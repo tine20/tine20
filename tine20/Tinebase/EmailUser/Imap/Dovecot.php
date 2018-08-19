@@ -341,7 +341,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      * @param  array $_rawdata
      * @return Tinebase_Model_EmailUser
      */
-    protected function _rawDataToRecord(array $_rawdata)
+    protected function _rawDataToRecord(array &$_rawdata)
     {
         $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
         

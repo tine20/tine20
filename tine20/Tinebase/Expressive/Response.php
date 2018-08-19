@@ -19,6 +19,6 @@ use \Zend\Diactoros\Response;
  */
 class Tinebase_Expressive_Response extends Response
 {
-    /** @var Tinebase_Record_RecordSet|Tinebase_Record_Abstract */
+    /** @var Tinebase_Record_RecordSet|Tinebase_Record_Interface */
     public $resultObject = null;
 }

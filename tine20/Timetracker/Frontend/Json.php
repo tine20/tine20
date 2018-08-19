@@ -98,7 +98,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns multiple records prepared for json transport
      * NOTE: we can't use parent::_multipleRecordsToJson here because of the different container handling
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data
@@ -154,7 +154,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
-        $_records->convertDates = true;
+        $_records->setConvertDates(true);
         $result = $_records->toArray();
 
         return $result;

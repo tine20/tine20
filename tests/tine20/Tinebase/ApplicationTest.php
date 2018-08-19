@@ -72,6 +72,10 @@ class Tinebase_ApplicationTest extends TestCase
             'order'     => 99,
             'version'   => 1
         )));
+
+        // make the record dirty
+        $application->tables = '';
+        unset($application->tables);
         
         $this->assertTrue($application instanceof Tinebase_Model_Application);
         

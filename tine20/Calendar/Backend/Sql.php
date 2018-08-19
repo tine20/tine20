@@ -628,9 +628,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * converts raw data from adapter into a single record
      *
      * @param  array $_data
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
-    protected function _rawDataToRecord(array $_rawData) {
+    protected function _rawDataToRecord(array &$_rawData) {
         $_rawData['rrule_constraints'] = Tinebase_Helper::is_json($_rawData['rrule_constraints']) ?
             json_decode($_rawData['rrule_constraints'], true) : NULL;
 
@@ -647,7 +647,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  array $_rawData of arrays
      * @return Tinebase_Record_RecordSet
      */
-    protected function _rawDataToRecordSet(array $_rawData)
+    protected function _rawDataToRecordSet(array &$_rawData)
     {
         $events = new Tinebase_Record_RecordSet($this->_modelName);
         $events->addIndices(array('rrule', 'recurid'));

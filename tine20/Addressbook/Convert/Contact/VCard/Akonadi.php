@@ -81,7 +81,7 @@ class Addressbook_Convert_Contact_VCard_Akonadi extends Addressbook_Convert_Cont
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::toTine20Model()
      */
-    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $vcard = self::getVObject($blob);
         $contact = parent::toTine20Model($blob, $_record, $options);
@@ -109,7 +109,7 @@ class Addressbook_Convert_Contact_VCard_Akonadi extends Addressbook_Convert_Cont
      * @param  Addressbook_Model_Contact  $_record
      * @return \Sabre\VObject\Component\VCard
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));
         

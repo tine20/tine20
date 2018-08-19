@@ -891,7 +891,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * * Addressbook_Controller_List::getInstance()->get() will check for ACLs
      * * Addressbook_Controller_ListRole::getInstance()->get() will check for ACLs
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @return Tinebase_Record_RecordSet
      */
     public function generatePathForRecord($record)

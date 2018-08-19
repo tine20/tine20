@@ -182,7 +182,7 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
      * @param array $_data            the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         if (isset($_data['options']) && is_array($_data['options'])) {
             $_data['options'] = Zend_Json::encode($_data['options']);

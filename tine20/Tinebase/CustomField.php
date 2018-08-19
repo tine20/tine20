@@ -468,7 +468,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 // recordlist
                 $values = array();
                 foreach ($_value as $record) {
-                    if (is_array($record) || $record instanceof Tinebase_Record_Abstract) {
+                    if (is_array($record) || $record instanceof Tinebase_Record_Interface) {
                         $values[] = $record[$idProperty];
                     } else {
                         $values[] = $record;

@@ -81,7 +81,7 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::toTine20Model()
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $contact = parent::toTine20Model($_blob, $_record, $options);
 	Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' contact (RAW) ' . print_r($_blob, true));
@@ -185,7 +185,7 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
      * @param  Addressbook_Model_Contact  $_record
      * @return string
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));

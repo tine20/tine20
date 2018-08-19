@@ -58,10 +58,10 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
      * converts string to Addressbook_Model_Contact
      * 
      * @param  string                          $_blob   the string to parse
-     * @param  Tinebase_Record_Abstract        $_record  update existing contact
+     * @param  Tinebase_Record_Interface        $_record  update existing contact
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
+    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null)
     {
         $contactData = array();
         $contactString = $_blob;
@@ -91,10 +91,10 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
     /**
     * converts Addressbook_Model_Contact to string
     *
-    * @param  Tinebase_Record_Abstract  $_record
+    * @param  Tinebase_Record_Interface  $_record
     * @return string
     */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         return $_record->__toString();
     }

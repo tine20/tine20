@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_NewModelConfiguration as MC;
+
 /**
  * class to hold contact data
  * 
@@ -65,7 +67,7 @@
  * @property    string $url_home                   private url of the contact
  * @property    integer $preferred_address         defines which is the preferred address of a contact, 0: business, 1: private
  */
-class Addressbook_Model_Contact extends Tinebase_Record_Abstract
+class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
     /**
      * const to describe contact of current account id independent
@@ -647,18 +649,17 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      *
      * @param array $_data            the new data to set
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
-        $_data = $this->_resolveAutoValues($_data);
+        $this->_resolveAutoValues($_data);
         parent::setFromArray($_data);
     }
     
     /**
      * Resolves the auto values n_fn and n_fileas
      * @param array $_data
-     * @return array $_data
      */
-    protected function _resolveAutoValues(array $_data)
+    protected function _resolveAutoValues(array &$_data)
     {
         if (! (isset($_data['org_name']) || array_key_exists('org_name', $_data))) {
             $_data['org_name'] = '';
@@ -692,7 +693,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
         }
-        return $_data;
     }
     
     /**
@@ -706,17 +706,20 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         
         switch ($_name) {
             case 'n_given':
-                $resolved = $this->_resolveAutoValues(array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name')));
+                $resolved = array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name'));
+                $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
                 parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             case 'n_family':
-                $resolved = $this->_resolveAutoValues(array('n_family' => $_value, 'n_given' => $this->__get('n_given'), 'org_name' => $this->__get('org_name')));
+                $resolved = array('n_family' => $_value, 'n_given' => $this->__get('n_given'), 'org_name' => $this->__get('org_name'));
+                $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
                 parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             case 'org_name':
-                $resolved = $this->_resolveAutoValues(array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family')));
+                $resolved = array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family'));
+                $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
                 parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
@@ -944,7 +947,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 
     public function resolveAttenderCleanUp()
     {
-        $this->_properties = array_intersect_key($this->_properties, [
+        $this->_data = array_intersect_key($this->_data, [
             'id'          => true,
             'note'        => true,
             'email'       => true,

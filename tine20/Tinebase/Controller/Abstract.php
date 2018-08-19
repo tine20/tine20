@@ -247,7 +247,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     public function deletePersonalFolder($_accountId, $model = '', $containerModel = 'Tinebase_Model_Container')
     {
-        if ($_accountId instanceof Tinebase_Record_Abstract) {
+        if ($_accountId instanceof Tinebase_Record_Interface) {
             $_accountId = $_accountId->getId();
         }
 

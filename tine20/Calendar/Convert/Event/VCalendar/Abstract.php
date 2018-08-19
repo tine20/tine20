@@ -117,7 +117,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * @param  Calendar_Model_Event  $_record
      * @return Sabre\VObject\Component
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         $_records = new Tinebase_Record_RecordSet(get_class($_record), array($_record), true, false);
         
@@ -388,7 +388,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * @param  array                 $options  array of options
      * @return Calendar_Model_Event
      */
-    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $vcalendar = self::getVObject($blob);
         

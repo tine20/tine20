@@ -39,7 +39,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
         
         // get container id from default container if not set
         if (empty($this->_options['container_id'])) {
-            /** @var Tinebase_Record_Abstract $defaultContainer */
+            /** @var Tinebase_Record_Interface $defaultContainer */
             $defaultContainer = $this->_controller->getDefaultInventory();
             $this->_options['container_id'] = $defaultContainer->getId();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting default container id: ' . $this->_options['container_id']);

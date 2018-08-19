@@ -156,7 +156,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * 
      * @todo need to discuss if this is the right place to do this. perhaps the client should send the fullname (and displayname), too.
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         // always update accountDisplayName and accountFullName
         if (isset($_data['accountLastName'])) {
@@ -380,7 +380,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
             return true;
         }
 
-        if ($_containerId instanceof Tinebase_Record_Abstract) {
+        if ($_containerId instanceof Tinebase_Record_Interface) {
             $aclModel = get_class($_containerId);
             if (! in_array($aclModel, array('Tinebase_Model_Container', 'Tinebase_Model_Tree_Node'))) {
                 // fall back to param

@@ -78,7 +78,7 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      *
      * @param array $_data            the new data to set
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         if (isset($_data['filters']) && ! $_data['filters'] instanceof Tinebase_Model_Filter_FilterGroup) {
             try {
@@ -98,7 +98,7 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      *
      * @param  string $_data json encoded data
      */
-    public function setFromJsonInUsersTimezone($_data)
+    public function setFromJsonInUsersTimezone(&$_data)
     {
         if (isset($_data['filters']) && ! $_data['filters'] instanceof Tinebase_Model_Filter_FilterGroup) {
             

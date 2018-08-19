@@ -123,7 +123,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param array $_data the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data);
+    public function setFromArray(array &$_data);
     
     /**
      * Sets timezone of $this->_datetimeFields
@@ -211,7 +211,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param  string $_data json encoded data
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromJsonInUsersTimezone($_data);
+    public function setFromJsonInUsersTimezone(&$_data);
 
     /**
      * returns the title of the record
@@ -342,4 +342,10 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return bool
      */
     public static function generatesPaths();
+
+    /**
+     * @param boolean $_bool the new value
+     * @return boolean the old value
+     */
+    public function setConvertDates($_bool);
 }

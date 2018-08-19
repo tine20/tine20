@@ -75,7 +75,7 @@ abstract class Tasks_TestCase extends PHPUnit_Framework_TestCase
             'url'                  => 'http://www.testtask.com',
         ),true, false);
         
-        $task->convertDates = true;
+        $task->setConvertDates(true);
         
         return $task;
     }

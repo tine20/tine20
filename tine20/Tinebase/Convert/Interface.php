@@ -19,19 +19,19 @@
 interface Tinebase_Convert_Interface
 {
     /**
-     * converts external format to Tinebase_Record_Abstract
+     * converts external format to Tinebase_Record_Interface
      * 
      * @param  mixed                     $_blob
-     * @param  Tinebase_Record_Abstract  $_record  update existing record
-     * @return Tinebase_Record_Abstract
+     * @param  Tinebase_Record_Interface  $_record  update existing record
+     * @return Tinebase_Record_Interface
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null);
+    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null);
     
     /**
-     * converts Tinebase_Record_Abstract to external format
+     * converts Tinebase_Record_Interface to external format
      * 
-     * @param  Tinebase_Record_Abstract  $_record
+     * @param  Tinebase_Record_Interface  $_record
      * @return mixed
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record);
+    public function fromTine20Model(Tinebase_Record_Interface $_record);
 }

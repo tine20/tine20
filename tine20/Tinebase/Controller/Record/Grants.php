@@ -310,7 +310,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      */
     protected function _getGrants($records)
     {
-        $recordset = ($records instanceof Tinebase_Record_Abstract)
+        $recordset = ($records instanceof Tinebase_Record_Interface)
             ? new Tinebase_Record_RecordSet($this->_modelName, array($records))
             : ($records instanceof Tinebase_Record_RecordSet ? $records : new Tinebase_Record_RecordSet($this->_modelName, $records));
         
@@ -324,7 +324,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * get grants for account
      * 
      * @param Tinebase_Model_User $user
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @return Tinebase_Model_Grants
      * 
      * @todo force refetch from db or add user param to _getGrants()?

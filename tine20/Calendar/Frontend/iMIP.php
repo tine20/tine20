@@ -346,7 +346,7 @@ class Calendar_Frontend_iMIP
      * @param $_iMIP
      * @param bool $_refetch
      * @param bool $_getDeleted
-     * @return NULL|Tinebase_Record_Abstract
+     * @return NULL|Tinebase_Record_Interface
      */
     public function getExistingEvent($_iMIP, $_refetch = FALSE, $_getDeleted = FALSE)
     {

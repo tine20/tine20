@@ -2205,7 +2205,8 @@ class Calendar_JsonTests extends Calendar_TestCase
         $event->dtend->addDay(1)->setTime(17, 0 ,0);
 
         $createEvent = new Calendar_Model_Event(array(), true);
-        $createEvent->setFromJsonInUsersTimezone($event->toArray());
+        $eventData = $event->toArray();
+        $createEvent->setFromJsonInUsersTimezone($eventData);
         Calendar_Controller_Event::getInstance()->create($createEvent);
 
         $result = $this->_uit->searchFreeTime($event->toArray(), $options);

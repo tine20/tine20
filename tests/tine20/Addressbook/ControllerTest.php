@@ -705,4 +705,67 @@ class Addressbook_ControllerTest extends TestCase
 
         static::assertEquals($adminContact->tel_car, $result->tel_car);
     }
+
+    public function testContactModelPerformance()
+    {
+        $container = $this->_getTestContainer('Addressbook', 'Addressbook_Model_Contact');
+
+        $data = [];
+        $memory = memory_get_usage();
+        $timeStarted = microtime(true);
+        $recordData = array(
+            'adr_one_countryname' => 'DE',
+            'adr_one_locality' => 'Hamburg',
+            'adr_one_postalcode' => '24xxx',
+            'adr_one_region' => 'Hamburg',
+            'adr_one_street' => 'Pickhuben 4',
+            'adr_one_street2' => 'no second street',
+            'adr_two_countryname' => 'DE',
+            'adr_two_locality' => 'Hamburg',
+            'adr_two_postalcode' => '24xxx',
+            'adr_two_region' => 'Hamburg',
+            'adr_two_street' => 'Pickhuben 4',
+            'adr_two_street2' => 'no second street2',
+            'assistent' => 'Cornelius Weiß',
+            'bday' => '1975-01-02 03:04:05', // new Tinebase_DateTime???
+            'email' => 'unittests@tine20.org',
+            'email_home' => 'unittests@tine20.org',
+            'note' => 'Bla Bla Bla',
+            'container_id' => $container->id,
+            'role' => 'Role',
+            'title' => 'Title',
+            'url' => 'http://www.tine20.org',
+            'url_home' => 'http://www.mundundzähne.de',
+            'n_family' => 'Kneschke',
+            'n_fileas' => 'Kneschke, Lars',
+            'n_given' => 'Laars',
+            'n_middle' => 'no middle name',
+            'n_prefix' => 'no prefix',
+            'n_suffix' => 'no suffix',
+            'org_name' => 'Metaways Infosystems GmbH',
+            'org_unit' => 'Tine 2.0',
+            'tel_assistent' => '+49TELASSISTENT',
+            'tel_car' => '+49TELCAR',
+            'tel_cell' => '+49TELCELL',
+            'tel_cell_private' => '+49TELCELLPRIVATE',
+            'tel_fax' => '+49TELFAX',
+            'tel_fax_home' => '+49TELFAXHOME',
+            'tel_home' => '+49TELHOME',
+            'tel_pager' => '+49TELPAGER',
+            'tel_work' => '+49TELWORK',
+        );
+
+        for($i =0; $i < 100; ++$i) {
+            $contact = new Addressbook_Model_Contact(null, true);
+            $data = $recordData;
+            unset($data['tel_work']);
+            $contact->setFromArray($data);
+        }
+
+        $timeEnd = microtime(true);
+        $memoryEnd = memory_get_usage();
+
+        echo PHP_EOL . 'time: ' . (($timeEnd - $timeStarted) * 1000) . 'ms, memory: ' . ($memoryEnd - $memory) .
+            PHP_EOL;
+    }
 }

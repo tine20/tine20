@@ -83,11 +83,11 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * converts vcard to Addressbook_Model_Contact
      * 
      * @param  \Sabre\VObject\Component|resource|string  $blob       the vcard to parse
-     * @param  Tinebase_Record_Abstract                $_record    update existing contact
+     * @param  Tinebase_Record_Interface                $_record    update existing contact
      * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $vcard = self::getVObject($blob);
 
@@ -323,12 +323,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     }
 
     /**
-     * converts Tinebase_Record_Abstract to external format
+     * converts Tinebase_Record_Interface to external format
      *
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Tinebase_Record_Interface  $record
      * @return mixed
      */ 
-    public function fromTine20Model(Tinebase_Record_Abstract $record)
+    public function fromTine20Model(Tinebase_Record_Interface $record)
     {
     }
     
@@ -459,10 +459,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * add GEO data to VCard
      * 
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Tinebase_Record_Interface  $record
      * @param  \Sabre\VObject\Component  $card
      */
-    protected function _fromTine20ModelAddGeoData(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelAddGeoData(Tinebase_Record_Interface $record, \Sabre\VObject\Component $card)
     {
         /** @var Addressbook_Model_Contact $record */
         if ($record->adr_one_lat && $record->adr_one_lon) {
@@ -476,10 +476,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * add birthday data to VCard
      * 
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Tinebase_Record_Interface  $record
      * @param  \Sabre\VObject\Component  $card
      */
-    protected function _fromTine20ModelAddBirthday(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelAddBirthday(Tinebase_Record_Interface $record, \Sabre\VObject\Component $card)
     {
         /** @var Addressbook_Model_Contact $record */
         if ($record->bday instanceof Tinebase_DateTime) {
@@ -493,10 +493,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * parse categories from Tine20 model to VCard and attach it to VCard $card
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param Sabre\VObject\Component $card
      */
-        protected function _fromTine20ModelAddCategories(Tinebase_Record_Abstract $record, Sabre\VObject\Component $card)
+        protected function _fromTine20ModelAddCategories(Tinebase_Record_Interface $record, Sabre\VObject\Component $card)
         {
             if (!isset($record->tags)) {
                 // If the record has not been populated yet with tags, let's try to get them all and update the record
@@ -532,10 +532,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * initialize vcard object
      * 
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Tinebase_Record_Interface  $record
      * @return \Sabre\VObject\Component
      */
-    protected function _fromTine20ModelRequiredFields(Tinebase_Record_Abstract $record,$fn = null,$org = null)
+    protected function _fromTine20ModelRequiredFields(Tinebase_Record_Interface $record,$fn = null,$org = null)
     {
         /** @var Addressbook_Model_Contact $record */
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;

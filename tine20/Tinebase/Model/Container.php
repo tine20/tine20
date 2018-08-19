@@ -192,7 +192,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @param array $_data            the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         
@@ -287,12 +287,12 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     /**
      * resolves container_id property
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_containerProperty
      */
     public static function resolveContainerOfRecord($_record, $_containerProperty = 'container_id')
     {
-        if (! $_record instanceof Tinebase_Record_Abstract) {
+        if (! $_record instanceof Tinebase_Record_Interface) {
             return;
         }
         

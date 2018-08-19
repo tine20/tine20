@@ -55,7 +55,7 @@ class Tasks_Convert_Task_VCalendar_Evolution extends Tasks_Convert_Task_VCalenda
      * @param  array                 $options
      * @return Calendar_Model_Event
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $task = parent::toTine20Model($_blob,$_record,$options);
         /**

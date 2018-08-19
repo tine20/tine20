@@ -60,7 +60,7 @@ class Setup_SchemaTool
         if (! $modelNames) {
             $modelNames = array();
 
-            /** @var Tinebase_Record_Abstract $modelName */
+            /** @var Tinebase_Record_Interface $modelName */
             foreach($mappingDriver->getAllClassNames() as $modelName) {
                 $modelConfig = $modelName::getConfiguration();
 

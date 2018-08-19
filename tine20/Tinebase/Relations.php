@@ -520,7 +520,7 @@ class Tinebase_Relations
      */
     protected function _setAppRecord($_relation, $_doCreateUpdateCheck = false)
     {
-        if (! $_relation->related_record instanceof Tinebase_Record_Abstract) {
+        if (! $_relation->related_record instanceof Tinebase_Record_Interface) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Relation: ' . print_r($_relation->toArray(), TRUE));
             throw new Tinebase_Exception_UnexpectedValue('Related record is missing from relation.');

@@ -18,12 +18,12 @@
 class Tinebase_Convert_Container_Json extends Tinebase_Convert_Json
 {
     /**
-     * converts Tinebase_Record_Abstract to external format
+     * converts Tinebase_Record_Interface to external format
      * 
-     * @param  Tinebase_Record_Abstract $_model
+     * @param  Tinebase_Record_Interface $_model
      * @return mixed
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_model)
+    public function fromTine20Model(Tinebase_Record_Interface $_model)
     {
         $recordSet = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($_model));
         $result = $this->fromTine20RecordSet($recordSet);

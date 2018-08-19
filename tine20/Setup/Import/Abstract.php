@@ -130,7 +130,7 @@ abstract class Setup_Import_Abstract
 
     protected function _amendRecordData($_record) {}
 
-    protected function _importRecord(Tinebase_Record_Abstract $_record)
+    protected function _importRecord(Tinebase_Record_Interface $_record)
     {
         if ($_record->getId()) {
             return $this->_controllerToImport->update($_record, false);

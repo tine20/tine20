@@ -100,7 +100,7 @@ class Tinebase_FileSystem_RecordAttachments
      */
     public function getMultipleAttachmentsOfRecords($records)
     {
-        if ($records instanceof Tinebase_Record_Abstract) {
+        if ($records instanceof Tinebase_Record_Interface) {
             $records = new Tinebase_Record_RecordSet(get_class($records), array($records));
         }
 
@@ -208,13 +208,13 @@ class Tinebase_FileSystem_RecordAttachments
     /**
      * add attachement to record
      * 
-     * @param  Tinebase_Record_Abstract $record
+     * @param  Tinebase_Record_Interface $record
      * @param  string $name
      * @param  mixed $attachment
          @see Tinebase_FileSystem::copyTempfile
      * @return null|Tinebase_Model_Tree_Node
      */
-    public function addRecordAttachment(Tinebase_Record_Abstract $record, $name, $attachment)
+    public function addRecordAttachment(Tinebase_Record_Interface $record, $name, $attachment)
     {
         // only occurs via unittests
         if (!$name && isset($attachment->tempFile) && ! is_resource($attachment->tempFile)) {
@@ -271,7 +271,7 @@ class Tinebase_FileSystem_RecordAttachments
     /**
      * delete attachments of record
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      */
     public function deleteRecordAttachments($record)
     {
@@ -284,12 +284,12 @@ class Tinebase_FileSystem_RecordAttachments
     /**
      * get path for record attachments
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param boolean $createDirIfNotExists
      * @throws Tinebase_Exception_InvalidArgument
      * @return string
      */
-    public function getRecordAttachmentPath(Tinebase_Record_Abstract $record, $createDirIfNotExists = false)
+    public function getRecordAttachmentPath(Tinebase_Record_Interface $record, $createDirIfNotExists = false)
     {
         if (! $record->getId()) {
             throw new Tinebase_Exception_InvalidArgument('record needs an identifier');
@@ -308,11 +308,11 @@ class Tinebase_FileSystem_RecordAttachments
     /**
      * get base path for record attachments (without the record id)
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param boolean $createDirIfNotExists
      * @return string
      */
-    public function getRecordAttachmentBasePath(Tinebase_Record_Abstract $record, $createDirIfNotExists = false)
+    public function getRecordAttachmentBasePath(Tinebase_Record_Interface $record, $createDirIfNotExists = false)
     {
         $parentPath = $this->_fsController->getApplicationBasePath($record->getApplication(),
             Tinebase_FileSystem::FOLDER_TYPE_RECORDS);

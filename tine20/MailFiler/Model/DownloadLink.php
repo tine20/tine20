@@ -67,7 +67,7 @@ class MailFiler_Model_DownloadLink extends Tinebase_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase/Record/Tinebase_Record_Abstract#setFromArray($_data)
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         

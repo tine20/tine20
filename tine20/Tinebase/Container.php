@@ -752,7 +752,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public static function addGrantsSql($_select, $_accountId, $_grant, $_aclTableName = 'container_acl', $_andGrants = FALSE, $joinCallBack = null)
     {
-        $accountId = $_accountId instanceof Tinebase_Record_Abstract
+        $accountId = $_accountId instanceof Tinebase_Record_Interface
             ? $_accountId->getId()
             : $_accountId;
         
@@ -1331,7 +1331,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * check if the given user user has a certain grant
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   int|Tinebase_Record_Abstract        $_containerId
+     * @param   int|Tinebase_Record_Interface        $_containerId
      * @param   array|string                        $_grant
      * @return  boolean
      */
@@ -1508,7 +1508,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 continue;
             }
             
-            if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && isset($containers[$containerId])) {
+            if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Interface && isset($containers[$containerId])) {
                 if (isset($containers[$containerId]->path)) {
                     $record->$_containerProperty = $containers[$containerId];
                 } else {
@@ -1546,7 +1546,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             return array();
         }
         
-        $accountId = $_accountId instanceof Tinebase_Record_Abstract
+        $accountId = $_accountId instanceof Tinebase_Record_Interface
             ? $_accountId->getId()
             : $_accountId;
         

@@ -18,12 +18,12 @@
 class Calendar_Convert_Resource_Json extends Tinebase_Convert_Json
 {
    /**
-    * converts Tinebase_Record_Abstract to external format
+    * converts Tinebase_Record_Interface to external format
     *
-    * @param  Tinebase_Record_Abstract $_record
+    * @param  Tinebase_Record_Interface $_record
     * @return mixed
     */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         $jsonData = parent::fromTine20Model($_record);
 

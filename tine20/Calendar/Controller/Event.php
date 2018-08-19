@@ -1636,12 +1636,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
    /**
     * adopt alarm time to next occurrence for recurring events
     *
-    * @param Tinebase_Record_Abstract $_record
+    * @param Tinebase_Record_Interface $_record
     * @param Tinebase_Model_Alarm $_alarm
     * @param bool $_nextBy {instance|time} set recurr alarm to next from given instance or next by current time
     * @return void
     */
-    public function adoptAlarmTime(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
+    public function adoptAlarmTime(Tinebase_Record_Interface $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
     {
         if ($_record->rrule) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .

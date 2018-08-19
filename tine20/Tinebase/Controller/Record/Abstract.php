@@ -1272,7 +1272,7 @@ abstract class Tinebase_Controller_Record_Abstract
                         Tinebase_Model_Relation::DEGREE_PARENT !== $relation['related_degree']) {
                     continue;
                 }
-                /** @var Tinebase_Record_Abstract $model */
+                /** @var Tinebase_Record_Interface $model */
                 $model = $relation['related_model'];
                 if ($model::generatesPaths()) {
                     return true;
@@ -1287,7 +1287,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     Tinebase_Model_Relation::DEGREE_PARENT !== $relation->related_degree) {
                     continue;
                 }
-                /** @var Tinebase_Record_Abstract $model */
+                /** @var Tinebase_Record_Interface $model */
                 $model = $relation->related_model;
                 if ($model::generatesPaths()) {
                     return true;
@@ -2270,7 +2270,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * input can have the following datatypes:
      * - Tinebase_Model_Filter_FilterGroup
      * - Tinebase_Record_RecordSet
-     * - Tinebase_Record_Abstract
+     * - Tinebase_Record_Interface
      * - string (single id)
      * - array (multiple ids)
      *
@@ -2287,8 +2287,8 @@ abstract class Tinebase_Controller_Record_Abstract
         } elseif ($_mixed instanceof Tinebase_Record_RecordSet) {
             // RECORDSET (Tinebase_Record_RecordSet)
             $result = ($_refresh) ? $this->_backend->getMultiple($_mixed->getArrayOfIds()) : $_mixed;
-        } elseif ($_mixed instanceof Tinebase_Record_Abstract) {
-            // RECORD (Tinebase_Record_Abstract)
+        } elseif ($_mixed instanceof Tinebase_Record_Interface) {
+            // RECORD (Tinebase_Record_Interface)
             if ($_refresh) {
                 $result = $this->_backend->getMultiple($_mixed->getId());
             } else {
@@ -2425,7 +2425,7 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if (! empty($_record->{$_property}) && $_record->{$_property} && $_record->{$_property}->count() > 0) {
 
-            /** @var Tinebase_Record_Abstract $record */
+            /** @var Tinebase_Record_Interface $record */
             foreach ($_record->{$_property} as $record) {
                 
                 $record->{$_fieldConfig['refIdField']} = $_record->getId();
@@ -2509,7 +2509,7 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_property
      * @param array $_fieldConfig
      * @throws Tinebase_Exception_Record_DefinitionFailure
@@ -2568,7 +2568,7 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_property
      * @param array $_fieldConfig
      * @throws Tinebase_Exception_Record_DefinitionFailure
@@ -2782,13 +2782,13 @@ HumanResources_CliTests.testSetContractsEndDate */
      *
      * TODO replace converter usage when we have refactored the record resolving
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param $foreignModel
      * @param $groupField
      * @param $idProp
      * @return Tinebase_Record_RecordSet
      */
-    public function getResolvedGroupRecords(Tinebase_Record_Abstract $record, $foreignModel, $groupField, $idProp)
+    public function getResolvedGroupRecords(Tinebase_Record_Interface $record, $foreignModel, $groupField, $idProp)
     {
         $record = $this->get($record->getId());
 

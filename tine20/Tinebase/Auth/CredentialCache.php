@@ -151,7 +151,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
             'creation_time' => Tinebase_DateTime::now(),
             'valid_until'   => $validUntil ?: Tinebase_DateTime::now()->addMonth(1)
         ), true, false);
-        $cache->convertDates = true;
+        $cache->setConvertDates(true);
         
         $this->_encrypt($cache);
         $this->_saveInSession($cache);
@@ -207,8 +207,8 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         }
         
         if (! ($_cache->username && $_cache->password)) {
-            $savedCache = $this->_getCache($_cache->getId());
-            $_cache->setFromArray($savedCache->toArray());
+            $savedCache = $this->_getCache($_cache->getId())->toArray();
+            $_cache->setFromArray($savedCache);
             $this->_decrypt($_cache);
         }
     }

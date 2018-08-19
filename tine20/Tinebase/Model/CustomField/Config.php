@@ -79,7 +79,7 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
      * @param array $_data
      * @return array
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         if ((isset($_data['definition']) || array_key_exists('definition', $_data))) {
             if (is_string($_data['definition'])) {

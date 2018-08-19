@@ -164,7 +164,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         foreach ($events as $event) {
             $toRemove = array();
             foreach ($event->attendee as $key => $attendee) {
-                $attendeeUserId = $attendee->user_id instanceof Tinebase_Record_Abstract
+                $attendeeUserId = $attendee->user_id instanceof Tinebase_Record_Interface
                     ? $attendee->user_id->getId()
                     : $attendee->user_id;
 

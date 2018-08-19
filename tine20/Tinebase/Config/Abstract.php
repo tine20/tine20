@@ -283,7 +283,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
-        if (is_object($_value) && $_value instanceof Tinebase_Record_Abstract) {
+        if (is_object($_value) && $_value instanceof Tinebase_Record_Interface) {
             $_value = $_value->toArray(true);
         }
 

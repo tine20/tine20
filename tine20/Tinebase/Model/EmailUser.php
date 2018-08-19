@@ -108,7 +108,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
      *
      * @param array $_data            the new data to set
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         foreach (array('emailForwards', 'emailAliases') as $arrayField) {
             if (isset($_data[$arrayField]) && ! is_array($_data[$arrayField])) {

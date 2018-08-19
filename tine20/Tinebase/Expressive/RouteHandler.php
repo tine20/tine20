@@ -143,7 +143,7 @@ class Tinebase_Expressive_RouteHandler
     }
 
     /**
-     * TODO think about return type? should it be Tinebase_Record_Abstract|Tinebase_Record_RecordSet
+     * TODO think about return type? should it be Tinebase_Record_Interface|Tinebase_Record_RecordSet
      * @return mixed
      * @throws Tinebase_Exception_InvalidArgument
      */

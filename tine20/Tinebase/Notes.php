@@ -328,7 +328,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         if ($notes instanceOf Tinebase_Record_RecordSet) {
             $notesToSet = $notes;
         } else {
-            if (count($notes) > 0 && $notes[0] instanceOf Tinebase_Record_Abstract) {
+            if (count($notes) > 0 && $notes[0] instanceOf Tinebase_Record_Interface) {
                 // array of notes records given
                 $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $notes);
             } else {
@@ -409,7 +409,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * add new system note
      *
-     * @param Tinebase_Record_Abstract|string $_record
+     * @param Tinebase_Record_Interface|string $_record
      * @param string|Tinebase_Mode_User $_userId
      * @param string $_type (created|changed)
      * @param Tinebase_Record_RecordSet|string $_mods (Tinebase_Model_ModificationLog)
@@ -426,8 +426,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             return FALSE;
         }
         
-        $id = ($_record instanceof Tinebase_Record_Abstract) ? $_record->getId() : $_record;
-        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Abstract) ? get_class($_record) : 'unknown');
+        $id = ($_record instanceof Tinebase_Record_Interface) ? $_record->getId() : $_record;
+        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : 'unknown');
         if (($_userId === NULL)) {
             $_userId = Tinebase_Core::getUser();
         }

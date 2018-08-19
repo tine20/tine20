@@ -581,7 +581,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
                 foreach($date->attendee as $attendee) {
                     // flatten
-                    $attendee['user_id'] = $attendee['user_id'] instanceof Tinebase_Record_Abstract ? $attendee['user_id']->getId() : $attendee['user_id'];
+                    $attendee['user_id'] = $attendee['user_id'] instanceof Tinebase_Record_Interface ? $attendee['user_id']->getId() : $attendee['user_id'];
 
                     // manage authkeys
                     if ($anonymousAccess) {

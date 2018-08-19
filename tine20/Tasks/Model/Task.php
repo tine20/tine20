@@ -249,7 +249,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * @param   array $_data
      * @return void
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         

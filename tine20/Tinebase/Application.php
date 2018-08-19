@@ -747,7 +747,7 @@ class Tinebase_Application
      */
     public static function extractAppAndModel($modelOrApplication, $model = null)
     {
-        if (! $modelOrApplication instanceof Tinebase_Model_Application && $modelOrApplication instanceof Tinebase_Record_Abstract) {
+        if (! $modelOrApplication instanceof Tinebase_Model_Application && $modelOrApplication instanceof Tinebase_Record_Interface) {
             $modelOrApplication = get_class($modelOrApplication);
         }
 

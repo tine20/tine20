@@ -229,12 +229,12 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
     /**
      * add automatic alarms to record (if configured)
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return void
      * 
      * @todo    move this to Tinebase_Controller_Record_Abstract
      */
-    protected function _addAutomaticAlarms(Tinebase_Record_Abstract $_record)
+    protected function _addAutomaticAlarms(Tinebase_Record_Interface $_record)
     {
         $automaticAlarms = Tasks_Config::getInstance()->get(Tinebase_Config::AUTOMATICALARM, new Tinebase_Config_Struct());
         if (! is_object($automaticAlarms)) {

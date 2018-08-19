@@ -1548,7 +1548,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data

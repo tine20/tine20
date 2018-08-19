@@ -435,7 +435,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      *
      * @param string            $_forlderId
      * @param SimpleXMLElement  $_data
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
     #public function search($_folderId, SimpleXMLElement $_data)
     #{

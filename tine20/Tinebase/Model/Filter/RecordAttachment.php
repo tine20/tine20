@@ -34,7 +34,7 @@ class Tinebase_Model_Filter_RecordAttachment extends Tinebase_Model_Filter_Abstr
     protected $_subFilter = null;
 
     /**
-     * @var string|Tinebase_Record_Abstract
+     * @var string|Tinebase_Record_Interface
      */
     protected $_model;
 

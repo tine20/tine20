@@ -309,7 +309,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * creates recordsets for depedent records or records instead of arrays for records on record fields
      * and sets timezone of these records to utc
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      */
     protected function _dependentRecordsFromJson(&$record)
     {
@@ -390,7 +390,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $_id record id
      * @param array  $_data key/value pairs with fields to update
      * @param Tinebase_Controller_Record_Interface $_controller
-     * @return Tinebase_Record_Abstract record
+     * @return Tinebase_Record_Interface record
      */
     protected function _updateProperties($_id, $_data, Tinebase_Controller_Record_Interface $_controller)
     {
@@ -497,7 +497,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data

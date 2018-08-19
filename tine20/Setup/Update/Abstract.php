@@ -516,7 +516,7 @@ class Setup_Update_Abstract
 
         $updateRequired = false;
         $setNewVersions = array();
-        /** @var Tinebase_Record_Abstract $modelName */
+        /** @var Tinebase_Record_Interface $modelName */
         foreach ($modelNames as $modelName) {
             $modelConfig = $modelName::getConfiguration();
             $tableName = Tinebase_Helper::array_value('name', $modelConfig->getTable());

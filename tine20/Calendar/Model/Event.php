@@ -660,7 +660,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * @param array $_data            the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         if (empty($_data['geo'])) {
             $_data['geo'] = NULL;
@@ -774,12 +774,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         $organizerContactId = NULL;
         if ($_attendee && in_array($_attendee->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
-            $organizerContactId = $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id;
+            $organizerContactId = $_attendee->user_id instanceof Tinebase_Record_Interface ? $_attendee->user_id->getId() : $_attendee->user_id;
         } else {
             $organizerContactId = Tinebase_Core::getUser()->contact_id;
         }
         
-        return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Abstract ? $this->organizer->getId() : $this->organizer);
+        return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Interface ? $this->organizer->getId() : $this->organizer);
     }
     
     /**

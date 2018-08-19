@@ -68,7 +68,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
             throw new MappingException('Class ' . $className . 'has no appropriate ModelConfiguration');
         }
 
-        /** @var Tinebase_Record_Abstract $className */
+        /** @var Tinebase_Record_Interface $className */
         /** @var Tinebase_ModelConfiguration $modelConfig */
         $modelConfig = $className::getConfiguration();
 

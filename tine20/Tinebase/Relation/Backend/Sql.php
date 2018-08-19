@@ -238,7 +238,8 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(), true);
         foreach ($this->_dbTable->fetchAll($where) as $relation) {
-            $relations->addRecord($this->_rawDataToRecord($relation->toArray(), true));
+            $rawData = $relation->toArray();
+            $relations->addRecord($this->_rawDataToRecord($rawData, true));
         }
         return $relations;
     }
@@ -267,7 +268,8 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $relationRow = $this->_dbTable->fetchRow($where);
         
         if($relationRow) {
-            return $this->_rawDataToRecord($relationRow->toArray());
+            $relationRow = $relationRow->toArray();
+            return $this->_rawDataToRecord($relationRow);
         } else {
             throw new Tinebase_Exception_Record_NotDefined("No relation found.");
         }
@@ -279,15 +281,15 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  array $_rawDatas of arrays
      * @return Tinebase_Record_RecordSet
      */
-    protected function _rawDataToRecordSet(array $_rawDatas)
+    protected function _rawDataToRecordSet(array &$_rawDatas)
     {
         foreach ($_rawDatas as &$data) {
             $data['id'] = $data['rel_id'];
         }
 
-        $result = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $_rawDatas, true);
+        $result = new Tinebase_Record_RecordSetFast(Tinebase_Model_Relation::class, $_rawDatas);
 
-        /** @var Tinebase_Record_Abstract $record *
+        /** @var Tinebase_Record_Interface $record *
         foreach ($result as $record) {
             if (! empty($this->_foreignTables)) {
                 $this->_explodeForeignValues($record);
@@ -302,9 +304,9 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * converts raw data from adapter into a single record
      *
      * @param  array $_rawData
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
-    protected function _rawDataToRecord(array $_rawData)
+    protected function _rawDataToRecord(array &$_rawData)
     {
         $_rawData['id'] = $_rawData['rel_id'];
         $result = new Tinebase_Model_Relation($_rawData, true);

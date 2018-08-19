@@ -84,7 +84,7 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
      * @param  Addressbook_Model_Contact  $_record
      * @return \Sabre\VObject\Component\VCard
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));

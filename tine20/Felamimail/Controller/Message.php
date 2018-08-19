@@ -353,7 +353,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     * @param Felamimail_Model_Message $_message
     * @param string $_partId
     * @param array $_partData
-    * @return NULL|Tinebase_Record_Abstract
+    * @return NULL|Tinebase_Record_Interface
     */
     protected function _getForeignMessagePart(Felamimail_Model_Message $_message, $_partId, $_partData)
     {
@@ -390,7 +390,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * process foreign iMIP part
      * 
      * @param string $_application
-     * @param Tinebase_Record_Abstract $_iMIP
+     * @param Tinebase_Record_Interface $_iMIP
      * @return mixed
      * 
      * @todo use iMIP factory?
@@ -420,7 +420,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param string $_iMIPId
      * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
     public function getiMIP($_iMIPId)
     {

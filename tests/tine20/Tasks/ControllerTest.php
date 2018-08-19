@@ -76,7 +76,7 @@ class Tasks_ControllerTest extends TestCase
             'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ),true, false);
-        $this->_testTask1->convertDates = true;
+        $this->_testTask1->setConvertDates(true);
         
         $this->_persistantTestTask1 = $this->_controller->create($this->_testTask1);
     }

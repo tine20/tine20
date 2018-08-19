@@ -28,7 +28,7 @@ class Tinebase_Convert_Factory
     /**
      * factory function to return a selected converter backend class
      *
-     * @param   string|Tinebase_Record_Abstract $_record record object or class name
+     * @param   string|Tinebase_Record_Interface $_record record object or class name
      * @param   string $_type
      * @return  Tinebase_Convert_Interface
      * @throws  Tinebase_Exception_NotImplemented
@@ -37,7 +37,7 @@ class Tinebase_Convert_Factory
     {
         switch ($_type) {
             case self::TYPE_JSON:
-                $recordClass = ($_record instanceof Tinebase_Record_Abstract) ? get_class($_record) : $_record;
+                $recordClass = ($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : $_record;
                 $converterClass = str_replace('Model', 'Convert', $recordClass);
                 $converterClass .= '_Json';
                 

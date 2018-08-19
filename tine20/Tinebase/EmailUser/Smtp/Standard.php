@@ -132,9 +132,9 @@ class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_Abstract imp
      * converts raw data from adapter into a single record / do mapping
      *
      * @param  array $_data
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
-    protected function _rawDataToRecord(array $_rawdata)
+    protected function _rawDataToRecord(array &$_rawdata)
     {
         $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
         

@@ -500,7 +500,7 @@ class Tinebase_ModelConfiguration {
      *
      * @var array
      */
-    protected $_fields = array();
+    public $_fields = array();
     
     /**
      * if this is set to true, all virtual fields get resolved by the record controller method "resolveVirtualFields"
@@ -1827,7 +1827,7 @@ class Tinebase_ModelConfiguration {
             $foreignRecordModelConfiguration = $foreignRecordClass::getConfiguration();
 
             $foreignRecords->setTimezone(Tinebase_Core::getUserTimezone());
-            $foreignRecords->convertDates = true;
+            $foreignRecords->setConvertDates(true);
 
             if ($foreignRecords->count() > 0) {
 

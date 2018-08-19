@@ -768,7 +768,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * create record from record data
      * 
      * @param array $_recordData
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
     protected function _createRecordToImport($_recordData)
     {
@@ -785,10 +785,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * import single record
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_resolveStrategy
      * @param array $_recordData not needed here but in other import classes (i.a. Admin_Import_Csv)
-     * @return Tinebase_Record_Abstract the imported record
+     * @return Tinebase_Record_Interface the imported record
      * @throws Tinebase_Exception_Record_Validation
      */
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
@@ -824,7 +824,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * handle record tags
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_resolveStrategy
      */
     protected function _handleTags($_record, $_resolveStrategy = NULL)
@@ -968,7 +968,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
     * add auto tags from options
     *
-    * @param Tinebase_Record_Abstract $_record
+    * @param Tinebase_Record_Interface $_record
     */
     protected function _addAutoTags($_record)
     {
@@ -1059,14 +1059,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *                                ['mergeMine',   ('Merge, keeping my details')],
      *                                ['keep',        ('Keep both records')]
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param string $resolveStrategy
-     * @param Tinebase_Record_Abstract $clientRecord
-     * @return Tinebase_Record_Abstract
+     * @param Tinebase_Record_Interface $clientRecord
+     * @return Tinebase_Record_Interface
      * 
      * @todo we should refactor the merge handling: this function should always get the merged record OR always do the merging itself
      */
-    protected function _importAndResolveConflict(Tinebase_Record_Abstract $record, $resolveStrategy = null, $clientRecord = null)
+    protected function _importAndResolveConflict(Tinebase_Record_Interface $record, $resolveStrategy = null, $clientRecord = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' ResolveStrategy: ' . $resolveStrategy);
@@ -1130,9 +1130,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * merge record / skip if no diff
      * 
-     * @param Tinebase_Record_Abstract $updateRecord
-     * @param Tinebase_Record_Abstract $mergeRecord
-     * @return Tinebase_Record_Abstract
+     * @param Tinebase_Record_Interface $updateRecord
+     * @param Tinebase_Record_Interface $mergeRecord
+     * @return Tinebase_Record_Interface
      */
     protected function _mergeRecord($updateRecord, $mergeRecord)
     {
@@ -1173,7 +1173,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param Exception $e
      * @param integer $recordIndex
-     * @param Tinebase_Record_Abstract|array $record
+     * @param Tinebase_Record_Interface|array $record
      * @param boolean $allowToResolveDuplicates
      * 
      * @todo use json converter for client record
@@ -1189,7 +1189,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $exception = array(
                 'code'         => $e->getCode(),
                 'message'      => $e->getMessage(),
-                'clientRecord' => ($record !== NULL && $record instanceof Tinebase_Record_Abstract) ? $record->toArray() 
+                'clientRecord' => ($record !== NULL && $record instanceof Tinebase_Record_Interface) ? $record->toArray()
                     : (is_array($record) ? $record : array()),
             );
         }
@@ -1209,7 +1209,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param Tinebase_Exception_Duplicate $ted
      * @param integer $recordIndex
-     * @param Tinebase_Record_Abstract|array $record
+     * @param Tinebase_Record_Interface|array $record
      * @param boolean $allowToResolveDuplicates
      * @return array|null exception
      */

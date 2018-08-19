@@ -222,11 +222,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      *
      * @param array $_data            the new data to set
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         
-        if ((isset($_data['flatpath']) || array_key_exists('flatpath', $_data))) {
+        if (isset($_data['flatpath'])) {
             $this->_parsePath($_data['flatpath']);
         }
     }

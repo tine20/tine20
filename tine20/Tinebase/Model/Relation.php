@@ -142,7 +142,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      *
      * @todo    always json::encode remarks? / add options field that is always json encoded
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         
@@ -220,7 +220,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         $model = $this->related_model;
         return (class_exists($model) ? $model::getRecordName() : $model)
             . (empty($this->type) ? '' :  ' ' . $this->type)
-            . ($this->related_record instanceof Tinebase_Record_Abstract ? ' ' . $this->related_record->getTitle()
+            . ($this->related_record instanceof Tinebase_Record_Interface ? ' ' . $this->related_record->getTitle()
                 : '');
     }
 }

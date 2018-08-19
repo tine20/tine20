@@ -374,7 +374,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             if (count($recordSet) === 0) {
                 return;
             }
-            if (($record = reset($recordSet)) instanceof Tinebase_Record_Abstract) {
+            if (($record = reset($recordSet)) instanceof Tinebase_Record_Interface) {
                 if (null !== $disallowedKeys) {
                     $realRecordSet = new Tinebase_Record_RecordSet(get_class($record));
                     foreach($recordSet as $key => $value) {
@@ -410,7 +410,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                 $recordSet = $realRecordSet;
             }
         } elseif (is_object($recordSet)) {
-            if ($recordSet instanceof Tinebase_Record_Abstract) {
+            if ($recordSet instanceof Tinebase_Record_Interface) {
                 $recordSet = new Tinebase_Record_RecordSet(get_class($recordSet), array($recordSet));
             } elseif (!$recordSet instanceof Tinebase_Record_RecordSet) {
                 return;

@@ -80,7 +80,7 @@ class Tinebase_Model_RoleMember extends Tinebase_Record_Abstract
                 'record set model: ' . $_recordSet->getRecordClassName() . ', record set diff model: ' . $model);
         }
 
-        /** @var Tinebase_Record_Abstract $modelInstance */
+        /** @var Tinebase_Record_Interface $modelInstance */
         $modelInstance = new $model(array(), true);
         $idProperty = $modelInstance->getIdProperty();
 

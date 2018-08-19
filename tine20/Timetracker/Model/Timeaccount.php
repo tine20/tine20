@@ -355,7 +355,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @param array $_data
      * @return void
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         

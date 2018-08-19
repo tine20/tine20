@@ -46,7 +46,8 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     {
         // initial object
         $this->objects['TestRecord'] = new Tinebase_Record_DummyRecord(array(), true);
-        $this->objects['TestRecord']->setFromArray(array('id'=>'2', 'test_2'=>NULL, ), NULL);
+        $tmpData = array('id'=>'2', 'test_2'=>NULL, );
+        $this->objects['TestRecord']->setFromArray($tmpData, NULL);
         
         // date management
         $date = new Tinebase_DateTime();
