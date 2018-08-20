@@ -3180,6 +3180,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * create preview for files without a preview, delete previews for already deleted files
      *
      * @return bool
+     * @throws Zend_Db_Statement_Exception
      */
     public function sanitizePreviews()
     {
@@ -3197,7 +3198,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         $created = 0;
         $deleted = 0;
 
-        foreach($treeNodeBackend->search(
+        foreach ($treeNodeBackend->search(
                 new Tinebase_Model_Tree_Node_Filter([
                     ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
                 ], '', ['ignoreAcl' => true])
@@ -3238,7 +3239,19 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     continue;
                 }
 
-                $previewController->createPreviewsFromNode($actualNode);
+                try {
+                    $previewController->createPreviewsFromNode($actualNode);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // this might throw Deadlock exceptions - ignore those
+                    if (strpos($zdse->getMessage(), 'Deadlock') !== false) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Ignoring deadlock / skipping preview generation - Error: '
+                            . $zdse->getMessage());
+                        continue;
+                    } else {
+                        throw $zdse;
+                    }
+                }
                 $validHashes[$actualNode->hash] = true;
                 ++$created;
             }
