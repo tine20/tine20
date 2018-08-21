@@ -485,8 +485,7 @@
     protected function _getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, &$method, Calendar_Model_Attender $attender)
     {
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
-        $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
-        
+
         switch ($_action) {
             case 'alarm':
                 $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
