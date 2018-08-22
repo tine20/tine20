@@ -555,6 +555,34 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * example usage:
+     *           $out = $this->_appCliHelper('Addressbook', 'createDemoData', []);
+     *
+     * @param $appName
+     * @param $command
+     * @param $params
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _appCliHelper($appName, $command, $params)
+    {
+        $classname = $appName . '_Frontend_Cli';
+        if (! class_exists($classname)) {
+            throw new Tinebase_Exception_InvalidArgument('CLI class ' . $classname . ' not found');
+        }
+
+        $cli = new $classname();
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments($params);
+
+        ob_start();
+        call_user_func_array([$cli, $command], [$opts]);
+        $out = ob_get_clean();
+
+        return $out;
+    }
+
+    /**
      * add an attachment to a record
      *
      * @param $record
