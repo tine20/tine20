@@ -995,10 +995,21 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $this->selectFolder($globalName);
         $this->_protocol->expunge();
     }
-    
+
+    /**
+     * @param string $_header
+     * @return string
+     */
     protected function _mimeDecodeHeader($_header)
     {
-        $result = iconv_mime_decode($_header, ICONV_MIME_DECODE_CONTINUE_ON_ERROR);
+        if (is_array($_header)) {
+            // just use the first value here
+            $header = array_shift($_header);
+        } else {
+            $header = $_header;
+        }
+
+        $result = iconv_mime_decode($header, ICONV_MIME_DECODE_CONTINUE_ON_ERROR);
         
         return $result;
     }
