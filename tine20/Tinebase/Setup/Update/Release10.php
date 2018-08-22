@@ -949,9 +949,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 . ' Updated node acl for ' . $node->name .' (container id: ' . $container->getId() . ')');
 
             // remove old acl container
-            Tinebase_Container::getInstance()->deleteContainer($container, /* ignore acl */ true);
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Removed old container ' . $container->name);
+            try {
+                Tinebase_Container::getInstance()->deleteContainer($container, /* ignore acl */
+                    true);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Removed old container ' . $container->name);
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                Tinebase_Exception::log($teia);
+            }
         }
     }
 
