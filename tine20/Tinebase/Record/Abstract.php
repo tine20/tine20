@@ -301,7 +301,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function __clone()
     {
-        foreach ($this->_properties as $name => $value)
+        foreach ($this->_properties as $name => &$value)
         {
             if (is_object($value)) {
                 $this->_properties[$name] = clone $value;

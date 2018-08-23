@@ -37,7 +37,7 @@ class Tinebase_Notification
     /**
      * holds the instance of the singleton
      *
-     * @var Adressbook_Controller
+     * @var Tinebase_Notification
      */
     private static $_instance = NULL;
     

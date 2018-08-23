@@ -3180,6 +3180,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * create preview for files without a preview, delete previews for already deleted files
      *
      * @return bool
+     * @throws Zend_Db_Statement_Exception
      */
     public function sanitizePreviews()
     {
@@ -3197,7 +3198,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         $created = 0;
         $deleted = 0;
 
-        foreach($treeNodeBackend->search(
+        foreach ($treeNodeBackend->search(
                 new Tinebase_Model_Tree_Node_Filter([
                     ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
                 ], '', ['ignoreAcl' => true])
@@ -3238,7 +3239,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     continue;
                 }
 
-                $previewController->createPreviewsFromNode($actualNode);
+                if (! $previewController->createPreviews($actualNode)) {
+                    continue;
+                }
+
                 $validHashes[$actualNode->hash] = true;
                 ++$created;
             }
