@@ -78,7 +78,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                             setup.php --pgsqlMigration -- mysqlConfigFile=/path/to/config/file',
                 'upgradeMysql564'         => 'update database to use features of MySQL 5.6.4+
                         Examples:
-                            setup.php --upgrade_mysql_564',
+                            setup.php --upgradeMysql564',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
