@@ -109,7 +109,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
-        this.i18nEmptyText = this.app.i18n._('No Messages found or the cache is empty.');
+        this.i18nEmptyText = this.app.i18n._('No Messages found.');
         
         this.recordProxy = Tine.Felamimail.messageBackend;
         
