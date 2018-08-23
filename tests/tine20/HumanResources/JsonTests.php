@@ -775,7 +775,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      */
     public function testGetFeastAndFreeDays()
     {
-            $employmentBegin = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
+            $employmentBegin = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())
+                ->setDate(2014, 1, 2)->setTime(0,0,0);
             $employmentEnd   = clone $employmentBegin;
             $employmentEnd->setDate(2014, 1, 30);
         
