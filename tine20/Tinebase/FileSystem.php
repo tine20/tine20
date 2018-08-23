@@ -3239,19 +3239,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     continue;
                 }
 
-                try {
-                    $previewController->createPreviewsFromNode($actualNode);
-                } catch (Zend_Db_Statement_Exception $zdse) {
-                    // this might throw Deadlock exceptions - ignore those
-                    if (strpos($zdse->getMessage(), 'Deadlock') !== false) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                            . ' Ignoring deadlock / skipping preview generation - Error: '
-                            . $zdse->getMessage());
-                        continue;
-                    } else {
-                        throw $zdse;
-                    }
+                if (! $previewController->createPreviews($actualNode)) {
+                    continue;
                 }
+
                 $validHashes[$actualNode->hash] = true;
                 ++$created;
             }
