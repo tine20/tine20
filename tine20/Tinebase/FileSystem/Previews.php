@@ -146,14 +146,28 @@ class Tinebase_FileSystem_Previews
     }
 
     /**
-     * @param string $_id
+     * @param string|Tinebase_Model_Tree_Node $_id
      * @param int $_revision
      * @return bool
-     * @throws Tinebase_Exception
+     * @throws Zend_Db_Statement_Exception
      */
-    public function createPreviews($_id, $_revision)
+    public function createPreviews($_id, $_revision = null)
     {
-        return $this->createPreviewsFromNode(Tinebase_FileSystem::getInstance()->get($_id, $_revision));
+        $node = $_id instanceof Tinebase_Model_Tree_Node ? $_id : Tinebase_FileSystem::getInstance()->get($_id, $_revision);
+
+        try {
+            return $this->createPreviewsFromNode($node);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // this might throw Deadlock exceptions - ignore those
+            if (strpos($zdse->getMessage(), 'Deadlock') !== false) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Ignoring deadlock / skipping preview generation - Error: '
+                    . $zdse->getMessage());
+                return false;
+            } else {
+                throw $zdse;
+            }
+        }
     }
 
     /**
