@@ -1530,6 +1530,7 @@ class Tinebase_ModelConfiguration {
      * - also checks feature switches
      * 
      * @param array $_fieldConfig the field configuration
+     * @return boolean
      */
     protected function _isAvailable($_fieldConfig)
     {
@@ -1540,6 +1541,8 @@ class Tinebase_ModelConfiguration {
             if (!(isset(self::$_availableApplications[$fieldConfig['appName']])
                 || array_key_exists($fieldConfig['appName'], self::$_availableApplications))
             ) {
+                // NOTE: this check fails during setup (install) because related app might not be installed yet -
+                //       as long as this isn't fixed, we need to make sure the apps are installed in the correct order.
                 self::$_availableApplications[$fieldConfig['appName']] = Tinebase_Application::getInstance()->isInstalled($fieldConfig['appName'], TRUE);
             }
             $result = self::$_availableApplications[$fieldConfig['appName']];

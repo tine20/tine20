@@ -4,8 +4,6 @@
     <version>12.0</version>
     <order>20</order>
     <depends>
-        <application>Admin</application>
-        <application>Addressbook</application>
         <application>Tasks</application>
         <application>Sales</application>
     </depends>

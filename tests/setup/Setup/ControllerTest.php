@@ -398,4 +398,40 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(in_array(SQL_TABLE_PREFIX . 'felamimail_cache_message', $tables), 'felamimail tables need to be in _getBackupStructureOnlyTables');
     }
+
+    public function testSortInstallableApplications()
+    {
+        $apps = ['Tinebase','Addressbook','Courses','CoreData','Voipmanager','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Phone','Timetracker','MailFiler','Tasks','Projects','Felamimail','Admin','Calendar','Sales'];
+
+        $applications = array();
+        foreach ($apps as $applicationName) {
+            $applications[$applicationName] = Setup_Controller::getInstance()->getSetupXml($applicationName);
+        }
+
+        $result = Setup_Controller::getInstance()->sortInstallableApplications($applications);
+        $expected = array (
+            0 => 'Tinebase',
+            1 => 'Admin',
+            2 => 'Addressbook',
+            3 => 'Calendar',
+            4 => 'CoreData',
+            5 => 'Felamimail',
+            6 => 'Sales',
+            7 => 'ExampleApplication',
+            8 => 'Inventory',
+            9 => 'Projects',
+            10 => 'Timetracker',
+            11 => 'ActiveSync',
+            12 => 'Filemanager',
+            13 => 'Phone',
+            14 => 'MailFiler',
+            15 => 'Crm',
+            16 => 'Tasks',
+            17 => 'Courses',
+            18 => 'Voipmanager',
+            19 => 'HumanResources',
+            20 => 'SimpleFAQ',
+        );
+        self::assertEquals($expected, array_keys($result));
+    }
 }

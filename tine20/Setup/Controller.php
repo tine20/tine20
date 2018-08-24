@@ -1626,7 +1626,7 @@ class Setup_Controller
                 }
             }
         }
-        $applications = $this->_sortInstallableApplications($applications);
+        $applications = $this->sortInstallableApplications($applications);
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
 
@@ -2162,7 +2162,7 @@ class Setup_Controller
      * @param array $_applications
      * @return array
      */
-    protected function _sortInstallableApplications($_applications)
+    public function sortInstallableApplications($_applications)
     {
         $result = array();
         
@@ -2174,10 +2174,21 @@ class Setup_Controller
                 unset($_applications[$app]);
             }
         }
-        
+
+        // sort by order
+        uasort($_applications, function($a, $b) {
+            $aOrder = isset($a->order) ? (int) $a->order : 100;
+            $bOrder = isset($b->order) ? (int) $b->order : 100;
+            if ($aOrder == $bOrder) {
+                // sort alphabetically
+                return ((string) $a->name < (string) $b->name) ? -1 : 1;
+            }
+            return ($aOrder < $bOrder) ? -1 : 1;
+        });
+
         // get all apps to install ($name => $dependencies)
         $appsToSort = array();
-        foreach($_applications as $name => $xml) {
+        foreach ($_applications as $name => $xml) {
             $depends = (array) $xml->depends;
             if (isset($depends['application'])) {
                 if ($depends['application'] == 'Tinebase') {
