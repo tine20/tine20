@@ -182,48 +182,57 @@ class Felamimail_Frontend_JsonTest extends TestCase
         
         if (! empty($this->_foldersToClear)) {
             foreach ($this->_foldersToClear as $folderName) {
-                // delete test messages from given folders on imap server (search by special header)
-                $this->_imap->selectFolder($folderName);
-                $result = $this->_imap->search(array(
-                    'HEADER X-Tine20TestMessage jsontest'
-                ));
-                //print_r($result);
-                foreach ($result as $messageUid) {
-                    $this->_imap->removeMessage($messageUid);
-                }
-                
-                // clear message cache
-                $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $folderName);
-                Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
+                try {
+                    // delete test messages from given folders on imap server (search by special header)
+                    $this->_imap->selectFolder($folderName);
+                    $result = $this->_imap->search(array(
+                        'HEADER X-Tine20TestMessage jsontest'
+                    ));
+                    //print_r($result);
+                    foreach ($result as $messageUid) {
+                        $this->_imap->removeMessage($messageUid);
+                    }
+
+                    // clear message cache
+                    $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(),
+                        $folderName);
+                    Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
+                } catch (Exception $e) {}
             }
         }
         
         // sieve cleanup
         if ($this->_testSieveScriptName !== NULL) {
-            Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
             try {
-                Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
-            } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                // do not delete script if active
-            }
-            Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
-            
-            if ($this->_oldSieveData !== NULL) {
-                $this->_oldSieveData->save();
-            }
+                Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
+                try {
+                    Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
+                } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                    // do not delete script if active
+                }
+                Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
+
+                if ($this->_oldSieveData !== NULL) {
+                    $this->_oldSieveData->save();
+                }
+            } catch (Exception $e) {}
         }
         if ($this->_oldActiveSieveScriptName !== NULL) {
-            Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
-            Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
+            try {
+                Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
+                Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
+            } catch (Exception $e) {}
         }
         
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
-            $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
-            //echo "delete $path";
-            $webdavRoot->delete($path);
+            try {
+                $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
+                //echo "delete $path";
+                $webdavRoot->delete($path);
+            } catch (Exception $e) {}
         }
-        
+
         parent::tearDown();
 
         // needed to clear cache of containers
@@ -1209,7 +1218,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($messageData);
-        $message = $this->_searchForMessageBySubject($subject);
+        $this->_searchForMessageBySubject($subject);
         
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $this->_checkEmailNote($contact, $subject);
