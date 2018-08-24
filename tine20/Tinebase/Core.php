@@ -1063,6 +1063,7 @@ class Tinebase_Core
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
                 );
                 $dbConfigArray['options']['init_commands'] = array(
+                    "SET NAMES UTF8MB4",
                     "SET time_zone = '+0:00'",
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
                     "SET SESSION group_concat_max_len = 4294967295"
@@ -1077,6 +1078,12 @@ class Tinebase_Core
                             . ' Falling back to utf-8 charset');
 
                         $dbConfigArray['charset'] = 'utf8';
+                        $dbConfigArray['options']['init_commands'] = array(
+                            "SET NAMES UTF8",
+                            "SET time_zone = '+0:00'",
+                            "SET SQL_MODE = 'STRICT_ALL_TABLES'",
+                            "SET SESSION group_concat_max_len = 4294967295"
+                        );
                         $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
                     }
                 }
@@ -1785,16 +1792,15 @@ class Tinebase_Core
      */
     public static function filterInputForDatabase($string)
     {
-        if (self::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $string = Tinebase_Helper::mbConvertTo($string);
-            
+        $string = Tinebase_Helper::mbConvertTo($string);
+
+        if (($db = self::getDb()) instanceof Zend_Db_Adapter_Pdo_Mysql &&
+                ! Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
             // remove 4 byte utf8
-            $result = preg_replace('/[\xF0-\xF7].../s', '?', $string);
-        } else {
-            $result = $string;
+            $string = preg_replace('/[\xF0-\xF7].../s', '?', $string);
         }
         
-        return $result;
+        return $string;
     }
     
     /**
