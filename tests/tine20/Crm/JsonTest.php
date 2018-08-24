@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -757,7 +757,8 @@ class Crm_JsonTest extends Crm_AbstractTest
         $leadArray['start'] = null;
         $newLead = $this->_getUit()->saveLead($leadArray);
         
-        $this->assertContains(Tinebase_DateTime::now()->format('Y-m-d'), $newLead['start'], 'start should be set to now if missing');
+        $this->assertContains(Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d'),
+            $newLead['start'], 'start should be set to now if missing');
     }
     
     /**
