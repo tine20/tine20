@@ -83,6 +83,7 @@ class Tinebase_Fulltext_Indexer
 
         $db = Tinebase_Core::getDb();
         $db->delete(SQL_TABLE_PREFIX . 'external_fulltext', $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $_id));
+        $blob = Tinebase_Core::filterInputForDatabase($blob);
         $db->insert(SQL_TABLE_PREFIX . 'external_fulltext', array('id' => $_id, 'text_data' => $blob));
     }
 
