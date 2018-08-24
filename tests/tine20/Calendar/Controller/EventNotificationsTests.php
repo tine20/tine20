@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -675,7 +675,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert alarm
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
         $this->_assertMail('pwulf', $assertString);
 
         // check adjusted alarm time
@@ -727,7 +727,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
         // check series
@@ -777,7 +777,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->addWeek(1)->format('M j');
+        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->addWeek(1)
+                ->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
         // check adjusted alarm time
