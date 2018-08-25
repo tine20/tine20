@@ -155,7 +155,8 @@ abstract class Timetracker_AbstractTest extends TestCase
         }
 
         if($data['start_date'] === NULL) {
-            $data['start_date'] = Tinebase_DateTime::now()->toString('Y-m-d');
+            $data['start_date'] = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())
+                ->toString('Y-m-d');
         }
 
         $ts = new Timetracker_Model_Timesheet($data, TRUE);
