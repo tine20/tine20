@@ -933,6 +933,7 @@ class Tinebase_Core
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
                 );
                 $dbConfigArray['options']['init_commands'] = array(
+                    "SET NAMES UTF8",
                     "SET time_zone = '+0:00'",
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
                     "SET SESSION group_concat_max_len = 4294967295"
