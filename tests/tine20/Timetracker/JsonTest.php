@@ -568,7 +568,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
 
         // date is last/this sunday (1. day of week in the US)
-        $today = Tinebase_DateTime::now();
+        $today = Tinebase_DateTime::now()->setTime(12, 0, 0);
         $dayOfWeek = $today->get('w');
         $lastSunday = $today->subDay($dayOfWeek);
 

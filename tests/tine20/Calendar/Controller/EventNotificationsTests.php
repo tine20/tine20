@@ -24,7 +24,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * @var Calendar_Controller_EventNotifications controller unter test
      */
     protected $_notificationController;
-    
+
     /**
      * (non-PHPdoc)
      * @see tests/tine20/Calendar/Calendar_TestCase::setUp()
@@ -57,7 +57,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function tearDown()
     {
         parent::tearDown();
-        
+
         Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last week */ 1);
     }
     
@@ -617,8 +617,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 . ' Something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this: ' . $e);
             static::fail($e->getMessage());
         }
-
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        
+        $assertString = ' at ' . $event->dtstart->getClone()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
         $this->_assertMail('sclever', $assertString);
     }
     
@@ -654,7 +654,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert alarm
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        $assertString = ' at ' . $event->dtstart->getClone()->addDay(1)->setTimezone(Tinebase_Core::getUserTimezone())
+                ->format('M j');
         $this->_assertMail('pwulf', $assertString);
 
         // check adjusted alarm time
@@ -706,7 +707,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        $assertString = ' at ' . $event->dtstart->getClone()->addDay(1)->setTimezone(Tinebase_Core::getUserTimezone())
+                ->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
         // check series
@@ -756,7 +758,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->addWeek(1)
+        $assertString = ' at ' . $event->dtstart->getClone()->addWeek(1)->setTimezone(Tinebase_Core::getUserTimezone())
                 ->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
