@@ -849,7 +849,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * example:
      * $ php tine20.php --method Tinebase.setCustomfieldAcl -- application=Addressbook \
      *   model=Addressbook_Model_Contact name=$CFNAME \
-     *   grants='[{"account":"$USERNAME","account_type":"user","editGrant":1,"addGrant":1},{"account_type":"anyone","readGrant":1}]'
+     *   grants='[{"account":"$USERNAME","account_type":"user","readGrant":1,"writeGrant":1},{"account_type":"anyone","readGrant":1}]'
      *
      * @param $_opts
      * @return integer
@@ -886,6 +886,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $grantsArray = Tinebase_Helper::jsonDecode($data['grants']);
+        $removeOldGrants = true;
         foreach ($grantsArray as $grant) {
             $accountType = isset($grant['account_type']) ? $grant['account_type'] : null;
             if (isset($grant['account'])) {
@@ -901,13 +902,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
             }
             $grants = [];
-            $allGrants = Tinebase_Model_Grants::getAllGrants();
+            $allGrants = Tinebase_Model_CustomField_Grant::getAllGrants();
             foreach ($grant as $key => $value) {
                 if (in_array($key, $allGrants) && $value) {
                     $grants[] = $key;
                 }
             }
-            Tinebase_CustomField::getInstance()->setGrants($cf->getId(), $grants, $accountType, $accountId);
+            Tinebase_CustomField::getInstance()->setGrants($cf->getId(), $grants, $accountType, $accountId, $removeOldGrants);
+            // prevent overwrite
+            $removeOldGrants = false;
         }
 
         return 0;
