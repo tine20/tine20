@@ -352,7 +352,7 @@ abstract class Timetracker_AbstractTest extends TestCase
         );
 
         if ($_type == 'inweek') {
-            $date = Tinebase_DateTime::now();
+            $date = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone());
             $weekNumber = $date->get('W');
             $result[] = array(
                 'field' => 'start_date',

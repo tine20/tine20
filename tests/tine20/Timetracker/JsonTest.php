@@ -240,8 +240,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // checks
         $this->assertEquals($timesheet->description, $timesheetData['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']['accountId']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'], 'account is not resolved');
-        $this->assertEquals(Tinebase_DateTime::now()->toString('Y-m-d') . ' 00:00:00',  $timesheetData['start_date']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'],
+            'account is not resolved');
+        $this->assertEquals(Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->toString('Y-m-d') .
+            ' 00:00:00',  $timesheetData['start_date']);
 
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
@@ -543,7 +545,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
 
         // date is last/this sunday (1. day of week in the US)
-        $today = Tinebase_DateTime::now()->setTime(12, 0, 0);
+        $today = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(12, 0, 0);
         $dayOfWeek = $today->get('w');
         $lastSunday = $today->subDay($dayOfWeek);
 
