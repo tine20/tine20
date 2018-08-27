@@ -32,11 +32,6 @@ class Timetracker_Setup_Update_Release12 extends Setup_Update_Abstract
     {
         // remove old index + fks first
         try {
-            $this->_backend->dropForeignKey('timetracker_timesheet', 'timesheet::timeaccount_id--timeaccount::id');
-        } catch (Zend_Db_Exception $zdse) {
-            // already dropped
-        }
-        try {
             $this->_backend->dropForeignKey('timetracker_timeaccount', 'timeaccount::container_id--container::id');
         } catch (Zend_Db_Exception $zdse) {
             // already dropped
