@@ -575,7 +575,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record the update record
      * @param   Tinebase_Record_Interface $_oldRecord the current persistent record
      * @throws Tinebase_Exception_AccessDenied
-     * @todo remove system note for updated jpegphoto when images are modlogged (@see 0000284: modlog of contact images / move images to vfs)
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -586,25 +585,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_setGeoData($_record);
         }
         
-        if (isset($_record->jpegphoto)){
-            // add system note when jpegphoto gets changed
-            $translate = Tinebase_Translation::getTranslation('Addressbook');
-            $noteMessage = "";
-
-            if (! empty($_record->jpegphoto)) {
-                // new or updated contact image supplied
-                $noteMessage = $translate->_('Uploaded new contact image.');
-            } else {
-                // contact image deleted
-                $noteMessage = $translate->_('Deleted contact image.');
-            }
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . (new Exception($noteMessage)));
-            }
-            Tinebase_Notes::getInstance()->addSystemNote($_record, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $noteMessage);
-        }
-
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
         }
