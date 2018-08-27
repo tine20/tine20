@@ -450,7 +450,10 @@ class Setup_Update_Abstract
             $setupId = Tinebase_Config::getInstance()->get(Tinebase_Config::SETUPUSERID);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $setupId . ' as setupuser.');
             /** @noinspection PhpUndefinedMethodInspection */
-            return Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId, 'Tinebase_Model_FullUser');
+            $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId,
+                Tinebase_Model_FullUser::class);
+            static::assertAdminGroupMembership($setupUser);
+            return $setupUser;
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                 . __LINE__ . ' ' . $tenf->getMessage());
@@ -461,11 +464,28 @@ class Setup_Update_Abstract
 
         $setupUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_SETUP);
         if ($setupUser) {
+            static::assertAdminGroupMembership($setupUser);
             Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, null);
             Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
         }
 
         return $setupUser;
+    }
+
+    static public function assertAdminGroupMembership(Tinebase_Model_FullUser $_user)
+    {
+        $unsetUser = false;
+        if (!Tinebase_Core::getUser()) {
+            Tinebase_Core::set(Tinebase_Core::USER, $_user);
+            $unsetUser = true;
+        }
+        try {
+            Tinebase_User::getInstance()->assertAdminGroupMembership($_user);
+        } finally {
+            if ($unsetUser) {
+                Tinebase_Core::unsetUser();
+            }
+        }
     }
 
     /**
