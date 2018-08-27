@@ -291,7 +291,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $filter = new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'record_type',         'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
             array('field' => 'record_id',           'operator' => 'equals', 'value' => $contact->getId()),
-            array('field' => 'modification_time',   'operator' => 'within', 'value' => 'weekThis'),
+            array('field' => 'modification_time',   'operator' => 'after',  'value' =>  Tinebase_DateTime::now()->subDay(1)),
             array('field' => 'change_type',         'operator' => 'not',    'value' => Tinebase_Timemachine_ModificationLog::CREATED)
         ));
 
