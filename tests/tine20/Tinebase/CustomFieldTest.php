@@ -414,6 +414,7 @@ class Tinebase_CustomFieldTest extends TestCase
     public function testSearchByDate()
     {
         $date = new Tinebase_DateTime();
+        $date->setTimezone(Tinebase_Core::getUserTimezone());
         $cf = self::getCustomField([
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'model' => 'Addressbook_Model_Contact',
