@@ -1839,6 +1839,13 @@ class Setup_Controller
         }
         $applications = $this->_sortUninstallableApplications($applications);
 
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstalling applications: '
+            . print_r(array_keys($applications), true));
+
+        if (count($_applications) > count($applications)) {
+            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Some applications could not be uninstalled (check dependencies).');
+        }
+
         foreach ($applications as $name => $xml) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($name);
             $this->_uninstallApplication($app);

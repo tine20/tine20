@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>cal_import_event_csv</name>
+    <model>Calendar_Model_Event</model>
+    <plugin>Calendar_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <description>csv import</description>
+    <label>Import csv-files</label>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>summary</source>
+            <destination>summary</destination>
+        </field>
+        <field>
+            <source>description</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>status</source>
+            <destination>status</destination>
+        </field>
+        <field>
+            <source>date</source>
+            <destination>date</destination>
+        </field>
+        <field>
+            <source>time</source>
+            <destination>time</destination>
+        </field>
+        <field>
+            <source>duration</source>
+            <destination>duration</destination>
+        </field>
+        <field>
+            <source>rrule</source>
+            <destination>rrule</destination>
+        </field>
+        <field>
+            <source>members</source>
+            <destination>members</destination>
+        </field>
+        <field>
+            <source>resources</source>
+            <destination>resources</destination>
+        </field>
+        <field>
+            <source>groups</source>
+            <destination>groups</destination>
+        </field>
+        <field>
+            <source>is_all_day_event</source>
+            <destination>is_all_day_event</destination>
+        </field>
+    </mapping>
+</config>
