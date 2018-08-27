@@ -861,7 +861,77 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         return TRUE;
     }
-    
+
+    /**
+     * set customfield acl
+     *
+     * example:
+     * $ php tine20.php --method Tinebase.setCustomfieldAcl -- application=Addressbook \
+     *   model=Addressbook_Model_Contact name=$CFNAME \
+     *   grants='[{"account":"$USERNAME","account_type":"user","editGrant":1,"addGrant":1},{"account_type":"anyone","readGrant":1}]'
+     *
+     * @param $_opts
+     * @return integer
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function setCustomfieldAcl(Zend_Console_Getopt $_opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
+        // parse args
+        $args = $_opts->getRemainingArgs();
+        $data = array();
+        foreach ($args as $idx => $arg) {
+            list($key, $value) = explode('=', $arg);
+            if ($key == 'application') {
+                $key = 'application_id';
+                $value = Tinebase_Application::getInstance()->getApplicationByName($value)->getId();
+            }
+            $data[$key] = $value;
+        }
+
+        if (! isset($data['grants']) || ! isset($data['name'])) {
+            throw new Tinebase_Exception_InvalidArgument('grants and name params are required');
+        }
+
+        $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+            $data['application_id'],
+            $data['name']);
+
+        if (! $cf) {
+            throw new Tinebase_Exception_InvalidArgument('customfield not found');
+        }
+
+        $grantsArray = Tinebase_Helper::jsonDecode($data['grants']);
+        foreach ($grantsArray as $grant) {
+            $accountType = isset($grant['account_type']) ? $grant['account_type'] : null;
+            if (isset($grant['account'])) {
+                if ($accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                    $group = Tinebase_Group::getInstance()->getGroupByName($grant['account']);
+                    $accountId = $group->getId();
+                } else {
+                    $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
+                    $accountId = $user->getId();
+                    $accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+                }
+            } else {
+                $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
+            }
+            $grants = [];
+            $allGrants = Tinebase_Model_Grants::getAllGrants();
+            foreach ($grant as $key => $value) {
+                if (in_array($key, $allGrants) && $value) {
+                    $grants[] = $key;
+                }
+            }
+            Tinebase_CustomField::getInstance()->setGrants($cf->getId(), $grants, $accountType, $accountId);
+        }
+
+        return 0;
+    }
+
     /**
      * nagios monitoring for tine 2.0 database connection
      * 

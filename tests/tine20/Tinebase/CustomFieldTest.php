@@ -173,7 +173,7 @@ class Tinebase_CustomFieldTest extends TestCase
      *
      * @see 0007630: Customfield read access to all users
      */
-    public function testAddressbookCustomFieldAcl()
+    public function testAddressbookCustomFieldAcl($setViaCli = false)
     {
         $createdCustomField = $this->_instance->addCustomField(self::getCustomField(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
@@ -194,22 +194,43 @@ class Tinebase_CustomFieldTest extends TestCase
         );
         $contact->customfields = $cfValue;
         $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
-        $this->assertEquals($cfValue, $contact->customfields, 'cf not saved: ' . print_r($contact->toArray(), TRUE));
+        self::assertEquals($cfValue, $contact->customfields, 'cf not saved: ' . print_r($contact->toArray(), TRUE));
         
         // create group and only give acl to this group
         $group = Tinebase_Group::getInstance()->getDefaultAdminGroup();
-        $this->_instance->setGrants($createdCustomField, array(
-            Tinebase_Model_CustomField_Grant::GRANT_READ,
-            Tinebase_Model_CustomField_Grant::GRANT_WRITE,
-        ), Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $group->getId());
+
+        if ($setViaCli) {
+            $result = $this->_appCliHelper('Tinebase', 'setCustomfieldAcl', [
+                '--',
+                'application=Addressbook',
+                'model=Addressbook_Model_Contact',
+                'name=' . $createdCustomField->name . '',
+                'grants=[{"account":"' . $group->name . '","account_type":"group","readGrant":1,"writeGrant":1}]'
+            ]);
+            self::assertEquals("", $result);
+        } else {
+            $this->_instance->setGrants($createdCustomField, array(
+                Tinebase_Model_CustomField_Grant::GRANT_READ,
+                Tinebase_Model_CustomField_Grant::GRANT_WRITE,
+            ), Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $group->getId());
+        }
+
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
-        $this->assertEquals(2, count($contact->customfields));
+        self::assertEquals(2, count($contact->customfields));
         
         // change user and check cfs
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         Tinebase_Core::set(Tinebase_Core::USER, $sclever);
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
-        $this->assertEquals(array($anotherCustomField->name => 'test value 2'), $contact->customfields, 'cf should be hidden: ' . print_r($contact->customfields, TRUE));
+        self::assertEquals(array($anotherCustomField->name => 'test value 2'), $contact->customfields, 'cf should be hidden: ' . print_r($contact->customfields, TRUE));
+    }
+
+    /**
+     * testAddressbookCustomFieldAclViaCli
+     */
+    public function testAddressbookCustomFieldAclViaCli()
+    {
+        $this->testAddressbookCustomFieldAcl(true);
     }
 
     /**
