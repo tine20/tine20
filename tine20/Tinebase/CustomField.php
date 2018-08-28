@@ -673,10 +673,13 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param   array $_grants list of grants to add
      * @param   string $_accountType
      * @param   int $_accountId
+     * @param   boolean $_removeOldGrants
      * @return  void
      * @throws Tinebase_Exception_Backend
+     *
+     * @todo let this function set all grants at once (like container grants)
      */
-    public function setGrants($_customfieldId, $_grants = array(), $_accountType = NULL, $_accountId = NULL)
+    public function setGrants($_customfieldId, $_grants = array(), $_accountType = NULL, $_accountId = NULL, $_removeOldGrants = true)
     {
         $cfId = ($_customfieldId instanceof Tinebase_Model_CustomField_Config) ? $_customfieldId->getId() : $_customfieldId;
         
@@ -686,8 +689,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 . ($_accountType !== NULL ? $_accountType : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) . ' (' . $_accountId . ')');
             
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            $this->_backendACL->deleteByProperty($cfId, 'customfield_id');
-            
+            if ($_removeOldGrants) {
+                $this->_backendACL->deleteByProperty($cfId, 'customfield_id');
+            }
+
             foreach ($_grants as $grant) {
                 if (in_array($grant, Tinebase_Model_CustomField_Grant::getAllGrants())) {
                     $newGrant = new Tinebase_Model_CustomField_Grant(array(
