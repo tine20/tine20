@@ -172,6 +172,8 @@ class Tinebase_CustomFieldTest extends TestCase
      * testAddressbookCustomFieldAcl
      *
      * @see 0007630: Customfield read access to all users
+     *
+     * @todo test write grant
      */
     public function testAddressbookCustomFieldAcl($setViaCli = false)
     {
@@ -205,7 +207,8 @@ class Tinebase_CustomFieldTest extends TestCase
                 'application=Addressbook',
                 'model=Addressbook_Model_Contact',
                 'name=' . $createdCustomField->name . '',
-                'grants=[{"account":"' . $group->name . '","account_type":"group","readGrant":1,"writeGrant":1}]'
+                'grants=[{"account":"' . $group->name . '","account_type":"group","readGrant":1,"writeGrant":1},{"account":"'
+                    . Tinebase_Core::getUser()->accountLoginName . '","writeGrant":1}]'
             ]);
             self::assertEquals("", $result);
         } else {
