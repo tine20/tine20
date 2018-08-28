@@ -72,7 +72,7 @@ abstract class Tinebase_Controller_Event extends Tinebase_Controller_Abstract im
     }
 
     /**
-     * creates the initial (file/tree node) folder for new accounts
+     * creates the initial (file/tree node) folder for new accounts and returns it. skips creation if node already exists.
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the account object
      * @param string $applicationName
