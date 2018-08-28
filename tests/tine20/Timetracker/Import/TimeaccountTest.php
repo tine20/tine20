@@ -27,6 +27,11 @@ class Timetracker_Import_TimeaccountTest extends TestCase
 
     public function testImportDemoData()
     {
+        if (Tinebase_DateTime::now()->setTimezone('UTC')->format('d') !== Tinebase_DateTime::now()->setTimezone(
+                Tinebase_Core::getUserTimezone())->format('d')) {
+            static::markTestSkipped('utc / usertimezone have a different date, test would fail');
+        }
+
         $importer_timeaccount = new Tinebase_Setup_DemoData_Import('Timetracker_Model_Timeaccount', [
             'definition' => 'time_import_timeaccount_csv',
         ]);

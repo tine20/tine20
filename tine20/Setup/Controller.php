@@ -581,6 +581,11 @@ class Setup_Controller
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $message);
 
                 $this->_assertApplicationStatesTable();
+                // sad but true, assertApplication changes eventually the application version in the same object instance we have
+                // and then it gets set back, but only in a new instance.... we have to refetch
+                if ($_application->name === 'Tinebase') {
+                    $_application = Tinebase_Application::getInstance()->getApplicationById($_application->getId());
+                }
 
                 $version = $_application->getMajorAndMinorVersion();
                 $minor = $version['minor'];
@@ -672,7 +677,7 @@ class Setup_Controller
         }
 
         $updater = new Tinebase_Setup_Update_Release11($this->_backend);
-        $oldVersion = Setup_Update_Abstract::getAppVersion('Tinebase');
+        $oldVersion = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->version;
         $updater->update_23();
         $updater->setApplicationVersion('Tinebase', $oldVersion);
     }
@@ -1743,6 +1748,8 @@ class Setup_Controller
         $replicationMasterId = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         // do updates now, because maybe application state updates are not yet there
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        Tinebase_Application::getInstance()->resetClassCache();
         $this->updateApplications();
 
         // then set the replication master id
