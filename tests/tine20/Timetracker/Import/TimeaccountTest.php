@@ -10,6 +10,12 @@
 
 /**
  * Test helper
+ *
+ * ATTENTION this class is not included in the AllTest file. if you want to add a real test
+ * to this class, don't forget to include it!
+ * \Timetracker_Import_DemoDataTest::suite
+ * //$suite->addTestSuite('Timetracker_Import_TimeaccountTest');
+ *
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
