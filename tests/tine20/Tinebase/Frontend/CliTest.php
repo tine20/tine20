@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -212,6 +212,7 @@ class Tinebase_Frontend_CliTest extends TestCase
                 $serverTime = $task->server_time->getClone();
             }
             $task->next_run = $task->server_time->getClone()->subDay(100);
+            $task->lock_id = null;
             $scheduler->update($task);
         }
         $opts = new Zend_Console_Getopt('abp:');
@@ -232,7 +233,8 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertEquals($adminGroup->getId(), $cronuser->accountPrimaryGroup);
 
         foreach ($scheduler->getAll() as $task) {
-            static::assertNotEmpty($task->last_run, 'task ' . $task->name . ' did not run successfully');
+            static::assertNotEmpty($task->last_run, 'task ' . $task->name . ' did not run successfully: ' .
+                print_r($task->toArray(), true));
             static::assertTrue($task->last_run->isLaterOrEquals($serverTime),
                 'task ' . $task->name . ' did not run successfully');
         }
