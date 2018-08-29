@@ -20,12 +20,8 @@ class Timetracker_Import_TimeaccountTest extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
-        
-    }
-
-    public function testImportDemoData()
+    // not a test! will be called by \Timetracker_Import_TimesheetTest::testImportDemoData
+    public function importDemoData()
     {
         if (Tinebase_DateTime::now()->setTimezone('UTC')->format('d') !== Tinebase_DateTime::now()->setTimezone(
                 Tinebase_Core::getUserTimezone())->format('d')) {
