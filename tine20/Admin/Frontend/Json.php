@@ -81,7 +81,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'primarydomain'                 => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains'              => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
-            'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
+            'defaultInternalAddressbook'    => (
+                    isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])
+                    && $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL)
                 ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 
                 : NULL,
         );

@@ -78,6 +78,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      * returns internal addressbook
      * 
      * @return Tinebase_Model_Container
+     * @todo replace with setDefaultInternalAddressbook
      */
     protected function _getInternalAddressbook()
     {
@@ -171,12 +172,21 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeInternalAddressbook()
     {
+        $internalAddressbook = $this->_getInternalAddressbook();
+        self::setGrantsForInternalAddressbook($internalAddressbook);
+    }
+
+    /**
+     * give anyone read rights to the internal addressbook
+     * give Administrators group read/edit/admin rights to the internal addressbook
+     *
+     * @param $internalAddressbook
+     */
+    public static function setGrantsForInternalAddressbook($internalAddressbook)
+    {
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
 
-        // give anyone read rights to the internal addressbook
-        // give Administrators group read/edit/admin rights to the internal addressbook
-        $internalAddressbook = $this->_getInternalAddressbook();
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
             Tinebase_Model_Grants::GRANT_READ
         ), TRUE);
@@ -236,13 +246,28 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      * 
      * @param Tinebase_Model_Container $internalAddressbook
      * @return Tinebase_Model_Container
-     * 
-     * @todo create new internal adb on the fly if it does not exist?
+     *
+     * @todo translate 'Internal Contacts'
      */
     public static function setDefaultInternalAddressbook($internalAddressbook = NULL)
     {
         if ($internalAddressbook === NULL) {
-            $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+            try {
+                $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName(
+                    'Addressbook',
+                    'Internal Contacts',
+                    Tinebase_Model_Container::TYPE_SHARED);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // create new internal adb
+                $internalAddressbook = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+                    'name'              =>'Internal Contacts',
+                    'type'              => Tinebase_Model_Container::TYPE_SHARED,
+                    'backend'           => 'Sql',
+                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+                    'model'             => 'Addressbook_Model_Contact'
+                )), null, true);
+                self::setGrantsForInternalAddressbook($internalAddressbook);
+            }
         }
         
         Admin_Config::getInstance()->set(
