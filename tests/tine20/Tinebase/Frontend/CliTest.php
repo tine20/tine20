@@ -221,8 +221,9 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->_releaseDBLockIds[] = 'Tinebase_Frontend_Cli::triggerAsyncEvents::' . Tinebase_Core::getTinebaseId();
 
         ob_start();
-        $this->_cli->triggerAsyncEvents($opts);
-        $out = ob_get_clean();
+        $result = $this->_cli->triggerAsyncEvents($opts);
+        ob_get_clean();
+        static::assertTrue($result, 'cli triggerAsyncEvents did not return true');
         
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
         $this->assertTrue(! empty($cronuserId), 'got empty cronuser id');
