@@ -708,6 +708,8 @@ class Addressbook_ControllerTest extends TestCase
 
     public function testContactModelPerformance()
     {
+        self::markTestSkipped('this test has no assertions - just for performance measurement');
+
         $container = $this->_getTestContainer('Addressbook', 'Addressbook_Model_Contact');
 
         $memory = memory_get_usage();
