@@ -58,8 +58,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      * Loads the metadata for the specified class into the provided container.
      *
      * @param string        $className
-     * @param ClassMetadata $metadata
-     * @return void
+     * @param Doctrine\ORM\Mapping\ClassMetadata $metadata
      * @throws MappingException
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata)
@@ -80,7 +79,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
         // mysql supports full text for InnoDB as of 5.6.4 for everybody else: remove full text index
         if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') ) {
-            $this->__removeFullTextIndex($table);
+            $this->_removeFullTextIndex($table);
         }
 
         $metadata->setPrimaryTable($table);
@@ -91,7 +90,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
     /**
      * @param Tinebase_ModelConfiguration $modelConfig
-     * @param ClassMetadata $metadata
+     * @param Doctrine\ORM\Mapping\ClassMetadata $metadata
      */
     protected function _mapAssociations(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
     {
@@ -117,7 +116,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
     /**
      * @param Tinebase_ModelConfiguration $modelConfig
-     * @param ClassMetadata $metadata
+     * @param Doctrine\ORM\Mapping\ClassMetadata $metadata
      */
     protected function _mapFields(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
     {
