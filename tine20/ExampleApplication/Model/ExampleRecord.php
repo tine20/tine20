@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -55,7 +55,6 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 
         'table'             => array(
             'name'    => 'example_application_record',
-            'options' => array('collate' => 'utf8_general_ci'),
             'indexes' => array(
                 'testcontainer_id' => array(
                     'columns' => array('container_id')

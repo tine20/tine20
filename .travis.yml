@@ -16,7 +16,7 @@ env:
 #      - mysql-server
     
 before_script:
-  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS tine20;" -uroot; fi
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS tine20 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;" -uroot; fi
   - cd tine20
   - composer install
   - cp config.inc.travis.php config.inc.php
