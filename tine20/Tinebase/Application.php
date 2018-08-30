@@ -40,6 +40,7 @@ class Tinebase_Application
     const STATE_FILESYSTEM_ROOT_REVISION_SIZE = 'filesystemRootRevisionSize';
     const STATE_FILESYSTEM_ROOT_SIZE = 'filesystemRootSize';
     const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';
+    const STATE_UPDATES = 'updates';
 
 
     /**

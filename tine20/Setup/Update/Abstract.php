@@ -17,6 +17,14 @@
  */
 class Setup_Update_Abstract
 {
+    const CLASS_CONST = 'class';
+    const FUNCTION_CONST = 'function';
+
+    const PRIO_TINEBASE_STRUCTURE = 100;
+    const PRIO_TINEBASE_UPDATE = 300;
+    const PRIO_NORMAL_APP_STRUCTURE = 500;
+    const PRIO_NORMAL_APP_UPDATE = 1000;
+
     /**
      * backend for databse handling and extended database queries
      *
@@ -29,7 +37,9 @@ class Setup_Update_Abstract
      */
     protected $_db;
 
-    /** 
+    protected static $_allUpdates = [];
+
+    /**
      * the constructor
      *
      * @param Setup_Backend_Interface $_backend
@@ -38,6 +48,11 @@ class Setup_Update_Abstract
     {
         $this->_backend = $_backend;
         $this->_db = Tinebase_Core::getDb();
+    }
+
+    public static function getAllUpdates()
+    {
+        return static::$_allUpdates;
     }
 
     /**
@@ -85,6 +100,29 @@ class Setup_Update_Abstract
         $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
         $application->version = $_version;
         
+        return Tinebase_Application::getInstance()->updateApplication($application);
+    }
+
+    /**
+     * adds the update key to the application state, marking when and that it run
+     *
+     * @param string $_applicationName
+     * @param string $_version new version number
+     * @param string $_updateKey update key to add to application state
+     * @return Tinebase_Model_Application
+     */
+    public function addApplicationUpdate($_applicationName, $_version, $_updateKey)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+        $application->version = $_version;
+        if (!($state = json_decode(Tinebase_Application::getInstance()->getApplicationState(
+                Tinebase_Core::getTinebaseId(), Tinebase_Application::STATE_UPDATES, true), true))) {
+            $state = [];
+        }
+        $state[$_updateKey] = Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG);
+        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Core::getTinebaseId(),
+            Tinebase_Application::STATE_UPDATES, json_encode($state));
+
         return Tinebase_Application::getInstance()->updateApplication($application);
     }
     

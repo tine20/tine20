@@ -481,12 +481,17 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                 </declaration>
             </table>'), 'Tinebase', 'application_states');
 
-            $appController = Tinebase_Application::getInstance();
-            /** @var Tinebase_Model_Application $application */
-            foreach ($appController->getApplications() as $application) {
-                foreach ($application->xprops('state') as $name => $value) {
-                    $appController->setApplicationState($application, $name, $value);
+            $tmpApp = new Tinebase_Model_Application([], true);
+            if ($tmpApp->has('state')) {
+                $appController = Tinebase_Application::getInstance();
+                /** @var Tinebase_Model_Application $application */
+                foreach ($appController->getApplications() as $application) {
+                    foreach ($application->xprops('state') as $name => $value) {
+                        $appController->setApplicationState($application, $name, $value);
+                    }
                 }
+            } else {
+                Setup_Core::getLogger()->err(Tinebase_Model_Application::class . ' does not have property state!');
             }
         }
 

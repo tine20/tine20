@@ -440,10 +440,11 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
+        // TODO remove this loop in Release 13
         $maxLoops = 50;
         do {
             $result = $this->_updateApplications();
-            if ($_opts->v && ! empty($result['messages'])) {
+            if ($_opts->v && ! empty($result['messages']) && (50 === $maxLoops || $result['updated'] > 0)) {
                 echo "Messages:\n";
                 foreach ($result['messages'] as $message) {
                     echo "  " . $message . "\n";
@@ -462,6 +463,8 @@ class Setup_Frontend_Cli
      */
     protected function _updateApplications()
     {
+        static $ran = false;
+
         $controller = Setup_Controller::getInstance();
         try {
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
@@ -484,14 +487,13 @@ class Setup_Frontend_Cli
             }
         }
 
-        $result = array();
-        if (count($applications) > 0) {
-            $result = $controller->updateApplications($applications);
+        $result = $controller->updateApplications($applications);
+
+        if (!$ran || $result['updated'] > 0) {
             echo "Updated " . $result['updated'] . " application(s).\n";
-        } else {
-            $result['updated'] = 0;
         }
-        
+        $ran = true;
+
         return $result;
     }
 
@@ -1182,7 +1184,7 @@ class Setup_Frontend_Cli
         return 0;
     }
 
-    protected function _migrateUtf8mb4()
+    public function _migrateUtf8mb4()
     {
         $db = Setup_Core::getDb();
         if (!$db instanceof Zend_Db_Adapter_Pdo_Mysql) {
