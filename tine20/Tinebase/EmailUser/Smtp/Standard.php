@@ -56,7 +56,8 @@ class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_Abstract imp
         }
         
         // convert data to Tinebase_Model_EmailUser
-        $emailUser = $this->_rawDataToRecord(array());
+        $data = [];
+        $emailUser = $this->_rawDataToRecord($data);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
         
