@@ -1074,7 +1074,7 @@ msgstr "Neue Nachricht"
 
 #: js/Felamimail.js:89
 msgid "Email"
-msgstr "Nachricht"
+msgstr "E-Mail"
 
 #: js/Felamimail.js:125
 msgid "Active Vacation Message"

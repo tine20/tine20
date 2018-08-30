@@ -1276,8 +1276,7 @@ class Setup_Controller
         if (count($allUserContactIds) > 0) {
             $contactSQLBackend->delete($allUserContactIds);
         }
-        
-        
+
         Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
         $listsSQLBackend = new Addressbook_Backend_List();
         $allGroupListIds = $listsSQLBackend->search(new Addressbook_Model_ListFilter(array('type' => 'group')), null, true);
