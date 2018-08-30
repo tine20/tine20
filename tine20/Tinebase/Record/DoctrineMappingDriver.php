@@ -50,9 +50,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      * Loads the metadata for the specified class into the provided container.
      *
      * @param string        $className
-     * @param ClassMetadata $metadata
-     *
-     * @return void
+     * @param Doctrine\ORM\Mapping\ClassMetadata $metadata
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata)
     {

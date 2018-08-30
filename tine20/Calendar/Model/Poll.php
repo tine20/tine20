@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @property Tinebase_Record_RecordSet      alternative_dates
  */
@@ -54,7 +54,6 @@ class Calendar_Model_Poll extends Tinebase_Record_Abstract
 
         'table'             => [
             'name'    => 'cal_polls',
-            'options' => ['collate' => 'utf8_general_ci'],
 //            'indexes' => array(
 //                'container_id' => array(
 //                    'columns' => array('container_id')
