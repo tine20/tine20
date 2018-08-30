@@ -93,7 +93,7 @@
     "uglify-es": "^3.2.2",
     "uglify-loader": "^2.0.0",
     "uglifyjs-webpack-plugin": "^1.1.2",
-    "unminified-webpack-plugin": "github:tine20/unminified-webpack-plugin#pu/suffixagainagain",
+    "unminified-webpack-plugin": "github:tine20/unminified-webpack-plugin#pu/chunkloading-v3",
     "url-loader": "^0.6.2",
     "vue-loader": "^13.5.0",
     "vue-simple-spinner": "^1.2.8",

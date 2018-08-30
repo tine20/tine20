@@ -16068,8 +16068,8 @@
       }
     },
     "unminified-webpack-plugin": {
-      "version": "github:tine20/unminified-webpack-plugin#ea349295604de67a2766addddba626f294e0a6b4",
-      "from": "github:tine20/unminified-webpack-plugin#pu/suffixagainagain",
+      "version": "github:tine20/unminified-webpack-plugin#bb3cc2af7fa2905d11e00aeab88a4463fe200a0a",
+      "from": "github:tine20/unminified-webpack-plugin#pu/chunkloading-v3",
       "dev": true
     },
     "unpipe": {
