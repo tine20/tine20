@@ -472,8 +472,9 @@ class Setup_Controller
             Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
         }
 
+        // we need to clone here because we would taint the app cache otherwise
         // update tinebase first (to biggest major version)
-        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $tinebase = clone (Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
         if ($idx = $applications->getIndexById($tinebase->getId())) {
             unset($applications[$idx]);
         }
