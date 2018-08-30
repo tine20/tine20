@@ -632,9 +632,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param   bool  $_ignoreACL don't check acl grants
      * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = false)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
     {
-        $events = parent::getMultiple($_ids, $_ignoreACL = false);
+        $events = parent::getMultiple($_ids, $_ignoreACL, $_expander);
         if ($_ignoreACL !== true) {
             $this->_freeBusyCleanup($events, 'get');
         }

@@ -275,9 +275,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      * @param   bool  $_ignoreACL don't check acl grants
      * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE)
+    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
     {
-        $records = parent::getMultiple($_ids, $_ignoreACL);
+        $records = parent::getMultiple($_ids, $_ignoreACL, $_expander);
         $this->_doPrivateCleanup($records);
         return $records;
     }

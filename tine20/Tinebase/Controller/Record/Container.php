@@ -112,7 +112,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      * @param   bool $_ignoreACL don't check acl grants
      * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE)
+    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
     {
         $this->_checkRight('get');
 
