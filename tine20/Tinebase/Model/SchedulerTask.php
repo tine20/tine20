@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -63,7 +63,6 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
 
         'table'             => [
             'name'    => Tinebase_Backend_Scheduler::TABLE_NAME,
-            'options' => ['collate' => 'utf8_general_ci'],
             'indexes' => [
                 'next_run' => [
                     'columns' => ['next_run']
