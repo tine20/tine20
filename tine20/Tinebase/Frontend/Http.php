@@ -420,7 +420,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected function _getFilesToWatch($_fileType, $apps = array())
     {
-        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
+        $requiredApplications = array('Setup', 'Tinebase', 'Admin', 'Addressbook');
         $installedApplications = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
         $orderedApplications = array_merge($requiredApplications, array_diff($installedApplications, $requiredApplications));
         $filesToWatch = array();
