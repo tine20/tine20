@@ -582,11 +582,6 @@ class Setup_Controller
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $message);
 
                 $this->_assertApplicationStatesTable();
-                // sad but true, assertApplication changes eventually the application version in the same object instance we have
-                // and then it gets set back, but only in a new instance.... we have to refetch
-                if ($_application->name === 'Tinebase') {
-                    $_application = Tinebase_Application::getInstance()->getApplicationById($_application->getId());
-                }
 
                 $version = $_application->getMajorAndMinorVersion();
                 $minor = $version['minor'];
