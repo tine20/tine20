@@ -20,30 +20,42 @@ class Tinebase_Setup_DemoData_Import
     protected $_application = null;
     protected $_options = [];
 
+    /**
+     * Tinebase_Setup_DemoData_Import constructor.
+     * @param string $modelName
+     * @param array $options
+     */
     public function __construct($modelName, $options = [])
     {
         $extract = Tinebase_Application::extractAppAndModel($modelName);
-        $this->_options['$modelName'] = $extract['modelName'];
+        $this->_options['modelName'] = $extract['modelName'];
         $this->_options['dryrun'] = false;
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($extract['appName']);
         $this->_options = array_merge($this->_options, $options);
     }
 
+    /**
+     * @throws Tinebase_Exception_NotFound
+     */
     public function importDemodata()
     {
         $importDir = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR
             . $this->_application->name . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData'
-            . DIRECTORY_SEPARATOR . 'import'. DIRECTORY_SEPARATOR . $this->_options['$modelName'];
+            . DIRECTORY_SEPARATOR . 'import'. DIRECTORY_SEPARATOR . $this->_options['modelName'];
 
         if (! file_exists($importDir)) {
             throw new Tinebase_Exception_NotFound('Import dir not found: ' . $importDir);
         }
 
         // loop all files in import dir
-        // TODO allow filters / subdirs
+        // TODO allow more filters / subdirs
         $fh = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($importDir), RecursiveIteratorIterator::CHILD_FIRST);
         $importedDemoDataFiles = 0;
         foreach ($fh as $splFileInfo) {
+            if (isset($this->_options['file']) && $this->_options['file'] !== '*' && $splFileInfo->getFilename() !== $this->_options['file']) {
+                // skip
+                continue;
+            }
             $result = $this->_importDemoDataFile($splFileInfo);
             if ($result) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -77,8 +89,11 @@ class Tinebase_Setup_DemoData_Import
                 // create generic import definition if not found in options
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($this->_options['$modelName']);
             }
-            $importClass = $this->_application->name . '_Import_Csv';
-            if(!class_exists($importClass)){
+            $importClass = $definition->plugin;
+            if(empty($importClass)) {
+                $importClass = $this->_application->name . '_Import_Csv';
+            }
+            if (!class_exists($importClass)){
                 $importClass = Tinebase_Import_Csv_Generic::class;
             }
             $this->_importer = call_user_func_array([$importClass, 'createFromDefinition'], [$definition, $this->_options]);

@@ -160,36 +160,41 @@ class Tinebase_Frontend_Cli_Abstract
      * (2) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz models=Calendar,Event sharedonly // Creates shared calendars and events with the default locale en                
      * (3) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz // Creates all demo calendars and events for all users
      * (4) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz full // Creates much more demo data than (3)
-     * 
+     * (5) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz -- demodata=csv // import demodata from csv files
+     * (6) $ php tine20.php --method=Admin.createDemoData --username=admin --password=xyz -- demodata=set set=default.yml // import demodata defined by default.yml
+     *
      * @param Zend_Console_Getopt $_opts
      * @param boolean $checkDependencies
+     * @return boolean
      */
     public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
-        try {
-            $data = $this->_parseArgs($_opts, array('demodata'));
-        }catch(Exception $e) {
-            $data['demodata'] = ""; 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-        }
         // just admins can perform this action
         if (! $this->_checkAdminRight()) {
             return FALSE;
         }
-        switch($data['demodata']){
+
+        $data = $this->_parseArgs($_opts);
+        if (! isset($data['demodata'])) {
+            $data['demodata'] = '';
+        }
+
+        switch ($data['demodata']){
             case "php":
                 $this->_createPhpDemoData($_opts, $checkDependencies);
                 break;
             case "csv":
                 $this->_createImportDemoData();
                 break;
-            case ("all" ):
-            case(""):
+            case "set":
+                $set = isset($data['set']) ? $data['set'] : null;
+                $this->_createImportDemoDataFromSet($set);
+                break;
+            case "all":
+            case "":
+            default:
                 $this->_createPhpDemoData($_opts, $checkDependencies);
                 $this->_createImportDemoData();
-                break;
-            default:
-                echo $data['demodata'] . "test \n";
         }
         return true;
     }
@@ -287,7 +292,24 @@ class Tinebase_Frontend_Cli_Abstract
             }
         }
     }
-    
+
+    /**
+     * try to import demodata files from APP/Setup/DemoData/demodata_set_file.yml
+     *
+     * @param string $setFile
+     */
+    protected function _createImportDemoDataFromSet($setFile = null)
+    {
+        if (! extension_loaded('yaml')) {
+            throw new Tinebase_Exception_SystemGeneric('php yaml extension needed');
+        }
+
+        $importer = new Tinebase_Setup_DemoData_ImportSet($this->_applicationName, [
+            'files' => [$setFile]]
+        );
+        $importer->importDemodata();
+    }
+
     /**
      * get container for setContainerGrants
      * 
