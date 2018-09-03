@@ -2,6 +2,7 @@
 <config>
     <model>Tinebase_Model_FullUser</model>
     <plugin>Admin_Import_User_Csv</plugin>
+    <name>admin_user_import_csv</name>
     <type>import</type>
     <headline>1</headline>
     <dryrun>0</dryrun>

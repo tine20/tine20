@@ -1,0 +1,24 @@
+########################
+# Tine 2.0
+# @package     Admin
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Philipp Schüle <p.schuele@metaways.de>
+# @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for Admin module
+# imports users, groups and roles
+########################
+---
+name: users groups roles
+
+files:
+  #$app,$model,$definition,$file
+  - Admin/User/admin_user_import_csv/user.csv
+  - Admin/Group/admin_group_import_csv/group.csv
+  - Admin/Role/admin_role_import_csv/role.csv
+
+
+# this set could contain other sets:
+# sets:
+#   - another_set.yml
