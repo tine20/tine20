@@ -1018,8 +1018,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         updatedEvent.markDirty();
         store.replaceRecord(event, updatedEvent);
 
-        if (! updatedEvent.inPeriod(view.getPeriod())) {
-            view.updatePeriod({from: updatedEvent.get('dtstart')});
+        if (! event.inPeriod(view.getPeriod())) {
+            view.updatePeriod({from: event.get('dtstart')});
             promise = store.promiseLoad({});
         } else if (event.isRecurBase()
             || updatedEvent.isRecurBase()
