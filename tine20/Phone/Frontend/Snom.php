@@ -351,6 +351,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      * @param string $callId the callid
      * @param string $local the username of the asterisk sip peer
      * @param string $remote the remote number
+     * @throws Tinebase_Exception_NotFound
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
     {
@@ -361,7 +362,6 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
         
-        $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
         $controller = Phone_Controller::getInstance();
         
         $pos = strpos($callId, '@');
@@ -379,21 +379,8 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             $remote = substr($remote, 0 , $pos);
         };
 
-        if (empty($local)) {
-            // local/line_id might be empty (asterisk bug)
-            // fetch last call with line_id via mac
-            $call = $controller->getLastCall($mac);
-            if (!$call) {
-                throw new Tinebase_Exception_NotFound('no last call found for phone mac address');
-            }
-        } else {
-            $call = new Phone_Model_Call(array(
-                'id' => substr($callId, 0, 40),
-                'phone_id' => $phone->getId(),
-                'line_id' => $local
-            ));
-        }
-        
+        $call = $this->_getCall($callId, $local, $mac);
+
         switch ($event) {
             case 'outgoing':
                 $call->source = $local;
@@ -417,5 +404,48 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 $controller->callDisconnected($call);
                 break;
         }
+    }
+
+    /**
+     * @param string $callId
+     * @param $local
+     * @param $mac
+     * @return null|Phone_Model_Call
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getCall($callId, $local, $mac)
+    {
+        $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
+        $controller = Phone_Controller::getInstance();
+
+        if (empty($local)) {
+            // local/line_id might be empty (asterisk bug)
+            // fetch last call with line_id via mac
+            $call = $controller->getLastCall($mac);
+            if (! $call) {
+                throw new Tinebase_Exception_NotFound('no last call found for phone mac address');
+            }
+        } else {
+            // try to find current call
+            // TODO search with phoneId?
+            try {
+                $call = $controller->getCall($callId);
+                if ($call->phone_id === $phone->getId()) {
+                    return $call;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $call = null;
+            }
+
+            if (! $call) {
+                $call = new Phone_Model_Call(array(
+                    'id' => substr($callId, 0, 40),
+                    'phone_id' => $phone->getId(),
+                    'line_id' => $local
+                ));
+            }
+        }
+
+        return $call;
     }
 }
