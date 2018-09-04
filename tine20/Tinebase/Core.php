@@ -1054,6 +1054,7 @@ class Tinebase_Core
                 }
 
                 $dbConfigArray['charset'] = Tinebase_Backend_Sql_Adapter_Pdo_Mysql::getCharsetFromConfigOrCache($dbConfigArray);
+                $upperCaseCharset = strtoupper($dbConfigArray['charset']);
 
                 if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Using MySQL charset: ' . $dbConfigArray['charset']);
@@ -1063,7 +1064,7 @@ class Tinebase_Core
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
                 );
                 $dbConfigArray['options']['init_commands'] = array(
-                    "SET NAMES UTF8MB4",
+                    "SET NAMES $upperCaseCharset",
                     "SET time_zone = '+0:00'",
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
                     "SET SESSION group_concat_max_len = 4294967295"
