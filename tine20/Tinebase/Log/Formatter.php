@@ -165,6 +165,11 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         return self::getPrefix() . ' ' . self::getUsername() . ' ' . $timelog . '- ' . $this->_getFormattedOutput($output, $event);
     }
 
+    /**
+     * @param $output
+     * @param array $event
+     * @return string
+     */
     protected function _getFormattedOutput($output, array $event)
     {
         if (self::$_colorize) {
@@ -175,6 +180,10 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         return $output;
     }
 
+    /**
+     * @param $logPrio
+     * @return string
+     */
     protected function _getColorByPrio($logPrio)
     {
         switch ($logPrio) {
