@@ -997,7 +997,7 @@ class Tinebase_Core
         $dbConfig = $config->database;
         
         if (!empty($dbConfig->password)) {
-            self::getLogger()->getFormatter()->addReplacement($dbConfig->password);
+            self::getLogger()->addReplacement($dbConfig->password);
         }
         
         if (! defined('SQL_TABLE_PREFIX')) {

@@ -48,6 +48,7 @@ class Tinebase_Log_Formatter_AbstractTest extends TestCase
 
     protected function tearDown()
     {
+        Tinebase_Log_Formatter::reset();
         $this->_writer->shutdown();
         unlink($this->_logfile);
     }
