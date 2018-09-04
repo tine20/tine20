@@ -18,6 +18,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Log
+ *
+ * @todo remove static vars to allow to configure multiple log writers/formatters individually
  */
 class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
 {
@@ -258,6 +260,17 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     public static function resetUsername()
     {
         self::$_username = NULL;
+    }
+
+    /**
+     * reset username and options
+     *
+     * @return string
+     */
+    public static function reset()
+    {
+        self::$_username = NULL;
+        self::$_colorize = false;
     }
 
     /**
