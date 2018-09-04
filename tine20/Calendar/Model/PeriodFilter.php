@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -93,11 +93,18 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     public function setValue($_value)
     {
         if (is_array($_value) && (isset($_value['from']) && isset($_value['until']))) {
+            if (is_string($_value['from']) && substr($_value['from'], 0, 1) === 'P') {
+                $_value['from'] = $this->_calculatePeriod($_value['from']);
+            }
+            if (is_string($_value['until']) && substr($_value['until'], 0, 1) === 'P') {
+                $_value['until'] = $this->_calculatePeriod($_value['until']);
+            }
+
             // convert DateTime to Tinebase_DateTime
             if (is_object($_value['from']) && get_class($_value['from']) === 'DateTime') {
                 $_value['from'] = new Tinebase_DateTime($_value['from']);
             }
-            if (is_object($_value['from']) && get_class($_value['until']) === 'DateTime') {
+            if (is_object($_value['until']) && get_class($_value['until']) === 'DateTime') {
                 $_value['until'] = new Tinebase_DateTime($_value['until']);
             }
             
@@ -109,6 +116,27 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
         } else {
             throw new Tinebase_Exception_UnexpectedValue('Period must be an array with from and until properties');
         }
+    }
+
+    protected function _calculatePeriod($_period)
+    {
+        if (isset($this->_options['timezone'])) {
+            $tz = $this->_options['timezone'];
+        } else {
+            $tz = 'UTC';
+        }
+
+        $now = new Tinebase_DateTime('now', $tz);
+        if (strlen($_period) > 1) {
+            if (strpos($_period, '-') !== false) {
+                $_period = str_replace('-', '', $_period);
+                $now->sub(new DateInterval($_period));
+            } else {
+                $now->add(new DateInterval($_period));
+            }
+        }
+
+        return $now;
     }
     
     /**
