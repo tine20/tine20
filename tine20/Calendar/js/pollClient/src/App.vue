@@ -102,7 +102,7 @@
         <div class="row">
           <div class="col-md-12" v-if="showChangeButtons()">
             <b-button-group>
-              <b-btn @click="onCancelChanges" variant="secondary">{{formatMessage('Cancle')}}</b-btn>
+              <b-btn @click="onCancelChanges" variant="secondary">{{formatMessage('Cancel')}}</b-btn>
               <b-btn @click="onApplyChanges" variant="primary">{{formatMessage('Save')}}</b-btn>
             </b-button-group>
           </div>
