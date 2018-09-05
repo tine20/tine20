@@ -39,15 +39,17 @@ class Tinebase_Server_JsonTests extends TestCase
         (
             'envelope' => 'JSON-RPC-2.0',
             'transport' => 'POST',
-            'parameters' => array
-            (
-                array
-                (
+            'parameters' => array (
+                array (
                     'type' => 'array',
                     'optional' => false,
                     'name' => 'recordData'
+                ),
+                array (
+                    'type' => 'boolean',
+                    'optional' => true,
+                    'name' => 'duplicateCheck'
                 )
-
             ),
             'returns' => 'array'
         ), $smdArray['services']['Inventory.saveInventoryItem'], 'saveInventoryItem smd mismatch');
@@ -55,15 +57,12 @@ class Tinebase_Server_JsonTests extends TestCase
         (
             'envelope' => 'JSON-RPC-2.0',
             'transport' => 'POST',
-            'parameters' => array
-            (
-                array
-                (
+            'parameters' => array (
+                array (
                     'type' => 'array',
                     'optional' => false,
                     'name' => 'ids'
                 )
-
             ),
             'returns' => 'array'
         ), $smdArray['services']['Inventory.deleteInventoryItems']);

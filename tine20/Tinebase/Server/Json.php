@@ -526,6 +526,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                         'type' => 'array',
                         'name' => 'recordData',
                     )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'boolean',
+                        'name' => 'duplicateCheck',
+                        'optional' => true,
+                    )),
                 ),
                 'help'   => 'Save ' . $simpleModelName . '',
                 'plural' => false,
