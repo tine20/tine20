@@ -261,40 +261,40 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         // find address, otherwise do not bill this contract
         if (! $contract->billing_address_id) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no billing address could be found!';
                 $this->_autoInvoiceIterationFailures[] = $failure;
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $failure);
             }
             
             $this->_currentBillingContract = NULL;
         }
         
         if (! $this->_currentBillingCostCenter) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no costcenter could be found!';
                 $this->_autoInvoiceIterationFailures[] = $failure;
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $failure);
             }
             
             $this->_currentBillingContract = NULL;
         }
         
         if (! $this->_currentBillingCustomer) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no customer could be found!';
                 $this->_autoInvoiceIterationFailures[] = $failure;
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $failure);
             }
             
             $this->_currentBillingContract = NULL;
         }
 
         if(! $contract->start_date) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no start date is set!';
                 $this->_autoInvoiceIterationFailures[] = $failure;
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $failure);
             }
 
             $this->_currentBillingContract = NULL;

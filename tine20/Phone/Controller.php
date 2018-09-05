@@ -175,7 +175,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
             array('field' => 'name', 'operator' => 'equals', 'value' => $_call->line_id)
         ));
         $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);
-        if(count($asteriskSipPeers) > 0) {
+        if (count($asteriskSipPeers) > 0) {
             $_call->callerid = $asteriskSipPeers[0]->callerid;
         } else {
             $_call->callerid = $_call->line_id;
