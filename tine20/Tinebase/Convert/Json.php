@@ -683,6 +683,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     // re-fetch attachments
                     Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
                 }
+                // order by creation time to show the latest attachment as record image
+                $record->attachments->sort('creation_time', 'DESC');
                 foreach ($record->attachments as $attachment) {
                     if (in_array($attachment->contenttype, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
                         $record->image = Tinebase_Model_Image::getImageUrl('Tinebase', $attachment->getId(), 'vfs');
