@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -402,7 +402,13 @@ abstract class Tinebase_Model_Filter_Abstract
         if (is_array($value)) {
             $returnValue = array();
             foreach ($value as $idx => $val) {
-                $returnValue[$idx] = $this->_replaceWildcardsSingleValue($val);
+                if (is_array($val)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . " No sub arrays allowed, skipping this value: "
+                        . print_r($val, true));
+                } else {
+                    $returnValue[$idx] = $this->_replaceWildcardsSingleValue($val);
+                }
             }
         } else {
             $returnValue = $this->_replaceWildcardsSingleValue($value);
