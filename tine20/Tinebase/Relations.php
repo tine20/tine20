@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Relations
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        re-enable the caching (but check proper invalidation first) -> see task #232
@@ -463,9 +463,11 @@ class Tinebase_Relations
      */
     public function getMultipleRelations($_model, $_backend, $_ids, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE, $_relatedModels = NULL)
     {
+        $flippedIds = array_flip($_ids);
+
         // prepare a record set for each given id
         $result = array();
-        foreach ($_ids as $key => $id) {
+        foreach ($flippedIds as $key) {
             $result[$key] = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(),  true);
         }
         
@@ -474,9 +476,8 @@ class Tinebase_Relations
         
         // sort relations into corrensponding sets
         foreach ($relations as $relation) {
-            $keys = array_keys($_ids, $relation->own_id);
-            foreach ($keys as $key) {
-                $result[$key]->addRecord($relation);
+            if (isset($flippedIds[$relation->own_id])) {
+                $result[$flippedIds[$relation->own_id]]->addRecord($relation);
             }
         }
         
