@@ -1222,10 +1222,6 @@ msgstr "Anmelden"
 msgid "{headerDate, date, full} {headerDate, time, short}"
 msgstr ""
 
-#: js/pollClient/src/App.vue:105 tempExtract/vueStrings.js:105
-msgid "Cancel"
-msgstr "Abbrechen"
-
 #: js/pollClient/src/App.vue:106 tempExtract/vueStrings.js:106
 msgid "Save"
 msgstr "Speichern"
