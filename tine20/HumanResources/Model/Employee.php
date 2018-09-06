@@ -31,7 +31,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 15,
+        'version'           => 16,
         'recordName'        => 'Employee',
         'recordsName'       => 'Employees', // ngettext('Employee', 'Employees', n)
         'hasRelations'      => TRUE,
@@ -86,6 +86,14 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'type' => 'user',
                 'group' => 'employee',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
+            ),
+            'dfcom_id' => array(
+                'label' => 'DFCOM card id', //_('DFCOM card id')
+                'type'  => 'string',
+                'length'      => 255,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'shy' => TRUE,
                 'nullable' => true,
             ),
             'description' => array(

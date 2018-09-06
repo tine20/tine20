@@ -314,6 +314,15 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         blur: this.updateDisplayName
                                     }
                                 }
+                            )], [
+                                Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'dfcom_id',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                {
+                                    columnWidth: 1
+                                }
                             )]
                         ]
                     }]
