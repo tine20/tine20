@@ -199,13 +199,13 @@ class Tinebase_FileSystem_RecordAttachments
             try {
                 $this->addRecordAttachment($record, $added->name, $added);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' Could not add new attachment ' . print_r($added->toArray(), TRUE) . ' to record: ' . print_r($record->toArray(), TRUE));
-                Tinebase_Exception::log($teia);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    ' Could not add new attachment ' . print_r($added->toArray(), TRUE) . ' to record: ' . $record->getId()
+                    . ' / Error Message: ' . $teia->getMessage());
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' Could not add new attachment ' . print_r($added->toArray(), TRUE) . ' to record: ' . print_r($record->toArray(), TRUE));
-                Tinebase_Exception::log($tenf);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    ' Could not add new attachment ' . print_r($added->toArray(), TRUE) . ' to record: ' . $record->getId()
+                    . ' / Error Message: ' . $tenf->getMessage());
             }
         }
     }
