@@ -1470,7 +1470,8 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
         //$_format = "Y-m-d H:i:s";
         foreach ($_toConvert as $field => $value) {
             if (! $value) {
-                if (in_array($field, static::$_configurationObject->datetimeFields)) {
+                $dateTimeFields = is_object(static::$_configurationObject) ? static::$_configurationObject->datetimeFields : null;
+                if ($dateTimeFields && in_array($field, $dateTimeFields)) {
                     $_toConvert[$field] = NULL;
                 }
             } elseif ($value instanceof DateTime) {
