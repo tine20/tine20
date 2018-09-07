@@ -100,7 +100,7 @@
         $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
         foreach ($attendeeMigration['toUpdate'] as $attendee) {
             $oldAttendee = Calendar_Model_Attender::getAttendee($_oldEvent->attendee, $attendee);
-            if ($attendee->status == $oldAttendee->status) {
+            if ($oldAttendee && $attendee->status == $oldAttendee->status) {
                 $attendeeMigration['toUpdate']->removeRecord($attendee);
             }
         }
