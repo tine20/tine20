@@ -30,7 +30,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [],
     evalGrants: false,
     mode: 'local',
-    recordClass: Tine.Admin.Model.User,
+    recordClass: Tine.Tinebase.Model.Account,
     
     /**
      * needed for request
@@ -100,7 +100,10 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.onRecordUpdate();
         if (this.isValid()) {
             this.loadMask.show();
-            Tine.Courses.addNewMember(this.record.data, this.courseData, function(response, exception) {
+            Tine.Courses.addNewMember({
+                    accountFirstName: this.getForm().findField('accountFirstName').getValue(), 
+                    accountLastName: this.getForm().findField('accountLastName').getValue()
+                }, this.courseData, function(response, exception) {
                 Tine.log.debug('Tine.Courses.CourseEditDialog::onMembersImport');
                 Tine.log.debug(arguments);
                 

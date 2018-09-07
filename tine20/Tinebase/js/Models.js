@@ -68,12 +68,17 @@ Tine.Tinebase.Model.Role = Tine.Tinebase.data.Record.create([
 /**
  * Model of a generalised account (user or group)
  */
-Tine.Tinebase.Model.Account = Ext.data.Record.create([
+Tine.Tinebase.Model.Account = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'type'},
     {name: 'name'},
     {name: 'data'} // todo: throw away data
-]);
+], {
+    appName: 'Tinebase',
+    modelName: 'Account',
+    idProperty: 'id',
+    titleProperty: 'name'
+});
 
 /**
  * Model of a container
