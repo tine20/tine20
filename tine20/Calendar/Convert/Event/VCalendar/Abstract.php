@@ -815,7 +815,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                         $value = mb_substr($value, 0, 1024, 'UTF-8');
                     }
 
-                    $event->$key = $value;
+                    $event->$key = Tinebase_Core::filterInputForDatabase($value);
                     break;
                     
                 case 'ORGANIZER':
