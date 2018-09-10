@@ -76,7 +76,12 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @var array
      */
     protected $_skipDefaultOption = array();
-    
+
+    /**
+     * @var array
+     */
+    protected $_appPrefsCache = array();
+
     /**************************** public abstract functions *********************************/
 
     /**
@@ -245,8 +250,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             $result = $this->getValueForUser(
                 $_preferenceName, $accountId,
                 ($accountId === '0')
-                ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
-                : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+                    ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
+                    : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
             );
         } catch (Tinebase_Exception_NotFound $tenf) {
             if ($_default !== NULL) {
@@ -313,22 +318,38 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     protected function _getPrefs($_preferenceName, $_accountId = '0', $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
     {
+        $cacheId = $_accountId . $_accountType;
+        
+        if (isset($this->_appPrefsCache[$cacheId])) {
+            $result = array_filter($this->_appPrefsCache[$cacheId], function ($result) use ($_preferenceName) {
+                return $result['name'] == $_preferenceName;
+            });
+            
+            return $result;
+        }
+        
         $select = $this->_getSelect();
         
         $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId();
         $filter = new Tinebase_Model_PreferenceFilter(array(
-            array('field'     => 'account',         'operator'  => 'equals', 'value'     => array(
-                    'accountId' => $_accountId, 'accountType' => $_accountType)
+            array('field' => 'account',         'operator' => 'equals', 'value' => array(
+                'accountId' => $_accountId, 'accountType' => $_accountType)
             ),
-            array('field'     => 'name',            'operator'  => 'equals', 'value'     => $_preferenceName),
-            array('field'     => 'application_id',  'operator'  => 'equals', 'value'     => $appId),
+            array('field' => 'name',            'operator' => 'in',     'value' => $this->getAllApplicationPreferences()),
+            array('field' => 'application_id',  'operator' => 'equals', 'value' => $appId),
         ));
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         
-        return $queryResult;
+        $this->_appPrefsCache[$cacheId] = $queryResult;
+
+        $result = array_filter($queryResult, function ($result) use ($_preferenceName) {
+            return $result['name'] == $_preferenceName;
+        });
+        
+        return $result;
     }
     
     /**
@@ -424,6 +445,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preferences.');
             }
         }
+        
+        $this->resetAppPrefsCache();
+        
         // check if already there -> update
         $queryResult = $this->_getPrefs($_preferenceName, $_accountId, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
         $prefArray = NULL;
@@ -478,6 +502,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
         }
         
+        $this->resetAppPrefsCache();
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' ' . $action . ': ' . $_preferenceName . ' for user ' . $_accountId . ' -> '
             . (is_array($_value) ? print_r($_value, true) : $_value));
@@ -513,7 +539,12 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
 
         return $result;
     }
-
+    
+    public function resetAppPrefsCache()
+    {
+        $this->_appPrefsCache = array();
+    }
+    
     /**
      * resolve preference options and add 'use default'
      * 
@@ -591,12 +622,14 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting pref ' . $_preferenceName);
 
         $where = array(
-        $this->_db->quoteInto($this->_db->quoteIdentifier('name')           . ' = ?', $_preferenceName),
-        $this->_db->quoteInto($this->_db->quoteIdentifier('account_id')     . ' = ?', Tinebase_Core::getUser()->getId()),
-        $this->_db->quoteInto($this->_db->quoteIdentifier('account_type')   . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name')           . ' = ?', $_preferenceName),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_id')     . ' = ?', Tinebase_Core::getUser()->getId()),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_type')   . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
         );
 
         $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
+        
+        $this->resetAppPrefsCache();
     }
 
     /**
@@ -615,6 +648,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             throw new Tinebase_Exception_UnexpectedValue($message);
         }
 
+        $this->resetAppPrefsCache();
+        
         return parent::create($_record);
     }
 
@@ -633,6 +668,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if (! Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preference defaults.');
         }
+        
+        $this->resetAppPrefsCache();
         
         // create prefs that don't exist in the db
         foreach ($_data as $id => $prefData) {

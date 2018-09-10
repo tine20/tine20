@@ -1626,26 +1626,26 @@ class Tinebase_Core
     {
         $result = NULL;
 
-        if (self::isRegistered(self::PREFERENCES)) {
-            $prefs = self::get(self::PREFERENCES);
-            if (isset($prefs[$_application])) {
-                $result = $prefs[$_application];
-            }
-        } else {
-            $prefs = array();
+        if (!self::isRegistered(self::PREFERENCES)) {
+            self::set(self::PREFERENCES, array());
         }
-
-        if ($result === NULL) {
-            $prefClassName = $_application . '_Preference';
-            if (@class_exists($prefClassName)) {
-                $result = new $prefClassName();
-                $prefs[$_application] = $result;
-                self::set(self::PREFERENCES, $prefs);
-            } else if ($_throwException) {
-                throw new Tinebase_Exception_NotFound('No preference class found for app ' . $_application);
-            }
+        
+        $prefs = self::get(self::PREFERENCES);
+        
+        if (isset($prefs[$_application])) {
+            return $prefs[$_application];
         }
-
+        
+        $prefClassName = $_application . '_Preference';
+        
+        if (@class_exists($prefClassName)) {
+            $result = new $prefClassName();
+            $prefs[$_application] = $result;
+            self::set(self::PREFERENCES, $prefs);
+        } else if ($_throwException) {
+            throw new Tinebase_Exception_NotFound('No preference class found for app ' . $_application);
+        }
+        
         return $result;
     }
     

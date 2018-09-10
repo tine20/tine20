@@ -46,13 +46,20 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             'model'             => Calendar_Model_Event::class,
         )));
         
-        $prefs = new Calendar_Preference();
+        $prefs = Tinebase_Core::getPreference('Calendar');
         $prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $this->objects['initialContainer']->getId());
 
         // rw cal agent
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
 
         $_SERVER['REQUEST_URI'] = 'lars';
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+        Tinebase_Core::getPreference('Calendar')->resetAppPrefsCache();
+        Tinebase_Core::set(Tinebase_Core::PREFERENCES, null);
     }
 
     /**
