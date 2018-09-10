@@ -33,11 +33,9 @@ class Tinebase_Frontend_HttpTest extends PHPUnit_Framework_TestCase
      */
     public function testMainScreen()
     {
-        ob_start();
-        $this->_uit->mainScreen();
-        $html = ob_get_clean();
-        
-        $this->assertGreaterThan(100, strlen($html));
+        $response = $this->_uit->mainScreen();
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertGreaterThan(100, strlen($response->getBody()));
     }
 
     /**
@@ -45,10 +43,8 @@ class Tinebase_Frontend_HttpTest extends PHPUnit_Framework_TestCase
      */
     public function testgetPostalXWindow()
     {
-        ob_start();
-        $this->_uit->getPostalXWindow();
-        $html = ob_get_clean();
-
-        $this->assertGreaterThan(100, strlen($html));
+        $response = $this->_uit->getPostalXWindow();
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertGreaterThan(100, strlen($response->getBody()));
     }
 }
