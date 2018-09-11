@@ -134,7 +134,10 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             $value[] = $v;
         }
         
-        parent::setValue(is_array($_value) ? $value : $value[0]);
+        parent::setValue(is_array($_value)
+            ? $value
+            : (isset($value[0]) ? $value[0] : null)
+        );
         $this->_isResolved = FALSE;
     }
     
@@ -187,7 +190,9 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
 
                 $values[] = $containerData;
             }
-            $result['value'] = is_array($this->_value) ? $values : $values[0];
+            $result['value'] = is_array($this->_value)
+                ? $values
+                : (isset($values[0]) ? $values[0] : null);
         }
         
         return $result;
