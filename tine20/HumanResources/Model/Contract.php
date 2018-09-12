@@ -30,6 +30,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 4,
         'recordName'      => 'Contract', // ngettext('Contract', 'Contracts', n)
         'recordsName'     => 'Contracts',
         'hasRelations'    => FALSE,
@@ -43,12 +44,35 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'titleProperty'   => 'start_date',
         'appName'         => 'HumanResources',
         'modelName'       => 'Contract',
+
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'employee_id' => [
+                    'targetEntity' => 'HumanResources_Model_Employee',
+                    'fieldName' => 'employee_id',
+                    'joinColumns' => [[
+                        'name' => 'employee_id',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ],
+            ],
+        ],
+
+        'table'             => array(
+            'name'    => 'humanresources_contract',
+            'indexes' => array(
+                'employee_id' => array(
+                    'columns' => array('employee_id'),
+                ),
+            ),
+        ),
         
         'fields'          => array(
             'employee_id'       => array(
                 'label'      => 'Employee',    // _('Employee')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
                 'type'       => 'record',
+                'doctrineIgnore'        => true, // already defined as association
                 'sortable'   => FALSE,
                 'config' => array(
                     'appName'     => 'HumanResources',
@@ -62,12 +86,13 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type'       => 'datetime',
                 'sortable'   => FALSE,
-                 'default'    => 'now',
-                 'showInDetailsPanel' => TRUE
+                'showInDetailsPanel' => TRUE,
+                'nullable' => true,
             ),
             'end_date'          => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'nullable' => TRUE,
                 'label'   => 'End Date',    // _('End Date')
                 'type'    => 'datetime',
                 'sortable'   => FALSE,
@@ -79,7 +104,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'default' => 27,
                 'queryFilter' => TRUE,
                 'sortable'   => FALSE,
-                'showInDetailsPanel' => TRUE
+                'showInDetailsPanel' => TRUE,
             ),
             'feast_calendar_id' => array(
                 'label' => 'Feast Calendar',    // _('Feast Calendar')
@@ -89,7 +114,9 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                     'modelName' => 'Event',
                 ),
                 'sortable'   => FALSE,
-                'showInDetailsPanel' => TRUE
+                'showInDetailsPanel' => TRUE,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'workingtime_json'  => array(
                 'label'   => 'Workingtime', // _('Workingtime')

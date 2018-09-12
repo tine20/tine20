@@ -173,6 +173,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $end->addMonth(11);
         
         $employee = new HumanResources_Model_Employee(array(
+            'number' => $this->_lastEmployeeNumber++,
             'account_id' => $user->getId(),
             'n_family' => 'TEST',
             'n_given' => 'UNIT',

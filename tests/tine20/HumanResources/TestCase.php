@@ -206,13 +206,18 @@ class HumanResources_TestCase extends TestCase
 
         $this->_lastEmployeeNumber++;
         
+        $sdate = new Tinebase_DateTime();
+        $sdate->subMonth(1);
+        
         $ea = array(
             'number'     => $this->_lastEmployeeNumber,
             'n_fn'       => $a->accountFullName,
             'n_given'    => $a->accountFirstName,
             'n_family'   => $a->accountLastName,
             'account_id' => $a->getId(),
-            'position'   => 'Photographer'
+            'position'   => 'Photographer',
+            'employment_begin' => $sdate
+            
         );
 
         return new HumanResources_Model_Employee($ea);

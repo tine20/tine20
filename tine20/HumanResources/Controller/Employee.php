@@ -418,6 +418,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     'n_fn'                => $account->n_fn,
                     'bday'                => $account->bday,
                     'bank_account_holder' => $account->n_fn,
+                    'employment_begin'    => Tinebase_DateTime::now()->subYear(1)
                 ));
                 
                 if ($_feastCalendarId && $_workingTimeModelId && $_vacationDays) {

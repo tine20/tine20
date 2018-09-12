@@ -31,6 +31,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 15,
         'recordName'        => 'Employee',
         'recordsName'       => 'Employees', // ngettext('Employee', 'Employees', n)
         'hasRelations'      => TRUE,
@@ -65,140 +66,196 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'jsConfig' => array('valueType' => 'bool')
             )
         ),
+
+        'table'             => array(
+            'name'    => 'humanresources_employee',
+        ),
         
         'fields'            => array(
             'number' => array(
                 'label' => 'Number', //_('Number')
                 'duplicateCheckGroup' => 'number',
                 'group' => 'employee',
-                'type'  => 'integer'
+                'type'  => 'integer',
+                'nullable'     => true,
+                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE,  'presence' => 'required'),
             ),
             'account_id' => array(
                 'label' => 'Account', //_('Account')
                 'duplicateCheckGroup' => 'account',
                 'type' => 'user',
-                'group' => 'employee'
+                'group' => 'employee',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'description' => array(
                 'label'   => 'Description', // _('Description')
-                'type'    => 'text'
+                'type'    => 'text',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'countryname' => array(
                 'label'   => 'Country', //_('Country')
                 'group'   => 'private',
                 'default' => 'Germany', // _('Germany')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'     => TRUE
             ),
             'locality' => array(
                 'label' => 'Locality', //_('Locality')
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'postalcode' => array(
                 'label' => 'Postalcode', //_('Postalcode')
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'region' => array(
                 'label' => 'Region', //_('Region')
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'street' => array(
                 'label' => 'Street', //_('Street')
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'street2' => array(
                 'label' => 'Street 2', //_('Street 2')
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'email' => array(
                 'label' => 'E-Mail', //_('E-Mail')
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'tel_home' => array(
                 'label' => 'Telephone Number', //_('Telephone Number')
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'tel_cell' => array(
                 'label' => 'Cell Phone Number', //_('Cell Phone Number')
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'title' => array(
                 'label' => 'Title', //_('Title')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'salutation' => array(
                 'label' => 'Salutation', //_('Salutation')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'n_family' => array(
                 'label' => 'Last Name', //_('Last Name')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'n_given' => array(
                 'label' => 'First Name', //_('First Name')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'n_fn' => array(
                 'label'       => 'Employee name', //_('Employee name')
                 'queryFilter' => TRUE,
-                'shy'         => TRUE
+                'shy'         => TRUE,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'bday' => array(
                 'label' => 'Birthday', //_('Birthday')
                 'type'  => 'datetime',
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'bank_account_holder' => array(
                 'label' => 'Account Holder', //_('Account Holder')
                 'group' => 'banking',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'bank_account_number' => array(
                 'label' => 'Account Number', //_('Account Number')
                 'duplicateCheckGroup' => 'bankaccount',
                 'group' => 'banking',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'iban' => array(
                 'label' => 'IBAN',
                 'duplicateCheckGroup' => 'iban',
                 'group' => 'banking',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'bic' => array(
                 'label' => 'BIC',
                 'duplicateCheckGroup' => 'bic',
                 'group' => 'banking',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'bank_name' => array(
                 'label' => 'Bank Name', //_('Bank Name')
                 'group' => 'banking',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'bank_code_number' => array(
                 'label' => 'Code Number', //_('Code Number')
                 'duplicateCheckGroup' => 'bankaccount',
                 'group' => 'banking',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'employment_begin' => array(
                 'label' => 'Employment begin', //_('Employment begin')
                 'type'  => 'date',
                 'group' => 'private',
+                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE,  'presence' => 'required'),
             ),
             'employment_end' => array(
                 'label' => 'Employment end', //_('Employment end')
                 'type'  => 'date',
                 'group' => 'private',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'supervisor_id' => array(
                 'label' => 'Supervisor', //_('Supervisor')
                 'type'  => 'record',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'nullable' => true,
                 'config' => array(
                     'appName'       => 'HumanResources',
                     'modelName'     => 'Employee',
@@ -208,9 +265,9 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             ),
             'division_id' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'nullable' => true,
                 'label' => 'Division', //_('Division')
                 'type'  => 'record',
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'config' => array(
                     'appName'     => 'Sales',
                     'modelName'   => 'Division',
@@ -219,13 +276,19 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             ),
             'health_insurance' => array(
                 'label' => 'Health Insurance', //_('Health Insurance')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
                 'shy'   => TRUE
             ),
             'profession' => array(
                 'label' => 'Profession', //_('Profession')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'position' => array(
                 'label' => 'Position', //_('Position')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'contracts' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -238,7 +301,6 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     'refIdField'  => 'employee_id',
                     'paging'      => array('sort' => 'start_date', 'dir' => 'ASC'),
                     'dependentRecords' => TRUE,
-                    'omitOnSearch' => FALSE
                 ),
                 'group' => 'private',
             ),

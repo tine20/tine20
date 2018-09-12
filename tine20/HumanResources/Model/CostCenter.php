@@ -30,6 +30,7 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 2,
         'recordName'        => 'Cost Center', // ngettext('Cost Center', 'Cost Centers', n)
         'recordsName'       => 'Cost Centers',
         'hasRelations'      => FALSE,
@@ -44,12 +45,35 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
         'titleProperty'     => 'cost_center_id.remark',
         'appName'           => 'HumanResources',
         'modelName'         => 'CostCenter',
-    
+
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'employee_id' => [
+                    'targetEntity' => 'HumanResources_Model_Employee',
+                    'fieldName' => 'employee_id',
+                    'joinColumns' => [[
+                        'name' => 'employee_id',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ]
+            ],
+        ],
+
+        'table'             => array(
+            'name'    => 'humanresources_costcenter',
+            'indexes' => array(
+                'employee_id' => array(
+                    'columns' => array('employee_id'),
+                ),
+            ),
+        ),
+        
         'fields'            => array(
             'employee_id'       => array(
                 'label'      => 'Employee',    // _('Employee')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
                 'type'       => 'record',
+                'doctrineIgnore'        => true, // already defined as association
                 'config' => array(
                     'appName'     => 'HumanResources',
                     'modelName'   => 'Employee',

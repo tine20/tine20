@@ -31,6 +31,7 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 5,
         'recordName'        => 'Personal account', // ngettext('Personal account', 'Personal accounts', n)
         'recordsName'       => 'Personal accounts',
         'hasRelations'      => TRUE,
@@ -55,10 +56,33 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
             )
         ),
         
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'employee_id' => [
+                    'targetEntity' => 'HumanResources_Model_Employee',
+                    'fieldName' => 'employee_id',
+                    'joinColumns' => [[
+                        'name' => 'employee_id',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ]
+            ],
+        ],
+
+        'table'             => array(
+            'name'    => 'humanresources_account',
+            'indexes' => array(
+                'employee_id' => array(
+                    'columns' => array('employee_id'),
+                ),
+            ),
+        ),
+        
         'fields'            => array(
             'employee_id' => array(
                 'label' => 'Employee',
                 'type'  => 'record',
+                'doctrineIgnore'        => true, // already defined as association
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'duplicateCheckGroup' => 'year-employee',
                 'config' => array(
@@ -88,6 +112,8 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
             'description' => array(
                 'label' => 'Description', //_('Description')
                 'group' => 'Miscellaneous', //_('Miscellaneous')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             // virtual fields
             'remaining_vacation_days' => array(

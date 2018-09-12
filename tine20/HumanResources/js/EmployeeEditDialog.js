@@ -124,13 +124,16 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         };
         
         var firstRow = [
-            Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
+            Tine.widgets.form.FieldManager.get(
+            this.appName,
+            this.modelName,
+            'supervisor_id',
+            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+            {
                 allowLinkingItself: false,
-                name: 'supervisor_id',
-                fieldLabel: this.app.i18n._('Supervisor'),
-                editDialog: this,
-                allowBlank: true
-            })];
+
+            }
+        )];
             
         if (this.useSales) {
             firstRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Division', {
@@ -199,26 +202,30 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         xtype: 'columnform',
                         labelAlign: 'top',
                         formDefaults: formFieldDefaults,
-                        items: [[{
-                                fieldLabel: this.app.i18n._('Number'),
-                                name: 'number',
-                                allowBlank: false,
-                                columnWidth: .125,
-                                xtype: 'numberfield',
-                                maxValue: 999999999
-                            }, 
-                                Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                        items: [[
+                                Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'number',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                {
+                                    columnWidth: .125,
+                                    maxValue: 999999999
+                                }
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'account_id',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                {
+                                    columnWidth: .380,
+                                    ref: '../../../../../../../contactPicker',
                                     userOnly: true,
                                     useAccountRecord: true,
                                     blurOnSelect: true,
-                                    name: 'account_id',
-                                    fieldLabel: this.app.i18n._('Account'),
-                                    columnWidth: .380,
-                                    ref: '../../../../../../../contactPicker',
-                                    allowBlank: false,
                                     listeners: {
                                         scope: this,
-                                        blur: function() { 
+                                        blur: function() {
                                             if (this.contactPicker.selectedRecord) {
                                                 this.contactButton.enable();
                                             } else {
@@ -226,7 +233,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                             }
                                         }
                                     }
-                                }), {
+                                }
+                            ), {
                                columnWidth: .045,
                                xtype:'button',
                                ref: '../../../../../../../contactButton',
@@ -250,20 +258,23 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                                     this.form.findField(f).setValue(sr.get('adr_two_' + f));
                                                 }, this);
                                                 
-                                                Ext.each(['email_home', 'tel_home', 'tel_cell', 'bday'], function(f){
+                                                Ext.each(['email', 'tel_home', 'tel_cell', 'bday'], function(f){
                                                     this.form.findField(f).setValue(sr.get(f));
                                                 }, this);
                                             }
                                         }
                                     }
                                }
-                            }, {
-                                columnWidth: .450,
-                                allowBlank: false,
-                                fieldLabel: this.app.i18n._('Full Name'),
-                                name: 'n_fn',
-                                disabled: true
-                            }], [
+                            }, Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'n_fn',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                {
+                                    columnWidth: .450,
+                                    disabled: true
+                                }
+                            )], [
                             new Tine.Tinebase.widgets.keyfield.ComboBox({
                                 fieldLabel: this.app.i18n._('Salutation'),
                                 name: 'salutation',
@@ -271,29 +282,39 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 keyFieldName: 'contactSalutation',
                                 value: '',
                                 columnWidth: .25
-                            }), {
-                                columnWidth: .25,
-                                fieldLabel: this.app.i18n._('Title'),
-                                name: 'title'
-                            }, {
-                                columnWidth: .25,
-                                fieldLabel: this.app.i18n._('First Name'),
-                                name: 'n_given',
-                                allowBlank: false,
-                                listeners: {
-                                    scope: this,
-                                    blur: this.updateDisplayName
+                            }), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'title',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                {
+                                    columnWidth: .25,
                                 }
-                            }, {
-                                columnWidth: .25,
-                                fieldLabel: this.app.i18n._('Last Name'),
-                                name: 'n_family',
-                                allowBlank: false,
-                                listeners: {
-                                    scope: this,
-                                    blur: this.updateDisplayName
+                            ),  Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'n_given',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                {
+                                    columnWidth: .25,
+                                    listeners: {
+                                        scope: this,
+                                        blur: this.updateDisplayName
+                                    }
                                 }
-                            }]
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'n_family',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                {
+                                    columnWidth: .25,
+                                    listeners: {
+                                        scope: this,
+                                        blur: this.updateDisplayName
+                                    }
+                                }
+                            )]
                         ]
                     }]
                 }, {
@@ -311,31 +332,47 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 xtype: 'widget-countrycombo',
                                 name: 'countryname',
                                 fieldLabel: this.app.i18n._('Country')
-                            }, {
-                                name: 'locality',
-                                fieldLabel: this.app.i18n._('Locality')
-                            }, {
-                                name: 'postalcode',
-                                fieldLabel: this.app.i18n._('Postalcode')
-                            }], [{
-                                name: 'region',
-                                fieldLabel: this.app.i18n._('Region')
-                            }, {
-                                name: 'street',
-                                fieldLabel: this.app.i18n._('Street')
-                            }, {
-                                name: 'street2',
-                                fieldLabel: this.app.i18n._('Street2')
-                            }], [{
-                                name: 'email',
-                                fieldLabel: this.app.i18n._('E-Mail')
-                            }, {
-                                name: 'tel_home',
-                                fieldLabel: this.app.i18n._('Telephone Number')
-                            }, {
-                                name: 'tel_cell',
-                                fieldLabel: this.app.i18n._('Cell Phone Number')
-                            }], [{
+                            }, Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'locality',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'postalcode',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            )], [Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'region',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'street',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'street2',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            )], [Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'email',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'tel_home',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'tel_cell',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            )], [{
                                 xtype: 'extuxclearabledatefield',
                                 name: 'bday',
                                 fieldLabel: this.app.i18n._('Birthday')
@@ -352,28 +389,44 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         labelAlign: 'top',
                         formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {}),
                         items: [ firstRow
-                            , [{
-                                xtype: 'datefield',
-                                name: 'employment_begin',
-                                fieldLabel: this.app.i18n._('Employment begin'),
-                                allowBlank: false,
-                                columnWidth: .5
-                            }, {
-                                xtype: 'extuxclearabledatefield',
-                                name: 'employment_end',
-                                allowBlank: true,
-                                fieldLabel: this.app.i18n._('Employment end'),
-                                columnWidth: .5
-                            }, {
-                                name: 'profession',
-                                fieldLabel: this.app.i18n._('Profession'),
-                                columnWidth: .5
-                            }, {
-                                name: 'position',
-                                fieldLabel: this.app.i18n._('Position'),
-                                columnWidth: .5
-                            }
-                        ]]
+                            , [Tine.widgets.form.FieldManager.get(
+                                    this.appName,
+                                    this.modelName,
+                                    'employment_begin',
+                                    Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                    {
+                                        columnWidth: .5,
+                                    }
+                                ),
+                                Tine.widgets.form.FieldManager.get(
+                                    this.appName,
+                                    this.modelName,
+                                    'employment_end',
+                                    Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                    {
+                                        columnWidth: .5,
+                                    }
+                                ), Tine.widgets.form.FieldManager.get(
+                                    this.appName,
+                                    this.modelName,
+                                    'profession',
+                                    Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                    {
+                                        columnWidth: .5,
+                                    }
+                                ),
+                                Tine.widgets.form.FieldManager.get(
+                                    this.appName,
+                                    this.modelName,
+                                    'position',
+                                    Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                                    {
+                                        columnWidth: .5,
+                                    }
+                                )
+                                
+                            ]
+                        ]
                     }]
                 }, {
                     xtype: 'fieldset',
@@ -386,25 +439,38 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         labelAlign: 'top',
                         formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
                         items: [
-                            [{
-                                name: 'bank_account_holder',
-                                fieldLabel: this.app.i18n._('Account Holder')
-                            }, {
-                                name: 'bank_account_number',
-                                fieldLabel: this.app.i18n._('Account Number')
-                            }, {
-                                name: 'bank_name',
-                                fieldLabel: this.app.i18n._('Bank Name')
-                            }], [{
-                                name: 'bank_code_number',
-                                fieldLabel: this.app.i18n._('Code Number')
-                            }, {
-                                name: 'iban',
-                                fieldLabel: 'IBAN'
-                            }, {
-                                name: 'bic',
-                                fieldLabel: 'BIC'
-                            }
+                            [Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'bank_account_holder',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'bank_account_number',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'bank_name',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            )], [
+                                Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'bank_code_number',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ), Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'iban',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            ),Tine.widgets.form.FieldManager.get(
+                                this.appName,
+                                this.modelName,
+                                'bic',
+                                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
+                            )
                         ]]
                     }]
                 }
