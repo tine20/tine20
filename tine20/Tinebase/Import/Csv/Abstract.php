@@ -121,7 +121,8 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     {
         // get headline
         if (isset($this->_options['headline']) && $this->_options['headline']) {
-            $this->_headline = $this->_getRawData($_resource);
+            $firstLine = $this->_getRawData($_resource);
+            $this->_headline = $firstLine ? $firstLine : array();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Got headline: ' . implode(', ', $this->_headline));
             if (! $this->_options['use_headline']) {
