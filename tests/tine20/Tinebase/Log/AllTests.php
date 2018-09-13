@@ -26,6 +26,7 @@ class Tinebase_Log_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Log Tests');
         $suite->addTestSuite('Tinebase_Log_Filter_FilterTest');
         $suite->addTestSuite('Tinebase_Log_FormatterTest');
+        $suite->addTestSuite('Tinebase_Log_Formatter_JsonTest');
         return $suite;
     }
 }
