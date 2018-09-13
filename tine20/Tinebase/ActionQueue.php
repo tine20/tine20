@@ -184,7 +184,7 @@
         // loop over all jobs
         while(false !== ($jobId = $this->_queue->waitForJob())) {
             $job = $this->_queue->receive($jobId);
-            
+
             $this->executeAction($job);
             
             $this->_queue->delete($jobId);
