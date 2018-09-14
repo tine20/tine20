@@ -221,6 +221,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         foreach($events as $event) {
             $pollId = $event->poll_id instanceof Calendar_Model_Poll ? $event->poll_id->getId() : $event->poll_id;
             if ($pollId) {
+                $event->mute = $event->mute || Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS);
                 $groupedEvents[$pollId][] = $event->getId();
             }
         }
@@ -302,11 +303,13 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                         continue;
                     }
 
+                    $toAdd->mute = $event->mute || Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS);
                     Calendar_Controller_Event::getInstance()->create($toAdd);
                 }
 
                 foreach ($diff->modified as $eventDiff) {
                     $toUpdate = $poll->alternative_dates->getById($eventDiff->id);
+                    $toUpdate->mute = $event->mute || Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS);
                     Calendar_Controller_Event::getInstance()->update($toUpdate);
                 }
 

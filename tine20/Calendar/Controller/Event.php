@@ -248,7 +248,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // send notifications
-        if ($this->_sendNotifications && $_record->mute != 1) {
+        $createdEvent->mute = $_record->mute;
+        if ($this->_sendNotifications) {
             $this->doSendNotifications($createdEvent, Tinebase_Core::getUser(), 'created');
         }        
 
@@ -992,7 +993,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         // send notifications
         $this->sendNotifications($sendNotifications);
-        if ($this->_sendNotifications && $_record->mute != 1) {
+        $updatedEvent->mute = $_record->mute;
+        if ($this->_sendNotifications) {
             $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
         return $updatedEvent;
@@ -1500,7 +1502,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->doContainerACLChecks($doContainerACLChecks);
         
         // send notifications
-        if ($this->_sendNotifications && $_event->mute != 1) {
+        if ($this->_sendNotifications) {
             // NOTE: recur exception is a fake event from client. 
             //       this might lead to problems, so we wrap the calls
             try {
@@ -2155,10 +2157,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
-                $exceptionIds = $this->getRecurExceptions($event)->getId();
+                $exceptions = $this->getRecurExceptions($event);
+                $events->merge($exceptions);
+
+                $exceptionIds = $exceptions->getId();
+                $_ids = array_merge($_ids, $exceptionIds);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
-                $_ids = array_merge($_ids, $exceptionIds);
             }
 
             // TODO make this undoable!
@@ -2169,7 +2174,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         Calendar_Controller_Poll::getInstance()->inspectDeleteEvents($events);
         
-        return array_unique($_ids);
+        return $events;
     }
     
     /**
@@ -2528,8 +2533,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // send notifications
-        if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications && $_event->mute != 1) {
+        if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications) {
             $updatedEvent = $this->get($event->getId());
+            $updatedEvent->mute = $_event->mute;
             $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $oldEvent);
         }
         
@@ -2933,6 +2939,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function doSendNotifications(Tinebase_Record_Interface $_event, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
+        if ($_event->mute) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' skip sending notifications as event is muted');
+
+            return;
+        }
         Tinebase_ActionQueue::getInstance()->queueAction('Calendar.sendEventNotifications', 
             $_event, 
             $_updater,

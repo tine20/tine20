@@ -1675,12 +1675,18 @@ abstract class Tinebase_Controller_Record_Abstract
             /** @var Tinebase_Record_Interface $_ids */
             $_ids = (array)$_ids->getId();
         }
-        /** @var array $_ids */
 
+        /** @var string[] $_ids */
         $ids = $this->_inspectDelete((array) $_ids);
+        if ($ids instanceof Tinebase_Record_RecordSet) {
+            /** @var Tinebase_Record_RecordSet $records */
+            $records = $ids;
+            $ids = array_unique($records->getId());
+        } else {
+            /** @var Tinebase_Record_RecordSet $records */
+            $records = $this->_backend->getMultiple((array)$ids);
+        }
 
-        $records = $this->_backend->getMultiple((array)$ids);
-        
         if (count((array)$ids) != count($records)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
         }
@@ -1760,7 +1766,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * inspects delete action
      *
      * @param array $_ids
-     * @return array of ids to actually delete
+     * @return RecordSet|string[] records to actually delete
      */
     protected function _inspectDelete(array $_ids)
     {
