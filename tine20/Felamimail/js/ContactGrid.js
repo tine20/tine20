@@ -165,10 +165,12 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @return {Void}
      */
     onContactStoreLoad: function(store, records, options) {
-        if (Ext.isRecord(this.messageRecord) && Ext.isArray(this.messageRecord.data[type])) {
+        if (Ext.isObject(this.messageRecord)) {
             Ext.each(records, function (record) {
                 Ext.each(['to', 'cc', 'bcc'], function (type) {
-                    if (this.messageRecord.data[type].indexOf(Tine.Felamimail.getEmailStringFromContact(record)) !== -1) {
+                    if (Ext.isArray(this.messageRecord.data[type]) &&
+                        this.messageRecord.data[type].indexOf(Tine.Felamimail.getEmailStringFromContact(record)) !== -1
+                    ) {
                         this.setTypeRadio(record, type);
                     }
                 }, this);
