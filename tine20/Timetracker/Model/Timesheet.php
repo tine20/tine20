@@ -107,7 +107,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ),
             ),
             'is_billable'           => array(
-                'label'                 => null,
+                'label'                 => 'Billable', // _('Billable')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
                 'type'                  => 'boolean',
                 'default'               => 1,
@@ -153,7 +153,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'copyOmit'              => true,
             ),
             'is_cleared'            => array(
-                'label'                 => null,
+                'label'                 => 'Cleared', // _('Cleared')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'                  => 'boolean',
                 'default'               => 0,
