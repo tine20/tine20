@@ -243,6 +243,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'type'  => 'date',
                 'group' => 'private',
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE,  'presence' => 'required'),
+                'nullable' => true,
             ),
             'employment_end' => array(
                 'label' => 'Employment end', //_('Employment end')
