@@ -1169,7 +1169,7 @@ class Tinebase_ModelConfiguration {
             
             $this->_setFieldFilterModel($fieldDef, $fieldKey);
 
-            if (isset($fieldDef['queryFilter'])) {
+            if (isset($fieldDef['queryFilter']) && $fieldDef['queryFilter']) {
                 $queryFilters[] = $fieldKey;
             }
 
