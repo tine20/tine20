@@ -2905,7 +2905,7 @@ msgstr "neue Sprache wird eingestellt..."
 #: Controller/Event.php:87
 #, python-format
 msgid "%s's personal files"
-msgstr "%s's persönliche Datein"
+msgstr "Persönliche Dateien von %s"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."

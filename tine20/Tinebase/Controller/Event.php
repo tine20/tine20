@@ -50,7 +50,6 @@ abstract class Tinebase_Controller_Event extends Tinebase_Controller_Abstract im
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         // do nothing
-        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
     }
     
     /**
@@ -91,8 +90,12 @@ abstract class Tinebase_Controller_Event extends Tinebase_Controller_Abstract im
             ) . '/' . $account->getId() . '/' . $nodeName;
 
         if (true === Tinebase_FileSystem::getInstance()->fileExists($path)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found existing personal folder: "' .
+                $path . '"');
             $personalNode = Tinebase_FileSystem::getInstance()->stat($path);
         } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new personal folder: "' .
+                $path . '"');
             $personalNode = Tinebase_FileSystem::getInstance()->createAclNode($path);
         }
 
