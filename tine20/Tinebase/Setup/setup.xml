@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>12.5</version>
+    <version>12.6</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -1888,7 +1888,7 @@
 
         <table>
             <name>temp_files</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1928,6 +1928,7 @@
                 <field>
                     <name>size</name>
                     <type>integer</type>
+                    <length>64</length>
                     <unsigned>true</unsigned>
                     <notnull>true</notnull>
                 </field>

@@ -675,11 +675,34 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 11.33
+     *
+     * increase temp_file size column to bigint
+     */
+    public function update_32()
+    {
+        $this->_backend->alterCol('temp_files', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>size</name>
+                    <type>integer</type>
+                    <length>64</length>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>'));
+
+        if ($this->getTableVersion('temp_files') == 1) {
+            $this->setTableVersion('temp_files', 2);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.33');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_32()
+    public function update_33()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }
