@@ -23,4 +23,10 @@ class HumanResources_Setup_Update_Release12 extends Setup_Update_Abstract
         $this->updateSchema('HumanResources', array('HumanResources_Model_Employee'));
         $this->setApplicationVersion('HumanResources', '12.2');
     }
+
+    public function update_2()
+    {
+        $this->updateSchema('HumanResources', array('HumanResources_Model_WorkingTime', 'HumanResources_Model_Break'));
+        $this->setApplicationVersion('HumanResources', '12.3');
+    }
 }

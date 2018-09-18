@@ -84,4 +84,26 @@ class HumanResources_Controller extends Tinebase_Controller_Event
 
         return array('SUCCESS' => TRUE);
     }
+
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = parent::getCoreDataForApplication();
+
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'hr_wtm',
+            'application_id' => $application,
+            'model' => 'HumanResources_Model_WorkingTime',
+            'label' => 'Working time model' // _('Working time model')
+        )));
+
+        return $result;
+    }
 }

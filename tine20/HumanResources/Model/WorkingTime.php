@@ -53,6 +53,7 @@ class HumanResources_Model_WorkingTime extends Tinebase_Record_Abstract
         'fields' => [
             'title' => [
                 'type' => 'string',
+                'label'      => 'Title', // _('Title')
                 'length' => 255,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
@@ -60,14 +61,45 @@ class HumanResources_Model_WorkingTime extends Tinebase_Record_Abstract
                 'type' => 'text', // json
                 'nullable' => true,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'default' => '{"days":[0,0,0,0,0,0,0]}'
             ],
+            'work_start' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'      => 'Start time', // _('Start time')
+                'type'       => 'time',
+                'nullable'     => true,
+            ),
+            'work_end' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'      => 'End time', // _('End time')
+                'type'       => 'time',
+                'nullable'     => true,
+            ),
             'working_hours' => [
                 'type' => 'integer',
                 'nullable' => true,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'inputFilters' => ['Zend_Filter_Empty' => null],
-                'default' => 1,
+                'default' => 0,
             ],
+
+
+            'breaks' => [
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Breaks', // _('Breaks')
+                'type'       => 'records',
+                'nullable'   => true,
+                'default'    => null,
+                'config'     => array(
+                    'appName'          => 'HumanResources',
+                    'modelName'        => 'Break',
+                    'refIdField'       => 'workingtime_id',
+                    'recordClassName' => 'HumanResources_Model_Break',
+                    'controllerClassName' => 'HumanResources_Controller_Break',
+                    'filterClassName' => 'HumanResources_Model_BreakFilter',
+                    'dependentRecords' => TRUE
+                ),
+            ]
         ]
     );
 }
