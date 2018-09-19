@@ -40,17 +40,16 @@ abstract class ImportTestCase extends TestCase
      */
     protected $_testContainer = null;
 
-
     /**
      * tear down tests
      */
     protected function tearDown()
     {
-        parent::tearDown();
-
         if ($this->_testContainer) {
-            Tinebase_Container::getInstance()->deleteContainer($this->_testContainer);
+            Tinebase_Container::getInstance()->deleteContainer($this->_testContainer, true);
         }
+
+        parent::tearDown();
 
         // cleanup
         if (file_exists($this->_filename) && $this->_deleteImportFile) {
