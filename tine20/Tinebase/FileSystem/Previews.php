@@ -218,6 +218,8 @@ class Tinebase_FileSystem_Previews
             return false;
         }
 
+        unlink($tempPath);
+
         foreach($config as $key => $cnf) {
             if (!isset($result[$key])) {
                 return false;
@@ -265,6 +267,7 @@ class Tinebase_FileSystem_Previews
                 // this means we create a file node of type preview
                 $fileSystem->setStreamOptionForNextOperation(Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW, true);
                 $fileSystem->copyTempfile($fh, $name);
+                unlink($tempFile);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
