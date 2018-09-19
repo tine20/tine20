@@ -1,12 +1,14 @@
 
 TINE 2.0 RELEASENOTES
-===
+=====================
                     
   Release:     Nele (2018.11)
-  Last change: 2018-02-01
+  Last change: 2018-09-19
 
 GENERAL CHANGES
 ---
+
+* New Icon Set
 
 * PHP 7.2 Support
 
@@ -27,13 +29,6 @@ It is possible to define protection for certain areas of Tine 2.0. For example, 
          ]
      ],
 
-* Sentry.io integration
-If you have a sentry.io server which collects your errors, you can just add it to Tine 2.0 by setting this config:
-
-    'sentryUri' => 'https://USER:PW@sentry.my.domain/2', // note: no double slashes in uri except after "https:"
-
-see 0013706: integrate sentry.io error handling (https://forge.tine20.org/view.php?id=13706)
-
 * Access Log Cleanup
 
 Access Log Entries are not removed if older than 7 days be default. You can use the config option
@@ -49,17 +44,43 @@ We changed the default charset to UTF8MB4. All tables in the Tine 2.0 Database a
     innodb_file_per_table = 'ON'
 The update script will test these settings and abort if prerequisites are not met.
 
+* Improved Branding customization via configuration
+
+options: BRANDING_TITLE,BRANDING_LOGO,BRANDING_DESCRIPTION,BRANDING_WEBURL,BRANDING_HELPURL,BRANDING_FAVICON,INSTALL_LOGO, ...
+
+* Sentry.io integration
+
+If you have a sentry.io server which collects your errors, you can just add it to Tine 2.0 by setting this config:
+
+    'sentryUri' => 'https://USER:PW@sentry.my.domain/2', // note: no double slashes in uri except after "https:"
+
+see 0013706: integrate sentry.io error handling (https://forge.tine20.org/view.php?id=13706)
+
+* JSON-Log-Formatter
+
 FILEMANAGER
 ---
+
 * PIN Protection / Data safe
+
 Folders can be PIN protected: its contents are only visibly if user provides a valid second factor / PIN.
  - use an AreaLock with area 'Tinebase.datasafe' to activate pin protection
+
+* WebDAV NTLM V2 Support (Windows 10)
+
+* Password Policy for Download Links
 
 ADDRESSBOOK
 ---
 
+* Structure-Panel
+
+* Contact images are visible on mouse-over in grid view
+
 CALENDAR
 ---
+
+* Polls
 
 * Link to event in event notification mails
 
@@ -69,3 +90,9 @@ To have the correct URL, you need to set this config:
 
 EMAIL
 ---
+
+* Mass-Mailing
+
+Send one mail to each recipient
+
+* Allow to set reply-to in message compose dialog
