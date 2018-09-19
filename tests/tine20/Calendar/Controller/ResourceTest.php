@@ -460,4 +460,31 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
             $container['xprops']['Tinebase']['Container']['GrantsModel'] === Calendar_Model_ResourceGrants::class,
             'xprops are not properly set on container: ' . print_r($container, true));
     }
+
+    public function testUpdateEventLocations()
+    {
+        // create event with resource
+        $resource = $this->testCreateResource();
+        $ct = new Calendar_Controller_EventTests();
+        $ct->setUp();
+        $event = $ct->_getEvent(true);
+        $event->location = $resource->name;
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+            'user_id'   => $resource->getId()
+        ))));
+        Calendar_Controller_Event::getInstance()->create($event);
+
+        // rename resource
+        $resource->name = 'testUpdateEventLocations';
+        Calendar_Controller_Resource::getInstance()->update($resource);
+
+        // fetch event
+        $hopefullyUpdatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+
+
+        $this->assertEquals($hopefullyUpdatedEvent->location, $resource->name);
+
+        $ct->tearDown();
+    }
 }
