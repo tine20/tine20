@@ -319,7 +319,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      */
     public function updateEventLocations($currentName, $newName, $updatePastEvents = false)
     {
-        $currentName = is_array($currentName) ?: [$currentName];
+        $currentName = is_array($currentName) ? $currentName : [$currentName];
 
         $filter = new Calendar_Model_EventFilter([
             ['field' => 'location', 'operator' => 'in', 'value' => $currentName]
@@ -338,10 +338,15 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
 
         $events = Calendar_Controller_Event::getInstance()->search($filter);
-        $events->location = $newName;
 
         foreach($events as $event) {
-            Calendar_Controller_Event::getInstance()->update($event);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Updating event {$event->id} location from '{$event->location}' to '{$newName}'");
+            $event->location = $newName;
+            try {
+                Calendar_Controller_Event::getInstance()->update($event);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not update event {$event->id} location from '{$event->location}' to '{$newName}'" . $e);
+            }
         }
 
         Tinebase_Core::set(Tinebase_Core::USER, $currentUser);

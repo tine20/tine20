@@ -128,7 +128,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     /**
      * delete duplicate events
-     *  - allowed params: 
+     *  - allowed params:
      *      organizer=ORGANIZER_CONTACTID (equals)
      *      created_by=USER_ID (equals)
      *      dtstart="2014-10-28" (after)
@@ -536,5 +536,60 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 }
             }
         }
+    }
+
+    /**
+     * update event locations (before 2018.11 there was no autoupdate on resource rename)
+     * allowed params:
+     *      --updatePastEvents (otherwise from now on)
+     *      -d (dry run)
+     */
+    public function updateEventLocations(Zend_Console_Getopt $opts)
+    {
+        $args = $this->_parseArgs($opts);
+        $updatePastEvents = !!$args['updatePastEvents'];
+        $dry = $opts->d;
+        $this->_addOutputLogWriter(6);
+
+        $resources = Calendar_Controller_Resource::getInstance()->getAll();
+
+        foreach($resources as $resource) {
+            // collect old names from history
+            $names = [];
+            $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications(
+                'Calendar',
+                $resource->getId(),
+                Calendar_Model_Resource::class,
+                'Sql',
+                $resource->creation_time
+            )->filter('change_type', Tinebase_Timemachine_ModificationLog::UPDATED);
+
+            /** @var Tinebase_Model_ModificationLog $modification */
+            foreach($modifications as $modification) {
+                $modified_attribute = $modification->modified_attribute;
+
+                // legacy code
+                if (!empty($modified_attribute) && $modified_attribute == 'name') {
+                    $names[] = $modification->old_value;
+
+                // new code modificationLog implementation
+                } else {
+                    /** @var Tinebase_Record_Diff $diff */
+                    $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                    if (isset($diff->oldData['name'])) {
+                        $names[] = $diff->oldData['name'];
+                    }
+                }
+            }
+
+            if (!empty($names)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Ressource [{$resource->id}] '{$resource->name}' had this names before " . print_r($names, true));
+                if (! $dry) {
+                    Calendar_Controller_Resource::getInstance()->updateEventLocations($names, $resource->name, $updatePastEvents);
+                }
+            }
+
+        }
+
     }
 }
