@@ -547,7 +547,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function updateEventLocations(Zend_Console_Getopt $opts)
     {
         $args = $this->_parseArgs($opts);
-        $updatePastEvents = !!$args['updatePastEvents'];
+        $updatePastEvents = isset($args['updatePastEvents']) ? !!$args['updatePastEvents'] : false;
         $dry = $opts->d;
         $this->_addOutputLogWriter(6);
 
