@@ -54,4 +54,17 @@ class Calendar_Setup_Update_Release12 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Calendar', '12.4');
     }
+
+    /**
+     * update to 12.5
+     *
+     * add xprops to external invitation calendars
+     */
+    public function update_4()
+    {
+        $update11 = new Calendar_Setup_Update_Release11($this->_backend);
+        $update11->update_11();
+
+        $this->setApplicationVersion('Calendar', '12.5');
+    }
 }

@@ -37,6 +37,8 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      */
     protected $_applicationName = 'Calendar';
 
+    const XPROP_EXTERNAL_INVITATION_CALENDAR = 'externalInvitationCalendar';
+
     /**
      * don't clone. Use the singleton.
      *
@@ -335,7 +337,8 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                 'type'              => Tinebase_Model_Container::TYPE_SHARED,
                 'backend'           => Tinebase_User::SQL,
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'model'             => 'Calendar_Model_Event'
+                'model'             => 'Calendar_Model_Event',
+                'xprops'            => [self::XPROP_EXTERNAL_INVITATION_CALENDAR => true],
             )), NULL, TRUE);
             
             $grants = new Tinebase_Record_RecordSet($container->getGrantClass(), array(

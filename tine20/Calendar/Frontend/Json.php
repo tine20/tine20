@@ -527,7 +527,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $eventRecord = new Calendar_Model_Event([], TRUE);
             $eventRecord->setFromJsonInUsersTimezone($event);
 
-            if ($eventRecord->dtstart === null || empty($eventRecord->getId())) {
+            if ($eventRecord->dtstart === null || (empty($eventRecord->getId()) &&
+                    (string)$eventRecord->getId() !== '0')) {
                 continue;
             }
 

@@ -2014,7 +2014,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         unset($persistentEvent->rrule);
 
         $eventData = [$persistentEvent->toArray()];
-        $eventData[0]['id'] = Tinebase_Record_Abstract::generateUID();
+        $eventData[0]['id'] = 0;
         $persistentEvent->dtstart->addMinute(10);
         $persistentEvent->dtend->addMinute(10);
         $eventData[] = $persistentEvent->toArray();
