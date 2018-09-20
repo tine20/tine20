@@ -2493,4 +2493,87 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.57');
     }
+
+    /**
+     * update to 10.58
+     *
+     * change unique key parent_id - name - deleted_time so that it really works
+     */
+    public function update_57()
+    {
+        $doSleep = false;
+        $fsController = Tinebase_FileSystem::getInstance();
+        do {
+            $cont = false;
+            $stmt = $this->_db->select()->from(['n1' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.id')
+                ->join(['n2' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.parent_id = n2.parent_id AND '.
+                    'n1.name = n2.name AND n1.id <> n2.id AND n1.deleted_time IS NULL AND n2.deleted_time IS NULL',
+                    ['id2' => 'n2.id'])->limit(1000)->query();
+
+            if ($doSleep) sleep(1);
+            $doSleep = true;
+            $namesProcessed = [];
+
+            foreach ($stmt->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+                try {
+                    $node = $fsController->get($row['id']);
+                } catch(Tinebase_Exception_NotFound $tenf) { continue; }
+                $key = $node->parent_id . $node->name;
+                if (isset($namesProcessed[$key])) continue;
+                $namesProcessed[$key] = true;
+
+                try {
+                    $node2 = $fsController->get($row['id2']);
+                } catch(Tinebase_Exception_NotFound $tenf) { continue; }
+                if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE && $node2->type  ===
+                        Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+                    if (empty($node->hash) || !is_file($node->getFilesystemPath())) {
+                        // delete $node
+                    } elseif (empty($node2->hash) || !is_file($node2->getFilesystemPath())) {
+                        // delete $node2
+                        $node = $node2;
+                    } elseif ($node2->last_modified_time < $node->last_modified_time) {
+                        // delete node2
+                        $node = $node2;
+                    }
+                } else {
+                    if ($node2->last_modified_time < $node->last_modified_time) {
+                        // delete node2
+                        $node = $node2;
+                    }
+                }
+
+                if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+                    Tinebase_FileSystem::getInstance()->deleteFileNode($node);
+                } else {
+                    Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->softDelete($node->getId());
+
+                    // delete object only, if no other tree node refers to it, really?
+                    if (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()
+                            ->getObjectCount($node->object_id) == 0) {
+                        Tinebase_FileSystem::getInstance()->getFileObjectBackend()->softDelete($node->object_id);
+                    }
+                }
+
+                $cont = true;
+            }
+        } while ($cont);
+
+        $this->_db->update(SQL_TABLE_PREFIX . 'tree_nodes', ['deleted_time' => '1970-01-01 00:00:00'],
+            'deleted_time IS NULL');
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                    <default>1970-01-01 00:00:00</default>
+                    <notnull>true</notnull>
+                </field>');
+
+        $this->_backend->alterCol('tree_nodes', $declaration);
+        if ($this->getTableVersion('tree_nodes') < 9) {
+            $this->setTableVersion('tree_nodes', 9);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.58');
+    }
 }
