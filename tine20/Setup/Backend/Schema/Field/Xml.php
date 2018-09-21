@@ -101,16 +101,12 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
                 case 'integer':
                     $this->default = (int) $_declaration->default;
                     break;
-    
-                case 'datetime':
-                    $this->type = 'datetime';
-                    $this->default = NULL; //@todo default value is ignored - is this intended?
-                    break;
                 
                 case 'float':
                     $this->default = (float) $_declaration->default;
                     break;
 
+                case 'datetime':
                 case 'text':
                 case 'clob':
                 case 'blob':

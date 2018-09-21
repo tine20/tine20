@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.33</version>
+    <version>11.34</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -3519,6 +3519,8 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                    <default>1970-01-01 00:00:00</default>
+                    <notnull>true</notnull>
                 </field>
                 <index>
                     <name>id</name>

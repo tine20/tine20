@@ -696,4 +696,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.33');
     }
+
+    /**
+     * update to 11.34
+     *
+     * change unique key parent_id - name - deleted_time so that it really works
+     */
+    public function update_33()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_57();
+        $this->setApplicationVersion('Tinebase', '11.34');
+    }
 }

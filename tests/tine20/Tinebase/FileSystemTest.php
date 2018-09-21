@@ -107,6 +107,7 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
         $this->assertEquals(1, $node->revision);
         $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($this->_basePath)->hash);
+        static::assertNull($node->deleted_time, 'deleted_time should be null');
         
         return $testPath;
     }
