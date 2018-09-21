@@ -509,7 +509,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $this->cleanCustomfields();
 
             echo "\nCleaning notes...";
-            $this->cleanNotes();
+            $this->cleanNotes($_opts);
         }
 
         echo "\n\n";
@@ -520,20 +520,25 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * cleanNotes: removes notes of records that have been deleted
      */
-    public function cleanNotes()
+    public function cleanNotes(Zend_Console_Getopt $_opts)
     {
         if (! $this->_checkAdminRight()) {
             return FALSE;
         }
 
+        $args = $this->_parseArgs($_opts, array(), 'cleanNotesOffset');
+
         $notesController = Tinebase_Notes::getInstance();
         $limit = 1000;
-        $offset = 0;
+        $offset = (isset($args['cleanNotesOffset']) ? $args['cleanNotesOffset'] : 0);
         $controllers = array();
         $models = array();
         $deleteIds = array();
+        $deletedCount = 0;
 
         do {
+            echo "\noffset $offset...";
+
             $notes = $notesController->getAllNotes('id ASC', $limit, $offset);
             $offset += $limit;
 
@@ -607,17 +612,22 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
                 }
             }
+            if (count($deleteIds) > 0) {
+                $deletedCount += count($deleteIds);
+                $offset -= $notesController->purgeNotes($deleteIds);
+                if ($offset < 0) $offset = 0;
+                $deleteIds = [];
+            }
+            echo ' done';
         } while ($notes->count() === $limit);
 
-        if (count($deleteIds) > 0) {
-            $notesController->purgeNotes($deleteIds);
-        }
+
 
         foreach($controllers as $model => $controller) {
             $controller->doContainerACLChecks($models[$model][3]);
         }
 
-        echo "\ndeleted " . count($deleteIds) . " notes\n";
+        echo "\ndeleted " . $deletedCount . " notes\n";
     }
 
     /**
