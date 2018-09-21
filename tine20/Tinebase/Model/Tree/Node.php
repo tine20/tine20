@@ -258,6 +258,9 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 
     public function runConvertToRecord()
     {
+        if (isset($this->_properties['deleted_time']) && $this->_properties['deleted_time'] == '1970-01-01 00:00:00') {
+            unset($this->_properties['deleted_time']);
+        }
         if (isset($this->_properties['available_revisions']) && is_string($this->_properties['available_revisions'])) {
             $this->_properties['available_revisions'] = explode(',', ltrim(
                 rtrim($this->_properties['available_revisions'], '}'), '{'));
@@ -268,6 +271,9 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 
     public function runConvertToData()
     {
+        if (array_key_exists('deleted_time', $this->_properties) && null === $this->_properties['deleted_time']) {
+            unset($this->_properties['deleted_time']);
+        }
         if (isset($this->_properties[self::XPROPS_REVISION]) && is_array($this->_properties[self::XPROPS_REVISION])) {
             if (count($this->_properties[self::XPROPS_REVISION]) > 0) {
                 $this->_properties[self::XPROPS_REVISION] = json_encode($this->_properties[self::XPROPS_REVISION]);

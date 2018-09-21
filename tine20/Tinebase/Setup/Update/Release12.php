@@ -77,4 +77,14 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_32();
         $this->setApplicationVersion('Tinebase', '12.6');
     }
+
+    /**
+     * increase temp_file size column to bigint
+     */
+    public function update_6()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_57();
+        $this->setApplicationVersion('Tinebase', '12.7');
+    }
 }
