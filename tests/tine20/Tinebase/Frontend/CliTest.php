@@ -347,7 +347,7 @@ class Tinebase_Frontend_CliTest extends TestCase
     {
         // initial clean... tests don't clean up properly
         ob_start();
-        $this->_cli->cleanNotes();
+        $this->_cli->cleanNotes(new Zend_Console_Getopt([], []));
         $out = ob_get_clean();
 
         $noteController = Tinebase_Notes::getInstance();
@@ -416,7 +416,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertEquals($notesCreated + $realDataNotes + $dbArtifacts, $allNotes->count(), 'notes created and notes in DB mismatch');
 
         ob_start();
-        $this->_cli->cleanNotes();
+        $this->_cli->cleanNotes(new Zend_Console_Getopt([], []));
         $out = ob_get_clean();
 
         $this->assertTrue(preg_match('/deleted \d+ notes/', $out) == 1, 'CLI job produced output: ' . $out);
