@@ -33,14 +33,16 @@ class Timetracker_Setup_Update_Release12 extends Setup_Update_Abstract
         // remove old index + fks first
         try {
             $this->_backend->dropForeignKey('timetracker_timeaccount', 'timeaccount::container_id--container::id');
-        } catch (Zend_Db_Exception $zdse) {
-            // already dropped
+        } catch (Exception $e) {
+            // already dropped?
+            Tinebase_Exception::log($e);
         }
 
         try {
             $this->_backend->dropForeignKey('timetracker_timeaccount_fav', 'timesheet_favorites--timesheet_id::id');
-        } catch (Zend_Db_Exception $zdse) {
-            // already dropped
+        } catch (Exception $e) {
+            // already dropped?
+            Tinebase_Exception::log($e);
         }
 
         $this->updateSchema('Timetracker', array('Timetracker_Model_Timesheet', 'Timetracker_Model_Timeaccount'));
