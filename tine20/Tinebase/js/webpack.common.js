@@ -117,8 +117,9 @@ module.exports = {
         mainFields: ["browser", "browserify", "module", "main"],
         // we need an absolut path here so that apps can resolve modules too
         modules: [
+            path.resolve(__dirname, "../.."),
             __dirname,
             path.resolve(__dirname, "node_modules")
-        ],
+        ]
     }
 };
