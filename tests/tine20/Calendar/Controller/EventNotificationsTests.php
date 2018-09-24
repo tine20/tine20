@@ -327,22 +327,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testNotificationToNonAccounts()
     {
-        $event = $this->_getEvent(TRUE);
-        $event->attendee = $this->_getPersonaAttendee('pwulf');
-        $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
-        
-        // add nonaccount attender
-        $nonAccountEmail = 'externer@example.org';
-        $nonAccountAttender = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
-            'n_family'  => 'externer',
-            'email'     => $nonAccountEmail,
-        )));
-        $event->attendee->addRecord($this->_createAttender($nonAccountAttender->getId()));
-        
-        self::flushMailer();
-        $persistentEvent = $this->_eventController->create($event);
-        
-        // invitaion should be send to internal and external attendee
+        $persistentEvent = $this->_createEventWithExternal();
+
+        // invitation should be send to internal and external attendee
         $this->_assertMail('pwulf,externer@example.org', 'invitation');
         
         // add alarm
@@ -353,19 +340,66 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         ));
         
         self::flushMailer();
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         
         // don't send alarm change to external attendee
         $this->_assertMail('externer@example.org');
         
         self::flushMailer();
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         
         $this->_assertMail('externer@example.org');
         $this->_assertMail('pwulf', 'declined');
     }
-    
+
+    /**
+     * @param bool $externalOrganizer
+     * @return Calendar_Model_Event
+     */
+    protected function _createEventWithExternal($externalOrganizer = false)
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('pwulf');
+
+        // add nonaccount attender
+        $nonAccountEmail = 'externer@example.org';
+        $nonAccountAttender = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'  => 'externer',
+            'email'     => $nonAccountEmail,
+        )));
+        $event->attendee->addRecord($this->_createAttender($nonAccountAttender->getId()));
+
+        if ($externalOrganizer) {
+            $event->organizer = $nonAccountAttender->getId();
+        } else {
+            $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
+        }
+
+        self::flushMailer();
+        return $this->_eventController->create($event);
+    }
+
+    /**
+     * testExternalInvitationContainer - container should be hidden by xprop!
+     */
+    public function testExternalInvitationContainer()
+    {
+        $this->_createEventWithExternal(true);
+        $externalAttender = Calendar_Model_Attender::resolveEmailToContact([
+            'email' => 'externer@example.org'
+        ]);
+        Calendar_Controller::getInstance()->getInvitationContainer($externalAttender);
+
+        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Model_Grants::GRANT_EDIT);
+
+        foreach ($containers as $container) {
+            if ($container->name === 'externer@example.org') {
+                self::fail('external invitation container found!');
+            }
+        }
+    }
+
     /**
      * testRecuringExceptions
      */

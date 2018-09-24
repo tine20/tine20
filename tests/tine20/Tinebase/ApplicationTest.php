@@ -289,6 +289,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Calendar_Model_AttendeeRole::class,
                 Calendar_Model_Event::class,
                 Calendar_Model_EventPersonalGrants::class,
+                Calendar_Model_ExternalInvitationGrants::class,
                 Calendar_Model_Poll::class,
                 Calendar_Model_FreeBusy::class,
                 Calendar_Model_Exdate::class,
