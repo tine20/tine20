@@ -351,7 +351,6 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      * @param string $callId the callid
      * @param string $local the username of the asterisk sip peer
      * @param string $remote the remote number
-     * @throws Tinebase_Exception_NotFound
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
     {
@@ -359,9 +358,11 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         // it's a single shot request
         parent::_authenticate();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Event: $event CallId: $callId Local: $local Remote: $remote ");
+        }
+
         $controller = Phone_Controller::getInstance();
         
         $pos = strpos($callId, '@');
@@ -383,17 +384,16 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
 
         switch ($event) {
             case 'outgoing':
-                $call->source = $local;
-                $call->destination = $remote;
-                $call->direction = Phone_Model_Call::TYPE_OUTGOING;
-                $controller->callStarted($call);
-                break;
-                
             case 'incoming':
                 $call->source = $local;
                 $call->destination = $remote;
-                $call->direction = Phone_Model_Call::TYPE_INCOMING;
-                $controller->callStarted($call);
+                $call->direction = $event === 'incoming' ? Phone_Model_Call::TYPE_INCOMING : Phone_Model_Call::TYPE_OUTGOING;
+                try {
+                    $controller->callStarted($call);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // might be a duplicate
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                }
                 break;
                 
             case 'connected':
@@ -403,6 +403,10 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             case 'disconnected':
                 $controller->callDisconnected($call);
                 break;
+
+            default:
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Unhandled snom event: '
+                    . $event);
         }
     }
 
