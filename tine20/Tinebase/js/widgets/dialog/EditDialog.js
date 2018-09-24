@@ -94,6 +94,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     saveAndCloseButtonText: '',
     /**
+     * @cfg {Function} saveAndCloseActionUpdater
+     * overwritable action updater
+     */
+    saveAndCloseActionUpdater: null,
+    /**
      * @cfg {String} cancelButtonText
      * text of cancel button
      */
@@ -609,6 +614,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             ref: '../btnSaveAndClose',
             scope: this,
+            actionUpdater: this.saveAndCloseActionUpdater,
             // TODO: remove the defer when all subpanels use the deferByTicket mechanism
             handler: function() { this.onSaveAndClose.defer(500, this); },
             iconCls: 'action_saveAndClose'
