@@ -25,9 +25,9 @@ require('widgets/ActionUpdater')
 require('widgets/grid/ExportButton')
 require('widgets/dialog/TokenModeEditDialogPlugin')
 require('widgets/customfields/EditDialogPlugin')
-require('../../../../tine20/Admin/js/user/Users')
+require('Admin/js/user/Users')
 
-require('../../../../tine20/Admin/js/user/EditDialog')
+require('Admin/js/user/EditDialog')
 
 describe('UserEditDialog', () => {
   global.log()
