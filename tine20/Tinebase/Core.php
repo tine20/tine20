@@ -929,9 +929,9 @@ class Tinebase_Core
                 // @todo set charset to utf8mb4 / @see 0008708: switch to mysql utf8mb4
                 
                 // force some driver options
-                $dbConfigArray['driver_options'] = array(
-                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
-                );
+                $driverOptions = isset($dbConfigArray['driver_options']) ? $dbConfigArray['driver_options'] : [];
+                // be aware of the difference of array_merge and [] + [] with numeric keys!
+                $dbConfigArray['driver_options'] = $driverOptions + [PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE];
                 $dbConfigArray['options']['init_commands'] = array(
                     "SET NAMES UTF8",
                     "SET time_zone = '+0:00'",
