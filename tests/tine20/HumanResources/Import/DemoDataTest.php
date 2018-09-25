@@ -17,32 +17,25 @@ class HumanResources_Import_DemoDataTest extends TestCase
      * @var Tinebase_Model_Container
      */
     protected $_importContainer = null;
-
-    /**
-     * tearDown
-     */
-    protected function tearDown()
-    {
-        HumanResources_Controller_Employee::getInstance()->deleteByFilter(
-            Tinebase_Model_Filter_FilterGroup::getFilterForModel('HumanResources_Model_Employee', [
-                ['field' => 'number', 'operator' => 'equals', 'value' => 567]
-            ]
-        ));
-
-        parent::tearDown();
-    }
+    
 
     public function testImportDemoData()
     {
-        $importer = new Tinebase_Setup_DemoData_Import('HumanResources_Model_Employee', [
-            'definition' => 'hr_employee_import_csv',
+        if (!extension_loaded('yaml')) {
+            $this->markTestSkipped('Yaml are not install');
+        }
+        $now = Tinebase_DateTime::now();
+        $this->_importContainer = $this->_getTestContainer('HumanResources', 'HumanResources_Model_Employee');
+        $importer = new Tinebase_Setup_DemoData_ImportSet('HumanResources', [
+            'container_id' => $this->_importContainer->getId(),
+            'files' => array('hr.yml')
         ]);
-        $importer->importDemodata();
 
+        $importer->importDemodata();
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('HumanResources_Model_Employee', [
-            ['field' => 'number', 'operator' => 'equals', 'value' => 567]
+            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = HumanResources_Controller_Employee::getInstance()->search($filter);
-        self::assertEquals(1, count($result));
+        self::assertEquals(2, count($result));
     }
 }

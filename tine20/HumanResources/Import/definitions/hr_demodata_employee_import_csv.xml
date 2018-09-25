@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <name>hr_employee_import_csv</name>
+    <name>hr_demodata_employee_import_csv</name>
     <model>HumanResources_Model_Employee</model>
-    <plugin>HumanResources_Import_Csv</plugin>
+    <plugin>HumanResources_Import_DemoData_Csv</plugin>
     <type>import</type>
     <headline>1</headline>
     <dryrun>1</dryrun>
@@ -10,6 +10,22 @@
     <description>employee import</description>
     <extension>csv</extension>
     <mapping>
+        <field>
+            <source>costcenter</source>
+            <destination>costcenter</destination>
+        </field>
+        <field>
+            <source>supervisor</source>
+            <destination>supervisor</destination>
+        </field>
+        <field>
+            <source>division</source>
+            <destination>division</destination>
+        </field>
+        <field>
+            <source>user</source>
+            <destination>user</destination>
+        </field>
         <field>
             <source>Mitarbeiternummer</source>
             <destination>number</destination>
