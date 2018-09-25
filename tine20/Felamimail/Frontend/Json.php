@@ -614,7 +614,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     *
+     * @param array $mails
+     * @return array
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function doMailsBelongToAccount($mails)
@@ -644,9 +645,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $contacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
         
-        
         $usermails = array_filter(array_merge($contacts->email, $contacts->email_home));
         
         return array_diff($mails, $usermails);
-    }   
+    }
+
+    /**
+     * @param $nodeId
+     * @return array
+     */
+    public function getMessageFromNode($nodeId)
+    {
+        $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId);
+        return $this->_recordToJson($message);
+    }
 }

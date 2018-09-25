@@ -7,7 +7,7 @@ use Sabre\DAV;
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -2424,5 +2424,38 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
         file_put_contents($tempfilePath, 'some content');
         return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
+    }
+
+    public function testGetMessageFromNode()
+    {
+        // create test eml node
+        // @todo move this as helper to generic testcase
+        $user = Tinebase_Core::getUser();
+        $container = Tinebase_FileSystem::getInstance()->getPersonalContainer($user, 'Filemanager', $user)->getFirstRecord();
+        $filepaths = ['/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+            . '/' . $user->accountLoginName
+            . '/' . $container->name
+            . '/test.eml'
+        ];
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileIds = [Tinebase_TempFile::getInstance()->createTempFile($tempPath)];
+        self::assertTrue(is_int($strLen = file_put_contents(
+            $tempPath,
+            file_get_contents(dirname(__FILE__) . '/../files/multipart_related.eml')))
+        );
+        $ffj = new Filemanager_Frontend_Json();
+        $result = $ffj->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, true);
+
+        self::assertEquals(1, count($result));
+
+        // fetch it & assert data
+        $message = $this->_json->getMessageFromNode($result[0]['id']);
+        self::assertEquals('Christof Gacki', $message['from_name']);
+        self::assertEquals('c.gacki@metaways.de', $message['from_email']);
+        self::assertEquals(Zend_Mime::TYPE_HTML, $message['body_content_type']);
+        self::assertContains('wie gestern besprochen würde mich sehr freuen', $message['body']);
+        self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));
+        self::assertEquals(1, count($message['attachments']));
+        self::assertEquals('2010-05-05 16:25:40', $message['sent']);
     }
 }

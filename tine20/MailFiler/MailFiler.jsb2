@@ -40,10 +40,6 @@
           "path": "js/"
         },
         {
-          "text": "MailDetailsPanel.js",
-          "path": "js/"
-        },
-        {
           "text": "NodeTreePanel.js",
           "path": "js/"
         },

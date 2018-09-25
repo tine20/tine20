@@ -29,7 +29,7 @@ Tine.Tinebase.AppManager = function() {
     // do it the other way round because add() always adds records at the beginning of the MixedCollection
     var enabledApps = Tine.Tinebase.registry.get('userApplications'),
         app;
-        
+
     Tine.log.debug('Tine.Tinebase.AppManager - enabled Apps: ');
     Tine.log.debug(enabledApps);
     
@@ -76,14 +76,14 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
             Ext.applyIf(appObj, app);
             this.apps.replace(appName, appObj);
         }
-        
+
         return this.apps.get(appName);
     },
 
 
     /**
      * helper as consumer might not know if we are in maincreen or dialog
-     * @depricated
+     * @deprecated
      */
     getActive: function() {
         if (Tine.Tinebase.MainScreen) {
@@ -176,7 +176,7 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
      * @private
      */
     getAppObj: function(app) {
-       try{
+       try {
             // legacy
             if (typeof(Tine[app.appName].getPanel) == 'function') {
                 // make a legacy Tine.Application
@@ -185,16 +185,15 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
 
             return typeof(Tine[app.appName].Application) == 'function' ? new Tine[app.appName].Application(app) : new Tine.Tinebase.Application(app);
             
-        } catch(e) {
-            console.error('Initialising of Application "' + app.appName + '" failed with the following message:' + e);
-            console.error(e.stack);
-            if (! Tine[app.appName].registry) {
-                // registry load problem: reload
-                Tine.Tinebase.common.reload({});
-            }
-
-            return false;
-        }
+       } catch(e) {
+           console.error('Initialising of Application "' + app.appName + '" failed with the following message:' + e);
+           console.error(e.stack);
+           if (! Tine[app.appName].registry) {
+               // registry load problem: reload
+               Tine.Tinebase.common.reload({});
+           }
+           return false;
+       }
     },
     
     /**

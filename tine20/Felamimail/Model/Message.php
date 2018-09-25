@@ -178,7 +178,73 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'received',
         'sent',
     );
-    
+
+    /**
+     * create Felamimail message from raw mime content
+     *
+     * @param string $_mimeContent
+     * @return Felamimail_Model_Message
+     *
+     * @todo move to converter?
+     */
+    public static function createFromMime($_mimeContent)
+    {
+        $message = \ZBateson\MailMimeParser\Message::from($_mimeContent);
+
+        $data = [];
+        foreach (['date' => 'sent'] as $headerKey => $property) {
+            $data[$property] = new Tinebase_DateTime($message->getHeader($headerKey)->getDateTime());
+        }
+        foreach (['subject', ] as $headerKey) {
+            $data[$headerKey] = $message->getHeaderValue($headerKey);
+        }
+        $from = $message->getHeader('from');
+        $data['from_email'] = $from->getValue();
+        $data['from_name'] = $from->getPersonName();
+        foreach(['to', 'cc', 'bcc'] as $headerKey) {
+            $headerValue = $message->getHeader($headerKey);
+            if (! $headerValue) {
+                continue;
+            }
+            $addresses = $headerValue->getAddresses();
+            $data[$headerKey] = [];
+            foreach ($addresses as $address) {
+                // TODO add name?
+                $data[$headerKey][] = $address->getEmail();
+            }
+        }
+
+        // what if message has only plain/text?
+        $data['content_type'] = $message->getContentType();
+        if ($data['content_type'] == Zend_Mime::TYPE_TEXT) {
+            $data['body'] = $message->getContent();
+            $data['body_content_type'] = Zend_Mime::TYPE_TEXT;
+        } else {
+            $data['body'] = $message->getHtmlContent();
+            $data['body_content_type'] = Zend_Mime::TYPE_HTML;
+            // TODO why do we need this?
+            $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+        }
+
+        $data['attachments'] = [];
+        foreach ($message->getAllAttachmentParts() as $id => $attachment) {
+            $data['attachments'][] = [
+                'content-type' => $attachment->getContentType(),
+                'filename'     => $attachment->getFilename(),
+                'partId'       => $id,
+                // TODO get those?
+                //'size'         => $attachment->get(),
+                //'description'  => $attachment->,
+                //'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
+            ];
+        }
+        if (count($data['attachments']) > 0) {
+            $data['has_attachment'] = true;
+        }
+
+        return new Felamimail_Model_Message($data);
+    }
+
     /**
      * gets record related properties
      * 

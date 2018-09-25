@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.MailFiler');
 
+require('Felamimail/js/MailDetailsPanel');
+
 /**
  * @namespace   Tine.MailFiler
  * @class       Tine.MailFiler.NodeEditDialog
@@ -171,7 +173,7 @@ Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             disabled: true
         };
 
-        this.mailDetailsPanel = new Tine.MailFiler.MailDetailsPanel({
+        this.mailDetailsPanel = new Tine.Felamimail.MailDetailsPanel({
             appName: this.appName
         });
 
