@@ -2003,7 +2003,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         if (e.getTarget('.action_attach')) {
-            if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && Tine.Tinebase.configManager.get('filesystem').createPreviews) {
+            if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
                 Tine.Filemanager.DocumentPreview.openWindow({
                     record: this.getStore().getAt(row),
                     initialApp: this.app,
