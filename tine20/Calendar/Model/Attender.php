@@ -160,7 +160,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $resolvedUser->getPreferredEmailAddress();
                 break;
             case self::USERTYPE_GROUP:
-                return $resolvedUser->getId();
+                $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+                $domain = isset($smtpConfig['primarydomain']) ? '@' . $smtpConfig['primarydomain'] : '';
+                return $resolvedUser->getId() . $domain;
                 break;
             case self::USERTYPE_RESOURCE:
                 return $resolvedUser->email;
@@ -474,7 +476,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 // does a list with this id exist?
                 if (! $attendeeId) {
                     try {
-                        $list = Addressbook_Controller_List::getInstance()->get($newAttendee['email']);
+                        $listId = explode('@', $newAttendee['email'])[0];
+                        $list = Addressbook_Controller_List::getInstance()->get($listId);
                         if ($list) {
                             $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
                             $attendeeId = $list->getId();
