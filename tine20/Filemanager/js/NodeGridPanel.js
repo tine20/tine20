@@ -59,8 +59,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     currentFolderNode: null,
 
-    previewsEnabled: false,
-
     dataSafeAreaName: 'Tinebase.datasafe',
     dataSafeEnabled: false,
 
@@ -85,7 +83,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.gridConfig.enableDragDrop = false;
         }
 
-        this.previewsEnabled = Tine.Tinebase.configManager.get('filesystem').createPreviews;
         this.dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock(this.dataSafeAreaName);
 
         this.recordProxy = this.recordProxy || Tine.Filemanager.fileRecordBackend;
@@ -345,11 +342,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onKeyDown: function(e) {
         Tine.Filemanager.NodeGridPanel.superclass.onKeyDown.apply(this, arguments);
 
-
-        if (!this.previewsEnabled) {
-            return true;
-        }
-
         // Open preview on space if a node is selected and the node type equals file
         if (e.getKey() == e.SPACE) {
             this.action_preview.execute()
@@ -473,13 +465,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_moveRecord = Tine.Filemanager.nodeActionsMgr.get('move');
         this.action_publish = Tine.Filemanager.nodeActionsMgr.get('publish');
         this.action_systemLink = Tine.Filemanager.nodeActionsMgr.get('systemLink');
-
-        if (this.previewsEnabled) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
-                initialApp: this.app,
-                sm: this.grid.getSelectionModel()
-            });
-        }
+        this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
+            initialApp: this.app,
+            sm: this.grid.getSelectionModel()
+        });
 
         if (this.dataSafeEnabled) {
             this.action_dataSafe = new Ext.Action({
@@ -518,11 +507,18 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }.createDelegate(this)
         });
 
-        var contextActions = [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_download, 'resume', 'pause', this.action_editFile, this.action_publish, this.action_systemLink];
-
-        if (this.previewsEnabled) {
-            contextActions.push(this.action_preview);
-        }
+        var contextActions = [
+            this.action_deleteRecord,
+            'rename',
+            this.action_moveRecord,
+            this.action_download,
+            'resume',
+            'pause',
+            this.action_editFile,
+            this.action_publish,
+            this.action_systemLink,
+            this.action_preview
+        ];
 
         this.contextMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getRecordName(),
@@ -551,12 +547,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_deleteRecord,
             this.action_editFile,
             this.action_publish,
-            this.action_systemLink
+            this.action_systemLink,
+            this.action_preview
         ];
-
-        if (this.previewsEnabled) {
-            actions.push(this.action_preview);
-        }
 
         this.actionUpdater.addActions(actions);
     },
@@ -707,16 +700,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     scale: 'medium',
                     rowspan: 2,
                     iconAlign: 'top'
-                })
-            ];
-
-            if (this.previewsEnabled) {
-                items.push(Ext.apply(new Ext.Button(this.action_preview), {
+                }),
+                Ext.apply(new Ext.Button(this.action_preview), {
                     scale: 'medium',
                     rowspan: 2,
                     iconAlign: 'top'
-                }));
-            }
+                })
+            ];
 
             if (this.dataSafeEnabled) {
                 items.push(Ext.apply(new Ext.Button(this.action_dataSafe), {
@@ -766,9 +756,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             prefs = this.app.getRegistry().get('preferences'),
             dbClickAction = Tine.Tinebase.configManager.get('downloadsAllowed') ? prefs.get('dbClickAction') : 'preview';
 
-        if (prefs && dbClickAction === 'download' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.downloadGrant', false)) {
+        if (prefs && dbClickAction === 'download' && rowRecord.data.type == 'file'
+            && !this.readOnly && _.get(rowRecord, 'data.account_grants.downloadGrant', false)
+        ) {
             Tine.Filemanager.downloadFile(rowRecord);
-        } else if (this.previewsEnabled && prefs && dbClickAction === 'preview' && rowRecord.data.type == 'file' && !this.readOnly && _.get(rowRecord, 'data.account_grants.readGrant', false)) {
+        } else if (prefs && dbClickAction === 'preview' && rowRecord.data.type == 'file'
+            && !this.readOnly && _.get(rowRecord, 'data.account_grants.readGrant', false)
+        ) {
             this.action_preview.execute();
         } else if (rowRecord.data.type == 'folder') {
             this.expandFolder(rowRecord);

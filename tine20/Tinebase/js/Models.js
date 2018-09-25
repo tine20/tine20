@@ -517,7 +517,7 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'acl_node', label: 'Grants Folder' }, // _('Grants Folder')
     { name: 'object_id'},
     { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
-    { name: 'preview_count', label: 'Preview Count' }, // _('Preview Count')
+    { name: 'preview_count', label: 'Preview Count', type: 'int' }, // _('Preview Count')
     { name: 'isIndexed', label: 'Indexed' }, // _('Indexed')
     { name: 'pin_protected_node', label: 'Pin Protected' }, // _('Pin Protected')
     { name: 'quota', label: 'Quota'}, // _('Quota')

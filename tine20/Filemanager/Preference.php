@@ -86,18 +86,14 @@ class Filemanager_Preference extends Tinebase_Preference_Abstract
                 $preference->value = 'download';
 
                 $downloadOption = '<option>
-                            <value>download</value>
-                            <label>' . $translate->_('Download') . '</label>
-                        </option>';
+                    <value>download</value>
+                    <label>' . $translate->_('Download') . '</label>
+                </option>';
 
-                if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}) {
-                    $previewOption = '<option>
-                            <value>preview</value>
-                            <label>' . $translate->_('Preview') . '</label>
-                        </option>';
-                } else {
-                    $previewOption = '';
-                }
+                $previewOption = '<option>
+                    <value>preview</value>
+                    <label>' . $translate->_('Preview') . '</label>
+                </option>';
 
                 $preference->options = \sprintf('<?xml version="1.0" encoding="UTF-8"?>
                     <options>
