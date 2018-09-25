@@ -40,7 +40,9 @@ Ext.extend(Ext.ux.ConnectionStatus, Ext.Button, {
      * @property {bool} Browser supports online offline detection
      */
     isSuppoeted: null,
-    
+
+    cls: 'x-ux-connectionstatus',
+
     /**
      * @private
      */
@@ -53,10 +55,14 @@ Ext.extend(Ext.ux.ConnectionStatus, Ext.Button, {
     initComponent: function() {
         Ext.ux.ConnectionStatus.superclass.initComponent.call(this);
         
-        this.onlineText = '(' + i18n._('online') + ')';
-        this.offlineText = '(' + i18n._('offline') + ')';
-        this.unknownText = '(' + i18n._('unknown') + ')';
-        
+        this.onlineText = this.wrapText(i18n._('online'));
+        this.offlineText = this.wrapText(i18n._('offline'));
+        this.unknownText = this.wrapText(i18n._('unknown'));
+
+        if (! this.showText) {
+            this.setText = this.setTooltip;
+        }
+
         // M$ IE has not online/offline events yet
         if (Ext.isIE6 || Ext.isIE7 || ! window.navigator || window.navigator.onLine === undefined) {
             this.setStatus('unknown');
@@ -75,6 +81,10 @@ Ext.extend(Ext.ux.ConnectionStatus, Ext.Button, {
                 this.setStatus('online', true);
             }, this);
         //}
+    },
+
+    wrapText: function(text) {
+        return this.showText ? ('(' + text + ')') : text;
     },
 
     /**
