@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>sales_import_contract_csv</name>
+    <model>Sales_Model_Contract</model>
+    <plugin>Sales_Import_Contract_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>title</source>
+            <destination>title</destination>
+        </field>
+        <field>
+            <source>description</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>start_date</source>
+            <destination>start_date</destination>
+        </field>
+        <field>
+            <source>end_date</source>
+            <destination>end_date</destination>
+        </field>
+        <!-- resolve -->
+        <field>
+            <source>customers</source>
+            <destination>customers</destination>
+        </field>
+        <field>
+            <source>contract_in</source>
+            <destination>contract_in</destination>
+        </field>
+        <field>
+            <source>contract_ex</source>
+            <destination>contract_ex</destination>
+        </field>
+        <field>
+            <source>costcenter</source>
+            <destination>costcenter</destination>
+        </field>
+        <field>
+            <source>product</source>
+            <destination>product</destination>
+        </field>
+    </mapping>
+</config>
+

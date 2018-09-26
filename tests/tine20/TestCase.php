@@ -863,4 +863,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return strip_tags($zip->getFromName('word/document.xml'));
     }
+    
+    protected function clear($app,$model)
+    {
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , [
+            ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
+        ]);
+        $controller =  Tinebase_Core::getApplicationInstance($app,$model); // @TODO seem not good... 
+        $controller::getInstance()->deleteByFilter($filter);
+    }
 }
