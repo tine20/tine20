@@ -281,7 +281,7 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
                         !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $container->name)) {
                     continue;
                 }
-                $grants = $containerController->getGrantsOfContainer($container);
+                $grants = $containerController->getGrantsOfContainer($container, true);
                 if ($grants->count() > 1 || $grants->getFirstRecord()->account_type !==
                         Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE ||
                         $grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_READ}) {

@@ -2507,6 +2507,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     {
         $doSleep = false;
         $fsController = Tinebase_FileSystem::getInstance();
+        $fsController->resetBackends();
+
         do {
             $cont = false;
             $stmt = $this->_db->select()->from(['n1' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.id')
@@ -2548,14 +2550,13 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 }
 
                 if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
-                    Tinebase_FileSystem::getInstance()->deleteFileNode($node);
+                    $fsController->deleteFileNode($node);
                 } else {
-                    Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->softDelete($node->getId());
+                    $fsController->_getTreeNodeBackend()->softDelete($node->getId());
 
                     // delete object only, if no other tree node refers to it, really?
-                    if (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()
-                            ->getObjectCount($node->object_id) == 0) {
-                        Tinebase_FileSystem::getInstance()->getFileObjectBackend()->softDelete($node->object_id);
+                    if ($fsController->_getTreeNodeBackend()->getObjectCount($node->object_id) == 0) {
+                        $fsController->getFileObjectBackend()->softDelete($node->object_id);
                     }
                 }
 
