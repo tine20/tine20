@@ -107,12 +107,6 @@ class Tinebase_Auth_NtlmV2
             throw new Tinebase_Exception_InvalidArgument('can\'t send headers for authentication success');
         }
 
-        if (self::AUTH_FAILURE === $phase) {
-            if (null !== ($this->_response = $this->_ntlm_get_challenge_msg())) {
-                $phase = self::AUTH_PHASE_ONE;
-            }
-        }
-
         header('HTTP/1.1 401 Unauthorized');
         if (self::AUTH_PHASE_ONE === $phase) {
             header('WWW-Authenticate: NTLM ' . trim(base64_encode($this->_response)));
