@@ -464,6 +464,8 @@ class Setup_Controller
         }
         
         $messages = array();
+
+        // turn off create previews and index content temporarily
         $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
         if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
                 $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT})) {
