@@ -81,6 +81,7 @@ class Tinebase_State
      * 
      * @param string $_name
      * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function clearState($_name)
     {
@@ -101,6 +102,8 @@ class Tinebase_State
      * @param string $_name
      * @param string $_value
      * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Exception
      */
     public function setState($_name, $_value)
     {
@@ -109,20 +112,30 @@ class Tinebase_State
         }
         
         $userId = Tinebase_Core::getUser()->getId();
-        
-        $results = $this->_backend->search($this->_getFilter($_name, $userId));
-        
-        if ($results->count() == 0) {
-            $record = new Tinebase_Model_State(array(
-                'user_id'   => $userId,
-                'state_id'  => $_name,
-                'data'      => $_value
-            ));
-            $this->_backend->create($record);
-        } else {
-            $record = $results->getFirstRecord();
-            $record->data = $_value;
-            $this->_backend->update($record);
+        $db = Tinebase_Core::getDb();
+
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+            $results = $this->_backend->search($this->_getFilter($_name, $userId));
+
+            if ($results->count() == 0) {
+                $record = new Tinebase_Model_State(array(
+                    'user_id' => $userId,
+                    'state_id' => $_name,
+                    'data' => $_value
+                ));
+                $this->_backend->create($record);
+            } else {
+                $record = $results->getFirstRecord();
+                $record->data = $_value;
+                $this->_backend->update($record);
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
         }
     }
 
