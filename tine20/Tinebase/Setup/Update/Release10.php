@@ -2501,6 +2501,16 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_57()
     {
+        // turn on FS modLog temporarily
+        $oldFsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
+        if (!$oldFsConfig) throw new Tinebase_Exception('did not find filesystem config!');
+        if (!$oldFsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            $fsConfig = clone $oldFsConfig;
+            $fsConfig->unsetParent();
+            $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
+            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
+        }
+
         $doSleep = false;
         $fsController = Tinebase_FileSystem::getInstance();
         $fsController->resetBackends();
@@ -2573,6 +2583,11 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->_backend->alterCol('tree_nodes', $declaration);
         if ($this->getTableVersion('tree_nodes') < 9) {
             $this->setTableVersion('tree_nodes', 9);
+        }
+
+        if (isset($fsConfig)) {
+            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $oldFsConfig);
+            $fsController->resetBackends();
         }
 
         $this->setApplicationVersion('Tinebase', '10.58');
