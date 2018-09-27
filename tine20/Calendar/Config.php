@@ -362,7 +362,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => array(
                 'records' => array(
                     array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'icon' => 'images/icon-set/icon_invite.svg',                      'system' => true), //_('No response')
-                    array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/icon-set/icon_ok.svg',                          'system' => true), //_('Accepted')
+                    array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/icon-set/icon_calendar_attendee_accepted.svg',                          'system' => true), //_('Accepted')
                     array('id' => 'DECLINED',     'value' => 'Declined',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',    'system' => true), //_('Declined')
                     array('id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true), //_('Tentative')
                 ),

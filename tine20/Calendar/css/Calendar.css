@@ -171,9 +171,10 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 /**** status icons ****/
 .cal-status-icon {
     background-repeat:no-repeat;
-    background-position: 0px -1px;
-    width: 12px;
-    height: 12px;
+    background-position: 0px -2px;
+    margin: 0px -1px 0px -1px;
+    width: 14px;
+    height: 14px;
     cursor: pointer;
 }
 
@@ -200,8 +201,8 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .alarm-black        { background-image: url(../../images/icon-set/icon_bell.svg) !important; }
 .NEEDS-ACTION-white { background-image: url(../../images/icon-set/icon_invite_white.svg) !important; }
 .NEEDS-ACTION-black { background-image: url(../../images/icon-set/icon_invite.svg) !important; }
-.ACCEPTED-white     { background-image: url(../../images/icon-set/icon_ok_white.svg) !important; }
-.ACCEPTED-black     { background-image: url(../../images/icon-set/icon_ok.svg) !important; }
+.ACCEPTED-white     { background-image: url(../../images/icon-set/icon_calendar_attendee_accepted_white.svg) !important; }
+.ACCEPTED-black     { background-image: url(../../images/icon-set/icon_calendar_attendee_accepted.svg) !important; }
 .DECLINED-white     { background-image: url(../../images/icon-set/icon_calendar_attendee_cancle_white.svg) !important; }
 .DECLINED-black     { background-image: url(../../images/icon-set/icon_calendar_attendee_cancle.svg) !important; }
 .TENTATIVE-white    { background-image: url(../../images/icon-set/icon_calendar_attendee_tentative_white.svg) !important; }
@@ -237,19 +238,19 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     min-width: 16px;
     min-height: 16px;
     background-repeat: no-repeat;
-    opacity: 0.3;
+    opacity: 0.8;
 }
 
 .cal-fbinfo-state-free {
-    background-image: url(../../images/icon-set/icon_user_vacant.svg) !important;
+    background-image: url(../../images/icon-set/icon_attendee_freebusy_free.svg) !important;
 }
 
 .cal-fbinfo-state-tentative {
-    background-image: url(../../images/icon-set/icon_calendar_attendee_tentative.svg) !important;
+    background-image: url(../../images/icon-set/icon_attendee_freebusy_tentative.svg) !important;
 }
 
 .cal-fbinfo-state-busy {
-    background-image: url(../../images/icon-set/icon_user_not_available.svg) !important;
+    background-image: url(../../images/icon-set/icon_attendee_freebusy_busy.svg) !important;
 }
 
 .cal-fbinfo-state-unavailable {

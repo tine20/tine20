@@ -32,7 +32,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     initComponent: function() {
         this.initActions();
         this.onlineStatus = new Ext.ux.ConnectionStatus({
-            showIcon: false
+            showIcon: true,
+            showText: false
         });
         
         this.items = this.getItems();
