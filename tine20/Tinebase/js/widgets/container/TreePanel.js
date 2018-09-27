@@ -378,7 +378,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var result = null;
 
         Ext.each(selection, function(node) {
-            if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
+            if (node && node.attributes.leaf) {
                 if (! requiredGrants || this.hasGrant(node, requiredGrants)) {
                     result = node.attributes.container;
                     // take the first one
@@ -634,7 +634,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         event.stopPropagation();
         event.preventDefault();
 
-        if (Tine.Tinebase.container.pathIsContainer(path)) {
+        if (node.attributes.leaf) {
             if (container.account_grants && container.account_grants.adminGrant) {
                 this.contextMenuSingleContainer.showAt(event.getXY());
             } else {
