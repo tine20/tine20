@@ -127,6 +127,12 @@ class Setup_Controller
             'smtp'  => Tinebase_Config::SMTP,
             'sieve' => Tinebase_Config::SIEVE,
         );
+
+        // initialize real config if Tinebase is installed
+        if ($this->isInstalled('Tinebase') && ! Tinebase_Core::getConfig() instanceof Tinebase_Config_Abstract) {
+            // we only have a Zend_Config - check if we can switch to Tinebase_Config
+            Tinebase_Core::setupConfig();
+        }
     }
 
     /**
