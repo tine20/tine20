@@ -965,6 +965,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 }
 
 .tine-viewport-waitcycle,
+.x-tree-node-loading .x-tree-node-icon,
 .x-mask-wait,
 .x-btn-wait + div,
 .x-item-disabled .x-tbar-loading + div,
@@ -983,11 +984,13 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     height: 32px;
 }
 
+.x-tree-node-loading .x-tree-node-icon,
 .x-item-disabled .x-tbar-loading,
 .x-btn-wait {
     background-image: none !important;
 }
 
+.x-tree-node-loading .x-tree-node-icon,
 .x-item-disabled .x-tbar-loading + div,
 .x-btn-wait + div {
     width: 12px;
@@ -996,6 +999,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     left: 5px;
 }
 
+.x-tree-node-loading .x-tree-node-icon,
 .tine-viewport-waitcycle,
 .x-mask-wait,
 .x-item-disabled .x-tbar-loading + div,
@@ -1004,6 +1008,10 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     border: 2px solid #ccc !important;
     border-top: 2px solid #2196f3 !important;
     border-radius: 100%;
+}
+
+.x-tree-node-loading .x-tree-node-icon {
+    margin-top: 3px;
 }
 
 .x-mask-loading {
