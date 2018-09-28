@@ -79,12 +79,22 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
     }
 
     /**
-     * increase temp_file size column to bigint
+     * change unique key parent_id - name - deleted_time so that it really works
      */
     public function update_6()
     {
         $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
         $release10->update_57();
         $this->setApplicationVersion('Tinebase', '12.7');
+    }
+
+    /**
+     * container xprops need to be [] not NULL
+     */
+    public function update_7()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_34();
+        $this->setApplicationVersion('Tinebase', '12.8');
     }
 }

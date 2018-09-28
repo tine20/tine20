@@ -744,6 +744,53 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         sleep(1);
         $this->assertEquals(FALSE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever should _not_ have a read grant');
-        
+    }
+
+    public function testGetSharedCalendarContainersByAddGrant()
+    {
+        // create container
+        $container = new Tinebase_Model_Container(array(
+            'name'              => 'tine20sharedcalendar',
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'owner_id'          => null,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
+        ));
+        $grants = new Tinebase_Record_RecordSet($container->getGrantClass(), array(
+            array(
+                'account_id'      => '0',
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                Tinebase_Model_Grants::GRANT_ADD     => true,
+                Tinebase_Model_Grants::GRANT_EXPORT  => true,
+                Tinebase_Model_Grants::GRANT_SYNC    => true,
+            )
+        ), TRUE);
+
+        $sharedContainer = $this->_instance->addContainer($container, $grants);
+
+        // search only with "addGrant"
+        $result = $this->_instance->getSharedContainer(
+            Tinebase_Core::getUser(),
+            Calendar_Model_Event::class,
+            [Tinebase_Model_Grants::GRANT_ADD]
+        );
+        $createdContainerInResult = $result->getById($sharedContainer->getId());
+        self::assertNotFalse($createdContainerInResult, 'container not in result!');
+
+        // @todo check with "null" xprops / does not work yet - don't know why
+//        $db = Tinebase_Core::getDb();
+//        $db->update($this->_instance->getTablePrefix() . $this->_instance->getTableName(), [
+//            'xprops' => null
+//        ], $db->quoteInto('id = ?', $sharedContainer->getId()));
+//        // search only with "addGrant"
+//        $result = $this->_instance->getSharedContainer(
+//            Tinebase_Core::getUser(),
+//            Calendar_Model_Event::class,
+//            [Tinebase_Model_Grants::GRANT_ADD]
+//        );
+//        $createdContainerInResult = $result->getById($sharedContainer->getId());
+//        self::assertNotFalse($createdContainerInResult, 'container not in result!');
     }
 }

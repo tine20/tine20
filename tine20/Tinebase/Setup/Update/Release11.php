@@ -710,11 +710,25 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 11.35
+     *
+     * container xprops need to be [] not NULL
+     */
+    public function update_34()
+    {
+        $quotedField = $this->_db->quoteIdentifier('xprops');
+        $this->_db->update(SQL_TABLE_PREFIX . 'container', ['xprops' => '[]'],
+            $quotedField . ' IS NULL');
+
+        $this->setApplicationVersion('Tinebase', '11.35');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_34()
+    public function update_35()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }
