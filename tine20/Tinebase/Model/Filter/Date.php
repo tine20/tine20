@@ -157,6 +157,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @param string $_operator
      * @param string $_value
      * @return array|string date value
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _getDateValues($_operator, $_value)
     {
@@ -323,6 +324,10 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $value = $this->_getFirstAndLastDayOfWeek($date, $_value);
             
         } else  {
+            if (is_array($_value)) {
+                throw new Tinebase_Exception_InvalidArgument('array value not allowed for operator ' . $_operator);
+            }
+
             $value = substr($_value, 0, 10);
         }
         
