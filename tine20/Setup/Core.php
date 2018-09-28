@@ -125,7 +125,7 @@ class Setup_Core extends Tinebase_Core
      */
     public static function setupConfig()
     {
-        if(self::configFileExists()) {
+        if (self::configFileExists()) {
             $config = new Zend_Config(require self::getConfigFilePath());
         } else {
             $config = new Zend_Config(array());
