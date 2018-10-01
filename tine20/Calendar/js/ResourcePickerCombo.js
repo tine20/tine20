@@ -30,13 +30,22 @@ Tine.Calendar.ResourcePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
                     '<div class="x-combo-list-item">',
                         '<table>',
                             '<tr>',
-                                '<td style="min-width: 20px;" class="cal-attendee-type-resource">&nbsp</td>',
+                                '<td style="min-width: 20px;" class="tine-grid-row-action-icon cal-attendee-type-resource">&nbsp</td>',
                                 '<td width="100%">{[Tine.Tinebase.EncodingHelper.encode(values.name)]}</td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td style="min-width: 20px;">&nbsp</td>',
+                                '<td class="cal-attendee-resource-hierarchy">{[this.encodeHierarchy(values.hierarchy)]}</td>',
                             '</tr>',
                         '</table>',
                         '{[Tine.widgets.path.pathsRenderer(values.paths, this.lastQuery)]}',
                     '</div>',
-                '</tpl>'
+                '</tpl>', {
+                    encodeHierarchy: function(hierarchy) {
+                        hierarchy = String(hierarchy).replace(/\//g, ' » ');
+                        return Tine.Tinebase.EncodingHelper.encode(hierarchy);
+                    }
+                }
             );
         }
     }
