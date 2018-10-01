@@ -141,7 +141,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         if (! $event->creation_time instanceof Tinebase_DateTime) {
             throw new Tinebase_Exception_Record_Validation('creation_time needed for conversion to Sabre\VObject\Component');
         }
-        
+
+        /** @var \Sabre\VObject\Component\VEvent $vevent */
         $vevent = $vcalendar->create('VEVENT', array(
             'CREATED'       => $_event->creation_time->getClone()->setTimezone('UTC'),
             'LAST-MODIFIED' => $lastModifiedDateTime->getClone()->setTimezone('UTC'),
@@ -314,6 +315,19 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             
             if ($mozSnooze instanceof DateTime) {
                 $vevent->add('X-MOZ-SNOOZE-TIME', $mozSnooze->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
+            }
+
+            if (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
+                $sabrePropertyParser = new Calendar_Convert_Event_VCalendar_SabrePropertyParser($vcalendar);
+                foreach ($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] as $prop) {
+                    try {
+                        $vevent->add($sabrePropertyParser->parseProperty($prop));
+                    } catch (\Sabre\VObject\ParseException $svope) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
+                            '::' . __LINE__ . ' failed adding events imip x-property: ' . $prop . ' -> ' .
+                            $svope->getMessage());
+                    }
+                }
             }
         }
         
@@ -715,7 +729,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         $attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         $skipFieldsIfOnlyBasicData = array('ATTENDEE', 'UID', 'ORGANIZER', 'VALARM', 'ATTACH', 'CATEGORIES');
-        
+        $imipProps = [];
+
+        /** @var \Sabre\VObject\Property $property */
         foreach ($vevent->children() as $property) {
             if (isset($this->_options['onlyBasicData'])
                 && $this->_options['onlyBasicData']
@@ -1048,8 +1064,17 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                         $snoozeTime = $this->_convertToTinebaseDateTime($property);
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                             . ' Found snooze time for recur occurrence: ' . $snoozeTime->toString());
+                    } elseif ($property instanceof \Sabre\VObject\Property) {
+                        $imipProps[$property->name] = trim($property->serialize());
                     }
                     break;
+            }
+        }
+        if (!empty($imipProps)) {
+            if (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
+                $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] += $imipProps;
+            } else {
+                $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] = $imipProps;
             }
         }
 

@@ -61,6 +61,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     const RANGE_ALL           = 'ALL';
     const RANGE_THIS          = 'THIS';
     const RANGE_THISANDFUTURE = 'THISANDFUTURE';
+
+    const XPROPS_IMIP_PROPERTIES = 'imipProperties';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -168,6 +170,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         Tinebase_Model_Grants::GRANT_EDIT     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_DELETE   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+
+        'xprops'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -828,5 +832,20 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function getTitle()
     {
         return $this->summary;
+    }
+
+    // TODO remove the runConvert methods when migration to Modelconfig!
+    public function runConvertToRecord()
+    {
+        if (isset($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
+        }
+    }
+
+    public function runConvertToData()
+    {
+        if (isset($this->_properties['xprops']) && is_array($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_encode($this->_properties['xprops']);
+        }
     }
 }
