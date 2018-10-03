@@ -471,6 +471,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param bool $_getDeleted
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
@@ -669,8 +670,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_inspectAfterCreate($createdRecord, $_record);
             $createdRecordWithRelated = $this->_setRelatedData($createdRecord, $_record, null, true, true);
             $this->_inspectAfterSetRelatedDataCreate($createdRecordWithRelated, $_record);
-            $this->_writeModLog($createdRecord, null);
-            $this->_setSystemNotes($createdRecord);
+            $mods = $this->_writeModLog($createdRecordWithRelated, null);
+            $this->_setSystemNotes($createdRecordWithRelated, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $mods);
 
             if ($this->sendNotifications()) {
                 $this->doSendNotifications($createdRecord, Tinebase_Core::getUser(), 'created');
@@ -1290,6 +1291,14 @@ abstract class Tinebase_Controller_Record_Abstract
                 ($record->has('relations') &&
                     $this->_checkRelationsForPathGeneratingModels($record, $currentRecord)))) {
             Tinebase_Record_Path::getInstance()->rebuildPaths($updatedRecord, $currentRecord);
+        }
+
+        if (null !== ($mc = $updatedRecord::getConfiguration())) {
+            foreach (array_keys($mc->getVirtualFields()) as $virtualField) {
+                if (!isset($updatedRecord[$virtualField])) {
+                    $updatedRecord->{$virtualField} = $record->{$virtualField};
+                }
+            }
         }
 
         return $updatedRecord;

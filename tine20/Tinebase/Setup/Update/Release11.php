@@ -797,7 +797,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.38
+     * update to 11.40
      *
      * update filterSyncToken table
      */

@@ -520,7 +520,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                         $valueString = $value;
                     }
 
-                    $return .= ' ' . $translate->_($attribute) . ' (' . $oldDataString . ' -> ' . $valueString . ')';
+                    if (null !== $oldDataString || (null !== $valueString && '' !== $valueString)) {
+                        $return .= ' ' . $translate->_($attribute) . ' (' . $oldDataString . ' -> ' . $valueString . ')';
+                    }
                 }
             }
 

@@ -182,11 +182,13 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string|Tinebase_Model_Application $applicationId application object, id or name
      * @param string $customFieldName
      * @param string $modelName
+     * @param bool $getSystemCFs (default false)
      * @return Tinebase_Model_CustomField_Config|null
      */
-    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null)
+    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null, $getSystemCFs = false)
     {
-        $allAppCustomfields = $this->getCustomFieldsForApplication($applicationId, $modelName);
+        $allAppCustomfields = $this->getCustomFieldsForApplication($applicationId, $modelName,
+            Tinebase_Model_CustomField_Grant::GRANT_READ, $getSystemCFs);
         return $allAppCustomfields->find('name', $customFieldName);
     }
     

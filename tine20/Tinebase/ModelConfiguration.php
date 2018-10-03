@@ -974,6 +974,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             ]
         );
 
+        $hooks = [];
         if ($this->_hasSystemCustomFields) {
             try {
                 $modelsSystemCFs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($this->_appName,
@@ -986,11 +987,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             /** @var Tinebase_Model_CustomField_Config $cfc */
             foreach ($modelsSystemCFs as $cfc) {
                 $definition = $cfc->definition->toArray();
-                if (!isset($definition[Tinebase_Model_CustomField_Config::DEF_FIELD])) {
-                    throw new Tinebase_Exception_Record_DefinitionFailure('customfield ' . $cfc->getId() . ' ' .
-                        $cfc->name . ' has a bad definition: ' . print_r($definition, true));
+                if (isset($definition[Tinebase_Model_CustomField_Config::DEF_FIELD])) {
+                    $this->_fields[$cfc->name] = $definition[Tinebase_Model_CustomField_Config::DEF_FIELD];
                 }
-                $this->_fields[$cfc->name] = $definition[Tinebase_Model_CustomField_Config::DEF_FIELD];
+
+                if (isset($definition[Tinebase_Model_CustomField_Config::DEF_HOOK])) {
+                    foreach ($definition[Tinebase_Model_CustomField_Config::DEF_HOOK] as $hook) {
+                        $hooks[] = $hook;
+                    }
+                }
             }
         }
 
@@ -1115,7 +1120,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         } elseif ($this->_hasNotes) {
             $this->_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
         }
-        
+
+        foreach ($hooks as $hook) {
+            call_user_func_array($hook, [&$this->_fields]);
+        }
+
         // holds the filters used for the query-filter, if any
         $queryFilters = array();
         
@@ -1127,12 +1136,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
 
             // set default type to string, if no type is given
-            if (! (isset($fieldDef[self::TYPE]) || array_key_exists('type', $fieldDef))) {
+            if (! isset($fieldDef[self::TYPE])) {
                 $fieldDef[self::TYPE] = 'string';
             }
             
             // don't handle field if app is not available or feature disabled
-            if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))
+            if (isset($fieldDef['config'])
                 && in_array($fieldDef[self::TYPE], ['record', 'records', 'virtual'])
                 && ! $this->_isAvailable($fieldDef['config']))
             {
@@ -1620,12 +1629,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
         $result = true;
         if (isset($fieldConfig['appName'])) {
-            if (!(isset(self::$_availableApplications[$fieldConfig['appName']])
-                || array_key_exists($fieldConfig['appName'], self::$_availableApplications))
-            ) {
-                // NOTE: this check fails during setup (install) because related app might not be installed yet -
-                //       as long as this isn't fixed, we need to make sure the apps are installed in the correct order.
-                self::$_availableApplications[$fieldConfig['appName']] = Tinebase_Application::getInstance()->isInstalled($fieldConfig['appName'], TRUE);
+            if (!isset(self::$_availableApplications[$fieldConfig['appName']])) {
+                self::$_availableApplications[$fieldConfig['appName']] = Tinebase_Application::getInstance()
+                    ->isInstalled($fieldConfig['appName'], true);
             }
             $result = self::$_availableApplications[$fieldConfig['appName']];
         }
@@ -1634,8 +1640,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             $config = Tinebase_Config_Abstract::factory($fieldConfig['appName']);
             $result = $config->featureEnabled($fieldConfig['feature']);
 
-            if (! $result && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Feature ' . $fieldConfig['feature'] . ' disables field');
+            if (! $result && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                . '::' . __LINE__ . ' Feature ' . $fieldConfig['feature'] . ' disables field');
         }
 
         return $result;

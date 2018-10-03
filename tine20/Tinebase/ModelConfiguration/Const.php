@@ -17,11 +17,16 @@
  */
 
 class Tinebase_ModelConfiguration_Const {
+    const APP_NAME = 'appName';
+    const ASSOCIATIONS = 'associations';
+
+    const CONFIG = 'config';
     const CONTROLLER = 'controller';
     const COLUMNS = 'columns';
 
     const DB_COLUMNS = 'dbColumns';
     const DEFAULT_VAL = 'default';
+    const DEPENDENT_RECORDS = 'dependentRecords';
 
     const FIELDS = 'fields';
     const FILTER = 'filter';
@@ -36,6 +41,8 @@ class Tinebase_ModelConfiguration_Const {
     const LABEL = 'label';
     const LENGTH = 'length';
 
+    const MODEL_NAME = 'modelName';
+
     const NAME = 'name';
     const NULLABLE = 'nullable';
 
@@ -44,6 +51,8 @@ class Tinebase_ModelConfiguration_Const {
 
     const QUERY_FILTER = 'queryFilter';
 
+    const REF_ID_FIELD = 'refIdField';
+
     const SYSTEM = 'system';
 
     const TABLE = 'table';
@@ -51,10 +60,13 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_BIGINT = 'bigint';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_CONTAINER = 'container';
+    const TYPE_DATETIME = 'datetime';
     const TYPE_FLOAT = 'float';
     const TYPE_FULLTEXT = 'fulltext';
     const TYPE_INTEGER = 'integer';
     const TYPE_KEY_FIELD = 'keyfield';
+    const TYPE_RECORD = 'record';
+    const TYPE_RECORDS = 'records';
     const TYPE_STRING = 'string';
     const TYPE_TEXT = 'text';
     const TYPE_USER = 'user';

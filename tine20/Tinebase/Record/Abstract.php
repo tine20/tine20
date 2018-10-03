@@ -231,6 +231,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * @param bool $_bypassFilters sets {@see this->bypassFilters}
      * @param mixed $_convertDates sets {@see $this->convertDates} and optionaly {@see $this->$dateConversionFormat}
      * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
@@ -281,6 +282,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     public static function resetConfiguration()
     {
+        static::$_inputFilters = [];
         static::$_configurationObject = null;
         Tinebase_ModelConfiguration::resetAvailableApps();
     }

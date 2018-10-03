@@ -1999,7 +1999,7 @@
                     <name>is_system</name>
                     <type>boolean</type>
                     <notnull>true</notnull>
-                    <default>true</default>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>definition</name>

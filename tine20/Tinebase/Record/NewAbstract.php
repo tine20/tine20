@@ -200,6 +200,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public static function resetConfiguration()
     {
+        static::$_inputFilters = [];
         static::$_configurationObject = null;
         // we have to re-instantiate it immediately, we depend on it
         static::getConfiguration();
