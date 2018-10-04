@@ -101,6 +101,12 @@ class Tinebase_Scheduler_Task
         ];
     }
 
+    public function setCron($cron)
+    {
+        $this->_cron = $cron;
+        $this->_cronObject = Cron\CronExpression::factory($this->_cron);
+    }
+
     /**
      * @param Tinebase_Model_SchedulerTask $task
      */
@@ -328,7 +334,7 @@ class Tinebase_Scheduler_Task
             return;
         }
 
-        $task = self::_getPreparedTask('Tinebase_TempFileCleanup', self::TASK_TYPE_DAILY, [[
+        $task = self::_getPreparedTask('Tinebase_TempFileCleanup', self::TASK_TYPE_HOURLY, [[
             self::CONTROLLER    => 'Tinebase_TempFile',
             self::METHOD_NAME   => 'clearTableAndTempdir',
         ]]);
