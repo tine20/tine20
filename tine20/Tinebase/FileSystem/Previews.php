@@ -176,7 +176,9 @@ class Tinebase_FileSystem_Previews
      */
     public function canNodeHavePreviews(Tinebase_Model_Tree_Node $node)
     {
-        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE || empty($node->hash) || $node->size == 0) {
+        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE || empty($node->hash) || $node->size == 0 ||
+                Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                ->{Tinebase_Config::FILESYSTEM_PREVIEW_MAX_FILE_SIZE} < $node->size) {
             return false;
         }
         $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);

@@ -641,6 +641,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_CREATE_PREVIEWS = 'createPreviews';
     const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
     const FILESYSTEM_PREVIEW_SERVICE_CLASS = 'previewServiceClass';
+    const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
 
     const ACTIONQUEUE = 'actionqueue';
@@ -2058,6 +2059,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setByAdminModule'      => FALSE,
                     'setBySetupModule'      => FALSE,
                     'default'               => 'Tinebase_FileSystem_Preview_ServiceV1',
+                ),
+                self::FILESYSTEM_PREVIEW_MAX_FILE_SIZE => array(
+                    //_('Max file size for preview service')
+                    'label'                 => 'Max file size for preview service',
+                    //_('Max file size for preview service.')
+                    'description'           => 'Max file size for preview service.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 51904512, // == 49.5 * 1024 * 1024,
                 ),
             ),
             'default'               => array(),
