@@ -210,15 +210,19 @@ class Tinebase_FileSystem_Previews
             return false;
         }
 
-        $config = $this->_getConfig();
+        try {
+            $config = $this->_getConfig();
 
-        if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' preview creation for file ' . $node->getId() . ' ' . $node->name . ' failed');
-            return false;
+            if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' preview creation for file ' . $node->getId() . ' ' . $node->name . ' failed');
+                }
+                return false;
+            }
+        } finally {
+            unlink($tempPath);
         }
-
-        unlink($tempPath);
 
         foreach($config as $key => $cnf) {
             if (!isset($result[$key])) {
@@ -259,15 +263,20 @@ class Tinebase_FileSystem_Previews
                 if (false === file_put_contents($tempFile, $blob)) {
                     throw new Tinebase_Exception('could not write content to temp file');
                 }
-                $blob = null;
-                if (false === ($fh = fopen($tempFile, 'r'))) {
-                    throw new Tinebase_Exception('could not open temp file for reading');
-                }
+                try {
+                    $blob = null;
+                    if (false === ($fh = fopen($tempFile, 'r'))) {
+                        throw new Tinebase_Exception('could not open temp file for reading');
+                    }
 
-                // this means we create a file node of type preview
-                $fileSystem->setStreamOptionForNextOperation(Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW, true);
-                $fileSystem->copyTempfile($fh, $name);
-                unlink($tempFile);
+                    // this means we create a file node of type preview
+                    $fileSystem->setStreamOptionForNextOperation(Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW,
+                        true);
+                    $fileSystem->copyTempfile($fh, $name);
+                    fclose($fh);
+                } finally {
+                    unlink($tempFile);
+                }
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
