@@ -733,13 +733,31 @@ class Tinebase_Core
             $tmpdir = isset($config['tmpdir']) ? $config['tmpdir'] : null;
         }
 
+        // let's make the fall back dir more safe in a multi instance environment
         if (! $tmpdir || !@is_writable($tmpdir)) {
+            $append = '';
+            if ($tmpdir) {
+                // first lets try to create the configured tmpdir
+                if (@mkdir($tmpdir, 0777, true) && null == clearstatcache() && @is_writable($tmpdir)) {
+                    // yeaha, saved the day
+                    return $tmpdir;
+                }
+                // we have a configured tmpdir, but it is not writable / doesn't exist => as it is different for each
+                // instance in the environment, we use it to create a unique hash for this instance and append it to
+                // the default fall back dir (which might be the same for each instance!)
+                $append = '/' . md5($tmpdir);
+            }
             $tmpdir = sys_get_temp_dir();
             if (empty($tmpdir) || !@is_writable($tmpdir)) {
                 $tmpdir = session_save_path();
                 if (empty($tmpdir) || !@is_writable($tmpdir)) {
                     $tmpdir = '/tmp';
                 }
+            }
+
+            if ($append) {
+                $tmpdir = rtrim($tmpdir, '/') . $append;
+                @mkdir($tmpdir, 0777, true);
             }
         }
         
