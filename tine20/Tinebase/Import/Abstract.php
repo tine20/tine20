@@ -251,7 +251,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $recordToImport = null;
             try {
                 // client record overwrites record in import data (only if set)
-                $clientRecordData = (isset($clientRecordDatas[$recordIndex]) || array_key_exists($recordIndex, $clientRecordDatas)) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
+                $clientRecordData = isset($clientRecordDatas[$recordIndex]['recordData']) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
                 if ($clientRecordData && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                     Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Client record: ' . print_r($clientRecordData, TRUE));
                 }
