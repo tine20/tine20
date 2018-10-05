@@ -1337,7 +1337,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Could not select folder ' . $folder->globalname . ': ' . $e->getMessage());
+                    . ' Could not select folder ' . (is_object($folder) ? $folder->globalname : $folderId) . ': ' . $e->getMessage());
             }
         }
         
