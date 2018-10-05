@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -192,6 +192,7 @@ class Tinebase_ImageHelper
 
         if (! $dataUrl) {
             $blob = Tinebase_Helper::getFileOrUriContents($imagePath);
+            $mime = '';
 
             if (substr($imagePath, -4) === '.ico') {
                 $mime = 'image/x-icon';
