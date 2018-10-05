@@ -47,13 +47,25 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
         $responseJson = null;
         do {
             $lastRun = time();
-            $response = $httpClient->request();
-            if ((int)$response->getStatus() === 200) {
-                $responseJson = json_decode($response->getBody(), true);
-                break;
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
-                    . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getMessage());
+            try {
+                $response = $httpClient->request();
+                if ((int)$response->getStatus() === 200) {
+                    $responseJson = json_decode($response->getBody(), true);
+                    break;
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                            . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getMessage());
+                    }
+                    if ($synchronRequest) {
+                        return false;
+                    }
+                }
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                        . __LINE__ . ' preview service call failed: ' . $e->getMessage());
+                }
                 if ($synchronRequest) {
                     return false;
                 }
