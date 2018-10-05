@@ -441,14 +441,14 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             );
             
             foreach ($iterator as $key => $value) {
-                if ($key == $_partId && is_array($value) && (isset($value['partId']) || array_key_exists('partId', $value))) {
+                if ($key == $_partId && is_array($value) && isset($value['partId'])) {
                     $result = (
                         $_useMessageStructure
-                        && is_array($value)
-                        && (isset($value['messageStructure']) || array_key_exists('messageStructure', $value))
+                        && isset($value['messageStructure'])
                         && (! isset($value['contentType']) || $value['contentType'] !== Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822)
                     )   ? $value['messageStructure']
                         : $value;
+                    break;
                 }
             }
         }
