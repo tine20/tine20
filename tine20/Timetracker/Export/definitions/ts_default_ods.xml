@@ -10,141 +10,121 @@
    <columns>
  <column>
     <identifier>account_id</identifier>
-	<header>account_id</header>
-    <Type>varchar(255)</Type>
-	<width>2,5cm</width>
+    <header>account_id</header>
+    <type>varchar(255)</type>
   </column>
   <column>
-    <identifier>timeaccount_id</identifier>
-	<header>timeaccount_id</header>
-    <Type>varchar(40)</Type>
-	<width>2,5cm</width>
-  </column>
-        <column>
-            <identifier>title</identifier>
-            <header>Title</header>
-            <type>string</type>
-            <width>2,5cm</width>
+     <identifier>timeaccount_number</identifier>
+     <header>Timeaccount Number</header>
+     <type>timeaccount</type>
+     <field>number</field>
   </column>
   <column>
-    <identifier>is_billable</identifier>
-	<header>is_billable</header>
-    <Type>int(11)</Type>
-	<width>2,5cm</width>
- </column>
-  <column>
-    <identifier>billed_in</identifier>
-	<header>billed_in</header>
-    <Type>varchar(255)</Type>
-	<width>2,5cm</width>
+     <identifier>timeaccount_id</identifier>
+     <header>Timeaccount</header>
+     <type>timeaccount</type>
+     <field>title</field>
   </column>
   <column>
-    <identifier>is_cleared</identifier>
-	<header>is_cleared</header>
-    <Type>int(11)</Type>
-	<width>2,5cm</width>
+     <identifier>is_billable</identifier>
+	 <header>is_billable</header>
+     <type>int(11)</type>
+  </column>
+  <column>
+     <identifier>billed_in</identifier>
+	 <header>billed_in</header>
+     <type>varchar(255)</type>
+  </column>
+  <column>
+     <identifier>is_cleared</identifier>
+	 <header>is_cleared</header>
+     <type>int(11)</type>
  </column>
   <column>
     <identifier>start_date</identifier>
 	<header>start_date</header>
-    <Type>date</Type>
-	<width>2,5cm</width>
+    <type>date</type>
   </column>
   <column>
     <identifier>start_time</identifier>
 	<header>start_time</header>
-    <Type>time</Type>
-	<width>2,5cm</width>
+    <type>time</type>
   </column>
   <column>
     <identifier>duration</identifier>
 	<header>duration</header>
-    <Type>int(11)</Type>
-	<width>2,5cm</width>
+    <type>int(11)</type>
   </column>
   <column>
     <identifier>description</identifier>
 	<header>description</header>
-    <Type>longtext</Type>
-	<width>2,5cm</width>
+    <type>longtext</type>
   </column>
   <column>
     <identifier>created_by</identifier>
 	<header>created_by</header>
-    <Type>varchar(40)</Type>
-	<width>2,5cm</width>
+    <type>varchar(40)</type>
   </column>
   <column>
     <identifier>creation_time</identifier>
     <header>creation_time</header>
-	<Type>datetime</Type>
-	<width>2,5cm</width>
+	<type>datetime</type>
   </column>
   <column>
     <identifier>last_modified_by</identifier>
 	<header>last_modified_by</header>
-    <Type>varchar(40)</Type>
-	<width>2,5cm</width>
+    <type>varchar(40)</type>
    </column>
   <column>
     <identifier>last_modified_time</identifier>
 	<header>last_modified_time</header>
-    <Type>datetime</Type>
-	<width>2,5cm</width>
+    <type>datetime</type>
   </column>
   <column>
     <identifier>is_deleted</identifier>
 	<header>is_deleted</header>
-    <Type>int(11)</Type>
-	<width>2,5cm</width>
+    <type>int(11)</type>
   </column>
   <column>
     <identifier>deleted_by</identifier>
 	<header>deleted_by</header>
-    <Type>varchar(40)</Type>
-	<width>2,5cm</width>
+    <type>varchar(40)</type>
   </column>
   <column>
     <identifier>deleted_time</identifier>
 	<header>deleted_time</header>
-    <Type>datetime</Type>
-	<width>2,5cm</width>
+    <type>datetime</type>
  </column>
   <column>
     <identifier>seq</identifier>
 	<header>seq</header>
-    <Type>int(11)</Type>
-	<width>2,5cm</width>
+    <type>int(11)</type>
   </column>
-        <column>
-            <identifier>Einsatzort</identifier>
-            <header>Einsatzort</header>
-            <type>string</type>
-            <width>2,5cm</width>
-        </column>
+  <column>
+     <identifier>Einsatzort</identifier>
+     <header>Einsatzort</header>
+     <type>string</type>     
+  </column>
   <column>
     <identifier>invoice_id</identifier>
 	<header>invoice_id</header>
-    <Type>varchar(255)</Type>
-	<width>2,5cm</width>
+    <type>varchar(255)</type>
   </column>
   <column>
     <identifier>end_time</identifier>
 	<header>end_time</header>
-    <Type>time</Type>
-	<width>2,5cm</width>
+    <type>time</type>
   </column>
   <column>
     <identifier>need_for_clarification</identifier>
 	<header>need_for_clarification</header>
-    <Type>int(11)</Type>
-	<width>2,5cm</width>
+    <type>int(11)</type>
   </column>
   <column>
     <identifier>type</identifier>
 	<header>type</header>
-    <Type>varchar(40)</Type>
-	<width>2,5cm</width>
+    <type>varchar(40)</type>	
  </column>
 </columns>
 </config>
+
