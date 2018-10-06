@@ -280,7 +280,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param $termOfContractInMonths
      * @param $automaticContractExtensionInMonths
      * @param $cancellationPeriodInMonths
+     * @param null $today
      * @return array
+     * @throws Exception
      */
     public function getTerminationDeadline(
         $commencement,
@@ -301,6 +303,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $cancellationPeriodInMonths,
             $today
         );
+
         $deadline->setTimezone(Tinebase_Core::getUserTimezone());
         $deadline->setTime(0, 0);
 
