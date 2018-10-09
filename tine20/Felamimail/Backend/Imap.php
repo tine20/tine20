@@ -500,11 +500,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
 
         if (isset($summary['messages'])) {
             foreach ($summary['messages'] as $id => $data) {
-                $messages[$data['UID']] = array(
-                    'flags'  => $data['FLAGS'],
-                    'uid'    => $data['UID'],
-                    'modseq' => $data['MODSEQ'][0]
-                );
+                if (isset($data['UID']) && isset($data['FLAGS']) && isset($data['MODSEQ'][0])) {
+                    $messages[$data['UID']] = array(
+                        'flags'     => $data['FLAGS'],
+                        'uid'       => $data['UID'],
+                        'modseq'    => $data['MODSEQ'][0]
+                    );
+                }
             }
         }
         
