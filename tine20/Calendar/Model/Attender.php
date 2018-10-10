@@ -1142,6 +1142,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $isAttendeeCondition = $_event && $_event->attendee instanceof Tinebase_Record_RecordSet ? self::getAttendee($_event->attendee, $_attendee) : TRUE;
         return ($isAttendeeCondition || $isOrganizerCondition) && $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
     }
+    
+    public function getUserId()
+    {
+        return $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id;
+    }
 
     /**
      * clear in class cache
