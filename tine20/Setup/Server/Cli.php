@@ -82,6 +82,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'upgradeMysql564'         => 'update database to use features of MySQL 5.6.4+
                         Examples:
                             setup.php --upgradeMysql564',
+                'migrateUtf8mb4'         => 'update database to use MySQL utf8mb4
+                        Examples:
+                            setup.php --migrateUtf8mb4',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -111,6 +114,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->setpassword) &&
             empty($opts->getconfig) &&
             empty($opts->upgradeMysql564) &&
+            empty($opts->migrateUtf8mb4) &&
             empty($opts->pgsqlMigration)))
         {
             echo $opts->getUsageMessage();
