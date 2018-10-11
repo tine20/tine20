@@ -286,7 +286,25 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_eventController->attenderStatusUpdate($persistentEvent, $rwright, $rwright->status_authkey);
         $this->_assertMail('rwright', 'accept');
     }
-    
+
+    /**
+     * testAttenderStatusUpdateOrganizerIsAttendee
+     *
+     * skip dublicate notification for external organizer
+     */
+    public function testAttenderStatusUpdateOrganizerIsAttendee()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->organizer = $this->_getPersonasContacts('rwright')->getId();
+        $event->attendee = $this->_getPersonaAttendee('rwright');
+        $persistentEvent = $this->_eventController->create($event);
+        $rwright = $persistentEvent->attendee[0];
+        $rwright->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        self::flushMailer();
+        $this->_eventController->attenderStatusUpdate($persistentEvent, $rwright, $rwright->status_authkey);
+        $this->assertEquals(1, count(self::getMessages()));
+    }
+
     /**
      * testOrganizerNotificationSupress
      */
