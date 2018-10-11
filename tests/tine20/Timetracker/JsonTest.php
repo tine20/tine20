@@ -1386,4 +1386,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             $this->assertEquals('This Timeaccount is already closed!', $tect->getMessage());
         }
     }
+    
+    public function testUnitField()
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $this->assertEquals('', $timeaccount['price_unit']);
+        
+        $timeaccount->price_unit = 'days';
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $this->assertEquals('days', $timeaccount['price_unit']);
+        
+
+
+    }
 }

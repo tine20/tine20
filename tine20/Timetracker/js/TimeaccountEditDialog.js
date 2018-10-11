@@ -17,6 +17,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     windowNamePrefix: 'TimeaccountEditWindow_',
     appName: 'Timetracker',
+    modelName: 'Timeaccount',
     recordClass: Tine.Timetracker.Model.Timeaccount,
     recordProxy: Tine.Timetracker.timeaccountBackend,
     useInvoice: false,
@@ -114,24 +115,22 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             forceSelection: true,
             triggerAction: 'all',
             store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
-        }, {
-            fieldLabel: this.app.i18n._('Billed'),
-            name: 'status',
-            xtype: 'combo',
-            mode: 'local',
-            forceSelection: true,
-            triggerAction: 'all',
-            value: 'not yet billed',
-            store: [
-                ['not yet billed', this.app.i18n._('not yet billed')], 
-                ['to bill', this.app.i18n._('to bill')],
-                ['billed', this.app.i18n._('billed')]
-            ],
-            listeners: {
-                scope: this,
-                select: this.onBilledChange.createDelegate(this)
-            }
-        }];
+        }, [
+            Tine.widgets.form.FieldManager.get(
+                this.appName,
+                this.modelName,
+                'status',
+                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                {
+                    id: 'status',
+                    listeners: {
+                        scope: this,
+                        select: this.onBilledChange.createDelegate(this)
+                    } 
+
+                }
+            )
+        ]];
         
         secondRow.push({
             columnWidth: 1/3,
@@ -140,19 +139,17 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             name: 'billed_in'
         });
         
-        secondRow.push({
-            fieldLabel: this.app.i18n._('Booking deadline'),
-            name: 'deadline',
-            xtype: 'combo',
-            mode: 'local',
-            forceSelection: true,
-            triggerAction: 'all',
-            value: 'none',
-            store: [
-                ['none', this.app.i18n._('none')], 
-                ['lastweek', this.app.i18n._('last week')]
-            ]
-        });
+        secondRow.push([
+            Tine.widgets.form.FieldManager.get(
+                this.appName,
+                this.modelName,
+                'deadline',
+                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                {
+                    id: 'deadline',
+                }
+            )
+        ]);
         
         secondRow.push({
             xtype: 'extuxclearabledatefield',

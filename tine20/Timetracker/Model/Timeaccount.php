@@ -171,6 +171,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'default'               => 'hours',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
             ),
+            // @TODO price -> move this to Sales contracts/positions
             'price' => array(
                 'type'         => 'money',
                 'nullable'     => true,
@@ -178,11 +179,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'label'        => 'Price', // _('Price')
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
+            // @TODO price_unit -> move this to Sales contracts/positions
             'price_unit'        => array(
                 'shy'                   => TRUE,
-                'default'               => 'hours',
                 'nullable'              => true,
-                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'is_open'           => array(
                 // is_open = Status, status = Billed
@@ -225,24 +226,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'copyOmit'              => true,
             ),
             'status'            => array(
-                // TODO make this a keyfield
-                // is_open = Status, status = Billed
-//                    _('not yet billed')
-//                    _('to bill')
-//                    _('billed')
-                'label'                 => 'Billed', //_('Billed')
-                'type'                  => 'string',
-                'filterDefinition'      => array(
-                    'filter'                => 'Tinebase_Model_Filter_Text',
-                    'jsConfig'              => array('filtertype' => 'timetracker.timeaccountbilled')
-                ),
-                'validators'            => array(
-                                                Zend_Filter_Input::ALLOW_EMPTY => true,
-                                                Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_NOT_YET_BILLED,
-                                                array('InArray', array(self::STATUS_NOT_YET_BILLED, self::STATUS_TO_BILL, self::STATUS_BILLED)),
-                                            ),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_NOT_YET_BILLED),
+                'nullable' => true,
+                'default' => self::STATUS_NOT_YET_BILLED,
                 'copyOmit'              => true,
-                'default'               => 'not yet billed'
+                'label' => 'Billed', // _('Billed')
+                'type' => 'keyfield',
+                'name' => 'status',
             ),
             'cleared_at'        => array(
                 'label'                 => "Cleared at", // _("Cleared at")
@@ -251,15 +241,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'nullable'              => true,
                 'copyOmit'              => true,
             ),
-            'deadline'          => array(
-                'label'                 => 'Booking deadline', // _('Booking deadline')
-                'type'                  => 'string',
-                'nullable'              => true,
-                'validators'            => array(
-                                            Zend_Filter_Input::ALLOW_EMPTY      => true,
-                                            Zend_Filter_Input::DEFAULT_VALUE    => self::DEADLINE_NONE,
-                                                array('InArray', array(self::DEADLINE_NONE, self::DEADLINE_LASTWEEK)),
-                                            )
+                'deadline' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => self::DEADLINE_NONE),
+                'nullable' => true,
+                'default' => self::DEADLINE_NONE,
+                'label' => 'Booking deadline', // _('Booking deadline')
+                'type' => 'keyfield',
+                'name' => 'deadline',
             ),
             'grants'            => array(
                 'label'                 => NULL,
