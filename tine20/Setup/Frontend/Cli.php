@@ -1269,18 +1269,55 @@ class Setup_Frontend_Cli
         $db->query('SET unique_checks = 0');
         foreach ($tables as $table) {
             $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+
+            if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
+                $setupBackend = new Setup_Backend_Mysql();
+                $setupBackend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+                $setupBackend->dropIndex('tree_nodes', 'parent_id-name');
+            }
+
             $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) .
                 ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
-        }
 
-        $setupBackend = new Setup_Backend_Mysql();
-        $setupBackend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+            if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
+                $setupBackend = new Setup_Backend_Mysql();
+                $setupBackend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
                     <name>name</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
                     <collation>utf8mb4_bin</collation>
                 </field>'));
+                $setupBackend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>parent_id-name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>parent_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
+                    </field>
+                </index>'));
+                $setupBackend->addForeignKey('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>tree_nodes::parent_id--tree_nodes::id</name>
+                    <field>
+                        <name>parent_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tree_nodes</table>
+                        <field>id</field>
+                        <onupdate>cascade</onupdate>
+                        <!-- add ondelete? -->
+                    </reference>
+                </index>'));
+            }
+        }
+
+
 
         $db->query('SET foreign_key_checks = 1');
         $db->query('SET unique_checks = 1');

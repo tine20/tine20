@@ -79,12 +79,15 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'pgsqlMigration'            => 'migrate from pgsql to mysql
                         Examples:
                             setup.php --pgsqlMigration -- mysqlConfigFile=/path/to/config/file',
-                'upgradeMysql564'         => 'update database to use features of MySQL 5.6.4+
+                'upgradeMysql564'           => 'update database to use features of MySQL 5.6.4+
                         Examples:
                             setup.php --upgradeMysql564',
-                'migrateUtf8mb4'         => 'update database to use MySQL utf8mb4
+                'migrateUtf8mb4'            => 'update database to use MySQL utf8mb4
                         Examples:
                             setup.php --migrateUtf8mb4',
+                'maintenance_mode'          => 'set systems maintenance mode state
+                        Examples:
+                           setup.php --maintenance_mode -- state=[on|all|off]',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -115,7 +118,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->getconfig) &&
             empty($opts->upgradeMysql564) &&
             empty($opts->migrateUtf8mb4) &&
-            empty($opts->pgsqlMigration)))
+            empty($opts->pgsqlMigration) &&
+            empty($opts->maintenance_mode)))
         {
             echo $opts->getUsageMessage();
             exit;
