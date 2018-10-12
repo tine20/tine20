@@ -295,6 +295,14 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function &xprops($_property = 'xprops');
 
     /**
+     * extended json data properties getter
+     *
+     * @param string $_property
+     * @return &array
+     */
+    public function &jsonData($_property);
+
+    /**
      * get fields
      *
      * @return array

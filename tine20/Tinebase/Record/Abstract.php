@@ -1598,6 +1598,29 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function &xprops($_property = 'xprops')
     {
+        if (!isset($this->_validators[$_property])) {
+            throw new Tinebase_Exception_UnexpectedValue($_property . ' is no property of $this->_properties');
+        }
+        if (!isset($this->_properties[$_property])) {
+            $this->_properties[$_property] = array();
+        } else if (is_string($this->_properties[$_property])) {
+            $this->_properties[$_property] = json_decode($this->_properties[$_property], true);
+        }
+
+        return $this->_properties[$_property];
+    }
+
+    /**
+     * extended json data properties getter
+     *
+     * @param string $_property
+     * @return &array
+     */
+    public function &jsonData($_property)
+    {
+        if (!isset($this->_validators[$_property])) {
+            throw new Tinebase_Exception_UnexpectedValue($_property . ' is no property of $this->_properties');
+        }
         if (!isset($this->_properties[$_property])) {
             $this->_properties[$_property] = array();
         } else if (is_string($this->_properties[$_property])) {
