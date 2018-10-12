@@ -455,7 +455,7 @@ class Calendar_Frontend_iMIP
         $existingEvent = $this->getExistingEvent($_iMIP);
         if (! $existingEvent) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_EVENTEXISTS, "cannot process REPLY to non existent/invisible event");
-            $result = FALSE;
+            return false;
         }
         
         $iMIPAttenderIdx = $_iMIP->getEvent()->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $_iMIP->getEvent()->attendee->getEmail()) : FALSE;
