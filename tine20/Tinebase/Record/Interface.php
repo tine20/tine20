@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -288,6 +288,14 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return &array
      */
     public function &xprops($_property = 'xprops');
+
+    /**
+     * extended json data properties getter
+     *
+     * @param string $_property
+     * @return &array
+     */
+    public function &jsonData($_property);
 
     /**
      * get fields
