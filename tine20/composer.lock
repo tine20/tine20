@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d6f8985e44f3f8f69111d492b2e7e5d",
+    "content-hash": "1d15d532af5ad7a76ebb5f5485c8bdb7",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -487,7 +487,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": ""
+                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -617,7 +617,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": ""
+                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
             },
             "require": {
                 "php": ">=5.2"
@@ -639,8 +639,7 @@
                 {
                     "name": "Edward Z. Yang",
                     "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com",
-                    "role": "Developer"
+                    "homepage": "http://ezyang.com"
                 }
             ],
             "description": "Standards compliant HTML filter written in PHP",
@@ -1107,7 +1106,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": ""
+                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
             },
             "require": {
                 "ext-ctype": "*",
@@ -1393,7 +1392,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -1521,7 +1520,7 @@
         },
         {
             "name": "zendframework/zend-http",
-            "version": "2.4.10",
+            "version": "2.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-http.git",
@@ -1785,11 +1784,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl31",
+            "version": "1.12.20pl33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "937d90ee8bdff12b9c4bbba58bda39aca430231c"
+                "reference": "f2b69f97ad01aa9af6d28a68b5df616beb785d37"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1806,7 +1805,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2018-06-06T13:40:50+00:00"
+            "time": "2018-10-13T01:11:06+00:00"
         }
     ],
     "packages-dev": [
@@ -2366,7 +2365,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch31",
+            "version": "1.12.20.0-patch33",
             "package": "zendframework/zendframework1"
         },
         {
