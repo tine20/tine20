@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac496d9394c75fc63d04f71775b8dd3a",
+    "content-hash": "893fbe8c37460190650103c4e3e6cfc7",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -738,7 +738,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
+                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -770,7 +770,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1980,7 +1980,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "e8880afdfd69fe23ae17918ee6a7e65d4bfd1d36"
+                "reference": "3bc0d5591fcd719c2dc78bd9ffad42d1561fe471"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -2004,7 +2004,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2018-03-01T15:59:58+00:00"
+            "time": "2018-05-16T12:42:25+00:00"
         },
         {
             "name": "tine20/composerapploader",
@@ -2136,16 +2136,16 @@
         },
         {
             "name": "zendframework/zend-diactoros",
-            "version": "1.6.1",
+            "version": "1.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "c8664b92a6d5bc229e48b0923486c097e45a7877"
+                "reference": "20da13beba0dde8fb648be3cc19765732790f46e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/c8664b92a6d5bc229e48b0923486c097e45a7877",
-                "reference": "c8664b92a6d5bc229e48b0923486c097e45a7877",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/20da13beba0dde8fb648be3cc19765732790f46e",
+                "reference": "20da13beba0dde8fb648be3cc19765732790f46e",
                 "shasum": ""
             },
             "require": {
@@ -2158,17 +2158,29 @@
             "require-dev": {
                 "ext-dom": "*",
                 "ext-libxml": "*",
-                "phpunit/phpunit": "^5.7.16 || ^6.0.8",
+                "php-http/psr7-integration-tests": "dev-master",
+                "phpunit/phpunit": "^5.7.16 || ^6.0.8 || ^7.2.7",
                 "zendframework/zend-coding-standard": "~1.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6-dev",
-                    "dev-develop": "1.7-dev"
+                    "dev-master": "1.8.x-dev",
+                    "dev-develop": "1.9.x-dev",
+                    "dev-release-2.0": "2.0.x-dev"
                 }
             },
             "autoload": {
+                "files": [
+                    "src/functions/create_uploaded_file.php",
+                    "src/functions/marshal_headers_from_sapi.php",
+                    "src/functions/marshal_method_from_sapi.php",
+                    "src/functions/marshal_protocol_version_from_sapi.php",
+                    "src/functions/marshal_uri_from_sapi.php",
+                    "src/functions/normalize_server.php",
+                    "src/functions/normalize_uploaded_files.php",
+                    "src/functions/parse_cookie_header.php"
+                ],
                 "psr-4": {
                     "Zend\\Diactoros\\": "src/"
                 }
@@ -2184,7 +2196,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2017-10-12T15:24:51+00:00"
+            "time": "2018-09-05T19:29:37+00:00"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -2615,11 +2627,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl32",
+            "version": "1.12.20pl33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "72e62c12cac3e6e57406011fa84eaa9823dd49ba"
+                "reference": "f2b69f97ad01aa9af6d28a68b5df616beb785d37"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2636,7 +2648,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2018-06-06T15:32:54+00:00"
+            "time": "2018-10-13T01:11:06+00:00"
         }
     ],
     "packages-dev": [
@@ -3002,7 +3014,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-09-02T10:13:14+00:00"
+            "time": "2015-10-06T15:47:00+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3049,7 +3061,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2015-06-21T13:08:43+00:00"
+            "time": "2017-11-27T13:52:08+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -3139,7 +3151,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-05-12T18:03:57+00:00"
+            "time": "2017-02-26T11:10:40+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -3188,7 +3200,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2014-03-03T05:10:30+00:00"
+            "time": "2017-12-04T08:55:13+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -3260,7 +3272,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-10-17T09:04:17+00:00"
+            "time": "2015-06-03T05:03:30+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3898,7 +3910,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch32",
+            "version": "1.12.20.0-patch33",
             "package": "zendframework/zendframework1"
         },
         {
@@ -3922,7 +3934,20 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6 | ^7.0"
+        "php": "^5.6 | ^7.0",
+        "ext-ctype": "*",
+        "ext-date": "*",
+        "ext-dom": "*",
+        "ext-gd": "*",
+        "ext-hash": "*",
+        "ext-iconv": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-spl": "*",
+        "ext-simplexml": "*",
+        "ext-xml": "*",
+        "ext-zip": "*"
     },
     "platform-dev": [],
     "platform-overrides": {
