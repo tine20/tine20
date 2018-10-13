@@ -1213,7 +1213,7 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
      */
     public function &xprops($_property = 'xprops')
     {
-        if (!isset($this->_validators[$_property])) {
+        if (!static::$_configurationObject->hasField($_property)) {
             throw new Tinebase_Exception_UnexpectedValue($_property . ' is no property of $this->_properties');
         }
         if (!isset($this->_data[$_property])) {
@@ -1236,7 +1236,7 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
      */
     public function &jsonData($_property)
     {
-        if (!isset($this->_validators[$_property])) {
+        if (!static::$_configurationObject->hasField($_property)) {
             throw new Tinebase_Exception_UnexpectedValue($_property . ' is no property of $this->_properties');
         }
         if (!isset($this->_properties[$_property])) {
