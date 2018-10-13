@@ -44,6 +44,13 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
      * @var string
      */
     protected $_hasRecordFolder = true;
+
+    /**
+     * app can support delegations
+     *
+     * @var boolean
+     */
+    protected $_canSupportDelegations = true;
     
     /**
      * the current path
@@ -394,6 +401,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
      */
     protected function _clientSupportsDelegations()
     {
+        if (!$this->_canSupportDelegations) {
+            return false;
+        }
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
             $clientSupportsDelegations = in_array($backend, array(
