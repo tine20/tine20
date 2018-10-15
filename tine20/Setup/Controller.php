@@ -1006,7 +1006,12 @@ class Setup_Controller
      */
     public function getConfigData()
     {
-        $configArray = Setup_Core::get(Setup_Core::CONFIG)->toArray();
+        $config = Setup_Core::get(Setup_Core::CONFIG);
+        if ($config instanceof Tinebase_Config_Abstract) {
+            $configArray = $config->getConfigFileData();
+        } else {
+            $configArray = $config->toArray();
+        }
         
         #####################################
         # LEGACY/COMPATIBILITY:
