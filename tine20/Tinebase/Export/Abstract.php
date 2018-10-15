@@ -275,6 +275,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
         $this->_config = $this->_getExportConfig($_additionalOptions);
+        if (null !== $this->_config->header) {
+            $this->_writeGenericHeader = (bool)$this->_config->header;
+        }
         if ($this->_config->template) {
             $this->_templateFileName = $this->_config->template;
         }
@@ -321,6 +324,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $this->_sortInfo = $_additionalOptions['sortInfo'];
                 }
             }
+        }
+
+        if (!isset($this->_sortInfo['sort']) && null !== $this->_config->sort) {
+            $this->_sortInfo['sort'] = $this->_config->sort->field;
+            $this->_sortInfo['dir'] = $this->_config->sort->direction ?: 'ASC';
         }
 
         if (!isset($this->_sortInfo['sort']) && !empty($this->_modelName)) {
