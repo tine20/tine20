@@ -78,6 +78,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 $result = $export->generate();
                 break;
             case 'newPDF':
+            case 'newCsv':
             case 'csv':
             case 'xls':
             case 'doc':
@@ -105,6 +106,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'pdf':
                 echo $pdfOutput;
                 break;
+            case 'newCsv':
             case 'newPDF':
             case 'xls':
             case 'doc':

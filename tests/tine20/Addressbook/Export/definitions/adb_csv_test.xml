@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_csv_test</name>
+    <type>export</type>
+    <plugin>Tinebase_Export_Csv</plugin>
+    <sort>
+        <field>n_given</field>
+        <direction>ASC</direction>
+    </sort>
+    <header>0</header>
+    <delimiter>&#x09;</delimiter>
+    <enclosure>"</enclosure>
+    <columns>
+        <column>
+            <identifier>n_given</identifier>
+            <header>Given Name</header>
+        </column>
+        <column>
+            <identifier>email</identifier>
+            <header>Email address</header>
+        </column>
+    </columns>
+</config>
