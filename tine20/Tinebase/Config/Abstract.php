@@ -374,7 +374,17 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         return $value !== Tinebase_Model_Config::NOTSET;
     }
-    
+
+    /**
+     * public wrapper for _getConfigFileData, only use it from outside of the config classes!
+     *
+     * @return array
+     */
+    public function getConfigFileData()
+    {
+        return $this->_getConfigFileData();
+    }
+
     /**
      * returns data from central config.inc.php file
      * 
