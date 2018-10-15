@@ -87,4 +87,36 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
     
         $this->assertGreaterThanOrEqual(2, count($children), 'there should be more than one container');
     }
+
+    public function testGetAllContainersWithShared()
+    {
+        $c = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser()->getId(),
+            Addressbook_Model_Contact::class, $this->_personas['sclever']->getId(), '*', true)->getFirstRecord();
+        if (null === $c) {
+            $c = Addressbook_Controller::getInstance()->createPersonalFolder($this->_personas['sclever'])
+                ->getFirstRecord();
+        }
+        Tinebase_Container::getInstance()->addGrants($c, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Core::getUser()->getId(), [
+                Tinebase_Model_Grants::GRANT_READ,
+                Tinebase_Model_Grants::GRANT_SYNC
+            ], true);
+
+        $_SERVER['HTTP_USER_AGENT'] = 'DAVdroid/0.1';
+
+        $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' .
+            Tinebase_Core::getUser()->contact_id, true);
+
+        $children = $collection->getChildren();
+
+        $this->assertGreaterThanOrEqual(1, count($children), 'there should be at least one container');
+
+        $found = false;
+        foreach ($children as $child) {
+            if ($c->getId() === $child->getName()) {
+                $found = true;
+            }
+        }
+        static::assertTrue($found, 'did not find Susan Clevers share');
+    }
 }
