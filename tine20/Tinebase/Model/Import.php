@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Spahn <m.spahn@metaways.de
  * 
  */
@@ -193,7 +193,7 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
         
         // set timestamp according to interval, if it is not set
         if (! isset($_data['timestamp'])) {
-            switch ($_data['interval']) {
+            switch (isset($_data['interval']) ? $_data['interval'] : null) {
                 case Tinebase_Model_Import::INTERVAL_DAILY:
                     $timestamp->subDay(1)->subSecond(1);
                     break;
