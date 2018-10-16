@@ -135,6 +135,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         try {
             $contact = $adbController->get($this->user_id, null, false);
             return $contact->account_id ? $contact->account_id : null;
+        } catch (Tinebase_Exception_NotFound $e) {
+            return null;
         } finally {
             $adbController->doContainerACLChecks($adbAcl);
         }
