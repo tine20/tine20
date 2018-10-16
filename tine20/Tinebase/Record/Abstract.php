@@ -1078,6 +1078,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 } else {
                     $recordField = $recordField->getId();
                 }
+            } elseif ((($ownField === 0 || $ownField === '0') && $recordField !== 0 && $recordField !== '0') ||
+                    ($recordField === 0 || $recordField === '0') && $ownField !== 0 && $ownField !== '0') {
+                // do nothing, we want to record this diff below
             } elseif ($ownField == $recordField) {
                 continue;
             } elseif (empty($ownField) && empty($recordField)) {
@@ -1101,7 +1104,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
-     * merge given record into $this
+     * merge given record into $this, only fills so far empty properties with new values from given record
+     * note that 0, '0' are not empty, while null, '' are empty
      * 
      * @param Tinebase_Record_Interface $record
      * @param Tinebase_Record_Diff $diff
@@ -1122,7 +1126,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         foreach ($diff->diff as $field => $value) {
-            if (empty($this->{$field})) {
+            if (empty($this->{$field}) && $this->{$field} !== 0 && $this->{$field} !== '0') {
                 $this->{$field} = $value;
             }
         }
