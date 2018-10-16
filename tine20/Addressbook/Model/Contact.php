@@ -377,7 +377,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 // this must not be of type 'text' => crlf filter must not be applied
                 // => default type = string
                 // TODO the SQL field is of course not varchar(255)... so...
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::DEFAULT_VALUE    => 0
+                ],
+                'inputFilters'                  => [Zend_Filter_Empty::class => 0],
                 'modlogOmit'                    => true,
                 'system'                        => true
             ],

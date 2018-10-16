@@ -114,16 +114,29 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
             'test_2' => 99,
             'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'set1' => new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord'),
+            'string0' => '0',
+            'int0'    => 0,
         ), true);
         
         $record2 = clone $record1;
         $record2->string = 'anders';
         $record2->test_1 = 26;
         $record2->set2 = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $record2->string0 = '';
+        $record2->int0 = null;
         $diff = $record1->diff($record2)->diff;
-        $this->assertEquals(2, count($diff), 'expected difference in string & test_1: ' . print_r($diff, TRUE));
-        $this->assertEquals('anders', $diff['string']);
-        $this->assertEquals(26, $diff['test_1']);
+        $this->assertSame(4, count($diff), 'expected difference in string & test_1 & string0 & int0: ' . print_r($diff, TRUE));
+        $this->assertSame('anders', $diff['string']);
+        $this->assertSame(26, $diff['test_1']);
+        $this->assertSame('', $diff['string0']);
+        $this->assertSame(null, $diff['int0']);
+
+        $diff = $record2->diff($record1)->diff;
+        $this->assertSame(4, count($diff), 'expected difference in string & test_1 & string0 & int0: ' . print_r($diff, TRUE));
+        $this->assertSame('test', $diff['string']);
+        $this->assertSame(25, $diff['test_1']);
+        $this->assertSame('0', $diff['string0']);
+        $this->assertSame(0, $diff['int0']);
 
         $record2 = clone $record1;
         $record2->date_single = clone $record1->date_single;
@@ -131,6 +144,35 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $diff = $record1->diff($record2)->diff;
         $this->assertEquals(1, count($diff));
         $this->assertTrue((isset($diff['date_single']) || array_key_exists('date_single', $diff)));
+    }
+
+    public function testMerge()
+    {
+        $record1 = new Tinebase_Record_DummyRecord(array(
+            'string'  => 'test',
+            'test_1'  => 0,
+            'string0' => '0',
+            'int0'    => null,
+            'set1'    => '',
+        ), true);
+
+        $record2 = new Tinebase_Record_DummyRecord(array(
+            'string'  => 'bla',
+            'test_1'  => 10,
+            'string0' => '10',
+            'int0'    => 10,
+            'set1'    => 'set1',
+            'set2'    => 'set2'
+        ), true);
+
+        $record1->merge($record2);
+
+        static::assertSame('test', $record1->string);
+        static::assertSame(0, $record1->test_1);
+        static::assertSame('0', $record1->string0);
+        static::assertSame(10, $record1->int0);
+        static::assertSame('set1', $record1->set1);
+        static::assertSame('set2', $record1->set2);
     }
 
     /**
