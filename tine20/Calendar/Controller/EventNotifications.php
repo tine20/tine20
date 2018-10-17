@@ -176,7 +176,21 @@
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Notification action: " . $_action);
-        
+
+
+        // Check if organizer is attender
+        $organizerIsAttender = false;
+        foreach($_event->attendee as $attender) {
+            if ($attender->getUserId()  == $_event->resolveOrganizer()->id) {
+                $organizerIsAttender = true;
+            }
+        }
+
+        $organizer = new Calendar_Model_Attender(array(
+            'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'    => $_event->resolveOrganizer()
+        ));
+
         switch ($_action) {
             case 'alarm':
                 foreach($_event->attendee as $attender) {
@@ -188,8 +202,14 @@
             case 'booked':
             case 'created':
             case 'deleted':
-                foreach($_event->attendee as $attender) {
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                // skip invitations/cancle if event came from external
+                if ($_event->resolveOrganizer()->account_id) {
+                    foreach ($_event->attendee as $attender) {
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                    }
+                } else {
+                    // send reply (aka status update) to external organizer
+                    $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE);
                 }
                 break;
             case 'changed':
@@ -244,21 +264,8 @@
                 
         }
 
-        $organizerIsAttender = false;
-        
-        // Check if organizer is attender
-        foreach($_event->attendee as $attender) {
-            if ($attender->getUserId()  == $_event->resolveOrganizer()->id) {
-                $organizerIsAttender = true;
-            }
-        }
-
         // send notification to organizer if she's not attendee
         if ( !$organizerIsAttender && $_action == 'changed') {
-            $organizer = new Calendar_Model_Attender(array(
-                'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'    => $_event->resolveOrganizer()
-            ));
             $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updates);
         }
     }
