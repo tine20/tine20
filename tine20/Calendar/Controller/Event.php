@@ -2583,13 +2583,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // create/update attendee
+        /** @var Calendar_Model_Attender $attender */
         foreach ($_event->attendee as $attender) {
             $attenderId = $attender->getId();
             $idx = ($attenderId) ? $currentAttendee->getIndexById($attenderId) : FALSE;
             
             if ($idx !== FALSE) {
                 $currentAttender = $currentAttendee[$idx];
-                $this->_updateAttender($attender, $currentAttender, $_event, $_isRescheduled, $calendar);
+                if ($_isRescheduled || !$attender->diff($currentAttender)->isEmpty()) {
+                    $this->_updateAttender($attender, $currentAttender, $_event, $_isRescheduled, $calendar);
+                }
             } else {
                 $this->_createAttender($attender, $_event, FALSE, $calendar);
             }
