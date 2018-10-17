@@ -2206,6 +2206,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent = $this->_controller->update($updateEvent);
         static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
 
+        // update the event, not the attendees
+        $updatedEvent->summary = 'event 2';
+        $updatedEvent = $this->_controller->update($updatedEvent);
+        static::assertSame('event 2', $updatedEvent->summary);
+
         $event = clone $updatedEvent;
         // delete it
         $this->_controller->delete($event->getId());
@@ -2218,7 +2223,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->seq = 0;
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationById('Calendar')->getId(), $event, 10000);
-        static::assertEquals(7, $modifications->count());
+        static::assertEquals(8, $modifications->count());
 
         // undelete it
         $mod = $modifications->getLastRecord();
@@ -2236,6 +2241,17 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $undeletedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()
             ->status);
         static::assertEquals(1, $undeletedEvent->alarms->count());
+        static::assertSame('event 2', $undeletedEvent->summary);
+
+        // undo the summary change
+        $mod = $modifications->getLastRecord();
+        static::assertNotContains(Calendar_Model_Attender::class, $mod->new_value);
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undeletedEvent = $this->_controller->get($event->getId());
+        static::assertSame('event 1', $undeletedEvent->summary);
 
         // undo the reschedule
         $mod = $modifications->getLastRecord();
