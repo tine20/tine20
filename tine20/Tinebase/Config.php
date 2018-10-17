@@ -669,6 +669,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const TINE20_URL = 'tine20URL';
 
+    const FILTER_SYNC_TOKEN = 'filterSyncToken';
+    const FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL = 'cleanUpMaxTotal';
+    const FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER = 'cleanUpMaxFilter';
+    const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -2091,6 +2096,53 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'               => array(),
         ),
+        self::FILTER_SYNC_TOKEN => [
+            //_('Filter sync token settings')
+            self::LABEL                 => 'Filter sync token settings',
+            //_('Filter sync token settings')
+            self::DESCRIPTION           => 'Filter sync token settings',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::CONTENT               => [
+                self::FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE     => [
+                    //_('Max age in days')
+                    self::LABEL                 => 'Max age in days',
+                    //_('Max age in days')
+                    self::DESCRIPTION           => 'Max age in days',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => 750, // 2 years
+                ],
+                self::FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL   => [
+                    //_('Max amount in total')
+                    self::LABEL                 => 'Max amount in total',
+                    //_('Max amount in total')
+                    self::DESCRIPTION           => 'Max amount in total',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => 10000000, // 10 mio
+                ],
+                self::FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER => [
+                    //_('Max amount per filter')
+                    self::LABEL                 => 'Max amount per filter',
+                    //_('Max amount per filter')
+                    self::DESCRIPTION           => 'Max amount per filter',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => 100000, // 100k
+                ],
+            ],
+            self::DEFAULT_STR           => [],
+        ],
         self::QUOTA => array(
             //_('Quota settings')
             'label'                 => 'Quota settings',
@@ -2194,7 +2246,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule' => true,
         ),
     );
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::$_appName

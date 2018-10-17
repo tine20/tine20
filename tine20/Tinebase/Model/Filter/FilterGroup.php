@@ -947,7 +947,22 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     {
         $this->_options = $_options;
     }
-    
+
+    public function hash()
+    {
+        $data = [];
+        foreach ($this->_filterObjects as $object) {
+            if ($object instanceof Tinebase_Model_Filter_FilterGroup) {
+                $data[] = $object->hash();
+            } else if ($object instanceof Tinebase_Model_Filter_Abstract) {
+                $data[] = $object->getField() . '_' . $object->getOperator() . '_' . $object->getValue();
+            }
+        }
+
+        sort($data);
+        return md5($this->getModelName() . '_' . $this->getCondition() . '_' . join('_', $data));
+    }
+
     /**
      * return filter object(s)
      *
