@@ -896,6 +896,14 @@ Ext.override(Ext.menu.Menu, {
     })
 });
 
+Ext.apply(Ext.form.VTypes, {
+    //@see https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+    emailRe: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+    email : function(v){
+        return this.emailRe.test(String(v).toLowerCase());
+    },
+});
+
 Ext.override(Ext.grid.GridDragZone, {
     getDragData : function(e){
         var t = Ext.lib.Event.getTarget(e);
