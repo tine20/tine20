@@ -107,4 +107,14 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_35();
         $this->setApplicationVersion('Tinebase', '12.9');
     }
+
+    /**
+     * update temp file cleanup task
+     */
+    public function update_9()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_36();
+        $this->setApplicationVersion('Tinebase', '12.10');
+    }
 }

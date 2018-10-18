@@ -738,11 +738,31 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 11.36
+     *
+     * update temp file cleanup task
+     */
+    public function update_36()
+    {
+        $scheduler = new Tinebase_Backend_Scheduler();
+        try {
+            /** @var Tinebase_Model_SchedulerTask $task */
+            $task = $scheduler->getByProperty('Tinebase_TempFileCleanup', 'name');
+            $task->config->setCron(Tinebase_Scheduler_Task::TASK_TYPE_HOURLY);
+            $scheduler->update($task);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Scheduler_Task::addTempFileCleanupTask(Tinebase_Scheduler::getInstance());
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.37');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_36()
+    public function update_37()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }

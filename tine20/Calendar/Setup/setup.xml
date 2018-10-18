@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Calendar</name>
+<<<<<<< HEAD
     <!-- gettext('Calendar') -->
     <version>12.5</version>
+=======
+    <!-- gettext('Calendar') -->   
+    <version>11.13</version>
+>>>>>>> 2018.11
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>15</version>
+            <version>16</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -178,6 +183,11 @@
                     <name>poll_id</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
                 </field>
                 <index>
                     <name>description</name>

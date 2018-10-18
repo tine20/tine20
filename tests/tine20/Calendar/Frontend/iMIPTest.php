@@ -94,7 +94,39 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         parent::tearDown();
     }
-    
+
+    public function testExternalInvitationToOneOfARecurSeries()
+    {
+        $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) .
+            '/files/exchange_external_reoccuring_onlyone.ics');
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'ics'            => $ics,
+            'method'         => 'REQUEST',
+            'originator'     => 'l.kneschke@caldav.org',
+        ));
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $this->_iMIPFrontendMock->process($iMIP);
+
+        static::assertTrue($iMIP->event instanceof Calendar_Model_Event, 'imips event not set');
+        static::assertEquals(1, count($iMIP->event->attendee));
+        static::assertEquals('Daily Call', $iMIP->event->summary);
+        static::assertEquals('RECURRENCE-ID:20180906T110000',
+            $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['RECURRENCE-ID']);
+        static::assertEquals('X-MICROSOFT-CDO-OWNERAPPTID:1983350753',
+            $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['X-MICROSOFT-CDO-OWNERAPPTID']);
+
+        // TODO test that msg send to external server contains proper recurid
+        $iMIP->preconditionsChecked = true;
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var \Sabre\VObject\Component\VCalendar $vcalendar */
+        $vcalendar = Calendar_Convert_Event_VCalendar_Factory::factory('')->fromTine20Model($iMIP->getEvent());
+        $vCalBlob = $vcalendar->serialize();
+        static::assertContains('RECURRENCE-ID:20180906T110000', $vCalBlob);
+        static::assertContains('X-MICROSOFT-CDO-OWNERAPPTID:1983350753', $vCalBlob);
+    }
+
     /**
      * testExternalInvitationRequestAutoProcess
      */
@@ -550,7 +582,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             return;
         }
         
-        $this->fail("autoProcess did not throw TOPROCESS Exception $e");
+        $this->fail("autoProcess did not throw TOPROCESS Exception");
     }
     
     /**

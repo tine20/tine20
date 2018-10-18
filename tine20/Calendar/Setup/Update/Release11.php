@@ -304,13 +304,30 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setApplicationVersion('Calendar', '11.12');
     }
 
+    public function update_12()
+    {
+        if (! $this->_backend->columnExists('xprops', 'cal_events')) {
+            $this->_backend->addCol('cal_events', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('cal_events') < 16) {
+            $this->setTableVersion('cal_events', 16);
+        }
+
+        $this->setApplicationVersion('Calendar', '11.13');
+    }
 
     /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_12()
+    public function update_13()
     {
         $this->setApplicationVersion('Calendar', '12.0');
     }
