@@ -144,6 +144,7 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
     /**
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Db_Statement_Exception
+     * @return bool
      */
     public function cleanUp()
     {
@@ -159,5 +160,7 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
             ' deleted ' . $deleted . ' filter sync token');
+
+        return true;
     }
 }
