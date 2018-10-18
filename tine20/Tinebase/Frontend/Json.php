@@ -1433,14 +1433,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! class_exists($filterClassName)) {
             throw new Tinebase_Exception_InvalidArgument('A filter for the given appName and modelName does not exist!');
         }
-        
-        if (! in_array($property, $recordClassName::getAutocompleteFields())) {
+
+        /** @var Tinebase_Model_Filter_FilterGroup $filter */
+        $filter = new $filterClassName();
+        $propFilter = $filter->createFilter(['field' => $property, 'operator' => 'startswith', 'value' => $startswith]);
+        if (!$propFilter instanceof Tinebase_Model_Filter_Text && !$propFilter instanceof Tinebase_Model_Filter_Query) {
             throw new Tinebase_Exception_UnexpectedValue('bad property name');
         }
-        
-        $filter = new $filterClassName(array(
-            array('field' => $property, 'operator' => 'startswith', 'value' => $startswith),
-        ));
+        $filter->addFilter($propFilter);
         
         $paging = new Tinebase_Model_Pagination(array('sort' => $property));
         
