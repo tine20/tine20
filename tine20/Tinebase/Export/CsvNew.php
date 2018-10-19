@@ -130,10 +130,41 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
 
     protected function _endRow()
     {
-        if (false === fputcsv($this->_filehandle, $this->_currentRow, $this->_delimiter, $this->_enclosure,
+        if (false === self::fputcsv($this->_filehandle, $this->_currentRow, $this->_delimiter, $this->_enclosure,
                 $this->_escape_char)) {
             throw new Tinebase_Exception_Backend('could not write current row to csv stream');
         }
+    }
+
+    /**
+     * The php build in fputcsv function is buggy, so we need an own one :-(
+     *
+     * @param resource $filePointer
+     * @param array $dataArray
+     * @param char $delimiter
+     * @param char $enclosure
+     * @param char $escapeEnclosure
+     */
+    public static function fputcsv($filePointer, $dataArray, $delimiter = ',', $enclosure = '"', $escapeEnclosure = '"')
+    {
+        $string = "";
+        $writeDelimiter = false;
+        foreach($dataArray as $dataElement) {
+            if ($writeDelimiter) {
+                $string .= $delimiter;
+            }
+            if ($enclosure) {
+                $escapedDataElement = (!is_array($dataElement)) ? preg_replace("/$enclosure/", $escapeEnclosure . $enclosure, $dataElement) : '';
+                $string .= $enclosure . $escapedDataElement . $enclosure;
+            } else {
+                // world is so buggy (e.g. DF Devices)
+                $string .= $dataElement;
+            }
+            $writeDelimiter = true;
+        }
+        $string .= "\n";
+
+        fwrite($filePointer, $string);
     }
 
     /**
