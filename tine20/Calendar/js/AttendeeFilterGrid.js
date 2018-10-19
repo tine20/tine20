@@ -58,7 +58,11 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
             sortable: true,
             resizable: false,
             header: '&#160;',
-            tooltip: this.app.i18n._('Check to filter for this attendee')
+            tooltip: this.app.i18n._('Check to filter for this attendee'),
+            listeners: {
+                scope: this,
+                beforecheckchange: this.onBeforeCheckChange
+            }
         }));
         
         this.plugins = Ext.isArray(this.plugins) ? this.plugins : [];
@@ -103,7 +107,19 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
             }
         });
     },
-    
+
+    onBeforeCheckChange: function(col, newValue, oldValue, record) {
+        var _ = window.lodash,
+            chkCount = _.countBy(_.map(this.store.data.items, 'data.checked')).true,
+            filterPanel = this.app.getMainScreen().getCenterPanel().filterToolbar.activeFilterPanel,
+            calFilter = filterPanel.filterStore.getAt(filterPanel.filterStore.findExact('field', 'container_id'));
+
+        if (! newValue && chkCount == 1 && !calFilter) {
+
+            return false;
+        }
+    },
+
     onBeforeRowSelect: function(sm, idx, keep, attendee) {
         if (! attendee.get('user_id')) {
             return false;
