@@ -41,6 +41,7 @@
  * @property string                         transp
  * @property string                         status
  * @property string                         summary
+ * @property string                         external_seq
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
