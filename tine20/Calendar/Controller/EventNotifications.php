@@ -245,6 +245,11 @@
                     foreach ($attendeeMigration['toUpdate'] as $attender) {
                         $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
                     }
+
+                    // send notification to organizer if she's not attendee
+                    if (! $organizerIsAttender) {
+                        $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updates);
+                    }
                 }
                 
                 break;
@@ -262,11 +267,6 @@
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
                 break;
                 
-        }
-
-        // send notification to organizer if she's not attendee
-        if ( !$organizerIsAttender && $_action == 'changed') {
-            $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updates);
         }
     }
 
