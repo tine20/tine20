@@ -613,8 +613,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
             if (false === ($result = $iterator->iterate())) {
                 $result = array(
-                    'totalcount' => $this->_records->count(),
-                    'results'    => array(),
+                    'totalcount' => 0,
+                    'results'    => [],
                 );
             }
         } else {
