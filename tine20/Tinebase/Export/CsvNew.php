@@ -48,7 +48,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      * @throws Tinebase_Exception_NotFound
      */
     public function __construct(
-        Tinebase_Model_Filter_FilterGroup $_filter,
+        Tinebase_Model_Filter_FilterGroup $_filter = null,
         Tinebase_Controller_Record_Interface $_controller = null,
         $_additionalOptions = array()
     ) {
@@ -71,17 +71,21 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
             }
         }
     }
+
     /**
      * generate export
      *
-     * @return string|boolean filename
+     * @param  resource|null $_fileHandle
+     * @throws Tinebase_Exception_Backend
      */
-    public function generate()
+    public function generate($_fileHandle = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
             ' Generating new csv export of ' . $this->_modelName);
 
-        if (!($this->_filehandle = fopen('php://memory', 'w'))) {
+        if (is_resource($_fileHandle)) {
+            $this->_filehandle = $_fileHandle;
+        } elseif (!($this->_filehandle = fopen('php://memory', 'w'))) {
             throw new Tinebase_Exception_Backend('could not create export memory stream');
         }
 
@@ -109,6 +113,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
     /**
      * @param string $_key
      * @param string $_value
+     * @throws Tinebase_Exception_NotImplemented
      */
     protected function _setValue($_key, $_value)
     {
@@ -141,9 +146,9 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      *
      * @param resource $filePointer
      * @param array $dataArray
-     * @param char $delimiter
-     * @param char $enclosure
-     * @param char $escapeEnclosure
+     * @param string $delimiter
+     * @param string $enclosure
+     * @param string $escapeEnclosure
      */
     public static function fputcsv($filePointer, $dataArray, $delimiter = ',', $enclosure = '"', $escapeEnclosure = '"')
     {
@@ -169,6 +174,8 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
 
     /**
      * output result
+     * @param resource $_outputStream
+     * @throws Tinebase_Exception_Backend
      */
     public function write($_outputStream = STDOUT)
     {

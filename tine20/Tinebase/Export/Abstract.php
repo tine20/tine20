@@ -66,7 +66,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      *
      * @var Zend_Config_Xml
      */
-    protected $_config = array();
+    protected $_config = null;
 
     /**
      * @var string application name of this export class
@@ -86,6 +86,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * @var Tinebase_Model_Filter_FilterGroup
      */
     protected $_filter = null;
+
+    /**
+     * export definition
+     *
+     * @var Tinebase_Model_ImportExportDefinition
+     */
+    protected $_definition = null;
 
     /**
      * sort records by this field (array keys: sort / dir / ...)
@@ -257,10 +264,18 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * @throws Tinebase_Exception_NotFound
      */
     public function __construct(
-        Tinebase_Model_Filter_FilterGroup $_filter,
+        Tinebase_Model_Filter_FilterGroup $_filter = null,
         Tinebase_Controller_Record_Interface $_controller = null,
         $_additionalOptions = array()
     ) {
+        if (null === $_filter) {
+            if (!isset($_additionalOptions['definitionId']) && !isset($_additionalOptions['definitionFilename'])) {
+                throw new Tinebase_Exception_InvalidArgument('no filter provided and no definitionId or name given');
+            }
+            $this->_config = $this->_getExportConfig($_additionalOptions);
+            $_filter = $this->_definition->getFilter();
+        }
+
         $this->_filter = $_filter;
         if (!$this->_modelName) {
             $this->_modelName = $this->_filter->getModelName();
@@ -274,7 +289,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-        $this->_config = $this->_getExportConfig($_additionalOptions);
+        if (null === $this->_config) {
+            $this->_config = $this->_getExportConfig($_additionalOptions);
+        }
         if (null !== $this->_config->header) {
             $this->_writeGenericHeader = (bool)$this->_config->header;
         }
@@ -476,6 +493,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $definition = $definitions->getFirstRecord();
         }
 
+        $this->_definition = $definition;
         $config = Tinebase_ImportExportDefinition::getInstance()->
             getOptionsAsZendConfigXml($definition, $_additionalOptions);
 
@@ -1457,5 +1475,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     public function registerTwigExtension(Twig_ExtensionInterface $twigExtension)
     {
         $this->_twigExtensions[] = $twigExtension;
+    }
+
+    /**
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    public function getFilter()
+    {
+        return $this->_filter;
     }
 }
