@@ -406,10 +406,15 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $_bodyContentTypes = array();
         foreach ($_parts as $part) {
             if (is_array($part) && (isset($part['contentType']) || array_key_exists('contentType', $part))) {
-                if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)) && ! $this->_partIsAttachment($part)) {
+                if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN))
+                    && ! $this->_partIsAttachment($part))
+                {
                     $_bodyContentTypes[] = $part['contentType'];
-                } else if (($part['contentType'] == self::CONTENT_TYPE_MULTIPART || $part['contentType'] == self::CONTENT_TYPE_MULTIPART_RELATED) 
-                    && (isset($part['parts']) || array_key_exists('parts', $part)))
+                } else if (in_array($part['contentType'], [
+                        self::CONTENT_TYPE_MULTIPART,
+                        self::CONTENT_TYPE_MULTIPART_RELATED,
+                        self::CONTENT_TYPE_MULTIPART_MIXED
+                    ]) && (isset($part['parts']) || array_key_exists('parts', $part)))
                 {
                     $_bodyContentTypes = array_merge($_bodyContentTypes, $this->_getBodyContentTypes($part['parts']));
                 }
