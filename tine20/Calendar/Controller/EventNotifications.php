@@ -186,6 +186,8 @@
             }
         }
 
+        $organizerIsExternal = !$_event->resolveOrganizer()->account_id;
+
         $organizer = new Calendar_Model_Attender(array(
             'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'    => $_event->resolveOrganizer()
@@ -203,7 +205,7 @@
             case 'created':
             case 'deleted':
                 // skip invitations/cancle if event came from external
-                if ($_event->resolveOrganizer()->account_id) {
+                if (! $organizerIsExternal) {
                     foreach ($_event->attendee as $attender) {
                         $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                     }
@@ -214,13 +216,15 @@
                 break;
             case 'changed':
                 $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
-                
-                foreach ($attendeeMigration['toCreate'] as $attender) {
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
-                }
-                
-                foreach ($attendeeMigration['toDelete'] as $attender) {
-                    $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+
+                if (! $organizerIsExternal) {
+                    foreach ($attendeeMigration['toCreate'] as $attender) {
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                    }
+
+                    foreach ($attendeeMigration['toDelete'] as $attender) {
+                        $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                    }
                 }
                 
                 // NOTE: toUpdate are all attendee to be notified
@@ -242,8 +246,20 @@
                     }
                     
                     // send notifications
-                    foreach ($attendeeMigration['toUpdate'] as $attender) {
-                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
+                    if (! $organizerIsExternal) {
+                        foreach ($attendeeMigration['toUpdate'] as $attender) {
+                            $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
+                        }
+                    }
+
+                    if ($organizerIsExternal || !$organizerIsAttender) {
+                        $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', $notificationLevel, $updates);
+                    }
+
+                    if ($organizerIsExternal) {
+                        // NOTE: a reply to an external reschedule is a reschedule for us, but a status update only for external!
+                        $updatesForExternalOrganizer = array('attendee' => array('toUpdate' => $_event->attendee));
+                        $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updatesForExternalOrganizer);
                     }
 
                     // send notification to organizer if she's not attendee
