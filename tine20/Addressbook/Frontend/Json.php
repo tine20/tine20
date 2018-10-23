@@ -121,10 +121,15 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $lists = $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(), 'Addressbook_Model_ListFilter');
         if (!$dont_add) {
             foreach ($lists["results"] as $list) {
-                array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
+                if (! empty($list["emails"])) {
+                    array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
+                }
             }
          }
-         return array("results" => $results, "totalcount" => $lists["totalcount"]+$contacts["totalcount"]);
+         return array(
+            "results" => $results,
+            "totalcount" => $lists["totalcount"]+$contacts["totalcount"]
+        );
     }
 
     /**
@@ -302,10 +307,10 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_save($recordData, Addressbook_Controller_Contact::getInstance(), 'Contact', 'id', array($duplicateCheck));
     }
-    
+
     /**
      * import contacts
-     * 
+     *
      * @param string $tempFileId to import
      * @param string $definitionId
      * @param array $importOptions
@@ -316,7 +321,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
     }
-    
+
     /**
     * get contact information from string by parsing it using predefined rules
     *

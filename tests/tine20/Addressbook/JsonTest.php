@@ -2222,4 +2222,31 @@ Steuernummer 33/111/32212";
 
         $this->assertTrue($result['totalcount'] > 0, 'Did not find list User with path filter');
     }
+
+    /**
+     * test Addressbook.searchEmailAddresss and check for "emails" property
+     *
+     * {"jsonrpc":"2.0","method":"Addressbook.searchEmailAddresss","params":{"filter":[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"query","operator":"contains","value":""},{"field":"email_query","operator":"contains","value":"@"}]},{"field":"path","operator":"contains","value":""}]}],"paging":{"sort":"name","dir":"ASC","start":0,"limit":50}},"id":4}
+     */
+    public function testSearchEmailAddresss()
+    {
+        Addressbook_Controller_List::destroyInstance();
+        $result = $this->_uit->searchEmailAddresss([
+            ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "query", "operator" => "contains", "value" => ""],
+                ["field" => "email_query", "operator" => "contains", "value" => "@"]
+            ]], ["field" => "path", "operator" => "contains", "value" => ""]]]
+        ], ["sort" => "name", "dir" => "ASC", "start" => 0, "limit" => 50]);
+
+        static::assertGreaterThan(0, $result['totalcount'], 'no results found');
+        static::assertTrue(isset($result['results'][count($result['results'])-1]['emails']),
+            'last entry should be a list that has emails: ' . print_r($result['results'][count($result['results'])-1],
+                true));
+        foreach ($result['results'] as $entry) {
+            // only lists have 'emails' key
+            if (isset($entry['emails']) && empty($entry['emails'])) {
+                self::fail('empty lists should not be returned - list: ' . print_r($entry, true));
+            }
+        }
+    }
 }
