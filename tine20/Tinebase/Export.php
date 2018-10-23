@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        when more formats switched to Tinebase_Export_Abstract, change creation of object (new $exportClass($_additionalOptions))
@@ -38,7 +38,7 @@ class Tinebase_Export
     /**
      * get export object for given filter and format
      * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Filter_FilterGroup|null $_filter
      * @param string|array $_options format (as string) or export definition id (array)
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional)
