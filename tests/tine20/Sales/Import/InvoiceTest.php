@@ -30,6 +30,7 @@ class Sales_Import_InvoiceTest extends TestCase
             $this->markTestSkipped('Yaml are not install');
         }
         self::clear('Sales', 'Invoice');
+        $now = Tinebase_DateTime::now();
         $this->_importContainer = $this->_getTestContainer('Sales', 'Sales_Model_Invoice');
         $importer = new Tinebase_Setup_DemoData_ImportSet('Sales', [
             'container_id' => $this->_importContainer->getId(),
@@ -38,7 +39,7 @@ class Sales_Import_InvoiceTest extends TestCase
 
         $importer->importDemodata();
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Sales_Model_Invoice', [
-            ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
+            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = Sales_Controller_Invoice::getInstance()->search($filter);
         self::assertEquals(1, count($result));

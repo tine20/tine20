@@ -28,12 +28,13 @@ class Sales_Import_CostCenter extends TestCase
     public function testImportDemoData()
     {
         self::clear('Sales', 'CostCenter');
+        $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_CostCenter', [
             'definition' => 'sales_import_costcenter_csv',
         ]);
         $importer->importDemodata();
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Sales_Model_CostCenter', [
-            ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
+        $filter = Sales_Model_CostCenterFilter::getFilterForModel('Sales_Model_CostCenter', [
+            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = Sales_Controller_CostCenter::getInstance()->search($filter);
         self::assertEquals(4, count($result));
