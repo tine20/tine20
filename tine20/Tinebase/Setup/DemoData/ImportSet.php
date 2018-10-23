@@ -49,7 +49,7 @@ class Tinebase_Setup_DemoData_ImportSet
      */
     public function importDemodata()
     {
-        if (! isset($this->_options['files']) || empty($this->_options['files'])) {
+        if (!isset($this->_options['files']) || empty($this->_options['files'])) {
             throw new Tinebase_Exception_InvalidArgument('no yml files given.');
         }
 
@@ -83,12 +83,16 @@ class Tinebase_Setup_DemoData_ImportSet
     protected function _importDemoDataSet($setData)
     {
         if (isset($setData['sets'])) {
-            throw new Tinebase_Exception_NotImplemented('sub-sets are not implemented yet.');
-
+            foreach ($setData['sets'] as $set) {
+                list($app, $yml) = explode('/', $set);
+                $importer = new Tinebase_Setup_DemoData_ImportSet($app, [
+                    'files' => [$yml]]);
+                $importer->importDemodata();
+            }
         } else if (isset($setData['files'])) {
             foreach ($setData['files'] as $file) {
                 // @todo handle missing parts
-                list($app,$model,$definition,$file) = explode('/', $file);
+                list($app, $model, $definition, $file) = explode('/', $file);
                 $modelName = $app . '_Model_' . $model;
                 $importer = new Tinebase_Setup_DemoData_Import($modelName, [
                     'definition' => $definition,
