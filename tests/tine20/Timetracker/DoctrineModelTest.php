@@ -41,9 +41,4 @@ class Timetracker_DoctrineModelTest extends TestCase
         self::assertContains('ALTER TABLE `tine20_timetracker_timesheet` ADD CONSTRAINT', $sql[2], print_r($sql, true));
         self::assertContains('FOREIGN KEY (`timeaccount_id`) REFERENCES `tine20_timetracker_timeaccount` (`id`)', $sql[2], print_r($sql, true));
     }
-
-    public function testTimesheetStartDateFields()
-    {
-        // TODO implement
-    }
 }

@@ -114,10 +114,12 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'shy'                   => true
             ),
             'is_billable_combined'  => array(
-                'label'                 => 'Billable', // _('Billable')
+                // TODO add update script for favorites?
+                // TODO remove Billable filters?
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'type'                  => 'virtual',
                 'config'                => [
+                    'label'                 => 'Billable (Combined)', // _('Billable (Combined)')
                     'type'                  => 'boolean',
                 ],
                 'filterDefinition'      => [
@@ -161,10 +163,11 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'copyOmit'              => true,
             ),
             'is_cleared_combined'   => array(
-                'label'                 => 'Cleared', // _('Cleared')
-                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                // TODO add update script for favorites?
+                // TODO remove Cleared filter?
                 'type'                  => 'virtual',
                 'config'                => [
+                    'label'                 => 'Cleared (Combined)', // _('Cleared (Combined)')
                     'type'                  => 'boolean',
                 ],
                 'filterDefinition'      => array(

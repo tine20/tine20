@@ -105,8 +105,8 @@ class Tinebase_ModelConfigurationTest extends TestCase
      */
     public function testRelationCopyOmit()
     {
-        $customer = new Timetracker_Model_Timeaccount([], true);
-        $cObj = $customer->getConfiguration();
+        $timeaccount = new Timetracker_Model_Timeaccount([], true);
+        $cObj = $timeaccount->getConfiguration();
         $fields = $cObj->getFields();
         foreach ($fields as $name => $fieldconfig) {
             if ($name === 'relations') {
@@ -115,8 +115,8 @@ class Tinebase_ModelConfigurationTest extends TestCase
             }
         }
 
-        $customer = new Tasks_Model_Task([], true);
-        $cObj = $customer->getConfiguration();
+        $task = new Tasks_Model_Task([], true);
+        $cObj = $task->getConfiguration();
         $fields = $cObj->getFields();
         foreach ($fields as $name => $fieldconfig) {
             if ($name === 'relations') {
@@ -124,5 +124,21 @@ class Tinebase_ModelConfigurationTest extends TestCase
                     'Tasks_Model_Task relations should not be omitted on copy: ' . print_r($fieldconfig, true));
             }
         }
+    }
+
+    /**
+     * assert virtual field filters in model config
+     */
+    public function testVirtualFieldFilter()
+    {
+        $timesheet = new Timetracker_Model_Timesheet([], true);
+        $cObj = $timesheet->getConfiguration();
+
+        $filterModel = $cObj->getFilterModel();
+        self::assertTrue(isset($filterModel['_filterModel']['is_cleared_combined']));
+        $fields = $cObj->getFields();
+        self::assertTrue(isset($fields['is_cleared_combined']));
+        self::assertTrue(isset($fields['is_cleared_combined']['config']['label']));
+        self::assertTrue(isset($fields['is_cleared_combined']['filterDefinition']['options']));
     }
 }
