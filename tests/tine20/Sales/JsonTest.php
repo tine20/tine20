@@ -367,8 +367,10 @@ class Sales_JsonTest extends TestCase
             . print_r($firstcustomer, true));
         $this->assertTrue(is_array($firstcustomer['cpextern_id']), 'cpextern_id not resolved: '
             . print_r($firstcustomer, true));
-        $this->assertTrue(is_array($firstcustomer['cpextern_id']['created_by']), 'cpextern_id creator not resolved: '
-            . print_r($firstcustomer, true));
+        $this->assertTrue(
+            $firstcustomer['cpextern_id']['created_by'] === null
+                || is_array($firstcustomer['cpextern_id']['created_by']),
+            'cpextern_id creator not resolved: ' . print_r($firstcustomer, true));
     }
     
     /**
