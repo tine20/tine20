@@ -2292,6 +2292,12 @@ Steuernummer 33/111/32212";
         static::assertTrue(isset($result['results'][count($result['results'])-1]['emails']),
             'last entry should be a list that has emails: ' . print_r($result['results'][count($result['results'])-1],
                 true));
+        foreach ($result['results'] as $entry) {
+            // only lists have 'emails' key
+            if (isset($entry['emails']) && empty($entry['emails'])) {
+                self::fail('empty lists should not be returned - list: ' . print_r($entry, true));
+            }
+        }
     }
 
     /**
