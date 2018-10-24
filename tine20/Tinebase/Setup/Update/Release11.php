@@ -738,7 +738,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.36
+     * update to 11.37
      *
      * update temp file cleanup task
     */
@@ -755,5 +755,17 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Tinebase', '11.37');
+    }
+
+    /**
+     * update to 11.38
+     *
+     * update filterSyncToken table
+     */
+    public function update_37()
+    {
+        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        $this->setApplicationVersion('Tinebase', '11.38');
     }
 }

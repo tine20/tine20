@@ -41,44 +41,19 @@ class Tinebase_FilterSyncToken_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
-     * @param $_filterHash
      * @param $_filterSyncToken
      * @return bool
      * @throws Zend_Db_Statement_Exception
      */
-    public function hasFilterSyncToken($_filterHash, $_filterSyncToken)
+    public function hasFilterSyncToken($_filterSyncToken)
     {
         $result = $this->_db->query('select count(*) from ' .
             $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName)
-            . $this->_db->quoteInto(' where ' . $this->_db->quoteIdentifier('filterHash') . ' = ?', $_filterHash) .
-            $this->_db->quoteInto(' AND ' . $this->_db->quoteIdentifier('filterSyncToken') . ' = ?', $_filterSyncToken))
+            . $this->_db->quoteInto(' where ' . $this->_db->quoteIdentifier('filterSyncToken') . ' = ?',
+                $_filterSyncToken))
             ->fetchColumn();
 
         return (bool)$result;
-    }
-
-    /**
-     * @param $_filterHash
-     * @param $_filterSyncToken
-     * @return Tinebase_Model_FilterSyncToken
-     * @throws Tinebase_Exception_NotFound
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function getFilterSyncToken($_filterHash, $_filterSyncToken)
-    {
-        $result = $this->_db->query('select * from ' .
-            $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName)
-            . $this->_db->quoteInto(' where ' . $this->_db->quoteIdentifier('filterHash') . ' = ?', $_filterHash) .
-            $this->_db->quoteInto(' AND ' . $this->_db->quoteIdentifier('filterSyncToken') . ' = ?', $_filterSyncToken))
-            ->fetchAll();
-
-        if (empty($result)) {
-            throw new Tinebase_Exception_NotFound('can\'t find filterHash ' . $_filterHash .' and filterSyncToken '
-                . $_filterSyncToken);
-        }
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->_rawDataToRecord($result[0]);
     }
 
     /**

@@ -108,7 +108,7 @@ class Tinebase_FilterSyncTokenTest extends TestCase
 
 
         // check migration with one added record
-        $migration = $syncToken->getMigration($contactFilter, $emptySyncToken, $oneContactSyncToken);
+        $migration = $syncToken->getMigration($emptySyncToken, $oneContactSyncToken);
         static::assertTrue(count($migration) === 3 && isset($migration['added'])
             && isset($migration['updated']) && isset($migration['deleted']));
         static::assertSame($firstContact->getId(), $migration['added'][0]);
@@ -137,14 +137,14 @@ class Tinebase_FilterSyncTokenTest extends TestCase
 
 
         // check migration with three added record
-        $migration = $syncToken->getMigration($contactFilter, $oneContactSyncToken, $fourContactSyncToken);
+        $migration = $syncToken->getMigration($oneContactSyncToken, $fourContactSyncToken);
         static::assertSame(3, count($migration['added']));
         static::assertTrue(in_array($secondContact->getId(), $migration['added']));
         static::assertTrue(in_array($thirdContact->getId(), $migration['added']));
         static::assertTrue(in_array($forthContact->getId(), $migration['added']));
 
         // check migration with four added record
-        $migration = $syncToken->getMigration($contactFilter, $emptySyncToken, $fourContactSyncToken);
+        $migration = $syncToken->getMigration($emptySyncToken, $fourContactSyncToken);
         static::assertSame(4, count($migration['added']));
 
 
@@ -171,7 +171,7 @@ class Tinebase_FilterSyncTokenTest extends TestCase
 
 
         // check migration with 2 added record, 2 updated and 2 deleted
-        $migration = $syncToken->getMigration($contactFilter, $fourContactSyncToken, $sixContactSyncToken);
+        $migration = $syncToken->getMigration($fourContactSyncToken, $sixContactSyncToken);
         static::assertSame(2, count($migration['added']));
         static::assertTrue(in_array($fifthContact->getId(), $migration['added']));
         static::assertTrue(in_array($sixthContact->getId(), $migration['added']));
