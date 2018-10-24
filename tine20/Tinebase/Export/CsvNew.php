@@ -36,6 +36,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
     protected $_delimiter = ';';
     protected $_enclosure = '"';
     protected $_escape_char = '\\';
+    protected $_charset = 'utf-8';
 
     /**
      * the constructor
@@ -62,6 +63,9 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
         }
         if (null !== $this->_config->escape_char) {
             $this->_escape_char = $this->_config->escape_char;
+        }
+        if (null !== $this->_config->charset) {
+            $this->_charset = $this->_config->charset;
         }
 
         $this->_fields = [];
@@ -136,7 +140,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
     protected function _endRow()
     {
         if (false === self::fputcsv($this->_filehandle, $this->_currentRow, $this->_delimiter, $this->_enclosure,
-                $this->_escape_char)) {
+                $this->_escape_char, $this->_charset)) {
             throw new Tinebase_Exception_Backend('could not write current row to csv stream');
         }
     }
@@ -146,15 +150,18 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      *
      * @param resource $filePointer
      * @param array $dataArray
-     * @param string $delimiter
-     * @param string $enclosure
-     * @param string $escapeEnclosure
+     * @param char $delimiter
+     * @param char $enclosure
+     * @param char $escapeEnclosure
      */
-    public static function fputcsv($filePointer, $dataArray, $delimiter = ',', $enclosure = '"', $escapeEnclosure = '"')
+    public static function fputcsv($filePointer, $dataArray, $delimiter = ',', $enclosure = '"', $escapeEnclosure = '"', $charset = 'utf-8')
     {
         $string = "";
         $writeDelimiter = false;
         foreach($dataArray as $dataElement) {
+            if ($charset != 'utf8') {
+                $dataElement = iconv('utf-8', $charset, $dataElement);
+            }
             if ($writeDelimiter) {
                 $string .= $delimiter;
             }
@@ -162,7 +169,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
                 $escapedDataElement = (!is_array($dataElement)) ? preg_replace("/$enclosure/", $escapeEnclosure . $enclosure, $dataElement) : '';
                 $string .= $enclosure . $escapedDataElement . $enclosure;
             } else {
-                // world is so buggy (e.g. DF Devices)
+                // e.g. text/tab-separated-values (https://www.iana.org/assignments/media-types/text/tab-separated-values) have no enclosure
                 $string .= $dataElement;
             }
             $writeDelimiter = true;
