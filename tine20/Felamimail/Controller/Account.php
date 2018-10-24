@@ -72,7 +72,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_backend = new Felamimail_Backend_Account();
         
         $this->setImapConfig();
-        $this->_useSystemAccount = ((isset($this->_imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $this->_imapConfig)) && $this->_imapConfig['useSystemAccount']);
+        $this->_useSystemAccount = isset($this->_imapConfig['useSystemAccount']) && $this->_imapConfig['useSystemAccount'];
     }
     
     /**
