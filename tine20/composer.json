@@ -11,6 +11,9 @@
     }, {
         "type": "git",
         "url": "https://github.com/tine20/zendframework1.git"
+    }, {
+        "type": "git",
+        "url": "https://github.com/tine20/dbal.git"
     },{
         "type": "git",
         "url": "https://github.com/tine20/OpenDocument.git"
@@ -51,6 +54,7 @@
         "metaways/timezoneconvert": "1.*",
         "zendframework/zend-http": "2.5.*",
         "doctrine/orm": "2.5.*",
+        "doctrine/dbal": "v2.5.13pl4 as v2.5.13",
         "twig/twig": "~1.0",
         "phpoffice/phpspreadsheet": "dev-master",
         "nikic/fast-route": "^1.2",
