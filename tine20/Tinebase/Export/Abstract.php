@@ -285,7 +285,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         $this->_controller = ($_controller !== null) ? $_controller :
-            Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+            Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName, isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
