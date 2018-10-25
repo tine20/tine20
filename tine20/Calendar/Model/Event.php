@@ -755,7 +755,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     /**
      * sets and returns the addressbook entry of the organizer
      * 
-     * @return Addressbook_Model_Contact
+     * @return Addressbook_Model_Contact|null
      */
     public function resolveOrganizer()
     {
@@ -766,7 +766,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             }
         }
         
-        return $this->organizer;
+        return is_object($this->organizer) ? $this->organizer : null;
     }
     
     /**
