@@ -89,7 +89,9 @@ class Tinebase_Setup_DemoData_ImportSet
                     'files' => [$yml]]);
                 $importer->importDemodata();
             }
-        } else if (isset($setData['files'])) {
+        }
+        
+        if (isset($setData['files'])) {
             foreach ($setData['files'] as $file) {
                 // @todo handle missing parts
                 list($app, $model, $definition, $file) = explode('/', $file);
