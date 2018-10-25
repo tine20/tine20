@@ -1117,10 +1117,6 @@
           "path": "css/ux/grid/"
         },
         {
-          "text": "PagingToolbar.css",
-          "path": "css/ux/grid/"
-        },
-        {
           "text": "GridDropZone.css",
           "path": "css/ux/grid/"
         },

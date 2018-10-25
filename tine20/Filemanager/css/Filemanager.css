@@ -72,6 +72,7 @@ table.x-btn.x-type-data-safe {
 .x-tinebase-typefolder .x-grid3-cell-inner {
     background-image:url(../../images/icon-set/icon_folder.svg);
     background-repeat: no-repeat;
+    background-size: 16px;
     padding-left: 19px;
 }
 
