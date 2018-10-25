@@ -1628,7 +1628,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 }
             }
             if (count($_grants) == 0 || ! $adminGrant) {
-                throw new Tinebase_Exception_UnexpectedValue('You are not allowed to remove all (admin) grants for this container.');
+                // _('You are not allowed to remove all (admin) grants for this container.')
+                throw new Tinebase_Exception_SystemGeneric('You are not allowed to remove all (admin) grants for this container.');
             }
         }
         
