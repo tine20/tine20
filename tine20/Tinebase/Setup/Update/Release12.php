@@ -117,4 +117,16 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_36();
         $this->setApplicationVersion('Tinebase', '12.10');
     }
+
+    /**
+     * update to 12.11
+     *
+     * update filterSyncToken table
+     */
+    public function update_10()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_37();
+        $this->setApplicationVersion('Tinebase', '12.11');
+    }
 }

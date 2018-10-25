@@ -30,6 +30,7 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
 
     /**
      * Tinebase_Model_FilterSyncToken constructor.
+     * @throws Tinebase_Exception_Backend_Database
      */
     protected function __construct()
     {
@@ -38,6 +39,7 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
 
     /**
      * @return self
+     * @throws Tinebase_Exception_Backend_Database
      */
     public static function getInstance()
     {
@@ -51,6 +53,7 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
 
     /**
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Controller_Record_Abstract|null $_controller
      * @return string
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
@@ -58,7 +61,8 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
      * @throws Tinebase_Exception_Record_NotAllowed
      * @throws Zend_Db_Statement_Exception
      */
-    public function getFilterSyncToken(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function getFilterSyncToken(Tinebase_Model_Filter_FilterGroup $_filter,
+        Tinebase_Controller_Record_Abstract $_controller = null)
     {
         // make sure we have a last_modified_time property
         /** @var Tinebase_Record_Interface $model */
@@ -76,17 +80,21 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
         }
 
         // get id => last_modified_time map
-        /** @var Tinebase_Controller_Record_Abstract $controller */
-        $controller = Tinebase_Core::getApplicationInstance($model);
-        $data = $controller->search($_filter, null, false,
+        if (null === $_controller) {
+            $_controller = Tinebase_Core::getApplicationInstance($model);
+        }
+        $data = $_controller->search($_filter, null, false,
             [Tinebase_Backend_Sql_Abstract::IDCOL, 'last_modified_time']);
 
 
-        $filterSyncToken = Tinebase_Helper::arrayHash($data, true);
         // attention, the search above may alter the filter! so we need to hash it after we executed it
         $filterHash = $_filter->hash();
+        $data[] = $filterHash;
+        $filterSyncToken = Tinebase_Helper::arrayHash($data, true);
+        array_pop($data);
 
-        if (!$this->_backend->hasFilterSyncToken($filterHash, $filterSyncToken)) {
+
+        if (!$this->_backend->hasFilterSyncToken($filterSyncToken)) {
             $this->_backend->create(new Tinebase_Model_FilterSyncToken([
                 'filterHash' => $filterHash,
                 'filterSyncToken' => $filterSyncToken,
@@ -98,30 +106,19 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
     }
 
     /**
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param $_fromToken
      * @param $_toToken
      * @return array|bool
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Zend_Db_Statement_Exception
      */
-    public function getMigration(Tinebase_Model_Filter_FilterGroup $_filter, $_fromToken, $_toToken)
+    public function getMigration($_fromToken, $_toToken)
     {
-        // got to execute the filter once to make sure it gets altered by the controller
-        // (in case the controller does that) TODO improve this?
-        $controller = Tinebase_Core::getApplicationInstance($_filter->getModelName());
-        $controller->search($_filter, new Tinebase_Model_Pagination(['start' => 0, 'limit' => 1]), false, true);
-
-        $filterHash = $_filter->hash();
         $result = [
             'updated'   => [],
         ];
 
         try {
-            $fromData = $this->_backend->getFilterSyncToken($filterHash, $_fromToken);
-            $toData = $this->_backend->getFilterSyncToken($filterHash, $_toToken);
+            $fromData = $this->_backend->getByProperty($_fromToken, 'filterSyncToken');
+            $toData = $this->_backend->getByProperty($_toToken, 'filterSyncToken');
         } catch (Tinebase_Exception_NotFound $tenf) {
             return false;
         }
