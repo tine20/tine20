@@ -101,11 +101,6 @@
             <type>int(11)</type>
         </column>
         <column>
-            <identifier>Einsatzort</identifier>
-            <header>Einsatzort</header>
-            <type>string</type>
-        </column>
-        <column>
             <identifier>invoice_id</identifier>
             <header>invoice_id</header>
             <type>varchar(255)</type>
