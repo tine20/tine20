@@ -80,7 +80,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
         // mysql supports full text for InnoDB as of 5.6.4 for everybody else: remove full text index
         if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') ) {
-            $this->__removeFullTextIndex($table);
+            $this->_removeFullTextIndex($table);
         }
 
         $metadata->setPrimaryTable($table);
