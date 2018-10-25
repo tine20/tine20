@@ -85,7 +85,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * fetch one contact of a user identified by his user_id
      *
-     * @param   int $_userId
+     * @param   string $_userId
      * @return  Addressbook_Model_Contact 
      * @throws  Addressbook_Exception_NotFound if contact not found
      */

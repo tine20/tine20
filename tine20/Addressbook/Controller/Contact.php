@@ -57,6 +57,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             array('n_given', 'n_family', 'org_name'),
             array('email'),
         ));
+
         
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
@@ -110,7 +111,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $groups = $listController->getMemberships($_id);
             $contact->groups = $listController->getMultiple($groups);
         }
-        
+
         Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
 
         return $contact;
@@ -159,8 +160,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * fetch one contact identified by $_userId
      *
-     * @param   string $_userId
-     * @param   boolean $_ignoreACL don't check acl grants
+     * @param string|Tinebase_Model_User $_userId
+     * @param boolean $_ignoreACL don't check acl grants
      * @return Addressbook_Model_Contact
      * @throws Addressbook_Exception_AccessDenied
      * @throws Addressbook_Exception_NotFound
@@ -174,7 +175,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_InvalidArgument('Empty user id');
         }
 
-        $contact = $this->_backend->getByUserId($_userId);
+        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
+        $contact = $this->_backend->getByUserId($userId);
         
         if ($_ignoreACL === FALSE) {
             if (empty($contact->container_id)) {

@@ -127,6 +127,8 @@
      * @param String                     $_action
      * @param Tinebase_Record_Interface  $_oldEvent
      * @param Array                      $_additionalData
+     *
+     * @refactor split up this function, it's way too long
      */
     public function doSendNotifications(Calendar_Model_Event $_event, $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
@@ -178,19 +180,25 @@
             . " Notification action: " . $_action);
 
 
-        // Check if organizer is attender
+        $organizerContact = $_event->resolveOrganizer();
+        if (! $organizerContact) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Organizer missing - using creator as organizer for notification purposes.');
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_event->created_by);
+        }
+
         $organizerIsAttender = false;
-        foreach($_event->attendee as $attender) {
-            if ($attender->getUserId()  == $_event->resolveOrganizer()->id) {
+        foreach ($_event->attendee as $attender) {
+            if ($attender->getUserId() == $_event->resolveOrganizer()->id) {
                 $organizerIsAttender = true;
             }
         }
 
-        $organizerIsExternal = !$_event->resolveOrganizer()->account_id;
+        $organizerIsExternal = ! $organizerContact->account_id;
 
         $organizer = new Calendar_Model_Attender(array(
             'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'    => $_event->resolveOrganizer()
+            'user_id'    => $organizerContact
         ));
 
         switch ($_action) {
