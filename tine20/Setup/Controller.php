@@ -1894,10 +1894,8 @@ class Setup_Controller
             if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
 
-            $createdTables = array();
-
             // do modelconfig + doctrine
-            $createdTables = array_merge($createdTables, $this->_createModelConfigSchema($_xml->name));
+            $createdTables = $this->_createModelConfigSchema($_xml->name);
 
             // traditional xml declaration
             if (isset($_xml->tables)) {

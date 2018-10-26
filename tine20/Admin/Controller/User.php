@@ -237,7 +237,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $user = $this->_userBackend->updateUser($_user);
 
             // make sure primary groups is in the list of group memberships
-            $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
+            $currentGroups = ! isset($_user->groups)
+                ? Admin_Controller_Group::getInstance()->getGroupMemberships($user->getId())
+                : (array) $_user->groups;
+            $groups = array_unique(array_merge(array($user->accountPrimaryGroup), $currentGroups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
 
             // update account status if changed to enabled/disabled
@@ -276,7 +279,24 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $this->setAccountPassword($_user, $_password, $_passwordRepeat, FALSE);
         }
 
+        $this->_updateCurrentUser($user);
+
         return $user;
+    }
+
+    /**
+     * update current user in session if changed
+     *
+     * @param $updatedUser
+     */
+    protected function _updateCurrentUser($updatedUser)
+    {
+        $currentUser = Tinebase_Core::getUser();
+        if ($currentUser->getId() === $updatedUser->getId()) {
+            // update current user in session!
+            Tinebase_Core::set(Tinebase_Core::USER, $updatedUser);
+            Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
+        }
     }
     
     /**

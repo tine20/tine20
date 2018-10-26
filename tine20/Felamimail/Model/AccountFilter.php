@@ -32,5 +32,6 @@ class Felamimail_Model_AccountFilter extends Tinebase_Model_Filter_FilterGroup
         'id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
         'user_id'       => array('filter' => 'Tinebase_Model_Filter_Id'),
         'name'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'type'          => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

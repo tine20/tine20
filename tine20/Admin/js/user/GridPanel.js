@@ -113,7 +113,22 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
     },
-    
+
+    /**
+     * on update after edit
+     *
+     * @param {String|Tine.Tinebase.data.Record} record
+     */
+    onUpdateRecord: function (record) {
+        Tine.Admin.customfield.GridPanel.superclass.onUpdateRecord.apply(this, arguments);
+
+        // reload app if current user changed
+        const updatedRecord = Ext.util.JSON.decode(record);
+        if (Tine.Tinebase.registry.get('currentAccount').accountId === updatedRecord.accountId) {
+            Tine.Tinebase.common.confirmApplicationRestart();
+        }
+    },
+
     /**
      * add custom items to action toolbar
      * 

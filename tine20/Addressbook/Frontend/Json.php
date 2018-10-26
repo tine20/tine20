@@ -151,7 +151,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'Addressbook_Model_ListFilter');
             if (!$dont_add) {
                 foreach ($lists["results"] as $list) {
-                    array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
+                    if (! empty($list["emails"])) {
+                        array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
+                    }
                 }
             }
         } finally {
@@ -340,7 +342,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_save($recordData, Addressbook_Controller_Contact::getInstance(), 'Contact', 'id', array($duplicateCheck));
     }
+    
 
+    
     /**
     * get contact information from string by parsing it using predefined rules
     *

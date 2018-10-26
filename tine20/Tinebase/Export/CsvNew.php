@@ -36,6 +36,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
     protected $_delimiter = ';';
     protected $_enclosure = '"';
     protected $_escape_char = '\\';
+    protected $_charset = 'utf-8';
 
     /**
      * the constructor
@@ -48,7 +49,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      * @throws Tinebase_Exception_NotFound
      */
     public function __construct(
-        Tinebase_Model_Filter_FilterGroup $_filter,
+        Tinebase_Model_Filter_FilterGroup $_filter = null,
         Tinebase_Controller_Record_Interface $_controller = null,
         $_additionalOptions = array()
     ) {
@@ -63,6 +64,9 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
         if (null !== $this->_config->escape_char) {
             $this->_escape_char = $this->_config->escape_char;
         }
+        if (null !== $this->_config->charset) {
+            $this->_charset = $this->_config->charset;
+        }
 
         $this->_fields = [];
         foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
@@ -71,17 +75,21 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
             }
         }
     }
+
     /**
      * generate export
      *
-     * @return string|boolean filename
+     * @param  resource|null $_fileHandle
+     * @throws Tinebase_Exception_Backend
      */
-    public function generate()
+    public function generate($_fileHandle = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
             ' Generating new csv export of ' . $this->_modelName);
 
-        if (!($this->_filehandle = fopen('php://memory', 'w'))) {
+        if (is_resource($_fileHandle)) {
+            $this->_filehandle = $_fileHandle;
+        } elseif (!($this->_filehandle = fopen('php://memory', 'w'))) {
             throw new Tinebase_Exception_Backend('could not create export memory stream');
         }
 
@@ -109,6 +117,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
     /**
      * @param string $_key
      * @param string $_value
+     * @throws Tinebase_Exception_NotImplemented
      */
     protected function _setValue($_key, $_value)
     {
@@ -130,14 +139,50 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
 
     protected function _endRow()
     {
-        if (false === fputcsv($this->_filehandle, $this->_currentRow, $this->_delimiter, $this->_enclosure,
-                $this->_escape_char)) {
+        if (false === self::fputcsv($this->_filehandle, $this->_currentRow, $this->_delimiter, $this->_enclosure,
+                $this->_escape_char, $this->_charset)) {
             throw new Tinebase_Exception_Backend('could not write current row to csv stream');
         }
     }
 
     /**
+     * The php build in fputcsv function is buggy, so we need an own one :-(
+     *
+     * @param resource $filePointer
+     * @param array $dataArray
+     * @param char $delimiter
+     * @param char $enclosure
+     * @param char $escapeEnclosure
+     */
+    public static function fputcsv($filePointer, $dataArray, $delimiter = ',', $enclosure = '"', $escapeEnclosure = '"', $charset = 'utf-8')
+    {
+        $string = "";
+        $writeDelimiter = false;
+        foreach($dataArray as $dataElement) {
+            if ($charset != 'utf8') {
+                $dataElement = iconv('utf-8', $charset, $dataElement);
+            }
+            if ($writeDelimiter) {
+                $string .= $delimiter;
+            }
+            if ($enclosure) {
+                $escapedDataElement = (!is_array($dataElement)) ? preg_replace("/$enclosure/", $escapeEnclosure . $enclosure, $dataElement) : '';
+                $string .= $enclosure . $escapedDataElement . $enclosure;
+            } else {
+                // e.g. text/tab-separated-values (https://www.iana.org/assignments/media-types/text/tab-separated-values) have no enclosure
+                $string .= $dataElement;
+            }
+            $writeDelimiter = true;
+        }
+        $string .= "\n";
+
+        fwrite($filePointer, $string);
+    }
+
+    /**
      * output result
+     * @param resource $_outputStream
+     * @throws Tinebase_Exception_Backend
      */
     public function write($_outputStream = STDOUT)
     {

@@ -269,4 +269,26 @@ class Addressbook_Export_DocTest extends TestCase
 
         static::assertContains($contactRelated->getTitle(), $plain);
     }
+
+    public function testFactoryNoFilter()
+    {
+        $export = Tinebase_Export::factory(null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()
+            ->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                'model' => Addressbook_Model_Contact::class,
+                'format' => 'docx',
+                'label' => 'Word details'
+            ]))->getFirstRecord()->getId()]);
+
+        static::assertInstanceOf(Addressbook_Export_Doc::class, $export);
+        static::assertSame($export->getFilter()->hash(), (new Addressbook_Model_ContactFilter())->hash());
+        $export->registerTwigExtension(
+            new Tinebase_Export_TwigExtensionCacheBust(Tinebase_Record_Abstract::generateUID()));
+
+        $doc = Tinebase_TempFile::getTempPath();
+        $export->generate();
+        $export->save($doc);
+
+        $plain = $this->getPlainTextFromDocx($doc);
+        static::assertContains('James McBlack', $plain);
+    }
 }

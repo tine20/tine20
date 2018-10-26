@@ -232,6 +232,10 @@ class Tinebase_FileSystem_Previews
             }
         }
 
+        // reduce deadlock risk. We fill the stat path cache outside the transaction in the hope that
+        // rmdir / mkdir will make updates on the tree structure versus the root directly, without reading first
+        $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
+        $fileSystem->isDir($basePath);
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         try {

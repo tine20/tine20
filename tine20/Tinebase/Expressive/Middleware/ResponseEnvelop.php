@@ -78,6 +78,16 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             $response = new Response($body = 'php://memory', 500);
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            $body = $response->getBody();
+            $body->rewind();
+            $headerStr = '';
+            foreach($response->getHeaders() as $name => $values) {
+                $headerStr .= "$name: {$values[0]}\n";
+            }
+
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " response:\n$headerStr\n".$body->getContents());
+        }
         return $response;
     }
 }
