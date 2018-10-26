@@ -90,7 +90,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
     /**
      * @param Tinebase_ModelConfiguration $modelConfig
-     * @param Doctrine\ORM\Mapping\ClassMetadata $metadata
+     * @param ClassMetadata $metadata
      */
     protected function _mapAssociations(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
     {
@@ -116,7 +116,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
     /**
      * @param Tinebase_ModelConfiguration $modelConfig
-     * @param Doctrine\ORM\Mapping\ClassMetadata $metadata
+     * @param ClassMetadata $metadata
      */
     protected function _mapFields(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
     {
