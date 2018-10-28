@@ -491,6 +491,11 @@ class Setup_Controller
         list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
 
+        // TODO remove this in release 13
+        $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
+        $release11->addIsSystemToCustomFieldConfig();
+        Setup_SchemaTool::updateAllSchema();
+
         for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
             $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
         }

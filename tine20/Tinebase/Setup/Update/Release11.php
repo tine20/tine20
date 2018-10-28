@@ -776,6 +776,13 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_38()
     {
+        $this->addIsSystemToCustomFieldConfig();
+
+        $this->setApplicationVersion('Tinebase', '11.39');
+    }
+
+    public function addIsSystemToCustomFieldConfig()
+    {
         if (!$this->_backend->columnExists('is_system', 'customfield_config')) {
             $this->_backend->addCol('customfield_config', new Setup_Backend_Schema_Field_Xml(
                 '<field>
@@ -789,8 +796,6 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         if ($this->getTableVersion('customfield_config') < 6) {
             $this->setTableVersion('customfield_config', 6);
         }
-
-        $this->setApplicationVersion('Tinebase', '11.39');
     }
 
     /**
