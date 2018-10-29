@@ -26,6 +26,11 @@
             <field>title</field>
         </column>
         <column>
+            <identifier>is_billable_combined</identifier>
+            <header>is_billable_combined</header>
+            <type>int(11)</type>
+        </column>
+        <column>
             <identifier>is_billable</identifier>
             <header>is_billable</header>
             <type>int(11)</type>
@@ -38,6 +43,11 @@
         <column>
             <identifier>is_cleared</identifier>
             <header>is_cleared</header>
+            <type>int(11)</type>
+        </column>
+        <column>
+            <identifier>is_cleared_combined</identifier>
+            <header>is_cleared_combined</header>
             <type>int(11)</type>
         </column>
         <column>
