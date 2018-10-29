@@ -19,7 +19,6 @@
  * @property    string  $name
  * @property    string  $status
  * @property    string  $version
- * @property    array   $tables
  * @property    string  $order
  *
  * TODO remove this state property in Release12 and obviously don't use it anymore
@@ -106,15 +105,6 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
             ),
-
-/*
-            'tables'            => array(
-                'label'             => 'Tables', //_('Tables')
-                'type'              => 'virtual',
-                'queryFilter'       => TRUE,
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true)
-            ),
-*/
         )
     );
     

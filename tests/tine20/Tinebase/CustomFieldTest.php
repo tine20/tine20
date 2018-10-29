@@ -553,6 +553,8 @@ class Tinebase_CustomFieldTest extends TestCase
 
     public function testSystemCF()
     {
+        self::markTestSkipped('TODO activate system cfs for contacts again');
+
         $AdbApp = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $systemCF = new Tinebase_Model_CustomField_Config([
             'application_id'    => $AdbApp->getId(),

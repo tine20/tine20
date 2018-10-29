@@ -161,9 +161,4 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_38();
         $this->setApplicationVersion('Tinebase', '12.12');
     }
-
-    public function update_12()
-    {
-        $this->setApplicationVersion('Tinebase', '12.13');
-    }
 }

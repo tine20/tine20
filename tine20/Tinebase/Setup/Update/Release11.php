@@ -760,13 +760,11 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     /**
      * update to 11.38
      *
-     * update filterSyncToken table
+     * do nothing here
      */
     public function update_37()
     {
-        //$this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
-
-        //$this->setApplicationVersion('Tinebase', '11.38');
+        $this->setApplicationVersion('Tinebase', '11.38');
     }
 
     /**
@@ -789,7 +787,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                     <name>is_system</name>
                     <type>boolean</type>
                     <notnull>true</notnull>
-                    <default>true</default>
+                    <default>false</default>
                 </field>'));
         }
 
@@ -812,12 +810,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
     /**
      * update to 12.0
-     *
-     * @return void
      */
     public function update_40()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
-
     }
 }

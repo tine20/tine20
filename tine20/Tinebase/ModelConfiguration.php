@@ -992,7 +992,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 }
                 $this->_fields[$cfc->name] = $definition[Tinebase_Model_CustomField_Config::DEF_FIELD];
             }
-
         }
 
         if ($this->_hasCustomFields) {
