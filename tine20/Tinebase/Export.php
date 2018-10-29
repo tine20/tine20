@@ -44,6 +44,7 @@ class Tinebase_Export
      * @param array $_additionalOptions (optional)
      * @return Tinebase_Export_Abstract
      * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public static function factory($_filter, $_options, $_controller = NULL, $_additionalOptions = array()) 
     {
@@ -73,8 +74,10 @@ class Tinebase_Export
         if (preg_match('/pdf/i', $exportClass) && true === static::$_pdfLegacyHandling) {
             // legacy
             $result = new $exportClass($_additionalOptions);
-        } else {
+        } else if (class_exists($exportClass)) {
             $result = new $exportClass($_filter, $_controller, $_additionalOptions);
+        } else {
+            throw new Tinebase_Exception_NotFound('class ' . $exportClass . ' not found');
         }
         
         return $result;
