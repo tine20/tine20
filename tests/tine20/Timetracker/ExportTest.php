@@ -139,14 +139,13 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         // the first line must not be empty
         foreach ($odsExportClass->getDocument()->getBody()->getTables() as $table) {
             $body = $table->getBody();
-            $namespaces = $body->getNamespaces(true);
-            
+
             foreach ($body->xpath('//table:table') as $tbl) {
                 $cells = $tbl->xpath('//table:table-cell');
                 foreach ($cells as $cell) {
                     $xpath = $cell->xpath('//text:p');
-                    $this->assertEquals($i18n->_('Date'), (string) $xpath[0]);
-                    $this->assertEquals($i18n->_('Description'), (string) $xpath[1]);
+                    $this->assertEquals($i18n->_('Staff Member'), (string) $xpath[0]);
+                    $this->assertEquals($i18n->_('Timeaccount Number'), (string) $xpath[1]);
                 }
             }
         }

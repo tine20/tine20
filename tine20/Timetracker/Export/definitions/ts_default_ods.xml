@@ -10,7 +10,7 @@
     <columns>
         <column>
             <identifier>account_id</identifier>
-            <header>account_id</header>
+            <header>Staff Member</header>
             <type>varchar(255)</type>
         </column>
         <column>
@@ -27,7 +27,7 @@
         </column>
         <column>
             <identifier>is_billable_combined</identifier>
-            <header>is_billable_combined</header>
+            <header>Billable</header>
             <type>int(11)</type>
         </column>
         <column>
@@ -47,12 +47,12 @@
         </column>
         <column>
             <identifier>is_cleared_combined</identifier>
-            <header>is_cleared_combined</header>
+            <header>Cleared</header>
             <type>int(11)</type>
         </column>
         <column>
             <identifier>start_date</identifier>
-            <header>start_date</header>
+            <header>Date</header>
             <type>date</type>
         </column>
         <column>
@@ -62,12 +62,12 @@
         </column>
         <column>
             <identifier>duration</identifier>
-            <header>duration</header>
+            <header>Duration</header>
             <type>int(11)</type>
         </column>
         <column>
             <identifier>description</identifier>
-            <header>description</header>
+            <header>Description</header>
             <type>longtext</type>
         </column>
         <column>
@@ -132,4 +132,3 @@
         </column>
     </columns>
 </config>
-
