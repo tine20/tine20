@@ -106,17 +106,47 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * add new custom field
      *
      * @param Tinebase_Model_CustomField_Config $_record
-     * @return Tinebase_Model_CustomField_Config
+     * @return Tinebase_Record_Interface
      */
     public function addCustomField(Tinebase_Model_CustomField_Config $_record)
     {
-        $result = $this->_backendConfig->create($_record);
-        Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
-        $this->_writeModLog($result, null);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Created new custom field ' . $_record->name . ' for application ' . $_record->application_id);
-        
+
+        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            try {
+                if ($_record->is_system) {
+                    $this->_backendConfig->setOnlySystemCFs();
+                }
+                $result = $this->_backendConfig->create($_record);
+            } finally {
+                $this->_backendConfig->setNoSystemCFs();
+            }
+            Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
+            $this->_writeModLog($result, null);
+
+            if ($_record->is_system) {
+                $app = Tinebase_Application::getInstance()->getApplicationById($_record->application_id);
+                /** @var Tinebase_Record_Interface $model */
+                $model = $_record->model;
+                // clear the MC cache
+                $model::resetConfiguration();
+
+                Setup_SchemaTool::updateAllSchema();
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Created new custom field ' . $_record->name . ' for application ' . $_record->application_id);
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+            $transId = null;
+        } finally {
+            if (null !== $transId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
         return $result;
     }
     
@@ -168,14 +198,16 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string|Tinebase_Model_Application $_applicationId application object, id or name
      * @param string                            $_modelName
      * @param string                            $_requiredGrant (read grant by default)
+     * @param bool                              $_getSystemCFs (false by default)
      * @return Tinebase_Record_RecordSet|Tinebase_Model_CustomField_Config of Tinebase_Model_CustomField_Config records
      */
-    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_requiredGrant = Tinebase_Model_CustomField_Grant::GRANT_READ)
+    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_requiredGrant = Tinebase_Model_CustomField_Grant::GRANT_READ, $_getSystemCFs = false)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
         $userId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : 'nouser';
-        $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '') . $_requiredGrant . $userId;
+        $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '') . $_requiredGrant . $userId .
+            (int)$_getSystemCFs;
         
         if (isset($this->_cfByApplicationCache[$cfIndex])) {
             return $this->_cfByApplicationCache[$cfIndex];
@@ -205,7 +237,15 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             
             $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
             $filter->setRequiredGrants((array)$_requiredGrant);
-            $result = $this->_backendConfig->search($filter);
+            try {
+                if ($_getSystemCFs) {
+                    $this->_backendConfig->setOnlySystemCFs();
+                }
+                $result = $this->_backendConfig->search($filter);
+            } finally {
+                $this->_backendConfig->setNoSystemCFs();
+            }
+
         
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Got ' . count($result) . ' uncached custom fields for app id ' . $applicationId . ' (cacheid: ' . $cacheId . ')');
@@ -270,7 +310,16 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $cfId = $_customField->getId();
         } else {
             $cfId = $_customField;
-            $_customField = $this->_backendConfig->get($cfId);
+            try {
+                $_customField = $this->_backendConfig->get($cfId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                try {
+                    $this->_backendConfig->setOnlySystemCFs();
+                    $_customField = $this->_backendConfig->get($cfId);
+                } finally {
+                    $this->_backendConfig->setNoSystemCFs();
+                }
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -282,6 +331,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $this->_backendConfig->delete($cfId);
 
         $this->_writeModLog(null, $_customField);
+
+        if ($_customField->is_system) {
+            /** @var Tinebase_Record_Interface $model */
+            $model = $_customField->model;
+            $model::resetConfiguration();
+
+            Setup_SchemaTool::updateAllSchema();
+        }
     }
     
     /**

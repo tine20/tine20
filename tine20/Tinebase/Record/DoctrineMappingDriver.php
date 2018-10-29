@@ -19,7 +19,8 @@ use Doctrine\Common\Persistence\Mapping\MappingException;
  * @package     Tinebase
  * @subpackage  Record
  */
-class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
+class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_Const
+    implements Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
 {
     /**
      * @var array modelConfigType => Doctrine2Type
@@ -34,6 +35,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         // TODO use datetime here?
         'time'          => 'time',
         'integer'       => 'integer',
+        'bigint'        => 'bigint',
         'numberableInt' => 'integer',
         'numberableStr' => 'string',
         'float'         => 'float',
@@ -42,9 +44,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         'record'        => 'string',
         'keyfield'      => 'string',
         'user'          => 'string',
-        // NOTE 1: smallint is not working somehow ...
-        // NOTE 2: we need int here because otherwise we need to typecast values for pgsql
-        'boolean'       => 'integer',
+        'boolean'       => 'boolean',
         'money'         => 'float',
         // TODO replace that with a single type 'datetime_separated'?
 //        'datetime_separated' => 'date',
@@ -63,15 +63,16 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata)
     {
-        if (! $this->isTransient($className)) {
+        /** @var Tinebase_Record_Interface $className */
+        /** @var Tinebase_ModelConfiguration $modelConfig */
+        if (null === ($modelConfig = $className::getConfiguration())) {
+        //if (! $this->isTransient($className)) {
             throw new MappingException('Class ' . $className . 'has no appropriate ModelConfiguration');
         }
 
-        /** @var Tinebase_Record_Interface $className */
-        /** @var Tinebase_ModelConfiguration $modelConfig */
-        $modelConfig = $className::getConfiguration();
-
-        $table = $modelConfig->getTable();
+        if (empty($table = $modelConfig->getTable())) {
+            $table = ['name' => $modelConfig->getTableName()];
+        }
         if (! isset($table['name'])) {
             throw new MappingException('Table name missing');
         }
@@ -121,7 +122,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
     protected function _mapFields(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
     {
         $virtualFields = array_keys($modelConfig->getVirtualFields());
-        foreach ($modelConfig->getFields() as $fieldName => $config) {
+        foreach ($modelConfig->getFields() + $modelConfig->getDbColumns() as $fieldName => $config) {
             if (in_array($fieldName, $virtualFields, true)) {
                 continue;
             }
@@ -130,6 +131,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
             if (! $config['doctrineIgnore']) {
                 try {
+
                     $metadata->mapField($config);
                 } catch (\Doctrine\ORM\Mapping\MappingException $dome) {
                     // TODO ignore or fix exceptions like
@@ -138,6 +140,10 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                         . ' ' . $dome->getMessage());
 
+                    if (!isset($config['columnName'])) {
+                        $config['columnName'] = $config['fieldName'];
+                    }
+                    $metadata->addInheritedFieldMapping($config);
                 }
             }
         }
@@ -175,12 +181,18 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         $defaultDoctrineIgnore = isset($config['doctrineIgnore']) ? $config['doctrineIgnore'] : false;
 
         $config['doctrineIgnore'] = true;
-        if (isset(self::$_typeMap[$config['type']])) {
-            if ($config['type'] === 'container') {
-                $config['length'] = 40;
+        if (isset(self::$_typeMap[$config[self::TYPE]])) {
+            if ($config[self::TYPE] === self::TYPE_CONTAINER) {
+                $config[self::LENGTH] = 40;
             }
-            $config['type'] = self::$_typeMap[$config['type']];
+            $config[self::TYPE] = self::$_typeMap[$config[self::TYPE]];
             $config['doctrineIgnore'] = $defaultDoctrineIgnore;
+            if (isset($config[self::UNSIGNED])) {
+                if (!isset($config[self::OPTIONS])) {
+                    $config[self::OPTIONS] = [];
+                }
+                $config[self::OPTIONS][self::UNSIGNED] = $config[self::UNSIGNED];
+            }
         }
     }
 
@@ -191,9 +203,16 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      */
     public function getAllClassNames()
     {
-        // @TODO Walk all models, check for modelconfig with version OR
-        //       Walk all Controllers, ask for models and do the above
-        return array();
+        $result = [];
+
+        /** @var Tinebase_Record_Interface $model */
+        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications() as $model) {
+            if ($this->isTransient($model)) {
+                $result[] = $model;
+            }
+        }
+
+        return $result;
     }
 
     /**

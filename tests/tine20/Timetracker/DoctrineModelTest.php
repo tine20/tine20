@@ -21,7 +21,7 @@ class Timetracker_DoctrineModelTest extends TestCase
 
     public function testTimesheetTimaccountForeignKey()
     {
-        $em = Setup_SchemaTool::getEntityManager('Timetracker', array('Timetracker_Model_Timesheet'));
+        $em = Setup_SchemaTool::getEntityManager();
 
         // check if association is set up correctly
         $tsMetadata = $em->getClassMetadata('Timetracker_Model_Timesheet');
@@ -32,7 +32,7 @@ class Timetracker_DoctrineModelTest extends TestCase
 
         // check mysql schema
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
-        $classes = Setup_SchemaTool::getMetadata('Timetracker', array('Timetracker_Model_Timeaccount', 'Timetracker_Model_Timesheet'));
+        $classes = Setup_SchemaTool::getMetadata(array('Timetracker_Model_Timeaccount', 'Timetracker_Model_Timesheet'));
         $schema = $tool->getSchemaFromMetadata($classes);
         $sql = $schema->toSql($em->getConnection()->getDatabasePlatform());
         self::assertEquals(3, count($sql));

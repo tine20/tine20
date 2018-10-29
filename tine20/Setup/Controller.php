@@ -491,6 +491,11 @@ class Setup_Controller
         list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
 
+        // TODO remove this in release 13
+        $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
+        $release11->addIsSystemToCustomFieldConfig();
+        Setup_SchemaTool::updateAllSchema();
+
         for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
             $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
         }
@@ -1894,7 +1899,22 @@ class Setup_Controller
             if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
 
-            // do modelconfig + doctrine
+            $appData = [
+                'name'      => (string)$_xml->name,
+                'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
+                'order'     => $_xml->order ? (string)$_xml->order : 99,
+                'version'   => (string)$_xml->version
+            ];
+            if ($_xml->id && strlen($_xml->id) === 40) {
+                $appData['id'] = (string)$_xml->id;
+            }
+            $application = new Tinebase_Model_Application($appData);
+
+            if ('Tinebase' !== $application->name) {
+                $application = Tinebase_Application::getInstance()->addApplication($application);
+            }
+
+            // do doctrine/MCV2 then old xml
             $createdTables = $this->_createModelConfigSchema($_xml->name);
 
             // traditional xml declaration
@@ -1909,19 +1929,10 @@ class Setup_Controller
                 }
             }
 
-            $appData = [
-                'name'      => (string)$_xml->name,
-                'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
-                'order'     => $_xml->order ? (string)$_xml->order : 99,
-                'version'   => (string)$_xml->version
-            ];
-            if ($_xml->id && strlen($_xml->id) === 40) {
-                $appData['id'] = (string)$_xml->id;
+            if ('Tinebase' === $application->name) {
+                $application = Tinebase_Application::getInstance()->addApplication($application);
             }
-            $application = new Tinebase_Model_Application($appData);
 
-            $application = Tinebase_Application::getInstance()->addApplication($application);
-            
             // keep track of tables belonging to this application
             foreach ($createdTables as $table) {
                 Tinebase_Application::getInstance()->addApplicationTable($application, (string) $table->name, (int) $table->version);
@@ -1960,7 +1971,11 @@ class Setup_Controller
             // create tables using doctrine 2
             // NOTE: we don't use createSchema here because some tables might already been created
             // TODO or use createSchema, catch exception and fallback to updateSchema ?
-            Setup_SchemaTool::updateSchema($appName, $models);
+            if ('Tinebase' === (string)$appName) {
+                Setup_SchemaTool::updateSchema($models);
+            } else {
+                Setup_SchemaTool::updateAllSchema();
+            }
 
             // adopt to old workflow
             /** @var Tinebase_Record_Abstract $model */

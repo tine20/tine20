@@ -785,6 +785,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 case 'container':
                     $lastTables[] = $table;
                     break;
+                case Timetracker_Model_Timeaccount::TABLE_NAME:
+                    array_unshift($lastTables, $table);
+                    break;
                 case 'tags':
                     array_unshift($orderedTables, $table);
                     break;

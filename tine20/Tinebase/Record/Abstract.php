@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Record
  */
-abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
+abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Const implements Tinebase_Record_Interface
 {
     /**
      * ISO8601LONG datetime representation

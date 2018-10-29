@@ -464,7 +464,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $containerController->setGrants($container->getId(), $grants, true);
 
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
-        $containerModifications = $modifications->filter('record_type', 'Tinebase_Model_Container');
+        $containerModifications = $modifications->filter('record_type', Tinebase_Model_Container::class);
         static::assertEquals(4, $containerModifications->count(), 'should have 4 mod logs to process');
 
         // rollback

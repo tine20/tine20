@@ -19,7 +19,6 @@
  * @property    string  $name
  * @property    string  $status
  * @property    string  $version
- * @property    array   $tables
  * @property    string  $order
  *
  * TODO remove this state property in Release12 and obviously don't use it anymore
@@ -40,38 +39,49 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        self::VERSION       => 5,
         'recordName'        => 'Application',
         'recordsName'       => 'Applications', // ngettext('Application', 'Applications', n)
         'hasRelations'      => FALSE,
         'hasCustomFields'   => FALSE,
         'hasNotes'          => FALSE,
         'hasTags'           => FALSE,
-        'modlogActive'      => TRUE,
+        'modlogActive'      => FALSE,
         'hasAttachments'    => FALSE,
         'createModule'      => FALSE,
 
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',
         'modelName'         => 'Application',
+        self::TABLE         => [
+            self::NAME          => 'applications',
+            self::INDEXES       => [
+                'name'                      => [
+                    self::COLUMNS               => ['name'],
+                    self::UNIQUE                => true,
+                ],
+                'status'                    => [
+                    self::COLUMNS               => ['status'],
+                ],
+            ],
+        ],
 
         'fields' => array(
             'name'              => array(
                 'label'             => 'Name', //_('Name')
-                'type'              => 'string',
-                'queryFilter'       => TRUE,
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-                'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
-            ),
-            'version'           => array(
-                'label'             => 'Version', //_('Version')
-                'type'              => 'string',
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 25,
+                self::NULLABLE      => false,
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
             ),
             'status'            => array(
                 'label'             => 'Status', //_('Status')
-                'type'              => 'string',
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 32,
+                self::NULLABLE      => false,
+                self::DEFAULT_VAL   => Tinebase_Application::ENABLED,
                 'queryFilter'       => TRUE,
                 'validators'        => [['InArray', [
                     Tinebase_Application::ENABLED,
@@ -80,21 +90,20 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
             ),
             'order'             => array(
                 'label'             => 'Order', //_('Order')
-                'type'              => 'string',
+                self::TYPE          => self::TYPE_INTEGER,
+                self::UNSIGNED      => true,
+                self::NULLABLE      => false,
                 'queryFilter'       => TRUE,
                 'validators'        => array('Digits', 'presence' => 'required'),
             ),
-            'tables'            => array(
-                'label'             => 'Tables', //_('Tables')
-                'type'              => 'string',
+            'version'           => array(
+                'label'             => 'Version', //_('Version')
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 25,
+                self::NULLABLE      => false,
                 'queryFilter'       => TRUE,
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true)
-            ),
-            // TODO remove in Release 12. Do not use it anymore
-            'state'             => array(
-                'label'             => 'State', //_('State')
-                'type'              => 'json',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
             ),
         )
     );

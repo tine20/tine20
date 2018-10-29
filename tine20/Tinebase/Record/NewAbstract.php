@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Record
  */
-class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
+class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const implements Tinebase_Record_Interface
 {
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -178,7 +178,7 @@ class Tinebase_Record_NewAbstract implements Tinebase_Record_Interface
         $modelConfiguration = static::$_modelConfiguration;
         /** @var Tinebase_Record_NewAbstract $parent */
         foreach (class_parents(static::class) as $parent) {
-            if (null !== $parent::$_modelConfiguration) {
+            if (isset($parent::$_modelConfiguration) && null !== $parent::$_modelConfiguration) {
                 $modelConfiguration = array_merge_recursive($modelConfiguration, $parent::$_modelConfiguration);
             }
         }

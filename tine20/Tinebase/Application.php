@@ -721,7 +721,7 @@ class Tinebase_Application
             $controllerClass = $app->name . '_Controller';
             if (!class_exists(($controllerClass))) {
                 try {
-                    $controllerInstance = Tinebase_Core::getApplicationInstance($app->name);
+                    $controllerInstance = Tinebase_Core::getApplicationInstance($app->name, '', true);
                 } catch(Tinebase_Exception_NotFound $tenf) {
                     continue;
                 }
