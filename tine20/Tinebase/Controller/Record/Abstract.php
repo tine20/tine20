@@ -2739,11 +2739,23 @@ HumanResources_CliTests.testSetContractsEndDate */
 
             if (null === $_filter) {
                 /** @var Tinebase_Model_Filter_FilterGroup $_filter */
-                $_filter = new $filterName(array(), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => $_ignoreAcl));
+                $_filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    $model,
+                    [],
+                    Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
+                    ['ignoreAcl' => $_ignoreAcl]
+                );
+
                 // we add the container_id filter like this because Calendar Filters have special behaviour that we want to avoid
                 // alternatively the calender event controller would have to overwrite this method and deal with this application
                 // specifics itself. But for the time being, this seems like a good generic solution
                 $_filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $_container->id));
+            }
+
+            if ($_filter->getFilter('container_id', false, true) === null) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' no container filter in model -> skip');
+                return;
             }
 
             if ($_ignoreAcl) {
