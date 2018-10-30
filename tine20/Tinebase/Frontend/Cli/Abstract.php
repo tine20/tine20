@@ -287,6 +287,7 @@ class Tinebase_Frontend_Cli_Abstract
             $importer = new Tinebase_Setup_DemoData_Import($model, $options);
             try {
                 $importer->importDemodata();
+                echo 'Csv Demo Data was created successfully' . chr(10) . chr(10);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // model has no import files
             }
@@ -307,7 +308,12 @@ class Tinebase_Frontend_Cli_Abstract
         $importer = new Tinebase_Setup_DemoData_ImportSet($this->_applicationName, [
             'files' => [$setFile]]
         );
-        $importer->importDemodata();
+        try {
+            $importer->importDemodata();
+            echo 'Set Demo Data was created successfully' . chr(10) . chr(10);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // model has no import files
+        }
     }
 
     /**
