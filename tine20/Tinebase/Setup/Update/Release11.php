@@ -768,4 +768,16 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.38');
     }
+
+    /**
+     * update to 11.39
+     *
+     * update filterSyncToken table
+     */
+    public function update_38()
+    {
+        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        $this->setApplicationVersion('Tinebase', '11.39');
+    }
 }
