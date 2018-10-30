@@ -277,11 +277,12 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
             ));
 
             foreach ($containerBackend->search(new Tinebase_Model_ContainerFilter([
-                        ['field' => 'application_id', 'operator' => 'equals', 'value' =>
-                            Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()],
-                        ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED],
-                        ['field' => 'name', 'operator' => 'contains', 'value' => '@']
-                    ])) as $container) {
+                    ['field' => 'application_id', 'operator' => 'equals', 'value' =>
+                        Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()],
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED],
+                    ['field' => 'name', 'operator' => 'contains', 'value' => '@'],
+                    ['field' => 'is_deleted', 'operator' => 'equals', 'value' => 0],
+            ])) as $container) {
 
                 if (isset($container->xprops()[Calendar_Controller::XPROP_EXTERNAL_INVITATION_CALENDAR]) ||
                         !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $container->name)) {
