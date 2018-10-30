@@ -24,6 +24,9 @@
         "type": "git",
         "url": "https://github.com/tine20/syncroton.git"
     }, {
+        "type": "git",
+        "url": "https://github.com/tine20/vobject.git"
+    }, {
       "type": "git",
       "url": "https://github.com/paulmhh/PHPWord"
     }],
@@ -48,7 +51,7 @@
         "ezyang/htmlpurifier": "v4.6.0",
         "phpoffice/phpexcel": "1.8.*",
         "sabre/dav": "1.8.*",
-        "sabre/vobject": "3.5.3 as 2.1.0",
+        "sabre/vobject": "3.5.3pl1 as 2.1.0",
         "metaways/opendocument": "1.1",
         "phpoffice/phpword": "v0.14.0 as v0.13.0",
         "metaways/timezoneconvert": "1.*",
