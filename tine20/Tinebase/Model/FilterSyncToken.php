@@ -36,7 +36,7 @@ class Tinebase_Model_FilterSyncToken extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version'           => 2,
+        'version'           => 3,
         'titleProperty'     => 'filterHash',
 
         'appName'           => 'Tinebase',
@@ -45,14 +45,14 @@ class Tinebase_Model_FilterSyncToken extends Tinebase_Record_Abstract
         'table'             => [
             'name'              => 'filter_sync_token',
             'indexes'           => [
-                'created'           => [
-                    'columns'           => ['created']
+                'filterHash'            => [
+                    'columns'               => ['filterHash']
+                ],
+                'created'               => [
+                    'columns'               => ['created']
                 ],
             ],
             'uniqueConstraints' => [
-                'uniqueFilterHash'      => [
-                    'columns'               => ['filterHash']
-                ],
                 'uniqueFilterSyncToken' => [
                     'columns'               => ['filterSyncToken']
                 ],

@@ -161,4 +161,14 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_38();
         $this->setApplicationVersion('Tinebase', '12.12');
     }
+
+    /**
+     * update to 12.13
+     *
+     * mcv2 schemas will be updated automatically, leave this empty!
+     */
+    public function update_12()
+    {
+        $this->setApplicationVersion('Tinebase', '12.13');
+    }
 }
