@@ -701,6 +701,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
      * @param string $stringToCheck
      * @param string $command
      * @param string $device
+     * @return Felamimail_Model_Message
      */
     protected function _sendMailTestHelper($xml, $messageId, $stringToCheck, $command = "Syncroton_Command_SmartReply", $device = Syncroton_Model_Device::TYPE_ANDROID_40)
     {
@@ -720,6 +721,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
 
         //echo $completeMessage->body;
         $this->assertContains($stringToCheck, $completeMessage->body);
+        return $completeMessage;
     }
     
     /**
@@ -992,5 +994,50 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
         $this->_createdMessages->addRecord($message);
         $this->assertTrue(empty($message->subject));
+    }
+
+    /**
+     * check if recipient addresses are split correctly
+     */
+    public function testSendMailToRecipientsWithComma()
+    {
+        $messageId = '<2248dca3-809b-4bb9-8643-2e732c43e639@email.android.com>';
+
+        $email = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<SendMail xmlns="uri:ComposeMail">
+  <ClientId>SendMail-519120675237184</ClientId>
+  <SaveInSentItems/>
+  <Mime>Date: Thu, 01 Nov 2018 13:52:55 +0100&#13;
+Subject: =?UTF-8?Q?10_=E2=82=AC_geliehen?=&#13;
+Message-ID: ' . htmlspecialchars($messageId) . '&#13;
+X-Android-Message-ID: &lt;2248dca3-809b-4bb9-8643-2e732c43e639@email.android.com&gt;&#13;
+In-Reply-To: &lt;6c62aeff-b1f7-4d45-a9a7-443b5764be21@email.android.com&gt;&#13;
+From: p.schuele@metaways.de&#13;
+To: =?ISO-8859-1?Q?Sch=FCle=2C_Philipp?= &lt;' . $this->_emailTestClass->getEmailAddress() . '&gt;, Christian&#13;
+ Feitl &lt;c.feitl@metaways.de&gt;&#13;
+Importance: Normal&#13;
+X-Priority: 3&#13;
+X-MSMail-Priority: Normal&#13;
+MIME-Version: 1.0&#13;
+Content-Type: text/html; charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+PGRpdiBkaXI9J2F1dG8nPjxkaXY+PGJyPjxkaXYgY2xhc3M9ImdtYWlsX3F1b3RlIj4tLS0tLS0t&#13;
+LS0tIFdlaXRlcmdlbGVpdGV0ZSBOYWNocmljaHQgLS0tLS0tLS0tLTxicj5Wb246IHAuc2NodWVs&#13;
+ZUBtZXRhd2F5cy5kZTxicj5EYXR1bTogMzAuMTAuMjAxOCAxMjoxNTxicj5CZXRyZWZmOiAxMCDi&#13;
+gqwgZ2VsaWVoZW48YnI+QW46IENocmlzdGlhbiBGZWl0bCAmbHQ7Yy5mZWl0bEBtZXRhd2F5cy5k&#13;
+ZSZndDssIlNjaMO8bGUsIFBoaWxpcHAiICZsdDtwLnNjaHVlbGVAbWV0YXdheXMuZGUmZ3Q7PGJy&#13;
+PkNjOiA8YnI+PGJyIHR5cGU9ImF0dHJpYnV0aW9uIj48YmxvY2txdW90ZSBjbGFzcz0icXVvdGUi&#13;
+IHN0eWxlPSJtYXJnaW46MCAwIDAgLjhleDtib3JkZXItbGVmdDoxcHggI2NjYyBzb2xpZDtwYWRk&#13;
+aW5nLWxlZnQ6MWV4Ij48ZGl2IGRpcj0iYXV0byI+PC9kaXY+PC9ibG9ja3F1b3RlPjwvZGl2Pjxi&#13;
+cj48L2Rpdj48L2Rpdj4=&#13;
+</Mime>
+</SendMail>';
+
+        $stringToCheck = 'geliehen';
+
+        $message = $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
+        self::assertEquals(2, count($message->to), 'message should have 2 recipients: ' . print_r($message->to, true));
     }
 }
