@@ -31,7 +31,7 @@ class Sales_Import_ContractTest extends TestCase
             $this->markTestSkipped('Yaml are not install');
         }
         self::clear('Sales', 'Contract');
-
+        $now = Tinebase_DateTime::now();
         $this->_importContainer = $this->_getTestContainer('Sales', 'Sales_Model_Contract');
         $importer = new Tinebase_Setup_DemoData_ImportSet('Sales', [
             'container_id' => $this->_importContainer->getId(),
@@ -39,8 +39,8 @@ class Sales_Import_ContractTest extends TestCase
         ]);
 
         $importer->importDemodata();
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Sales_Model_Contract', [
-            ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
+        $filter = Sales_Model_ContractFilter::getFilterForModel('Sales_Model_Contract', [
+            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = Sales_Controller_Contract::getInstance()->search($filter);
         self::assertEquals(3, count($result));

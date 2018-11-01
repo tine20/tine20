@@ -27,12 +27,13 @@ class Sales_Import_CustomerTest extends TestCase
     public function testImportDemoData()
     {
         self::clear('Sales', 'Customer');
+        $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_Customer', [
             'definition' => 'Sales_import_customer_csv',
         ]);
         $importer->importDemodata();
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Sales_Model_Customer', [
-            ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
+        $filter = Sales_Model_CustomerFilter::getFilterForModel('Sales_Model_Customer', [
+            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = Sales_Controller_Customer::getInstance()->search($filter);
         self::assertEquals(3, count($result));
