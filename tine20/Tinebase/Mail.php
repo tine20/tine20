@@ -562,9 +562,12 @@ class Tinebase_Mail extends Zend_Mail
                 $name = trim(trim($matches[1]), '"');
                 $address = trim($matches[2]);
                 $addresses[$key] = array('name' => substr($name, 0, 250), 'address' => $address);
-            } else {
+            } else if (strpos($address, '@') !== false) {
                 $address = preg_replace('/[,;]*/i', '', $address);
                 $addresses[$key] = array('name' => null, 'address' => trim($address));
+            } else {
+                // skip this - no email address found
+                unset($addresses[$key]);
             }
         }
 
