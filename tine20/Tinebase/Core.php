@@ -527,9 +527,15 @@ class Tinebase_Core
         $container->register(RequestInterface::class)
             ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals');
 
+        try {
+            $applications = Tinebase_Application::getInstance()->getApplications();
+        } catch (Exception $e) {
+            // Tinebase is not yet installed
+            return $container;
+        }
+        
         /** @var Tinebase_Model_Application $application */
-        foreach (Tinebase_Application::getInstance()->getApplications()
-                     ->filter('status', Tinebase_Application::ENABLED) as $application) {
+        foreach ($applications->filter('status', Tinebase_Application::ENABLED) as $application) {
             /** @var Tinebase_Controller_Abstract $className */
             $className = $application->name . '_Controller';
             if (class_exists($className)) {
