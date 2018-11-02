@@ -46,6 +46,12 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      */
     constraint: null,
 
+    /**
+     * @cfg {Array} requiredGrants
+     * grants which are required to select nodes
+     */
+    requiredGrants: ['readGrant'],
+
     windowNamePrefix: 'FilePickerDialog_',
 
     /**
@@ -67,6 +73,10 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             ]
         }];
 
+        this.on('apply', function() {
+            this.fireEvent('selected', this.nodes);
+        }, this);
+
         Tine.Filemanager.FilePickerDialog.superclass.initComponent.call(this);
     },
 
@@ -80,6 +90,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      */
     getFilePicker: function () {
         var picker = new Tine.Filemanager.FilePicker({
+            requiredGrants: this.requiredGrants,
             constraint: this.constraint,
             singleSelect: this.singleSelect
         });

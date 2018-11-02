@@ -378,7 +378,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var result = null;
 
         Ext.each(selection, function(node) {
-            if (node && node.attributes.leaf) {
+            if (node && this.nodeAcceptsContents(node.attributes)) {
                 if (! requiredGrants || this.hasGrant(node, requiredGrants)) {
                     result = node.attributes.container;
                     // take the first one
