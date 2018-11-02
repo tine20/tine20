@@ -30,7 +30,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @var array
      */
     protected $_defaultDemoDataDefinition = [
-        'HumanResources_Model_Employee' => 'hr_employee_import_csv'
+        'HumanResources_Model_Employee' => 'hr_demodata_employee_import_csv'
     ];
     protected $_applicationName = 'HumanResources';
 
