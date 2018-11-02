@@ -66,6 +66,7 @@ class Tinebase_Setup_DemoData_Import
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Imported ' . $importedDemoDataFiles . ' demo data files');
+
     }
 
     /**
