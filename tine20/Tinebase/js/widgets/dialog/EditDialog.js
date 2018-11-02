@@ -839,6 +839,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // unset container if user is not allowed to add record in original container
         if(this.evalGrants && ! hasRequiredGrant) {
             _.unset(this.record, 'data.' + this.recordClass.getMeta('containerProperty'));
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
         }
@@ -920,6 +921,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
 
         if (!this.record.id || !_.get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
         }
