@@ -1002,7 +1002,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
     public function testSendMailToRecipientsWithComma()
     {
         $messageId = '<2248dca3-809b-4bb9-8643-2e732c43e639@email.android.com>';
-
+      
         $email = '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
 <SendMail xmlns="uri:ComposeMail">
@@ -1014,8 +1014,8 @@ Message-ID: ' . htmlspecialchars($messageId) . '&#13;
 X-Android-Message-ID: &lt;2248dca3-809b-4bb9-8643-2e732c43e639@email.android.com&gt;&#13;
 In-Reply-To: &lt;6c62aeff-b1f7-4d45-a9a7-443b5764be21@email.android.com&gt;&#13;
 From: p.schuele@metaways.de&#13;
-To: =?ISO-8859-1?Q?Sch=FCle=2C_Philipp?= &lt;' . $this->_emailTestClass->getEmailAddress() . '&gt;, Christian&#13;
- Feitl &lt;c.feitl@metaways.de&gt;&#13;
+To: =?ISO-8859-1?Q?Sch=FCle=2C_Philipp?= &lt;' . $this->_emailTestClass->getEmailAddress() . '&gt;, some&#13;
+ one &lt;' . $this->_emailTestClass->getEmailAddress() . '&gt;&#13;
 Importance: Normal&#13;
 X-Priority: 3&#13;
 X-MSMail-Priority: Normal&#13;
@@ -1038,6 +1038,6 @@ cj48L2Rpdj48L2Rpdj4=&#13;
         $stringToCheck = 'geliehen';
 
         $message = $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
-        self::assertEquals(2, count($message->to), 'message should have 2 recipients: ' . print_r($message->to, true));
+        self::assertEquals(1, count($message->to), 'message should have 1 recipient: ' . print_r($message->to, true));
     }
 }
