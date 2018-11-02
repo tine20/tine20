@@ -330,13 +330,26 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
         
         try {
+            
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                $contact = $this->createOrUpdateContact($_user);
-                $_user->contact_id = $contact->getId();
-            }
-            
+                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Addressbook_Model_Contact', [
+                        ['field' => 'n_fileas', 'operator' => 'equals', 'value' => $_user['accountDisplayName']]]);
+
+                    $userContact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
+                  
+                    if($userContact === null)
+                    {
+                        $userContact = $this->createOrUpdateContact($_user);
+                        $_user->contact_id = $userContact->getId();
+                    } else{
+                        $_user->contact_id = $userContact->getId();
+                        $this->createOrUpdateContact($_user);
+                    }
+                }
+
+                      
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'create');
             
             $user = $this->_userBackend->addUser($_user);
