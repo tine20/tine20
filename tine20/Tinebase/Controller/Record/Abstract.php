@@ -294,6 +294,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
+        $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
         
         $count = $this->_backend->searchCount($_filter);
