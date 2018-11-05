@@ -1331,7 +1331,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         $imap = Felamimail_Backend_ImapFactory::factory($accountId);
         
-        if ($folderId !== NULL) {
+        if ($folderId !== null) {
+            $folder = null;
             try {
                 $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
                 $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
