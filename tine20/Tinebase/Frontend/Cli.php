@@ -1777,4 +1777,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    /**
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function reportPreviewStatus(Zend_Console_Getopt $opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        print_r(Tinebase_FileSystem::getInstance()->reportPreviewStatus());
+
+        return 0;
+    }
 }
