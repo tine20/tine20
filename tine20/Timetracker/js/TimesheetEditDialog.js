@@ -107,6 +107,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             if (timeaccount.data.is_billable == "0" || timeaccount.get('is_billable') == "0") {
                 this.getForm().findField('is_billable').setValue(false);
             }
+            
+            //Always reset is_billable to true on copy timesheet (only if Timaccount is billable of course)
+            if (this.copyRecord && (timeaccount.data.is_billable == "1" || timeaccount.get('is_billable') == "1")) {
+                this.getForm().findField('is_billable').setValue(true);
+            }
 
             this.getForm().findField('timeaccount_description').setValue(timeaccount.data.description);
         }
