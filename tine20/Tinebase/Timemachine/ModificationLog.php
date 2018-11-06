@@ -1455,6 +1455,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 // must not happen, continuing pointless!
                 return false;
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         $this->_externalInstanceId = null;

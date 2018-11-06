@@ -601,6 +601,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " cannot update constraints exdates for event {$constraintsEventId}: " . $e);
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         return true;
@@ -3163,6 +3165,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $filter = new Calendar_Model_EventFilter($filter);
         foreach ($this->search($filter) as $event) {
             $eventNotificationController->doSendNotifications($event, null, 'tentative');
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         return true;

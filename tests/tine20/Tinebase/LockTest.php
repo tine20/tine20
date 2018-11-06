@@ -4,8 +4,8 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2015-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 /**
@@ -30,23 +30,61 @@ class Tinebase_LockTest extends TestCase
      */
     protected function tearDown()
     {
-        parent::tearDown();
-
         foreach ($this->_testLockIds as $id => $foo) {
             $lock = Tinebase_Lock::getLock($id);
             if ($lock->isLocked()) {
                 $lock->release();
             }
         }
+
+        parent::tearDown();
     }
 
-    public function testLock($recursion = false)
+    public function testPgsqlLock()
+    {
+        if (!Tinebase_Lock_UnitTestFix::fixBackend(Tinebase_Lock_Pgsql::class)) {
+            static::markTestSkipped('no pgsql available');
+        }
+
+        $this->_testLock();
+    }
+
+    public function testMySQLLock()
+    {
+        if (!Tinebase_Lock_UnitTestFix::fixBackend(Tinebase_Lock_Mysql::class)) {
+            static::markTestSkipped('no mysql available');
+        }
+
+        $this->_testLock();
+    }
+
+    public function testRedisLock()
+    {
+        if (!Tinebase_Lock_UnitTestFix::fixBackend(Tinebase_Lock_Redis::class)) {
+            static::markTestSkipped('no redis configured');
+        }
+
+        $this->_testLock();
+    }
+
+    public function testRedisBackendLock()
+    {
+        if (!Tinebase_Lock_UnitTestFix::fixBackend(Tinebase_Lock_Redis::class)) {
+            static::markTestSkipped('no redis configured');
+        }
+
+        $this->_testLockBackend();
+    }
+
+    protected function _testLock($recursion = false)
     {
         $this->_testLockIds['lock1'] = true;
         static::assertTrue(Tinebase_Lock::tryAcquireLock('lock1'), 'could not get acquire lock1');
 
         $this->_testLockIds['lock2'] = true;
         static::assertTrue(Tinebase_Lock::tryAcquireLock('lock2'), 'could not get acquire lock2');
+
+        Tinebase_Lock::keepLocksAlive();
 
         try {
             Tinebase_Lock::tryAcquireLock('lock1');
@@ -65,14 +103,14 @@ class Tinebase_LockTest extends TestCase
         static::assertFalse(Tinebase_Lock::getLock('lock2')->isLocked(), 'lock2 should be unlocked');
 
         if (false === $recursion) {
-            $this->testLock(true);
+            $this->_testLock(true);
         }
     }
 
     /**
      * Test create a lock
      */
-    public function testLockBackend()
+    protected function _testLockBackend()
     {
         $this->_testLockIds['lock1'] = true;
         static::assertTrue(Tinebase_Lock::tryAcquireLock('lock1'), 'could not get acquire lock1');

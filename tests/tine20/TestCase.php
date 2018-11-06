@@ -154,6 +154,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         foreach ($this->_areaLocksToInvalidate as $area) {
             Tinebase_AreaLock::getInstance()->resetValidAuth($area);
         }
+
+        Tinebase_Lock_UnitTestFix::clearLocks();
     }
 
     /**

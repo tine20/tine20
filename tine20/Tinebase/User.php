@@ -802,6 +802,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
         foreach ($users as $user) {
             try {
                 self::syncUser($user, $options);
+
+                Tinebase_Lock::keepLocksAlive();
             } catch (Exception $e) {
                 $result = false;
                 Tinebase_Exception::log($e, null, $user->toArray());
@@ -884,6 +886,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     Tinebase_TransactionManager::getInstance()->rollBack();
                 }
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldContainerAcl);

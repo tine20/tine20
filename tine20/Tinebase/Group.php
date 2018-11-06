@@ -361,6 +361,8 @@ class Tinebase_Group
                     Tinebase_TransactionManager::getInstance()->rollBack();
                 }
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         return true;

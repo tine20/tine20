@@ -604,6 +604,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 Tinebase_Exception::log($e);
                 $success = false;
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         if (!empty($parentIds)) {

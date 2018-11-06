@@ -26,6 +26,14 @@ class Tinebase_Lock_Redis extends Tinebase_Lock_Abstract
 
     protected $_lockUUID = null;
 
+    public function keepAlive()
+    {
+        // use the method! not the property! the method does the keep a live for us.
+        if (!$this->isLocked()) {
+            throw new Tinebase_Exception_Backend('trying to keep an unlocked lock alive');
+        }
+    }
+
     /**
      * @return bool
      */
