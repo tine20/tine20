@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,7 +37,8 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
         } else {
             $synchronRequest = false;
         }
-        $httpClient = Tinebase_Core::getHttpClient($this->_url, array('timeout' => ($synchronRequest ? 10 : 300)));
+
+        $httpClient = $this->_getHttpClient($synchronRequest);
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost('config', json_encode($_config));
         $httpClient->setFileUpload($_filePath, 'file');
@@ -95,5 +96,14 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
         }
 
         return false;
+    }
+
+    /**
+     * @param boolean $_synchronRequest
+     * @return Zend_Http_Client
+     */
+    protected function _getHttpClient($_synchronRequest)
+    {
+        return Tinebase_Core::getHttpClient($this->_url, array('timeout' => ($_synchronRequest ? 10 : 300)));
     }
 }
