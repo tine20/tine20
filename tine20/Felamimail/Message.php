@@ -277,8 +277,9 @@ class Felamimail_Message extends Zend_Mail_Message
     public static function createMessageFromZendMailMessage(Zend_Mail_Message $_zendMailMessage)
     {
         $message = new Felamimail_Model_Message();
+        $message->headers = $_zendMailMessage->getHeaders();
         
-        foreach ($_zendMailMessage->getHeaders() as $headerName => $headerValue) {
+        foreach ($message->headers as $headerName => $headerValue) {
             switch($headerName) {
                 case 'subject':
                     $message->$headerName = $headerValue;

@@ -2630,6 +2630,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * @param string $_action
      * @param boolean $_topLevelAllowed
      * @throws Tinebase_Exception_AccessDenied
+     * @return boolean
      */
     public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = true, $_throw = true)
     {

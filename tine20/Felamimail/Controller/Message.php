@@ -202,11 +202,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Account $_account
      * @param string                   $_partId
      * @param string                   $mimeType
+     * @return Felamimail_Model_Message
      */
-    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, $_partId = NULL, $mimeType='configured')
+    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message,
+                                                  Felamimail_Model_Account $_account = null,
+                                                  $_partId = null,
+                                                  $mimeType='configured')
     {
         if ($mimeType == 'configured') {
-            $mimeType = ($_account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
+            $mimeType = (
+                $_account->display_format == Felamimail_Model_Account::DISPLAY_HTML
+                || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE
+            )
                 ? Zend_Mime::TYPE_HTML
                 : Zend_Mime::TYPE_TEXT;
         }
@@ -1214,5 +1221,34 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         throw new Tinebase_Exception_NotFound('Resource not found');
+    }
+
+    /**
+     * @param $nodeId
+     * @return Felamimail_Model_Message
+     */
+    public function getMessageFromNode($nodeId)
+    {
+        // @todo simplify this / create Tinebase_Model_Tree_Node_Path::createFromNode()?
+
+        $node = Tinebase_FileSystem::getInstance()->get($nodeId);
+        $nodePath = Tinebase_FileSystem::getInstance()->getPathOfNode($node, true);
+        $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($nodePath);
+        Tinebase_FileSystem::getInstance()->checkPathACL($path);
+
+        // @todo check if it's an email (.eml?)
+
+        $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
+
+        // @todo allow to configure body mime type to fetch?
+
+        $message = Felamimail_Model_Message::createFromMime($content);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got Message: ' . print_r($message->toArray(), true));
+
+        // TODO use HTMLpurifier?
+
+        return $message;
     }
 }

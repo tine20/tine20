@@ -4,19 +4,19 @@
  * @package     MailFiler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-Ext.ns('Tine.MailFiler');
+Ext.ns('Tine.Felamimail');
 
 /**
- * @namespace   Tine.MailFiler
- * @class       Tine.MailFiler.MailDetailsPanel
+ * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.MailDetailsPanel
  * @extends     Ext.Panel
  *
- * @todo: Improve this and use in Felamimail (this one is more configurable()
+ * @todo: use in/instead of Tine.Felamimail.GridDetailsPanel (this one is more configurable()
  */
-Tine.MailFiler.MailDetailsPanel = Ext.extend(Ext.Panel, {
+Tine.Felamimail.MailDetailsPanel = Ext.extend(Ext.Panel, {
     record: null,
     app: null,
     appName: null,
@@ -24,7 +24,7 @@ Tine.MailFiler.MailDetailsPanel = Ext.extend(Ext.Panel, {
 
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get(this.appName);
-        Tine.MailFiler.MailDetailsPanel.superclass.initComponent.call(this);
+        Tine.Felamimail.MailDetailsPanel.superclass.initComponent.call(this);
     },
 
     /**
@@ -32,7 +32,7 @@ Tine.MailFiler.MailDetailsPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     afterRender: function () {
-        Tine.MailFiler.MailDetailsPanel.superclass.afterRender.apply(this, arguments);
+        Tine.Felamimail.MailDetailsPanel.superclass.afterRender.apply(this, arguments);
         this.body.on('click', this.onClick, this);
     },
 
@@ -72,7 +72,9 @@ Tine.MailFiler.MailDetailsPanel = Ext.extend(Ext.Panel, {
                 },
 
                 showDate: function (sent, recordData) {
-                    var date = sent ? Date.parseDate(sent, Date.patterns.ISO8601Long) : Date.parseDate(recordData.received, Date.patterns.ISO8601Long);
+                    var date = sent
+                        ? (Ext.isDate(sent) ? sent : Date.parseDate(sent, Date.patterns.ISO8601Long))
+                        : Date.parseDate(recordData.received, Date.patterns.ISO8601Long);
                     return date ? date.format('l') + ', ' + Tine.Tinebase.common.dateTimeRenderer(date) : '';
                 },
 
@@ -178,10 +180,13 @@ Tine.MailFiler.MailDetailsPanel = Ext.extend(Ext.Panel, {
                     });
 
                 } else {
+
+                    // TODO allow download for Mime Mails
+
                     new Ext.ux.file.Download({
                         params: {
                             requestType: 'HTTP',
-                            method: 'MailFiler.downloadAttachment',
+                            method: this.appName + '.downloadAttachment',
                             path: this.nodeRecord.data.path,
                             nodeId: this.record.node_id,
                             partId: attachment.partId
@@ -262,11 +267,17 @@ Tine.MailFiler.MailDetailsPanel = Ext.extend(Ext.Panel, {
     /**
      * fills this fields with the corresponding message data
      *
-     * @param {Tine.Tinebase.data.Record} record
+     * @param {Tine.Tinebase.data.Record|Object} record
      */
     loadRecord: function (record) {
-        this.record = record.data.hasOwnProperty('message') ? record.data.message : record;
-        this.nodeRecord = record;
+        if (record.data) {
+            // TODO improve model detection
+            this.record = record.data.hasOwnProperty('message') ? record.data.message : record;
+            this.nodeRecord = record;
+        } else {
+            // TODO use model? here we only get the "data" part of the message record
+            this.record = record;
+        }
         this.initTemplate();
         this.update(this.record);
     }

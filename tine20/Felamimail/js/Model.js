@@ -339,6 +339,28 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         
         return this.doXHTTPRequest(options);
     },
+
+    /**
+     * @param Tine.Tinebase.Model.Tree_Node node
+     * @param {Object} options
+     * @returns {*}
+     */
+    getMessageFromNode: function(node, options)
+    {
+        options = options || {};
+        options.params = options.params || {};
+
+        // @todo needed?
+        options.beforeSuccess = function(response) {
+            return [this.recordReader(response)];
+        };
+
+        var p = options.params;
+        p.method = this.appName + '.getMessageFromNode';
+        p.nodeId = node.id;
+
+        return this.doXHTTPRequest(options);
+    },
     
     /**
      * exception handler for this proxy
@@ -349,7 +371,6 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         Tine.Felamimail.handleRequestException(exception);
     }
 });
-
 
 /**
  * @namespace Tine.Felamimail.Model
