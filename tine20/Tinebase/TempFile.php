@@ -269,6 +269,8 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' File no longer found: ' . $file->path);
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         $result = $this->delete($tempfiles->getArrayOfIds());
@@ -281,6 +283,8 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 unlink($directoryIterator->getPathname());
                 ++$result;
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed ' . $result . ' temp files from filesystem only.');

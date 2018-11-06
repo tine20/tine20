@@ -36,4 +36,6 @@ interface Tinebase_Lock_Interface
      * @return bool
      */
     public function isLocked();
+
+    public function keepAlive();
 }

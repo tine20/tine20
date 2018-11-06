@@ -16,11 +16,26 @@
 class Tinebase_Lock
 {
     protected static $locks = [];
+    protected static $lastKeepAlive = null;
 
     /**
      * @var string
      */
     protected static $backend = null;
+
+    public static function keepLocksAlive()
+    {
+        // only do this once a minute
+        if (null !== static::$lastKeepAlive && time() - static::$lastKeepAlive < 60) {
+            return;
+        }
+        static::$lastKeepAlive = time();
+
+        /** @var Tinebase_Lock_Abstract $lock */
+        foreach (static::$locks as $lock) {
+            $lock->keepAlive();
+        }
+    }
 
     /**
      * @param $id
@@ -78,13 +93,20 @@ class Tinebase_Lock
     protected static function getBackend($id)
     {
         if (null === static::$backend) {
+            $db = Tinebase_Core::getDb();
+            if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+                Tinebase_Lock_Mysql::checkCapabilities();
+            }
+
             $config = Tinebase_Config::getInstance();
             $cachingBackend = null;
             if ($config->caching && $config->caching->backend) {
                 $cachingBackend = ucfirst($config->caching->backend);
             }
-            $db = Tinebase_Core::getDb();
-            if ($cachingBackend === 'Redis' && extension_loaded('redis')) {
+
+            if (Tinebase_Lock_Mysql::supportsMultipleLocks()) {
+                static::$backend = Tinebase_Lock_Mysql::class;
+            } elseif ($cachingBackend === 'Redis' && extension_loaded('redis')) {
                 $host = $config->caching->host ? $config->caching->host :
                     ($config->caching->redis && $config->caching->redis->host ?
                         $config->caching->redis->host : 'localhost');
@@ -94,7 +116,6 @@ class Tinebase_Lock
                 Tinebase_Lock_Redis::connect($host, $port);
             } elseif ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
                 static::$backend = Tinebase_Lock_Mysql::class;
-                Tinebase_Lock_Mysql::checkCapabilities();
             } elseif($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
                 static::$backend = Tinebase_Lock_Pgsql::class;
             } else {
