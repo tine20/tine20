@@ -603,8 +603,8 @@ class Tinebase_Tags
      */
     protected function _getApplicationForModel($modelName)
     {
-        // FIXME this needs to be resolved - currently tags are saved with Tinebase app id for Filemanager/MailFiler ...
-        if (in_array($modelName, array('Filemanager_Model_Node', 'MailFiler_Model_Node'))) {
+        // FIXME this needs to be resolved - currently tags are saved with Tinebase app id for Filemanager ...
+        if (in_array($modelName, array('Filemanager_Model_Node'))) {
             $appName = 'Tinebase';
         } else {
             list($appName, , ) = explode('_', $modelName);

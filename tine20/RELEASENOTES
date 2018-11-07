@@ -70,6 +70,10 @@ Folders can be PIN protected: its contents are only visibly if user provides a v
 
 * Password Policy for Download Links
 
+* E-Mail previews
+
+Mime-Message type files can be viewed in the preview panel.
+
 ADDRESSBOOK
 ---
 
@@ -96,3 +100,9 @@ EMAIL
 Send one mail to each recipient
 
 * Allow to set reply-to in message compose dialog
+
+MAILFILER
+---
+
+* The MailFiler module has been removed because most of the functionality is in Filemanager and more
+ will be added soon. It will live on as community module in https://github.com/tine20/tine20/tree/community_apps

@@ -1,7 +1,7 @@
 /*
  * Tine 2.0
  *
- * @package     MailFiler
+ * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
  * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
