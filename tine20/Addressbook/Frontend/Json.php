@@ -90,7 +90,19 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchContacts($filter, $paging)
     {
-        return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
+        $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'container_id'  => [],
+                'tags'          => [],
+                'attachments'   => [],
+            ],
+            Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                Tinebase_Record_Expander::PROPERTY_CLASS_USER => [],
+            ],
+        ]);
+
+        return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(),
+            Addressbook_Model_ContactFilter::class, $expander);
     }
 
     /**
@@ -139,7 +151,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'Addressbook_Model_ListFilter');
             if (!$dont_add) {
                 foreach ($lists["results"] as $list) {
-                    array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
+                    if (! empty($list["emails"])) {
+                        array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
+                    }
                 }
             }
         } finally {
@@ -328,7 +342,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_save($recordData, Addressbook_Controller_Contact::getInstance(), 'Contact', 'id', array($duplicateCheck));
     }
+    
 
+    
     /**
     * get contact information from string by parsing it using predefined rules
     *
@@ -386,8 +402,10 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getDefaultAddressbook()
     {
         $defaultAddressbook = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+
+        $account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultAddressbook)->toArray();
         $defaultAddressbookArray = $defaultAddressbook->toArray();
-        $defaultAddressbookArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultAddressbook->getId())->toArray();
+        $defaultAddressbookArray['account_grants'] = $account_grants;
         
         return $defaultAddressbookArray;
     }
@@ -409,7 +427,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data
@@ -433,7 +451,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getImageLink($contactArray)
     {
-        $link = 'images/empty_photo_blank.png';
+        $link = 'images/icon-set/icon_undefined_contact.svg';
         if (! empty($contactArray['jpegphoto'])) {
             $link = Tinebase_Model_Image::getImageUrl('Addressbook', $contactArray['id'], '');
         } else if (isset($contactArray['salutation']) && ! empty($contactArray['salutation'])) {

@@ -48,7 +48,15 @@ Ext.ux.grid.CheckColumn = function(config){
     }
 
     this.addEvents(
-
+        /**
+         * @event beforecheckchange
+         * Fires before a check state changes
+         * @param {Ext.ux.grid.CheckColumn} this
+         * @param {boolean} newvalue
+         * @param {boolean} oldvalue
+         * @param {Ext.data.Record} record
+         */
+        'beforecheckchange',
         /**
          * @event checkchange
          * Fires when a check state changes
@@ -83,6 +91,10 @@ Ext.extend(Ext.ux.grid.CheckColumn, Ext.util.Observable, {
      * @return {boolean}
      */
     onBeforeCheck: function(checkbox, record) {
+        if (this.fireEvent('beforecheckchange', this, !record.data[this.dataIndex], record.data[this.dataIndex], record) === false) {
+            return false;
+        }
+
         return !this.grid.readOnly;
     },
 

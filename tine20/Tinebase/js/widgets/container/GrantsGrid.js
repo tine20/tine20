@@ -39,8 +39,13 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     selectTypeDefault: 'group',
     selectRole: true,
     hasAccountPrefix: true,
-    recordClass: Tine.Tinebase.Model.Grant,
-    
+
+    /**
+     * canonical name
+     * @cfg {String} canonicalName
+     */
+    canonicalName: 'GrantsGrid',
+
     readGrantTitle: 'Read', // i18n._('Read')
     readGrantDescription: 'The grant to read records of this container', // i18n._('The grant to read records of this container')
     addGrantTitle: 'Add', // i18n._('Add')
@@ -56,23 +61,36 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     adminGrantTitle: 'Admin', // i18n._('Admin')
     adminGrantDescription: 'The grant to administrate this container', // i18n._('The grant to administrate this container')
     
-    freebusyGrantTitle: 'Free Busy', // i18n._('Free Busy')
-    freebusyGrantDescription: 'The grant to access free busy information of events in this calendar', // i18n._('The grant to access free busy information of events in this calendar')
-    privateGrantTitle: 'Private', // i18n._('Private')
-    privateGrantDescription: 'The grant to access records marked as private in this container', // i18n._('The grant to access records marked as private in this container')
-    
-    
     /**
      * @private
      */
     initComponent: function () {
+        if (! this.recordDefaults) {
+            this.recordDefaults = {
+                readGrant: true,
+                exportGrant: true,
+                syncGrant: true
+            };
+        }
+
+        if (! this.recordClass) {
+            this.recordClass = Tine.Tinebase.container.getGrantsModel(this.grantContainer);
+        }
+
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+        }
+
         this.initColumns();
-        
-        this.recordDefaults = {
-            readGrant: true,
-            exportGrant: true,
-            syncGrant: true
-        };
+
+        if (! this.store) {
+            this.store = new Ext.data.JsonStore({
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'account_id',
+                fields: this.recordClass
+            });
+        }
         
         Tine.widgets.container.GrantsGrid.superclass.initComponent.call(this);
         
@@ -104,21 +122,42 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
      * init grid columns
      */
     initColumns: function() {
-        var grants = this.grantContainer
-            ? Tine.widgets.container.GrantsManager.getByContainer(this.grantContainer)
-            : Tine.widgets.container.GrantsManager.defaultGrants();
-        
-        if (this.alwaysShowAdminGrant || (this.grantContainer && this.grantContainer.type == 'shared')) {
+        var _ = window.lodash,
+            me = this,
+            getTranslation = function(string) {
+                var translation = me.app.i18n._hidden(string);
+
+                return translation != string ? translation : window.i18n._hidden(string);
+            },
+            grants = _.reduce(this.recordClass.getFieldNames(), function(grants, name) {
+                var isGrant = name.match(/(.+)Grant$/),
+                    grant = isGrant ? isGrant[1] : false;
+
+                if (grant && ['freebusy', 'private', 'download', 'publish', 'admin'].indexOf(grant) < 0 ) {
+                    grants.push(grant);
+                }
+
+                return grants;
+            }, []);
+
+        // manage runtime depended grants
+        // NOTE: this could also be solved withe the useGrant method!
+        if (this.grantContainer) {
+            grants = Tine.widgets.container.GrantsManager.getByContainer(this.grantContainer);
+        }
+
+        if (this.recordClass.hasField('adminGrant') && (this.alwaysShowAdminGrant || (me.grantContainer && me.grantContainer.type == 'shared'))) {
             grants.push('admin');
         }
         
         this.configColumns = [];
         
         Ext.each(grants, function(grant) {
+            var header = getTranslation(this[grant + 'GrantTitle']);
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 id: grant,
-                header: i18n._(this[grant + 'GrantTitle']),
-                tooltip: i18n._(this[grant + 'GrantDescription']),
+                header: String(header).replace(/\s+/, '<br>'),
+                tooltip: '<b>' + header + '</b><br>' + getTranslation(this[grant + 'GrantDescription']),
                 dataIndex: grant + 'Grant',
                 width: 55,
                 onBeforeCheck: this.onBeforeCheck.createDelegate(this)
@@ -131,6 +170,11 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
             findFn = function(o) { return o.id == grant;},
             current = lodash.find(cm.config, findFn),
             config = lodash.find(this.configColumns, findFn);
+
+        // apparently config might be empty for shared folders
+        if (!config) {
+            return;
+        }
 
         if (use && ! current) {
             cm.setConfig(cm.config.push(config));
@@ -163,8 +207,16 @@ Tine.widgets.container.GrantsManager = function() {
          *
          * @return Array
          */
-        defaultGrants: function() {
-            return ['read', 'add', 'edit', 'delete', 'export', 'sync'];
+        defaultGrants: function(container) {
+            var _ = window.lodash,
+                modelName = container.model,
+                grantsModelName = modelName + 'Grants',
+                grantsModel = Tine.Tinebase.data.RecordMgr.get(grantsModelName);
+
+            return grantsModel ? _.reduce(grantsModel.getFieldNames(), function(grants, fieldName) {
+                var match = String(fieldName).match(/(.+)Grant$/);
+                return grants.concat(match ? match[1] : []);
+            }, []) : ['read', 'add', 'edit', 'delete', 'export', 'sync'];
         },
 
         /**
@@ -177,7 +229,7 @@ Tine.widgets.container.GrantsManager = function() {
             var modelName = container.model || container,
                 grants  = grantsForModels[modelName]
                     ? (Ext.isFunction(grantsForModels[modelName]) ? grantsForModels[modelName](container) : grantsForModels[modelName])
-                    : this.defaultGrants();
+                    : this.defaultGrants(container);
 
             return grants;
         },

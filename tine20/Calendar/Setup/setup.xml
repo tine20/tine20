@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Calendar</name>
-    <!-- gettext('Calendar') -->   
-    <version>12.0</version>
+    <!-- gettext('Calendar') -->
+    <version>12.6</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>15</version>
+            <version>16</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -179,6 +179,11 @@
                     <type>text</type>
                     <length>40</length>
                 </field>
+                <field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
                 <index>
                     <name>description</name>
                     <fulltext>true</fulltext>
@@ -320,7 +325,7 @@
         <!-- attendee -->
         <table>
             <name>cal_attendee</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -423,6 +428,11 @@
                     <notnull>true</notnull>
                     <default>0</default>
                 </field>
+                <field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -484,7 +494,7 @@
         <!-- resources -->
         <table>
             <name>cal_resources</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -541,6 +551,11 @@
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>hierarchy</name>
+                    <type>text</type>
+                    <length>65535</length>
                 </field>
                 <field>
                     <name>description</name>

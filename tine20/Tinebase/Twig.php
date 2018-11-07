@@ -50,7 +50,7 @@ class Tinebase_Twig
         if (isset($_options[self::TWIG_LOADER])) {
             $twigLoader = $_options[self::TWIG_LOADER];
         } else {
-            $twigLoader = new Twig_Loader_Filesystem(['/'], dirname(__DIR__));
+            $twigLoader = new Twig_Loader_Filesystem(['./'], dirname(__DIR__));
         }
 
         if (TINE20_BUILDTYPE === 'DEVELOPMENT' || (isset($_options[self::TWIG_CACHE]) && !$_options[self::TWIG_CACHE])) {
@@ -111,6 +111,14 @@ class Tinebase_Twig
      */
     protected function _addTwigFunctions()
     {
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('config', function ($key, $app='') {
+            $config = Tinebase_Config::getInstance();
+            if ($app) {
+                $config = $config->{$app};
+            }
+            return $config->{$key};
+        }));
+
         $locale = $this->_locale;
         $translate = $this->_translate;
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',

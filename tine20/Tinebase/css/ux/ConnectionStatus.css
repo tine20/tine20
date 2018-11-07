@@ -1,11 +1,16 @@
 .x-ux-connectionstatus-online {
-    background-image: url(../../../images/oxygen/16x16/status/user-online.png) !important;;
+    background-image: url(../../../images/icon-set/icon_connected.svg) !important;;
 }
 
 .x-ux-connectionstatus-offline {
-    background-image: url(../../../images/oxygen/16x16/status/user-offline.png) !important;;
+    background-image: url(../../../images/icon-set/icon_connection_failed.svg) !important;;
 }
 
 .x-ux-connectionstatus-unknown {
-    background-image: url(../../../images/oxygen/16x16/categories/system-help.png) !important;;
+    background-image: url(../../../images/icon-set/icon_connection_unknown.svg) !important;;
+}
+
+.x-ux-connectionstatus.x-btn-icon .x-btn-small .x-btn-text {
+    background-size: 14px 14px !important;
+    background-position: 1px 1px !important;
 }

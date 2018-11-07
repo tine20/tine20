@@ -24,7 +24,7 @@ class Tinebase_CoreTest extends TestCase
     
     public function testGetDispatchServerJSON()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "OPTIONS /index.php HTTP/1.1\r\n".
             "Host: localhost\r\n".
             "User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\r\n".
@@ -43,7 +43,7 @@ class Tinebase_CoreTest extends TestCase
         
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /index.php HTTP/1.1\r\n".
             "X-Tine20-Request-Type: JSON\r\n".
             "\r\n".
@@ -56,7 +56,7 @@ class Tinebase_CoreTest extends TestCase
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
         
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /index.php HTTP/1.1\r\n".
             "Content-Type: application/json\r\n".
             "\r\n".
@@ -71,7 +71,7 @@ class Tinebase_CoreTest extends TestCase
     
     public function testGetDispatchServerSnom()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /index.php HTTP/1.1\r\n".
             "User-Agent: Mozilla/4.0 (compatible; snom300-SIP 8.4.35 1.1.3-u)"
         );
@@ -83,7 +83,7 @@ class Tinebase_CoreTest extends TestCase
     
     public function testGetDispatchServerAsterisk()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /index.php HTTP/1.1\r\n".
             "User-Agent: asterisk-libcurl-agent/1.0"
         );
@@ -95,7 +95,7 @@ class Tinebase_CoreTest extends TestCase
     
     public function testGetDispatchServerActiveSync()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "GET /index.php?frontend=activesync HTTP/1.1\r\n".
             "User-Agent: SAMSUNG-GT-I9300/101.403"
         );
@@ -108,7 +108,7 @@ class Tinebase_CoreTest extends TestCase
     
     public function testGetDispatchServerWebDAV()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "GET /index.php?frontend=webdav HTTP/1.1\r\n".
             "User-Agent: SAMSUNG-GT-I9300/101.403"
         );

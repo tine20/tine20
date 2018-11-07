@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -23,33 +23,51 @@
 class Tinebase_Model_Path extends Tinebase_Record_Abstract 
 {
     /**
-     * key in $_validators/$_properties array for the field which
-     *   represents the identifier
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_identifier = 'id';
+    protected static $_configurationObject = NULL;
 
     /**
-     * record validators
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'                => array('allowEmpty' => TRUE),
-        'path'              => array('allowEmpty' => TRUE),
-        'shadow_path'       => array('allowEmpty' => TRUE),
-        'creation_time'     => array('allowEmpty' => TRUE),
-    );
-    
-    /**
-     * datetime fields
-     *
-     * @var array
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-    );
+    protected static $_modelConfiguration = [
+        'recordName'        => 'Path',
+        'recordsName'       => 'Paths', // ngettext('Path', 'Paths', n)
+        'hasRelations'      => false,
+        'copyRelations'     => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'modlogActive'      => false,
+        'hasAttachments'    => false,
+        'createModule'      => false,
+        'exposeHttpApi'     => false,
+        'exposeJsonApi'     => false,
+
+        'titleProperty'     => 'path',
+        'appName'           => 'Tinebase',
+        'modelName'         => 'Path',
+        'table'             => array(
+            'name'              => 'path',
+        ),
+
+        'fields'            => [
+            'path'              => [
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'shadow_path'       => [
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'creation_time'     => [
+                'type'              => 'datetime',
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+        ],
+    ];
 
     /**
      * expects a shadow path part of format [] = optional, {} are part of the string!

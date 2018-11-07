@@ -34,11 +34,12 @@ Tine.Tinebase.container = {
     
     /**
      * @private
-     * 
+     *
+     * @deprecated
      * @property isLeafRegExp
      * @type RegExp
      */
-    isLeafRegExp: /^\/personal\/[0-9a-z_\-]+\/|^\/shared\/[a-f0-9]+/i,
+    isLeafRegExp: /^\/personal\/[0-9a-z_\-]+\/|^\/shared\/.+/i,
     
     /**
      * @private
@@ -71,7 +72,10 @@ Tine.Tinebase.container = {
      * 
      * NOTE: if path could only be undefined when server send container without path.
      *       This happens only in server json classes which only could return containers
-     * 
+     * NOTE: for virtual paths we can't compute if path represents a container(leaf)
+     *       so don't use this function anymore
+     *
+     * @deprecated
      * @static
      * @param {String} path
      * @return {Boolean}
@@ -144,6 +148,21 @@ Tine.Tinebase.container = {
         var pathParts = Ext.isArray(path) ? path : String(path).split('/');
         
         return pathParts[1];
+    },
+
+    /**
+     * get grants model of given container
+     *
+     * @static
+     * @param container
+     * @return {Record}
+     */
+    getGrantsModel: function(container) {
+        var _ = window.lodash,
+            containerData = _.isFunction(container.beginEdit) ? container.data : container,
+            grantsModelName = _.get(containerData, 'xprops.Tinebase.Container.GrantsModel', containerData.model + 'Grants'),
+            grantsModel = Tine.Tinebase.data.RecordMgr.get(grantsModelName);
+
+        return grantsModel || Tine.Tinebase.data.RecordMgr.get(Tine.Tinebase.Model.Grant);
     }
-    
 };

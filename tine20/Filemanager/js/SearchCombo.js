@@ -31,6 +31,9 @@ Ext.ns('Tine.Filemanager');
 Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
     
     allowBlank: false,
+    singleSelect: true,
+    constraint: 'file',
+
     itemSelector: 'div.search-item',
     minListWidth: 200,
 
@@ -47,6 +50,27 @@ Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
 
+        if (! this.title) {
+            if (this.constraint == 'file') {
+                if (this.singleSelect) {
+                    this.title = this.app.i18n._('Select a file');
+                } else {
+                    this.title = this.app.i18n._('Select files');
+                }
+            } else if (this.constraint == 'folder') {
+                if (this.singleSelect) {
+                    this.title = this.app.i18n._('Select a folder');
+                } else {
+                    this.title = this.app.i18n._('Select folders');
+                }
+            } else {
+                if (this.singleSelect) {
+                    this.title = this.app.i18n._('Select an item');
+                } else {
+                    this.title = this.app.i18n._('Select items');
+                }
+            }
+        }
         this.supr().initComponent.call(this);
 
         this.addEvents(
@@ -59,9 +83,9 @@ Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
     
     onTriggerClick: function () {
         var filepicker = new Tine.Filemanager.FilePickerDialog({
-            title: this.app.i18n._('Select a file'),
-            singleSelect: true,
-            constraint: 'file'
+            title: this.title,
+            singleSelect: this.singleSelect,
+            constraint: this.constraint
         });
 
         filepicker.on('selected', function (node) {

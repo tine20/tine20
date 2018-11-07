@@ -62,7 +62,7 @@ msgstr "E-Mail-Notiz erzeugen"
 
 #: Preference.php:126
 msgid "Save Note default Value."
-msgstr "Es wird standardmäßig eine E-Mail-Notiz beim versenden einer Nachricht erzeugt."
+msgstr "Es wird standardmäßig eine E-Mail-Notiz beim Versenden einer Nachricht erzeugt."
 
 #: Preference.php:129
 msgid "Confirm Delete"
@@ -291,7 +291,10 @@ msgstr "Ja"
 
 #: js/AccountEditDialog.js:369
 msgid "Reply-To Email"
-msgstr "Replay-To E-Mail"
+msgstr "Antwortadresse"
+
+msgid "Add email address here for reply-to"
+msgstr "Antwortadresse hier eintragen (reply-to)"
 
 #: js/RecipientGrid.js:234
 msgid "Click here to set To/CC/BCC."
@@ -315,7 +318,7 @@ msgstr "Entfernen"
 
 #: js/GridPanelHook.js:34 js/GridPanelHook.js:90
 msgid "Compose email"
-msgstr "E-Mail verfassen"
+msgstr "Nachricht verfassen"
 
 #: js/GridPanelHook.js:49 js/Model.js:170 js/GridPanel.js:538
 msgid "To"
@@ -542,23 +545,23 @@ msgstr "Kopie  zurückbehalten"
 
 #: js/sieve/RuleEditDialog.js:432
 msgid "Move mail to folder"
-msgstr "E-Mail in Ordner verschieben"
+msgstr "Nachricht in Ordner verschieben"
 
 #: js/sieve/RuleEditDialog.js:433
 msgid "Redirect mail to address"
-msgstr "E-Mail an folgende Adresse weiterleiten"
+msgstr "Nachricht an folgende Adresse weiterleiten"
 
 #: js/sieve/RuleEditDialog.js:434
 msgid "Reject mail with this text"
-msgstr "E-Mail mit folgendem Text ablehnen"
+msgstr "Nachricht mit folgendem Text ablehnen"
 
 #: js/sieve/RuleEditDialog.js:435
 msgid "Discard mail"
-msgstr "E-Mail verwerfen"
+msgstr "Nachricht verwerfen"
 
 #: js/sieve/RuleEditDialog.js:436
 msgid "Keep mail"
-msgstr "E-Mail behalten"
+msgstr "Nachricht behalten"
 
 #: js/sieve/RulesDialog.js:51
 msgid "Sieve Filter Rules"
@@ -806,11 +809,11 @@ msgstr "Aktivieren Sie diesen Knopf um eine Lesebestätigung zu erhalten."
 
 #: js/MessageEditDialog.js:211
 msgid "Encrypt Email"
-msgstr "E-Mail verschlüsseln"
+msgstr "Nachricht verschlüsseln"
 
 #: js/MessageEditDialog.js:221
 msgid "Encrypt email using Mailvelope"
-msgstr "E-Mail mit Mailvelope verschlüsseln"
+msgstr "Nachricht mit Mailvelope verschlüsseln"
 
 #: js/MessageEditDialog.js:239
 msgid "Click to search for and add recipients from the Addressbook."
@@ -853,7 +856,7 @@ msgstr "Originalnachricht"
 
 #: js/MessageEditDialog.js:939 js/MessageEditDialog.js:1235
 msgid "Compose email:"
-msgstr "E-Mail verfassen:"
+msgstr "Nachricht verfassen:"
 
 #: js/MessageEditDialog.js:1172
 msgid "Convert to formated text"
@@ -866,7 +869,13 @@ msgstr "Nachricht"
 
 #: js/MessageEditDialog.js:1215
 msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
-msgstr "Beachte: Diese E-Mail wird als Massen-Mail verschickt. So bekommt z.b. jeder Empfänger seine eigene einzelne Kopie."
+msgstr "Beachte: Diese Nachricht wird als Massen-Mail verschickt. So bekommt z.b. jeder Empfänger seine eigene einzelne Kopie."
+
+msgid "Mass Mailing"
+msgstr "Massen-Mail"
+
+msgid "Activate this toggle button to send the mail as separate mail to each recipient."
+msgstr "Wenn der Knopf gedrückt ist, bekommt jeder Empfänger seine eigene einzelne Kopie der Nachricht."
 
 #: js/MessageEditDialog.js:1317
 msgid "Empty subject"
@@ -976,8 +985,8 @@ msgstr[0] "Flag-Liste"
 msgstr[1] "Flag-Listen"
 
 #: js/GridPanel.js:112
-msgid "No Messages found or the cache is empty."
-msgstr "Keine Nachrichten gefunden oder Zwischenspeicher (cache) leer."
+msgid "No Messages found."
+msgstr "Keine Nachrichten gefunden."
 
 #: js/GridPanel.js:231
 msgid "Compose"
@@ -1061,7 +1070,7 @@ msgstr "Wollen Sie eine Lesebestätigung senden?"
 
 #: js/Felamimail.js:33
 msgid "New Mail"
-msgstr "Neue E-Mail"
+msgstr "Neue Nachricht"
 
 #: js/Felamimail.js:89
 msgid "Email"
@@ -1088,7 +1097,7 @@ msgstr "{0} als default Mailer"
 
 #: js/Felamimail.js:595
 msgid "New mails"
-msgstr "Neue E-Mails"
+msgstr "Neue Nachrichten"
 
 #: js/Felamimail.js:596
 #, python-brace-format
@@ -1151,15 +1160,15 @@ msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 #: js/FolderSelectPanel.js:175
 #, python-brace-format
 msgid "Folders of account {0}"
-msgstr "Ordner von E-Mailkonto {0}"
+msgstr "Ordner von Konto {0}"
 
 #: js/FolderSelectPanel.js:176
 msgid "Folders of all accounts"
-msgstr "Ordner aller E-Mailkonten"
+msgstr "Ordner aller Konten"
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"
-msgstr "Alle Posteingänge meiner E-Mailkonten"
+msgstr "Alle Posteingänge meiner Konten"
 
 #: Setup/Initialize.php:51
 msgid "All unread mail"
@@ -1167,7 +1176,7 @@ msgstr "Alle ungelesenen Nachrichten"
 
 #: Setup/Initialize.php:52
 msgid "All unread mail of my email accounts"
-msgstr "Alle ungelesenen Nachrichten meiner E-Mailkonten"
+msgstr "Alle ungelesenen Nachrichten meiner Konten"
 
 #: Setup/Initialize.php:59
 msgid "All highlighted mail"
@@ -1175,7 +1184,7 @@ msgstr "Alle markierten Nachrichten"
 
 #: Setup/Initialize.php:60
 msgid "All highlighted mail of my email accounts"
-msgstr "Alle markierten Nachrichten meiner E-Mailkonten"
+msgstr "Alle markierten Nachrichten meiner Konten"
 
 #: Setup/Initialize.php:67
 msgid "All drafts"
@@ -1211,7 +1220,7 @@ msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP
 
 #: Config.php:143
 msgid "Delete Archived Mail"
-msgstr "Archivierte E-Mail löschen"
+msgstr "Archivierte Nachricht löschen"
 
 #: Config.php:153
 msgid "Enabled Features"
@@ -1308,7 +1317,7 @@ msgstr "Abwesenheitsnotiz von %1$s"
 
 #: Controller/Sieve.php:677
 msgid "You have new mail from "
-msgstr "Sie haben eine neue E-Mail von "
+msgstr "Sie haben eine neue Nachricht von "
 
 #: Model/Message.php:295
 msgid "Reading Confirmation:"
@@ -1332,19 +1341,19 @@ msgstr "am"
 
 #: Acl/Rights.php:106
 msgid "manage email accounts"
-msgstr "E-Mailkonten verwalten"
+msgstr "Konten verwalten"
 
 #: Acl/Rights.php:107
 msgid "Edit and delete email accounts"
-msgstr "Bearbeiten und Löschen von E-Mailkonten"
+msgstr "Bearbeiten und Löschen von Konten"
 
 #: Acl/Rights.php:110
 msgid "Add email accounts"
-msgstr "E-Mailkonten hinzufügen"
+msgstr "Konten hinzufügen"
 
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
-msgstr "Neue E-Mailkonten hinzufügen"
+msgstr "Neue Konten hinzufügen"
 
 #~ msgid "Quota usage"
 #~ msgstr "Kontingentnutzung"

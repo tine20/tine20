@@ -107,12 +107,6 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
     // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
     minWidth: 180,
-
-    /**
-     * additional filters to use for each query
-     * @type {Array}
-     */
-    additionalFilters: null,
     
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));

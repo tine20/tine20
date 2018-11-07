@@ -164,8 +164,8 @@ Ext.ns('Tine', 'Tine.Setup');
     },
 
     resultRenderer: function(value) {
-        var icon = (value) ? 'images/oxygen/16x16/actions/dialog-apply.png' : 'images/oxygen/16x16/actions/dialog-cancel.png';
-        return '<img class="TasksMainGridStatus" src="' + icon + '">';
+        var icon = (value) ? 'images/icon-set/icon_ok.svg' : 'images/icon-set/icon_stop.svg';
+        return '<img class="setup-envcheck-grid-status" src="' + icon + '">';
     },
     
     messageRenderer: function(value) {

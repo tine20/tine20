@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -75,18 +75,83 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * @var string
      */
     const ACCOUNT_STATUS_BLOCKED  = 'blocked';
-    
+
     /**
-     * name of fields containing datetime or or an array of datetime
-     * information
+     * key in $_validators/$_properties array for the filed which
+     * represents the identifier
      *
-     * @var array list of datetime fields
+     * @var string
      */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-    );
+    protected $_identifier = 'accountId';
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = [
+        'recordName'        => 'User',
+        'recordsName'       => 'Users', // ngettext('User', 'Users', n)
+        'hasRelations'      => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'hasXProps'         => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
+        'createModule'      => false,
+        'exposeHttpApi'     => false,
+        'exposeJsonApi'     => false,
+
+        'titleProperty'     => 'accountDisplayName',
+        'appName'           => 'Tinebase',
+        'modelName'         => 'User',
+        'idProperty'        => 'accountId',
+
+        'filterModel'       => [],
+
+        'fields'            => [
+            'accountDisplayName'            => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountLastName'               => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountFirstName'              => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountEmailAddress'           => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'inputFilters'                  => [
+                    Zend_Filter_StringTrim::class => null,
+                    Zend_Filter_StringToLower::class => null,
+                ],
+            ],
+            'accountFullName'               => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'contact_id'                    => [
+                //'type'                          => 'record',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+        ],
+    ];
 
     /**
      * if foreign Id fields should be resolved on search and get from json
@@ -101,50 +166,6 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     protected static $_resolveForeignIdFields = array(
         'Tinebase_Model_User'        => array('created_by', 'last_modified_by')
     );
-    
-    /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_filters = array(
-        'accountId'             => 'StringTrim',
-        //'accountLoginName'    => 'StringTrim',
-        'accountDisplayName'    => 'StringTrim',
-        'accountLastName'       => 'StringTrim',
-        'accountFirstName'      => 'StringTrim',
-        'accountFullName'       => 'StringTrim',
-    );
-    
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'accountId'             => array('presence' => 'required'),
-        //'accountLoginName'    => array('presence' => 'required'),
-        'accountDisplayName'    => array('presence' => 'required'),
-        'accountLastName'       => array('presence' => 'required'),
-        'accountFirstName'      => array('allowEmpty' => true),
-        'accountEmailAddress'   => array('allowEmpty' => true),
-        'accountFullName'       => array('presence' => 'required'),
-        'contact_id'            => array('allowEmpty' => true),
-        // @todo do we need this information in this model?
-        'created_by'            => array('allowEmpty' => true),
-        'creation_time'         => array('allowEmpty' => true),
-        'last_modified_by'      => array('allowEmpty' => true),
-        'last_modified_time'    => array('allowEmpty' => true),
-        'is_deleted'            => array('allowEmpty' => true),
-        'deleted_time'          => array('allowEmpty' => true),
-        'deleted_by'            => array('allowEmpty' => true),
-        'seq'                   => array('allowEmpty' => true),
-        'xprops'                => array('allowEmpty' => true),
-    );
 
     protected static $_replicable = true;
 
@@ -156,7 +177,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * 
      * @todo need to discuss if this is the right place to do this. perhaps the client should send the fullname (and displayname), too.
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         // always update accountDisplayName and accountFullName
         if (isset($_data['accountLastName'])) {
@@ -176,13 +197,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         parent::setFromArray($_data);
     }
     
-   /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'accountId';
+
     
     /**
      * check if current user has a given right for a given application
@@ -380,7 +395,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
             return true;
         }
 
-        if ($_containerId instanceof Tinebase_Record_Abstract) {
+        if ($_containerId instanceof Tinebase_Record_Interface) {
             $aclModel = get_class($_containerId);
             if (! in_array($aclModel, array('Tinebase_Model_Container', 'Tinebase_Model_Tree_Node'))) {
                 // fall back to param
@@ -408,27 +423,14 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * converts a int, string or Tinebase_Model_User to an accountid
      *
      * @param int|string|Tinebase_Model_User $_accountId the accountid to convert
-     * @return int
-     * @throws Tinebase_Exception_NotFound
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
      * 
-     * TODO replace with TRA::convertId
+     * TODO completely replace with TRA::convertId
      */
     static public function convertUserIdToInt($_accountId)
     {
-        if ($_accountId instanceof Tinebase_Model_User) {
-            if (empty($_accountId->accountId)) {
-                throw new Tinebase_Exception_NotFound('accountId can not be empty');
-            }
-            $accountId = (string) $_accountId->accountId;
-        } else {
-            $accountId = (string) $_accountId;
-        }
-        
-        if (empty($accountId)) {
-            throw new Tinebase_Exception_NotFound('accountId can not be empty');
-        }
-        
-        return $accountId;
+        return (string) self::convertId($_accountId, 'Tinebase_Model_User');
     }
     
     /**

@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -22,7 +22,7 @@ class Tinebase_Backend_Sql_Factory_Abstract
      
     /**
      * @param Zend_Db_Adapter_Abstract $adapter
-     * @return mixed
+     * @return Tinebase_Backend_Sql_Command_Interface
     */
     public static function factory(Zend_Db_Adapter_Abstract $adapter)
     {

@@ -281,11 +281,11 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
      *
      * @param string $loginName
      * @param Zend_Auth_Result $authResult
-     * @param Zend_Controller_Request_Abstract $request
+     * @param Tinebase_Http_Request $request
      * @param string $clientIdString
      * @return Tinebase_Model_AccessLog
      */
-    public function getAccessLogEntry($loginName, Zend_Auth_Result $authResult, \Zend\Http\Request $request, $clientIdString)
+    public function getAccessLogEntry($loginName, Zend_Auth_Result $authResult, Tinebase_Http_Request $request, $clientIdString)
     {
         if ($header = $request->getHeaders('USER-AGENT')) {
             $userAgent = substr($header->getFieldValue(), 0, 255);
@@ -294,7 +294,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         }
 
         $accessLog = new Tinebase_Model_AccessLog(array(
-            'ip'         => $request->getServer('REMOTE_ADDR'),
+            'ip'         => $request->getRemoteAddress(),
             'li'         => Tinebase_DateTime::now(),
             'result'     => $authResult->getCode(),
             'clienttype' => $clientIdString,

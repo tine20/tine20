@@ -28,7 +28,7 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
      * @param  Tasks_Model_Task  $_record
      * @return \Sabre\VObject\Component
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($_record->toArray(), true));
@@ -208,7 +208,7 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
      * @param  array                 $options
      * @return Calendar_Model_Event
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $vcalendar = self::getVObject($_blob);
         

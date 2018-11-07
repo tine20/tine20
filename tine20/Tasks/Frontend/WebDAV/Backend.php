@@ -103,6 +103,7 @@ class Tasks_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBackend
                 'owner_id'          => Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $principalParts[1]),
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
                 'backend'           => 'Sql',
+                'model'             => Calendar_Model_Event::class,
             ));
             
             $container = Tinebase_Container::getInstance()->addContainer($container);

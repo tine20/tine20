@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add test testOrganizerSendBy
@@ -94,16 +94,79 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         parent::tearDown();
     }
-    
+
+    public function testExternalInvitationToOneOfARecurSeries()
+    {
+        $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) .
+            '/files/exchange_external_reoccuring_onlyone.ics');
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'ics'            => $ics,
+            'method'         => 'REQUEST',
+            'originator'     => 'l.kneschke@caldav.org',
+        ));
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $this->_iMIPFrontendMock->process($iMIP);
+
+        static::assertTrue($iMIP->event instanceof Calendar_Model_Event, 'imips event not set');
+        static::assertEquals(1, count($iMIP->event->attendee));
+        static::assertEquals('Daily Call', $iMIP->event->summary);
+        static::assertEquals('RECURRENCE-ID:20180906T110000',
+            $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['RECURRENCE-ID']);
+        static::assertEquals('X-MICROSOFT-CDO-OWNERAPPTID:1983350753',
+            $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['X-MICROSOFT-CDO-OWNERAPPTID']);
+
+        // TODO test that msg send to external server contains proper recurid
+        $iMIP->preconditionsChecked = true;
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var \Sabre\VObject\Component\VCalendar $vcalendar */
+        $vcalendar = Calendar_Convert_Event_VCalendar_Factory::factory('')->fromTine20Model($iMIP->getEvent());
+        $vCalBlob = $vcalendar->serialize();
+        static::assertContains('RECURRENCE-ID:20180906T110000', $vCalBlob);
+        static::assertContains('X-MICROSOFT-CDO-OWNERAPPTID:1983350753', $vCalBlob);
+    }
+
     /**
      * testExternalInvitationRequestAutoProcess
      */
-    public function testExternalInvitationRequestAutoProcess()
+    public function testExternalInvitationRequestAutoProcess($_doAssertation = true, $_doAutoProcess = true)
     {
-        return $this->_testExternalImap('invitation_request_external.ics', 5, 'test mit extern');
+        return $this->_testExternalImap('invitation_request_external.ics', 5, 'test mit extern', $_doAssertation,
+            $_doAutoProcess);
     }
 
-    protected function _testExternalImap($icsFilename, $numAttendee, $summary)
+    public function testExternalInvitationRequestMultiImport()
+    {
+        if (Tinebase_Core::getUser()->accountLoginName === 'travis') {
+            static::markTestSkipped('FIXME on travis-ci');
+        }
+
+        $firstIMIP = $this->testExternalInvitationRequestAutoProcess();
+        $this->_iMIPFrontendMock->process($firstIMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Calendar_Model_Attender::clearCache();
+
+        $secondIMIP = $this->testExternalInvitationRequestAutoProcess(false, false);
+
+        static::assertTrue($secondIMIP->preconditionsChecked, 'preconditions have not been checked');
+        static::assertNotEmpty($secondIMIP->existing_event, 'there should be an existing event');
+        static::assertEmpty($secondIMIP->preconditions, 'no preconditions should be raised');
+        static::assertEquals($secondIMIP->event->organizer->getId(), $secondIMIP->existing_event->organizer->getId(),
+            'organizer mismatch');
+        static::assertEquals(4, count($secondIMIP->event->attendee));
+        static::assertEquals(5, count($secondIMIP->existing_event->attendee));
+        static::assertEquals(2, $secondIMIP->existing_event->attendee->filter('status',
+            Calendar_Model_Attender::STATUS_ACCEPTED)->count(), 'organizer and vagrant should have accepted');
+        $this->_iMIPFrontendMock->process($secondIMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $event = Calendar_Controller_Event::getInstance()->get($firstIMIP->event->getId());
+        static::assertEquals(3, $event->attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)->count(),
+            'organizer, vagrant and sclever should have accepted');
+    }
+
+    protected function _testExternalImap($icsFilename, $numAttendee, $summary, $_doAssertation = true,
+        $_doAutoProcess = true)
     {
         $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/' . $icsFilename);
         $iMIP = new Calendar_Model_iMIP(array(
@@ -113,13 +176,17 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'originator'     => 'l.kneschke@caldav.org',
         ));
 
-        $this->_iMIPFrontend->autoProcess($iMIP);
+        if ($_doAutoProcess) {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        }
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
 
-        $this->assertEmpty($prepared->existing_event, 'there should be no existing event');
-        $this->assertEmpty($prepared->preconditions, 'no preconditions should be raised');
-        $this->assertEquals($numAttendee, count($prepared->event->attendee));
-        $this->assertEquals($summary, $prepared->event->summary);
+        if ($_doAssertation) {
+            $this->assertEmpty($prepared->existing_event, 'there should be no existing event');
+            $this->assertEmpty($prepared->preconditions, 'no preconditions should be raised');
+            $this->assertEquals($numAttendee, count($prepared->event->attendee));
+            $this->assertEquals($summary, $prepared->event->summary);
+        }
 
         return $iMIP;
     }
@@ -515,7 +582,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             return;
         }
         
-        $this->fail("autoProcess did not throw TOPROCESS Exception $e");
+        $this->fail("autoProcess did not throw TOPROCESS Exception");
     }
     
     /**
@@ -559,15 +626,21 @@ class Calendar_Frontend_iMIPTest extends TestCase
         
         $this->assertEquals(3, count($updatedEvent->attendee));
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
+        $this->assertTrue(isset($updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]) &&
+            isset($updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE]),
+            'xprops of attender not properly set: ' . print_r($updatedExternalAttendee->xprops(), true));
+        $this->assertEquals($iMIP->getEvent()->seq, $updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE]);
+        $this->assertEquals($iMIP->getEvent()->last_modified_time, $updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]);
         
-        // TEST ACCEPTABLE NON RECENT REPLY
+        // TEST NORMAL REPLY
         $updatedExternalAttendee->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         Calendar_Controller_Event::getInstance()->attenderStatusUpdate($updatedEvent, $updatedExternalAttendee, $updatedExternalAttendee->status_authkey);
         try {
+            $iMIP->getEvent()->seq = $iMIP->getEvent()->seq + 1;
             $iMIP->preconditionsChecked = false;
             $this->_iMIPFrontend->autoProcess($iMIP);
         } catch (Exception $e) {
-            $this->fail('TEST ACCEPTABLE NON RECENT REPLY autoProcess throws Exception: ' . $e);
+            $this->fail('TEST NORMAL REPLY autoProcess throws Exception: ' . $e);
         }
         unset($iMIP->existing_event);
         
@@ -576,13 +649,15 @@ class Calendar_Frontend_iMIPTest extends TestCase
         
         $this->assertEquals(3, count($updatedEvent->attendee));
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
+        $this->assertEquals($iMIP->getEvent()->seq, $updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE]);
+        $this->assertEquals($iMIP->getEvent()->last_modified_time, $updatedExternalAttendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]);
         
         // check if attendee are resolved
         $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP);
         $this->assertTrue($iMIP->existing_event->attendee instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(3, count($iMIP->existing_event->attendee));
         
-        // TEST NON ACCEPTABLE NON RECENT REPLY
+        // TEST NON RECENT REPLY (seq is the same as before)
         $iMIP->preconditionsChecked = false;
         try {
             $this->_iMIPFrontend->autoProcess($iMIP);

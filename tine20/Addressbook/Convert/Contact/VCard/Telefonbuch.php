@@ -23,11 +23,11 @@ class Addressbook_Convert_Contact_VCard_Telefonbuch extends Addressbook_Convert_
      * converts vcard to Addressbook_Model_Contact
      *
      * @param  \Sabre\VObject\Component|stream|string  $blob       the vcard to parse
-     * @param  Tinebase_Record_Abstract                $_record    update existing contact
+     * @param  Tinebase_Record_Interface                $_record    update existing contact
      * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $vcard = self::getVObject($blob);
 

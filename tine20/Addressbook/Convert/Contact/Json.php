@@ -33,13 +33,41 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
         }
 
         // TODO: Can be removed when "0000284: modlog of contact images / move images to vfs" is resolved.
+        // TODO: https://github.com/tine20/tine20/issues/235
         Addressbook_Frontend_Json::resolveImages($_records);
 
         $this->_appendRecordPaths($_records, $_filter);
 
-        $result = parent::fromTine20RecordSet($_records, $_filter, $_pagination);
+        $dehydrator = Tinebase_Record_Hydration_Factory::createDehydrator(Tinebase_Record_Hydration_Factory::TYPE_ARRAY,
+            Addressbook_Model_Contact::class, [
+                Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                Tinebase_Record_Dehydrator_Strategy::DEF_SUB_DEFINITIONS    => [
+                    'paths'                                                     => [
+                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                    ],
+                    'container_id'                                              => [
+                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                    ],
+                    'tags'                                                      => [
+                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                    ],
+                    'attachments'                                               => [
+                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                    ],
+                    'created_by'                                                => [
+                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                    ],
+                    'last_modified_by'                                          => [
+                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                    ],
+                ]
+            ]);
 
-        return $result;
+        return $dehydrator->dehydrate($_records);
+
+        //$result = parent::fromTine20RecordSet($_records, $_filter, $_pagination);
+
+        //return $result;
     }
 
     /**
@@ -48,7 +76,8 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
      * @param Tinebase_Record_RecordSet $_records
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      *
-     * TODO move to generic json converter
+     * @deprecated
+     * TODO move to expander
      */
     protected function _appendRecordPaths($_records, $_filter)
     {

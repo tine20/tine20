@@ -1734,7 +1734,13 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     {
         $this->validateTableVersion('sales_invoices', '3');
 
-        $this->renameTable('sales_invoices', 'sales_sales_invoices');
+        try {
+            $this->renameTable('sales_invoices', 'sales_sales_invoices');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // table already exists -> rename existing table
+            $this->renameTable('sales_sales_invoices', 'sales_sales_invoices_bkp');
+            $this->renameTable('sales_invoices', 'sales_sales_invoices');
+        }
 
         $this->setTableVersion('sales_sales_invoices', 4);
 
@@ -1893,6 +1899,11 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>';
+
+        try {
+            $this->renameTable('sales_purchase_invoices', 'sales_purchase_invoices_bkp');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+        }
 
         $this->createTable('sales_purchase_invoices', Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition), 'Sales');
 
@@ -2091,7 +2102,11 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </field>';
 
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
-        $this->_backend->addCol('sales_purchase_invoices', $declaration, 16);
+        try {
+            $this->_backend->addCol('sales_purchase_invoices', $declaration, 16);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // skip
+        }
 
         $field = '<field>
                     <name>price_total</name>
@@ -2101,7 +2116,11 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </field>';
 
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
-        $this->_backend->addCol('sales_purchase_invoices', $declaration, 19);
+        try {
+            $this->_backend->addCol('sales_purchase_invoices', $declaration, 19);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // skip
+        }
 
         // update existing purchase invoices, set total price to price_gross
         $db = $this->_backend->getDb();
@@ -2116,9 +2135,13 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </field>';
 
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        try {
         $this->_backend->addCol('sales_sales_invoices', $declaration, 8);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // skip
+        }
 
-        // TODO fix this for pgsql/oracle. currently we only update the invoices for mysql db adapters
+// TODO fix this for pgsql/oracle. currently we only update the invoices for mysql db adapters
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
             $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_sales_invoices') . ' SET ' . $db->quoteIdentifier('price_tax') . ' = TRUNCATE( ' . $db->quoteIdentifier('price_net') . ' * ' . $db->quoteIdentifier('sales_tax') . ' / 100 + 0.005, 2) WHERE ' . $db->quoteIdentifier('price_net') . ' > 0';
             $db->query($sql);

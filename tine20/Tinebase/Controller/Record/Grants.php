@@ -182,8 +182,16 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             $this->_grantsBackend->deleteByProperty($recordId, 'record_id');
-            
+
+            $uniqueGate = [];
+            /** @var Tinebase_Model_Grants $newGrant */
             foreach ($record->grants as $newGrant) {
+                $uniqueKey = $newGrant->account_type . $newGrant->account_id;
+                if (isset($uniqueGate[$uniqueKey])) {
+                    continue;
+                }
+                $uniqueGate[$uniqueKey] = true;
+                
                 foreach (call_user_func($this->_grantsModel . '::getAllGrants') as $grant) {
                     if ($newGrant->{$grant}) {
                         $newGrant->id = null;
@@ -302,7 +310,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      */
     protected function _getGrants($records)
     {
-        $recordset = ($records instanceof Tinebase_Record_Abstract)
+        $recordset = ($records instanceof Tinebase_Record_Interface)
             ? new Tinebase_Record_RecordSet($this->_modelName, array($records))
             : ($records instanceof Tinebase_Record_RecordSet ? $records : new Tinebase_Record_RecordSet($this->_modelName, $records));
         
@@ -316,7 +324,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * get grants for account
      * 
      * @param Tinebase_Model_User $user
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @return Tinebase_Model_Grants
      * 
      * @todo force refetch from db or add user param to _getGrants()?

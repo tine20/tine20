@@ -204,7 +204,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header('Location: ' . $redirectUrl);
             return;
         }
-        
+
         // check if setup/update required
         $setupController = Setup_Controller::getInstance();
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
@@ -212,102 +212,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             if ($setupController->updateNeeded($application)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . " " . $application->name . ' needs an update');
-                $this->setupRequired();
+                return $this->setupRequired();
             }
         }
-        
-        $this->_renderMainScreen();
-        
-        /**
-         * old code used to display user registration
-         * @todo must be reworked
-         * 
-        
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
 
-        header('Content-Type: text/html; charset=utf-8');
-        
-        // check if registration is active
-        if(isset(Tinebase_Core::getConfig()->login)) {
-            $registrationConfig = Tinebase_Core::getConfig()->registration;
-            $view->userRegistration = (isset($registrationConfig->active)) ? $registrationConfig->active : '';
-        } else {
-            $view->userRegistration = 0;
-        }        
-        
-        echo $view->render('jsclient.php');
-        */
+        return $this->mainScreen();
     }
-    
-    /**
-     * renders the main screen
-     * 
-     * @return void
-     */
-    protected function _renderMainScreen()
-    {
-        $view = new Zend_View();
-        $baseDir = dirname(dirname(dirname(__FILE__)));
-        $view->setScriptPath("$baseDir/Tinebase/views");
 
-        if (TINE20_BUILDTYPE =='DEVELOPMENT') {
-            $jsFilestoInclude = $this->_getFilesToWatch('js');
-            $view->devIncludes = $jsFilestoInclude;
-        }
-
-        $view->registryData = array();
-        
-        $this->_setMainscreenHeaders();
-        
-        echo $view->render('jsclient.php');
-    }
-    
-    /**
-     * set headers for mainscreen
-     */
-    protected function _setMainscreenHeaders()
-    {
-        if (headers_sent()) {
-            return;
-        }
-        
-        header('Content-Type: text/html; charset=utf-8');
-        
-        // obsoleted by CSP see https://www.w3.org/TR/CSP2/#directive-frame-ancestors
-        //header('X-Frame-Options: SAMEORIGIN');
-
-        $frameAncestors = implode(' ' ,array_merge(
-            (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
-            array("'self'")
-        ));
-
-        // set Content-Security-Policy header against clickjacking and XSS
-        // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
-        $scriptSrcs = array("'self'", "'unsafe-eval'", 'https://versioncheck.tine20.net');
-        if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
-            $scriptSrcs[] = Tinebase_Core::getUrl('protocol') . '://' . Tinebase_Core::getUrl('host') . ":10443";
-        }
-        $scriptSrc = implode(' ', $scriptSrcs);
-        header("Content-Security-Policy: default-src 'self'");
-        header("Content-Security-Policy: script-src $scriptSrc");
-        header("Content-Security-Policy: frame-ancestors $frameAncestors");
-
-        // headers for IE 10+11
-        header("X-Content-Security-Policy: default-src 'self'");
-        header("X-Content-Security-Policy: script-src $scriptSrc");
-        header("X-Content-Security-Policy: frame-ancestors $frameAncestors");
-
-        // set Strict-Transport-Security; used only when served over HTTPS
-        header('Strict-Transport-Security: max-age=16070400');
-
-        // cache mainscreen for one day in production
-        $maxAge = ! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT' ? 86400 : -10000;
-        header('Cache-Control: private, max-age=' . $maxAge);
-        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
-        header_remove('Pragma');
-    }
-    
     /**
      * renders the setup/update required dialog
      */
@@ -397,75 +308,23 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
 
     /**
-     * checks authentication and display Tine 2.0 main screen 
+     * display Tine 2.0 main screen
      */
     public function mainScreen()
     {
-        $this->checkAuth();
-        $this->_renderMainScreen();
+        $locale = Tinebase_Core::getLocale();
+
+        $jsFiles = ['Tinebase/js/fatClient.js'];
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
+
+        $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
+        if (! empty($customJSFiles)) {
+            $jsFiles[] = "index.php?method=Tinebase.getCustomJsFiles";
+        }
+
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig');
     }
-    
-    /**
-     * handle session exception for http requests
-     * 
-     * we force the client to delete session cookie, but we don't destroy
-     * the session on server side. This way we prevent session DOS from thrid party
-     */
-    public function sessionException()
-    {
-        Tinebase_Session::expireSessionCookie();
-        echo "
-            <script type='text/javascript'>
-                window.location.href = window.location.href;
-            </script>
-        ";
-        /*
-        ob_start();
-        $html = $this->login();
-        $html = ob_get_clean();
-        
-        $script = "
-            <script type='text/javascript'>
-                exception = {code: 401};
-                Ext.onReady(function() {
-                    Ext.MessageBox.show({
-                        title: _('Authorisation Required'), 
-                        msg: _('Your session is not valid. You need to login again.'),
-                        buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.WARNING
-                    });
-                });
-            </script>";
-        
-        echo preg_replace('/<\/head.*>/', $script . '</head>', $html);
-        */
-    }
-    
-    /**
-     * generic http exception occurred
-     */
-    public function exception()
-    {
-        ob_start();
-        $this->_renderMainScreen();
-        $html = ob_get_clean();
-        
-        $script = "
-        <script type='text/javascript'>
-            exception = {code: 400};
-            Ext.onReady(function() {
-                Ext.MessageBox.show({
-                    title: _('Abnormal End'), 
-                    msg: _('An error occurred, the program ended abnormal.'),
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.WARNING
-                });
-            });
-        </script>";
-        
-        echo preg_replace('/<\/head.*>/', $script . '</head>', $html);
-    }
-    
+
     /**
      * returns javascript of translations for the currently configured locale
      *
@@ -484,15 +343,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // production
         $filesToWatch = $this->_getFilesToWatch('lang', array($app));
         $this->_deliverChangedFiles('lang', $filesToWatch);
-    }
-    
-    /**
-     * return javascript files if changed
-     * 
-     */
-    public function getJsFiles()
-    {
-        $this->_deliverChangedFiles('js');
     }
 
     /**
@@ -536,7 +386,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') $clientETag: ' . $clientETag);
 
-        $serverETag = $this->getAssetHash();
+        $serverETag = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
 
         if ($clientETag == $serverETag) {
             header("HTTP/1.0 304 Not Modified");
@@ -556,53 +406,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
             if ($_fileType != 'lang') {
                 // adds new server version etag for client version check
-                echo "Tine.clientVersion.filesHash = '$serverETag';";
+                echo "Tine.clientVersion.assetHash = '$serverETag';";
             }
         }
-    }
-
-    /**
-     * get map of asset files
-     *
-     * @param boolean $asJson
-     * @throws Exception
-     * @return string|array
-     */
-    public static function getAssetsMap($asJson = false)
-    {
-        $jsonFile = 'Tinebase/js/webpack-assets-FAT.json';
-
-        if (TINE20_BUILDTYPE =='DEVELOPMENT') {
-            $devServerURL = Tinebase_Config::getInstance()->get('webpackDevServerURL', 'http://localhost:10443');
-            $jsonFileUri = $devServerURL . '/' . $jsonFile;
-            $json = Tinebase_Helper::getFileOrUriContents($jsonFileUri);
-            if (! $json) {
-                Tinebase_Core::getLogger()->ERR(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
-                throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
-            }
-        } else {
-            $json = file_get_contents(dirname(dirname(__DIR__)) . '/' . $jsonFile);
-        }
-
-        return $asJson ? $json : json_decode($json, true);
-    }
-
-    /**
-     * @return string
-     * @throws Exception
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    public static function getAssetHash()
-    {
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        $map = self::getAssetsMap();
-        foreach($map as $asset => $ressources) {
-            if (! $enabledApplications->filter('name', basename($asset))->count()) {
-                unset($map[$asset]);
-            }
-        }
-
-        return sha1(json_encode($map) . TINE20_BUILDTYPE);
     }
 
     /**
@@ -614,27 +420,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected function _getFilesToWatch($_fileType, $apps = array())
     {
-        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
+        $requiredApplications = array('Setup', 'Tinebase', 'Admin', 'Addressbook');
         $installedApplications = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
         $orderedApplications = array_merge($requiredApplications, array_diff($installedApplications, $requiredApplications));
         $filesToWatch = array();
-        $fileMap = $this->getAssetsMap();
 
         foreach ($orderedApplications as $application) {
-            if (! empty($apps) && ! $apps[0] == 'all' && ! in_array($application, $apps)) continue;
+            if (! empty($apps) && $apps[0] != 'all' && ! in_array($application, $apps)) continue;
             switch($_fileType) {
                 case 'js':
-                    if (isset($fileMap["{$application}/js/{$application}"])) {
-                        $jsFile = $fileMap["{$application}/js/{$application}"]['js'];
-                    } else {
-                        break;
-                    }
-
-                    if (TINE20_BUILDTYPE === 'DEBUG') {
-                        $jsFile = preg_replace('/\.js$/', '.debug.js', $jsFile);
-                    }
-
-                    $filesToWatch[] = $jsFile;
+                    $filesToWatch[] = "{$application}/js/{$application}";
                     break;
                 case 'lang':
                     $fileName = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
@@ -848,26 +643,14 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
     public function getPostalXWindow()
     {
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-        $fileMap = $this->getAssetsMap();
-        $view->jsFiles = [$fileMap['Tinebase/js/postal.xwindow.js']['js']];
-
-        if (TINE20_BUILDTYPE != 'RELEASE') {
-            if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
-                $view->jsFiles[] = 'webpack-dev-server.js';
-            } else {
-                $view->jsFiles[0] = preg_replace('/\.js$/', '.debug.js', $view->jsFiles[0]);
-            }
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' getPostalXWindow');
-
-        $this->_setMainscreenHeaders();
-
-        echo $view->render('postal.xwindow.php');
-        exit();
+        $context = [
+            'path' => Tinebase_Core::getUrl('path'),
+        ];
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML(
+           'Tinebase/js/postal-xwindow-client.js',
+            'Tinebase/views/XWindowClient.html.twig',
+            $context
+        );
     }
 
     /**

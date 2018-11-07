@@ -62,7 +62,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'model'             => 'Addressbook_Model_Contact'
         )));
 
-        $this->objects['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $this->objects['grants'] = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass(), array(
             array(
                 'account_id'     => Tinebase_Core::getUser()->getId(),
                 'account_type'   => 'user',
@@ -292,7 +292,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         $grants = $this->_instance->getGrantsOfAccount(Tinebase_Core::getUser(), $this->objects['initialContainer']);
         
-        $this->assertEquals('Tinebase_Model_Grants', get_class($grants), 'wrong type');
+        $this->assertEquals($this->objects['initialContainer']->getGrantClass(), get_class($grants), 'wrong type');
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_READ});
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_ADD});
         $this->assertTrue($grants->{Tinebase_Model_Grants::GRANT_EDIT});
@@ -305,7 +305,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetGrants()
     {
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
         $newGrants->addRecord(
             new Tinebase_Model_Grants(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
@@ -336,7 +336,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         );
         
         $grants = $this->_instance->setGrants($this->objects['initialContainer'], $newGrants);
-        $this->assertEquals('Tinebase_Record_RecordSet', get_class($grants), 'wrong type');
+        $this->assertEquals($this->objects['initialContainer']->getGrantClass(), $grants->getRecordClassName(),
+            'wrong type');
         $this->assertEquals(2, count($grants));
 
         $grants = $grants->toArray();
@@ -362,7 +363,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->testSetGrants();
         
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
         $newGrants->addRecord(
             new Tinebase_Model_Grants(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
@@ -419,7 +420,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'name'           => 'containerTest' . Tinebase_Record_Abstract::generateUID(),
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'backend'        => 'Sql'
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
         )));
         
         $otherUsers = $this->_instance->getOtherUsers(Tinebase_Core::getUser(), 'Addressbook', array(
@@ -438,7 +440,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSearchContainerWithoutReadButWithAdminGrant()
     {
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
         $newGrants->addRecord(
             new Tinebase_Model_Grants(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
@@ -506,6 +508,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => Addressbook_Model_Contact::class,
         )));
         $initialContainer = $this->_instance->get($this->objects['initialContainer']);
         $contact = new Addressbook_Model_Contact(array(
@@ -550,11 +553,12 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($container !== null);
         $this->assertEquals($user->getId(), $container->owner_id);
         
-        $oldGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($container->id, TRUE);
+        $oldGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($container, TRUE);
 
-        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $grantClass = $container->getGrantClass();
+        $newGrants = new Tinebase_Record_RecordSet($grantClass);
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(
+            new $grantClass(
                 array(
                     'account_id'    => $user->accountId,
                     'account_type'  => 'user',
@@ -567,7 +571,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             )
         );
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(
+            new $grantClass(
                 array(
                     'account_id'    => Tinebase_Core::getUser()->getId(),
                     'account_type'  => 'user',
@@ -579,7 +583,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        Tinebase_Container::getInstance()->setGrants($container->id, $newGrants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($container, $newGrants, TRUE);
 
         $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), 'Calendar', array(
             Tinebase_Model_Grants::GRANT_READ
@@ -597,7 +601,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
 
         // TODO move to tear down
         Tinebase_User::getInstance()->setStatus($user, 'enabled');
-        Tinebase_Container::getInstance()->setGrants($container->id, $oldGrants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($container, $oldGrants, TRUE);
         
         $this->assertEquals(0, $otherUsers->filter('accountId', $user->accountId)->count(), 'should not find jsmiths container');
     }
@@ -676,9 +680,10 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => Addressbook_Model_Contact::class,
         ));
         
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $grants = new Tinebase_Record_RecordSet($container->getGrantClass(), array(
             array(
                 'account_id'      => '0',
                 'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
@@ -709,7 +714,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(FALSE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever should _not_ have a read grant');
         
         // have readGrant for sclever
-        $this->_instance->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $this->_instance->setGrants($container, new Tinebase_Record_RecordSet($container->getGrantClass(), array(
             array(
                 'account_id'    => Tinebase_Core::getUser()->getId(),
                 'account_type'  => 'user',
@@ -725,7 +730,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(TRUE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever _should have_ a read grant');
         
         // remove readGrant for sclever again
-        $this->_instance->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $this->_instance->setGrants($container, new Tinebase_Record_RecordSet($container->getGrantClass(), array(
             array(
                 'account_id'    => Tinebase_Core::getUser()->getId(),
                 'account_type'  => 'user',
@@ -739,6 +744,53 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         sleep(1);
         $this->assertEquals(FALSE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever should _not_ have a read grant');
-        
+    }
+
+    public function testGetSharedCalendarContainersByAddGrant()
+    {
+        // create container
+        $container = new Tinebase_Model_Container(array(
+            'name'              => 'tine20sharedcalendar',
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'owner_id'          => null,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
+        ));
+        $grants = new Tinebase_Record_RecordSet($container->getGrantClass(), array(
+            array(
+                'account_id'      => '0',
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                Tinebase_Model_Grants::GRANT_ADD     => true,
+                Tinebase_Model_Grants::GRANT_EXPORT  => true,
+                Tinebase_Model_Grants::GRANT_SYNC    => true,
+            )
+        ), TRUE);
+
+        $sharedContainer = $this->_instance->addContainer($container, $grants);
+
+        // search only with "addGrant"
+        $result = $this->_instance->getSharedContainer(
+            Tinebase_Core::getUser(),
+            Calendar_Model_Event::class,
+            [Tinebase_Model_Grants::GRANT_ADD]
+        );
+        $createdContainerInResult = $result->getById($sharedContainer->getId());
+        self::assertNotFalse($createdContainerInResult, 'container not in result!');
+
+        // @todo check with "null" xprops / does not work yet - don't know why
+//        $db = Tinebase_Core::getDb();
+//        $db->update($this->_instance->getTablePrefix() . $this->_instance->getTableName(), [
+//            'xprops' => null
+//        ], $db->quoteInto('id = ?', $sharedContainer->getId()));
+//        // search only with "addGrant"
+//        $result = $this->_instance->getSharedContainer(
+//            Tinebase_Core::getUser(),
+//            Calendar_Model_Event::class,
+//            [Tinebase_Model_Grants::GRANT_ADD]
+//        );
+//        $createdContainerInResult = $result->getById($sharedContainer->getId());
+//        self::assertNotFalse($createdContainerInResult, 'container not in result!');
     }
 }

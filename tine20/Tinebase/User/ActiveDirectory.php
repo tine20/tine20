@@ -425,7 +425,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      *
      * @param array $_userData
      * @param string $_accountClass
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
     protected function _ldap2User(array $_userData, $_accountClass = 'Tinebase_Model_FullUser')
     {

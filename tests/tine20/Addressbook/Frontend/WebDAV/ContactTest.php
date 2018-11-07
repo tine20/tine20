@@ -54,6 +54,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => Addressbook_Model_Contact::class,
         )));
     }
 

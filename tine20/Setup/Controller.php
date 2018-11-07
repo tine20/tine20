@@ -88,14 +88,14 @@ class Setup_Controller
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new Setup_Controller;
         }
         
         return self::$_instance;
     }
 
-    public static function unsetInstance()
+    public static function destroyInstance()
     {
         self::$_instance = null;
     }
@@ -127,6 +127,12 @@ class Setup_Controller
             'smtp'  => Tinebase_Config::SMTP,
             'sieve' => Tinebase_Config::SIEVE,
         );
+
+        // initialize real config if Tinebase is installed
+        if ($this->isInstalled('Tinebase') && ! Tinebase_Core::getConfig() instanceof Tinebase_Config_Abstract) {
+            // we only have a Zend_Config - check if we can switch to Tinebase_Config
+            Tinebase_Core::setupConfig();
+        }
     }
 
     /**
@@ -450,6 +456,11 @@ class Setup_Controller
         
         //find smallest major version
         foreach ($applications as $application) {
+            if (! $this->updateNeeded($application)) {
+                $applications->removeRecord($application);
+                continue;
+            }
+            
             if ($smallestMajorVersion === NULL || $application->getMajorVersion() < $smallestMajorVersion) {
                 $smallestMajorVersion = $application->getMajorVersion();
             }
@@ -459,6 +470,8 @@ class Setup_Controller
         }
         
         $messages = array();
+
+        // turn off create previews and index content temporarily
         $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
         if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
                 $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT})) {
@@ -468,14 +481,20 @@ class Setup_Controller
             Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
         }
 
+        // we need to clone here because we would taint the app cache otherwise
         // update tinebase first (to biggest major version)
-        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $tinebase = clone (Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
         if ($idx = $applications->getIndexById($tinebase->getId())) {
             unset($applications[$idx]);
         }
 
         list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
+
+        // TODO remove this in release 13
+        $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
+        $release11->addIsSystemToCustomFieldConfig();
+        Setup_SchemaTool::updateAllSchema();
 
         for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
             $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
@@ -502,15 +521,26 @@ class Setup_Controller
      * load the setup.xml file and returns a simplexml object
      *
      * @param string $_applicationName name of the application
-     * @return SimpleXMLElement
+     * @param boolean $_disableAppIfNotFound
+     * @return SimpleXMLElement|null
+     * @throws Setup_Exception_NotFound
      */
-    public function getSetupXml($_applicationName)
+    public function getSetupXml($_applicationName, $_disableAppIfNotFound = false)
     {
         $setupXML = $this->_baseDir . ucfirst($_applicationName) . '/Setup/setup.xml';
 
-        if (!file_exists($setupXML)) {
-            throw new Setup_Exception_NotFound(ucfirst($_applicationName)
-                . '/Setup/setup.xml not found. If application got renamed or deleted, re-run setup.php.');
+        if (! file_exists($setupXML)) {
+            if ($_disableAppIfNotFound) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                    . ' not found - disabling application "' . $_applicationName . '".');
+                $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+                Tinebase_Application::getInstance()->setApplicationStatus(
+                    array($application->getId()),
+                    Tinebase_Application::DISABLED);
+                return null;
+            } else {
+                throw new Setup_Exception_NotFound($setupXML . ' not found. If application got renamed or deleted, re-run setup.php.');
+            }
         }
         
         $xml = simplexml_load_file($setupXML);
@@ -526,8 +556,8 @@ class Setup_Controller
      */
     public function checkUpdate(Tinebase_Model_Application $_application)
     {
-        $xmlTables = $this->getSetupXml($_application->name);
-        if(isset($xmlTables->tables)) {
+        $xmlTables = $this->getSetupXml($_application->name, true);
+        if ($xmlTables && isset($xmlTables->tables)) {
             foreach ($xmlTables->tables[0] as $tableXML) {
                 $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                 if (true == $this->_backend->tableExists($table->name)) {
@@ -550,6 +580,7 @@ class Setup_Controller
      * @param   string    $_majorVersion
      * @return  array   messages
      * @throws  Setup_Exception if current app version is too high
+     * @throws  Exception
      */
     public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion)
     {
@@ -562,6 +593,8 @@ class Setup_Controller
                 
                 $messages[] = $message;
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+
+                $this->_assertApplicationStatesTable();
 
                 $version = $_application->getMajorAndMinorVersion();
                 $minor = $version['minor'];
@@ -639,6 +672,28 @@ class Setup_Controller
         return $messages;
     }
 
+    /**
+     * make sure that application_states table exists before the update
+     *
+     * @see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues/77
+     *
+     * TODO should be removed at some point
+     */
+    protected function _assertApplicationStatesTable()
+    {
+        if ($this->_backend->tableExists('application_states')) {
+            return;
+        }
+
+        $updater = new Tinebase_Setup_Update_Release11($this->_backend);
+        $oldVersion = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->version;
+        $updater->update_23();
+        $updater->setApplicationVersion('Tinebase', $oldVersion);
+    }
+
+    /**
+     * TODO should be removed at some point
+     */
     protected function _fixTinebase10_33()
     {
         // check and execute \Tinebase_Setup_Update_Release10::update_32 if not done yet :-/
@@ -771,14 +826,11 @@ class Setup_Controller
      */
     public function updateNeeded($_application)
     {
-        try {
-            $setupXml = $this->getSetupXml($_application->name);
-        } catch (Setup_Exception_NotFound $senf) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $senf->getMessage() . ' Disabling application "' . $_application->name . '".');
-            Tinebase_Application::getInstance()->setApplicationStatus(array($_application->getId()), Tinebase_Application::DISABLED);
+        $setupXml = $this->getSetupXml($_application->name, true);
+        if (! $setupXml) {
             return false;
         }
-        
+
         $updateNeeded = version_compare($_application->version, $setupXml->version);
         
         if($updateNeeded === -1) {
@@ -787,7 +839,7 @@ class Setup_Controller
         
         return false;
     }
-    
+
     /**
      * search for installed and installable applications
      *
@@ -798,7 +850,6 @@ class Setup_Controller
         // get installable apps
         $installable = $this->getInstallableApplications(/* $getInstalled */ true);
         $applications = array();
-
         // get installed apps
         if (Setup_Core::get(Setup_Core::CHECKDB)) {
             try {
@@ -886,6 +937,8 @@ class Setup_Controller
     {
         $result = array();
         $success = TRUE;
+        
+        
 
         // check php environment
         $requiredIniSettings = array(
@@ -983,7 +1036,12 @@ class Setup_Controller
      */
     public function getConfigData()
     {
-        $configArray = Setup_Core::get(Setup_Core::CONFIG)->toArray();
+        $config = Setup_Core::get(Setup_Core::CONFIG);
+        if ($config instanceof Tinebase_Config_Abstract) {
+            $configArray = $config->getConfigFileData();
+        } else {
+            $configArray = $config->toArray();
+        }
         
         #####################################
         # LEGACY/COMPATIBILITY:
@@ -1232,8 +1290,7 @@ class Setup_Controller
         if (count($allUserContactIds) > 0) {
             $contactSQLBackend->delete($allUserContactIds);
         }
-        
-        
+
         Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
         $listsSQLBackend = new Addressbook_Backend_List();
         $allGroupListIds = $listsSQLBackend->search(new Addressbook_Model_ListFilter(array('type' => 'group')), null, true);
@@ -1587,7 +1644,7 @@ class Setup_Controller
                 }
             }
         }
-        $applications = $this->_sortInstallableApplications($applications);
+        $applications = $this->sortInstallableApplications($applications);
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
 
@@ -1608,7 +1665,35 @@ class Setup_Controller
             }
         }
 
+        $this->_clearCache();
+
         Tinebase_Event::reFireForNewApplications();
+    }
+
+    public function setMaintenanceMode($options)
+    {
+        if (! isset($options['state'])) {
+            return false;
+        }
+        switch ($options['state']) {
+            case Tinebase_Config::MAINTENANCE_MODE_OFF:
+                Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE} = '';
+                break;
+
+            case Tinebase_Config::MAINTENANCE_MODE_NORMAL:
+                Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE} =
+                    Tinebase_Config::MAINTENANCE_MODE_NORMAL;
+                break;
+
+            case Tinebase_Config::MAINTENANCE_MODE_ALL:
+                Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE} =
+                    Tinebase_Config::MAINTENANCE_MODE_ALL;
+                break;
+
+            default:
+                return false;
+        }
+        return true;
     }
 
     /**
@@ -1670,17 +1755,21 @@ class Setup_Controller
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
+        // make sure we have the right instance id
+        Tinebase_Core::unsetTinebaseId();
         // save the master id
         $replicationMasterId = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         // do updates now, because maybe application state updates are not yet there
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        Tinebase_Application::getInstance()->resetClassCache();
         $this->updateApplications();
 
         // then set the replication master id
         $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
         Tinebase_Application::getInstance()->setApplicationState($tinebase,
             Tinebase_Application::STATE_REPLICATION_MASTER_ID, $replicationMasterId);
-        
+
         return true;
     }
 
@@ -1690,6 +1779,7 @@ class Setup_Controller
      * TODO: think about moving the Tinebase ID (and more info) to a metadata.json file in the backup zip
      *
      * @param $mysqlBackupFile
+     * @return string the old TinebaseId
      * @throws Setup_Exception
      */
     protected function _replaceTinebaseidInDump($mysqlBackupFile)
@@ -1713,6 +1803,8 @@ class Setup_Controller
         exec($cmd);
         copy($mysqlBackupFile . '.tmp', $mysqlBackupFile);
         unlink($mysqlBackupFile . '.tmp');
+
+        return $oldTinebaseId;
     }
 
     /**
@@ -1767,6 +1859,13 @@ class Setup_Controller
         }
         $applications = $this->_sortUninstallableApplications($applications);
 
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstalling applications: '
+            . print_r(array_keys($applications), true));
+
+        if (count($_applications) > count($applications)) {
+            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Some applications could not be uninstalled (check dependencies).');
+        }
+
         foreach ($applications as $name => $xml) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($name);
             $this->_uninstallApplication($app);
@@ -1800,7 +1899,23 @@ class Setup_Controller
             if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
 
-            $createdTables = array();
+            $appData = [
+                'name'      => (string)$_xml->name,
+                'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
+                'order'     => $_xml->order ? (string)$_xml->order : 99,
+                'version'   => (string)$_xml->version
+            ];
+            if ($_xml->id && strlen($_xml->id) === 40) {
+                $appData['id'] = (string)$_xml->id;
+            }
+            $application = new Tinebase_Model_Application($appData);
+
+            if ('Tinebase' !== $application->name) {
+                $application = Tinebase_Application::getInstance()->addApplication($application);
+            }
+
+            // do doctrine/MCV2 then old xml
+            $createdTables = $this->_createModelConfigSchema($_xml->name);
 
             // traditional xml declaration
             if (isset($_xml->tables)) {
@@ -1814,38 +1929,10 @@ class Setup_Controller
                 }
             }
 
-            // do modelconfig + doctrine
-            $application = Setup_Core::getApplicationInstance($_xml->name, '', true);
-            $models = $application->getModels(true /* MCv2only */);
-
-            if (count($models) > 0) {
-                // create tables using doctrine 2
-                Setup_SchemaTool::createSchema($_xml->name, $models);
-
-                // adopt to old workflow
-                /** @var Tinebase_Record_Abstract $model */
-                foreach ($models as $model) {
-                    $modelConfiguration = $model::getConfiguration();
-                    $createdTables[] = (object)array(
-                        'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
-                        'version' => $modelConfiguration->getVersion(),
-                    );
-                }
+            if ('Tinebase' === $application->name) {
+                $application = Tinebase_Application::getInstance()->addApplication($application);
             }
 
-            $appData = [
-                'name'      => (string)$_xml->name,
-                'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
-                'order'     => $_xml->order ? (string)$_xml->order : 99,
-                'version'   => (string)$_xml->version
-            ];
-            if ($_xml->id && strlen($_xml->id) === 40) {
-                $appData['id'] = (string)$_xml->id;
-            }
-            $application = new Tinebase_Model_Application($appData);
-
-            $application = Tinebase_Application::getInstance()->addApplication($application);
-            
             // keep track of tables belonging to this application
             foreach ($createdTables as $table) {
                 Tinebase_Application::getInstance()->addApplicationTable($application, (string) $table->name, (int) $table->version);
@@ -1868,6 +1955,40 @@ class Setup_Controller
             Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
         }
+    }
+
+    /**
+     * @param $appName
+     * @return array
+     */
+    protected function _createModelConfigSchema($appName)
+    {
+        $application = Setup_Core::getApplicationInstance($appName, '', true);
+        $models = $application->getModels(true /* MCv2only */);
+        $createdTables = [];
+
+        if (count($models) > 0) {
+            // create tables using doctrine 2
+            // NOTE: we don't use createSchema here because some tables might already been created
+            // TODO or use createSchema, catch exception and fallback to updateSchema ?
+            if ('Tinebase' === (string)$appName) {
+                Setup_SchemaTool::updateSchema($models);
+            } else {
+                Setup_SchemaTool::updateAllSchema();
+            }
+
+            // adopt to old workflow
+            /** @var Tinebase_Record_Abstract $model */
+            foreach ($models as $model) {
+                $modelConfiguration = $model::getConfiguration();
+                $createdTables[] = (object)array(
+                    'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
+                    'version' => $modelConfiguration->getVersion(),
+                );
+            }
+        }
+
+        return $createdTables;
     }
 
     protected function _createTable($table)
@@ -2076,7 +2197,7 @@ class Setup_Controller
      * @param array $_applications
      * @return array
      */
-    protected function _sortInstallableApplications($_applications)
+    public function sortInstallableApplications($_applications)
     {
         $result = array();
         
@@ -2088,10 +2209,21 @@ class Setup_Controller
                 unset($_applications[$app]);
             }
         }
-        
+
+        // sort by order
+        uasort($_applications, function($a, $b) {
+            $aOrder = isset($a->order) ? (int) $a->order : 100;
+            $bOrder = isset($b->order) ? (int) $b->order : 100;
+            if ($aOrder == $bOrder) {
+                // sort alphabetically
+                return ((string) $a->name < (string) $b->name) ? -1 : 1;
+            }
+            return ($aOrder < $bOrder) ? -1 : 1;
+        });
+
         // get all apps to install ($name => $dependencies)
         $appsToSort = array();
-        foreach($_applications as $name => $xml) {
+        foreach ($_applications as $name => $xml) {
             $depends = (array) $xml->depends;
             if (isset($depends['application'])) {
                 if ($depends['application'] == 'Tinebase') {
@@ -2338,6 +2470,12 @@ class Setup_Controller
             throw new Exception('backupDir not configured');
         }
 
+        if (! isset($options['db']) && ! isset($options['files']) && ! isset($options['config'])) {
+            // files & db are default
+            $options['db'] = true;
+            $options['files'] = true;
+        }
+
         if (! isset($options['noTimestamp'])) {
             $backupDir .= '/' . date_create('now', new DateTimeZone('UTC'))->format('Y-m-d-H-i-s');
         }
@@ -2363,7 +2501,7 @@ class Setup_Controller
 
             $backupOptions = array(
                 'backupDir'         => $backupDir,
-                'structTables'      => $this->_getBackupStructureOnlyTables(),
+                'structTables'      => $this->getBackupStructureOnlyTables(),
             );
 
             $this->_backend->backup($backupOptions);
@@ -2372,7 +2510,7 @@ class Setup_Controller
         }
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
-        if ($options['files'] && $filesDir) {
+        if (isset($options['files']) && $options['files'] && $filesDir) {
             `cd $filesDir; tar cjf $backupDir/tine20_files.tar.bz2 .`;
 
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of files successful');
@@ -2385,7 +2523,7 @@ class Setup_Controller
      * @return array
      * @throws Setup_Exception_NotFound
      */
-    protected function _getBackupStructureOnlyTables()
+    public function getBackupStructureOnlyTables()
     {
         $tables = array();
 
@@ -2396,7 +2534,10 @@ class Setup_Controller
          * @var $application Tinebase_Model_Application
          */
         foreach ($applications as $application) {
-            $tableDef = $this->getSetupXml($application->name);
+            $tableDef = $this->getSetupXml($application->name, true);
+            if (! $tableDef) {
+                continue;
+            }
             $structOnlys = $tableDef->xpath('//table/backupStructureOnly[text()="true"]');
 
             foreach ($structOnlys as $structOnly) {

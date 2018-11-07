@@ -63,6 +63,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AVAILABLE_LANGUAGES = 'availableLanguages';
 
     /**
+     * CACHE
+     *
+     * @var string
+     */
+    const CACHE = 'caching';
+
+    /**
      * DEFAULT_LOCALE
      *
      * @var string
@@ -92,7 +99,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const IMAP = 'imap';
-    
+
+    /**
+     * trusted proxy config
+     *
+     * @var string
+     */
+    const TRUSTED_PROXIES = 'trustedProxies';
+
     /**
      * smtp conf name
      * 
@@ -528,6 +542,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MAINTENANCE_MODE = 'maintenanceMode';
+    const MAINTENANCE_MODE_OFF = 'off';
+    const MAINTENANCE_MODE_NORMAL = 'normal';
+    const MAINTENANCE_MODE_ALL = 'all';
 
     /**
      * @var string
@@ -543,6 +560,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const BRANDING_MASKICON_COLOR = 'branding_maskicon_color';
     const BRANDING_TITLE = 'branding_title';
     const BRANDING_WEBURL = 'branding_weburl';
+    const BRANDING_HELPURL = 'branding_helpUrl';
+    const BRANDING_SHOPURL = 'branding_shopUrl';
+    const BRANDING_BUGSURL = 'branding_bugreportUrl';
     const BRANDING_DESCRIPTION = 'branding_description';
 
     const CURRENCY_SYMBOL = 'currencySymbol';
@@ -627,6 +647,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_INDEX_CONTENT = 'index_content';
     const FILESYSTEM_CREATE_PREVIEWS = 'createPreviews';
     const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
+    const FILESYSTEM_PREVIEW_SERVICE_VERSION = 'previewServiceVersion';
+    const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
 
     const ACTIONQUEUE = 'actionqueue';
@@ -646,6 +668,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_SKIP_IMAP_QUOTA = 'skipImapQuota';
 
     const TINE20_URL = 'tine20URL';
+
+    const FILTER_SYNC_TOKEN = 'filterSyncToken';
+    const FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL = 'cleanUpMaxTotal';
+    const FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER = 'cleanUpMaxFilter';
+    const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
 
     /**
      * (non-PHPdoc)
@@ -765,6 +792,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'System IMAP server configuration.',
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::TRUSTED_PROXIES => array(
+            //_('Trusted Proxies')
+            'label'                 => 'Trusted Proxies',
+            //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
+            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
+            'type'                  => 'array',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
@@ -1734,9 +1771,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::MAINTENANCE_MODE => array(
             //_('Maintenance mode enabled')
             'label'                 => 'Maintenance mode enabled',
-            //_('Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!')
-            'description'           => 'Installation is in maintenance mode. With this only users having the maintenance right can login',
-            'type'                  => 'bool',
+            //_('Set Tine 2.0 maintenance mode. Possible values: "off", "normal" (only users having the maintenance right can login) and "all"')
+            'description'           => 'Set Tine 2.0 maintenance mode. Possible values: "off", "normal" (only users having the maintenance right can login) and "all"',
+            'type'                  => 'string',
             'default'               => '',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
@@ -1765,72 +1802,82 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
-        self::INSTALL_LOGO => array(
-            //_('Installation logo')
-            'label'                 => 'Installation logo',
-            //_('Path to custom installation logo.')
-            'description'           => 'Path to custom installation logo.',
+        self::BRANDING_TITLE => array(
+            //_('custom title')
+            'label'                 => 'custom title',
+            //_('Custom title for branding.')
+            'description'           => 'Custom title for branding.',
             'type'                  => 'string',
-            'default'               => false,
-            'clientRegistryInclude' => true,
+            'default'               => "Tine 2.0 ®",
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_LOGO => array(
+            //_('custom logo path')
+            'label'                 => 'custom logo path',
+            //_('Path to custom logo.')
+            'description'           => 'Path to custom logo.',
+            'type'                  => 'string',
+            'default'               => './images/tine_logo.png',
+            'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
         self::BRANDING_DESCRIPTION => array(
-                //_('custom description')
-                'label'                 => 'custom description',
-                //_('Custom description for branding.')
-                'description'           => 'Custom description for branding.',
-                'type'                  => 'string',
-                'default'               => '',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
-        ),
-        self::BRANDING_WEBURL => array(
-                //_('custom weburl')
-                'label'                 => 'custom weburl',
-                //_('Custom weburl for branding.')
-                'description'           => 'Custom weburl for branding.',
-                'type'                  => 'string',
-                'default'               => '',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE
-        ),
-        self::WEBSITE_URL => array(
-            //_('custom website url')
-            'label'                 => 'custom website url',
-            //_('Custom url used for logo on login page.')
-            'description'           => 'Custom url used for logo on login page.',
+            //_('custom description')
+            'label'                 => 'custom description',
+            //_('Custom description for branding.')
+            'description'           => 'Custom description for branding.',
             'type'                  => 'string',
             'default'               => '',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        self::BRANDING_TITLE => array(
-                //_('custom title')
-                'label'                 => 'custom title',
-                //_('Custom title for branding.')
-                'description'           => 'Custom ltitle for branding.',
-                'type'                  => 'string',
-                'default'               => '',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+        self::BRANDING_WEBURL => array(
+            //_('custom weburl')
+            'label'                 => 'custom weburl',
+            //_('Custom weburl for branding.')
+            'description'           => 'Custom weburl for branding.',
+            'type'                  => 'string',
+            'default'               => 'https://github.com/tine20/tine20',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE
         ),
-        self::BRANDING_LOGO => array(
-                //_('custom logo path')
-                'label'                 => 'custom logo path',
-                //_('Path to custom logo.')
-                'description'           => 'Path to custom logo.',
-                'type'                  => 'string',
-                'default'               => './images/tine_logo.png',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
+        self::BRANDING_HELPURL => array(
+            //_('custom help url')
+            'label'                 => 'custom help url',
+            //_('Custom url for help.')
+            'description'           => 'Custom url for help.',
+            'type'                  => 'string',
+            'default'               => 'https://github.com/tine20/tine20/wiki',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE
+        ),
+        self::BRANDING_SHOPURL => array(
+            //_('custom shop url')
+            'label'                 => 'custom shop url',
+            //_('Custom url for the shop.')
+            'description'           => 'Custom url for the shop.',
+            'type'                  => 'string',
+            'default'               => 'https://www.tine20.com/partner/',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE
+        ),
+        self::BRANDING_BUGSURL => array(
+            //_('custom bugreport url')
+            'label'                 => 'custom bugreport url',
+            //_('Custom bugreport url.')
+            'description'           => 'Custom bugreport url.',
+            'type'                  => 'string',
+            'default'               => 'https://api.tine20.net/bugreport.php',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE
         ),
         self::BRANDING_FAVICON => array(
             //_('custom favicon paths')
@@ -1865,6 +1912,29 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Background color of mask icon (safari pinned tab).',
             'type'                  => 'string',
             'default'               => '#9b7f14',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO => array(
+            //_('Installation logo')
+            'label'                 => 'Installation logo',
+            //_('Path to custom installation logo.')
+            'description'           => 'Path to custom installation logo.',
+            'type'                  => 'string',
+            'default'               => false,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::WEBSITE_URL => array(
+            //_('custom website url')
+            'label'                 => 'custom website url',
+            //_('Custom url used for logo on login page.')
+            'description'           => 'Custom url used for logo on login page.',
+            'type'                  => 'string',
+            'default'               => '',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
@@ -2001,9 +2071,78 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => FALSE,
                     'default'               => NULL,
                 ),
+                self::FILESYSTEM_PREVIEW_SERVICE_VERSION => array(
+                    //_('Class for preview service')
+                    'label'                 => 'Version for preview service',
+                    //_('Class to use, to connect to preview service.')
+                    'description'           => 'Version of preview service api.',
+                    'type'                  => 'int',
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 1,
+                ),
+                self::FILESYSTEM_PREVIEW_MAX_FILE_SIZE => array(
+                    //_('Max file size for preview service')
+                    'label'                 => 'Max file size for preview service',
+                    //_('Max file size for preview service.')
+                    'description'           => 'Max file size for preview service.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 51904512, // == 49.5 * 1024 * 1024,
+                ),
             ),
             'default'               => array(),
         ),
+        self::FILTER_SYNC_TOKEN => [
+            //_('Filter sync token settings')
+            self::LABEL                 => 'Filter sync token settings',
+            //_('Filter sync token settings')
+            self::DESCRIPTION           => 'Filter sync token settings',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::CONTENT               => [
+                self::FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE     => [
+                    //_('Max age in days')
+                    self::LABEL                 => 'Max age in days',
+                    //_('Max age in days')
+                    self::DESCRIPTION           => 'Max age in days',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => 750, // 2 years
+                ],
+                self::FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL   => [
+                    //_('Max amount in total')
+                    self::LABEL                 => 'Max amount in total',
+                    //_('Max amount in total')
+                    self::DESCRIPTION           => 'Max amount in total',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => 10000000, // 10 mio
+                ],
+                self::FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER => [
+                    //_('Max amount per filter')
+                    self::LABEL                 => 'Max amount per filter',
+                    //_('Max amount per filter')
+                    self::DESCRIPTION           => 'Max amount per filter',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => 100000, // 100k
+                ],
+            ],
+            self::DEFAULT_STR           => [],
+        ],
         self::QUOTA => array(
             //_('Quota settings')
             'label'                 => 'Quota settings',
@@ -2107,7 +2246,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule' => true,
         ),
     );
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::$_appName

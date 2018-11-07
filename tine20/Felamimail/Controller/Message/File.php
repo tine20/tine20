@@ -57,7 +57,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
     }
 
     /**
-     * file messages into Filemanager / MailFiler / ..,.
+     * file messages into Filemanager
      *
      * @param Felamimail_Model_MessageFilter|Tinebase_Record_RecordSet $messages
      * @param string $targetApp

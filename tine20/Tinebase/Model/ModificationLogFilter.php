@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -26,14 +26,7 @@ class Tinebase_Model_ModificationLogFilter extends Tinebase_Model_Filter_FilterG
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Tinebase_Model_ModificationLog';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_ModificationLogFilter';
+    protected $_modelName = Tinebase_Model_ModificationLog::class;
     
     /**
      * @var array filter model fieldName => definition

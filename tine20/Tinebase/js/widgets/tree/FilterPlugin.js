@@ -143,14 +143,16 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             
             var containerPath = value && Ext.isString(value.path) ? value.path.split('/') : [''],
                 containerId = containerPath.pop(),
-                namePath = value && Ext.isString(value.name) ? value.name.split('/') : [''];
-                if (namePath[0] == "") {
-                    namePath.shift();
-                }
-                namePath.pop();
-                namePath.push(containerId);
+                // NOTE: if hierarchy ends with a "/" name gets appended otherwise last part of hierarchy is the display name
+                hierarchy = value ? (String(value.hierarchy).match(/\/$/) || !value.hierarchy ? value.hierarchy || '' + value.name : value.hierarchy) : '',
+                hierarchyPath = hierarchy.split('/');
+            if (hierarchyPath[0] == "") {
+                hierarchyPath.shift();
+            }
+            hierarchyPath.pop();
+            hierarchyPath.push(containerId);
                 
-            containerPath = containerPath.concat(namePath).join('/');
+            containerPath = containerPath.concat(hierarchyPath).join('/');
             var treePath = this.treePanel.getTreePath(containerPath);
             
             this.selectPath.call(this.treePanel, treePath, null, function() {

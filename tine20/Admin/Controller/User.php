@@ -237,7 +237,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $user = $this->_userBackend->updateUser($_user);
 
             // make sure primary groups is in the list of group memberships
-            $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
+            $currentGroups = ! isset($_user->groups)
+                ? Admin_Controller_Group::getInstance()->getGroupMemberships($user->getId())
+                : (array) $_user->groups;
+            $groups = array_unique(array_merge(array($user->accountPrimaryGroup), $currentGroups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
 
             // update account status if changed to enabled/disabled
@@ -276,7 +279,24 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $this->setAccountPassword($_user, $_password, $_passwordRepeat, FALSE);
         }
 
+        $this->_updateCurrentUser($user);
+
         return $user;
+    }
+
+    /**
+     * update current user in session if changed
+     *
+     * @param $updatedUser
+     */
+    protected function _updateCurrentUser($updatedUser)
+    {
+        $currentUser = Tinebase_Core::getUser();
+        if ($currentUser->getId() === $updatedUser->getId()) {
+            // update current user in session!
+            Tinebase_Core::set(Tinebase_Core::USER, $updatedUser);
+            Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
+        }
     }
     
     /**
@@ -296,11 +316,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), TRUE));
-        
-        $this->_checkLoginNameExistance($_user);
-        $this->_checkLoginNameLength($_user);
-        $this->_checkPrimaryGroupExistance($_user);
-        
+
         if ($_password != $_passwordRepeat) {
             throw new Admin_Exception("Passwords don't match.");
         } else if (empty($_password)) {
@@ -308,15 +324,31 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_passwordRepeat = '';
         }
         Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
-        
+
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+            $this->_checkLoginNameExistance($_user);
+            $this->_checkLoginNameLength($_user);
+            $this->_checkPrimaryGroupExistance($_user);
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                $contact = $this->createOrUpdateContact($_user);
-                $_user->contact_id = $contact->getId();
-            }
-            
+                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Addressbook_Model_Contact', [
+                        ['field' => 'n_fileas', 'operator' => 'equals', 'value' => $_user['accountDisplayName']]]);
+
+                    $userContact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
+                  
+                    if($userContact === null)
+                    {
+                        $userContact = $this->createOrUpdateContact($_user);
+                        $_user->contact_id = $userContact->getId();
+                    } else{
+                        $_user->contact_id = $userContact->getId();
+                        $this->createOrUpdateContact($_user);
+                    }
+                }
+
+                      
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'create');
             
             $user = $this->_userBackend->addUser($_user);

@@ -20,6 +20,7 @@
  * @property    string $owner_id
  * @property    string $id
  * @property    string $name
+ * @property    string $hierarchy
  * @property    string $backend
  * @property    string $order
  * @property    string $color
@@ -66,6 +67,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        self::VERSION       => 14,
         'recordName'        => 'Container',
         'recordsName'       => 'Containers', // ngettext('Container', 'Containers', n)
         'hasRelations'      => FALSE,
@@ -80,67 +82,130 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',
         'modelName'         => 'Container',
+        self::TABLE         => [
+            self::NAME          => 'container',
+            self::INDEXES       => [
+                'type'                      => [
+                    self::COLUMNS               => ['type'],
+                ],
+                'application_id'            => [
+                    self::COLUMNS               => ['application_id'],
+                ],
+                'owner_id'                  => [
+                    self::COLUMNS               => ['owner_id'],
+                ],
+            ],
+        ],
+
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'container_id_fk' => [
+                    'targetEntity' => Tinebase_Model_Application::class,
+                    'fieldName' => 'application_id',
+                    'joinColumns' => [[
+                        'name' => 'application_id',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ],
+            ],
+        ],
 
         'fields' => array(
             'name'              => array(
                 'label'             => 'Name', //_('Name')
-                'type'              => 'string',
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => false,
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
             ),
+            'hierarchy'         => array(
+                'label'             => 'Hierarchy', //_('Hierarchy')
+                self::TYPE          => self::TYPE_TEXT,
+                self::LENGTH        => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_MEDIUMTEXT,
+                self::NULLABLE      => true,
+                'queryFilter'       => true,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
+                self::FILTER_DEFINITION => [],
+            ),
             'type'              => array(
                 'label'             => 'Type', //_('Type')
-                'type'              => 'string',
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 32,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => self::TYPE_PERSONAL,
                 'queryFilter'       => TRUE,
                 'validators'        => array(array('InArray', array(self::TYPE_PERSONAL, self::TYPE_SHARED))),
             ),
-            'backend'            => array(
-                'type'              => 'string',
-                'validators'        => array('presence' => 'required'),
-            ),
-            'order'              => array(
-                'label'             => 'Order', // _('Order')
-                'type'              => 'integer',
+            'owner_id'           => array(
+                'label'             => 'Owner', // _('Owner')
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 40,
+                self::NULLABLE      => true,
                 'validators'        => array('allowEmpty' => true),
             ),
             'color'              => array(
                 'label'             => 'Color', // _('Color')
-                'type'              => 'string',
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 7,
+                self::NULLABLE      => true,
                 'validators'        => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
+            ),
+            'order'              => array(
+                'label'             => 'Order', // _('Order')
+                self::TYPE          => self::TYPE_INTEGER,
+                self::UNSIGNED      => true,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => 0,
+                'validators'        => array('allowEmpty' => true),
+            ),
+            'backend'            => array(
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 64,
+                self::NULLABLE      => false,
+                'validators'        => array('presence' => 'required'),
             ),
             'application_id'     => array(
                 'label'             => 'Application', // _('Application')
-                'type'              => 'string',
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 40,
+                self::NULLABLE      => false,
                 'validators'        => array('Alnum', 'presence' => 'required'),
             ),
-            'owner_id'           => array(
-                'label'             => 'Owner', // _('Owner')
-                'type'              => 'string',
+            // only gets updated in increaseContentSequence() + readonly in normal record context
+            'content_seq'        => array(
+                self::TYPE          => self::TYPE_BIGINT,
+                self::UNSIGNED      => true,
+                self::NULLABLE      => true,
+                'readOnly'          => true,
                 'validators'        => array('allowEmpty' => true),
             ),
             'model'              => array(
                 'label'             => 'Model', // _('Model')
-                'type'              => 'string',
-                'validators'        => array('allowEmpty' => true),
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 64,
+                self::NULLABLE      => true,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
             ),
             'uuid'               => array(
                 'label'             => 'UUID', // _('UUID')
-                'type'              => 'string',
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 64,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
                 'validators'        => array('allowEmpty' => true),
             ),
-            // only gets updated in increaseContentSequence() + readonly in normal record context
-            'content_seq'        => array(
-                'type'              => 'integer',
-                'readOnly'          => true,
-                'validators'        => array('allowEmpty' => true),
-            ),
+
             'account_grants'     => array(
-                'type'              => 'string',
+                self::TYPE          => 'string',
+                self::IS_VIRTUAL    => true,
                 'validators'        => array('allowEmpty' => true),
             ),
             'path'               => array(
-                'type'              => 'string',
+                self::TYPE          => 'virtual',
                 'validators'        => array('allowEmpty' => true),
             ),
         )
@@ -184,7 +249,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @param array $_data            the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         
@@ -279,12 +344,12 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     /**
      * resolves container_id property
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_containerProperty
      */
     public static function resolveContainerOfRecord($_record, $_containerProperty = 'container_id')
     {
-        if (! $_record instanceof Tinebase_Record_Abstract) {
+        if (! $_record instanceof Tinebase_Record_Interface) {
             return;
         }
         
@@ -346,5 +411,22 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     public function isReplicable()
     {
         return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGrantClass()
+    {
+        if (isset($this->xprops()['Tinebase']['Container']['GrantsModel'])) {
+            return $this->xprops()['Tinebase']['Container']['GrantsModel'];
+        }
+
+        $class = $this->model . 'Grants';
+        if (class_exists($class)) {
+            return $class;
+        }
+
+        return Tinebase_Model_Grants::class;
     }
 }

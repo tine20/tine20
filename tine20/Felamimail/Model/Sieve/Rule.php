@@ -61,7 +61,8 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
      */
     public function setFromFSR(Felamimail_Sieve_Rule $fsr)
     {
-        $this->setFromArray($fsr->toArray());
+        $data = $fsr->toArray();
+        $this->setFromArray($data);
     }
     
     /**

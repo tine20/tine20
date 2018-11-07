@@ -346,7 +346,7 @@ class Calendar_Frontend_iMIP
      * @param $_iMIP
      * @param bool $_refetch
      * @param bool $_getDeleted
-     * @return NULL|Tinebase_Record_Abstract
+     * @return NULL|Tinebase_Record_Interface
      */
     public function getExistingEvent($_iMIP, $_refetch = FALSE, $_getDeleted = FALSE)
     {
@@ -414,7 +414,19 @@ class Calendar_Frontend_iMIP
                 if (! $event->container_id) {
                     $event->container_id = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
                 }
-                
+
+                if (!empty($event->recurid) && empty($event->rrule)) {
+                    if ($event->recurid instanceof Tinebase_DateTime) {
+                        if (!isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
+                            $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] = [];
+                        }
+                        $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['RECURRENCE-ID'] =
+                            'RECURRENCE-ID:' . $event->recurid->setTimezone($event->originator_tz)->format('Ymd') . 'T'
+                            . $event->recurid->format('His');
+                    }
+                    $event->recurid = null;
+                }
+
                 $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             } else {
                 if ($event->external_seq > $existingEvent->external_seq && !$_status) {
@@ -455,27 +467,20 @@ class Calendar_Frontend_iMIP
         $existingEvent = $this->getExistingEvent($_iMIP);
         if (! $existingEvent) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_EVENTEXISTS, "cannot process REPLY to non existent/invisible event");
-            $result = FALSE;
+            return false;
         }
         
         $iMIPAttenderIdx = $_iMIP->getEvent()->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $_iMIP->getEvent()->attendee->getEmail()) : FALSE;
+        /** @var Calendar_Model_Attender $iMIPAttender */
         $iMIPAttender = $iMIPAttenderIdx !== FALSE ? $_iMIP->getEvent()->attendee[$iMIPAttenderIdx] : NULL;
         $iMIPAttenderStatus = $iMIPAttender ? $iMIPAttender->status : NULL;
         $eventAttenderIdx = $existingEvent->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $existingEvent->attendee->getEmail()) : FALSE;
+        /** @var Calendar_Model_Attender $eventAttender */
         $eventAttender = $eventAttenderIdx !== FALSE ? $existingEvent->attendee[$eventAttenderIdx] : NULL;
         $eventAttenderStatus = $eventAttender ? $eventAttender->status : NULL;
-        
-        if ($_iMIP->getEvent()->isObsoletedBy($existingEvent)) {
-            
-            // allow non RECENT replies if no reschedule and STATUS_NEEDSACTION
-            if ($eventAttenderStatus != Calendar_Model_Attender::STATUS_NEEDSACTION || $existingEvent->isRescheduled($_iMIP->getEvent())) {
-                $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
-                $result = FALSE;
-            }
-        }
-        
-        if (! is_null($iMIPAttenderStatus) && $iMIPAttenderStatus == $eventAttenderStatus) {
-            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_TOPROCESS, "this REPLY was already processed");
+
+        if ($existingEvent->isRescheduled($_iMIP->getEvent())) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "event was rescheduled");
             $result = FALSE;
         }
         
@@ -483,6 +488,21 @@ class Calendar_Frontend_iMIP
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in existing event -> party crusher?");
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' originator is not attendee in existing event - originator: ' . print_r($_iMIP->originator, true));
+            $result = FALSE;
+        } elseif (isset($eventAttender->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE])) {
+            if ($eventAttender->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE] > $_iMIP->getEvent()->seq ||
+                ($eventAttender->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE] == $_iMIP->getEvent()->seq &&
+                    (!$_iMIP->getEvent()->last_modified_time instanceof Tinebase_DateTime ||
+                        !isset($eventAttender->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]) ||
+                        $_iMIP->getEvent()->last_modified_time->isEarlierOrEquals(new Tinebase_DateTime(
+                        $eventAttender->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]))))) {
+                $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+                $result = FALSE;
+            }
+        }
+
+        if (! is_null($iMIPAttenderStatus) && $iMIPAttenderStatus == $eventAttenderStatus) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_TOPROCESS, "this REPLY was already processed");
             $result = FALSE;
         }
         
@@ -519,7 +539,16 @@ class Calendar_Frontend_iMIP
         $existingEvent = $this->getExistingEvent($_iMIP);
         $event = $_iMIP->mergeEvent($existingEvent);
         $attendee = $event->attendee[array_search($_iMIP->originator, $existingEvent->attendee->getEmail())];
-        
+
+        // do not use $event here! seq last_modified_time gets overridden by existingEvent
+        $attendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_SEQUENCE] = $_iMIP->getEvent()->seq;
+        if ($_iMIP->getEvent()->last_modified_time instanceof Tinebase_DateTime) {
+            $attendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP] = $_iMIP->getEvent()->last_modified_time
+                ->toString();
+        } else {
+            unset($attendee->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]);
+        }
+
         // NOTE: if current user has no rights to the calendar, status update is not applied
         Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($event, $attendee);
 

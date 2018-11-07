@@ -46,7 +46,8 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     {
         // initial object
         $this->objects['TestRecord'] = new Tinebase_Record_DummyRecord(array(), true);
-        $this->objects['TestRecord']->setFromArray(array('id'=>'2', 'test_2'=>NULL, ), NULL);
+        $tmpData = array('id'=>'2', 'test_2'=>NULL, );
+        $this->objects['TestRecord']->setFromArray($tmpData, NULL);
         
         // date management
         $date = new Tinebase_DateTime();
@@ -114,16 +115,29 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
             'test_2' => 99,
             'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'set1' => new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord'),
+            'string0' => '0',
+            'int0'    => 0,
         ), true);
         
         $record2 = clone $record1;
         $record2->string = 'anders';
         $record2->test_1 = 26;
         $record2->set2 = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $record2->string0 = '';
+        $record2->int0 = null;
         $diff = $record1->diff($record2)->diff;
-        $this->assertEquals(2, count($diff), 'expected difference in string & test_1: ' . print_r($diff, TRUE));
-        $this->assertEquals('anders', $diff['string']);
-        $this->assertEquals(26, $diff['test_1']);
+        $this->assertSame(4, count($diff), 'expected difference in string & test_1 & string0 & int0: ' . print_r($diff, TRUE));
+        $this->assertSame('anders', $diff['string']);
+        $this->assertSame(26, $diff['test_1']);
+        $this->assertSame('', $diff['string0']);
+        $this->assertSame(null, $diff['int0']);
+
+        $diff = $record2->diff($record1)->diff;
+        $this->assertSame(4, count($diff), 'expected difference in string & test_1 & string0 & int0: ' . print_r($diff, TRUE));
+        $this->assertSame('test', $diff['string']);
+        $this->assertSame(25, $diff['test_1']);
+        $this->assertSame('0', $diff['string0']);
+        $this->assertSame(0, $diff['int0']);
 
         $record2 = clone $record1;
         $record2->date_single = clone $record1->date_single;
@@ -133,20 +147,49 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $this->assertTrue((isset($diff['date_single']) || array_key_exists('date_single', $diff)));
     }
 
+    public function testMerge()
+    {
+        $record1 = new Tinebase_Record_DummyRecord(array(
+            'string'  => 'test',
+            'test_1'  => 0,
+            'string0' => '0',
+            'int0'    => null,
+            'set1'    => '',
+        ), true);
+
+        $record2 = new Tinebase_Record_DummyRecord(array(
+            'string'  => 'bla',
+            'test_1'  => 10,
+            'string0' => '10',
+            'int0'    => 10,
+            'set1'    => 'set1',
+            'set2'    => 'set2'
+        ), true);
+
+        $record1->merge($record2);
+
+        static::assertSame('test', $record1->string);
+        static::assertSame(0, $record1->test_1);
+        static::assertSame('0', $record1->string0);
+        static::assertSame(10, $record1->int0);
+        static::assertSame('set1', $record1->set1);
+        static::assertSame('set2', $record1->set2);
+    }
+
     /**
      * test clone
      */
     public function testClone()
     {
-        $record = new Tinebase_Record_DummyRecord(array(
-            'string' => 'test',
-            'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-        ), true);
+        $record = $this->objects['TestRecord'];
         
         $clone = clone $record;
         $clone->date_single->addDay(1);
+        $clone->date_multiple[0]->addDay(1);
         
         $this->assertFalse($record->date_single == $clone->date_single, 'date in record and clone is equal');
+        $this->assertFalse($record->date_multiple[0] == $clone->date_multiple[0],
+            'date_multiple in record and clone is equal');
     }
     
     /**

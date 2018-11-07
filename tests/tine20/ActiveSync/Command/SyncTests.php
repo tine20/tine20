@@ -526,7 +526,8 @@ class ActiveSync_Command_SyncTests extends TestCase
 
         $output = $this->testSyncOfEmails('emoji.eml', 'emoji.eml');
 
-        $this->assertContains('Mein Kopf ist gerade zu voll...?', $output, 'emoji should be replaced with "?"');
+        $this->assertContains(Tinebase_Core::filterInputForDatabase('Mein Kopf ist gerade zu voll...😃?'), $output,
+            'handling of utf8mb4 failed');
     }
     
     /**

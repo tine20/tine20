@@ -51,7 +51,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $this->plugin = new Tinebase_WebDav_Plugin_OwnCloud();
 
         // Create request, there is no in tinebase while running unittests, but the owncloud plugin needs an user agent
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /index.php HTTP/1.1\r\n" .
             "Host: localhost\r\n" .
             "Content-Type: application/json\r\n" .
@@ -121,7 +121,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
 
 
         // use old owncloud user agent!
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "POST /index.php HTTP/1.1\r\n" .
             "Host: localhost\r\n" .
             "Content-Type: application/json\r\n" .

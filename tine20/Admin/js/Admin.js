@@ -12,7 +12,7 @@
 
 Ext.ns('Tine.Admin');
 
-Tine.Admin = function () {
+Tine.Admin.init = function () {
     var registeredItems = [];
     var panels = [];
 
@@ -140,7 +140,7 @@ Tine.Admin = function () {
         }, {
             text: translation.gettext('Server Information'),
             cls: "treemain",
-            iconCls: 'admin-node-computers',
+            iconCls: 'admin-node-server-info',
             allowDrag: false,
             allowDrop: true,
             id: "serverinfo",
@@ -376,11 +376,7 @@ Tine.Admin = function () {
 
         return treePanel;
     };
-    
-    // public functions and variables
-    return {
-        registerItem: registerItem,
-        getPanel: getAdminTree
-    };
-    
+
+    Tine.Admin.registerItem = registerItem;
+    Tine.Admin.getPanel = getAdminTree;
 }();

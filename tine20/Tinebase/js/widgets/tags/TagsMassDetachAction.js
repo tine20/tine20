@@ -16,7 +16,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.tags');
  */
 Tine.widgets.tags.TagsMassDetachAction = function(config) {
     config.text = config.text ? config.text : i18n._('Detach tag(s)');
-    config.iconCls = 'action_tag_delete';
+    config.iconCls = 'x-widget-tag-action-detach';
     config.handler = this.handleClick.createDelegate(this);
     Ext.apply(this, config);
     

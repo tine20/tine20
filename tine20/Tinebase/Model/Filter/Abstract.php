@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -70,6 +70,11 @@ abstract class Tinebase_Model_Filter_Abstract
      * @todo move this to acl filter?
      */
     protected $_isImplicit = FALSE;
+
+    /**
+     * @var Tinebase_Model_Filter_FilterGroup|null parent reference
+     */
+    protected $_parent = null;
     
     /**
      * get a new single filter action
@@ -222,10 +227,18 @@ abstract class Tinebase_Model_Filter_Abstract
     public function setValue($_value)
     {
         // cope with resolved records
-        if (is_array($_value) && (isset($_value['id']) || array_key_exists('id', $_value))) {
-            $_value = $_value['id'];
+        if (is_array($_value)) {
+            if (isset($_value['id'])) {
+                $_value = $_value['id'];
+            } else {
+                foreach ($_value as $idx => $value) {
+                    if (is_array($value) && isset($value['id'])) {
+                        $_value[$idx] = $value['id'];
+                    }
+                }
+            }
         }
-        
+
         //@todo validate value before setting it!
         $this->_value = $_value;
     }
@@ -389,7 +402,13 @@ abstract class Tinebase_Model_Filter_Abstract
         if (is_array($value)) {
             $returnValue = array();
             foreach ($value as $idx => $val) {
-                $returnValue[$idx] = $this->_replaceWildcardsSingleValue($val);
+                if (is_array($val)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . " No sub arrays allowed, skipping this value: "
+                        . print_r($val, true));
+                } else {
+                    $returnValue[$idx] = $this->_replaceWildcardsSingleValue($val);
+                }
             }
         } else {
             $returnValue = $this->_replaceWildcardsSingleValue($value);
@@ -416,8 +435,14 @@ abstract class Tinebase_Model_Filter_Abstract
         // escape backslashes first
         $returnValue = addcslashes($value, '\\');
 
-        // replace wildcards from user ()
-        $returnValue = str_replace(array('*', '_'),  $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
+        // is * escaped?
+        if (!strpos($returnValue, '\\*')) {
+            // replace wildcards from user ()
+            $returnValue = str_replace(array('*', '_'), $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
+        } else {
+            // remove escaping and just search for * (not as wildcard)
+            $returnValue = str_replace(array("\\"), $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
+        }
 
         // add wildcard to value according to operator
         if (isset($action['wildcards'])) {
@@ -425,5 +450,13 @@ abstract class Tinebase_Model_Filter_Abstract
         }
 
         return (string) $returnValue;
+    }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $_parent
+     */
+    public function setParent(Tinebase_Model_Filter_FilterGroup $_parent)
+    {
+        $this->_parent = $_parent;
     }
 }

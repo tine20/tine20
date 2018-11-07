@@ -78,7 +78,7 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
                 $str = count($this->{$action}) . ' ' . $translate->_($action) . ': ';
                 $first = true;
                 foreach ($this->{$action} as $data) {
-                    /** @var Tinebase_Record_Abstract $record */
+                    /** @var Tinebase_Record_Interface $record */
                     $record = new $model($data, true);
                     $str .= ($first ? '' : ', ') . $record->getTitle();
                     $first = false;

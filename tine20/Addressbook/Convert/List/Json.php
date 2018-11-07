@@ -78,7 +78,7 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
         $contactIds = array();
         $contacts = null;
         foreach ($records as $record) {
-            if (isset($record->memberroles)) {
+            if (isset($record->memberroles) && is_object($record->memberroles)) {
                 $contactIds = array_merge($contactIds, $record->memberroles->contact_id);
             }
         }
@@ -86,7 +86,7 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
             $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($contactIds);
         }
         foreach ($records as $list) {
-            if (isset($list->memberroles)) {
+            if (isset($list->memberroles) && is_object($list->memberroles)) {
                 foreach ($list->memberroles as $memberrole) {
                     if ($contacts !== null) {
                         $contact = $contacts->getById(is_array($memberrole) ? $memberrole['contact_id'] : $memberrole->contact_id);

@@ -37,7 +37,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @var array
      */
-    protected $_configuredModels = array('Employee', 'Account', 'ExtraFreeTime', 'Contract', 'FreeDay', 'FreeTime', 'CostCenter');
+    protected $_configuredModels = array('Employee', 'Account', 'ExtraFreeTime', 'Contract', 'FreeDay', 'FreeTime', 'CostCenter', 'WorkingTime', 'Break');
     protected $_defaultModel = 'Employee';
     
     /**

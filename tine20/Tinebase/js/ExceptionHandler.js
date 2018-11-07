@@ -208,7 +208,12 @@ Tine.Tinebase.ExceptionHandler = function() {
                     msg: i18n._('Someone else saved this record while you where editing the data. You need to reload and make your changes again.')
                 }));
                 break;
-            
+            // outdated client
+            case 426:
+                var version = Tine.Tinebase.registry.set('version', exception.version);
+                Tine.Tinebase.tineInit.checkClientVersion();
+                break;
+
             // Service Unavailable!
             // Use this error code for generic problems like misconfig we don't want to see bugreports for
             case 503:
@@ -264,7 +269,6 @@ Tine.Tinebase.ExceptionHandler = function() {
                 break;
                 
             // generic error with message generated on the server
-                
             case 600:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._(exception.title),

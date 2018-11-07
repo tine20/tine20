@@ -163,7 +163,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             requiredGrant: 'deleteGrant',
             text: this.app.i18n._('Copy Event to clipboard'),
             handler: this.onCopyToEvent.createDelegate(this),
-            iconCls: 'action_editcopy'
+            iconCls: 'action_copy'
         });
         
         this.action_cancelPasting = new Ext.Action({
@@ -205,7 +205,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     text: this.app.i18n._('Sheet'),
                     iconCls: 'cal-week-view',
                     handler: this.onPrint.createDelegate(this, ['sheet']),
-                    disabled: Ext.isIE || Ext.isNewIE
+                    disabled: Ext.isNewIE
                 }]
             }
         });
@@ -1018,8 +1018,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         updatedEvent.markDirty();
         store.replaceRecord(event, updatedEvent);
 
-        if (! updatedEvent.inPeriod(view.getPeriod())) {
-            view.updatePeriod({from: updatedEvent.get('dtstart')});
+        if (! event.inPeriod(view.getPeriod())) {
+            view.updatePeriod({from: event.get('dtstart')});
             promise = store.promiseLoad({});
         } else if (event.isRecurBase()
             || updatedEvent.isRecurBase()

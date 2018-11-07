@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -19,7 +19,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * 
  * @package     Calendar
  */
-class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
+class Calendar_Model_EventTests extends TestCase
 {
     /**
      * test isObsoletedBy
@@ -121,5 +121,63 @@ class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
         $update->rrule = 'FREQ=WEEKLY;INTERVAL=;BYDAY=TH;WKST=SU';
         $diff = $event->diff($update);
         $this->assertTrue((isset($diff->diff['rrule']) || array_key_exists('rrule',$diff->diff)), 'real change should have diff! diff:' . print_r($diff->toArray(), TRUE));
+    }
+
+    /**
+     * test filter diff
+     */
+    public function testRruleConstraintDiff()
+    {
+        $baseEventData = array(
+            'dtstart'   => new Tinebase_DateTime('2011-11-23 14:25:00'),
+            'dtend'     => new Tinebase_DateTime('2011-11-23 15:25:00'),
+            'summary'   => 'test event',
+        );
+        $testContainer1 = $this->_getTestContainer('Calendar', 'Calendar_Model_Event');
+        $testContainer2 = $this->_getTestContainer('Calendar', 'Calendar_Model_Event');
+
+        $event1 = new Calendar_Model_Event(array_merge($baseEventData,[
+            'rrule_constraints' => array(
+                array('field' => 'container_id', 'operator' => 'in', 'value' => array($testContainer1->getId())),
+            )
+        ]));
+        $event2 = new Calendar_Model_Event(array_merge($baseEventData,[
+            'rrule_constraints' => array(
+                array('field' => 'container_id', 'operator' => 'in', 'value' => array($testContainer1->getId())),
+            )
+        ]));
+        $event3 = new Calendar_Model_Event(array_merge($baseEventData,[
+            'rrule_constraints' => array(
+                array('field' => 'container_id', 'operator' => 'in', 'value' => array($testContainer2->getId())),
+            )
+        ]));
+        $event4 = new Calendar_Model_Event(array_merge($baseEventData,[
+            'rrule_constraints' => array(
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => $testContainer2->getId()),
+            )
+        ]));
+
+        $testData = [
+            [
+                'baseEvent' => $event1,
+                'diffEvent' => $event2,
+                'diffEmpty' => true,
+            ],
+            [
+                'baseEvent' => $event1,
+                'diffEvent' => $event3,
+                'diffEmpty' => false,
+            ],
+            [
+                'baseEvent' => $event1,
+                'diffEvent' => $event4,
+                'diffEmpty' => false,
+            ],
+        ];
+
+        foreach ($testData as $test) {
+            $diff = $test['baseEvent']->diff($test['diffEvent']);
+            self::assertTrue($diff->isEmpty() === $test['diffEmpty'], 'diff not empty: ' . print_r($diff->toArray(), true));
+        }
     }
 }

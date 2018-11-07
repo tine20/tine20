@@ -32,6 +32,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     dataSafeAreaName: 'Tinebase.datasafe',
     dataSafeEnabled: false,
 
+    hasGrid: true,
+
     initComponent: function() {
         this.on('nodedragover', this.onNodeDragOver, this);
 
@@ -397,7 +399,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         grid.currentFolderNode = node;
 
-        if (gridSelectionModel) {
+        if (this.hasGrid && gridSelectionModel) {
             gridSelectionModel.clearSelections();
         }
 
@@ -606,5 +608,16 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 forceOverwrite: false
         };
         Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, addToGridStore);
+    },
+
+
+    /**
+     * returns true if node can accept contents
+     *
+     * @param nodeAttributes
+     * @returns boolean
+     */
+    nodeAcceptsContents: function(nodeAttributes) {
+        return !! nodeAttributes;
     }
 });

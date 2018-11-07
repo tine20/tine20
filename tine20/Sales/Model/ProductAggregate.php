@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexaander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -189,15 +189,23 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
     public function loadBillables(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate)
     {
         $this->_referenceDate = $date;
-        
+        $this->_billables = [];
+
+        // if we have accountables assigned, they do the billables
+        if ($this->json_attributes && isset($this->json_attributes['assignedAccountables']) &&
+                is_array($this->json_attributes['assignedAccountables']) &&
+                count($this->json_attributes['assignedAccountables'])) {
+            return;
+        }
+
+
         list($from, $to) = $this->getInterval();
-        $this->_billables = array();
         
         // if we are not already in user timezone we are in deep shit, add assertation rather instead or something
         $this->setTimezone(Tinebase_Core::getUserTimezone());
         
         while($from < $to) {
-            $this->_billables[$from->format('Y-m')] = array(clone $this);
+            $this->_billables[$from->format('Y-m')] = [$this];
             // 1 or interval?!? should show up every month as a position, so 1! NOT interval
             $from->addMonth(1);
         }

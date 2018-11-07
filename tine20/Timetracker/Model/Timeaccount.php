@@ -6,10 +6,8 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        update validators (default values, mandatory fields)
- * @todo        add setFromJson with relation handling
  */
 
 /**
@@ -20,6 +18,8 @@
  */
 class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 {
+    const TABLE_NAME = 'timetracker_timeaccount';
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -48,6 +48,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 13,
         'containerName'     => 'Timeaccount',
         'containersName'    => 'Timeaccounts',
         'recordName'        => 'Timeaccount',
@@ -71,6 +72,37 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         ),
         'appName'           => 'Timetracker',
         'modelName'         => 'Timeaccount',
+
+        // TODO add this when we convert container to MCV2
+//       'associations' => [\Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_ONE => [
+//            'container' => [
+//                'targetEntity' => 'Tinebase_Model_Container',
+//                'fieldName' => 'container_id',
+//                'joinColumns' => [[
+//                    'name' => 'container_id',
+//                    'referencedColumnName'  => 'id'
+//                ]],
+//            ]
+//        ]],
+
+        'table'             => array(
+            'name'    => self::TABLE_NAME,
+            'indexes' => array(
+                'title' => array(
+                    'columns' => array('title')
+                ),
+                'number' => array(
+                    'columns' => array('number')
+                ),
+                'container_id' => array(
+                    'columns' => array('container_id')
+                ),
+                'description' => array(
+                    'columns' => array('description'),
+                    'flags' => array('fulltext')
+                ),
+            ),
+        ),
 
         'filterModel'       => array(
             'contract'          => array(
@@ -103,6 +135,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             'account_grants'    => array(
                 'label'                 => NULL,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'type'                  => 'virtual',
             ),
             'title'             => array(
                 'label'                 => 'Title', //_('Title')
@@ -117,24 +150,28 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'queryFilter'           => TRUE,
                 'showInDetailsPanel'    => TRUE,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'nullable'              => true,
             ),
             'description'       => array(
                 'label'                 => 'Description', // _('Description')
                 'type'                  => 'fulltext',
                 'showInDetailsPanel'    => TRUE,
                 'queryFilter'           => true,
+                'nullable'              => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'budget'            => array(
                 'type'                  => 'float',
                 'inputFilters'          => array('Zend_Filter_Digits', 'Zend_Filter_Empty' => NULL),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'nullable'              => true,
             ),
             'budget_unit'       => array(
                 'shy'                   => TRUE,
                 'default'               => 'hours',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
             ),
+            // @TODO price -> move this to Sales contracts/positions
             'price' => array(
                 'type'         => 'money',
                 'nullable'     => true,
@@ -142,10 +179,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'label'        => 'Price', // _('Price')
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
+            // @TODO price_unit -> move this to Sales contracts/positions
             'price_unit'        => array(
                 'shy'                   => TRUE,
-                'default'               => 'hours',
-                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
+                'nullable'              => true,
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'is_open'           => array(
                 // is_open = Status, status = Billed
@@ -160,6 +198,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
             ),
             'is_billable'       => array(
+                // TODO why is this not visible / editable?
                 'type'                  => 'boolean',
                 'default'               => TRUE,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
@@ -168,11 +207,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'label'                 => "Cleared in", // _("Cleared in"),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'copyOmit'              => true,
+                'nullable'              => true,
             ),
             'invoice_id'        => array(
                 'label'                 => 'Invoice', // _('Invoice')
                 'type'                  => 'record',
                 'inputFilters'          => array('Zend_Filter_Empty' => NULL),
+                'nullable'              => true,
                 'config'                => array(
                     'appName'               => 'Sales',
                     'modelName'             => 'Invoice',
@@ -185,34 +226,28 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'copyOmit'              => true,
             ),
             'status'            => array(
-                // is_open = Status, status = Billed
-                'label'                 => 'Billed', //_('Billed')
-                'type'                  => 'string',
-                'filterDefinition'      => array(
-                    'filter'                => 'Tinebase_Model_Filter_Text',
-                    'jsConfig'              => array('filtertype' => 'timetracker.timeaccountbilled')
-                ),
-                'validators'            => array(
-                                                Zend_Filter_Input::ALLOW_EMPTY => true,
-                                                Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_NOT_YET_BILLED,
-                                                array('InArray', array(self::STATUS_NOT_YET_BILLED, self::STATUS_TO_BILL, self::STATUS_BILLED)),
-                                            ),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_NOT_YET_BILLED),
+                'nullable' => true,
+                'default' => self::STATUS_NOT_YET_BILLED,
                 'copyOmit'              => true,
+                'label' => 'Billed', // _('Billed')
+                'type' => 'keyfield',
+                'name' => 'status',
             ),
             'cleared_at'        => array(
                 'label'                 => "Cleared at", // _("Cleared at")
                 'type'                  => 'datetime',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'nullable'              => true,
                 'copyOmit'              => true,
             ),
-            'deadline'          => array(
-                'label'                 => 'Booking deadline', // _('Booking deadline')
-                'type'                  => 'string',
-                'validators'            => array(
-                                            Zend_Filter_Input::ALLOW_EMPTY      => true,
-                                            Zend_Filter_Input::DEFAULT_VALUE    => self::DEADLINE_NONE,
-                                                array('InArray', array(self::DEADLINE_NONE, self::DEADLINE_LASTWEEK)),
-                                            )
+                'deadline' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => self::DEADLINE_NONE),
+                'nullable' => true,
+                'default' => self::DEADLINE_NONE,
+                'label' => 'Booking deadline', // _('Booking deadline')
+                'type' => 'keyfield',
+                'name' => 'deadline',
             ),
             'grants'            => array(
                 'label'                 => NULL,
@@ -236,7 +271,18 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                     )
                 )
             ),
-
+            'contract'       => array(
+                'type'                  => 'virtual',
+                'config'                => array(
+                    'type'                  => 'relation',
+                    'label'                 => 'Contract',    // _('Contract')
+                    'config'                => array(
+                        'appName'               => 'Sales',
+                        'modelName'             => 'Contract',
+                        'type'                  => 'TIME_ACCOUNT'
+                    )
+                )
+            ),
         )
     );
 
@@ -251,7 +297,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
             array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible Person', 'max' => '1:0'), // _('Responsible Person')
         )
+        ),
+        array('relatedApp' => 'Sales', 'relatedModel' => 'Contract', 'config' => array(
+            array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '1:0'), // _('Time Account')
         )
+        ),
     );
     
     /**
@@ -296,7 +346,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @param array $_data
      * @return void
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         

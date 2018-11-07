@@ -94,20 +94,32 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
         do {
             // first get a random task due to execute (without a transaction to avoid deadlocks!)
             if (null === ($dueTask = $this->_backend->getDueTask())) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                    __LINE__ . ' no due task found, stopping...');
                 // nothing to do, stop work
                 break;
             }
 
             // in case a task fails quickly, we may run by here every few milli seconds... so better keep count
+            // actually failed tasks are suspended for at least 5 minutes, so this is became redundant
+            // also a minutely task may come by here twice legally
             if (!isset($tasks[$dueTask->getId()])) {
                 $tasks[$dueTask->getId()] = 1;
             } else {
-                if (++$tasks[$dueTask->getId()] > 3) {
-                    // same task for the third time, we abort now
+                if (++$tasks[$dueTask->getId()] > 4) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                            __LINE__ . ' task ' . $dueTask->name . ' run to often, aborting');
+                    }
+                    // same task for the fifth time, we dont try again
                     return false;
-                }
-                if (++$tasks[$dueTask->getId()] > 2) {
-                    // lets try one more time, maybe there are other tasks to work on
+                    
+                } elseif ($tasks[$dueTask->getId()] > 2) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                            __LINE__ . ' task ' . $dueTask->name . ' run to often, skipping');
+                    }
+                    // same task for the third+ time, we dont try again
                     continue;
                 }
             }

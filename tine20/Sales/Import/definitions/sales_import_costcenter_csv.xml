@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>sales_import_costcenter_csv</name>
+    <model>Sales_Model_CostCenter</model>
+    <plugin>Tinebase_Import_Csv_Generic</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>number</source>
+            <destination>number</destination>
+        </field>
+        <field>
+            <source>remark</source>
+            <destination>remark</destination>
+        </field>
+    </mapping>
+</config>
+

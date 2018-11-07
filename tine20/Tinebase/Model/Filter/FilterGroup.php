@@ -28,7 +28,6 @@
  * 
  * <code> 
  * class myFilterGroup {
- *     protected $_className = 'myFilterGroup';
  *     protected $_applicationName = 'myapp';
  *     protected $_filterModel = array (
  *         'name'       => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -122,15 +121,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected $_configuredModel = NULL;
     
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     *      
-     * @todo: remove all these properties from any place it's used like that and replace the calls with static
-     */
-    protected $_className = '';
-    
-    /**
      * @var string application of this filter group
      */
     protected $_applicationName = NULL;
@@ -187,6 +177,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @var boolean whether to check ACLs
      */
     protected $_ignoreAcl = false;
+
+    /**
+     * @var Tinebase_Model_Filter_FilterGroup|null reference to parent group
+     */
+    protected $_parent = null;
     
     /******************************** functions ********************************/
     
@@ -198,9 +193,14 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @param  array $_options
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct(array $_data = array(), $_condition = '', $_options = array())
+    public function __construct(array $_data = array(), $_condition = '', $_options = array(),
+        Tinebase_Model_Filter_FilterGroup $_parent = null)
     {
         $this->_createFromModelConfiguration();
+
+        if (null !== $_parent) {
+            $this->_parent = $_parent;
+        }
         
         $this->_setOptions($_options);
         
@@ -217,7 +217,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected function _createFromModelConfiguration()
     {
         if ($this->_configuredModel) {
-            /** @var Tinebase_Record_Abstract $m */
+            /** @var Tinebase_Record_Interface $m */
             $m = $this->_configuredModel;
             $filterConfig = $m::getConfiguration()->getFilterModel();
 
@@ -239,9 +239,37 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     {
         foreach($this->_filterObjects as $idx => $filter) {
             $this->_filterObjects[$idx] = clone $filter;
+            $this->_filterObjects[$idx]->setParent($this);
         }
     }
-    
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $_parent
+     */
+    public function setParent($_parent)
+    {
+        $this->_parent = $_parent;
+    }
+
+    /**
+     * @return null|Tinebase_Model_Filter_FilterGroup
+     */
+    public function getParent()
+    {
+        return $this->_parent;
+    }
+
+    /**
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    public function getRootParent()
+    {
+        if (null != $this->_parent) {
+            return $this->_parent->getRootParent();
+        }
+        return $this;
+    }
+
     /**
      * sets this filter group from filter data in array representation
      *
@@ -259,16 +287,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
-                    . ' Adding FilterGroup: ' . $this->_className);
-                
-                if (empty($this->_className) || ! class_exists($this->_className)) {
-                    $this->_className = get_class($this);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
-                        . ' _className was not set, using get_class: ' . $this->_className);
-                }
-                
-                $filtergroup = new $this->_className(array(), $filterData['condition'], $this->_options);
-                if ($this->_className === 'Tinebase_Model_Filter_FilterGroup') {
+                    . ' Adding FilterGroup: ' . static::class);
+
+                $selfClass = static::class;
+                $filtergroup = new $selfClass(array(), $filterData['condition'], $this->_options, $this);
+                if (static::class === 'Tinebase_Model_Filter_FilterGroup') {
                     // generic modelconfig filter group, need to set model
                     $filtergroup->setConfiguredModel($this->_configuredModel);
                 }
@@ -337,7 +360,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 break;
             default:
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
-                    . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
+                    . static::class . ' with filter data: ' . print_r($_filterData, TRUE));
                 return;
         }
         
@@ -387,14 +410,14 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $fieldModel = (isset($_filterData['field']) && isset($this->_filterModel[$_filterData['field']])) ? $this->_filterModel[$_filterData['field']] : '';
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . '[' . $this->_className . '] Debug: ' . print_r($this->_filterModel, true));
+            . '[' . static::class . '] Debug: ' . print_r($this->_filterModel, true));
         
         if (empty($fieldModel)) {
             if (isset($_filterData['field']) && strpos($_filterData['field'], '#') === 0) {
                 $this->_addCustomFieldFilter($_filterData);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
+                    . '[' . static::class . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
             }
         } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel)) && (isset($_filterData['value']) || array_key_exists('value', $_filterData))) {
             // create a 'single' filter
@@ -411,7 +434,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (filter syntax problem) -> ' 
-                . $this->_className . ' with filter data: ' . print_r($_filterData, TRUE));
+                . static::class . ' with filter data: ' . print_r($_filterData, TRUE));
         }
     }
 
@@ -474,7 +497,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function addFilter(Tinebase_Model_Filter_Abstract $_filter, $_setFromArray = FALSE)
     {
         if (! $_filter instanceof Tinebase_Model_Filter_Abstract) {
-            if ($_filter instanceof Tinebase_Model_Filter_Group) {
+            if ($_filter instanceof Tinebase_Model_Filter_FilterGroup) {
                 return $this->addFilterGroup($_filter);
             }
             throw new Tinebase_Exception_InvalidArgument('Filters must be of instance Tinebase_Model_Filter_Abstract');
@@ -484,6 +507,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             // this is added afterwards and considered as an implicit acl filter
             $_filter->setIsImplicit(TRUE);
         }
+
+        $_filter->setParent($this);
         
         $this->_filterObjects[] = $_filter;
         
@@ -499,6 +524,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function addFilterGroup($_filtergroup)
     {
+        $_filtergroup->setParent($this);
+
         if (! $_filtergroup instanceof Tinebase_Model_Filter_FilterGroup) {
             if ($_filtergroup instanceof Tinebase_Model_Filter_Abstract) {
                 return $this->addFilter($_filtergroup);
@@ -587,7 +614,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     /**
-     * gets aclFilter of this group and optionally cascading subgroups
+     * gets aclFilter of this group
      * 
      * @return array
      */
@@ -920,7 +947,22 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     {
         $this->_options = $_options;
     }
-    
+
+    public function hash()
+    {
+        $data = [];
+        foreach ($this->_filterObjects as $object) {
+            if ($object instanceof Tinebase_Model_Filter_FilterGroup) {
+                $data[] = $object->hash();
+            } else if ($object instanceof Tinebase_Model_Filter_Abstract) {
+                $data[] = $object->getField() . '_' . $object->getOperator() . '_' . $object->getValue();
+            }
+        }
+
+        sort($data);
+        return md5($this->getModelName() . '_' . $this->getCondition() . '_' . join('_', $data));
+    }
+
     /**
      * return filter object(s)
      *

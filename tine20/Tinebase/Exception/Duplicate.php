@@ -21,7 +21,7 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
     /**
      * the client record
      * 
-     * @var Tinebase_Record_Abstract
+     * @var Tinebase_Record_Interface
      */
     protected $_clientRecord = NULL;
     

@@ -58,9 +58,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         
         Tine.Sales.ProductAggregateGridPanel.superclass.initComponent.call(this);
         this.store.sortInfo = this.defaultSortInfo;
-        
-        
-        
+
         this.on('afteredit', this.onAfterEdit, this);
         this.editDialog.on('load', this.loadRecord, this);
         
@@ -263,13 +261,31 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
     },
     
     renderQuantity: function(value, cell, record) {
-        // product does not bill an accountable -> return qty
-        var ac = record.get('product_id').accountable;
-        if (! ac || ac == 'Sales_Model_ProductAggregate' || ac == 'Sales_Model_Product') {
+        if (this.hasQuantity(record)) {
             return value;
         }
         
         return '';
+    },
+
+    /**
+     * accountables do not have a quantity
+     *
+     * @param record
+     * @returns {boolean}
+     *
+     * TODO this should be refactored...
+     */
+    hasQuantity: function(record) {
+        // product does not bill an accountable -> return qty
+        var ac = record.get('product_id').accountable;
+        return (
+            ! ac
+            // TODO find a better way here to determine if record has quantity
+            || ac == 'Sales_Model_ProductAggregate'
+            || ac == 'Sales_Model_Product'
+            || ac == 'WebAccounting_Model_ProxmoxVM'
+        );
     },
     
     /**
@@ -283,7 +299,9 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 break;
             case 'product_id':
                 var relatedRecord = this.productEditor.store.getById(o.value);
-                o.record.set('product_id', relatedRecord.data);
+                if (relatedRecord) {
+                    o.record.set('product_id', relatedRecord.data);
+                }
                 break;
             case 'interval':
                 o.record.set('interval', o.value);
@@ -305,17 +323,14 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
      */
     onBeforeRowEdit: function(o) {
         if (o.field == 'quantity') {
-            // product does not bill an accountable -> return qty
-            var ac = o.record.get('product_id').accountable;
-
-            if (!(! ac || ac == 'Sales_Model_ProductAggregate' || ac == 'Sales_Model_Product')) {
-                return false; 
-            } else {
+            if (this.hasQuantity(o.record)) {
                 return true;
+            } else {
+                return false;
             }
         }
-        
-        return;
+
+        return true;
     },
     
     /**
@@ -434,7 +449,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
 
         if (accountable == 'WebAccounting_Model_ProxmoxVM') {
             // TODO get accountable keys from modelconfig / registry (Tine.WebAccounting.registry.get('models')[MODEL])
-            return ['vcpus', 'memory', 'storage'];
+            return ['vcpus', 'memory', 'storage', 'assignedAccountables'];
         } else {
             return [];
         }

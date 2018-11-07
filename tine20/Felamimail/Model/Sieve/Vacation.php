@@ -82,7 +82,8 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
      */
     public function setFromFSV(Felamimail_Sieve_Vacation $fsv)
     {
-        $this->setFromArray($fsv->toArray());
+        $data = $fsv->toArray();
+        $this->setFromArray($data);
     }
     
     /**

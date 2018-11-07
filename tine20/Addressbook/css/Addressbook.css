@@ -1,25 +1,13 @@
 .action_addList {
-    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
-}
-.x-btn-medium .action_addList {
-    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
-}
-.x-btn-large .action_addList {
-    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
+    background-image:url(../../images/icon-set/icon_address_group_plus.svg) !important;
 }
 
 .AddressbookIconCls, .AddressbookContact {
-    background-image:url(../../images/oxygen/16x16/apps/kaddressbook.png) !important;
-}
-.x-btn-medium .AddressbookIconCls, .x-btn-medium .AddressbookContact {
-    background-image:url(../../images/oxygen/22x22/apps/kaddressbook.png) !important;
-}
-.x-btn-large .AddressbookIconCls, .x-btn-large .AddressbookContact {
-    background-image:url(../../images/oxygen/32x32/apps/kaddressbook.png) !important;
+    background-image:url(../../images/icon-set/icon_adressbook.svg) !important;
 }
 
 .action_parseAddress {
-    background-image:url(../../images/oxygen/16x16/actions/contact-new.png) !important;
+    background-image:url(../../images/icon-set/icon_addressbook_plus.svg) !important;
 }
 
 .x-form-item-float-left {
@@ -28,44 +16,19 @@
 }
 
 .renderer_typeAccountIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
-    height: 16px;
+    background-image:url(../../images/icon-set/icon_profil.svg) !important;
 }
 
 .renderer_typeContactIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
-    height: 16px;
+    background-image:url(../../images/icon-set/icon_user.svg) !important;
 }
 
 .renderer_typeGroupIcon, .AddressbookList{
-    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
-    background-repeat: no-repeat;
-    /*background-position: 2px 2px;*/
-    /*height: 16px;*/
-}
-.x-btn-medium .AddressbookList {
-    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
-}
-
-.x-btn-large .AddressbookList {
-    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
+    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
 }
 
 .renderer_typeListIcon {
-    background-image:url(../../images/list.png) !important;
-    background-repeat: no-repeat;
-    /*background-position: 2px 2px;*/
-    /*height: 16px;*/
-}
-
-.x-grid3-cell-inner .renderer_typeAccountIcon,
-.x-grid3-cell-inner .renderer_typeContactIcon {
-    margin-bottom: -2px;
-    margin-top: -2px;
+    background-image:url(../../images/icon-set/icon_address_group.svg) !important;
 }
 
 .renderer_displayNameRenderer_noName {
@@ -85,6 +48,6 @@
 }
 
 .AddressbookStructure {
-    background-image:url(../../images/oxygen/16x16/actions/view-list-icons.png) !important;
+    background-image:url(../../images/icon-set/icon_address_structure.svg) !important;
     background-repeat: no-repeat;
 }

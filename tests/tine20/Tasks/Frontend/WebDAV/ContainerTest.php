@@ -50,6 +50,7 @@ class Tasks_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'model'             => Tasks_Model_Task::class,
         )));
         
         Tinebase_Container::getInstance()->addGrants($this->objects['initialContainer'], Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Core::getUser()->accountPrimaryGroup, array(Tinebase_Model_Grants::GRANT_READ));

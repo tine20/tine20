@@ -48,7 +48,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // load grants store if editing record
         if (this.record && this.record.id) {
-            this.grantsStore.loadData({
+            this.grantsGrid.getStore().loadData({
                 results:    this.record.get('account_grants'),
                 totalcount: this.record.get('account_grants').length
             });
@@ -64,7 +64,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // get grants from grants grid
         this.record.set('account_grants', '');
         var grants = [];
-        this.grantsStore.each(function(grant){
+        this.grantsGrid.getStore().each(function(grant){
             grants.push(grant.data);
         });
         this.record.set('account_grants', grants);
@@ -76,16 +76,8 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.container.GrantsGrid}
      */
     initGrantsGrid: function () {
-        this.grantsStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'account_id',
-            fields: Tine.Tinebase.Model.Grant
-        });
-       
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             flex: 1,
-            store: this.grantsStore,
             grantContainer: this.record.data,
             alwaysShowAdminGrant: true,
             showHidden: true
@@ -94,10 +86,44 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return this.grantsGrid;
     },
 
+    getFormItems: function() {
+        return {
+            xtype: 'tabpanel',
+            border: false,
+            plain:true,
+            activeTab: 0,
+            defaults: {
+                hideMode: 'offsets'
+            },
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
+            items:[
+                {
+                    title: this.i18nRecordName,
+                    autoScroll: true,
+                    border: false,
+                    frame: true,
+                    layout: 'border',
+                    defaults: { autoScroll: true },
+                    items: [{
+                        region: 'center',
+                        layout: 'fit',
+                        items: this.getContainerFormItems()
+                    }].concat(this.getEastPanel())
+                }, new Tine.widgets.activities.ActivitiesTabPanel({
+                    app: this.appName,
+                    record_id: this.record.id,
+                    record_model: 'Tinebase_Model_Container'
+                })
+            ]
+        };
+    },
+
     /**
      * returns dialog
      */
-    getFormItems: function () {
+    getContainerFormItems: function () {
         var userApplications = Tine.Tinebase.registry.get('userApplications');
         this.appStore = new Ext.data.JsonStore({
             root: 'results',
@@ -194,6 +220,13 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: 0.1,
                     fieldLabel: this.app.i18n._('Color'),
                     name: 'color'
+                }],[{
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Container Hierarchy/Name'),
+                    allowBlank: false,
+                    columnWidth: 1,
+                    name: 'hierarchy',
+                    allowBlank: true
                 }]]
             }, 
                 this.initGrantsGrid(), {
@@ -217,8 +250,8 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Admin.ContainerEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 700,
-        height: 400,
+        width: 1024,
+        height: 500,
         name: Tine.Admin.ContainerEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.ContainerEditDialog',
         contentPanelConstructorConfig: config

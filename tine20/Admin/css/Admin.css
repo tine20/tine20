@@ -1,155 +1,61 @@
-.action_enable {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-apply.png) !important;
-}
-.x-btn-medium .action_enable {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-apply.png) !important;
-}
-.x-btn-large .action_enable {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-apply.png) !important;
-}
-
-.action_disable {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
-}
-.x-btn-medium .action_disable {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-cancel.png) !important;
-}
-.x-btn-large .action_disable {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-cancel.png) !important;
-}
-
 .action_settings {
-    background-image:url(../../images/oxygen/16x16/actions/view-choose.png) !important;
+    background-image:url(../../images/icon-set/icon_settings.svg) !important;
 }
-.x-btn-medium .action_settings {
-    background-image:url(../../images/oxygen/22x22/actions/view-choose.png) !important;
-}
-.x-btn-large .action_settings {
-    background-image:url(../../images/oxygen/32x32/actions/view-choose.png) !important;
-}
-
 
 .action_permissions {
-    background-image:url(../../images/oxygen/16x16/status/dialog-password.png) !important;
-}
-.x-btn-medium .action_permissions {
-    background-image:url(../../images/oxygen/22x22/status/dialog-password.png) !important;
-}
-.x-btn-large .action_permissions {
-    background-image:url(../../images/oxygen/32x32/status/dialog-password.png) !important;
+    background-image:url(../../images/icon-set/Icon_key.svg) !important;
 }
 
 .action_addGroup {
-    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
-}
-.x-btn-medium .action_addGroup {
-    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
-}
-.x-btn-large .action_addGroup {
-    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
+    background-image:url(../../images/icon-set/Icon_add.svg) !important;
 }
 
 .action_password {
-    background-image:url(../../images/oxygen/16x16/actions/password.png) !important;
-}
-.x-btn-medium .action_password {
-    background-image:url(../../images/oxygen/22x22/actions/password.png) !important;
-}
-.x-btn-large .action_password {
-    background-image:url(../../images/oxygen/32x32/actions/password.png) !important;
+    background-image:url(../../images/icon-set/Icon_key.svg) !important;
 }
 
 .AdminIconCls {
-    background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
-}
-.x-btn-medium .AdminIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/systemtray.png) !important;
-}
-.x-btn-large .AdminIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/systemtray.png) !important;
+    background-image:url(../../images/icon-set/icon_settings.svg) !important;
 }
 
 .admin-node-accesslog {
-    background-image:url(../../images/oxygen/16x16/apps/utilities-log-viewer.png) !important;
-}
-.x-btn-medium .admin-node-accesslog {
-    background-image:url(../../images/oxygen/22x22/apps/utilities-log-viewer.png) !important;
-}
-.x-btn-large .admin-node-accesslog {
-    background-image:url(../../images/oxygen/32x32/apps/utilities-log-viewer.png) !important;
-}
-
-.admin-node-user {
-    background-image:url(../../images/oxygen/16x16/places/user-identity.png) !important;
-}
-.x-btn-medium .admin-node-user {
-    background-image:url(../../images/oxygen/22x22/places/user-identity.png) !important;
-}
-.x-btn-large .admin-node-user {
-    background-image:url(../../images/oxygen/32x32/places/user-identity.png) !important;
-}
-
-.admin-node-groups {
-    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
-}
-.x-btn-medium .admin-node-groups {
-    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
-}
-.x-btn-large .admin-node-groups {
-    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
+    background-image:url(../../images/icon-set/icon_log_file.svg) !important;
 }
 
 .admin-node-computers {
-    background-image:url(../../images/oxygen/16x16/places/network-local.png) !important;
+    background-image:url(../../images/icon-set/icon_server.svg) !important;
 }
-.x-btn-medium .admin-node-computers {
-    background-image:url(../../images/oxygen/22x22/places/network-local.png) !important;
-}
-.x-btn-large .admin-node-computers {
-    background-image:url(../../images/oxygen/32x32/places/network-local.png) !important;
+
+.admin-node-server-info {
+    background-image:url(../../images/icon-set/icon_server_information.svg) !important;
 }
 
 .admin-node-applications {
-    background-image:url(../../images/oxygen/16x16/places/user-desktop.png) !important;
-}
-.x-btn-medium .admin-node-applications {
-    background-image:url(../../images/oxygen/22x22/places/user-desktop.png) !important;
-}
-.x-btn-large .admin-node-applications {
-    background-image:url(../../images/oxygen/32x32/places/user-desktop.png) !important;
+    background-image:url(../../images/icon-set/icon_app.svg) !important;
 }
 
 .admin-node-containers {
-    background-image:url(../../images/oxygen/16x16/places/folder.png) !important;
+    background-image:url(../../images/icon-set/icon_folder.svg) !important;
 }
+
 .admin-action-add-container {
-    background-image:url(../../images/oxygen/16x16/places/folder.png) !important;
-}
-.x-btn-medium .admin-action-add-container {
-    background-image:url(../../images/oxygen/22x22/places/folder.png) !important;
-}
-.x-btn-large .admin-action-add-container {
-    background-image:url(../../images/oxygen/32x32/places/folder.png) !important;
+    background-image:url(../../images/icon-set/icon_filemanager_plus.svg) !important;
 }
 
 .admin-node-customfields {
-    background-image:url(../../images/oxygen/16x16/actions/edit-rename.png) !important;
+    background-image:url(../../images/icon-set/icon_customfield.svg) !important;
 }
+
 .admin-action-add-customfield {
-    background-image:url(../../images/oxygen/16x16/actions/edit-rename.png) !important;
+    background-image:url(../../images/icon-set/Icon_add.svg) !important;
 }
-.x-btn-medium .admin-action-add-customfield {
-    background-image:url(../../images/oxygen/22x22/actions/edit-rename.png) !important;
-}
-.x-btn-large .admin-action-add-customfield {
-    background-image:url(../../images/oxygen/32x32/actions/edit-rename.png) !important;
-}
+
 .admin-node-customfields-store {
-    background-image:url(../../images/oxygen/16x16/apps/kexi.png) !important;
+    background-image:url(../../images/icon-set/icon_coreData.svg) !important;
 }
 
 .admin-node-quota-usage {
-    background-image:url(../../images/oxygen/16x16/devices/drive-harddisk.png) !important;
+    background-image:url(../../images/icon-set/icon_quota.svg) !important;
 }
 
 .x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-checkbox, 

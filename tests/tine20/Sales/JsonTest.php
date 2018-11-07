@@ -306,6 +306,30 @@ class Sales_JsonTest extends TestCase
     }
 
     /**
+     * testSearchActiveAndInactiveContracts
+     */
+    public function testSearchActiveAndInactiveContracts()
+    {
+        $contract = $this->_getContract('phpunit contract', 'blabla', [
+            // inactive contract
+            'end_date' => Tinebase_DateTime::now()->subDay(1)->toString()
+        ]);
+        $this->_instance->saveContract($contract->toArray());
+
+        // search & check
+        $filter = $this->_getFilter($contract->title);
+        $filter[] = array('field' => 'end_date', 'operator' => 'before', 'value' => Tinebase_Model_Filter_Date::DAY_THIS);
+        $search = $this->_instance->searchContracts($filter, $this->_getPaging());
+        $this->assertEquals(1, $search['totalcount'], 'inactive contract should be found');
+        $this->assertEquals($contract->title, $search['results'][0]['title']);
+
+        $filter = $this->_getFilter($contract->title);
+        $filter[] = array('field' => 'end_date', 'operator' => 'after', 'value' => Tinebase_Model_Filter_Date::DAY_LAST);
+        $search = $this->_instance->searchContracts($filter, $this->_getPaging());
+        $this->assertEquals(0, $search['totalcount'], 'inactive contract should not be found');
+    }
+
+    /**
      * assert products filter
      */
     public function testContractFilterModel()
@@ -367,8 +391,10 @@ class Sales_JsonTest extends TestCase
             . print_r($firstcustomer, true));
         $this->assertTrue(is_array($firstcustomer['cpextern_id']), 'cpextern_id not resolved: '
             . print_r($firstcustomer, true));
-        $this->assertTrue(is_array($firstcustomer['cpextern_id']['created_by']), 'cpextern_id creator not resolved: '
-            . print_r($firstcustomer, true));
+        $this->assertTrue(
+            $firstcustomer['cpextern_id']['created_by'] === null
+                || is_array($firstcustomer['cpextern_id']['created_by']),
+            'cpextern_id creator not resolved: ' . print_r($firstcustomer, true));
     }
     
     /**
@@ -509,14 +535,17 @@ class Sales_JsonTest extends TestCase
     /**
      * get contract
      *
+     * @param $title
+     * @param $desc
+     * @param $additionaldata
      * @return Sales_Model_Contract
      */
-    protected function _getContract($title = 'phpunit contract', $desc = 'blabla')
+    protected function _getContract($title = 'phpunit contract', $desc = 'blabla', $additionaldata = [])
     {
-        return new Sales_Model_Contract(array(
+        return new Sales_Model_Contract(array_merge([
             'title'         => $title,
             'description'   => $desc,
-        ), TRUE);
+        ], $additionaldata), TRUE);
     }
 
     /**
@@ -725,10 +754,11 @@ class Sales_JsonTest extends TestCase
         list($contact1, $contact2, $contact3, $contact4) = $this->_createContacts(4);
         
         $this->_setContractRelations($contract, array($contact1), 'RESPONSIBLE');
-        
+
+        unset($contact1->relations);
         Addressbook_Controller_Contact::getInstance()->update($contact1);
         $contact1 = Addressbook_Controller_Contact::getInstance()->get($contact1->getId(), NULL, TRUE);
-        $this->assertEquals(1, count($contact1->relations));
+        $this->assertEquals(1, count($contact1->relations), 'did not find expected relation in contact');
         
         // a partner may be added
         $relation = new Tinebase_Model_Relation(array(
@@ -744,7 +774,7 @@ class Sales_JsonTest extends TestCase
         ));
         
         $contact2->relations = array($relation);
-    
+
         $contact2 = Addressbook_Controller_Contact::getInstance()->update($contact2);
         $contact2 = Addressbook_Controller_Contact::getInstance()->get($contact2->getId(), NULL, TRUE);
         $this->assertEquals(1, count($contact2->relations));

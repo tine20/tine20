@@ -94,6 +94,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     saveAndCloseButtonText: '',
     /**
+     * @cfg {Function} saveAndCloseActionUpdater
+     * overwritable action updater
+     */
+    saveAndCloseActionUpdater: null,
+    /**
      * @cfg {String} cancelButtonText
      * text of cancel button
      */
@@ -609,6 +614,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             ref: '../btnSaveAndClose',
             scope: this,
+            actionUpdater: this.saveAndCloseActionUpdater,
             // TODO: remove the defer when all subpanels use the deferByTicket mechanism
             handler: function() { this.onSaveAndClose.defer(500, this); },
             iconCls: 'action_saveAndClose'
@@ -727,7 +733,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                 containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                 appName: this.app.appName,
-                requiredGrant: this.evalGrants ? 'addGrant' : false,
+                // required grant to change container
+                requiredGrant: this.evalGrants ? 'deleteGrant' : false,
+                // required grants for the container to choose
+                requiredGrants: [this.evalGrants ? 'addGrant' : false],
                 disabled: this.isContainerSelectorDisabled(),
                 listeners: {
                     scope: this,
@@ -830,6 +839,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // unset container if user is not allowed to add record in original container
         if(this.evalGrants && ! hasRequiredGrant) {
             _.unset(this.record, 'data.' + this.recordClass.getMeta('containerProperty'));
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
         }
@@ -911,6 +921,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
 
         if (!this.record.id || !_.get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
+            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
         }

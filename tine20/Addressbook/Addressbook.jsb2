@@ -145,6 +145,22 @@
         {
           "text": "Addressbook.css",
           "path": "css/"
+        },
+        {
+          "text": "Contact.css",
+          "path": "css/"
+        },
+        {
+          "text": "List.css",
+          "path": "css/"
+        },
+        {
+          "text": "Structure.css",
+          "path": "css/"
+        },
+        {
+          "text": "Resource.css",
+          "path": "css/"
         }
       ]
     }

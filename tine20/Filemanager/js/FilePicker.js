@@ -72,6 +72,12 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     constraint: null,
 
     /**
+     * @cfg {Array} requiredGrants
+     * grants which are required to select nodes
+     */
+    requiredGrants: ['readGrant'],
+
+    /**
      * Constructor.
      */
     initComponent: function () {
@@ -223,7 +229,8 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         var valid = true;
 
         Ext.each(nodes, function (node) {
-            if (!me.checkNodeConstraint(node.data || node)) {
+            node = node.data ? node : new Tine.Filemanager.Model.Node(node);
+            if (!me.checkNodeConstraint(node)) {
                 valid = false;
                 return false;
             }
@@ -240,7 +247,11 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      */
     checkNodeConstraint: function (node) {
         // Minimum information to proceed here
-        if (!node.path || !node.id) {
+        if (!node.get('path') || !node.id) {
+            return false;
+        }
+
+        if (! this.hasGrant(node, this.requiredGrants)) {
             return false;
         }
 
@@ -249,21 +260,30 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             return true;
         }
 
-        switch (this.constraint) {
-            case 'file':
-                if (node.type !== 'file') {
-                    return false;
-                }
-                break;
-            case 'folder':
-                if (node.type !== 'folder') {
-                    return false;
-                }
-                break;
-        }
-
-        return true;
+        return node.get('type') == this.constraint;
     },
+
+    /**
+     * checkes if user has requested grant for given node
+     *
+     * @param {Tine.Filemanager.Model.Node} node
+     * @param {Array} grant
+     * @return bool
+     */
+    hasGrant: function(node, grants) {
+        var _ = window.lodash,
+            condition = true;
+
+        _.each(grants, function(grant) {
+            condition = condition && _.get(node, 'data.account_grants.' + grant, false);
+            if (grant == 'addGrant' && node.isVirtual()) {
+                condition = false;
+            }
+        });
+
+        return condition;
+    },
+
 
     /**
      * Customized column model for the grid

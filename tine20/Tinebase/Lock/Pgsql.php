@@ -19,6 +19,13 @@
  */
 class Tinebase_Lock_Pgsql extends Tinebase_Lock_Abstract
 {
+    public function keepAlive()
+    {
+        $db = Tinebase_Core::getDb();
+        $db->query('SELECT NOW()')->fetchAll();
+    }
+
+
     /**
      * @return bool
      */

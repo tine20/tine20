@@ -85,7 +85,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * fetch one contact of a user identified by his user_id
      *
-     * @param   int $_userId
+     * @param   string $_userId
      * @return  Addressbook_Model_Contact 
      * @throws  Addressbook_Exception_NotFound if contact not found
      */
@@ -183,6 +183,11 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function _saveImage($contactId, $imageData)
     {
+        if ($imageData == 1) {
+            // happens for example when record is going to be deleted - do nothing
+            return $imageData;
+        }
+
         if (! empty($imageData)) {
             // make sure that we got a valid image blob
             try {
@@ -190,8 +195,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                     . ' Invalid image blob data, preserving old image');
-                Tinebase_Exception::log($e);
-                
                 return $this->getImage($contactId);
             }
         }

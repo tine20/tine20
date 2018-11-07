@@ -18,7 +18,6 @@
  */
 abstract class Tinebase_Setup_DemoData_Abstract
 {
-
     /**
      * the models to create demodata for
      * @var array
@@ -672,8 +671,8 @@ abstract class Tinebase_Setup_DemoData_Abstract
     /**
      * returns a relation array by records
      * 
-     * @param Tinebase_Record_Abstract $ownRecord
-     * @param Tinebase_Record_Abstract $foreignRecord
+     * @param Tinebase_Record_Interface $ownRecord
+     * @param Tinebase_Record_Interface $foreignRecord
      * @param string $ownDegree
      * @param string $type
      * @return array

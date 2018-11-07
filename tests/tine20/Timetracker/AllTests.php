@@ -4,7 +4,7 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -27,6 +27,9 @@ class Timetracker_AllTests
         $suite->addTestSuite('Timetracker_ControllerTest');
         $suite->addTestSuite('Timetracker_ExportTest');
         $suite->addTestSuite('Timetracker_FilterTest');
+        $suite->addTestSuite('Timetracker_DoctrineModelTest');
+        $suite->addTestSuite('Timetracker_Import_AllTest');
+
         return $suite;
     }
 }

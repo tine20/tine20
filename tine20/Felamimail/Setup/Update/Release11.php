@@ -18,21 +18,24 @@ class Felamimail_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
-            'Felamimail',
-            Tinebase_FileSystem::FOLDER_TYPE_SHARED
-        );
+        if (! Tinebase_Core::isFilesystemAvailable()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Skipping update of sieve notification template');
+        } else {
+            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'Felamimail',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            );
 
-        if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen(
-                $basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                    . ' Could not open defaultForwarding.sieve file');
-            }
-            throw new Tinebase_Exception_Backend('Could not open defaultForwarding.sieve file');
-        }
+            if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen(
+                    $basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' Could not open defaultForwarding.sieve file');
+                }
+            } else {
 
-        fwrite($fh, <<<'sieveFile'
+                fwrite($fh, <<<'sieveFile'
 require ["enotify", "variables", "copy", "body"];
 
 if header :contains "Return-Path" "<>" {
@@ -55,14 +58,15 @@ if header :contains "Return-Path" "<>" {
               "mailto:USER_EXTERNAL_EMAIL?body=${message}";
 }
 sieveFile
-        );
+                );
 
-        if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                    . ' Could not close defaultForwarding.sieve file');
+                if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                            . ' Could not close defaultForwarding.sieve file');
+                    }
+                }
             }
-            throw new Tinebase_Exception_Backend('Could not close defaultForwarding.sieve file');
         }
 
         $this->setApplicationVersion('Felamimail', '11.1');

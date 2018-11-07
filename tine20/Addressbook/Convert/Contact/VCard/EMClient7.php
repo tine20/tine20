@@ -73,7 +73,7 @@ class Addressbook_Convert_Contact_VCard_EMClient7 extends Addressbook_Convert_Co
      * @param  Addressbook_Model_Contact  $_record
      * @return \Sabre\VObject\Component\VCard
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         $card = $this->_fromTine20ModelRequiredFields($_record);
 
@@ -119,11 +119,11 @@ class Addressbook_Convert_Contact_VCard_EMClient7 extends Addressbook_Convert_Co
      * converts vcard to Addressbook_Model_Contact
      *
      * @param  \Sabre\VObject\Component|stream|string  $blob       the vcard to parse
-     * @param  Tinebase_Record_Abstract                $_record    update existing contact
+     * @param  Tinebase_Record_Interface                $_record    update existing contact
      * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $contact = parent::toTine20Model($blob, $_record, $options);
         $contact['adr_two_countryname'] = $this->_toTine20ParseCountry($contact['adr_two_countryname']);

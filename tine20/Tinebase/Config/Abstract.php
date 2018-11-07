@@ -283,7 +283,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
-        if (is_object($_value) && $_value instanceof Tinebase_Record_Abstract) {
+        if (is_object($_value) && $_value instanceof Tinebase_Record_Interface) {
             $_value = $_value->toArray(true);
         }
 
@@ -374,7 +374,17 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         return $value !== Tinebase_Model_Config::NOTSET;
     }
-    
+
+    /**
+     * public wrapper for _getConfigFileData, only use it from outside of the config classes!
+     *
+     * @return array
+     */
+    public function getConfigFileData()
+    {
+        return $this->_getConfigFileData();
+    }
+
     /**
      * returns data from central config.inc.php file
      * 
@@ -669,6 +679,20 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     }
 
     /**
+     * clears the inMemory class cache
+     *
+     * @param string|null $key
+     */
+    public function clearMemoryCache($key = null)
+    {
+        if (null === $key) {
+            $this->_mergedConfigCache = [];
+        } else {
+            unset($this->_mergedConfigCache[$key]);
+        }
+    }
+
+    /**
      * clear the cache
      * @param   array $appFilter
      */
@@ -796,7 +820,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 if (is_object($_rawData) && $_rawData instanceof Tinebase_Config_KeyField) {
                     return $_rawData;
                 }
-                $options = (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array();
+                $options = isset($definition['options']) ? (array) $definition['options'] : array();
                 $options['appName'] = $appName;
                 return Tinebase_Config_KeyField::create($_rawData, $options);
 

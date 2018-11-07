@@ -281,7 +281,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
      *
      * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         $this->fulltext = $this->number . ' - ' . $this->name;

@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
 Ext.ns('Tine.Felamimail');
 
 /**
@@ -862,7 +862,7 @@ Tine.Felamimail.getSignature = function(id) {
     var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
     if (signature && signature != '') {
         // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
-        result = '<br><br><span id="felamimail-body-signature">-- <br>' + signature + '</span>';
+        result = '<br><br><span class="felamimail-body-signature">-- <br>' + signature + '</span>';
     }
     
     return result;

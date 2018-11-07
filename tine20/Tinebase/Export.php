@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        when more formats switched to Tinebase_Export_Abstract, change creation of object (new $exportClass($_additionalOptions))
@@ -38,12 +38,13 @@ class Tinebase_Export
     /**
      * get export object for given filter and format
      * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Filter_FilterGroup|null $_filter
      * @param string|array $_options format (as string) or export definition id (array)
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional)
      * @return Tinebase_Export_Abstract
      * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public static function factory($_filter, $_options, $_controller = NULL, $_additionalOptions = array()) 
     {
@@ -73,8 +74,10 @@ class Tinebase_Export
         if (preg_match('/pdf/i', $exportClass) && true === static::$_pdfLegacyHandling) {
             // legacy
             $result = new $exportClass($_additionalOptions);
-        } else {
+        } else if (class_exists($exportClass)) {
             $result = new $exportClass($_filter, $_controller, $_additionalOptions);
+        } else {
+            throw new Tinebase_Exception_NotFound('class ' . $exportClass . ' not found');
         }
         
         return $result;

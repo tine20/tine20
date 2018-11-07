@@ -747,9 +747,13 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
     public function testGetTerminationDeadline()
     {
+        $now = Tinebase_DateTime::now()->setTime(0, 0, 0);
+        $expected = new Tinebase_DateTime('2018-10-01 00:00:00');
+        while ($expected < $now) $expected->addYear(1);
+        
         $result = $this->_instance->getTerminationDeadline('2017-01-01 00:00:00', 12, 12 ,3 ,0, new Tinebase_DateTime('2017-11-1'));
         self::assertTrue(isset($result['terminationDeadline']));
-        self::assertEquals('2018-10-01 00:00:00', $result['terminationDeadline']);
+        self::assertEquals($expected->toString(), $result['terminationDeadline']);
     }
 
     /******************** protected helper funcs ************************/

@@ -389,7 +389,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract imple
      * @param  array                     $_data
      * @return Tinebase_Model_EmailUser
      */
-    protected function _rawDataToRecord(array $_rawdata)
+    protected function _rawDataToRecord(array &$_rawdata)
     {
         $data = array();
         

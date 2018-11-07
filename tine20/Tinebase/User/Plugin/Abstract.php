@@ -146,6 +146,10 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
             $this->_db = Tinebase_Core::getDb();
         } else {
             $dbConfig = array_intersect_key($mailDbConfig, array_flip(array('adapter', 'host', 'dbname', 'username', 'password', 'port')));
+            $dbConfig['driver_options'] = [
+                // use lower timeout as we don't want this to block tine (for example the login)
+                MYSQLI_OPT_CONNECT_TIMEOUT => 5
+            ];
             $this->_db = Tinebase_Core::createAndConfigureDbAdapter($dbConfig);
         }
     }

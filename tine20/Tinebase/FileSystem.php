@@ -647,7 +647,7 @@ class Tinebase_FileSystem implements
     protected function _updateFileObject(Tinebase_Model_Tree_Node $_parentNode, $_id, $_hash, $_hashFile = null)
     {
         /** @var Tinebase_Model_Tree_FileObject $currentFileObject */
-        $currentFileObject = $_id instanceof Tinebase_Record_Abstract ? $_id : $this->_fileObjectBackend->get($_id);
+        $currentFileObject = $_id instanceof Tinebase_Record_Interface ? $_id : $this->_fileObjectBackend->get($_id);
 
         if (! $_hash) {
             // use existing hash from file object
@@ -2348,6 +2348,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             }
             $existingHashes = $this->_fileObjectBackend->checkRevisions($hashsToCheck);
             $hashesToDelete = array_merge($hashesToDelete, array_diff($hashsToCheck, $existingHashes));
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         // to avoid concurrency problems we just sleep a second to give concurrent write processes time to make their
@@ -2365,6 +2367,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 . ' Deleting ' . $filename);
             unlink($filename);
             $deleteCount++;
+
+            Tinebase_Lock::keepLocksAlive();
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -2618,6 +2622,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         $success = true;
         foreach($this->_fileObjectBackend->getNotIndexedObjectIds() as $objectId) {
             $success = $this->indexFileObject($objectId) && $success;
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         return $success;
@@ -2630,6 +2636,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * @param string $_action
      * @param boolean $_topLevelAllowed
      * @throws Tinebase_Exception_AccessDenied
+     * @return boolean
      */
     public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = true, $_throw = true)
     {
@@ -2746,7 +2753,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * check if the given user user has a certain grant
      *
      * @param   string|Tinebase_Model_User   $_accountId
-     * @param   int|Tinebase_Record_Abstract $_containerId
+     * @param   int|Tinebase_Record_Interface $_containerId
      * @param   array|string                 $_grant
      * @return  boolean
      */
@@ -2843,7 +2850,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     /* $_condition = */ '',
                     /* $_options */ array(
                     'ignoreAcl' => $_ignoreACL,
-                    'user' => $_accountId instanceof Tinebase_Record_Abstract
+                    'user' => $_accountId instanceof Tinebase_Record_Interface
                         ? $_accountId->getId()
                         : $_accountId
                 ));
@@ -2905,7 +2912,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             /* $_condition = */ '',
             /* $_options */ array(
                 'ignoreAcl' => $_ignoreACL,
-                'user' => $_accountId instanceof Tinebase_Record_Abstract
+                'user' => $_accountId instanceof Tinebase_Record_Interface
                     ? $_accountId->getId()
                     : $_accountId
             )
@@ -3002,7 +3009,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * @param   string|Tinebase_Record_Interface $recordClass
      * @param   string|Tinebase_Model_User       $accountId use current user if omitted
      * @param   string                           $defaultContainerPreferenceName
-     * @return  Tinebase_Record_Abstract
+     * @return  Tinebase_Record_Interface
      */
     public function getDefaultContainer($recordClass, $accountId = null, $defaultContainerPreferenceName = null)
     {
@@ -3014,7 +3021,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * get grants assigned to one account of one container
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   int|Tinebase_Record_Abstract        $_containerId
+     * @param   int|Tinebase_Record_Interface        $_containerId
      * @param   string                              $_grantModel
      * @return Tinebase_Model_Grants
      *
@@ -3068,7 +3075,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     /**
      * get all grants assigned to this container
      *
-     * @param   int|Tinebase_Record_Abstract $_containerId
+     * @param   int|Tinebase_Record_Interface $_containerId
      * @param   bool                         $_ignoreAcl
      * @param   string                       $_grantModel
      * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
@@ -3168,6 +3175,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 }
 
             } catch(Tinebase_Exception_NotFound $tenf) {}
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -3177,9 +3186,76 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     }
 
     /**
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function reportPreviewStatus()
+    {
+        $status = ['missing' => 0, 'created' => 0];
+
+        if (false === $this->_previewActive) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
+            return $status;
+        }
+
+        $created = &$status['created'];
+        $missing = &$status['missing'];
+
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+        $previewController = Tinebase_FileSystem_Previews::getInstance();
+
+        foreach ($treeNodeBackend->search(
+            new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
+            ], '', ['ignoreAcl' => true])
+            , null, true) as $id) {
+
+            /** @var Tinebase_Model_Tree_Node $node */
+            try {
+                $treeNodeBackend->setRevision(null);
+                $node = $treeNodeBackend->get($id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
+
+            $availableRevisions = $node->available_revisions;
+            if (!is_array($availableRevisions)) {
+                $availableRevisions = explode(',', $availableRevisions);
+            }
+            foreach ($availableRevisions as $revision) {
+                if ($node->revision != $revision) {
+                    $treeNodeBackend->setRevision($revision);
+                    try {
+                        $actualNode = $treeNodeBackend->get($id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue;
+                    } finally {
+                        $treeNodeBackend->setRevision(null);
+                    }
+                } else {
+                    $actualNode = $node;
+                }
+
+                if (!$previewController->canNodeHavePreviews($actualNode)) {
+                    continue;
+                }
+
+                if ($previewController->hasPreviews($actualNode)) {
+                    $created++;
+                } else {
+                    $missing++;
+                }
+            }
+        }
+
+        return $status;
+    }
+
+    /**
      * create preview for files without a preview, delete previews for already deleted files
      *
      * @return bool
+     * @throws Zend_Db_Statement_Exception
      */
     public function sanitizePreviews()
     {
@@ -3197,7 +3273,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         $created = 0;
         $deleted = 0;
 
-        foreach($treeNodeBackend->search(
+        foreach ($treeNodeBackend->search(
                 new Tinebase_Model_Tree_Node_Filter([
                     ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
                 ], '', ['ignoreAcl' => true])
@@ -3238,10 +3314,15 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     continue;
                 }
 
-                $previewController->createPreviewsFromNode($actualNode);
+                if (! $previewController->createPreviews($actualNode)) {
+                    continue;
+                }
+
                 $validHashes[$actualNode->hash] = true;
                 ++$created;
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         $treeNodeBackend->setRevision(null);
@@ -3279,6 +3360,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             if (!isset($validHashes[$name])) {
                 $invalidHashes[] = $name;
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         $validHashes = $this->_fileObjectBackend->checkRevisions($invalidHashes);
@@ -3307,6 +3390,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 try {
                     $this->rmdir($this->getPathOfNode($id, true));
                 } catch (Exception $e) {}
+
+                Tinebase_Lock::keepLocksAlive();
             }
         }
 
@@ -3622,6 +3707,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     $this->_sendQuotaNotification($node);
                     $notifiedNodes[$node->getId()] = true;
                 }
+
+                Tinebase_Lock::keepLocksAlive();
             }
         }
 
@@ -3642,6 +3729,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             } elseif($softQuota > 0 && $size > ($node->quota * $softQuota / 100)) {
                 $this->_sendQuotaNotification($node);
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         if ($quotaConfig->{Tinebase_Config::QUOTA_SKIP_IMAP_QUOTA}) {
@@ -3689,6 +3778,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                         $emailUser->emailUsername . ' exceeded email ' . ($softAlert ? 'soft ' : '') . 'quota');
                 }
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         return true;

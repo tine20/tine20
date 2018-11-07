@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        extend/use sql abstract backend
@@ -277,9 +277,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      * @param string|array $_ids Ids
      * @return Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids, $_ignoreACL = false)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
     {
-        return $this->_getRolesBackend()->getMultiple($_ids, $_ignoreACL);
+        return $this->_getRolesBackend()->getMultiple($_ids, $_ignoreACL, $_expander);
     }
     
     /**

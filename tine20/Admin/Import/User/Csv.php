@@ -52,7 +52,7 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
     /**
      * import single record (create password if in data)
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_resolveStrategy
      * @param array $_recordData
      * @return Tinebase_Record_Interface

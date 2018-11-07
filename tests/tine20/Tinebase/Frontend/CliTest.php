@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -212,6 +212,7 @@ class Tinebase_Frontend_CliTest extends TestCase
                 $serverTime = $task->server_time->getClone();
             }
             $task->next_run = $task->server_time->getClone()->subDay(100);
+            $task->lock_id = null;
             $scheduler->update($task);
         }
         $opts = new Zend_Console_Getopt('abp:');
@@ -220,8 +221,9 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->_releaseDBLockIds[] = 'Tinebase_Frontend_Cli::triggerAsyncEvents::' . Tinebase_Core::getTinebaseId();
 
         ob_start();
-        $this->_cli->triggerAsyncEvents($opts);
-        $out = ob_get_clean();
+        $result = $this->_cli->triggerAsyncEvents($opts);
+        ob_get_clean();
+        static::assertTrue($result, 'cli triggerAsyncEvents did not return true');
         
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
         $this->assertTrue(! empty($cronuserId), 'got empty cronuser id');
@@ -232,7 +234,8 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertEquals($adminGroup->getId(), $cronuser->accountPrimaryGroup);
 
         foreach ($scheduler->getAll() as $task) {
-            static::assertNotEmpty($task->last_run, 'task ' . $task->name . ' did not run successfully');
+            static::assertNotEmpty($task->last_run, 'task ' . $task->name . ' did not run successfully: ' .
+                print_r($task->toArray(), true));
             static::assertTrue($task->last_run->isLaterOrEquals($serverTime),
                 'task ' . $task->name . ' did not run successfully');
         }
@@ -325,13 +328,26 @@ class Tinebase_Frontend_CliTest extends TestCase
     }
 
     /**
+     * testMonitoringCheckCache
+     */
+    public function testMonitoringCheckCache()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringCheckCache();
+        $out = ob_get_clean();
+
+        self::assertContains('CACHE ', $out);
+        self::assertLessThanOrEqual(1, $result);
+    }
+
+    /**
      * test cleanNotes
      */
     public function testCleanNotes()
     {
         // initial clean... tests don't clean up properly
         ob_start();
-        $this->_cli->cleanNotes();
+        $this->_cli->cleanNotes(new Zend_Console_Getopt([], []));
         $out = ob_get_clean();
 
         $noteController = Tinebase_Notes::getInstance();
@@ -344,7 +360,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $realDataNotes = 0;
         foreach($models as $model) {
             /** @var Tinebase_Record_Interface $instance */
-            $instance = new $model();
+            $instance = new $model([], true);
             if ($instance->has('notes')) {
 
                 if (strpos($model, 'Tinebase') === 0) {
@@ -400,7 +416,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertEquals($notesCreated + $realDataNotes + $dbArtifacts, $allNotes->count(), 'notes created and notes in DB mismatch');
 
         ob_start();
-        $this->_cli->cleanNotes();
+        $this->_cli->cleanNotes(new Zend_Console_Getopt([], []));
         $out = ob_get_clean();
 
         $this->assertTrue(preg_match('/deleted \d+ notes/', $out) == 1, 'CLI job produced output: ' . $out);
@@ -447,7 +463,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $realDataCustomFields = 0;
         foreach($models as $model) {
             /** @var Tinebase_Record_Interface $instance */
-            $instance = new $model();
+            $instance = new $model([], true);
             list($appName) = explode('_', $model);
 
             if ($instance->has('customfields')) {

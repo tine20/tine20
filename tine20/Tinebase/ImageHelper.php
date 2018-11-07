@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -68,8 +68,10 @@ class Tinebase_ImageHelper
             throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');
         }
         if (! (isset($imgInfo['channels']) || array_key_exists('channels', $imgInfo))) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Uploaded ' . $imgInfo['mime'] . ' image had no channel information. Setting channels to 3.');
-            $imgInfo['channels'] = 3;
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Image of type ' . $imgInfo['mime']
+                    . ' had no channel information. Setting channels to 0.');
+            $imgInfo['channels'] = 0;
         }
         return array(
             'width'    => $imgInfo[0],
@@ -88,12 +90,17 @@ class Tinebase_ImageHelper
      */
     public static function isImageFile($_file)
     {
-        if(!$_file) {
+        if (! $_file || ! file_exists($_file)) {
             return false;
         }
-        $imgInfo = getimagesize($_file);
-        if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
-            return true;
+        try {
+            $imgInfo = getimagesize($_file);
+            if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
+                return true;
+            }
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
         return false;
     }
@@ -139,7 +146,8 @@ class Tinebase_ImageHelper
     public static function parseImageLink($link)
     {
         $params = array();
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . parse_url($link, PHP_URL_QUERY));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . parse_url($link, PHP_URL_QUERY));
         parse_str(parse_url($link, PHP_URL_QUERY), $params);
         $params['isNewImage'] = false;
         if (isset($params['application']) && $params['application'] == 'Tinebase') {
@@ -184,6 +192,7 @@ class Tinebase_ImageHelper
 
         if (! $dataUrl) {
             $blob = Tinebase_Helper::getFileOrUriContents($imagePath);
+            $mime = '';
 
             if (substr($imagePath, -4) === '.ico') {
                 $mime = 'image/x-icon';

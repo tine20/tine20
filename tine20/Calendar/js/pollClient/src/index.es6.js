@@ -51,5 +51,5 @@ Vue.config.productionTip = false
 Vue.use(Tine20, {})
 
 /* eslint-disable no-new */
-new Vue(App).$mount('#app')
+new Vue(App).$mount('#tine-viewport-app')
 // router.replace('/')

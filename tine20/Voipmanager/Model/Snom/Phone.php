@@ -131,7 +131,7 @@ class Voipmanager_Model_Snom_Phone extends Tinebase_Record_Abstract
      * 
      * @todo    check if this is really needed!
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         if (isset($_data['redirect_time']) && $_data['redirect_time'] == '') {
             $_data['redirect_time'] = 0;

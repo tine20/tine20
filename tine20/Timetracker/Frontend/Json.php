@@ -98,12 +98,12 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns multiple records prepared for json transport
      * NOTE: we can't use parent::_multipleRecordsToJson here because of the different container handling
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data
      * 
-     * @todo replace with Timetracker_Convert_*
+     * @todo replace with Timetracker_Convert_Timesheet_Json
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
@@ -136,10 +136,9 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
                 break;
             case 'Timetracker_Model_Timeaccount':
-                // resolve timeaccounts grants
-                Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
-                $this->_resolveTimeaccountGrants($_records);
-                break;
+                $converter = new Timetracker_Convert_Timeaccount_Json();
+                $result = $converter->fromTine20RecordSet($_records, $_filter, $_pagination);
+                return $result;
         }
         
         if (Tinebase_Core::getUser()->hasRight('Sales', 'manage_invoices')) {
@@ -153,10 +152,9 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
-
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
-        $_records->convertDates = true;
+        $_records->setConvertDates(true);
         $result = $_records->toArray();
 
         return $result;
@@ -182,31 +180,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_DELETE] = $modifyGrant;
 
         return $timeaccountGrantsArray;
-    }
-
-    /**
-     * calculate effective ta grants so the client doesn't need to calculate them
-     *
-     * @param  array  $_timesaccounts
-     */
-    protected function _resolveTimeaccountGrants(Tinebase_Record_RecordSet $_timesaccounts)
-    {
-         $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
-         foreach ($_timesaccounts as $timeaccount) {
-             $timeaccountGrantsArray = $timeaccount->account_grants;
-             $modifyGrant = $manageAllRight || $timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::GRANT_ADMIN];
-
-             $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_READ]   = true;
-             $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_EDIT]   = $modifyGrant;
-             $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_DELETE] = $modifyGrant;
-             $timeaccount->account_grants = $timeaccountGrantsArray;
-
-             // also move the grants into the container_id property, as the clients expects records to
-             // be contained in some kind of container where it searches the grants in
-             $timeaccount->container_id = array(
-                'account_grants' => $timeaccountGrantsArray
-             );
-         }
     }
 
     /**
@@ -273,7 +246,8 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * @return array
      */
-    protected function getOwnTimeAccountBookmarks() {
+    protected function getOwnTimeAccountBookmarks()
+    {
         $ownFavoritesFilter = new Timetracker_Model_TimeaccountFavoriteFilter([
             'account_id' => Tinebase_Core::getUser()->accountId,
         ]);
@@ -312,16 +286,38 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchTimesheets($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter', true);
-        
-        $result['totalcountbillable'] = $result['totalcount']['sum_is_billable_combined'];
-        $result['totalsum']           = $result['totalcount']['sum_duration'];
-        $result['totalsumbillable']   = $result['totalcount']['sum_duration_billable'];
-        $result['totalcount']         = $result['totalcount']['count'];
-
-        return $result;
+        return $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter', true);
     }
 
+    /**
+     * do search count request only when resultset is equal
+     * to $pagination->limit or we are not on the first page
+     *
+     * @param $filter
+     * @param $pagination
+     * @param Tinebase_Controller_SearchInterface $controller the record controller
+     * @param $totalCountMethod
+     * @param integer $resultCount
+     * @return array
+     */
+    protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
+    {
+        if ($controller instanceof Timetracker_Controller_Timesheet) {
+            $result = $controller->searchCount($filter);
+
+            $totalresult = [];
+
+            // add totalcounts of leadstates/leadsources/leadtypes
+            $totalresult['totalcountbillable'] = $result['sum_is_billable_combined'];
+            $totalresult['totalsum'] = $result['sum_duration'];
+            $totalresult['totalsumbillable'] = $result['sum_duration_billable'];
+            $totalresult['totalcount'] = $result['count'];
+
+            return $totalresult;
+        } else {
+            return parent:: _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount);
+        }
+    }
     /**
      * Return a single record
      *
@@ -366,7 +362,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchTimeaccounts($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_timeaccountController, 'Timetracker_Model_TimeaccountFilter');
+        return $this->_search($filter, $paging, $this->_timeaccountController, 'Timetracker_Model_TimeaccountFilter', true);
     }
 
     /**

@@ -47,7 +47,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'encodingTo'        => 'UTF-8',
         'useStreamFilter'   => true,
         'postMappingHook'   => null,
-        // if this is set, always resolve duplicates
+        // if this is set, always resolve (one of:  mergeTheirs, mergeMine, keep
         'duplicateResolveStrategy' => null,
     );
     
@@ -251,7 +251,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $recordToImport = null;
             try {
                 // client record overwrites record in import data (only if set)
-                $clientRecordData = (isset($clientRecordDatas[$recordIndex]) || array_key_exists($recordIndex, $clientRecordDatas)) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
+                $clientRecordData = isset($clientRecordDatas[$recordIndex]['recordData']) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
                 if ($clientRecordData && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                     Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Client record: ' . print_r($clientRecordData, TRUE));
                 }
@@ -768,7 +768,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * create record from record data
      * 
      * @param array $_recordData
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
     protected function _createRecordToImport($_recordData)
     {
@@ -785,10 +785,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * import single record
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_resolveStrategy
      * @param array $_recordData not needed here but in other import classes (i.a. Admin_Import_Csv)
-     * @return Tinebase_Record_Abstract the imported record
+     * @return Tinebase_Record_Interface the imported record
      * @throws Tinebase_Exception_Record_Validation
      */
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
@@ -796,10 +796,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $_record->isValid(TRUE);
         
         if ($this->_options['dryrun']) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Doing Dry-Run ... (transaction will be rolled-back)');
             Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
-        
-        $this->_handleTags($_record, $_resolveStrategy);
+        if($_record->has('tags')){
+            $this->_handleTags($_record, $_resolveStrategy);
+        };
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Record to import: ' . print_r($_record->toArray(), true));
@@ -822,7 +825,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * handle record tags
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_resolveStrategy
      */
     protected function _handleTags($_record, $_resolveStrategy = NULL)
@@ -966,7 +969,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
     * add auto tags from options
     *
-    * @param Tinebase_Record_Abstract $_record
+    * @param Tinebase_Record_Interface $_record
     */
     protected function _addAutoTags($_record)
     {
@@ -1057,14 +1060,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *                                ['mergeMine',   ('Merge, keeping my details')],
      *                                ['keep',        ('Keep both records')]
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param string $resolveStrategy
-     * @param Tinebase_Record_Abstract $clientRecord
-     * @return Tinebase_Record_Abstract
+     * @param Tinebase_Record_Interface $clientRecord
+     * @return Tinebase_Record_Interface
      * 
      * @todo we should refactor the merge handling: this function should always get the merged record OR always do the merging itself
      */
-    protected function _importAndResolveConflict(Tinebase_Record_Abstract $record, $resolveStrategy = null, $clientRecord = null)
+    protected function _importAndResolveConflict(Tinebase_Record_Interface $record, $resolveStrategy = null, $clientRecord = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' ResolveStrategy: ' . $resolveStrategy);
@@ -1087,7 +1090,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if ($recordToUpdate !== null) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                         . ' Merged record: ' . print_r($record->toArray(), TRUE));
-                    
+
+                    // skip concurrency check when merging records
+                    if ($recordToUpdate->has('seq')) {
+                        $recordToUpdate->seq = $record->seq;
+                    }
+
                     $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $recordToUpdate, FALSE);
                     $this->_importResult['updatecount']++;
                 } else {
@@ -1123,9 +1131,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * merge record / skip if no diff
      * 
-     * @param Tinebase_Record_Abstract $updateRecord
-     * @param Tinebase_Record_Abstract $mergeRecord
-     * @return Tinebase_Record_Abstract
+     * @param Tinebase_Record_Interface $updateRecord
+     * @param Tinebase_Record_Interface $mergeRecord
+     * @return Tinebase_Record_Interface
      */
     protected function _mergeRecord($updateRecord, $mergeRecord)
     {
@@ -1166,7 +1174,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param Exception $e
      * @param integer $recordIndex
-     * @param Tinebase_Record_Abstract|array $record
+     * @param Tinebase_Record_Interface|array $record
      * @param boolean $allowToResolveDuplicates
      * 
      * @todo use json converter for client record
@@ -1182,7 +1190,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $exception = array(
                 'code'         => $e->getCode(),
                 'message'      => $e->getMessage(),
-                'clientRecord' => ($record !== NULL && $record instanceof Tinebase_Record_Abstract) ? $record->toArray() 
+                'clientRecord' => ($record !== NULL && $record instanceof Tinebase_Record_Interface) ? $record->toArray()
                     : (is_array($record) ? $record : array()),
             );
         }
@@ -1202,7 +1210,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param Tinebase_Exception_Duplicate $ted
      * @param integer $recordIndex
-     * @param Tinebase_Record_Abstract|array $record
+     * @param Tinebase_Record_Interface|array $record
      * @param boolean $allowToResolveDuplicates
      * @return array|null exception
      */

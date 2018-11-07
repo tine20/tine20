@@ -47,7 +47,8 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
         if (empty($this->_options['container_id'])) {
             $defaultContainer = $this->_controller->getDefaultAddressbook();
             $this->_options['container_id'] = $defaultContainer->getId();
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting default container id: ' . $this->_options['container_id']);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' Setting default container id: ' . $this->_options['container_id']);
         }
     }
     

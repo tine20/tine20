@@ -91,7 +91,8 @@ class HumanResources_TestCase extends TestCase
                 'owner_id'       => Tinebase_Core::getUser(),
                 'backend'        => 'SQL',
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'color'          => '#00FF00'
+                'color'          => '#00FF00',
+                'model'          => Calendar_Model_Event::class,
             ), true));
         }
         
@@ -102,7 +103,8 @@ class HumanResources_TestCase extends TestCase
                 'owner_id'       => Tinebase_Core::getUser(),
                 'backend'        => 'SQL',
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'color'          => '#00FF00'
+                'color'          => '#00FF00',
+                'model'          => Calendar_Model_Event::class,
             ), true));
         }
 
@@ -204,13 +206,18 @@ class HumanResources_TestCase extends TestCase
 
         $this->_lastEmployeeNumber++;
         
+        $sdate = new Tinebase_DateTime();
+        $sdate->subMonth(1);
+        
         $ea = array(
             'number'     => $this->_lastEmployeeNumber,
             'n_fn'       => $a->accountFullName,
             'n_given'    => $a->accountFirstName,
             'n_family'   => $a->accountLastName,
             'account_id' => $a->getId(),
-            'position'   => 'Photographer'
+            'position'   => 'Photographer',
+            'employment_begin' => $sdate
+            
         );
 
         return new HumanResources_Model_Employee($ea);

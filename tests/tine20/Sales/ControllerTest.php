@@ -203,6 +203,15 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
                 'quantity' => 1,
                 'interval' => 1,
                 'billing_point' => 1,
+                'json_attributes' => [
+                    'assignedAccountables' => [[
+                            'model' => 'a',
+                            'id'    => 1,
+                        ], [
+                            'model' => 'a',
+                            'id'    => 1,
+                        ]],
+                    ],
             ),
             array(
                 'product_id' => $productTwo->getId(),
@@ -226,6 +235,8 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
         $this->assertEquals(2, count($productAggregates));
+        static::assertEquals(1, count($productAggregates->find('product_id', $productOne->getId())
+            ->json_attributes['assignedAccountables']));
 
         $contractData->products = array(
             array(
@@ -233,6 +244,15 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
                 'quantity' => 1,
                 'interval' => 1,
                 'billing_point' => 1,
+                'json_attributes' => [
+                    'assignedAccountables' => [[
+                        'model' => 'a',
+                        'id'    => 1,
+                    ], [
+                        'model' => 'a',
+                        'id'    => 1,
+                    ]],
+                ],
             ),
         );
         $this->_backend->update($contractData);
@@ -245,6 +265,32 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
         $this->assertEquals(1, count($productAggregates));
+        static::assertEquals(1, count($productAggregates->find('product_id', $productOne->getId())
+            ->json_attributes['assignedAccountables']));
+
+        $contractData->products = array(
+            array(
+                'product_id' => $productOne->getId(),
+                'quantity' => 1,
+                'interval' => 1,
+                'billing_point' => 1,
+                'json_attributes' => [
+                    'assignedAccountables' => '',
+                ],
+            ),
+        );
+        $this->_backend->update($contractData);
+        $contract = $this->_backend->get($contractData->getId());
+
+        // check count of product aggregates
+        $filter = new Sales_Model_ProductAggregateFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())
+        ));
+        $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        $this->assertEquals(1, count($productAggregates));
+        static::assertFalse(isset($productAggregates->find('product_id', $productOne->getId())
+            ->json_attributes['assignedAccountables']));
 
         // cleanup
         $this->_backend->delete($contract->getId());

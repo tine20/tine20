@@ -10,93 +10,49 @@
  */
 
 .FilemanagerIconCls, .tine-recordclass-gridicon.FilemanagerNode {
-    background-image:url(../../images/oxygen/16x16/apps/system-file-manager.png) !important;
-}
-.x-btn-medium .FilemanagerIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/system-file-manager.png) !important;
-}
-.x-btn-large .FilemanagerIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/system-file-manager.png) !important;
-}
-
-.action_edit_file {
-    background-image:url(../../images/oxygen/16x16/apps/kjournal.png) !important;
-}
-
-.x-btn-medium .action_edit_file {
-    background-image:url(../../images/oxygen/22x22/apps/kjournal.png) !important;
-}
-
-.x-btn-large .action_edit_file {
-    background-image:url(../../images/oxygen/32x32/apps/kjournal.png) !important;
+    background-image:url(../../images/icon-set/icon_filemanager_reiter.svg);
 }
 
 .action_filemanager_folder_up {
-    background-image:url(../../images/oxygen/16x16/actions/go-up-search.png) !important;
-}
-.x-btn-medium .action_filemanager_folder_up {
-    background-image:url(../../images/oxygen/22x22/actions/go-up-search.png) !important;
-}
-.x-btn-large .action_filemanager_folder_up {
-    background-image:url(../../images/oxygen/32x32/actions/go-up-search.png) !important;
+    background-image:url(../../images/icon-set/icon_folder_up.svg) !important;
 }
 
 .action_filemanager_save_all {
-    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
-}
-.x-btn-medium .action_filemanager_save_all {
-    background-image:url(../../images/oxygen/22x22/actions/save-all.png) !important;
-}
-.x-btn-large .action_filemanager_save_all {
-    background-image:url(../../images/oxygen/32x32/actions/save-all.png) !important;
+    background-image:url(../../images/icon-set/icon_download.svg) !important;
 }
 
 /* @TODO improve me */
 .action_filemanager_data_safe_locked {
-    background-image:url(../../images/oxygen/16x16/actions/encrypted.png) !important;
-}
-.x-btn-medium .action_filemanager_data_safe_locked {
-    background-image:url(../../images/oxygen/22x22/actions/encrypted.png) !important;
-}
-.x-btn-large .action_filemanager_data_safe_locked {
-    background-image:url(../../images/oxygen/32x32/actions/encrypted.png) !important;
+    background-image:url(../../images/icon-set/icon_lock.svg) !important;
 }
 
 /* @TODO improve me */
 .action_filemanager_data_safe_unlocked {
-    background-image:url(../../images/oxygen/16x16/actions/decrypted.png) !important;
-}
-.x-btn-medium .action_filemanager_data_safe_unlocked {
-    background-image:url(../../images/oxygen/22x22/actions/decrypted.png) !important;
-}
-.x-btn-large .action_filemanager_data_safe_unlocked {
-    background-image:url(../../images/oxygen/32x32/actions/decrypted.png) !important;
-}
-
-.action_create_folder {
-    background-image:url(../../images/oxygen/16x16/actions/folder-new.png) !important;
+    background-image:url(../../images/icon-set/icon_lock_open.svg) !important;
 }
 
 .action_pause {
-    background-image: url("../../images/oxygen/16x16/actions/media-playback-pause.png");
+    background-image:url(../../images/icon-set/icon_pause.svg) !important;
     background-repeat: no-repeat;
 }
 
 .action_resume {
-    background-image:url(../../images/oxygen/16x16/actions/media-playback-start.png);
+    background-image:url(../../images/icon-set/icon_play.svg) !important;
     background-repeat: no-repeat;
 }
 
-.x-btn-medium .action_create_folder {
-    background-image:url(../../images/oxygen/22x22/actions/folder-new.png) !important;
-}
-.x-btn-large .action_create_folder {
-    background-image:url(../../images/oxygen/32x32/actions/folder-new.png) !important;
+.action_create_folder {
+    background-image:url(../../images/icon-set/icon_filemanager_plus.svg) !important;
 }
 
 .x-type-data-safe .x-tree-node-icon,
 .x-type-data-safe .x-tinebase-typefolder .x-grid3-cell-inner {
-    filter: invert(10%) saturate(500%) hue-rotate(345deg);
+    background-image:url(../../images/icon-set/icon_folder_red.svg) !important;
+
+}
+
+.x-type-data-safe.x-tree-node-expanded .x-tree-node-icon {
+    background-image:url(../../images/icon-set/icon_filemanager_red.svg) !important;
 }
 
 .x-tree-node .x-type-data-safe a span,
@@ -114,28 +70,14 @@ table.x-btn.x-type-data-safe {
 
 
 .x-tinebase-typefolder .x-grid3-cell-inner {
-    background-image:url(../../library/ExtJS/resources/images/default/tree/folder.gif);
-    background-repeat: no-repeat;
-    padding-left: 19px;
-}
-
-.x-tinebase-typeoctet .x-grid3-cell-inner {
-    background-image:url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png);
+    background-image:url(../../images/icon-set/icon_folder.svg);
     background-repeat: no-repeat;
     padding-left: 19px;
 }
 
 .action_publish {
-    background-image: url("../../images/oxygen/16x16/apps/package-network.png");
+    background-image: url("../../images/icon-set/icon_publish.svg") !important;
     background-repeat: no-repeat;
-}
-
-.x-btn-medium .action_publish {
-    background-image: url("../../images/oxygen/22x22/apps/package-network.png");
-} 
-
-.x-btn-large .action_publish {
-    background-image: url("../../images/oxygen/32x32/apps/package-network.png");
 }
 
 .revision-checkbox-field .x-form-check-wrap {

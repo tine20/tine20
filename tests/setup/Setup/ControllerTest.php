@@ -315,7 +315,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
 
         $oldTinebaseId = '624f5f466ad6306dac31ad81e06cc6ca25090bb3';
         $options = array(
-            'backupDir' => dirname(__DIR__) . '/files/2017-11-23-08-47-08',
+            'backupDir' => dirname(__DIR__) . '/files/2018-08-27-17-04-11',
             'db' => 1,
         );
         $result = $this->_uit->getInstance()->installFromDump($options);
@@ -394,12 +394,44 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBackupStructureOnlyTables()
     {
-        require_once __DIR__ . '/Controller_Mock.php';
-
-        $setupControllerMock = new Setup_Controller_Mock();
-
-        $tables = $setupControllerMock->getBackupStructureOnlyTables();
+        $tables = Setup_Controller::getInstance()->getBackupStructureOnlyTables();
 
         $this->assertTrue(in_array(SQL_TABLE_PREFIX . 'felamimail_cache_message', $tables), 'felamimail tables need to be in _getBackupStructureOnlyTables');
+    }
+
+    public function testSortInstallableApplications()
+    {
+        $apps = ['Tinebase','Addressbook','Courses','CoreData','Voipmanager','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Phone','Timetracker','MailFiler','Tasks','Projects','Felamimail','Admin','Calendar','Sales'];
+
+        $applications = array();
+        foreach ($apps as $applicationName) {
+            $applications[$applicationName] = Setup_Controller::getInstance()->getSetupXml($applicationName);
+        }
+
+        $result = Setup_Controller::getInstance()->sortInstallableApplications($applications);
+        $expected = array (
+            0 => 'Tinebase',
+            1 => 'Admin',
+            2 => 'Addressbook',
+            3 => 'Calendar',
+            4 => 'CoreData',
+            5 => 'Felamimail',
+            6 => 'Sales',
+            7 => 'ExampleApplication',
+            8 => 'Inventory',
+            9 => 'Projects',
+            10 => 'Timetracker',
+            11 => 'ActiveSync',
+            12 => 'Filemanager',
+            13 => 'Phone',
+            14 => 'MailFiler',
+            15 => 'Crm',
+            16 => 'Tasks',
+            17 => 'Courses',
+            18 => 'Voipmanager',
+            19 => 'HumanResources',
+            20 => 'SimpleFAQ',
+        );
+        self::assertEquals($expected, array_keys($result));
     }
 }

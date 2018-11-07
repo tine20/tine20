@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -55,7 +55,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 
         'table'             => array(
             'name'    => 'inventory_item',
-            'options' => array('collate' => 'utf8_general_ci'),
             'indexes' => array(
                 'container_id' => array(
                     'columns' => array('container_id')
@@ -81,7 +80,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'length'      => 255,
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'label'       => 'Name', // _('Name')
-                'queryFilter' => TRUE
+                'queryFilter' => true,
             ),
             'status' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
@@ -110,6 +109,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'nullable'   => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Location', // _('Location')
+                'queryFilter' => true,
             ),
             'invoice_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),

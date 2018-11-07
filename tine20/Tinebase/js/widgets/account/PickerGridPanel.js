@@ -344,6 +344,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
                     {
                         id: 'name',
                         header: i18n._('Name'),
+                        width: 200,
                         dataIndex: this.recordPrefix + 'name',
                         renderer: Tine.Tinebase.common.accountRenderer
                     }

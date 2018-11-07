@@ -46,7 +46,7 @@ class Calendar_Controller_PollTest extends TestCase
         parent::setUp();
 
         $this->_oldRequest = Tinebase_Core::get(Tinebase_Core::REQUEST);
-        Tinebase_Core::set(Tinebase_Core::REQUEST, new \Zend\Http\PhpEnvironment\Request());
+        Tinebase_Core::set(Tinebase_Core::REQUEST, new Tinebase_Http_Request());
 
         $this->jt = new Calendar_Frontend_Json_PollTest();
         $this->jt->setUp();
@@ -64,6 +64,16 @@ class Calendar_Controller_PollTest extends TestCase
         }
 
         parent::tearDown();
+    }
+
+    public function testPublicApiMainScreen()
+    {
+        $this->markTestSkipped('needs running webpack-dev-server or build');
+
+        $response = $this->_uit->publicApiMainScreen('');
+
+        $this->assertTrue(!!preg_match('#pollClient/src/index.es6.js#', $response->getBody()), 'entry point missing');
+        $this->assertTrue(array_key_exists('Content-Security-Policy', $response->getHeaders()), 'headers missing');
     }
 
     protected function assertAnonymousTest()
@@ -618,6 +628,48 @@ EOT;
 //            $html = $message->getBodyHtml()->getContent();
 
             $this->assertContains('has been closed', $text);
+
+        } finally {
+            Tinebase_Smtp::setDefaultTransport($oldTransport);
+            Felamimail_Transport::setTestTransport($oldTestTransport);
+            static::resetMailer();
+        }
+    }
+
+    public function testSupressDeleteNotifications()
+    {
+        // if mailing is not installed, as with pgsql
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
+        if (empty($smtpConfig->primarydomain)) {
+            $smtpConfig->primarydomain = 'unittest.test';
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
+        }
+
+        $oldTransport = Tinebase_Smtp::getDefaultTransport();
+        $oldTestTransport = Felamimail_Transport::setTestTransport(null);
+        static::resetMailer();
+
+        try {
+            Tinebase_Notification::destroyInstance();
+            Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
+            Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
+            static::flushMailer();
+
+            Calendar_Controller_Event::getInstance()->sendNotifications(true);
+            Calendar_Config::getInstance()->set(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS, true);
+
+            list($persistentEvent, $poll, $alternativeEvents) = $this->jt->testGetPollEvents();
+            $alternativeEvent = Tinebase_Helper::array_value(0, array_values(
+                array_filter($alternativeEvents['results'],
+                    function ($event) use ($persistentEvent) {
+                        return $event['id'] != $persistentEvent['id'];
+                    })));
+
+
+            Calendar_Controller_Event::getInstance()->delete($alternativeEvent['id']);
+
+            $messages = static::getMessages();
+            $this->assertEmpty($messages);
 
         } finally {
             Tinebase_Smtp::setDefaultTransport($oldTransport);

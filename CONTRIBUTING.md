@@ -25,11 +25,75 @@ This can be done directly in the Pull Request, thanks to https://cla-assistant.i
 For PHP code, write [phpunit](https://phpunit.de/) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/master/tests/tine20)
 For JavaScript code, write [karma](http://karma-runner.github.io) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/master/tests/js)
 
-_TODO add more info about good tests_
-
 ### Commit Message Guidelines
 
-_TODO add_
+Tine 2.0 uses [Conventional Commits](https://conventionalcommits.org/) style commit messages:
+ 
+    <type>(<scope>): MESSAGE
+    
+    [optional body]
+    
+    [optional footer]
+
+Example:
+
+    feature(Addressbook): adds type-ahead to some contact fields
+    
+    * company
+    * unit
+    * address data
+    
+    closes #289
+
+Another:
+    
+    fix(Phone): improve handling of empty phone numbers
+
+    ... when looking for the matching contact
+
+See also the [AngularJS commit guidelines](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines).
+
+<type> can be one of the following:
+
+- tweak
+- hack
+- fix
+- feature
+- build
+- docs
+- perf
+- refactor
+- style
+- test
+- config
+- script
+- text
+
+Some example <scope>s:
+
+- APPNAME like Addressbook, Calendar, Tasks
+- Tests / Unittests
+- Cli
+- Import, Export
+- Setup
+
+You should reference a GitHub issue (if exists) like this:
+
+    See #1234
+    
+If the commit closes an issue, it should be done like this:
+
+    Closes #1234
+    
+(or any other "closing" keyword - see https://help.github.com/articles/closing-issues-using-keywords/ for reference)
+
+If the commit reverts a previous commit, it should begin with revert:, followed by the header of the reverted commit.
+In the body it should say: "This reverts commit <hash>", where the hash is the SHA of the commit being reverted.
+
+We also use some annotations to mark commits for documentation follow-ups:
+
+- @usermanual (User manual needs to be updated because of this commit)
+- @releasenotes (RELEASENOTES need to be updated because of this commit)
 
 ## Reporting Bugs
 
@@ -59,12 +123,17 @@ _TODO add more_
 
 ### Coding Standards
 
-_TODO add more_
+For PHP Code, we use the [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) and [PSR-2](https://www.php-fig.org/psr/psr-2/) Coding Standards.
 
 ## Asking and Answering Questions
 
-_TODO add more_
+If you have a question, please open an issue. We will put the label "Question" on it. Feel
+free to answer questions of other users. You could also put your question on Stackoverflow (tag "tine20"):
+https://stackoverflow.com/questions/tagged/tine20
+
+Questions on GitHub can be asked in german or english.
 
 ## Additional Resources
 
 * [Guidelines for CONTRIBUTING](https://help.github.com/articles/setting-guidelines-for-repository-contributors/)
+* [AngularJS Commit Message Guidelines](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines)

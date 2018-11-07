@@ -84,7 +84,12 @@ class Tinebase_Record_PathTest extends TestCase
                     'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'type'              => 't'
                 ]
-            ]
+            ],
+            'grants'               => [[
+                    'account_id'      => Tinebase_Core::getUser()->getId(),
+                    'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+                ]]
         ]));
 
         $result = $this->_uit->getPathsForRecord($resource);
@@ -304,12 +309,10 @@ class Tinebase_Record_PathTest extends TestCase
     {
         $contact = $this->testTriggerRebuildPathForRecords();
 
-        // due to full text we need to commit here!
-        //Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        //$this->_transactionId = null;
-
         // change contact name and check path in related records
         $this->_fatherRecord->n_family = 'stepfather';
+        // don't update relations
+        unset($this->_fatherRecord->relations);
         Addressbook_Controller_Contact::getInstance()->update($this->_fatherRecord);
 
         $recordPaths = $this->_uit->getPathsForRecord($contact);

@@ -33,7 +33,8 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Tasks';
         $this->_modelName = 'Tasks_Model_Task';
         $this->_backend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);
@@ -53,7 +54,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      * @var Tasks_Controller_Task
      */
     private static $_instance = NULL;
-    
+
     /**
      * holds backend instance
      * (only sql atm.)
@@ -74,7 +75,15 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         }
         return self::$_instance;
     }
-    
+
+    /**
+     * destroy instance
+     */
+    public static function unsetInstance()
+    {
+        self::$_instance = NULL;
+    }
+
     /****************************** overwritten functions ************************/
 
     /**
@@ -220,12 +229,12 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
     /**
      * add automatic alarms to record (if configured)
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return void
      * 
      * @todo    move this to Tinebase_Controller_Record_Abstract
      */
-    protected function _addAutomaticAlarms(Tinebase_Record_Abstract $_record)
+    protected function _addAutomaticAlarms(Tinebase_Record_Interface $_record)
     {
         $automaticAlarms = Tasks_Config::getInstance()->get(Tinebase_Config::AUTOMATICALARM, new Tinebase_Config_Struct());
         if (! is_object($automaticAlarms)) {

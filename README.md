@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/tine20/Tine-2.0-Open-Source-Groupware-and-CRM.svg?branch=master)](https://travis-ci.org/tine20/Tine-2.0-Open-Source-Groupware-and-CRM)
+[![Build Status](https://travis-ci.org/tine20/tine20.svg?branch=master)](https://travis-ci.org/tine20/tine20)
 ![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftine20%2FTine-2.0-Open-Source-Groupware-and-CRM.svg?type=shield)
 
 # Tine 2.0 - Community Edition
@@ -6,12 +6,12 @@
 Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](http://www.tine20.com).
 
 ## Official Community ressources
-* [Tine2.0 Contributors Guide](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/blob/master/CONTRIBUTING.md)
-* [Documentation Wiki](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki)
-* [Github Issue tracker / Questions](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues)
-* [Github Implementation Project](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/projects/1)
-* [Github Documentation Project](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/projects/2)
-* [Package Downloads](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/releases)
+* [Tine2.0 Contributors Guide](https://github.com/tine20/tine20/blob/master/CONTRIBUTING.md)
+* [Documentation Wiki](https://github.com/tine20/tine20/wiki)
+* [Github Issue tracker / Questions](https://github.com/tine20/tine20/issues)
+* [Github Implementation Project](https://github.com/tine20/tine20/projects/1)
+* [Github Documentation Project](https://github.com/tine20/tine20/projects/2)
+* [Package Downloads](https://github.com/tine20/tine20/releases)
 * [Twitter](https://twitter.com/tine20org)
 * [Matrix chat room #tine20:matrix.org](https://riot.im/app/#/room/#tine20:matrix.org)
 * [Gitter chat room](https://gitter.im/tine20/Lobby)
@@ -36,7 +36,7 @@ don't fix bugs or supply security updates for old versions.
 In general, users of the Community Edition are technically experienced and able to help themselves. The ability to read,
 understand and change the software as well as to share the new version with others really is the heart of free software.
 
-Moreover, in our [Issues and Questions Section](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues)
+Moreover, in our [Issues and Questions Section](https://github.com/tine20/tine20/issues)
 you can get support from other community members. As a rule of thumb: You can expect more support from others the more
 you contribute yourself. Don't expect others to contribute if you are not willing to contribute yourself. Remember: We
 are a community of free software enthusiasts and innovators. If you are out for a good Samaritan you need to look
@@ -57,7 +57,14 @@ Each [Tine 2.0 Business Edition](http://www.tine20.com) is maintained with secur
 years. Our [partners](https://www.tine20.com/partner/) offer a wide range of commercial support for different business needs.
 
 ## Reporting security issues
-If you found any security relevant issue you can mail us [security@tine20.com](mailto:security@tine20.com). You can also create issues in our [forge](https://forge.tine20.org) and explain the issue there. Make sure you tick the privat flag there and write us your ticket number to the mail above! Once we resolved the issue, we can disable the privat state and announce it to the public.
+If you found any security relevant issue you can mail us [security@tine20.com](mailto:security@tine20.com).
+
+## Server Requirements
+* Webserver like [Apache](https://httpd.apache.org/), [Ngnix](https://www.nginx.com/), …
+* [MySQL](http://www.mysql.com/) >= 5.4 or [MariaDB](https://mariadb.org) >= 5.5
+* [PHP](http://www.php.net/) 5.6 - 7.2, version 7.0 - 7.2 recommended.
+  + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring
+  + Optional Extensions: Redis, LDAP, Memcache
 
 ## Licenses, Copyrights and Trademarks 
 Tine 2.0 - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.
@@ -69,4 +76,4 @@ all Tine 2.0 specific source code it's possible to offer it with different licen
 The name "Tine 2.0" is our registered trademark. This is for your and our safety. We can use the name and logo without
 legal fraught from other parties.
 
-see [Tine2.0 LICENSE file](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/blob/master/LICENSE.md)
+see [Tine2.0 LICENSE file](https://github.com/tine20/tine20/blob/master/LICENSE.md)

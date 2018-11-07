@@ -163,6 +163,43 @@ class Addressbook_JsonTest extends TestCase
         $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
+
+        /*
+        $contactsById = [];
+        foreach ($contacts['results'] as $data) {
+            $contactsById[$data['id']] = $data;
+        }
+        $records = Addressbook_Controller_Contact::getInstance()->getMultiple(array_keys($contactsById));
+
+        Addressbook_Frontend_Json::resolveImages($records);
+        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $pathController = Tinebase_Record_Path::getInstance();
+            foreach ($records as $record) {
+                $record->paths = $pathController->getPathsForRecord($record);
+                $pathController->cutTailAfterRecord($record, $record->paths);
+            }
+        }
+        $converter = new Tinebase_Convert_Json();
+        $data = [];
+        foreach ($converter->fromTine20RecordSet($records) as $a) {
+
+            // fix legacy bugs
+            if (array_key_exists('cat_id', $a)) {
+                unset($a['cat_id']);
+            }
+            if (array_key_exists('label', $a)) {
+                unset($a['label']);
+            }
+            if (array_key_exists('private', $a)) {
+                unset($a['private']);
+            }
+            $data[$a['id']] = $a;
+        }
+
+        $id = $contacts['results'][0]['id'];
+        static::assertEquals($data[$id], $contactsById[$id]);
+        static::assertEquals($data, $contactsById);
+        */
     }
 
     /**
@@ -1459,6 +1496,48 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * testTextFilterWildcards
+     */
+    public function testTextFilterWildcards()
+    {
+        $contact = $this->_addContact('my * Corp');
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => strtolower('PHP*NIT')),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact['id']),
+        );
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => strtolower('PHP*NIT')),
+            array('field' => 'org_name', 'operator' => 'equals', 'value' => strtolower('* Corp')),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact['id']),
+        );
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => strtolower('PHP*NIT')),
+            array('field' => 'org_name', 'operator' => 'contains', 'value' => strtolower('\* Corp')),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact['id']),
+        );
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => strtolower('PHP*NIT')),
+            array('field' => 'org_name', 'operator' => 'contains', 'value' => strtolower('not \* Corp')),
+            array('field' => 'id', 'operator' => 'equals', 'value' => $contact['id']),
+        );
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(0, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+    }
+
+    /**
      * return event organizuer filter
      *
      * @return array
@@ -1556,7 +1635,8 @@ class Addressbook_JsonTest extends TestCase
             'name'           => 'PHPUnit test calendar',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'        => 'Sql',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'          => Calendar_Model_Event::class,
         ), true));
 
         return new Calendar_Model_Event(array(
@@ -2212,6 +2292,12 @@ Steuernummer 33/111/32212";
         static::assertTrue(isset($result['results'][count($result['results'])-1]['emails']),
             'last entry should be a list that has emails: ' . print_r($result['results'][count($result['results'])-1],
                 true));
+        foreach ($result['results'] as $entry) {
+            // only lists have 'emails' key
+            if (isset($entry['emails']) && empty($entry['emails'])) {
+                self::fail('empty lists should not be returned - list: ' . print_r($entry, true));
+            }
+        }
     }
 
     /**

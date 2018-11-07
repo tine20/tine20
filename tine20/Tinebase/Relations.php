@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Relations
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        re-enable the caching (but check proper invalidation first) -> see task #232
@@ -98,7 +98,7 @@ class Tinebase_Relations
      * @param  string $_model           own model to get relations for
      * @param  string $_backend         own backend to get relations for
      * @param  string $_id              own id to get relations for 
-     * @param  array  $_relationData    data for relations to create
+     * @param  array|Tinebase_Record_RecordSet  $_relationData    data for relations to create
      * @param  bool   $_ignoreACL       create relations without checking permissions
      * @param  bool   $_inspectRelated  do update/create related records on the fly
      * @param  bool   $_doCreateUpdateCheck do duplicate/freebusy/... checking for relations
@@ -112,14 +112,18 @@ class Tinebase_Relations
                                  $_inspectRelated = false,
                                  $_doCreateUpdateCheck = false)
     {
-        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
-        foreach((array) $_relationData as $relationData) {
-            if ($relationData instanceof Tinebase_Model_Relation) {
-                $relations->addRecord($relationData);
-            } else {
-                $relation = new Tinebase_Model_Relation(NULL, TRUE);
-                $relation->setFromJsonInUsersTimezone($relationData);
-                $relations->addRecord($relation);
+        if ($_relationData instanceof Tinebase_Record_RecordSet) {
+            $relations = $_relationData;
+        } else {
+            $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+            foreach ((array)$_relationData as $relationData) {
+                if ($relationData instanceof Tinebase_Model_Relation) {
+                    $relations->addRecord($relationData);
+                } else {
+                    $relation = new Tinebase_Model_Relation(NULL, TRUE);
+                    $relation->setFromJsonInUsersTimezone($relationData);
+                    $relations->addRecord($relation);
+                }
             }
         }
         
@@ -463,9 +467,11 @@ class Tinebase_Relations
      */
     public function getMultipleRelations($_model, $_backend, $_ids, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE, $_relatedModels = NULL)
     {
+        $flippedIds = array_flip($_ids);
+
         // prepare a record set for each given id
         $result = array();
-        foreach ($_ids as $key => $id) {
+        foreach ($flippedIds as $key) {
             $result[$key] = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(),  true);
         }
         
@@ -474,9 +480,8 @@ class Tinebase_Relations
         
         // sort relations into corrensponding sets
         foreach ($relations as $relation) {
-            $keys = array_keys($_ids, $relation->own_id);
-            foreach ($keys as $key) {
-                $result[$key]->addRecord($relation);
+            if (isset($flippedIds[$relation->own_id])) {
+                $result[$flippedIds[$relation->own_id]]->addRecord($relation);
             }
         }
         
@@ -520,7 +525,7 @@ class Tinebase_Relations
      */
     protected function _setAppRecord($_relation, $_doCreateUpdateCheck = false)
     {
-        if (! $_relation->related_record instanceof Tinebase_Record_Abstract) {
+        if (! $_relation->related_record instanceof Tinebase_Record_Interface) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Relation: ' . print_r($_relation->toArray(), TRUE));
             throw new Tinebase_Exception_UnexpectedValue('Related record is missing from relation.');
@@ -807,5 +812,13 @@ class Tinebase_Relations
         }
 
         return $result;
+    }
+
+    /**
+     * @return Tinebase_Relation_Backend_Sql
+     */
+    public function getBackend()
+    {
+        return $this->_backend;
     }
 }

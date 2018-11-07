@@ -137,7 +137,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
         
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
         
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']->id);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']);
         $this->assertContains(Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->accountId, $grants->account_id);
     }
     
@@ -166,7 +166,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
         
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
         
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']->id);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']);
         $this->assertNotContains(Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->accountId, $grants->account_id);
     }
     
@@ -198,7 +198,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
         
         $grantsOfPwulf = Tinebase_Container::getInstance()
-            ->getGrantsOfContainer($this->objects['initialContainer']->id)
+            ->getGrantsOfContainer($this->objects['initialContainer'])
             ->filter('account_id', Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->accountId)
             ->getFirstRecord();
         $this->assertTrue($grantsOfPwulf->deleteGrant);

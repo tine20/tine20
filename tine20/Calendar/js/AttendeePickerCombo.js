@@ -27,6 +27,12 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
     eventRecord: null,
 
     /**
+     * @cfg {Bool} requireFreeBusyGrantOnly
+     * freebusy grant is sufficient to find ressource (instead of inviteGrant)
+     */
+    requireFreeBusyGrantOnly: false,
+
+    /**
      * @property {Tine.Calendar.Model.AttenderProxy} recordProxy
      */
     recordProxy: null,
@@ -47,6 +53,39 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
         });
 
         Tine.Calendar.AttendeePickerCombo.superclass.initComponent.call(this);
+    },
+
+    /**
+     * prepare paging and sort
+     *
+     * @param {Ext.data.Store} store
+     * @param {Object} options
+     */
+    onBeforeLoad: function (store, options) {
+        Tine.Calendar.AttendeePickerCombo.superclass.onBeforeLoad.call(this, store, options);
+
+        if (this.requireFreeBusyGrantOnly) {
+            this.store.baseParams.filter.push({
+                field: 'resourceFilter', value: [
+                    {field: 'requireFreeBusyGrant', value: 1}
+                ]
+            });
+        }
+    },
+
+    /**
+     * create bogus attendee record for directly entered email-addresses
+     */
+    getValue: function() {
+        var raw = this.getRawValue();
+        if (Ext.form.VTypes.email(raw)) {
+            this.value = raw;
+            this.selectedRecord = new Tine.Calendar.Model.Attender(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                'user_type': 'user',
+                'user_id': this.value
+            }));
+        }
+        return Tine.Calendar.AttendeePickerCombo.superclass.getValue.apply(this, arguments);
     },
 
     /**

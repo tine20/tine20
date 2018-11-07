@@ -286,8 +286,8 @@ class Tinebase_GroupTest extends TestCase
         // sync again -> should not change anything
         Tinebase_Group::syncListsOfUserContact(array($group->getId()), $testUser->contact_id);
         $listAgain = Addressbook_Controller_List::getInstance()->get($group->list_id);
-        $this->assertTrue(($diff = $list->diff($listAgain, ['last_modified_by', 'last_modified_time', 'seq']))
-            ->isEmpty(), print_r($diff->toArray(), true));
+        $diff = $list->diff($listAgain, ['last_modified_by', 'last_modified_time', 'seq']);
+        $this->assertTrue($diff->isEmpty(), print_r($diff->toArray(), true));
         
         // change list id -> should get list by (group) name
         $group->list_id = NULL;

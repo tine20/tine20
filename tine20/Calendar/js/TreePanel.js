@@ -82,17 +82,26 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     useProperties: true,
     
     initComponent: function() {
-        this.filterPlugin = new Tine.widgets.tree.FilterPlugin({
-            treePanel: this,
-            /**
-             * overwritten to deal with calendars special filter approach
-             * 
-             * @return {Ext.Panel}
-             */
-            getGridPanel: function() {
-                return Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
-            }
-        });
+        var _ = window.lodash,
+            me = this;
+
+        //@TODO improve detection or pipe as config
+        this.isMainScreenFilterTree = this.hasContextMenu;
+
+        // only apply filter plugin when used as mainscreen leftpanel
+        if (this.isMainScreenFilterTree) {
+            this.filterPlugin = new Tine.widgets.tree.FilterPlugin({
+                treePanel: this,
+                /**
+                 * overwritten to deal with calendars special filter approach
+                 *
+                 * @return {Ext.Panel}
+                 */
+                getGridPanel: function () {
+                    return Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
+                }
+            });
+        }
         
         this.on('beforeclick', this.onBeforeClick, this);
         this.on('containercolorset', function() {
@@ -100,6 +109,37 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         });
         
         this.supr().initComponent.call(this);
+
+        // remove resource calendars user has appropriate grants for
+        this.loader.processResponse = _.wrap(this.loader.processResponse, function(orig, response, node, callback, scope) {
+            var o = response.responseData || Ext.decode(response.responseText);
+            response.responseData = o.hasOwnProperty('totalcount') ? o.results : o;
+
+                response.responseData = _.reduce(response.responseData, function (newResponse, nodeData) {
+                var grantsModelName = _.get(nodeData, 'xprops.Tinebase.Container.GrantsModel', 'Tinebase_Model_Grants'),
+                    accountGrants = _.get(nodeData, 'account_grants', {}),
+                    hasRequiredGrants = grantsModelName != 'Calendar_Model_ResourceGrants' ? true : (
+                        (
+                            _.get(accountGrants, 'resourceInviteGrant', false) ||
+                            _.get(accountGrants, 'resourceReadGrant', false)
+                        ) && (
+                            _.get(accountGrants, 'eventsFreebusyGrant', false) ||
+                            _.get(accountGrants, 'eventsReadGrant', false)
+                        )
+                    );
+
+                if (grantsModelName == 'Calendar_Model_ResourceGrants') {
+                    // transform grants for event container selection
+                    accountGrants.addGrant = accountGrants.eventsAddGrant;
+                    accountGrants.editGrant = accountGrants.eventsEditGrant;
+                    accountGrants.deleteGrant = accountGrants.eventsDeleteGrant;
+                }
+
+                return hasRequiredGrants ? newResponse.concat([nodeData]) : newResponse;
+            }, []);
+
+            return orig.apply(me.loader, _.drop(arguments));
+        });
     },
 
     initContextMenu: function() {
@@ -131,14 +171,15 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         resourceId = lodash.get(xprops, 'Calendar.Resource.resource_id');
 
         if (resourceId) {
-            this.action_editResource.setText(grants.adminGrant ?
-                this.app.i18n._('Edit Resource') :
-                this.app.i18n._('View Resource')
+            this.action_editResource.setText(grants.resourceEditGrant ||
+                Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources') ?
+                    this.app.i18n._('Edit Resource') :
+                    this.app.i18n._('View Resource')
             );
         }
 
         if (grants) {
-            this.action_editResource.setHidden(! grants.readGrant || ! resourceId);
+            this.action_editResource.setHidden(! grants.resourceReadGrant || ! resourceId);
         }
 
         this.action_editResource.resourceId = resourceId;

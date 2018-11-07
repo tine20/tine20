@@ -64,6 +64,7 @@ abstract class Tinebase_WebDav_Plugin_AbstractBaseTest extends TestCase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )));
         Tinebase_Container::getInstance()->increaseContentSequence($this->objects['initialContainer']);
     }

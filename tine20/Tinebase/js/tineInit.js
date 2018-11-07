@@ -12,6 +12,8 @@
 
 /*global Ext, Tine, google, OpenLayers, Locale, */
 
+import waitFor from 'util/waitFor.es6';
+
 /** ------------------------- Ext.ux Initialisation ------------------------ **/
 
 Ext.ux.Printer.BaseRenderer.prototype.stylesheetPath = 'Tinebase/js/ux/Printer/print.css';
@@ -45,17 +47,6 @@ Tine.clientVersion.buildRevision    = 'none';
 Tine.clientVersion.codeName         = 'none';
 Tine.clientVersion.packageString    = 'none';
 Tine.clientVersion.releaseTime      = 'none';
-
-/**
- * title of app (gets set at build time)
- * 
- * @type String
- */
-Tine.logo = 'images/tine_logo.png';
-Tine.title = 'Tine 2.0 \u00ae';
-Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
-Tine.helpUrl = 'https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki';
-Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
 
 /**
  * quiet logging in release mode
@@ -173,6 +164,8 @@ Tine.Tinebase.tineInit = {
                 }
             }
         }, this);
+
+        Tine.clientVersion.assetHash = window.assetHash;
     },
 
     initPostal: function () {
@@ -217,8 +210,6 @@ Tine.Tinebase.tineInit = {
      * default wait panel (picture only no string!)
      */
     initBootSplash: function () {
-        Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url(favicon/30/png)');
-
         Tine.Tinebase.viewport = new Ext.Viewport({
             layout: 'fit',
             border: false,
@@ -372,7 +363,12 @@ Tine.Tinebase.tineInit = {
             options.headers = options.headers || {};
             options.headers['X-Tine20-JsonKey'] = jsonKey;
             options.headers['X-Tine20-TransactionId'] = Tine.Tinebase.data.Record.generateUID();
-            
+
+            // server might not accept outdated clients
+            if (Tine.clientVersion.assetHash) {
+                options.headers['X-Tine20-ClientAssetHash'] = Tine.clientVersion.assetHash;
+            }
+
             options.url = Ext.urlAppend((options.url ? options.url : Tine.Tinebase.tineInit.requestUrl),  'transactionid=' + options.headers['X-Tine20-TransactionId']);
             
             // convert non Ext.Direct request to jsonrpc
@@ -595,7 +591,14 @@ Tine.Tinebase.tineInit = {
                 params: {
                     method: Tine.Tinebase.tineInit.getAllRegistryDataMethod
                 },
-                failure: function () {
+                failure: function (exception) {
+                    if (exception.responseText.match(/"code":426/)) {
+                        return Tine.Tinebase.common.reload({
+                            keepRegistry: false,
+                            clearCache: true
+                        });
+                    }
+
                     // if registry could not be loaded, this is mostly due to missconfiguaration
                     // don't send error reports for that!
                     Tine.Tinebase.ExceptionHandler.handleRequestException({
@@ -628,9 +631,10 @@ Tine.Tinebase.tineInit = {
                         }
                     }
 
-                    Tine.Tinebase.tineInit.onRegistryLoad();
-
-                    cb.call(scope);
+                    Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
+                        Ext.util.CSS.refreshCache();
+                        cb.call(scope);
+                    });
                 }
             });
         } else {
@@ -641,8 +645,10 @@ Tine.Tinebase.tineInit = {
                 Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
             }
 
-            Tine.Tinebase.tineInit.onRegistryLoad();
-            cb.call(scope);
+            Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
+                Ext.util.CSS.refreshCache();
+                cb.call(scope);
+            });
         }
 
 
@@ -655,29 +661,28 @@ Tine.Tinebase.tineInit = {
         if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered 
             && Tine.Tinebase.registry.get('preferences')
             && Tine.Tinebase.registry.get('currentAccount')
-            && ! Ext.isNewIE
         ) {
             Tine.log.info('tineInit::onRegistryLoad - register onPreferenceChange handler');
             Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
             Tine.Tinebase.tineInit.onPreferenceChangeRegistered = true;
         }
 
-        Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
-        //Do we have a custom weburl for branding?
-        Tine.weburl = Tine.Tinebase.registry.get('brandingWeburl') ? Tine.Tinebase.registry.get('brandingWeburl') : Tine.weburl;
-        Tine.websiteUrl = Tine.Tinebase.registry.get('websiteUrl') ? Tine.Tinebase.registry.get('websiteUrl') : Tine.weburl;
-        
-        //DO we have a custom title for branding?
-        Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
-        Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
+        Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url(' + Tine.Tinebase.registry.get('brandingFaviconSvg') + ')');
 
-        if (Tine.Tinebase.registry.get('installLogo')) {
-            Tine.installLogo = Tine.Tinebase.registry.get('installLogo');
-        } else if (Tine.Tinebase.registry.get('brandingLogo')) {
-            Tine.installLogo = Tine.Tinebase.registry.get('brandingLogo');
-        } else {
-            Tine.installLogo = Tine.logo;
-        }
+        Tine.title = Tine.Tinebase.registry.get('brandingTitle');
+        Tine.descriptoion = Tine.Tinebase.registry.get('brandingTitle');
+        Tine.logo = Tine.Tinebase.registry.get('brandingLogo');
+        Tine.weburl = Tine.Tinebase.registry.get('brandingWeburl');
+        Tine.helpUrl = Tine.Tinebase.registry.get('brandingHelpUrl');
+        Tine.shop = Tine.Tinebase.registry.get('brandingShopUrl');
+        Tine.bugreportUrl = Tine.Tinebase.registry.get('brandingBugsUrl');
+
+        Tine.installLogo = Tine.Tinebase.registry.get('installLogo') ?
+            Tine.Tinebase.registry.get('installLogo') :
+            Tine.Tinebase.registry.get('brandingLogo');
+        Tine.websiteUrl = Tine.Tinebase.registry.get('websiteUrl') ?
+            Tine.Tinebase.registry.get('websiteUrl') :
+            Tine.Tinebase.registry.get('brandingWeburl');
 
         if (Ext.isWebApp && Tine.Tinebase.registry.get('sessionId')) {
             // restore session cookie
@@ -710,20 +715,26 @@ Tine.Tinebase.tineInit = {
         // we might need to add a real config for this
         // it's not clear how to detect devices w.o. local storage or clients which place
         // downloads in a cloud :-(
-        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isTouchDevice);
+        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isIOS && !Ext.isAndorid);
 
         var AreaLocks = require('./AreaLocks.es6');
         Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
+
+        // load initial js of user enabled apps
+        // @TODO: move directly after login (login should return requested parts of registry)
+        var appLoader = require('./app-loader!app-loader.js');
+        return appLoader(Tine.Tinebase.registry.get('userApplications'));
     },
 
     /**
      * check client version and reload on demand
      */
     checkClientVersion: function() {
-        var serverHash = Tine.Tinebase.registry.get('version').filesHash,
-            clientHash = Tine.clientVersion.filesHash;
+        var serverHash = Tine.Tinebase.registry.get('version').assetHash,
+            buildType = Tine.Tinebase.registry.get('version').buildType,
+            clientHash = Tine.clientVersion.assetHash;
 
-        if (clientHash && clientHash != serverHash) {
+        if (clientHash && clientHash != serverHash && ['RELEASE', 'DEBUG'].indexOf(buildType) > -1) {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,
@@ -853,16 +864,17 @@ Tine.Tinebase.tineInit = {
         }, this, {buffer: 150});
 
         // initialise window types
-        var windowType = 'Browser';
+        var windowType = '';
         Ext.ux.PopupWindow.prototype.url = Tine.Tinebase.common.getUrl();
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
             // update window factory window type (required after login)
             windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
-            if (! windowType) {
-                windowType = 'Browser';
-            }
         }
-        windowType = Ext.isTouchDevice ? 'Ext' : windowType;
+
+        if (! windowType || windowType == 'autodetect') {
+            // var browserDetection = require('browser-detection');
+            windowType = Ext.supportsPopupWindows ? 'Browser' : 'Ext';
+        }
 
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
@@ -873,7 +885,7 @@ Tine.Tinebase.tineInit = {
      */
     initState: function () {
         if (Tine.Tinebase.tineInit.stateful === true) {
-            if (window.isMainWindow || Ext.isIE) {
+            if (window.isMainWindow) {
                 // NOTE: IE is as always pain in the ass! cross window issues prohibit serialisation of state objects
                 Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
             } else {
@@ -900,7 +912,7 @@ Tine.Tinebase.tineInit = {
      * initialise application manager
      */
     initAppMgr: function () {
-        if (! Ext.isIE9 && ! Ext.isIE && ! window.isMainWindow) {
+        if (! window.isMainWindow) {
             // return app from main window for non-IE browsers
             Tine.Tinebase.appMgr = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr;
         } else {
@@ -918,19 +930,9 @@ Tine.Tinebase.tineInit = {
     /**
      * config locales
      */
-    initLocale: function () {
-        //Locale.setlocale(Locale.LC_ALL, '');
-        window.i18n = new Locale.Gettext();
-        window.i18n.textdomain('Tinebase');
-
-        window._ = function (msgid) {
-            Tine.log.warn('_() is deprecated, please use i18n._ instead' + new Error().stack);
-            return window.i18n.dgettext('Tinebase', msgid);
-        };
-
-        Tine.Tinebase.prototypeTranslation();
-
-        var formatMessage = require('format-message');
+    initLocale: async function () {
+        var _ = window.lodash,
+            formatMessage = require('format-message');
 
         // NOTE: we use gettext tooling for template selection
         //       as there is almost no tooling for icu-messages out there
@@ -944,15 +946,43 @@ Tine.Tinebase.tineInit = {
             return formatMessage.apply(formatMessage, arguments);
         };
         window.lodash.assign(window.formatMessage, formatMessage);
+
+        require('Locale');
+        require('Locale/Gettext');
+
+        await waitFor( function() { return Tine.__translationData.__isLoaded; });
+
+        _.each(Tine.__translationData.msgs, function(msgs, category) {
+            Locale.Gettext.prototype._msgs[category] = new Locale.Gettext.PO(msgs);
+        });
+
+        window.i18n = new Locale.Gettext();
+        window.i18n.textdomain('Tinebase');
+
+        window._ = function (msgid) {
+            Tine.log.warn('_() is deprecated, please use i18n._ instead' + new Error().stack);
+            return window.i18n.dgettext('Tinebase', msgid);
+        };
+
+
+        Locale.Gettext.prototype.translationsLoaded = function() {
+            return new Promise(function (fulfill) {
+                Tine.__translationData.__isLoaded
+            })
+        };
+        window.i18n.translationsLoaded().then(function() {
+            Tine.Tinebase.prototypeTranslation();
+            fulfill();
+        });
     }
 };
 
-Ext.onReady(function () {
+Ext.onReady(async function () {
     Tine.Tinebase.tineInit.initWindow();
     Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
-    Tine.Tinebase.tineInit.initLocale();
+    await Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
 
     Tine.Tinebase.tineInit.initRegistry(false, function() {

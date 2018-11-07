@@ -41,12 +41,8 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * grant to delete  all records of a container / a single record
      */
     const GRANT_DELETE   = 'deleteGrant';
-    
-    /**
-     * grant to _access_ records marked as private (GRANT_X = GRANT_X * GRANT_PRIVATE)
-     */
-    const GRANT_PRIVATE = 'privateGrant';
-    
+
+
     /**
      * grant to export all records of a container / a single record
      */
@@ -61,12 +57,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * grant to administrate a container
      */
     const GRANT_ADMIN    = 'adminGrant';
-    
-    /**
-     * grant to see freebusy info in calendar app
-     * @todo move to Calendar_Model_Grant once we are able to cope with app specific grant classes
-     */
-    const GRANT_FREEBUSY = 'freebusyGrant';
+
 
     /**
      * grant to download file nodes
@@ -143,11 +134,11 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             self::GRANT_ADD,
             self::GRANT_EDIT,
             self::GRANT_DELETE,
-            self::GRANT_PRIVATE,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE,
             self::GRANT_EXPORT,
             self::GRANT_SYNC,
             self::GRANT_ADMIN,
-            self::GRANT_FREEBUSY,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY,
             self::GRANT_DOWNLOAD,
             self::GRANT_PUBLISH,
         );
@@ -331,7 +322,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                 'record set model: ' . $_recordSet->getRecordClassName() . ', record set diff model: ' . $model);
         }
 
-        /** @var Tinebase_Record_Abstract $modelInstance */
+        /** @var Tinebase_Record_Interface $modelInstance */
         $modelInstance = new $model(array(), true);
         $idProperty = $modelInstance->getIdProperty();
 
@@ -452,5 +443,24 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         ));
 
         return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function doSetGrantFailsafeCheck()
+    {
+        return true;
+    }
+
+    /**
+     * @param Zend_Db_Select $_select
+     * @param Tinebase_Model_Application $_application
+     * @param string $_accountId
+     * @param string|array $_grant
+     */
+    public static function addCustomGetSharedContainerSQL(Zend_Db_Select $_select,
+        Tinebase_Model_Application $_application, $_accountId, $_grant)
+    {
     }
 }

@@ -44,7 +44,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
      * @param {Object}   importOptions
      */
     doImport: function(callback, importOptions, clientRecordData) {
-        var targetContainer = this.containerField.getValue() || this.containerCombo.getValue();
+        var targetContainer = this.containerCombo.getValue();
         var type = this.typeCombo.getValue();
         
         var params = {
@@ -266,35 +266,15 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             width: 400,
             items: [{
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('Container name / New or existing if it already exists you need permissions to add to.') + '<br /><br /></p>'
+                html: '<p>' + this.app.i18n._('Calendar name (you need permissions to add events)') + '<br /><br /></p>'
             }, {
                 xtype: 'panel',
                 heigth: 150,
                 layout: 'hbox',
                 items: [{
-                    id: this.app.appName + 'ContainerName',
-                    xtype: 'textfield',
-                    ref: '../../../containerField',
-                    enableKeyEvents: true,
-                    listeners: {
-                        scope: this,
-                        keyup: function() {
-                            this.manageButtons();
-                        }
-                    },
-                    flex: 1
-                }, {
-                    xtype: 'label',
-                    html: ' - ' + this.app.i18n._('or') + ' - ',
-                    style: {
-                        'text-align': 'center'
-                    },
-                    width: 40
-                }, {
                     xtype: 'panel',
                     flex: 1,
                     height: 20,
-                    width: 200,
                     items: [new Tine.widgets.container.SelectionComboBox({
                         id: this.app.appName + 'EditDialogContainerSelector',
                         ref: '../../../../containerCombo',
@@ -304,7 +284,8 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                         appName: this.appName,
                         value: this.defaultImportContainer,
                         requiredGrant: false,
-                        recordClass: this.recordClass
+                        recordClass: this.recordClass,
+                        width: 400
                     })]
                 }]
             }]
@@ -509,12 +490,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 return (
                     ((this.typeCombo && (this.typeCombo.getValue() == 'remote_ics' || this.typeCombo.getValue() == 'remote_caldav'))
                     && (this.remoteLocation && this.remoteLocation.getValue())
-                    && (this.ttlCombo && (this.ttlCombo.getValue() || this.ttlCombo.getValue() === 0))))
+                    && (this.ttlCombo && (this.ttlCombo.getValue() || this.ttlCombo.getValue() === 0)))
                     && credentialsCheck
                     || ((this.typeCombo && (this.typeCombo.getValue() == 'upload'))
                     && (this.definitionCombo && this.definitionCombo.getValue())
                     && (this.uploadButton && this.uploadButton.upload))
-                    && ((this.containerField && this.containerField.getValue()) || (this.containerCombo && this.containerCombo.getValue())
+                    && (this.containerCombo && this.containerCombo.getValue())
                 );
 
             }).createDelegate(this)

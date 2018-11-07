@@ -102,7 +102,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         list($application,) = explode('_', $this->model, 2);
         $this->_customFields = Tinebase_CustomField::getInstance()
             ->getCustomFieldsForApplication($application, $this->model);
-        /** @var Tinebase_Record_Abstract $model */
+        /** @var Tinebase_Record_Interface $model */
         $model = $this->model;
         $this->_externalSortMapping = $model::getSortExternalMapping();
         if (null !== ($mc = $model::getConfiguration())) {
@@ -143,7 +143,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
         $this->_readModelConfig();
 
-        /** @var Tinebase_Record_Abstract $model */
+        /** @var Tinebase_Record_Interface $model */
         $model = $this->model;
         if (null === ($mc = $model::getConfiguration())) {
             if (empty($this->_customFields) && empty($this->_externalSortMapping)) {
@@ -182,7 +182,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 ++$joinCount;
                 $db = $_select->getAdapter();
                 $relationName = 'relationPagi' . $joinCount;
-                /** @var Tinebase_Record_Abstract $relatedModel */
+                /** @var Tinebase_Record_Interface $relatedModel */
                 $relatedModel = $virtualFields[$field]['config']['appName'] . '_Model_' .
                     $virtualFields[$field]['config']['modelName'];
                 if (null === ($relatedMC = $relatedModel::getConfiguration())) {
@@ -230,7 +230,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
                 ++$joinCount;
                 $db = $_select->getAdapter();
-                /** @var Tinebase_Record_Abstract $relatedModel */
+                /** @var Tinebase_Record_Interface $relatedModel */
                 $relatedModel = $recordFields[$field]['config']['appName'] . '_Model_' .
                     $recordFields[$field]['config']['modelName'];
                 if (null === ($relatedMC = $relatedModel::getConfiguration())) {

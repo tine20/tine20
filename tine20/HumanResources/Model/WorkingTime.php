@@ -19,51 +19,87 @@
 class HumanResources_Model_WorkingTime extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which
-     * represents the identifier
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_identifier = 'id';
+    protected static $_configurationObject = NULL;
 
     /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'HumanResources';
-
-    /**
-     * list of zend validator
-     *
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'    => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'title' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'json' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'working_hours'       => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+    protected static $_modelConfiguration = array(
+        'version'           => 3,
+        'recordName'        => 'Working time',
+        'recordsName'       => 'Working times', // ngettext('Working time', 'Working times', n)
+        'hasRelations'    => FALSE,
+        'hasCustomFields' => FALSE,
+        'hasNotes'        => FALSE,
+        'hasTags'         => FALSE,
+        'modlogActive'    => TRUE,
+        'isDependent'     => TRUE,
+        'createModule'    => FALSE,
+        'titleProperty'     => 'title',
+        'appName'           => 'HumanResources',
+        'modelName'         => 'WorkingTime',
+        
+        'table'             => array(
+            'name'    => 'humanresources_workingtime',
+        ),
 
-        // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-    );
 
-    /**
-     * name of fields containing datetime or an array of datetime information
-     * @var array list of datetime fields
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
+        'fields' => [
+            'title' => [
+                'type' => 'string',
+                'label'      => 'Title', // _('Title')
+                'length' => 255,
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'json' => [
+                'type' => 'text', // json
+                'nullable' => true,
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'default' => '{"days":[0,0,0,0,0,0,0]}'
+            ],
+            'work_start' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'      => 'Start time', // _('Start time')
+                'type'       => 'time',
+                'nullable'     => true,
+            ),
+            'work_end' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'      => 'End time', // _('End time')
+                'type'       => 'time',
+                'nullable'     => true,
+            ),
+            'working_hours' => [
+                'type' => 'integer',
+                'nullable' => true,
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'inputFilters' => ['Zend_Filter_Empty' => null],
+                'default' => 0,
+            ],
+
+
+            'breaks' => [
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Breaks', // _('Breaks')
+                'type'       => 'records',
+                'nullable'   => true,
+                'default'    => null,
+                'config'     => array(
+                    'appName'          => 'HumanResources',
+                    'modelName'        => 'Break',
+                    'refIdField'       => 'workingtime_id',
+                    'recordClassName' => 'HumanResources_Model_Break',
+                    'controllerClassName' => 'HumanResources_Controller_Break',
+                    'filterClassName' => 'HumanResources_Model_BreakFilter',
+                    'dependentRecords' => TRUE
+                ),
+            ]
+        ]
     );
 }

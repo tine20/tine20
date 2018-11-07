@@ -49,11 +49,13 @@ class HumanResources_ModelConfigurationTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('id',            $fields);
         
         $account = Tinebase_Core::getUser();
-
+        
         $employee = new HumanResources_Model_Employee(array(
+            'number' => 12345,
             'account_id' => $account->getId(),
             'n_family'   => $account->accountLastName,
             'n_given'    => $account->accountFirstName,
+            'employment_begin' => Tinebase_DateTime::now()->subYear(1)
         ));
         
         // test record fields
@@ -97,9 +99,11 @@ class HumanResources_ModelConfigurationTest extends PHPUnit_Framework_TestCase
         $account = Tinebase_Core::getUser();
 
         $employee = new HumanResources_Model_Employee(array(
+            'number' => 54321,
             'account_id' => $account->getId(),
             'n_family' => $account->accountLastName,
             'n_given' => $account->accountFirstName,
+            'employment_begin' => Tinebase_DateTime::now()->subYear(1)
         ));
 
         $employeeCObj = $employee::getConfiguration();

@@ -45,7 +45,7 @@ class Calendar_Frontend_CalDAVTest extends TestCase
     public function testGetUserDirectory()
     {
         $grants = Tinebase_Model_Grants::getPersonalGrants($this->_personas['sclever']->getId());
-        $grants->merge(new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        $grants->merge(new Tinebase_Record_RecordSet($grants->getRecordClassName(), array(array(
             'account_id' => Tinebase_Core::getUser()->getId(),
             'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             Tinebase_Model_Grants::GRANT_READ => true,
@@ -398,6 +398,7 @@ END:VCALENDAR&#13;
             'type'              => $type,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )), $grants);
         
         return $container;
@@ -415,6 +416,7 @@ END:VCALENDAR&#13;
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'model'             => Tasks_Model_Task::class,
         )));
         
         return $container;

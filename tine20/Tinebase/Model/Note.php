@@ -52,55 +52,73 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Tinebase';
-    
+
     /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_filters = array(
-        'note'              => 'StringTrim'
-    );
-    
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                     => array('Alnum', 'allowEmpty' => true),
-        'note_type_id'           => array('Alnum', 'allowEmpty' => false),
-    
-        'note'                   => array('presence' => 'required', 'allowEmpty' => false),
-        
-        'record_id'              => array('allowEmpty' => true),
-        'record_model'           => array('allowEmpty' => true),
-        'record_backend'         => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 'Sql'),
-    
-        'created_by'             => array('allowEmpty' => true),
-        'creation_time'          => array('allowEmpty' => true),
-        'last_modified_by'       => array('allowEmpty' => true),
-        'last_modified_time'     => array('allowEmpty' => true),
-        'is_deleted'             => array('allowEmpty' => true),
-        'deleted_time'           => array('allowEmpty' => true),
-        'deleted_by'             => array('allowEmpty' => true),
-        'seq'                    => array('allowEmpty' => true),
-    );
-    
-    /**
-     * datetime fields
-     *
-     * @var array
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-    );
+    protected static $_modelConfiguration = [
+        'recordName'        => 'Note',
+        'recordsName'       => 'Notes', // ngettext('Note', 'Notes', n)
+        'hasRelations'      => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'hasXProps'         => false,
+        // this will add a notes property which we shouldn't have...
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
+        'createModule'      => false,
+        'exposeHttpApi'     => false,
+        'exposeJsonApi'     => false,
+
+        'appName'           => 'Tinebase',
+        'modelName'         => 'Note',
+        'idProperty'        => 'id',
+
+        'filterModel'       => [],
+
+        'fields'            => [
+            'note_type_id'                  => [
+                //'type'                          => 'record',
+                'validators'                    => [
+                    'presence' => 'required',
+                    Zend_Filter_Input::ALLOW_EMPTY => false
+                ],
+            ],
+            'note'                          => [
+                'type'                          => 'string',
+                'validators'                    => [
+                    'presence' => 'required',
+                    Zend_Filter_Input::ALLOW_EMPTY => false
+                ],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'record_id'                     => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'record_model'                  => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'record_backend'                => [
+                'type'                          => 'string',
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'Sql'
+                ],
+            ],
+        ],
+    ];
     
     /**
      * returns array with record related properties

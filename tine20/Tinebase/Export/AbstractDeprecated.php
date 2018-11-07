@@ -474,10 +474,10 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
     /**
      * return tag names of record
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return string
      */
-    protected function _getTags(Tinebase_Record_Abstract $_record)
+    protected function _getTags(Tinebase_Record_Interface $_record)
     {
         $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($_record);
         return implode(', ', $tags->name);
@@ -546,12 +546,12 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
      * 
      * return container name (or other field)
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_field
      * @param string $_property
      * @return string
      */
-    protected function _getContainer(Tinebase_Record_Abstract $_record, $_field = 'id', $_property = 'container_id')
+    protected function _getContainer(Tinebase_Record_Interface $_record, $_field = 'id', $_property = 'container_id')
     {
         $container = $_record->{$_property};
         return $container[$_field];
@@ -560,7 +560,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
     /**
      * add relation values from related records
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param string $relationType
      * @param string $recordField
      * @param boolean $onlyFirstRelation
@@ -568,7 +568,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
      * @param string $application
      * @return string
      */
-    protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE, $keyfield = NULL, $application = NULL)
+    protected function _addRelations(Tinebase_Record_Interface $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE, $keyfield = NULL, $application = NULL)
     {
         $record->relations->addIndices(array('type'));
         $matchingRelations = $record->relations->filter('type', $relationType);
@@ -603,10 +603,10 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
     /**
      * add relation summary (such as n_fileas, title, ...)
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return string
      */
-    protected function _getRelationSummary(Tinebase_Record_Abstract $_record)
+    protected function _getRelationSummary(Tinebase_Record_Interface $_record)
     {
         $result = '';
         switch(get_class($_record)) {
@@ -624,10 +624,10 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
     /**
      * add relation values from related records
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return string
      */
-    protected function _addNotes(Tinebase_Record_Abstract $_record)
+    protected function _addNotes(Tinebase_Record_Interface $_record)
     {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->notes->toArray(), true));
         

@@ -10,13 +10,7 @@
  */
 
 .TasksIconCls, .TasksTask {
-    background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
-}
-.x-btn-medium .TasksIconCls, .x-btn-medium .TasksTask {
-    background-image:url(../../images/oxygen/22x22/actions/todo.png) !important;
-}
-.x-btn-large .TasksIconCls, .x-btn-large .TasksTask {
-    background-image:url(../../images/oxygen/32x32/actions/todo.png) !important;
+    background-image:url(../../images/icon-set/icon_tasks.svg) !important;
 }
 
 .TasksMainGridStatus {
@@ -36,4 +30,16 @@
 
 .tasks-grid-completed {
     color: #777;
+}
+
+.t-contenttype-task .action_add {
+    background-image: url(../../images/icon-set/icon_task_plus.svg) !important;
+}
+
+.t-contenttype-task .action_edit {
+    background-image: url(../../images/icon-set/icon_task_edit.svg) !important;
+}
+
+.t-contenttype-task .action_delete {
+    background-image: url(../../images/icon-set/icon_task_clear.svg) !important;
 }

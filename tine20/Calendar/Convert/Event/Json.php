@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,12 +18,12 @@
 class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
 {
     /**
-    * converts Tinebase_Record_Abstract to external format
+    * converts Tinebase_Record_Interface to external format
     *
-    * @param  Tinebase_Record_Abstract $_record
+    * @param  Tinebase_Record_Interface $_record
     * @return mixed
     */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         self::resolveRelatedData($_record);
         return parent::fromTine20Model($_record);
@@ -126,7 +126,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         $events = $_events instanceof Tinebase_Record_RecordSet || is_array($_events) ? $_events : array($_events);
     
         foreach ($events as &$event) {
-            if ($event->organizer && $event->organizer instanceof Tinebase_Record_Abstract
+            if ($event->organizer && $event->organizer instanceof Tinebase_Record_Interface
                 && (!$event->organizer->has('account_id') || !$event->organizer->account_id)
                 && $event->{Tinebase_Model_Grants::GRANT_EDIT} 
             ) {
@@ -180,22 +180,8 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($_records, null, array('container_id'));
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
-        $_records->convertDates = true;
+        $_records->setConvertDates(true);
 
-        $eventsData = $_records->toArray();
-        
-        foreach ($eventsData as $idx => $eventData) {
-            if (! (isset($eventData[Tinebase_Model_Grants::GRANT_READ]) || array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData)) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
-                $eventsData[$idx] = array_intersect_key($eventsData[$idx], array_flip(array(
-                    'id',
-                    'dtstart',
-                    'dtend',
-                    'transp',
-                    'is_all_day_event',
-                )));
-            }
-        }
-
-        return $eventsData;
+        return $_records->toArray();
     }
 }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -44,50 +44,86 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Tinebase';
-    
+
     /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_filters = array(
-        'name'              => 'StringTrim'
-    );
-    
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                     => array('Alnum', 'allowEmpty' => true),
-        'type'                   => array(array('InArray', array(self::TYPE_PERSONAL, self::TYPE_SHARED))),
-        'owner'                  => array('allowEmpty' => true),
-        'name'                   => array('presence' => 'required'),
-        'description'            => array('allowEmpty' => true),
-        'color'                  => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
-        'occurrence'             => array('allowEmpty' => true),
-        'selection_occurrence'   => array('allowEmpty' => true), // not persistent
-        'account_grants'         => array('allowEmpty' => true),
-        'created_by'             => array('allowEmpty' => true),
-        'creation_time'          => array('allowEmpty' => true),
-        'last_modified_by'       => array('allowEmpty' => true),
-        'last_modified_time'     => array('allowEmpty' => true),
-        'is_deleted'             => array('allowEmpty' => true),
-        'deleted_time'           => array('allowEmpty' => true),
-        'deleted_by'             => array('allowEmpty' => true),
-        'seq'                    => array('allowEmpty' => true),
-    );
-    
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-    );
+    protected static $_modelConfiguration = [
+        'recordName'        => 'Tag',
+        'recordsName'       => 'Tags', // ngettext('Tag', 'Tags', n)
+        'hasRelations'      => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'hasXProps'         => false,
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
+        'createModule'      => false,
+        'exposeHttpApi'     => false,
+        'exposeJsonApi'     => false,
+
+        'appName'           => 'Tinebase',
+        'modelName'         => 'Tag',
+
+        'filterModel'       => [],
+
+        'fields'            => [
+            'type'                          => [
+                'type'                          => 'string',
+                'validators'                    => [
+                    'inArray' => [
+                        self::TYPE_PERSONAL,
+                        self::TYPE_SHARED,
+                    ]
+                ],
+            ],
+            'owner'                         => [
+                //'type'                          => 'record',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'name'                          => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'description'                   => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'color'                         => [
+                'type'                          => 'string',
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    ['regex', '/^#[0-9a-fA-F]{6}$/'],
+                ],
+            ],
+            'occurrence'                    => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'selection_occurrence'          => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'account_grants'                => [
+                //'type'                          => '!?',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'rights'                        => [
+                //'type'                          => '!?',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+        ],
+    ];
     
     /**
      * returns containername

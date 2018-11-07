@@ -60,6 +60,20 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowHeight: 700,
 
     displayNotes: true,
+
+    /**
+     * invoice position panels - only visible in "auto" invoices
+     *
+     * @type Object
+     */
+    positionsPanels: null,
+
+    /**
+     * @todo make it const
+     *
+     * @type array
+     */
+    positionTypes: ['total', 'inclusive', 'exceeding'], // _('total') _('inclusive') _('exceeding')
     
     initComponent: function() {
         if (!this.app) {
@@ -161,9 +175,18 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         // this will start preparing the gridpanels for the invoice positions
-        if (this.positionsPanel) {
-            this.positionsPanel.positions = this.record.get('positions');
-            this.positionsPanel.invoiceId = this.record.get('id');
+        if (this.positionsPanels) {
+            Ext.each(this.positionTypes, function(type) {
+
+                var positions = [];
+                if (Ext.isArray(this.record.get('positions'))) {
+                    positions = this.record.get('positions').filter((value, index, array) => {
+                        return (value.type === type || (value.type === "" && type === 'total'));
+                    });
+                }
+                this.positionsPanels[type].positions = positions;
+                this.positionsPanels[type].invoiceId = this.record.get('id');
+            }, this);
         }
         
         Tine.Sales.InvoiceEditDialog.superclass.onRecordLoad.call(this);
@@ -198,8 +221,12 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         this.onAddressLoad();
-        if (this.positionsPanel) {
-            this.positionsPanel.setTitle(this.app.i18n._('Positions') + ' (' +  (Ext.isArray(this.record.data.positions) ? this.record.data.positions.length : 0) + ')');
+        if (this.positionsPanels) {
+            Ext.each(this.positionTypes, function(type) {
+                var positionCount = this.positionsPanels[type].positions.length;
+                this.positionsPanels[type].setTitle(String.format(this.app.i18n._('Positions ({0})'), this.app.i18n._(type))
+                    + ' (' + positionCount + ')');
+            }, this);
         }
     },
     
@@ -370,10 +397,13 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
         
         if (this.record.get('is_auto') == 1) {
-            this.positionsPanel = new Tine.Sales.InvoicePositionPanel({
-                app: this.app,
-                title: null
-            });
+            this.positionsPanels = [];
+            Ext.each(this.positionTypes, function(type) {
+                this.positionsPanels[type] = new Tine.Sales.InvoicePositionPanel({
+                    app: this.app,
+                    title: null
+                });
+            }, this);
         }
         
         this.priceNetField = new Ext.ux.form.NumberField({
@@ -625,8 +655,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }]
         }];
         
-        if (this.positionsPanel) {
-            items.push(this.positionsPanel);
+        if (this.positionsPanels) {
+            Ext.each(this.positionTypes, function(type) {
+                items.push(this.positionsPanels[type]);
+            }, this);
         }
         
         items.push(new Tine.widgets.activities.ActivitiesTabPanel({

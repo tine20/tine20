@@ -31,13 +31,14 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 3,
         'recordName'        => 'Free Day', // ngettext('Free Day', 'Free Days', n)
         'recordsName'       => 'Free Days',
         'hasRelations'      => FALSE,
         'hasCustomFields'   => FALSE,
         'hasNotes'          => FALSE,
         'hasTags'           => FALSE,
-        'modlogActive'      => FALSE,
+        'modlogActive'      => TRUE,
         'isDependent'       => TRUE,
         'createModule'      => FALSE,
         'containerProperty' => NULL,
@@ -45,12 +46,35 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
         'titleProperty'     => NULL,
         'appName'           => 'HumanResources',
         'modelName'         => 'FreeDay',
-    
+
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'freetime_id' => [
+                    'targetEntity' => 'HumanResources_Model_FreeTime',
+                    'fieldName' => 'freetime_id',
+                    'joinColumns' => [[
+                        'name' => 'freetime_id',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ]
+            ],
+        ],
+
+        'table'             => array(
+            'name'    => 'humanresources_freeday',
+            'indexes' => array(
+                'freetime_id' => array(
+                    'columns' => array('freetime_id'),
+                ),
+            ),
+        ),
+        
         'fields'            => array(
             'freetime_id'       => array(
                 'label'      => NULL,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type'       => 'record',
+                'doctrineIgnore'        => true, // already defined as association
                 'config' => array(
                     'appName'     => 'HumanResources',
                     'modelName'   => 'FreeTime',

@@ -109,7 +109,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
-        this.i18nEmptyText = this.app.i18n._('No Messages found or the cache is empty.');
+        this.i18nEmptyText = this.app.i18n._('No Messages found.');
         
         this.recordProxy = Tine.Felamimail.messageBackend;
         
@@ -307,7 +307,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             text: this.app.i18n._('File Message'),
             handler: this.onFileRecords,
             disabled: true,
-            hidden: ! (Tine.Tinebase.common.hasRight('run', 'MailFiler') || Tine.Tinebase.common.hasRight('run', 'Filemanager')),
+            hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
             iconCls: 'action_file',
             scope: this
         });
@@ -324,7 +324,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             text: this.app.i18n._('Print Preview'),
             handler: this.onPrintPreview.createDelegate(this, []),
             disabled:true,
-            hidden: Ext.isTouchDevice, // no popups here
+            hidden: Ext.supportsPopupWindows,
             iconCls:'action_printPreview',
             scope:this
         });
@@ -725,141 +725,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
-     * file selected messages to a Filemanager
+     * file selected messages to Filemanager
      */
     onFileRecords: function() {
-        // show filemanager tree to get target
-        // allow to decide which Filemanager to file the messages in (config or combo?)
+        var filePicker = new Tine.Filemanager.FilePickerDialog({
+            windowTitle: this.app.i18n._('Select Save Location'),
+            singleSelect: true,
+            requiredGrants: ['addGrant'],
+            constraint: 'folder'
+        });
 
-        var appStore = [],
-            app = null,
-            dlgItems = [];
-        Ext.each(['MailFiler', 'Filemanager'], function(appName) {
-            if (Tine.Tinebase.common.hasRight('run', appName)) {
-                // TODO remove ctx menus from tree selection panel?
-                switch(appName) {
-                    case 'MailFiler':
-                        this.folderCombo = this.mailFilerFolderCombo = new Tine.widgets.container.SelectionComboBox({
-                            recordClass: Tine.MailFiler.Model.Node,
-                            // TODO make this work & remove mode:local
-                            //remoteMethod: 'MailFiler.searchNodes',
-                            mode: 'local',
-                            treePanelClass: Tine.MailFiler.NodeTreePanel,
-                            allowNodeSelect: true,
-                            allowToplevelNodeSelect: false,
-                            label: 'save in folder',
-                            listWidth: 230,
-                            // TODO should be auto width
-                            width: 242
-                        });
-                        break;
-                    case 'Filemanager':
-                        this.folderCombo = this.filemanagerFolderCombo = new Tine.widgets.container.SelectionComboBox({
-                            recordClass: Tine.Filemanager.Model.Node,
-                            // TODO make this work & remove mode:local
-                            //remoteMethod: 'Filemanager.searchNodes',
-                            mode: 'local',
-                            treePanelClass: Tine.Filemanager.NodeTreePanel,
-                            allowNodeSelect: true,
-                            allowToplevelNodeSelect: false,
-                            listWidth: 230,
-                            width: 242
-                        });
-                        break;
-                }
-                app = Tine.Tinebase.appMgr.get(appName);
-                appStore.push([appName, app.i18n._(appName)]);
-            }
+        filePicker.on('selected', function (node) {
+            this.fileRecords('Filemanager', node[0].path);
         }, this);
 
-        if (appStore.length > 1) {
-            this.fileAppCombo = new Ext.form.ComboBox({
-                label: 'choose app',
-                store: appStore,
-                value: appStore[0][0],
-                listeners: {
-                    scope: this,
-                    select: function (combo, value) {
-                        // set visible state for folder combos
-                        // TODO generalize?
-                        if (value === 'MailFiler') {
-                            this.mailFilerFolderCombo.show();
-                            this.filemanagerFolderCombo.hide();
-                            this.folderCombo = this.mailFilerFolderCombo;
-                        } else {
-                            this.mailFilerFolderCombo.hide();
-                            this.filemanagerFolderCombo.show();
-                            this.folderCombo = this.filemanagerFolderCombo;
-                        }
-                    }
-                }
-            });
-
-            // set visible state for folder combos
-            if (appStore[0][0] === 'MailFiler') {
-                this.mailFilerFolderCombo.hidden = false;
-                this.filemanagerFolderCombo.hidden = true;
-                this.folderCombo = this.mailFilerFolderCombo;
-            } else {
-                this.mailFilerFolderCombo.hidden = true;
-                this.filemanagerFolderCombo.hidden = false;
-                this.folderCombo = this.filemanagerFolderCombo;
-            }
-            dlgItems = [
-                this.fileAppCombo,
-                this.filemanagerFolderCombo,
-                this.mailFilerFolderCombo
-            ];
-        } else {
-            dlgItems.push(this.folderCombo);
-        }
-
-        var fileRecordsWin = Tine.WindowFactory.getWindow({
-            layout: 'fit',
-            width: 250,
-            height: 100,
-            padding: '5px',
-            modal: true,
-            title: this.app.i18n._('File Messages To Folder'),
-            items: [{
-                xtype: 'form',
-                buttonAlign: 'right',
-                border: false,
-                layout: 'fit',
-                items: dlgItems,
-                buttons: [{
-                    text: i18n._('Cancel'),
-                    minWidth: 70,
-                    scope: this,
-                    handler: function () {
-                        fileRecordsWin.close();
-                    },
-                    iconCls: 'action_cancel'
-                }, {
-                    text: i18n._('Ok'),
-                    minWidth: 70,
-                    scope: this,
-                    handler: function() {
-                        if (this.folderCombo.getValue() == '') {
-                            return;
-                        }
-
-                        // get path from combo
-                        // TODO use stat path???
-                        var folder = this.folderCombo.getStore().getById(this.folderCombo.getValue()),
-                            path = folder ? folder.get('path') : null,
-                            appName = this.fileAppCombo
-                                        ? this.fileAppCombo.getValue()
-                                        : (Tine.Tinebase.common.hasRight('run', 'MailFiler') ? 'MailFiler' : 'Filemanager');
-                        if (path) {
-                            this.fileRecords(appName, path);
-                            fileRecordsWin.close();
-                        }
-                    },
-                    iconCls: 'action_saveAndClose'
-                }]
-            }]
-        });
+        filePicker.openWindow();
     },
 
     /**

@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 Ext.ns('Tine.widgets.relation');
@@ -274,10 +274,15 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     getViewRowClass: function(record, index, rowParams, store) {
         var relatedModel = record.get('related_model').split('_Model_');
-            relatedModel = Tine[relatedModel[0]].Model[relatedModel[1]];
+            relatedModel = Tine[relatedModel[0]].Model ? Tine[relatedModel[0]].Model[relatedModel[1]] : null;
         
         var ownModel = record.get('own_model').split('_Model_');
-            ownModel = Tine[ownModel[0]].Model[ownModel[1]];
+            ownModel = Tine[ownModel[0]].Model ? Tine[ownModel[0]].Model[ownModel[1]] : null;
+
+        if (! ownModel || ! relatedModel) {
+            // TODO add "no access/app not available" class?
+            return '';
+        }
             
         if (this.invalidRowRecords && this.invalidRowRecords.indexOf(record.id) !== -1) {
             rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
@@ -708,8 +713,12 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             return '';
         }
         var split = value.split('_Model_');
-        var model = Tine[split[0]].Model[split[1]];
-        return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
+        if (Tine[split[0]].Model) {
+            var model = Tine[split[0]].Model[split[1]];
+            return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
+        } else {
+            return String.format(i18n._("No access to {0}"), split[0]);
+        }
     },
 
     /**

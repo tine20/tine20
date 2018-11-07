@@ -110,7 +110,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         // assertions
         $this->assertEquals($getLead, $savedLead);
         $this->assertEquals($getLead['notes'][0]['note'], 'phpunit test note');
-        $this->assertTrue($searchLeads['totalcount'] > 0);
+        $this->assertTrue($searchLeads['totalcount'] > 0, print_r($searchLeads, true));
         $this->assertTrue(isset($searchLeads['totalleadstates']) && count($searchLeads['totalleadstates']) > 0);
         $this->assertEquals($getLead['description'], $searchLeads['results'][0]['description']);
         $this->assertEquals(200, $searchLeads['results'][0]['turnover'], 'turnover has not been calculated using product prices');

@@ -35,7 +35,15 @@ let registry = (app) => {
   }
 }
 
+let i18n = () => {
+  window.i18n = {
+    _: function (s) {
+      return s
+    }
+  }
+}
 export {
   registry,
-  log
+  log,
+  i18n
 }

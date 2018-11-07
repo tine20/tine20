@@ -116,7 +116,14 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implem
             return;
         }
 
-        $imap = $this->_getImapConnection();
+        try {
+            $imap = $this->_getImapConnection();
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not establish IMAP connection');
+            Tinebase_Exception::log($e);
+            return;
+        }
 
         $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
 
@@ -134,8 +141,6 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implem
             'emailPort'     => $this->_config['port'],
             'emailSecure'   => $this->_config['ssl'],
         ));
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
 
         $_user->imapUser  = $emailUser;
         $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);

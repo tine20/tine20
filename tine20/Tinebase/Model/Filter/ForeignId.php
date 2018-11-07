@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -24,13 +24,6 @@
  */
 class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecord
 {
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_Filter_ForeignId';
-    
     /**
      * get foreign controller
      * 
@@ -91,7 +84,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     protected function _getGenericFilterInformation()
     {
-        list($appName, $i, $filterName) = explode('_', $this->_className);
+        list($appName, , $filterName) = explode('_', static::class);
         
         $result = array(
             'linkType'      => 'foreignId',
@@ -100,7 +93,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
         );
         
         if (isset($this->_options['modelName'])) {
-            list($appName, $i, $modelName) = explode('_', $this->_options['modelName']);
+            list(,, $modelName) = explode('_', $this->_options['modelName']);
             $result['modelName'] = $modelName;
         }
         

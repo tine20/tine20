@@ -36,21 +36,30 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )));
         $this->objects['sharedContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )));
         
-        $prefs = new Calendar_Preference();
+        $prefs = Tinebase_Core::getPreference('Calendar');
         $prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $this->objects['initialContainer']->getId());
 
         // rw cal agent
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
 
         $_SERVER['REQUEST_URI'] = 'lars';
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+        Tinebase_Core::getPreference('Calendar')->resetAppPrefsCache();
+        Tinebase_Core::set(Tinebase_Core::PREFERENCES, null);
     }
 
     /**
@@ -211,7 +220,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         // save event as sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
-        $existingEventForSclever = $this->testCreateEventWithExternalOrganizer($this->_getTestContainer('Calendar'), $existingEvent->getId())->getRecord();
+        $existingEventForSclever = $this->testCreateEventWithExternalOrganizer($this->_getTestContainer('Calendar', Calendar_Model_Event::class), $existingEvent->getId())->getRecord();
         $this->_testCalendars[] = Tinebase_Container::getInstance()->getContainerById($existingEventForSclever->container_id);
         
         $this->assertEquals($existingEvent->uid, $existingEventForSclever->uid);
@@ -916,6 +925,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
         )));
         
         // move event (displaycontainer)
@@ -1129,7 +1139,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      */
     public function testAcceptInvitationForRecurringEventException()
     {
-        Tinebase_Container::getInstance()->setGrants($this->objects['initialContainer'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        Tinebase_Container::getInstance()->setGrants($this->objects['initialContainer'], new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass(), array(
             $this->_getAllCalendarGrants(),
             array(
                 'account_id'    => 0,
@@ -1138,7 +1148,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
                 Tinebase_Model_Grants::GRANT_ADD      => false,
                 Tinebase_Model_Grants::GRANT_EDIT     => false,
                 Tinebase_Model_Grants::GRANT_DELETE   => false,
-                Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+                Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
                 Tinebase_Model_Grants::GRANT_ADMIN    => false,
         ))), true);
         

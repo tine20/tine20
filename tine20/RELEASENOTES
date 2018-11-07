@@ -1,71 +1,28 @@
 
 TINE 2.0 RELEASENOTES
-===
+=====================
                     
-  Release:     Nele (2018.11)
-  Last change: 2018-02-01
+  Release:     TBA (2019.11)
+  Last change: 2018-10-30
 
 GENERAL CHANGES
 ---
 
-* PHP 7.2 Support
+* Enforcing table structure of addressbook, container and applications
 
-* AreaLocks
-It is possible to define protection for certain areas of Tine 2.0. For example, it might be required to give a PIN if you
- want to access the Sales application.
+PLEASE NOTE: if your table structure of those three tables does not match exactly
+ the tine20 intended structure, that structure will be enforced on those 3 tables.
+ Columns and indexes will be dropped or altered to exactly match the tine20 intended
+ structure.
 
- Example configuration of a Sales app AreaLock with PIN:
+More Models will be converted to this soon. We call it "Model Configuration Version 2"
 
-     'userPin' => true,
-     'areaLocks' => [
-         'records' => [
-             [
-                 'area' => 'Sales',
-                 'provider' => 'Pin',
-                 'validity' => 'session', // it is only required to give the pin once per session
-             ]
-         ]
-     ],
+* System-Customfields
 
-* Sentry.io integration
-If you have a sentry.io server which collects your errors, you can just add it to Tine 2.0 by setting this config:
+Customfields that are added directly to the record table schema.
 
-    'sentryUri' => 'https://USER:PW@sentry.my.domain/2', // note: no double slashes in uri except after "https:"
-
-see 0013706: integrate sentry.io error handling (https://forge.tine20.org/view.php?id=13706)
-
-* Access Log Cleanup
-
-Access Log Entries are not removed if older than 7 days be default. You can use the config option
- 'accessLogRotationDays' to define a custom rotation.
-
-* MySQL with UTF8 MB4 charset
-
-We changed the default charset to UTF8MB4. All tables in the Tine 2.0 Database are converted during
- the Update. This requires either MySQL 5.7.7+ or MariaDB 10.2.2+ with default settings. Earlier versions are supported
- with non default settings. MySQL 5.6+ and MariaDB 10.0+ need to set:
-    innodb_large_prefix = 1
-    innodb_file_format = 'Barracuda'
-    innodb_file_per_table = 'ON'
-The update script will test these settings and abort if prerequisites are not met.
-
-FILEMANAGER
----
-* PIN Protection / Data safe
-Folders can be PIN protected: its contents are only visibly if user provides a valid second factor / PIN.
- - use an AreaLock with area 'Tinebase.datasafe' to activate pin protection
-
-ADDRESSBOOK
+MAILFILER
 ---
 
-CALENDAR
----
-
-* Link to event in event notification mails
-
-To have the correct URL, you need to set this config:
-
-    'tine20URL' => 'https://my.tine20.domain',
-
-EMAIL
----
+* The MailFiler module has been removed because most of the functionality is in Filemanager and more
+ will be added soon. It will live on as community module in https://github.com/tine20/tine20/tree/community_apps

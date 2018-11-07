@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -80,50 +80,6 @@ class ActiveSync_Controller_SyncDevices extends Tinebase_Controller_Record_Abstr
         
         return self::$_instance;
     }
-    
-    /**
-     * get list of access log entries
-     *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * @param boolean $_getRelations
-     * @param boolean $_onlyIds
-     * @param string $_action for right/acl check
-     * @return Tinebase_Record_RecordSet|array
-     */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
-    {
-        $this->checkRight('MANAGE_DEVICES');
-        
-        return parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-    }
-    
-    /**
-     * returns the total number of access logs
-     * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string $_action for right/acl check
-     * @return int
-     */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
-    {
-        $this->checkRight('MANAGE_DEVICES');
-        
-        return parent::searchCount($_filter, $_action);
-    }
-    
-    /**
-     * delete access log entries
-     *
-     * @param   array $_ids list of logIds to delete
-     * @return Tinebase_Record_RecordSet
-     */
-    public function delete($_ids)
-    {
-        $this->checkRight('MANAGE_DEVICES');
-        
-        return parent::delete($_ids);
-    }
 
     /**
      * set remoteWipe flag for devices
@@ -169,14 +125,30 @@ class ActiveSync_Controller_SyncDevices extends Tinebase_Controller_Record_Abstr
     }
 
     /**
-     * inspect creation of one record (before create)
+     * overwrite this function to check rights / don't forget to call parent
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
+     * @param string $_action {get|create|update|delete}
+     * @return void
      * @throws Tinebase_Exception_AccessDenied
      */
-    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    protected function _checkRight($_action)
     {
-        throw new Tinebase_Exception_AccessDenied('this is not allowed!');
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        switch($_action) {
+            case 'get':
+            case 'update':
+            case 'delete':
+                $this->checkRight('MANAGE_DEVICES');
+                break;
+            case 'create':
+            default:
+                throw new Tinebase_Exception_AccessDenied('this is not allowed!');
+                break;
+        }
+
+        parent::_checkRight($_action);
     }
 }

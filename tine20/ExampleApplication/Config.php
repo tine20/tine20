@@ -116,9 +116,9 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => array(
                 'records' => array(
-                    array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')
-                    array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Cancelled')
-                    array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true), //_('In process')
+                    array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/icon-set/icon_ok.svg',     'system' => true), //_('Completed')
+                    array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/icon-set/icon_stop.svg',   'system' => true), //_('Cancelled')
+                    array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/icon-set/icon_reload.svg', 'system' => true), //_('In process')
                 ),
                 self::DEFAULT_STR => 'IN-PROCESS'
             )

@@ -204,7 +204,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     onRecordUpdate: function() {
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordUpdate.call(this);
-        
+
+        var _ = window.lodash;
         var firstDay = this.datePicker.store.getFirstDay();
         var lastDay  = this.datePicker.store.getLastDay();
         
@@ -212,13 +213,13 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (! this.accountPicker) {
             this.record.set('account_id', null);
         } else {
-            this.record.set('account_id', this.currentAccount.data);
+            this.record.set('account_id', _.get(this, 'currentAccount.data'));
         }
         
         this.record.set('freedays',      this.datePicker.getData());
         this.record.set('type',          this.fixedFields.get('type').toLowerCase());
-        this.record.set('firstday_date', new Date(firstDay.get('date')));
-        this.record.set('lastday_date',  new Date(lastDay.get('date')));
+        this.record.set('firstday_date', firstDay ? firstDay.get('date') : null);
+        this.record.set('lastday_date',  lastDay ? lastDay.get('date') : null);
         this.record.set('days_count',    this.datePicker.store.getCount());
     },
     
@@ -231,6 +232,11 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             var year = account.year;
         } else {
             var year = this.startYear;
+        }
+
+        // init to current date if year is current
+        if (year == new Date().format('Y')) {
+            date = new Date().clearTime();
         }
         
         Tine.log.debug('Initializing the date picker. Using year ' + year);
@@ -245,7 +251,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             foreignIdProperty: 'freeday_id',
             freetimeType: this.freetimeType,
             currentYear: year,
-            value: date || new Date(year, 1, 1)
+            value: date || new Date(year, 0, 1)
         });
     },
     

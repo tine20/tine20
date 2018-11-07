@@ -114,7 +114,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase_Record_Abstract::setFromArray()
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         

@@ -730,7 +730,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function logout()
     {
-        Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
+        Tinebase_Controller::getInstance()->logout();
         
         Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
         
@@ -787,11 +787,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
         try {
-            $filesHash = Tinebase_Frontend_Http::getAssetHash();
+            $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
         } catch (Exception $e) {
-            $filesHash = Tinebase_Record_Abstract::generateUID(8);
+            // unittests
+            $assetHash = Tinebase_Record_Abstract::generateUID(8);
         }
-        
+
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
 
@@ -809,7 +810,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'codeName'      => TINE20_CODENAME,
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME,
-                'filesHash'     => $filesHash,
+                'assetHash'     => $assetHash,
             ),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
@@ -824,10 +825,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
-            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
+            'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
             'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
+            'brandingDescription'=> Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION),
+            'brandingHelpUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_HELPURL),
+            'brandingShopUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_SHOPURL),
+            'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
+            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
+            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5'),
         );
 
@@ -1413,7 +1419,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data
@@ -1467,14 +1473,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! $controller) {
             throw new Tinebase_Exception_InvalidArgument('A controller for the given appName and modelName does not exist!');
         }
-        
-        if (! in_array($property, $recordClassName::getAutocompleteFields())) {
+
+        /** @var Tinebase_Model_Filter_FilterGroup $filter */
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName);
+        $propFilter = $filter->createFilter(['field' => $property, 'operator' => 'startswith', 'value' => $startswith]);
+        if (!$propFilter instanceof Tinebase_Model_Filter_Text && !$propFilter instanceof Tinebase_Model_Filter_Query) {
             throw new Tinebase_Exception_UnexpectedValue('bad property name');
         }
-
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName, array(
-            array('field' => $property, 'operator' => 'startswith', 'value' => $startswith),
-        ));
+        $filter->addFilter($propFilter);
 
         $paging = new Tinebase_Model_Pagination(array('sort' => $property));
         

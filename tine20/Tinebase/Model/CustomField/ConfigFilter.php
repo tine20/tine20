@@ -22,13 +22,6 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
      * @var string application of this filter group
      */
     protected $_applicationName = 'Tinebase';
-
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_CustomField_ConfigFilter';
     
     /**
      * @var array one of these grants must be met
@@ -90,7 +83,7 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
         $this->_requiredGrants = $_grants;
         $this->_isResolved = FALSE;
     }
-    
+
     /**
      * appends sql to given select statement
      *

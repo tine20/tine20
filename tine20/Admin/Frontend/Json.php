@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
@@ -81,7 +81,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'primarydomain'                 => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains'              => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
-            'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
+            'defaultInternalAddressbook'    => (
+                    isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])
+                    && $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL)
                 ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 
                 : NULL,
         );
@@ -315,7 +317,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $sort = (isset($paging['sort']))    ? $paging['sort']   : 'accountDisplayName';
         $dir  = (isset($paging['dir']))     ? $paging['dir']    : 'ASC';
         
-        $result = $this->getUsers($filter[0]['value'], $sort, $dir, $paging['start'], $paging['limit']);
+        $result = $this->getUsers($filter[0]['value'], $sort, $dir, isset($paging['start']) ? $paging['start'] : 0,
+            isset($paging['limit']) ? $paging['limit'] : null);
         $result['filter'] = $filter[0];
         
         return $result;
@@ -340,7 +343,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // old fn style yet
         $sort = (isset($paging['sort']))    ? $paging['sort']   : 'name';
         $dir  = (isset($paging['dir']))     ? $paging['dir']    : 'ASC';
-        $groups = Tinebase_Group::getInstance()->getGroups($filter[0]['value'], $sort, $dir, $paging['start'], $paging['limit']);
+        $groups = Tinebase_Group::getInstance()->getGroups($filter[0]['value'], $sort, $dir, isset($paging['start']) ?
+            $paging['start'] : 0, isset($paging['limit']) ? $paging['limit'] : null);
 
         $result['results'] = $groups->toArray();
         $result['totalcount'] = Admin_Controller_Group::getInstance()->searchCount($filter[0]['value']);
@@ -1546,7 +1550,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data

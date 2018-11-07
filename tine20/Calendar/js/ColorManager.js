@@ -158,7 +158,7 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
     rowspan: 2,
     iconAlign: 'top',
     requiredGrant: 'readGrant',
-    iconCls:'cal-grid-view-color',
+    iconCls:'action_changecolor',
     colorStrategy: 'container',
     stateful: true,
     stateId: 'cal-calpanel-color-strategy-btn',

@@ -197,7 +197,7 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         
         $userIds = $persistentEvent->attendee->user_id;
         foreach($userIds as $idx => $id) {
-            if ($id instanceof Tinebase_Record_Abstract) {
+            if ($id instanceof Tinebase_Record_Interface) {
                 $userIds[$idx] = $id->getId();
             }
         }

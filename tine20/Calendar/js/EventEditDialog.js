@@ -23,11 +23,7 @@ require('./PollPanel');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    /**
-     * @cfg {Number} containerId initial container id
-     */
-    containerId: -1,
-    
+
     labelAlign: 'side',
     windowNamePrefix: 'CalEventEditWindow_',
     appName: 'Calendar',
@@ -184,11 +180,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     //width: 300,
                                     //listWidth: 300,
                                     name: this.recordClass.getMeta('containerProperty'),
+                                    treePanelClass: Tine.Calendar.TreePanel,
                                     recordClass: this.recordClass,
                                     containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                                     containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                                     appName: this.app.appName,
                                     requiredGrant: 'readGrant',
+                                    requiredGrants: ['addGrant'],
                                     disabled: true
                                 }), Ext.apply(this.perspectiveCombo.getAttendeeContainerField(), {
                                     columnWidth: 1
@@ -360,7 +358,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_freeTimeSearch = new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Free Time Search'),
             handler: this.onFreeTimeSearch,
-            iconCls: 'action_fretimesearch',
+            iconCls: 'cal-action_fretimesearch',
             disabled: false,
             scope: this
         });
@@ -368,7 +366,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.tbarItems = [new Ext.Button(this.action_freeTimeSearch), new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
             handler: this.onMuteNotificationOnce,
-            iconCls: 'notes_noteIcon',
+            iconCls: 'action_mute_noteification',
             disabled: false,
             scope: this,
             enableToggle: true
@@ -542,15 +540,20 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO change attender status?
      */
     doCopyRecord: function() {
+        var _ = window.lodash;
+
+        // Calendar is the only app with record based grants -> user gets edit grant for all fields when copying
+        this.record.set('editGrant', true);
+
+        // BUT: add Grant is container based!
+        this.record.set('addGrant', _.get(this.record, 'data.container_id.account_grants.addGrant', false));
+
         Tine.Calendar.EventEditDialog.superclass.doCopyRecord.call(this);
         
         // remove attender ids
         Ext.each(this.record.data.attendee, function(attender) {
             delete attender.id;
         }, this);
-        
-        // Calendar is the only app with record based grants -> user gets edit grant for all fields when copying
-        this.record.set('editGrant', true);
 
         Tine.log.debug('Tine.Calendar.EventEditDialog::doCopyRecord() -> record:');
         Tine.log.debug(this.record);

@@ -58,7 +58,7 @@ class Tinebase_CustomField_Value
                     // TODO probably the decode can be removed?
                     $value = $controller->getMultiple(Tinebase_Helper::jsonDecode($this->_value));
                 }
-                $value->sort(function(Tinebase_Record_Abstract $a, Tinebase_Record_Abstract $b) {
+                $value->sort(function(Tinebase_Record_Interface $a, Tinebase_Record_Interface $b) {
                     return strcmp($a->getTitle(), $b->getTitle());
                 }, null, 'function');
                 break;

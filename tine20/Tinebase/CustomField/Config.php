@@ -32,11 +32,78 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Tinebase_Model_CustomField_Config';
 
     /**
+     * switch between no system custom fields, only system custom fields and no check at all
+     *
+     * @var boolean
+     */
+    protected $_noSystemCFs = true;
+
+    /**
+     * switch between no system custom fields, only system custom fields and no check at all
+     *
+     * @var boolean
+     */
+    protected $_onlySystemCFs = false;
+
+    /**
      * default column(s) for count
      *
      * @var string
      */
     protected $_defaultCountCol = 'id';
+
+    public static function getInstance()
+    {
+        return new self();
+    }
+
+    /**
+     * will return only system custom fields
+     */
+    public function setOnlySystemCFs()
+    {
+        $this->_noSystemCFs = false;
+        $this->_onlySystemCFs = true;
+    }
+
+    /**
+     * will return only non system custom fields
+     */
+    public function setNoSystemCFs()
+    {
+        $this->_noSystemCFs = true;
+        $this->_onlySystemCFs = false;
+    }
+
+    /**
+     * will return both non system and system custom fields
+     */
+    public function setAllCFs()
+    {
+        $this->_noSystemCFs = false;
+        $this->_onlySystemCFs = false;
+    }
+
+    /**
+     * get the basic select object to fetch records from the database
+     *
+     * @param array|string $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_cols = self::ALLCOL, $_getDeleted = FALSE)
+    {
+        $select = parent::_getSelect($_cols, $_getDeleted);
+
+        if ($this->_noSystemCFs) {
+            $select->where($this->_db->quoteIdentifier('is_system') . ' = 0');
+        }
+        if ($this->_onlySystemCFs) {
+            $select->where($this->_db->quoteIdentifier('is_system') . ' = 1');
+        }
+
+        return $select;
+    }
 
     /**
      * get customfield config ids by grant
@@ -129,5 +196,38 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
             $data['definition'] = Zend_Json::encode($data['definition']);
         }
         return $data;
+    }
+
+    /**
+     * apply modification logs from a replication master locally
+     *
+     * @param Tinebase_Model_ModificationLog $_modification
+     * @throws Tinebase_Exception
+     */
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
+    {
+
+        switch ($_modification->change_type) {
+            case Tinebase_Timemachine_ModificationLog::CREATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $model = $_modification->record_type;
+                $record = new $model($diff->diff);
+                Tinebase_CustomField::getInstance()->addCustomField($record);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $record = $this->get($_modification->record_id, true);
+                $record->applyDiff($diff);
+                Admin_Controller_Customfield::getInstance()->update($record);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                Tinebase_CustomField::getInstance()->deleteCustomField($_modification->record_id);
+                break;
+
+            default:
+                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
+        }
     }
 }

@@ -1,0 +1,32 @@
+########################
+# Tine 2.0
+# @package     Sales
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Philipp Schüle <p.schuele@metaways.de>
+# @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for Sales module
+# imports Sales
+########################
+---
+name: Sales
+
+files:
+#$app,$model,$definition,$file
+- Sales/CostCenter/sales_import_costcenter_csv/*
+- Addressbook/Contact/addressbook_tine_import_csv/*
+- Sales/Division/sales_import_division_csv/*
+- Sales/Customer/sales_import_customer_csv/*
+- Sales/Supplier/sales_import_supplier_csv/* # maybe field address import?'
+- Sales/Product/sales_import_product_csv/*
+- Sales/Contract/sales_import_contract_csv/*
+- Sales/Offer/sales_import_offer_csv/*
+- Sales/Invoice/sales_import_invoice_csv/*
+- Sales/PurchaseInvoice/sales_import_purchaseinvoice_csv/*
+- Sales/OrderConfirmation/sales_import_orderconfirmation_csv/*
+
+
+# this set could contain other sets:
+# sets:
+#   - another_set.yml

@@ -482,12 +482,12 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * resolves users of given record
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string|array             $_userProperties
      * @param bool                     $_addNonExistingUsers
      * @return void
      */
-    public function resolveUsers(Tinebase_Record_Abstract $_record, $_userProperties, $_addNonExistingUsers = FALSE)
+    public function resolveUsers(Tinebase_Record_Interface $_record, $_userProperties, $_addNonExistingUsers = FALSE)
     {
         $recordSet = new Tinebase_Record_RecordSet('Tinebase_Record_Abstract', array($_record));
         $this->resolveMultipleUsers($recordSet, $_userProperties, $_addNonExistingUsers);
@@ -777,4 +777,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @return Tinebase_Record_RecordSet
      */
     abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User');
+
+    public function getDefaultModel()
+    {
+        return Tinebase_Model_FullUser::class;
+    }
 }

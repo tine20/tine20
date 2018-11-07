@@ -317,13 +317,14 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     break;
             }
         }
-        
-        // force update of n_fileas and n_fn
-        $contact->setFromArray(array(
+
+        $data = array(
             'n_given'   => $contact->n_given,
             'n_family'  => $contact->n_family,
             'org_name'  => $contact->org_name
-        ));
+        );
+        // force update of n_fileas and n_fn
+        $contact->setFromArray($data);
         
         // either "org_name" or "n_family" must be given!
         if (empty($contact->org_name) && empty($contact->n_family)) {

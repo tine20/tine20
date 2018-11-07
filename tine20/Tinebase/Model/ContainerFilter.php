@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -26,14 +26,7 @@ class Tinebase_Model_ContainerFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Tinebase_Model_Container';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_ContainerFilter';
+    protected $_modelName = Tinebase_Model_Container::class;
     
     /**
      * @var array filter model fieldName => definition
@@ -47,5 +40,6 @@ class Tinebase_Model_ContainerFilter extends Tinebase_Model_Filter_FilterGroup
         'owner_id'          => array('filter' => 'Tinebase_Model_Filter_Id'),
         'model'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'uuid'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'is_deleted'        => array('filter' => 'Tinebase_Model_Filter_Bool'),
     );
 }

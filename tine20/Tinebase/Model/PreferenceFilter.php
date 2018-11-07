@@ -26,14 +26,7 @@ class Tinebase_Model_PreferenceFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Tinebase_Model_Preference';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_PreferenceFilter';
+    protected $_modelName = Tinebase_Model_Preference::class;
     
     /**
      * @var array filter model fieldName => definition

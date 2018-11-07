@@ -48,7 +48,7 @@ Ext.extend(Tine.widgets.relation.GridRenderer, Ext.Component, {
         }
         
         if (! this.recordClass) {
-            if (! Tine[this.foreignApp]) {
+            if (! Tine[this.foreignApp] || ! Tine[this.foreignApp].Model) {
                 Tine.log.warn('Tine.widgets.relation.GridRenderer::render - ForeignApp not found: ' + this.foreignApp);
                 return '';
             }
@@ -59,6 +59,9 @@ Ext.extend(Tine.widgets.relation.GridRenderer, Ext.Component, {
         for (var index = 0; index < relations.length; index++) {
             var el = relations[index];
             if (el.type == this.type && el.related_model == this.relModel) {
+                if (!el.related_record) {
+                    return i18n._('No Access');
+                }
                 var record = new this.recordClass(el.related_record);
                 return Ext.util.Format.htmlEncode(record.getTitle());
             }

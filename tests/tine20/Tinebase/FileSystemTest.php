@@ -107,6 +107,7 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
         $this->assertEquals(1, $node->revision);
         $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($this->_basePath)->hash);
+        static::assertNull($node->deleted_time, 'deleted_time should be null');
         
         return $testPath;
     }
@@ -951,6 +952,16 @@ class Tinebase_FileSystemTest extends TestCase
 
     public function testAclAdjustDuringMove()
     {
+        try {
+            $sharedNode = $this->_controller->stat($this->_controller->getApplicationBasePath('Filemanager',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED));
+
+            if (null !== $sharedNode->acl_node) {
+                $sharedNode->acl_node = null;
+                $this->_controller->update($sharedNode);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
         /** @var Tinebase_Model_Tree_Node $aclSharedFolder */
         $aclSharedFolder = Filemanager_Controller_Node::getInstance()->createNodes(['/shared/testAcl'],
             Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord();

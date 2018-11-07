@@ -7,6 +7,9 @@
         isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
         isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
         isNewIE = (Ext.isIE9 || isIE10 || isIE11),
+        isEdge = check(/edge/),
+        isIOS = check(/ipad/) || check(/iphone/),
+        isAndroid = check(/android/),
         isTouchDevice =
             // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
             'ontouchstart' in window        // works on most browsers
@@ -20,14 +23,17 @@
         supportsUserFocus = ! (isTouchDevice && !isWebApp);
 
     Ext.apply(Ext, {
-        isIE10 : isIE10,
-        isIE11 : isIE11,
-        
-        isNewIE : isNewIE,
+        isIE10: isIE10,
+        isIE11: isIE11,
+        isNewIE: isNewIE,
+        isEdge: isEdge,
+        isIOS: isIOS,
+        isAndroid: isAndroid,
         isTouchDevice: isTouchDevice,
         isWebApp: isWebApp,
-        supportsUserFocus: supportsUserFocus
-    })
+        supportsUserFocus: supportsUserFocus,
+        supportsPopupWindows: !isIOS && !isAndroid
+    });
 })();
 
 Ext.override(Ext.data.Store, {
@@ -635,9 +641,9 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
             Ext.form.TriggerField.prototype.taskForResize.delay(300);
             return;
         }
-        
+
         var visible = !!window.lodash.get(cmp, 'el.dom.offsetParent', false);
-        
+
         if (visible !== cmp.wasVisible && cmp.el.dom) {
             cmp.setWidth(cmp.width);
             if (cmp.wrap && cmp.wrap.dom) {
@@ -645,7 +651,7 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
             }
             cmp.syncSize();
         }
-        
+
         cmp.wasVisible = visible;
     });
     Ext.form.TriggerField.prototype.taskForResize.delay(300);
@@ -786,7 +792,7 @@ Ext.util.CSS = function(){
                     // nested rules
                     if (ssRules[j].styleSheet) {
                         Ext.util.CSS.cacheStyleSheet(ssRules[j].styleSheet);
-                    } else {
+                    } else if (ssRules[j].selectorText) {
                         sel = ssRules[j].selectorText.toLowerCase();
                         rules[sel] = ssRules[j];
                         selParts = sel.split(', ');
@@ -932,6 +938,42 @@ Ext.override(Ext.tree.TreePanel, {
     }
 });
 
+Ext.override(Ext.menu.Menu, {
+    setActive: Ext.emptyFn,
+    setZIndex: Ext.emptyFn,
+    showAt: Ext.menu.Menu.prototype.showAt.createSequence(function () {
+        Ext.WindowMgr.register(this);
+        Ext.WindowMgr.bringToFront(this);
+    }),
+    hide: Ext.menu.Menu.prototype.hide.createSequence(function () {
+        Ext.WindowMgr.unregister(this);
+    })
+});
+
+Ext.apply(Ext.form.VTypes, {
+    //@see https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+    emailRe: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+    email : function(v){
+        return this.emailRe.test(String(v).toLowerCase());
+    },
+});
+
+Ext.override(Ext.grid.GridDragZone, {
+    getDragData : function(e){
+        var t = Ext.lib.Event.getTarget(e);
+        var rowIndex = this.view.findRowIndex(t);
+        if(rowIndex !== false){
+            var sm = this.grid.selModel;
+            // fix: make DD & checkbox selection working together
+            if((!sm.isSelected(rowIndex) || e.hasModifier()) && !e.getTarget('.x-grid3-row-checker')) {
+                sm.handleMouseDown(this.grid, rowIndex, e);
+            }
+            return {grid: this.grid, ddel: this.ddel, rowIndex: rowIndex, selections:sm.getSelections()};
+        }
+        return false;
+    }
+});
+
 Ext.override(Ext.Component, {
     /**
      * is this component rendered?
@@ -1015,7 +1057,7 @@ Ext.override(Ext.grid.EditorGridPanel, {
             this.on('celldblclick', this.onCellDblClick, this);
         }
     },
-    
+
     onBeforeEdit: function(o) {
         if (this.readOnly) {
             o.cancel = true;
@@ -1064,4 +1106,16 @@ Ext.override(Ext.layout.ToolbarLayout, {
         delete cfg.id;
         return cfg;
     }
+});
+
+Ext.override(Ext.LoadMask, {
+    onBeforeLoad: function() {
+        if(!this.disabled){
+            this.el.mask(this.msg, this.msgCls);
+            Ext.fly(this.el.query('.ext-el-mask-msg')[0]).appendChild(Ext.DomHelper.createDom({tag: 'div', cls: 'x-mask-wait'}));
+        }
+    },
+    onLoad : function(){
+        this.el.unmask(this.removeMask);
+    },
 });

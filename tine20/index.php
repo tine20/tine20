@@ -22,16 +22,4 @@ if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
 }
 
 Tinebase_Core::dispatchRequest();
-
-if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-    // log profiling information
-    $time_end = microtime(true);
-    $time = $time_end - $time_start;
-
-    Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ')' .
-        ' METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD)
-        . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
-        . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
-        . ' / PID: ' . $pid
-    );
-}
+Tinebase_Log::logUsageAndMethod('index.php', $time_start, Tinebase_Core::get(Tinebase_Core::METHOD), $pid);

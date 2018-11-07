@@ -83,11 +83,11 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * converts vcard to Addressbook_Model_Contact
      * 
      * @param  \Sabre\VObject\Component|resource|string  $blob       the vcard to parse
-     * @param  Tinebase_Record_Abstract                $_record    update existing contact
+     * @param  Tinebase_Record_Interface                $_record    update existing contact
      * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $vcard = self::getVObject($blob);
 
@@ -176,10 +176,81 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     
                     $data['org_name'] = $parts[0];
                     $data['org_unit'] = isset($parts[1]) ? $parts[1] : null;
+
+                    $this->_toTine20ModelParseOrgExtra($data,$parts);
                     break;
                     
                 case 'PHOTO':
-                    $jpegphoto = $property->getValue();
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: ' . $property['ENCODING'] . ":" . $property['TYPE'] );
+                    if (    ( $property['ENCODING'] != "b" )
+                         && ( $property['ENCODING'] != "B" ) ) {
+                        // pass on for now as is if image is not binary encoding, sabre or whoever would in this case
+                        // decode any base 64 or hex string into binary blob  
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: passing on non binary image as is (' . strlen($property->getValue()) .')' );
+                        $jpegphoto = $property->getValue();
+                        break;
+                    }
+                    switch ( $property['TYPE'] ) {
+                        case 'JPG' : {}
+                        case 'jpg' : {}
+                        case 'Jpg' : {}
+                        case 'Jpeg' : {}
+                        case 'jpeg' : {}
+                        case 'PNG' : {}
+                        case 'png' : {}
+                        case 'JPEG' : {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: passing on invalid ' . $property['TYPE'] . ' image as is (' . strlen($property->getValue()) .')' );
+                            $jpegphoto = $property->getValue();
+                            break;
+                        }
+                        default : {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: recoding to jpeg (' . strlen($property->getValue()) . ')' );
+
+                            $info = @getimagesizefromstring($property->getValue());
+                            if ( info === false ) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: is of unknown type. passing on as is');
+                                $jpegphoto = $property->getValue();
+                                break;
+                            }
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: is of type (' . $info['mime'] . ')' );
+                            if ( in_array($info['mime'], Tinebase_ImageHelper::getSupportedImageMimeTypes()) ) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: can be handled by tine20 directly, not recoded ' );
+                                $jpegphoto = $property->getValue();
+                                break;
+                            }
+                            $recode = imagecreatefromstring($property->getValue());
+                            if ( $recode === false ) {
+                                // pass on for now as is if image is not binary encoding, sabre or whoever would in this case
+                                // decode any base 64 or hex string into binary blob  
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: recoding failed, pass on as is  ' );
+                                $jpegphoto = $property->getValue();
+                                break;
+                            }                            
+                            ob_start();
+                            if ( imagejpeg($recode,null,90) === true ) {
+                                $jpegphoto = ob_get_contents();
+                            }
+                            ob_end_clean();
+                            imagedestroy($recode);
+                            $info = getimagesizefromstring($jpegphoto);
+                            if ( !in_array($info['mime'], Tinebase_ImageHelper::getSupportedImageMimeTypes()) ) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: failed to recode to jpeg (' .strlen($jpegphoto) .')' );
+                                $jpegphoto = $property->getValue();
+                                break;
+                            }
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: recoded to jpeg (' .strlen($jpegphoto) .')' );
+                        }
+                    }
                     break;
                     
                 case 'TEL':
@@ -208,8 +279,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 default:
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
+                    $this->_toTine20ModelParseOther($data,$property);
                     break;
             }
         }
@@ -253,15 +323,24 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     }
 
     /**
-     * converts Tinebase_Record_Abstract to external format
+     * converts Tinebase_Record_Interface to external format
      *
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Tinebase_Record_Interface  $record
      * @return mixed
      */ 
-    public function fromTine20Model(Tinebase_Record_Abstract $record)
+    public function fromTine20Model(Tinebase_Record_Interface $record)
     {
     }
     
+    /**
+     * parse extra fields provided with org entry in vcard
+     * 
+     * @param array $data
+     * @param array $orgextra
+     */
+    protected function _toTine20ModelParseOrgExtra(&$data,$orgextra) {
+    }
+
     /**
      * parse telephone
      * 
@@ -355,6 +434,14 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 break;
         }
     }
+    /**
+     * (non-PHPdoc)
+     * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseOther()
+     */
+    protected function _toTine20ModelParseOther(&$data, \Sabre\VObject\Property $property) {
+       if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+           Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
+    }
     
     /**
      * parse BIRTHDAY
@@ -372,10 +459,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * add GEO data to VCard
      * 
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Tinebase_Record_Interface  $record
      * @param  \Sabre\VObject\Component  $card
      */
-    protected function _fromTine20ModelAddGeoData(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelAddGeoData(Tinebase_Record_Interface $record, \Sabre\VObject\Component $card)
     {
         /** @var Addressbook_Model_Contact $record */
         if ($record->adr_one_lat && $record->adr_one_lon) {
@@ -389,10 +476,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * add birthday data to VCard
      * 
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Tinebase_Record_Interface  $record
      * @param  \Sabre\VObject\Component  $card
      */
-    protected function _fromTine20ModelAddBirthday(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelAddBirthday(Tinebase_Record_Interface $record, \Sabre\VObject\Component $card)
     {
         /** @var Addressbook_Model_Contact $record */
         if ($record->bday instanceof Tinebase_DateTime) {
@@ -406,10 +493,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * parse categories from Tine20 model to VCard and attach it to VCard $card
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param Sabre\VObject\Component $card
      */
-        protected function _fromTine20ModelAddCategories(Tinebase_Record_Abstract $record, Sabre\VObject\Component $card)
+        protected function _fromTine20ModelAddCategories(Tinebase_Record_Interface $record, Sabre\VObject\Component $card)
         {
             if (!isset($record->tags)) {
                 // If the record has not been populated yet with tags, let's try to get them all and update the record
@@ -445,21 +532,26 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * initialize vcard object
      * 
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Tinebase_Record_Interface  $record
      * @return \Sabre\VObject\Component
      */
-    protected function _fromTine20ModelRequiredFields(Tinebase_Record_Abstract $record)
+    protected function _fromTine20ModelRequiredFields(Tinebase_Record_Interface $record,$fn = null,$org = null)
     {
         /** @var Addressbook_Model_Contact $record */
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        
+        if ( !isset($fn) || $fn === null ) {
+            $fn = $record->n_fileas;
+        }
+        if ( !isset($org) || $org === null ) {
+            $org = array($record->org_name, $record->org_unit);
+        }
         $card = new \Sabre\VObject\Component\VCard(array(
             'VERSION' => '3.0',
-            'FN'      => $record->n_fileas,
+            'FN'      => $fn,
             'N'       => array($record->n_family, $record->n_given, $record->n_middle, $record->n_prefix, $record->n_suffix),
             'PRODID'  => "-//tine20.com//Tine 2.0 Addressbook V$version//EN",
             'UID'     => $record->getId(),
-            'ORG'     => array($record->org_name, $record->org_unit),
+            'ORG'     => $org,
             'TITLE'   => $record->title
         ));
         

@@ -621,6 +621,11 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
      * @todo Add support vor Events spanning over a day boundary
      */
     insertEvent: function(event) {
+        if (! this.mainBody) {
+            // maybe another app is active and mainBody has not been rendered yet
+            return;
+        }
+
         event.ui = new Tine.Calendar.DaysViewEventUI(event);
         event.ui.render(this);
     },
@@ -669,10 +674,6 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             }, this);
             
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
-            
-            if (Ext.isIE) {
-                e.browserEvent = {type: 'mousedown'};
-            }
             
             event.ui.resizeable[rzPos].onMouseDown.call(event.ui.resizeable[rzPos], e);
             //event.ui.resizeable.startSizing.defer(2000, event.ui.resizeable, [e, event.ui.resizeable[rzPos]]);
@@ -1141,6 +1142,11 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
     },
 
     getMainBodyHeight: function() {
+        if (! this.mainBody) {
+            // maybe another app is active
+            return 0;
+        }
+
         var height = this.mainBody.getHeight();
 
         // hidden atm.

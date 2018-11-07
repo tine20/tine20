@@ -244,8 +244,9 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
-        $request = new \Zend\Http\PhpEnvironment\Request();
-        self::set(self::REQUEST, $request);
+        // NOTE: we put the request in the registry here - should be kept in mind when we implement more
+        //       middleware pattern / expressive functionality as each handler might create a new request / request is modified
+        $request = self::getRequest();
         
         // check transaction header
         if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
@@ -526,9 +527,15 @@ class Tinebase_Core
         $container->register(RequestInterface::class)
             ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals');
 
+        try {
+            $applications = Tinebase_Application::getInstance()->getApplications();
+        } catch (Exception $e) {
+            // Tinebase is not yet installed
+            return $container;
+        }
+        
         /** @var Tinebase_Model_Application $application */
-        foreach (Tinebase_Application::getInstance()->getApplications()
-                     ->filter('status', Tinebase_Application::ENABLED) as $application) {
+        foreach ($applications->filter('status', Tinebase_Application::ENABLED) as $application) {
             /** @var Tinebase_Controller_Abstract $className */
             $className = $application->name . '_Controller';
             if (class_exists($className)) {
@@ -731,13 +738,31 @@ class Tinebase_Core
             $tmpdir = isset($config['tmpdir']) ? $config['tmpdir'] : null;
         }
 
+        // let's make the fall back dir more safe in a multi instance environment
         if (! $tmpdir || !@is_writable($tmpdir)) {
+            $append = '';
+            if ($tmpdir) {
+                // first lets try to create the configured tmpdir
+                if (@mkdir($tmpdir, 0777, true) && null == clearstatcache() && @is_writable($tmpdir)) {
+                    // yeaha, saved the day
+                    return $tmpdir;
+                }
+                // we have a configured tmpdir, but it is not writable / doesn't exist => as it is different for each
+                // instance in the environment, we use it to create a unique hash for this instance and append it to
+                // the default fall back dir (which might be the same for each instance!)
+                $append = '/' . md5($tmpdir);
+            }
             $tmpdir = sys_get_temp_dir();
             if (empty($tmpdir) || !@is_writable($tmpdir)) {
                 $tmpdir = session_save_path();
                 if (empty($tmpdir) || !@is_writable($tmpdir)) {
                     $tmpdir = '/tmp';
                 }
+            }
+
+            if ($append) {
+                $tmpdir = rtrim($tmpdir, '/') . $append;
+                @mkdir($tmpdir, 0777, true);
             }
         }
         
@@ -995,7 +1020,7 @@ class Tinebase_Core
         $dbConfig = $config->database;
         
         if (!empty($dbConfig->password)) {
-            self::getLogger()->getFormatter()->addReplacement($dbConfig->password);
+            self::getLogger()->addReplacement($dbConfig->password);
         }
         
         if (! defined('SQL_TABLE_PREFIX')) {
@@ -1051,42 +1076,39 @@ class Tinebase_Core
                     }
                 }
 
-                $cacheId = md5(__METHOD__ . '::useUtf8mb4');
-                if (!isset($dbConfigArray['useUtf8mb4'])) {
-                    if (false !== ($result = static::getCache()->load($cacheId))) {
-                        $dbConfigArray['useUtf8mb4'] = $result;
-                    }
-                }
+                $dbConfigArray['charset'] = Tinebase_Backend_Sql_Adapter_Pdo_Mysql::getCharsetFromConfigOrCache($dbConfigArray);
+                $upperCaseCharset = strtoupper($dbConfigArray['charset']);
 
-                if (isset($dbConfigArray['useUtf8mb4']) && !$dbConfigArray['useUtf8mb4']) {
-                    $dbConfigArray['charset'] = 'utf8';
-                } else {
-                    $dbConfigArray['charset'] = 'utf8mb4';
-                }
-                
+                if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Using MySQL charset: ' . $dbConfigArray['charset']);
+
                 // force some driver options
-                $dbConfigArray['driver_options'] = array(
-                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
-                );
+                $driverOptions = isset($dbConfigArray['driver_options']) ? $dbConfigArray['driver_options'] : [];
+                // be aware of the difference of array_merge and [] + [] with numeric keys!
+                $dbConfigArray['driver_options'] = $driverOptions + [PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE];
                 $dbConfigArray['options']['init_commands'] = array(
+                    "SET NAMES $upperCaseCharset",
                     "SET time_zone = '+0:00'",
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
                     "SET SESSION group_concat_max_len = 4294967295"
                 );
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
 
-                if (!isset($dbConfigArray['useUtf8mb4'])) {
-                    // auto detect charset to be used
-                    // empty db => utf8mb4
-                    if (false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn(0) &&
-                            strpos($db->query('show create table ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1),
-                            'utf8mb4') === false) {
+                if (! isset($dbConfigArray['useUtf8mb4'])) {
+                    if (! Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
                         $db->closeConnection();
+
+                        if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Falling back to utf-8 charset');
+
                         $dbConfigArray['charset'] = 'utf8';
+                        $dbConfigArray['options']['init_commands'] = array(
+                            "SET NAMES UTF8",
+                            "SET time_zone = '+0:00'",
+                            "SET SQL_MODE = 'STRICT_ALL_TABLES'",
+                            "SET SESSION group_concat_max_len = 4294967295"
+                        );
                         $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
-                        static::getCache()->save(0, $cacheId);
-                    } else {
-                        static::getCache()->save(1, $cacheId);
                     }
                 }
                 break;
@@ -1123,7 +1145,7 @@ class Tinebase_Core
         
         return $db;
     }
-    
+
     /**
      * get db profiling
      * 
@@ -1578,10 +1600,28 @@ class Tinebase_Core
         return self::get(self::USER);
     }
 
+    /**
+     * unset user in registry
+     */
     public static function unsetUser()
     {
         Zend_Registry::set(self::USER, null);
         Tinebase_Log_Formatter::resetUsername();
+    }
+
+    /**
+     * get the http request
+     *
+     * @return Tinebase_Http_Request
+     */
+    public static function getRequest()
+    {
+        if (! self::isRegistered(self::REQUEST)) {
+            $request = new Tinebase_Http_Request();
+            self::set(self::REQUEST, $request);
+        }
+
+        return self::get(self::REQUEST);
     }
 
     /**
@@ -1610,26 +1650,26 @@ class Tinebase_Core
     {
         $result = NULL;
 
-        if (self::isRegistered(self::PREFERENCES)) {
-            $prefs = self::get(self::PREFERENCES);
-            if (isset($prefs[$_application])) {
-                $result = $prefs[$_application];
-            }
-        } else {
-            $prefs = array();
+        if (!self::isRegistered(self::PREFERENCES)) {
+            self::set(self::PREFERENCES, array());
         }
-
-        if ($result === NULL) {
-            $prefClassName = $_application . '_Preference';
-            if (@class_exists($prefClassName)) {
-                $result = new $prefClassName();
-                $prefs[$_application] = $result;
-                self::set(self::PREFERENCES, $prefs);
-            } else if ($_throwException) {
-                throw new Tinebase_Exception_NotFound('No preference class found for app ' . $_application);
-            }
+        
+        $prefs = self::get(self::PREFERENCES);
+        
+        if (isset($prefs[$_application])) {
+            return $prefs[$_application];
         }
-
+        
+        $prefClassName = $_application . '_Preference';
+        
+        if (@class_exists($prefClassName)) {
+            $result = new $prefClassName();
+            $prefs[$_application] = $result;
+            self::set(self::PREFERENCES, $prefs);
+        } else if ($_throwException) {
+            throw new Tinebase_Exception_NotFound('No preference class found for app ' . $_application);
+        }
+        
         return $result;
     }
     
@@ -1730,23 +1770,23 @@ class Tinebase_Core
      */
     public static function getUrl($part = 'full')
     {
-        if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
-            if (empty($url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL))) {
+        if (empty($url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL))) {
+            if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
                 $protocol = 'http://'; // backward compatibility. This is what used to happen if you ask zend
                 $hostname = '';
                 $pathname = '';
             } else {
-                $protocol = parse_url($url, PHP_URL_SCHEME);
-                $hostname = parse_url($url, PHP_URL_HOST);
-                $pathname = rtrim(str_replace($protocol . '://' . $hostname, '', $url), '/');
+                $request = new Zend_Controller_Request_Http();
+                $pathname = $request->getBasePath();
+                $hostname = $request->getHttpHost();
+                $protocol = $request->getScheme();
             }
         } else {
-            $request = new Zend_Controller_Request_Http();
-            $pathname = $request->getBasePath();
-            $hostname = $request->getHttpHost();
-            $protocol = $request->getScheme();
+            $protocol = parse_url($url, PHP_URL_SCHEME);
+            $hostname = parse_url($url, PHP_URL_HOST);
+            $pathname = rtrim(str_replace($protocol . '://' . $hostname, '', $url), '/');
         }
 
         switch ($part) {
@@ -1794,16 +1834,15 @@ class Tinebase_Core
      */
     public static function filterInputForDatabase($string)
     {
-        if (self::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $string = Tinebase_Helper::mbConvertTo($string);
-            
+        $string = Tinebase_Helper::mbConvertTo($string);
+
+        if (($db = self::getDb()) instanceof Zend_Db_Adapter_Pdo_Mysql &&
+                ! Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
             // remove 4 byte utf8
-            $result = preg_replace('/[\xF0-\xF7].../s', '?', $string);
-        } else {
-            $result = $string;
+            $string = preg_replace('/[\xF0-\xF7].../s', '?', $string);
         }
         
-        return $result;
+        return $string;
     }
     
     /**
@@ -1931,9 +1970,10 @@ class Tinebase_Core
 
                 if (isset($session->filesystemAvailable)) {
                     $isFileSystemAvailable = $session->filesystemAvailable;
-
-                    self::set('FILESYSTEM', $isFileSystemAvailable);
-                    return $isFileSystemAvailable;
+                    if ($isFileSystemAvailable) {
+                        self::set('FILESYSTEM', $isFileSystemAvailable);
+                        return $isFileSystemAvailable;
+                    }
                 }
             } catch (Zend_Session_Exception $zse) {
                 $session = null;
@@ -1972,7 +2012,18 @@ class Tinebase_Core
     public static function inMaintenanceMode()
     {
         $config = self::getConfig();
-        return !! $config->maintenanceMode;
+        return !empty($config->{Tinebase_Config::MAINTENANCE_MODE});
+    }
+
+    /**
+     * returns true if installation is in maintenance mode "ALL"
+     *
+     * @return bool
+     */
+    public static function inMaintenanceModeAll()
+    {
+        $config = self::getConfig();
+        return $config->{Tinebase_Config::MAINTENANCE_MODE} === Tinebase_Config::MAINTENANCE_MODE_ALL;
     }
 
     /**
@@ -2007,6 +2058,16 @@ class Tinebase_Core
         $httpClient = new Zend_Http_Client($uri, $config);
 
         return $httpClient;
+    }
+
+    /**
+     * get Preview Services client
+     *
+     * @return Tinebase_FileSystem_Preview_ServiceInterface
+     */
+    public static function getPreviewService()
+    {
+        return Tinebase_FileSystem_Preview_ServiceFactory::getPreviewService();
     }
 
     /**
@@ -2182,7 +2243,8 @@ class Tinebase_Core
      * @return null|string
      * @throws FileNotFoundException
      */
-    public static function getInstallLogo() {
+    public static function getInstallLogo()
+    {
         $logo = Tinebase_Config::getInstance()->{Tinebase_Config::INSTALL_LOGO};
         
         if (!$logo) {

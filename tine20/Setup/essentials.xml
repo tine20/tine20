@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <essential>
-    <enviroment name="PHP" version="5.5"/>
+    <enviroment name="PHP" version="5.6"/>
     <extensions>
-        <extension name="json" />
-        <extension name="gd" />
+        <extension name="ctype" />
         <extension name="date" />
+        <extension name="dom" />
+        <extension name="gd" />
+        <extension name="hash" />
+        <extension name="iconv" />
+        <extension name="json" />
+        <extension name="mbstring" />
+        <extension name="openssl" />
         <extension name="SPL" />
         <extension name="SimpleXML" />
-        <extension name="ctype" />
-        <extension name="dom" />
-        <extension name="openssl" />
-        <extension name="iconv" />
-        <extension name="zip" />
         <extension name="xml" />
-        <extension name="hash" />
-        <extension name="mbstring" />
+        <extension name="zip" />
     </extensions>
 </essential>

@@ -202,11 +202,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Account $_account
      * @param string                   $_partId
      * @param string                   $mimeType
+     * @return Felamimail_Model_Message
      */
-    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, $_partId = NULL, $mimeType='configured')
+    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message,
+                                                  Felamimail_Model_Account $_account = null,
+                                                  $_partId = null,
+                                                  $mimeType='configured')
     {
         if ($mimeType == 'configured') {
-            $mimeType = ($_account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
+            $mimeType = (
+                $_account->display_format == Felamimail_Model_Account::DISPLAY_HTML
+                || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE
+            )
                 ? Zend_Mime::TYPE_HTML
                 : Zend_Mime::TYPE_TEXT;
         }
@@ -312,7 +319,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // PGP MIME Version 1
-        if ($_message->structure['contentType'] == 'multipart/encrypted'
+        if (isset($_message->structure['contentType']) && $_message->structure['contentType'] == 'multipart/encrypted'
          && isset($_message->structure['parts'][1]['subType'])
          && $_message->structure['parts'][1]['subType'] == 'pgp-encrypted') {
             $identification = $this->getMessagePart($_message, 1)->getContent();
@@ -353,7 +360,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     * @param Felamimail_Model_Message $_message
     * @param string $_partId
     * @param array $_partData
-    * @return NULL|Tinebase_Record_Abstract
+    * @return NULL|Tinebase_Record_Interface
     */
     protected function _getForeignMessagePart(Felamimail_Model_Message $_message, $_partId, $_partData)
     {
@@ -390,7 +397,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * process foreign iMIP part
      * 
      * @param string $_application
-     * @param Tinebase_Record_Abstract $_iMIP
+     * @param Tinebase_Record_Interface $_iMIP
      * @return mixed
      * 
      * @todo use iMIP factory?
@@ -420,7 +427,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param string $_iMIPId
      * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
     public function getiMIP($_iMIPId)
     {
@@ -982,14 +989,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
                 // if its not a winmail.dat, or the winmail.dat couldn't be expanded 
                 // properly because it has richtext embedded, return attachment as it is
-                if (empty($expanded)) {
+                if (empty($expanded) && isset($part['contentType']) && isset($part['partId'])) {
                 
                     $attachmentData = array(
                         'content-type' => $part['contentType'], 
                         'filename'     => $filename,
                         'partId'       => $part['partId'],
-                        'size'         => $part['size'],
-                        'description'  => $part['description'],
+                        'size'         => isset($part['size']) ? $part['size'] : 0,
+                        'description'  => isset($part['description']) ? $part['description'] : '',
                         'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
                     );
                     
@@ -1214,5 +1221,34 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         throw new Tinebase_Exception_NotFound('Resource not found');
+    }
+
+    /**
+     * @param $nodeId
+     * @return Felamimail_Model_Message
+     */
+    public function getMessageFromNode($nodeId)
+    {
+        // @todo simplify this / create Tinebase_Model_Tree_Node_Path::createFromNode()?
+
+        $node = Tinebase_FileSystem::getInstance()->get($nodeId);
+        $nodePath = Tinebase_FileSystem::getInstance()->getPathOfNode($node, true);
+        $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($nodePath);
+        Tinebase_FileSystem::getInstance()->checkPathACL($path);
+
+        // @todo check if it's an email (.eml?)
+
+        $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
+
+        // @todo allow to configure body mime type to fetch?
+
+        $message = Felamimail_Model_Message::createFromMime($content);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got Message: ' . print_r($message->toArray(), true));
+
+        // TODO use HTMLpurifier?
+
+        return $message;
     }
 }

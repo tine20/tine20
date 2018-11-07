@@ -221,6 +221,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         foreach($events as $event) {
             $pollId = $event->poll_id instanceof Calendar_Model_Poll ? $event->poll_id->getId() : $event->poll_id;
             if ($pollId) {
+                $event->mute = $event->mute || Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS);
                 $groupedEvents[$pollId][] = $event->getId();
             }
         }
@@ -238,14 +239,15 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
      * inspect event helper
      *
      * @param Calendar_Model_Event $event
-     * @throws Tasks_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _inspectEvent($event)
     {
         $poll = $event->poll_id;
         if ($poll instanceof Calendar_Model_Poll) {
             if ($event->rrule || $event->isRecurException()) {
-                throw new Tasks_Exception_UnexpectedValue('Polls for recurring events are not supported');
+                // _('Polls for recurring events are not supported')
+                throw new Tinebase_Exception_SystemGeneric('Polls for recurring events are not supported');
             }
             try {
                 $this->_inspectedPoll = $poll->getId();
@@ -301,11 +303,13 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                         continue;
                     }
 
+                    $toAdd->mute = $event->mute || Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS);
                     Calendar_Controller_Event::getInstance()->create($toAdd);
                 }
 
                 foreach ($diff->modified as $eventDiff) {
                     $toUpdate = $poll->alternative_dates->getById($eventDiff->id);
+                    $toUpdate->mute = $event->mute || Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS);
                     Calendar_Controller_Event::getInstance()->update($toUpdate);
                 }
 
@@ -494,33 +498,12 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
     public function publicApiMainScreen($pollId, $userKey = null, $authKey = null)
     {
-        $view = new Zend_View();
-        $view->setScriptPath('Calendar/views');
-
-        $baseUrl = Tinebase_Core::getUrl() . '/';
         $locale = Tinebase_Core::getLocale();
-        $eTag = Tinebase_Frontend_Http::getAssetHash();
 
-        $fileMap = Tinebase_Frontend_Http::getAssetsMap();
-        $view->jsFiles = [$baseUrl . $fileMap['Calendar/js/pollClient/src/index.es6.js']['js']];
-        $view->jsFiles[] = $baseUrl . "index.php?method=Tinebase.getJsTranslations&&locale={$locale}&app=Calendar&version={$eTag}";
+        $jsFiles = ['Calendar/js/pollClient/src/index.es6.js'];
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar";
 
-        if (TINE20_BUILDTYPE != 'RELEASE') {
-            if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
-                $view->jsFiles[] = $baseUrl . 'webpack-dev-server.js';
-            } else {
-                $view->jsFiles[0] = preg_replace('/\.js$/', '.debug.js', $view->jsFiles[0]);
-            }
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' publicApiMainScreen');
-
-//        $this->Tinebase_Frontend_Http::_setMainscreenHeaders();
-
-        $response = new \Zend\Diactoros\Response();
-        $response->getBody()->write($view->render('pollClient.php'));
-        return $response;
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles);
     }
 
     public function assertPublicUsage()
@@ -537,8 +520,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             'cceContainerACLChecks' => Calendar_Controller_Event::getInstance()->doContainerACLChecks(false),
             'cceRightChecks'        => Calendar_Controller_Event::getInstance()->doRightChecks(false),
             'cceSendNotifications'        => Calendar_Controller_Event::getInstance()->sendNotifications(false),
-//            'accContainerACLChecks'  => Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false),
-//            'accRightChecks'         => Addressbook_Controller_Contact::getInstance()->doRightChecks(false),
             'currentUser'           => $currentUser,
         ];
 
@@ -549,8 +530,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldvalues['cceContainerACLChecks']);
             Calendar_Controller_Event::getInstance()->doRightChecks($oldvalues['cceRightChecks']);
             Calendar_Controller_Event::getInstance()->sendNotifications($oldvalues['cceSendNotifications']);
-//            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldvalues['accContainerACLChecks']);
-//            Addressbook_Controller_Contact::getInstance()->doRightChecks($oldvalues['accRightChecks']);
             if ($oldvalues['currentUser']) {
                 Tinebase_Core::set(Tinebase_Core::USER, $oldvalues['currentUser']);
             }
@@ -605,7 +584,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
                 foreach($date->attendee as $attendee) {
                     // flatten
-                    $attendee['user_id'] = $attendee['user_id'] instanceof Tinebase_Record_Abstract ? $attendee['user_id']->getId() : $attendee['user_id'];
+                    $attendee['user_id'] = $attendee['user_id'] instanceof Tinebase_Record_Interface ? $attendee['user_id']->getId() : $attendee['user_id'];
 
                     // manage authkeys
                     if ($anonymousAccess) {

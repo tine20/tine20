@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -151,8 +151,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 Tinebase_Container::getInstance()->getGrantsOfRecords(
                     $_records,
                     Tinebase_Core::getUser(),
-                    $modelConfiguration ? $modelConfiguration->containerProperty : 'container_id',
-                    $modelConfiguration ? $modelConfiguration->grantsModel : 'Tinebase_Model_Grants'
+                    $modelConfiguration ? $modelConfiguration->containerProperty : 'container_id'
                 );
             }
 
@@ -194,14 +193,13 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string|array                        $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
-     * @param bool|array                          $_getRelations
+     * @param bool|array|Tinebase_Record_Expander $_getRelations
      * @param string                              $_totalCountMethod
      * @return array
      */
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
         $filter = $this->_decodeFilter($_filter, $_filterModel);
-
         $decodedPagination = $this->_prepareParameter($_paging);
         if (null !== $this->_paginationModel) {
             $decodedPagination['model'] = $this->_paginationModel;
@@ -209,18 +207,41 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $decodedPagination['model'] = $filter->getModelName();
         }
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
-
         $records = $_controller->search($filter, $pagination, $_getRelations);
-        
+
         $result = $this->_multipleRecordsToJson($records, $filter);
-        
-        return array(
+        $totalCountResult = $this->_getSearchTotalCount($filter, $pagination, $_controller, $_totalCountMethod, count($result));
+
+        return array_merge($totalCountResult, [
             'results'       => array_values($result),
-            'totalcount'    => $_totalCountMethod == self::TOTALCOUNT_CONTROLLER ?
-                $_controller->searchCount($filter) :
-                count($result),
-            'filter'        => $filter->toArray(TRUE),
-        );
+            'filter'        => $filter->toArray(true),
+        ]);
+    }
+
+    /**
+     * do search count request only when resultset is equal
+     * to $pagination->limit or we are not on the first page
+     *
+     * @param $filter
+     * @param $pagination
+     * @param Tinebase_Controller_SearchInterface $controller the record controller
+     * @param $totalCountMethod
+     * @param integer $resultCount
+     * @return array
+     */
+    protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
+    {
+         if (   $totalCountMethod === self::TOTALCOUNT_CONTROLLER
+            && $pagination->limit
+            && ($pagination->start != 0 || $resultCount == $pagination->limit)
+         ) {
+             $totalCount = $controller->searchCount($filter);
+         } else {
+             $totalCount = $resultCount;
+         }
+         return [
+             'totalcount' => $totalCount
+         ];
     }
 
     /**
@@ -236,7 +257,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if ($_filter instanceof Tinebase_Model_Filter_FilterGroup) {
             return $_filter;
         }
-        
+
         $filterModel = $this->_getPluginForFilterModel($_filterModel);
         $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
 
@@ -288,7 +309,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * creates recordsets for depedent records or records instead of arrays for records on record fields
      * and sets timezone of these records to utc
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      */
     protected function _dependentRecordsFromJson(&$record)
     {
@@ -369,7 +390,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $_id record id
      * @param array  $_data key/value pairs with fields to update
      * @param Tinebase_Controller_Record_Interface $_controller
-     * @return Tinebase_Record_Abstract record
+     * @return Tinebase_Record_Interface record
      */
     protected function _updateProperties($_id, $_data, Tinebase_Controller_Record_Interface $_controller)
     {
@@ -424,7 +445,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if (! is_object($importer)) {
             throw new Tinebase_Exception_NotFound('No importer found for ' . $definition->name);
         }
-        
+
         // extend execution time to 30 minutes
         $this->_longRunningRequest(1800);
 
@@ -476,7 +497,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data

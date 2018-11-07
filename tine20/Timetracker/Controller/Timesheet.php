@@ -153,6 +153,51 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         
         return $matrix;
     }
+
+    /**
+     * calculates duration, start and end from given value
+     *
+     * @param Timetracker_Model_Timesheet $_record
+     * @return void
+     */
+    protected function _calculateTimes(Timetracker_Model_Timesheet $_record)
+    {
+        $duration = $_record->duration;
+        $start = $_record->start_time;
+        $end = $_record->end_time;
+
+        // If start and end ist given calculate duration and overwrite default
+        if (isset($start) && isset($end)){
+            $start = new dateTime($_record->start_date . ' ' . $start);
+            $end = new dateTime($_record->start_date . ' ' . $end);
+            
+            if ($end < $start) {
+                $end = $end->modify('+1 days');
+            }
+
+            $duration = $end->diff($start);
+            $_record->duration = $duration->h * 60 + $duration->i;
+            return;
+        }
+        
+        // If duration and start is set calculate the end
+        if (isset($duration) && isset($start)){
+            $start = new dateTime($_record->start_date . ' ' . $start);
+            
+            $end = $start->modify('+' . $duration . ' minutes');
+            $_record->end_time = $end->format('H:i');
+            return;
+        }
+
+        // If start is not set but duration and end calculate start instead
+        if (isset($duration) && isset($end)){
+            $end = new dateTime($_record->start_date . ' ' . $end);
+
+            $start = $end->modify('-' . $duration . ' minutes');
+            $_record->start_time = $start->format('H:i');
+            return;
+        }
+    }
     
     /**
      * checks deadline of record
@@ -218,6 +263,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_checkDeadline($_record);
+        $this->_calculateTimes($_record);
     }
     
     /**
@@ -230,6 +276,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $this->_checkDeadline($_record);
+        $this->_calculateTimes($_record);
     }    
     
     /**

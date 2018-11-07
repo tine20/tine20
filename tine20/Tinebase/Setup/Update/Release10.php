@@ -12,8 +12,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**
      * update to 10.1
-     *
-     * @see 0012162: create new MailFiler application
      */
     public function update_0()
     {
@@ -949,9 +947,14 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 . ' Updated node acl for ' . $node->name .' (container id: ' . $container->getId() . ')');
 
             // remove old acl container
-            Tinebase_Container::getInstance()->deleteContainer($container, /* ignore acl */ true);
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Removed old container ' . $container->name);
+            try {
+                Tinebase_Container::getInstance()->deleteContainer($container, /* ignore acl */
+                    true);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Removed old container ' . $container->name);
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                Tinebase_Exception::log($teia);
+            }
         }
     }
 
@@ -2005,19 +2008,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                 }
             } catch(Tinebase_Exception_NotFound $tenf) {}
         }
-        if (Tinebase_Application::getInstance()->isInstalled('MailFiler')) {
-            try {
-                $node = $fileSystem->stat('/MailFiler/folders/shared');
-                if (null === $node->acl_node) {
-                    $fileSystem->setGrantsForNode($node, Tinebase_Model_Grants::getDefaultGrants(array(
-                        Tinebase_Model_Grants::GRANT_DOWNLOAD => true
-                    ), array(
-                        Tinebase_Model_Grants::GRANT_PUBLISH => true
-                    )));
-                    $inheritPropertyMethod->invoke($fileSystem, $node, 'acl_node', $node->acl_node, null);
-                }
-            } catch(Tinebase_Exception_NotFound $tenf) {}
-        }
 
         $this->setApplicationVersion('Tinebase', '10.38');
     }
@@ -2114,9 +2104,10 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_41()
     {
-        $scheduler = Tinebase_Core::getScheduler();
+        /* schema update, also it will be done now in \Tinebase_Setup_Update_Release11::update_11
+         * $scheduler = Tinebase_Core::getScheduler();
         $scheduler->removeTask('Tinebase_User/Group::syncUsers/Groups');
-        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
+        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);*/
         $this->setApplicationVersion('Tinebase', '10.42');
     }
 
@@ -2264,10 +2255,11 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_46()
     {
+        /* schema update, will be done now in \Tinebase_Setup_Update_Release11::update_11
         $scheduler = Tinebase_Core::getScheduler();
         if (! $scheduler->hasTask('Tinebase_AclTablesCleanup')) {
             Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
-        }
+        }*/
         $this->setApplicationVersion('Tinebase', '10.47');
     }
 
@@ -2320,8 +2312,9 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_49()
     {
+        /* schema update, will be done now in \Tinebase_Setup_Update_Release11::update_11
         $scheduler = Tinebase_Core::getScheduler();
-        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
+        Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler); */
         $this->setApplicationVersion('Tinebase', '10.50');
     }
 
@@ -2447,9 +2440,152 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.0
+     * update to 10.56
+     *
+     * eventually add missing indexed_hash column to tree_nodes
      */
     public function update_55()
+    {
+        if (!$this->_backend->columnExists('indexed_hash', 'tree_nodes')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                            <name>indexed_hash</name>
+                            <type>text</type>
+                            <length>40</length>
+                        </field>');
+
+            $this->_backend->addCol('tree_nodes', $declaration);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.56');
+    }
+
+    /**
+     * update to 10.57
+     *
+     * removing db prefix from application_tables if present
+     */
+    public function update_56()
+    {
+        $command = Tinebase_Backend_Sql_Command::factory($this->_db);
+        foreach ($this->_db->select()->from(SQL_TABLE_PREFIX . 'application_tables')->where(
+                $this->_db->quoteIdentifier('name') . ' ' . $command->getLike() . $this->_db->quoteInto(' ?',
+                    SQL_TABLE_PREFIX . '%'))->query()->fetchAll(Zend_DB::FETCH_ASSOC) as $row) {
+            $this->_db->delete(SQL_TABLE_PREFIX . 'application_tables', $this->_db->quoteIdentifier('application_id') .
+                $this->_db->quoteInto(' = ? AND ', $row['application_id']) . $this->_db->quoteIdentifier('name') .
+                $this->_db->quoteInto(' = ?', $row['name']));
+            $this->_db->insert(SQL_TABLE_PREFIX . 'application_tables',[
+                'application_id'    => $row['application_id'],
+                'name'              => substr($row['name'], strlen(SQL_TABLE_PREFIX)),
+                'version'           => $row['version']
+            ]);
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.57');
+    }
+
+    /**
+     * update to 10.58
+     *
+     * change unique key parent_id - name - deleted_time so that it really works
+     */
+    public function update_57()
+    {
+        // turn on FS modLog temporarily
+        $oldFsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
+        if (!$oldFsConfig) throw new Tinebase_Exception('did not find filesystem config!');
+        if (!$oldFsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            $fsConfig = clone $oldFsConfig;
+            $fsConfig->unsetParent();
+            $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
+            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
+        }
+
+        $doSleep = false;
+        $fsController = Tinebase_FileSystem::getInstance();
+        $fsController->resetBackends();
+
+        do {
+            $cont = false;
+            $stmt = $this->_db->select()->from(['n1' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.id')
+                ->join(['n2' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.parent_id = n2.parent_id AND '.
+                    'n1.name = n2.name AND n1.id <> n2.id AND n1.deleted_time IS NULL AND n2.deleted_time IS NULL',
+                    ['id2' => 'n2.id'])->limit(1000)->query();
+
+            if ($doSleep) sleep(1);
+            $doSleep = true;
+            $namesProcessed = [];
+
+            foreach ($stmt->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+                try {
+                    $node = $fsController->get($row['id']);
+                } catch(Tinebase_Exception_NotFound $tenf) { continue; }
+                $key = $node->parent_id . $node->name;
+                if (isset($namesProcessed[$key])) continue;
+                $namesProcessed[$key] = true;
+
+                try {
+                    $node2 = $fsController->get($row['id2']);
+                } catch(Tinebase_Exception_NotFound $tenf) { continue; }
+                if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE && $node2->type  ===
+                        Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+                    if (empty($node->hash) || !is_file($node->getFilesystemPath())) {
+                        // delete $node
+                    } elseif (empty($node2->hash) || !is_file($node2->getFilesystemPath())) {
+                        // delete $node2
+                        $node = $node2;
+                    } elseif ($node2->last_modified_time < $node->last_modified_time) {
+                        // delete node2
+                        $node = $node2;
+                    }
+                } else {
+                    if ($node2->last_modified_time < $node->last_modified_time) {
+                        // delete node2
+                        $node = $node2;
+                    }
+                }
+
+                if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+                    $fsController->deleteFileNode($node);
+                } else {
+                    $fsController->_getTreeNodeBackend()->softDelete($node->getId());
+
+                    // delete object only, if no other tree node refers to it, really?
+                    if ($fsController->_getTreeNodeBackend()->getObjectCount($node->object_id) == 0) {
+                        $fsController->getFileObjectBackend()->softDelete($node->object_id);
+                    }
+                }
+
+                $cont = true;
+            }
+        } while ($cont);
+
+        $this->_db->update(SQL_TABLE_PREFIX . 'tree_nodes', ['deleted_time' => '1970-01-01 00:00:00'],
+            'deleted_time IS NULL');
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                    <default>1970-01-01 00:00:00</default>
+                    <notnull>true</notnull>
+                </field>');
+
+        $this->_backend->alterCol('tree_nodes', $declaration);
+        if ($this->getTableVersion('tree_nodes') < 9) {
+            $this->setTableVersion('tree_nodes', 9);
+        }
+
+        if (isset($fsConfig)) {
+            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $oldFsConfig);
+            $fsController->resetBackends();
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.58');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_58()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
     }

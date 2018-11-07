@@ -20,6 +20,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     windowNamePrefix: 'TimesheetEditWindow_',
     appName: 'Timetracker',
+    modelName: 'Timesheet',
     recordClass: Tine.Timetracker.Model.Timesheet,
     recordProxy: Tine.Timetracker.timesheetBackend,
     tbarItems: null,
@@ -106,6 +107,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             if (timeaccount.data.is_billable == "0" || timeaccount.get('is_billable') == "0") {
                 this.getForm().findField('is_billable').setValue(false);
             }
+
+            this.getForm().findField('timeaccount_description').setValue(timeaccount.data.description);
         }
 
         this.getForm().findField('is_billable').setDisabled(notBillable);
@@ -210,7 +213,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 disabled: true,
                 fieldLabel: this.app.i18n._('Cleared In'),
                 name: 'billed_in'
-            }];
+            },];
         
         if (this.useInvoice) {
             lastRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
@@ -264,19 +267,28 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         lazyInit: false
                     })], [{
                         fieldLabel: this.app.i18n._('Duration'),
+                        columnWidth: 0.25,
                         name: 'duration',
                         selectOnFocus: true,
                         allowBlank: false,
                         xtype: 'tinedurationspinner'
                         }, {
                         fieldLabel: this.app.i18n._('Date'),
+                        columnWidth: 0.25,
                         name: 'start_date',
                         allowBlank: false,
                         xtype: 'datefield'
                         }, {
                         fieldLabel: this.app.i18n._('Start'),
+                        columnWidth: 0.25,
                         emptyText: this.app.i18n._('not set'),
                         name: 'start_time',
+                        xtype: 'timefield'
+                        }, {
+                        fieldLabel: this.app.i18n._('End'),
+                        columnWidth: 0.25,
+                        emptyText: this.app.i18n._('not set'),
+                        name: 'end_time',
                         xtype: 'timefield'
                     }], [{
                         columnWidth: 1,
@@ -286,7 +298,24 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         allowBlank: false,
                         xtype: 'textarea',
                         height: 150
-                    }], lastRow] 
+                    }], lastRow,
+                    [
+                        Tine.widgets.form.FieldManager.get(
+                            this.appName,
+                            this.modelName,
+                            'type',
+                            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                            {
+                                columnWidth: .5,
+                            }
+                        ),
+                        {
+                            columnWidth: .5,
+                            boxLabel: this.app.i18n._('Need for Clarification'),
+                            name: 'need_for_clarification',
+                            xtype: 'checkbox'
+                        }
+                    ]]
                 }, {
                     // activities and tags
                     layout: 'ux.multiaccordion',
@@ -307,7 +336,29 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         })
                     ]
                 }]
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
+            }, {
+                    title: this.app.i18n._('Timeaccount'),
+                    autoScroll: true,
+                    border: false,
+                    frame: true,
+                    layout: 'border',
+                    items: [{
+                        region: 'center',
+                        layout: 'fit',
+                        height: 400,
+                        flex: 1,
+                        border: false,
+                        style: 'padding-bottom: 5px;',
+                        items: [{
+                            xtype: 'textarea',
+                            name: 'timeaccount_description',
+                            grow: false,
+                            preventScrollbars: false,
+                            fieldLabel: this.app.i18n._('Description'),
+                            readOnly: true
+                        }]
+                    }]
+                }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (! this.copyRecord) ? this.record.id : null,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')

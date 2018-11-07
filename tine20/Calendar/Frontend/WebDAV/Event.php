@@ -9,7 +9,7 @@ use Sabre\VObject;
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -428,9 +428,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * Updates the VCard-formatted object
      *
      * @param string $cardData
+     * @param bool $retry
      * @return void
      */
-    public function put($cardData) 
+    public function put($cardData, $retry = true)
     {
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         if (get_class($this->_getConverter()) == 'Calendar_Convert_Event_VCalendar_Generic') {
@@ -496,8 +497,19 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
-        
-        $this->update($event, $cardData);
+
+        try {
+            $this->update($event, $cardData);
+
+            // in case we have a deadlock, retry operation once
+        } catch (Zend_Db_Statement_Exception $zdbse) {
+            if ($retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                return $this->put($cardData, false);
+            } else {
+                throw $zdbse;
+            }
+        }
         
         return $this->getETag();
     }

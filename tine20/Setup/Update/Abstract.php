@@ -450,18 +450,42 @@ class Setup_Update_Abstract
             $setupId = Tinebase_Config::getInstance()->get(Tinebase_Config::SETUPUSERID);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $setupId . ' as setupuser.');
             /** @noinspection PhpUndefinedMethodInspection */
-            $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId, 'Tinebase_Model_FullUser');
+            $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId,
+                Tinebase_Model_FullUser::class);
+            static::assertAdminGroupMembership($setupUser);
+            return $setupUser;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' ' . $tenf->getMessage());
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' ' . $teia->getMessage());
+        }
 
-            $setupUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_SETUP);
-            if ($setupUser) {
-                Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, null);
-                Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
-            }
+        $setupUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_SETUP);
+        if ($setupUser) {
+            static::assertAdminGroupMembership($setupUser);
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, null);
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
         }
 
         return $setupUser;
+    }
+
+    static public function assertAdminGroupMembership(Tinebase_Model_FullUser $_user)
+    {
+        $unsetUser = false;
+        if (!Tinebase_Core::getUser()) {
+            Tinebase_Core::set(Tinebase_Core::USER, $_user);
+            $unsetUser = true;
+        }
+        try {
+            Tinebase_User::getInstance()->assertAdminGroupMembership($_user);
+        } finally {
+            if ($unsetUser) {
+                Tinebase_Core::unsetUser();
+            }
+        }
     }
 
     /**
@@ -492,7 +516,7 @@ class Setup_Update_Abstract
 
         $updateRequired = false;
         $setNewVersions = array();
-        /** @var Tinebase_Record_Abstract $modelName */
+        /** @var Tinebase_Record_Interface $modelName */
         foreach ($modelNames as $modelName) {
             $modelConfig = $modelName::getConfiguration();
             $tableName = Tinebase_Helper::array_value('name', $modelConfig->getTable());
@@ -505,7 +529,7 @@ class Setup_Update_Abstract
         }
 
         if ($updateRequired) {
-            Setup_SchemaTool::updateSchema($appName, $modelNames);
+            Setup_SchemaTool::updateSchema($modelNames);
 
             foreach($setNewVersions as $table => $version) {
                 $this->setTableVersion($table, $version);
@@ -513,5 +537,30 @@ class Setup_Update_Abstract
         }
 
         return true;
+    }
+
+    /**
+     * updateKeyFieldIcon
+     *
+     * @param $configController
+     * @param $configName
+     */
+    public function updateKeyFieldIcon($configController, $configName)
+    {
+        $config = $configController->get($configName);
+        $defintion = $configController->getDefinition($configName);
+        $dirty = false;
+        foreach ($defintion['default']['records'] as $defaultData) {
+            $existing = $config->records->getById($defaultData['id']);
+            if ($existing && isset($defaultData['icon']) && $existing->icon != $defaultData['icon']) {
+                $existing->icon = $defaultData['icon'];
+                $dirty = true;
+            }
+        }
+
+        if ($dirty) {
+            // autosave - nothing to do
+            // $configController->set($configName, $config);
+        }
     }
 }

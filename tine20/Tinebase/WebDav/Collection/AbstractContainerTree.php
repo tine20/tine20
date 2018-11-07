@@ -62,6 +62,13 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      * @var string
      */
     protected $_hasRecordFolder = true;
+
+    /**
+     * app can support delegations
+     *
+     * @var boolean
+     */
+    protected $_canSupportDelegations = true;
     
     /**
      * the current path
@@ -269,10 +276,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         }
 
         if ((! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_READ) ||
-                ! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_SYNC)) &&
-                ($directory->model !== Calendar_Model_Event::class ||
-                ! isset($directory->xprops()['Calendar']['Resource']['resource_id']) ||
-                !Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES))) {
+                ! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_SYNC))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' User ' . Tinebase_Core::getUser()->getId()
                 . ' has either not READ or SYNC grants for container ' . $directory->getId());
@@ -645,6 +649,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      */
     protected function _clientSupportsDelegations()
     {
+        if (!$this->_canSupportDelegations) {
+            return false;
+        }
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
             $clientSupportsDelegations = in_array($backend, array(
@@ -1023,6 +1030,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         return $pathParts;
     }
 
+    /**
+     * @param $_id
+     * @return Tinebase_Model_FullUser
+     */
     protected function _getUser($_id)
     {
         $classCacheId = ($this->_useIdAsName ? 'contact_id' : ($this->_useLoginAsFolderName() ? 'accountLoginName' : 'accountDisplayName')) . $_id;
@@ -1036,9 +1047,14 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $contact->account_id, 'Tinebase_Model_FullUser');
         } else {
             if ($this->_useLoginAsFolderName()) {
-                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $_id, 'Tinebase_Model_FullUser');
+                $nameProp = 'accountLoginName';
             } else {
-                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountDisplayName', $_id, 'Tinebase_Model_FullUser');
+                $nameProp = 'accountDisplayName';
+            }
+            if (Tinebase_Core::getUser()->{$nameProp} === $_id) {
+                $user = Tinebase_Core::getUser();
+            } else {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend($nameProp, $_id, 'Tinebase_Model_FullUser');
             }
         }
 

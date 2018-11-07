@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -63,6 +63,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return Tinebase_ModelConfiguration|NULL
      */
     public static function getConfiguration();
+
+    /**
+     * resetConfiguration
+     */
+    public static function resetConfiguration();
 
     /**
      * sets identifier of record
@@ -123,7 +128,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param array $_data the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data);
+    public function setFromArray(array &$_data);
     
     /**
      * Sets timezone of $this->_datetimeFields
@@ -158,6 +163,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return array
      */
     public function toArray($_recursive = TRUE);
+
+    /**
+     * @return array
+     */
+    public function getData();
     
     /**
      * returns an array with differences to the given record
@@ -211,7 +221,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param  string $_data json encoded data
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromJsonInUsersTimezone($_data);
+    public function setFromJsonInUsersTimezone(&$_data);
 
     /**
      * returns the title of the record
@@ -290,6 +300,14 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function &xprops($_property = 'xprops');
 
     /**
+     * extended json data properties getter
+     *
+     * @param string $_property
+     * @return &array
+     */
+    public function &jsonData($_property);
+
+    /**
      * get fields
      *
      * @return array
@@ -326,6 +344,14 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function resolveConcurrencyUpdate($_property, $_diffValue, $_oldValue);
 
     /**
+     * returns the id of a record property
+     *
+     * @param string $_property
+     * @return string|null
+     */
+    public function getIdFromProperty($_property);
+
+    /**
      * @param array $_validators
      */
     public function setValidators(array $_validators);
@@ -334,4 +360,15 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return bool
      */
     public static function generatesPaths();
+
+    /**
+     * @param boolean $_bool the new value
+     * @return boolean the old value
+     */
+    public function setConvertDates($_bool);
+
+    /**
+     * @param array $data
+     */
+    public function hydrateFromBackend(array &$_data);
 }

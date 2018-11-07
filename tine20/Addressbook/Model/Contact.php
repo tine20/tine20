@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_NewModelConfiguration as MC;
+
 /**
  * class to hold contact data
  * 
@@ -65,7 +67,7 @@
  * @property    string $url_home                   private url of the contact
  * @property    integer $preferred_address         defines which is the preferred address of a contact, 0: business, 1: private
  */
-class Addressbook_Model_Contact extends Tinebase_Record_Abstract
+class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
     /**
      * const to describe contact of current account id independent
@@ -94,21 +96,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var integer
      */
     const SMALL_PHOTO_SIZE = 36000;
-    
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Addressbook';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -123,6 +110,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
+        self::VERSION       => 25,
         'containerName'     => 'Addressbook',
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
         'recordName'        => 'Contact',
@@ -130,6 +118,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'hasRelations'      => true,
         'copyRelations'     => false,
         'hasCustomFields'   => true,
+        // TODO activate hasSystemCustomFields
+        'hasSystemCustomFields' => false,
         'hasNotes'          => true,
         'hasTags'           => true,
         'modlogActive'      => true,
@@ -143,9 +133,46 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'titleProperty'     => 'n_fn',
         'appName'           => 'Addressbook',
         'modelName'         => 'Contact',
-        'table'             => array(
-            'name'              => 'addressbook',
-        ),
+        self::TABLE         => [
+            self::NAME          => 'addressbook',
+            self::INDEXES       => [
+                'cat_id'                    => [
+                    self::COLUMNS               => ['cat_id'],
+                ],
+                'container_id_index'        => [
+                    self::COLUMNS               => ['container_id'],
+                ],
+                'type'                      => [
+                    self::COLUMNS               => ['type'],
+                ],
+                'n_given_n_family'          => [
+                    self::COLUMNS               => ['n_given', 'n_family'],
+                ],
+                'n_fileas'                  => [
+                    self::COLUMNS               => ['n_fileas'],
+                ],
+                'n_family_n_given'          => [
+                    self::COLUMNS               => ['n_family', 'n_given'],
+                ],
+                'note'                      => [
+                    self::COLUMNS               => ['note'],
+                    self::FLAGS                 => ['fulltext'],
+                ],
+            ],
+        ],
+
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'container_id_fk' => [
+                    'targetEntity' => Tinebase_Model_Container::class,
+                    'fieldName' => 'container_id',
+                    'joinColumns' => [[
+                        'name' => 'container_id',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ],
+            ],
+        ],
 
         'filterModel'       => [
             'id'                => [
@@ -234,351 +261,583 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             ],
         ],
 
-        /*
-         * TODO what about that? no bday filter? why? see todo comment in contactFilter file!
-         * current state: we have a DATETIME filter for bday, that what the modelconfig does
-         * it makes things automatically
-        //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
-         */
-
-        'fields'            => [
+        self::FIELDS        => [
             'account_id'                    => [
-                'validators'                    => [
+                self::TYPE                      => self::TYPE_STRING, // self::TYPE_USER....
+                self::IS_VIRTUAL                => true,
+                self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => null
                 ],
             ],
             'adr_one_countryname'           => [
-                'label'                         => 'Country', // _('Country')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_StringTrim::class, Zend_Filter_StringToUpper::class],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Country', // _('Country')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToUpper::class],
             ],
             'adr_one_locality'              => [
-                'label'                         => 'City', // _('City')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'queryFilter'                   => true,
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'City', // _('City')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'adr_one_postalcode'            => [
-                'label'                         => 'Postalcode', // _('Postalcode')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Postalcode', // _('Postalcode')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_region'                => [
-                'label'                         => 'Region', // _('Region')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Region', // _('Region')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_street'                => [
-                'label'                         => 'Street', // _('Street')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Street', // _('Street')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_street2'               => [
-                'label'                         => 'Street 2', // _('Street 2')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Street 2', // _('Street 2')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_lon'                   => [
-                'type'                          => 'float',
-                'label'                         => 'Longitude', // _('Longitude')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_Empty::class => null],
+                self::TYPE                      => self::TYPE_FLOAT,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Longitude', // _('Longitude')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_Empty::class => null],
             ],
             'adr_one_lat'                   => [
-                'type'                          => 'float',
-                'label'                         => 'Latitude', // _('Latitude')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_Empty::class => null],
+                self::TYPE                      => self::TYPE_FLOAT,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Latitude', // _('Latitude')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_Empty::class => null],
             ],
             'adr_two_countryname'           => [
-                'label'                         => 'Country (private)', // _('Country (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_StringTrim::class, Zend_Filter_StringToUpper::class],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Country (private)', // _('Country (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToUpper::class],
             ],
             'adr_two_locality'              => [
-                'label'                         => 'City (private)', // _('City (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'City (private)', // _('City (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_postalcode'            => [
-                'label'                         => 'Postalcode (private)', // _('Postalcode (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Postalcode (private)', // _('Postalcode (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_region'                => [
-                'label'                         => 'Region (private)', // _('Region (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Region (private)', // _('Region (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_street'                => [
-                'label'                         => 'Street (private)', // _('Street (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Street (private)', // _('Street (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_street2'               => [
-                'label'                         => 'Street 2 (private)', // _('Street 2 (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Street 2 (private)', // _('Street 2 (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_lon'                   => [
-                'type'                          => 'float',
-                'label'                         => 'Longitude (private)', // _('Longitude (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_Empty::class => null],
+                self::TYPE                      => self::TYPE_FLOAT,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Longitude (private)', // _('Longitude (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_Empty::class => null],
             ],
             'adr_two_lat'                   => [
-                'type'                          => 'float',
-                'label'                         => 'Latitude (private)', // _('Latitude (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_Empty::class => null],
+                self::TYPE                      => self::TYPE_FLOAT,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Latitude (private)', // _('Latitude (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_Empty::class => null],
             ],
             'assistent'                     => [
-                'label'                         => 'Assistent', // _('Assistent')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Assistent', // _('Assistent')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'bday'                          => [
-                'type'                          => 'datetime',
-                'label'                         => 'Birthday', // _('Birthday')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => 'datetime',
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Birthday', // _('Birthday')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'calendar_uri'                  => [
-                'label'                         => 'Calendar URI', // _('Calendar URI')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 128,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Calendar URI', // _('Calendar URI')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'email'                         => [
-                'label'                         => 'Email', // _('Email')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
-                'queryFilter'                   => true,
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Email', // _('Email')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
+                self::QUERY_FILTER              => true,
             ],
             'email_home'                    => [
-                'label'                         => 'Email (private)', // _('Email (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
-                'queryFilter'                   => true,
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Email (private)', // _('Email (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
+                self::QUERY_FILTER              => true,
             ],
             'freebusy_uri'                  => [
-                'label'                         => 'Free/Busy URI', // _('Free/Busy URI')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 128,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Free/Busy URI', // _('Free/Busy URI')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'geo'                           => [
-                'label'                         => 'Geo', // _('Geo')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 32,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Geo', // _('Geo')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'groups'                        => [
-                'type'                          => 'virtual',
-                'label'                         => 'Groups', // _('Groups')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => 'virtual',
+                self::LABEL                     => 'Groups', // _('Groups')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::OMIT_MOD_LOG              => true,
             ],
             'industry'                      => [
-                'label'                         => 'Industry', // _('Industry')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'filterDefinition'              => [
-                    'filter'                        => Tinebase_Model_Filter_ForeignId::class,
-                    'options'                       => [
-                        'filtergroup'                   => Addressbook_Model_IndustryFilter::class,
-                        'controller'                    => Addressbook_Controller_Industry::class
+                self::TYPE                      => self::TYPE_STRING, // TODO make a record out of it?
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Industry', // _('Industry')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_ForeignId::class,
+                    self::OPTIONS                   => [
+                        self::FILTER_GROUP              => Addressbook_Model_IndustryFilter::class,
+                        self::CONTROLLER                => Addressbook_Controller_Industry::class
                     ]
                 ]
             ],
             'jpegphoto'                     => [
-                // this must not be of type 'text' => crlf filter must not be applied
-                // => default type = string
-                // TODO the SQL field is of course not varchar(255)... so...
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'modlogOmit'                    => true,
-                'system'                        => true
+                self::TYPE                      => self::TYPE_VIRTUAL,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::DEFAULT_VALUE    => 0
+                ],
+                self::INPUT_FILTERS             => [Zend_Filter_Empty::class => 0],
+                self::OMIT_MOD_LOG              => true,
+                self::SYSTEM                    => true
             ],
             'note'                          => [
-                'type'                          => 'fulltext',
-                'label'                         => 'Note', // _('Note')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'queryFilter'                   => true,
+                self::TYPE                      => self::TYPE_FULLTEXT,
+                self::LENGTH                    => 2147483647, // mysql longtext, really?!?
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Note', // _('Note')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'n_family'                      => [
-                'label'                         => 'Last Name', // _('Last Name')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'queryFilter'                   => true,
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Last Name', // _('Last Name')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'n_fileas'                      => [
-                'label'                         => 'Display Name', // _('Display Name')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Display Name', // _('Display Name')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'n_fn'                          => [
-                'label'                         => 'Full Name', // _('Full Name')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Full Name', // _('Full Name')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'n_given'                       => [
-                'label'                         => 'First Name', // _('First Name')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'queryFilter'                   => true,
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'First Name', // _('First Name')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'n_middle'                      => [
-                'label'                         => 'Middle Name', // _('Middle Name')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Middle Name', // _('Middle Name')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'n_prefix'                      => [
-                'label'                         => 'Title', // _('Title')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Title', // _('Title')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'n_suffix'                      => [
-                'label'                         => 'Suffix', // _('Suffix')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Suffix', // _('Suffix')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'org_name'                      => [
-                'label'                         => 'Company', // _('Company')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'queryFilter'                   => true,
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Company', // _('Company')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'org_unit'                      => [
-                'label'                         => 'Unit', // _('Unit')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'queryFilter'                   => true,
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Unit', // _('Unit')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'paths'                         => [
-                'type'                          => 'virtual',
+                'type'                          => 'records',
+                self::IS_VIRTUAL                => true,
+                'noResolve'                     => true,
+                'config'                        => [
+                    'recordClassName'               => Tinebase_Model_Path::class,
+                    'controllerClassName'           => Tinebase_Record_Path::class,
+                    'filterClassName'               => Tinebase_Model_PathFilter::class,
+                ],
                 'label'                         => 'Paths', // _('Paths')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'preferred_address'             => [
-                'label'                         => 'Preferred Address', // _('Preferred Address')
-                'validators'                    => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Preferred Address', // _('Preferred Address')
+                self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => 0
                 ],
-                'inputFilters'                  => [Zend_Filter_Empty::class => 0],
+                self::INPUT_FILTERS             => [Zend_Filter_Empty::class => 0],
             ],
             'pubkey'                        => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_TEXT,
+                self::LENGTH                    => 2147483647, // mysql longtext, really?!?
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [],
             ],
             'role'                          => [
-                'label'                         => 'Job Role', // _('Job Role')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Job Role', // _('Job Role')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'room'                          => [
-                'label'                         => 'Room', // _('Room')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Room', // _('Room')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'salutation'                    => [
-                'type'                          => 'keyfield',
-                'label'                         => 'Salutation', // _('Salutation')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'name'                          => Addressbook_Config::CONTACT_SALUTATION,
+                self::TYPE                      => self::TYPE_KEY_FIELD,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Salutation', // _('Salutation')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NAME                      => Addressbook_Config::CONTACT_SALUTATION,
             ],
             'syncBackendIds'                => [
-                'label'                         => 'syncBackendIds', // _('syncBackendIds')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'system'                        => true
+                self::TYPE                      => self::TYPE_TEXT,
+                self::LENGTH                    => 16000,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'syncBackendIds', // _('syncBackendIds')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [],
+                self::SYSTEM                    => true
             ],
             'tel_assistent'                 => [
-                'system'                        => true,
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::SYSTEM                    => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_car'                       => [
-                'label'                         => 'Car phone', // _('Car phone')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Car phone', // _('Car phone')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_cell'                      => [
-                'label'                         => 'Mobile', // _('Mobile')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Mobile', // _('Mobile')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_cell_private'              => [
-                'label'                         => 'Mobile (private)', // _('Mobile (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Mobile (private)', // _('Mobile (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_fax'                       => [
-                'label'                         => 'Fax', // _('Fax')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Fax', // _('Fax')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_fax_home'                  => [
-                'label'                         => 'Fax (private)', // _('Fax (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Fax (private)', // _('Fax (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_home'                      => [
-                'label'                         => 'Phone (private)', // _('Phone (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Phone (private)', // _('Phone (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_pager'                     => [
-                'label'                         => 'Pager', // _('Pager')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Pager', // _('Pager')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_work'                      => [
-                'label'                         => 'Phone', // _('Phone')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Phone', // _('Phone')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_other'                     => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_prefer'                    => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_assistent_normalized'      => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_car_normalized'            => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_cell_normalized'           => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_cell_private_normalized'   => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_fax_normalized'            => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_fax_home_normalized'       => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_home_normalized'           => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_pager_normalized'          => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_work_normalized'           => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_other_normalized'          => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_prefer_normalized'         => [
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'title'                         => [
-                'label'                         => 'Job Title', // _('Job Title')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Job Title', // _('Job Title')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'type'                          => [
-                'label'                         => 'Type', // _('Type')
-                'system'                        => true,
-                'validators'                    => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 128,
+                self::LABEL                     => 'Type', // _('Type')
+                self::SYSTEM                    => true,
+                self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => self::CONTACTTYPE_CONTACT,
                     ['InArray', [self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT]]
                 ],
+                self::DEFAULT_VAL                  => 'contact', // TODO check if this works!=?!?
+
             ],
             'tz'                            => [
-                'label'                         => 'Timezone', // _('Timezone')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 8,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Timezone', // _('Timezone')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'url'                           => [
-                'label'                         => 'Web', // _('Web')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_StringTrim::class],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 128,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Web', // _('Web')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class],
             ],
             'url_home'                      => [
-                'label'                         => 'URL (private)', // _('URL (private)')
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [Zend_Filter_StringTrim::class],
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 128,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'URL (private)', // _('URL (private)')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class],
             ],
-        ]];
 
-    
+
+            // do we want to remove those?
+            'label'                         => [
+                self::TYPE                      => self::TYPE_TEXT,
+                self::LENGTH                    => 2147483647, // mysql longtext, really?!?
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Label', // _('Label')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'cat_id'                        => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+
+        ],
+
+        self::DB_COLUMNS                => [
+            'tid'                           => [
+                'fieldName'                     => 'tid',
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 1,
+                self::NULLABLE                  => true,
+                //self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DEFAULT_VAL               => 'n', // TODO check if this works!=?!?
+            ],
+            'private'                       => [
+                'fieldName'                     => 'private',
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::LENGTH                    => 1,
+                self::NULLABLE                  => true,
+                //self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DEFAULT_VAL               => 0, // TODO check if this works!=?!?
+            ],
+        ],
+    ];
+
+
     /**
      * if foreign Id fields should be resolved on search and get from json
      * should have this format: 
@@ -646,20 +905,25 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      *
      * @param array $_data            the new data to set
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
-        $_data = $this->_resolveAutoValues($_data);
+        $this->_resolveAutoValues($_data);
         parent::setFromArray($_data);
     }
-    
+
+    public function hydrateFromBackend(array &$_data)
+    {
+        $this->_resolveAutoValues($_data);
+        parent::hydrateFromBackend($_data);
+    }
     /**
      * Resolves the auto values n_fn and n_fileas
      * @param array $_data
-     * @return array $_data
      */
-    protected function _resolveAutoValues(array $_data)
+    protected function _resolveAutoValues(array &$_data)
     {
         if (! (isset($_data['org_name']) || array_key_exists('org_name', $_data))) {
+            // we might want to set it to null instead?
             $_data['org_name'] = '';
         }
 
@@ -691,7 +955,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
         }
-        return $_data;
     }
     
     /**
@@ -705,17 +968,20 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         
         switch ($_name) {
             case 'n_given':
-                $resolved = $this->_resolveAutoValues(array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name')));
+                $resolved = array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name'));
+                $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
                 parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             case 'n_family':
-                $resolved = $this->_resolveAutoValues(array('n_family' => $_value, 'n_given' => $this->__get('n_given'), 'org_name' => $this->__get('org_name')));
+                $resolved = array('n_family' => $_value, 'n_given' => $this->__get('n_given'), 'org_name' => $this->__get('org_name'));
+                $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
                 parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             case 'org_name':
-                $resolved = $this->_resolveAutoValues(array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family')));
+                $resolved = array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family'));
+                $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
                 parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
@@ -939,5 +1205,19 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             'n_given' => $firstName,
             'n_family' => $lastName
         ];
+    }
+
+    public function resolveAttenderCleanUp()
+    {
+        $this->_data = array_intersect_key($this->_data, [
+            'id'          => true,
+            'note'        => true,
+            'email'       => true,
+            'n_family'    => true,
+            'n_given'     => true,
+            'n_fileas'    => true,
+            'n_fn'        => true,
+            'account_id'  => true,
+        ]);
     }
 }

@@ -773,7 +773,15 @@ msgstr "Größe"
 msgid "Revision"
 msgstr "Revision"
 
-#: js/Models.js:495 js/Models.js:497
+#: js/Models.js:502
+msgid "Grants"
+msgstr "Berechtigungen"
+
+#: js/Models.js:503
+msgid "Grants Folder"
+msgstr "Berechtigungs-Ordner"
+
+#: js/Models.js:497 js/Models.js:495
 msgid "Available Revision"
 msgstr "Verfügbare Revisionen"
 
@@ -1005,10 +1013,6 @@ msgstr "Persönlich"
 #: js/common.js:263 js/common.js:301
 msgid "No Information"
 msgstr "Keine Information"
-
-#: js/common.js:338
-msgid "No Access"
-msgstr "Kein Zugriff"
 
 #: js/common.js:371
 #, python-brace-format
@@ -1867,7 +1871,7 @@ msgstr "Dieses wichtige Update sollte umgehend installiert werden!"
 
 #: js/widgets/VersionCheck.js:62
 msgid "Please consider updating!"
-msgstr "Bitte ziehen sie eine Aktualisierung in betracht!"
+msgstr "Bitte ziehen Sie eine Aktualisierung in Betracht!"
 
 #: js/widgets/ActivitiesPanel.js:81
 msgid "Timestamp"
@@ -2905,7 +2909,7 @@ msgstr "neue Sprache wird eingestellt..."
 #: Controller/Event.php:87
 #, python-format
 msgid "%s's personal files"
-msgstr "%s's persönliche Datein"
+msgstr "Persönliche Dateien von %s"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
@@ -3865,9 +3869,8 @@ msgid "Order"
 msgstr "Reihenfolge"
 
 #: Model/Container.php:113
-#, fuzzy
 msgid "Application"
-msgstr "Anwendung"
+msgstr ""
 
 #: Model/Container.php:118
 msgid "Owner"
@@ -4039,14 +4042,6 @@ msgstr "Ihr Tine 2.0 Konto wurde deaktiviert"
 msgid "Exception ({0})"
 msgstr "Ausnahmefehler ({0})"
 
-#: js/Models.js:502
-msgid "Grants"
-msgstr "Berechtigungen"
-
-#: js/Models.js:503
-msgid "Grants Folder"
-msgstr "Berechtigungs-Ordner"
-
 msgid "Change Password For \"{0}\""
 msgstr "Passwort für \"{0}\" ändern"
 
@@ -4093,6 +4088,41 @@ msgstr "Maximum fehlerhafte Anmeldungen"
 
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Maximum fehlerhafte Anmeldungen bevor das Konto gesperrt wird"
+
+msgid "setting new timezone..."
+msgstr "Neue Zeitzone setzen..."
+
+msgid "setting new language..."
+msgstr "neue Sprache wird eingestellt..."
+
+# LICENSE TRANSLATIONS
+msgid "{0} Business Edition trial"
+msgstr "{0} Business Edition Testversion."
+
+msgid ""
+"Thank you for testing {0} Business Edition. This version is limited to 5 "
+"users."
+msgstr ""
+"Danke, dass sie die {0} Business Edition testen. Diese Version ist auf 5 "
+"Benutzer limitiert."
+
+msgid "Buy subscription now."
+msgstr "Subskription jetzt kaufen."
+
+msgid "Your {0} Business Edition subscription expires in {1} days"
+msgstr "Ihre {0} Business Edition Subskription läuft in {1} Tagen ab"
+
+msgid "Subscription expired"
+msgstr "Subskription abgelaufen"
+
+msgid "Your {0} Business Edition subscription expired."
+msgstr "Ihre {0} Business Edition Subskription ist abgelaufen."
+
+msgid "License Type"
+msgstr "Lizenz Typ"
+
+msgid "No Access"
+msgstr "Kein Zugriff"
 
 msgid "Old pin is wrong."
 msgstr "Die alte PIN ist falsch."
@@ -4333,18 +4363,13 @@ msgstr "Das Zweit-Passwort wird benötigt um diese Applikationen zu nutzen"
 msgid "Second Factor Required"
 msgstr "Zweit-Passwort benötigt"
 
-#: ModelConfiguration.php:1116
 msgid "Image"
 msgstr "Bild"
 
-msgid "setting new timezone..."
-msgstr "Neue Zeitzone setzen..."
-
-msgid "setting new language..."
-msgstr "neue Sprache wird eingestellt..."
-
 msgid "{gender, select, male {one of} female {one of} other {one of}}"
-msgstr "{gender, select, male {einer von} female {eine von} other {eines von}}"
+msgstr ""
+"{gender, select, male {einer von} female {eine von} other {eines von}}"
 
 msgid "{gender, select, male {none of} female {none of} other {none of}}"
-msgstr "{gender, select, male {keiner von} female {keine von} other {keines von}}"
+msgstr ""
+"{gender, select, male {keiner von} female {keine von} other {keines von}}"

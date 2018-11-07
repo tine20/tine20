@@ -135,10 +135,10 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                         }
 
                         // the called function generates the needed output
-                        $method->invokeArgs($object, $calling_args);
+                        return $method->invokeArgs($object, $calling_args);
                     } else {
                         // the called function generates the needed output
-                        call_user_func_array($method->getName(), $calling_args);
+                        return call_user_func_array($method->getName(), $calling_args);
                     }
 
                 } else if ($method instanceof Zend_Server_Method_Definition) {
@@ -148,7 +148,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                     $calling_args = $this->_getCallingArgs($func_args, $request);
                     $callback = $method->getCallback();
                     $callbackMethod = $callback->getMethod();
-                    call_user_func_array(array($method->getObject(), $callbackMethod), $calling_args);
+                    return call_user_func_array(array($method->getObject(), $callbackMethod), $calling_args);
 
                 } else {
                     throw new Zend_Json_Server_Exception("Unknown Method '$this->_method'.", 400);
@@ -205,23 +205,17 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
     /**
      * Implement Zend_Server_Interface::fault()
      *
-     * @param string $fault Message
+     * @param mixed $fault Message
      * @param int $code Error Code
      */
     public function fault($exception = null, $code = null)
     {
-        if (isset($method)) {
+        if (isset($this->_functions[$this->_method])) {
             $function = $this->_functions[$this->_method];
         } else {
             $function = $this->_method;
         }
-        
-        if ($function instanceof Zend_Server_Reflection_Method) {
-            $class = $function->getDeclaringClass()->getName();
-        } else {
-            $class = false;
-        }
-        
+
         if ($function instanceof Zend_Server_Reflection_Method) {
             $method = $function->getName();
         } else {
@@ -257,10 +251,8 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                 }
             }
         }
-        
-        echo "<pre>";
-        var_dump($error);
-        echo "</pre>";
+
+        echo $error['msg'] . "\n";
     }
     
     /**

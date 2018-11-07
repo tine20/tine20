@@ -328,7 +328,8 @@ class Tinebase_Relation_RelationTest extends TestCase
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
             'backend'        => 'sql',
-            'name'           => 'testsdf'
+            'name'           => 'testsdf',
+            'model'          => Sales_Model_Contract::class,
         )));
         
         $contract = new Sales_Model_Contract(array('number' => '23547', 'title' => 'test', 'container_id' => $container->getId()));
@@ -410,5 +411,22 @@ class Tinebase_Relation_RelationTest extends TestCase
             }
         }
     }
-}
 
+    /**
+     * testRemoveRelationsByAppACL
+     *
+     * - remove right to Tasks app of related record
+     * - other relations should still be visible
+     */
+    public function testRemoveRelationsByAppACL()
+    {
+        Tasks_Controller_Task::unsetInstance();
+        Tinebase_Core::clearAppInstanceCache();
+        $this->_removeRoleRight('Tasks', Crm_Acl_Rights::RUN);
+        $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+
+        self::assertTrue($relations instanceof Tinebase_Record_RecordSet, 'relations are not a RecordSet');
+        self::assertEquals(3, count($relations), print_r($relations->toArray(), true));
+        self::assertEquals([null, Tinebase_Model_Relation::REMOVED_BY_ACL, Tinebase_Model_Relation::REMOVED_BY_ACL], $relations->record_removed_reason);
+    }
+}

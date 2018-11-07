@@ -61,6 +61,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                           setup.php --egw14import /path/to/config.ini',
                 'reset_demodata'            => 'reinstall applications and install Demodata (Needs Admin user)',
                 'updateAllImportExportDefinitions' => 'update ImportExport definitions for all applications',
+                'updateAllAccountsWithAccountEmail' => 'create/update email users with current account
+                         Examples:
+                           setup.php --updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com',
                 'backup'                    => 'backup config and data
                          Examples:
                            setup.php --backup -- config=1 db=1 files=1 backupDir=/backup/tine20 noTimestamp=1',
@@ -76,9 +79,15 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'pgsqlMigration'            => 'migrate from pgsql to mysql
                         Examples:
                             setup.php --pgsqlMigration -- mysqlConfigFile=/path/to/config/file',
-                'upgradeMysql564'         => 'update database to use features of MySQL 5.6.4+
+                'upgradeMysql564'           => 'update database to use features of MySQL 5.6.4+
                         Examples:
-                            setup.php --upgrade_mysql_564',
+                            setup.php --upgradeMysql564',
+                'migrateUtf8mb4'            => 'update database to use MySQL utf8mb4
+                        Examples:
+                            setup.php --migrateUtf8mb4',
+                'maintenance_mode'          => 'set systems maintenance mode state
+                        Examples:
+                           setup.php --maintenance_mode -- state=[on|all|off]',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -99,7 +108,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->check_requirements) && 
             empty($opts->reset_demodata) &&
             empty($opts->updateAllImportExportDefinitions) &&
-            empty($opts->create_admin) && 
+            empty($opts->updateAllAccountsWithAccountEmail) &&
+            empty($opts->create_admin) &&
             empty($opts->setconfig) && 
             empty($opts->backup) &&
             empty($opts->restore) &&
@@ -107,7 +117,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->setpassword) &&
             empty($opts->getconfig) &&
             empty($opts->upgradeMysql564) &&
-            empty($opts->pgsqlMigration)))
+            empty($opts->migrateUtf8mb4) &&
+            empty($opts->pgsqlMigration) &&
+            empty($opts->maintenance_mode)))
         {
             echo $opts->getUsageMessage();
             exit;

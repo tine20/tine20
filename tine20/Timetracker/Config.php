@@ -24,6 +24,27 @@ class Timetracker_Config extends Tinebase_Config_Abstract
     const FEATURE_TIMEACCOUNT_BOOKMARK = 'featureTimeaccountBookmark';
 
     /**
+     * deadline
+     * 
+     * @var string
+     */
+    const DEADLINE = 'deadline';
+
+    /**
+     * status
+     *
+     * @var string
+     */
+    const STATUS ='status';
+    
+    /**
+     * Type
+     *
+     * @var string
+     */
+    const TYPE = 'type';
+
+    /**
      * @var array
      */
     protected static $_properties = [
@@ -48,6 +69,49 @@ class Timetracker_Config extends Tinebase_Config_Abstract
             ],
             self::DEFAULT_STR => [],
         ],
+        self::TYPE => [
+            //_('Type')
+            'label' => 'Type',
+            //_('Type')
+            'description' => 'Possible types',
+            'type' => 'keyFieldConfig',
+            'clientRegistryInclude' => true,
+            'setByAdminModule' => true,
+            'setBySetupModule' => false,
+            'default' => [
+                'records' => [
+                    ['id' => 'AZ', 'value' => 'Working time', 'system' => true], //_('Working time')
+                    ['id' => 'PZ', 'value' => 'Project time', 'system' => true], //_('Project time')
+                ]
+            ]
+        ],
+        self::DEADLINE => array(
+            'label' => 'Booking deadline',
+            'description' => 'Dealine',
+            'type' => 'keyFieldConfig',
+            'clientRegistryInclude' => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => Timetracker_Model_Timeaccount::DEADLINE_NONE,    'value' => 'none'), // _('none')
+                    array('id' => Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK,  'value' => 'last week'), // _('last week')
+                ),
+                'default' => Timetracker_Model_Timeaccount::DEADLINE_NONE,
+            )            
+        ),
+        self::STATUS => array(
+            'label' => 'status',
+            'description' => 'Status',
+            'type' => 'keyFieldConfig',
+            'clientRegistryInclude' => TRUE,
+            'default' => array(
+                'records' => array(
+                    array('id' => Timetracker_Model_Timeaccount::STATUS_NOT_YET_BILLED, 'value' => 'not yet billed'), //_('not yet billed')
+                    array('id' => Timetracker_Model_Timeaccount::STATUS_TO_BILL, 'value' => 'to bill'), //_('status to bill')
+                    array('id' => Timetracker_Model_Timeaccount::STATUS_BILLED, 'value' => 'billed'), //_('billed')
+                ),
+                'default' => Timetracker_Model_Timeaccount::STATUS_NOT_YET_BILLED,
+            )
+        )
     ];
     /**
      * holds the instance of the singleton

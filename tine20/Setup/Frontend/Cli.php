@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add ext check again
  */
@@ -49,6 +49,8 @@ class Setup_Frontend_Cli
      */
     public function handle(Zend_Console_Getopt $_opts, $exitAfterHandle = true)
     {
+        $time_start = microtime(true);
+
         // always set real setup user if Tinebase is installed
         if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             try {
@@ -73,10 +75,14 @@ class Setup_Frontend_Cli
             $this->_uninstall($_opts);
         } elseif(isset($_opts->install_dump)) {
             $this->_installDump($_opts);
+        } elseif(isset($_opts->maintenance_mode)) {
+            $this->_maintenanceMode($_opts);
         } elseif(isset($_opts->list)) {
             $result = $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
+        } elseif(isset($_opts->updateAllAccountsWithAccountEmail)) {
+            $this->_updateAllAccountsWithAccountEmail($_opts);
         } elseif(isset($_opts->sync_passwords_from_ldap)) {
             $this->_syncPasswords($_opts);
         } elseif(isset($_opts->egw14import)) {
@@ -105,7 +111,11 @@ class Setup_Frontend_Cli
             $this->_pgsqlMigration($_opts);
         } elseif(isset($_opts->upgradeMysql564)) {
             $this->_upgradeMysql564();
+        } elseif(isset($_opts->migrateUtf8mb4)) {
+            $this->_migrateUtf8mb4();
         }
+
+        Tinebase_Log::logUsageAndMethod('setup.php', $time_start, 'Setup.' . implode(',', $_opts->getOptions()));
         
         if ($exitAfterHandle) {
             exit($result);
@@ -166,10 +176,11 @@ class Setup_Frontend_Cli
         // TODO ask for cleanup? make cleanup?
         // TODO check maintenance mode, its needs to be on!
         // TODO check action queue is empty
-        // TODO check admin right
         // known issues:
-        // fulltext! path!
-        // [r?]trim unique keys, if there was something trimed, remember, second+ time add _ or something
+        // path!
+        // [r?]trim unique keys, if there was something trimmed, remember, second+ time add _ or something
+
+        $noBackupTables = Setup_Controller::getInstance()->getBackupStructureOnlyTables();
 
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         if (!isset($options['mysqlConfigFile'])) {
@@ -214,9 +225,18 @@ class Setup_Frontend_Cli
         Tinebase_Config::destroyInstance();
         Tinebase_Application::getInstance()->clearCache();
         Tinebase_Application::destroyInstance();
+        Tinebase_Container::getInstance()->resetClassCache();
+        Tinebase_Container::destroyInstance();
+        Setup_Controller::destroyInstance();
+        Setup_Backend_Factory::clearCache();
+        Tinebase_User::destroyInstance();
+        Setup_Core::set(Setup_Core::USER, 'setupuser');
+        Addressbook_Backend_Factory::clearCache();
+        Addressbook_Controller_Contact::destroyInstance();
         $dbConfig['driver'] = 'pdo_mysql';
         $dbConfig['user']   = $dbConfig['username'];
         Setup_SchemaTool::setDBParams($dbConfig);
+
         $newOpts = new Zend_Console_Getopt(['install' => []], [
             '--install', '--', 'acceptedTermsVersion=1', 'adminLoginName=a', 'adminPassword=b'
         ]);
@@ -224,6 +244,8 @@ class Setup_Frontend_Cli
 
         $blackListedTables = [];
         $mysqlTables = $mysqlDB->query('SHOW TABLES')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+        $pgsqlTables = $pgsqlDb->query('SELECT table_name FROM information_schema.tables WHERE table_schema = '
+            . '\'public\' AND table_type= \'BASE TABLE\'')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         // set foreign key checks off
         $mysqlDB->query('SET foreign_key_checks = 0');
@@ -242,24 +264,34 @@ class Setup_Frontend_Cli
         $mysqlDB->query('SET autocommit = 0');
 
         foreach (array_diff($mysqlTables, $blackListedTables) as $table) {
-            if (strpos($table, 'cache') !== false) {
+            if (in_array($table, $noBackupTables)) {
                 continue;
             }
+            if (!in_array($table, $pgsqlTables)) {
+                continue;
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Migrating table ' . $table . ' ...');
+
             $start = 0;
             $limit = 50;
             $tableDscr = Tinebase_Db_Table::getTableDescriptionFromCache($table);
             $primaries = [];
             $columns = [];
+            $selectColumns = [];
             foreach ($tableDscr as $col => $desc) {
                 if ($desc['PRIMARY']) {
                     $primaries[] = $col;
                 }
                 $columns[] = $mysqlDB->quoteIdentifier($col);
+                $selectColumns[] = $col;
             }
             $insertQuery = 'INSERT INTO ' . $mysqlDB->quoteIdentifier($table) . ' (' . join(', ', $columns) .
                 ') VALUES ';
-            $select = $pgsqlDb->select()->from($table)->order($primaries);
+            $select = $pgsqlDb->select()->from($table, $selectColumns)->order($primaries);
 
+            $rowcount = 0;
             while (true) {
                 $select->limit($limit, $start);
                 if (empty($data = $select->query()->fetchAll(Zend_Db::FETCH_NUM))) {
@@ -277,20 +309,22 @@ class Setup_Frontend_Cli
                         $firstRow = false;
                     }
                     $first = false;
+                    $rowcount++;
                 }
 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' ' . $query);
 
                 $mysqlDB->query($query . ')');
             }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' ... done. Migrated ' . $rowcount . ' rows.');
         }
 
         $mysqlDB->query('COMMIT');
         $mysqlDB->query('SET foreign_key_checks = 1');
         $mysqlDB->query('SET unique_checks = 1');
-
-        $this->_upgradeMysql564();
     }
 
     protected function _upgradeMysql564()
@@ -724,7 +758,44 @@ class Setup_Frontend_Cli
 
         Tinebase_User::syncUsers($options);
     }
-    
+
+    /**
+     * create/update email users with current account
+     *  USAGE: php tine20.php --method=Tinebase.updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     */
+    protected function _updateAllAccountsWithAccountEmail(Zend_Console_Getopt $_opts)
+    {
+        $data = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (isset($data['fromInstance'])) {
+            // fetch all accounts from fromInstance and write to configured instance
+            $imap = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $imap->copyFromInstance($data['fromInstance']);
+        }
+
+        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
+        $userController = Tinebase_User::getInstance();
+        $emailUser = Tinebase_EmailUser::getInstance();
+        /** @var Tinebase_Model_FullUser $user */
+        foreach ($userController->getFullUsers() as $user) {
+            $emailUser->inspectGetUserByProperty($user);
+            if (! empty($user->accountEmailAddress)) {
+                list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
+                if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
+                    $newEmailAddress = $userPart . '@' . $allowedDomains[0];
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
+                    $user->accountEmailAddress = $newEmailAddress;
+                }
+                $userController->updateUser($user);
+            }
+        }
+
+        return 0;
+    }
+
     /**
      * sync ldap passwords
      * 
@@ -1018,6 +1089,30 @@ class Setup_Frontend_Cli
     }
 
     /**
+     * set maintenance mode to state X
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _maintenanceMode(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        $modes = [
+            Tinebase_Config::MAINTENANCE_MODE_NORMAL,
+            Tinebase_Config::MAINTENANCE_MODE_ALL,
+            Tinebase_Config::MAINTENANCE_MODE_OFF,
+        ];
+        if (!isset($options['state']) || !in_array($options['state'], $modes)) {
+            echo PHP_EOL . 'parameter --state=[' . implode('|', $modes) . '] missing' . PHP_EOL;
+        } else {
+            if (Setup_Controller::getInstance()->setMaintenanceMode($options)) {
+                echo PHP_EOL . 'set maintenance mode to: ' . $options['state'] . PHP_EOL;
+            } else {
+                echo PHP_EOL . 'failed to set maintance mode to: ' . $options['state'] . PHP_EOL;
+            }
+        }
+    }
+
+    /**
      * install tine20 from a dump (local dir or remote dir)
      *
      * @param Zend_Console_Getopt $_opts
@@ -1142,5 +1237,94 @@ class Setup_Frontend_Cli
         }
 
         return 0;
+    }
+
+    protected function _migrateUtf8mb4()
+    {
+        $db = Setup_Core::getDb();
+        if (!$db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            throw new Tinebase_Exception_Backend_Database('you are not using mysql');
+        }
+
+        if (($ilp = $db->query('SELECT @@innodb_large_prefix')->fetchColumn()) !== '1') {
+            throw new Tinebase_Exception_Backend_Database('innodb_large_prefix seems not be turned on: ' . $ilp);
+        }
+        if (($iff = $db->query('SELECT @@innodb_file_format')->fetchColumn()) !== 'Barracuda') {
+            throw new Tinebase_Exception_Backend_Database('innodb_file_format seems not to be Barracuda: ' . $iff);
+        }
+        if (($ift = $db->query('SELECT @@innodb_file_per_table')->fetchColumn()) !== '1') {
+            throw new Tinebase_Exception_Backend_Database('innodb_file_per_table seems not to be turned on: ' . $ift);
+        }
+
+        try {
+            $db->query('ALTER DATABASE ' . $db->quoteIdentifier($db->getConfig()['dbname']) .
+                ' CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci');
+        } catch (Zend_Db_Exception $zde) {
+            Tinebase_Exception::log($zde);
+        }
+
+        $tables = $db->listTables();
+
+        $db->query('SET foreign_key_checks = 0');
+        $db->query('SET unique_checks = 0');
+        foreach ($tables as $table) {
+            $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+
+            if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
+                $setupBackend = new Setup_Backend_Mysql();
+                $setupBackend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+                $setupBackend->dropIndex('tree_nodes', 'parent_id-name');
+            }
+
+            $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) .
+                ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+
+            if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
+                $setupBackend = new Setup_Backend_Mysql();
+                $setupBackend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                    <collation>utf8mb4_bin</collation>
+                </field>'));
+                $setupBackend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>parent_id-name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>parent_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
+                    </field>
+                </index>'));
+                $setupBackend->addForeignKey('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>tree_nodes::parent_id--tree_nodes::id</name>
+                    <field>
+                        <name>parent_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tree_nodes</table>
+                        <field>id</field>
+                        <onupdate>cascade</onupdate>
+                        <!-- add ondelete? -->
+                    </reference>
+                </index>'));
+            }
+        }
+
+
+
+        $db->query('SET foreign_key_checks = 1');
+        $db->query('SET unique_checks = 1');
+
+        foreach ($tables as $table) {
+            $db->query('REPAIR TABLE ' . $db->quoteIdentifier($table));
+            $db->query('OPTIMIZE TABLE ' . $db->quoteIdentifier($table));
+        }
     }
 }

@@ -344,8 +344,11 @@ class Tinebase_Translation
         }
         
         if (! $jsTranslations) {
-            $jsTranslations  = "";
-            
+            $jsTranslations  = "/************************** namespace for static data **************************/ \n";
+            $jsTranslations .= "Tine = window.Tine || {};\n";
+            $jsTranslations .= "Tine.__translationData = Tine.__translationData || {};\n";
+            $jsTranslations .= "Tine.__translationData.msgs = Tine.__translationData.msgs || {};\n";
+
             if (in_array($_appName, array('Tinebase', 'all'))) {
                 $jsTranslations .= "/************************** generic translations **************************/ \n";
                 
@@ -358,17 +361,20 @@ class Tinebase_Translation
                     $jsTranslations  .= "console.error('Translation Error: extjs changed their lang file name again ;-(');";
                 }
             }
-
+            
             foreach ($tine20TranslationFiles as $appName => $poPaths) {
                 $poObject = self::po2jsObject($poPaths);
                 //if (! json_decode($poObject)) {
                 //    $jsTranslations .= "console.err('tanslations for application $appName are broken');";
                 //} else {
-                    $jsTranslations  .= "/********************** tine translations of $appName**********************/ \n";
-                    $jsTranslations .= "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject); \n";
+                    $jsTranslations .= "/********************** tine translations of $appName **********************/ \n";
+                    $jsTranslations .= "Tine.__translationData.msgs['./LC_MESSAGES/$appName'] = $poObject; \n";
                 //}
             }
-            
+
+            $jsTranslations .= "/********************** translation loaded flag **********************/ \n";
+            $jsTranslations .= "Tine.__translationData.__isLoaded = true; \n";
+
             if (isset($cache)) {
                 $cache->save($jsTranslations, $cacheId);
             }

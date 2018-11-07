@@ -88,9 +88,9 @@ class Calendar_Setup_Update_Release5 extends Setup_Update_Abstract
         $attendeeStatusConfig = array(
             'name'    => Calendar_Config::ATTENDEE_STATUS,
             'records' => array(
-                array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true), //_('No response')
-                array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Accepted')
-                array('id' => 'DECLINED',     'value' => 'Declined',    'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Declined')
+                array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'icon' => 'images/icon-set/icon_invite.svg', 'system' => true), //_('No response')
+                array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/icon-set/icon_ok.svg',                   'system' => true), //_('Accepted')
+                array('id' => 'DECLINED',     'value' => 'Declined',    'icon' => 'images/icon-set/icon_stop.svg',        'system' => true), //_('Declined')
                 array('id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/calendar-response-tentative.png',               'system' => true), //_('Tentative')
             ),
         );

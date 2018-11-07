@@ -25,26 +25,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: true,
     showContainerSelector: false,
     tbarItems: [],
-
-    /**
-     * executed after record got updated from proxy
-     */
-    onRecordLoad: function() {
-        // manage_resources right grants all grants
-        if (Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')) {
-            // TODO use a loop here (or maybe adminGrant is sufficient?)
-            var _ = window.lodash;
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.readGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.syncGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.exportGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.adminGrant', true);
-        }
-
-        Tine.Calendar.ResourceEditDialog.superclass.onRecordLoad.call(this);
-    },
+    requiredSaveGrant: 'resourceEditGrant',
 
     /**
      *
@@ -52,15 +33,13 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         this.grantsGridPanel = new Tine.widgets.container.GrantsGrid({
+            recordClass: Tine.Calendar.Model.ResourceGrants,
             grantContainer: {
                 application_id: this.app.id,
-                type: Tine.Tinebase.container.TYPE_SHARED
-            },
-        
-            store: new Ext.data.JsonStore({
-                fields: Tine.Tinebase.Model.Grant,
-                root: 'grants'
-            })
+                type: Tine.Tinebase.container.TYPE_SHARED,
+                model: 'Calendar_Model_Event',
+                xprops: {Tinebase: {Container: {GrantsModel: 'Calendar_Model_ResourceGrants'}}}
+            }
         });
         
         return {
@@ -102,7 +81,13 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         keyFieldName: 'resourceTypes',
                         fieldLabel: this.app.i18n._('Type'),
                         name: 'type'
-                    })], [
+                    })], [{
+                        xtype: 'textfield',
+                        fieldLabel: this.app.i18n._('Calendar Hierarchy/Name'),
+                        allowBlank: true,
+                        columnWidth: 1,
+                        name: 'hierarchy'
+                    }], [
                         new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Calendar',
                             keyFieldName: 'attendeeStatus',
@@ -178,7 +163,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Calendar.ResourceEditDialog.superclass.onAfterRecordLoad.apply(this, arguments);
 
         if (this.record.data && this.record.data.grants) {
-            this.grantsGridPanel.getStore().loadData(this.record.data);
+            this.grantsGridPanel.getStore().loadData({results: this.record.data.grants});
         }
     },
     
@@ -205,8 +190,8 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.Calendar.ResourceEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 400,
+        width: 1024,
+        height: 430,
         name: Tine.Calendar.ResourceEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Calendar.ResourceEditDialog',
         contentPanelConstructorConfig: config

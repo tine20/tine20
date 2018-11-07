@@ -32,25 +32,25 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     protected $_recursiveResolvingProtection = [];
 
     /**
-     * converts external format to Tinebase_Record_Abstract
+     * converts external format to Tinebase_Record_Interface
      *
      * @param  mixed $_blob the input data to parse
-     * @param  Tinebase_Record_Abstract $_record update existing record
-     * @return Tinebase_Record_Abstract
+     * @param  Tinebase_Record_Interface $_record update existing record
+     * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = NULL)
+    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = NULL)
     {
         throw new Tinebase_Exception_NotImplemented('From json to record is not implemented yet');
     }
     
     /**
-     * converts Tinebase_Record_Abstract to external format
+     * converts Tinebase_Record_Interface to external format
      * 
-     * @param  Tinebase_Record_Abstract $_record
+     * @param  Tinebase_Record_Interface $_record
      * @return mixed
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         if (! $_record) {
             return array();
@@ -68,7 +68,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     /**
      * converts Tinebase_Record_RecordSet to external format
      *
-     * @param Tinebase_Record_RecordSet|Tinebase_Record_Abstract  $_records
+     * @param Tinebase_Record_RecordSet|Tinebase_Record_Interface  $_records
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      *
@@ -103,7 +103,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $this->_resolveBeforeToArray($_records, $config, $multiple);
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
-        $_records->convertDates = true;
+        $_records->setConvertDates(true);
 
         if (false === $multiple) {
             $result = $_records->getFirstRecord()->toArray();
@@ -138,7 +138,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param Tinebase_Record_RecordSet $_records the records
      * @param Tinebase_ModelConfiguration $modelConfig
      */
-    protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records, Tinebase_ModelConfiguration $modelConfig = NULL)
+    protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfig = NULL)
     {
         if (! $modelConfig) {
             return;
@@ -160,10 +160,10 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 foreach ($fields as $field) {
                     $idsForField = $_records->{$field};
                     foreach ($idsForField as $key => $value) {
-                        if ($value instanceof Tinebase_Record_Abstract) {
+                        if ($value instanceof Tinebase_Record_Interface) {
                             $foreignRecordsArray[$value->getId()] = $value;
                         } else {
-                            if ($value && !isset($foreignRecordsArray[$value])) {
+                            if ($value && is_scalar($value) && ! isset($foreignRecordsArray[$value])) {
                                 $foreignIds[$value] = $value;
                             }
                         }
@@ -212,7 +212,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     continue;
                 }
                 $foreignRecords->setTimezone(Tinebase_Core::getUserTimezone());
-                $foreignRecords->convertDates = true;
+                $foreignRecords->setConvertDates(true);
                 Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($foreignRecords, $modelConfig);
                 $fr = $foreignRecords->getFirstRecord();
                 if ($fr && $fr->has('notes')) {
@@ -308,8 +308,23 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         $foreignIds = array();
         foreach ($fields as $field) {
-            $foreignIds = array_unique(array_merge($foreignIds, $records->{$field}));
+            $value = $records->{$field};
+            if (is_array($value)) {
+                if (isset($value['id'])) {
+                    $value = [$value['id']];
+                } else {
+                    $value = array_filter($value, function ($val) { return is_scalar($val); });
+                }
+            } elseif (is_scalar($value)) {
+                $value = [$value];
+            } elseif ($value instanceof Tinebase_Record_Interface) {
+                $value = [$value->getId()];
+            } else {
+                $value = [];
+            }
+            $foreignIds = array_merge($foreignIds, $value);
         }
+        $foreignIds = array_unique($foreignIds);
         
         try {
             $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
@@ -364,7 +379,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      */
     protected function _resolveRecursive(
         Tinebase_Record_RecordSet $_records,
-        Tinebase_ModelConfiguration $modelConfiguration = NULL,
+        $modelConfiguration = NULL,
         $multiple = false
     ) {
         if (! $modelConfiguration || (! $_records->count())) {
@@ -387,7 +402,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         foreach ($resolveFields as $property) {
             foreach ($_records->{$property} as $idx => $recordOrRecords) {
                 // cope with single records
-                if ($recordOrRecords instanceof Tinebase_Record_Abstract) {
+                if ($recordOrRecords instanceof Tinebase_Record_Interface) {
                     $records = new Tinebase_Record_RecordSet(get_class($recordOrRecords));
                     $records->addRecord($recordOrRecords);
                 } else {
@@ -403,7 +418,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 $this->_recursiveResolvingProtection[$id] = true;
 
                 if ($records instanceof Tinebase_Record_RecordSet && $records->count() > 0) {
-                    /** @var Tinebase_Record_Abstract $model */
+                    /** @var Tinebase_Record_Interface $model */
                     $model = $records->getRecordClassName();
                     $mc = $model::getConfiguration();
                     Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records, $mc);
@@ -459,7 +474,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // iterate fields to resolve
         foreach ($resolveFields as $fieldKey => $c) {
             $config = $c['config'];
-            
+
+            if (isset($c['noResolve']) && $c['noResolve']) {
+                continue;
+            }
+
             // resolve records, if omitOnSearch is definitively set to FALSE (by default they won't be resolved on search)
             if ($multiple && !(isset($config['omitOnSearch']) && $config['omitOnSearch'] === FALSE)) {
                 continue;
@@ -470,6 +489,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
 
             // fetch the fields by the refIfField
+            if (! class_exists($config['controllerClassName'])) {
+                continue;
+            }
             /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
             /** @noinspection PhpUndefinedMethodInspection */
             $controller = $config['controllerClassName']::getInstance();
@@ -496,7 +518,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $foreignRecordModelConfiguration = $foreignRecordClass::getConfiguration();
             
             $foreignRecords->setTimezone(Tinebase_Core::getUserTimezone());
-            $foreignRecords->convertDates = true;
+            $foreignRecords->setConvertDates(true);
             
             $fr = $foreignRecords->getFirstRecord();
 
@@ -665,6 +687,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     // re-fetch attachments
                     Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
                 }
+                // order by creation time to show the latest attachment as record image
+                $record->attachments->sort('creation_time', 'DESC');
                 foreach ($record->attachments as $attachment) {
                     if (in_array($attachment->contenttype, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
                         $record->image = Tinebase_Model_Image::getImageUrl('Tinebase', $attachment->getId(), 'vfs');
@@ -713,7 +737,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // TODO can't we do this in a more elegant way?? maybe use array_walk?
         $tmp = ($multiple) ? $resultSet : array($resultSet);
         foreach ($tmp as &$record) {
-            if ($record instanceof Tinebase_Record_Abstract || $record instanceof Tinebase_Record_RecordSet) continue;
+            if ($record instanceof Tinebase_Record_Interface || $record instanceof Tinebase_Record_RecordSet) continue;
             $record['account_grants'] = $userGrants;
         }
 

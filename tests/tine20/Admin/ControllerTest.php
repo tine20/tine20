@@ -212,8 +212,45 @@ class Admin_ControllerTest extends TestCase
         )));
 
         $lookupCf = Tinebase_CustomField::getInstance()->getCustomField($cf->getId());
-
         $this->assertEquals('unittest_test', $lookupCf->name);
+    }
+
+    /**
+     * testCustomFieldDelete
+     */
+    public function testCustomFieldUpdate()
+    {
+        $instanceSeq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        $this->testCustomFieldCreate();
+        $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Addressbook');
+        $result = $cfs->filter('name', 'unittest_test')->getFirstRecord();
+
+        $result->name = 'changed name';
+        $updatedCF = Admin_Controller_Customfield::getInstance()->update($result);
+        static::assertEquals($result->name, $updatedCF->name);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->getReplicationModificationsByInstanceSeq($instanceSeq);
+        static::assertEquals(2, $modifications->count(), 'no replication modifications found');
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        try {
+            Tinebase_CustomField::getInstance()->getCustomField($result->getId());
+            static::fail('rollback did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(
+            $modifications->getRecordClassName(), [$modifications->getFirstRecord()]));
+        $lookupCf = Tinebase_CustomField::getInstance()->getCustomField($result->getId());
+        $this->assertEquals('unittest_test', $lookupCf->name);
+
+        Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(
+            $modifications->getRecordClassName(), [$modifications->getLastRecord()]));
+        $lookupCf = Tinebase_CustomField::getInstance()->getCustomField($result->getId());
+        $this->assertEquals($updatedCF->name, $lookupCf->name);
     }
 
     /**
@@ -221,6 +258,8 @@ class Admin_ControllerTest extends TestCase
      */
     public function testCustomFieldDelete()
     {
+        $instanceSeq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
         $this->testCustomFieldCreate();
         $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Addressbook');
         $result = $cfs->filter('name', 'unittest_test')->getFirstRecord();
@@ -228,6 +267,31 @@ class Admin_ControllerTest extends TestCase
         $deleted = Admin_Controller_Customfield::getInstance()->delete([$result->getId()]);
 
         $this->assertEquals(1, count($deleted));
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->getReplicationModificationsByInstanceSeq($instanceSeq);
+        static::assertEquals(2, $modifications->count(), 'no replication modifications found');
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        try {
+            Tinebase_CustomField::getInstance()->getCustomField($result->getId());
+            static::fail('rollback did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(
+            $modifications->getRecordClassName(), [$modifications->getFirstRecord()]));
+        $lookupCf = Tinebase_CustomField::getInstance()->getCustomField($result->getId());
+        $this->assertEquals('unittest_test', $lookupCf->name);
+
+        Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(
+            $modifications->getRecordClassName(), [$modifications->getLastRecord()]));
+
+        try {
+            Tinebase_CustomField::getInstance()->getCustomField($result->getId());
+            static::fail('delete replication did not work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
     }
 
     public function testFailedListCreation()

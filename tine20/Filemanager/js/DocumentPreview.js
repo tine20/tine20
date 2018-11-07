@@ -1,3 +1,11 @@
+/**
+ * Tine 2.0
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
 Ext.ns('Tine.Filemanager');
 
 Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
@@ -105,6 +113,11 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
             });
         } else if (this.record.get('preview_count')) {
             records.push(this.record);
+        } else if (this.hasEmailPreview(this.record)) {
+            // @todo fake preview count needed?
+            this.record.set('preview_count', 1);
+
+            records.push(this.record);
         }
 
         records = _.filter(records, function(record) {
@@ -120,35 +133,92 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
         
         this.afterIsRendered().then(function () {
             _.each(records, function(record) {
-                _.range(record.get('preview_count')).forEach(function (previewNumber) {
-                    var path = record.get('path'),
-                        revision = record.get('revision');
-
-                    var url = Ext.urlEncode({
-                        method: 'Tinebase.downloadPreview',
-                        frontend: 'http',
-                        _path: path,
-                        _appId: me.initialApp ? me.initialApp.id : me.app.id,
-                        _type: 'previews',
-                        _num: previewNumber,
-                        _revision: revision
-                    }, Tine.Tinebase.tineInit.requestUrl + '?');
-
-                    me.add({
-                        html: '<img style="width: 100%;" src="' + url + '" />',
-                        xtype: 'panel',
-                        frame: true,
-                        border: true
-                    });
-                });
+                if (me.hasEmailPreview(record)) {
+                    me.addEmailDetailsPanel(me, record);
+                } else {
+                    me.addPreviewPanelForRecord(me, record);
+                }
             });
             
             me.doLayout();
         });
     },
 
+    addPreviewPanelForRecord: function (me, record) {
+        _.range(record.get('preview_count')).forEach(function (previewNumber) {
+            var path = record.get('path'),
+                revision = record.get('revision');
+
+            var url = Ext.urlEncode({
+                method: 'Tinebase.downloadPreview',
+                frontend: 'http',
+                _path: path,
+                _appId: me.initialApp ? me.initialApp.id : me.app.id,
+                _type: 'previews',
+                _num: previewNumber,
+                _revision: revision
+            }, Tine.Tinebase.tineInit.requestUrl + '?');
+
+            me.add({
+                html: '<img style="width: 100%;" src="' + url + '" />',
+                xtype: 'panel',
+                frame: true,
+                border: true
+            });
+        });
+    },
+
+    addEmailDetailsPanel: function (me, node) {
+        require('Felamimail/js/MailDetailsPanel');
+
+        let detailsPanel = new Tine.Felamimail.MailDetailsPanel({
+            height: 830, // @todo auto
+            autoscroll: true, // @todo scollbar!
+            appName: 'Filemanager'
+        });
+        me.add(detailsPanel);
+
+        Tine.Felamimail.messageBackend.getMessageFromNode(node, {
+            success: function(response) {
+                // TODO make it work
+                var message = Tine.Felamimail.messageBackend.recordReader({responseText: Ext.util.JSON.encode(response.data)});
+                this.loadRecord(message.data);
+            },
+            failure: function (exception) {
+                Tine.log.debug(exception);
+                // @todo add loadMask?
+                // this.getLoadMask().hide();
+                // if (exception.code == 404) {
+                    this.defaultTpl.overwrite(body, {msg: this.app.i18n._('Message not available.')});
+                // } else {
+                //     // @todo handle exception?
+                // }
+            },
+            scope: detailsPanel
+        });
+    },
+
+    hasEmailPreview: function (fileNode) {
+        if (! Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
+            // needs Felamimail
+            return false;
+        }
+
+        // define email content-types
+        const emailContentTypes = [
+            'message/rfc822'
+        ];
+        if (emailContentTypes.indexOf(fileNode.get('contenttype')) !== -1) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
     /**
      * Fires if no previews are available
+     *
+     * @todo show more information about preview service + configuration
      */
     onNoPreviewAvailable: function () {
         var me = this;

@@ -66,7 +66,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      *
      * @var Zend_Config_Xml
      */
-    protected $_config = array();
+    protected $_config = null;
 
     /**
      * @var string application name of this export class
@@ -86,6 +86,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * @var Tinebase_Model_Filter_FilterGroup
      */
     protected $_filter = null;
+
+    /**
+     * export definition
+     *
+     * @var Tinebase_Model_ImportExportDefinition
+     */
+    protected $_definition = null;
 
     /**
      * sort records by this field (array keys: sort / dir / ...)
@@ -214,7 +221,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_currentRowType = null;
 
     /**
-     * @var Tinebase_Record_Abstract
+     * @var Tinebase_Record_Interface
      */
     protected $_currentRecord = null;
 
@@ -257,10 +264,18 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * @throws Tinebase_Exception_NotFound
      */
     public function __construct(
-        Tinebase_Model_Filter_FilterGroup $_filter,
+        Tinebase_Model_Filter_FilterGroup $_filter = null,
         Tinebase_Controller_Record_Interface $_controller = null,
         $_additionalOptions = array()
     ) {
+        if (null === $_filter) {
+            if (!isset($_additionalOptions['definitionId']) && !isset($_additionalOptions['definitionFilename'])) {
+                throw new Tinebase_Exception_InvalidArgument('no filter provided and no definitionId or name given');
+            }
+            $this->_config = $this->_getExportConfig($_additionalOptions);
+            $_filter = $this->_definition->getFilter();
+        }
+
         $this->_filter = $_filter;
         if (!$this->_modelName) {
             $this->_modelName = $this->_filter->getModelName();
@@ -270,11 +285,16 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         $this->_controller = ($_controller !== null) ? $_controller :
-            Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+            Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName, isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-        $this->_config = $this->_getExportConfig($_additionalOptions);
+        if (null === $this->_config) {
+            $this->_config = $this->_getExportConfig($_additionalOptions);
+        }
+        if (null !== $this->_config->header) {
+            $this->_writeGenericHeader = (bool)$this->_config->header;
+        }
         if ($this->_config->template) {
             $this->_templateFileName = $this->_config->template;
         }
@@ -323,8 +343,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
         }
 
+        if (!isset($this->_sortInfo['sort']) && null !== $this->_config->sort) {
+            $this->_sortInfo['sort'] = $this->_config->sort->field;
+            $this->_sortInfo['dir'] = $this->_config->sort->direction ?: 'ASC';
+        }
+
         if (!isset($this->_sortInfo['sort']) && !empty($this->_modelName)) {
-            /** @var Tinebase_Record_Abstract $mc */
+            /** @var Tinebase_Record_Interface $mc */
             $mc = $this->_modelName;
             if (null !== ($mc = $mc::getConfiguration())) {
                 /** @var Tinebase_ModelConfiguration $mc */
@@ -351,7 +376,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $_additionalOptions['recordData']['container_id'] = $_additionalOptions['recordData']['container_id']['id'];
             }
             $this->_FEDataRecordResolving = true;
-            /** @var Tinebase_Record_Abstract $record */
+            /** @var Tinebase_Record_Interface $record */
             $record = new $this->_modelName([], true);
             $record->setFromJsonInUsersTimezone($_additionalOptions['recordData']);
             $this->_records = new Tinebase_Record_RecordSet($this->_modelName, [$record]);
@@ -468,6 +493,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $definition = $definitions->getFirstRecord();
         }
 
+        $this->_definition = $definition;
         $config = Tinebase_ImportExportDefinition::getInstance()->
             getOptionsAsZendConfigXml($definition, $_additionalOptions);
 
@@ -522,7 +548,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     {
         $model = '';
         if (null !== $this->_modelName) {
-            /** @var Tinebase_Record_Abstract $model */
+            /** @var Tinebase_Record_Interface $model */
             $model = $this->_modelName;
             if (null !== ($modelConf = $model::getConfiguration())) {
                 $model = ' ' . $this->_translate->_($modelConf->recordName, $this->_locale);
@@ -605,8 +631,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
             if (false === ($result = $iterator->iterate())) {
                 $result = array(
-                    'totalcount' => $this->_records->count(),
-                    'results'    => array(),
+                    'totalcount' => 0,
+                    'results'    => [],
                 );
             }
         } else {
@@ -935,7 +961,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
             }
 
-            /** @var Tinebase_Record_Abstract $record */
+            /** @var Tinebase_Record_Interface $record */
             foreach ($_records as $record) {
                 $cfs = $record->customfields;
                 if (empty($cfs)) {
@@ -979,7 +1005,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             break;
         }
 
-        /** @var Tinebase_Record_Abstract $modelName */
+        /** @var Tinebase_Record_Interface $modelName */
         $modelName = $_records->getRecordClassName();
 
         if ($record->has('relations')) {
@@ -1011,7 +1037,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
             $this->_resolveRelationsType($relations);
 
-            /** @var Tinebase_Record_Abstract $record */
+            /** @var Tinebase_Record_Interface $record */
             foreach ($_records as $idx => $record) {
                 if (isset($relations[$idx])) {
                     $record->relations = $relations[$idx];
@@ -1026,7 +1052,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_modelConfig = $modelName::getConfiguration();
 
         if (null === $this->_modelConfig && $_records->getRecordClassName() === $this->_modelName) {
-            /** @var Tinebase_Record_Abstract $record */
+            /** @var Tinebase_Record_Interface $record */
             foreach ($_records as $idx => $record) {
                 // TODO FE data resolving: what about this? I guess that is ok?
                 foreach ($this->_virtualFields as $name => $virtualField) {
@@ -1060,15 +1086,19 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             // TODO FE data resolving: what about this!
             $backupFields = [];
             if ($this->_FEDataRecordResolving) {
-                /** @var Tinebase_Record_Abstract $recordsClass */
+                /** @var Tinebase_Record_Interface $recordsClass */
                 $recordsClass = $_records->getRecordClassName();
-                foreach ($recordsClass::getResolveForeignIdFields() as $key => $value) {
-                    if ($key === 'recursive') {
-                        $value = array_keys($value);
-                    }
-                    foreach ($value as $field) {
-                        $backupFields[$field] = $_records->{$field};
-                        $_records->{$field} = null;
+                $resolveForeignIdFields = $recordsClass::getResolveForeignIdFields();
+                // TODO switch to is_iterable() when we no longer support PHP < 7.0
+                if (is_array($resolveForeignIdFields) || $resolveForeignIdFields instanceof \Traversable) {
+                    foreach ($resolveForeignIdFields as $key => $value) {
+                        if ($key === 'recursive') {
+                            $value = array_keys($value);
+                        }
+                        foreach ($value as $field) {
+                            $backupFields[$field] = $_records->{$field};
+                            $_records->{$field} = null;
+                        }
                     }
                 }
             }
@@ -1193,7 +1223,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
             }
         } else {
-            /** @var Tinebase_Record_Abstract $record */
+            /** @var Tinebase_Record_Interface $record */
             $record = new $this->_modelName(array(), true);
 
             $this->_fields = $record->getFields();
@@ -1392,7 +1422,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                         $this->_config->datetimeformat);
                 } elseif($_value instanceof Tinebase_Model_CustomField_Config) {
                     $_value = $_value->value->__toString();
-                } elseif ($_value instanceof Tinebase_Record_Abstract) {
+                } elseif ($_value instanceof Tinebase_Record_Interface) {
                     $_value = $_value->getTitle();
                 } elseif ($_value instanceof Tinebase_Record_RecordSet) {
                     $_value = join(', ', $_value->getTitle());
@@ -1445,5 +1475,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     public function registerTwigExtension(Twig_ExtensionInterface $twigExtension)
     {
         $this->_twigExtensions[] = $twigExtension;
+    }
+
+    /**
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    public function getFilter()
+    {
+        return $this->_filter;
     }
 }

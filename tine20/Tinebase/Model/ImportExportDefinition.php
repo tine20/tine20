@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -95,4 +95,21 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+
+
+    /**
+     * get defined filter
+     *
+     * @TODO: implement
+     * - add filterData property
+     * - add persistendFilter property
+     * - rethink: what to return when no filter is defined? empty filter?
+     * - rethink: overwrite or combine filters / have option for that?
+     *
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    public function getFilter()
+    {
+        return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->model);
+    }
 }

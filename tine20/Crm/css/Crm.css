@@ -1,46 +1,6 @@
 .CrmIconCls, .CrmLead {
-    background-image:url(../../images/oxygen/16x16/actions/datashowchart.png) !important;
+    background-image:url(../../images/icon-set/icon_crm.svg) !important;
 }
-.x-btn-medium .CrmIconCls, .x-btn-medium .CrmLead {
-    background-image:url(../../images/oxygen/22x22/actions/datashowchart.png) !important;
-}
-.x-btn-large .CrmIconCls, .x-btn-large .CrmLead {
-    background-image:url(../../images/oxygen/32x32/actions/datashowchart.png) !important;
-}
-
-
-.actionAddTask {
-    background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
-}
-.x-btn-medium .actionAddTask {
-    background-image:url(../../images/oxygen/22x22/actions/todo.png) !important;
-}
-.x-btn-large .actionAddTask {
-    background-image:url(../../images/oxygen/32x32/actions/todo.png) !important;
-}
-
-
-.actionEdit {
-    background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
-}
-.x-btn-medium .actionEdit {
-    background-image:url(../../images/oxygen/22x22/actions/edit.png) !important;
-}
-.x-btn-large .actionEdit {
-    background-image:url(../../images/oxygen/32x32/actions/edit.png) !important;
-}
-
-
-.actionDelete {
-    background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
-}
-.x-btn-medium .actionDelete {
-    background-image:url(../../images/oxygen/22x22/actions/edit-delete.png) !important;
-}
-.x-btn-large .actionDelete {
-    background-image:url(../../images/oxygen/32x32/actions/edit-delete.png) !important;
-}
-
 
 .activities-item-small {
     padding: 2px 4px; 
@@ -96,37 +56,16 @@
 
 
 .contactIconResponsible {
-    background-image:url(../../images/oxygen/16x16/apps/preferences-desktop-user.png) !important;
+    background-image:url(../../images/icon-set/icon_responsible.svg) !important;
 }
-.x-btn-medium .contactIconResponsible {
-    background-image:url(../../images/oxygen/22x22/apps/preferences-desktop-user.png) !important;
-}
-.x-btn-large .contactIconResponsible {
-    background-image:url(../../images/oxygen/32x32/apps/preferences-desktop-user.png) !important;
-}
-
 
 .contactIconCustomer {
-    background-image:url(../../images/oxygen/16x16/apps/system-users.png) !important;
+    background-image:url(../../images/icon-set/icon_client.svg) !important;
 }
-.x-btn-medium .contactIconCustomer {
-    background-image:url(../../images/oxygen/22x22/apps/system-users.png) !important;
-}
-.x-btn-large .contactIconCustomer {
-    background-image:url(../../images/oxygen/32x32/apps/system-users.png) !important;
-}
-
 
 .contactIconPartner {
-    background-image:url(../../images/oxygen/16x16/actions/view-process-own.png) !important;
+    background-image:url(../../images/icon-set/icon_partner.svg) !important;
 }
-.x-btn-medium .contactIconPartner {
-    background-image:url(../../images/oxygen/22x22/actions/view-process-own.png) !important;
-}
-.x-btn-large .contactIconPartner {
-    background-image:url(../../images/oxygen/32x32/actions/view-process-own.png) !important;
-}
-
 
 .productSummary {
     background: transparent none repeat;

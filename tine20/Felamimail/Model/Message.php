@@ -27,6 +27,7 @@
  * @property    array   $structure          the message structure
  * @property    array   $attachments        the attachments
  * @property    string  $messageuid         the message uid on the imap server
+ * @property    string  $reply_to           reply-to header
  * @property    array   $preparedParts      prepared parts
  * @property    integer $reading_conf       true if it must send a reading confirmation
  * @property    boolean $massMailingFlag    true if message should be treated as mass mailing
@@ -141,6 +142,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'text_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'html_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'has_attachment'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'reply_to'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // this is: content_type_of_envelope
         'content_type'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -176,7 +178,73 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'received',
         'sent',
     );
-    
+
+    /**
+     * create Felamimail message from raw mime content
+     *
+     * @param string $_mimeContent
+     * @return Felamimail_Model_Message
+     *
+     * @todo move to converter?
+     */
+    public static function createFromMime($_mimeContent)
+    {
+        $message = \ZBateson\MailMimeParser\Message::from($_mimeContent);
+
+        $data = [];
+        foreach (['date' => 'sent'] as $headerKey => $property) {
+            $data[$property] = new Tinebase_DateTime($message->getHeader($headerKey)->getDateTime());
+        }
+        foreach (['subject', ] as $headerKey) {
+            $data[$headerKey] = $message->getHeaderValue($headerKey);
+        }
+        $from = $message->getHeader('from');
+        $data['from_email'] = $from->getValue();
+        $data['from_name'] = $from->getPersonName();
+        foreach(['to', 'cc', 'bcc'] as $headerKey) {
+            $headerValue = $message->getHeader($headerKey);
+            if (! $headerValue) {
+                continue;
+            }
+            $addresses = $headerValue->getAddresses();
+            $data[$headerKey] = [];
+            foreach ($addresses as $address) {
+                // TODO add name?
+                $data[$headerKey][] = $address->getEmail();
+            }
+        }
+
+        // what if message has only plain/text?
+        $data['content_type'] = $message->getContentType();
+        if ($data['content_type'] == Zend_Mime::TYPE_TEXT) {
+            $data['body'] = $message->getContent();
+            $data['body_content_type'] = Zend_Mime::TYPE_TEXT;
+        } else {
+            $data['body'] = $message->getHtmlContent();
+            $data['body_content_type'] = Zend_Mime::TYPE_HTML;
+            // TODO why do we need this?
+            $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+        }
+
+        $data['attachments'] = [];
+        foreach ($message->getAllAttachmentParts() as $id => $attachment) {
+            $data['attachments'][] = [
+                'content-type' => $attachment->getContentType(),
+                'filename'     => $attachment->getFilename(),
+                'partId'       => $id,
+                // TODO get those?
+                //'size'         => $attachment->get(),
+                //'description'  => $attachment->,
+                //'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
+            ];
+        }
+        if (count($data['attachments']) > 0) {
+            $data['has_attachment'] = true;
+        }
+
+        return new Felamimail_Model_Message($data);
+    }
+
     /**
      * gets record related properties
      * 
@@ -404,10 +472,15 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $_bodyContentTypes = array();
         foreach ($_parts as $part) {
             if (is_array($part) && (isset($part['contentType']) || array_key_exists('contentType', $part))) {
-                if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)) && ! $this->_partIsAttachment($part)) {
+                if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN))
+                    && ! $this->_partIsAttachment($part))
+                {
                     $_bodyContentTypes[] = $part['contentType'];
-                } else if (($part['contentType'] == self::CONTENT_TYPE_MULTIPART || $part['contentType'] == self::CONTENT_TYPE_MULTIPART_RELATED) 
-                    && (isset($part['parts']) || array_key_exists('parts', $part)))
+                } else if (in_array($part['contentType'], [
+                        self::CONTENT_TYPE_MULTIPART,
+                        self::CONTENT_TYPE_MULTIPART_RELATED,
+                        self::CONTENT_TYPE_MULTIPART_MIXED
+                    ]) && (isset($part['parts']) || array_key_exists('parts', $part)))
                 {
                     $_bodyContentTypes = array_merge($_bodyContentTypes, $this->_getBodyContentTypes($part['parts']));
                 }
@@ -430,29 +503,31 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Getting structure for part ' . $_partId . ' / complete structure: ' . print_r($this->structure, TRUE));
-        
+
+        // make sure structure is fetched
+        $structure = $this->structure;
         if ($_partId == null) {
             // maybe we want no part at all => just return the whole structure
-            $result = $this->structure;
-        } else if ($this->structure['partId'] == $_partId) {
+            $result = $structure;
+        } else if (isset($structure['partId']) && $structure['partId'] == $_partId) {
             // maybe we want the first part => just return the whole structure
-            $result = $this->structure;
+            $result = $structure;
         } else {
             // iterate structure to find the correct part
             $iterator = new RecursiveIteratorIterator(
-                new RecursiveArrayIterator($this->structure),
+                new RecursiveArrayIterator($structure),
                 RecursiveIteratorIterator::SELF_FIRST
             );
             
             foreach ($iterator as $key => $value) {
-                if ($key == $_partId && is_array($value) && (isset($value['partId']) || array_key_exists('partId', $value))) {
+                if ($key == $_partId && is_array($value) && isset($value['partId'])) {
                     $result = (
                         $_useMessageStructure
-                        && is_array($value)
-                        && (isset($value['messageStructure']) || array_key_exists('messageStructure', $value))
+                        && isset($value['messageStructure'])
                         && (! isset($value['contentType']) || $value['contentType'] !== Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822)
                     )   ? $value['messageStructure']
                         : $value;
+                    break;
                 }
             }
         }
@@ -791,7 +866,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $html = '<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></head>' . $html;
         }
         // use a hack to make sure html is loaded as utf-8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
-        $dom->loadHTML('<?xml encoding="UTF-8">' . $html);
+        // we ignore errors here as html messages aren't always valid xml
+        @$dom->loadHTML('<?xml encoding="UTF-8">' . $html);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' HTML (DOMDocument): ' . $dom->saveHTML());
         

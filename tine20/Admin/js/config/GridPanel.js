@@ -219,12 +219,13 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             value = Ext.encode(record.get('default'));
         }
 
+        value = Ext.decode(value);
+
         switch (record.get('type')) {
             case 'bool':
                 value = Tine.Tinebase.common.booleanRenderer(value);
                 break;
             case 'keyField':
-                value = Ext.decode(value);
                 Ext.each(record.get('options')['records'], function(record) {
                     if (record.id == value) {
                         value = this.configApp.i18n._hidden(record.value);

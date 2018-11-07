@@ -18,6 +18,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Log
+ *
+ * @todo remove static vars to allow to configure multiple log writers/formatters individually
  */
 class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
 {
@@ -165,6 +167,11 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         return self::getPrefix() . ' ' . self::getUsername() . ' ' . $timelog . '- ' . $this->_getFormattedOutput($output, $event);
     }
 
+    /**
+     * @param $output
+     * @param array $event
+     * @return string
+     */
     protected function _getFormattedOutput($output, array $event)
     {
         if (self::$_colorize) {
@@ -175,6 +182,10 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         return $output;
     }
 
+    /**
+     * @param $logPrio
+     * @return string
+     */
     protected function _getColorByPrio($logPrio)
     {
         switch ($logPrio) {
@@ -249,6 +260,17 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     public static function resetUsername()
     {
         self::$_username = NULL;
+    }
+
+    /**
+     * reset username and options
+     *
+     * @return string
+     */
+    public static function reset()
+    {
+        self::$_username = NULL;
+        self::$_colorize = false;
     }
 
     /**

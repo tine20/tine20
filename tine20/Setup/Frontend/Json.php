@@ -108,18 +108,15 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * update existing applications
      *
      * @param array $applicationNames application names to update
+     * @return array
+     *
+     * TODO remove $applicationNames param and adopt js client
      */
     public function updateApplications($applicationNames)
     {
-        $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
-        foreach ($applicationNames as $applicationName) {
-            $applications->addRecord(Tinebase_Application::getInstance()->getApplicationByName($applicationName));
-        }
-        
-        if(count($applications) > 0) {
-            $this->_controller->updateApplications($applications);
-        }
-        
+        // always update all update-able applications
+        $this->_controller->updateApplications();
+
         return array(
             'success'=> true,
             'setupRequired' => $this->_controller->setupRequired()
@@ -130,6 +127,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * uninstall applications
      *
      * @param array $applicationNames application names to uninstall
+     * @return array
      */
     public function uninstallApplications($applicationNames)
     {
@@ -287,7 +285,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'buildType'     => TINE20_BUILDTYPE,
                 'codeName'      => TINE20SETUP_CODENAME,
                 'packageString' => TINE20SETUP_PACKAGESTRING,
-                'releaseTime'   => TINE20SETUP_RELEASETIME
+                'releaseTime'   => TINE20SETUP_RELEASETIME,
+                // NOTE: if assetHash is not available we have a serious problem -  please don't generate one!
+                'assetHash'     => Tinebase_Frontend_Http_SinglePageApplication::getAssetHash(),
             ),
             'authenticationData'   => $this->loadAuthenticationData(),
         );
@@ -340,10 +340,22 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'buildType'     => TINE20_BUILDTYPE,
                 'codeName'      => TINE20SETUP_CODENAME,
                 'packageString' => TINE20SETUP_PACKAGESTRING,
-                'releaseTime'   => TINE20SETUP_RELEASETIME
+                'releaseTime'   => TINE20SETUP_RELEASETIME,
+                // NOTE: if assetHash is not available we have a serious problem -  please don't generate one!
+                'assetHash'     => Tinebase_Frontend_Http_SinglePageApplication::getAssetHash(),
             ),
             'maxFileUploadSize' => Tinebase_Helper::convertToBytes(ini_get('upload_max_filesize')),
             'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
+            'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
+            'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
+            'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
+            'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
+            'brandingDescription'=> Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION),
+            'brandingHelpUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_HELPURL),
+            'brandingShopUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_SHOPURL),
+            'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
+            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
+            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
         );
         
         return $registryData;

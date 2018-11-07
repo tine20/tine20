@@ -152,7 +152,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         });
 
         // TODO: does user need rights for Filemanager?
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && Tine.Tinebase.configManager.get('filesystem').createPreviews) {
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
             this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
                 initialApp: this.app,
                 sm: this.getSelectionModel()
@@ -171,7 +171,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         var selectedRows = this.getSelectionModel().getSelections(),
             rowRecord = selectedRows[0];
 
-        if (e.getKey() == e.SPACE && Tine.Tinebase.configManager.get('filesystem').createPreviews && rowRecord.data.type == 'file' && !this.readOnly) {
+        if (e.getKey() == e.SPACE && rowRecord.data.type == 'file' && !this.readOnly) {
             this.action_preview.execute();
         }
     },
@@ -193,7 +193,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
 
         if (prefs.get('dbClickAction') === 'download' && downloadsAllowed && !this.readOnly) {
             this.onDownload();
-        } else if (Tine.Tinebase.configManager.get('filesystem').createPreviews && prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly) {
+        } else if (prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly) {
             this.action_preview.execute();
         }
     },

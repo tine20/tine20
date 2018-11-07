@@ -10,7 +10,18 @@
  */
 class Tasks_Setup_Update_Release11 extends Setup_Update_Abstract
 {
+    /**
+     * update to 11.1
+     */
     public function update_0()
+    {
+        $this->updateKeyFieldIcon(Tasks_Config::getInstance(), Tasks_Config::TASK_STATUS);
+        $this->updateKeyFieldIcon(Tasks_Config::getInstance(), Tasks_Config::TASK_PRIORITY);
+
+        $this->setApplicationVersion('Tasks', '11.1');
+    }
+
+    public function update_1()
     {
         $this->setApplicationVersion('Tasks', '12.0');
     }

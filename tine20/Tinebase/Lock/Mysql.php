@@ -22,6 +22,12 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
     protected static $mysqlLockId = null;
     protected static $supportsMultipleLocks = false;
 
+    public function keepAlive()
+    {
+        $db = Tinebase_Core::getDb();
+        $db->query('SELECT now()')->fetchAll();
+    }
+
     /**
      * @return bool
      */

@@ -110,6 +110,8 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             list($appName, , $itemName) = explode('_', $alarm->model);
             $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
 
+            Tinebase_Lock::keepLocksAlive();
+
             if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
 
                 $alarm->sent_time = Tinebase_DateTime::now();

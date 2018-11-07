@@ -94,6 +94,14 @@
         {
           "text": "AdminPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "WorkingTimeEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "BreakGridPanel.js",
+          "path": "js/"
         }
       ]
     },

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Mail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -20,12 +20,12 @@ class Tinebase_Mail extends Zend_Mail
     /**
     * email address regexp
     */
-    const EMAIL_ADDRESS_REGEXP = '/^([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,63})$/i';
+    const EMAIL_ADDRESS_REGEXP = '/^([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})$/i';
 
     /**
      * email address regexp (which might be contained in a longer text)
      */
-    const EMAIL_ADDRESS_CONTAINED_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,63})/i';
+    const EMAIL_ADDRESS_CONTAINED_REGEXP = '/([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i';
 
     /**
      * Sender: address
@@ -47,10 +47,16 @@ class Tinebase_Mail extends Zend_Mail
      * @param  string             $_replyBody
      * @return Tinebase_Mail
      */
-    public static function createFromZMM(Zend_Mail_Message $_zmm, $_replyBody = null)
+    public static function createFromZMM(Zend_Mail_Message $_zmm, $_replyBody = null, $_signature = null)
     {
+        if (empty($_signature)) {
+           $content = $_zmm->getContent();
+        }
+        else {
+           $content = self::_getZMMContentWithSignature($_zmm, $_signature);
+        }
         $contentStream = fopen("php://temp", 'r+');
-        fputs($contentStream, $_zmm->getContent());
+        fputs($contentStream, $content);
         rewind($contentStream);
         
         $mp = new Zend_Mime_Part($contentStream);
@@ -85,6 +91,78 @@ class Tinebase_Mail extends Zend_Mail
         return $result;
     }
     
+    /**
+     * get content from Zend_Mail_Message with attached mail signature
+     * 
+     * @param  Zend_Mail_Message  $zmm
+     * @param  string             $signature
+     * @return string
+     */
+    protected static function _getZMMContentWithSignature(Zend_Mail_Message $zmm, $signature)
+    {
+        if (stripos($zmm->contentType, 'multipart/') === 0) {
+            // Multipart message
+            $zmm->rewind();
+            $boundary = $zmm->getHeaderField('content-type', 'boundary');
+            $rawHeaders = [];
+            foreach (Zend_Mime_Decode::splitMime($zmm->getContent(), $boundary) as $mimePart) {
+                $mimePart = str_replace("\r", '', $mimePart);
+                array_push($rawHeaders, substr($mimePart, 0, strpos($mimePart, "\n\n")));
+            }
+            $content = '';
+            for ($num = 1; $num <= $zmm->countParts(); $num++) {
+                $zmp = $zmm->getPart($num);
+                $content .= "\r\n--" . $boundary . "\r\n";
+                $content .= $rawHeaders[$num-1] . "\r\n\r\n";
+                $content .= self::_getPartContentWithSignature($zmp, $signature);
+            }
+            $content .= "\r\n--" . $boundary . "--\r\n";
+            return $content;
+        }
+        else {
+            $content = self::_getPartContentWithSignature($zmm, $signature);
+        }
+        return $content;
+    }
+    
+    /**
+     * get content from Zend_Mail_Part with attached mail signature
+     * 
+     * @param  Zend_Mail_Part  $zmp
+     * @param  string          $signature
+     * @return string
+     */
+    public static function _getPartContentWithSignature($zmp, $signature)
+    {
+        $contentType = $zmp->getHeaderField('content-type', 0);
+        if (($contentType != 'text/html') && ($contentType != 'text/plain')) {
+            // Modify text parts only
+            return $zmp->getContent();
+        }
+        if (($zmp->headerExists('Content-Disposition')) && (stripos($zmp->contentDisposition, 'attachment;') === 0)) {
+            // Do not modify attachment
+            return $zmp->getContent();
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Attaching signature to ' . $contentType . ' mime part');
+        $content = $zmp->getContent();
+        if ($zmp->contentTransferEncoding == Zend_Mime::ENCODING_BASE64) {
+            $content = base64_decode($content);
+        }
+        else if ($zmp->contentTransferEncoding == Zend_Mime::ENCODING_QUOTEDPRINTABLE) {
+            $content = quoted_printable_decode($content);
+        }
+        if ($contentType == "text/html") {
+            $signature = "<br />&minus;&minus;<br />" . $signature;
+        }
+        else {
+            $signature = Felamimail_Message::convertFromHTMLToText($signature, "\n");
+            $signature = "\n--\n" . $signature;
+        }
+        $content .= $signature;
+        return Zend_Mime::encode($content, $zmp->contentTransferEncoding);
+    }
+
     /**
      * get meta data (like contentype, charset, ...) from zmm and set it in zmp
      * 
@@ -430,8 +508,13 @@ class Tinebase_Mail extends Zend_Mail
                     restore_error_handler();
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
                     $zmp->resetStream();
-                    $body = base64_decode(stream_get_contents($zmp->getRawStream()));
-                    $body = iconv($charset, 'utf-8', $body);
+                    $decodedBody = base64_decode(stream_get_contents($zmp->getRawStream()));
+                    $body = @iconv($charset, 'utf-8', $decodedBody);
+                    if (empty($body)) {
+                        // if iconv above still fails we do mb_convert and replace all special chars ...
+                        $body = Tinebase_Helper::mbConvertTo($decodedBody);
+                        $body = Tinebase_Helper::replaceSpecialChars($body, false);
+                    }
                 }
             }
         }
@@ -461,16 +544,16 @@ class Tinebase_Mail extends Zend_Mail
      */
     protected static function _appendCharsetFilter(Zend_Mime_Part $_part, $charset)
     {
-        if ($charset == 'utf8') {
+        if ('utf8' === $charset) {
             $charset = 'utf-8';
-        } else if ($charset == 'us-ascii') {
+        } elseif ('us-ascii' === $charset) {
             // us-ascii caused problems with iconv encoding to utf-8
             $charset = self::DEFAULT_FALLBACK_CHARSET;
-        } else if (strpos($charset, '.') !== false) {
+        } elseif (strpos($charset, '.') !== false) {
             // the stream filter does not like charsets with a dot in its name
             // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
             $charset = self::DEFAULT_FALLBACK_CHARSET;
-        } else if (iconv($charset, 'utf-8', '') === false) {
+        } elseif (@iconv($charset, 'utf-8', '') === false) {
             // check if charset is supported by iconv
             $charset = self::DEFAULT_FALLBACK_CHARSET;
         }
@@ -492,7 +575,8 @@ class Tinebase_Mail extends Zend_Mail
             require_once 'StreamFilter/ConvertMbstring.php';
             $filter = 'convert.mbstring';
         } else {
-            $filter = "convert.iconv.$_charset/utf-8//IGNORE";
+            // //IGNORE works only as of PHP7.2 -> the code expects an error to occur, don't use //IGNORE
+            $filter = "convert.iconv.$_charset/utf-8";
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
@@ -556,9 +640,12 @@ class Tinebase_Mail extends Zend_Mail
                 $name = trim(trim($matches[1]), '"');
                 $address = trim($matches[2]);
                 $addresses[$key] = array('name' => substr($name, 0, 250), 'address' => $address);
-            } else {
+            } else if (strpos($address, '@') !== false) {
                 $address = preg_replace('/[,;]*/i', '', $address);
                 $addresses[$key] = array('name' => null, 'address' => trim($address));
+            } else {
+                // skip this - no email address found
+                unset($addresses[$key]);
             }
         }
 

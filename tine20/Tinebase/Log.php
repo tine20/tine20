@@ -25,10 +25,11 @@
 class Tinebase_Log extends Zend_Log
 {
     /**
-     * 
-     * @var Tinebase_Log_Formatter
+     * known formatters
+     *
+     * @var array of Tinebase_Log_Formatter
      */
-    protected $_formatter;
+    protected $_formatters = [];
 
     /**
      * Keeps flipped priorities from _priorities array in Zend_Log
@@ -88,20 +89,36 @@ class Tinebase_Log extends Zend_Log
      */
     public function addReplacement($search, $replace = '********')
     {
-        $this->getFormatter()->addReplacement($search, $replace);
+        foreach ($this->_formatters as $formatter) {
+            $formatter->addReplacement($search, $replace);
+        }
     }
     
     /**
-     * 
+     * get formatter (by config, if given)
+     *
      * @return Tinebase_Log_Formatter
+     * @param Tinebase_Config_Struct
+     *
+     * @todo allow multiple formatters for different classes
      */
-    public function getFormatter()
+    public function getFormatter($config = null)
     {
-        if (!$this->_formatter instanceof Tinebase_Log_Formatter) {
-            $this->_formatter = new Tinebase_Log_Formatter();
+        if ($config && $config->formatter) {
+            $formatterClass = 'Tinebase_Log_Formatter_' . ucfirst($config->formatter);
+            if (class_exists($formatterClass)) {
+                if (! isset($this->_formatters[$config->formatter])) {
+                    $this->_formatters[$config->formatter] = new $formatterClass();
+                }
+                return $this->_formatters[$config->formatter];
+            }
+        } else {
+            if (! isset($this->_formatters['default'])) {
+                $this->_formatters['default'] = new Tinebase_Log_Formatter();
+            }
         }
-        
-        return $this->_formatter;
+
+        return $this->_formatters['default'];
     }
     
     /**
@@ -128,7 +145,7 @@ class Tinebase_Log extends Zend_Log
         $filename = $loggerConfig->filename;
         $writer = new Zend_Log_Writer_Stream($filename);
         
-        $writer->setFormatter($this->getFormatter());
+        $writer->setFormatter($this->getFormatter($loggerConfig));
 
         $priority = ($loggerConfig->priority) ? (int)$loggerConfig->priority : Zend_Log::EMERG;
         $filter = new Zend_Log_Filter_Priority($priority);
@@ -206,5 +223,33 @@ class Tinebase_Log extends Zend_Log
     public function getTimezone()
     {
         return($this->_tz);
+    }
+
+    /**
+     * logUsageAndMethod
+     *
+     * @param string $file
+     * @param float $time_start
+     * @param string $method
+     * @param int $pid
+     *
+     * @todo we could make $time_start optional and use Tinebase_Core::STARTTIME if set
+     */
+    public static function logUsageAndMethod($file, $time_start, $method, $pid = null)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            // log profiling information
+            $time_end = microtime(true);
+            $time = $time_end - $time_start;
+            $pid = $pid === null ? getmypid() : $pid;
+
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' FILE: ' . $file
+                . ' METHOD: ' . $method
+                . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
+                . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
+                . ' / PID: ' . $pid
+            );
+        }
     }
 }

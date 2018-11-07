@@ -761,7 +761,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'add'}]),
-            iconCls: this.newRecordIcon,
+            iconCls: 'action_add',
             scope: this
         }) : null;
 
@@ -1992,7 +1992,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         */
 
         // fix selection of one record if shift/ctrl key is not pressed any longer
-        if (e.button === 0 && !e.shiftKey && !e.ctrlKey && ! Ext.isTouchDevice) {
+        if (e.button === 0 && !e.shiftKey && !e.ctrlKey && !e.getTarget('.x-grid3-row-checker')) {
             if (sm.getCount() == 1 && sm.isSelected(row)) {
                 // return;
             } else {
@@ -2003,7 +2003,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         if (e.getTarget('.action_attach')) {
-            if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && Tine.Tinebase.configManager.get('filesystem').createPreviews) {
+            if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
                 Tine.Filemanager.DocumentPreview.openWindow({
                     record: this.getStore().getAt(row),
                     initialApp: this.app,

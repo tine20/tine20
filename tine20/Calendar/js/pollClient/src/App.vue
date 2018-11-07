@@ -43,7 +43,7 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full}', {headerDate: new Date(date.dtstart)})}}</span></th>
+                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full} {headerDate, time, short}', {headerDate: new Date(date.dtstart.replace(' ', 'T'))})}}</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -61,7 +61,7 @@
                       class="calendar-symbol"
                       v-if="!poll.config.is_anonymous && activeAttendee.id !== null && activeAttendee.id === attendee.key"
                     >
-                      <img :src="getCalendarIcon(datestatus)" alt='formatMessage("Calendar")' />
+                      <img :src="getCalendarIcon(datestatus)" alt="formatMessage('Calendar')" />
                     </span>
                     <img :src="getStatusIcon(datestatus.status)" :alt="statusName(datestatus.status)" />
                   </td>
@@ -102,7 +102,7 @@
         <div class="row">
           <div class="col-md-12" v-if="showChangeButtons()">
             <b-button-group>
-              <b-btn @click="onCancelChanges" variant="secondary">{{formatMessage('Cancle')}}</b-btn>
+              <b-btn @click="onCancelChanges" variant="secondary">{{formatMessage('Cancel')}}</b-btn>
               <b-btn @click="onApplyChanges" variant="primary">{{formatMessage('Save')}}</b-btn>
             </b-button-group>
           </div>
@@ -117,7 +117,7 @@
       </template>
       <div>
         <b-modal ref="loadMask" :visible="transferingPoll" hide-header hide-footer no-fade no-close-on-esc no-close-on-backdrop centered>
-          <spinner size="medium" :message='formatMessage("Please wait...")'></spinner>
+          <spinner size="medium" :message="formatMessage('Please wait...')"></spinner>
         </b-modal>
       </div>
       <div>
@@ -239,6 +239,9 @@ export default {
 
   mounted () {
     this.loadPoll()
+
+    document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none'
+    document.getElementsByClassName('tine-viewport-poweredby')[0].style.display = 'none'
 
     let urlParams = window.location.href.substring(window.location.href.indexOf('poll/') + 5).split('/')
 
@@ -586,7 +589,7 @@ export default {
         }
       })
 
-      return this.baseUrl + 'images/view-calendar-day-' + new Date(start).getDate() + '.png'
+      return this.baseUrl + 'images/icon-set/icon_cal_' + new Date(start.replace(' ', 'T')).getDate() + '.svg'
     },
     showChangeButtons () {
       if (_.isEmpty(this.poll)) {
@@ -749,6 +752,11 @@ iframe.calendar {
 <style>
   .calendar-window .modal-body {
     padding: 0;
+  }
+
+  .icon-cell img {
+    width: 24px;
+    margin: -2px;
   }
 
   button {

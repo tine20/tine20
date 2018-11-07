@@ -1,0 +1,28 @@
+/*
+ * Tine 2.0
+ *
+ * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author       Michael Spahn <m.spahn@metaways.de>
+ * @copyright    Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ */
+
+.t-contenttype-contact .action_add {
+    background-image:url(../../images/icon-set/icon_addressbook_plus.svg) !important;
+}
+
+.t-contenttype-contact .action_edit {
+    background-image:url(../../images/icon-set/icon_address_edit.svg) !important;
+}
+
+.t-contenttype-contact .action_delete {
+    background-image:url(../../images/icon-set/icon_address_clear.svg) !important;
+}
+
+.t-contenttype-contact .action_export {
+    background-image:url(../../images/icon-set/icon_address_export.svg) !important;
+}
+
+.t-contenttype-contact .action_import {
+    background-image:url(../../images/icon-set/icon_address_import.svg) !important;
+}

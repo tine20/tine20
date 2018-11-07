@@ -48,16 +48,37 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchLeads($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, $this->_controller, 'Crm_Model_LeadFilter', array('Addressbook_Model_Contact', 'Sales_Model_Product'));
-        
-        // add totalcounts of leadstates/leadsources/leadtypes
-        $result['totalleadstates'] = $result['totalcount']['leadstates'];
-        $result['totalleadsources'] = $result['totalcount']['leadsources'];
-        $result['totalleadtypes'] = $result['totalcount']['leadtypes'];
-        
-        $result['totalcount'] = $result['totalcount']['totalcount'];
-        
-        return $result;
+        return $this->_search($filter, $paging, $this->_controller, 'Crm_Model_LeadFilter', array('Addressbook_Model_Contact', 'Sales_Model_Product'));
+    }
+
+    /**
+     * do search count request only when resultset is equal
+     * to $pagination->limit or we are not on the first page
+     *
+     * @param $filter
+     * @param $pagination
+     * @param Tinebase_Controller_SearchInterface $controller the record controller
+     * @param $totalCountMethod
+     * @param integer $resultCount
+     * @return array
+     */
+    protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
+    {
+        if ($controller instanceof Crm_Controller_Lead) {
+            $result = $controller->searchCount($filter);
+
+            $totalresult = [];
+
+            // add totalcounts of leadstates/leadsources/leadtypes
+            $totalresult['totalleadstates'] = $result['leadstates'];
+            $totalresult['totalleadsources'] = $result['leadsources'];
+            $totalresult['totalleadtypes'] = $result['leadtypes'];
+            $totalresult['totalcount'] = $result['totalcount'];
+
+            return $totalresult;
+        } else {
+            return parent:: _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount);
+        }
     }
     
     /**
@@ -73,7 +94,9 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         foreach($lead['relations'] as $relation) {
             if ($relation['related_model'] == 'Tasks_Model_Task') {
-                $organizerIds[] = $relation['related_record']['organizer'];
+                if (isset($relation['related_record'])) {
+                    $organizerIds[] = $relation['related_record']['organizer'];
+                }
             }
         }
         
@@ -81,7 +104,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $organizers = $be->getMultiple($organizerIds);
 
         for ($i = 0; $i < count($lead['relations']); $i++) {
-            if ($lead['relations'][$i]['related_model'] == 'Tasks_Model_Task') {
+            if ($lead['relations'][$i]['related_model'] == 'Tasks_Model_Task' && isset($lead['relations'][$i]['related_record'])) {
                 $organizer = $organizers->getById($lead['relations'][$i]['related_record']['organizer']);
                 if ($organizer) {
                     $lead['relations'][$i]['related_record']['organizer'] = $organizer->toArray();
@@ -137,10 +160,11 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getDefaultContainer()
     {
-        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Crm_Preference::DEFAULTLEADLIST)->toArray();
+        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Crm_Preference::DEFAULTLEADLIST);
+        $defaultContainerArray = $defaultContainer->toArray();
         $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
             Tinebase_Core::getUser(),
-            $defaultContainerArray['id']
+            $defaultContainer
         )->toArray();
         
         return $defaultContainerArray;

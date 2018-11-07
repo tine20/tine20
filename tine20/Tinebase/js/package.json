@@ -3,11 +3,17 @@
   "private": true,
   "main": "Tinebase.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js",
-    "build": "webpack-dev-server --progress --config webpack.prod.js",
+    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.js",
+    "build": "./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js",
     "test": "NODE_ENV=unittest karma start karma.unittest.conf.js --single-run",
     "test:watch": "NODE_ENV=unittest karma start karma.unittest.conf.js",
     "test:watchnoreports": "NODE_ENV=unittest karma start karma.unittest.noreports.conf.js"
+  },
+  "tine20": {
+    "entryPoints": [
+      "fatClient.js",
+      "postal-xwindow-client.js"
+    ]
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -32,6 +38,7 @@
     "postal.request-response": "github:tine20/postal.request-response",
     "postal.xwindow": "github:tine20/postal.xwindow",
     "store2": "^2.5.9",
+    "svg-url-loader": "^2.3.2",
     "vue": "^2.5.9",
     "vue-router": "^3.0.1"
   },
@@ -86,7 +93,7 @@
     "uglify-es": "^3.2.2",
     "uglify-loader": "^2.0.0",
     "uglifyjs-webpack-plugin": "^1.1.2",
-    "unminified-webpack-plugin": "github:tine20/unminified-webpack-plugin#pu/suffixagainagain",
+    "unminified-webpack-plugin": "github:tine20/unminified-webpack-plugin#pu/chunkloading-v3",
     "url-loader": "^0.6.2",
     "vue-loader": "^13.5.0",
     "vue-simple-spinner": "^1.2.8",

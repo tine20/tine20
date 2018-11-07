@@ -11,6 +11,9 @@
     }, {
         "type": "git",
         "url": "https://github.com/tine20/zendframework1.git"
+    }, {
+        "type": "git",
+        "url": "https://github.com/tine20/dbal.git"
     },{
         "type": "git",
         "url": "https://github.com/tine20/OpenDocument.git"
@@ -21,23 +24,40 @@
         "type": "git",
         "url": "https://github.com/tine20/syncroton.git"
     }, {
+        "type": "git",
+        "url": "https://github.com/tine20/vobject.git"
+    }, {
       "type": "git",
       "url": "https://github.com/paulmhh/PHPWord"
     }],
     "require": {
         "php": "^5.6 | ^7.0",
-        "zendframework/zendframework1": "1.12.20pl30 as 1.12.20",
+        "ext-ctype": "*",
+        "ext-date": "*",
+        "ext-dom": "*",
+        "ext-gd": "*",
+        "ext-hash": "*",
+        "ext-iconv": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-SPL": "*",
+        "ext-SimpleXML": "*",
+        "ext-xml": "*",
+        "ext-zip": "*",
+        "zendframework/zendframework1": "1.12.20pl33 as 1.12.20",
         "tine20/composerapploader": "1.0.*",
         "syncroton/syncroton": "dev-master",
         "ezyang/htmlpurifier": "v4.6.0",
         "phpoffice/phpexcel": "1.8.*",
         "sabre/dav": "1.8.*",
-        "sabre/vobject": "3.5.3 as 2.1.0",
+        "sabre/vobject": "3.5.3pl1 as 2.1.0",
         "metaways/opendocument": "1.1",
         "phpoffice/phpword": "v0.14.0 as v0.13.0",
         "metaways/timezoneconvert": "1.*",
         "zendframework/zend-http": "2.5.*",
         "doctrine/orm": "2.5.*",
+        "doctrine/dbal": "v2.5.13pl4 as v2.5.13",
         "twig/twig": "~1.0",
         "phpoffice/phpspreadsheet": "dev-master",
         "nikic/fast-route": "^1.2",
@@ -46,7 +66,8 @@
         "mtdowling/cron-expression": "^1.2 | ^2.0",
         "symfony/dependency-injection": "^3.4",
         "symfony/config": "^3.3",
-        "sentry/sentry": "^1.8"
+        "sentry/sentry": "^1.8",
+        "zbateson/mail-mime-parser": "1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.6.*",
@@ -77,7 +98,10 @@
     "scripts": {
         "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
         "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
-        "build": "./vendor/bin/phing"
+        "build": "./vendor/bin/phing",
+        "post-install-cmd": [
+            "git submodule update --init"
+        ]
     },
     "support": {
         "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",

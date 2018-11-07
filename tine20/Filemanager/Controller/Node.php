@@ -258,7 +258,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * 
      * @return  Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids, $_ignoreACL = false)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
     {
         foreach (($results = $this->_backend->getMultipleTreeNodes($_ids, $_ignoreACL)) as $node) {
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
@@ -1067,7 +1067,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     $node = $this->_copyNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
                 }
 
-                if ($node instanceof Tinebase_Record_Abstract) {
+                if ($node instanceof Tinebase_Record_Interface) {
                     $result->addRecord($node);
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__

@@ -46,7 +46,7 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
     *
     * @param Tinebase_Model_User $_user
     * @param array $_ldapEntry
-    * @return Tinebase_Record_Abstract
+    * @return Tinebase_Record_Interface
     */
     protected function _ldap2User(Tinebase_Model_User $_user, array &$_ldapEntry)
     {

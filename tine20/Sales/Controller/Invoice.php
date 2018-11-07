@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -261,40 +261,40 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         // find address, otherwise do not bill this contract
         if (! $contract->billing_address_id) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no billing address could be found!';
                 $this->_autoInvoiceIterationFailures[] = $failure;
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $failure);
             }
             
             $this->_currentBillingContract = NULL;
         }
         
         if (! $this->_currentBillingCostCenter) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no costcenter could be found!';
                 $this->_autoInvoiceIterationFailures[] = $failure;
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $failure);
             }
             
             $this->_currentBillingContract = NULL;
         }
         
         if (! $this->_currentBillingCustomer) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no customer could be found!';
                 $this->_autoInvoiceIterationFailures[] = $failure;
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $failure);
             }
             
             $this->_currentBillingContract = NULL;
         }
 
         if(! $contract->start_date) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no start date is set!';
                 $this->_autoInvoiceIterationFailures[] = $failure;
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $failure);
             }
 
             $this->_currentBillingContract = NULL;
@@ -422,23 +422,25 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     if ($productAggregate->json_attributes && isset($productAggregate->json_attributes['assignedAccountables']) &&
                         is_array($productAggregate->json_attributes['assignedAccountables']) && count($productAggregate->json_attributes['assignedAccountables'])) {
 
-                        foreach ($productAggregate->json_attributes['assignedAccountables'] as $relationId) {
-                            $billedRelations[$relationId] = true;
-
-                            $relation = $this->_currentBillingContract->relations->getById($relationId);
-
-                            if (false === $relation || $product->accountable != $relation->related_model) {
-                                throw new Tinebase_Exception_UnexpectedValue('couldnt resolved assignedAccountables');
+                        foreach ($productAggregate->json_attributes['assignedAccountables'] as $relation) {
+                            $cRelation = $this->_currentBillingContract->relations
+                                ->filter('related_id', $relation['id'])->find('related_model', $relation['model']);
+                            if (null !== $cRelation) {
+                                $billedRelations[$cRelation->getId()] = true;
+                                $record = $cRelation->related_record;
+                            } else {
+                                $controller = Tinebase_Core::getApplicationInstance($relation['model']);
+                                $record = $controller->get($relation['id']);
                             }
 
                             $relations[] = array_merge(array(
-                                'related_model'  => $relation->related_model,
-                                'related_id'     => $relation->related_id,
-                                'related_record' => $relation->related_record->toArray(),
+                                'related_model'  => $relation['model'],
+                                'related_id'     => $relation['id'],
+                                'related_record' => $record->toArray(),
                             ), $this->_getRelationDefaults());
 
                             $billableAccountables[] = array(
-                                'ac' => $relation->related_record,
+                                'ac' => $record,
                                 'pa' => $productAggregate
                             );
                         }
@@ -456,7 +458,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // iterate relations, look for accountables, prepare relations
         foreach ($this->_currentBillingContract->relations as $relation) {
             if (isset($billedRelations[$relation->id]) ||
-                    !$relation->related_record instanceof Tinebase_Record_Abstract) {
+                    !$relation->related_record instanceof Tinebase_Record_Interface) {
                 continue;
             }
             // use productaggregate definition, if it has been found
@@ -1152,7 +1154,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         }
                     }
                 }
-                
+
+                /** @var Sales_Model_ProductAggregate $productAggregate */
                 foreach($paToUpdate as $paId => $productAggregate) {
                     $firstBill = (! $productAggregate->last_autobill);
                     
@@ -1185,7 +1188,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                     
                     Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
-                    
+
+                    $productAggregate->runConvertToRecord();
                     $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
                 }
                 

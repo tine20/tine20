@@ -51,19 +51,17 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
     initComponent: function() {
         this.containerName = this.containerName ? this.containerName : i18n._('Folder');
 
-        this.grantsStore =  new Ext.data.JsonStore({
+        this.grantsGrid = new Tine.widgets.container.GrantsGrid({
+            grantContainer: this.grantContainer
+        });
+        
+        Ext.apply(this.grantsGrid.getStore(), {
             baseParams: {
                 method: 'Tinebase_Container.getContainerGrants',
                 containerId: this.grantContainer.id
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            //id: 'id',
-            // use account_id here because that simplifies the adding of new records with the search comboboxes
-            id: 'account_id',
-            fields: Tine.Tinebase.Model.Grant
+            }
         });
-        this.grantsStore.load();
+        this.grantsGrid.getStore().load();
         
         Tine.widgets.container.GrantsDialog.superclass.initComponent.call(this);
     },
@@ -80,11 +78,6 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
      * returns dialog
      */
     getFormItems: function() {
-        this.grantsGrid = new Tine.widgets.container.GrantsGrid({
-            store: this.grantsStore,
-            grantContainer: this.grantContainer
-        });
-        
         return this.grantsGrid;
     },
     
@@ -95,7 +88,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Updating Grants'));
         
         var grants = [];
-        this.grantsStore.each(function(_record){
+        this.grantsGrid.getStore().each(function(_record){
             grants.push(_record.data);
         });
         
@@ -115,7 +108,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                     return;
                 }
                 var grants = Ext.util.JSON.decode(_result.responseText);
-                this.grantsStore.loadData(grants, false);
+                this.grantsGrid.getStore().loadData(grants, false);
             },
             failure: function(response, options) {
                 var responseText = Ext.util.JSON.decode(response.responseText);

@@ -951,7 +951,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _saveMessageInTinebaseCache(Felamimail_Model_Message $_message, Felamimail_Model_Folder $_folder, $_messageData)
     {
-        if (! $_message->received->isLater(Tinebase_DateTime::now()->subDay(3))) {
+        if (! $_message->received->isLater(Tinebase_DateTime::now()->subDay(1))) {
             return;
         }
         
@@ -959,7 +959,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' caching message ' . $_message->getId() . ' / memory usage: ' . $memory/1024/1024 . ' MBytes');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), TRUE));
-        
+
         $cacheId = 'getMessageHeaders' . $_message->getId();
         Tinebase_Core::getCache()->save($_messageData['header'], $cacheId, array('getMessageHeaders'));
     
@@ -1331,13 +1331,14 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         $imap = Felamimail_Backend_ImapFactory::factory($accountId);
         
-        if ($folderId !== NULL) {
+        if ($folderId !== null) {
+            $folder = null;
             try {
                 $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
                 $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Could not select folder ' . $folder->globalname . ': ' . $e->getMessage());
+                    . ' Could not select folder ' . (is_object($folder) ? $folder->globalname : $folderId) . ': ' . $e->getMessage());
             }
         }
         

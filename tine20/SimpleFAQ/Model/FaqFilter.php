@@ -5,7 +5,7 @@
  * @package     SimpleFAQ
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Patrick Ryser <patrick.ryser@gmail.com>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -22,14 +22,7 @@ class SimpleFAQ_Model_FaqFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'SimpleFAQ_Model_Faq';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'SimpleFAQ_Model_FaqFilter';
+    protected $_modelName = SimpleFAQ_Model_Faq::class;
     
     /**
      * @var array filter model fieldName => definition

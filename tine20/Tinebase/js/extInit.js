@@ -41,14 +41,9 @@ Ext.SSL_SECURE_URL = "library/ExtJS/resources/images/default/s.gif";
 /**
  * use native json implementation because we had problems with utf8 linebreaks (\u2028 for example)
  * @see 0003356: Special characters in telephone numbers makes addressbook stop responding
- * @see 0009416: IE9: js error in (new) lead edit dialog
- * @note IE is principally capable to use native json, but for *some reason* it's not working properly
- *       so we don't use it for IE
- * @note and IE9 has some "circular references problem" with its native json ...
- * 
  * @type Boolean
  */
-Ext.USE_NATIVE_JSON = ! Ext.isIE && ! Ext.isIE9;
+Ext.USE_NATIVE_JSON = true;
 
 /**
  * init ext quick tips
@@ -193,3 +188,15 @@ Ext.XTemplate.prototype.encode = function(value) {
 Ext.XTemplate.prototype.doubleEncode = function(value) {
     return value ? Tine.Tinebase.common.doubleEncode(value) : '';
 };
+
+/**
+ * allow separate icons for small buttons - needed e.g. for animations
+ * @type {Ext.Template}
+ */
+Ext.Button.buttonTemplate = new Ext.Template(
+    '<table id="{4}" cellspacing="0" class="x-btn {3}"><tbody class="{1}">',
+    '<tr><td class="x-btn-tl"><i>&#160;</i></td><td class="x-btn-tc"></td><td class="x-btn-tr"><i>&#160;</i></td></tr>',
+    '<tr><td class="x-btn-ml"><i>&#160;</i></td><td class="x-btn-mc"><em class="{2}" unselectable="on"><button type="{0}"></button><div class="x-btn-image"></div></em></td><td class="x-btn-mr"><i>&#160;</i></td></tr>',
+    '<tr><td class="x-btn-bl"><i>&#160;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&#160;</i></td></tr>',
+    '</tbody></table>');
+Ext.Button.buttonTemplate.compile();

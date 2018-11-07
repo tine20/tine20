@@ -26,6 +26,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         'Tinebase.monitoringCheckConfig',
         'Tinebase.monitoringCheckCron',
         'Tinebase.monitoringCheckQueue',
+        'Tinebase.monitoringCheckCache',
         'Tinebase.monitoringLoginNumber',
         'Tinebase.monitoringActiveUsers',
     );
@@ -78,6 +79,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
+        $time_start = microtime(true);
         $method = $this->getRequestMethod();
         
         if (! in_array($method, array('Tinebase.monitoringCheckDB', 'Tinebase.monitoringCheckConfig'))) {
@@ -111,7 +113,8 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         // finish profiling here - we won't run in Tinebase_Core again
         Tinebase_Core::finishProfiling();
         Tinebase_Core::getDbProfiling();
-        
+
+        Tinebase_Log::logUsageAndMethod('tine20.php', $time_start, $method);
         exit($result);
     }
     

@@ -43,7 +43,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         $server = new Tinebase_Http_Server();
         $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
         $server->setClass('Filemanager_Frontend_Download', 'Download');
-        
+
         try {
             if (Tinebase_Session::sessionExists()) {
                 try {
@@ -69,7 +69,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
                 }
-                
+
                 $applicationParts = explode('.', $this->getRequestMethod());
                 $applicationName = ucfirst($applicationParts[0]);
                 
@@ -89,17 +89,21 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.login';
                 }
-                
+
                 // sessionId got send by client, but we don't use sessions for non authenticated users
                 if (Tinebase_Session::sessionExists()) {
                     // expire session cookie on client
                     Tinebase_Session::expireSessionCookie();
                 }
             }
-            
+
             $this->_method = $this->getRequestMethod();
             
-            $server->handle($_REQUEST);
+            $response = $server->handle($_REQUEST);
+            if ($response instanceof \Zend\Diactoros\Response) {
+                $emitter = new Zend\Diactoros\Response\SapiEmitter();
+                $emitter->emit($response);
+            }
             
         } catch (Zend_Json_Server_Exception $zjse) {
             // invalid method requested or not authenticated, etc.
@@ -122,7 +126,8 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                     exit;
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Show mainscreen with setup exception');
-                    $this->_method = 'Tinebase.exception';
+                    header('HTTP/1.0 500 Internal Server Error');
+                    exit;
                 }
                 
                 $server->handle(array('method' => $this->_method));

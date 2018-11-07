@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,6 +16,10 @@
  */
 class Sales_Model_InvoicePosition extends Tinebase_Record_Abstract
 {
+    const TYPE_TOTAL = 'total';
+    const TYPE_INCLUSIVE = 'inclusive';
+    const TYPE_EXCEEDING = 'exceeding';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -48,6 +52,19 @@ class Sales_Model_InvoicePosition extends Tinebase_Record_Abstract
             'model' => array(
                 'label'   => 'Type', // _('Type')
                 'type'    => 'string',
+            ),
+            'type' => array(
+                //'label'   => 'Type', // _('Type')
+                'type'    => 'string',
+                'validators' => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => '',
+                    Zend_Validate_InArray::class => [
+                        self::TYPE_EXCEEDING,
+                        self::TYPE_INCLUSIVE,
+                        self::TYPE_TOTAL,
+                    ]
+                ],
             ),
             'invoice_id' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),

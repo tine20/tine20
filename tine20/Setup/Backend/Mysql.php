@@ -452,7 +452,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $cmd = ($structDump!==false?'{ ':'')
               ."mysqldump --defaults-extra-file=$mycnf "
               .$ignoreTables
-              ."--single-transaction "
+              ."--single-transaction --max_allowed_packet=512M "
               ."--opt "
               . escapeshellarg($this->_config->database->dbname)
               . ($structDump!==false?'; ' . $structDump . '; }':'')
@@ -460,6 +460,22 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         exec($cmd);
         unlink($mycnf);
+
+        // validate all tables have been dumped
+        exec("bzcat $backupDir/tine20_mysql.sql.bz2 | grep 'CREATE TABLE `'", $output);
+        array_walk($output, function (&$val) {
+            if (preg_match('/`(.*)`/', $val, $m)) {
+                $val = $m[1];
+            } else {
+                $val = null;
+            }
+        });
+        $output = array_filter($output);
+        $allTables = $this->_db->listTables();
+        $diff = array_diff($allTables, $output);
+        if (!empty($diff)) {
+            throw new Tinebase_Exception_Backend('dump did not work, table diff: ' . print_r($diff, true));
+        }
     }
 
     /**
@@ -535,10 +551,16 @@ EOT;
         return false;
     }
 
+    /**
+     * @param array $_buffer
+     * @param Setup_Backend_Schema_Field_Abstract $_field
+     * @return array
+     */
     protected function _addDeclarationCollation(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
     {
         if (isset($_field->collation)) {
-            $_buffer[] = 'COLLATE ' . $_field->collation;
+            $collation = ($_field->collation == 'utf8mb4_bin' && ! $this->_useUtf8mb4) ? 'utf8_bin' : $_field->collation;
+            $_buffer[] = 'COLLATE ' . $collation;
         }
         return $_buffer;
     }

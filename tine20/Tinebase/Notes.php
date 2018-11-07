@@ -281,12 +281,12 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  Tinebase_Record_RecordSet  $_records       the recordSet
      * @param  string                     $_notesProperty  the property in the record where the notes are in (defaults: 'notes')
      * @param  string                     $_backend   backend of record
-     * @return void
+     * @return Tinebase_Record_RecordSet|null
      */
     public function getMultipleNotesOfRecords($_records, $_notesProperty = 'notes', $_backend = 'Sql', $_onlyNonSystemNotes = TRUE)
     {
         if (count($_records) == 0) {
-            return;
+            return null;
         }
         
         $modelName = $_records->getRecordClassName();
@@ -302,6 +302,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             //$record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
             $record->{$_notesProperty} = $notesOfRecords->filter('record_id', $record->getId());
         }
+
+        return $notesOfRecords;
     }
     
     /************************** set / add / delete notes ************************/
@@ -328,7 +330,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         if ($notes instanceOf Tinebase_Record_RecordSet) {
             $notesToSet = $notes;
         } else {
-            if (count($notes) > 0 && $notes[0] instanceOf Tinebase_Record_Abstract) {
+            if (count($notes) > 0 && $notes[0] instanceOf Tinebase_Record_Interface) {
                 // array of notes records given
                 $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $notes);
             } else {
@@ -409,7 +411,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * add new system note
      *
-     * @param Tinebase_Record_Abstract|string $_record
+     * @param Tinebase_Record_Interface|string $_record
      * @param string|Tinebase_Mode_User $_userId
      * @param string $_type (created|changed)
      * @param Tinebase_Record_RecordSet|string $_mods (Tinebase_Model_ModificationLog)
@@ -426,8 +428,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             return FALSE;
         }
         
-        $id = ($_record instanceof Tinebase_Record_Abstract) ? $_record->getId() : $_record;
-        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Abstract) ? get_class($_record) : 'unknown');
+        $id = ($_record instanceof Tinebase_Record_Interface) ? $_record->getId() : $_record;
+        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : 'unknown');
         if (($_userId === NULL)) {
             $_userId = Tinebase_Core::getUser();
         }
@@ -914,10 +916,16 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @ param boolean $getDeleted
      * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Note
      */
-    public function getAllNotes()
+    public function getAllNotes($orderBy = null, $limit = null, $offset = null)
     {
         $select = $this->_db->select()
             ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'));
+        if (null !== $orderBy) {
+            $select->order($orderBy);
+        }
+        if (null !== $limit) {
+            $select->limit($limit, $offset);
+        }
 
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);

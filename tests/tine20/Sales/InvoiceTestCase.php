@@ -562,7 +562,7 @@ class Sales_InvoiceTestCase extends TestCase
         
         $i = 0;
         
-        foreach($contractData as $cd) {
+        foreach ($contractData as $cd) {
             $costcenter = $this->_costcenterRecords->getByIndex($i);
             $customer   = $this->_customerRecords->getByIndex($i);
             

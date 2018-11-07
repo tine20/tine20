@@ -152,7 +152,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00FF00'
+            'color'          => '#00FF00',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         $group = Tinebase_Group::getInstance()->getDefaultGroup();
@@ -168,12 +169,32 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'description'          => static::$_de ? 'Bis zu 10 Personen' : 'Up to 10 people',
             'email'                => 'mars@tin20.com',
             'is_location'          => TRUE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_READ => true,
+            ]]
         )));
         $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
             'name'                 => static::$_de ? 'Besprechnungsraum Venus (2.OG)' : 'Meeting Room Venus (second floor)',
             'description'          => static::$_de ? 'Bis zu 14 Personen' : 'Up to 14 people',
             'email'                => 'venus@tin20.com',
             'is_location'          => TRUE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_READ => true,
+            ]]
         )));
     }
     
@@ -504,7 +525,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF'
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         if (isset($this->_personas['sclever'])) {
@@ -662,7 +684,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF'
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         if (isset($this->_personas['sclever'])) {
@@ -832,7 +855,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF'
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         if (isset($this->_personas['sclever'])) {
@@ -1221,7 +1245,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF'
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
         ), true));
 
         if (isset($this->_personas['sclever'])) {

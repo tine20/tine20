@@ -57,6 +57,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             array('n_given', 'n_family', 'org_name'),
             array('email'),
         ));
+
         
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
@@ -110,7 +111,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $groups = $listController->getMemberships($_id);
             $contact->groups = $listController->getMultiple($groups);
         }
-        
+
         Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
 
         return $contact;
@@ -159,8 +160,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * fetch one contact identified by $_userId
      *
-     * @param   string $_userId
-     * @param   boolean $_ignoreACL don't check acl grants
+     * @param string|Tinebase_Model_User $_userId
+     * @param boolean $_ignoreACL don't check acl grants
      * @return Addressbook_Model_Contact
      * @throws Addressbook_Exception_AccessDenied
      * @throws Addressbook_Exception_NotFound
@@ -174,7 +175,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_InvalidArgument('Empty user id');
         }
 
-        $contact = $this->_backend->getByUserId($_userId);
+        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
+        $contact = $this->_backend->getByUserId($userId);
         
         if ($_ignoreACL === FALSE) {
             if (empty($contact->container_id)) {
@@ -575,7 +577,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record the update record
      * @param   Tinebase_Record_Interface $_oldRecord the current persistent record
      * @throws Tinebase_Exception_AccessDenied
-     * @todo remove system note for updated jpegphoto when images are modlogged (@see 0000284: modlog of contact images / move images to vfs)
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -586,25 +587,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_setGeoData($_record);
         }
         
-        if (isset($_record->jpegphoto)){
-            // add system note when jpegphoto gets changed
-            $translate = Tinebase_Translation::getTranslation('Addressbook');
-            $noteMessage = "";
-
-            if (! empty($_record->jpegphoto)) {
-                // new or updated contact image supplied
-                $noteMessage = $translate->_('Uploaded new contact image.');
-            } else {
-                // contact image deleted
-                $noteMessage = $translate->_('Deleted contact image.');
-            }
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . (new Exception($noteMessage)));
-            }
-            Tinebase_Notes::getInstance()->addSystemNote($_record, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $noteMessage);
-        }
-
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
         }
@@ -716,10 +698,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         if (! empty($_record->{$_address . 'countryname'})) {
             try {
-                $country = Zend_Locale::getTranslation($_record->{$_address . 'countryname'}, 'Country', $_record->{$_address . 'countryname'});
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
-                $nominatim->setCountry($country);
+                $countryname = $_record->{$_address . 'countryname'};
+                if (! empty($countryname)) {
+                    $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
+                    $nominatim->setCountry($country);
+                }
             } catch (Zend_Locale_Exception $zle) {
                 Tinebase_Exception::log($zle, true);
             }
@@ -908,7 +893,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * * Addressbook_Controller_List::getInstance()->get() will check for ACLs
      * * Addressbook_Controller_ListRole::getInstance()->get() will check for ACLs
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @return Tinebase_Record_RecordSet
      */
     public function generatePathForRecord($record)
@@ -978,8 +963,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         $contactId = $_addedUser->contact_id;
         if (!empty($contactId)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . " addedUser does have contact_id set: " . $_addedUser->accountLoginName . ' updating existing contact now.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . " Added user does have contact_id set: " . $_addedUser->accountLoginName . ' updating existing contact now.');
 
             $this->inspectUpdateUser($_addedUser, $_newUserProperties);
             return;

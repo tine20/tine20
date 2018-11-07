@@ -127,10 +127,10 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
     }
 
     /**
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param null $_resolveStrategy
      * @param array $_recordData
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_Validation
      * @throws Tinebase_Exception_NotFound

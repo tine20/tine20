@@ -259,7 +259,7 @@ class Tinebase_AccountTest extends TestCase
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
 
-        $account = Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
+        Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
     }
 
     /**
@@ -268,7 +268,7 @@ class Tinebase_AccountTest extends TestCase
      */
     public function testConvertAccountIdToInt()
     {
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
         
         Tinebase_Model_User::convertUserIdToInt(0);
     }
@@ -291,7 +291,7 @@ class Tinebase_AccountTest extends TestCase
             )
         );
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
         
         Tinebase_Model_User::convertUserIdToInt($noIdAccount);
     }

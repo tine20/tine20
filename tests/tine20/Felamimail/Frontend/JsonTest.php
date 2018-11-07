@@ -7,7 +7,7 @@ use Sabre\DAV;
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -182,48 +182,57 @@ class Felamimail_Frontend_JsonTest extends TestCase
         
         if (! empty($this->_foldersToClear)) {
             foreach ($this->_foldersToClear as $folderName) {
-                // delete test messages from given folders on imap server (search by special header)
-                $this->_imap->selectFolder($folderName);
-                $result = $this->_imap->search(array(
-                    'HEADER X-Tine20TestMessage jsontest'
-                ));
-                //print_r($result);
-                foreach ($result as $messageUid) {
-                    $this->_imap->removeMessage($messageUid);
-                }
-                
-                // clear message cache
-                $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $folderName);
-                Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
+                try {
+                    // delete test messages from given folders on imap server (search by special header)
+                    $this->_imap->selectFolder($folderName);
+                    $result = $this->_imap->search(array(
+                        'HEADER X-Tine20TestMessage jsontest'
+                    ));
+                    //print_r($result);
+                    foreach ($result as $messageUid) {
+                        $this->_imap->removeMessage($messageUid);
+                    }
+
+                    // clear message cache
+                    $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(),
+                        $folderName);
+                    Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
+                } catch (Exception $e) {}
             }
         }
         
         // sieve cleanup
         if ($this->_testSieveScriptName !== NULL) {
-            Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
             try {
-                Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
-            } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                // do not delete script if active
-            }
-            Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
-            
-            if ($this->_oldSieveData !== NULL) {
-                $this->_oldSieveData->save();
-            }
+                Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
+                try {
+                    Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
+                } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                    // do not delete script if active
+                }
+                Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
+
+                if ($this->_oldSieveData !== NULL) {
+                    $this->_oldSieveData->save();
+                }
+            } catch (Exception $e) {}
         }
         if ($this->_oldActiveSieveScriptName !== NULL) {
-            Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
-            Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
+            try {
+                Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
+                Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
+            } catch (Exception $e) {}
         }
         
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
-            $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
-            //echo "delete $path";
-            $webdavRoot->delete($path);
+            try {
+                $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
+                //echo "delete $path";
+                $webdavRoot->delete($path);
+            } catch (Exception $e) {}
         }
-        
+
         parent::tearDown();
 
         // needed to clear cache of containers
@@ -1209,7 +1218,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($messageData);
-        $message = $this->_searchForMessageBySubject($subject);
+        $this->_searchForMessageBySubject($subject);
         
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $this->_checkEmailNote($contact, $subject);
@@ -1294,126 +1303,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessagesInMailFiler()
-    {
-        $this->testFileMessages('MailFiler');
-        $personalFilemanagerContainer = $this->_getPersonalContainerNode('MailFiler');
-        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
-            . '/' . Tinebase_Core::getUser()->accountLoginName
-            . '/' . $personalFilemanagerContainer->name;
-        $filter = array(array(
-            'field'    => 'path',
-            'operator' => 'equals',
-            'value'    => $path
-        ), array(
-            'field'    => 'subject',
-            'operator' => 'contains',
-            'value'    => 'test'
-        ));
-        $mailFilerJson = new MailFiler_Frontend_Json();
-        $emlNodes = $mailFilerJson->searchNodes($filter, array('sort' => 'subject', 'order' => 'ASC'));
-        $this->assertEquals(2, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
-        $emlNode = $emlNodes['results'][1];
-
-        // check email fields
-        $this->assertTrue(isset($emlNode['message']), 'message not found in node array: ' . print_r($emlNodes['results'], true));
-        $this->assertEquals(array(Tinebase_Core::getUser()->accountEmailAddress), $emlNode['message']['to'], print_r($emlNode['message'], true));
-        $this->assertTrue(isset($emlNode['message']['structure']) && is_array($emlNode['message']['structure']), 'structure not found or not an array: ' . print_r($emlNode['message'], true));
-
-        $emlNode = $mailFilerJson->getNode($emlNode['id']);
-        $this->assertTrue(isset($emlNode['message']['body']) && is_string($emlNode['message']['body']), 'body not found or not a string: ' . print_r($emlNode['message'], true));
-        $this->assertContains('aaaaaä', $emlNode['message']['body'], print_r($emlNode['message'], true));
-
-        $emlNodesDesc = $mailFilerJson->searchNodes($filter, array('sort' => 'subject', 'order' => 'DESC'));
-        $this->assertEquals(2, $emlNodesDesc['totalcount'], 'could not find eml file node with subject filter');
-        $this->assertEquals($emlNode['id'], $emlNodesDesc['results'][1]['id'], 'sort did not work');
-    }
-
-    /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessagesInMailFilerWithAttachment()
-    {
-        $emlNode = $this->_fileMessageInMailFiler();
-        $this->assertTrue(isset($emlNode['message']['attachments']), 'attachments not found in message node: ' . print_r($emlNode, true));
-        $this->assertEquals(1, count($emlNode['message']['attachments']), 'attachment not found in message node: ' . print_r($emlNode, true));
-        $this->assertEquals('moz-screenshot-83.png', $emlNode['message']['attachments'][0]['filename'], print_r($emlNode['message']['attachments'], true));
-    }
-
-    /**
-     * @param string $messageFile
-     * @return array
-     */
-    protected function _fileMessageInMailFiler($messageFile = 'multipart_related.eml', $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag')
-    {
-        $appName = 'MailFiler';
-        $personalFilemanagerContainer = $this->_getPersonalContainerNode($appName);
-        $testFolder = $this->_getFolder($this->_testFolderName);
-        $message = fopen(dirname(__FILE__) . '/../files/' . $messageFile, 'r');
-        Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
-
-        $message = $this->_searchForMessageBySubject($subject, $this->_testFolderName);
-        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
-            . '/' . Tinebase_Core::getUser()->accountLoginName
-            . '/' . $personalFilemanagerContainer->name;
-        $filter = array(array(
-            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
-        ));
-        $this->_json->fileMessages($filter, $appName, $path);
-        $filter = array(array(
-            'field'    => 'path',
-            'operator' => 'equals',
-            'value'    => $path
-        ), array(
-            'field'    => 'subject',
-            'operator' => 'equals',
-            'value'    => $message['subject']
-        ));
-        $mailFilerJson = new MailFiler_Frontend_Json();
-        $emlNodes = $mailFilerJson->searchNodes($filter, array());
-        $this->assertGreaterThan(0, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
-        $emlNode = $emlNodes['results'][0];
-
-        return $mailFilerJson->getNode($emlNode['id']);;
-    }
-
-    /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessagesInMailFilerWithSingleBodyPart()
-    {
-        $emlNode = $this->_fileMessageInMailFiler('tine20_alarm_notifictation.eml', 'Alarm for event "ss/ss" at Oct 12, 2016 4:00:00 PM');
-        $this->assertContains('Event details', $emlNode['message']['body'], print_r($emlNode['message'], true));
-        $this->assertContains('"ss/ss"', $emlNode['message']['subject'], print_r($emlNode['message'], true));
-        $this->assertContains('"ss_ss"', $emlNode['name'], print_r($emlNode, true));
-    }
-
-    /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessageWithDelete()
-    {
-        $emlNode = $this->_fileMessageInMailFiler();
-        $mailFilerJson = new MailFiler_Frontend_Json();
-        $result = $mailFilerJson->deleteNodes(array($emlNode['path']));
-        self::assertEquals('success', $result['status']);
-    }
-
-    /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessageWithMultipartAttachment()
-    {
-        $emlNode = $this->_fileMessageInMailFiler('multipart_attachments.eml', 'Testmail mit Anhang');
-        $this->assertTrue(isset($emlNode['message']['attachments']), 'attachments not found in message node: ' . print_r($emlNode, true));
-        $this->assertEquals(5, count($emlNode['message']['attachments']), 'attachment not found in message node: ' . print_r($emlNode, true));
-        $this->assertEquals('TS Lagerstände.jpg', $emlNode['message']['attachments'][0]['filename'], print_r($emlNode['message']['attachments'], true));
-        $this->assertContains('Siehe Dateien anbei', $emlNode['message']['body'], print_r($emlNode['message'], true));
-    }
-
-    /**
      * testMessageNoteForContactWithoutEditGrant
      */
     public function testMessageNoteForContactWithoutEditGrant()
@@ -1423,7 +1312,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             'Addressbook',
             'Internal Contacts',
             Tinebase_Model_Container::TYPE_SHARED);
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        $grants = new Tinebase_Record_RecordSet($internalContacts->getGrantClass(), array(array(
             'account_id'    => $this->_personas['sclever']->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
@@ -1440,7 +1329,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => false,
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         )));
-        Tinebase_Container::getInstance()->setGrants($internalContacts->getId(), $grants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($internalContacts, $grants, TRUE);
 
         $subject = 'test note';
         $messageData = $this->_getMessageData('', $subject);
@@ -2217,6 +2106,25 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     }
 
     /**
+     * @see https://github.com/tine20/tine20/issues/2172
+     */
+    public function testReplyToInMessage()
+    {
+        $this->_account->reply_to = 'noreply@tine20.org';
+        $this->_json->saveAccount($this->_account->toArray());
+
+        $this->_foldersToClear[] = 'INBOX';
+        $messageToSend = $this->_getMessageData();
+        $messageToSend['reply_to'] = 'donotreply@tine20.org';
+        $this->_json->saveMessage($messageToSend);
+        $message = $this->_searchForMessageBySubject($messageToSend['subject']);
+
+        $complete = $this->_json->getMessage($message['id']);
+        $this->assertTrue(isset($complete['headers']['reply-to']), print_r($complete, true));
+        $this->assertEquals('"Tine 2.0 Admin Account" <donotreply@tine20.org>', $complete['headers']['reply-to']);
+    }
+
+    /**
      * Its possible to choice the kind of attachment when adding it.
      *
      * type = tempfile: uploaded from harddisk, supposed to be a regular attachment
@@ -2396,5 +2304,38 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
         file_put_contents($tempfilePath, 'some content');
         return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
+    }
+
+    public function testGetMessageFromNode()
+    {
+        // create test eml node
+        // @todo move this as helper to generic testcase
+        $user = Tinebase_Core::getUser();
+        $container = Tinebase_FileSystem::getInstance()->getPersonalContainer($user, 'Filemanager', $user)->getFirstRecord();
+        $filepaths = ['/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+            . '/' . $user->accountLoginName
+            . '/' . $container->name
+            . '/test.eml'
+        ];
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileIds = [Tinebase_TempFile::getInstance()->createTempFile($tempPath)];
+        self::assertTrue(is_int($strLen = file_put_contents(
+            $tempPath,
+            file_get_contents(dirname(__FILE__) . '/../files/multipart_related.eml')))
+        );
+        $ffj = new Filemanager_Frontend_Json();
+        $result = $ffj->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, true);
+
+        self::assertEquals(1, count($result));
+
+        // fetch it & assert data
+        $message = $this->_json->getMessageFromNode($result[0]['id']);
+        self::assertEquals('Christof Gacki', $message['from_name']);
+        self::assertEquals('c.gacki@metaways.de', $message['from_email']);
+        self::assertEquals(Zend_Mime::TYPE_HTML, $message['body_content_type']);
+        self::assertContains('wie gestern besprochen würde mich sehr freuen', $message['body']);
+        self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));
+        self::assertEquals(1, count($message['attachments']));
+        self::assertEquals('2010-05-05 16:25:40', $message['sent']);
     }
 }

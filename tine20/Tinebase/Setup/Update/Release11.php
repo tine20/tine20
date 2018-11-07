@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
+class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**
      * update to 11.1
@@ -168,6 +168,7 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $this->updateSchema('Tinebase', array(Tinebase_Model_SchedulerTask::class));
 
         $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->removeTask('Tinebase_User/Group::syncUsers/Groups');
         // TODO create methods for fetching and creating all known application tasks (maybe with existence check)
         Tinebase_Scheduler_Task::addAlarmTask($scheduler);
         Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
@@ -532,11 +533,285 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 12.0
+     * update to 11.27
      *
-     * @return void
+     * eventually add missing indexed_hash column to tree_nodes
      */
     public function update_26()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_55();
+
+        $this->setApplicationVersion('Tinebase', '11.27');
+    }
+
+    /**
+     * update to 11.28
+     *
+     * check for container without a model and set app default model if NULL
+     */
+    public function update_27()
+    {
+        $models = [];
+        $containers = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container', ['id', 'application_id'])
+            ->where($this->_db->quoteIdentifier('model') . ' IS NULL OR ' . $this->_db->quoteIdentifier('model')
+                . ' = ' . $this->_db->quote(''))->query()->fetchAll(Zend_DB::FETCH_ASSOC);
+
+        foreach ($containers as $container) {
+            if (!isset($models[$container['application_id']])) {
+                $models[$container['application_id']] = Tinebase_Core::getApplicationInstance(
+                    Tinebase_Application::getInstance()->getApplicationById($container['application_id'])->name, '',
+                    true)->getDefaultModel();
+            }
+
+            if ($models[$container['application_id']]) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Setting model ' . $models[$container['application_id']] . ' for container ' . $container['id']);
+                $this->_db->update(SQL_TABLE_PREFIX . 'container', ['model' => $models[$container['application_id']]],
+                    $this->_db->quoteInto('id = ?', $container['id']));
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Could not find default model for app id ' . $container['application_id']);
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.28');
+    }
+
+    /**
+     * update to 11.29
+     *
+     * add hierarchy column to container
+     */
+    public function update_28()
+    {
+        // first we need to do the calendar structure update. When we touch the containers below we might trigger
+        // a resource update too, so the structure needs to be available by then, we can't wait for the Calendar
+        // to update later
+        if (Tinebase_Application::getInstance()->isInstalled('Calendar')) {
+            $calendarUpdate = new Calendar_Setup_Update_Release11($this->_backend);
+            $calendarUpdate->update_9(false);
+        }
+
+        if (! $this->_backend->columnExists('hierarchy', 'container')) {
+            $this->_backend->addCol('container', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>hierarchy</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+
+            $containerController = Tinebase_Container::getInstance();
+            /** @var Tinebase_Model_Container $container */
+            foreach ($containerController->getAll() as $container) {
+                $container->hierarchy = $container->name;
+                $containerController->update($container);
+            }
+        }
+
+        if ($this->getTableVersion('container') == 13) {
+            $this->setTableVersion('container', 14);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.29');
+    }
+
+    /**
+     * update to 11.30
+     *
+     * create replication user
+     */
+    public function update_29()
+    {
+        try {
+            Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_REPLICATION);
+            // nothing to do
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $replicationUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
+                Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+            if (null !== $replicationUser) {
+                $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
+                if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
+                    $password = Tinebase_Record_Abstract::generateUID(12);
+                }
+                // TODO auto create pw that is matching the policy
+                $pwPolicyActive = Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE};
+                if ($pwPolicyActive) {
+                    Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE} = false;
+                }
+                Tinebase_User::getInstance()->setPassword($replicationUser, $password);
+                if ($pwPolicyActive) {
+                    Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE} = true;
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.30');
+    }
+
+    /**
+     * update to 11.31
+     *
+     * removing db prefix from application_tables if present
+     */
+    public function update_30()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_56();
+        $this->setApplicationVersion('Tinebase', '11.31');
+    }
+
+    /**
+     * delete some obsolete export definitions
+     */
+    public function update_31()
+    {
+        $obsoleteNames = ['adb_default_xls', 'adb_ods', 'lead_excel5_xls'];
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter([
+            ['field' => 'name', 'operator' => 'in', 'value' => $obsoleteNames]
+        ]);
+        Tinebase_ImportExportDefinition::getInstance()->deleteByFilter($filter);
+        $this->setApplicationVersion('Tinebase', '11.32');
+    }
+
+    /**
+     * update to 11.33
+     *
+     * increase temp_file size column to bigint
+     */
+    public function update_32()
+    {
+        $this->_backend->alterCol('temp_files', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>size</name>
+                    <type>integer</type>
+                    <length>64</length>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>'));
+
+        if ($this->getTableVersion('temp_files') == 1) {
+            $this->setTableVersion('temp_files', 2);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.33');
+    }
+
+    /**
+     * update to 11.34
+     *
+     * change unique key parent_id - name - deleted_time so that it really works
+     */
+    public function update_33()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_57();
+        $this->setApplicationVersion('Tinebase', '11.34');
+    }
+
+    /**
+     * update to 11.35
+     *
+     * container xprops need to be [] not NULL
+     */
+    public function update_34()
+    {
+        $quotedField = $this->_db->quoteIdentifier('xprops');
+        $this->_db->update(SQL_TABLE_PREFIX . 'container', ['xprops' => '[]'],
+            $quotedField . ' IS NULL');
+
+        $this->setApplicationVersion('Tinebase', '11.35');
+    }
+
+    /**
+     * update to 11.36
+     *
+     * create filterSyncToken table and add clean up job
+     */
+    public function update_35()
+    {
+        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        Tinebase_Scheduler_Task::addFilterSyncTokenCleanUpTask(Tinebase_Core::getScheduler());
+
+        $this->setApplicationVersion('Tinebase', '11.36');
+    }
+
+    /**
+     * update to 11.37
+     *
+     * update temp file cleanup task
+     */
+    public function update_36()
+    {
+        $scheduler = new Tinebase_Backend_Scheduler();
+        try {
+            /** @var Tinebase_Model_SchedulerTask $task */
+            $task = $scheduler->getByProperty('Tinebase_TempFileCleanup', 'name');
+            $task->config->setCron(Tinebase_Scheduler_Task::TASK_TYPE_HOURLY);
+            $scheduler->update($task);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Scheduler_Task::addTempFileCleanupTask(Tinebase_Scheduler::getInstance());
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.37');
+    }
+
+    /**
+     * update to 11.38
+     *
+     * do nothing here
+     */
+    public function update_37()
+    {
+        $this->setApplicationVersion('Tinebase', '11.38');
+    }
+
+    /**
+     * update to 11.39
+     *
+     * add is_system column to customfield_config
+     */
+    public function update_38()
+    {
+        $this->addIsSystemToCustomFieldConfig();
+
+        $this->setApplicationVersion('Tinebase', '11.39');
+    }
+
+    public function addIsSystemToCustomFieldConfig()
+    {
+        if (!$this->_backend->columnExists('is_system', 'customfield_config')) {
+            $this->_backend->addCol('customfield_config', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>is_system</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('customfield_config') < 6) {
+            $this->setTableVersion('customfield_config', 6);
+        }
+    }
+
+    /**
+     * update to 11.38
+     *
+     * update filterSyncToken table
+     */
+    public function update_39()
+    {
+        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        $this->setApplicationVersion('Tinebase', '11.40');
+    }
+
+    /**
+     * update to 12.0
+     */
+    public function update_40()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }

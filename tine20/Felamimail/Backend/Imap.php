@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -502,11 +502,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
 
         if (isset($summary['messages'])) {
             foreach ($summary['messages'] as $id => $data) {
-                $messages[$data['UID']] = array(
-                    'flags'  => $data['FLAGS'],
-                    'uid'    => $data['UID'],
-                    'modseq' => $data['MODSEQ'][0]
-                );
+                if (isset($data['UID']) && isset($data['FLAGS']) && isset($data['MODSEQ'][0])) {
+                    $messages[$data['UID']] = array(
+                        'flags'     => $data['FLAGS'],
+                        'uid'       => $data['UID'],
+                        'modseq'    => $data['MODSEQ'][0]
+                    );
+                }
             }
         }
         
@@ -526,7 +528,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $summary = $this->_protocol->fetch(array('UID', 'FLAGS'), $from, $to, $useUid);
                 
         // fetch returns a different structure when fetching one or multiple messages
-        if($to === null && ctype_digit("$from")) {
+        if ($to === null && ctype_digit("$from")) {
             $summary = array(
                 $from => $summary
             );
@@ -534,18 +536,20 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $messages = array();
         
-        foreach($summary as $id => $data) {
+        foreach ($summary as $id => $data) {
             $flags = array();
             foreach ($data['FLAGS'] as $flag) {
                 $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
             }
     
-            if($this->_useUid === true) {
+            if ($this->_useUid === true) {
+                if (! isset($data['UID'])) {
+                    continue;
+                }
                 $key = $data['UID'];
             } else {
                 $key = $id;
             }
-            
             
             $messages[$key] = array(
                 'flags'     => $flags,
@@ -553,7 +557,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             );
         }
         
-        if($to === null && ctype_digit("$from")) {
+        if ($to === null && ctype_digit("$from")) {
             // only one message requested
             return $messages[$from];
         } else {
@@ -726,8 +730,14 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     protected function _parseStructureNonMultiPart($_structure, $_partId)
     {
         if (is_array($_structure[0]) || is_array($_structure[1])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
-            throw new Felamimail_Exception_IMAP('Invalid structure. String expected, got array.');
+            $structStr = print_r($_structure, true);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $structStr);
+            throw new Felamimail_Exception_IMAP('Invalid structure. String expected, got array: ' . $structStr);
+        }
+        if (count($_structure) < 7) {
+            $structStr = print_r($_structure, true);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $structStr);
+            throw new Felamimail_Exception_IMAP('Invalid structure. count < 7: ' . $structStr);
         }
         
         $structure = $this->_getBasicNonMultipartStructure($_partId);
@@ -746,8 +756,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $parameters = array();
             for($i=0; $i<count($_structure[2]); $i++) {
                 $key   = strtolower($_structure[2][$i]);
-                $value = $_structure[2][++$i];
-                $parameters[$key] = $this->_mimeDecodeHeader($value);
+                if (isset($_structure[2][++$i])) {
+                    $value = $_structure[2][$i];
+                    $parameters[$key] = $this->_mimeDecodeHeader($value);
+                }
             }
             $structure['parameters'] = $parameters;
         }
@@ -804,8 +816,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                 $parameters = array();
                 for ($i=0; $i<count($_structure[$index][1]); $i++) {
                     $key = strtolower($_structure[$index][1][$i]);
-                    $value = $_structure[$index][1][++$i];
-                    $parameters[$key] = $this->_mimeDecodeHeader($value);
+                    if (isset($_structure[$index][1][++$i])) {
+                        $value = $_structure[$index][1][$i];
+                        $parameters[$key] = $this->_mimeDecodeHeader($value);
+                    }
                 }
                 $structure['disposition']['parameters'] = $parameters;
             }
@@ -834,9 +848,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function messageUidExists($from, $to = null)
     {
-        $result = (array)$this->_protocol->fetch('UID', $from, $to, true);
-        
-        return $result;
+        return array_filter((array)$this->_protocol->fetch('UID', $from, $to, true), function ($val) {
+            return is_scalar($val);
+        });
     }
     
     /**
@@ -848,7 +862,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function getUidbyUid($from, $to = null)
     {
-        $result = $this->_protocol->fetch('UID', $from, $to, true);
+        $result = $this->messageUidExists($from, $to);
         
         // @todo check if this is really needed
         // sanitize result, sometimes the fetch command can return wrong results :(
@@ -870,7 +884,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     
     public function resolveMessageSequence($from, $to = null)
     {
-        $result = $this->_protocol->fetch('UID', $from, $to, false);
+        $result = array_filter($this->_protocol->fetch('UID', $from, $to, false), function ($val) {
+            return is_scalar($val);
+        });
         
         return $result;
     }
@@ -882,7 +898,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $from = (array) $from;
         }
         
-        $result = $this->_protocol->fetch('UID', $from, $to, true);
+        $result = $this->messageUidExists($from, $to);
         
         if (count($result) === 0) {
             throw new Zend_Mail_Protocol_Exception('the single id was not found in response');
@@ -981,10 +997,21 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $this->selectFolder($globalName);
         $this->_protocol->expunge();
     }
-    
+
+    /**
+     * @param string $_header
+     * @return string
+     */
     protected function _mimeDecodeHeader($_header)
     {
-        $result = iconv_mime_decode($_header, ICONV_MIME_DECODE_CONTINUE_ON_ERROR);
+        if (is_array($_header)) {
+            // just use the first value here
+            $header = array_shift($_header);
+        } else {
+            $header = $_header;
+        }
+
+        $result = iconv_mime_decode($header, ICONV_MIME_DECODE_CONTINUE_ON_ERROR);
         
         return $result;
     }

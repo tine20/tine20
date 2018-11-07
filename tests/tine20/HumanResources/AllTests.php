@@ -27,6 +27,7 @@ class HumanResources_AllTests
         $suite->addTestSuite('HumanResources_CliTests');
         $suite->addTestSuite('HumanResources_ControllerTests');
         $suite->addTestSuite('HumanResources_ModelConfigurationTest');
+        $suite->addTestSuite('HumanResources_Import_DemoDataTest');
         return $suite;
     }
 }

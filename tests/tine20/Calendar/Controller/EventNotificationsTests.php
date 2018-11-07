@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -24,7 +24,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * @var Calendar_Controller_EventNotifications controller unter test
      */
     protected $_notificationController;
-    
+
     /**
      * (non-PHPdoc)
      * @see tests/tine20/Calendar/Calendar_TestCase::setUp()
@@ -57,7 +57,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function tearDown()
     {
         parent::tearDown();
-        
+
         Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last week */ 1);
     }
     
@@ -286,7 +286,25 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_eventController->attenderStatusUpdate($persistentEvent, $rwright, $rwright->status_authkey);
         $this->_assertMail('rwright', 'accept');
     }
-    
+
+    /**
+     * testAttenderStatusUpdateOrganizerIsAttendee
+     *
+     * skip dublicate notification for external organizer
+     */
+    public function testAttenderStatusUpdateOrganizerIsAttendee()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->organizer = $this->_getPersonasContacts('rwright')->getId();
+        $event->attendee = $this->_getPersonaAttendee('rwright');
+        $persistentEvent = $this->_eventController->create($event);
+        $rwright = $persistentEvent->attendee[0];
+        $rwright->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        self::flushMailer();
+        $this->_eventController->attenderStatusUpdate($persistentEvent, $rwright, $rwright->status_authkey);
+        $this->assertEquals(1, count(self::getMessages()));
+    }
+
     /**
      * testOrganizerNotificationSupress
      */
@@ -327,22 +345,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testNotificationToNonAccounts()
     {
-        $event = $this->_getEvent(TRUE);
-        $event->attendee = $this->_getPersonaAttendee('pwulf');
-        $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
-        
-        // add nonaccount attender
-        $nonAccountEmail = 'externer@example.org';
-        $nonAccountAttender = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
-            'n_family'  => 'externer',
-            'email'     => $nonAccountEmail,
-        )));
-        $event->attendee->addRecord($this->_createAttender($nonAccountAttender->getId()));
-        
-        self::flushMailer();
-        $persistentEvent = $this->_eventController->create($event);
-        
-        // invitaion should be send to internal and external attendee
+        $persistentEvent = $this->_createEventWithExternal();
+
+        // invitation should be send to internal and external attendee
         $this->_assertMail('pwulf,externer@example.org', 'invitation');
         
         // add alarm
@@ -353,19 +358,66 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         ));
         
         self::flushMailer();
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         
         // don't send alarm change to external attendee
         $this->_assertMail('externer@example.org');
         
         self::flushMailer();
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         
         $this->_assertMail('externer@example.org');
         $this->_assertMail('pwulf', 'declined');
     }
-    
+
+    /**
+     * @param bool $externalOrganizer
+     * @return Calendar_Model_Event
+     */
+    protected function _createEventWithExternal($externalOrganizer = false)
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('pwulf');
+
+        // add nonaccount attender
+        $nonAccountEmail = 'externer@example.org';
+        $nonAccountAttender = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'  => 'externer',
+            'email'     => $nonAccountEmail,
+        )));
+        $event->attendee->addRecord($this->_createAttender($nonAccountAttender->getId()));
+
+        if ($externalOrganizer) {
+            $event->organizer = $nonAccountAttender->getId();
+        } else {
+            $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
+        }
+
+        self::flushMailer();
+        return $this->_eventController->create($event);
+    }
+
+    /**
+     * testExternalInvitationContainer - container should be hidden by xprop!
+     */
+    public function testExternalInvitationContainer()
+    {
+        $this->_createEventWithExternal(true);
+        $externalAttender = Calendar_Model_Attender::resolveEmailToContact([
+            'email' => 'externer@example.org'
+        ]);
+        Calendar_Controller::getInstance()->getInvitationContainer($externalAttender);
+
+        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Model_Grants::GRANT_EDIT);
+
+        foreach ($containers as $container) {
+            if ($container->name === 'externer@example.org') {
+                self::fail('external invitation container found!');
+            }
+        }
+    }
+
     /**
      * testRecuringExceptions
      */
@@ -617,8 +669,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 . ' Something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this: ' . $e);
             static::fail($e->getMessage());
         }
-
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        
+        $assertString = ' at ' . $event->dtstart->getClone()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
         $this->_assertMail('sclever', $assertString);
     }
     
@@ -654,7 +706,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert alarm
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        $assertString = ' at ' . $event->dtstart->getClone()->addDay(1)->setTimezone(Tinebase_Core::getUserTimezone())
+                ->format('M j');
         $this->_assertMail('pwulf', $assertString);
 
         // check adjusted alarm time
@@ -706,7 +759,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        $assertString = ' at ' . $event->dtstart->getClone()->addDay(1)->setTimezone(Tinebase_Core::getUserTimezone())
+                ->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
         // check series
@@ -756,7 +810,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->addWeek(1)
+        $assertString = ' at ' . $event->dtstart->getClone()->setTimezone(Tinebase_Core::getUserTimezone())
                 ->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
@@ -1363,16 +1417,22 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             }
         }
 
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id, true);
 
-        $newGrants = array(
+        $newGrants = [
                 'account_id' => $this->_personas['sclever']->getId(),
                 'account_type' => 'user',
-                Tinebase_Model_Grants::GRANT_READ => true,
-                Tinebase_Model_Grants::GRANT_EDIT => true
-            );
+                Calendar_Model_ResourceGrants::RESOURCE_READ => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true,
+                Calendar_Model_ResourceGrants::RESOURCE_EDIT => true,
+                Calendar_Model_ResourceGrants::EVENTS_EDIT => true,
+        ];
 
-        Tinebase_Container::getInstance()->setGrants($resource->container_id, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array_merge(array($newGrants), $grants->toArray())), TRUE);
+        Tinebase_Container::getInstance()->setGrants($resource->container_id,
+            new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, array_merge([$newGrants],
+                $grants->toArray())), true, false);
 
         self::flushMailer();
 
@@ -1380,7 +1440,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
         $messages = self::getMessages();
 
-        Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants);
+        Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants, true, false);
 
         if ($suppress_notification) {
             $this->assertEquals(1, count($messages), 'one mail should be send to current user (attender)');
@@ -1401,6 +1461,46 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
 
     /**
+     * testNotificationForNonAttendeeOrganizer
+     */
+    public function testNotificationForNonAttendeeOrganizer()
+    {
+        $jmcblack =  $this->_getPersona('jmcblack');
+        $event = $this->_getEvent(/*now = */ true);
+        
+        // remove organizer attendee
+        foreach ($event->attendee as $idx => $attender) {
+            if ($attender->user_id === $event->organizer) {
+                $event->attendee->removeRecord($attender);
+            }
+        }
+       
+        // Switch organizer. The current user would not get the mail because he changes the status => own changes => no mail 
+        $event->organizer = $jmcblack->contact_id;
+
+        self::flushMailer();
+
+        $persistentEvent = $this->_eventController->create($event);
+
+        $messages = self::getMessages();
+
+        $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
+        $this->assertEquals(1, count($messages),
+            'one mail (Invitation) should be send to sclever. Event: '
+            . print_r($persistentEvent->toArray(), true) . ' Messages: '
+            . print_r($messages, true)
+        );
+
+        $persistentEvent->attendee[0]->status = Calendar_Model_Attender::STATUS_DECLINED;
+
+        self::flushMailer();
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        
+        // One mail is sent to organizer. Sclever will not get one because it is her status that changed => send level not reached
+        $this->_assertMail('jmcblack', 'decline');
+    }
+
+    /**
      * testResourceNotificationMuteForEditors
      *
      * @see 0011312: Make resource notification handling and default status configurable
@@ -1408,6 +1508,17 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testResourceNotificationMuteForEditors()
     {
         Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, true);
+        $this->testResourceNotification(/* $suppress_notification = */ true);
+        $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
+    }
+
+    /**
+     * testResourceNotificationMute without editors config
+     *
+     */
+    public function testResourceNotificationMute()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, false);
         $this->testResourceNotification(/* $suppress_notification = */ true);
         $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
     }

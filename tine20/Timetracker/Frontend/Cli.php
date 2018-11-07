@@ -26,6 +26,16 @@ class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @var string
      */
     protected $_applicationName = 'Timetracker';
+
+    /**
+     * import demodata default definitions
+     *
+     * @var array
+     */
+    protected $_defaultDemoDataDefinition = [
+        'Timetracker_Model_Timeaccount' => 'time_import_timeaccount_csv',
+        'Timetracker_Model_Timesheet' => 'time_import_timesheet_csv'
+    ];
     
     /**
      * help array with function names and param descriptions

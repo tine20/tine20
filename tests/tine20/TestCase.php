@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -131,6 +131,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             $this->_deleteGroups();
         }
         if ($this->_transactionId) {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back test transaction');
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -141,7 +142,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($this->_originalTestUser instanceof Tinebase_Model_User) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         }
-        
+
         if ($this->_invalidateRolesCache) {
             Tinebase_Acl_Roles::getInstance()->resetClassCache();
         }
@@ -153,6 +154,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         foreach ($this->_areaLocksToInvalidate as $area) {
             Tinebase_AreaLock::getInstance()->resetValidAuth($area);
         }
+
+        Tinebase_Lock_UnitTestFix::clearLocks();
     }
 
     /**
@@ -161,7 +164,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _releaseDBLocks()
     {
         foreach ($this->_releaseDBLockIds as $lockId) {
-            Tinebase_Core::releaseMultiServerLock($lockId);
+            try {
+                Tinebase_Core::releaseMultiServerLock($lockId);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
         }
 
         $this->_releaseDBLockIds = array();
@@ -324,7 +331,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $model
      * @return Tinebase_Model_Container
      */
-    protected function _getTestContainer($applicationName, $model = null)
+    protected function _getTestContainer($applicationName, $model)
     {
         return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit ' . $model .' container',
@@ -362,7 +369,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @return Object
      * @throws Exception
-     * 
+     *
      * @todo fix ide object class detection for completions
      */
     protected function _getUit()
@@ -504,6 +511,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             }
             Tinebase_Acl_Roles::getInstance()->setRoleRights($roleId, $rights);
         }
+
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
         
         return $roleRights;
     }
@@ -511,15 +520,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * set grants for a persona and the current user
      * 
-     * @param integer $containerId
+     * @param Tinebase_Model_Container|string $container
      * @param string $persona
      * @param boolean $personaAdminGrant
      * @param boolean $userAdminGrant
      * @param array $additionalGrants
      */
-    protected function _setPersonaGrantsForTestContainer($containerId, $persona, $personaAdminGrant = false, $userAdminGrant = true, $additionalGrants = [])
+    protected function _setPersonaGrantsForTestContainer($container, $persona, $personaAdminGrant = false, $userAdminGrant = true, $additionalGrants = [])
     {
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        $container = $container instanceof Tinebase_Model_Container ? $container : Tinebase_Container::getInstance()
+            ->getContainerById($container);
+        $grantClass = $container->getGrantClass();
+        $grants = new Tinebase_Record_RecordSet($grantClass, array(array(
             'account_id'    => $this->_personas[$persona]->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
@@ -538,10 +550,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         )));
 
         foreach ($additionalGrants as $grant) {
+            if (is_array($grant)) {
+                $grant = new $grantClass($grant);
+            }
             $grants->addRecord($grant);
         }
 
-        Tinebase_Container::getInstance()->setGrants($containerId, $grants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($container, $grants, TRUE);
     }
 
     /**
@@ -556,22 +571,52 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * call handle cli function with params
+     * call handle cli function (Setup) with params
+     *  example usage:
+     *      $result = $this->_cliHelper('getconfig', array('--getconfig','--','configkey=allowedJsonOrigins'));
      *
      * @param string $command
-     * @param array $_params
+     * @param array $params
      * @return string
+     * @todo should be renamed to _setupCliHelper
      */
-    protected function _cliHelper($command, $_params)
+    protected function _cliHelper($command, $params)
     {
         $opts = new Zend_Console_Getopt(array($command => $command));
-        $opts->setArguments($_params);
+        $opts->setArguments($params);
         ob_start();
         $this->_cli->handle($opts, false);
         $out = ob_get_clean();
         return $out;
     }
 
+    /**
+     * example usage:
+     *           $out = $this->_appCliHelper('Addressbook', 'createDemoData', []);
+     *
+     * @param $appName
+     * @param $command
+     * @param $params
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _appCliHelper($appName, $command, $params)
+    {
+        $classname = $appName . '_Frontend_Cli';
+        if (! class_exists($classname)) {
+            throw new Tinebase_Exception_InvalidArgument('CLI class ' . $classname . ' not found');
+        }
+
+        $cli = new $classname();
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments($params);
+
+        ob_start();
+        call_user_func_array([$cli, $command], [$opts]);
+        $out = ob_get_clean();
+
+        return $out;
+    }
 
     /**
      * add an attachment to a record
@@ -632,11 +677,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         if ($nameField) {
-            $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
+            self::assertTrue(isset($savedRecord[$nameField]), 'name field missing: ' . print_r($savedRecord, true));
+            self::assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
             if (null !== $configuration && $configuration->modlogActive) {
-                $this->assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
+                self::assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
                     print_r($savedRecord, true));
-                $this->assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId'],
+                self::assertEquals(Tinebase_Core::getUser()->getId(), $savedRecord['created_by']['accountId'],
                     'created_by has wrong value: ' . print_r($savedRecord, true));
             }
         }
@@ -646,7 +692,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($description) {
             $savedRecord[$descriptionField] = 'my updated description';
             $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
-            $this->assertEquals('my updated description', $updatedRecord[$descriptionField]);
+            self::assertEquals('my updated description', $updatedRecord[$descriptionField]);
             $savedRecord = $updatedRecord;
             $recordWasUpdated = true;
         }
@@ -655,19 +701,19 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             // update name as well!
             $savedRecord[$nameField] = 'my updated namefield';
             $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
-            $this->assertEquals('my updated namefield', $updatedRecord[$nameField]);
+            self::assertEquals('my updated namefield', $updatedRecord[$nameField]);
             $savedRecord = $updatedRecord;
             $recordWasUpdated = true;
         }
 
         $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $savedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
-        $this->assertEquals(1, $result['totalcount']);
+        self::assertEquals(1, $result['totalcount']);
 
         if (null !== $configuration && $configuration->modlogActive && $recordWasUpdated) {
-            $this->assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
+            self::assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
                 'last_modified_by not present: ' . print_r($result, true));
-            $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['last_modified_by']['accountId'],
+            self::assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['last_modified_by']['accountId'],
                 'last_modified_by has wrong value: ' . print_r($result, true));
         }
 
@@ -675,9 +721,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             call_user_func(array($uit, 'delete' . $modelName . 's'), array($savedRecord['id']));
             try {
                 call_user_func(array($uit, 'get' . $modelName), $savedRecord['id']);
-                $this->fail('should delete Record');
+                self::fail('should delete Record');
             } catch (Tinebase_Exception_NotFound $tenf) {
-                $this->assertTrue($tenf instanceof Tinebase_Exception_NotFound);
+                self::assertTrue($tenf instanceof Tinebase_Exception_NotFound);
             }
         }
 
@@ -701,18 +747,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $name
      * @param string $model
      * @param string $type
+     * @param array $definition
      * @return Tinebase_Model_CustomField_Config
      *
      * TODO use a single array as param that is merged with the defaults
      */
-    protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string')
+    protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string', $definition = null)
     {
-        $application = substr($model, 0, strpos($model, '_'));
-        $cfData = new Tinebase_Model_CustomField_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
-            'name'              => $name,
-            'model'             => $model,
-            'definition'        => array(
+        if ($definition === null) {
+            $definition = array(
                 'label' => Tinebase_Record_Abstract::generateUID(),
                 'type'  => $type,
                 'recordConfig' => $type === 'record'
@@ -724,7 +767,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                     'group'  => 'unittest',
                     'order'  => 100,
                 )
-            )
+            );
+        }
+
+        $application = substr($model, 0, strpos($model, '_'));
+        $cfData = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
+            'name'              => $name,
+            'model'             => $model,
+            'definition'        => $definition,
         ));
 
         try {
@@ -799,7 +850,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, $locks);
         $this->_areaLocksToInvalidate[] = $config['area'];
     }
-    
+
     /**
      * @param $docx
      * @return string
@@ -813,5 +864,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         return strip_tags($zip->getFromName('word/document.xml'));
+    }
+    
+    protected function clear($app,$model)
+    {
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , [
+            ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
+        ]);
+        $controller =  Tinebase_Core::getApplicationInstance($app,$model); // @TODO seem not good... 
+        $controller::getInstance()->deleteByFilter($filter);
     }
 }

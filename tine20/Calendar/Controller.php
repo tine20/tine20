@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -36,6 +36,8 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      * @var string
      */
     protected $_applicationName = 'Calendar';
+
+    const XPROP_EXTERNAL_INVITATION_CALENDAR = 'externalInvitationCalendar';
 
     /**
      * don't clone. Use the singleton.
@@ -68,14 +70,23 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' handle event of type ' . get_class($_eventObject));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' '
+            . __LINE__ . ' handle event of type ' . get_class($_eventObject));
         
         switch (get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
                 //$this->createPersonalFolder($_eventObject->account);
                 Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $_eventObject->account->getId());
                 break;
-                
+
+            case 'Calendar_Event_DeleteResource':
+                /**
+                 * @var Calendar_Event_DeleteResource $_eventObject
+                 */
+                $this->_deleteEventAttenders($_eventObject);
+
+                break;
+
             case 'Tinebase_Event_User_DeleteAccount':
                 /**
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
@@ -123,16 +134,28 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         }
     }
 
-    protected function _deleteEventAttenders($_eventObject)
+    /**
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _deleteEventAttenders(Tinebase_Event_Abstract $_eventObject)
     {
-        $contactId = $_eventObject->account->contact_id;
+        if ($_eventObject instanceof Tinebase_Event_User_DeleteAccount) {
+            $attenderId = $_eventObject->account->contact_id;
+            $type = Calendar_Model_Attender::USERTYPE_USER;
+        } else if ($_eventObject instanceof Calendar_Event_DeleteResource) {
+            $attenderId = $_eventObject->resource->getId();
+            $type = Calendar_Model_Attender::USERTYPE_RESOURCE;
+        }
 
         $filter = new Calendar_Model_EventFilter(array(array(
             'field' => 'attender', 'operator' => 'in', 'value' => array(array(
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => $contactId,
+                'user_type' => $type,
+                'user_id'   => $attenderId,
             ))
         )));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' '
+            . __LINE__ . ' Deleting Event Attender ' . $attenderId . ' (type: ' . $type . ')');
 
         $eventController = Calendar_Controller_Event::getInstance();
         $oldAcl = $eventController->doContainerACLChecks(false);
@@ -140,22 +163,23 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
 
         $events = $eventController->search($filter);
         /** @var Calendar_Model_Event $event */
-        foreach($events as $event)
-        {
+        foreach ($events as $event) {
             $toRemove = array();
             foreach ($event->attendee as $key => $attendee) {
-                $attendeeUserId = $attendee->user_id instanceof Tinebase_Record_Abstract
+                $attendeeUserId = $attendee->user_id instanceof Tinebase_Record_Interface
                     ? $attendee->user_id->getId()
                     : $attendee->user_id;
 
-                if ($attendeeUserId === $contactId && ($attendee->user_type === Calendar_Model_Attender::USERTYPE_USER ||
-                                                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
-                {
+                if ($attendeeUserId === $attenderId &&
+                    ($attendee->user_type === Calendar_Model_Attender::USERTYPE_USER ||
+                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUPMEMBER ||
+                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE
+                    )) {
                     $toRemove[] = $key;
                 }
             }
             if (count($toRemove) > 0) {
-                foreach($toRemove as $index) {
+                foreach ($toRemove as $index) {
                     $event->attendee->offsetUnset($index);
                 }
 
@@ -269,7 +293,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         $container->type = Tinebase_Model_Container::TYPE_SHARED;
         $tbc->update($container);
 
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        $grants = new Tinebase_Record_RecordSet($container->getGrantClass(), array(
             array(
                 'account_id'      => '0',
                 'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
@@ -313,10 +337,11 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                 'type'              => Tinebase_Model_Container::TYPE_SHARED,
                 'backend'           => Tinebase_User::SQL,
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'model'             => 'Calendar_Model_Event'
+                'model'             => 'Calendar_Model_Event',
+                'xprops'            => [self::XPROP_EXTERNAL_INVITATION_CALENDAR => true],
             )), NULL, TRUE);
             
-            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            $grants = new Tinebase_Record_RecordSet($container->getGrantClass(), array(
                 array(
                     'account_id'      => '0',
                     'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
@@ -325,7 +350,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                     Tinebase_Model_Grants::GRANT_DELETE      => true,
                 )
             ));
-            Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
+            Tinebase_Container::getInstance()->setGrants($container, $grants, true, false);
         }
          
         return $container;
@@ -374,34 +399,41 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
             . ' about to handle Tinebase_Event_Container_BeforeCreate' );
         
         if ($_eventObject->container && 
-            $_eventObject->container->type === Tinebase_Model_Container::TYPE_PERSONAL &&
-            $_eventObject->container->application_id === Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId() &&
-            $_eventObject->grants instanceof Tinebase_Record_RecordSet
-            ) {
-            // get owner from initial initial grants
-            $grants = $_eventObject->grants;
-            $grants->removeAll();
-            
-            $grants->addRecord(new Tinebase_Model_Grants(array(
-                'account_id'     => $_eventObject->accountId,
-                'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Model_Grants::GRANT_READ      => true,
-                Tinebase_Model_Grants::GRANT_ADD       => true,
-                Tinebase_Model_Grants::GRANT_EDIT      => true,
-                Tinebase_Model_Grants::GRANT_DELETE    => true,
-                Tinebase_Model_Grants::GRANT_EXPORT    => true,
-                Tinebase_Model_Grants::GRANT_SYNC      => true,
-                Tinebase_Model_Grants::GRANT_ADMIN     => true,
-                Tinebase_Model_Grants::GRANT_FREEBUSY  => true,
-                Tinebase_Model_Grants::GRANT_PRIVATE   => true,
-            ), TRUE));
-            
-            if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
-                $grants->addRecord(new Tinebase_Model_Grants(array(
-                    'account_id'      => '0',
-                    'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                    Tinebase_Model_Grants::GRANT_FREEBUSY  => true
-                ), TRUE));
+                $_eventObject->container->type === Tinebase_Model_Container::TYPE_PERSONAL &&
+                $_eventObject->container->model === Calendar_Model_Event::class &&
+                $_eventObject->container->application_id === Tinebase_Application::getInstance()
+                    ->getApplicationByName('Calendar')->getId()) {
+
+            $_eventObject->container->xprops()['Tinebase']['Container']['GrantsModel'] =
+                Calendar_Model_EventPersonalGrants::class;
+
+            if ($_eventObject->grants instanceof Tinebase_Record_RecordSet) {
+                // get owner from initial initial grants
+                $grants = new Tinebase_Record_RecordSet(Calendar_Model_EventPersonalGrants::class);
+
+                $grants->addRecord(new Calendar_Model_EventPersonalGrants([
+                    'account_id' => $_eventObject->accountId,
+                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    Tinebase_Model_Grants::GRANT_READ => true,
+                    Tinebase_Model_Grants::GRANT_ADD => true,
+                    Tinebase_Model_Grants::GRANT_EDIT => true,
+                    Tinebase_Model_Grants::GRANT_DELETE => true,
+                    Tinebase_Model_Grants::GRANT_EXPORT => true,
+                    Tinebase_Model_Grants::GRANT_SYNC => true,
+                    Tinebase_Model_Grants::GRANT_ADMIN => true,
+                    Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
+                    Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
+                ], true));
+
+                if (!Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
+                    $grants->addRecord(new Calendar_Model_EventPersonalGrants(array(
+                        'account_id' => '0',
+                        'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                        Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true
+                    ), true));
+                }
+
+                $_eventObject->grants = $grants;
             }
         }
     }
@@ -460,7 +492,9 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      */
     public function prepareMassMailingMessage(Felamimail_Model_Message $_message)
     {
-        Calendar_Controller_Poll::getInstance()->prepareMassMailingMessage($_message);
+        if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
+            Calendar_Controller_Poll::getInstance()->prepareMassMailingMessage($_message);
+        }
         return;
     }
 

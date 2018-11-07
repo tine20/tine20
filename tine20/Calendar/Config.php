@@ -72,6 +72,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FREEBUSY_TYPES = 'freebusyTypes';
 
     /**
+     * which information does the grant freebusy reveal
+     *
+     * @var string
+     */
+    const FREEBUSY_INFO_ALLOWED = 'freebusyInfoAllowed';
+
+    /**
      * Crop days view
      *
      * @var string
@@ -303,9 +310,9 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'default'               => [
                 'records' => [
-                    ['id' => 'CONFIRMED',    'value' => 'Confirmed',   'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true], //_('Confirmed')
-                    ['id' => 'CANCELED',     'value' => 'Canceled',    'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true], //_('Canceled')
-                    ['id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/calendar-response-tentative.png',               'system' => true], //_('Tentative')
+                    ['id' => 'CONFIRMED',    'value' => 'Confirmed',   'icon' => 'images/icon-set/icon_ok.svg',                          'system' => true], //_('Confirmed')
+                    ['id' => 'CANCELED',     'value' => 'Canceled',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',                        'system' => true], //_('Canceled')
+                    ['id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true], //_('Tentative')
                 ],
                 'default' => 'CONFIRMED'
             ]
@@ -354,10 +361,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true), //_('No response')
-                    array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Accepted')
-                    array('id' => 'DECLINED',     'value' => 'Declined',    'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Declined')
-                    array('id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/calendar-response-tentative.png',               'system' => true), //_('Tentative')
+                    array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'icon' => 'images/icon-set/icon_invite.svg',                      'system' => true), //_('No response')
+                    array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/icon-set/icon_calendar_attendee_accepted.svg',                          'system' => true), //_('Accepted')
+                    array('id' => 'DECLINED',     'value' => 'Declined',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',    'system' => true), //_('Declined')
+                    array('id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true), //_('Tentative')
                 ),
                 'default' => 'NEEDS-ACTION'
             )
@@ -614,6 +621,26 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => '',
         ),
+        self::FREEBUSY_INFO_ALLOWED => [
+            //_('Freebusy Info')
+            self::LABEL             => 'Freebusy Info',
+            //_('What data the freebusy grant reveals')
+            self::DESCRIPTION       => 'What data the freebusy grant reveals',
+            self::TYPE              => self::TYPE_KEYFIELD,
+                self::OPTIONS           => [
+                    'records'               => [
+                        ['id' => 10,  'value' => 'only date & time'], //_('only date & time')
+                        ['id' => 20,  'value' => 'and calendar'], //_('and calendar')
+                        ['id' => 30,  'value' => 'and organizer'], //_('and organizer')
+                        ['id' => 40,  'value' => 'and resources'], //_('and resources')
+                        ['id' => 50,  'value' => 'and other attendees'], //_('and other attendees')
+                    ],
+                ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => 10,
+        ],
     );
     
     /**

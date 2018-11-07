@@ -35,7 +35,6 @@ class AllTests
             'Courses',
             'ActiveSync',
             'Filemanager',
-            'MailFiler',
             'Projects',
             'HumanResources',
             'Inventory',

@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.Tinebase');
 
+require('ux/TabPanelStripCompressorPlugin');
+
 /**
  * Main appStarter/picker tab panel
  * 
@@ -21,12 +23,13 @@ Tine.Tinebase.AppTabsPanel = function(config) {
     Ext.apply(this, config);
     this.plugins = [new Ext.ux.TabPanelSortPlugin({
         dragZoneConfig: {
-            onBeforeDrag: this.onBeforeDrag.createDelegate(this) 
+            onBeforeDrag: this.onBeforeDrag.createDelegate(this),
+            scroll: false
         },
         dropZoneConfig: {
             getTargetFromEvent: this.getTargetFromEvent.createDelegate(this)
         }
-    })];
+    }), 'ux.tabpanelstripcompressorplugin'];
     
     Tine.Tinebase.AppTabsPanel.superclass.constructor.call(this, config);
 };
@@ -76,6 +79,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
             title: Tine.title,
             iconCls: 'tine-favicon',
             closable: true,
+            noCompress: true,
             listeners: {
                 scope: this,
                 beforeclose: this.onBeforeTabClose
@@ -298,7 +302,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
      */
     onBeforeTabChange: function(tp, newTab, currentTab) {
         if (this.id2appName(newTab) === 'menu') {
-            this.menu.show(this.menuTabEl, 'tl-bl');
+            this.menu.show.defer(10, this.menu, [this.menuTabEl, 'tl-bl']);
             return false;
         }
     },

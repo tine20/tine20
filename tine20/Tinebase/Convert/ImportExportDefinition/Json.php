@@ -18,14 +18,14 @@
 class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
 {
     /**
-     * converts Tinebase_Record_Abstract to external format
+     * converts Tinebase_Record_Interface to external format
      * 
-     * @param  Tinebase_Record_Abstract $_model
+     * @param  Tinebase_Record_Interface $_model
      * @return mixed
      * 
      * @todo rename model to record?
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_model)
+    public function fromTine20Model(Tinebase_Record_Interface $_model)
     {
         /** @var Tinebase_Model_ImportExportDefinition $_model */
         $this->_convertOptions($_model);

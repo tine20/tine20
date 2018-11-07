@@ -5,13 +5,15 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * class to hold contract data
  *
  * @package     Sales
+ *
+ * @property Tinebase_DateTime      $end_date
  */
 class Sales_Model_Contract extends Tinebase_Record_Abstract
 {
@@ -249,7 +251,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
      *
      * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
         $this->fulltext = $this->number . ' - ' . $this->title;

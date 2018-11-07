@@ -205,6 +205,15 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             Syncroton_Registry::setTasksDataClass('Tasks_Frontend_ActiveSync');
         }
         
-        Syncroton_Registry::set(Syncroton_Registry::DEFAULT_POLICY, ActiveSync_Config::getInstance()->get(ActiveSync_Config::DEFAULT_POLICY));
+        Syncroton_Registry::set(Syncroton_Registry::DEFAULT_POLICY, ActiveSync_Config::getInstance()
+            ->get(ActiveSync_Config::DEFAULT_POLICY));
+
+        Syncroton_Registry::set(Syncroton_Registry::SLEEP_CALLBACK, function() {
+            Tinebase_Core::getDb()->closeConnection();
+            Tinebase_Core::set(Tinebase_Core::DB, null);
+        });
+        Syncroton_Registry::set(Syncroton_Registry::WAKEUP_CALLBACK, function() {
+            Tinebase_Core::setupDatabaseConnection();
+        });
     }
 }

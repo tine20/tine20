@@ -223,10 +223,10 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             return;
         }
         
-        $rawUser = $this->getRawUserById($_user);
+        $rawUser = (array)$this->getRawUserById($_user);
         
         // convert data to Tinebase_Model_EmailUser
-        $emailUser = $this->_rawDataToRecord((array)$rawUser);
+        $emailUser = $this->_rawDataToRecord($rawUser);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($emailUser->toArray(), TRUE));
@@ -520,7 +520,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * @param  array                    $_data
      * @return Tinebase_Model_EmailUser
      */
-    abstract protected function _rawDataToRecord(array $_rawdata);
+    abstract protected function _rawDataToRecord(array &$_rawdata);
      
     /**
      * returns array of raw user data

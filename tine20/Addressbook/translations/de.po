@@ -807,6 +807,9 @@ msgstr "Ein neues Kontaktbild wurde hochgeladen."
 msgid "Deleted contact image."
 msgstr "Lösche Kontaktbild"
 
+msgid "Contact Image"
+msgstr "Kontaktbild"
+
 #: Model/List.php:106
 msgid "Percent"
 msgstr "Prozent"

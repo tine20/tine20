@@ -85,7 +85,7 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
         });
         this.upload.on('uploadcomplete', this.onUploadComplete, this);
         
-        this.setIconClass('x-tinebase-uploading');
+        this.setIconClass('x-btn-wait');
         this.upload.upload();
     },
     

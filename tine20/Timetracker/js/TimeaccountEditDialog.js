@@ -17,6 +17,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     windowNamePrefix: 'TimeaccountEditWindow_',
     appName: 'Timetracker',
+    modelName: 'Timeaccount',
     recordClass: Tine.Timetracker.Model.Timeaccount,
     recordProxy: Tine.Timetracker.timeaccountBackend,
     useInvoice: false,
@@ -62,7 +63,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.getGrantsGrid();
         
         var grants = this.record.get('grants') || [];
-        this.grantsStore.loadData({results: grants});
+        this.grantsGrid.getStore().loadData({results: grants});
         Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordLoad.call(this);
         
         if (! this.copyRecord && ! this.record.id) {
@@ -78,7 +79,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.record.set('grants', '');
         
         var grants = [];
-        this.grantsStore.each(function(_record){
+        this.grantsGrid.getStore().each(function(_record){
             grants.push(_record.data);
         });
         
@@ -114,24 +115,22 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             forceSelection: true,
             triggerAction: 'all',
             store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
-        }, {
-            fieldLabel: this.app.i18n._('Billed'),
-            name: 'status',
-            xtype: 'combo',
-            mode: 'local',
-            forceSelection: true,
-            triggerAction: 'all',
-            value: 'not yet billed',
-            store: [
-                ['not yet billed', this.app.i18n._('not yet billed')], 
-                ['to bill', this.app.i18n._('to bill')],
-                ['billed', this.app.i18n._('billed')]
-            ],
-            listeners: {
-                scope: this,
-                select: this.onBilledChange.createDelegate(this)
-            }
-        }];
+        }, [
+            Tine.widgets.form.FieldManager.get(
+                this.appName,
+                this.modelName,
+                'status',
+                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                {
+                    id: 'status',
+                    listeners: {
+                        scope: this,
+                        select: this.onBilledChange.createDelegate(this)
+                    } 
+
+                }
+            )
+        ]];
         
         secondRow.push({
             columnWidth: 1/3,
@@ -140,19 +139,17 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             name: 'billed_in'
         });
         
-        secondRow.push({
-            fieldLabel: this.app.i18n._('Booking deadline'),
-            name: 'deadline',
-            xtype: 'combo',
-            mode: 'local',
-            forceSelection: true,
-            triggerAction: 'all',
-            value: 'none',
-            store: [
-                ['none', this.app.i18n._('none')], 
-                ['lastweek', this.app.i18n._('last week')]
-            ]
-        });
+        secondRow.push([
+            Tine.widgets.form.FieldManager.get(
+                this.appName,
+                this.modelName,
+                'deadline',
+                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                {
+                    id: 'deadline',
+                }
+            )
+        ]);
         
         secondRow.push({
             xtype: 'extuxclearabledatefield',
@@ -279,62 +276,14 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
     getGrantsGrid: function() {
         if (! this.grantsGrid) {
-            this.grantsStore =  new Ext.data.JsonStore({
-                root: 'results',
-                totalProperty: 'totalcount',
-                // use account_id here because that simplifies the adding of new records with the search comboboxes
-                id: 'account_id',
-                fields: Tine.Timetracker.Model.TimeaccountGrant
-            });
-            
-            var columns = [
-                new Ext.ux.grid.CheckColumn({
-                    header: this.app.i18n._('Book Own'),
-                    dataIndex: 'bookOwnGrant',
-                    tooltip: i18n._('The grant to add Timesheets to this Timeaccount'),
-                    width: 55
-                }),
-                new Ext.ux.grid.CheckColumn({
-                    header: this.app.i18n._('View All'),
-                    tooltip: i18n._('The grant to view Timesheets of other users'),
-                    dataIndex: 'viewAllGrant',
-                    width: 55
-                }),
-                new Ext.ux.grid.CheckColumn({
-                    header: this.app.i18n._('Book All'),
-                    tooltip: i18n._('The grant to add Timesheets for other users'),
-                    dataIndex: 'bookAllGrant',
-                    width: 55
-                }),
-                new Ext.ux.grid.CheckColumn({
-                    header:this.app.i18n._('Manage Clearing'),
-                    tooltip: i18n._('The grant to manage clearing of Timesheets'),
-                    dataIndex: 'manageBillableGrant',
-                    width: 55
-                }),
-                new Ext.ux.grid.CheckColumn({
-                    header:this.app.i18n._('Export'),
-                    tooltip: i18n._('The grant to export Timesheets of Timeaccount'),
-                    dataIndex: 'exportGrant',
-                    width: 55
-                }),
-                new Ext.ux.grid.CheckColumn({
-                    header: this.app.i18n._('Manage All'),
-                    tooltip: i18n._('Includes all other grants'),
-                    dataIndex: 'adminGrant',
-                    width: 55
-                })
-            ];
-            
-            this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
+            this.grantsGrid = new Tine.widgets.container.GrantsGrid({
                 selectType: 'both',
                 title:  this.app.i18n._('Permissions'),
-                store: this.grantsStore,
+                alwaysShowAdminGrant: true,
                 hasAccountPrefix: true,
-                configColumns: columns,
                 selectAnyone: false,
                 selectTypeDefault: 'group',
-                recordClass: Tine.Tinebase.Model.Grant
+                recordClass: Tine.Timetracker.Model.TimeaccountGrant
             });
         }
         return this.grantsGrid;

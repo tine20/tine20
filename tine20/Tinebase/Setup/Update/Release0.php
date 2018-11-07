@@ -1057,6 +1057,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
         $this->_backend->createTable($table);
         
+//        @todo update all these icons!!!
         $noteType = new Tinebase_Model_NoteType(array(
             'id'            => '1',
             'name'          => 'note',

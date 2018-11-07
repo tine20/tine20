@@ -61,13 +61,14 @@ class Setup_CliTest extends TestCase
      */
     public function testSetBoolConfig()
     {
-        $this->_oldConfigs[Tinebase_Config::MAINTENANCE_MODE] = Tinebase_Config::getInstance()->get(Tinebase_Config::MAINTENANCE_MODE);
+        $config = Tinebase_Config::REDIRECTTOREFERRER;
+        $this->_oldConfigs[$config] = Tinebase_Config::getInstance()->get($config);
 
         $values = array(1, "true");
         foreach ($values as $configValue) {
-            $output = $this->_cliHelper('setconfig', array('--setconfig', '--', 'configkey=maintenanceMode', 'configvalue=' . $configValue));
-            $this->assertContains('OK - Updated configuration option maintenanceMode for application Tinebase', $output);
-            $result = Tinebase_Config_Abstract::factory('Tinebase')->get(Tinebase_Config::MAINTENANCE_MODE);
+            $output = $this->_cliHelper('setconfig', array('--setconfig', '--', 'configkey=' . $config, 'configvalue=' . $configValue));
+            $this->assertContains('OK - Updated configuration option ' . $config . ' for application Tinebase', $output);
+            $result = Tinebase_Config_Abstract::factory('Tinebase')->get($config);
             $this->assertTrue($result);
         }
     }

@@ -97,7 +97,7 @@ class Calendar_Controller_Alarm
     {
         return array(
             'user_type' => $_attendee->user_type,
-            'user_id'   => $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id
+            'user_id'   => $_attendee->user_id instanceof Tinebase_Record_Interface ? $_attendee->user_id->getId() : $_attendee->user_id
         );
     }
     

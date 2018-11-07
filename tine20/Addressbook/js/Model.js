@@ -104,7 +104,7 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     // ngettext('Addressbook', 'Addressbooks', n); gettext('Addressbooks');
     containerName: 'Addressbook',
     containersName: 'Addressbooks',
-    copyOmitFields: ['account_id', 'type'],
+    copyOmitFields: ['account_id', 'type', 'relations'],
     
     /**
      * returns true if record has an email address

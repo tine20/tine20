@@ -85,7 +85,7 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::toTine20Model()
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null, $options = array())
+    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
         $contact = parent::toTine20Model($_blob, $_record, $options);
         
@@ -102,10 +102,10 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
     /**
      * Convert from tine to model
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return \Sabre\VObject\Component
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));

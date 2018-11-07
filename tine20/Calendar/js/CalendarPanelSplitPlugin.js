@@ -460,7 +460,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.SplitBtn = Ext.extend(Ext.Button, {
     disabled: true,
     scale: 'medium',
     rowspan: 2,
-    icon: 'images/oxygen/22x22/actions/fileview-column.png',
+    icon: 'images/icon-set/icon_column.svg',
     iconAlign: 'top',
     text: 'Split',
     stateful: true,

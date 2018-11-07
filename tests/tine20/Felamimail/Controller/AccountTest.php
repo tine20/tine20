@@ -40,6 +40,8 @@ class Felamimail_Controller_AccountTest extends TestCase
 
     protected $_oldConfig = null;
 
+    protected $_userChanged = false;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -79,6 +81,10 @@ class Felamimail_Controller_AccountTest extends TestCase
 
         if ($this->_oldConfig) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_oldConfig);
+        }
+
+        if ($this->_userChanged) {
+            Admin_Controller_User::getInstance()->update($this->_originalTestUser);
         }
     }
     
@@ -278,5 +284,27 @@ class Felamimail_Controller_AccountTest extends TestCase
         unset($this->_account->user);
         $this->_account->resolveCredentials();
         $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $this->_account->user);
+    }
+
+    /**
+     * test if email address and name of system account changes if user email is updated
+     */
+    public function testChangeSystemAccountEmailAddress()
+    {
+        $user = Admin_Controller_User::getInstance()->get(Tinebase_Core::getUser()->getId());
+        $user->accountEmailAddress = 'someaddress@' . TestServer::getPrimaryMailDomain();
+        // TODO find out why we lose the right sometimes ...
+        try {
+            Admin_Controller_User::getInstance()->update($user);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            self::markTestSkipped('FIXME: somehow we lost the view/manage accounts right ...');
+        }
+        $this->_userChanged = true;
+        $account = $this->_controller->search()->getFirstRecord();
+
+        self::assertEquals($user->accountEmailAddress, $account->name,
+            'name mismatch: ' . print_r($account->toArray(), true));
+        self::assertEquals($user->accountEmailAddress, $account->email,
+            'email mismatch: ' . print_r($account->toArray(), true));
     }
 }

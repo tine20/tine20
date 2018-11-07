@@ -101,8 +101,8 @@ Locale.getTranslationData = function(type, key) {
     
     var value = '';
  
-    if ( Locale.prototype.TranslationLists[type] && Locale.prototype.TranslationLists[type][key] ) {
-        value = Locale.prototype.TranslationLists[type][key];
+    if ( Tine.__translationData.TranslationLists[type] && Tine.__translationData.TranslationLists[type][key] ) {
+        value = Tine.__translationData.TranslationLists[type][key];
     }
     
     return value;
@@ -115,5 +115,5 @@ Locale.getTranslationData = function(type, key) {
  * @return {Object}
  */
 Locale.getTranslationList = function(type) {
-    return Locale.prototype.TranslationLists[type];
+    return Tine.__translationData.TranslationLists[type];
 }

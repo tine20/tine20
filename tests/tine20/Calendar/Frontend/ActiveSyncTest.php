@@ -988,10 +988,12 @@ Zeile 3</AirSyncBase:Data>
         $folderA = $this->testCreateFolder(); // personal of test user
         
         $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        /** @var Tinebase_Model_Container $folderB */
         $folderB = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $sclever->getId());
+        $folderBContainer = Tinebase_Container::getInstance()->getContainerById($folderB);
 
         // have syncGerant for sclever
-        Tinebase_Container::getInstance()->setGrants($folderB, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        Tinebase_Container::getInstance()->setGrants($folderBContainer, new Tinebase_Record_RecordSet($folderBContainer->getGrantClass(), array(
             array(
                 'account_id'    => $sclever->getId(),
                 'account_type'  => 'user',
@@ -1339,6 +1341,66 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($serverId);
         self::assertEquals('testtermin updated', $updatedEvent->summary);
         self::assertEquals('2013-10-22 16:00:00', $updatedEvent->dtstart->toString());
+    }
+
+    public function testUpdateEventAddRecureException()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        $event = $this->_createEvent();
+        $event->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id' => $this->_personas['sclever']->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        ]));
+        $event->rrule = new Calendar_Model_Rrule('FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=TU,FR');
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+        $event->attendee->find('user_id', $this->_personas['sclever']->contact_id)->status =
+            Calendar_Model_Attender::STATUS_ACCEPTED;
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+
+        $controller = Syncroton_Data_Factory::factory($this->_class,
+            $this->_getDevice(ActiveSync_TestCase::TYPE_IOS_11), $event->creation_time);
+
+        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(
+            ['collectionId' => $syncrotonFolder->serverId]), $event->getId());
+        self::assertNotNull($syncrotonEventtoUpdate->attendees, 'attendee should not be null');
+
+        // 20180703T160000Z is a Tuesday
+        $xml = new SimpleXMLElement('<Exception>
+                <Body xmlns="uri:AirSyncBase">
+                  <Type>1</Type>
+                  <Data/>
+                </Body>
+                <Deleted xmlns="uri:Calendar">0</Deleted>
+                <ExceptionStartTime xmlns="uri:Calendar">20180703T160000Z</ExceptionStartTime>
+                <StartTime xmlns="uri:Calendar">20180703T160000Z</StartTime>
+                <EndTime xmlns="uri:Calendar">20180703T170000Z</EndTime>
+                <Subject xmlns="uri:Calendar">TEST-EXCEPTION-FROM-IOS yeah</Subject>
+                <BusyStatus xmlns="uri:Calendar">2</BusyStatus>
+                <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+              </Exception>');
+        $exception = new Syncroton_Model_EventException($xml);
+        $syncrotonEventtoUpdate->exceptions = [$exception];
+        $attendees = [];
+        /** @var Syncroton_Model_EventAttendee $attendee */
+        foreach ($syncrotonEventtoUpdate->attendees as $attendee) {
+            //unset($attendee->attendeeStatus);
+            $attendees[] = clone $attendee;
+        }
+        $exception->attendees = $attendees;
+
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $event->getId(), $syncrotonEventtoUpdate);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($serverId);
+        static::assertEquals(1, count($updatedEvent->exdate), 'exdates count not right');
+        static::assertEquals('2018-07-03 16:00:00', $updatedEvent->exdate[0]);
+
+        $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($updatedEvent);
+        static::assertEquals(1, $exceptions->count(), 'exdates count not right');
+        /** @var Calendar_Model_Event $exception */
+        $exception = $exceptions->getFirstRecord();
+        static::assertEquals(2, $exception->attendee->count(), 'attendee count is wrong');
+        static::assertEquals(2, $exception->attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)
+            ->count(), 'expected both attendees have accepted');
     }
 
     public function testPreserveDataOnCreateRecurException()

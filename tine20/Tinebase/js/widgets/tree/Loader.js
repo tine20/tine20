@@ -101,7 +101,9 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
             }
 
             // Get folder name to final container
-            var parts = Ext.isString(node.name) ? node.name.split("/") : [''];
+            // NOTE: if hierarchy ends with a "/" name gets appended otherwise last part of hierarchy is the display name
+            var hierarchy = String(node.hierarchy).match(/\/$/) || !node.hierarchy ? node.hierarchy || '' + node.name : node.hierarchy,
+                parts = Ext.isString(hierarchy) ? hierarchy.split("/") : [''];
             containerName = parts[parts.length - 1];
 
             // Remove first "" and last item because they don't belong to the folder names

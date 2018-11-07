@@ -34,14 +34,6 @@
           "path": "js/"
         },
         {
-          "text": "Locale.js",
-          "path": "js/"
-        },
-        {
-          "text": "Gettext.js",
-          "path": "js/Locale/"
-        },
-        {
           "text": "store.compat.js",
           "path": "js/ux/util/"
         },
@@ -1055,10 +1047,6 @@
         },
         {
           "text": "FileSelectionDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "tineInit.js",
           "path": "js/"
         }
       ]

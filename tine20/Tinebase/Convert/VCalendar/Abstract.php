@@ -144,11 +144,11 @@ abstract class Tinebase_Convert_VCalendar_Abstract
     /**
      * parse valarm properties
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @param Traversable $valarms
      * @param \Sabre\VObject\Component $vcomponent
      */
-    protected function _parseAlarm(Tinebase_Record_Abstract $record, $valarms, \Sabre\VObject\Component $vcomponent)
+    protected function _parseAlarm(Tinebase_Record_Interface $record, $valarms, \Sabre\VObject\Component $vcomponent)
     {
         foreach ($valarms as $valarm) {
             

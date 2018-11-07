@@ -105,7 +105,14 @@
             <typecast>datetime</typecast>
             <destination>Erscheinungs Datum</destination>
         </field>
-
+        <field>
+            <source>Verfügbare Anzahl</source>
+            <destination>active_number</destination>
+        </field>
+        <field>
+            <source>Totale Anzahl</source>
+            <destination>total_number</destination>
+        </field>
 
     </mapping>
 </config>

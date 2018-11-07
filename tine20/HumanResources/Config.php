@@ -75,8 +75,8 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'SICKNESS',             'value' => 'Sickness',           'icon' => 'images/oxygen/16x16/actions/book.png',  'system' => TRUE),  //_('Sickness')
-                    array('id' => 'VACATION',             'value' => 'Vacation',           'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE),  //_('Vacation')
+                    array('id' => 'SICKNESS',             'value' => 'Sickness',           'icon' => 'images/icon-set/icon_sick.svg',  'system' => TRUE),  //_('Sickness')
+                    array('id' => 'VACATION',             'value' => 'Vacation',           'icon' => 'images/icon-set/icon_vacation.svg', 'system' => TRUE),  //_('Vacation')
                 ),
                 'default' => 'VACATION'
             )
@@ -91,10 +91,10 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'REQUESTED',  'value' => 'Requested',  'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => TRUE),  //_('Requested')
-                    array('id' => 'IN-PROCESS', 'value' => 'In process', 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => TRUE),  //_('In process')
-                    array('id' => 'ACCEPTED',   'value' => 'Accepted',   'icon' => 'images/oxygen/16x16/actions/ok.png', 'system' => TRUE),  //_('Accepted')
-                    array('id' => 'DECLINED',   'value' => 'Declined',   'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png', 'system' => TRUE),  //_('Declined')
+                    array('id' => 'REQUESTED',  'value' => 'Requested',  'icon' => 'images/icon-set/icon_invite.svg', 'system' => TRUE),  //_('Requested')
+                    array('id' => 'IN-PROCESS', 'value' => 'In process', 'icon' => 'images/icon-set/icon_reload.svg', 'system' => TRUE),  //_('In process')
+                    array('id' => 'ACCEPTED',   'value' => 'Accepted',   'icon' => 'images/icon-set/icon_ok.svg', 'system' => TRUE),  //_('Accepted')
+                    array('id' => 'DECLINED',   'value' => 'Declined',   'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Declined')
 
                 ),
                 'default' => 'REQUESTED'
@@ -110,8 +110,8 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/oxygen/16x16/actions/smiley.png', 'system' => TRUE),  //_('Excused')
-                    array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/oxygen/16x16/actions/tools-report-bug.png', 'system' => TRUE),  //_('Unexcused')
+                    array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/icon-set/icon_ok.svg', 'system' => TRUE),  //_('Excused')
+                    array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Unexcused')
 
                 ),
                 'default' => 'EXCUSED'

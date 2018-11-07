@@ -6,7 +6,7 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -204,7 +204,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                         continue;
                     }
 
-                    /** @var Tinebase_Record_Abstract $record */
+                    /** @var Tinebase_Record_Interface $record */
                     $record = new $model(null, true);
 
                     foreach ($ids as $key => &$ids2) {
@@ -476,7 +476,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         
         $id = $modification->generateUID();
         $modification->setId($id);
-        $modification->convertDates = true;
+        $modification->setConvertDates(true);
 
         // mainly if we are applying replication modlogs on the slave, we set the masters instance id here
         if (null !== $this->_externalInstanceId) {
@@ -575,7 +575,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         }
 
         $diffArray = $diff->diff;
-        /** @var Tinebase_Record_Abstract $newRecord */
+        /** @var Tinebase_Record_Interface $newRecord */
         $newRecord->_convertISO8601ToDateTime($diffArray);
 
         foreach ($diffArray as $key => $value) {
@@ -693,7 +693,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             . ' RecordSet diff: ' . print_r($concurrentChangeDiff->toArray(), TRUE));
         
         foreach ($concurrentChangeDiff->added as $added) {
-            /** @var Tinebase_Record_Abstract $addedRecord */
+            /** @var Tinebase_Record_Interface $addedRecord */
             $addedRecord = new $concurrentChangeDiff->model($added);
             if (! $newRecord->$attribute->getById($addedRecord->getId())) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -703,9 +703,9 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         }
         
         foreach ($concurrentChangeDiff->removed as $removed) {
-            /** @var Tinebase_Record_Abstract $removedRecord */
+            /** @var Tinebase_Record_Interface $removedRecord */
             $removedRecord = new $concurrentChangeDiff->model($removed);
-            /** @var Tinebase_Record_Abstract $recordToRemove */
+            /** @var Tinebase_Record_Interface $recordToRemove */
             $recordToRemove = $newRecord->$attribute->getById($removedRecord->getId());
             if ($recordToRemove) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -718,9 +718,9 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' modified diff: ' . print_r($modified, TRUE));
 
-            /** @var Tinebase_Record_Abstract $modifiedRecord */
+            /** @var Tinebase_Record_Interface $modifiedRecord */
             $modifiedRecord = new $concurrentChangeDiff->model(array_merge(array('id' => $modified['id']), $modified['diff']), TRUE);
-            /** @var Tinebase_Record_Abstract $newRecordsRecord */
+            /** @var Tinebase_Record_Interface $newRecordsRecord */
             $newRecordsRecord = $newRecord->$attribute->getById($modifiedRecord->getId());
             if ($newRecordsRecord && ($newRecordsRecord->has('seq') || $newRecordsRecord->has('last_modified_time'))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -896,15 +896,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         }
 
         return $modifications;
-
-        /** old
-
-        $this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->toArray(), $_curRecord->getModlogOmitFields());
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Logged ' . count($modifications) . ' modifications.');
-        
-        return $modifications; */
     }
     
     /**
@@ -939,7 +930,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             'record_type'          => $_model,
             'record_backend'       => $_backend,
             'modification_time'    => $currentTime,
-            'modification_account' => $currentAccountId,
+            'modification_account' => $currentAccountId ? $currentAccountId : 'unknown',
             'seq'                  => (isset($_updateMetaData['seq'])) ? $_updateMetaData['seq'] : 0,
             'client'               => $client
         ), TRUE);
@@ -1464,6 +1455,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 // must not happen, continuing pointless!
                 return false;
             }
+
+            Tinebase_Lock::keepLocksAlive();
         }
 
         $this->_externalInstanceId = null;

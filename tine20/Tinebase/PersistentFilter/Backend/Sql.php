@@ -81,9 +81,9 @@ class Tinebase_PersistentFilter_Backend_Sql extends Tinebase_Backend_Sql_Abstrac
      * converts raw data from adapter into a single record
      *
      * @param  array $_rawData
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
-    protected function _rawDataToRecord(array $_rawData)
+    protected function _rawDataToRecord(array &$_rawData)
     {
         $_rawData['filters'] = Zend_Json::decode($_rawData['filters']);
         return new $this->_modelName($_rawData, true);
@@ -95,7 +95,7 @@ class Tinebase_PersistentFilter_Backend_Sql extends Tinebase_Backend_Sql_Abstrac
      * @param  array $_rawDatas of arrays
      * @return Tinebase_Record_RecordSet
      */
-    protected function _rawDataToRecordSet(array $_rawDatas)
+    protected function _rawDataToRecordSet(array &$_rawDatas)
     {
         foreach ($_rawDatas as $idx => $rawData) {
             try {

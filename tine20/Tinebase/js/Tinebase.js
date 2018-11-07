@@ -5,12 +5,9 @@
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-/**
- * webpack entry
- */
 require('core-js/fn/promise');
 var lodash = require('lodash');
 var director = require('director');

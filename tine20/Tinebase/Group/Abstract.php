@@ -213,7 +213,8 @@ abstract class Tinebase_Group_Abstract
         }
         $defaultGroupName = Tinebase_User::getBackendConfiguration($configKey);
         if (empty($defaultGroupName)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $configKey . ' not found. Check your user backend configuration.');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $configKey
+                . ' not found. Using ' . $_name);
             $defaultGroupName = $_name;
         }
 

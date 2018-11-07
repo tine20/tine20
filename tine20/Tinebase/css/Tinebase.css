@@ -8,493 +8,249 @@ html, body {
 }
 
 .ApplicationIconCls {
-    background-image:url(../../images/oxygen/16x16/apps/preferences-plugin.png) !important;
-}
-.x-btn-medium .ApplicationIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/preferences-plugin.png) !important;
-}
-.x-btn-large .ApplicationIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/preferences-plugin.png) !important;
+    background-image:url(../../images/icon-set/icon_debug.svg);
 }
 
 /* ----- actions -------------------------------------------------------------*/
 .action_add {
-    background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
+    background-image:url(../../images/icon-set/Icon_add.svg) !important;
 }
-.x-btn-medium .action_add {
-    background-image:url(../../images/oxygen/22x22/actions/list-add.png) !important;
+
+.action_enable {
+    background-image:url(../../images/icon-set/icon_ok.svg) !important;
 }
-.x-btn-large .action_add {
-    background-image:url(../../images/oxygen/32x32/actions/list-add.png) !important;
+
+.action_disable {
+    background-image:url(../../images/icon-set/icon_stop.svg) !important;
 }
 
 .action_cut {
-    background-image:url(../../images/oxygen/16x16/actions/edit-cut.png) !important;
-}
-.x-btn-medium .action_cut {
-    background-image:url(../../images/oxygen/22x22/actions/edit-cut.png) !important;
-}
-.x-btn-large .action_cut {
-    background-image:url(../../images/oxygen/32x32/actions/edit-cut.png) !important;
+    background-image:url(../../images/icon-set/icon_cut.svg) !important;
 }
 
 .action_cut_break {
-    background-image:url(../../images/oxygen/16x16/actions/edit-cut-break.png) !important;
+    background-image:url(../../images/icon-set/icon_copy_cancel.svg) !important;
 }
-.x-btn-medium .action_cut_break {
-    background-image:url(../../images/oxygen/22x22/actions/edit-cut-break.png) !important;
-}
-.x-btn-large .action_cut_break {
-    background-image:url(../../images/oxygen/32x32/actions/edit-cut-break.png) !important;
+
+.action_copy {
+    background-image:url(../../images/icon-set/icon_copy_to_clipboard.svg) !important;
+
 }
 
 .action_paste {
-    background-image:url(../../images/oxygen/16x16/actions/edit-paste.png) !important;
-}
-.x-btn-medium .action_paste {
-    background-image:url(../../images/oxygen/22x22/actions/edit-paste.png) !important;
-}
-.x-btn-large .action_paste {
-    background-image:url(../../images/oxygen/32x32/actions/edit-paste.png) !important;
+    background-image:url(../../images/icon-set/icon_paste_from_clipboard.svg) !important;
 }
 
 .action_remove {
-    background-image:url(../../images/oxygen/16x16/actions/list-remove.png) !important;
+    background-image:url(../../images/icon-set/icon_cross.svg) !important;
 }
-.x-btn-medium .action_remove {
-    background-image:url(../../images/oxygen/22x22/actions/list-remove.png) !important;
-}
-.x-btn-large .action_remove {
-    background-image:url(../../images/oxygen/32x32/actions/list-remove.png) !important;
-}
-
 
 .action_edit {
-    background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;
-}
-.x-btn-medium .action_edit {
-    background-image:url(../../images/oxygen/22x22/actions/edit.png) !important;
-}
-.x-btn-large .action_edit {
-    background-image:url(../../images/oxygen/32x32/actions/edit.png) !important;
+    background-image:url(../../images/icon-set/icon_edit.svg) !important;
 }
 
 .action_move {
-    background-image:url(../../images/edit-move.png) !important;
+    background-image:url(../../images/icon-set/icon_item_move.svg) !important;
 }
 
 .action_editcopy {
-    background-image:url(../../images/oxygen/16x16/actions/edit-copy.png) !important;
-}
-.x-btn-medium .action_editcopy {
-    background-image:url(../../images/oxygen/22x22/actions/edit-copy.png) !important;
-}
-.x-btn-large .action_editcopy {
-    background-image:url(../../images/oxygen/32x32/actions/edit-copy.png) !important;
+    background-image:url(../../images/icon-set/icon_copy_to_new.svg) !important;
 }
 
 
 .action_system_link {
-    background-image:url(../../images/oxygen/16x16/places/link.png) !important;
-}
-.x-btn-medium .action_system_link {
-    background-image:url(../../images/oxygen/22x22/places/link.png) !important;
-}
-.x-btn-large .action_system_link {
-    background-image:url(../../images/oxygen/32x32/places/link.png) !important;
+    background-image: url(../../images/icon-set/icon_system_link.svg) !important;
 }
 
+/* START svg fixes */
+.x-btn-icon {
+    background-size: 16px 16px !important;
+    background-position: top !important;
+    background-repeat: no-repeat;
+}
+
+.x-btn-icon-medium-top button {
+    background-size: 22px 22px;
+    background-position: top !important;
+    background-repeat: no-repeat;
+}
+
+.x-btn-icon-large-top button {
+    background-size: 32px 32px;
+    background-position: top !important;
+    background-repeat: no-repeat;
+}
+/* END svg fixes */
+
 .action_rename {
-    background-image:url(../../images/oxygen/16x16/actions/document-properties.png) !important;
-}
-.x-btn-medium .action_rename {
-    background-image:url(../../images/oxygen/22x22/actions/document-properties.png) !important;
-}
-.x-btn-large .action_rename {
-    background-image:url(../../images/oxygen/32x32/actions/document-properties.png) !important;
+    background-image:url(../../images/icon-set/icon_edit.svg) !important;
 }
 
 .action_changecolor {
-    background-image:url(../../images/oxygen/16x16/actions/color-line.png) !important;
-}
-.x-btn-medium .action_changecolor {
-    background-image:url(../../images/oxygen/22x22/actions/color-line.png) !important;
-}
-.x-btn-large .action_changecolor {
-    background-image:url(../../images/oxygen/32x32/actions/color-line.png) !important;
-}
-
-.action_toggleshared {
-    background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png) !important;
+    background-image:url(../../images/icon-set/icon_color.svg) !important;
 }
 
 .action_delete, .actionDelete {
-    background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
+    background-image:url(../../images/icon-set/icon_cross.svg) !important;
 }
-.x-btn-medium .action_delete, .x-btn-medium .actionDelete {
-    background-image:url(../../images/oxygen/22x22/actions/edit-delete.png) !important;
+
+.x-tbar-page-prev {
+    background-image:url(../../images/icon-set/icon_arrow_left.svg) !important;
 }
-.x-btn-large .action_delete, .x-btn-large .actionDelete {
-    background-image:url(../../images/oxygen/32x32/actions/edit-delete.png) !important;
+
+.x-tbar-page-next {
+    background-image:url(../../images/icon-set/icon_arrow_right.svg) !important;
 }
 
 .action_applyChanges {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png) !important;
+    background-image:url(../../images/icon-set/icon_ok.svg) !important;
 }
-.x-btn-medium .action_applyChanges {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-ok-apply.png) !important;
-}
-.x-btn-large .action_applyChanges {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-ok-apply.png) !important;
-}
-
 
 .action_cancel {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
+    background-image:url(../../images/icon-set/icon_stop.svg) !important;
 }
-.x-btn-medium .action_cancel {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-cancel.png) !important;
-}
-.x-btn-large .action_cancel {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-cancel.png) !important;
-}
-
 
 .action_saveAndClose {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-ok.png) !important;
-}
-.x-btn-medium .action_saveAndClose {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-ok.png) !important;
-}
-.x-btn-large .action_saveAndClose {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-ok.png) !important;
+    background-image:url(../../images/icon-set/icon_ok.svg) !important;
 }
 
 .action_next {
-    background-image:url(../../images/oxygen/16x16/actions/go-next.png) !important;
+    background-image:url(../../images/icon-set/icon_arrow_right.svg) !important;
 }
-.x-btn-medium .action_next {
-    background-image:url(../../images/oxygen/22x22/actions/go-next.png) !important;
-}
-.x-btn-large .action_next {
-    background-image:url(../../images/oxygen/32x32/actions/go-next.png) !important;
+
+.x-tbar-loading {
+    background-image: url(../../images/icon-set/icon_reload.svg) !important;
 }
 
 .action_previous {
-    background-image:url(../../images/oxygen/16x16/actions/go-previous.png) !important;
-}
-.x-btn-medium .action_previous {
-    background-image:url(../../images/oxygen/22x22/actions/go-previous.png) !important;
-}
-.x-btn-large .action_previous {
-    background-image:url(../../images/oxygen/32x32/actions/go-previous.png) !important;
+    background-image:url(../../images/icon-set/icon_arrow_left.svg) !important;
 }
 
 .action_managePermissions {
-    background-image:url(../../images/oxygen/16x16/actions/password.png) !important;
-}
-.x-btn-medium .action_managePermissions {
-    background-image:url(../../images/oxygen/22x22/actions/password.png) !important;
-}
-.x-btn-large .action_managePermissions {
-    background-image:url(../../images/oxygen/32x32/actions/password.png) !important;
+    background-image:url(../../images/icon-set/Icon_key.svg) !important;
 }
 
 .action_manageProperties {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-information.png) !important;
-}
-.x-btn-medium .action_manageProperties {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-information.png) !important;
-}
-.x-btn-large .action_manageProperties {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-information.png) !important;
+    background-image:url(../../images/icon-set/icon_info.svg) !important;
 }
 
 .action_addContact {
-    background-image:url(../../images/oxygen/16x16/actions/add-user.png) !important;
+    background-image:url(../../images/icon-set/icon_addressbook_plus.svg) !important;
 }
-.x-btn-medium .action_addContact {
-    background-image:url(../../images/oxygen/22x22/actions/add-user.png) !important;
-}
-.x-btn-large .action_addContact {
-    background-image:url(../../images/oxygen/32x32/actions/add-user.png) !important;
-}
-
 
 .action_deleteContact {
-    background-image:url(../../images/oxygen/16x16/actions/delete-user.png) !important;
+    background-image:url(../../images/icon-set/icon_address_clear.svg) !important;
 }
-.x-btn-medium .action_deleteContact {
-    background-image:url(../../images/oxygen/22x22/actions/delete-user.png) !important;
-}
-.x-btn-large .action_deleteContact {
-    background-image:url(../../images/oxygen/32x32/actions/delete-user.png) !important;
-}
-
 
 .action_exportAsPdf {
-    background-image:url(../../images/oxygen/16x16/mimetypes/pdf.png) !important;
+    background-image:url(../../images/icon-set/icon_pdf.svg) !important;
 }
-.x-btn-medium .action_exportAsPdf {
-    background-image:url(../../images/oxygen/22x22/mimetypes/pdf.png) !important;
-}
-.x-btn-large .action_exportAsPdf {
-    background-image:url(../../images/oxygen/32x32/mimetypes/pdf.png) !important;
-}
-
 
 .action_showArchived {
-    background-image:url(../../images/oxygen/16x16/actions/ark-extract.png) !important;
+    background-image:url(../../images/icon-set/icon_archived-show.svg) !important;
 }
-.x-btn-medium .action_showArchived {
-    background-image:url(../../images/oxygen/22x22/actions/ark-extract.png) !important;
-}
-.x-btn-large .action_showArchived {
-    background-image:url(../../images/oxygen/32x32/actions/ark-extract.png) !important;
-}
-
 
 .action_logOut {
-    background-image:url(../../images/oxygen/16x16/actions/system-shutdown.png) !important;
-}
-.x-btn-medium .action_logOut {
-    background-image:url(../../images/oxygen/22x22/actions/system-shutdown.png) !important;
-}
-.x-btn-large .action_logOut {
-    background-image:url(../../images/oxygen/32x32/actions/system-shutdown.png) !important;
+    background-image:url(../../images/icon-set/icon_logout.svg) !important;
 }
 
 .action_login {
-    background-image:url(../../images/oxygen/16x16/actions/view-refresh.png) !important;
-}
-.x-btn-medium .action_login {
-    background-image:url(../../images/oxygen/22x22/actions/view-refresh.png) !important;
-}
-.x-btn-large .action_login {
-    background-image:url(../../images/oxygen/32x32/actions/view-refresh.png) !important;
+    background-image:url(../../images/icon-set/icon_reload.svg) !important;
 }
 
 .action_loadTutorial,
 .action_userManual {
-    background-image: url(../../images/help-icon.png) !important;
-}
-
-.action_tag {
-    background-image:url(../../images/oxygen/16x16/actions/rss-tag.png) !important;
-}
-.x-btn-medium .action_tag {
-    background-image:url(../../images/oxygen/22x22/actions/rss-tag.png) !important;
-}
-.x-btn-large .action_tag {
-    background-image:url(../../images/oxygen/32x32/actions/rss-tag.png) !important;
-}
-
-.action_tag_delete {
-    background-image:url(../../images/oxygen/16x16/actions/rss-tag-delete.png) !important;
+    background-image: url(../../images/icon-set/icon_faq.svg) !important;
 }
 
 .action_uploadImage {
-    background-image:url(../../images/oxygen/16x16/actions/insert-image.png) !important;
+    background-image:url(../../images/icon-set/icon_upload.svg) !important;
 }
-.x-btn-medium .action_uploadImage {
-    background-image:url(../../images/oxygen/22x22/actions/insert-image.png) !important;
-}
-.x-btn-large .action_uploadImage {
-    background-image:url(../../images/oxygen/32x32/actions/insert-image.png) !important;
-}
-
 
 .action_cropImage {
-    background-image:url(../../images/oxygen/16x16/actions/select-rectangular.png) !important;
+    background-image:url(../../images/icon-set/icon_image_crop.svg) !important;
 }
-.x-btn-medium .action_cropImage {
-    background-image:url(../../images/oxygen/22x22/actions/select-rectangular.png) !important;
-}
-.x-btn-large .action_cropImage {
-    background-image:url(../../images/oxygen/32x32/actions/select-rectangular.png) !important;
-}
-
 
 .action_originalImage {
-    background-image:url(../../images/oxygen/16x16/mimetypes/image-jpeg2000.png) !important;
+    background-image:url(../../images/icon-set/icon_image_show.svg) !important;
 }
-.x-btn-medium .action_originalImage {
-    background-image:url(../../images/oxygen/22x22/mimetypes/image-jpeg2000.png) !important;
-}
-.x-btn-large .action_originalImage {
-    background-image:url(../../images/oxygen/32x32/mimetypes/image-jpeg2000.png) !important;
-}
-
 
 .action_export {
-    background-image:url(../../images/oxygen/16x16/actions/file-export.png) !important;
+    background-image:url(../../images/icon-set/icon_export.svg) !important;
 }
-.x-btn-medium .action_export {
-    background-image:url(../../images/oxygen/22x22/actions/file-export.png) !important;
-}
-.x-btn-large .action_export {
-    background-image:url(../../images/oxygen/32x32/actions/file-export.png) !important;
-}
-
 
 .action_import {
-    background-image:url(../../images/oxygen/16x16/actions/file-import.png) !important;
+    background-image:url(../../images/icon-set/icon_import.svg) !important;
 }
-.x-btn-medium .action_import {
-    background-image:url(../../images/oxygen/22x22/actions/file-import.png) !important;
-}
-.x-btn-large .action_import {
-    background-image:url(../../images/oxygen/32x32/actions/file-import.png) !important;
-}
-
 
 .action_about {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-information.png) !important;
+    background-image:url(../../images/icon-set/icon_info.svg) !important;
 }
-.x-btn-medium .action_about {
-    background-image:url(../../images/oxygen/22x22/actions/dialog-information.png) !important;
-}
-.x-btn-large .action_about {
-    background-image:url(../../images/oxygen/32x32/actions/dialog-information.png) !important;
-}
-
 
 .action_adminMode {
-    background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
+    background-image:url(../../images/icon-set/icon_settings.svg) !important;
 }
-.x-btn-medium .action_adminMode {
-    background-image:url(../../images/oxygen/22x22/apps/systemtray.png) !important;
-}
-.x-btn-large .action_adminMode {
-    background-image:url(../../images/oxygen/32x32/apps/systemtray.png) !important;
-}
-
 
 .action_composeEmail {
-    background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
-}
-.x-btn-medium .action_composeEmail {
-    background-image:url(../../images/oxygen/22x22/apps/kmail.png) !important;
-}
-.x-btn-large .action_composeEmail {
-    background-image:url(../../images/oxygen/32x32/apps/kmail.png) !important;
+    background-image:url(../../images/icon-set/icon_email.svg) !important;
 }
 
 .action_print {
-    background-image:url(../../images/oxygen/16x16/actions/document-print.png) !important;
-}
-.x-btn-medium .action_print {
-    background-image:url(../../images/oxygen/22x22/actions/document-print.png) !important;
-}
-.x-btn-large .action_print {
-    background-image:url(../../images/oxygen/32x32/actions/document-print.png) !important;
+    background-image:url(../../images/icon-set/icon_print.svg) !important;
 }
 
 .action_printPreview {
-    background-image:url(../../images/oxygen/16x16/actions/document-print-preview.png) !important;
-}
-.x-btn-medium .action_printPreview {
-    background-image:url(../../images/oxygen/22x22/actions/document-print-preview.png) !important;
-}
-.x-btn-large .action_printPreview {
-    background-image:url(../../images/oxygen/32x32/actions/document-print-preview.png) !important;
+    background-image:url(../../images/icon-set/icon_print_peview.svg) !important;
 }
 
 .action_resolveDuplicates {
-    background-image: url(../../images/oxygen/16x16/actions/file-revert.png) !important;
+    background-image:url(../../images/icon-set/icon_merge.svg) !important;
 }
 
 .tinebase-action-export-xls {
-    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-excel.png) !important;
-}
-.x-btn-medium .tinebase-action-export-xls {
-    background-image:url(../../images/oxygen/22x22/mimetypes/application-vnd.ms-excel.png) !important;
-}
-.x-btn-large .tinebase-action-export-xls {
-    background-image:url(../../images/oxygen/32x32/mimetypes/application-vnd.ms-excel.png) !important;
+    background-image:url(../../images/icon-set/icon_excel.svg) !important;
 }
 
 .tinebase-action-export-doc {
-    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-word.png) !important;
-}
-.x-btn-medium .tinebase-action-export-doc {
-    background-image:url(../../images/oxygen/22x22/mimetypes/application-vnd.ms-word.png) !important;
-}
-.x-btn-large .tinebase-action-export-doc {
-    background-image:url(../../images/oxygen/32x32/mimetypes/application-vnd.ms-word.png) !important;
+    background-image:url(../../images/icon-set/icon_doc_file.svg) !important;
 }
 
 
 .tinebase-action-export-ods {
-    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;
+    background-image:url(../../images/icon-set/icon_ods.svg) !important;
 }
-.x-btn-medium .tinebase-action-export-ods {
-    background-image:url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;
-}
-.x-btn-large .tinebase-action-export-ods {
-    background-image:url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;
-}
-
 
 .tinebase-action-export-csv {
-    background-image:url(../../images/oxygen/16x16/mimetypes/text-csv.png) !important;
-}
-.x-btn-medium .tinebase-action-export-csv {
-    background-image:url(../../images/oxygen/22x22/mimetypes/text-csv.png) !important;
-}
-.x-btn-large .tinebase-action-export-csv {
-    background-image:url(../../images/oxygen/32x32/mimetypes/text-csv.png) !important;
+    background-image:url(../../images/icon-set/icon_mime_csv.svg) !important;
 }
 
 .action_options {
-    background-image:url(../../images/oxygen/16x16/actions/gear.png) !important;
-}
-.x-btn-medium .action_options {
-    background-image:url(../../images/oxygen/22x22/actions/gear.png) !important;
-}
-.x-btn-large .action_options {
-    background-image:url(../../images/oxygen/32x32/actions/gear.png) !important;
+    background-image:url(../../images/icon-set/icon_settings.svg) !important;
 }
 
 .action_attach {
-    background-image:url(../../images/oxygen/16x16/actions/attach.png) !important;
-}
-.x-btn-medium .action_attach {
-    background-image:url(../../images/oxygen/22x22/actions/attach.png) !important;
-}
-.x-btn-large .action_attach {
-    background-image:url(../../images/oxygen/32x32/actions/attach.png) !important;
+    background-image:url(../../images/icon-set/icon_paperclip.svg) !important;
 }
 
 .action_image {
-    background-image:url(../../images/oxygen/16x16/mimetypes/image-x-generic.png) !important;
-}
-.x-btn-medium .action_image {
-    background-image:url(../../images/oxygen/22x22/mimetypes/image-x-generic.png) !important;
-}
-.x-btn-large .action_image {
-    background-image:url(../../images/oxygen/32x32/mimetypes/image-x-generic.png) !important;
+    background-image:url(../../images/icon-set/icon_file_image.svg) !important;
 }
 
 .tinebase-action-debug-console {
-    background-image:url(../../images/oxygen/16x16/apps/utilities-terminal.png) !important;
-}
-
-.action_report {
-    background-image:url(../../images/oxygen/22x22/actions/history-kdeprint.png) !important;
+    background-image:url(../../images/icon-set/icon_debug.svg) !important;
 }
 
 .tinebase-dd-drop-ok-copy  .x-dd-drop-icon {
-    background-image:url(../../images/oxygen/16x16/actions/edit-copy.png) !important;
+    background-image:url(../../images/icon-set/icon_copy_to_new.svg) !important;
 }
 
 .tinebase-dd-drop-ok-move  .x-dd-drop-icon {
-    background-image:url(../../images/edit-move.png) !important;
+    background-image:url(../../images/icon-set/icon_item_move.svg) !important;
 }
 
 /* ----- tree classes --------------------------------------------------------*/
 .tinebase-tree-drop-move  .x-dd-drop-icon {
-    background-image:url(../../images/oxygen/16x16/places/link.png) !important;
+    background-image:url(../../images/icon-set/icon_system_link.svg) !important;
 }
 
 .tinebase-tree-hide-collapsetool .x-tree-ec-icon {
@@ -502,19 +258,15 @@ html, body {
 }
 
 .tinebase-westpanel-node-favorite img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/actions/knewstuff.png);
+    background-image:url(../../images/icon-set/icon_star_full.svg);
 }
 
 .tinebase-westpanel-node-favorite-shared img.x-tree-node-icon {
-    background-image:url(../../images/oxygen/16x16/actions/get-hot-new-stuff.png);
+    background-image:url(../../images/icon-set/icon_star_out_neg.svg);
 }
 
 .action-tinebase-favorite {
-    background-image:url(../../images/oxygen/16x16/actions/knewstuff.png) !important;
-}
-
-.action-clipboard {
-    background-image:url("../../images/oxygen/16x16/apps/klipper.png") !important;
+    background-image:url(../../images/icon-set/icon_star_full.svg) !important;
 }
 
 /* ----- login dialog --------------------------------------------------------*/
@@ -525,6 +277,14 @@ html, body {
 .tb-login-lobobox {
     text-align:right;
     height: 60px;
+}
+
+.tb-login-headsup-box {
+    color: gray;
+    text-align: left;
+    position: absolute;
+    font-size: 32px;
+    font-weight: bold;
 }
 
 .tb-login-lobobox img {
@@ -593,7 +353,7 @@ html, body {
 }
 
 .tb-about-whatsnew p {
-    background: transparent url(../../images/oxygen/16x16/actions/dialog-information.png) left top no-repeat;
+    background: transparent url(../../images/icon-set/icon_info.svg) left top no-repeat;
     padding: 2px 0 2px 20px;
 }
 
@@ -623,44 +383,54 @@ html, body {
 
 /* ----- account renderer ------------------------------------------------------------*/
 .renderer {
-    width: 12px;
+    width: 16px;
     float: left;
     padding-left: 5px;
 }
 
 .renderer_accountUserIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
+    background-image:url(../../images/icon-set/icon_profil.svg) !important;
 }
 
 .renderer_accountUserChangedIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
+    background-image:url(../../images/icon-set/icon_profil.svg) !important;
     background-color: red !important;
 }
 
+.renderer_accountAnyoneIcon {
+    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
+}
+
 .renderer_accountGroupIcon {
-    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
+    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
 }
 
 .renderer_accountGroupmemberIcon {
-    background-image:url(../../images/groupmember.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
+    background-image:url(../../images/icon-set/icon_groupmember.svg) !important;
 }
 
 .renderer_accountRoleIcon {
-    background-image:url(../../images/oxygen/16x16/actions/view-process-users.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
+    background-image:url(../../images/icon-set/icon_user_role.svg) !important;
 }
 
 .renderer_accountContactIcon {
-    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
+    background-image:url(../../images/icon-set/icon_profil.svg) !important;
+}
+
+.tinebase-accounttype-user {
+    background-image:url(../../images/icon-set/icon_profil.svg) !important;
+}
+
+.tinebase-accounttype-group {
+    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
+}
+
+.tinebase-accounttype-role {
+    background-image:url(../../images/icon-set/icon_user_role.svg) !important;
+}
+
+.tinebase-accounttype-addanyone {
+    background-image:url(../../images/icon-set/icon_group_full.svg) !important;
 }
 
 /* TODO make this work */
@@ -669,101 +439,33 @@ html, body {
     font-size: 11px;
 }
 
-.renderer_accountAnyoneIcon {
-    background-image: url(../../images/oxygen/16x16/actions/users.png) !important;
-    background-repeat: no-repeat;
-    background-position: 2px 2px;
+.action_mute_noteification {
+    background-image:url(../../images/icon-set/icon_mute_notification.svg) !important;
 }
 
-.tinebase-accounttype-user {
-    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
-}
-.x-btn-medium .tinebase-accounttype-user {
-    background-image:url(../../images/oxygen/22x22/actions/user-female.png) !important;
-}
-.x-btn-large .tinebase-accounttype-user {
-    background-image:url(../../images/oxygen/32x32/actions/user-female.png) !important;
+.action_noteification {
+    background-image:url(../../images/icon-set/icon_notification.svg) !important;
 }
 
-.tinebase-accounttype-group {
-    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
-}
-.x-btn-medium .tinebase-accounttype-group {
-    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
-}
-.x-btn-large .tinebase-accounttype-group {
-    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
-}
-
-.tinebase-accounttype-role {
-    background-image:url(../../images/oxygen/16x16/actions/view-process-users.png) !important;
-}
-.x-btn-medium .tinebase-accounttype-role {
-    background-image:url(../../images/oxygen/22x22/actions/view-process-users.png) !important;
-}
-.x-btn-large .tinebase-accounttype-role {
-    background-image:url(../../images/oxygen/32x32/actions/view-process-users.png) !important;
-}
-
-.tinebase-accounttype-addanyone {
-    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
-}
-.x-btn-medium .tinebase-accounttype-addanyone {
-    background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
-}
-.x-btn-large .tinebase-accounttype-addanyone {
-    background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
+.action_preview {
+    background-image:url(../../images/icon-set/icon_preview.svg) !important;
 }
 
 /* ----- notes ------------------------------------------------------------*/
 .notes_noteIcon {
-   background-image:url(../../images/oxygen/16x16/actions/note.png) !important;
-}
-.x-btn-medium .notes_noteIcon {
-   background-image:url(../../images/oxygen/22x22/actions/note.png) !important;
-}
-.x-btn-large .notes_noteIcon {
-   background-image:url(../../images/oxygen/32x32/actions/note.png) !important;
+   background-image:url(../../images/icon-set/icon_edit.svg) !important;
 }
 
 .notes_telephoneIcon {
-   background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
-}
-.x-btn-medium .notes_telephoneIcon {
-   background-image:url(../../images/oxygen/22x22/apps/kcall.png) !important;
-}
-.x-btn-large .notes_telephoneIcon {
-   background-image:url(../../images/oxygen/32x32/apps/kcall.png) !important;
+   background-image:url(../../images/icon-set/icon_phone.svg) !important;
 }
 
 .notes_emailIcon {
-   background-image:url(../../images/oxygen/16x16/actions/kontact-mail.png) !important;
-}
-.x-btn-medium .notes_emailIcon {
-   background-image:url(../../images/oxygen/22x22/actions/kontact-mail.png) !important;
-}
-.x-btn-large .notes_emailIcon {
-   background-image:url(../../images/oxygen/32x32/actions/kontact-mail.png) !important;
+   background-image:url(../../images/icon-set/icon_email.svg) !important;
 }
 
 .descriptionIcon {
-   background-image:url(../../images/oxygen/16x16/apps/kwrite.png) !important;
-}
-.x-btn-medium .descriptionIcon {
-   background-image:url(../../images/oxygen/22x22/apps/kwrite.png) !important;
-}
-.x-btn-large .descriptionIcon {
-   background-image:url(../../images/oxygen/32x32/apps/kwrite.png) !important;
-}
-
-.previewIcon {
-    background-image:url(../../images/oxygen/16x16/actions/fileview-preview.png) !important;
-}
-.x-btn-medium .previewIcon {
-    background-image:url(../../images/oxygen/22x22/actions/fileview-preview.png) !important;
-}
-.x-btn-large .previewIcon {
-    background-image:url(../../images/oxygen/32x32/actions/fileview-preview.png) !important;
+   background-image:url(../../images/icon-set/icon_note.svg) !important;
 }
 
 /* ----- mainmenu ------------------------------------------------------------*/
@@ -802,8 +504,12 @@ html, body {
 
 .tine-favicon {
     /* NOTE: favicon is configured at runtime! */
-    background-image:url(../../library/ExtJS/resources/images/default/s.gif) !important;
     background-size: 16px 16px;
+}
+
+span .x-tab-strip-text.tine-favicon {
+    background-position-y: 2px !important;
+    background-size: 15px 15px;
 }
 
 .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {
@@ -838,8 +544,8 @@ html, body {
 
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close,
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close:hover {
-    background-image:url("../../library/ExtJS/resources/images/default/button/arrow.gif");
-    top: 6px;
+    background-image:url("../../images/icon-set/icon_arrow_full_down.svg");
+    top: 5px;
     right: 19px;
 }
 
@@ -892,16 +598,15 @@ html, body {
 }
 
 .tine-grid-row-action-icon {
-    width: 16px;
-    height: 16px;
-    zoom: 65%;
     background-repeat: no-repeat;
+    height: 16px;
+    margin: -2px;
 }
 
 /******* grid cell classes *********/
 
 .tine-grid-cell-hint {
-    background-image:url("../../library/ExtJS/resources/images/default/button/arrow.gif");
+    background-image:url("../../images/icon-set/icon_arrow_full_down.svg");
     position: absolute;
     top: 0px;
     right: 0px;
@@ -949,43 +654,7 @@ span:hover.tinebase-download-link {
 }
 
 .action_download {
-    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
-}
-.x-btn-medium .action_download {
-    background-image:url(../../images/oxygen/22x22/actions/save-all.png) !important;
-}
-.x-btn-large .action_download {
-    background-image:url(../../images/oxygen/32x32/actions/save-all.png) !important;
-}
-
-/********* uploads ************/
-
-.x-tinebase-uploading {
-    background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif) !important;
-}
-
-.x-tinebase-uploadrow .x-grid3-cell-inner {
-    background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);
-    background-repeat: no-repeat;
-    padding-left: 19px;
-}
-
-.x-tinebase-uploadpaused .x-grid3-cell-inner {
-    background-image:url(../../images/oxygen/16x16/actions/media-playback-pause.png);
-    background-repeat: no-repeat;
-    padding-left: 19px;
-}
-
-.x-tinebase-uploading .x-grid3-cell-inner {
-    background-image:url(../../images/oxygen/16x16/actions/media-playback-start.png);
-    background-repeat: no-repeat;
-    padding-left: 19px;
-}
-
-.x-tinebase-uploadcomplete .x-grid3-cell-inner {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png);
-    background-repeat: no-repeat;
-    padding-left: 19px;
+    background-image:url(../../images/icon-set/icon_download.svg) !important;
 }
 
 /******** email ***********/
@@ -1039,49 +708,48 @@ span:hover.tinebase-showheaders-link {
 
 
 /* multiple edit dialog */
-    
-.tinebase-editmultipledialog-noneedit, 
-input.tinebase-editmultipledialog-noneedit, 
+
+.tinebase-editmultipledialog-noneedit,
+input.tinebase-editmultipledialog-noneedit,
 textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     background-color: #f4f1d3;
     background-image:none!important;
-    }
-    
+}
+
+.tinebase-editmultipledialog-clearer.over,
 .tinebase-editmultipledialog-clearer {
-    background: transparent url("../../library/ExtJS/resources/images/default/form/clear-trigger.gif") -16px top no-repeat;
-    border-bottom:1px solid #7eadd9; 
-    height:18px;
-    width:18px;
+    background-image:url(../../images/icon-set/icon_clear.svg) !important;
+    border-bottom:1px solid #7eadd9;
+    background-position: 0px;
+    height:16px;
+    width:16px;
+    top: 5px;
     display:block;
     position:absolute;
     z-index:9;
-    }
-    
-.tinebase-editmultipledialog-clearer.hidden {
-    border-bottom:none; 
-    height:18px; 
-    background-image: url(../../library/ExtJS/resources/images/default/s.gif);
-    }
-    
-.tinebase-editmultipledialog-clearer.undo {
-    background: transparent url(../../images/oxygen/16x16/actions/edit-undo-grey.png) 0 3px no-repeat;
-    border-bottom: none;   
-    }
+}
 
-.tinebase-editmultipledialog-clearer.undo.over {
-    background: transparent url(../../images/oxygen/16x16/actions/edit-undo.png) 0 3px no-repeat;
-    }
-    
+.tinebase-editmultipledialog-clearer.hidden {
+    border-bottom:none;
+    height:18px;
+    background-image: url(../../library/ExtJS/resources/images/default/s.gif);
+}
+
+.tinebase-editmultipledialog-clearer.undo.over,
+.tinebase-editmultipledialog-clearer.undo {
+    background-position: center;
+    background-image:url(../../images/icon-set/icon_undo.svg) !important;
+    border-bottom: none;
+}
+
+
 .tinebase-editmultipledialog-dirty {
     position:absolute;
     left:0;
+    /*background-image:url(../../images/icon-set/icon_data-dirty_red.svg) !important;*/
     background-image: url(../../library/ExtJS/resources/images/default/grid/dirty.gif);
     background-repeat: no-repeat;
-}    
-    
-.tinebase-editmultipledialog-clearer.click {background-position: -33px 0}
-
-.tinebase-editmultipledialog-clearer.over {background-position: -67px 0}
+}
 
 .tinebase-editmultipledialog-dirtycheck {
     background-color: #F4F1D3; /* #F9F9A3 */
@@ -1211,4 +879,157 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 
 .tine-tinebase-recorddisplaypanel-displayfield .x-form-display-field {
     display: inline-block;
+}
+
+.x-tree-node-expanded .x-tree-node-icon {
+    background-image: url(../../images/icon-set/icon_filemanager.svg) !important;
+}
+
+.x-tree-node-collapsed .x-tree-node-icon {
+    background-image: url(../../images/icon-set/icon_folder.svg) !important;
+}
+
+.x-tree-node-leaf .x-tree-node-icon {
+    background-image: url(../../images/icon-set/icon_folder.svg);
+}
+
+/*.x-form-field-wrap .x-form-search-trigger {*/
+    /*background-image: url(../../images/icon-set/icon_search.svg);*/
+/*}*/
+
+/* @todo make better loading mask, use existing vue/bootstrap component*/
+
+/*div.ext-el-mask-msg.x-mask-loading {*/
+    /*margin: 0 0 0 0;*/
+    /*border: none;*/
+    /*padding: 0 0 0 0;*/
+    /*background-color: transparent;*/
+    /*background-position: center;*/
+    /*background-size: 60px 60px;*/
+    /*width: 60px;*/
+    /*height: 60px;*/
+/*}*/
+
+/*.ext-el-mask-msg.x-mask-loading div {*/
+    /*display: none;*/
+/*}*/
+
+.x-tab-strip .x-tab-with-icon span.x-tab-strip-text {
+    padding-left: 20px;
+    background-position: 0 1px;
+    background-repeat: no-repeat;
+}
+
+
+.x-btn.x-btn-icon .x-tbar-page-first {
+    background: url(../../images/icon-set/icon_arrow_back_last.svg) !important;
+}
+
+.x-btn.x-btn-icon .x-tbar-page-prev {
+    background: url(../../images/icon-set/icon_arrow_left.svg) !important;
+}
+
+.x-btn.x-btn-icon .x-tbar-page-last {
+    background: url(../../images/icon-set/icon_arrow_action_last.svg) !important;
+}
+
+.x-btn.x-btn-icon .x-tbar-page-next  {
+    background: url(../../images/icon-set/icon_arrow_right.svg) !important;
+}
+
+.x-cols-icon {
+    background: url(../../images/icon-set/icon_column_neg.svg) !important;
+}
+
+
+/* only works for small btns as we don't have to align them*/
+.x-btn {
+    position: relative;
+}
+
+.x-btn-image {
+    top: 2px;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+}
+
+/* loading animations */
+@keyframes loading-animation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.tine-viewport-waitcycle,
+.x-tree-node-loading .x-tree-node-icon,
+.x-mask-wait,
+.x-btn-wait + div,
+.x-item-disabled .x-tbar-loading + div,
+.x-item-disabled .x-tbar-loading {
+    animation-name: loading-animation;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.17, .67, .52, .71);
+}
+
+.tine-viewport-waitcycle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+}
+
+.x-tree-node-loading .x-tree-node-icon,
+.x-item-disabled .x-tbar-loading,
+.x-btn-wait {
+    background-image: none !important;
+}
+
+.x-tree-node-loading .x-tree-node-icon,
+.x-item-disabled .x-tbar-loading + div,
+.x-btn-wait + div {
+    width: 12px;
+    height: 12px;
+    top: 5px;
+    left: 5px;
+}
+
+.x-tree-node-loading .x-tree-node-icon,
+.tine-viewport-waitcycle,
+.x-mask-wait,
+.x-item-disabled .x-tbar-loading + div,
+.x-btn-wait + div {
+    box-sizing: border-box;
+    border: 2px solid #ccc !important;
+    border-top: 2px solid #2196f3 !important;
+    border-radius: 100%;
+}
+
+.x-tree-node-loading .x-tree-node-icon {
+    margin-top: 3px;
+}
+
+.x-mask-loading {
+    background: none;
+    border: none;
+}
+
+.x-mask-loading div {
+    background-image: none !important;
+}
+
+.x-mask-wait {
+    left: 8px;
+    padding: 0px !important;
+    position: absolute;
+    top: 7px;
+    height: 16px;
+    width: 16px;
+    margin: 0px;
+    background-image: none !important;
 }

@@ -34,6 +34,10 @@ abstract class ImportTestCase extends TestCase
 
     protected $_importerClassName = 'Tinebase_Import_Csv_Generic';
     protected $_modelName = null;
+
+    /**
+     * @var Tinebase_Model_Container
+     */
     protected $_testContainer = null;
 
     /**
@@ -41,11 +45,11 @@ abstract class ImportTestCase extends TestCase
      */
     protected function tearDown()
     {
-        parent::tearDown();
-
         if ($this->_testContainer) {
-            Tinebase_Container::getInstance()->deleteContainer($this->_testContainer);
+            Tinebase_Container::getInstance()->deleteContainer($this->_testContainer, true);
         }
+
+        parent::tearDown();
 
         // cleanup
         if (file_exists($this->_filename) && $this->_deleteImportFile) {
@@ -59,10 +63,12 @@ abstract class ImportTestCase extends TestCase
      * @param array $_options
      * @param string|Tinebase_Model_ImportExportDefinition $_definition
      * @param Tinebase_Model_Filter_FilterGroup $_exportFilter
+     * @param array $clientRecordData
+     * @param array $replacements should contain $replacements['from'] and $replacements['to']
      * @throws Tinebase_Exception_NotFound
      * @return array
      */
-    protected function _doImport(array $_options = array(), $_definition = null, Tinebase_Model_Filter_FilterGroup $_exportFilter = null, $clientRecordData = [])
+    protected function _doImport(array $_options = array(), $_definition = null, Tinebase_Model_Filter_FilterGroup $_exportFilter = null, $clientRecordData = [], $replacements = null)
     {
         if (! $this->_importerClassName || ! $this->_modelName) {
             throw new Tinebase_Exception_NotFound('No import class or model name given');
@@ -79,6 +85,12 @@ abstract class ImportTestCase extends TestCase
         if ($_exportFilter !== NULL) {
             $exporter = Tinebase_Export::factory($_exportFilter, 'csv', Tinebase_Core::getApplicationInstance($this->_modelName));
             $this->_filename = $exporter->generate();
+
+            if ($replacements) {
+                $csv = file_get_contents($this->_filename);
+                $csv = str_replace($replacements['from'], $replacements['to'], $csv);
+                file_put_contents($this->_filename, $csv);
+            }
         }
 
         // then import

@@ -293,7 +293,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
                 . ' Edit grant is sufficient to change record if account id does not change');
             return true;
         }
-        
+
         $existing = $this->search(new Tinebase_Model_PersistentFilterFilter(array(
             'account_id'        => $record->account_id,
             'application_id'    => $record->application_id,
@@ -305,8 +305,16 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
         } else {
             $rec = $record;
         }
-        
-        $right = $user->hasRight($record->application_id, $this->_getManageSharedRight($rec));
+
+        $sharedRight = $this->_getManageSharedRight($rec);
+        if (! $sharedRight) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Application has no "manage shared favorites" right');
+            return true;
+        }
+
+        $right = $user->hasRight($record->application_id, $sharedRight);
+
         if (! $right && $_throwException) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to manage shared favorites!'); 
         }
@@ -317,15 +325,20 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
     /**
      * returns the name of the manage shared right for the record given
      * @param Tinebase_Record_Interface $record
-     * @return string
+     * @return string|null
      */
     protected function _getManageSharedRight($record)
     {
         $split = explode('_Model_', str_replace('Filter', '', $record->model));
         $rightClass = $split[0] . '_Acl_Rights';
         $rightConstant = 'MANAGE_SHARED_' . strtoupper($split[1]) . '_FAVORITES';
-        
-        return constant($rightClass . '::' . $rightConstant);
+        $constantWithClass = $rightClass . '::' . $rightConstant;
+
+        if (! defined($constantWithClass)) {
+            return null;
+        } else {
+            return constant($rightClass . '::' . $rightConstant);
+        }
     }
     
     /**
@@ -333,6 +346,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
      *
      * @param array $_ids
      * @return array of ids to actually delete
+     * @throws Tinebase_Exception_AccessDenied
      */
     protected function _inspectDelete(array $_ids) 
     {

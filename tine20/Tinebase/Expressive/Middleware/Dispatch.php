@@ -50,15 +50,15 @@ class Tinebase_Expressive_Middleware_Dispatch implements MiddlewareInterface
         if ($result instanceof ResponseInterface) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' dispatcher result is a ResponseInterface');
-
             return $result;
         }
-        if ($result instanceof Tinebase_Record_Abstract || $result instanceof  Tinebase_Record_RecordSet) {
+        if ($result instanceof Tinebase_Record_Interface || $result instanceof  Tinebase_Record_RecordSet) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' dispatcher result is a Tinebase_Record_*');
 
             $response = new Tinebase_Expressive_Response();
             $response->resultObject = $result;
+            
             return $response;
         }
 

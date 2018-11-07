@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -26,14 +26,7 @@ class Tinebase_Model_OpenId_TrustedSiteFilter extends Tinebase_Model_Filter_Filt
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Tinebase_Model_OpenId_TrustedSite';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_OpenId_TrustedSiteFilter';
+    protected $_modelName = Tinebase_Model_OpenId_TrustedSite::class;
     
     /**
      * @var array filter model fieldName => definition

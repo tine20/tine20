@@ -81,6 +81,7 @@ class Tinebase_State
      * 
      * @param string $_name
      * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function clearState($_name)
     {
@@ -101,6 +102,8 @@ class Tinebase_State
      * @param string $_name
      * @param string $_value
      * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Exception
      */
     public function setState($_name, $_value)
     {
@@ -109,20 +112,30 @@ class Tinebase_State
         }
         
         $userId = Tinebase_Core::getUser()->getId();
-        
-        $results = $this->_backend->search($this->_getFilter($_name, $userId));
-        
-        if ($results->count() == 0) {
-            $record = new Tinebase_Model_State(array(
-                'user_id'   => $userId,
-                'state_id'  => $_name,
-                'data'      => $_value
-            ));
-            $this->_backend->create($record);
-        } else {
-            $record = $results->getFirstRecord();
-            $record->data = $_value;
-            $this->_backend->update($record);
+        $db = Tinebase_Core::getDb();
+
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+            $results = $this->_backend->search($this->_getFilter($_name, $userId));
+
+            if ($results->count() == 0) {
+                $record = new Tinebase_Model_State(array(
+                    'user_id' => $userId,
+                    'state_id' => $_name,
+                    'data' => $_value
+                ));
+                $this->_backend->create($record);
+            } else {
+                $record = $results->getFirstRecord();
+                $record->data = $_value;
+                $this->_backend->update($record);
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
         }
     }
 
@@ -147,44 +160,83 @@ class Tinebase_State
         
         return $result;
     }
-    
+
     /**
-     * decoder for the extjs state encoder
-     * 
-     * @param  mixed $_value
-     * @return mixed
+     * @param $raw Ext encoded state
+     * @return array|bool|Tinebase_DateTime
      */
-    public static function decode($_value)
+    public static function decode($raw)
     {
-        $val = urldecode($_value);
-        list ($type, $data) = explode(':', $val);
-        
-        switch ($type) {
-            case 'a': //array
-                $array = array();
-                
-                $entries = explode('^', $data);
-                foreach ($entries as $entry) {
-                    $array[] = self::decode($entry);
-                }
-                return $array;
-                break;
-                
-            case 'n': // number
-            case 's': //string
-                return $data;
-                break;
-                
-            case 'o': //object
-                $object = array();
-                
-                $entries = explode('^', $data);
-                foreach ($entries as $entry) {
-                    list ($p, $v) = explode ('=', $entry);
-                    $object[$p] = self::decode($v);
-                }
-                return $object;
-                break;
+        if (preg_match('/^(a|n|d|b|s|o)\:(.*)$/', urldecode($raw), $matches)) {
+            $type = $matches[1];
+            $v = $matches[2];
+
+            switch($type){
+                case "n":
+                    return floatval($v);
+                case "d":
+                    return new Tinebase_DateTime($v);
+                case "b":
+                    return ($v == "1");
+                case "a":
+                    $all = [];
+                    if($v != ''){
+                        foreach (explode('^', $v) as $val) {
+                            $all[] = self::decode($val);
+                        }
+                    }
+                    return $all;
+                case "o":
+                    $all = [];
+                    if($v != ''){
+                        foreach (explode('^', $v) as $val) {
+                            $kv = explode('=', $val);
+                            $all[$kv[0]] = self::decode($kv[1]);
+                        }
+                    }
+                    return $all;
+                default:
+                    return $v;
+            }
         }
+    }
+
+    /**
+     * @param $state
+     * @return string
+     */
+    public static function encode($state)
+    {
+        $enc = '';
+        if(is_numeric($state)) {
+            $enc = "n:" . $state;
+        } else if(is_bool($state)) {
+            $enc = "b:" . ($state ? "1" : "0");
+        } else if($state instanceof DateTime){
+            $enc = "d:" . $state->format('D, d M Y H:i:s') + ' GMT';
+        } else if(is_array($state)) {
+            $flat = "";
+            if (! count(array_filter(array_keys($state), 'is_string'))) {
+                // numeric keys
+                foreach($state as $key => $val) {
+                    $flat .= self::encode($val) . '^';
+                }
+                $enc = "a:" . $flat;
+            } else {
+                // string keys
+                foreach($state as $key => $val) {
+                    if ($val) {
+                        $flat .= $key . '=' . self::encode($val) . '^';
+                    }
+                }
+                $enc = "o:" . $flat;
+            }
+
+            $enc = substr($enc, 0, -1);
+        } else {
+            $enc = "s:". $state;
+        }
+
+        return urlencode($enc);
     }
 }

@@ -68,7 +68,7 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
      */
     protected function _getTwigContext(array $context)
     {
-        /* @var $record Tinebase_Record_Abstract */
+        /* @var $record Tinebase_Record_Interface */
         if (empty($this->_records)) {
             return parent::_getTwigContext($context);
         }

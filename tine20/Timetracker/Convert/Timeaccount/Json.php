@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,24 +18,13 @@
 class Timetracker_Convert_Timeaccount_Json extends Tinebase_Convert_Json
 {
     /**
-     * resolve multiple record fields (Tinebase_ModelConfiguration._recordsFields)
+     * converts Tinebase_Record_Interface to external format
      *
-     * @param Tinebase_Record_RecordSet $_records
-     * @param Tinebase_ModelConfiguration $modelConfiguration
-     */
-    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL)
-    {
-        // grants cannnot be resolved the default way, other records fields must not be resolved
-    }
-
-    /**
-     * converts Tinebase_Record_Abstract to external format
-     *
-     * @param  Tinebase_Record_Abstract  $_record
+     * @param  Tinebase_Record_Interface  $_record
      * @return mixed
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         $recordArray = parent::fromTine20Model($_record);
 
@@ -64,4 +53,40 @@ class Timetracker_Convert_Timeaccount_Json extends Tinebase_Convert_Json
         return $recordArray;
     }
 
+    /**
+     * resolves child records before converting the record set to an array
+     *
+     * @param Tinebase_Record_RecordSet $records
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     */
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
+    {
+        parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+        $this->_resolveGrants($records);
+    }
+
+
+    protected function _resolveGrants(Tinebase_Record_RecordSet $_records)
+    {
+        // TODO do we need this?
+        // Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
+
+        $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
+        foreach ($_records as $timeaccount) {
+            $timeaccountGrantsArray = $timeaccount->account_grants;
+            $modifyGrant = $manageAllRight || $timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::GRANT_ADMIN];
+
+            $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_READ]   = true;
+            $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_EDIT]   = $modifyGrant;
+            $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_DELETE] = $modifyGrant;
+            $timeaccount->account_grants = $timeaccountGrantsArray;
+
+            // also move the grants into the container_id property, as the clients expects records to
+            // be contained in some kind of container where it searches the grants in
+            if (is_array($timeaccount->container_id) || is_object($timeaccount->container_id)) {
+                $timeaccount->container_id['account_grants'] = $timeaccountGrantsArray;
+            }
+        }
+    }
 }

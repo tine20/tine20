@@ -162,9 +162,9 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
     /**
      * save tine20 record to db
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      */
-    public function saveTineRecord(Tinebase_Record_Abstract $record)
+    public function saveTineRecord(Tinebase_Record_Interface $record)
     {
         if (! $record->account_id) {
             $savedRecord = $this->_tineRecordBackend->create($record);

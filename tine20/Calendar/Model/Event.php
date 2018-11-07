@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -61,6 +61,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     const RANGE_ALL           = 'ALL';
     const RANGE_THIS          = 'THIS';
     const RANGE_THISANDFUTURE = 'THISANDFUTURE';
+
+    const XPROPS_IMIP_PROPERTIES = 'imipProperties';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -134,6 +136,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         // ical scheduleable interface fields
         'dtstart'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'recurid'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'members'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'resources'            => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'date'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'duration'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'time'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'groups'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'base_event_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical scheduleable interface fields with multiple appearance
         'exdate'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), //  array of Tinebase_DateTimeTinebase_DateTime's
@@ -155,13 +163,15 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         
         // grant helper fields
-        Tinebase_Model_Grants::GRANT_FREEBUSY => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_READ     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_SYNC     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_EXPORT   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_EDIT     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_DELETE   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        Tinebase_Model_Grants::GRANT_PRIVATE  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+
+        'xprops'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -192,7 +202,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         Tinebase_Model_Grants::GRANT_EXPORT,
         Tinebase_Model_Grants::GRANT_EDIT,
         Tinebase_Model_Grants::GRANT_DELETE,
-        Tinebase_Model_Grants::GRANT_PRIVATE,
+        Calendar_Model_EventPersonalGrants::GRANT_PRIVATE,
         'external_seq'
     );
 
@@ -206,6 +216,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     protected $_filters = [
         'organizer'     => array(array('Empty', null)),
     ];
+
+    protected static $_freebusyCleanUpKeys = null;
+    protected static $_freebusyCleanUpVisibilty = null;
     
     /**
      * sets record related properties
@@ -437,8 +450,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'organizer':
                 if (! $_value instanceof Addressbook_Model_Contact) {
                     $organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($_value, TRUE)->getFirstRecord();
+                    return $organizer instanceof Addressbook_Model_Contact ? $organizer->n_fileas : '';
+                } else {
+                    return '';
                 }
-                return $organizer instanceof Addressbook_Model_Contact ? $organizer->n_fileas : '';
             case 'rrule':
                 if ($_value) {
                     $rrule = $_value instanceof Calendar_Model_Rrule ? $_value : new Calendar_Model_Rrule($_value);
@@ -469,7 +484,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if ($this->class !== Calendar_Model_Event::CLASS_PUBLIC) {
             $hasGrant &= (
                 // private grant
-                $this->{Tinebase_Model_Grants::GRANT_PRIVATE} ||
+                $this->{Calendar_Model_EventPersonalGrants::GRANT_PRIVATE} ||
                 // I'm organizer
                 Tinebase_Core::getUser()->contact_id == ($this->organizer instanceof Addressbook_Model_Contact ? $this->organizer->getId() : $this->organizer) ||
                 // I'm attendee
@@ -568,7 +583,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             throw new Tinebase_Exception_Record_Validation('rrule until must not be before dtstart');
         }
     }
-    
+
+    public static function resetFreeBusyCleanupCache()
+    {
+        static::$_freebusyCleanUpVisibilty = null;
+        static::$_freebusyCleanUpKeys = null;
+    }
+
     /**
      * cleans up data to only contain freebusy infos
      * removes all fields except dtstart/dtend/id/modlog fields
@@ -580,31 +601,58 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if ($this->hasGrant(Tinebase_Model_Grants::GRANT_READ)) {
            return FALSE;
         }
+
+        $oldAttendee = $this->attendee;
+        if (!$oldAttendee instanceof Tinebase_Record_RecordSet) {
+            $oldAttendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class);
+        }
+
+        if (null === static::$_freebusyCleanUpKeys) {
+            static::$_freebusyCleanUpVisibilty =
+                intval(Calendar_Config::getInstance()->{Calendar_Config::FREEBUSY_INFO_ALLOWED});
+            $keys = [
+                'id',
+                'dtstart',
+                'dtend',
+                'transp',
+                'seq',
+                'uid',
+                'is_all_day_event',
+                'rrule',
+                'rrule_until',
+                'recurid',
+                'exdate',
+                'created_by',
+                'creation_time',
+                'last_modified_by',
+                'last_modified_time',
+                'is_deleted',
+                'deleted_time',
+                'deleted_by',
+                'originator_tz',
+            ];
+            if (static::$_freebusyCleanUpVisibilty > 10) {
+                $keys[] = 'container_id';
+            }
+            if (static::$_freebusyCleanUpVisibilty > 20) {
+                $keys[] = 'organizer';
+            }
+            if (static::$_freebusyCleanUpVisibilty > 30) {
+                $keys[] = 'attendee';
+            }
+            static::$_freebusyCleanUpKeys = array_flip($keys);
+        }
         
-        $this->_properties = array_intersect_key($this->_properties, array_flip(array(
-            'id', 
-            'dtstart', 
-            'dtend',
-            'transp',
-            'seq',
-            'uid',
-            'is_all_day_event',
-            'rrule',
-            'rrule_until',
-            'recurid',
-            'exdate',
-            'originator_tz',
-            'attendee', // if we remove this, we need to adopt attendee resolveing
-            'container_id',
-            'created_by',
-            'creation_time',
-            'last_modified_by',
-            'last_modified_time',
-            'is_deleted',
-            'deleted_time',
-            'deleted_by',
-        )));
-        
+        $this->_properties = array_intersect_key($this->_properties, static::$_freebusyCleanUpKeys);
+
+        if (40 === static::$_freebusyCleanUpVisibilty) {
+            /** @var Calendar_Model_Attender $attendee */
+            $oldAttendee = $oldAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_RESOURCE);
+        } elseif (static::$_freebusyCleanUpVisibilty < 40) {
+            $oldAttendee->removeAll();
+        }
+        $this->attendee = $oldAttendee;
+
         return TRUE;
     }
     
@@ -616,7 +664,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * @param array $_data            the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         if (empty($_data['geo'])) {
             $_data['geo'] = NULL;
@@ -634,7 +682,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_data['status'] = self::STATUS_CONFIRMED;
         }
         
-        if (isset($_data['container_id']) && is_array($_data['container_id'])) {
+        if (isset($_data['container_id']) && is_array($_data['container_id']) && isset($_data['container_id']['id'])) {
             $_data['container_id'] = $_data['container_id']['id'];
         }
         
@@ -707,7 +755,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     /**
      * sets and returns the addressbook entry of the organizer
      * 
-     * @return Addressbook_Model_Contact
+     * @return Addressbook_Model_Contact|null
      */
     public function resolveOrganizer()
     {
@@ -718,7 +766,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             }
         }
         
-        return $this->organizer;
+        return is_object($this->organizer) ? $this->organizer : null;
     }
     
     /**
@@ -730,12 +778,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         $organizerContactId = NULL;
         if ($_attendee && in_array($_attendee->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
-            $organizerContactId = $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id;
+            $organizerContactId = $_attendee->user_id instanceof Tinebase_Record_Interface ? $_attendee->user_id->getId() : $_attendee->user_id;
         } else {
             $organizerContactId = Tinebase_Core::getUser()->contact_id;
         }
         
-        return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Abstract ? $this->organizer->getId() : $this->organizer);
+        return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Interface ? $this->organizer->getId() : $this->organizer);
     }
     
     /**
@@ -784,5 +832,20 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function getTitle()
     {
         return $this->summary;
+    }
+
+    // TODO remove the runConvert methods when migration to Modelconfig!
+    public function runConvertToRecord()
+    {
+        if (isset($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
+        }
+    }
+
+    public function runConvertToData()
+    {
+        if (isset($this->_properties['xprops']) && is_array($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_encode($this->_properties['xprops']);
+        }
     }
 }

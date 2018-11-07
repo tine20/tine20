@@ -299,10 +299,10 @@ class Addressbook_Backend_Ldap implements Tinebase_Backend_Interface
     /**
      * returns a ldap filter string
      *
-     * @param  Tinebase_Record_Abstract $_filter
+     * @param  Tinebase_Record_Interface $_filter
      * @return String
      */
-    protected function _getFilter(Tinebase_Record_Abstract $_filter) {
+    protected function _getFilter(Tinebase_Record_Interface $_filter) {
         
     }
     

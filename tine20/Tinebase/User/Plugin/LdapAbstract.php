@@ -227,7 +227,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      *
      * @param Tinebase_Model_User $_user
      * @param array $_ldapEntry
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      * @todo add generic function for this in Tinebase_User_Ldap or Tinebase_Ldap?
      */
     abstract protected function _ldap2User(Tinebase_Model_User $_user, array &$_ldapEntry);

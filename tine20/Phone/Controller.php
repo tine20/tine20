@@ -175,31 +175,14 @@ class Phone_Controller extends Tinebase_Controller_Abstract
             array('field' => 'name', 'operator' => 'equals', 'value' => $_call->line_id)
         ));
         $asteriskSipPeers = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->search($filter);
-        if(count($asteriskSipPeers) > 0) {
+        if (count($asteriskSipPeers) > 0) {
             $_call->callerid = $asteriskSipPeers[0]->callerid;
         } else {
             $_call->callerid = $_call->line_id;
         }
 
-        // resolve telephone number to contacts if possible
         $phoneController = Phone_Controller_Call::getInstance();
-        $telNumber = Addressbook_Model_Contact::normalizeTelephoneNoCountry($phoneController->resolveInternalNumber($_call->destination));
-        if (null !== $telNumber) {
-            $filter = new Addressbook_Model_ContactFilter(array(
-                array('field' => 'telephone_normalized', 'operator' => 'equals', 'value' => $telNumber),
-            ));
-
-            $controller = Addressbook_Controller_Contact::getInstance();
-            $oldAclChecks = $controller->doContainerACLChecks();
-
-            $controller->doContainerACLChecks(false);
-            $contacts = $controller->search($filter);
-            $controller->doContainerACLChecks($oldAclChecks);
-
-            if ($contacts->count() > 0) {
-                $_call->contact_id = $contacts->getFirstRecord()->getId();
-            }
-        }
+        $phoneController->resolveCallNumberToContact($_call, true);
 
         $call = $backend->create($_call);
 
@@ -237,7 +220,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         
         $call = $backend->update($_call);
         // calculate duration and ringing time
-        if($call->connected instanceof DateTime) {
+        if ($call->connected instanceof DateTime) {
             
             // how long did we talk
             $connected = clone $call->connected;
@@ -273,5 +256,28 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         $call = $backend->get($_callId);
         
         return $call;
+    }
+
+    /**
+     * get last call for a mac address from the backend
+     *
+     * @param string $mac
+     * @return Phone_Model_Call
+     */
+    public function getLastCall($mac)
+    {
+        $phone = Phone_Controller_MyPhone::getInstance()->getByMacAddress($mac);
+        $filter = new Phone_Model_CallFilter([], '', ['ignoreAcl' => true]);
+        $filter->createFilter(
+            array('id' => 'defaultAdded', 'field' => 'phone_id', 'operator' => 'AND', 'value' => array(
+                array('field' => ':id', 'operator' => 'equals', 'value' => $phone->getId())
+            ))
+        );
+        $pagination = new Tinebase_Model_Pagination([
+            'limit' => 1,
+            'order' => 'start',
+            'dir'   => 'DESC'
+        ]);
+        return Phone_Controller_Call::getInstance()->search($filter, $pagination)->getFirstRecord();
     }
 }

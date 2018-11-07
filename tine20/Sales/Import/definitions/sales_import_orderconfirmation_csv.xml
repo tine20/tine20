@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>sales_import_orderconfirmation_csv</name>
+    <model>Sales_Model_OrderConfirmation</model>
+    <plugin>Sales_Import_OrderConfirmation_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>title</source>
+            <destination>title</destination>
+        </field>
+        <field>
+            <source>description</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>offer</source>
+            <destination>offer</destination>
+        </field>
+        <field>
+            <source>contract</source>
+            <destination>contract</destination>
+        </field>
+    </mapping>
+</config>
+

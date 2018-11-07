@@ -26,14 +26,7 @@ class Tinebase_Model_AlarmFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Tinebase_Model_Alarm';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Tinebase_Model_AlarmFilter';
+    protected $_modelName = Tinebase_Model_Alarm::class;
     
     /**
      * @var array filter model fieldName => definition

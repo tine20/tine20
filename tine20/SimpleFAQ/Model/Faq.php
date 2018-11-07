@@ -82,18 +82,5 @@ class SimpleFAQ_Model_Faq extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
      );
-
-     /**
-     * fills a record from json data
-     *
-     * @param string $_data json encoded data
-     * @return void
-     */
-     public function setFromJson($_data)
-     {
-        parent::setFromJson($_data);
-
-        // do something here if you like
-     }
 }
 

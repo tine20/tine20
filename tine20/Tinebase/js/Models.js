@@ -68,12 +68,17 @@ Tine.Tinebase.Model.Role = Tine.Tinebase.data.Record.create([
 /**
  * Model of a generalised account (user or group)
  */
-Tine.Tinebase.Model.Account = Ext.data.Record.create([
+Tine.Tinebase.Model.Account = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'type'},
     {name: 'name'},
     {name: 'data'} // todo: throw away data
-]);
+], {
+    appName: 'Tinebase',
+    modelName: 'Account',
+    idProperty: 'id',
+    titleProperty: 'name'
+});
 
 /**
  * Model of a container
@@ -81,6 +86,7 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
 Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id'},
     {name: 'name'},
+    {name: 'hierarchy'},
     {name: 'type'},
     {name: 'backend'},
     {name: 'order'},
@@ -107,7 +113,7 @@ Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
 /**
  * Model of a grant
  */
-Tine.Tinebase.Model.Grant = Ext.data.Record.create([
+Tine.Tinebase.Model.Grant = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'record_id'},
     {name: 'account_id'},
@@ -124,7 +130,15 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'downloadGrant',type: 'boolean'},
     {name: 'publishGrant', type: 'boolean'},
     {name: 'adminGrant',   type: 'boolean'}
-]);
+], {
+    appName: 'Tinebase',
+    modelName: 'Grant',
+    idProperty: 'id',
+    titleProperty: 'account_name',
+    // ngettext('Grant', 'Grants', n); gettext('Grant');
+    recordName: 'Grant',
+    recordsName: 'Grants'
+});
 
 /**
  * Model of a tag
@@ -503,7 +517,7 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'acl_node', label: 'Grants Folder' }, // _('Grants Folder')
     { name: 'object_id'},
     { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
-    { name: 'preview_count', label: 'Preview Count' }, // _('Preview Count')
+    { name: 'preview_count', label: 'Preview Count', type: 'int' }, // _('Preview Count')
     { name: 'isIndexed', label: 'Indexed' }, // _('Indexed')
     { name: 'pin_protected_node', label: 'Pin Protected' }, // _('Pin Protected')
     { name: 'quota', label: 'Quota'}, // _('Quota')

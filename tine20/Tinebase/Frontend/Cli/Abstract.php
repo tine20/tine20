@@ -25,7 +25,15 @@ class Tinebase_Frontend_Cli_Abstract
      * @var string
      */
     protected $_applicationName = 'Tinebase';
-    
+
+    /**
+     * import demodata default definitions
+     *
+     * @var array
+     */
+    protected $_defaultDemoDataDefinition = [
+    ];
+
     /**
      * help array with function names and param descriptions
      */
@@ -89,7 +97,7 @@ class Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
 
-        $data = $this->_parseArgs($_opts, array('name', 'type'), array('owner', 'color'));
+        $data = $this->_parseArgs($_opts, array('name', 'type', 'model'), array('owner', 'color'));
 
         if ($data['type'] !== 'shared') {
             die ('only shared containers supported');
@@ -100,6 +108,7 @@ class Tinebase_Frontend_Cli_Abstract
         $container = new Tinebase_Model_Container(array(
             'name'              => $data['name'],
             'type'              => $data['type'],
+            'model'             => $data['model'],
             'application_id'    => $app->getId(),
             'backend'           => 'Sql'
         ));
@@ -151,9 +160,12 @@ class Tinebase_Frontend_Cli_Abstract
      * (2) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz models=Calendar,Event sharedonly // Creates shared calendars and events with the default locale en                
      * (3) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz // Creates all demo calendars and events for all users
      * (4) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz full // Creates much more demo data than (3)
-     * 
+     * (5) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz -- demodata=csv // import demodata from csv files
+     * (6) $ php tine20.php --method=Admin.createDemoData --username=admin --password=xyz -- demodata=set set=default.yml // import demodata defined by default.yml
+     *
      * @param Zend_Console_Getopt $_opts
      * @param boolean $checkDependencies
+     * @return boolean
      */
     public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
@@ -161,77 +173,149 @@ class Tinebase_Frontend_Cli_Abstract
         if (! $this->_checkAdminRight()) {
             return FALSE;
         }
-        
+
+        $data = $this->_parseArgs($_opts);
+        if (! isset($data['demodata'])) {
+            $data['demodata'] = '';
+        }
+
+        switch ($data['demodata']){
+            case "php":
+                $this->_createPhpDemoData($_opts, $checkDependencies);
+                break;
+            case "csv":
+                $this->_createImportDemoData();
+                break;
+            case "set":
+                $set = isset($data['set']) ? $data['set'] : null;
+                $this->_createImportDemoDataFromSet($set);
+                break;
+            case "all":
+            case "":
+            default:
+                $this->_createPhpDemoData($_opts, $checkDependencies);
+                $this->_createImportDemoData();
+        }
+        return true;
+    }
+
+    /**
+     * checks for APP_Setup_DemoData and executes the code
+     *
+     * @param $_opts
+     * @param $checkDependencies
+     */
+    protected function _createPhpDemoData($_opts, $checkDependencies)
+    {
         $className = $this->_applicationName . '_Setup_DemoData';
-        
-        if (class_exists($className)) {
-            if ($checkDependencies) {
-                foreach($className::getRequiredApplications() as $appName) {
-                    if (Tinebase_Application::getInstance()->isInstalled($appName)) {
-                        $cname = $appName . '_Setup_DemoData';
-                        if (class_exists($cname)) {
-                            if (! $cname::hasBeenRun()) {
-                                $className2 = $appName . '_Frontend_Cli';
-                                if (class_exists($className2)) {
-                                    echo 'Creating required DemoData of application "' . $appName . '"...' . PHP_EOL;
-                                    $class = new $className2();
-                                    $class->createDemoData($_opts, TRUE);
-                                }
+
+        if (! class_exists($className)) {
+            return;
+        }
+        if ($checkDependencies) {
+            foreach($className::getRequiredApplications() as $appName) {
+                if (Tinebase_Application::getInstance()->isInstalled($appName)) {
+                    $cname = $appName . '_Setup_DemoData';
+                    if (class_exists($cname)) {
+                        if (! $cname::hasBeenRun()) {
+                            $className2 = $appName . '_Frontend_Cli';
+                            if (class_exists($className2)) {
+                                echo 'Creating required DemoData of application "' . $appName . '"...' . PHP_EOL;
+                                $class = new $className2();
+                                $class->createDemoData($_opts, TRUE);
                             }
                         }
                     }
                 }
             }
-            
-            $options = array('createUsers' => TRUE, 'createShared' => TRUE, 'models' => NULL, 'locale' => 'de', 'password' => '');
-            
-            if ($_opts) {
-                $args = $this->_parseArgs($_opts, array());
-                
-                if ((isset($args['other']) || array_key_exists('other', $args))) {
-                    $options['createUsers']  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
-                    $options['createShared'] = in_array('noshared',   $args['other']) ? FALSE : TRUE;
-                    $options['full']         = in_array('full',       $args['other']) ? FALSE : TRUE;
-                }
-                
-                // locale defaults to de
-                if (isset($args['locale'])) {
-                    $options['locale'] = $args['locale'];
-                }
-                
-                // password defaults to empty password
-                if (isset($args['password'])) {
-                    $options['password'] = $args['password'];
-                }
-                
-                if (isset($args['users'])) {
-                    $options['users'] = is_array($args['users']) ? $args['users'] : array($args['users']);
-                }
-                
-                if (isset($args['models'])) {
-                    $options['models'] = is_array($args['models']) ? $args['models'] : array($args['models']);
-                }
-            }
-            
-
-            $setupDemoData = $className::getInstance();
-            if ($setupDemoData->createDemoData($options)) {
-                echo 'Demo Data was created successfully' . chr(10) . chr(10);
-                if (method_exists($setupDemoData, 'unsetInstance')) {
-                    $setupDemoData->unsetInstance();
-                }
-            } else {
-                echo 'No Demo Data has been created' . chr(10) . chr(10);
-            }
-        } else {
-            echo chr(10);
-            echo 'Creating Demo Data is not implemented yet for this Application!' . chr(10);
-            echo chr(10);
         }
 
-        return true;
+        $options = array('createUsers' => TRUE, 'createShared' => TRUE, 'models' => NULL, 'locale' => 'de', 'password' => '');
+
+        if ($_opts) {
+            $args = $this->_parseArgs($_opts, array());
+
+            if ((isset($args['other']) || array_key_exists('other', $args))) {
+                $options['createUsers']  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
+                $options['createShared'] = in_array('noshared',   $args['other']) ? FALSE : TRUE;
+                $options['full']         = in_array('full',       $args['other']) ? FALSE : TRUE;
+            }
+
+            // locale defaults to de
+            if (isset($args['locale'])) {
+                $options['locale'] = $args['locale'];
+            }
+
+            // password defaults to empty password
+            if (isset($args['password'])) {
+                $options['password'] = $args['password'];
+            }
+
+            if (isset($args['users'])) {
+                $options['users'] = is_array($args['users']) ? $args['users'] : array($args['users']);
+            }
+
+            if (isset($args['models'])) {
+                $options['models'] = is_array($args['models']) ? $args['models'] : array($args['models']);
+            }
+        }
+
+
+        $setupDemoData = $className::getInstance();
+        if ($setupDemoData->createDemoData($options)) {
+            echo 'Demo Data was created successfully' . chr(10) . chr(10);
+            if (method_exists($setupDemoData, 'unsetInstance')) {
+                $setupDemoData->unsetInstance();
+            }
+        } else {
+            echo 'No Demo Data has been created' . chr(10) . chr(10);
+        }
     }
-    
+
+    /**
+     * try to import demodata files from APP/Setup/DemoData/import
+     */
+    protected function _createImportDemoData()
+    {
+        // get all app models and try to find import files for them
+        $application = Setup_Core::getApplicationInstance($this->_applicationName, '', true);
+        foreach ($application->getModels() as $model) {
+            $options = isset($this->_defaultDemoDataDefinition[$model])
+                ? [
+                    'definition' => $this->_defaultDemoDataDefinition[$model]
+                ] : [];
+            $importer = new Tinebase_Setup_DemoData_Import($model, $options);
+            try {
+                $importer->importDemodata();
+                echo 'Csv Demo Data was created successfully' . chr(10) . chr(10);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // model has no import files
+            }
+        }
+    }
+
+    /**
+     * try to import demodata files from APP/Setup/DemoData/demodata_set_file.yml
+     *
+     * @param string $setFile
+     */
+    protected function _createImportDemoDataFromSet($setFile = null)
+    {
+        if (! extension_loaded('yaml')) {
+            throw new Tinebase_Exception_SystemGeneric('php yaml extension needed');
+        }
+
+        $importer = new Tinebase_Setup_DemoData_ImportSet($this->_applicationName, [
+            'files' => [$setFile]]
+        );
+        try {
+            $importer->importDemodata();
+            echo 'Set Demo Data was created successfully' . chr(10) . chr(10);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // model has no import files
+        }
+    }
+
     /**
      * get container for setContainerGrants
      * 

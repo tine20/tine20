@@ -57,6 +57,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     defaultAttendeeRole: 'REQ',
 
     /**
+     * @cfg {Bool} requireFreeBusyGrantOnly
+     *  freebusy grant is sufficient to find ressource (instead of inviteGrant)
+     */
+    requireFreeBusyGrantOnly: null,
+
+    /**
      * The record currently being edited
      * 
      * @type Tine.Calendar.Model.Event
@@ -461,6 +467,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 minListWidth: 370,
                 blurOnSelect: true,
                 eventRecord: this.record,
+                requireFreeBusyGrantOnly: this.requireFreeBusyGrantOnly,
                 additionalFilters: type != 'any' ? [{field: 'type', operator: 'oneof', value: [type]}] : null
             });
 
@@ -570,7 +577,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     grants = lodash.get(resource, 'data.container_id.account_grants', {});
 
                 items = items.concat(new Ext.Action({
-                    text: grants.adminGrant ?
+                    text: grants.resourceEditGrant || Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources') ?
                         this.app.i18n._('Edit Resource') :
                         this.app.i18n._('View Resource'),
                     iconCls: 'cal-resource',
@@ -934,21 +941,21 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     renderAttenderType: function(type, metadata, attender) {
         metadata.css = 'tine-grid-cell-no-dirty';
-        var cssClass = '',
+        var cssClass = 'tine-grid-row-action-icon ',
             qtipText =  '',
             userId = attender.get('user_id'),
             hasAccount = userId && ((userId.get && userId.get('account_id')) || userId.account_id);
             
         switch (type) {
             case 'user':
-                cssClass = hasAccount || ! userId ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon';
+                cssClass += hasAccount || ! userId ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon';
                 qtipText = hasAccount || ! userId ? '' : Tine.Tinebase.appMgr.get('Calendar').i18n._('External Attendee');
                 break;
             case 'group':
-                cssClass = 'renderer_accountGroupIcon';
+                cssClass += 'renderer_accountGroupIcon';
                 break;
             default:
-                cssClass = 'cal-attendee-type-' + type;
+                cssClass += 'cal-attendee-type-' + type;
                 break;
         }
         

@@ -41,7 +41,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $event['attendee'] = $this->_getAttendee()->toArray();
 
         $event['poll_id'] = [
-            'id' => '72315e2c9f337af7d7774a5389e453784ca168d5',
+            'id' => Tinebase_Record_Abstract::generateUID(),
             'name' => 'test poll',
             'locked' => false,
             'password' => 'testpwd',
@@ -118,7 +118,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $persistentEvent = $this->testCreatePoll();
         $persistentEvent['rrule'] = 'FREQ=DAILY;INTERVAL=1';
 
-        $this->setExpectedException(Tasks_Exception_UnexpectedValue::class);
+        $this->setExpectedException(Tinebase_Exception_SystemGeneric::class);
         $this->_uit->saveEvent($persistentEvent);
     }
 
@@ -493,6 +493,10 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         self::flushMailer();
         Calendar_Config::getInstance()->set(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS, true);
         $this->testCreatePoll();
+        $this->assertCount(0, self::getMessages());
+
+        self::flushMailer();
+        $this->testUpdatePollRelatedData();
         $this->assertCount(0, self::getMessages());
     }
 

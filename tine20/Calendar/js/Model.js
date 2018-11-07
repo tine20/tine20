@@ -56,6 +56,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'rrule_constraints' },
     { name: 'originator_tz' },
     // grant helper fields
+    {name: 'addGrant'       , type: 'bool'},
     {name: 'readGrant'      , type: 'bool'},
     {name: 'editGrant'      , type: 'bool'},
     {name: 'deleteGrant'    , type: 'bool'},
@@ -435,20 +436,6 @@ Tine.Calendar.Model.Event.datetimeRenderer = function(dt) {
     return String.format(app.i18n._("{0} {1} o'clock"), dt.format('l') + ', ' + Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
 };
 
-// register grants for calendar containers
-Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(container) {
-    var grants = Tine.widgets.container.GrantsManager.defaultGrants();
-
-    if (container.type == 'personal') {
-        grants.push('freebusy');
-    }
-    if (container.type == 'personal' && container.capabilites_private) {
-        grants.push('private');
-    }
-
-    return grants;
-});
-
 // register calendar filters in addressbook
 Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
     foreignRecordClass: 'Calendar.Event',
@@ -733,14 +720,14 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
 
     getIconCls: function() {
         var type = this.get('user_type'),
-            cls = 'cal-attendee-type-';
+            cls = 'tine-grid-row-action-icon cal-attendee-type-';
 
         switch(type) {
             case 'user':
-                cls = 'renderer_typeAccountIcon';
+                cls = 'tine-grid-row-action-icon renderer_typeAccountIcon';
                 break;
             case 'group':
-                cls = 'renderer_accountGroupIcon';
+                cls = 'tine-grid-row-action-icon renderer_accountGroupIcon';
                 break;
             default:
                 cls += type;
@@ -1004,6 +991,7 @@ Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
 Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'name'},
+    {name: 'hierarchy'},
     {name: 'description'},
     {name: 'email'},
     {name: 'max_number_of_people', type: 'int'},
@@ -1025,7 +1013,24 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     containerProperty: 'container_id',
     // ngettext('Resource', 'Resources', n); gettext('Resources');
     recordName: 'Resource',
-    recordsName: 'Resources'
+    recordsName: 'Resources',
+
+    initData: function() {
+        if (Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')) {
+            var _ = window.lodash
+            account_grants = _.get(this, this.grantsPath, {});
+
+            _.assign(account_grants, {
+                'resourceInviteGrant': true,
+                'resourceReadGrant': true,
+                'resourceEditGrant': true,
+                'resourceExportGrant': true,
+                'resourceSyncGrant': true,
+                'resourceAdminGrant': true
+            });
+            _.set(this, this.grantsPath, account_grants);
+        }
+    }
 });
 
 /**
@@ -1035,17 +1040,29 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
  * @static
  */
 Tine.Calendar.Model.Resource.getDefaultData = function() {
+    // add admin (and other) grant for resource managers
+    var grants = Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources') ? [{
+        account_id: Tine.Tinebase.registry.get('currentAccount').accountId,
+        account_type: "user",
+        account_name: Tine.Tinebase.registry.get('currentAccount').accountDisplayName,
+        'resourceInviteGrant': true,
+        'resourceReadGrant': true,
+        'resourceEditGrant': true,
+        'resourceExportGrant': true,
+        'resourceSyncGrant': true,
+        'resourceAdminGrant': true
+    }]: []
+
+    grants.push({
+        account_id: "0",
+        account_type: "anyone",
+        account_name: i18n._('Anyone'),
+        resourceInviteGrant: true,
+        eventsFreebusyGrant: true
+    });
+
     var data = {
-        grants: [{
-            account_id: "0",
-            account_type: "anyone",
-            account_name: i18n._('Anyone'),
-            exportGrant: true,
-            readGrant: true,
-            syncGrant: true
-        }
-            // don't add account/group/role with admin grants here as manage_resource right is enough
-        ]
+        grants: grants
     };
 
     return data;
@@ -1057,6 +1074,7 @@ Tine.Calendar.Model.Resource.getFilterModel = function() {
     return [
         {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Name'), field: 'name'},
+        {label: app.i18n._('Calendar Hierarchy/Name'), field: 'hierarchy'},
         {label: app.i18n._('Email'), field: 'email'},
         {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
         {label: app.i18n._('Maximum number of attendee'), field: 'max_number_of_people'},

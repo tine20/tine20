@@ -121,9 +121,8 @@ Tine.widgets.container.SelectionDialog = Ext.extend(Ext.Component, {
             allowMultiSelection: false,
             defaultContainer: this.defaultContainer || this.TriggerField ? this.TriggerField.defaultContainer : null,
             requiredGrants: this.requiredGrants,
-            // TODO find a better way for this. currently the Filemanager container tree subfolder creation works differently...
-            // this disables context menu for *Node' containers...
-            hasContextMenu: this.recordClass ? (this.recordClass.getMeta('modelName') != 'Node') : true
+            hasContextMenu: false,
+            hasGrid: false
         });
 
         this.tree.on('click', this.onTreeNodeClick, this);
@@ -134,21 +133,29 @@ Tine.widgets.container.SelectionDialog = Ext.extend(Ext.Component, {
      * @private
      */
     onTreeNodeClick: function(node) {
-        this.okAction.setDisabled(
-            ! (node.leaf
-                || (this.allowNodeSelect
-                        // TODO create isTopLevelNode() in Tine.Tinebase.container
-                    && (this.allowToplevelNodeSelect
-                        || node.attributes
-                        && (
-                            (node.attributes.path.match(/^\/personal/) && node.attributes.path.split("/").length > 3)
-                            || (node.attributes.path.match(/^\/other/) && node.attributes.path.split("/").length > 3)
-                            || (node.attributes.path.match(/^\/shared/) && node.attributes.path.split("/").length > 2)
-                        )
+
+        var disable = ! (node.leaf
+            || (this.allowNodeSelect
+                    // TODO create isTopLevelNode() in Tine.Tinebase.container
+                && (this.allowToplevelNodeSelect
+                    || node.attributes
+                    && (
+                        (node.attributes.path.match(/^\/personal/) && node.attributes.path.split("/").length > 3)
+                        || (node.attributes.path.match(/^\/other/) && node.attributes.path.split("/").length > 3)
+                        || (node.attributes.path.match(/^\/shared/) && node.attributes.path.split("/").length > 2)
                     )
                 )
             )
         );
+
+        (function() {
+            if (this.requiredGrants) {
+                var selectedContainer = this.tree.getSelectedContainer(this.requiredGrants, false, true);
+                disable = !selectedContainer;
+            }
+            this.okAction.setDisabled(disable);
+
+        }).defer(100, this);
 
         if (! node.leaf ) {
             node.expand();

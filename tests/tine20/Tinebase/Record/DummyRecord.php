@@ -50,6 +50,8 @@ class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'   ),
         'string'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'Alpha' ),
+        'string0'         => array('allowEmpty' => true),
+        'int0'            => array('allowEmpty' => true),
         'stringtrim'      => array('allowEmpty' => false, 'Alpha' ),
         'test_1'          => array('allowEmpty' => true,  'Int'   ),
         'test_2'          => array('allowEmpty' => true,  'Int'   ),
