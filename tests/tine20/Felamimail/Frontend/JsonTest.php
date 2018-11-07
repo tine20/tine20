@@ -2336,6 +2336,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertContains('wie gestern besprochen würde mich sehr freuen', $message['body']);
         self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));
         self::assertEquals(1, count($message['attachments']));
+        self::assertEquals(34504, $message['attachments'][0]['size']);
         self::assertEquals('2010-05-05 16:25:40', $message['sent']);
     }
 }
