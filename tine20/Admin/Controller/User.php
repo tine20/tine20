@@ -316,11 +316,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), TRUE));
-        
-        $this->_checkLoginNameExistance($_user);
-        $this->_checkLoginNameLength($_user);
-        $this->_checkPrimaryGroupExistance($_user);
-        
+
         if ($_password != $_passwordRepeat) {
             throw new Admin_Exception("Passwords don't match.");
         } else if (empty($_password)) {
@@ -328,10 +324,13 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_passwordRepeat = '';
         }
         Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
-        
+
         try {
-            
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+            $this->_checkLoginNameExistance($_user);
+            $this->_checkLoginNameLength($_user);
+            $this->_checkPrimaryGroupExistance($_user);
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
                     $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Addressbook_Model_Contact', [
