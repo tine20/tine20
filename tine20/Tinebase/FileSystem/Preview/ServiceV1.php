@@ -78,24 +78,29 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
         } while(++$tries < 4 && time() - $timeStarted < 180);
 
         if (is_array($responseJson)) {
-            $response = array();
-            foreach($responseJson as $key => $urls) {
-                $response[$key] = array();
-                foreach($urls as $url) {
-                    $blob = file_get_contents($url);
-                    if (false === $blob) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
-                            . '::' . __LINE__ . ' couldn\'t read fileblob from url: ' . $url);
-                        return false;
-                    }
-                    $response[$key][] = $blob;
-                }
-            }
-
-            return $response;
+            return $this->_processJsonResponse($responseJson);
         }
 
         return false;
+    }
+
+    protected function _processJsonResponse(array $responseJson)
+    {
+        $response = array();
+        foreach($responseJson as $key => $urls) {
+            $response[$key] = array();
+            foreach($urls as $url) {
+                $blob = file_get_contents($url);
+                if (false === $blob) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
+                        . '::' . __LINE__ . ' couldn\'t read fileblob from url: ' . $url);
+                    return false;
+                }
+                $response[$key][] = $blob;
+            }
+        }
+
+        return $response;
     }
 
     /**
