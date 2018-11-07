@@ -3186,6 +3186,72 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     }
 
     /**
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function reportPreviewStatus()
+    {
+        $status = ['missing' => 0, 'created' => 0];
+
+        if (false === $this->_previewActive) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
+            return $status;
+        }
+
+        $created = &$status['created'];
+        $missing = &$status['missing'];
+
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+        $previewController = Tinebase_FileSystem_Previews::getInstance();
+
+        foreach ($treeNodeBackend->search(
+            new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
+            ], '', ['ignoreAcl' => true])
+            , null, true) as $id) {
+
+            /** @var Tinebase_Model_Tree_Node $node */
+            try {
+                $treeNodeBackend->setRevision(null);
+                $node = $treeNodeBackend->get($id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
+
+            $availableRevisions = $node->available_revisions;
+            if (!is_array($availableRevisions)) {
+                $availableRevisions = explode(',', $availableRevisions);
+            }
+            foreach ($availableRevisions as $revision) {
+                if ($node->revision != $revision) {
+                    $treeNodeBackend->setRevision($revision);
+                    try {
+                        $actualNode = $treeNodeBackend->get($id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue;
+                    } finally {
+                        $treeNodeBackend->setRevision(null);
+                    }
+                } else {
+                    $actualNode = $node;
+                }
+
+                if (!$previewController->canNodeHavePreviews($actualNode)) {
+                    continue;
+                }
+
+                if ($previewController->hasPreviews($actualNode)) {
+                    $created++;
+                } else {
+                    $missing++;
+                }
+            }
+        }
+
+        return $status;
+    }
+
+    /**
      * create preview for files without a preview, delete previews for already deleted files
      *
      * @return bool
