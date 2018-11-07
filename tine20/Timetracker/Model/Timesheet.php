@@ -107,19 +107,16 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ),
             ),
             'is_billable'           => array(
-                'label'                 => 'Billable', // _('Billable')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
                 'type'                  => 'boolean',
                 'default'               => 1,
                 'shy'                   => true
             ),
             'is_billable_combined'  => array(
-                // TODO add update script for favorites?
-                // TODO remove Billable filters?
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'type'                  => 'virtual',
                 'config'                => [
-                    'label'                 => 'Billable (Combined)', // _('Billable (Combined)')
+                    'label'                 => 'Billable', // _('Billable')
                     'type'                  => 'boolean',
                 ],
                 'filterDefinition'      => [
@@ -155,7 +152,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'copyOmit'              => true,
             ),
             'is_cleared'            => array(
-                'label'                 => 'Cleared', // _('Cleared')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'                  => 'boolean',
                 'default'               => 0,
@@ -163,11 +159,9 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'copyOmit'              => true,
             ),
             'is_cleared_combined'   => array(
-                // TODO add update script for favorites?
-                // TODO remove Cleared filter?
                 'type'                  => 'virtual',
                 'config'                => [
-                    'label'                 => 'Cleared (Combined)', // _('Cleared (Combined)')
+                    'label'                 => 'Cleared', // _('Cleared')
                     'type'                  => 'boolean',
                 ],
                 'filterDefinition'      => array(
