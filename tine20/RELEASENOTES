@@ -20,3 +20,9 @@ More Models will be converted to this soon. We call it "Model Configuration Vers
 * System-Customfields
 
 Customfields that are added directly to the record table schema.
+
+MAILFILER
+---
+
+* The MailFiler module has been removed because most of the functionality is in Filemanager and more
+ will be added soon. It will live on as community module in https://github.com/tine20/tine20/tree/community_apps

@@ -307,7 +307,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             text: this.app.i18n._('File Message'),
             handler: this.onFileRecords,
             disabled: true,
-            hidden: ! (Tine.Tinebase.common.hasRight('run', 'MailFiler') || Tine.Tinebase.common.hasRight('run', 'Filemanager')),
+            hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
             iconCls: 'action_file',
             scope: this
         });

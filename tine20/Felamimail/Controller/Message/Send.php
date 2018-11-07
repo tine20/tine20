@@ -922,7 +922,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     }
 
     /**
-     * get attachment defined by a file node (mailfiler or filemanager)
+     * get attachment defined by a file node
      *
      * @param $attachment
      * @return null|Zend_Mime_Part
@@ -931,67 +931,19 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getFileNodeAttachment(&$attachment)
     {
-        if (isset($attachment['path'])) {
-            // allow Filemanager?
-            $appname = 'Filemanager';
-            $path = $attachment['path'];
-        } else {
-            list($appname, $path, $messageuid, $partId) = explode('|', $attachment['id']);
-        }
+        $nodeController = Filemanager_Controller_Node::getInstance();
+        $node = $nodeController->get($attachment['id']);
 
-        try {
-            $nodeController = Tinebase_Core::getApplicationInstance($appname . '_Model_Node');
-        } catch (Tinebase_Exception $te) {
-            Tinebase_Exception::log($te);
+        if (!Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
             return null;
         }
 
-        // remove filename from path
-        // TODO remove DRY with \MailFiler_Frontend_Http::downloadAttachment
-        $pathParts = explode('/', $path);
-        array_pop($pathParts);
-        $path = implode('/', $pathParts);
-
-        if ($appname === 'MailFiler') {
-            $filter = array(
-                array(
-                    'field' => 'path',
-                    'operator' => 'equals',
-                    'value' => $path
-                ),
-                array(
-                    'field' => 'messageuid',
-                    'operator' => 'equals',
-                    'value' => $messageuid
-                )
-            );
-            $node = $nodeController->search(new MailFiler_Model_NodeFilter($filter))->getFirstRecord();
-        } else {
-            $nodeController = Filemanager_Controller_Node::getInstance();
-            $node = $nodeController->get($attachment['id']);
-
-            if (!Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
-                return null;
-            }
-
-            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(
-                Filemanager_Controller_Node::getInstance()->addBasePath($node->path)
-            );
-        }
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(
+            Filemanager_Controller_Node::getInstance()->addBasePath($node->path)
+        );
 
         if ($node) {
-            if ($appname === 'MailFiler') {
-                $mailpart = MailFiler_Controller_Message::getInstance()->getPartFromNode($node, $partId);
-                // TODO use stream
-                $content = Felamimail_Message::getDecodedContent($mailpart);
-
-            } elseif ($appname === 'Filemanager') {
-                $content = fopen($pathRecord->streamwrapperpath, 'r');
-
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' We don\'t support ' . $appname . ' nodes as attachment yet.');
-            }
+            $content = fopen($pathRecord->streamwrapperpath, 'r');
 
             $part = new Zend_Mime_Part($content);
             $part->encoding = Zend_Mime::ENCODING_BASE64;

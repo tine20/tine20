@@ -2743,9 +2743,9 @@ HumanResources_CliTests.testSetContractsEndDate */
         $model = $_container->model;
         $filterName = $model . 'Filter';
 
-        // workaround to fix Filemanager/MailFiler as we don't want to delete container contents when moving folders
+        // workaround to fix Filemanager as we don't want to delete container contents when moving folders
         // TODO find a better solution here - needs Filemanager refactoring
-        if (! in_array($model, array('Filemanager_Model_Node', 'MailFiler_Model_Node')) &&
+        if (! in_array($model, array('Filemanager_Model_Node')) &&
             method_exists($this->_backend, 'search') && ($_filter !== null || class_exists($filterName))) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Delete ' . $model . ' records in container ' . $_container->getId());

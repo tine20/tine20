@@ -76,7 +76,7 @@ class Tinebase_ApplicationTest extends TestCase
         // make the record dirty
         $application->version = 2;
         $application->version = 1;
-        
+
         $this->assertTrue($application instanceof Tinebase_Model_Application);
         
         return $application;
@@ -461,15 +461,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Voipmanager_Model_Asterisk_Context::class,
             ),
         );
-
-        // remove bogus apps
-        $remove = array('MailFiler');
-        foreach ($remove as $r)
-        {
-            if (($key = array_search($r, $appNames)) !== false) {
-                unset($appNames[$key]);
-            }
-        }
 
         // check all expected models are there
         foreach ($expectedData as $appName => $expectedModels) {
