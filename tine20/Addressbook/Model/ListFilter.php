@@ -17,25 +17,4 @@
 class Addressbook_Model_ListFilter extends Tinebase_Model_Filter_FilterGroup
 {
     protected $_configuredModel = 'Addressbook_Model_List';
-
-    
-    /**
-     * @var array filter model fieldName => definition
-     *
-    protected $_filterModel = array(
-
-        'path'                => array(
-            'filter' => 'Tinebase_Model_Filter_Path',
-            'options' => array()
-        ),
-
-        'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
-
-
-        'showHidden'           => array('filter' => 'Addressbook_Model_ListHiddenFilter'),
-        'contact'              => array('filter' => 'Addressbook_Model_ListMemberFilter'),
-        'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array(
-            'idProperty' => 'addressbook_lists.id'
-        )),
-    );*/
 }
