@@ -264,7 +264,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * file messages into Filemanager
+     * file messages into Filemanager / MailFiler
      *
      * @param array $filterData
      * @param string $targetApp

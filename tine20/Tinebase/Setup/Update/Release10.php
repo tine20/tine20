@@ -12,6 +12,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**
      * update to 10.1
+     *
+     * @see 0012162: create new MailFiler application
      */
     public function update_0()
     {
@@ -1998,6 +2000,19 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
             try {
                 $node = $fileSystem->stat('/Filemanager/folders/shared');
+                if (null === $node->acl_node) {
+                    $fileSystem->setGrantsForNode($node, Tinebase_Model_Grants::getDefaultGrants(array(
+                        Tinebase_Model_Grants::GRANT_DOWNLOAD => true
+                    ), array(
+                        Tinebase_Model_Grants::GRANT_PUBLISH => true
+                    )));
+                    $inheritPropertyMethod->invoke($fileSystem, $node, 'acl_node', $node->acl_node, null);
+                }
+            } catch(Tinebase_Exception_NotFound $tenf) {}
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('MailFiler')) {
+            try {
+                $node = $fileSystem->stat('/MailFiler/folders/shared');
                 if (null === $node->acl_node) {
                     $fileSystem->setGrantsForNode($node, Tinebase_Model_Grants::getDefaultGrants(array(
                         Tinebase_Model_Grants::GRANT_DOWNLOAD => true
