@@ -24,8 +24,8 @@ class Calendar_Frontend_iMIPMock extends Calendar_Frontend_iMIP
     * @param  Calendar_Model_iMIP   $_iMIP
     * @param  string                $_status
     */
-    public function process($_iMIP, $_status = NULL)
+    public function process($_iMIP, $_status = NULL, $_retry = true)
     {
-        return $this->_process($_iMIP, $_status);
+        return $this->_process($_iMIP, $_status, $_retry);
     }
 }
