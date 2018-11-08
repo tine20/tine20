@@ -167,6 +167,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 )
             ))
         ));
+        /** @var Calendar_Model_Event $existingEvent */
         $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
         if ($existingEvent === null) {
@@ -209,6 +210,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             
             $vevent = new self($container, $event);
         } else {
+
+            if ($existingEvent->hasExternalOrganizer() && is_numeric($existingEvent->external_seq) &&
+                    (int)$event->external_seq < (int)$existingEvent->external_seq) {
+                throw new Sabre\DAV\Exception\PreconditionFailed('updating existing event with outdated external seq');
+            }
+
             if ($existingEvent->is_deleted) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' recovering already deleted event');

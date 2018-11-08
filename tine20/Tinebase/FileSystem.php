@@ -990,8 +990,10 @@ class Tinebase_FileSystem implements
             $this->_fileObjectBackend->update($fileObject);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
 
         } catch (Exception $e) {
+            $transactionId = null;
             Tinebase_Exception::log($e);
             Tinebase_TransactionManager::getInstance()->rollBack();
 
@@ -999,6 +1001,11 @@ class Tinebase_FileSystem implements
 
         } finally {
             unlink($tmpFile);
+
+            // in case of the return trues above
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            }
         }
 
         return true;
