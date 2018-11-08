@@ -182,9 +182,9 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         if (!empty($_SERVER['HTTP_USER_AGENT'])) {
             $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
         }
-        
+
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
-        
+
         $existingEvent = $this->testCreateEventWithInternalOrganizer();
         $existingRecord = $existingEvent->getRecord();
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
@@ -198,6 +198,76 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $record = $event->getRecord();
         
         $this->assertEquals($existingRecord->getId(), $record->getId(), 'event got duplicated');
+    }
+
+    public function testUpdateOldEvent()
+    {
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
+        }
+
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
+        $vcalendar = self::getVCalendar(__DIR__ . '/../files/invitation_request_external_2internals.ics');
+        $id = 'e679217e8c3f89e8ca55779f70f9940e6689ed98';
+        $targetContainer = $this->objects['initialContainer'];
+        $event = Calendar_Frontend_WebDAV_Event::create($targetContainer, "$id.ics", $vcalendar);
+
+        $record = $event->getRecord();
+        $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($record->attendee);
+        $resolvedAttendees = Calendar_Model_Attender::getResolvedAttendees($record->attendee, true);
+
+        static::assertSame('Hi12', $record->summary);
+        //static::assertSame($targetContainer->name, $container->name, 'event not in invitation calendar');
+        static::assertTrue(!! $ownAttendee, 'own attendee missing');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status);
+        static::assertSame('1', $record->seq, 'tine20 seq starts with 1');
+        static::assertSame('1', $record->external_seq, 'external seq: 1');
+        static::assertSame('1300', $record->dtstart->format('Hi'));
+        static::assertCount(3, $resolvedAttendees, '3 attendees expected');
+        foreach ($resolvedAttendees as $attendee) {
+            static::assertTrue(in_array($attendee->user_id->account_id, [Tinebase_Core::getUser()->getId(),
+                    $this->_personas['sclever']->getId(), null]), 'unexpected attendee');
+        }
+        static::assertTrue($record->hasExternalOrganizer(), 'should have external organizer');
+
+
+        $vcalendar = self::getVCalendar(__DIR__ . '/../files/invitation_accepted_by_internal1.ics');
+        $event = Calendar_Frontend_WebDAV_Event::create($targetContainer, "$id.ics", $vcalendar);
+
+        $updated = $event->getRecord();
+        $container = Tinebase_Container::getInstance()->getContainerById($updated->container_id);
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($updated->attendee);
+        $resolvedAttendees = Calendar_Model_Attender::getResolvedAttendees($record->attendee, true);
+
+        static::assertSame($updated->getId(), $record->getId());
+        //static::assertSame($targetContainer->name, $container->name, 'event not in invitation calendar');
+        static::assertTrue(!! $ownAttendee, 'own attendee missing');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status);
+        static::assertSame('2', $updated->seq, 'tine20 seq starts with 1');
+        static::assertSame('3', $updated->external_seq, 'external seq: 1');
+        static::assertSame('1330', $updated->dtstart->format('Hi'));
+        static::assertCount(3, $resolvedAttendees, '3 attendees expected');
+        foreach ($resolvedAttendees as $attendee) {
+            static::assertTrue(in_array($attendee->user_id->account_id, [Tinebase_Core::getUser()->getId(),
+                $this->_personas['sclever']->getId(), null]), 'unexpected attendee');
+        }
+
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $vcalendar = self::getVCalendar(__DIR__ . '/../files/old_invitation_accepted_by_internal2.ics');
+        try {
+            $cId = Calendar_Controller_Event::getDefaultDisplayContainerId($this->_personas['sclever']->getId());
+            Calendar_Frontend_WebDAV_Event::create(Tinebase_Container::getInstance()->get($cId), "$id.ics", $vcalendar);
+            static::fail('external seq out of order, we should not reach this point');
+        } catch(Sabre\DAV\Exception\PreconditionFailed $sdepf) {
+            static::assertSame('updating existing event with outdated external seq', $sdepf->getMessage());
+        }
+
+        if (isset($oldUserAgent)) {
+            $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent;
+        }
     }
 
     /**
@@ -221,8 +291,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     
     /**
      * folderChanges are implemented as DELETE/PUT actions in most CalDAV
-     * clients. Unfortunally clients send both requests in parallel. This
-     * creates raise conditions when DELETE is faster (e.g. due to trasport
+     * clients. Unfortunately clients send both requests in parallel. This
+     * creates raise conditions when DELETE is faster (e.g. due to transport
      * issues) than the PUT.
      */
     public function testCreateEventWhichExistsAlreadyDeleted()
