@@ -228,12 +228,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
 
         $data['attachments'] = [];
         foreach ($message->getAllAttachmentParts() as $id => $attachment) {
+            $partStream = $attachment->getStream();
             $data['attachments'][] = [
                 'content-type' => $attachment->getContentType(),
                 'filename'     => $attachment->getFilename(),
                 'partId'       => $id,
+                'size'         => $partStream->getSize(),
                 // TODO get those?
-                //'size'         => $attachment->get(),
                 //'description'  => $attachment->,
                 //'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
             ];
