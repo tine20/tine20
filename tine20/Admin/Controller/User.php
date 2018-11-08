@@ -331,7 +331,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $this->_checkLoginNameExistance($_user);
             $this->_checkLoginNameLength($_user);
             $this->_checkPrimaryGroupExistance($_user);
-            
+        } catch (Tinebase_Exception_SystemGeneric $sytemEx) {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+            throw $sytemEx;
+        }  catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Exception::log($e);
+            throw $e;
+        }
+
+        try {
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
                     $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Addressbook_Model_Contact', [
                         ['field' => 'n_fileas', 'operator' => 'equals', 'value' => $_user['accountDisplayName']]]);
