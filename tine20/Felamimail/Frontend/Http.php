@@ -35,6 +35,46 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
 
     /**
+     * download node attachment
+     *
+     * @param  string  $nodeId
+     * @param  string  $partId
+     *
+     * @todo write a test
+     */
+    public function downloadNodeAttachment($nodeId, $partId)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Downloading Attachment ' . $partId . ' of node with id ' . $nodeId
+        );
+
+        $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId);
+        $attachment = isset($message['attachments'][$partId]) ? $message['attachments'][$partId] : null;
+
+        if ($attachment === null) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Attachment not found');
+            return;
+        }
+
+        $contentType = $attachment['content-type'];
+        $filename = $attachment['filename'];
+        /** @var GuzzleHttp\Psr7\Stream $stream */
+        $stream = $attachment['contentstream'];
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+            . ' filename: '    . $filename
+            . ' content type ' . $contentType
+            // . ' contents: ' . $stream->getContents()
+        );
+
+        $this->_prepareHeader($filename, $contentType);
+
+        $stream->rewind();
+        echo $stream->getContents();
+    }
+
+    /**
      * download message
      *
      * @param  string  $messageId

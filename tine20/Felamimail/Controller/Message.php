@@ -1243,6 +1243,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // @todo allow to configure body mime type to fetch?
 
         $message = Felamimail_Model_Message::createFromMime($content);
+        $message->setId($node->getId());
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got Message: ' . print_r($message->toArray(), true));
