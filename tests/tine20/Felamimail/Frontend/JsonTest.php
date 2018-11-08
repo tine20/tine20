@@ -1458,7 +1458,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $message = $this->_searchForMessageBySubject('test invalid imip');
         
         $fullMessage = $this->_json->getMessage($message['id']);
-        $this->assertTrue(empty($fullMessage->preparedParts));
+        $this->assertFalse(empty($fullMessage['preparedParts']));
     }
 
     /**

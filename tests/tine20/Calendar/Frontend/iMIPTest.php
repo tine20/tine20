@@ -446,7 +446,9 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $fmailJson = new Felamimail_Frontend_Json();
         $jsonMessage = $fmailJson->getMessage($complete->getId());
         Calendar_Config::getInstance()->set(Calendar_Config::DISABLE_EXTERNAL_IMIP, false);
-        $this->assertEmpty($jsonMessage['preparedParts']);
+        $this->assertFalse(empty($jsonMessage['preparedParts']));
+        static::assertTrue(isset($jsonMessage['preparedParts'][0]['preparedData']['preconditions']) &&
+            !empty($jsonMessage['preparedParts'][0]['preparedData']['preconditions']));
     }
     
     /**
