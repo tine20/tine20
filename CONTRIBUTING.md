@@ -2,6 +2,9 @@
 
 ## Write Code
 
+You might find this wiki page helpful for setting up a development environment for Tine 2.0:
+https://github.com/tine20/tine20/wiki/EN:Development-Setup
+
 * Please make sure that there aren’t existing pull requests attempting to address the issue mentioned
 * Check for related issues on the issue tracker
 * Non-trivial changes should be discussed on an issue first
