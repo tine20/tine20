@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.Filemanager.nodeActions');
 
+require('Filemanager/js/QuickLookPanel');
+
 /**
  * @singleton
  */
@@ -313,15 +315,15 @@ Tine.Filemanager.nodeActions.Preview = {
     scope: this,
     handler: function () {
         var selections = this.initialConfig.selections;
-
         if (selections.length > 0) {
             var selection = selections[0];
-
             if (selection && selection.get('type') === 'file') {
-                Tine.Filemanager.DocumentPreview.openWindow({
+                Tine.Filemanager.QuickLookPanel.openWindow({
                     record: selection,
                     initialApp: this.initialConfig.initialApp || null,
-                    sm: this.initialConfig.sm
+                    sm: this.initialConfig.sm,
+                    // @todo move registry to global registry
+                    registry: Tine.Filemanager.QuickLookRegistry
                 });
             }
         }

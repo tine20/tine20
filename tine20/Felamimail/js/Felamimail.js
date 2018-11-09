@@ -10,6 +10,12 @@
 
 Ext.ns('Tine.Felamimail');
 
+require('Felamimail/js/MailDetailsPanel');
+
+require('Tinebase/js/Application');
+require('Tinebase/js/ux/ItemRegistry');
+require('Tinebase/js/widgets/MainScreen');
+
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.Application
@@ -112,6 +118,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             this.showActiveVacation();
             this.initGridPanelHooks();
             this.registerProtocolHandler();
+            this.registerQuickLookPanel();
         }
     },
     
@@ -188,8 +195,22 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         if (! (enabled && Ext.isFunction(navigator.registerProtocolHandler))) {
             Tine.Felamimail.registerProtocolHandlerAction.setHidden(true);
         }
+    },
 
+    /**
+     * initialize Filemanager email QuickLook
+     *
+     * @returns {boolean}
+     */
+    registerQuickLookPanel: function() {
+        if (! Tine.Tinebase.common.hasRight('run', 'Filemanager')) {
+            // needs Filemanager
+            return false;
+        }
 
+        // register correct panel constructor name
+        Tine.Filemanager.QuickLookRegistry.register('message/rfc822', 'felamimaildetailspanel');
+        return true;
     },
 
     /**

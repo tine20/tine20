@@ -8,8 +8,7 @@
  
 Ext.ns('Tine.Felamimail');
 
-
-Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPanel ,{
+Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPanel, {
     /**
      * @cfg {Tine.Felamimail.Model.Message}
      */
