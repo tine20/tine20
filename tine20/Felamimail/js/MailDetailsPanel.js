@@ -181,14 +181,15 @@ Tine.Felamimail.MailDetailsPanel = Ext.extend(Ext.Panel, {
 
                 } else {
 
-                    // TODO allow download for Mime Mails
+                    // TODO allow download for attachments of imap messages
 
                     new Ext.ux.file.Download({
                         params: {
                             requestType: 'HTTP',
-                            method: this.appName + '.downloadAttachment',
-                            path: this.nodeRecord.data.path,
-                            nodeId: this.record.node_id,
+                            method: 'Felamimail.downloadNodeAttachment',
+                            // method: this.appName + '.downloadAttachment',
+                            // path: this.nodeRecord.data.path,
+                            nodeId: this.record.id,
                             partId: attachment.partId
                         }
                     }).start();
