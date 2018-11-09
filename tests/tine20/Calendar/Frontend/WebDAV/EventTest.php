@@ -229,8 +229,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         //static::assertSame($targetContainer->name, $container->name, 'event not in invitation calendar');
         static::assertTrue(!! $ownAttendee, 'own attendee missing');
         static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status);
-        static::assertSame('1', $record->seq, 'tine20 seq starts with 1');
-        static::assertSame('1', $record->external_seq, 'external seq: 1');
+        static::assertEquals('1', $record->seq, 'tine20 seq starts with 1');
+        static::assertEquals('1', $record->external_seq, 'external seq: 1');
         static::assertSame('1300', $record->dtstart->format('Hi'));
         static::assertCount(3, $resolvedAttendees, '3 attendees expected');
         foreach ($resolvedAttendees as $attendee) {
@@ -252,8 +252,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         //static::assertSame($targetContainer->name, $container->name, 'event not in invitation calendar');
         static::assertTrue(!! $ownAttendee, 'own attendee missing');
         static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status);
-        static::assertSame('2', $updated->seq, 'tine20 seq starts with 1');
-        static::assertSame('3', $updated->external_seq, 'external seq: 1');
+        static::assertEquals('2', $updated->seq, 'tine20 seq starts with 1');
+        static::assertEquals('3', $updated->external_seq, 'external seq: 1');
         static::assertSame('1330', $updated->dtstart->format('Hi'));
         static::assertCount(3, $resolvedAttendees, '3 attendees expected');
         foreach ($resolvedAttendees as $attendee) {
