@@ -189,7 +189,7 @@
 
         $organizerIsAttender = false;
         foreach ($_event->attendee as $attender) {
-            if ($attender->getUserId() == $_event->resolveOrganizer()->id) {
+            if ($attender->getUserId() === $organizerContact->getId()) {
                 $organizerIsAttender = true;
             }
         }
