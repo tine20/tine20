@@ -80,8 +80,8 @@ class Timetracker_Config extends Tinebase_Config_Abstract
             'setBySetupModule' => false,
             'default' => [
                 'records' => [
-                    ['id' => 'AZ', 'value' => 'Working time', 'system' => true], //_('Working time')
-                    ['id' => 'PZ', 'value' => 'Project time', 'system' => true], //_('Project time')
+                    ['id' => Timetracker_Model_Timesheet::TYPE_WORKINGTIME, 'value' => 'Working time', 'system' => true], //_('Working time')
+                    ['id' => Timetracker_Model_Timesheet::TYPE_PROJECTTIME, 'value' => 'Project time', 'system' => true], //_('Project time')
                 ]
             ]
         ],

@@ -16,6 +16,9 @@
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
+    const TYPE_WORKINGTIME = 'AZ';
+    const TYPE_PROJECTTIME = 'PZ';
+
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
