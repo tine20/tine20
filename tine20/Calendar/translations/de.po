@@ -103,6 +103,13 @@ msgstr "Der Grad an Aktionen über die Sie benachrichtigt werden wollen. Bitte b
 msgid "Send Notifications Emails of own Actions"
 msgstr "Sende Benachrichtigungen über eigene Änderungen"
 
+#: Preference
+msgid "Send Notifications Emails of tentative events"
+msgstr "Sende Benachrichtigungen für vorläufige Termine"
+
+msgid "Get notifications emails of tentative events"
+msgstr "Empfangen von Benachrichtigungen über Änderungen bei vorläufigen Terminen"
+
 #: Preference.php:186
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"

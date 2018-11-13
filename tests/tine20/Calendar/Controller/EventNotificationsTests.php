@@ -1551,13 +1551,24 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
 
-    public function testSendTentativeNotifications()
+    /**
+     * funktion for NotificationsTest
+     * @param $sendTentative '0','1'
+     * @param $attendee @boolean
+     */
+    public function _tentativeNotification($sendTentative, $attendee)
     {
         $tentConf = Calendar_Config::getInstance()->{Calendar_Config::TENTATIVE_NOTIFICATIONS};
         $oldValue = $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED};
         $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = true;
+        Tinebase_Core::getPreference('Calendar')->setValueForUser(Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE, $sendTentative,
+            Tinebase_FullUser::getInstance()->getFullUserByLoginName('sclever')->getId());
         try {
             $event = $this->_getEvent(true);
+            if(!$attendee)
+            {
+                $event->attendee = null;
+            }
             $event->dtstart->addHour(15);
             $event->dtend->addHour(15);
             $event->status = Calendar_Model_Event::STATUS_TENTATIVE;
@@ -1566,31 +1577,46 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
             self::flushMailer();
             $this->_eventController->sendTentativeNotifications();
-            $this->_assertMail('sclever', 'Tentative');
+            if($sendTentative) {
+                $this->_assertMail('sclever', 'Tentative');
+            } else
+            {
+                $this->_assertMail('sclever', '');
+            }
         } finally {
             $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = $oldValue;
         }
     }
 
+    /**
+     * testSendTentativeNotifications
+     */
+    public function testSendTentativeNotifications()
+    {
+        $this->_tentativeNotification('0',true);
+    }
+
+    /**
+     * testSendTentativeNotificationsNoAttenders
+     */
     public function testSendTentativeNotificationsNoAttenders()
     {
-        $tentConf = Calendar_Config::getInstance()->{Calendar_Config::TENTATIVE_NOTIFICATIONS};
-        $oldValue = $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED};
-        $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = true;
-        try {
-            $event = $this->_getEvent(TRUE);
-            $event->attendee = null;
-            $event->dtstart->addHour(15);
-            $event->dtend->addHour(15);
-            $event->status = Calendar_Model_Event::STATUS_TENTATIVE;
-            $event->organizer = $this->_getPersonasContacts('sclever')->getId();
-            $this->_eventController->create($event);
+        $this->_tentativeNotification('0',false);
+    }
 
-            self::flushMailer();
-            $this->_eventController->sendTentativeNotifications();
-            $this->_assertMail('sclever', 'Tentative');
-        } finally {
-            $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = $oldValue;
-        }
+    /**
+     * testSendNotificationForTentative
+     */
+    public function testSendNotificationForTentative()
+    {
+        $this->_tentativeNotification('1',false);
+    }
+
+    /**
+     * testSendNotificationForNoTentative
+     */
+    public function testSendNotificationForNoTentative()
+    {
+        $this->_tentativeNotification('1',true);
     }
 }

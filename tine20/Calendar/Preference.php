@@ -58,6 +58,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
 
     /**
+     * send notifications of liturgische events
+     */
+    const SEND_NOTIFICATION_FOR_TENTATIVE = 'sendnotificationsfortentative';
+
+    /**
      * send alarm notifications
      */
     const SEND_ALARM_NOTIFICATIONS = 'sendalarmnotifications';
@@ -124,6 +129,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
+            self::SEND_NOTIFICATION_FOR_TENTATIVE,
             self::SEND_ALARM_NOTIFICATIONS,
             self::DEFAULTALARM_ENABLED,
             self::DEFAULTALARM_MINUTESBEFORE,
@@ -184,6 +190,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
                 'label'         => $translate->_('Send Notifications Emails of own Actions'),
                 'description'   => $translate->_('Get notifications emails for actions you did yourself'),
+            ),
+            self::SEND_NOTIFICATION_FOR_TENTATIVE => array(
+                'label'         => $translate->_('Send Notifications Emails of tentative events'),
+                'description'   => $translate->_('Get notifications emails of tentative events'),
             ),
             self::SEND_ALARM_NOTIFICATIONS => array(
                 'label'         => $translate->_('Send Alarm Notifications Emails'),
@@ -330,6 +340,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::SEND_NOTIFICATION_OF_OWN_ACTIONS:
                 $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::SEND_NOTIFICATION_FOR_TENTATIVE:
+                $preference->value      = 1;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
