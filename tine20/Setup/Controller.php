@@ -494,6 +494,8 @@ class Setup_Controller
         // TODO remove this in release 13
         $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
         $release11->addIsSystemToCustomFieldConfig();
+        $adbRelease11 = new Addressbook_Setup_Update_Release11(Setup_Backend_Factory::factory());
+        $adbRelease11->fixContactData();
         Setup_SchemaTool::updateAllSchema();
 
         for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {

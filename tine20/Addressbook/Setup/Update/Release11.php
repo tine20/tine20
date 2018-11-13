@@ -221,9 +221,20 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_12()
     {
+        //$this->fixContactData(); -- is called in Setup_Controller::updateApplications
         Setup_SchemaTool::updateSchema([Addressbook_Model_Contact::class]);
 
         $this->setApplicationVersion('Addressbook', '11.13');
+    }
+
+    // is called in Setup_Controller::updateApplications
+    public function fixContactData()
+    {
+        if (version_compare($this->getApplicationVersion('Addressbook'), '11.13') < 0) {
+            $this->_db->query('update ' . SQL_TABLE_PREFIX . 'addressbook set creation_time = "1970-01-01 00:00:00" where CAST(creation_time AS CHAR(20)) = "0000-00-00 00:00:00"');
+            $this->_db->query('update ' . SQL_TABLE_PREFIX . 'addressbook set last_modified_time = "1970-01-01 00:00:00" where CAST(last_modified_time AS CHAR(20)) = "0000-00-00 00:00:00"');
+            $this->_db->query('update ' . SQL_TABLE_PREFIX . 'addressbook set is_deleted = 0 where  is_deleted IS NULL');
+        }
     }
 
     /**
