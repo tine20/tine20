@@ -228,6 +228,29 @@ abstract class Tinebase_Controller_Record_Abstract
         return $this->_backend;
     }
 
+    public function assertPublicUsage()
+    {
+        $currentUser = Tinebase_Core::getUser();
+        if (!$currentUser) {
+            Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
+                ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+        }
+
+        $oldvalues = [
+            'containerACLChecks' => $this->doContainerACLChecks(false),
+            'rightChecks' => $this->doRightChecks(false),
+            'currentUser' => $currentUser,
+        ];
+
+        return function () use ($oldvalues) {
+            $this->doContainerACLChecks($oldvalues['containerACLChecks']);
+            $this->doRightChecks($oldvalues['rightChecks']);
+            if ($oldvalues['currentUser']) {
+                Tinebase_Core::set(Tinebase_Core::USER, $oldvalues['currentUser']);
+            }
+        };
+    }
+
     /*********** get / search / count **************/
 
     /**
