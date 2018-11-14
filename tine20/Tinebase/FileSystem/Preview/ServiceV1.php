@@ -47,7 +47,15 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
         $responseJson = null;
         do {
             $lastRun = time();
-            $response = $httpClient->request();
+            try {
+                $response = $httpClient->request();
+            } catch (Zend_Http_Client_Exception $zhce) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                    . __LINE__ . ' request failed: ' . $zhce->getMessage());
+                if ($synchronRequest) {
+                    return false;
+                }
+            }
             if ((int)$response->getStatus() === 200) {
                 $responseJson = json_decode($response->getBody(), true);
                 break;
