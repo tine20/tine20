@@ -145,6 +145,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
     },
 
     addPreviewPanelForRecord: function (me, record) {
+        var _ = window.lodash;
         _.range(record.get('preview_count')).forEach(function (previewNumber) {
             var path = record.get('path'),
                 revision = record.get('revision');
