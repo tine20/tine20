@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Fronk
  * 
  * example dovecot db schema:
@@ -317,6 +317,13 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             // Only want 1 user (shouldn't be more than 1 anyway)
             ->limit(1);
 
+        $this->_appendInstanceNameOrDomainToSelect($select);
+
+        return $select;
+    }
+
+    protected function _appendInstanceNameOrDomainToSelect(Zend_Db_Select $select)
+    {
         $schema = $this->getSchema();
         // append instancename OR domain if set or domain IS NULL
         if (isset($this->_config['instanceName'])
@@ -331,8 +338,6 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         } else {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
         }
-
-        return $select;
     }
     
     /**
@@ -465,14 +470,9 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     public function getAllDomains()
     {
         $select = $this->_db->select()->from(array($this->_userTable), 'domain')->distinct();
-        if (isset($this->_config['instanceName'])) {
-            $select->where($this->_db->quoteIdentifier('instancename') . ' = ?', $this->_config['instanceName']);
-        }
+        $this->_appendInstanceNameOrDomainToSelect($select);
 
-        $result = $select->query()->fetchAll(Zend_DB::FETCH_NUM);
-        array_walk($result, function(&$val) {
-            $val = $val[0];
-        });
+        $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
         return $result;
     }
 }
