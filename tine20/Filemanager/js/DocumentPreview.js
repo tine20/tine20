@@ -116,6 +116,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                 frame: true,
                 border: true
             });
+            me.doLayout();
         });
     },
 
