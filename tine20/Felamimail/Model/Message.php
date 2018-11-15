@@ -228,14 +228,19 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
 
         $data['attachments'] = [];
         foreach ($message->getAllAttachmentParts() as $id => $attachment) {
+            /** @var ZBateson\MailMimeParser\Message\Part\MessagePart $attachment */
+            /** @var GuzzleHttp\Psr7\Stream $partStream */
+            $partStream = $attachment->getStream();
+            $contentStream = $attachment->getContentStream();
             $data['attachments'][] = [
                 'content-type' => $attachment->getContentType(),
                 'filename'     => $attachment->getFilename(),
                 'partId'       => $id,
-                // TODO get those?
-                //'size'         => $attachment->get(),
-                //'description'  => $attachment->,
-                //'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
+                // TODO why can't we get the size from the contentStream?
+                //'size'         => $contentStream->getSize(),
+                'size'         => $partStream->getSize(),
+                // unset before sending to client?
+                'contentstream'=> $contentStream,
             ];
         }
         if (count($data['attachments']) > 0) {

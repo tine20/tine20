@@ -2290,7 +2290,7 @@ Steuernummer 33/111/32212";
 
         static::assertGreaterThan(0, $result['totalcount'], 'no results found');
         static::assertTrue(isset($result['results'][count($result['results'])-1]['emails']),
-            'last entry should be a list that has emails: ' . print_r($result['results'][count($result['results'])-1],
+            'last entry should be a list that has emails: ' . print_r($result['results'],
                 true));
         foreach ($result['results'] as $entry) {
             // only lists have 'emails' key

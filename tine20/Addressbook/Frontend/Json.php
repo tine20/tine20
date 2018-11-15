@@ -136,7 +136,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $oldFeatureValue = null;
         $adbConfig = Addressbook_Config::getInstance();
         try {
-
             if (!$dont_add) {
                 // need to enable this feature to get the "emails" property
                 if (false === ($oldFeatureValue =
@@ -147,6 +146,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     Addressbook_Controller_List::destroyInstance();
                 }
             }
+            // NOTE: please ignore the "Skipping filter (no filter model defined)" INFO message in the logs ...
             $lists = $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(),
                 'Addressbook_Model_ListFilter');
             if (!$dont_add) {

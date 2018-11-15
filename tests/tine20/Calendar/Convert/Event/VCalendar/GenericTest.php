@@ -118,7 +118,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertTrue(!empty($event->organizer));
         $this->assertEquals('2012-02-27 15:56:00', $event->creation_time->toString(), 'CREATED not taken from ics');
         $this->assertEquals('2012-02-27 15:56:20', $event->last_modified_time, 'DTSTAMP not taken from ics');
-        $this->assertEquals(3, $event->seq, 'SEQUENCE not taken from ics');
+        $this->assertTrue($event->hasExternalOrganizer(), 'external organizer expected');
+        $this->assertEquals(3, $event->external_seq, 'SEQUENCE not taken from ics');
         
         
         return $event;

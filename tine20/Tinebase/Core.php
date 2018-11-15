@@ -533,7 +533,7 @@ class Tinebase_Core
             // Tinebase is not yet installed
             return $container;
         }
-        
+
         /** @var Tinebase_Model_Application $application */
         foreach ($applications->filter('status', Tinebase_Application::ENABLED) as $application) {
             /** @var Tinebase_Controller_Abstract $className */
@@ -1653,15 +1653,15 @@ class Tinebase_Core
         if (!self::isRegistered(self::PREFERENCES)) {
             self::set(self::PREFERENCES, array());
         }
-        
+
         $prefs = self::get(self::PREFERENCES);
-        
+
         if (isset($prefs[$_application])) {
             return $prefs[$_application];
         }
-        
+
         $prefClassName = $_application . '_Preference';
-        
+
         if (@class_exists($prefClassName)) {
             $result = new $prefClassName();
             $prefs[$_application] = $result;
@@ -1669,7 +1669,7 @@ class Tinebase_Core
         } else if ($_throwException) {
             throw new Tinebase_Exception_NotFound('No preference class found for app ' . $_application);
         }
-        
+
         return $result;
     }
     

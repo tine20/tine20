@@ -141,7 +141,8 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
         var result = '';
         
         if (value) {
-            result = Ext.util.Format.htmlEncode(value.get(this.searchRecordClass.getMeta('titleProperty')));
+            result = value.data ? Ext.util.Format.htmlEncode(value.get(this.searchRecordClass.getMeta('titleProperty'))) : 
+                value[this.searchRecordClass.getMeta('titleProperty')];
         }
         
         return result;
@@ -206,24 +207,33 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
     onRecordLoad: function(record) {
         var _ = window.lodash,
             evalGrants = this.editDialog.evalGrants,
-            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
-
-
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant),
+            types = [];
+        
         if (this.record) {
             return;
         }
 
         this.record = record;
 
+        //get relation types
+        if (this.typeEditor) {
+            _.forEach(this.typeEditor.keyFieldConfig.value.records, function(config) {
+                types.push(config.id);
+            })
+        }
+
         Tine.log.debug('Loading relations into store...');
         if (record.get('relations') && record.get('relations').length > 0) {
             var relationRecords = [];
             Ext.each(record.get('relations'), function(relation) {
-                relation.related_record = new this.searchRecordClass(
-                    relation.related_record, 
-                    relation.related_id
-                );
-                relationRecords.push(new Tine.Tinebase.Model.Relation(relation, relation.id));
+                if (types.indexOf(relation.type) >= 0){
+                    relation.related_record = new this.searchRecordClass(
+                        relation.related_record,
+                        relation.related_id
+                    );
+                    relationRecords.push(new Tine.Tinebase.Model.Relation(relation, relation.id));
+                }
                 
             }, this);
             this.store.add(relationRecords);

@@ -118,8 +118,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         'hasRelations'      => true,
         'copyRelations'     => false,
         'hasCustomFields'   => true,
-        // TODO activate hasSystemCustomFields
-        'hasSystemCustomFields' => false,
+        'hasSystemCustomFields' => true,
         'hasNotes'          => true,
         'hasTags'           => true,
         'modlogActive'      => true,

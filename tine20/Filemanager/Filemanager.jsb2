@@ -76,10 +76,6 @@
           "path": "js/"
         },
         {
-          "text": "DocumentPreview.js",
-          "path": "js/"
-        },
-        {
           "text": "FilePublishedDialog.js",
           "path": "js/"
         },
