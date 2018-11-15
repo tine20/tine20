@@ -769,8 +769,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 monitorValid: true,
                 defaults: { anchor: '100%' },
                 items: [{
-                    xtype: 'textfield',
+                    xtype: 'tw-passwordTriggerField',
                     inputType: 'password',
+                    autocomplete: 'new-password',
                     id: 'passwordRepeat',
                     fieldLabel: this.app.i18n.gettext('Repeat password'),
                     name: 'passwordRepeat',
@@ -872,9 +873,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.5
                     }, {
                         fieldLabel: this.app.i18n.gettext('Password'),
+                        xtype: 'tw-passwordTriggerField',
                         id: 'accountPassword',
                         name: 'accountPassword',
                         inputType: 'password',
+                        autocomplete: 'new-password',
                         columnWidth: 0.5,
                         tabIndex: 4,
                         passwordsMatch: true,

@@ -22,7 +22,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
      */
     locked: true,
     /**
-     * @cfg {Boolean} locked: true,
+     * @cfg {Boolean} clipboard: true,
      */
     clipboard: true,
 
