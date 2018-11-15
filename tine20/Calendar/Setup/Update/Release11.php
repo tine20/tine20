@@ -130,7 +130,15 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 
         /** @var Calendar_Model_Resource $resource */
         foreach ($resources as $resource) {
-            $container = $containerController->getContainerById($resource->container_id);
+            try {
+                $container = $containerController->getContainerById($resource->container_id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Resource might have lost its container... deleting invalid resource.'
+                    . ' Error: ' . $tenf->getMessage());
+                $resourceController->delete($resource->getId());
+                continue;
+            }
             if (!isset($container->xprops()['Tinebase']['Container']['GrantsModel'])) {
                 $container->xprops()['Tinebase']['Container']['GrantsModel'] = Calendar_Model_ResourceGrants::class;
                 $container->xprops()['Calendar']['Resource']['resource_id'] = $resource->getId();
