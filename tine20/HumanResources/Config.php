@@ -59,6 +59,11 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const REPORT_TEMPLATES_CONTAINER_ID = 'reportTemplatesContainerId';
+
+    /**
+     * id of timeaccount for workingtime timesheets
+     */
+    const WORKING_TIME_TIMEACCOUNT = 'workingTimeTimeAccount';
     
     /**
      * (non-PHPdoc)
@@ -160,6 +165,15 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::WORKING_TIME_TIMEACCOUNT => array(
+            //_('Timetracker Timeaccount for Workingtime Tracking')
+            'label'                 => 'Timetracker Timeaccount for Workingtime Tracking',
+            'description'           => 'Timetracker Timeaccount for Workingtime Tracking',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
         ),
     );
 
