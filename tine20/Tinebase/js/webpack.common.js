@@ -81,7 +81,7 @@ module.exports = {
             {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
             {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000}}]},
             {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000}}]},
-            {test: /\.svg/, use: [{loader: "svg-url-loader"}]},
+            {test: /\.svg/, use: [{loader: "svg-url-loader"},{loader: "./svg-fix-size-loader"}]},
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 use: [{loader: "url-loader", options: {limit: 100000}}]

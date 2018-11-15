@@ -3,6 +3,7 @@
 }
 
 .ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn {
+    background-size: 16px 16px;
     background-image:url(../../../../images/icon-set/icon_column.svg);
     width:16px;
     background-color: #eeeeee;
