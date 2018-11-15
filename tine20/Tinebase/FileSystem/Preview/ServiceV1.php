@@ -79,6 +79,9 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
 
         if (is_array($responseJson)) {
             return $this->_processJsonResponse($responseJson);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
+                . '::' . __LINE__ . ' Got empty/non-json response');
         }
 
         return false;

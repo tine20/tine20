@@ -70,6 +70,8 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
                         $resourceController->update($resource);
                     } catch (Tinebase_Exception_AccessDenied $tead) {
                         Tinebase_Exception::log($tead);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        Tinebase_Exception::log($tenf);
                     }
                 }
             }
