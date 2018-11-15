@@ -1586,7 +1586,7 @@ msgstr "{0} Datensätze hatten Fehler und wurden verworfen."
 #: js/widgets/dialog/ImportDialog.js:797
 #, python-brace-format
 msgid "In total we found {0} records in your import file."
-msgstr "Wir haben {0} Datensätze in der Import-Datein gefunden."
+msgstr "Wir haben {0} Datensätze in der Import-Datei gefunden."
 
 #: js/widgets/dialog/ImportDialog.js:800
 #, python-brace-format
@@ -2909,7 +2909,7 @@ msgstr "neue Sprache wird eingestellt..."
 #: Controller/Event.php:87
 #, python-format
 msgid "%s's personal files"
-msgstr "%s's persönliche Datein"
+msgstr "Persönliche Dateien von %s"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
@@ -2997,7 +2997,7 @@ msgstr "%s's persönlicher Ordner"
 
 #: FileSystem.php:3276
 msgid "The following files have changed:"
-msgstr "Die folgenden Datein haben sich geändert:"
+msgstr "Die folgenden Dateien haben sich geändert:"
 
 #: FileSystem.php:3278
 msgid "has been created."
