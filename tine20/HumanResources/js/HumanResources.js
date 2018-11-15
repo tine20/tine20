@@ -42,18 +42,18 @@ Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
                         sortable: true,
                         dataIndex: 'title'
                     }, {
-                        id: 'work_start',
+                        id: 'evaluation_period_start',
                         header: this.i18n._("Work Start"),
                         width: 300,
                         sortable: true,
-                        dataIndex: 'work_start',
+                        dataIndex: 'evaluation_period_start',
                         renderer: Tine.Tinebase.common.timeRenderer
                     }, {
-                        id: 'work_end',
+                        id: 'evaluation_period_end',
                         header: this.i18n._("Work End"),
                         width: 300,
                         sortable: true,
-                        dataIndex: 'work_end',
+                        dataIndex: 'evaluation_period_end',
                         renderer: Tine.Tinebase.common.timeRenderer
                     }]
                 }

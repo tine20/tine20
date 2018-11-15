@@ -63,15 +63,15 @@ class HumanResources_Model_WorkingTime extends Tinebase_Record_Abstract
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'default' => '{"days":[0,0,0,0,0,0,0]}'
             ],
-            'work_start' => array(
+            'evaluation_period_start' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'      => 'Start time', // _('Start time')
+                'label'      => 'Evaluation Start Time', // _('Evaluation Start Time')
                 'type'       => 'time',
                 'nullable'     => true,
             ),
-            'work_end' => array(
+            'evaluation_period_end' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'      => 'End time', // _('End time')
+                'label'      => 'Evaluation End Time', // _('Evaluation End Time')
                 'type'       => 'time',
                 'nullable'     => true,
             ),

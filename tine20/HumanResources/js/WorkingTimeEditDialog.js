@@ -213,13 +213,13 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
                                 fieldLabel: this.app.i18n._('Work start'),
                                 columnWidth: 1/4,
                                 emptyText: this.app.i18n._('not set'),
-                                name: 'work_start',
+                                name: 'evaluation_period_start',
                                 xtype: 'timefield'
                             }, {
                                 fieldLabel: this.app.i18n._('Work end'),
                                 columnWidth: 1/4,
                                 emptyText: this.app.i18n._('not set'),
-                                name: 'work_end',
+                                name: 'evaluation_period_end',
                                 xtype: 'timefield'
                             }, {
                                 fieldLabel: this.app.i18n._('Working Hours per week'),
