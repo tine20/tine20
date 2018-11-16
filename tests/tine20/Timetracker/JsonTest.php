@@ -215,14 +215,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
-     * try to get a Timeaccount with a within date filter
+     * try to get a Timesheet with a within date filter (within)
      *
      * @see 0013648: use new periodPicker for date filters
      */
     public function testSearchTimesheetsWithWithinFilter()
     {
-        $timeaccount = $this->_getTimesheet();
-        $this->_json->saveTimesheet($timeaccount->toArray());
+        $timesheet = $this->_getTimesheet();
+        $this->_json->saveTimesheet($timesheet->toArray());
 
         $now = Tinebase_DateTime::now();
         $filter = array(
@@ -233,6 +233,50 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         );
         $searchResult = $this->_json->searchTimesheets($filter, array());
         $this->assertEquals(1, $searchResult['totalcount']);
+    }
+
+    /**
+     * try to get a Timesheet with a time filter (start_time)
+     */
+    public function testSearchTimesheetsByStartTime()
+    {
+        $now = Tinebase_DateTime::now();
+        $nowString = $now->format('H:i:s');
+        $timesheet = $this->_getTimesheet([
+            'start_time' => $nowString
+        ]);
+        $savedTimesheet = $this->_json->saveTimesheet($timesheet->toArray());
+        $date = clone($now)->subHour(1);
+
+        $filter = array(
+            array('field' => 'start_time', 'operator' => 'after', 'value' => $date->format('H:i:s')),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
+            . print_r($savedTimesheet, true)
+            . ' with filter '
+            . print_r($filter, true)
+        );
+
+        $filter = array(
+            array('field' => 'start_time', 'operator' => 'before', 'value' => $date->addHour(2)->format('H:i:s')),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
+            . print_r($savedTimesheet, true)
+            . ' with filter '
+            . print_r($filter, true)
+        );
+
+        $filter = array(
+            array('field' => 'start_time', 'operator' => 'equals', 'value' => $nowString),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
+            . print_r($savedTimesheet, true)
+            . ' with filter '
+            . print_r($filter, true)
+        );
     }
 
     /**

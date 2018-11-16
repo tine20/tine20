@@ -433,7 +433,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      *
      * date                      Date                datetime date                          Tinebase_DateTime Tinebase_Model_Filter_Date  ISO8601Short
      * datetime                  Date with time      datetime date                          Tinebase_DateTime Tinebase_Model_Filter_Date  ISO8601Long
-     * time                      Time                datetime date                          Tinebase_DateTime Tinebase_Model_Filter_Date  ISO8601Time
+     * time                      Time                datetime date                          string?           Tinebase_Model_Filter_Time  ISO8601Time
      * string                    Text                varchar  string                        string            Tinebase_Model_Filter_Text
      * text                      Text with lnbr.     text     string                        string            Tinebase_Model_Filter_Text
      * fulltext                  Text with lnbr.     text     string                        string            Tinebase_Model_Filter_FullText
@@ -831,7 +831,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'datetime_separated_tz' => Tinebase_Model_Filter_Text::class,
         'date'                  => Tinebase_Model_Filter_Date::class,
         'datetime'              => Tinebase_Model_Filter_DateTime::class,
-        'time'                  => Tinebase_Model_Filter_Date::class,
+        'time'                  => Tinebase_Model_Filter_Time::class,
         'string'                => Tinebase_Model_Filter_Text::class,
         'stringAutocomplete'    => Tinebase_Model_Filter_Text::class,
         'text'                  => Tinebase_Model_Filter_Text::class,

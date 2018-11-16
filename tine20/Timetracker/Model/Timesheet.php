@@ -193,7 +193,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'inputFilters'          => array('Zend_Filter_PregReplace' => array('/(\d{4}-\d{2}-\d{2}).*/', '$1'))
             ),
             'start_time'            => array(
-                'label'                 => 'Evaluation Start Time', // _('Evaluation Start Time')
+                'label'                 => 'Start time', // _('Start time')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'inputFilters'          => array('Zend_Filter_Empty' => null),
                 'type'                  => 'time',
@@ -211,7 +211,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
 //                'nullable'              => true,
 //            ),
             'end_time'            => array(
-                'label'                 => 'Evaluation End Time', // _('Evaluation End Time')
+                'label'                 => 'End time', // _('End time')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'inputFilters'          => array('Zend_Filter_Empty' => NULL),
                 'nullable'              => true,

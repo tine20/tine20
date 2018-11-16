@@ -81,6 +81,10 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      */
     protected function _setOpSqlMap()
     {
+        if (! empty($this->_opSqlMap)) {
+            return;
+        }
+
         $db = Tinebase_Core::getDb();
         $sqlCommand = Tinebase_Backend_Sql_Command::factory($db);
 

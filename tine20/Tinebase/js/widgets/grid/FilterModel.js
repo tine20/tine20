@@ -144,6 +144,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'number':
                 case 'percentage':
                 case 'combo':
+                case 'time':
                 case 'country':
                     this.defaultOperator = 'equals';
                     break;
@@ -280,6 +281,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     break;
                 case 'customfield':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');
+                    break;
+                case 'time':
+                    this.operators.push('equals', 'before', 'after');
                     break;
                 case 'date':
                     this.operators.push('equals', 'before', 'after', 'within', 'inweek');
@@ -429,6 +433,19 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             };
         
         switch (this.valueType) {
+            case 'time':
+                value = new Ext.form.TimeField(Ext.apply(commonOptions, {
+                    listeners: {
+                        'specialkey': function(field, e) {
+                            if(e.getKey() == e.ENTER){
+                                this.onFiltertrigger();
+                            }
+                        },
+                        'select': this.onFiltertrigger,
+                        scope: this
+                    }
+                }));
+                break;
             case 'date':
                 value = this.dateValueRenderer(filter, el);
                 break;

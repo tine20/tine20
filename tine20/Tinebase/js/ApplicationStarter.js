@@ -290,6 +290,9 @@ Tine.Tinebase.ApplicationStarter = {
             case 'datetime_separated_date':
                 filter.valueType = 'date';
                 break;
+            case 'time':
+                filter.valueType = 'time';
+                break;
             case 'float':
             case 'integer':
             case 'money':
