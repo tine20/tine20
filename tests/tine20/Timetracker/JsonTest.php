@@ -176,24 +176,39 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
-     * try to get a Timeaccount with a tag filter
+     * try to get a Timesheet with a timeaccount_id filter
+     */
+    public function testSearchTimesheetsWithTimeaccountIdFilter()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+
+        $filter = array(
+            array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $timesheetData['timeaccount_id']['id']),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount']);
+    }
+
+    /**
+     * try to get a Timesheet with a tag filter
      *
      * @see 0012238: tag filter is not working for timesheets
      */
     public function testSearchTimesheetsWithTagFilter()
     {
-        $timeaccount = $this->_getTimesheet();
-        $timeaccount['tags'] = array(array(
+        $timesheet = $this->_getTimesheet();
+        $timesheet['tags'] = array(array(
             'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
             'name'          => 'mytag',
             'description'   => 'testtagfilter',
             'color'         => '#009B31',
         ));
-        $timeaccountData = $this->_json->saveTimesheet($timeaccount->toArray());
-        $this->assertEquals(1, count($timeaccountData['tags']));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->assertEquals(1, count($timesheetData['tags']));
 
         $filter = array(
-            array('field' => 'tag', 'operator' => 'equals', 'value' => $timeaccountData['tags'][0]['id']),
+            array('field' => 'tag', 'operator' => 'equals', 'value' => $timesheetData['tags'][0]['id']),
         );
         $searchResult = $this->_json->searchTimesheets($filter, array());
         $this->assertEquals(1, $searchResult['totalcount']);

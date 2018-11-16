@@ -2474,31 +2474,8 @@ abstract class Tinebase_Controller_Record_Abstract
         $filterArray = isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [];
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND');
 
-        try {
-            $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+        $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 
-            // TODO fix this:
-            // bad work around. Fields of type record return ForeignId Filter, but that filter can not do equals.
-            // remove try  catch and look for
-            /*     Sales_ControllerTest.testAddDeleteProducts
-    Sales_JsonTest.testSearchContracts
-    Sales_JsonTest.testSearchContractsByProduct
-    Sales_JsonTest.testSearchEmptyDateTimeFilter
-    Sales_JsonTest.testAdvancedContractsSearch
-    Sales_InvoiceJsonTests.testCRUD
-    Sales_InvoiceJsonTests.testSanitizingProductId
-    HumanResources_JsonTests.testEmployee
-    HumanResources_JsonTests.testDateTimeConversion
-    HumanResources_JsonTests.testContractDates
-    HumanResources_JsonTests.testAddContract
-    HumanResources_JsonTests.testSavingRelatedRecord
-    HumanResources_JsonTests.testSavingRelatedRecordWithCorruptId
-    HumanResources_CliTests.testSetContractsEndDate */
-
-        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
-            $filter->addFilter(new Tinebase_Model_Filter_Id($_fieldConfig['refIdField'], 'equals', $_record->getId()));
-        }
-        
         // an empty array will remove all records on this property
         if (! empty($_record->{$_property})) {
             $filter->addFilter($filter->createFilter('id', 'notin', $existing->getId()));

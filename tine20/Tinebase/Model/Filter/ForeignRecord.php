@@ -25,6 +25,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     protected $_operators = array(
         0 => 'AND',
         1 => 'OR',
+        2 => 'equals', //expects ID as value
     );
     
     /**
@@ -59,10 +60,17 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      *
      * @param array $_value
      */
-    public function setValue($_value) {
+    public function setValue($_value)
+    {
         $this->_foreignIds = NULL;
         $this->_valueIsNull = null === $_value;
-        $this->_value = (array)$_value;
+        if ($this->_operator === 'equals') {
+            $this->_value = array('field' => 'id', 'operator' => 'equals', 'value' => $_value);
+            $this->_foreignIds = $_value;
+        } else {
+            $this->_value = (array) $_value;
+        }
+
         $this->_removePrefixes();
         
         // @todo move this to another place?
