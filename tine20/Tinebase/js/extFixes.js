@@ -1119,3 +1119,25 @@ Ext.override(Ext.LoadMask, {
         this.el.unmask(this.removeMask);
     },
 });
+
+/**
+ * autocomplete for forms
+ */
+Ext.FormPanel.prototype.initComponent = Ext.FormPanel.prototype.initComponent.createSequence(function() {
+    if (this.autocomplete === false) {
+        this.bodyCfg.autocomplete = 'false';
+    }
+});
+
+/**
+ * autocomplete fix for password fields
+ * @see {https://stackoverflow.com/a/28457066}
+ */
+Ext.form.Field.prototype.origGetAutoCreate = Ext.Component.prototype.getAutoCreate;
+Ext.form.Field.prototype.getAutoCreate = function() {
+    var cfg = this.origGetAutoCreate();
+    if (this.inputType == 'password' && this.hasOwnProperty('autocomplete')) {
+        cfg.autocomplete = this.autocomplete;
+    }
+    return cfg;
+};
