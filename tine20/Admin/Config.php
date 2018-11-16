@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -30,6 +30,13 @@ class Admin_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME = 'featurePreventSpecialCharInLoginName';
+
+    /**
+     * FEATURE_FORCE_REYPE_PASSWORD
+     *
+     * @var string
+     */
+    const FEATURE_FORCE_REYPE_PASSWORD = 'featureForceRetypePassword';
 
     /**
      * (non-PHPdoc)
@@ -61,9 +68,16 @@ class Admin_Config extends Tinebase_Config_Abstract
                     //_('Prevent special chars in login name')
                     'description' => 'Prevent special chars in login name',
                 ),
+                // maybe this can removed at some point if no one uses/misses it ... ;)
+                self::FEATURE_FORCE_REYPE_PASSWORD => array(
+                    'label' => 'Force retype of new password in user edit dialog',
+                    //_('Force retype of new password in user edit dialog')
+                    'description' => 'Force retype of new password in user edit dialog',
+                ),
             ),
             'default' => array(
                 self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => false,
+                self::FEATURE_FORCE_REYPE_PASSWORD => false,
             ),
         ),
     );
