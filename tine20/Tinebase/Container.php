@@ -1945,20 +1945,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @throws Tinebase_Exception_Record_SystemContainer
      * 
      * @TODO: generalize when there are more "system" containers
-     * @todo move Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK to adb config
      */
     public function checkSystemContainer($containerIds)
     {
         if (!is_array($containerIds)) $containerIds = array($containerIds);
-        $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        // at the moment, just the internal addressbook is checked
-        try {
-            $defaultAddressbook = $this->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray();
-        } catch (Tinebase_Exception_NotFound $e) {
-            $defaultAddressbook = null;
-        }
 
-        if ($defaultAddressbook && in_array($defaultAddressbook['id'], $containerIds)) {
+        // at the moment, just the internal addressbook is checked
+        $defaultAddressbookId = Addressbook_Controller::getDefaultInternalAddressbook();
+
+        if ($defaultAddressbookId && in_array($defaultAddressbookId, $containerIds)) {
             // _('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!')
             throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!');
         }
