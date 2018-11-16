@@ -1484,4 +1484,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     {
         return $this->_filter;
     }
+
+    /**
+     * @return Tinebase_Controller_Record_Abstract
+     */
+    public function getController()
+    {
+        return $this->_controller;
+    }
 }
