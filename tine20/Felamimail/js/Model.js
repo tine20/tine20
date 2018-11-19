@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * TODO         think about adding a generic felamimail backend with the exception handler
  */
@@ -45,7 +45,8 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'preparedParts' }, // contains invitation event record
       { name: 'reading_conf' },
       { name: 'massMailingFlag', type: 'bool' },
-      { name: 'reply_to' }
+      { name: 'reply_to' },
+      { name: 'from_node' } // JS only - contains node data if opened from Filemanager
     ], {
     appName: 'Felamimail',
     modelName: 'Message',

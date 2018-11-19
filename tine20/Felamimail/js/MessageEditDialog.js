@@ -358,12 +358,21 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
 
         } else {
-            attachments = [{
+            var rfc822Attachment = {
                 name: message.get('subject'),
                 type: 'message/rfc822',
                 size: message.get('size'),
                 id: message.id
-            }];
+            }, node = message.get('from_node');
+            if (node) {
+                // @refactor use Ext.apply / lodash
+                rfc822Attachment.type = 'file';
+                rfc822Attachment.size = node.size;
+                rfc822Attachment.attachment_type = 'attachment';
+                rfc822Attachment.path = node.path;
+                rfc822Attachment.name = node.name;
+            }
+            attachments = [rfc822Attachment];
         }
 
         this.record.set('attachments', attachments);

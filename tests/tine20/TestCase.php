@@ -865,14 +865,53 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return strip_tags($zip->getFromName('word/document.xml'));
     }
-    
+
+    /**
+     * @param $app
+     * @param $model
+     *
+     * @todo coding style (-> _clear)
+     */
     protected function clear($app,$model)
     {
-
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , [
             ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
         ]);
         $controller =  Tinebase_Core::getApplicationInstance($app,$model); // @TODO seem not good... 
         $controller::getInstance()->deleteByFilter($filter);
+    }
+
+    /**
+     * create node in personal container of test user
+     *
+     * @param $nodeName
+     * @param $filePath
+     * @return array
+     */
+    protected function _createTestNode($nodeName, $filePath)
+    {
+        $user = Tinebase_Core::getUser();
+        $container = Tinebase_FileSystem::getInstance()->getPersonalContainer(
+            $user,
+            'Filemanager', $user
+        )->getFirstRecord();
+        $filepaths = ['/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+            . '/' . $user->accountLoginName
+            . '/' . $container->name
+            . '/' . $nodeName
+        ];
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileIds = [Tinebase_TempFile::getInstance()->createTempFile($tempPath)];
+        self::assertTrue(is_int($strLen = file_put_contents(
+            $tempPath,
+            file_get_contents($filePath)
+        )));
+        $ffj = new Filemanager_Frontend_Json();
+        $result = $ffj->createNodes(
+            $filepaths,
+            Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, true
+        );
+        self::assertEquals(1, count($result));
+        return $result;
     }
 }

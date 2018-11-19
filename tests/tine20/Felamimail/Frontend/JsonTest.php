@@ -1090,7 +1090,40 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
-    
+
+    /**
+     * forward message test (eml attachment from Filemanager)
+     */
+    public function testForwardMessageWithEmlAttachmentFromFilemanager()
+    {
+        $result = $this->_createTestNode(
+            'test.eml',
+            dirname(__FILE__) . '/../files/multipart_related.eml'
+        );
+        $subject = 'file attachment test';
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
+        $messageToSend['attachments'] = array(
+            array(
+                // @todo use constants?
+                'type' => 'file',
+                'attachment_type' => 'attachment',
+                'path' => $result[0]['path'],
+                'name' => $result[0]['name'],
+                'id'   => $result[0]['id'],
+            )
+        );
+        $this->_json->saveMessage($messageToSend);
+        $forwardMessage = $this->_searchForMessageBySubject($subject);
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+
+        $fullMessage = $this->_json->getMessage($forwardMessage['id']);
+        self::assertTrue(count($fullMessage['attachments']) === 1);
+        $attachment = $fullMessage['attachments'][0];
+        self::assertEquals('text/html', $attachment['content-type']);
+        self::assertEquals('test.eml', $attachment['filename']);
+        self::assertEquals(51882, $attachment['size']);
+    }
+
     /**
      * testSendMessageWithAttachmentWithoutExtension
      *
@@ -2308,25 +2341,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
     public function testGetMessageFromNode()
     {
-        // create test eml node
-        // @todo move this as helper to generic testcase
-        $user = Tinebase_Core::getUser();
-        $container = Tinebase_FileSystem::getInstance()->getPersonalContainer($user, 'Filemanager', $user)->getFirstRecord();
-        $filepaths = ['/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
-            . '/' . $user->accountLoginName
-            . '/' . $container->name
-            . '/test.eml'
-        ];
-        $tempPath = Tinebase_TempFile::getTempPath();
-        $tempFileIds = [Tinebase_TempFile::getInstance()->createTempFile($tempPath)];
-        self::assertTrue(is_int($strLen = file_put_contents(
-            $tempPath,
-            file_get_contents(dirname(__FILE__) . '/../files/multipart_related.eml')))
+        $result = $this->_createTestNode(
+            'test.eml',
+            dirname(__FILE__) . '/../files/multipart_related.eml'
         );
-        $ffj = new Filemanager_Frontend_Json();
-        $result = $ffj->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, true);
-
-        self::assertEquals(1, count($result));
 
         // fetch it & assert data
         $message = $this->_json->getMessageFromNode($result[0]['id']);

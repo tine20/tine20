@@ -927,11 +927,14 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param $attachment
      * @return null|Zend_Mime_Part
      * @throws Tinebase_Exception_NotFound
-     *
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _getFileNodeAttachment(&$attachment)
     {
         $nodeController = Filemanager_Controller_Node::getInstance();
+        if (! isset($attachment['id'])) {
+            throw new Tinebase_Exception_InvalidArgument('Node ID missing');
+        }
         $node = $nodeController->get($attachment['id']);
 
         if (!Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
@@ -946,7 +949,16 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $content = fopen($pathRecord->streamwrapperpath, 'r');
 
             $part = new Zend_Mime_Part($content);
-            $part->encoding = Zend_Mime::ENCODING_BASE64;
+            $encoding = Zend_Mime::ENCODING_BASE64;
+            if ($node->contenttype) {
+                $attachment['type'] = $node->contenttype;
+                if ($attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+                    $encoding = Zend_Mime::ENCODING_8BIT;
+                }
+                // not relevant?
+                $part->type = $node->contenttype;
+            }
+            $part->encoding = $encoding;
 
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__

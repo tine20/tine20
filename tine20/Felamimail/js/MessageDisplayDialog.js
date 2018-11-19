@@ -15,7 +15,10 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
     record: null,
     
     autoScroll: false,
-    
+
+    hasDeleteAction: true,
+    hasDownloadAction: true,
+
     initComponent: function() {
         if (Ext.isString(this.record)) {
             this.record = Tine.Felamimail.messageBackend.recordReader({responseText: this.record});
@@ -48,7 +51,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
             iconCls: 'action_delete',
             disabled: this.record.id.match(/_/)
         });
-        
+
         this.action_reply = new Ext.Action({
             text: this.app.i18n._('Reply'),
             handler: this.onMessageReplyTo.createDelegate(this, [false]),
@@ -73,7 +76,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
             iconCls: 'action_email_download',
             disabled: this.record.id.match(/_/)
         });
-        
+
         this.action_print = new Ext.Action({
             text: this.app.i18n._('Print Message'),
             handler: this.onMessagePrint.createDelegate(this.app.getMainScreen().getCenterPanel(), [this]),
@@ -95,49 +98,57 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
      * init toolbar
      */
     initToolbar: function() {
-        // use toolbar from gridPanel
+        var actions = [];
+
+        if (this.hasDeleteAction) {
+            actions.push(Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }));
+        }
+
+        actions.push([
+            Ext.apply(new Ext.Button(this.action_reply), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.action_replyAll), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.Button(this.action_forward), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            }),
+            Ext.apply(new Ext.SplitButton(this.action_print), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign:'top',
+                arrowAlign:'right'
+            })
+        ]);
+
+        if (this.hasDownloadAction) {
+            actions.push(Ext.apply(new Ext.Button(this.action_download), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign:'top',
+                arrowAlign:'right'
+            }));
+        }
+
         this.tbar = new Ext.Toolbar({
             defaults: {height: 55},
             items: [{
                 xtype: 'buttongroup',
                 columns: 5,
-                items: [
-                    Ext.apply(new Ext.Button(this.action_deleteRecord), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
-                    }),
-                    Ext.apply(new Ext.Button(this.action_reply), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
-                    }),
-                    Ext.apply(new Ext.Button(this.action_replyAll), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
-                    }),
-                    Ext.apply(new Ext.Button(this.action_forward), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
-                    }), 
-                    Ext.apply(new Ext.SplitButton(this.action_print), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign:'top',
-                        arrowAlign:'right'
-                    }), 
-                    Ext.apply(new Ext.Button(this.action_download), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign:'top',
-                        arrowAlign:'right'
-                    })
-                ]
+                items: actions
             }]
         });
-        
     },
     
     /**

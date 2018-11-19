@@ -47,6 +47,9 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
     // if this is given, we load the record from a node
     nodeRecord: null,
 
+    // if this is true, add top toolbar with actions to open mail in message display dialog
+    hasTopToolbar: true,
+
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18n = this.app.i18n;
@@ -61,7 +64,47 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
         this.initTemplate();
 
+        if (this.hasTopToolbar) {
+            this.initTopToolbar();
+        }
+
         Tine.Felamimail.MailDetailsPanel.superclass.initComponent.call(this);
+    },
+
+    /**
+     * init top toolbar for opening mails in fmail
+     */
+   initTopToolbar: function() {
+        this.action_openInFmail = new Ext.Action({
+            text: this.app.i18n._('Open in Felamimail'),
+            minWidth: 70,
+            scope: this,
+            handler: this.onOpenInFmail,
+            iconCls: this.app.appName + 'IconCls'
+        });
+
+       this.tbar = new Ext.Toolbar({
+           items: [
+               this.action_openInFmail
+           ]
+       });
+   },
+
+    /**
+     * open in Felamimail MessageDisplayDialog
+     */
+    onOpenInFmail: function() {
+        if (this.nodeRecord) {
+            // prepare message for forwarding in Tine.Felamimail.MessageEditDialog.handleAttachmentsOfExistingMessage
+            this.record.set('from_node', this.nodeRecord.data);
+        }
+
+        Tine.Felamimail.MessageDisplayDialog.openWindow({
+            record: this.record,
+            // remove delete + save actions as this makes no sense if opened from another app
+            hasDeleteAction: false,
+            hasDownloadAction: false
+        });
     },
 
     /**
