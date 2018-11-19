@@ -59,4 +59,40 @@ class HumanResources_Controller_WorkingTime extends Tinebase_Controller_Record_A
 
         return self::$_instance;
     }
+
+
+    /**
+     * get working time account for given employee
+     *
+     * NOTE: only one generic ta yet!
+     *
+     * @param HumanResources_Model_Employee $employee
+     * @return Timetracker_Model_Timeaccount
+     */
+    public function getWorkingTimeAccount(HumanResources_Model_Employee $employee)
+    {
+        $timeaccountId = HumanResources_Config::getInstance()->get(HumanResources_Config::WORKING_TIME_TIMEACCOUNT);
+        $tac = Timetracker_Controller_Timeaccount::getInstance();
+        $aclUsage = $tac->assertPublicUsage();
+
+        try {
+            if ($timeaccountId) {
+                $timeaccount = $tac->get($timeaccountId);
+            }
+
+            if (! ($timeaccountId && $timeaccount)) {
+                $i18n = Tinebase_Translation::getTranslation('HumanResources');
+                $timeaccount = $tac->create(new Timetracker_Model_Timeaccount([
+                    'number' => 'HRWT',
+                    'title' => $i18n->translate('HR Empoyee Working Time'),
+
+                ]), false);
+                HumanResources_Config::getInstance()->set(HumanResources_Config::WORKING_TIME_TIMEACCOUNT, $timeaccount->getId());
+            }
+        } finally {
+            $aclUsage();
+        }
+
+        return $timeaccount;
+    }
 }
