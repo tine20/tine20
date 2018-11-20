@@ -134,8 +134,10 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      */
     public function addReplacement($search, $replace = '********')
     {
-        $this->_search[$search]   = $search;
-        $this->_replace[$replace] = $replace;
+        if (! in_array($search, $this->_search)) {
+            $this->_search[] = $search;
+            $this->_replace[] = $replace;
+        }
     }
     
     /**

@@ -76,12 +76,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @return  bool
      * @throws  Tinebase_Exception_MaintenanceMode
-     *
-     * TODO what happened to the $securitycode parameter?
-     *  ->  @param   string                           $securitycode   the security code(captcha)
      */
     public function login($loginName, $password, \Zend\Http\Request $request, $clientIdString = NULL)
     {
+        // make sure pw is always replaced in Logger
+        Tinebase_Core::getLogger()->addReplacement($password);
+
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
         
         $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request, $clientIdString);
