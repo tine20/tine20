@@ -372,7 +372,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             
             $parameters = array(
                 'CN'       => $eventAttendee->getName(),
-                'CUTYPE'   => Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type],
+                'CUTYPE'   => $this->_getAttendeeCUType($eventAttendee),
                 'PARTSTAT' => $eventAttendee->status,
                 'ROLE'     => "{$eventAttendee->role}-PARTICIPANT",
                 'RSVP'     => 'FALSE'
@@ -382,6 +382,17 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             }
             $vevent->add('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail, $parameters);
         }
+    }
+
+    /**
+     * returns CUTYPE for given attendee
+     *
+     * @param Calendar_Model_Attender $eventAttendee
+     * @return string
+     */
+    protected function _getAttendeeCUType($eventAttendee)
+    {
+        return Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type];
     }
 
     /**
