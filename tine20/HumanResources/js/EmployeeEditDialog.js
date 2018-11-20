@@ -299,7 +299,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .25,
                                     listeners: {
                                         scope: this,
-                                        blur: this.updateDisplayName
+                                        change: this.updateDisplayName
                                     }
                                 }
                             ), Tine.widgets.form.FieldManager.get(
@@ -311,7 +311,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .25,
                                     listeners: {
                                         scope: this,
-                                        blur: this.updateDisplayName
+                                        change: this.updateDisplayName
                                     }
                                 }
                             )], [
