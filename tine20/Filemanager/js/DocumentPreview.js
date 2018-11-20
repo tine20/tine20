@@ -122,14 +122,22 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
 
     /**
      * Fires if no previews are available
-     *
-     * @todo show more information about preview service + configuration
      */
     onNoPreviewAvailable: function () {
         var me = this;
         me.afterIsRendered().then(function() {
+            var text = '';
+
+            if (!Tine.Tinebase.configManager.get('filesystem').createPreviews) {
+                text = '<br/><br/>' + me.app.i18n._('Sorry, Tine 2.0 would like to show you the contents of the file displayed.') + ' '
+                    me.app.i18n._('This is possible for .doc, .jpg, .pdf and even more file formats.') + '<br/>'
+                    '<a href="https://www.tine20.com/kontakt/" target="_blank">' +
+                    me.app.i18n._('Interested? Then let us know!') + '</a><br/>' +
+                    me.app.i18n._('We are happy make you a non-binding offer.');
+            }
+
             me.add({
-                html: '<b>' + me.app.i18n._('No preview available.') + '</b>',
+                html: '<b>' + me.app.i18n._('No preview available.') + '</b>' + text,
                 xtype: 'panel',
                 frame: true,
                 border: true

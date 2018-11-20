@@ -649,6 +649,18 @@ msgstr "Anonyme Download Links verwalten"
 msgid "Allow to see, add and delete download links of files and folders"
 msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
 
+msgid "Sorry, Tine 2.0 would like to show you the contents of the file displayed."
+msgstr "Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
+
+msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
+msgstr "Das geht z.B. für .doc, .jpg, .pdf und noch für weitere Dateiformate."
+
+msgid "Interested? Then let us know!"
+msgstr "Interessiert? Dann melden Sie sich bei uns!"
+
+msgid "We are happy make you a non-binding offer."
+msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
+
 #~ msgid "Once all 3 days"
 #~ msgstr "Alle 3 Tage"
 
