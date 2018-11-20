@@ -77,7 +77,14 @@ class HumanResources_Controller_WorkingTime extends Tinebase_Controller_Record_A
 
         try {
             if ($timeaccountId) {
-                $timeaccount = $tac->get($timeaccountId);
+                try {
+                    $timeaccount = $tac->get($timeaccountId);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    $timeaccount = null;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__
+                        . " configured workingtime account $timeaccountId can not be found");
+
+                }
             }
 
             if (! ($timeaccountId && $timeaccount)) {
@@ -88,6 +95,9 @@ class HumanResources_Controller_WorkingTime extends Tinebase_Controller_Record_A
 
                 ]), false);
                 HumanResources_Config::getInstance()->set(HumanResources_Config::WORKING_TIME_TIMEACCOUNT, $timeaccount->getId());
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__
+                    . " created new workingtime account {$timeaccount->getId()}");
+
             }
         } finally {
             $aclUsage();
