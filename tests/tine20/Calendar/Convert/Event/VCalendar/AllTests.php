@@ -28,7 +28,8 @@ class Calendar_Convert_Event_VCalendar_AllTests
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_MacOSXTest');
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_ThunderbirdTest');
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_EMClientTest');
-        
+        $suite->addTestSuite('Calendar_Convert_Event_VCalendar_DavDroidTest');
+
         return $suite;
     }
 }

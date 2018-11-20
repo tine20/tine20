@@ -38,4 +38,17 @@ class Calendar_Convert_Event_VCalendar_DavDroid extends Calendar_Convert_Event_V
         'is_all_day_event',
         'originator_tz'
     );
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getAttendeeCUType($eventAttendee)
+    {
+        $CUTYPE = parent::_getAttendeeCUType($eventAttendee);
+
+        // Android / DAVDroid can't cope with CUTYPE group
+        // @see https://developer.android.com/reference/android/provider/CalendarContract.AttendeesColumns#ATTENDEE_TYPE
+        return $eventAttendee->user_type != Calendar_Model_Attender::USERTYPE_GROUP ?
+            $CUTYPE : 'INDIVIDUAL';
+    }
 }
