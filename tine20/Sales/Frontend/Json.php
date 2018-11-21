@@ -700,7 +700,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $resolvedProducts = new Tinebase_Record_RecordSet('Sales_Model_Product');
         $productController = Sales_Controller_Product::getInstance();
         
-        foreach($invoice['relations'] as &$relation) {
+        foreach ($invoice['relations'] as &$relation) {
             if ($relation['related_model'] == "Sales_Model_ProductAggregate") {
                 if (! $product = $resolvedProducts->getById($relation['related_record']['product_id'])) {
                     $product = $productController->get($relation['related_record']['product_id']);
