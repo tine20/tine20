@@ -545,6 +545,7 @@ span .x-tab-strip-text.tine-favicon {
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close,
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close:hover {
     background-image:url("../../images/icon-set/icon_arrow_full_down.svg");
+    background-size: 11px 11px;
     top: 5px;
     right: 19px;
 }
