@@ -594,12 +594,13 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             ->from(array($this->_userTable))
             ->where('instancename = ?', $fromInstance);
         $data = $select->query()->fetchAll();
-        $count = 0;
+        $count = $update = 0;
         foreach ($data as $recordData) {
             // adjust instancename + domain and save record
             $recordData['instancename'] = $this->_config['instanceName'];
             $recordData['domain'] = empty($this->_config['domain']) ? $recordData['instancename'] : $this->_config['domain'];
             $recordData['username'] = str_replace($fromInstance, $recordData['instancename'], $recordData['username']);
+            $recordData['home'] = str_replace($fromInstance, $recordData['instancename'], $recordData['home']);
             try {
                 $this->_db->insert($this->_userTable, $recordData);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -609,11 +610,21 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             } catch (Zend_Db_Statement_Exception $zdse) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . $zdse->getMessage());
+                $where = array(
+                    $this->_db->quoteInto($this->_db->quoteIdentifier('username') . ' = ?', $recordData['username'])
+                );
+                $this->_appendClientIdOrDomain($where);
+
+                $this->_db->update($this->_userTable, $recordData, $where);
+                $update++;
             }
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Copied ' . $count
             . ' email records from instance' . $fromInstance . ' to ' .  $this->_config['instanceName']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Updated ' . $update
+            . ' email records from instance' . $fromInstance);
     }
 }
