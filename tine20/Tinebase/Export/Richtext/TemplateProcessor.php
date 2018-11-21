@@ -43,6 +43,8 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
 
     protected $_config = array();
 
+    protected $_twigName = '';
+
     /**
      * @param string $documentTemplate The fully qualified template filename.
      * @param bool   $inMemory
@@ -52,10 +54,14 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
      * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
      * @throws \PhpOffice\PhpWord\Exception\CopyFileException
      */
-    public function __construct($documentTemplate, $inMemory = false, $type = self::TYPE_STANDARD, Tinebase_Export_Richtext_TemplateProcessor $parent = null)
+    public function __construct($documentTemplate, $inMemory = false, $type = self::TYPE_STANDARD, Tinebase_Export_Richtext_TemplateProcessor $parent = null, $name = '')
     {
         $this->_type = $type;
         $this->_parent = $parent;
+        if (null !== $parent) {
+             $this->_twigName = $parent->getTwigName();
+        }
+        $this->_twigName .= $type . $name;
 
         if (true === $inMemory) {
             $this->tempDocumentMainPart = $documentTemplate;
@@ -89,6 +95,14 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             $this->_temporaryDocumentRels = $this->fixBrokenMacros(
                 $this->zipClass->getFromName('word/_rels/document.xml.rels'));
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwigName()
+    {
+        return $this->_twigName;
     }
 
     /**
@@ -246,16 +260,33 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             $this->zipClass->addFromString('word/_rels/footer' . $index . '.xml.rels', $data);
         }
 
+        // TODO here we use \x0B as a placeholder, but Tinebase_Twig adds a function which uses \n...
         // replace newline placeholder vertical tab (ascii 11)
+        /*
         foreach ($this->tempDocumentHeaders as &$xml) {
             $xml = join('</w:t><w:br /><w:t>', mb_split("\x0B", $xml));
         }
         $this->tempDocumentMainPart = join('</w:t><w:br /><w:t>', mb_split("\x0B", $this->tempDocumentMainPart));
         foreach ($this->tempDocumentFooters as &$xml) {
             $xml = join('</w:t><w:br /><w:t>', mb_split("\x0B", $xml));
-        }
+        }*/
 
         return parent::save();
+    }
+
+    /**
+     * executes a function on each xml document
+     * use a reference parameter if you want to change the document
+     */
+    public function forEachDocument($closure)
+    {
+        foreach ($this->tempDocumentHeaders as &$xml) {
+            $closure($xml);
+        }
+        $closure($this->tempDocumentMainPart);
+        foreach ($this->tempDocumentFooters as &$xml) {
+            $closure($xml);
+        }
     }
 
     /**
@@ -286,10 +317,6 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
      */
     public function replaceRow($search, $replacement)
     {
-        if ('${' !== substr($search, 0, 2) && '}' !== substr($search, -1)) {
-            $search = '${' . $search . '}';
-        }
-
         $tagPos = strpos($this->tempDocumentMainPart, $search);
         if (!$tagPos) {
             throw new \PhpOffice\PhpWord\Exception\Exception("Can not clone row, template variable not found or variable contains markup.");
@@ -493,5 +520,28 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         }
 
         return array_unique($result);
+    }
+
+    /**
+     * Finds parts of broken macros and sticks them together.
+     * Macros, while being edited, could be implicitly broken by some of the word processors.
+     *
+     * @param string $documentPart The document part in XML representation.
+     *
+     * @return string
+     */
+    protected function fixBrokenMacros($documentPart)
+    {
+        $fixedDocumentPart = parent::fixBrokenMacros($documentPart);
+
+        $fixedDocumentPart = preg_replace_callback(
+            '|\{\{[^}]*\}[^}]*\}|U',
+            function ($match) {
+                return strip_tags($match[0]);
+            },
+            $fixedDocumentPart
+        );
+
+        return $fixedDocumentPart;
     }
 }

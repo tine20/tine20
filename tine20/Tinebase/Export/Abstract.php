@@ -1370,22 +1370,22 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-        
-        return array_merge(array(
-            'branding'          => array(
-                'logo'              => $this->_logoPath,
-                'title'             => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE},
-                'description'       => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_DESCRIPTION},
-                'weburl'            => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_WEBURL},
-            ),
-            'export'            => array(
-                'timestamp'         => $this->_exportTimeStamp,
-                'account'           => Tinebase_Core::getUser(),
-                'contact'           => $contact,
-                'groupdata'         => $this->_lastGroupValue,
-            ),
+
+        return array_merge([
+            'branding' => [
+                'logo' => $this->_logoPath,
+                'title' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE},
+                'description' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_DESCRIPTION},
+                'weburl' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_WEBURL},
+            ],
+            'export' => [
+                'timestamp' => $this->_exportTimeStamp,
+                'account' => Tinebase_Core::getUser(),
+                'contact' => $contact,
+                'groupdata' => $this->_lastGroupValue,
+            ],
             'additionalRecords' => $this->_additionalRecords,
-        ), $context);
+        ], $context);
     }
 
     /**

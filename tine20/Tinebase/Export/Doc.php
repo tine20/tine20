@@ -582,7 +582,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
                 $dataSource = '<?xml' . $dataSource;
                 $processor = new Tinebase_Export_Richtext_TemplateProcessor($dataSource, true,
-                    Tinebase_Export_Richtext_TemplateProcessor::TYPE_DATASOURCE);
+                    Tinebase_Export_Richtext_TemplateProcessor::TYPE_DATASOURCE, null, $match[1]);
                 $this->_dataSources[$match[1]] = $processor;
 
                 $this->_findAndReplaceGroup($processor);
@@ -677,7 +677,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     {
         $result = array();
 
-        if (preg_match('/<w:tbl.*?(\$\{twig:[^}]*record[^}]*})/is', $_templateProcessor->getMainPart(), $matches)) {
+        if (preg_match('/<w:tbl.*?(\$\{twig:[^}]*record[^}]*})/is', $_templateProcessor->getMainPart(), $matches) ||
+            preg_match('/<w:tbl.*?(\{\{[^}]*record[^}]*}})/is', $_templateProcessor->getMainPart(), $matches)) {
             $result['recordRow'] = $_templateProcessor->replaceRow($matches[1], '${RECORD_ROW}');
             $processor = new Tinebase_Export_Richtext_TemplateProcessor('<?xml' . $result['recordRow'], true,
                 Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD, $_templateProcessor);

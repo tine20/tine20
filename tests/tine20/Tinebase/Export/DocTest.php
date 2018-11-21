@@ -42,4 +42,26 @@ class Tinebase_Export_DocTest extends TestCase
             unlink($tmpFile);
         }
     }
+
+    public function testDocTwigFunctions2()
+    {
+        $export = new Tinebase_Export_Doc2(new Addressbook_Model_ContactFilter(), null, [
+            'definitionFilename'=> dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_doc.xml',
+            'template'          => dirname(__DIR__) . '/files/export/addressbook_contact_twigFunctions2.docx',
+            'recordData'        => [
+                'n_given'           => 'testName',
+                'n_family'          => 'moreTest',
+                'bday'              => '2000-01-02'
+            ]]);
+        $export->generate();
+        $tmpFile = Tinebase_TempFile::getTempPath();
+        $export->save($tmpFile);
+
+        try {
+            static::assertEquals(filesize(dirname(__DIR__) . '/files/export/twigFunctions_result2.docx'),
+                filesize($tmpFile));
+        } finally {
+            unlink($tmpFile);
+        }
+    }
 }
