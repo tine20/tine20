@@ -390,6 +390,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * check if user email already exists in table
      * 
      * @param  string  $email
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _checkEmailExistance($email)
     {
