@@ -106,14 +106,6 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
 
     /**
      *
-     */
-    protected function _exportRecords()
-    {
-        parent::_exportRecords();
-    }
-
-    /**
-     *
      * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _onBeforeExportRecords()
