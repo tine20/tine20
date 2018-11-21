@@ -473,7 +473,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     onContentResize: function() {
         // make sure details panel doesn't hide grid
-        if (this.detailsPanel) {
+        if (this.detailsPanel && this.grid) {
             var gridHeight = this.grid.getHeight(),
                 detailsHeight = this.detailsPanel.getHeight();
 
