@@ -248,15 +248,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $savedTimesheet = $this->_json->saveTimesheet($timesheet->toArray());
         $date = clone($now)->subHour(1);
 
-        $filter = array(
-            array('field' => 'start_time', 'operator' => 'after', 'value' => $date->format('H:i:s')),
-        );
-        $searchResult = $this->_json->searchTimesheets($filter, array());
-        $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
-            . print_r($savedTimesheet, true)
-            . ' with filter '
-            . print_r($filter, true)
-        );
+        // skip check because this does not work at midnight
+        if (substr($nowString, 0, 2) !== '00') {
+            $filter = array(
+                array('field' => 'start_time', 'operator' => 'after', 'value' => $date->format('H:i:s')),
+            );
+            $searchResult = $this->_json->searchTimesheets($filter, array());
+            $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
+                . print_r($savedTimesheet, true)
+                . ' with filter '
+                . print_r($filter, true)
+            );
+        }
 
         $filter = array(
             array('field' => 'start_time', 'operator' => 'before', 'value' => $date->addHour(2)->format('H:i:s')),
