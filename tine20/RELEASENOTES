@@ -3,10 +3,12 @@ TINE 2.0 RELEASENOTES
 =====================
                     
   Release:     TBA (2019.11)
-  Last change: 2018-10-30
+  Last change: 2018-11-21
 
 GENERAL CHANGES
 ---
+
+* Minimum PHP Version: 7.0
 
 * Enforcing table structure of addressbook, container and applications
 

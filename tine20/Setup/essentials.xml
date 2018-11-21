@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <essential>
-    <enviroment name="PHP" version="5.6"/>
+    <enviroment name="PHP" version="7.0"/>
     <extensions>
         <extension name="ctype" />
         <extension name="date" />
