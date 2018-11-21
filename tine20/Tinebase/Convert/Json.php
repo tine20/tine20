@@ -493,7 +493,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $controller = $config['controllerClassName']::getInstance();
             $filterName = $config['filterClassName'];
             
-            $filterArray = array();
+            $filterArray = array(
+                array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)
+            );
             
             // addFilters can be added and must be added if the same model resides in more than one records fields
             if (isset($config['addFilters']) && is_array($config['addFilters'])) {
@@ -501,8 +503,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
 
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray);
-            $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
-            
+
             $paging = NULL;
             if (isset($config['paging']) && is_array($config['paging'])) {
                 $paging = new Tinebase_Model_Pagination($config['paging']);
