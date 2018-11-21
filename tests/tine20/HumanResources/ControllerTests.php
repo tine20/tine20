@@ -111,7 +111,7 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         
         $contractController = HumanResources_Controller_Contract::getInstance();
         $employeeController = HumanResources_Controller_Employee::getInstance();
-        $employee = $employeeController->create($employee);
+        $employee = $employeeController->create($employee, false);
         $contract = $this->_getContract($sdate);
         $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
 
