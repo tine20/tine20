@@ -274,12 +274,17 @@
                 break;
 
             case 'tentative':
+                
+                $prefUser = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE,
+                    $organizerContact->account_id);
                 $attendee = new Calendar_Model_Attender(array(
                     'cal_event_id'      => $_event->getId(),
                     'user_type'         => Calendar_Model_Attender::USERTYPE_USER,
                     'user_id'           => $_event->organizer,
                 ), true);
-                $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
+                if($prefUser) {
+                    $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
+                }
                 break;
 
             default:
