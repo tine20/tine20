@@ -20,6 +20,9 @@ trait Tinebase_Export_Convertible_PreviewServicePdf
      */
     public function convertToPdf($from)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Converting from ' . $from . ' to PDF');
+
         $suffixed = $from . '.' . $this->getFormat();
         copy($from, $suffixed);
 

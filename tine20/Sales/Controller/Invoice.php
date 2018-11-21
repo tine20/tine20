@@ -1724,7 +1724,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $xlsxFiles = [];
         
         /* @var $timeaccountPositions Sales_Model_InvoicePosition[] */
-        foreach($timeaccountPositions as $timeaccountPosition) {
+        foreach ($timeaccountPositions as $timeaccountPosition) {
             $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountPosition->accountable_id);
             $export = new Sales_Export_TimesheetTimeaccount($filter, null,
                 [
@@ -1738,10 +1738,17 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(
                 Tinebase_Record_Abstract::generateUID()));
 
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Creating export ...');
+
             $export->generate();
             
             $xlsx = Tinebase_TempFile::getTempPath();
             $export->save($xlsx);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' ... xlsx created: ' . $xlsx);
             
             $xlsxFiles[$timeaccount->getTitle()] = $xlsx;
             $pdfFiles[] = $export->convert(Tinebase_Export_Convertible::PDF, $xlsx);
