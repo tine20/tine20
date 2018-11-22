@@ -147,7 +147,13 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
             v = Number(v);
         }
         
-        return v.toLocaleString(Tine.Tinebase.registry.get('locale').locale) + " " + currencySymbol;
+        var locale = Tine.Tinebase.registry.get('locale').locale;
+        
+        if (locale.includes("_")) {
+            locale = locale.split("_")[0];
+        }
+        
+        return v.toLocaleString(locale) + " " + currencySymbol;
     },
     percentage: function(v){
         if(v === null) {
