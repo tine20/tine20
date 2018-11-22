@@ -1273,11 +1273,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
     /**
      * @see 0012160: save emails in filemanager
-     *
-     * @param string  $appName
      */
-    public function testFileMessages($appName = 'Filemanager')
+    public function testFileMessages()
     {
+        $appName = 'Filemanager';
         $user = Tinebase_Core::getUser();
         $personalFilemanagerContainer = $this->_getPersonalContainerNode($appName, $user);
         $message = $this->_sendMessage(
@@ -1323,8 +1322,29 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
         $this->assertContains($message['received'], $nodeWithDescription->description);
         $this->assertContains('aaaaaä', $nodeWithDescription->description);
+
+        // assert MessageFileLocation
+        $completeMessage = $this->_json->getMessage($message['id']);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_MessageFileLocation::class, [
+                ['field' => 'record_id', 'operator' => 'equals', 'value' => $emlNode['id']]
+            ]
+        );
+        $result = Felamimail_Controller_MessageFileLocation::getInstance()->search($filter);
+        self::assertEquals(1, count($result));
+        $fileLocation = $result->getFirstRecord();
+        self::assertNotNull($fileLocation->message_id);
+        self::assertEquals(Felamimail_Model_MessageFileLocation::TYPE_NODE, $fileLocation->type);
+        self::assertEquals(sha1($completeMessage['headers']['message-id']), $fileLocation->message_id_hash,
+            print_r($completeMessage, true));
+        self::assertEquals($emlNode->name, $fileLocation->record_title);
     }
 
+    /**
+     * @param $_appName
+     * @param null $_user
+     * @return NULL|Tinebase_Record_Interface
+     */
     protected function _getPersonalContainerNode($_appName, $_user = null)
     {
         $user = ($_user) ? $_user : Tinebase_Core::getUser();

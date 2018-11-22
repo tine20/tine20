@@ -21,6 +21,7 @@ class Setup_Update_Abstract
     const FUNCTION_CONST = 'function';
 
     const PRIO_TB_STRUCT_UPDATE = 100;
+    const PRIO_NORMAL_APP_STRUCT_UPDATE = 200;
     const PRIO_NORMAL_APP_UPDATE = 1000;
 
     /**
