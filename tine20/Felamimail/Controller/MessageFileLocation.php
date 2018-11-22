@@ -56,4 +56,27 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
 
         return self::$_instance;
     }
+
+    /**
+     * @param string $referenceString
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getLocationsByReference($referenceString)
+    {
+        if (strpos(' ', $referenceString) !== false) {
+            $references = explode(' ', $referenceString);
+        } else {
+            $references = [$referenceString];
+        }
+
+        $hashedReferences = array_map('sha1', $references);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_MessageFileLocation::class, [
+                ['field' => 'message_id_hash', 'operator' => 'in', 'value' => $hashedReferences]
+            ]
+        );
+        $locations = $this->search($filter);
+
+        return $locations;
+    }
 }

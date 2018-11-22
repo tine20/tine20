@@ -126,4 +126,57 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
             Felamimail_Controller_Message_Flags::getInstance()->addFlags($messages, array(Zend_Mail_Storage::FLAG_DELETED));
         }
     }
+
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getFileSuggestions(Felamimail_Model_Message $message)
+    {
+        $suggestions = new Tinebase_Record_RecordSet(Felamimail_Model_MessageFileSuggestion::class);
+        if ($message->getId()) {
+            // make sure we have the current message with headers, ...
+            $message = $this->get($message->getId());
+            $headers = $this->getMessageHeaders($message, null, true);
+            foreach (Felamimail_Controller_Message_File::getInstance()->getSenderContactsOfMessage($message)
+                     as $sender
+            ) {
+                $suggestions->addRecord(new Felamimail_Model_MessageFileSuggestion([
+                    'type' => Felamimail_Model_MessageFileSuggestion::TYPE_SENDER,
+                    'record' => $sender,
+                    'model' => get_class($sender),
+                ]));
+            }
+        } else {
+            $headers = isset($message->headers) ? $message->headers : [];
+            foreach (Felamimail_Controller_Message_File::getInstance()->getRecipientContactsOfMessage($message)
+                     as $recipient
+            ) {
+                $suggestions->addRecord(new Felamimail_Model_MessageFileSuggestion([
+                    'type' => Felamimail_Model_MessageFileSuggestion::TYPE_RECIPIENT,
+                    'record' => $recipient,
+                    'model' => get_class($recipient),
+                ]));
+            }
+        }
+
+        $headerFieldsToCheck = ['message-id', 'references', 'in-reply-to'];
+        foreach ($headerFieldsToCheck as $headerField) {
+            if (! isset($headers[$headerField]) || empty($headers[$headerField])) {
+                continue;
+            }
+            $referenceLocations = Felamimail_Controller_MessageFileLocation::getInstance()->getLocationsByReference(
+                $headers[$headerField]
+            );
+            foreach ($referenceLocations as $referenceLocations) {
+                $suggestions->addRecord(new Felamimail_Model_MessageFileSuggestion([
+                    'type' => Felamimail_Model_MessageFileSuggestion::TYPE_FILE_LOCATION,
+                    'record' => $referenceLocations,
+                    'model' => get_class($referenceLocations),
+                ]));
+            }
+        }
+
+        return $suggestions;
+    }
 }

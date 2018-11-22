@@ -830,6 +830,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get message headers
      * 
      * @param string|Felamimail_Model_Message $_messageId
+     * @param int $_partId
      * @param boolean $_readOnly
      * @return array
      * @throws Felamimail_Exception_IMAPMessageNotFound
@@ -1251,5 +1252,53 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // TODO use HTMLpurifier?
 
         return $message;
+    }
+
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getSenderContactsOfMessage($message)
+    {
+        $contactFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class,
+            [
+                ['field' => 'email_query', 'operator' => 'contains', 'value' => $message->from_email]
+            ]
+        );
+        return Addressbook_Controller_Contact::getInstance()->search($contactFilter);
+    }
+
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return array|Tinebase_Record_RecordSet
+     */
+    public function getRecipientContactsOfMessage(Felamimail_Model_Message $message)
+    {
+        $emailAddresses = [];
+        // fetch and sanitize email addresses
+        foreach (['to', 'cc', 'bcc'] as $type) {
+            if (isset($message->{$type})) {
+                foreach ($message->{$type} as $recipient) {
+                    $converted = Felamimail_Message::convertAddresses($recipient);
+                    $emailAddresses = array_merge($emailAddresses, $converted);
+                }
+            }
+        }
+        $emailAddressesFiltered = array_map(function($address) {
+            return $address['email'];
+        }, $emailAddresses);
+
+        $contactFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    ['field' => 'email', 'operator' => 'in', 'value' => $emailAddressesFiltered],
+                    ['field' => 'email_home', 'operator' => 'in', 'value' => $emailAddressesFiltered],
+                ]
+            ]
+        ]);
+        return Addressbook_Controller_Contact::getInstance()->search($contactFilter);
     }
 }

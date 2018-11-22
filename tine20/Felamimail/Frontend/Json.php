@@ -645,6 +645,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * returns eml node converted to Felamimail message
+     *
      * @param $nodeId
      * @return array
      */
@@ -652,5 +654,27 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId);
         return $this->_recordToJson($message);
+    }
+
+    /**
+     * fetch suggestions for filing places for given message / recipients / ...
+     *
+     * @param array $message
+     * @return array
+     */
+    public function getFileSuggestions($message)
+    {
+        $suggestions = Felamimail_Controller_Message_File::getInstance()->getFileSuggestions(
+            new Felamimail_Model_Message($message), true
+        );
+        $result = [];
+        foreach ($suggestions as $suggestion) {
+            $result[] = [
+                'type' => $suggestion->type,
+                'model' => $suggestion->model,
+                'record' => $this->_recordToJson($suggestion->record),
+            ];
+        }
+        return $result;
     }
 }

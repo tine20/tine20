@@ -1533,8 +1533,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'record':
-                $this->_filterModel[$fieldKey]['options']['controller']  = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Controller');
-                $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
+                if (isset($this->_filterModel[$fieldKey]['options'])) {
+                    $this->_filterModel[$fieldKey]['options']['controller'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Controller');
+                    $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
+                } else {
+                    break;
+                }
             case 'records':
                 $fieldDef['config']['recordClassName']     = isset($fieldDef['config']['recordClassName'])     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
                 $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');

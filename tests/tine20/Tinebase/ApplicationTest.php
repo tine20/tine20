@@ -324,6 +324,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Felamimail_Model_PreparedMessagePart::class,
                 Felamimail_Model_Message::class,
                 Felamimail_Model_MessageFileLocation::class,
+                Felamimail_Model_MessageFileSuggestion::class,
                 Felamimail_Model_Folder::class,
             ),
             'Filemanager' => array(
