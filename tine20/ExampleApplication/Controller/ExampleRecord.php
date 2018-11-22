@@ -23,14 +23,20 @@ class ExampleApplication_Controller_ExampleRecord extends Tinebase_Controller_Re
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'ExampleApplication';
-        $this->_backend = new ExampleApplication_Backend_ExampleRecord();
-        $this->_modelName = 'ExampleApplication_Model_ExampleRecord';
-        $this->_purgeRecords = FALSE;
+        $this->_modelName = ExampleApplication_Model_ExampleRecord::class;
+        $this->_backend = new Tinebase_Backend_Sql(array(
+            'modelName' => $this->_modelName,
+            'tableName' => 'example_application_record',
+            'modlogActive' => true
+        ));
+
+        $this->_purgeRecords = false;
+        $this->_resolveCustomFields = true;
         // activate this if you want to use containers
-        $this->_doContainerACLChecks = FALSE;
-        $this->_resolveCustomFields = TRUE;
+        $this->_doContainerACLChecks = false;
     }
     
     /**
