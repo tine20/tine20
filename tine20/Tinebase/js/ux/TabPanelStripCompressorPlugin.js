@@ -53,6 +53,8 @@ Ext.ux.TabPanelStripCompressorPlugin.prototype = {
         active = this.tabpanel.strip.down('li.x-tab-strip-active');
         if (active) {
             Ext.fly(active).child('.x-tab-strip-inner', true).style.width = 'auto';
+            var w = Ext.fly(active).child('.x-tab-strip-inner').getWidth();
+            Ext.fly(active).child('.x-tab-strip-inner', true).style.width = w + 'px';
         }
 
         var count = this.tabpanel.items.length,
