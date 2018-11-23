@@ -432,6 +432,8 @@ class Setup_Controller
     /**
      * updates installed applications. does nothing if no applications are installed
      *
+     * applications is legacy, we always update all installed applications
+     *
      * @param Tinebase_Record_RecordSet $_applications
      * @return  array   messages
      * @throws Tinebase_Exception
@@ -447,6 +449,107 @@ class Setup_Controller
             $_applications = Tinebase_Application::getInstance()->getApplications();
         }
 
+        // TODO remove this in Version 13
+        //return array(
+        //            'messages' => $messages,
+        //            'updated'  => $this->_updatedApplications,
+        //        );
+        $result = $this->_legacyUpdateApplications($_applications);
+        $iterationCount = 0;
+
+        do {
+            $updatesByPrio = [];
+            $minMajor = null;
+            /** @var Tinebase_Model_Application $application */
+            foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+                /** @var Setup_Update_Abstract $class */
+                if (null === $minMajor || $application->getMajorVersion() < $minMajor) {
+                    $minMajor = $application->getMajorVersion();
+                }
+            }
+
+            foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+                if ($application->getMajorVersion() > $minMajor) continue;
+
+                /** @var Setup_Update_Abstract $class */
+                $class = $application->name . '_Setup_Update_' . $application->getMajorVersion();
+                if (class_exists($class)) {
+                    $updates = $class::getAllUpdates();
+                    $allUpdates = [];
+                    foreach ($updates as $prio => $byPrio) {
+                        foreach ($byPrio as &$update) {
+                            $update['prio'] = $prio;
+                        }
+                        unset($update);
+                        $allUpdates += $byPrio;
+                    }
+                    $appUpdates = Tinebase_Application::getInstance()->getApplicationState($application->getId(),
+                        Tinebase_Model_Application::STATE_UPDATES);
+                    if (null !== $appUpdates && $appUpdates = json_decode($appUpdates, true)) {
+                        $allUpdates = array_diff_key($allUpdates, $appUpdates);
+                    }
+                    if (!empty($allUpdates)) {
+                        ++$result['updated'];
+                    }
+                    foreach ($allUpdates as $update) {
+                        if (!isset($updatesByPrio[$update['prio']])) {
+                            $updatesByPrio[$update['prio']] = [];
+                        }
+                        $updatesByPrio[$update['prio']][] = $update;
+                    }
+                }
+            }
+
+            if (empty($updatesByPrio)) {
+                return $result;
+            }
+
+            ksort($updatesByPrio);
+            $db = Setup_Core::getDb();
+            $classes = [];
+
+            try {
+                $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());
+
+                foreach ($updatesByPrio as $prio => $updates) {
+                    foreach ($updates as $update) {
+                        $className = $update[Setup_Update_Abstract::CLASS_CONST];
+                        $functionName = $update[Setup_Update_Abstract::FUNCTION_CONST];
+                        if (!isset($classes[$className])) {
+                            $classes[$className] = new $className($this->_backend);
+                        }
+                        $class = $classes[$className];
+
+                        try {
+                            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                . ' Updating ' . $className . '::' . $functionName
+                            );
+
+                            $class->$functionName();
+
+                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+                        } catch (Exception $e) {
+                            Tinebase_TransactionManager::getInstance()->rollBack();
+                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                            throw $e;
+                        }
+                    }
+                }
+
+            } finally {
+                $this->_cleanUpUpdate();
+            }
+        } while (++$iterationCount < 5);
+
+        throw new Tinebase_Exception('endless update loop');
+    }
+
+    protected function _legacyUpdateApplications(Tinebase_Record_RecordSet $_applications = null)
+    {
         // we need to clone here because we would taint the app cache otherwise
         $applications = clone($_applications);
 
@@ -611,8 +714,7 @@ class Setup_Controller
 
                         $classMethods = get_class_methods($update);
 
-                        // we must do at least one update
-                        do {
+                        while (array_search('update_' . $minor, $classMethods) !== false) {
                             $functionName = 'update_' . $minor;
 
                             try {
@@ -635,7 +737,7 @@ class Setup_Controller
                             }
 
                             $minor++;
-                        } while (array_search('update_' . $minor, $classMethods) !== false);
+                        }
                     } finally {
                         $this->_cleanUpUpdate();
                     }
@@ -689,6 +791,7 @@ class Setup_Controller
     /**
      * TODO should be removed at some point
      */
+    // TODO remove in Release 12
     protected function _fixTinebase10_33()
     {
         // check and execute \Tinebase_Setup_Update_Release10::update_32 if not done yet :-/
@@ -749,6 +852,7 @@ class Setup_Controller
         // set action to direct
         Tinebase_ActionQueue::getInstance('Direct');
 
+        // TODO remove in Release 12
         $this->_fixTinebase10_33();
 
         $roleController = Tinebase_Acl_Roles::getInstance();
