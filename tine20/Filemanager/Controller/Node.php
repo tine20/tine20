@@ -300,7 +300,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
     {
         /** @var Tinebase_Model_Tree_Node $record */
-        $record = parent::get($_id, $_getRelatedData, $_getDeleted);
+        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
 
         $this->_backend->checkPathACL($nodePath, 'get');

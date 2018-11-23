@@ -2508,7 +2508,8 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
             $cont = false;
             $stmt = $this->_db->select()->from(['n1' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.id')
                 ->join(['n2' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.parent_id = n2.parent_id AND '.
-                    'n1.name = n2.name AND n1.id <> n2.id AND n1.deleted_time IS NULL AND n2.deleted_time IS NULL',
+                    'n1.name = n2.name AND n1.id <> n2.id AND (n1.deleted_time IS NULL OR n1.deleted_time =
+                    "1970-01-01 00:00:00") AND (n2.deleted_time IS NULL OR n2.deleted_time = "1970-01-01 00:00:00")',
                     ['id2' => 'n2.id'])->limit(1000)->query();
 
             if ($doSleep) sleep(1);
