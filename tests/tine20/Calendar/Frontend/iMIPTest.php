@@ -169,6 +169,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $_doAutoProcess = true)
     {
         $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/' . $icsFilename);
+        $ics = preg_replace('#\d{8}T#', Tinebase_DateTime::now()->addDay(1)->format('Ymd') . 'T', $ics);
+
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
@@ -432,15 +434,12 @@ class Calendar_Frontend_iMIPTest extends TestCase
         }
         
         // assert REPLY message to organizer only
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
-        if (isset($smtpConfig->from) && ! empty($smtpConfig->from)) {
-            $messages = Calendar_Controller_EventNotificationsTests::getMessages();
-            $this->assertEquals(1, count($messages), 'exactly one mail should be send');
-            $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
-            $this->assertContains('accepted', $messages[0]->getSubject(), 'wrong subject');
-            $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
-            $this->assertContains('SEQUENCE:0', var_export($messages[0], TRUE), 'external sequence has not been keepted');
-        }
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertEquals(1, count($messages), 'exactly one mail should be send');
+        $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
+        $this->assertContains('accepted', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
+        $this->assertContains('SEQUENCE:0', var_export($messages[0], TRUE), 'external sequence has not been keepted');
     }
     
     /**
@@ -802,27 +801,61 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     public function testExternalInvitationRescheduleOutlook()
     {
+        // initial invitation
         $iMIP = $this->_testExternalImap('outlook_invitation.ics',
             3, 'Metaways Folgetermin ');
         $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
         $this->_eventIdsToDelete[] = $eventId = $iMIP->event->getId();
 
-        $ics = file_get_contents(dirname(__FILE__) . '/files/outlook_reschedule.ics');
+
+        // reschedule/reply first user
+        Calendar_Controller_EventNotificationsTests::flushMailer();
+        $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/outlook_reschedule.ics');
+        $ics = preg_replace('/20170816/', Tinebase_DateTime::now()->addDay(2)->format('Ymd'), $ics);
         $iMIP = new Calendar_Model_iMIP(array(
             'id' => Tinebase_Record_Abstract::generateUID(),
             'ics' => $ics,
             'method' => 'REQUEST',
             'originator' => 'l.kneschke@caldav.org',
         ));
-        // TEST REQUEST
-        try {
-            $this->_iMIPFrontend->autoProcess($iMIP);
-        } catch (Exception $e) {
-            $this->fail('TEST REQUEST autoProcess throws Exception: ' . $e);
-        }
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_TENTATIVE);
         unset($iMIP->existing_event);
 
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($eventId);
-        $this->assertEquals('2017-08-16 09:00:00',$updatedEvent->dtstart->toString());
+        $this->assertEquals(Tinebase_DateTime::now()->addDay(2)->format('Y-m-d') . ' 11:00:00',
+            $updatedEvent->dtstart->setTimezone($updatedEvent->originator_tz)->toString());
+
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertEquals(1, count($messages), 'exactly one mail should be send');
+        $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
+        $this->assertContains('Tentative response', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
+        $this->assertContains('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
+
+
+        // reply from second internal attendee
+        Calendar_Controller_EventNotificationsTests::flushMailer();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Calendar_Model_Attender::clearCache();
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id' => Tinebase_Record_Abstract::generateUID(),
+            'ics' => $ics,
+            'method' => 'REQUEST',
+            'originator' => 'l.kneschke@caldav.org',
+        ));
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_DECLINED);
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertEquals(1, count($messages), 'exactly one mail should be send');
+        $this->assertContains('Clever, Susan declined event', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertContains('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
+
+        // try outdated imip
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
+        try {
+            $iMIP = $this->_testExternalImap('outlook_invitation.ics',
+                3, 'Metaways Folgetermin ');
+        } catch (Calendar_Exception_iMIP $preconditionException) {}
+        $this->assertContains('RECENT', $preconditionException->getMessage());
+
     }
 }

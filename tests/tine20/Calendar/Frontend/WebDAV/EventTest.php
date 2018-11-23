@@ -209,6 +209,9 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
 
     public function testUpdateOldEvent()
     {
+        Calendar_Controller_Event::getInstance()->sendNotifications(true);
+
+        self::flushMailer();
         if (!empty($_SERVER['HTTP_USER_AGENT'])) {
             $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
         }
@@ -216,6 +219,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
 
         $vcalendar = self::getVCalendar(__DIR__ . '/../files/invitation_request_external_2internals.ics');
+        $vcalendar = preg_replace('/20181020/', Tinebase_DateTime::now()->addDay(1)->format('Ymd'), $vcalendar);
         $id = 'e679217e8c3f89e8ca55779f70f9940e6689ed98';
         $targetContainer = $this->objects['initialContainer'];
         $event = Calendar_Frontend_WebDAV_Event::create($targetContainer, "$id.ics", $vcalendar);
@@ -231,16 +235,20 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status);
         static::assertEquals('1', $record->seq, 'tine20 seq starts with 1');
         static::assertEquals('1', $record->external_seq, 'external seq: 1');
-        static::assertSame('1300', $record->dtstart->format('Hi'));
+        static::assertSame('1500', $record->dtstart->setTimezone($record->originator_tz)->format('Hi'));
         static::assertCount(3, $resolvedAttendees, '3 attendees expected');
         foreach ($resolvedAttendees as $attendee) {
             static::assertTrue(in_array($attendee->user_id->account_id, [Tinebase_Core::getUser()->getId(),
                     $this->_personas['sclever']->getId(), null]), 'unexpected attendee');
         }
         static::assertTrue($record->hasExternalOrganizer(), 'should have external organizer');
+        static::assertEquals(1, count(self::getMessages()));
+        static::assertContains('accepted event "Hi12"', self::getMessages()[0]->getSubject());
 
 
+        self::flushMailer();
         $vcalendar = self::getVCalendar(__DIR__ . '/../files/invitation_accepted_by_internal1.ics');
+        $vcalendar = preg_replace('/20181020/', Tinebase_DateTime::now()->addDay(1)->format('Ymd'), $vcalendar);
         $event = Calendar_Frontend_WebDAV_Event::create($targetContainer, "$id.ics", $vcalendar);
 
         $updated = $event->getRecord();
@@ -254,14 +262,17 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status);
         static::assertEquals('2', $updated->seq, 'tine20 seq starts with 1');
         static::assertEquals('3', $updated->external_seq, 'external seq: 1');
-        static::assertSame('1330', $updated->dtstart->format('Hi'));
+        static::assertSame('1500', $record->dtstart->setTimezone($record->originator_tz)->format('Hi'));
         static::assertCount(3, $resolvedAttendees, '3 attendees expected');
         foreach ($resolvedAttendees as $attendee) {
             static::assertTrue(in_array($attendee->user_id->account_id, [Tinebase_Core::getUser()->getId(),
                 $this->_personas['sclever']->getId(), null]), 'unexpected attendee');
         }
+        static::assertEquals(1, count(self::getMessages()));
+        static::assertContains('accepted event "Hi12"', self::getMessages()[0]->getSubject());
 
 
+        self::flushMailer();
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
         $vcalendar = self::getVCalendar(__DIR__ . '/../files/old_invitation_accepted_by_internal2.ics');
         try {
@@ -271,7 +282,9 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         } catch(Sabre\DAV\Exception\PreconditionFailed $sdepf) {
             static::assertSame('updating existing event with outdated external seq', $sdepf->getMessage());
         }
+        static::assertEquals(0, count(self::getMessages()));
 
+        Calendar_Controller_Event::getInstance()->sendNotifications(false);
         if (isset($oldUserAgent)) {
             $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent;
         }

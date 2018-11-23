@@ -447,13 +447,13 @@ class Calendar_Frontend_iMIP
 
                 $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             } else {
-                if ($event->external_seq > $existingEvent->external_seq && !$_status) {
-                    // no buttons pressed (just reading/updating)
+                if ($event->external_seq > $existingEvent->external_seq) {
                     // updates event with .ics
                     $event->id = $existingEvent->id;
                     $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
                 } else {
-                    $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
+                    // event is current
+                    $event = $existingEvent;
                 }
             }
             
