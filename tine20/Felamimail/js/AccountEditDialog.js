@@ -181,7 +181,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     editable      : false,
                     mode          : 'local',
                     forceSelection: true,
-                    value: 'none',
+                    value: 'tls',
                     xtype: 'combo',
                     store: [
                         ['none', this.app.i18n._('None')],
@@ -222,7 +222,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     lazyRender    : true,
                     editable      : false,
                     mode          : 'local',
-                    value: 'none',
+                    value: 'tls',
                     xtype: 'combo',
                     store: [
                         ['none', this.app.i18n._('None')],
@@ -277,7 +277,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     lazyRender    : true,
                     editable      : false,
                     mode          : 'local',
-                    value: 'none',
+                    value: 'tls',
                     xtype: 'combo',
                     store: [
                         ['none', this.app.i18n._('None')],
