@@ -784,4 +784,10 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $ics = $this->_converter->fromTine20Model($savedEvent);
         self::assertContains('UID:5aaratdeecgjat4cbjpif5dvms@google', $ics->serialize());
     }
+
+    public function testExternalInvitationSeqBeforeOrganizer()
+    {
+        $event = $this->_convertHelper(__DIR__ . '/../../../Frontend/files/external_invitation_seq_before_organizer.ics');
+        $this->assertEquals(2, $event->external_seq);
+    }
 }
