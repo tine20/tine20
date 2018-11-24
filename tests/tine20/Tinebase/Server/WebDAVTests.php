@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -187,16 +187,13 @@ EOS
         ob_start();
         
         $server = new Tinebase_Server_WebDAV();
-        
+
         $server->handle($request, $body);
-        
+
         $result = ob_get_contents();
-        
+
         ob_end_clean();
 
-        //print_r($request->getHeader('HTTP_AUTHORIZATION'));
-        //print_r($request->getHeaders());
-        
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30), $result);
     }
     
