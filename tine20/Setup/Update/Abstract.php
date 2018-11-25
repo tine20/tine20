@@ -20,6 +20,7 @@ class Setup_Update_Abstract
     const CLASS_CONST = 'class';
     const FUNCTION_CONST = 'function';
 
+    const PRIO_TB_STRUCT_UPDATE = 100;
     const PRIO_NORMAL_APP_UPDATE = 1000;
 
     /**
@@ -155,7 +156,7 @@ class Setup_Update_Abstract
         $stmt = $select->query();
         $rows = $stmt->fetchAll();
 
-        $result = (count($rows) > 0 && isset($rows[0]['version'])) ? $rows[0]['version'] : 0;
+        $result = (count($rows) > 0 && isset($rows[0]['version'])) ? (int)$rows[0]['version'] : 0;
         
         return $result;
     }
