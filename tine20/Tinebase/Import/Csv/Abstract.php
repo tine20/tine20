@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -147,10 +147,19 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     {
         $data = array();
         $_data_indexed = array();
+
+        if (! $_data) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Got empty raw data - skipping.');
+            return $data;
+        }
         
         if (! empty($this->_headline)) {
             if (sizeof($this->_headline) != sizeof($_data)) {
-                $_data = array_merge($_data, array_fill(sizeof($_data), sizeof($this->_headline)-sizeof($_data), ''));
+                $arrayWithEmptyValues = array_fill(sizeof($_data), sizeof($this->_headline)-sizeof($_data), '');
+                if (is_array($arrayWithEmptyValues)) {
+                    $_data = array_merge($_data, $arrayWithEmptyValues);
+                }
             }
             $_data_indexed = array_combine($this->_headline, $_data);
         }
