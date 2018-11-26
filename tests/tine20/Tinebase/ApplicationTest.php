@@ -343,7 +343,8 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_FreeDay::class,
                 HumanResources_Model_WorkingTime::class,
                 HumanResources_Model_FreeTime::class,
-                HumanResources_Model_Break::class
+                HumanResources_Model_Break::class,
+                HumanResources_Model_DailyWTReport::class,
             ),
             'Inventory' => array(
                 Inventory_Model_Status::class,

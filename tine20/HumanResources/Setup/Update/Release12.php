@@ -29,4 +29,10 @@ class HumanResources_Setup_Update_Release12 extends Setup_Update_Abstract
         $this->updateSchema('HumanResources', array('HumanResources_Model_WorkingTime', 'HumanResources_Model_Break'));
         $this->setApplicationVersion('HumanResources', '12.3');
     }
+
+    public function update_3()
+    {
+        $this->updateSchema('HumanResources', array(HumanResources_Model_DailyWTReport::class));
+        $this->setApplicationVersion('HumanResources', '12.4');
+    }
 }

@@ -1138,6 +1138,22 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employeeJson = $this->_json->saveEmployee($employeeJson);
         $this->assertEquals($id, $employeeJson['contracts'][0]['id']);
     }
+
+    public function testDailyWtReportApi()
+    {
+        // TODO create should not be possible via API?
+        // TODO create via controller/backend?
+        // TODO disallow to edit when clearance is set?
+
+        $this->_testSimpleRecordApi(
+            'DailyWTReport',
+            null,
+            null,
+            true,
+            [],
+            false
+        );
+    }
     
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10176
