@@ -211,7 +211,7 @@ class Tinebase_CoreTest extends TestCase
                 'account_id',
             ],
             // this is 2017.11 only, can be ignored
-            SQL_TABLE_PREFIX . 'tine20_async_job' => [
+            SQL_TABLE_PREFIX . 'async_job' => [
                 'name',
                 'seq',
             ],
