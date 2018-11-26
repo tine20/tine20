@@ -68,6 +68,8 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
         'appName'           => 'Sales',
         'modelName'         => 'Invoice',
 
+        'exposeHttpApi'     => true,
+
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
         
         'filterModel' => array(

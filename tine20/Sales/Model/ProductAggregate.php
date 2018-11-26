@@ -46,6 +46,8 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         'createModule'      => FALSE,
         'containerProperty' => NULL,
         'isDependent'       => TRUE,
+
+        'exposeHttpApi'     => true,
         
         'titleProperty'     => 'product_id.name',
         'appName'           => 'Sales',

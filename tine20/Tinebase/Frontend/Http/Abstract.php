@@ -264,21 +264,41 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
             switch ($apiMethod) {
                 case 'export':
-                    $decodedFilter = $this->_prepareParameter($args[0]);
-                    $decodedOptions = $this->_prepareParameter($args[1]);
-
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' Export filter: ' . print_r($decodedFilter, true)
-                        . ' Options: ' . print_r($decodedOptions, true));
+                    $decodedParams = $this->_getDecodedFilterAndOptions($args[0], $args[1]);
 
                     $modelName = $this->_applicationName . '_Model_' . $model;
                     $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
-                    $filter->setFromArrayInUsersTimezone($decodedFilter);
+                    $filter->setFromArrayInUsersTimezone($decodedParams['filter']);
 
-                    return $this->_export($filter, $decodedOptions, $modelController);
+                    return $this->_export($filter, $decodedParams['options'], $modelController);
                     break;
             }
         }
+    }
+
+    /**
+     * @param string $filterString
+     * @param string $optionsString
+     * @return array
+     */
+    protected function _getDecodedFilterAndOptions($filterString, $optionsString)
+    {
+        $decodedFilter = Tinebase_Helper::is_json($filterString) ? $this->_prepareParameter($filterString) : $filterString;
+        $decodedOptions = $this->_prepareParameter($optionsString);
+
+        if (empty($decodedFilter) && isset($decodedOptions['recordData']['id'])) {
+            // get contact id from $decodedOptions
+            $decodedFilter = $decodedOptions['recordData']['id'];
+        }
+
+        if (! is_array($decodedFilter)) {
+            $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
+        }
+
+        return [
+            'filter' => $decodedFilter,
+            'options' => $decodedOptions,
+        ];
     }
 
     /**
