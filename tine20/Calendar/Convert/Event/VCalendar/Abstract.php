@@ -825,16 +825,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     
                     break;
                     
-                case 'SEQUENCE':
-                    if (!$event->hasExternalOrganizer()) {
-                        if (!isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
-                            $event->seq = $property->getValue();
-                        }
-                    } else {
-                        $event->external_seq = $property->getValue();
-                    }
-                    break;
-                    
                 case 'DESCRIPTION':
                 case 'LOCATION':
                 case 'SUMMARY':
@@ -1088,6 +1078,18 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] += $imipProps;
             } else {
                 $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] = $imipProps;
+            }
+        }
+
+        // evaluate seq after organizer is parsed
+        if ($vevent->SEQUENCE) {
+            $seq = $vevent->SEQUENCE->getValue();
+            if (!$event->hasExternalOrganizer()) {
+                if (!isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
+                    $event->seq = $seq;
+                }
+            } else {
+                $event->external_seq = $seq;
             }
         }
 

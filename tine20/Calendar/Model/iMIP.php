@@ -185,8 +185,18 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
             if (! $this->ics) {
                 throw new Tinebase_Exception_Record_NotDefined('ics is needed to generate event');
             }
-            
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " Incoming iMIP ics \n"
+                    . $this->ics);
+            }
+
             $this->event = $this->_getConverter()->toTine20Model($this->ics);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Event: ' . print_r($this->event->toArray(), true));
+            }
             
             if (! $this->_properties['method']) {
                 $this->method = $this->_getConverter()->getMethod($this->ics);
