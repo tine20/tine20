@@ -46,6 +46,8 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
         'titleProperty'     => 'fulltext',
         'appName'           => 'Sales',
         'modelName'         => 'Supplier',
+
+        'exposeHttpApi'     => true,
         
         'fieldGroups'       => array(
             'core'       => 'Core Data',     // _('Core Data')
