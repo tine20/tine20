@@ -28,11 +28,6 @@ class Calendar_Frontend_iMIP
      */
     public function autoProcess(Calendar_Model_iMIP $_iMIP, $_retry = true)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . ' Incoming iMIP ics'
-                . print_r($_iMIP->toArray(), true));
-        }
-
         if ($_iMIP->method == Calendar_Model_iMIP::METHOD_COUNTER) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
                 __METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component with COUNTER method "
@@ -119,11 +114,6 @@ class Calendar_Frontend_iMIP
             } else {
                 throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
             }
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $_iMIP->event instanceof Calendar_Model_Event) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Event: ' . print_r($_iMIP->event->toArray(), true));
         }
         
         $method = $_iMIP->method ? ucfirst(strtolower($_iMIP->method)) : 'MISSINGMETHOD';
