@@ -11,7 +11,7 @@
  */
 class Addressbook_Setup_Update_10 extends Setup_Update_Abstract
 {
-    const RELEASE010_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE010_UPDATE006 = 'release010::update006';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [

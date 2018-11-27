@@ -11,7 +11,7 @@
  */
 class Tinebase_Setup_Update_10 extends Setup_Update_Abstract
 {
-    const RELEASE010_UPDATE059 = __CLASS__ . '::update059';
+    const RELEASE010_UPDATE059 = 'release010::update059';
 
     static protected $_allUpdates = [
         self::PRIO_TB_STRUCT_UPDATE         => [

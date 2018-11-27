@@ -490,11 +490,11 @@ class Setup_Controller
                         if (!empty($allUpdates)) {
                             ++$result['updated'];
                         }
-                        foreach ($allUpdates as $key => $update) {
+                        foreach ($allUpdates as $update) {
                             if (!isset($updatesByPrio[$update['prio']])) {
                                 $updatesByPrio[$update['prio']] = [];
                             }
-                            $updatesByPrio[$update['prio']][$key] = $update;
+                            $updatesByPrio[$update['prio']][] = $update;
                         }
                     }
                 }

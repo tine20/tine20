@@ -9,13 +9,13 @@
  * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
-class ExampleApplication_Setup_Update_10 extends Setup_Update_Abstract
+class ExampleApplication_Setup_Update_1 extends Setup_Update_Abstract
 {
-    const RELEASE010_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE001_UPDATE001 = 'release001::update001';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
-            self::RELEASE010_UPDATE001          => [
+            self::RELEASE001_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
             ],
@@ -25,6 +25,6 @@ class ExampleApplication_Setup_Update_10 extends Setup_Update_Abstract
 
     public function update001()
     {
-        $this->addApplicationUpdate('ExampleApplication', '10.0', self::RELEASE010_UPDATE001);
+        $this->addApplicationUpdate('ExampleApplication', '10.0', self::RELEASE001_UPDATE001);
     }
 }
