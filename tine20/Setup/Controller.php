@@ -433,7 +433,6 @@ class Setup_Controller
      *
      * applications is legacy, we always update all installed applications
      *
-     * TODO remove applications param
      * @param Tinebase_Record_RecordSet $_applications
      * @return  array   messages
      * @throws Tinebase_Exception
@@ -444,39 +443,20 @@ class Setup_Controller
             throw new Tinebase_Exception('could not create setup user');
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
-        $result = [
-            'messages' => [],
-            'updated'  => 0,
-        ];
+
+        if ($_applications === null) {
+            $_applications = Tinebase_Application::getInstance()->getApplications();
+        }
 
         // TODO remove this in Version 13
-        $maxLoops = 50;
-        do {
-            $applications = Tinebase_Application::getInstance()->getApplications();
-            foreach ($applications as $key => $application) {
-                try {
-                    if (! Setup_Controller::getInstance()->updateNeeded($application)) {
-                        unset($applications[$key]);
-                    }
-                } catch (Setup_Exception_NotFound $e) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' Failed to check if an application needs an update:' . $e->getMessage());
-                    unset($applications[$key]);
-                }
-            }
-            $tmpResult = $this->_legacyUpdateApplications($applications);
-            $result['updated'] += $tmpResult['updated'];
-            $result['messages'] = array_merge($result['messages'], $tmpResult['messages']);
-            Tinebase_Core::getCache()->clean();
-            Tinebase_Cache_PerRequest::getInstance()->reset();
-            Tinebase_Application::destroyInstance();
-            $maxLoops--;
-        } while (isset($tmpResult['updated']) && $tmpResult['updated'] > 0 && $maxLoops > 0);
-        if (0 === $maxLoops) {
-            throw new Tinebase_Exception('endless update loop');
-        }
-        // TODO end removal
-        
+        //return array(
+        //            'messages' => $messages,
+        //            'updated'  => $this->_updatedApplications,
+        //        );
+        $result = $this->_legacyUpdateApplications($_applications);
+        Tinebase_Core::getCache()->clean();
+        Tinebase_Cache_PerRequest::getInstance()->reset();
+        Tinebase_Application::destroyInstance();
         $iterationCount = 0;
 
         do {
@@ -767,11 +747,9 @@ class Setup_Controller
                 
                 // update app version
                 $updatedApp = Tinebase_Application::getInstance()->getApplicationById($_application->getId());
-                if ($_application->version != $updatedApp->version) {
-                    $_application->version = $updatedApp->version;
-                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " . $_application->version);
-                    $this->_updatedApplications++;
-                }
+                $_application->version = $updatedApp->version;
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " .  $_application->version);
+                $this->_updatedApplications++;
                 
                 break;
                 
