@@ -489,7 +489,6 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        // TODO remove this loop in Release 13
         $maxLoops = 50;
         do {
             $result = $this->_updateApplications();
@@ -534,9 +533,14 @@ class Setup_Frontend_Cli
             }
         }
 
-        $result = $controller->updateApplications($applications);
-        echo "Updated " . $result['updated'] . " application(s).\n";
-
+        $result = array();
+        if (count($applications) > 0) {
+            $result = $controller->updateApplications($applications);
+            echo "Updated " . $result['updated'] . " application(s).\n";
+        } else {
+            $result['updated'] = 0;
+        }
+        
         return $result;
     }
 

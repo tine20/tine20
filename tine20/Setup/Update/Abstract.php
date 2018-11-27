@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Update
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -17,11 +17,6 @@
  */
 class Setup_Update_Abstract
 {
-    const CLASS_CONST = 'class';
-    const FUNCTION_CONST = 'function';
-
-    const PRIO_NORMAL_APP_UPDATE = 1000;
-
     /**
      * backend for databse handling and extended database queries
      *
@@ -44,8 +39,6 @@ class Setup_Update_Abstract
      */
     protected $_isReplicationMaster = null;
 
-    protected static $_allUpdates = [];
-
     /** 
      * the constructor
      *
@@ -56,12 +49,7 @@ class Setup_Update_Abstract
         $this->_backend = $_backend;
         $this->_db = Tinebase_Core::getDb();
     }
-
-    public static function getAllUpdates()
-    {
-        return static::$_allUpdates;
-    }
-
+    
     /**
      * get version number of a given application 
      * version is stored in database table "applications"
@@ -107,24 +95,6 @@ class Setup_Update_Abstract
         $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
         $application->version = $_version;
         
-        return Tinebase_Application::getInstance()->updateApplication($application);
-    }
-
-    /**
-     * adds the update key to the application state, marking when and that it run
-     *
-     * @param string $_applicationName
-     * @param string $_version new version number
-     * @param string $_updateKey update key to add to application state
-     * @return Tinebase_Model_Application
-     */
-    public function addApplicationUpdate($_applicationName, $_version, $_updateKey)
-    {
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
-        $application->version = $_version;
-        $application->xprops('state')[Tinebase_Model_Application::STATE_UPDATES][$_updateKey] = Tinebase_DateTime::now()
-            ->format(Tinebase_Record_Abstract::ISO8601LONG);
-
         return Tinebase_Application::getInstance()->updateApplication($application);
     }
     

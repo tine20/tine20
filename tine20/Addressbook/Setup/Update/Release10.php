@@ -115,4 +115,12 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Addressbook', '10.6');
     }
+
+    public function update_6()
+    {
+        if ($this->getTableVersion('addressbook_lists') == 25) {
+            $this->setTableVersion('addressbook_lists', 6);
+        }
+        $this->setApplicationVersion('Addressbook', '10.7');
+    }
 }

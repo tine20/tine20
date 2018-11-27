@@ -2,7 +2,7 @@
 <application>
     <name>ExampleApplication</name>
     <!-- gettext('ExampleApplication') -->   
-    <version>10.0</version>
+    <version>1.0</version>
     <order>60</order>
     <status>enabled</status>
 </application>
