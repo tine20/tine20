@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -164,6 +164,9 @@ class Tinebase_CoreTest extends TestCase
 
         // TODO we should fix most of them! either the index should not be unique or we need to fix it
         $whiteListed = [
+            SQL_TABLE_PREFIX . 'roles' => [
+                'deleted_time',
+            ],
             SQL_TABLE_PREFIX . 'tree_nodes' => [
                 'parent_id',
             ],

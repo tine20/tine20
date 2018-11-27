@@ -497,17 +497,59 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        $result = Setup_Controller::getInstance()->updateApplications();
-        echo "Updated " . $result['updated'] . " application(s).\n";
-
-        if ($_opts->v && ! empty($result['messages'])) {
-            echo "Messages:\n";
-            foreach ($result['messages'] as $message) {
-                echo "  " . $message . "\n";
+        $maxLoops = 50;
+        do {
+            $result = $this->_updateApplications();
+            if ($_opts->v && ! empty($result['messages'])) {
+                echo "Messages:\n";
+                foreach ($result['messages'] as $message) {
+                    echo "  " . $message . "\n";
+                }
             }
+            $maxLoops--;
+        } while (isset($result['updated']) && $result['updated'] > 0 && $maxLoops > 0);
+        
+        return ($maxLoops > 0) ? 0 : 1;
+    }
+    
+    /**
+     * update all applications
+     * 
+     * @return array
+     */
+    protected function _updateApplications()
+    {
+        $controller = Setup_Controller::getInstance();
+        try {
+            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                    . ' Could not get applications');
+            Tinebase_Exception::log($e);
+            return array();
         }
         
-        return 0;
+        foreach ($applications as $key => &$application) {
+            try {
+                if (! $controller->updateNeeded($application)) {
+                    unset($applications[$key]);
+                }
+            } catch (Setup_Exception_NotFound $e) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' Failed to check if an application needs an update:' . $e->getMessage());
+                unset($applications[$key]);
+            }
+        }
+
+        $result = array();
+        if (count($applications) > 0) {
+            $result = $controller->updateApplications($applications);
+            echo "Updated " . $result['updated'] . " application(s).\n";
+        } else {
+            $result['updated'] = 0;
+        }
+        
+        return $result;
     }
 
     /**
