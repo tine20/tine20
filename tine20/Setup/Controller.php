@@ -432,9 +432,6 @@ class Setup_Controller
     /**
      * updates installed applications. does nothing if no applications are installed
      *
-     * applications is legacy, we always update all installed applications
-     *
-     * TODO remove applications param
      * @param Tinebase_Record_RecordSet $_applications
      * @return  array   messages
      * @throws Tinebase_Exception
@@ -445,136 +442,11 @@ class Setup_Controller
             throw new Tinebase_Exception('could not create setup user');
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
-        $result = [
-            'messages' => [],
-            'updated'  => 0,
-        ];
 
-        // TODO remove this in Version 13
-        $maxLoops = 50;
-        do {
-            $applications = Tinebase_Application::getInstance()->getApplications();
-            foreach ($applications as $key => $application) {
-                try {
-                    if (! Setup_Controller::getInstance()->updateNeeded($application)) {
-                        unset($applications[$key]);
-                    }
-                } catch (Setup_Exception_NotFound $e) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' Failed to check if an application needs an update:' . $e->getMessage());
-                    unset($applications[$key]);
-                }
-            }
-            $tmpResult = $this->_legacyUpdateApplications($applications);
-            $result['updated'] += $tmpResult['updated'];
-            $result['messages'] = array_merge($result['messages'], $tmpResult['messages']);
-            Tinebase_Core::getCache()->clean();
-            Tinebase_Cache_PerRequest::getInstance()->reset();
-            Tinebase_Application::destroyInstance();
-            $maxLoops--;
-        } while (isset($tmpResult['updated']) && $tmpResult['updated'] > 0 && $maxLoops > 0);
-        if (0 === $maxLoops) {
-            throw new Tinebase_Exception('endless update loop');
+        if ($_applications === null) {
+            $_applications = Tinebase_Application::getInstance()->getApplications();
         }
-        // TODO end removal
-        
-        $iterationCount = 0;
 
-        do {
-            $updatesByPrio = [];
-            $minMajor = null;
-            /** @var Tinebase_Model_Application $application */
-            foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
-                /** @var Setup_Update_Abstract $class */
-                if (null === $minMajor || (int)$application->getMajorVersion() < $minMajor) {
-                    $minMajor = (int)$application->getMajorVersion();
-                }
-            }
-
-            foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
-                if ((int)$application->getMajorVersion() > $minMajor) continue;
-
-                for ($v = 10; $v <= (int)$application->getMajorVersion(); ++$v) {
-                    /** @var Setup_Update_Abstract $class */
-                    $class = $application->name . '_Setup_Update_' . $v;
-                    if (class_exists($class)) {
-                        $updates = $class::getAllUpdates();
-                        $allUpdates = [];
-                        foreach ($updates as $prio => $byPrio) {
-                            foreach ($byPrio as &$update) {
-                                $update['prio'] = $prio;
-                            }
-                            unset($update);
-                            $allUpdates += $byPrio;
-                        }
-                        $appUpdates = Tinebase_Application::getInstance()->getApplicationState($application->getId(),
-                            Tinebase_Model_Application::STATE_UPDATES);
-                        if (null !== $appUpdates && $appUpdates = json_decode($appUpdates, true)) {
-                            $allUpdates = array_diff_key($allUpdates, $appUpdates);
-                        }
-                        if (!empty($allUpdates)) {
-                            ++$result['updated'];
-                        }
-                        foreach ($allUpdates as $key => $update) {
-                            if (!isset($updatesByPrio[$update['prio']])) {
-                                $updatesByPrio[$update['prio']] = [];
-                            }
-                            $updatesByPrio[$update['prio']][$key] = $update;
-                        }
-                    }
-                }
-            }
-
-            if (empty($updatesByPrio)) {
-                return $result;
-            }
-
-            ksort($updatesByPrio);
-            $db = Setup_Core::getDb();
-            $classes = [];
-
-            try {
-                $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());
-
-                foreach ($updatesByPrio as $prio => $updates) {
-                    foreach ($updates as $update) {
-                        $className = $update[Setup_Update_Abstract::CLASS_CONST];
-                        $functionName = $update[Setup_Update_Abstract::FUNCTION_CONST];
-                        if (!isset($classes[$className])) {
-                            $classes[$className] = new $className($this->_backend);
-                        }
-                        $class = $classes[$className];
-
-                        try {
-                            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-
-                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                                . ' Updating ' . $className . '::' . $functionName
-                            );
-
-                            $class->$functionName();
-
-                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-                        } catch (Exception $e) {
-                            Tinebase_TransactionManager::getInstance()->rollBack();
-                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                            throw $e;
-                        }
-                    }
-                }
-
-            } finally {
-                $this->_cleanUpUpdate();
-            }
-        } while (++$iterationCount < 5);
-
-        throw new Tinebase_Exception('endless update loop');
-    }
-
-    protected function _legacyUpdateApplications(Tinebase_Record_RecordSet $_applications = null)
-    {
         // we need to clone here because we would taint the app cache otherwise
         $applications = clone($_applications);
 
@@ -739,7 +611,8 @@ class Setup_Controller
 
                         $classMethods = get_class_methods($update);
 
-                        while (array_search('update_' . $minor, $classMethods) !== false) {
+                        // we must do at least one update
+                        do {
                             $functionName = 'update_' . $minor;
 
                             try {
@@ -762,7 +635,7 @@ class Setup_Controller
                             }
 
                             $minor++;
-                        }
+                        } while (array_search('update_' . $minor, $classMethods) !== false);
                     } finally {
                         $this->_cleanUpUpdate();
                     }
@@ -772,11 +645,9 @@ class Setup_Controller
                 
                 // update app version
                 $updatedApp = Tinebase_Application::getInstance()->getApplicationById($_application->getId());
-                if ($_application->version != $updatedApp->version) {
-                    $_application->version = $updatedApp->version;
-                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " . $_application->version);
-                    $this->_updatedApplications++;
-                }
+                $_application->version = $updatedApp->version;
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $_application->name . " successfully to " .  $_application->version);
+                $this->_updatedApplications++;
                 
                 break;
                 
@@ -818,7 +689,6 @@ class Setup_Controller
     /**
      * TODO should be removed at some point
      */
-    // TODO remove in Release 12
     protected function _fixTinebase10_33()
     {
         // check and execute \Tinebase_Setup_Update_Release10::update_32 if not done yet :-/
@@ -879,7 +749,6 @@ class Setup_Controller
         // set action to direct
         Tinebase_ActionQueue::getInstance('Direct');
 
-        // TODO remove in Release 12
         $this->_fixTinebase10_33();
 
         $roleController = Tinebase_Acl_Roles::getInstance();
@@ -1063,8 +932,8 @@ class Setup_Controller
     {
         $result = array();
         $success = TRUE;
-
-
+        
+        
 
         // check php environment
         $requiredIniSettings = array(

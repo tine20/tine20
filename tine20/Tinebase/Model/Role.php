@@ -129,22 +129,4 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
     {
         return self::convertId($_roleId, 'Tinebase_Model_Role');
     }
-
-    public function runConvertToRecord()
-    {
-        if (isset($this->_properties['deleted_time']) && $this->_properties['deleted_time'] == '1970-01-01 00:00:00') {
-            unset($this->_properties['deleted_time']);
-        }
-
-        parent::runConvertToRecord();
-    }
-
-    public function runConvertToData()
-    {
-        if (array_key_exists('deleted_time', $this->_properties) && null === $this->_properties['deleted_time']) {
-            unset($this->_properties['deleted_time']);
-        }
-
-        parent::runConvertToData();
-    }
 }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -27,11 +27,6 @@
  */
 class Tinebase_Model_Application extends Tinebase_Record_Abstract
 {
-    const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';
-    const STATE_FILESYSTEM_ROOT_SIZE = 'filesystemRootSize';
-    const STATE_FILESYSTEM_ROOT_REVISION_SIZE = 'filesystemRootRevisionSize';
-    const STATE_UPDATES = 'updates';
-
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
