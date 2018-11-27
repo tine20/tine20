@@ -454,9 +454,6 @@ class Setup_Controller
         //            'updated'  => $this->_updatedApplications,
         //        );
         $result = $this->_legacyUpdateApplications($_applications);
-        Tinebase_Core::getCache()->clean();
-        Tinebase_Cache_PerRequest::getInstance()->reset();
-        Tinebase_Application::destroyInstance();
         $iterationCount = 0;
 
         do {
