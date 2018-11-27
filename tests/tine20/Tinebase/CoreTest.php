@@ -229,6 +229,7 @@ class Tinebase_CoreTest extends TestCase
                         . '")' : ''))->fetchAll(Zend_Db::FETCH_ASSOC));
         }
 
-        static::assertCount(0, $result, print_r($result, true));
+        static::assertCount(0, $result,
+            'not all index fields are nullable = false: ' . print_r($result, true));
     }
 }
