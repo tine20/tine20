@@ -149,8 +149,8 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         
         var locale = Tine.Tinebase.registry.get('locale').locale;
         
-        if (locale.includes("_")) {
-            locale = locale.split("_")[0];
+        if (locale.includes('_')) {
+            locale = locale.split('_')[0];
         }
         
         return v.toLocaleString(locale) + " " + currencySymbol;
