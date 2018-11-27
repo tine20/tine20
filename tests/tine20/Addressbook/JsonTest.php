@@ -1677,13 +1677,15 @@ class Addressbook_JsonTest extends TestCase
         $contact = $this->_addContact();
         try {
             $this->_addContact($contact['org_name'], $_duplicateCheck);
-            $this->assertFalse($_duplicateCheck, 'duplicate detection failed');
+            self::assertFalse($_duplicateCheck, 'duplicate detection failed');
         } catch (Tinebase_Exception_Duplicate $ted) {
-            $this->assertTrue($_duplicateCheck, 'force creation failed');
+            self::assertTrue($_duplicateCheck, 'force creation failed');
             $exceptionData = $ted->toArray();
-            $this->assertEquals(1, count($exceptionData['duplicates']), print_r($exceptionData['duplicates'], TRUE));
-            $this->assertEquals($contact['n_given'], $exceptionData['duplicates'][0]['n_given']);
-            $this->assertEquals($contact['org_name'], $exceptionData['duplicates'][0]['org_name']);
+            self::assertEquals(1, count($exceptionData['duplicates']), print_r($exceptionData['duplicates'], TRUE));
+            $duplicateContact = $exceptionData['duplicates'][0];
+            self::assertEquals($contact['n_given'], $duplicateContact['n_given']);
+            self::assertEquals($contact['org_name'], $duplicateContact['org_name']);
+            self::assertTrue(is_array($duplicateContact['container_id']), print_r($duplicateContact, true));
         }
     }
     

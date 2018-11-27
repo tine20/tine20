@@ -38,36 +38,36 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
 
         $this->_appendRecordPaths($_records, $_filter);
 
-        $dehydrator = Tinebase_Record_Hydration_Factory::createDehydrator(Tinebase_Record_Hydration_Factory::TYPE_ARRAY,
-            Addressbook_Model_Contact::class, [
-                Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
-                Tinebase_Record_Dehydrator_Strategy::DEF_SUB_DEFINITIONS    => [
-                    'paths'                                                     => [
-                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
-                    ],
-                    'container_id'                                              => [
-                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
-                    ],
-                    'tags'                                                      => [
-                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
-                    ],
-                    'attachments'                                               => [
-                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
-                    ],
-                    'created_by'                                                => [
-                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
-                    ],
-                    'last_modified_by'                                          => [
-                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
-                    ],
-                ]
-            ]);
+        // TODO container_id of duplicate records need to be dehydrated, too - see \Addressbook_JsonTest::testDuplicateCheck
+//        $dehydrator = Tinebase_Record_Hydration_Factory::createDehydrator(Tinebase_Record_Hydration_Factory::TYPE_ARRAY,
+//            Addressbook_Model_Contact::class, [
+//                Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+//                Tinebase_Record_Dehydrator_Strategy::DEF_SUB_DEFINITIONS    => [
+//                    'paths'                                                     => [
+//                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+//                    ],
+//                    'container_id'                                              => [
+//                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+//                    ],
+//                    'tags'                                                      => [
+//                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+//                    ],
+//                    'attachments'                                               => [
+//                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+//                    ],
+//                    'created_by'                                                => [
+//                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+//                    ],
+//                    'last_modified_by'                                          => [
+//                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+//                    ],
+//                ]
+//            ]);
+//
+//        return $dehydrator->dehydrate($_records);
 
-        return $dehydrator->dehydrate($_records);
-
-        //$result = parent::fromTine20RecordSet($_records, $_filter, $_pagination);
-
-        //return $result;
+        $result = parent::fromTine20RecordSet($_records, $_filter, $_pagination);
+        return $result;
     }
 
     /**
