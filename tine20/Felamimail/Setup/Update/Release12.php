@@ -1,0 +1,24 @@
+<?php
+/**
+ * Tine 2.0
+ *
+ * @package     Felamimail
+ * @subpackage  Setup
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ */
+
+class Felamimail_Setup_Update_Release12 extends Setup_Update_Abstract
+{
+    /**
+     * update to 12.1
+     *
+     * add felamimail_message_filelocation table
+     */
+    public function update_0()
+    {
+        Setup_SchemaTool::updateSchema([Felamimail_Model_MessageFileLocation::class]);
+        $this->setApplicationVersion('Felamimail', '12.1');
+    }
+}
