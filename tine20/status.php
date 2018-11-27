@@ -10,10 +10,11 @@
 
 $values = array(
     'installed'     => true,
-    'version'       => '8.1.12.2',
-    'versionstring' => '8.1.12',
+    'version'       => '10.0.10.4',
+    'versionstring' => '10.0.10',
     'maintenance'   => false,
-    'edition'       => ''
+    'edition'       => '',
+    'productname'   => 'Tine 2.0' // lets try it ;-)
 );
 
 header('Content-Type: application/json');

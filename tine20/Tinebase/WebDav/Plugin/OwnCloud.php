@@ -60,6 +60,9 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
         array_push($server->protectedProperties,
             '{' . self::NS_OWNCLOUD . '}id'
         );
+        array_push($server->protectedProperties,
+            '{' . self::NS_OWNCLOUD . '}permissions'
+        );
     }
 
     /**
@@ -104,6 +107,29 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
                 // the path does not change for the other nodes => hence the id is "static"
                 $returnedProperties[200][$id] = sha1($path);
             }
+        }
+
+        $permission = '{' . self::NS_OWNCLOUD . '}permissions';
+        if (in_array($permission, $requestedProperties)) {
+            unset($requestedProperties[array_search($permission, $requestedProperties)]);
+//            if ($node instanceof Tinebase_Frontend_WebDAV_Node) {
+                $returnedProperties[200][$permission] = 'SWCKDNV';
+//            } else {
+                // the path does not change for the other nodes => hence the id is "static"
+//                $returnedProperties[200][$permission] = sha1($path);
+//            }
+        }
+
+        $fingerPrint = '{' . self::NS_OWNCLOUD . '}data-fingerprint';
+        if (in_array($fingerPrint, $requestedProperties)) {
+            unset($requestedProperties[array_search($fingerPrint, $requestedProperties)]);
+            $returnedProperties[200][$fingerPrint] = '';
+        }
+
+        $shareTypes = '{' . self::NS_OWNCLOUD . '}share-types';
+        if (in_array($shareTypes, $requestedProperties)) {
+            unset($requestedProperties[array_search($shareTypes, $requestedProperties)]);
+            $returnedProperties[200][$shareTypes] = '';
         }
     }
 
