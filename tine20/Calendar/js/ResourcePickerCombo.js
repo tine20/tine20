@@ -43,6 +43,9 @@ Tine.Calendar.ResourcePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
                 '</tpl>', {
                     encodeHierarchy: function(hierarchy) {
                         hierarchy = String(hierarchy).replace(/\//g, ' » ');
+                        if (hierarchy == 'null') {
+                            return '';
+                        }
                         return Tine.Tinebase.EncodingHelper.encode(hierarchy);
                     }
                 }
