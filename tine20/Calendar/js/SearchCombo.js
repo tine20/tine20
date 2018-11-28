@@ -81,10 +81,8 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
 
-        Ext.applyIf(this, {
-            fieldLabel: this.app.i18n._('Event'),
-            emptyText: this.app.i18n._('Search Event')
-        });
+        this.emptyText = this.emptyText || this.app.i18n._('Search Event');
+        this.fieldLabel = this.fieldLabel || this.app.i18n._('Event');
 
         this.disableClearer = ! this.allowBlank;
 
