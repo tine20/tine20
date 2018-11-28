@@ -529,7 +529,7 @@ class Setup_Update_Abstract
         }
 
         if ($updateRequired) {
-            Setup_SchemaTool::updateSchema($appName, $modelNames);
+            Setup_SchemaTool::updateSchema($modelNames);
 
             foreach($setNewVersions as $table => $version) {
                 $this->setTableVersion($table, $version);
