@@ -9,6 +9,8 @@
  
 Ext.namespace('Tine.Felamimail');
 
+require('./MessageFileButton');
+
 /**
  * Message grid panel
  * 
@@ -301,16 +303,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'action_move'
         });
 
-        this.action_fileRecord = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: true,
-            text: this.app.i18n._('File Message'),
-            handler: this.onFileRecords,
-            disabled: true,
-            hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
-            iconCls: 'action_file',
-            scope: this
-        });
+        this.action_fileRecord = new Tine.Felamimail.MessageFileButton({});
 
         this.action_addAccount = new Ext.Action({
             text: this.app.i18n._('Add Account'),
