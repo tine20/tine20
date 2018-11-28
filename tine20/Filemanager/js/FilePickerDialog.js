@@ -77,6 +77,23 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             this.fireEvent('selected', this.nodes);
         }, this);
 
+        this.app = this.app || Tine.Tinebase.appMgr.get('Filemanager');
+
+        if (! this.windowTitle) {
+            switch(this.constraint) {
+                case 'file':
+                    this.windowTitle = this.singleSelect ? this.app.i18n._('Select a file') : this.app.i18n._('Select files');
+                    break;
+                case 'folder':
+                    this.windowTitle = this.singleSelect ? this.app.i18n._('Select a folder') : this.app.i18n._('Select folders');
+                    break;
+                default:
+                    this.windowTitle = this.singleSelect ? this.app.i18n._('Select an item') : this.app.i18n._('Select items');
+                    break;
+            }
+        }
+
+        this.windowTitle = this.windowTitle || this.app.i18n._('')
         Tine.Filemanager.FilePickerDialog.superclass.initComponent.call(this);
     },
 
