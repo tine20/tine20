@@ -1096,7 +1096,9 @@ class Tinebase_FileSystem implements
 
                     $node = $this->stat($_path, $_revision);
                     $hashFile = $this->getRealPathForHash($node->hash);
-
+                    if (! file_exists($hashFile)) {
+                        return false;
+                    }
                     $handle = fopen($hashFile, $_mode);
 
                     break;
@@ -1141,13 +1143,15 @@ class Tinebase_FileSystem implements
                 }
             }
         }
-        
-        $contextOptions = array('tine20' => array(
-            'path' => $_path,
-            'mode' => $_mode,
-            'node' => $node
-        ));
-        stream_context_set_option($handle, $contextOptions);
+
+        if (is_resource($handle)) {
+            $contextOptions = array('tine20' => array(
+                'path' => $_path,
+                'mode' => $_mode,
+                'node' => $node
+            ));
+            stream_context_set_option($handle, $contextOptions);
+        }
         
         return $handle;
     }
