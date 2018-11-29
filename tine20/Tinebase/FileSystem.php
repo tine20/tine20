@@ -1082,7 +1082,9 @@ class Tinebase_FileSystem implements
 
                     $node = $this->stat($_path, $_revision);
                     $hashFile = $this->getRealPathForHash($node->hash);
-
+                    if (! file_exists($hashFile)) {
+                        return false;
+                    }
                     $handle = fopen($hashFile, $_mode);
 
                     break;
