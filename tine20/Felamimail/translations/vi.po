@@ -1,22 +1,130 @@
-#
+# 
 # Translators:
 # sao sang <saosangmo@yahoo.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2016-03-17 10:50+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/"
-"vi/)\n"
-"Language: vi\n"
+"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Model/MessageFileLocation.php:45
+msgid "Message File Location"
+msgid_plural "Message File Locations"
+msgstr[0] ""
+
+#: Model/MessageFileLocation.php:46
+msgid "Message File Locations"
+msgstr ""
+
+#: Model/MessageFileLocation.php:89
+msgid "Message ID Hash"
+msgstr ""
+
+#: Model/MessageFileLocation.php:96
+msgid "Message ID"
+msgstr ""
+
+#: Model/MessageFileLocation.php:104
+msgid "Model"
+msgstr ""
+
+#: Model/MessageFileLocation.php:111
+msgid "Record ID"
+msgstr ""
+
+#: Model/MessageFileLocation.php:118
+msgid "Record Title"
+msgstr ""
+
+#: Model/MessageFileLocation.php:125
+msgid "Type"
+msgstr ""
+
+#: Model/Message.php:368
+msgid "Reading Confirmation:"
+msgstr "Xác nhận đã đọc"
+
+#: Model/Message.php:369
+msgid "Your message:"
+msgstr "Nội dung của bạn"
+
+#: Model/Message.php:370
+msgid "Received on"
+msgstr ""
+
+#: Model/Message.php:371
+msgid "Was read by:"
+msgstr "Đã đọc bởi"
+
+#: Model/Message.php:372
+msgid "on"
+msgstr "vào"
+
+#: js/MessageDisplayDialog.js:49 js/GridPanel.js:286
+msgid "Delete"
+msgstr "Xóa"
+
+#: js/MessageDisplayDialog.js:56 js/GridPanel.js:241
+msgid "Reply"
+msgstr "Trả lời"
+
+#: js/MessageDisplayDialog.js:62 js/GridPanel.js:250
+msgid "Reply To All"
+msgstr "Trả lời tất cả"
+
+#: js/MessageDisplayDialog.js:68 js/GridPanel.js:259
+msgid "Forward"
+msgstr "Chuyển tiếp"
+
+#: js/MessageDisplayDialog.js:74
+msgid "Save"
+msgstr "Lưu lại"
+
+#: js/MessageDisplayDialog.js:81 js/GridPanel.js:333
+msgid "Print Message"
+msgstr "In nội dung"
+
+#: js/MessageDisplayDialog.js:87 js/GridPanel.js:324 js/GridPanel.js:1462
+#: js/GridPanel.js:1478
+msgid "Print Preview"
+msgstr "Xem trước khi in"
+
+#: js/TreePanel.js:691
+msgid "Total Messages:"
+msgstr "Tổng số tin nhắn"
+
+#: js/TreePanel.js:695
+msgid "Unread Messages:"
+msgstr "Thư chưa đọc:"
+
+#: js/TreePanel.js:699
+msgid "Name on Server:"
+msgstr "Tên trên máy chủ:"
+
+#: js/TreePanel.js:703
+msgid "Last update:"
+msgstr "Cập nhật lần cuối:"
+
+#: js/TreePanel.js:723
+#, python-brace-format
+msgid "Fetching messages... ({0} done)"
+msgstr ""
+
+#: js/TreePanel.js:739
+#, python-brace-format
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] "one:{0} thư chưa đọc\nother:{0} thư chưa đọc"
 
 #: js/PGPDetailsPanel.js:22
 #, python-brace-format
@@ -46,13 +154,11 @@ msgid "New {0}"
 msgstr "Tạo {0}"
 
 #: js/TreeContextMenu.js:64 js/TreeContextMenu.js:67 js/TreeContextMenu.js:70
-#: js/Model.js:56 js/Model.js:546 js/FolderFilterModel.js:30
-#: js/GridPanel.js:569 js/GridPanel.js:560
+#: js/FolderFilterModel.js:30 js/GridPanel.js:560 js/Model.js:59
+#: js/Model.js:570
 msgid "Folder"
 msgid_plural "Folders"
-msgstr[0] ""
-"one:Thư mục\n"
-"other:Thư mục"
+msgstr[0] "one:Thư mục\nother:Thư mục"
 
 #: js/TreeContextMenu.js:64
 #, python-brace-format
@@ -102,11 +208,352 @@ msgstr "Đánh dấu thư mục như đã đọc"
 msgid "Update Folder List"
 msgstr "Cập nhật danh sách thư mục"
 
-#: js/FolderSelectPanel.js:75 js/GridPanel.js:840 js/GridPanel.js:831
+#: js/RecipientPickerFavoritePanel.js:43
+msgid "Recipient filter"
+msgstr "Bộ lọc người nhận"
+
+#: js/RecipientPickerFavoritePanel.js:54
+msgid "All recipients"
+msgstr "Mọi người nhận"
+
+#: js/RecipientPickerFavoritePanel.js:57
+#, python-brace-format
+msgid "\"{0}\" recipients"
+msgstr "\"{0}\" người nhận"
+
+#: js/RecipientPickerDialog.js:63
+msgid "(new message)"
+msgstr "(thư mới)"
+
+#: js/RecipientPickerDialog.js:64
+#, python-brace-format
+msgid "Select recipients for \"{0}\""
+msgstr "Chọn người nhận cho \"{0}\""
+
+#: js/GridPanel.js:112
+msgid "No Messages found."
+msgstr ""
+
+#: js/GridPanel.js:231
+msgid "Compose"
+msgstr "Soạn thư"
+
+#: js/GridPanel.js:267
+msgid "Toggle highlighting"
+msgstr "Bật tắt điểm nhấn"
+
+#: js/GridPanel.js:276
+msgid "Mark read/unread"
+msgstr "Đánh dấu đọc/chưa đọc"
+
+#: js/GridPanel.js:296
+msgid "Move"
+msgstr ""
+
+#: js/GridPanel.js:307
+msgid "File Message"
+msgstr ""
+
+#: js/GridPanel.js:316
+msgid "Add Account"
+msgstr "Thêm tài khoản"
+
+#: js/GridPanel.js:492
+msgid "Id"
+msgstr "ID"
+
+#: js/GridPanel.js:499 js/MessageEditDialog.js:1080 js/MailDetailsPanel.js:287
+msgid "Attachments"
+msgstr "Đính kèm"
+
+#: js/GridPanel.js:506 js/Model.js:176
+msgid "Flags"
+msgstr "Cờ"
+
+#: js/GridPanel.js:513 js/Model.js:170 js/MessageEditDialog.js:1304
+#: js/sieve/RuleConditionsPanel.js:75 js/MailDetailsPanel.js:171
+#: Controller/Message/Send.php:367
+msgid "Subject"
+msgstr "Tiêu đề"
+
+#: js/GridPanel.js:519 js/Model.js:171 js/sieve/RuleConditionsPanel.js:71
+msgid "From (Email)"
+msgstr "Từ (email)"
+
+#: js/GridPanel.js:525 js/Model.js:172
+msgid "From (Name)"
+msgstr "Từ (tên)"
+
+#: js/GridPanel.js:531
+msgid "Sender"
+msgstr "Người gửi"
+
+#: js/GridPanel.js:538 js/GridPanelHook.js:49 js/Model.js:173
+msgid "To"
+msgstr "Tới"
+
+#: js/GridPanel.js:545 js/Model.js:564
+msgid "Sent"
+msgstr "Đã gửi"
+
+#: js/GridPanel.js:553 js/Model.js:179
+msgid "Received"
+msgstr "Đã nhận"
+
+#: js/GridPanel.js:568 js/sieve/RuleConditionsPanel.js:76
+msgid "Size"
+msgstr "Dung lượng"
+
+#: js/GridPanel.js:608 Controller/Message/Flags.php:25
+msgid "Answered"
+msgstr "Đã trả lời"
+
+#: js/GridPanel.js:611
+msgid "Forwarded"
+msgstr "Đã chuyển tiếp"
+
+#: js/GridPanel.js:614
+msgid "Tine20"
+msgstr ""
+
+#: js/GridPanel.js:617
+msgid "Recent"
+msgstr "Gần đây"
+
+#: js/GridPanel.js:732
+msgid "Select Save Location"
+msgstr ""
+
+#: js/GridPanel.js:762
+msgid "Filing Messages"
+msgstr ""
+
+#: js/GridPanel.js:797
+msgid "Error Filing Message"
+msgstr ""
+
+#: js/GridPanel.js:798
+msgid "Could not file message."
+msgstr ""
+
+#: js/GridPanel.js:1096
+msgid "Send Reading Confirmation"
+msgstr "Gửi xác nhận đã đọc"
+
+#: js/GridPanel.js:1097
+msgid "Do you want to send a reading confirmation message?"
+msgstr ""
+
+#: js/GridPanelHook.js:34 js/GridPanelHook.js:103
+msgid "Compose email"
+msgstr "Soạn Email"
+
+#: js/GridPanelHook.js:62
+msgid "CC"
+msgstr ""
+
+#: js/GridPanelHook.js:75
+msgid "BCC"
+msgstr ""
+
+#: js/GridPanelHook.js:88 js/MessageEditDialog.js:228
+msgid "Mass Mailing"
+msgstr ""
+
+#: js/ContactGrid.js:119 js/AccountEditDialog.js:187
+#: js/AccountEditDialog.js:228 js/AccountEditDialog.js:243
+#: js/AccountEditDialog.js:283
+msgid "None"
+msgstr "Không"
+
+#: js/ContactGrid.js:274
+msgid "Add as \"To\""
+msgstr "Thêm vào \"Đến\""
+
+#: js/ContactGrid.js:285
+msgid "Add as \"Cc\""
+msgstr "Thêm \"CC\""
+
+#: js/ContactGrid.js:296
+msgid "Add as \"Bcc\""
+msgstr "Thêm \"BCC\""
+
+#: js/ContactGrid.js:307
+msgid "Remove from recipients"
+msgstr "Xóa khỏi người nhận"
+
+#: js/ContactGrid.js:361 js/MessageEditDialog.js:701
+msgid "Loading Mail Addresses"
+msgstr "Đang tải địa chỉ email"
+
+#: js/Model.js:55
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "one: Nội dung\nother: Nội dung"
+
+#: js/Model.js:169
+msgid "Subject/From"
+msgstr "Tiêu đề/Từ"
+
+#: js/Model.js:174
+msgid "Cc"
+msgstr "Cc"
+
+#: js/Model.js:175
+msgid "Bcc"
+msgstr "Bcc"
+
+#: js/Model.js:430 js/AccountEditDialog.js:119
+msgid "Account"
+msgid_plural "Accounts"
+msgstr[0] "one: Tài khoản\nother: Tài khoản"
+
+#: js/Model.js:433
+msgid "Email Accounts"
+msgid_plural "Email Accounts"
+msgstr[0] "one: Tài khoản email\nother: Tài khoản email"
+
+#: js/Model.js:564
+msgid "INBOX"
+msgstr "Thư đến"
+
+#: js/Model.js:564
+msgid "Drafts"
+msgstr "Nháp"
+
+#: js/Model.js:564
+msgid "Templates"
+msgstr "Mẫu"
+
+#: js/Model.js:564
+msgid "Junk"
+msgstr "Thư rác"
+
+#: js/Model.js:564
+msgid "Trash"
+msgstr "Thùng rác"
+
+#: js/Model.js:573 js/Model.js:693 js/Model.js:759
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
+
+#: js/Model.js:690
+msgid "Vacation"
+msgid_plural "Vacations"
+msgstr[0] "one: Trả lời tự động\nother: Trả lời tự động"
+
+#: js/Model.js:756
+msgid "Rule"
+msgid_plural "Rules"
+msgstr[0] "one: Quy tắc\nother: Quy tắc"
+
+#: js/Model.js:883
+msgid "Flag"
+msgid_plural "Flags"
+msgstr[0] "one:Cờ\nother:Cờ"
+
+#: js/Model.js:886
+msgid "Flag list"
+msgid_plural "Flag lists"
+msgstr[0] "one:Danh sách cờ\nother:Danh sách cờ"
+
+#: js/Felamimail.js:39
+msgid "New Mail"
+msgstr "Email mới"
+
+#: js/Felamimail.js:95
+msgid "Email"
+msgstr "Email"
+
+#: js/Felamimail.js:132
+msgid "Active Vacation Message"
+msgstr "Bật chế độ tự động trả lời"
+
+#: js/Felamimail.js:133
+#, python-brace-format
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "Tài khoản email \"{0}\" có 1 email tự động trả lời đang hoạt động"
+
+#: js/Felamimail.js:170
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr ""
+
+#: js/Felamimail.js:191
+#, python-brace-format
+msgid "{0} as default mailer"
+msgstr ""
+
+#: js/Felamimail.js:617
+msgid "New mails"
+msgstr "Email mới"
+
+#: js/Felamimail.js:618
+#, python-brace-format
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "Bạn có {0} email mới trong thư mục {1} ({2})."
+
+#: js/Felamimail.js:738
+#, python-brace-format
+msgid "IMAP Credentials for {0}"
+msgstr "IMAP Credentials for {0}"
+
+#: js/Felamimail.js:741
+msgid "Credentials"
+msgstr "Credentials"
+
+#: js/Felamimail.js:930 js/Felamimail.js:963
+msgid "IMAP Error"
+msgstr "IMAP Error"
+
+#: js/Felamimail.js:931
+msgid "No connection to IMAP server."
+msgstr "Không kết nối tới máy chủ IMAP"
+
+#: js/Felamimail.js:947
+msgid "IMAP Credentials Error"
+msgstr "IMAP Credentials Error"
+
+#: js/Felamimail.js:948
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr "Thông tin email bị sai. Xin hãy liên lạc với quản trị hệ thống của bạn."
+
+#: js/Felamimail.js:964
+msgid ""
+"One of your folders was deleted or renamed by another client. Please update "
+"the folder list of this account."
+msgstr "Một trong số thư mục của bạn đã bị xóa hoặc đổi tên bởi người dùng khác."
+
+#: js/Felamimail.js:993
+msgid "SMTP Error"
+msgstr "SMTP Error"
+
+#: js/Felamimail.js:994
+msgid "No connection to SMTP server."
+msgstr "Không có kết nối tới máy chủ SMTP"
+
+#: js/Felamimail.js:1002
+msgid "Sieve Error"
+msgstr "Sieve Error"
+
+#: js/Felamimail.js:1003
+msgid "No connection to Sieve server."
+msgstr "Không có kết nối tới máy chủ Sieve"
+
+#: js/Felamimail.js:1011
+msgid "Save Sieve Script Error"
+msgstr "Lưu lỗi Sieve Script"
+
+#: js/Felamimail.js:1012
+msgid "Could not save script on Sieve server."
+msgstr "Không thể lưu scrip trên máy chủ Sieve"
+
+#: js/FolderSelectPanel.js:75
 msgid "Cancel"
 msgstr "Hủy bỏ"
 
-#: js/FolderSelectPanel.js:84 js/GridPanel.js:848 js/GridPanel.js:839
+#: js/FolderSelectPanel.js:84
 msgid "Ok"
 msgstr "OK"
 
@@ -119,494 +566,387 @@ msgstr "Thư mục của tài khoản {0}"
 msgid "Folders of all accounts"
 msgstr "Thư mục của mọi tài khoản"
 
-#: js/TreePanel.js:691
-msgid "Total Messages:"
-msgstr "Tổng số tin nhắn"
-
-#: js/TreePanel.js:695
-msgid "Unread Messages:"
-msgstr "Thư chưa đọc:"
-
-#: js/TreePanel.js:699
-msgid "Name on Server:"
-msgstr "Tên trên máy chủ:"
-
-#: js/TreePanel.js:703
-msgid "Last update:"
-msgstr "Cập nhật lần cuối:"
-
-#: js/TreePanel.js:723
-#, python-brace-format
-msgid "Fetching messages... ({0} done)"
-msgstr ""
-
-#: js/TreePanel.js:739
-#, python-brace-format
-msgid "{0} unread message"
-msgid_plural "{0} unread messages"
-msgstr[0] ""
-"one:{0} thư chưa đọc\n"
-"other:{0} thư chưa đọc"
-
-#: js/RecipientGrid.js:234
+#: js/RecipientGrid.js:235
 msgid "Click here to set To/CC/BCC."
 msgstr "Click vào đây để đặt To/CC/BCC"
 
-#: js/RecipientGrid.js:238 js/RecipientGrid.js:262
+#: js/RecipientGrid.js:239 js/RecipientGrid.js:263
 msgid "To:"
 msgstr "To:"
 
-#: js/RecipientGrid.js:241 js/RecipientGrid.js:263
+#: js/RecipientGrid.js:242 js/RecipientGrid.js:264
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:244 js/RecipientGrid.js:264
+#: js/RecipientGrid.js:245 js/RecipientGrid.js:265
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:390
+#: js/RecipientGrid.js:392
 msgid "Remove"
 msgstr "Xóa"
 
-#: js/RecipientPickerDialog.js:63
-msgid "(new message)"
-msgstr "(thư mới)"
-
-#: js/RecipientPickerDialog.js:64
-#, python-brace-format
-msgid "Select recipients for \"{0}\""
-msgstr "Chọn người nhận cho \"{0}\""
-
-#: js/ContactGrid.js:119 js/AccountEditDialog.js:187
-#: js/AccountEditDialog.js:228 js/AccountEditDialog.js:243
-#: js/AccountEditDialog.js:283
-msgid "None"
-msgstr "Không"
-
-#: js/ContactGrid.js:272
-msgid "Add as \"To\""
-msgstr "Thêm vào \"Đến\""
-
-#: js/ContactGrid.js:283
-msgid "Add as \"Cc\""
-msgstr "Thêm \"CC\""
-
-#: js/ContactGrid.js:294
-msgid "Add as \"Bcc\""
-msgstr "Thêm \"BCC\""
-
-#: js/ContactGrid.js:305
-msgid "Remove from recipients"
-msgstr "Xóa khỏi người nhận"
-
-#: js/ContactGrid.js:359 js/MessageEditDialog.js:667
-msgid "Loading Mail Addresses"
-msgstr "Đang tải địa chỉ email"
-
-#: js/Model.js:52
-msgid "Message"
-msgid_plural "Messages"
-msgstr[0] ""
-"one: Nội dung\n"
-"other: Nội dung"
-
-#: js/Model.js:166
-msgid "Subject/From"
-msgstr "Tiêu đề/Từ"
-
-#: js/Model.js:167 js/GridPanel.js:522 js/GridDetailsPanel.js:245
-#: js/MessageEditDialog.js:1212 js/sieve/RuleConditionsPanel.js:75
-#: Controller/Message/Send.php:294 js/MessageEditDialog.js:1225
-#: js/GridPanel.js:513 Controller/Message/Send.php:365
-msgid "Subject"
-msgstr "Tiêu đề"
-
-#: js/Model.js:168 js/GridPanel.js:528 js/sieve/RuleConditionsPanel.js:71
-#: js/GridPanel.js:519
-msgid "From (Email)"
-msgstr "Từ (email)"
-
-#: js/Model.js:169 js/GridPanel.js:534 js/GridPanel.js:525
-msgid "From (Name)"
-msgstr "Từ (tên)"
-
-#: js/Model.js:170 js/GridPanel.js:547 js/GridPanelHook.js:49
-#: js/GridPanel.js:538
-msgid "To"
-msgstr "Tới"
-
-#: js/Model.js:171
-msgid "Cc"
-msgstr "Cc"
-
-#: js/Model.js:172
-msgid "Bcc"
-msgstr "Bcc"
-
-#: js/Model.js:173 js/GridPanel.js:515 js/GridPanel.js:506
-msgid "Flags"
-msgstr "Cờ"
-
-#: js/Model.js:176 js/GridPanel.js:562 js/GridPanel.js:553
-msgid "Received"
-msgstr "Đã nhận"
-
-#: js/Model.js:406 js/AccountEditDialog.js:119
-msgid "Account"
-msgid_plural "Accounts"
-msgstr[0] ""
-"one: Tài khoản\n"
-"other: Tài khoản"
-
-#: js/Model.js:409
-msgid "Email Accounts"
-msgid_plural "Email Accounts"
-msgstr[0] ""
-"one: Tài khoản email\n"
-"other: Tài khoản email"
-
-#: js/Model.js:540
-msgid "INBOX"
-msgstr "Thư đến"
-
-#: js/Model.js:540
-msgid "Drafts"
-msgstr "Nháp"
-
-#: js/Model.js:540 js/GridPanel.js:554 js/GridPanel.js:545
-msgid "Sent"
-msgstr "Đã gửi"
-
-#: js/Model.js:540
-msgid "Templates"
-msgstr "Mẫu"
-
-#: js/Model.js:540
-msgid "Junk"
-msgstr "Thư rác"
-
-#: js/Model.js:540
-msgid "Trash"
-msgstr "Thùng rác"
-
-#: js/Model.js:549 js/Model.js:669 js/Model.js:735
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-"one: danh sách biểu ghi\n"
-"other: danh sách biểu ghi"
-
-#: js/Model.js:666
-msgid "Vacation"
-msgid_plural "Vacations"
-msgstr[0] ""
-"one: Trả lời tự động\n"
-"other: Trả lời tự động"
-
-#: js/Model.js:732
-msgid "Rule"
-msgid_plural "Rules"
-msgstr[0] ""
-"one: Quy tắc\n"
-"other: Quy tắc"
-
-#: js/Model.js:859
-msgid "Flag"
-msgid_plural "Flags"
-msgstr[0] ""
-"one:Cờ\n"
-"other:Cờ"
-
-#: js/Model.js:862
-msgid "Flag list"
-msgid_plural "Flag lists"
-msgstr[0] ""
-"one:Danh sách cờ\n"
-"other:Danh sách cờ"
-
-#: js/GridPanel.js:112
-msgid "No Messages found or the cache is empty."
-msgstr "Không có thư nào hoặc thư mục cache rỗng"
-
-#: js/GridPanel.js:142
-msgid "Quota usage"
-msgstr "Hạn mức sử dụng"
-
-#: js/GridPanel.js:240 js/GridPanel.js:231
-msgid "Compose"
-msgstr "Soạn thư"
-
-#: js/GridPanel.js:250 js/MessageDisplayDialog.js:54 js/GridPanel.js:241
-msgid "Reply"
-msgstr "Trả lời"
-
-#: js/GridPanel.js:259 js/MessageDisplayDialog.js:60 js/GridPanel.js:250
-msgid "Reply To All"
-msgstr "Trả lời tất cả"
-
-#: js/GridPanel.js:268 js/MessageDisplayDialog.js:66 js/GridPanel.js:259
-msgid "Forward"
-msgstr "Chuyển tiếp"
-
-#: js/GridPanel.js:276 js/GridPanel.js:267
-msgid "Toggle highlighting"
-msgstr "Bật tắt điểm nhấn"
-
-#: js/GridPanel.js:285 js/GridPanel.js:276
-msgid "Mark read/unread"
-msgstr "Đánh dấu đọc/chưa đọc"
-
-#: js/GridPanel.js:295 js/MessageDisplayDialog.js:47 js/GridPanel.js:286
-msgid "Delete"
-msgstr "Xóa"
-
-#: js/GridPanel.js:305 js/GridPanel.js:296
-msgid "Move"
-msgstr ""
-
-#: js/GridPanel.js:316 js/GridPanel.js:307
-msgid "File Message"
-msgstr ""
-
-#: js/GridPanel.js:325 js/GridPanel.js:316
-msgid "Add Account"
-msgstr "Thêm tài khoản"
-
-#: js/GridPanel.js:333 js/GridPanel.js:1594 js/GridPanel.js:1610
-#: js/MessageDisplayDialog.js:85 js/GridPanel.js:324 js/GridPanel.js:1582
-#: js/GridPanel.js:1598
-msgid "Print Preview"
-msgstr "Xem trước khi in"
-
-#: js/GridPanel.js:342 js/MessageDisplayDialog.js:79 js/GridPanel.js:333
-msgid "Print Message"
-msgstr "In nội dung"
-
-#: js/GridPanel.js:501 js/GridPanel.js:492
-msgid "Id"
-msgstr "ID"
-
-#: js/GridPanel.js:508 js/GridDetailsPanel.js:353 js/MessageEditDialog.js:1022
-#: js/MessageEditDialog.js:1026 js/GridPanel.js:499
-msgid "Attachments"
-msgstr "Đính kèm"
-
-#: js/GridPanel.js:540 js/GridPanel.js:531
-msgid "Sender"
-msgstr "Người gửi"
-
-#: js/GridPanel.js:577 js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:568
-msgid "Size"
-msgstr "Dung lượng"
-
-#: js/GridPanel.js:617 Controller/Message/Flags.php:25 js/GridPanel.js:608
-msgid "Answered"
-msgstr "Đã trả lời"
-
-#: js/GridPanel.js:620 js/GridPanel.js:611
-msgid "Forwarded"
-msgstr "Đã chuyển tiếp"
-
-#: js/GridPanel.js:623 js/GridPanel.js:614
-msgid "Tine20"
-msgstr ""
-
-#: js/GridPanel.js:626 js/GridPanel.js:617
-msgid "Recent"
-msgstr "Gần đây"
-
-#: js/GridPanel.js:832 js/GridPanel.js:823
-msgid "File Messages To Folder"
-msgstr ""
-
-#: js/GridPanel.js:893 js/GridPanel.js:882
-msgid "Filing Messages"
-msgstr ""
-
-#: js/GridPanel.js:915 js/GridPanel.js:917
-msgid "Error Filing Message"
-msgstr ""
-
-#: js/GridPanel.js:916 js/GridPanel.js:918
-msgid "Could not file message."
-msgstr ""
-
-#: js/GridPanel.js:1214 js/GridPanel.js:1216
-msgid "Send Reading Confirmation"
-msgstr "Gửi xác nhận đã đọc"
-
-#: js/GridPanel.js:1215 js/GridPanel.js:1217
-msgid "Do you want to send a reading confirmation message?"
-msgstr ""
-
-#: js/GridPanel.js:1439
-#, python-brace-format
-msgid "{0} %"
-msgstr "{0} %"
-
-#: js/GridPanel.js:1447
-msgid "Your quota"
-msgstr "Hạn mức của bạn"
-
-#: js/GridPanel.js:1448
-#, python-brace-format
-msgid "{0} available (total: {1})"
-msgstr "có sẵn {0} (tổng số: {1})"
-
-#: js/GridDetailsPanel.js:158
-msgid "Message not available."
-msgstr "Nội dung không sẵn sàng"
-
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:1089
-#: js/MessageEditDialog.js:1095
-msgid "From"
-msgstr "Từ"
-
-#: js/GridDetailsPanel.js:247
-msgid "Add"
-msgstr "Thêm"
-
-#: js/GridDetailsPanel.js:248
-msgid "Add contact to addressbook"
-msgstr "Thêm liên lạc vào sổ địa chỉ"
-
-#: js/GridDetailsPanel.js:249
-msgid "Date"
-msgstr "Ngày"
-
-#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:488
-msgid "Show or hide header information"
-msgstr "Hiện/ ẩn thông tin header"
-
-#: js/GridPanelHook.js:34 js/GridPanelHook.js:90
-msgid "Compose email"
-msgstr "Soạn Email"
-
-#: js/GridPanelHook.js:62
-msgid "CC"
-msgstr ""
-
-#: js/GridPanelHook.js:75
-msgid "BCC"
-msgstr ""
-
-#: js/MessageEditDialog.js:154
+#: js/MessageEditDialog.js:157
 msgid "Send"
 msgstr "Gửi"
 
-#: js/MessageEditDialog.js:162
+#: js/MessageEditDialog.js:165
 msgid "Search Recipients"
 msgstr "Tìm người nhận"
 
-#: js/MessageEditDialog.js:170
+#: js/MessageEditDialog.js:173
 msgid "Save As Draft"
 msgstr "Lưu bản nháp"
 
-#: js/MessageEditDialog.js:178
+#: js/MessageEditDialog.js:181
 msgid "Save As Template"
 msgstr "Lưu thành mẫu"
 
-#: js/MessageEditDialog.js:187
+#: js/MessageEditDialog.js:190
 msgid "Save Email Note"
 msgstr "Lưu ghi chú email"
 
-#: js/MessageEditDialog.js:195
+#: js/MessageEditDialog.js:198
 msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
-msgstr ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
+"Activate this toggle button to save the email text as a note attached to the"
+" recipient(s) contact(s)."
+msgstr "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 
-#: js/MessageEditDialog.js:199
+#: js/MessageEditDialog.js:202
 msgid "Reading Confirmation"
 msgstr "Xác nhận đã đọc"
 
-#: js/MessageEditDialog.js:207
+#: js/MessageEditDialog.js:210
 msgid "Activate this toggle button to receive a reading confirmation."
 msgstr ""
 
-#: js/MessageEditDialog.js:211
+#: js/MessageEditDialog.js:214
 msgid "Encrypt Email"
 msgstr ""
 
-#: js/MessageEditDialog.js:221
+#: js/MessageEditDialog.js:224
 msgid "Encrypt email using Mailvelope"
 msgstr ""
 
-#: js/MessageEditDialog.js:239
+#: js/MessageEditDialog.js:236
+msgid ""
+"Activate this toggle button to send the mail as separate mail to each "
+"recipient."
+msgstr ""
+
+#: js/MessageEditDialog.js:254
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Click để tìm kiếm và thêm người nhận từ danh bạ"
 
-#: js/MessageEditDialog.js:433
+#: js/MessageEditDialog.js:464
 msgid "Encrypted Content"
 msgstr ""
 
-#: js/MessageEditDialog.js:718
+#: js/MessageEditDialog.js:752
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#: js/MessageEditDialog.js:721
+#: js/MessageEditDialog.js:755
 #, python-brace-format
 msgid "{0} Message"
 msgstr "Nội dung {0}"
 
-#: js/MessageEditDialog.js:775 js/MessageEditDialog.js:780
+#: js/MessageEditDialog.js:809 js/MessageEditDialog.js:814
 msgid "Failed"
 msgstr "Thất bại"
 
-#: js/MessageEditDialog.js:776
+#: js/MessageEditDialog.js:810
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr "{0} thiết lập tài khoản rỗng."
 
-#: js/MessageEditDialog.js:781 js/MessageEditDialog.js:1256
-#: js/MessageEditDialog.js:1269
+#: js/MessageEditDialog.js:815 js/MessageEditDialog.js:1348
 msgid "Files are still uploading."
 msgstr "Files vẫn đang được upload."
 
-#: js/MessageEditDialog.js:896
+#: js/MessageEditDialog.js:950
 #, python-brace-format
 msgid "On {0}, {1} wrote"
 msgstr "Vào {0}, {1} viết"
 
-#: js/MessageEditDialog.js:901
+#: js/MessageEditDialog.js:955
 msgid "Original message"
 msgstr "Nội dung gốc"
 
-#: js/MessageEditDialog.js:939 js/MessageEditDialog.js:1222
-#: js/MessageEditDialog.js:1235
+#: js/MessageEditDialog.js:993 js/MessageEditDialog.js:1314
 msgid "Compose email:"
 msgstr "Soạn email:"
 
-#: js/MessageEditDialog.js:1166 js/MessageEditDialog.js:1172
+#: js/MessageEditDialog.js:1149 js/MailDetailsPanel.js:172
+msgid "From"
+msgstr "Từ"
+
+#: js/MessageEditDialog.js:1236
 msgid "Convert to formated text"
 msgstr ""
 
-#: js/MessageEditDialog.js:1172 js/MessageEditDialog.js:1179
-#: Controller/Message/Send.php:294 js/MessageEditDialog.js:1178
-#: js/MessageEditDialog.js:1185 Controller/Message/Send.php:365
+#: js/MessageEditDialog.js:1242 js/MessageEditDialog.js:1249
+#: Controller/Message/Send.php:367
 msgid "Body"
 msgstr "Nội dung"
 
-#: js/MessageEditDialog.js:1304 js/MessageEditDialog.js:1317
+#: js/MessageEditDialog.js:1281
+msgid ""
+"NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get"
+" his or her own copy."
+msgstr ""
+
+#: js/MessageEditDialog.js:1293 js/AccountEditDialog.js:369
+msgid "Reply-To Email"
+msgstr ""
+
+#: js/MessageEditDialog.js:1297
+msgid "Add email address here for reply-to"
+msgstr ""
+
+#: js/MessageEditDialog.js:1452
+msgid "Warning"
+msgstr ""
+
+#: js/MessageEditDialog.js:1453
+msgid ""
+"Some attachments are of type \"systemlinks\" whereas some of the recipients "
+"(marked yellow), couldn't be validated to be accounts on this installation. "
+"Only recipients with an active account will be able to open those "
+"attachments."
+msgstr ""
+
+#: js/MessageEditDialog.js:1453
+msgid "Do you really want to send?"
+msgstr ""
+
+#: js/MessageEditDialog.js:1496
 msgid "Empty subject"
 msgstr "Tiêu đề trống"
 
-#: js/MessageEditDialog.js:1305 js/MessageEditDialog.js:1318
+#: js/MessageEditDialog.js:1497
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Bạn có muốn gửi 1 email với tiêu đề trống?"
 
-#: js/MessageEditDialog.js:1338 js/MessageEditDialog.js:1351
+#: js/MessageEditDialog.js:1530
 msgid "No recipients set."
 msgstr "Không chỉ ra người nhận."
 
-#: js/MessageEditDialog.js:1360 js/MessageEditDialog.js:1373
+#: js/MessageEditDialog.js:1552
 #, python-brace-format
 msgid ""
 "Cannot encrypt message. Public keys for the following recipients are "
 "missing: {0}"
 msgstr ""
+
+#: js/sieve/RuleEditDialog.js:106
+msgid "Edit Filter Rule"
+msgstr "Sửa quy tắc lọc"
+
+#: js/sieve/RuleEditDialog.js:284
+msgid "Apply filter if"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:288
+msgid "all conditions match"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:289
+msgid "any condition matches"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:336
+msgid "Do this action:"
+msgstr "Thực hiện hành động:"
+
+#: js/sieve/RuleEditDialog.js:384 js/sieve/RulesGridPanel.js:284
+msgid "Keep a copy"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:432
+msgid "Move mail to folder"
+msgstr "Chuyển thư tới thư mục"
+
+#: js/sieve/RuleEditDialog.js:433
+msgid "Redirect mail to address"
+msgstr "Chuyển hướng tới địa chỉ"
+
+#: js/sieve/RuleEditDialog.js:434
+msgid "Reject mail with this text"
+msgstr "R"
+
+#: js/sieve/RuleEditDialog.js:435
+msgid "Discard mail"
+msgstr "Hủy thư"
+
+#: js/sieve/RuleEditDialog.js:436
+msgid "Keep mail"
+msgstr "Giữ email"
+
+#: js/sieve/RulesGridPanel.js:81
+msgid "Move up"
+msgstr "Chuyển lên"
+
+#: js/sieve/RulesGridPanel.js:88
+msgid "Move down"
+msgstr "Chuyển xuống"
+
+#: js/sieve/RulesGridPanel.js:95
+msgid "Enable"
+msgstr "Mở"
+
+#: js/sieve/RulesGridPanel.js:102
+msgid "Disable"
+msgstr "Tắt"
+
+#: js/sieve/RulesGridPanel.js:202
+msgid "ID"
+msgstr "ID"
+
+#: js/sieve/RulesGridPanel.js:209
+msgid "Conditions"
+msgstr "Điều kiện"
+
+#: js/sieve/RulesGridPanel.js:217
+msgid "Action"
+msgstr "Hành động"
+
+#: js/sieve/RulesGridPanel.js:320
+msgid "is greater than"
+msgstr "lớn hơn"
+
+#: js/sieve/RulesGridPanel.js:320
+msgid "is less than"
+msgstr "nhỏ hơn"
+
+#: js/sieve/RulesGridPanel.js:331
+#, python-brace-format
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr "Header \"{0}\" contains \"{1}\""
+
+#: js/sieve/RulesGridPanel.js:331
+#, python-brace-format
+msgid "Header \"{0}\" matches \"{1}\""
+msgstr "Header \"{0}\" matches \"{1}\""
+
+#: js/sieve/NotificationDialog.js:49
+#, python-brace-format
+msgid "Notification for {0}"
+msgstr ""
+
+#: js/sieve/NotificationDialog.js:85 js/AccountEditDialog.js:287
+msgid "Notification Email"
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:72
+msgid "From (Email and Name)"
+msgstr "Từ (Email và Tên)"
+
+#: js/sieve/RuleConditionsPanel.js:73
+msgid "To (Email)"
+msgstr "To (Email)"
+
+#: js/sieve/RuleConditionsPanel.js:74
+msgid "To (Email CC)"
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:77
+msgid "Header contains"
+msgstr "Chứa header"
+
+#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
+msgid "Header name"
+msgstr "Tên header"
+
+#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
+msgid "Header value"
+msgstr "Giá trị Header"
+
+#: js/sieve/RuleConditionsPanel.js:79
+msgid "Header regex"
+msgstr "Header regex"
+
+#: js/sieve/RulesDialog.js:51
+msgid "Sieve Filter Rules"
+msgstr "Quy tắc lọc Sieve"
+
+#: js/sieve/RulesDialog.js:94
+#, python-brace-format
+msgid "Sieve Filter Rules for {0}"
+msgstr "Quy tắc lọc Sieve cho {0}"
+
+#: js/sieve/VacationEditDialog.js:77
+#, python-brace-format
+msgid "Vacation Message for {0}"
+msgstr "Nội dung trả lời tự động cho {0}"
+
+#: js/sieve/VacationEditDialog.js:109
+msgid "General"
+msgstr "Chung"
+
+#: js/sieve/VacationEditDialog.js:121
+msgid "Advanced"
+msgstr "Nâng cao"
+
+#: js/sieve/VacationEditDialog.js:132
+msgid "Only send all X days to the same sender"
+msgstr "Chỉ gửi mọi thư X ngày tới cùng người gửi"
+
+#: js/sieve/VacationEditDialog.js:151
+msgid "Incoming mails will be answered with this text:"
+msgstr "Thư đến sẽ được trả lời với đoạn văn bản sau:"
+
+#: js/sieve/VacationEditDialog.js:174
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/sieve/VacationEditDialog.js:185
+msgid "I am available (vacation message disabled)"
+msgstr "Tôi sẵn sàng (nội dung trả lời tự động tắt)"
+
+#: js/sieve/VacationEditDialog.js:186
+msgid "I am not available (vacation message enabled)"
+msgstr "Tôi không sẵn sàng (nội dung trả lời tự động mở)"
+
+#: js/sieve/VacationEditDialog.js:227
+msgid "Start Date"
+msgstr "Ngày bắt đầu"
+
+#: js/sieve/VacationEditDialog.js:228
+msgid "Set vacation start date ..."
+msgstr "Đặt ngày trả lời tự động..."
+
+#: js/sieve/VacationEditDialog.js:232
+msgid "End Date"
+msgstr "Ngày kết thúc"
+
+#: js/sieve/VacationEditDialog.js:233
+msgid "Set vacation end date ..."
+msgstr "Đặt ngày kết thúc trả lời tự động..."
+
+#: js/sieve/VacationEditDialog.js:238
+msgid "Representative #1"
+msgstr "Representative #1"
+
+#: js/sieve/VacationEditDialog.js:239
+msgid "Choose first Representative ..."
+msgstr "Choose first Representative ..."
+
+#: js/sieve/VacationEditDialog.js:247
+msgid "Representative #2"
+msgstr "Representative #2"
+
+#: js/sieve/VacationEditDialog.js:248
+msgid "Choose second Representative ..."
+msgstr "Choose second Representative ..."
+
+#: js/sieve/VacationEditDialog.js:256
+msgid "Message Template"
+msgstr "Mẫu nội dung"
+
+#: js/sieve/VacationEditDialog.js:267
+msgid "Choose Template ..."
+msgstr "Chọn mẫu..."
 
 #: js/AccountEditDialog.js:79
 msgid "Add New Account"
@@ -715,10 +1055,6 @@ msgstr "Sieve"
 msgid "Port (Default: 2000)"
 msgstr "Port (Default: 2000)"
 
-#: js/AccountEditDialog.js:287 js/sieve/NotificationDialog.js:85
-msgid "Notification Email"
-msgstr ""
-
 #: js/AccountEditDialog.js:292
 msgid "Other Settings"
 msgstr "Thiết lập khác"
@@ -771,564 +1107,77 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: js/AccountEditDialog.js:369
-msgid "Reply-To Email"
+#: js/MailDetailsPanel.js:79
+msgid "Open in Felamimail"
 msgstr ""
 
-#: js/RecipientPickerFavoritePanel.js:43
-msgid "Recipient filter"
-msgstr "Bộ lọc người nhận"
+#: js/MailDetailsPanel.js:152 js/GridDetailsPanel.js:117
+msgid "Message not available."
+msgstr "Nội dung không sẵn sàng"
 
-#: js/RecipientPickerFavoritePanel.js:54
-msgid "All recipients"
-msgstr "Mọi người nhận"
+#: js/MailDetailsPanel.js:173
+msgid "Add"
+msgstr "Thêm"
 
-#: js/RecipientPickerFavoritePanel.js:57
-#, python-brace-format
-msgid "\"{0}\" recipients"
-msgstr "\"{0}\" người nhận"
+#: js/MailDetailsPanel.js:174
+msgid "Add contact to addressbook"
+msgstr "Thêm liên lạc vào sổ địa chỉ"
 
-#: js/MessageDisplayDialog.js:72
-msgid "Save"
-msgstr "Lưu lại"
+#: js/MailDetailsPanel.js:175
+msgid "Date"
+msgstr "Ngày"
 
-#: js/sieve/RuleEditDialog.js:106
-msgid "Edit Filter Rule"
-msgstr "Sửa quy tắc lọc"
+#: js/MailDetailsPanel.js:177 js/MailDetailsPanel.js:430
+msgid "Show or hide header information"
+msgstr "Hiện/ ẩn thông tin header"
 
-#: js/sieve/RuleEditDialog.js:284
-msgid "Apply filter if"
+#: js/AttachmentUploadGrid.js:59
+msgid "Download"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:288
-msgid "all conditions match"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:289
-msgid "any condition matches"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:336
-msgid "Do this action:"
-msgstr "Thực hiện hành động:"
-
-#: js/sieve/RuleEditDialog.js:384 js/sieve/RulesGridPanel.js:281
-#: js/sieve/RulesGridPanel.js:284
-msgid "Keep a copy"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:432
-msgid "Move mail to folder"
-msgstr "Chuyển thư tới thư mục"
-
-#: js/sieve/RuleEditDialog.js:433
-msgid "Redirect mail to address"
-msgstr "Chuyển hướng tới địa chỉ"
-
-#: js/sieve/RuleEditDialog.js:434
-msgid "Reject mail with this text"
-msgstr "R"
-
-#: js/sieve/RuleEditDialog.js:435
-msgid "Discard mail"
-msgstr "Hủy thư"
-
-#: js/sieve/RuleEditDialog.js:436
-msgid "Keep mail"
-msgstr "Giữ email"
-
-#: js/sieve/VacationEditDialog.js:77
-#, python-brace-format
-msgid "Vacation Message for {0}"
-msgstr "Nội dung trả lời tự động cho {0}"
-
-#: js/sieve/VacationEditDialog.js:109
-msgid "General"
-msgstr "Chung"
-
-#: js/sieve/VacationEditDialog.js:121
-msgid "Advanced"
-msgstr "Nâng cao"
-
-#: js/sieve/VacationEditDialog.js:132
-msgid "Only send all X days to the same sender"
-msgstr "Chỉ gửi mọi thư X ngày tới cùng người gửi"
-
-#: js/sieve/VacationEditDialog.js:151
-msgid "Incoming mails will be answered with this text:"
-msgstr "Thư đến sẽ được trả lời với đoạn văn bản sau:"
-
-#: js/sieve/VacationEditDialog.js:174
-msgid "Status"
-msgstr "Trạng thái"
-
-#: js/sieve/VacationEditDialog.js:185
-msgid "I am available (vacation message disabled)"
-msgstr "Tôi sẵn sàng (nội dung trả lời tự động tắt)"
-
-#: js/sieve/VacationEditDialog.js:186
-msgid "I am not available (vacation message enabled)"
-msgstr "Tôi không sẵn sàng (nội dung trả lời tự động mở)"
-
-#: js/sieve/VacationEditDialog.js:227
-msgid "Start Date"
-msgstr "Ngày bắt đầu"
-
-#: js/sieve/VacationEditDialog.js:228
-msgid "Set vacation start date ..."
-msgstr "Đặt ngày trả lời tự động..."
-
-#: js/sieve/VacationEditDialog.js:232
-msgid "End Date"
-msgstr "Ngày kết thúc"
-
-#: js/sieve/VacationEditDialog.js:233
-msgid "Set vacation end date ..."
-msgstr "Đặt ngày kết thúc trả lời tự động..."
-
-#: js/sieve/VacationEditDialog.js:238
-msgid "Representative #1"
-msgstr "Representative #1"
-
-#: js/sieve/VacationEditDialog.js:239
-msgid "Choose first Representative ..."
-msgstr "Choose first Representative ..."
-
-#: js/sieve/VacationEditDialog.js:247
-msgid "Representative #2"
-msgstr "Representative #2"
-
-#: js/sieve/VacationEditDialog.js:248
-msgid "Choose second Representative ..."
-msgstr "Choose second Representative ..."
-
-#: js/sieve/VacationEditDialog.js:256
-msgid "Message Template"
-msgstr "Mẫu nội dung"
-
-#: js/sieve/VacationEditDialog.js:267
-msgid "Choose Template ..."
-msgstr "Chọn mẫu..."
-
-#: js/sieve/RuleConditionsPanel.js:72
-msgid "From (Email and Name)"
-msgstr "Từ (Email và Tên)"
-
-#: js/sieve/RuleConditionsPanel.js:73
-msgid "To (Email)"
-msgstr "To (Email)"
-
-#: js/sieve/RuleConditionsPanel.js:74
-msgid "To (Email CC)"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:77
-msgid "Header contains"
-msgstr "Chứa header"
-
-#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
-msgid "Header name"
-msgstr "Tên header"
-
-#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
-msgid "Header value"
-msgstr "Giá trị Header"
-
-#: js/sieve/RuleConditionsPanel.js:79
-msgid "Header regex"
-msgstr "Header regex"
-
-#: js/sieve/RulesGridPanel.js:81
-msgid "Move up"
-msgstr "Chuyển lên"
-
-#: js/sieve/RulesGridPanel.js:88
-msgid "Move down"
-msgstr "Chuyển xuống"
-
-#: js/sieve/RulesGridPanel.js:95
-msgid "Enable"
-msgstr "Mở"
-
-#: js/sieve/RulesGridPanel.js:102
-msgid "Disable"
-msgstr "Tắt"
-
-#: js/sieve/RulesGridPanel.js:202
-msgid "ID"
-msgstr "ID"
-
-#: js/sieve/RulesGridPanel.js:209
-msgid "Conditions"
-msgstr "Điều kiện"
-
-#: js/sieve/RulesGridPanel.js:217
-msgid "Action"
-msgstr "Hành động"
-
-#: js/sieve/RulesGridPanel.js:312 js/sieve/RulesGridPanel.js:320
-msgid "is greater than"
-msgstr "lớn hơn"
-
-#: js/sieve/RulesGridPanel.js:312 js/sieve/RulesGridPanel.js:320
-msgid "is less than"
-msgstr "nhỏ hơn"
-
-#: js/sieve/RulesGridPanel.js:323 js/sieve/RulesGridPanel.js:331
-#, python-brace-format
-msgid "Header \"{0}\" contains \"{1}\""
-msgstr "Header \"{0}\" contains \"{1}\""
-
-#: js/sieve/RulesGridPanel.js:323 js/sieve/RulesGridPanel.js:331
-#, python-brace-format
-msgid "Header \"{0}\" matches \"{1}\""
-msgstr "Header \"{0}\" matches \"{1}\""
-
-#: js/sieve/NotificationDialog.js:49
-#, python-brace-format
-msgid "Notification for {0}"
-msgstr ""
-
-#: js/sieve/RulesDialog.js:51
-msgid "Sieve Filter Rules"
-msgstr "Quy tắc lọc Sieve"
-
-#: js/sieve/RulesDialog.js:94
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
-msgstr "Quy tắc lọc Sieve cho {0}"
-
-#: js/Felamimail.js:33
-msgid "New Mail"
-msgstr "Email mới"
-
-#: js/Felamimail.js:89
-msgid "Email"
-msgstr "Email"
-
-#: js/Felamimail.js:125
-msgid "Active Vacation Message"
-msgstr "Bật chế độ tự động trả lời"
-
-#: js/Felamimail.js:126
-#, python-brace-format
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr "Tài khoản email \"{0}\" có 1 email tự động trả lời đang hoạt động"
-
-#: js/Felamimail.js:173 js/Felamimail.js:183
-#, python-brace-format
-msgid "{0} as default mailer"
-msgstr ""
-
-#: js/Felamimail.js:585 js/Felamimail.js:595
-msgid "New mails"
-msgstr "Email mới"
-
-#: js/Felamimail.js:586 js/Felamimail.js:596
-#, python-brace-format
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr "Bạn có {0} email mới trong thư mục {1} ({2})."
-
-#: js/Felamimail.js:706 js/Felamimail.js:716
-#, python-brace-format
-msgid "IMAP Credentials for {0}"
-msgstr "IMAP Credentials for {0}"
-
-#: js/Felamimail.js:709 js/Felamimail.js:719
-msgid "Credentials"
-msgstr "Credentials"
-
-#: js/Felamimail.js:898 js/Felamimail.js:931 js/Felamimail.js:908
-#: js/Felamimail.js:941
-msgid "IMAP Error"
-msgstr "IMAP Error"
-
-#: js/Felamimail.js:899 js/Felamimail.js:909
-msgid "No connection to IMAP server."
-msgstr "Không kết nối tới máy chủ IMAP"
-
-#: js/Felamimail.js:915 js/Felamimail.js:925
-msgid "IMAP Credentials Error"
-msgstr "IMAP Credentials Error"
-
-#: js/Felamimail.js:916 js/Felamimail.js:926
-msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr ""
-"Thông tin email bị sai. Xin hãy liên lạc với quản trị hệ thống của bạn."
-
-#: js/Felamimail.js:932 js/Felamimail.js:942
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
-msgstr ""
-"Một trong số thư mục của bạn đã bị xóa hoặc đổi tên bởi người dùng khác."
-
-#: js/Felamimail.js:961 js/Felamimail.js:971
-msgid "SMTP Error"
-msgstr "SMTP Error"
-
-#: js/Felamimail.js:962 js/Felamimail.js:972
-msgid "No connection to SMTP server."
-msgstr "Không có kết nối tới máy chủ SMTP"
-
-#: js/Felamimail.js:970 js/Felamimail.js:980
-msgid "Sieve Error"
-msgstr "Sieve Error"
-
-#: js/Felamimail.js:971 js/Felamimail.js:981
-msgid "No connection to Sieve server."
-msgstr "Không có kết nối tới máy chủ Sieve"
-
-#: js/Felamimail.js:979 js/Felamimail.js:989
-msgid "Save Sieve Script Error"
-msgstr "Lưu lỗi Sieve Script"
-
-#: js/Felamimail.js:980 js/Felamimail.js:990
-msgid "Could not save script on Sieve server."
-msgstr "Không thể lưu scrip trên máy chủ Sieve"
-
-#: js/AttachmentUploadGrid.js:49 js/AttachmentUploadGrid.js:88
+#: js/AttachmentUploadGrid.js:83
 msgid "Attachment"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:58 js/AttachmentUploadGrid.js:97
+#: js/AttachmentUploadGrid.js:92
 msgid "Filemanager (Download link)"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:61 js/AttachmentUploadGrid.js:100
+#: js/AttachmentUploadGrid.js:95
 msgid "Filemanager (Download link, password)"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:64 js/AttachmentUploadGrid.js:103
+#: js/AttachmentUploadGrid.js:98
 msgid "Filemanager (Systemlink)"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:121 js/AttachmentUploadGrid.js:161
+#: js/AttachmentUploadGrid.js:156
 msgid "Attachment Type"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:122 js/AttachmentUploadGrid.js:162
+#: js/AttachmentUploadGrid.js:157
 msgid "Click icon to change"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:144 js/AttachmentUploadGrid.js:184
+#: js/AttachmentUploadGrid.js:179
 msgid "name"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:151 js/AttachmentUploadGrid.js:191
+#: js/AttachmentUploadGrid.js:186
 msgid "size"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:158 js/AttachmentUploadGrid.js:198
+#: js/AttachmentUploadGrid.js:193
 msgid "type"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:201 js/AttachmentUploadGrid.js:245
+#: js/AttachmentUploadGrid.js:240
 msgid "Failure"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:202 js/AttachmentUploadGrid.js:246
+#: js/AttachmentUploadGrid.js:241
 msgid "This file is already attached to this record."
 msgstr ""
-
-#: Controller/Message/Send.php:85 Controller/Message/Send.php:101
-msgid "Bad recipient address syntax"
-msgstr ""
-
-#: Controller/Message/Send.php:87 Controller/Message/Send.php:103
-msgid "Recipient address rejected"
-msgstr ""
-
-#: Controller/Message/Send.php:499 Controller/Message/Send.php:573
-msgid "Invalid address format"
-msgstr ""
-
-#: Controller/Message/Send.php:510 Controller/Message/Send.php:584
-#, python-format
-msgid "Error: %s"
-msgstr "Lỗi: %s"
-
-#: Controller/Message/Send.php:512 Controller/Message/Send.php:586
-msgid "Could not send message"
-msgstr "Không thể gửi message"
-
-#: Controller/Message/Send.php:772
-msgid ".My Mail Download Links"
-msgstr ""
-
-#: Controller/Message/Flags.php:26
-msgid "Seen"
-msgstr "Đã xem"
-
-#: Controller/Message/Flags.php:27
-msgid "Deleted"
-msgstr "Đã xóa"
-
-#: Controller/Message/Flags.php:28
-msgid "Draft"
-msgstr "Nháp"
-
-#: Controller/Message/Flags.php:29
-msgid "Flagged"
-msgstr "Đã cắm cờ"
-
-#: Controller/Sieve.php:338
-msgid "Out of Office reply from %1$s"
-msgstr "Trả lời bên ngoài cơ quan từ %1$s"
-
-#: Controller/Sieve.php:677
-msgid "You have new mail from "
-msgstr ""
-
-#: Config.php:103
-msgid "Vacation Templates Node ID"
-msgstr ""
-
-#: Config.php:112
-msgid "Email Notification Templates Node ID"
-msgstr ""
-
-#: Config.php:121
-msgid "Custom Vacation Message"
-msgstr "Nội dung trả lời tự động"
-
-#: Config.php:123
-msgid "User is allowed to set custom vacation message for system account"
-msgstr ""
-"Người dùng được phép đặt nội dung trả lời tự động theo ý muốn cho tài khoản "
-"hệ thống"
-
-#: Config.php:132
-msgid "Cache email body"
-msgstr "Bản lưu đệm nội dung email"
-
-#: Config.php:134
-msgid ""
-"Should the email body be cached (recommended for slow IMAP server "
-"connections)"
-msgstr ""
-"Should the email body be cached (recommended for slow IMAP server "
-"connections)"
-
-#: Config.php:143
-msgid "Delete Archived Mail"
-msgstr ""
-
-#: Config.php:153
-msgid "Enabled Features"
-msgstr ""
-
-#: Config.php:155
-msgid "Enabled features in Felamimail application."
-msgstr ""
-
-#: Config.php:162
-msgid "Tine 2.0 Flag"
-msgstr ""
-
-#: Config.php:163
-msgid "Add a Tine 2.0 flag to sent messages"
-msgstr ""
-
-#: Config.php:171
-msgid "Filter E-Mail URIs"
-msgstr ""
-
-#: Config.php:173
-msgid ""
-"Should the email body uris be filtered. Only anchors with URIs are allowed "
-"if this is turned on.)"
-msgstr ""
-
-#: Config.php:190
-msgid "System Account Folder Defaults"
-msgstr ""
-
-#: Config.php:192
-msgid "Paths of the special folders (like Sent, Trash, ...)"
-msgstr ""
-
-#: Config.php:201
-msgid "Allow self signed TLS cert for IMAP connection"
-msgstr ""
-
-#: Config.php:211
-msgid "Sieve Redirect Only Internal"
-msgstr ""
-
-#: Config.php:213
-msgid ""
-"Allow only sieve redirect rules to internal (primary/secondary) email "
-"addresses"
-msgstr ""
-
-#: Config.php:222 Config.php:224
-msgid "Sieve Notification Bounces Reporting Email"
-msgstr ""
-
-#: Setup/Initialize.php:44
-msgid "All inboxes of my email accounts"
-msgstr "Mọi thư đến trong tài khoản email của tôi."
-
-#: Setup/Initialize.php:51
-msgid "All unread mail"
-msgstr "Mọi thư chưa đọc"
-
-#: Setup/Initialize.php:52
-msgid "All unread mail of my email accounts"
-msgstr "Mọi email chưa đọc trong tài khoản email của tôi"
-
-#: Setup/Initialize.php:59
-msgid "All highlighted mail"
-msgstr "Mọi thư được nhấn mạnh"
-
-#: Setup/Initialize.php:60
-msgid "All highlighted mail of my email accounts"
-msgstr "Mọi thư nhấn mạnh trong tài khoản email của tôi"
-
-#: Setup/Initialize.php:67
-msgid "All drafts"
-msgstr "Mọi bản nháp"
-
-#: Setup/Initialize.php:68
-msgid "All mails with the draft flag"
-msgstr "Mọi thư với cờ nháp"
-
-#: Acl/Rights.php:106
-msgid "manage email accounts"
-msgstr "quản lý tài khoản email"
-
-#: Acl/Rights.php:107
-msgid "Edit and delete email accounts"
-msgstr "Sửa và xóa tài khoản email"
-
-#: Acl/Rights.php:110
-msgid "Add email accounts"
-msgstr "Thêm tài khoản email"
-
-#: Acl/Rights.php:111
-msgid "Create new email accounts"
-msgstr "Tạo tài khoản email"
-
-#: Model/Message.php:289 Model/Message.php:295
-msgid "Reading Confirmation:"
-msgstr "Xác nhận đã đọc"
-
-#: Model/Message.php:290 Model/Message.php:296
-msgid "Your message:"
-msgstr "Nội dung của bạn"
-
-#: Model/Message.php:291 Model/Message.php:297
-msgid "Received on"
-msgstr ""
-
-#: Model/Message.php:292 Model/Message.php:298
-msgid "Was read by:"
-msgstr "Đã đọc bởi"
-
-#: Model/Message.php:293 Model/Message.php:299
-msgid "on"
-msgstr "vào"
 
 #: Preference.php:65
 msgid "All inboxes"
@@ -1384,36 +1233,185 @@ msgid ""
 "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr ""
 
-#: js/AttachmentUploadGrid.js:59
-msgid "Download"
+#: Config.php:111
+msgid "Vacation Templates Node ID"
 msgstr ""
 
-#: js/MessageEditDialog.js:1215
+#: Config.php:120
+msgid "Email Notification Templates Node ID"
+msgstr ""
+
+#: Config.php:129
+msgid "Custom Vacation Message"
+msgstr "Nội dung trả lời tự động"
+
+#: Config.php:131
+msgid "User is allowed to set custom vacation message for system account"
+msgstr "Người dùng được phép đặt nội dung trả lời tự động theo ý muốn cho tài khoản hệ thống"
+
+#: Config.php:140
+msgid "Cache email body"
+msgstr "Bản lưu đệm nội dung email"
+
+#: Config.php:142
 msgid ""
-"NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get "
-"his or her own copy."
+"Should the email body be cached (recommended for slow IMAP server "
+"connections)"
+msgstr "Should the email body be cached (recommended for slow IMAP server connections)"
+
+#: Config.php:151
+msgid "Delete Archived Mail"
 msgstr ""
 
-#: js/Felamimail.js:162
-#, python-brace-format
-msgid "Poll URL: {0}"
+#: Config.php:161
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:163
+msgid "Enabled Features in Felamimail Application."
+msgstr ""
+
+#: Config.php:171
+msgid "Tine 2.0 Flag"
 msgstr ""
 
 #: Config.php:173
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr ""
+
+#: Config.php:179
+msgid "Show Reply-To"
+msgstr ""
+
+#: Config.php:181
+msgid "Show Reply-To field in message compose dialog"
+msgstr ""
+
+#: Config.php:189
+msgid "Filter E-Mail URIs"
+msgstr ""
+
+#: Config.php:191
 msgid ""
 "Should the email body uris be filtered. Only anchors with URIs are allowed "
 "if this is turned on"
 msgstr ""
 
-#: Controller/Message/Send.php:846
+#: Config.php:208
+msgid "System Account Folder Defaults"
+msgstr ""
+
+#: Config.php:210
+msgid "Paths of the special folders (like Sent, Trash, ...)"
+msgstr ""
+
+#: Config.php:219
+msgid "Allow self signed TLS cert for IMAP connection"
+msgstr ""
+
+#: Config.php:229
+msgid "Sieve Redirect Only Internal"
+msgstr ""
+
+#: Config.php:231
+msgid ""
+"Allow only sieve redirect rules to internal (primary/secondary) email "
+"addresses"
+msgstr ""
+
+#: Config.php:240 Config.php:242
+msgid "Sieve Notification Bounces Reporting Email"
+msgstr ""
+
+#: Acl/Rights.php:106
+msgid "manage email accounts"
+msgstr "quản lý tài khoản email"
+
+#: Acl/Rights.php:107
+msgid "Edit and delete email accounts"
+msgstr "Sửa và xóa tài khoản email"
+
+#: Acl/Rights.php:110
+msgid "Add email accounts"
+msgstr "Thêm tài khoản email"
+
+#: Acl/Rights.php:111
+msgid "Create new email accounts"
+msgstr "Tạo tài khoản email"
+
+#: Controller/Sieve.php:338
+msgid "Out of Office reply from %1$s"
+msgstr "Trả lời bên ngoài cơ quan từ %1$s"
+
+#: Controller/Sieve.php:677
+msgid "You have new mail from "
+msgstr ""
+
+#: Controller/Message/Flags.php:26
+msgid "Seen"
+msgstr "Đã xem"
+
+#: Controller/Message/Flags.php:27
+msgid "Deleted"
+msgstr "Đã xóa"
+
+#: Controller/Message/Flags.php:28
+msgid "Draft"
+msgstr "Nháp"
+
+#: Controller/Message/Flags.php:29
+msgid "Flagged"
+msgstr "Đã cắm cờ"
+
+#: Controller/Message/Send.php:103
+msgid "Bad recipient address syntax"
+msgstr ""
+
+#: Controller/Message/Send.php:105
+msgid "Recipient address rejected"
+msgstr ""
+
+#: Controller/Message/Send.php:575
+msgid "Invalid address format"
+msgstr ""
+
+#: Controller/Message/Send.php:586
+#, python-format
+msgid "Error: %s"
+msgstr "Lỗi: %s"
+
+#: Controller/Message/Send.php:588
+msgid "Could not send message"
+msgstr "Không thể gửi message"
+
+#: Controller/Message/Send.php:855
 msgid "My Mail Download Links"
 msgstr ""
 
-msgid "Add Note"
-msgstr "Thêm ghi chú"
+#: Setup/Initialize.php:44
+msgid "All inboxes of my email accounts"
+msgstr "Mọi thư đến trong tài khoản email của tôi."
 
-msgid "Edit Email Note Text:"
-msgstr "Sửa văn bản ghi chú email:"
+#: Setup/Initialize.php:51
+msgid "All unread mail"
+msgstr "Mọi thư chưa đọc"
 
-msgid "Vacation Templates Container ID"
-msgstr "Vacation Templates Container ID"
+#: Setup/Initialize.php:52
+msgid "All unread mail of my email accounts"
+msgstr "Mọi email chưa đọc trong tài khoản email của tôi"
+
+#: Setup/Initialize.php:59
+msgid "All highlighted mail"
+msgstr "Mọi thư được nhấn mạnh"
+
+#: Setup/Initialize.php:60
+msgid "All highlighted mail of my email accounts"
+msgstr "Mọi thư nhấn mạnh trong tài khoản email của tôi"
+
+#: Setup/Initialize.php:67
+msgid "All drafts"
+msgstr "Mọi bản nháp"
+
+#: Setup/Initialize.php:68
+msgid "All mails with the draft flag"
+msgstr "Mọi thư với cờ nháp"

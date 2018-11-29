@@ -19,31 +19,36 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Пожалуйста, выберите проект для добавления контактов"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Пожалуйста, выберите роль участника"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Выберите проект"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:85
+msgid "Role"
+msgstr "Роль"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Выберите роль"
+
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Добавлено {0} участников в проект"
+
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Проекты"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Найти FAQ"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Теги"
-
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
-msgid "Number"
-msgstr "Номер"
-
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
-msgid "Title"
-msgstr "Заголовок"
-
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
-msgid "Status"
-msgstr "Статус"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:111 js/ProjectEditDialog.js:124
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Проект"
@@ -67,9 +72,21 @@ msgstr "Списки проектов"
 msgid "Quick Search"
 msgstr "Быстрый поиск"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:178
+#: js/Model.js:74 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "Заголовок"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "Номер"
+
+#: js/Model.js:76 js/ProjectEditDialog.js:182
 msgid "Description"
 msgstr "Описание"
+
+#: js/Model.js:78 js/ProjectEditDialog.js:147 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "Статус"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -87,7 +104,7 @@ msgstr "Время создания"
 msgid "Created By"
 msgstr "Создано"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:84
 msgid "Attendee"
 msgstr "Участник"
 
@@ -95,34 +112,17 @@ msgstr "Участник"
 msgid "Attendee Role"
 msgstr "Роль участника"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Пожалуйста, выберите проект для добавления контактов"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Пожалуйста, выберите роль участника"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Выберите проект"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Роль"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Выберите роль"
-
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Добавлено {0} участников в проект"
-
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:196
 msgid "Enter description"
 msgstr "Введите описание"
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Найти FAQ"
+
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Теги"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -181,6 +181,14 @@ msgstr "Коллега"
 msgid "Responsible"
 msgstr "Ответственный"
 
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Управление общими избранными проектами"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Создание новых общих избранных проектов"
+
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
@@ -205,11 +213,3 @@ msgstr "Мои ожидающие проекты"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Мои приостановленные проекты"
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Управление общими избранными проектами"
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Создание новых общих избранных проектов"

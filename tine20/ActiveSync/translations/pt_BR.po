@@ -1,6 +1,7 @@
 # 
 # Translators:
 # fgsl <flavio.lisboa@serpro.gov.br>, 2017
+# fgsl <flavio.lisboa@serpro.gov.br>, 2017
 # Miguel Mucio Santos Moreira <miglinux@yahoo.com.br>, 2015
 msgid ""
 msgstr ""
@@ -18,39 +19,11 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Syncronização Ativa"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Selecione o Dispositivo"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Nenhum dispositivo de sincronização ativa registrado"
-
-#: js/Application.js:65
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Atribuir como {0} Filtro"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Filtro de Sincronização Reestabelecido"
-
-#: js/Application.js:91 js/Application.js:103
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} filtro para o dispositivo \"{1}\" está agora \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "Reestabelecido"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Atribuir Filtro de Sincronização"
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] "Dispositivos de Sincronização"
+msgstr[1] "Dispositivos de Sincronização"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -159,12 +132,6 @@ msgstr "Você realmente quer limpar os dispositivos selecionados? Todos os dados
 msgid "Quicksearch"
 msgstr "Pesquisa Rápida"
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] "Dispositivos de Sincronização"
-msgstr[1] "Dispositivos de Sincronização"
-
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
@@ -174,6 +141,40 @@ msgstr[1] "Dispositivos"
 #: js/Model.js:42
 msgid "Devices"
 msgstr "Dispositivos"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Syncronização Ativa"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Selecione o Dispositivo"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Nenhum dispositivo de sincronização ativa registrado"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Atribuir como {0} Filtro"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Filtro de Sincronização Reestabelecido"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} filtro para o dispositivo \"{1}\" está agora \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "Reestabelecido"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Atribuir Filtro de Sincronização"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -231,14 +232,6 @@ msgstr "Filtra intervalo de tempo para eventos"
 msgid "For how long in the past the events should be synchronized."
 msgstr "Por quanto tempo no passado os eventos devem ser sincronizados."
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Política Padrão"
-
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Política Padrão instalada durante a configuração"
-
 #: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
 msgstr "Gerenciamento de dispositivos de Sincronização Ativa"
@@ -254,3 +247,11 @@ msgstr "Reinicializar dispositivos de Sincronização Ativa"
 #: Acl/Rights.php:115
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr "Reinicializar remotamente dispositivos para o estado de fábrica, apagando todos os dados"
+
+#: Setup/setup.xml:544 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Política Padrão"
+
+#: Setup/setup.xml:549 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Política Padrão instalada durante a configuração"

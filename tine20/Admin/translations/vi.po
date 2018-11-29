@@ -1,122 +1,336 @@
-#
+# 
 # Translators:
 # sao sang <saosangmo@yahoo.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2016-03-17 10:50+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/"
-"vi/)\n"
-"Language: vi\n"
+"PO-Revision-Date: 2018-11-28 11:09+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/TagEditDialog.js:38 js/RoleEditDialog.js:70 js/GroupEditDialog.js:38
+#: js/Admin.js:26 js/AccessLog.js:106 js/user/Users.js:75
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "one: Người dùng\nother: Người dùng"
+
+#: js/Admin.js:39 js/Models.js:87
+msgid "Groups"
+msgstr "Nhóm"
+
+#: js/Admin.js:52
+msgid "Roles"
+msgstr "Vai trò"
+
+#: js/Admin.js:64 js/Models.js:128
+msgid "Applications"
+msgstr "Ứng dụng"
+
+#: js/Admin.js:77
+msgid "Containers"
+msgstr "Bộ chứa"
+
+#: js/Admin.js:89
+msgid "Shared Tags"
+msgstr "Từ khóa chia sẻ"
+
+#: js/Admin.js:102
+msgid "Customfields"
+msgstr "Trường tùy biến"
+
+#: js/Admin.js:114
+msgid "Computers"
+msgstr "Máy tính"
+
+#: js/Admin.js:128 js/Models.js:51 js/AccessLog.js:104
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "one: Nhật ký truy cập\nother: Nhật ký truy cập"
+
+#: js/Admin.js:141
+msgid "Server Information"
+msgstr "Thông tin máy chủ"
+
+#: js/Admin.js:157
+msgid "ActiveSync Devices"
+msgstr ""
+
+#: js/Admin.js:228
+msgid "Admin"
+msgstr "Admin"
+
+#: js/Admin.js:318
+msgid "Refresh"
+msgstr "Nạp lại"
+
+#: js/QuotaUsage.js:51 js/Applications.js:276 js/Groups.js:240
+#: js/AccessLog.js:132 js/container/EditDialog.js:157 js/Roles.js:238
+#: js/Tags.js:230 js/config/GridPanel.js:74 js/SambaMachineGrid.js:83
+#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:459
+#: js/user/EditDialog.js:315 js/user/EditDialog.js:351
+msgid "Name"
+msgstr "Tên"
+
+#: js/QuotaUsage.js:57
+msgid "Size"
+msgstr ""
+
+#: js/QuotaUsage.js:69
+msgid "Revision Size"
+msgstr ""
+
+#: js/QuotaUsage.js:70
+msgid "Total size of all available revisions"
+msgstr ""
+
+#: js/QuotaUsage.js:107
+msgid "Quota Usage"
+msgstr ""
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "one: Máy tính\nother: Máy tính"
+
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Danh bạ mặc định cho nhóm và liên lạc mới"
+
+#: js/Models.js:87 js/GroupEditDialog.js:222 js/customfield/EditDialog.js:493
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "one: Nhóm\nother: Nhóm"
+
+#: js/Models.js:128 js/ApplicationFilter.js:33 js/container/GridPanel.js:67
+#: js/container/EditDialog.js:169 js/customfield/GridPanel.js:70
+#: js/customfield/EditDialog.js:229 js/customfield/EditDialog.js:389
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "one: Ứng dụng\nother: Ứng dụng"
+
+#: js/Models.js:160 js/config/GridPanel.js:49
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+
+#: js/Models.js:160
+msgid "Configs"
+msgstr ""
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
 msgid "Please wait"
 msgstr "Xin hãy đợi"
 
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "Đang cập nhật từ khóa"
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr "Đang cập nhật thành viên"
 
-#: js/TagEditDialog.js:84 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
-#: js/Roles.js:69 js/Groups.js:74 js/GroupEditDialog.js:73
+#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:108
+#: js/RoleEditDialog.js:136 js/Roles.js:69 js/TagEditDialog.js:84
 msgid "Failed"
 msgstr "Hỏng"
 
-#: js/TagEditDialog.js:85
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr ""
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Không thể lưu nhóm"
 
-#: js/TagEditDialog.js:91 js/RoleEditDialog.js:115 js/GroupEditDialog.js:78
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115
 #: js/customfield/EditDialog.js:138 js/customfield/EditDialog.js:274
+#: js/TagEditDialog.js:91
 msgid "Errors"
 msgstr "Lỗi"
 
-#: js/TagEditDialog.js:91 js/RoleEditDialog.js:115 js/GroupEditDialog.js:78
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:91
 msgid "Please fix the errors noted."
 msgstr "Xin hãy sửa các lỗi được ghi chú."
 
-#: js/TagEditDialog.js:172
-msgid "Allowed Contexts"
-msgstr "Ngữ cảnh được phép"
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Tên nhóm"
 
-#: js/TagEditDialog.js:178
-msgid "Context"
-msgstr "Ngữ cảnh"
-
-#: js/TagEditDialog.js:191
-msgid "Account Rights"
-msgstr "Quyền tài khoản"
-
-#: js/TagEditDialog.js:200
-msgid "View"
-msgstr "Xem"
-
-#: js/TagEditDialog.js:205
-msgid "Use"
-msgstr "Sử dụng"
-
-#: js/TagEditDialog.js:222
-msgid "Tag Name"
-msgstr "Tên từ khóa"
-
-#: js/TagEditDialog.js:229 js/Tags.js:227 js/container/EditDialog.js:195
-msgid "Color"
-msgstr "Màu"
-
-#: js/TagEditDialog.js:234 js/user/GridPanel.js:104 js/RoleEditDialog.js:294
-#: js/Tags.js:231 js/Roles.js:243 js/Groups.js:241 js/GroupEditDialog.js:129
-#: js/config/GridPanel.js:63 js/SambaMachineGrid.js:57
-#: js/SambaMachineGrid.js:89 js/config/EditDialog.js:129 js/Roles.js:239
-#: js/user/GridPanel.js:105
+#: js/GroupEditDialog.js:129 js/Groups.js:241 js/RoleEditDialog.js:294
+#: js/Roles.js:239 js/Tags.js:231 js/config/GridPanel.js:63
+#: js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89
+#: js/user/GridPanel.js:105 js/TagEditDialog.js:234
 msgid "Description"
 msgstr "Mô tả"
 
-#: js/TagEditDialog.js:294 js/RoleEditDialog.js:361 js/GroupEditDialog.js:222
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:997
+msgid "Visibility"
+msgstr "Có thể nhìn thấy"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:1004
+msgid "Display in addressbook"
+msgstr "Hiển thị trong sổ địa chỉ"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:1004
+msgid "Hide from addressbook"
+msgstr "Ẩn từ sổ địa chỉ"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:1018
+msgid "Saved in Addressbook"
+msgstr "Đã lưu trong Sổ địa chỉ"
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Nhóm thành viên"
+
+#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:361 js/TagEditDialog.js:294
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr "Đang chuyển {0} ..."
 
-#: js/TagEditDialog.js:294
-msgid "Tag"
-msgstr "Từ khóa"
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Thêm nhóm mới"
 
-#: js/TagEditDialog.js:304
-msgid "Add New Tag"
-msgstr "Thêm từ khóa"
-
-#: js/TagEditDialog.js:306
+#: js/GroupEditDialog.js:240
 #, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "Sửa từ khóa \"{0}\""
+msgid "Edit Group \"{0}\""
+msgstr "Sửa nhóm \"{0}\""
 
-#: js/AccessLog.js:104 js/Admin.js:88 js/Models.js:51 js/Admin.js:128
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] ""
-"one: Nhật ký truy cập\n"
-"other: Nhật ký truy cập"
+#: js/Applications.js:23
+msgid "Enable Application"
+msgstr "Mở ứng dụng"
+
+#: js/Applications.js:31
+msgid "Disable Application"
+msgstr "Cấm ứng dụng"
+
+#: js/Applications.js:39
+msgid "Settings"
+msgstr "Thiết lập"
+
+#: js/Applications.js:68
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "{0} Thiết lập"
+
+#: js/Applications.js:141
+msgid "enable application"
+msgstr "mở ứng dụng"
+
+#: js/Applications.js:142
+msgid "disable application"
+msgstr "tắt ứng dụng"
+
+#: js/Applications.js:143
+msgid "settings"
+msgstr "thiết lập"
+
+#: js/Applications.js:180 js/Groups.js:180 js/Roles.js:180 js/Tags.js:174
+msgid "Search:"
+msgstr "Tìm kiếm:"
+
+#: js/Applications.js:220 js/user/EditDialog.js:959
+msgid "disabled"
+msgstr "đã tắt"
+
+#: js/Applications.js:223 js/user/EditDialog.js:958
+msgid "enabled"
+msgstr "đang mở"
+
+#: js/Applications.js:227
+#, python-brace-format
+msgid "unknown status ({0})"
+msgstr "không rõ trạng thái ({0})"
+
+#: js/Applications.js:265
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Hiển thị ứng dụng {0} - {1} của {2}"
+
+#: js/Applications.js:266
+msgid "No applications to display"
+msgstr "Không có ứng dụng nào"
+
+#: js/Applications.js:275 js/container/EditDialog.js:215
+#: js/customfield/EditDialog.js:498
+msgid "Order"
+msgstr "Xắp xếp"
+
+#: js/Applications.js:277 js/user/GridPanel.js:205 js/user/EditDialog.js:950
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/Applications.js:278
+msgid "Version"
+msgstr "Phiên bản"
+
+#: js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
+msgid "Confirm"
+msgstr "Xác nhận"
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Bạn có muốn xóa nhóm được chọn"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Đang xóa nhóm ..."
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Có lỗi xảy ra khi xóa nhóm"
+
+#: js/Groups.js:108
+msgid "Add Group"
+msgstr "Tạo nhóm"
+
+#: js/Groups.js:116
+msgid "Edit Group"
+msgstr "Sửa nhóm"
+
+#: js/Groups.js:124
+msgid "Delete Group"
+msgstr "Xóa nhóm"
+
+#: js/Groups.js:228
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Hiển thị nhóm {0} - {1} của {2}"
+
+#: js/Groups.js:229 js/Groups.js:287
+msgid "No groups to display"
+msgstr "Không có nhóm bài được hiển thị"
+
+#: js/Groups.js:239 js/container/GridPanel.js:65 js/Roles.js:237
+#: js/SambaMachineGrid.js:76 js/customfield/GridPanel.js:66
+#: js/user/GridPanel.js:204
+msgid "ID"
+msgstr "ID"
+
+#: js/Groups.js:242
+msgid "Creation Time"
+msgstr ""
+
+#: js/Groups.js:243
+msgid "Created By"
+msgstr ""
+
+#: js/Groups.js:244
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Groups.js:245
+msgid "Last Modified By"
+msgstr ""
+
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:56
+msgid "Computer Name"
+msgstr "Tên máy tính"
 
 #: js/AccessLog.js:105 js/AccessLog.js:133
 msgid "IP Address"
 msgstr "Địa chỉ IP"
-
-#: js/AccessLog.js:106 js/user/Users.js:72 js/Admin.js:23 js/user/Users.js:75
-#: js/Admin.js:26
-msgid "User"
-msgid_plural "Users"
-msgstr[0] ""
-"one: Người dùng\n"
-"other: Người dùng"
 
 #: js/AccessLog.js:107 js/AccessLog.js:134
 msgid "Login Time"
@@ -137,15 +351,6 @@ msgstr "Session ID"
 #: js/AccessLog.js:131
 msgid "Login Name"
 msgstr "Tên đăng nhập"
-
-#: js/AccessLog.js:132 js/user/EditDialog.js:288 js/user/EditDialog.js:324
-#: js/Tags.js:230 js/Roles.js:242 js/Groups.js:240 js/Applications.js:276
-#: js/config/GridPanel.js:74 js/container/EditDialog.js:131
-#: js/SambaMachineGrid.js:83 js/customfield/GridPanel.js:68
-#: js/customfield/EditDialog.js:459 js/config/EditDialog.js:115 js/Roles.js:238
-#: js/user/EditDialog.js:304 js/user/EditDialog.js:340 js/QuotaUsage.js:51
-msgid "Name"
-msgstr "Tên"
 
 #: js/AccessLog.js:136
 msgid "Result"
@@ -182,480 +387,6 @@ msgstr "hỏng"
 #: js/AccessLog.js:185
 msgid "success"
 msgstr "thành công"
-
-#: js/user/GridPanel.js:50 js/user/GridPanel.js:51
-msgid "Enable Account"
-msgstr "Mở tài khoản"
-
-#: js/user/GridPanel.js:60 js/user/GridPanel.js:61
-msgid "Disable Account"
-msgstr "Tắt tài khoản"
-
-#: js/user/GridPanel.js:70 js/user/GridPanel.js:71
-msgid "Reset Password"
-msgstr "Nhập lại mật khẩu"
-
-#: js/user/GridPanel.js:79 js/user/GridPanel.js:80
-msgid "Reset Pin"
-msgstr ""
-
-#: js/user/GridPanel.js:188 js/Roles.js:241 js/Groups.js:239
-#: js/container/GridPanel.js:65 js/SambaMachineGrid.js:76
-#: js/customfield/GridPanel.js:66 js/Roles.js:237 js/user/GridPanel.js:189
-msgid "ID"
-msgstr "ID"
-
-#: js/user/GridPanel.js:189 js/user/EditDialog.js:882 js/Applications.js:277
-#: js/user/EditDialog.js:927 js/user/GridPanel.js:190
-msgid "Status"
-msgstr "Trạng thái"
-
-#: js/user/GridPanel.js:190 js/user/GridPanel.js:191
-msgid "Display name"
-msgstr "Tên hiển thị"
-
-#: js/user/GridPanel.js:191 js/user/EditDialog.js:813 js/user/EditDialog.js:858
-#: js/user/EditDialog.js:903 js/user/GridPanel.js:192
-msgid "Login name"
-msgstr "Tên đăng nhập"
-
-#: js/user/GridPanel.js:192 js/user/EditDialog.js:807 js/user/EditDialog.js:852
-#: js/user/GridPanel.js:193
-msgid "Last name"
-msgstr "Tên"
-
-#: js/user/GridPanel.js:193 js/user/EditDialog.js:796 js/user/EditDialog.js:841
-#: js/user/GridPanel.js:194
-msgid "First name"
-msgstr "Tên họ"
-
-#: js/user/GridPanel.js:194 js/user/EditDialog.js:850 js/user/EditDialog.js:895
-#: js/user/GridPanel.js:195
-msgid "Email"
-msgstr "Email"
-
-#: js/user/GridPanel.js:195 js/user/EditDialog.js:857 js/user/EditDialog.js:902
-#: js/user/GridPanel.js:198
-msgid "OpenID"
-msgstr "OpenID"
-
-#: js/user/GridPanel.js:196 js/user/EditDialog.js:990
-#: js/user/EditDialog.js:1035 js/user/GridPanel.js:199
-msgid "Last login at"
-msgstr "Đăng nhập lần cuối lúc"
-
-#: js/user/GridPanel.js:197 js/user/EditDialog.js:994
-#: js/user/EditDialog.js:1039 js/user/GridPanel.js:200
-msgid "Last login from"
-msgstr "Đawng nhập lần cuối từ"
-
-#: js/user/GridPanel.js:198 js/user/GridPanel.js:201
-msgid "Password changed"
-msgstr "Đã đổi mật khẩu"
-
-#: js/user/GridPanel.js:199 js/user/EditDialog.js:923 js/user/EditDialog.js:968
-#: js/user/GridPanel.js:202
-msgid "Expires"
-msgstr "Hết hạn"
-
-#: js/user/GridPanel.js:258 js/user/GridPanel.js:261
-msgid "Set new password"
-msgstr "Đặt mật khẩu mới"
-
-#: js/user/GridPanel.js:258 js/user/GridPanel.js:261
-msgid "Please enter the new password:"
-msgstr "Xin hãy nhập mật khẩu mới"
-
-#: js/user/GridPanel.js:286 js/user/GridPanel.js:289
-msgid "Set new pin"
-msgstr ""
-
-#: js/user/GridPanel.js:286 js/user/GridPanel.js:289
-msgid "Please enter the new pin:"
-msgstr ""
-
-#: js/user/EditDialog.js:190 js/user/EditDialog.js:206
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Tên miền không được phép. Kiểm tra cấu hình tên miền SMTP"
-
-#: js/user/EditDialog.js:237 js/user/EditDialog.js:240
-#: js/user/EditDialog.js:736 js/user/EditDialog.js:253
-#: js/user/EditDialog.js:256 js/user/EditDialog.js:781
-msgid "Passwords do not match!"
-msgstr "Mật khẩu không giống nhau"
-
-#: js/user/EditDialog.js:243 js/user/EditDialog.js:259
-msgid "Passwords match!"
-msgstr "Mật khẩu giống nhau"
-
-#: js/user/EditDialog.js:289 js/user/EditDialog.js:864
-#: js/user/EditDialog.js:305 js/user/EditDialog.js:909
-msgid "Primary group"
-msgstr "Nhóm chính"
-
-#: js/user/EditDialog.js:366 js/user/EditDialog.js:382
-msgid "Unix"
-msgstr "Unix"
-
-#: js/user/EditDialog.js:380 js/user/EditDialog.js:396
-msgid "Home Directory"
-msgstr "Thư mục Home"
-
-#: js/user/EditDialog.js:384 js/user/EditDialog.js:400
-msgid "Login Shell"
-msgstr "Shell Login"
-
-#: js/user/EditDialog.js:390 js/user/EditDialog.js:406
-msgid "Windows"
-msgstr "Windows"
-
-#: js/user/EditDialog.js:404 js/user/EditDialog.js:420
-msgid "Home Drive"
-msgstr "Home Drive"
-
-#: js/user/EditDialog.js:409 js/user/EditDialog.js:425
-msgid "Logon Time"
-msgstr "Thơi gian đăng nh"
-
-#: js/user/EditDialog.js:411 js/user/EditDialog.js:992
-#: js/user/EditDialog.js:996 js/user/EditDialog.js:427
-#: js/user/EditDialog.js:1037 js/user/EditDialog.js:1041
-msgid "never logged in"
-msgstr "chưa bao giờ đăng nhập"
-
-#: js/user/EditDialog.js:414 js/user/EditDialog.js:430
-msgid "Home Path"
-msgstr "Đường dẫn trang chủ"
-
-#: js/user/EditDialog.js:419 js/user/EditDialog.js:435
-msgid "Logoff Time"
-msgstr "Thời gian thoát"
-
-#: js/user/EditDialog.js:421 js/user/EditDialog.js:437
-msgid "never logged off"
-msgstr "chưa bao giờ thoát"
-
-#: js/user/EditDialog.js:424 js/user/EditDialog.js:440
-msgid "Profile Path"
-msgstr "Đường dẫn hồ sơ"
-
-#: js/user/EditDialog.js:429 js/user/EditDialog.js:445
-msgid "Password Last Set"
-msgstr "Đặt mật khẩu lần cuối"
-
-#: js/user/EditDialog.js:431 js/user/EditDialog.js:926
-#: js/user/EditDialog.js:1000 js/user/EditDialog.js:447
-#: js/user/EditDialog.js:971 js/user/EditDialog.js:1045
-msgid "never"
-msgstr "chưa bao giờ"
-
-#: js/user/EditDialog.js:434 js/user/EditDialog.js:450
-msgid "Logon Script"
-msgstr "Script đăng nhập"
-
-#: js/user/EditDialog.js:439 js/user/EditDialog.js:455
-msgid "Password Can Change"
-msgstr "Mật khẩu có thể đổi"
-
-#: js/user/EditDialog.js:441 js/user/EditDialog.js:446
-#: js/user/EditDialog.js:451 js/user/EditDialog.js:457
-#: js/user/EditDialog.js:462 js/user/EditDialog.js:467
-msgid "not set"
-msgstr "chưa đặt"
-
-#: js/user/EditDialog.js:444 js/user/EditDialog.js:460
-msgid "Password Must Change"
-msgstr "Mật khẩu phải được thay đổi"
-
-#: js/user/EditDialog.js:449 js/user/EditDialog.js:465
-msgid "Kick Off Time"
-msgstr "Thời gian bắt đầu"
-
-#: js/user/EditDialog.js:469
-msgid "IMAP Quota (MB)"
-msgstr "IMAP Quota (MB)"
-
-#: js/user/EditDialog.js:488 js/user/EditDialog.js:526
-#: js/user/EditDialog.js:503 js/user/EditDialog.js:545
-#: js/user/EditDialog.js:577
-msgid "Quota"
-msgstr "Quota"
-
-#: js/user/EditDialog.js:489 js/user/EditDialog.js:527
-#: js/user/EditDialog.js:504 js/user/EditDialog.js:546
-#: js/user/EditDialog.js:578
-msgid "no quota set"
-msgstr "chưa đặt quota"
-
-#: js/user/EditDialog.js:499 js/user/EditDialog.js:550
-msgid "Current Mailbox size"
-msgstr "Dung lượng Mailbox hiện tại"
-
-#: js/user/EditDialog.js:507
-msgid "Sieve Quota (MB)"
-msgstr "Sieve Quota (MB)"
-
-#: js/user/EditDialog.js:537 js/user/EditDialog.js:582
-msgid "Current Sieve size"
-msgstr "Current Sieve size"
-
-#: js/user/EditDialog.js:546 js/user/EditDialog.js:975
-#: js/user/EditDialog.js:591 js/user/EditDialog.js:1020
-msgid "Information"
-msgstr "Thông tin"
-
-#: js/user/EditDialog.js:560 js/user/EditDialog.js:605
-msgid "Last Login"
-msgstr "Đăng nhập lần cuối"
-
-#: js/user/EditDialog.js:621 js/user/EditDialog.js:666
-msgid "Domain not allowed"
-msgstr "Tên miền không được phép sử dụng"
-
-#: js/user/EditDialog.js:622 js/user/EditDialog.js:667
-#, python-brace-format
-msgid ""
-"The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup. Please add this "
-"domain to the secondary domains in SMTP setup or use another domain which is "
-"configured already."
-msgstr ""
-
-#: js/user/EditDialog.js:631 js/user/EditDialog.js:676
-msgid "Email Alias"
-msgstr "Ánh xạ email"
-
-#: js/user/EditDialog.js:637 js/user/EditDialog.js:682
-msgid "Add an alias address..."
-msgstr "Thêm 1 địa chỉ ánh xạ email..."
-
-#: js/user/EditDialog.js:655 js/user/EditDialog.js:700
-msgid "Forwarding to self"
-msgstr "Chuyển tiếp tới chính tôi"
-
-#: js/user/EditDialog.js:656 js/user/EditDialog.js:701
-msgid ""
-"You are not allowed to set a forward email address that is identical to the "
-"users primary email or one of his aliases."
-msgstr ""
-"Bạn không được phép đặt 1 email chuyển tiếp giống với email chính của người "
-"dùng hoặc 1 trong các ánh xạ của h"
-
-#: js/user/EditDialog.js:665 js/user/EditDialog.js:710
-msgid "Email Forward"
-msgstr "Chuyến tiếp email"
-
-#: js/user/EditDialog.js:671 js/user/EditDialog.js:716
-msgid "Add a forward address..."
-msgstr "Thêm 1 địa chỉ chuyển tiếp..."
-
-#: js/user/EditDialog.js:684 js/user/EditDialog.js:729
-msgid "Forward Only"
-msgstr "Chỉ chuyển tiếp"
-
-#: js/user/EditDialog.js:703 js/user/EditDialog.js:748
-msgid "Password confirmation"
-msgstr "Xác nhận mật khẩu"
-
-#: js/user/EditDialog.js:720 js/user/EditDialog.js:765
-msgid "Repeat password"
-msgstr "Nhập lại mật khẩu"
-
-#: js/user/EditDialog.js:739 js/customfield/EditDialog.js:311
-#: js/user/EditDialog.js:784
-msgid "Cancel"
-msgstr "Hủy"
-
-#: js/user/EditDialog.js:746 js/user/EditDialog.js:791
-msgid "Ok"
-msgstr "OK"
-
-#: js/user/EditDialog.js:781 js/user/EditDialog.js:826
-msgid "Account"
-msgstr "Tài khoản"
-
-#: js/user/EditDialog.js:819 js/user/EditDialog.js:864
-msgid "Password"
-msgstr "Mật khẩu"
-
-#: js/user/EditDialog.js:890 js/Applications.js:223 js/user/EditDialog.js:935
-msgid "enabled"
-msgstr "đang mở"
-
-#: js/user/EditDialog.js:891 js/Applications.js:220 js/user/EditDialog.js:936
-msgid "disabled"
-msgstr "đã tắt"
-
-#: js/user/EditDialog.js:892 js/user/EditDialog.js:937
-msgid "expired"
-msgstr "hết hạn"
-
-#: js/user/EditDialog.js:893 js/user/EditDialog.js:938
-msgid "blocked"
-msgstr "đã bị phong tỏa"
-
-#: js/user/EditDialog.js:900 js/user/EditDialog.js:945
-msgid "Invalid Status"
-msgstr "Trạng thái không hợp lệ"
-
-#: js/user/EditDialog.js:901 js/user/EditDialog.js:946
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
-msgstr ""
-"Trạng thái bị phong tỏa chỉ hợp lệ khi người dùng cố đăng nhập với một mật "
-"khẩu sai một cách thường xuyên. Nó không thể được đặt trạng thái này ở đây."
-
-#: js/user/EditDialog.js:929 js/GroupEditDialog.js:137
-#: js/user/EditDialog.js:974
-msgid "Visibility"
-msgstr "Có thể nhìn thấy"
-
-#: js/user/EditDialog.js:936 js/GroupEditDialog.js:143
-#: js/user/EditDialog.js:981
-msgid "Display in addressbook"
-msgstr "Hiển thị trong sổ địa chỉ"
-
-#: js/user/EditDialog.js:936 js/GroupEditDialog.js:143
-#: js/user/EditDialog.js:981
-msgid "Hide from addressbook"
-msgstr "Ẩn từ sổ địa chỉ"
-
-#: js/user/EditDialog.js:950 js/GroupEditDialog.js:159
-#: js/user/EditDialog.js:995
-msgid "Saved in Addressbook"
-msgstr "Đã lưu trong Sổ địa chỉ"
-
-#: js/user/EditDialog.js:992 js/user/EditDialog.js:996
-#: js/user/EditDialog.js:1037 js/user/EditDialog.js:1041
-msgid "don't know"
-msgstr "không biết"
-
-#: js/user/EditDialog.js:998 js/user/EditDialog.js:1043
-msgid "Password set"
-msgstr "Mật khẩu được đặt"
-
-#: js/user/EditDialog.js:1005 js/user/EditDialog.js:1050
-msgid "User groups"
-msgstr "Nhóm người dùng"
-
-#: js/user/EditDialog.js:1011 js/user/EditDialog.js:1056
-msgid "User roles"
-msgstr "Vai trò người dùng"
-
-#: js/user/EditDialog.js:1017 js/user/EditDialog.js:1062
-msgid "Fileserver"
-msgstr "Máy chủ file"
-
-#: js/user/EditDialog.js:1023 js/user/EditDialog.js:1073
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:1032 js/user/EditDialog.js:1082
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/user/Users.js:72 js/user/Users.js:75
-msgid "Users"
-msgstr "Người dùng"
-
-#: js/user/Users.js:120 js/user/Users.js:123
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] ""
-"one: Người dùng Samba\n"
-"other: Người dùng Samba"
-
-#: js/user/Users.js:146 js/user/Users.js:149
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] ""
-"one: Người sử dụng email\n"
-"other: Người sử dụng email"
-
-#: js/Admin.js:36 js/Models.js:87 js/Admin.js:39
-msgid "Groups"
-msgstr "Nhóm"
-
-#: js/Admin.js:49 js/Admin.js:52
-msgid "Roles"
-msgstr "Vai trò"
-
-#: js/Admin.js:61 js/Admin.js:114
-msgid "Computers"
-msgstr "Máy tính"
-
-#: js/Admin.js:75 js/Models.js:128 js/Admin.js:64
-msgid "Applications"
-msgstr "Ứng dụng"
-
-#: js/Admin.js:101 js/Admin.js:89
-msgid "Shared Tags"
-msgstr "Từ khóa chia sẻ"
-
-#: js/Admin.js:114 js/Admin.js:77
-msgid "Containers"
-msgstr "Bộ chứa"
-
-#: js/Admin.js:126 js/Admin.js:102
-msgid "Customfields"
-msgstr "Trường tùy biến"
-
-#: js/Admin.js:138 js/Admin.js:141
-msgid "Server Information"
-msgstr "Thông tin máy chủ"
-
-#: js/Admin.js:154 js/Admin.js:157
-msgid "ActiveSync Devices"
-msgstr ""
-
-#: js/Admin.js:192 js/Admin.js:228
-msgid "Admin"
-msgstr "Admin"
-
-#: js/Admin.js:277 js/Admin.js:318
-msgid "Refresh"
-msgstr "Nạp lại"
-
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Danh bạ mặc định cho nhóm và liên lạc mới"
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] ""
-"one: Máy tính\n"
-"other: Máy tính"
-
-#: js/Models.js:87 js/GroupEditDialog.js:222 js/customfield/EditDialog.js:493
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-"one: Nhóm\n"
-"other: Nhóm"
-
-#: js/Models.js:128 js/container/GridPanel.js:67 js/container/EditDialog.js:143
-#: js/ApplicationFilter.js:33 js/customfield/GridPanel.js:70
-#: js/customfield/EditDialog.js:229 js/customfield/EditDialog.js:389
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-"one: Ứng dụng\n"
-"other: Ứng dụng"
-
-#: js/Models.js:160 js/config/GridPanel.js:49
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-
-#: js/Models.js:160
-msgid "Configs"
-msgstr ""
-
-#: js/RoleEditDialog.js:70 js/GroupEditDialog.js:38
-msgid "Updating Memberships"
-msgstr "Đang cập nhật thành viên"
 
 #: js/RoleEditDialog.js:108
 msgid "Could not save role."
@@ -694,46 +425,49 @@ msgstr "Thêm vai trò"
 msgid "Edit Role \"{0}\""
 msgstr "Sửa vai trò \"{0}\""
 
-#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
-msgid "Confirm"
-msgstr "Xác nhận"
+#: js/container/GridPanel.js:66
+msgid "Container Name"
+msgstr "Tên bộ chứa"
 
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Bạn có muốn xóa các từ khóa đa chọn?"
+#: js/container/GridPanel.js:68 js/container/GridPanel.js:100
+#: js/container/EditDialog.js:201 js/customfield/GridPanel.js:69
+#: js/customfield/EditDialog.js:447
+msgid "Type"
+msgstr "Loại"
 
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Đang xóa từ khóa ..."
+#: js/container/GridPanel.js:69
+msgid "Container Order"
+msgstr ""
 
-#: js/Tags.js:102
-msgid "Add Tag"
-msgstr "Thêm từ khóa"
+#: js/container/GridPanel.js:99 js/container/Container.js:46
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "one: Bộ chứa\nother: Bộ chứa"
 
-#: js/Tags.js:110
-msgid "Edit Tag"
-msgstr "Sửa từ khóa"
+#: js/container/EditDialog.js:190 js/customfield/GridPanel.js:71
+#: js/customfield/EditDialog.js:411
+msgid "Model"
+msgstr "Model"
 
-#: js/Tags.js:118
-msgid "Delete Tag"
-msgstr "Xóa từ khóa"
+#: js/container/EditDialog.js:202
+msgid "personal"
+msgstr "cá nhân"
 
-#: js/Tags.js:174 js/Roles.js:180 js/Groups.js:180 js/Applications.js:180
-msgid "Search:"
-msgstr "Tìm kiếm:"
+#: js/container/EditDialog.js:202
+msgid "shared"
+msgstr "dùng chung"
 
-#: js/Tags.js:216
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Hiển thị từ khóa {0} - {1} của {2}"
+#: js/container/EditDialog.js:221 js/Tags.js:227 js/TagEditDialog.js:229
+msgid "Color"
+msgstr "Màu"
 
-#: js/Tags.js:217 js/Tags.js:273
-msgid "No tags to display"
-msgstr "Không có từ khóa nào"
+#: js/container/EditDialog.js:225
+msgid "Container Hierarchy/Name"
+msgstr ""
 
-#: js/Tags.js:228
-msgid "Usage:&#160;"
-msgstr "Sử dụng:&#160;"
+#: js/container/EditDialog.js:233
+msgid "Note for Owner"
+msgstr "Ghi chép cho chủ sở huwuxu"
 
 #: js/Roles.js:47
 msgid "Do you really want to delete the selected roles?"
@@ -755,136 +489,58 @@ msgstr "Sửa vai trò"
 msgid "Delete Role"
 msgstr "Xóa vai trò"
 
-#: js/Roles.js:230 js/Roles.js:226
+#: js/Roles.js:226
 #, python-brace-format
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Hiển thị vai trò {0} - {1} của {2}"
 
-#: js/Roles.js:231 js/Roles.js:285 js/Roles.js:227 js/Roles.js:281
+#: js/Roles.js:227 js/Roles.js:281
 msgid "No roles to display"
 msgstr "Không có vai trò nào"
 
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Bạn có muốn xóa nhóm được chọn"
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Bạn có muốn xóa các từ khóa đa chọn?"
 
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Đang xóa nhóm ..."
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Đang xóa từ khóa ..."
 
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "Có lỗi xảy ra khi xóa nhóm"
+#: js/Tags.js:102
+msgid "Add Tag"
+msgstr "Thêm từ khóa"
 
-#: js/Groups.js:108
-msgid "Add Group"
-msgstr "Tạo nhóm"
+#: js/Tags.js:110
+msgid "Edit Tag"
+msgstr "Sửa từ khóa"
 
-#: js/Groups.js:116
-msgid "Edit Group"
-msgstr "Sửa nhóm"
+#: js/Tags.js:118
+msgid "Delete Tag"
+msgstr "Xóa từ khóa"
 
-#: js/Groups.js:124
-msgid "Delete Group"
-msgstr "Xóa nhóm"
-
-#: js/Groups.js:228
+#: js/Tags.js:216
 #, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Hiển thị nhóm {0} - {1} của {2}"
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Hiển thị từ khóa {0} - {1} của {2}"
 
-#: js/Groups.js:229 js/Groups.js:283 js/Groups.js:287
-msgid "No groups to display"
-msgstr "Không có nhóm bài được hiển thị"
+#: js/Tags.js:217 js/Tags.js:273
+msgid "No tags to display"
+msgstr "Không có từ khóa nào"
 
-#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:56
-msgid "Computer Name"
-msgstr "Tên máy tính"
-
-#: js/Applications.js:23
-msgid "Enable Application"
-msgstr "Mở ứng dụng"
-
-#: js/Applications.js:31
-msgid "Disable Application"
-msgstr "Cấm ứng dụng"
-
-#: js/Applications.js:39
-msgid "Settings"
-msgstr "Thiết lập"
-
-#: js/Applications.js:68
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "{0} Thiết lập"
-
-#: js/Applications.js:141
-msgid "enable application"
-msgstr "mở ứng dụng"
-
-#: js/Applications.js:142
-msgid "disable application"
-msgstr "tắt ứng dụng"
-
-#: js/Applications.js:143
-msgid "settings"
-msgstr "thiết lập"
-
-#: js/Applications.js:227
-#, python-brace-format
-msgid "unknown status ({0})"
-msgstr "không rõ trạng thái ({0})"
-
-#: js/Applications.js:265
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Hiển thị ứng dụng {0} - {1} của {2}"
-
-#: js/Applications.js:266
-msgid "No applications to display"
-msgstr "Không có ứng dụng nào"
-
-#: js/Applications.js:275 js/container/EditDialog.js:189
-#: js/customfield/EditDialog.js:498
-msgid "Order"
-msgstr "Xắp xếp"
-
-#: js/Applications.js:278
-msgid "Version"
-msgstr "Phiên bản"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Không thể lưu nhóm"
-
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "Tên nhóm"
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "Nhóm thành viên"
-
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "Thêm nhóm mới"
-
-#: js/GroupEditDialog.js:240
-#, python-brace-format
-msgid "Edit Group \"{0}\""
-msgstr "Sửa nhóm \"{0}\""
+#: js/Tags.js:228
+msgid "Usage:&#160;"
+msgstr "Sử dụng:&#160;"
 
 #: js/config/GridPanel.js:80 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:465 js/config/EditDialog.js:125
+#: js/customfield/EditDialog.js:465
 msgid "Label"
 msgstr "Nhãn"
 
-#: js/config/GridPanel.js:87 js/config/EditDialog.js:137
+#: js/config/GridPanel.js:87
 msgid "Value"
 msgstr "Giá trị"
 
-#: js/config/GridPanel.js:242 js/config/EditDialog.js:54
-#: js/config/EditDialog.js:74
+#: js/config/GridPanel.js:243
 #, python-brace-format
 msgid "Default ({0})"
 msgstr ""
@@ -897,50 +553,10 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: js/container/GridPanel.js:66
-msgid "Container Name"
-msgstr "Tên bộ chứa"
-
-#: js/container/GridPanel.js:68 js/container/GridPanel.js:100
-#: js/container/EditDialog.js:175 js/customfield/GridPanel.js:69
-#: js/customfield/EditDialog.js:447 js/config/EditDialog.js:118
-msgid "Type"
-msgstr "Loại"
-
-#: js/container/GridPanel.js:69
-msgid "Container Order"
-msgstr ""
-
-#: js/container/GridPanel.js:99 js/container/Container.js:46
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-"one: Bộ chứa\n"
-"other: Bộ chứa"
-
-#: js/container/EditDialog.js:164 js/customfield/GridPanel.js:71
-#: js/customfield/EditDialog.js:411
-msgid "Model"
-msgstr "Model"
-
-#: js/container/EditDialog.js:176
-msgid "personal"
-msgstr "cá nhân"
-
-#: js/container/EditDialog.js:176
-msgid "shared"
-msgstr "dùng chung"
-
-#: js/container/EditDialog.js:200
-msgid "Note for Owner"
-msgstr "Ghi chép cho chủ sở huwuxu"
-
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:111
 msgid "Customfield"
 msgid_plural "Customfields"
-msgstr[0] ""
-"one: Trường tùy biến\n"
-"other: Trường tùy biến"
+msgstr[0] "one: Trường tùy biến\nother: Trường tùy biến"
 
 #: js/customfield/GridPanel.js:184
 msgid "This custom field is still in use!"
@@ -961,6 +577,10 @@ msgstr "Record Class"
 #: js/customfield/EditDialog.js:274
 msgid "Given record class not found"
 msgstr "Lớp (class) biểu ghi đã cho không tồn tại"
+
+#: js/customfield/EditDialog.js:311 js/user/EditDialog.js:787
+msgid "Cancel"
+msgstr "Hủy"
 
 #: js/customfield/EditDialog.js:317
 msgid "OK"
@@ -1038,17 +658,417 @@ msgstr ""
 msgid "Customfield already exists. Please choose another name."
 msgstr "Trường tùy biến đã tồn tại. Xin chọn tên khác."
 
-#: Controller/Container.php:194 Controller/Container.php:190
-msgid "Your container has been changed"
-msgstr "Bộ chứa của bạn đã được thay đổi"
+#: js/user/GridPanel.js:51
+msgid "Enable Account"
+msgstr "Mở tài khoản"
 
-#: Controller/Container.php:195 Controller/Container.php:191
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Bộ chứa của bạn đã được đổi từ %1$s %2$s. Ghi chú: %3$s"
+#: js/user/GridPanel.js:61
+msgid "Disable Account"
+msgstr "Tắt tài khoản"
 
-#: Config.php:33 Config.php:35
+#: js/user/GridPanel.js:71
+msgid "Reset Password"
+msgstr "Nhập lại mật khẩu"
+
+#: js/user/GridPanel.js:80
+msgid "Reset Pin"
+msgstr ""
+
+#: js/user/GridPanel.js:206
+msgid "Display name"
+msgstr "Tên hiển thị"
+
+#: js/user/GridPanel.js:207 js/user/EditDialog.js:876
+#: js/user/EditDialog.js:926
+msgid "Login name"
+msgstr "Tên đăng nhập"
+
+#: js/user/GridPanel.js:208 js/user/EditDialog.js:870
+msgid "Last name"
+msgstr "Tên"
+
+#: js/user/GridPanel.js:209 js/user/EditDialog.js:859
+msgid "First name"
+msgstr "Tên họ"
+
+#: js/user/GridPanel.js:210 js/user/EditDialog.js:918
+msgid "Email"
+msgstr "Email"
+
+#: js/user/GridPanel.js:211
+msgid "Email usage"
+msgstr ""
+
+#: js/user/GridPanel.js:212
+msgid "Filesystem usage"
+msgstr ""
+
+#: js/user/GridPanel.js:213 js/user/EditDialog.js:925
+msgid "OpenID"
+msgstr "OpenID"
+
+#: js/user/GridPanel.js:214 js/user/EditDialog.js:1058
+msgid "Last login at"
+msgstr "Đăng nhập lần cuối lúc"
+
+#: js/user/GridPanel.js:215 js/user/EditDialog.js:1062
+msgid "Last login from"
+msgstr "Đawng nhập lần cuối từ"
+
+#: js/user/GridPanel.js:216
+msgid "Password changed"
+msgstr "Đã đổi mật khẩu"
+
+#: js/user/GridPanel.js:217 js/user/EditDialog.js:991
+msgid "Expires"
+msgstr "Hết hạn"
+
+#: js/user/GridPanel.js:276
+msgid "Set new password"
+msgstr "Đặt mật khẩu mới"
+
+#: js/user/GridPanel.js:276
+msgid "Please enter the new password:"
+msgstr "Xin hãy nhập mật khẩu mới"
+
+#: js/user/GridPanel.js:304
+msgid "Set new pin"
+msgstr ""
+
+#: js/user/GridPanel.js:304
+msgid "Please enter the new pin:"
+msgstr ""
+
+#: js/user/Users.js:75
+msgid "Users"
+msgstr "Người dùng"
+
+#: js/user/Users.js:123
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "one: Người dùng Samba\nother: Người dùng Samba"
+
+#: js/user/Users.js:149
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "one: Người sử dụng email\nother: Người sử dụng email"
+
+#: js/user/EditDialog.js:207
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Tên miền không được phép. Kiểm tra cấu hình tên miền SMTP"
+
+#: js/user/EditDialog.js:217
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+#: js/user/EditDialog.js:264 js/user/EditDialog.js:267
+#: js/user/EditDialog.js:784
+msgid "Passwords do not match!"
+msgstr "Mật khẩu không giống nhau"
+
+#: js/user/EditDialog.js:270
+msgid "Passwords match!"
+msgstr "Mật khẩu giống nhau"
+
+#: js/user/EditDialog.js:316 js/user/EditDialog.js:932
+msgid "Primary group"
+msgstr "Nhóm chính"
+
+#: js/user/EditDialog.js:393
+msgid "Unix"
+msgstr "Unix"
+
+#: js/user/EditDialog.js:407
+msgid "Home Directory"
+msgstr "Thư mục Home"
+
+#: js/user/EditDialog.js:411
+msgid "Login Shell"
+msgstr "Shell Login"
+
+#: js/user/EditDialog.js:417
+msgid "Windows"
+msgstr "Windows"
+
+#: js/user/EditDialog.js:431
+msgid "Home Drive"
+msgstr "Home Drive"
+
+#: js/user/EditDialog.js:436
+msgid "Logon Time"
+msgstr "Thơi gian đăng nh"
+
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:1060
+#: js/user/EditDialog.js:1064
+msgid "never logged in"
+msgstr "chưa bao giờ đăng nhập"
+
+#: js/user/EditDialog.js:441
+msgid "Home Path"
+msgstr "Đường dẫn trang chủ"
+
+#: js/user/EditDialog.js:446
+msgid "Logoff Time"
+msgstr "Thời gian thoát"
+
+#: js/user/EditDialog.js:448
+msgid "never logged off"
+msgstr "chưa bao giờ thoát"
+
+#: js/user/EditDialog.js:451
+msgid "Profile Path"
+msgstr "Đường dẫn hồ sơ"
+
+#: js/user/EditDialog.js:456
+msgid "Password Last Set"
+msgstr "Đặt mật khẩu lần cuối"
+
+#: js/user/EditDialog.js:458 js/user/EditDialog.js:994
+#: js/user/EditDialog.js:1068
+msgid "never"
+msgstr "chưa bao giờ"
+
+#: js/user/EditDialog.js:461
+msgid "Logon Script"
+msgstr "Script đăng nhập"
+
+#: js/user/EditDialog.js:466
+msgid "Password Can Change"
+msgstr "Mật khẩu có thể đổi"
+
+#: js/user/EditDialog.js:468 js/user/EditDialog.js:473
+#: js/user/EditDialog.js:478
+msgid "not set"
+msgstr "chưa đặt"
+
+#: js/user/EditDialog.js:471
+msgid "Password Must Change"
+msgstr "Mật khẩu phải được thay đổi"
+
+#: js/user/EditDialog.js:476
+msgid "Kick Off Time"
+msgstr "Thời gian bắt đầu"
+
+#: js/user/EditDialog.js:495
+msgid "Filesystem Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:514 js/user/EditDialog.js:556
+#: js/user/EditDialog.js:588
+msgid "Quota"
+msgstr "Quota"
+
+#: js/user/EditDialog.js:515 js/user/EditDialog.js:557
+#: js/user/EditDialog.js:589
+msgid "no quota set"
+msgstr "chưa đặt quota"
+
+#: js/user/EditDialog.js:519
+msgid "Current Filesystem usage"
+msgstr ""
+
+#: js/user/EditDialog.js:537
+msgid "IMAP Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:561
+msgid "Current Mailbox size"
+msgstr "Dung lượng Mailbox hiện tại"
+
+#: js/user/EditDialog.js:569
+msgid "Sieve Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:593
+msgid "Current Sieve size"
+msgstr "Current Sieve size"
+
+#: js/user/EditDialog.js:602 js/user/EditDialog.js:1043
+msgid "Information"
+msgstr "Thông tin"
+
+#: js/user/EditDialog.js:616
+msgid "Last Login"
+msgstr "Đăng nhập lần cuối"
+
+#: js/user/EditDialog.js:677
+msgid "Domain not allowed"
+msgstr "Tên miền không được phép sử dụng"
+
+#: js/user/EditDialog.js:678
+#, python-brace-format
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup. Please add this "
+"domain to the secondary domains in SMTP setup or use another domain which is"
+" configured already."
+msgstr ""
+
+#: js/user/EditDialog.js:687
+msgid "Email Alias"
+msgstr "Ánh xạ email"
+
+#: js/user/EditDialog.js:693
+msgid "Add an alias address..."
+msgstr "Thêm 1 địa chỉ ánh xạ email..."
+
+#: js/user/EditDialog.js:711
+msgid "Forwarding to self"
+msgstr "Chuyển tiếp tới chính tôi"
+
+#: js/user/EditDialog.js:712
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr "Bạn không được phép đặt 1 email chuyển tiếp giống với email chính của người dùng hoặc 1 trong các ánh xạ của h"
+
+#: js/user/EditDialog.js:721
+msgid "Email Forward"
+msgstr "Chuyến tiếp email"
+
+#: js/user/EditDialog.js:727
+msgid "Add a forward address..."
+msgstr "Thêm 1 địa chỉ chuyển tiếp..."
+
+#: js/user/EditDialog.js:740
+msgid "Forward Only"
+msgstr "Chỉ chuyển tiếp"
+
+#: js/user/EditDialog.js:750
+msgid "Password confirmation"
+msgstr "Xác nhận mật khẩu"
+
+#: js/user/EditDialog.js:768
+msgid "Repeat password"
+msgstr "Nhập lại mật khẩu"
+
+#: js/user/EditDialog.js:794
+msgid "Ok"
+msgstr "OK"
+
+#: js/user/EditDialog.js:844
+msgid "Account"
+msgstr "Tài khoản"
+
+#: js/user/EditDialog.js:882
+msgid "Password"
+msgstr "Mật khẩu"
+
+#: js/user/EditDialog.js:960
+msgid "expired"
+msgstr "hết hạn"
+
+#: js/user/EditDialog.js:961
+msgid "blocked"
+msgstr "đã bị phong tỏa"
+
+#: js/user/EditDialog.js:968
+msgid "Invalid Status"
+msgstr "Trạng thái không hợp lệ"
+
+#: js/user/EditDialog.js:969
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr "Trạng thái bị phong tỏa chỉ hợp lệ khi người dùng cố đăng nhập với một mật khẩu sai một cách thường xuyên. Nó không thể được đặt trạng thái này ở đây."
+
+#: js/user/EditDialog.js:1060 js/user/EditDialog.js:1064
+msgid "don't know"
+msgstr "không biết"
+
+#: js/user/EditDialog.js:1066
+msgid "Password set"
+msgstr "Mật khẩu được đặt"
+
+#: js/user/EditDialog.js:1073
+msgid "User groups"
+msgstr "Nhóm người dùng"
+
+#: js/user/EditDialog.js:1079
+msgid "User roles"
+msgstr "Vai trò người dùng"
+
+#: js/user/EditDialog.js:1085
+msgid "Fileserver"
+msgstr "Máy chủ file"
+
+#: js/user/EditDialog.js:1091
+msgid "Filesystem"
+msgstr ""
+
+#: js/user/EditDialog.js:1096
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:1105
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "Đang cập nhật từ khóa"
+
+#: js/TagEditDialog.js:85
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr ""
+
+#: js/TagEditDialog.js:172
+msgid "Allowed Contexts"
+msgstr "Ngữ cảnh được phép"
+
+#: js/TagEditDialog.js:178
+msgid "Context"
+msgstr "Ngữ cảnh"
+
+#: js/TagEditDialog.js:191
+msgid "Account Rights"
+msgstr "Quyền tài khoản"
+
+#: js/TagEditDialog.js:200
+msgid "View"
+msgstr "Xem"
+
+#: js/TagEditDialog.js:205
+msgid "Use"
+msgstr "Sử dụng"
+
+#: js/TagEditDialog.js:222
+msgid "Tag Name"
+msgstr "Tên từ khóa"
+
+#: js/TagEditDialog.js:294
+msgid "Tag"
+msgstr "Từ khóa"
+
+#: js/TagEditDialog.js:304
+msgid "Add New Tag"
+msgstr "Thêm từ khóa"
+
+#: js/TagEditDialog.js:306
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "Sửa từ khóa \"{0}\""
+
+#: Config.php:47 Config.php:49
 msgid "Default IMAP user settings"
 msgstr "Default IMAP user settings"
+
+#: Config.php:58
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:60
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+#: Config.php:68
+msgid "Prevent special chars in login name"
+msgstr ""
+
+#: Config.php:74
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
 
 #: Acl/Rights.php:215
 msgid "manage access log"
@@ -1063,10 +1083,9 @@ msgid "manage accounts"
 msgstr "quản lý tài khoản"
 
 #: Acl/Rights.php:220
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"thêm và sửa người dùng và nhóm, thêm thành viên nhóm, thay đổi mật khẩu "
-"người dùng"
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr "thêm và sửa người dùng và nhóm, thêm thành viên nhóm, thay đổi mật khẩu người dùng"
 
 #: Acl/Rights.php:223
 msgid "manage applications"
@@ -1082,10 +1101,9 @@ msgstr "quản lý vai trò"
 
 #: Acl/Rights.php:228
 msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"thêm và sửa vai trò, thêm thành viên mới vào vai trò, thêm quyền ứng dụng "
-"vào vai trò"
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr "thêm và sửa vai trò, thêm thành viên mới vào vai trò, thêm quyền ứng dụng vào vai trò"
 
 #: Acl/Rights.php:231
 msgid "manage shared tags"
@@ -1187,66 +1205,14 @@ msgstr "xem danh sách thông tin máy chủ"
 msgid "view quota usage"
 msgstr ""
 
-#: js/Groups.js:242
-msgid "Creation Time"
-msgstr ""
+#: Controller/Container.php:204
+msgid "Your container has been changed"
+msgstr "Bộ chứa của bạn đã được thay đổi"
 
-#: js/Groups.js:243
-msgid "Created By"
-msgstr ""
+#: Controller/Container.php:205
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Bộ chứa của bạn đã được đổi từ %1$s %2$s. Ghi chú: %3$s"
 
-#: js/Groups.js:244
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/Groups.js:245
-msgid "Last Modified By"
-msgstr ""
-
-#: js/config/EditDialog.js:121
-msgid "Source"
-msgstr ""
-
-#: js/user/EditDialog.js:484
-msgid "Filesystem Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:508
-msgid "Current Filesystem usage"
-msgstr ""
-
-#: js/user/EditDialog.js:526
-msgid "IMAP Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:558
-msgid "Sieve Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:1068
-msgid "Filesystem"
-msgstr ""
-
-#: js/user/GridPanel.js:196
-msgid "Email usage"
-msgstr ""
-
-#: js/user/GridPanel.js:197
-msgid "Filesystem usage"
-msgstr ""
-
-#: js/QuotaUsage.js:57
-msgid "Size"
-msgstr ""
-
-#: js/QuotaUsage.js:69
-msgid "Revision Size"
-msgstr ""
-
-#: js/QuotaUsage.js:70
-msgid "Total size of all available revisions"
-msgstr ""
-
-#: js/QuotaUsage.js:107
-msgid "Quota Usage"
+#: Controller/Tags.php:166
+msgid "Could not save tag without (view-)rights"
 msgstr ""

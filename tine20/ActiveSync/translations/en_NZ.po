@@ -17,39 +17,11 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "ActiveSync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Select a device"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "No ActiveSync device registered"
-
-#: js/Application.js:65
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Set as {0} filter"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Sync filter reset"
-
-#: js/Application.js:91 js/Application.js:103
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} filter for device \"{1}\" is now \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "reset"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Set sync filter"
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] "SyncDevice"
+msgstr[1] "SyncDevices"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -158,12 +130,6 @@ msgstr "Do you really want to wipe the selected devices? All personal data will 
 msgid "Quicksearch"
 msgstr "Quicksearch"
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] "SyncDevice"
-msgstr[1] "SyncDevices"
-
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
@@ -173,6 +139,40 @@ msgstr[1] "Devices"
 #: js/Model.js:42
 msgid "Devices"
 msgstr "Devices"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "ActiveSync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Select a device"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "No ActiveSync device registered"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Set as {0} filter"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Sync filter reset"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} filter for device \"{1}\" is now \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "reset"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Set sync filter"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -230,14 +230,6 @@ msgstr "Filter timeslot for events"
 msgid "For how long in the past the events should be synchronized."
 msgstr "For how long into the past the events should be synchronized for."
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Default policy"
-
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Default policy installed during setup"
-
 #: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
 msgstr "Manage ActiveSync devices"
@@ -253,3 +245,11 @@ msgstr "Reset ActiveSync devices"
 #: Acl/Rights.php:115
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr "Remotely reset ActiveSync devices to factory state, deleting all data"
+
+#: Setup/setup.xml:544 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Default policy"
+
+#: Setup/setup.xml:549 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Default policy installed during setup"

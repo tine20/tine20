@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-21 18:16+0000\n"
+"PO-Revision-Date: 2017-12-13 11:05+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Romanian (Romania) (http://www.transifex.com/tine20/tine20/language/ro_RO/)\n"
 "MIME-Version: 1.0\n"
@@ -18,95 +18,71 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Model/InventoryItem.php:37
+#: Model/InventoryItem.php:38
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] "Element inventar"
 msgstr[1] "Elementele inventarului"
 msgstr[2] "Elementele inventarului"
 
-#: Model/InventoryItem.php:41
+#: Model/InventoryItem.php:42
 msgid "Inventory item list"
 msgid_plural "Inventory item lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:101
+#: Model/InventoryItem.php:82 js/InventoryItemEditDialog.js:101
 msgid "Name"
 msgstr "Nume"
 
-#: Model/InventoryItem.php:84 js/InventoryItemEditDialog.js:197
+#: Model/InventoryItem.php:88 js/InventoryItemEditDialog.js:197
 msgid "Status"
 msgstr "Status"
 
-#: Model/InventoryItem.php:93
+#: Model/InventoryItem.php:97
 msgid "Inventory ID"
 msgstr "ID Inventor"
 
-#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:121
+#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:121
 msgid "Description"
 msgstr "Descriere"
 
-#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:155
+#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr "Locaţie"
 
-#: Model/InventoryItem.php:110 js/InventoryItemEditDialog.js:277
+#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:277
 msgid "Invoice date"
 msgstr "Dată factură"
 
-#: Model/InventoryItem.php:138 js/InventoryItemEditDialog.js:271
+#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:271
 msgid "Invoice"
 msgstr "Factură"
 
-#: Model/InventoryItem.php:146 js/InventoryItemEditDialog.js:251
+#: Model/InventoryItem.php:150 js/InventoryItemEditDialog.js:251
 msgid "Price"
 msgstr "Preţ"
 
-#: Model/InventoryItem.php:152
+#: Model/InventoryItem.php:155
 msgid "Cost Center"
 msgstr ""
 
-#: Model/InventoryItem.php:165 js/InventoryItemEditDialog.js:168
+#: Model/InventoryItem.php:168 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
 msgstr "Garanţie"
 
-#: Model/InventoryItem.php:173
+#: Model/InventoryItem.php:176
 msgid "Item added"
 msgstr "Element adăugat"
 
-#: Model/InventoryItem.php:181
+#: Model/InventoryItem.php:184
 msgid "Item removed"
 msgstr "Element înlăturat"
 
-#: Model/InventoryItem.php:190
+#: Model/InventoryItem.php:193
 msgid "Deprecate"
 msgstr ""
-
-#: Model/InventoryItem.php:196
-msgid "Image"
-msgstr ""
-
-#: js/InventoryItemGridPanel.js:37
-msgid "Export Inventory"
-msgstr "Export Inventar"
-
-#: js/InventoryItemGridPanel.js:46
-msgid "Export as ODS"
-msgstr "Export ca ODS"
-
-#: js/InventoryItemGridPanel.js:53
-msgid "Export as CSV"
-msgstr "Export ca CSV"
-
-#: js/InventoryItemGridPanel.js:60
-msgid "Export as ..."
-msgstr "Export ca ..."
-
-#: js/InventoryItemGridPanel.js:72
-msgid "Import items"
-msgstr "Import elemente"
 
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
@@ -145,8 +121,8 @@ msgid "Accounting"
 msgstr "Contabilitate"
 
 #: js/InventoryItemEditDialog.js:258
-msgid "Cost centre"
-msgstr "Centre de Cost"
+msgid "Cost center"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:283
 msgid "Depreciate"
@@ -206,10 +182,6 @@ msgid ""
 "###USERFULLNAME###"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventar"
-
 #: Setup/Initialize.php:34 Setup/Update/Release7.php:127
 msgid "All Inventory Items"
 msgstr "Toate elementele Inventarului"
@@ -217,3 +189,7 @@ msgstr "Toate elementele Inventarului"
 #: Setup/Initialize.php:35 Setup/Update/Release7.php:128
 msgid "All existing Inventory Items"
 msgstr "Toate elementele existente"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventar"

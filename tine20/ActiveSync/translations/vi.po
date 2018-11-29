@@ -17,39 +17,10 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Chọn 1 thiết bị"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Chưa có thiết bị nào được đăng ký"
-
-#: js/Application.js:65
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Đặt như là bộ lọc {0}"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Khởi tạo lại bộ lọc Sync"
-
-#: js/Application.js:91 js/Application.js:103
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "bộ lọc {0} cho thiết bị \"{1}\" bây giờ là \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "đã khởi tạo"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Đặt bộ lọc đồng bộ"
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] ""
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -158,11 +129,6 @@ msgstr ""
 msgid "Quicksearch"
 msgstr ""
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] ""
-
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
@@ -171,6 +137,40 @@ msgstr[0] "one:Thiết bị\nother:Thiết bị"
 #: js/Model.js:42
 msgid "Devices"
 msgstr "Thiết bị"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Chọn 1 thiết bị"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Chưa có thiết bị nào được đăng ký"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Đặt như là bộ lọc {0}"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Khởi tạo lại bộ lọc Sync"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "bộ lọc {0} cho thiết bị \"{1}\" bây giờ là \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "đã khởi tạo"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Đặt bộ lọc đồng bộ"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -228,14 +228,6 @@ msgstr ""
 msgid "For how long in the past the events should be synchronized."
 msgstr ""
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Chính sách mặc định"
-
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Chính sách mặc định đã được thiết lập quá trình cài đặt"
-
 #: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
 msgstr ""
@@ -251,3 +243,11 @@ msgstr ""
 #: Acl/Rights.php:115
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
+
+#: Setup/setup.xml:544 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Chính sách mặc định"
+
+#: Setup/setup.xml:549 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Chính sách mặc định đã được thiết lập quá trình cài đặt"

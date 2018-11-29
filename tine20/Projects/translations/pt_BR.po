@@ -2,6 +2,7 @@
 # Translators:
 # DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 # fgsl <flavio.lisboa@serpro.gov.br>, 2017
+# fgsl <flavio.lisboa@serpro.gov.br>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -18,31 +19,36 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Selecione o Projeto onde serão adicionados os contatos"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Selecione o perfil do participante"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Selecione o Projeto"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:85
+msgid "Role"
+msgstr "Perfil"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Selecione o Perfil"
+
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Adicionando {0} Participantes ao projeto"
+
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projetos"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Buscar FAQ"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Etiquetas"
-
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
-msgid "Number"
-msgstr "Número"
-
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
-msgid "Title"
-msgstr "Título"
-
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
-msgid "Status"
-msgstr "Situação"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:111 js/ProjectEditDialog.js:124
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projeto"
@@ -62,9 +68,21 @@ msgstr "Listas de Projetos"
 msgid "Quick Search"
 msgstr "Busca Rápida"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:178
+#: js/Model.js:74 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "Título"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "Número"
+
+#: js/Model.js:76 js/ProjectEditDialog.js:182
 msgid "Description"
 msgstr "Descrição"
+
+#: js/Model.js:78 js/ProjectEditDialog.js:147 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "Situação"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -82,7 +100,7 @@ msgstr "Data de Criação"
 msgid "Created By"
 msgstr "Criado por"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:84
 msgid "Attendee"
 msgstr "Participante"
 
@@ -90,34 +108,17 @@ msgstr "Participante"
 msgid "Attendee Role"
 msgstr "Perfil do participante"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Selecione o Projeto onde serão adicionados os contatos"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Selecione o perfil do participante"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Selecione o Projeto"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Perfil"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Selecione o Perfil"
-
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Adicionando {0} Participantes ao projeto"
-
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:196
 msgid "Enter description"
 msgstr "Digitar a Descrição"
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Buscar FAQ"
+
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Etiquetas"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -176,6 +177,14 @@ msgstr "Colega de trabalho"
 msgid "Responsible"
 msgstr "Responsável"
 
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Gerenciar favoritos em projetos compartilhados"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Criar novos favoritos em projetos compartilhados"
+
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
@@ -200,11 +209,3 @@ msgstr "Meus projetos em espera"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Meus projetos que estão retidos"
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Gerenciar favoritos em projetos compartilhados"
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Criar novos favoritos em projetos compartilhados"

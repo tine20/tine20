@@ -17,127 +17,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Phone.js:100
-msgid "Incoming call"
-msgstr "Sissetulev kõne"
-
-#: js/Phone.js:104
-msgid "Outgoing call"
-msgstr "Väljuv kõne"
-
-#: js/Phone.js:112
-msgid "unknown number"
-msgstr "tundmatu number"
-
-#: js/AddressbookGridPanelHook.js:40
-msgid "Call contact"
-msgstr "Helista kontaktile"
-
-#: js/AddressbookGridPanelHook.js:196
-msgid "Work"
-msgstr "Töö"
-
-#: js/AddressbookGridPanelHook.js:205
-msgid "Home"
-msgstr "Kodu"
-
-#: js/AddressbookGridPanelHook.js:214
-msgid "Cell"
-msgstr "Mobiil"
-
-#: js/AddressbookGridPanelHook.js:223
-msgid "Cell private"
-msgstr "isiklik mobiil"
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "Muuda telefoni seadeid"
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "Vali number"
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr ""
-
-#: js/CallGridPanel.js:167 Model/MyPhone.php:33
-msgid "Phones"
-msgstr "Telefonid"
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr ""
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr ""
-
-#: js/DialerPanel.js:53 Model/MyPhone.php:32
-msgid "Phone"
-msgstr ""
-
-#: js/DialerPanel.js:76 Model/Call.php:60
-msgid "Line"
-msgstr "Liin"
-
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Number"
-
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Loobu"
-
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Vali"
-
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Viga"
-
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "Valimine pole võimalik."
-
-#: Config.php:44 Config.php:46
-msgid "local prefix for outgoing calls"
-msgstr ""
-
-#: Config.php:53 Config.php:55
-msgid "telephone area code"
-msgstr ""
-
-#: Config.php:61
-msgid "regex for local calls"
-msgstr ""
-
-#: Config.php:63
-msgid ""
-"identifies if a calling number is a local call without leading area code"
-msgstr ""
-
-#: Config.php:70
-msgid "own telephone number"
-msgstr ""
-
-#: Config.php:72
-msgid "own telephone number to prefix to internal calls"
-msgstr ""
-
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr ""
-
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr ""
-
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr ""
-
 #: Model/Call.php:43
 msgid "Call"
 msgstr ""
@@ -145,6 +24,10 @@ msgstr ""
 #: Model/Call.php:44
 msgid "Calls"
 msgstr ""
+
+#: Model/Call.php:60 js/DialerPanel.js:77
+msgid "Line"
+msgstr "Liin"
 
 #: Model/Call.php:80
 msgid "Caller Id"
@@ -182,32 +65,149 @@ msgstr "Allikas"
 msgid "Destination"
 msgstr ""
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
+#: Model/MyPhone.php:32 js/DialerPanel.js:54
+msgid "Phone"
+msgstr ""
+
+#: Model/MyPhone.php:33 js/CallGridPanel.js:167
+msgid "Phones"
+msgstr "Telefonid"
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr ""
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr ""
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr ""
+
+#: js/DialerPanel.js:86
+msgid "Number"
+msgstr "Number"
+
+#: js/DialerPanel.js:95
+msgid "Cancel"
+msgstr "Loobu"
+
+#: js/DialerPanel.js:105
+msgid "Dial"
+msgstr "Vali"
+
+#: js/DialerPanel.js:125
+msgid "Error"
+msgstr "Viga"
+
+#: js/DialerPanel.js:126
+msgid "Not possible to dial."
+msgstr "Valimine pole võimalik."
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "Muuda telefoni seadeid"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "Vali number"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr ""
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr ""
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:40
+msgid "Call contact"
+msgstr "Helista kontaktile"
+
+#: js/AddressbookGridPanelHook.js:196
+msgid "Work"
+msgstr "Töö"
+
+#: js/AddressbookGridPanelHook.js:205
+msgid "Home"
+msgstr "Kodu"
+
+#: js/AddressbookGridPanelHook.js:214
+msgid "Cell"
+msgstr "Mobiil"
+
+#: js/AddressbookGridPanelHook.js:223
+msgid "Cell private"
+msgstr "isiklik mobiil"
+
+#: js/Phone.js:100
+msgid "Incoming call"
+msgstr "Sissetulev kõne"
+
+#: js/Phone.js:104
+msgid "Outgoing call"
+msgstr "Väljuv kõne"
+
+#: js/Phone.js:112
+msgid "unknown number"
+msgstr "tundmatu number"
+
+#: Config.php:44 Config.php:46
+msgid "local prefix for outgoing calls"
+msgstr ""
+
+#: Config.php:53 Config.php:55
+msgid "telephone area code"
+msgstr ""
+
+#: Config.php:61
+msgid "regex for local calls"
+msgstr ""
+
+#: Config.php:63
+msgid ""
+"identifies if a calling number is a local call without leading area code"
+msgstr ""
+
+#: Config.php:70
+msgid "own telephone number"
+msgstr ""
+
+#: Config.php:72
+msgid "own telephone number to prefix to internal calls"
+msgstr ""
+
+#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
 msgid "Calls this week"
-msgstr ""
-
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr ""
-
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr ""
-
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
 msgstr ""
 
 #: Setup/Initialize.php:34
 msgid "Incoming and outgoing calls of this week"
 msgstr ""
 
+#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
+msgid "Calls last week"
+msgstr ""
+
 #: Setup/Initialize.php:44
 msgid "Incoming and outgoing calls of last week"
 msgstr ""
 
+#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
+msgid "Calls this month"
+msgstr ""
+
 #: Setup/Initialize.php:54
 msgid "Incoming and outgoing calls of this month"
+msgstr ""
+
+#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
+msgid "Calls last month"
 msgstr ""
 
 #: Setup/Initialize.php:64

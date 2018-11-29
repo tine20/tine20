@@ -1,22 +1,111 @@
-#
+# 
 # Translators:
 # pschuele <p.schuele@metaways.de>, 2013-2014
+# sstamer <s.stamer@metaways.de>, 2016
 # sstamer <s.stamer@metaways.de>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2016-08-11 14:34+0000\n"
+"PO-Revision-Date: 2017-09-28 09:49+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Model/Call.php:43
+msgid "Call"
+msgstr "Anruf"
+
+#: Model/Call.php:44
+msgid "Calls"
+msgstr "Anrufe"
+
+#: Model/Call.php:60 js/DialerPanel.js:77
+msgid "Line"
+msgstr "Leitung"
+
+#: Model/Call.php:80
+msgid "Caller Id"
+msgstr "Eigene Rufnummer"
+
+#: Model/Call.php:86
+msgid "Start"
+msgstr "Start"
+
+#: Model/Call.php:91
+msgid "Connected"
+msgstr "Verbunden"
+
+#: Model/Call.php:95
+msgid "Disconnected"
+msgstr "Getrennt"
+
+#: Model/Call.php:100
+msgid "Duration"
+msgstr "Dauer"
+
+#: Model/Call.php:106
+msgid "Ringing"
+msgstr "Klingeln"
+
+#: Model/Call.php:112
+msgid "Direction"
+msgstr "Richtung"
+
+#: Model/Call.php:115
+msgid "Source"
+msgstr "Quelle"
+
+#: Model/Call.php:120
+msgid "Destination"
+msgstr "Gesprächspartner"
+
+#: Model/MyPhone.php:32 js/DialerPanel.js:54
+msgid "Phone"
+msgstr "Telefon"
+
+#: Model/MyPhone.php:33 js/CallGridPanel.js:167
+msgid "Phones"
+msgstr "Telefone"
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Leitungen"
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Beschreibung"
+
+#: js/DialerPanel.js:86
+msgid "Number"
+msgstr "Nummer"
+
+#: js/DialerPanel.js:95
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: js/DialerPanel.js:105
+msgid "Dial"
+msgstr "Wählen"
+
+#: js/DialerPanel.js:125
+msgid "Error"
+msgstr "Fehler"
+
+#: js/DialerPanel.js:126
+msgid "Not possible to dial."
+msgstr "Wählen nicht möglich."
 
 #: js/CallGridPanel.js:54
 msgid "Edit phone settings"
@@ -29,10 +118,6 @@ msgstr "Nummer wählen"
 #: js/CallGridPanel.js:69
 msgid "Initiate a new outgoing call"
 msgstr "Neuer ausgehender Anruf"
-
-#: js/CallGridPanel.js:167 Model/MyPhone.php:33
-msgid "Phones"
-msgstr "Telefone"
 
 #: js/CallGridPanel.js:216
 msgid "No phone selected"
@@ -74,34 +159,6 @@ msgstr "Ausgehender Anruf"
 msgid "unknown number"
 msgstr "Unbekannte Rufnummer"
 
-#: js/DialerPanel.js:53 Model/MyPhone.php:32
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/DialerPanel.js:76 Model/Call.php:60
-msgid "Line"
-msgstr "Leitung"
-
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Nummer"
-
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Wählen"
-
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Fehler"
-
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "Wählen nicht möglich."
-
 #: Config.php:44 Config.php:46
 msgid "local prefix for outgoing calls"
 msgstr "lokaler Präfix für ausgehende Anrufe"
@@ -115,7 +172,8 @@ msgid "regex for local calls"
 msgstr "regex für Ortsgespräche"
 
 #: Config.php:63
-msgid "identifies if a calling number is a local call without leading area code"
+msgid ""
+"identifies if a calling number is a local call without leading area code"
 msgstr ""
 
 #: Config.php:70
@@ -157,62 +215,3 @@ msgstr "Anrufe im letzten Monat"
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"
 msgstr "Eingehende und ausgehende Anrufe letzten Monats"
-
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Leitungen"
-
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Beschreibung"
-
-#: Model/Call.php:43
-msgid "Call"
-msgstr "Anruf"
-
-#: Model/Call.php:44
-msgid "Calls"
-msgstr "Anrufe"
-
-#: Model/Call.php:80
-msgid "Caller Id"
-msgstr "Eigene Rufnummer"
-
-#: Model/Call.php:86
-msgid "Start"
-msgstr "Start"
-
-#: Model/Call.php:91
-msgid "Connected"
-msgstr "Verbunden"
-
-#: Model/Call.php:95
-msgid "Disconnected"
-msgstr "Getrennt"
-
-#: Model/Call.php:100
-msgid "Duration"
-msgstr "Dauer"
-
-#: Model/Call.php:106
-msgid "Ringing"
-msgstr "Klingeln"
-
-#: Model/Call.php:112
-msgid "Direction"
-msgstr "Richtung"
-
-#: Model/Call.php:115
-msgid "Source"
-msgstr "Quelle"
-
-#: Model/Call.php:120
-msgid "Destination"
-msgstr "Gesprächspartner"
-
-#~ msgid "Contact"
-#~ msgstr "Kontakt"

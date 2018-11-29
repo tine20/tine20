@@ -17,31 +17,36 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Proszę wybrać rolę uczestnika"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Wybierz projekt"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:85
+msgid "Role"
+msgstr "Rola"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Wybierz rolę"
+
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Dodawanie {0} uczestników do projektu"
+
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projekty"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Przeszukiwanie FAQ"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
-msgid "Number"
-msgstr "Ilość"
-
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
-msgid "Title"
-msgstr "Tytuł"
-
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
-msgid "Status"
-msgstr "Status"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:111 js/ProjectEditDialog.js:124
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
@@ -65,9 +70,21 @@ msgstr "Listy projektów"
 msgid "Quick Search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:178
+#: js/Model.js:74 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "Ilość"
+
+#: js/Model.js:76 js/ProjectEditDialog.js:182
 msgid "Description"
 msgstr "Opis"
+
+#: js/Model.js:78 js/ProjectEditDialog.js:147 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "Status"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -85,7 +102,7 @@ msgstr "Czas utworzenia"
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:84
 msgid "Attendee"
 msgstr "Uczestnik"
 
@@ -93,34 +110,17 @@ msgstr "Uczestnik"
 msgid "Attendee Role"
 msgstr "Rola uczestnika"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Proszę wybrać rolę uczestnika"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Wybierz projekt"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Rola"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Wybierz rolę"
-
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Dodawanie {0} uczestników do projektu"
-
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:196
 msgid "Enter description"
 msgstr "Wprowadź opis"
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Przeszukiwanie FAQ"
+
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Znaczniki"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -179,6 +179,14 @@ msgstr "Współpracownik"
 msgid "Responsible"
 msgstr "Osoba odpowiedzialna"
 
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "zarządzanie wspólnymi ulubionymi projektu"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Utwórz nowe, wspólne ulubione projektu"
+
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
@@ -203,11 +211,3 @@ msgstr "Moje, oczekujące projekty"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Moje, wstrzymane projekty"
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "zarządzanie wspólnymi ulubionymi projektu"
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Utwórz nowe, wspólne ulubione projektu"

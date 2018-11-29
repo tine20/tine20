@@ -17,58 +17,19 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "Thông tin câu hỏi"
-
-#: js/FaqGridDetailsPanel.js:151 js/FaqGridPanel.js:98 js/FaqEditDialog.js:99
-msgid "Question"
-msgstr "Câu hỏi"
-
-#: js/FaqGridDetailsPanel.js:157 js/FaqGridPanel.js:105 js/SimpleFAQ.js:46
-#: js/FaqEditDialog.js:106
-msgid "Answer"
-msgstr "Trả lời"
-
-#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:79
-msgid "Tags"
-msgstr "Thẻ"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/FaqGridDetailsPanel.js:199 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqStatusFilterModel.js:27 js/FaqStatus.js:26
+#: js/FaqStatusFilterModel.js:27 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqGridDetailsPanel.js:199 js/FaqStatus.js:26
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "Trạng thái câu hỏi"
 
-#: js/FaqGridDetailsPanel.js:204 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "Loại câu hỏi"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Chưa có câu trả lời"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Mặc định"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Thêm mới kiểu câu hỏi"
-
 #: js/FaqGridPanel.js:72
 msgid "FAQ id"
 msgstr "Mã câu hỏi"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Thẻ"
 
 #: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
 msgid "Status"
@@ -78,9 +39,28 @@ msgstr "Trạng thái"
 msgid "Type"
 msgstr "Gõ"
 
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr "Tìm câu FAQ"
+#: js/FaqGridPanel.js:98 js/FaqGridDetailsPanel.js:151 js/FaqEditDialog.js:99
+msgid "Question"
+msgstr "Câu hỏi"
+
+#: js/FaqGridPanel.js:105 js/FaqGridDetailsPanel.js:157 js/SimpleFAQ.js:46
+#: js/FaqEditDialog.js:106
+msgid "Answer"
+msgstr "Trả lời"
+
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqGridDetailsPanel.js:204 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Loại câu hỏi"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Mặc định"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Thêm mới kiểu câu hỏi"
 
 #: js/Model.js:35 js/SimpleFAQ.js:19
 msgid "FAQ"
@@ -100,9 +80,21 @@ msgstr "Danh sách hỏi đáp"
 msgid "Quick Search"
 msgstr "Tìm nhanh"
 
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Thêm mới trạng thái câu hỏi"
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "Thông tin câu hỏi"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Chưa có câu trả lời"
 
 #: js/SimpleFAQ.js:26
 msgid "Find Question"
@@ -111,6 +103,14 @@ msgstr "Tìm câu hỏi"
 #: js/SimpleFAQ.js:35
 msgid "Search question"
 msgstr "Tìm câu hỏi"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr "Tìm câu FAQ"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Thêm mới trạng thái câu hỏi"
 
 #: js/FaqEditDialog.js:100
 msgid "Enter a question..."

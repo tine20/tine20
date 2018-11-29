@@ -19,33 +19,8 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "ЧаВО Иформация"
-
-#: js/FaqGridDetailsPanel.js:151 js/FaqGridPanel.js:98 js/FaqEditDialog.js:99
-msgid "Question"
-msgstr "Вопрос"
-
-#: js/FaqGridDetailsPanel.js:157 js/FaqGridPanel.js:105 js/SimpleFAQ.js:46
-#: js/FaqEditDialog.js:106
-msgid "Answer"
-msgstr "Ответ"
-
-#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:79
-msgid "Tags"
-msgstr "Теги"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Время создания"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Создан"
-
-#: js/FaqGridDetailsPanel.js:199 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqStatusFilterModel.js:27 js/FaqStatus.js:26
+#: js/FaqStatusFilterModel.js:27 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqGridDetailsPanel.js:199 js/FaqStatus.js:26
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "Статус ЧаВО"
@@ -53,30 +28,13 @@ msgstr[1] "Статусы ЧаВО"
 msgstr[2] "Статусы ЧаВО"
 msgstr[3] "Статусы ЧаВО"
 
-#: js/FaqGridDetailsPanel.js:204 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "Тип ЧаВО"
-msgstr[1] "Типы ЧаВО"
-msgstr[2] "Типы ЧаВО"
-msgstr[3] "Типы ЧаВО"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Нет ответа"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "По умолчанию"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Добавить новый тип ЧаВО..."
-
 #: js/FaqGridPanel.js:72
 msgid "FAQ id"
 msgstr "ID ЧаВО"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Теги"
 
 #: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
 msgid "Status"
@@ -86,9 +44,31 @@ msgstr "Состояние"
 msgid "Type"
 msgstr "Тип"
 
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr "Найти FAQ"
+#: js/FaqGridPanel.js:98 js/FaqGridDetailsPanel.js:151 js/FaqEditDialog.js:99
+msgid "Question"
+msgstr "Вопрос"
+
+#: js/FaqGridPanel.js:105 js/FaqGridDetailsPanel.js:157 js/SimpleFAQ.js:46
+#: js/FaqEditDialog.js:106
+msgid "Answer"
+msgstr "Ответ"
+
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqGridDetailsPanel.js:204 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Тип ЧаВО"
+msgstr[1] "Типы ЧаВО"
+msgstr[2] "Типы ЧаВО"
+msgstr[3] "Типы ЧаВО"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "По умолчанию"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Добавить новый тип ЧаВО..."
 
 #: js/Model.js:35 js/SimpleFAQ.js:19
 msgid "FAQ"
@@ -114,9 +94,21 @@ msgstr "Списки ЧаВО"
 msgid "Quick Search"
 msgstr "Быстрый поиск"
 
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Добавить новый статус ЧаВО"
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "ЧаВО Иформация"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Время создания"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Создан"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Нет ответа"
 
 #: js/SimpleFAQ.js:26
 msgid "Find Question"
@@ -125,6 +117,14 @@ msgstr "Найти вопрос"
 #: js/SimpleFAQ.js:35
 msgid "Search question"
 msgstr "Найти вопрос"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr "Найти FAQ"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Добавить новый статус ЧаВО"
 
 #: js/FaqEditDialog.js:100
 msgid "Enter a question..."

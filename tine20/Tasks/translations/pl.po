@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 12:08+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/tine20/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,45 +17,61 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:102
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s zadania własne"
+#: Model/Task.php:37
+msgid "GENDER_Task"
+msgid_plural "GENDER_Tasks"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
-#: Acl/Rights.php:97
-msgid "manage shared task lists"
-msgstr "edytowanie wspólnej listy zadań"
+#: Model/Task.php:38 js/Models.js:66
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Zadanie"
+msgstr[1] "zadania"
+msgstr[2] "zadania"
+msgstr[3] "zadania"
 
-#: Acl/Rights.php:98
-msgid "Create new shared tasks lists"
-msgstr "Utwórz nową, wspólną listę zadań"
+#: Model/Task.php:76 Model/Task.php:312 js/TaskGridPanel.js:138
+msgid "Percent"
+msgstr "W procentach"
 
-#: Acl/Rights.php:101
-msgid "manage shared tasks favorites"
-msgstr "zarządzanie ulubionymi ze wspólnych zadań"
+#: Model/Task.php:82 js/TaskEditDialog.js:235 js/TaskGridPanel.js:167
+#: Config.php:48 Setup/Update/Release5.php:75
+msgid "Completed"
+msgstr "Zakończone dnia"
 
-#: Acl/Rights.php:102
-msgid "Create or update shared tasks favorites"
-msgstr "Utwórz albo uaktualnij ulubione ze wspólnych zadań"
-
-#: Model/Task.php:207
+#: Model/Task.php:87 Model/Task.php:307
 msgid "Due"
 msgstr "Termin"
 
-#: Model/Task.php:208 js/TaskEditDialog.js:204
-msgid "Organizer"
-msgstr "Notatnik elektroniczny"
+#: Model/Task.php:92
+msgid "Class"
+msgstr ""
 
-#: Model/Task.php:209
+#: Model/Task.php:100 Model/Task.php:309
 msgid "Description"
 msgstr "Opis"
 
-#: Model/Task.php:210 js/TaskEditDialog.js:196 js/TaskGridPanel.js:119
+#: Model/Task.php:106
+msgid "Geo"
+msgstr ""
+
+#: Model/Task.php:111
+msgid "Location"
+msgstr ""
+
+#: Model/Task.php:116 Model/Task.php:308 js/TaskEditDialog.js:204
+msgid "Organizer"
+msgstr "Notatnik elektroniczny"
+
+#: Model/Task.php:310 js/TaskEditDialog.js:196 js/TaskGridPanel.js:122
 msgid "Priority"
 msgstr "Priorytet"
 
-#: Model/Task.php:211 js/TaskEditDialog.js:226 js/TaskGridPanel.js:148
-#: js/Models.js:110 js/Models.js:168
+#: Model/Task.php:311 js/TaskEditDialog.js:226 js/Models.js:110
+#: js/Models.js:168 js/TaskGridPanel.js:151
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Status"
@@ -63,19 +79,15 @@ msgstr[1] "statusy"
 msgstr[2] "statusy"
 msgstr[3] "statusy"
 
-#: Model/Task.php:212 js/TaskGridPanel.js:135
-msgid "Percent"
-msgstr "W procentach"
-
-#: Model/Task.php:219
+#: Model/Task.php:319
 msgid "Lead"
 msgstr "Zapytanie wstępne"
 
-#: Model/Task.php:225
+#: Model/Task.php:325
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Model/Task.php:226
+#: Model/Task.php:326
 msgid "Email"
 msgstr "E-mail"
 
@@ -87,7 +99,7 @@ msgstr ""
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "Należy podać prawidłową datę, ponieważ ustawiony jest alarm!"
 
-#: js/TaskEditDialog.js:185 js/TaskGridPanel.js:97 js/Models.js:107
+#: js/TaskEditDialog.js:185 js/Models.js:107 js/TaskGridPanel.js:100
 msgid "Summary"
 msgstr "Streszczenie"
 
@@ -111,55 +123,6 @@ msgstr "Wprowadź opis..."
 msgid "Percentage"
 msgstr "Procentowo"
 
-#: js/TaskEditDialog.js:235 js/TaskGridPanel.js:171 Config.php:48
-#: Setup/Update/Release5.php:75
-msgid "Completed"
-msgstr "Zakończone dnia"
-
-#: js/TaskGridPanel.js:54
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Czy na pewno chcesz usunąć zaznaczone zadanie?"
-msgstr[1] "Czy na pewno chcesz usunąć zaznaczone zadania?"
-msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
-msgstr[3] "Czy na pewno chcesz usunąć zaznaczone zadania?"
-
-#: js/TaskGridPanel.js:82
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/TaskGridPanel.js:87
-msgid "Lead name"
-msgstr ""
-
-#: js/TaskGridPanel.js:101
-msgid "Add a task..."
-msgstr "Dodaj zadanie..."
-
-#: js/TaskGridPanel.js:105 js/Models.js:108
-msgid "Due Date"
-msgstr "Data zakończenia"
-
-#: js/TaskGridPanel.js:164 js/Models.js:122
-msgid "Creation Time"
-msgstr "Czas utworzenia"
-
-#: js/TaskGridPanel.js:178 js/Models.js:118
-msgid "Responsible"
-msgstr "Osoba odpowiedzialna"
-
-#: js/Tasks.js:39
-msgid "New Task"
-msgstr "Nowe zadanie"
-
-#: js/Models.js:66
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Zadanie"
-msgstr[1] "zadania"
-msgstr[2] "zadania"
-msgstr[3] "zadania"
-
 #: js/Models.js:66
 msgid "Tasks"
 msgstr "Zadania"
@@ -180,6 +143,14 @@ msgstr "listy zadań"
 msgid "Quick Search"
 msgstr ""
 
+#: js/Models.js:108 js/TaskGridPanel.js:108
+msgid "Due Date"
+msgstr "Data zakończenia"
+
+#: js/Models.js:118 js/TaskGridPanel.js:174
+msgid "Responsible"
+msgstr "Osoba odpowiedzialna"
+
 #: js/Models.js:120
 msgid "Last Modified Time"
 msgstr "Czas ostatniej zmiany"
@@ -188,13 +159,41 @@ msgstr "Czas ostatniej zmiany"
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
+#: js/Models.js:122
+msgid "Creation Time"
+msgstr "Czas utworzenia"
+
 #: js/Models.js:123
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: Controller/Task.php:202
-msgid "Notification for Task "
-msgstr "Powiadomienie o zadaniu "
+#: js/Tasks.js:39
+msgid "New Task"
+msgstr "Nowe zadanie"
+
+#: js/TaskGridPanel.js:54
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Czy na pewno chcesz usunąć zaznaczone zadanie?"
+msgstr[1] "Czy na pewno chcesz usunąć zaznaczone zadania?"
+msgstr[2] "Czy na pewno chcesz usunąć zaznaczone zadania?"
+msgstr[3] "Czy na pewno chcesz usunąć zaznaczone zadania?"
+
+#: js/TaskGridPanel.js:83
+msgid "Attachments"
+msgstr ""
+
+#: js/TaskGridPanel.js:84
+msgid "Tags"
+msgstr "Znaczniki"
+
+#: js/TaskGridPanel.js:90
+msgid "Lead name"
+msgstr ""
+
+#: js/TaskGridPanel.js:104
+msgid "Add a task..."
+msgstr "Dodaj zadanie..."
 
 #: Preference.php:24
 msgid "All my tasks"
@@ -263,6 +262,31 @@ msgstr "wysoki"
 #: Config.php:68 Setup/Update/Release5.php:170
 msgid "urgent"
 msgstr "pilny"
+
+#: Acl/Rights.php:97
+msgid "manage shared task lists"
+msgstr "edytowanie wspólnej listy zadań"
+
+#: Acl/Rights.php:98
+msgid "Create new shared tasks lists"
+msgstr "Utwórz nową, wspólną listę zadań"
+
+#: Acl/Rights.php:101
+msgid "manage shared tasks favorites"
+msgstr "zarządzanie ulubionymi ze wspólnych zadań"
+
+#: Acl/Rights.php:102
+msgid "Create or update shared tasks favorites"
+msgstr "Utwórz albo uaktualnij ulubione ze wspólnych zadań"
+
+#: Controller.php:102
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s zadania własne"
+
+#: Controller/Task.php:211
+msgid "Notification for Task %1$s"
+msgstr ""
 
 #: Setup/Initialize.php:38 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"

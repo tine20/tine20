@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 14:29+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2018-11-28 11:09+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Finnish (http://www.transifex.com/tine20/tine20/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,6 +19,42 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: js/CourseGridPanel.js:44 js/Models.js:68
+msgid "Name"
+msgstr "Nimi"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Tyyppi"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Epäonnistui"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Virhe kurssia päivitettäessä"
+
+#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurssi"
+msgstr[1] "Kurssit"
+
+#: js/Models.js:67
+msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:70 js/CourseEditDialog.js:227 Config.php:103
+msgid "Internet Access"
+msgstr "Internet oikeudet"
+
+#: js/Models.js:105
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Kurssin tyyppi"
+msgstr[1] "Kurssin tyypit"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
@@ -32,11 +68,11 @@ msgstr "Sukunimi"
 msgid "Add new member to course"
 msgstr "Lisää uusi osallistuja kurssille"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:121
 msgid "Errors"
 msgstr "Virheet"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:121
 msgid "Please fix the errors noted."
 msgstr "Korjaa havaitut virheet"
 
@@ -47,12 +83,6 @@ msgstr "Lisää kurssin osallistujat"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Lisää uusi jäsen"
-
-#: js/CourseEditDialog.js:188 js/Models.js:43 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurssi"
-msgstr[1] "Kurssit"
 
 #: js/CourseEditDialog.js:204
 msgid "Course Name"
@@ -65,10 +95,6 @@ msgstr "Kurssi / Koulutuksen tyyppi"
 #: js/CourseEditDialog.js:221
 msgid "Description"
 msgstr "Kuvaus"
-
-#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:103
-msgid "Internet Access"
-msgstr "Internet oikeudet"
 
 #: js/CourseEditDialog.js:256
 msgid "Members"
@@ -86,40 +112,8 @@ msgstr "tuntematon"
 msgid "Reset Password"
 msgstr "Nollaa salasana"
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Nimi"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Tyyppi"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Epäonnistui"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Virhe kurssia päivitettäessä"
-
-#: js/Models.js:47
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Suorituslista"
-msgstr[1] "Suorituslistat"
-
-#: js/Models.js:71
-msgid "Quick Search"
-msgstr ""
-
-#: js/Models.js:109
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Kurssin tyyppi"
-msgstr[1] "Kurssin tyypit"
-
-#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
-#: Setup/Initialize.php:35
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
 msgid "All courses"
 msgstr "Kaikki kurssit"
 
@@ -193,30 +187,6 @@ msgstr ""
 msgid "The default department for new Courses"
 msgstr ""
 
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Opettaja"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Opettajan käyttäjätili"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Kurssini"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurssit"
-
-#: Setup/Initialize.php:57
-msgid "School"
-msgstr ""
-
-#: Setup/Initialize.php:58
-msgid "Defaul school for Courses application"
-msgstr ""
-
 #: Acl/Rights.php:108
 msgid "Add new user"
 msgstr "Lisää uusi osallistuja"
@@ -240,3 +210,27 @@ msgstr ""
 #: Acl/Rights.php:117
 msgid "Create or update shared courses favorites"
 msgstr ""
+
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Opettaja"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Opettajan käyttäjätili"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Kurssini"
+
+#: Setup/Initialize.php:57
+msgid "School"
+msgstr ""
+
+#: Setup/Initialize.php:58
+msgid "Defaul school for Courses application"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurssit"

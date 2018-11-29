@@ -15,44 +15,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fa_IR\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "لطفا پروژه را برای اضافه کردن مخاطب انتخاب کنید"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "لطفا نقش حاضرین در پروژه را انتخاب نمایید"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "انتخاب پروژه"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:85
+msgid "Role"
+msgstr "سِمَت"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "انتخاب سِمَت"
+
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "افزودن {0} شرکت کننده به پروژه"
 
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "پروژه ها"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "برچسب"
-
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
-msgid "Number"
-msgstr "شماره"
-
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
-msgid "Title"
-msgstr "عنوان"
-
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
-msgid "Status"
-msgstr "وضعیت"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:111 js/ProjectEditDialog.js:124
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Pluralized Translations\none: پروژه\nother: پروژه"
+msgstr[1] "Pluralized Translations\none: پروژه\nother: پروژه"
 
 #: js/Model.js:39
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Pluralized Translations\n\none: لیست پروژه\nother: لیست پروژه"
+msgstr[1] "Pluralized Translations\n\none: لیست پروژه\nother: لیست پروژه"
 
 #: js/Model.js:42
 msgid "Project lists"
@@ -62,9 +69,21 @@ msgstr "فهرست پروژه ها"
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:76 js/ProjectEditDialog.js:178
+#: js/Model.js:74 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "عنوان"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "شماره"
+
+#: js/Model.js:76 js/ProjectEditDialog.js:182
 msgid "Description"
 msgstr "توضیحات"
+
+#: js/Model.js:78 js/ProjectEditDialog.js:147 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "وضعیت"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -82,7 +101,7 @@ msgstr "زمان ساخت"
 msgid "Created By"
 msgstr "ساخته شده توسط"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:84
 msgid "Attendee"
 msgstr "شرکت کنندگان"
 
@@ -90,34 +109,17 @@ msgstr "شرکت کنندگان"
 msgid "Attendee Role"
 msgstr "نقش شرکت کنندگان"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "لطفا پروژه را برای اضافه کردن مخاطب انتخاب کنید"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "لطفا نقش حاضرین در پروژه را انتخاب نمایید"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "انتخاب پروژه"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "سِمَت"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "انتخاب سِمَت"
-
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "افزودن {0} شرکت کننده به پروژه"
-
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:196
 msgid "Enter description"
 msgstr "توضیحات"
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr ""
+
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "برچسب"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -176,6 +178,14 @@ msgstr "همکار"
 msgid "Responsible"
 msgstr "مسئوليت"
 
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "مدیریت پروژه‌های مشترک موردعلاقه"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "ایجاد پروژه مشترک مورد علاقه جدید"
+
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
@@ -200,11 +210,3 @@ msgstr "پروژه های در انتظار من"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "پروژه های در انتظار من"
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "مدیریت پروژه‌های مشترک موردعلاقه"
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "ایجاد پروژه مشترک مورد علاقه جدید"

@@ -22,39 +22,11 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "ActiveSync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Selecteer een apparaat"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Geen ActiveSync apparaat geregistreerd"
-
-#: js/Application.js:65
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Stel {0} in als filter"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Reset Sync filter"
-
-#: js/Application.js:91 js/Application.js:103
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} filter voor apparaat \"{1}\" is nu \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "Hersteld"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Zet Sync filter"
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -163,12 +135,6 @@ msgstr ""
 msgid "Quicksearch"
 msgstr "Snelzoeken"
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
@@ -178,6 +144,40 @@ msgstr[1] "Apparaten"
 #: js/Model.js:42
 msgid "Devices"
 msgstr "Apparaten"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "ActiveSync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Selecteer een apparaat"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Geen ActiveSync apparaat geregistreerd"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Stel {0} in als filter"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Reset Sync filter"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} filter voor apparaat \"{1}\" is nu \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "Hersteld"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Zet Sync filter"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -235,14 +235,6 @@ msgstr "Filter tijdslot voor afspraken"
 msgid "For how long in the past the events should be synchronized."
 msgstr "Hoelang terug moeten afspraken worden gesynchroniseerd."
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Standaard gedragslijn"
-
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Standaard gedragslijn ingesteld tijdens de installatie"
-
 #: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
 msgstr "Beheer ActiveSync apparaten"
@@ -258,3 +250,11 @@ msgstr ""
 #: Acl/Rights.php:115
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
+
+#: Setup/setup.xml:544 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Standaard gedragslijn"
+
+#: Setup/setup.xml:549 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Standaard gedragslijn ingesteld tijdens de installatie"

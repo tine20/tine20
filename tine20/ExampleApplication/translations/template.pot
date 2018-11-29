@@ -13,26 +13,52 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Model/ExampleRecord.php:35
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ExampleRecord.php:36
+msgid "example records"
+msgstr ""
+
+#: Model/ExampleRecord.php:39
+msgid "example record list"
+msgstr ""
+
+#: Model/ExampleRecord.php:40
+msgid "example record lists"
+msgstr ""
+
+#: Model/ExampleRecord.php:80 js/ExampleDetailsPanel.js:74
+#: js/ExampleRecordEditDialog.js:67
+msgid "Name"
+msgstr ""
+
+#: Model/ExampleRecord.php:87 js/ExampleRecordEditDialog.js:85
+msgid "Description"
+msgstr ""
+
+#: Model/ExampleRecord.php:92 js/ExampleDetailsPanel.js:78
+#: js/ExampleRecordEditDialog.js:73
+msgid "Status"
+msgstr ""
+
+#: Model/ExampleRecord.php:100 js/ExampleRecordEditDialog.js:79
+msgid "Reason"
+msgstr ""
+
+#: Model/ExampleRecord.php:107 Model/ExampleRecord.php:128
+msgid "Number"
+msgstr ""
+
 #: js/ExampleDetailsPanel.js:56
 msgid "Total Example Records"
 msgstr ""
 
-#: js/ExampleDetailsPanel.js:74 js/ExampleRecordEditDialog.js:67
-#: Model/ExampleRecord.php:80
-msgid "Name"
-msgstr ""
-
-#: js/ExampleDetailsPanel.js:78 js/ExampleRecordEditDialog.js:73
-#: Model/ExampleRecord.php:91
-msgid "Status"
-msgstr ""
-
 #: js/ExampleRecordEditDialog.js:50
 msgid "ExampleRecord"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:79 Model/ExampleRecord.php:99
-msgid "Reason"
 msgstr ""
 
 #: js/Example.js:23
@@ -110,7 +136,7 @@ msgid "Enabled Features"
 msgstr ""
 
 #: Config.php:156
-msgid "Enabled Features in Sales Application."
+msgid "Enabled Features in Example Application."
 msgstr ""
 
 #: Config.php:163
@@ -123,28 +149,6 @@ msgstr ""
 
 #: Config.php:175
 msgid "Just an example string for test purpose"
-msgstr ""
-
-#: Model/ExampleRecord.php:35
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/ExampleRecord.php:36
-msgid "example records"
-msgstr ""
-
-#: Model/ExampleRecord.php:39
-msgid "example record list"
-msgstr ""
-
-#: Model/ExampleRecord.php:40
-msgid "example record lists"
-msgstr ""
-
-#: Model/ExampleRecord.php:106 Model/ExampleRecord.php:128
-msgid "Number"
 msgstr ""
 
 #: Setup/setup.xml:4

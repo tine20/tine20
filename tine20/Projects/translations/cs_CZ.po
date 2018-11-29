@@ -11,41 +11,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs_CZ\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr ""
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr ""
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr ""
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:85
+msgid "Role"
+msgstr ""
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr ""
+
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr ""
 
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr ""
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr ""
-
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
-msgid "Number"
-msgstr ""
-
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
-msgid "Title"
-msgstr ""
-
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
-msgid "Status"
-msgstr ""
-
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:111 js/ProjectEditDialog.js:124
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Model.js:39
 msgid "Project list"
@@ -53,6 +59,7 @@ msgid_plural "Project lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Model.js:42
 msgid "Project lists"
@@ -62,8 +69,20 @@ msgstr ""
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:76 js/ProjectEditDialog.js:178
+#: js/Model.js:74 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr ""
+
+#: js/Model.js:75 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr ""
+
+#: js/Model.js:76 js/ProjectEditDialog.js:182
 msgid "Description"
+msgstr ""
+
+#: js/Model.js:78 js/ProjectEditDialog.js:147 js/ProjectGridPanel.js:134
+msgid "Status"
 msgstr ""
 
 #: js/Model.js:87
@@ -82,7 +101,7 @@ msgstr ""
 msgid "Created By"
 msgstr ""
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:84
 msgid "Attendee"
 msgstr ""
 
@@ -90,33 +109,16 @@ msgstr ""
 msgid "Attendee Role"
 msgstr ""
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr ""
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr ""
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr ""
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr ""
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr ""
-
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr ""
-
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:196
 msgid "Enter description"
+msgstr ""
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr ""
+
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
 msgstr ""
 
 #: Preference.php:24
@@ -176,6 +178,14 @@ msgstr ""
 msgid "Responsible"
 msgstr ""
 
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr ""
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr ""
+
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
@@ -199,12 +209,4 @@ msgstr ""
 
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
-msgstr ""
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr ""
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
 msgstr ""

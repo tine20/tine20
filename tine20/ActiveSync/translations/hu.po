@@ -17,39 +17,11 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Válassz egy eszközt"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Nincs regisztrált ActiveSync eszköz"
-
-#: js/Application.js:65
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Beállítás {0} szűrőként"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Újraállított Sync szűrő"
-
-#: js/Application.js:91 js/Application.js:103
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "\"{1}\" eszköz {0} szűrője most \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "újraállított"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Sync szűrő beállítása"
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -158,12 +130,6 @@ msgstr ""
 msgid "Quicksearch"
 msgstr ""
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
@@ -173,6 +139,40 @@ msgstr[1] "Eszközök"
 #: js/Model.js:42
 msgid "Devices"
 msgstr "Eszközök"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Válassz egy eszközt"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Nincs regisztrált ActiveSync eszköz"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Beállítás {0} szűrőként"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Újraállított Sync szűrő"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "\"{1}\" eszköz {0} szűrője most \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "újraállított"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Sync szűrő beállítása"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -230,14 +230,6 @@ msgstr ""
 msgid "For how long in the past the events should be synchronized."
 msgstr ""
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Alapértelmezett szabály"
-
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
-
 #: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
 msgstr ""
@@ -253,3 +245,11 @@ msgstr ""
 #: Acl/Rights.php:115
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
+
+#: Setup/setup.xml:544 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Alapértelmezett szabály"
+
+#: Setup/setup.xml:549 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Alapértelmezett szabály beállításra került a telepítés közben"

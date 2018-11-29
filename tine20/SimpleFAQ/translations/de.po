@@ -1,51 +1,76 @@
-#
+# 
 # Translators:
+# Ettore Atalan <atalanttore@googlemail.com>, 2016
+# lkneschke <l.kneschke@metaways.de>, 2013
 # lkneschke <l.kneschke@metaways.de>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2017-12-13 09:53+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr "FAQ durchsuchen"
-
-#: js/SimpleFAQ.js:19 js/Model.js:35
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQs"
-
-#: js/SimpleFAQ.js:26
-msgid "Find Question"
-msgstr "Finde Frage"
-
-#: js/SimpleFAQ.js:35
-msgid "Search question"
-msgstr "Suche Frage"
-
-#: js/SimpleFAQ.js:46 js/FaqEditDialog.js:106 js/FaqGridPanel.js:105
-#: js/FaqGridDetailsPanel.js:157
-msgid "Answer"
-msgstr "Antwort"
-
 #: js/FaqStatusFilterModel.js:27 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
+#: js/FaqGridDetailsPanel.js:199 js/FaqStatus.js:26
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "FAQ Status"
 msgstr[1] "FAQ Status"
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "FAQ Id"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Tags"
+
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
+msgid "Status"
+msgstr "Status"
+
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:115
+msgid "Type"
+msgstr "Typ"
+
+#: js/FaqGridPanel.js:98 js/FaqGridDetailsPanel.js:151 js/FaqEditDialog.js:99
+msgid "Question"
+msgstr "Frage"
+
+#: js/FaqGridPanel.js:105 js/FaqGridDetailsPanel.js:157 js/SimpleFAQ.js:46
+#: js/FaqEditDialog.js:106
+msgid "Answer"
+msgstr "Antwort"
+
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqGridDetailsPanel.js:204 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "FAQ Typ"
+msgstr[1] "FAQ Typen"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Standardeinstellungen"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Neuen FAQ Typ hinzufügen"
+
+#: js/Model.js:35 js/SimpleFAQ.js:19
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
 
 #: js/Model.js:39
 msgid "FAQ List"
@@ -60,53 +85,6 @@ msgstr "FAQ Listen"
 #: js/Model.js:74
 msgid "Quick Search"
 msgstr "Schnellsuche"
-
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
-#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "FAQ Typ"
-msgstr[1] "FAQ Typen"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Standardeinstellungen"
-
-#: js/FaqEditDialog.js:99 js/FaqGridPanel.js:98 js/FaqGridDetailsPanel.js:151
-msgid "Question"
-msgstr "Frage"
-
-#: js/FaqEditDialog.js:100
-msgid "Enter a question..."
-msgstr "Frage eingeben"
-
-#: js/FaqEditDialog.js:107
-msgid "Enter a answer..."
-msgstr "Antwort eingeben"
-
-#: js/FaqEditDialog.js:115 js/FaqGridPanel.js:92
-msgid "Type"
-msgstr "Typ"
-
-#: js/FaqEditDialog.js:127 js/FaqGridPanel.js:86
-msgid "Status"
-msgstr "Status"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Neuen FAQ Typ hinzufügen"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Neuen FAQ Status hinzufügen"
-
-#: js/FaqGridPanel.js:72
-msgid "FAQ id"
-msgstr "FAQ Id"
-
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
-msgid "Tags"
-msgstr "Tags"
 
 #: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
 msgid "FAQ Infos"
@@ -124,17 +102,49 @@ msgstr "Angelegt von"
 msgid "No answer yet"
 msgstr "Noch keine Antwort vorhanden"
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr "Alle FAQs meiner FAQ Listen"
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
+msgstr "Finde Frage"
 
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "Zuletzt bearbeitet"
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr "Suche Frage"
 
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "Alle FAQs die ich zuletzt bearbeitet habe"
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr "FAQ durchsuchen"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Neuen FAQ Status hinzufügen"
+
+#: js/FaqEditDialog.js:100
+msgid "Enter a question..."
+msgstr "Frage eingeben"
+
+#: js/FaqEditDialog.js:107
+msgid "Enter a answer..."
+msgstr "Antwort eingeben"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "Alle meine FAQs"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "Der Standart Favorit der beim öffnen der FAQ Listen  geladen wird"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "Standard FAQ List"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Die Standard FAQ Liste, in der neue FAQs angelegt werden."
 
 #: Controller.php:119
 #, python-format
@@ -161,22 +171,14 @@ msgstr "Intern"
 msgid "Public"
 msgstr "Öffentlich"
 
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr "Alle meine FAQs"
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Alle FAQs meiner FAQ Listen"
 
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr "Standard Favorit"
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Zuletzt bearbeitet"
 
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "Der Standart Favorit der beim öffnen der FAQ Listen  geladen wird"
-
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr "Standard FAQ List"
-
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Die Standard FAQ Liste, in der neue FAQs angelegt werden."
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Alle FAQs die ich zuletzt bearbeitet habe"

@@ -1,6 +1,7 @@
 # 
 # Translators:
 # Aleksey <aleksdem@aleksdem.com>, 2013
+# Aleksey <aleksdem@aleksdem.com>, 2013
 # John Doe <twisted_tits@mail.ru>, 2015
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
@@ -20,39 +21,13 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Выберите устройство"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Устройство ActiveSync не зарегистрировано"
-
-#: js/Application.js:65
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Установить как {0} фильтр"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Сброшенный фильтр синхронизации"
-
-#: js/Application.js:91 js/Application.js:103
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} фильтр для устройства \"{1}\" сейчас \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "сброшен"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Установить фильтр синхронизации"
+#: js/SyncDevices.js:70
+msgid "SyncDevice"
+msgid_plural "SyncDevices"
+msgstr[0] "Устройство"
+msgstr[1] "Устройства"
+msgstr[2] "Устройств"
+msgstr[3] "Устройств"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
@@ -161,14 +136,6 @@ msgstr ""
 msgid "Quicksearch"
 msgstr "Быстрый поиск"
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] "Устройство"
-msgstr[1] "Устройства"
-msgstr[2] "Устройств"
-msgstr[3] "Устройств"
-
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
@@ -180,6 +147,40 @@ msgstr[3] "Устройства"
 #: js/Model.js:42
 msgid "Devices"
 msgstr "Устройства"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Выберите устройство"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Устройство ActiveSync не зарегистрировано"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Установить как {0} фильтр"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Сброшенный фильтр синхронизации"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} фильтр для устройства \"{1}\" сейчас \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "сброшен"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Установить фильтр синхронизации"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -237,14 +238,6 @@ msgstr "Фильтрация событий по времени"
 msgid "For how long in the past the events should be synchronized."
 msgstr "Насколько давние события должны быть синхронизированы."
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Политика по умолчанию"
-
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Политика по умолчанию заданная при установке"
-
 #: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
 msgstr "Управление устройствами ActiveSync"
@@ -260,3 +253,11 @@ msgstr ""
 #: Acl/Rights.php:115
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
+
+#: Setup/setup.xml:544 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Политика по умолчанию"
+
+#: Setup/setup.xml:549 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Политика по умолчанию заданная при установке"
