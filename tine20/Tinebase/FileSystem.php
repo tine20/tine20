@@ -1129,13 +1129,15 @@ class Tinebase_FileSystem implements
                 }
             }
         }
-        
-        $contextOptions = array('tine20' => array(
-            'path' => $_path,
-            'mode' => $_mode,
-            'node' => $node
-        ));
-        stream_context_set_option($handle, $contextOptions);
+
+        if (is_resource($handle)) {
+            $contextOptions = array('tine20' => array(
+                'path' => $_path,
+                'mode' => $_mode,
+                'node' => $node
+            ));
+            stream_context_set_option($handle, $contextOptions);
+        }
         
         return $handle;
     }
