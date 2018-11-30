@@ -202,6 +202,13 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
 
     public function testUpdateOldEvent()
     {
+        // TODO should not depend on SMTP config ...
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        if (! $smtpConfig || ! isset($smtpConfig->from)
+        ) {
+            $this->markTestSkipped('SMTP notification backend not configured');
+        }
+
         Calendar_Controller_Event::getInstance()->sendNotifications(true);
 
         self::flushMailer();
