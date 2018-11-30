@@ -399,6 +399,9 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     public function testExternalInvitationRequestProcess()
     {
+        // TODO should not depend on IMAP/SMTP config ...
+        $this->_checkIMAPConfig();
+
         $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/invitation_request_external.ics' );
         $ics = preg_replace('#DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111121T130000#', 'DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->addHour(1)->format('Ymd\THis'), $ics);
         $ics = preg_replace('#DTEND;VALUE=DATE-TIME;TZID=Europe/Berlin:20111121T140000#', 'DTEND;VALUE=DATE-TIME;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->addHour(2)->format('Ymd\THis'), $ics);
@@ -486,7 +489,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         static::assertTrue(isset($jsonMessage['preparedParts'][0]['preparedData']['preconditions']) &&
             !empty($jsonMessage['preparedParts'][0]['preparedData']['preconditions']));
     }
-    
+
     /**
      * check IMAP config and marks test as skipped if no IMAP backend is configured
      */
@@ -803,6 +806,9 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     public function testExternalInvitationRescheduleOutlook()
     {
+        // TODO should not depend on IMAP/SMTP config ...
+        $this->_checkIMAPConfig();
+
         // initial invitation
         $iMIP = $this->_testExternalImap('outlook_invitation.ics',
             3, 'Metaways Folgetermin ');
