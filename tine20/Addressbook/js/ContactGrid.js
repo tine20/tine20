@@ -253,6 +253,9 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
     if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry')) {
         columns.push({ id: 'industry', header: i18n._('Industry'), dataIndex: 'industry', renderer: Tine.Tinebase.common.foreignRecordRenderer});
     }
+    if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureShortName')) {
+        columns.push({ id: 'n_short', header: i18n._('Short Name'), dataIndex: 'n_short', width: 50 });
+    }
     
     return columns;
 };

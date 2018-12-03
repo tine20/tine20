@@ -653,6 +653,71 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * Test automatic Short Name Creation
+     */
+    public function testContactShortName()
+    {
+        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::FEATURE_SHORT_NAME);
+        $enabledFeatures[Addressbook_Config::FEATURE_SHORT_NAME] = true;
+
+        Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
+        $this->assertTrue(Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME));
+
+        $newContactData = $this->_getContactData();
+        $newContactData['n_given'] = 'Li';
+        $newContactData['n_middle'] = '1';
+        $newContactData['n_family'] = 'Wun';
+        $contact = $this->_uit->saveContact($newContactData);
+
+        $this->assertEquals('LWU', $contact['n_short'], 'Short Name should be LWU ');
+
+        try {
+            $newContactData['n_given'] = 'Lee';
+            $contact = $this->_uit->saveContact($newContactData);
+            $this->assertEquals('LEWU', $contact['n_short'], 'Short Name should be LEWU ');
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertEquals('This Short Name already exists. How about LEWU?', $e->getMessage(), 'Short Name should be LEWU');
+        }
+
+        try {
+            $newContactData['n_given'] = 'Len';
+            $contact = $this->_uit->saveContact($newContactData);
+            $this->assertEquals('LEWUN', $contact['n_short'], 'Short Name should be LEWUN ');
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertEquals('This Short Name already exists. How about LEWUN?', $e->getMessage(), 'Short Name should be LEWUN');
+        }
+
+        try {
+            $newContactData['n_given'] = 'Lena';
+            $contact = $this->_uit->saveContact($newContactData);
+            $this->assertEquals('LENWUN', $contact['n_short'], 'Short Name should be LENWUN ');
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertEquals('This Short Name already exists. How about LENWUN?', $e->getMessage(), 'Short Name should be LENWUN');
+        }
+
+        // set manually
+        $newContactData['n_given'] = 'Leander';
+        $newContactData['n_short'] = 'XXX';
+        $contact = $this->_uit->saveContact($newContactData);
+        $this->assertEquals('XXX', $contact['n_short'], 'Short Name should be XXX ');
+        $newContactData['n_short'] = NULL;
+
+        // Leonard wants to be XXX (set manually) but Leander already is XXX
+        try {
+            $newContactData['n_given'] = 'Leonard';
+            $newContactData['n_short'] = 'XXX';
+            $this->_uit->saveContact($newContactData);
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertEquals('This Short Name already exists. How about LEOWUN?', $e->getMessage(), 'Sry but Leander should be XXX already!');
+        }
+
+        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::FEATURE_SHORT_NAME);
+        $enabledFeatures[Addressbook_Config::FEATURE_SHORT_NAME] = false;
+
+        Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
+    }
+    
+    /**
      * test updating of a contact (including geodata)
      *
      * @group longrunning

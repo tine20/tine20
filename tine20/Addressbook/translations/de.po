@@ -1023,6 +1023,13 @@ msgstr "Verwalte Gruppenfunktionen in den Stammdaten"
 msgid "View, create, delete or update list functions in CoreData application"
 msgstr "Gruppenfunktionen in den Stammdaten ansehen, anlegen, löschen oder bearbeiten"
 
+# short name feature
+msgid "Short Name"
+msgstr "Kürzel"
+
+msgid "This Short Name already exists. How about {0}?"
+msgstr "Dieses Kürzel existiert bereits. Wie wäre es mit {0}?"
+
 #~ msgid "List Type"
 #~ msgstr "Gruppen Typ"
 

@@ -215,4 +215,25 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Addressbook', '11.12');
     }
+
+    /**
+     * Adds short name for contacts
+     *
+     * @return void
+     */
+    public function update_12()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+             <field>
+                <name>n_short</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>');
+
+        $this->_backend->addCol('addressbook', $declaration);
+
+        $this->setTableVersion('addressbook', 26);
+        $this->setApplicationVersion('Addressbook', '11.13');
+    }
 }

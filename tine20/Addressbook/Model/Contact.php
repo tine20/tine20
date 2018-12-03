@@ -421,6 +421,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 'label'                         => 'Suffix', // _('Suffix')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
+            'n_short'                      => [
+                'label'                         => 'Short Name', // _('Short Name')
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
             'org_name'                      => [
                 'label'                         => 'Company', // _('Company')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],

@@ -80,6 +80,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const FEATURE_INDUSTRY = 'featureIndustry';
 
     /**
+     * FEATURE_SHORT_NAME
+     *
+     * @var string
+     */
+    const FEATURE_SHORT_NAME = 'featureShortName';
+
+    /**
      * FEATURE_RESOURCES
      *
      * @var string
@@ -137,6 +144,14 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                     //_('Add Industry field to Adressbook')
                     self::TYPE                      => self::TYPE_BOOL,
                     self::DEFAULT_STR               => true,
+                ],
+                self::FEATURE_SHORT_NAME           => [
+                    self::LABEL                     => 'Addressbook Short Names',
+                    //_('Addressbook Short Names')
+                    self::DESCRIPTION               => 'Add Short Name field to Adressbook',
+                    //_('Add Short Name field to Adressbook')
+                    self::TYPE                      => self::TYPE_BOOL,
+                    self::DEFAULT_STR               => false,
                 ],
                 self::FEATURE_RESOURCES          => [
                     self::LABEL                     => 'Manage resources in Addressbook',
