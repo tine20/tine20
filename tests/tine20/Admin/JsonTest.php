@@ -1030,8 +1030,8 @@ class Admin_JsonTest extends TestCase
             'account_type'   => 'user',
             Tinebase_Model_Grants::GRANT_ADMIN     => true
         );
-        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
-        $containerUpdated = $this->_json->saveContainer($container);
+        $this->setExpectedException(Tinebase_Exception_SystemGeneric::class);
+        $this->_json->saveContainer($container);
     }
     
     /**
