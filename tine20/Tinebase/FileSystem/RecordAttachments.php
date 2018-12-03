@@ -218,6 +218,7 @@ class Tinebase_FileSystem_RecordAttachments
      * @param  mixed $attachment
          @see Tinebase_FileSystem::copyTempfile
      * @return null|Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_Duplicate
      */
     public function addRecordAttachment(Tinebase_Record_Interface $record, $name, $attachment)
     {
@@ -264,7 +265,7 @@ class Tinebase_FileSystem_RecordAttachments
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Creating new record attachment ' . $attachmentPath);
         if ($this->_fsController->fileExists($attachmentPath)) {
-            throw new Tinebase_Exception_InvalidArgument('File already exists');
+            throw new Tinebase_Exception_Duplicate('File already exists');
         }
         
         $this->_fsController->copyTempfile($attachment, $attachmentPath);

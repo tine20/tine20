@@ -479,11 +479,49 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $part;
     }
 
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return string
+     */
     public function getMessageRawContent(Felamimail_Model_Message $message)
     {
         $partId = null;
         $partStructure  = $message->getPartStructure(/* partId */ $partId, /* $_useMessageStructure */ FALSE);
         return $this->_getPartContent($message, $partId, $partStructure);
+    }
+
+    /**
+     * create node filename from message data
+     *
+     * @param $message
+     * @return string
+     */
+    public function getMessageNodeFilename($message)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($message->toArray(), true));
+
+        // remove '/' and '\' from name as this might break paths
+        $subject = preg_replace('/[\/\\\]+/', '_', $message->subject);
+        // remove possible harmful utf-8 chars
+        // TODO should not be enabled by default (configurable?)
+        $subject = Tinebase_Helper::mbConvertTo($subject, 'ASCII');
+        $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageuid . $message->folder_id), 0, 10) . '.eml';
+
+        return $name;
+    }
+
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return Tinebase_Model_TempFile
+     */
+    public function putRawMessageIntoTempfile($message)
+    {
+        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message);
+        $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
+        file_put_contents($tempFilename, $rawContent);
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
+        return $tempFile;
     }
     
     /**

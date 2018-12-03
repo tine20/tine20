@@ -267,23 +267,27 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * file messages into Filemanager
      *
      * @param array $filterData
-     * @param string $targetApp
-     * @param string $targetPath
+     * @param array $locations
      * @return array
      */
-    public function fileMessages($filterData, $targetApp, $targetPath)
+    public function fileMessages($filterData, $locations)
     {
         $this->_longRunningRequest();
 
         $filter = $this->_decodeFilter($filterData, 'Felamimail_Model_MessageFilter');
-        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, $targetApp, $targetPath);
+
+        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, new Tinebase_Record_RecordSet(
+            Felamimail_Model_MessageFileLocation::class,
+            $locations,
+            true
+        ));
 
         return array(
             'totalcount' => ($result === false) ? 0 : $result,
-            'success'    => ($result !== false),
+            'success'    => ($result > 0),
         );
     }
-    
+
     /**
      * add given flags to given messages
      *

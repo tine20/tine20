@@ -79,4 +79,38 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
 
         return $locations;
     }
+
+    /**
+     * @param $message
+     * @param $location
+     * @param $record
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function createMessageLocationForRecord($message, $location, $record)
+    {
+        if (! $record || ! $record->getId()) {
+            throw new Tinebase_Exception_InvalidArgument('existing record is required');
+        }
+
+        if (! isset($message->headers['message-id'])) {
+            $headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message, null, true);
+            $messageId = $headers['message-id'];
+        } else {
+            $messageId = $message->headers['message-id'];
+        }
+
+        $locationToCreate = clone($location);
+        $locationToCreate->message_id = $messageId;
+        $locationToCreate->message_id_hash = sha1($messageId);
+        $locationToCreate->record_id = $record->getId();
+        if (empty($locationToCreate->record_title)) {
+            $locationToCreate->record_title = $record->getTitle();
+        }
+        if (empty($locationToCreate->type)) {
+            $locationToCreate->type = $locationToCreate->model === Filemanager_Model_Node::class
+                ? Felamimail_Model_MessageFileLocation::TYPE_NODE
+                : Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT;
+        }
+        $this->create($locationToCreate);
+    }
 }

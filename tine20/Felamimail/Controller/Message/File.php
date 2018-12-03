@@ -60,31 +60,26 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
      * file messages into Filemanager
      *
      * @param Felamimail_Model_MessageFilter|Tinebase_Record_RecordSet $messages
-     * @param string $targetApp
-     * @param string $targetPath
-     * @return integer|boolean
+     * @param Tinebase_Record_RecordSet $locations
+     * @return integer
      */
-    public function fileMessages($messages, $targetApp, $targetPath)
+    public function fileMessages($messages, $locations)
     {
-        $result = false;
-        if (Tinebase_Core::getUser()->hasRight($targetApp, Tinebase_Acl_Rights::RUN)) {
+        $result = 0;
+        foreach ($locations as $location) {
             if ($messages instanceof Tinebase_Model_Filter_FilterGroup) {
                 $iterator = new Tinebase_Record_Iterator(array(
                     'iteratable' => $this,
                     'controller' => $this,
-                    'filter'     => $messages,
-                    'function'   => 'processFileIteration',
+                    'filter' => $messages,
+                    'function' => 'processFileIteration',
                 ));
-                $iterateResult = $iterator->iterate($targetApp, $targetPath);
+                $iterateResult = $iterator->iterate($location);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Filed ' . $iterateResult['totalcount'] . ' message(s).');
-                $result = $iterateResult['totalcount'];
+                $result += $iterateResult['totalcount'];
             }
-
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' User does not have RUN right for application');
         }
 
         return $result;
@@ -94,32 +89,30 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
      * file messages
      *
      * @param Tinebase_Record_RecordSet $messages
-     * @param string $targetApp
-     * @param string $targetPath
+     * @param Felamimail_Model_MessageFileLocation $location
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function processFileIteration(Tinebase_Record_RecordSet $messages, $targetApp, $targetPath)
+    public function processFileIteration(Tinebase_Record_RecordSet $messages, Felamimail_Model_MessageFileLocation $location)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' About to file ' . count($messages) . ' messages to ' . $targetApp . '/' . $targetPath);
+            . ' About to file ' . count($messages) . ' messages to location ' . print_r($location->toArray(), true));
 
+        $modelControllers = [];
         foreach ($messages as $message) {
-            /** @var Filemanager_Controller_Node $nodeController */
-            $nodeController = Tinebase_Core::getApplicationInstance($targetApp . '_Model_Node');
-            $node = $nodeController->fileMessage($targetPath, $message);
-            if (! isset($message->headers['message-id'])) {
-                throw new Tinebase_Exception_InvalidArgument('message id header must be present for filing messages');
+            if (! isset($modelControllers[$location->model])) {
+                try {
+                    $modelControllers[$location->model] = Tinebase_Core::getApplicationInstance($location->model);
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    continue;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    continue;
+                }
             }
-            $messageId = $message->headers['message-id'];
-            $fileLocation = new Felamimail_Model_MessageFileLocation([
-                'message_id' => $messageId,
-                'message_id_hash' => sha1($messageId),
-                'model' => get_class($node),
-                'record_id' => $node->getId(),
-                'record_title' => $node->name,
-                'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
-            ]);
-            Felamimail_Controller_MessageFileLocation::getInstance()->create($fileLocation);
+            $recordController = $modelControllers[$location->model];
+            $record = $recordController->fileMessage($location, $message);
+            if ($record) {
+                Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record);
+            }
         }
 
         if (Felamimail_Config::getInstance()->get(Felamimail_Config::DELETE_ARCHIVED_MAIL)) {

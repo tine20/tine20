@@ -1424,25 +1424,25 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * file message
+     * file message and returns parent node
      *
-     * @param                          $targetPath
+     * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
      * @returns Filemanager_Model_Node
-     * @throws
      * @throws Filemanager_Exception_NodeExists
      * @throws Tinebase_Exception_AccessDenied
-     * @throws null
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function fileMessage($targetPath, Felamimail_Model_Message $message)
+    public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
     {
-        // save raw message in temp file
-        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message);
-        $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
-        file_put_contents($tempFilename, $rawContent);
-        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
+        if (! isset($location['record_id']['path']) || $location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
+            // file message as attachment
+            return parent::fileMessage($location, $message);
+        }
+        $targetPath = $location['record_id']['path'];
 
-        $filename = $this->_getMessageNodeFilename($message);
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
+        $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
 
         $emlNode = $this->createNodes(
             array($targetPath . '/' . $filename),
@@ -1453,28 +1453,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         $emlNode->description = $this->_getMessageNodeDescription($message);
         $emlNode->last_modified_time = Tinebase_DateTime::now();
-        return $this->update($emlNode);
-    }
+        $this->update($emlNode);
 
-    /**
-     * create node filename from message data
-     *
-     * @param $message
-     * @return string
-     */
-    protected function _getMessageNodeFilename($message)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r($message->toArray(), true));
-
-        // remove '/' and '\' from name as this might break paths
-        $subject = preg_replace('/[\/\\\]+/', '_', $message->subject);
-        // remove possible harmful utf-8 chars
-        // TODO should not be enabled by default (configurable?)
-        $subject = Tinebase_Helper::mbConvertTo($subject, 'ASCII');
-        $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageuid . $message->folder_id), 0, 10) . '.eml';
-
-        return $name;
+        // return parent node
+        return $this->get($emlNode->parent_id);
     }
 
     /**

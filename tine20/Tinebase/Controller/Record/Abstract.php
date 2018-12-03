@@ -2852,4 +2852,29 @@ HumanResources_CliTests.testSetContractsEndDate */
         }
         return $result;
     }
+
+    /**
+     * file message as record attachment
+     *
+     * @param Felamimail_Model_MessageFileLocation $location
+     * @param Felamimail_Model_Message $message
+     * @returns Tinebase_Record_Interface|null
+     */
+    public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
+    {
+        $recordId = is_array($location['record_id']) ? $location['record_id']['id'] : $location['record_id'];
+        $record = $this->get($recordId);
+
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
+        $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
+
+        try {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $filename, $tempFile);
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $filename . ' already exists');
+            return null;
+        }
+        return $record;
+    }
 }

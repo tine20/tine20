@@ -1091,6 +1091,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
+
     /**
      * forward message test (eml attachment from Filemanager)
      */
@@ -1123,6 +1124,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         self::assertEquals('test.eml', $attachment['filename']);
         self::assertEquals(51882, $attachment['size']);
     }
+
     /**
      * testSendMessageWithAttachmentWithoutExtension
      *
@@ -1275,7 +1277,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
      *
      * @return array
      */
-    public function testFileMessages()
+    public function testFileMessagesAsNode()
     {
         $appName = 'Filemanager';
         $user = Tinebase_Core::getUser();
@@ -1304,7 +1306,15 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $filter = array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'], $message2['id'])
         ));
-        $result = $this->_json->fileMessages($filter, $appName, $path);
+        $result = $this->_json->fileMessages($filter, [
+            [
+                'model' => Filemanager_Model_Node::class,
+                'record_id' => [
+                    'path' => $path
+                ],
+                'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE
+            ]
+        ]);
         $this->assertTrue(isset($result['totalcount']));
         $this->assertEquals(2, $result['totalcount'], 'message should be filed in ' . $appName . ': ' . print_r($result, true));
 
@@ -1332,19 +1342,20 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
         // assert MessageFileLocation
         $completeMessage = $this->_json->getMessage($message['id']);
+        $messageIdHash = sha1($completeMessage['headers']['message-id']);
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_MessageFileLocation::class, [
-                ['field' => 'record_id', 'operator' => 'equals', 'value' => $emlNode['id']]
+                ['field' => 'record_id', 'operator' => 'equals', 'value' => $personalFilemanagerContainer->getId()],
+                ['field' => 'message_id_hash', 'operator' => 'equals', 'value' => $messageIdHash],
             ]
         );
         $result = Felamimail_Controller_MessageFileLocation::getInstance()->search($filter);
-        self::assertEquals(1, count($result));
+        self::assertEquals(1, count($result), 'did not find location record: '
+            . print_r($result->toArray(), true));
         $fileLocation = $result->getFirstRecord();
         self::assertNotNull($fileLocation->message_id);
         self::assertEquals(Felamimail_Model_MessageFileLocation::TYPE_NODE, $fileLocation->type);
-        self::assertEquals(sha1($completeMessage['headers']['message-id']), $fileLocation->message_id_hash,
-            print_r($completeMessage, true));
-        self::assertEquals($emlNode->name, $fileLocation->record_title);
+        self::assertEquals($personalFilemanagerContainer->name, $fileLocation->record_title);
 
         return $completeMessage;
     }
@@ -2447,7 +2458,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testGetFileSuggestionsLocation()
     {
-        $message = $this->testFileMessages();
+        $message = $this->testFileMessagesAsNode();
         $result = $this->_json->getFileSuggestions($message);
 
         self::assertGreaterThanOrEqual(2, count($result));
@@ -2463,8 +2474,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($suggestion['record']));
         self::assertTrue(isset($suggestion['model']));
         self::assertEquals(Felamimail_Model_MessageFileLocation::class, $suggestion['model']);
-        self::assertEquals(Tinebase_Model_Tree_Node::class, $suggestion['record']['model']);
-        self::assertContains('test_test_', $suggestion['record']['record_title']);
+        self::assertEquals(Filemanager_Model_Node::class, $suggestion['record']['model']);
+        self::assertContains('personal files', $suggestion['record']['record_title']);
     }
 
     /**
@@ -2490,5 +2501,54 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $suggestion['record']['email'], print_r($suggestion['record'], true));
         self::assertTrue(isset($suggestion['model']));
         self::assertEquals(Addressbook_Model_Contact::class, $suggestion['model']);
+    }
+
+    public function testFileMessageAsAttachment()
+    {
+        $message = $this->_sendMessage();
+        // file message at current contact
+        $filter = [[
+            'field' => 'id', 'operator' => 'in', 'value' => [$message['id']]
+        ]];
+        $result = $this->_json->fileMessages($filter, [
+            [
+                'model' => Addressbook_Model_Contact::class,
+                'record_id' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
+                'type' => Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT
+            ]
+        ]);
+        $this->assertTrue(isset($result['totalcount']));
+        $this->assertEquals(1, $result['totalcount'], 'message should be filed in contact '
+            . print_r($result, true));
+
+        // check if message is attached to contact
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($contact);
+        self::assertEquals(1, count($attachments), print_r($contact->toArray(), true));
+    }
+
+    public function testFileMessageInvalid()
+    {
+        $message = $this->_sendMessage();
+        // file message at current contact
+        $filter = [[
+            'field' => 'id', 'operator' => 'in', 'value' => [$message['id']]
+        ]];
+        // try to send with wrong param structure
+        self::setExpectedException(Tinebase_Exception_Record_NotAllowed::class);
+        $result = $this->_json->fileMessages($filter, [
+            'model' => Addressbook_Model_Contact::class,
+            'record_id' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
+            'type' => Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT
+        ]);
+    }
+
+    /**
+     * call testFileMessageAsAttachment twice: duplicate exception is catched...
+     */
+    public function testFileMessageDuplicate()
+    {
+        $this->testFileMessageAsAttachment();
+        $this->testFileMessageAsAttachment();
     }
 }
