@@ -722,19 +722,18 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .tinebase-editmultipledialog-clearer.over,
 .tinebase-editmultipledialog-clearer {
     background-image:url(../../images/icon-set/icon_clear.svg) !important;
-    border-bottom:1px solid #7eadd9;
     background-position: 0px;
-    height:16px;
-    width:16px;
-    top: 5px;
+    height:14px;
+    width:14px;
+    top: 7px;
     display:block;
     position:absolute;
     z-index:9;
+    background-size: 14px 14px;
 }
 
 .tinebase-editmultipledialog-clearer.hidden {
     border-bottom:none;
-    height:18px;
     background-image: url(../../library/ExtJS/resources/images/default/s.gif);
 }
 
@@ -756,7 +755,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 
 .tinebase-editmultipledialog-dirtycheck {
     background-color: #F4F1D3; /* #F9F9A3 */
-    border: 1px solid #B5B8C8;
+    border: 1px solid #B5B8C8; 
     padding: 2px 2px 1px 2px;
     border-radius: 3px;
 }
