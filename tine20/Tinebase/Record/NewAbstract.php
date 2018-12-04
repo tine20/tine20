@@ -132,14 +132,14 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function __construct($_data = null, $_bypassFilters = false, $_convertDates = true)
     {
-        /** @deprecated TODO remove this code */
-        if (true !== $_convertDates) {
-            throw new Tinebase_Exception_InvalidArgument(static::class . ' doesnt support convertDates anymore');
-        }
-
         // this needs to be instantiated
         if (null === static::$_configurationObject) {
             static::getConfiguration();
+        }
+
+        /** @deprecated TODO remove this code */
+        if (true !== $_convertDates) {
+            throw new Tinebase_Exception_InvalidArgument(static::class . ' doesnt support convertDates anymore');
         }
 
         $this->bypassFilters = (bool)$_bypassFilters;
@@ -149,6 +149,14 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         }
 
         $this->_isDirty = false;
+    }
+
+    public function __wakeup()
+    {
+        // this needs to be instantiated
+        if (null === static::$_configurationObject) {
+            static::getConfiguration();
+        }
     }
 
     /**
@@ -1239,13 +1247,13 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         if (!static::$_configurationObject->hasField($_property)) {
             throw new Tinebase_Exception_UnexpectedValue($_property . ' is no property of $this->_properties');
         }
-        if (!isset($this->_properties[$_property])) {
-            $this->_properties[$_property] = array();
-        } else if (is_string($this->_properties[$_property])) {
-            $this->_properties[$_property] = json_decode($this->_properties[$_property], true);
+        if (!isset($this->_data[$_property])) {
+            $this->_data[$_property] = array();
+        } else if (is_string($this->_data[$_property])) {
+            $this->_data[$_property] = json_decode($this->_data[$_property], true);
         }
 
-        return $this->_properties[$_property];
+        return $this->_data[$_property];
     }
 
     /**
@@ -1496,7 +1504,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         //$_format = "Y-m-d H:i:s";
         foreach ($_toConvert as $field => $value) {
             if (! $value) {
-                $dateTimeFields = is_object(static::$_configurationObject) ? static::$_configurationObject->datetimeFields : null;
+                $dateTimeFields = static::$_configurationObject->datetimeFields;
                 if ($dateTimeFields && in_array($field, $dateTimeFields)) {
                     $_toConvert[$field] = NULL;
                 }
