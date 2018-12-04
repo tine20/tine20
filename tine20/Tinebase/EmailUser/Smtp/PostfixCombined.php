@@ -10,11 +10,13 @@
  */
 
  /**
- * plugin to handle postfix smtp accounts
- * 
- * @package    Tinebase
- * @subpackage EmailUser
- */
+  * plugin to handle postfix smtp accounts
+  *
+  * @package    Tinebase
+  * @subpackage EmailUser
+  *
+  * @todo extend Tinebase_EmailUser_Smtp_Postfix
+  */
 class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql implements Tinebase_EmailUser_Smtp_Interface
 {
     /**
@@ -297,7 +299,11 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql imp
                         // Get rid of TineEmail -> username mapping.
                         $tineEmailAlias = array_search($_rawdata[$this->_propertyMapping['emailUsername']], $data[$keyMapping]);
                         if ($tineEmailAlias !== false) {
-                            unset($data[$keyMapping][$tineEmailAlias]);
+                            if ($keyMapping === 'emailForwards' ||
+                                $_rawdata[$this->_propertyMapping['emailAddress']] === $_rawdata[$this->_propertyMapping['emailUsername']]
+                            ) {
+                                unset($data[$keyMapping][$tineEmailAlias]);
+                            }
                             $data[$keyMapping] = array_values($data[$keyMapping]);
                         }
                         // sanitize aliases & forwards
