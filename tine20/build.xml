@@ -383,7 +383,7 @@
         <echo msg="updating templates" />
         <exec command="./langHelper.php --pot" passthru="true" />
         <echo msg="push translations to transifex" />
-        <exec command="tx push -s" passthru="true" />
+        <exec command="tx push -s -t --skip" passthru="true" />
         <echo msg="commit updated strings now:" />
         <echo msg="git commit -a -m 'update lang templates'" />
         <echo msg="git push gerrit HEAD:refs/heads/master" />
