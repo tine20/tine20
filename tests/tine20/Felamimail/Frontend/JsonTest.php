@@ -29,35 +29,35 @@ class Felamimail_Frontend_JsonTest extends TestCase
      * @var array
      */
     protected $_messageIds = array();
-    
+
     /**
      * @var Felamimail_Model_Account
      */
     protected $_account = NULL;
-    
+
     /**
      * imap backend
 
      * @var Felamimail_Backend_ImapProxy
      */
     protected $_imap = NULL;
-    
+
     /**
      * name of the folder to use for tests
      * @var string
      */
     protected $_testFolderName = 'Junk';
-    
+
     /**
      * folders to delete in tearDown()
-     * 
+     *
      * @var array
      */
     protected $_createdFolders = array();
 
     /**
      * are there messages to delete?
-     * 
+     *
      * @var array
      */
     protected $_foldersToClear = array();
@@ -75,7 +75,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
      * @var boolean
      */
     protected $_oldSieveVacationActiveState = FALSE;
-    
+
     /**
      * old sieve data
      *
@@ -121,7 +121,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
      * @var Tinebase_Frontend_Json
      */
     protected $_frontend = NULL;
-    
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -131,7 +131,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         if ($this->_account === null) {
@@ -143,15 +143,15 @@ class Felamimail_Frontend_JsonTest extends TestCase
         } catch (Tinebase_Exception_NotFound $tenf) {
             // do nothing
         }
-        
+
         $this->_json = new Felamimail_Frontend_Json();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
-        
+
         foreach (array($this->_testFolderName, $this->_account->sent_folder, $this->_account->trash_folder) as $folderToCreate) {
             // create folder if it does not exist
             $this->_getFolder($folderToCreate);
         }
-        
+
         $this->_mailDomain = TestServer::getPrimaryMailDomain();
 
         $this->_frontend = new Tinebase_Frontend_Json();
@@ -167,7 +167,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Tearing down ...');
-        
+
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
                 //echo "delete $folderName\n";
@@ -179,7 +179,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             }
             Felamimail_Controller_Cache_Folder::getInstance()->clear($this->_account);
         }
-        
+
         if (! empty($this->_foldersToClear)) {
             foreach ($this->_foldersToClear as $folderName) {
                 try {
@@ -200,7 +200,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
                 } catch (Exception $e) {}
             }
         }
-        
+
         // sieve cleanup
         if ($this->_testSieveScriptName !== NULL) {
             try {
@@ -223,7 +223,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
                 Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
             } catch (Exception $e) {}
         }
-        
+
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
             try {
@@ -240,9 +240,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /************************ test functions *********************************/
-    
+
     /*********************** folder tests ****************************/
-    
+
     /**
      * test search folders (check order of folders as well)
      */
@@ -250,10 +250,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $filter = $this->_getFolderFilter();
         $result = $this->_json->searchFolders($filter);
-        
+
         $this->assertGreaterThan(1, $result['totalcount']);
         $expectedFolders = array('INBOX', $this->_testFolderName, $this->_account->trash_folder, $this->_account->sent_folder);
-        
+
         $foundCount = 0;
         foreach ($result['results'] as $index => $folder) {
             if (in_array($folder['localname'], $expectedFolders)) {
@@ -262,7 +262,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         }
         $this->assertEquals(count($expectedFolders), $foundCount);
     }
-    
+
     /**
      * clear test folder
      */
@@ -274,7 +274,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
         $filter = $this->_getMessageFilter($folder->getId());
         $result = $this->_json->searchMessages($filter, '');
-        
+
         $this->assertEquals(0, $result['totalcount'], 'Found too many messages in folder ' . $this->_testFolderName);
         $this->assertEquals(0, $folder->cache_totalcount);
     }
@@ -286,9 +286,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $filter = $this->_getFolderFilter();
         $result = $this->_json->searchFolders($filter);
-        
+
         $foldernames = array('test' => 'test', 'Schlüssel' => 'Schlüssel', 'test//1' => 'test1', 'test\2' => 'test2');
-        
+
         foreach ($foldernames as $foldername => $expected) {
             $result = $this->_json->addFolder($foldername, $this->_testFolderName, $this->_account->getId());
             $globalname = $this->_testFolderName . $this->_account->delimiter . $expected;
@@ -298,7 +298,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $result['cache_status']);
         }
     }
-    
+
     /**
      * test emtpy folder (with subfolder)
      */
@@ -307,53 +307,53 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $folderName = $this->_testFolderName;
         $folder = $this->_getFolder($this->_testFolderName);
         $this->testCreateFolders();
-        
+
         $folderArray = $this->_json->emptyFolder($folder->getId());
         $this->assertEquals(0, $folderArray['has_children']);
-        
+
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
         $this->assertEquals(0, count($result));
     }
-    
+
     /**
      * testUpdateFolderCache
      */
     public function testUpdateFolderCache()
     {
         $result = $this->_json->updateFolderCache($this->_account->getId(), '');
-        
+
         // create folders directly on imap server
         $this->_imap->createFolder('test', $this->_testFolderName, $this->_account->delimiter);
         $this->_imap->createFolder('testsub', $this->_testFolderName . $this->_account->delimiter . 'test', $this->_account->delimiter);
         // if something goes wrong, we need to delete these folders in tearDown
         $this->_createdFolders[] = $this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub';
         $this->_createdFolders[] = $this->_testFolderName . $this->_account->delimiter . 'test';
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Update cache and check if folder is found');
-        
+
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
         $testfolder = $result[0];
         $this->assertGreaterThan(0, count($result));
         $this->assertEquals($this->_testFolderName . $this->_account->delimiter . 'test', $testfolder['globalname']);
         $this->assertEquals(TRUE, (bool)$testfolder['has_children'], 'should have children');
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Delete subfolder directly on imap server');
-        
+
         $this->_imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub');
         array_shift($this->_createdFolders);
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Check if has_children got updated and folder is removed from cache');
-        
+
         $this->_json->updateFolderCache($this->_account->getId(), '');
         $testfolder = $this->_getFolder($this->_testFolderName . $this->_account->delimiter . 'test');
         $this->assertEquals(FALSE, (bool)$testfolder['has_children'], 'should have no children');
 
         return $testfolder;
     }
-    
+
     /**
      * testUpdateFolderCacheOfNonexistantFolder
      *
@@ -362,45 +362,45 @@ class Felamimail_Frontend_JsonTest extends TestCase
     public function testUpdateFolderCacheOfNonexistantFolder()
     {
         $testfolder = $this->testUpdateFolderCache();
-        
+
         try {
             $folderName = $this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub';
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Trying to fetch deleted folder ' . $folderName);
-            
+
             $testfoldersub = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $folderName);
             $this->fail('Tinebase_Exception_NotFound expected when looking for folder ' . $folderName);
         } catch (Tinebase_Exception_NotFound $tenf) {
         }
-        
+
         $this->_imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test');
         array_shift($this->_createdFolders);
-        
+
         // try to update message cache of nonexistant folder
         $removedTestfolder = $this->_json->updateMessageCache($testfolder['id'], 1);
         $this->assertEquals(0, $removedTestfolder['is_selectable'], 'Folder should not be selectable');
-        
+
         // update cache and check if folder is deleted
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
         $this->assertEquals(0, count($result));
     }
-    
+
     /*********************** accounts tests **************************/
-    
+
     /**
      * test search for accounts and check default account from config
      */
     public function testSearchAccounts()
     {
         $system = $this->_getSystemAccount();
-        
+
         $this->assertTrue(! empty($system), 'no accounts found');
         if (TestServer::getInstance()->getConfig()->mailserver) {
             $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $system['host']);
             $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $system['sieve_hostname']);
         }
     }
-    
+
     /**
      * get system account
      *
@@ -409,7 +409,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
     protected function _getSystemAccount()
     {
         $results = $this->_json->searchAccounts(array());
-        
+
         $this->assertGreaterThan(0, $results['totalcount']);
         $system = array();
         foreach ($results['results'] as $result) {
@@ -417,10 +417,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
                 $system = $result;
             }
         }
-        
+
         return $system;
     }
-    
+
     /**
      * test change / delete of account
      */
@@ -430,25 +430,25 @@ class Felamimail_Frontend_JsonTest extends TestCase
         unset($system['id']);
         $system['type'] = Felamimail_Model_Account::TYPE_USER;
         $account = $this->_json->saveAccount($system);
-        
+
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
         if (TestServer::getInstance()->getConfig()->mailserver) {
             $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $account['host']);
         }
-        
+
         $this->_json->changeCredentials($account['id'], $accountRecord->user, 'neuespasswort');
         $account = $this->_json->getAccount($account['id']);
-        
+
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
         $this->assertEquals('neuespasswort', $accountRecord->password);
-        
+
         $this->_json->deleteAccounts($account['id']);
     }
-    
+
     /*********************** message tests ****************************/
-    
+
     /**
      * test update message cache
      */
@@ -458,14 +458,14 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $inbox = $this->_getFolder('INBOX');
         // update message cache and check result
         $result = $this->_json->updateMessageCache($inbox['id'], 30);
-        
+
         if ($result['cache_status'] == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
             $this->assertEquals($result['imap_totalcount'], $result['cache_totalcount'], 'totalcounts should be equal');
         } else if ($result['cache_status'] == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
             $this->assertNotEquals(0, $result['cache_job_actions_est']);
         }
     }
-    
+
     /**
      * test folder status
      */
@@ -475,13 +475,13 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $result = $this->_json->searchFolders($filter);
         $this->assertGreaterThan(1, $result['totalcount']);
         $expectedFolders = array('INBOX', $this->_testFolderName, $this->_account->trash_folder, $this->_account->sent_folder);
-        
+
         foreach ($result['results'] as $folder) {
             $this->_json->updateMessageCache($folder['id'], 30);
         }
-        
+
         $message = $this->_sendMessage();
-        
+
         $status = $this->_json->getFolderStatus(array(array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())));
         $this->assertEquals(1, count($status));
         $this->assertEquals($this->_account->sent_folder, $status[0]['localname']);
@@ -498,7 +498,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         // remove one of the created folders
         $removedFolder = $this->_createdFolders[0];
         $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($removedFolder));
-        
+
         $status = $this->_json->getFolderStatus(array(array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())));
         $this->assertGreaterThan(2, count($status), 'Expected more than 2 folders that need an update: ' . print_r($status, TRUE));
         foreach ($status as $folder) {
@@ -507,7 +507,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             }
         }
     }
-    
+
     /**
      * test send message
      */
@@ -612,7 +612,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         // check if email note has been added to contact(s)
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
-        
+
         // check / delete notes
         $emailNotes = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
         foreach ($contact->notes as $note) {
@@ -680,17 +680,17 @@ class Felamimail_Frontend_JsonTest extends TestCase
     public function testGetMessage()
     {
         $message = $this->_sendMessage();
-        
+
         // get complete message
         $message = $this->_json->getMessage($message['id']);
-        
+
         // check
         $this->assertTrue(isset($message['headers']) && $message['headers']['message-id']);
         $this->assertContains('@' . $this->_mailDomain, $message['headers']['message-id']);
         $this->assertNotContains('<<', $message['headers']['message-id']);
         $this->assertNotContains('>>', $message['headers']['message-id']);
         $this->assertGreaterThan(0, preg_match('/aaaaaä/', $message['body']));
-        
+
         // delete message on imap server and check if correct exception is thrown when trying to get it
         $this->_imap->selectFolder('INBOX');
         $this->_imap->removeMessage($message['messageuid']);
@@ -698,7 +698,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->setExpectedException('Felamimail_Exception_IMAPMessageNotFound');
         $message = $this->_json->getMessage($message['id']);
     }
-    
+
     /**
      * try to get a message as plain/text
      */
@@ -706,18 +706,18 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $accountBackend = new Felamimail_Backend_Account();
         $message = $this->_sendMessage();
-        
+
         // get complete message
         $this->_account->display_format = Felamimail_Model_Account::DISPLAY_PLAIN;
         $accountBackend->update($this->_account);
         $message = $this->_json->getMessage($message['id']);
         $this->_account->display_format = Felamimail_Model_Account::DISPLAY_HTML;
         $accountBackend->update($this->_account);
-        
+
         // check
         $this->assertEquals("aaaaaä \n\r\n", $message['body']);
     }
-    
+
     /**
      * try search for a message with path filter
      */
@@ -742,7 +742,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             $this->assertEquals($inbox->getId(), $mail['folder_id'], 'message is in wrong folder: ' . print_r($mail, TRUE));
         }
     }
-    
+
     /**
      * try search for a message with all inboxes and flags filter
      */
@@ -756,11 +756,11 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $result = $this->_json->searchMessages($filter, '');
         $this->assertGreaterThan(0, $result['totalcount']);
         $this->assertEquals($result['totalcount'], count($result['results']));
-        
+
         $message = $this->_getMessageFromSearchResult($result, $sentMessage['subject']);
         $this->assertTrue(! empty($message), 'Sent message not found with all inboxes filter');
     }
-    
+
     /**
      * try search for a message with three cache filters to force a foreign relation join with at least 2 tables
      */
@@ -774,22 +774,22 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $result = $this->_json->searchMessages($filter, '');
         $this->assertEquals(0, $result['totalcount']);
     }
-    
+
     /**
      * try search for a message with empty path filter
      */
     public function testSearchMessageEmptyPath()
     {
         $sentMessage = $this->_sendMessage();
-        
+
         $filter = array(
             array('field' => 'path',  'operator' => 'equals',   'value' => ''),
         );
         $result = $this->_json->searchMessages($filter, '');
-        
+
         $this->assertEquals(0, $result['totalcount']);
         $accountFilterFound = FALSE;
-        
+
         foreach ($result['filter'] as $filter) {
             if ($filter['field'] === 'account_id' && empty($filter['value'])) {
                 $accountFilterFound = TRUE;
@@ -798,7 +798,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         }
         $this->assertTrue($accountFilterFound);
     }
-    
+
     /**
      * test flags (add + clear + deleted)
      */
@@ -806,22 +806,22 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $message = $this->_sendMessage();
         $inboxBefore = $this->_getFolder('INBOX');
-        
+
         $this->_json->addFlags($message['id'], Zend_Mail_Storage::FLAG_SEEN);
-        
+
         // check if unread count got decreased
         $inboxAfter = $this->_getFolder('INBOX');
         $this->assertTrue($inboxBefore->cache_unreadcount - 1 == $inboxAfter->cache_unreadcount, 'wrong cache unreadcount');
-        
+
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'seen flag not set');
-        
+
         // try with a filter
         $filter = array(
             array('field' => 'id', 'operator' => 'in', array($message['id']))
         );
         $this->_json->clearFlags($filter, Zend_Mail_Storage::FLAG_SEEN);
-        
+
         $message = $this->_json->getMessage($message['id']);
         $this->assertFalse(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'seen flag should not be set');
 
@@ -829,7 +829,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_DELETED);
         $this->_json->getMessage($message['id']);
     }
-    
+
     /**
      * testMarkFolderRead
      *
@@ -844,11 +844,11 @@ class Felamimail_Frontend_JsonTest extends TestCase
             'field' => 'flags', 'operator' => 'notin', 'value' => array(Zend_Mail_Storage::FLAG_SEEN)
         ));
         $this->_json->addFlags($filter, Zend_Mail_Storage::FLAG_SEEN);
-        
+
         $inboxAfter = $this->_getFolder('INBOX');
         $this->assertEquals(0, $inboxAfter->cache_unreadcount);
     }
-    
+
     /**
      * test delete from trash
      */
@@ -856,25 +856,25 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $message = $this->_sendMessage();
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_account->trash_folder);
-        
+
         $trash = $this->_getFolder($this->_account->trash_folder);
         $result = $this->_json->moveMessages(array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         )), $trash->getId());
 
         $messageInTrash = $this->_searchForMessageBySubject($message['subject'], $this->_account->trash_folder);
-        
+
         // delete messages in trash with filter
         $this->_json->addFlags(array(array(
             'field' => 'folder_id', 'operator' => 'equals', 'value' => $trash->getId()
         ), array(
             'field' => 'id', 'operator' => 'in', 'value' => array($messageInTrash['id'])
         )), Zend_Mail_Storage::FLAG_DELETED);
-        
+
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_json->getMessage($messageInTrash['id']);
     }
-    
+
     /**
      * move message to trash with trash folder constant (Felamimail_Model_Folder::FOLDER_TRASH)
      */
@@ -882,14 +882,14 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $message = $this->_sendMessage();
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_account->trash_folder);
-        
+
         $result = $this->_json->moveMessages(array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         )), Felamimail_Model_Folder::FOLDER_TRASH);
 
         $messageInTrash = $this->_searchForMessageBySubject($message['subject'], $this->_account->trash_folder);
     }
-    
+
     /**
      * test reply mail and check some headers
      *
@@ -898,12 +898,12 @@ class Felamimail_Frontend_JsonTest extends TestCase
     public function testReplyMessage()
     {
         $message = $this->_sendMessage();
-        
+
         $replyMessage = $this->_getReply($message);
         $this->_json->saveMessage($replyMessage);
-        
+
         $result = $this->_getMessages();
-        
+
         $replyMessageFound = array();
         $originalMessage = array();
         foreach ($result['results'] as $mail) {
@@ -918,20 +918,20 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertTrue(isset($replyMessageFound['id']) && isset($originalMessage['id']), 'replied message not found');
         $replyMessageFound = $this->_json->getMessage($replyMessageFound['id']);
         $originalMessage = $this->_json->getMessage($originalMessage['id']);
-        
+
         $this->assertTrue(! empty($replyMessageFound), 'replied message not found');
         $this->assertTrue(! empty($originalMessage), 'original message not found');
-        
+
         // check headers
         $this->assertTrue(isset($replyMessageFound['headers']['in-reply-to']));
         $this->assertEquals($originalMessage['headers']['message-id'], $replyMessageFound['headers']['in-reply-to']);
         $this->assertTrue(isset($replyMessageFound['headers']['references']));
         $this->assertEquals($originalMessage['headers']['message-id'], $replyMessageFound['headers']['references']);
-        
+
         // check answered flag
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_ANSWERED, $originalMessage['flags'], 'could not find flag'));
     }
-    
+
     /**
      * get reply message data
      *
@@ -944,7 +944,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $replyMessage['subject']    = 'Re: ' . $_original['subject'];
         $replyMessage['original_id']= $_original['id'];
         $replyMessage['flags']      = Zend_Mail_Storage::FLAG_ANSWERED;
-        
+
         return $replyMessage;
     }
 
@@ -956,7 +956,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $messageInSent = $this->_sendMessage($this->_account->sent_folder);
         $replyMessage = $this->_getReply($messageInSent);
         $returned = $this->_json->saveMessage($replyMessage);
-        
+
         $result = $this->_getMessages();
         $sentMessage = $this->_getMessageFromSearchResult($result, $replyMessage['subject']);
         $this->assertTrue(! empty($sentMessage));
@@ -1003,12 +1003,12 @@ class Felamimail_Frontend_JsonTest extends TestCase
         ));
         $replyMessage = $this->_getReply($messageInSent);
         $returned = $this->_json->saveMessage($replyMessage);
-        
+
         $result = $this->_getMessages();
         $sentMessage = $this->_getMessageFromSearchResult($result, $replyMessage['subject']);
         $this->assertTrue(! empty($sentMessage));
     }
-    
+
     /**
      * test move
      */
@@ -1016,10 +1016,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $message = $this->_sendMessage();
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_testFolderName);
-        
+
         $inbox = $this->_getFolder('INBOX');
         $inboxBefore = $this->_json->updateMessageCache($inbox['id'], 30);
-        
+
         // move
         $testFolder = $this->_getFolder($this->_testFolderName);
         $result = $this->_json->moveMessages(array(array(
@@ -1030,11 +1030,11 @@ class Felamimail_Frontend_JsonTest extends TestCase
         sleep(2);
 
         $inboxAfter = $this->_getFolder('INBOX');
-        
+
         // check if count was decreased correctly
         $this->assertEquals($inboxBefore['cache_unreadcount'] - 1, $inboxAfter['cache_unreadcount']);
         $this->assertEquals($inboxBefore['cache_totalcount'] - 1, $inboxAfter['cache_totalcount']);
-        
+
         $result = $this->_getMessages($this->_testFolderName);
         $movedMessage = array();
         foreach ($result['results'] as $mail) {
@@ -1044,7 +1044,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         }
         $this->assertTrue(! empty($movedMessage), 'moved message not found');
     }
-    
+
     /**
      * forward message test
      *
@@ -1055,10 +1055,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $testFolder = $this->_getFolder($this->_testFolderName);
         $message = fopen(dirname(__FILE__) . '/../files/multipart_related.eml', 'r');
         Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
-        
+
         $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
         $message = $this->_searchForMessageBySubject($subject, $this->_testFolderName);
-        
+
         $fwdSubject = 'Fwd: ' . $subject;
         $forwardMessageData = array(
             'account_id'    => $this->_account->getId(),
@@ -1073,24 +1073,24 @@ class Felamimail_Frontend_JsonTest extends TestCase
             ), TRUE)),
             'flags'         => Zend_Mail_Storage::FLAG_PASSED,
         );
-        
+
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($forwardMessageData);
         $forwardMessage = $this->_searchForMessageBySubject($fwdSubject);
-        
+
         // check attachment name
         $forwardMessageComplete = $this->_json->getMessage($forwardMessage['id']);
         $this->assertEquals(1, count($forwardMessageComplete['attachments']));
         $this->assertEquals('Verbessurüngsvorschlag.eml', $forwardMessageComplete['attachments'][0]['filename'], 'umlaut missing from attachment filename');
-        
+
         $forwardMessage = $this->_json->getMessage($forwardMessage['id']);
         $this->assertTrue((isset($forwardMessage['structure']) || array_key_exists('structure', $forwardMessage)), 'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardMessage['structure']['parts'][2]['contentType']);
-        
+
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
-    
+
     /**
      * testSendMessageWithAttachmentWithoutExtension
      *
@@ -1108,7 +1108,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->_json->saveMessage($messageToSend);
         $forwardMessage = $this->_searchForMessageBySubject($subject);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
-        
+
         $fullMessage = $this->_json->getMessage($forwardMessage['id']);
         $this->assertTrue(count($fullMessage['attachments']) === 1);
         $attachment = $fullMessage['attachments'][0];
@@ -1135,7 +1135,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
         self::assertContains('lalala &lt; logloff​', $fullMessage['body']);
     }
-    
+
     /**
      * save message in folder (draft) test
      *
@@ -1145,11 +1145,11 @@ class Felamimail_Frontend_JsonTest extends TestCase
     {
         $messageToSave = $this->_getMessageData();
         $messageToSave['bcc'] = array('bccaddress@email.org', 'bccaddress2@email.org');
-        
+
         $this->_getFolder($this->_account->drafts_folder);
         $this->_json->saveMessageInFolder($this->_account->drafts_folder, $messageToSave);
         $this->_foldersToClear = array($this->_account->drafts_folder);
-        
+
         // check if message is in drafts folder and recipients are present
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
         self::assertEquals($messageToSave['subject'],  $message['subject']);
@@ -1157,7 +1157,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
         self::assertContains('bccaddress',   $message['bcc'][0], 'bcc recipient not found');
     }
-    
+
     /**
      * testSendReadingConfirmation
      *
@@ -1172,12 +1172,12 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $messageWithReadingConfirmationHeader = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_testFolderName);
         $this->_messageIds[] = $messageWithReadingConfirmationHeader['id'];
         $this->_json->sendReadingConfirmation($messageWithReadingConfirmationHeader['id']);
-        
+
         $translate = Tinebase_Translation::getTranslation('Felamimail');
         $subject = $translate->_('Reading Confirmation:') . ' '. $messageToSave['subject'];
         $message = $this->_searchForMessageBySubject($subject);
         $this->_messageIds[] = $message['id'];
-        
+
         $complete = $this->_json->getMessage($message['id']);
         $this->assertContains($translate->_('Was read by:') . ' ' . $this->_account->from, $complete['body']);
     }
@@ -1190,20 +1190,20 @@ class Felamimail_Frontend_JsonTest extends TestCase
     public function testSaveMessageInNonExistantTemplatesFolder()
     {
         $messageToSave = $this->_getMessageData();
-        
+
         $templatesFolder = $this->_getFolder($this->_account->templates_folder, FALSE);
         if ($templatesFolder) {
             $this->_json->deleteFolder($templatesFolder['id'], $this->_account->getId());
         }
         $returned = $this->_json->saveMessageInFolder($this->_account->templates_folder, $messageToSave);
         $this->_foldersToClear = array($this->_account->templates_folder);
-        
+
         // check if message is in templates folder
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->templates_folder);
         $this->assertEquals($messageToSave['subject'],  $message['subject']);
         $this->assertEquals($messageToSave['to'][0],    $message['to'][0], 'recipient not found');
     }
-    
+
     /**
      * testSaveMessageNoteWithInvalidChar
      *
@@ -1215,15 +1215,15 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $messageData = $this->_getMessageData('', $subject);
         $messageData['note'] = true;
         $messageData['body'] .= "&nbsp;";
-        
+
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($messageData);
         $this->_searchForMessageBySubject($subject);
-        
+
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $this->_checkEmailNote($contact, $subject);
     }
-    
+
     /**
      * testSaveMessageNoteWithInvalidChar
      *
@@ -1354,10 +1354,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $inbox = $this->_getFolder('INBOX');
         $mailAsString = file_get_contents(dirname(__FILE__) . '/../files/invalidimip.eml');
         Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $mailAsString);
-        
+
         $this->_foldersToClear = array('INBOX');
         $message = $this->_searchForMessageBySubject('test invalid imip');
-        
+
         $fullMessage = $this->_json->getMessage($message['id']);
         $this->assertFalse(empty($fullMessage['preparedParts']));
     }
@@ -1448,7 +1448,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     }
 
     /*********************** sieve tests ****************************/
-    
+
     /**
      * set and get vacation sieve script
      *
@@ -1458,28 +1458,28 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     {
         $vacationData = $this->_getVacationData();
         $this->_sieveTestHelper($vacationData);
-        
+
         // check if script was activated
         $activeScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
         $this->assertEquals($this->_testSieveScriptName, $activeScriptName);
         $updatedAccount = Felamimail_Controller_Account::getInstance()->get($this->_account->getId());
         $this->assertTrue((bool) $updatedAccount->sieve_vacation_active);
-        
+
         $result = $this->_json->getVacation($this->_account->getId());
 
         $this->assertEquals($this->_account->email, $result['addresses'][0]);
-        
+
         $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
         if (preg_match('/dbmail/i', $sieveBackend->getImplementation())) {
             $translate = Tinebase_Translation::getTranslation('Felamimail');
             $vacationData['subject'] = sprintf($translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName);
         }
-        
+
         foreach (array('reason', 'enabled', 'subject', 'from', 'days') as $field) {
             $this->assertEquals($vacationData[$field], $result[$field], 'vacation data mismatch: ' . $field);
         }
     }
-    
+
     /**
      * get vacation data
      *
@@ -1497,7 +1497,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'mime'                  => NULL,
         );
     }
-    
+
     /**
      * test mime vacation sieve script
      */
@@ -1505,28 +1505,28 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     {
         $vacationData = $this->_getVacationData();
         $vacationData['reason'] = "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>";
-        
+
         $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
         if (! in_array('mime', $_sieveBackend->capability())) {
             $vacationData['mime'] = 'text/html';
         }
-        
+
         $this->_sieveTestHelper($vacationData, TRUE);
     }
-    
+
     /**
      * test get/set of rules sieve script
      */
     public function testGetSetRules()
     {
         $ruleData = $this->_getRuleData();
-        
+
         $this->_sieveTestHelper($ruleData);
-        
+
         // check getRules
         $result = $this->_json->getRules($this->_account->getId());
         $this->assertEquals($result['totalcount'], count($ruleData));
-        
+
         // check by sending mail
         $messageData = $this->_getMessageData('', 'viagra');
         $returned = $this->_json->saveMessage($messageData);
@@ -1534,7 +1534,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         // check if message is in test folder
         $message = $this->_searchForMessageBySubject($messageData['subject'], $this->_testFolderName);
     }
-    
+
     /**
      * testRemoveRules
      *
@@ -1544,11 +1544,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     {
         $this->testGetSetRules();
         $this->_json->saveRules($this->_account->getId(), array());
-        
+
         $result = $this->_json->getRules($this->_account->getId());
         $this->assertEquals(0, $result['totalcount'], 'found rules: ' . print_r($result, TRUE));
     }
-    
+
     /**
      * get sieve rule data
      *
@@ -1594,7 +1594,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'enabled'       => 1,
         ));
     }
-    
+
     /**
      * test to set a forward rule to this accounts email address
      * -> should throw exception to prevent mail cycling
@@ -1614,7 +1614,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             )),
             'enabled'       => 1,
         ));
-        
+
         try {
             $this->_sieveTestHelper($ruleData);
             $this->assertTrue(FALSE, 'it is not allowed to set own email address for redirect!');
@@ -1686,7 +1686,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     {
         $this->_addVacationTemplateFile();
         $result = $this->_json->getVacationMessageTemplates();
-        
+
         $this->assertTrue($result['totalcount'] > 0, 'no templates found');
         $found = FALSE;
         foreach ($result['results'] as $template) {
@@ -1695,12 +1695,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
                 break;
             }
         }
-        
+
         $this->assertTrue($found, 'wrong templates: ' . print_r($result['results'], TRUE));
-        
+
         return $template;
     }
-    
+
     /**
      * add vacation template file to vfs
      */
@@ -1712,7 +1712,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_pathsToDelete[] = $path . '/' . $this->_sieveVacationTemplateFile;
         $node->createFile($this->_sieveVacationTemplateFile, fopen(dirname(__FILE__) . '/../files/' . $this->_sieveVacationTemplateFile, 'r'));
     }
-    
+
     /**
      * testGetVacationMessage
      */
@@ -1728,7 +1728,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             $sclever->accountEmailAddress . ") instead.<br /><br />" .
             Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn, $result['message']);
     }
-    
+
     /**
      * get vacation message with template
      *
@@ -1748,10 +1748,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'template_id' => $template['id'],
             'signature' => $this->_account->signature
         ));
-        
+
         return $result;
     }
-    
+
     /**
      * testGetVacationWithSignature
      *
@@ -1760,14 +1760,14 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     public function testGetVacationWithSignature()
     {
         $this->_sieveVacationTemplateFile = 'vacation_template_sig.tpl';
-        
+
         // set signature with <br> + linebreaks
         $this->_account->signature = "llalala<br>\nxyz<br>\nblubb<br>";
-        
+
         $result = $this->_getVacationMessageWithTemplate();
         $this->assertContains('-- <br />llalala<br />xyz<br />blubb<br />', $result['message'], 'wrong linebreaks or missing signature');
     }
-    
+
     /**
     * testSetVacationWithStartAndEndDate
     *
@@ -1779,11 +1779,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $vacationData['start_date'] = '2012-04-18';
         $vacationData['end_date'] = '2012-04-20';
         $result = $this->_sieveTestHelper($vacationData);
-        
+
         $this->assertContains($vacationData['start_date'], $result['start_date']);
         $this->assertContains($vacationData['end_date'], $result['end_date']);
     }
-    
+
     /**
      * testSieveRulesOrder
      *
@@ -1792,21 +1792,21 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     public function testSieveRulesOrder()
     {
         $this->_setTestScriptname();
-        
+
         // disable vacation first
         $this->_setDisabledVacation();
-        
+
         $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
-        
+
         $ruleData = $this->_getRuleData();
         $ruleData[0]['id'] = $ruleData[2]['id'];
         $ruleData[2]['id'] = 11;
         $resultSet = $this->_json->saveRules($this->_account->getId(), $ruleData);
         $sieveScriptRules = $sieveBackend->getScript($this->_testSieveScriptName);
-        
+
         $this->_setDisabledVacation();
         $sieveScriptVacation = $sieveBackend->getScript($this->_testSieveScriptName);
-        
+
         // compare sieve scripts
         $this->assertContains($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
@@ -1836,7 +1836,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_testSieveScriptName = 'Felamimail_Unittest';
         Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
     }
-    
+
     /**
      * set disabled vacation message
      */
@@ -1846,7 +1846,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $vacationData['enabled'] = FALSE;
         $resultSet = $this->_json->saveVacation($vacationData);
     }
-    
+
     /**
      * get folder filter
      *
@@ -1870,10 +1870,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $result = array(array(
             'field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId
         ));
-        
+
         return $result;
     }
-    
+
     /**
      * get mailbox
      *
@@ -1889,7 +1889,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         } catch (Tinebase_Exception_NotFound $tenf) {
             $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($this->_account, $name) : NULL;
         }
-        
+
         return $folder;
     }
 
@@ -1943,10 +1943,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         }
 
         $this->assertTrue(! empty($message), 'Sent message not found.');
-        
+
         return $message;
     }
-    
+
     /**
      * returns message array from result
      *
@@ -1962,10 +1962,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
                 $message = $mail;
             }
         }
-        
+
         return $message;
     }
-    
+
     /**
      * get messages from folder
      *
@@ -1987,7 +1987,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         return $result;
     }
-    
+
     /**
      * search for message defined by subject in folder
      *
@@ -2001,7 +2001,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         sleep(1);
 
         $result = $this->_getMessages($_folderName);
-        
+
         $message = array();
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $_subject) {
@@ -2010,10 +2010,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         }
         $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
         $this->assertTrue(! empty($message), 'Message not found');
-        
+
         return $message;
     }
-    
+
     /**
      * sieve test helper
      *
@@ -2023,14 +2023,14 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     protected function _sieveTestHelper($_sieveData, $_isMime = FALSE)
     {
         $this->_setTestScriptname();
-        
+
         // check which save fn to use
         if ((isset($_sieveData['reason']) || array_key_exists('reason', $_sieveData))) {
             $resultSet = $this->_json->saveVacation($_sieveData);
             $this->assertEquals($this->_account->email, $resultSet['addresses'][0]);
-            
+
             $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
-            
+
             if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
                 $translate = Tinebase_Translation::getTranslation('Felamimail');
                 $this->assertEquals(sprintf(
@@ -2040,7 +2040,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             } else {
                 $this->assertEquals($_sieveData['subject'], $resultSet['subject']);
             }
-            
+
             if ($_isMime) {
                 // TODO check why behaviour changed with php 7 (test was relaxed to hotfix this)
                 //$this->assertEquals(html_entity_decode('unittest vacation&nbsp;message', ENT_NOQUOTES, 'UTF-8'), $resultSet['reason']);
@@ -2048,12 +2048,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             } else {
                 $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
             }
-            
+
         } else if ((isset($_sieveData[0]['action_type']) || array_key_exists('action_type', $_sieveData[0]))) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
             $this->assertEquals($_sieveData, $resultSet);
         }
-        
+
         return $resultSet;
     }
 
@@ -2065,12 +2065,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     {
         // search prefs
         $result = $this->_frontend->searchPreferencesForApplication('Felamimail', '');
-        
+
         // check results
         $this->assertTrue(isset($result['results']));
         $this->assertGreaterThan(0, $result['totalcount']);
     }
-    
+
     /**
      * testGetRegistryData
      *
@@ -2189,10 +2189,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
         self::assertEquals(0, count($message['attachments']), 'attachment set: ' . print_r($message, true));
         self::assertContains('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
-        self::assertEquals('</a>', substr($message['body'], -10, 4), 'link has no anchor tag');
+        self::assertContains('</a>', $message['body'],
+            'link has no anchor tag: ' . $message['body']);
 
         // download link id is at the end of message body
-        $downloadLinkId = trim(substr($message['body'], -50, 40));
+        $downloadLinkId = trim(substr($message['body'], -56, 40));
         $dl = Filemanager_Controller_DownloadLink::getInstance()->get($downloadLinkId);
         self::assertTrue(Filemanager_Controller_DownloadLink::getInstance()->validatePassword($dl, 'test'));
     }
@@ -2200,7 +2201,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     /**
      * Its possible to choice the kind of attachment when adding it.
      *
-     * type = filenode: chosen from fm, thats why type -> file, but the filemanager file is supposed to be used as a regular attachment
+     * type = filenode: chosen from fm, thats why type -> file, but the filemanager file
+     *  is supposed to be used as a regular attachment
      *
      * @see 0012950: More attachment methods for mail
      */
@@ -2214,14 +2216,33 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals(16, $message['attachments'][0]['size']);
     }
 
+    public function testAttachmentMethodFilemanagerSystemLink()
+    {
+        // make sure, we have a signature in the account
+        $this->_account->signature = 'my signature';
+        Felamimail_Controller_Account::getInstance()->update($this->_account);
+
+        $message = $this->_testAttachmentType('systemlink_fm', true);
+        self::assertContains('testcontainer/test.txt', $message['body'],
+            'system link missing from body - ' . print_r($message, true));
+        // check if
+        self::assertGreaterThan(
+            strpos($message['body'], 'test.txt'),
+            strpos($message['body'], 'my signature'),
+            'file link should be above signature: '
+            . print_r($message['body'], true)
+        );
+    }
+
     /**
      * @param $type
+     * @param boolean $withSignature
      * @return array
      *
      * @throws Filemanager_Exception_NodeExists
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _testAttachmentType($type)
+    protected function _testAttachmentType($type, $withSignature = false)
     {
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
         $tempfile = $this->_createTempFile('foobar1.txt');
@@ -2237,7 +2258,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
                 'attachment_type' => $type,
             );
 
-        } elseif (in_array($type, array('filenode', 'download_public_fm', 'download_protected_fm'))) {
+        } elseif (in_array($type, array('filenode', 'download_public_fm', 'download_protected_fm', 'systemlink_fm'))) {
             // attach existing file from filemanager
             $nodeController = Filemanager_Controller_Node::getInstance();
             $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
@@ -2270,6 +2291,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             $attachment['password'] = 'test';
         }
 
+        $body = 'foobar';
+        if ($withSignature) {
+            $body .= '<br><br><span class="felamimail-body-signature">-- <br>'
+                . $this->_account->signature . '</span>';
+        }
+
         $messageToSend = [
             'note' => null,
             'content_type' => 'text/html',
@@ -2280,8 +2307,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'cc' => [],
             'bcc' => [],
             'subject' => 'attachment test [' . $type . ']',
-            'body' => 'foobar',
-
+            'body' => $body,
             'attachments' => [ $attachment ],
             'from_email' => 'vagrant@example.org',
             'customfields' => [],
