@@ -353,11 +353,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $containerGrants = $this->getGrantsOfContainer($containerId, TRUE);
         $containerGrants->addIndices(array('account_type', 'account_id'));
-        $existingGrants = $containerGrants->filter('account_type', $_accountType);
-        
-        if ($_accountType !== Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) {
-            $existingGrants = $existingGrants->filter('account_id', $_accountId)->getFirstRecord();
-        }
+        $existingGrants = $containerGrants->filter('account_type', $_accountType)->filter('account_id', $accountId)
+            ->getFirstRecord();
         
         foreach($_grants as $grant) {
             if ($existingGrants === NULL || ! $existingGrants->{$grant}) {
