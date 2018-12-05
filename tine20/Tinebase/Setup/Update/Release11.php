@@ -780,4 +780,27 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.39');
     }
+    
+    public function update_39()
+    {
+        $note_types = array('note','telephone','email','created','changed');
+        foreach ($note_types as $note_type)
+        {
+            $note = Tinebase_Notes::getInstance()->getNoteTypeByName($note_type);
+            $icon = '';
+            switch ($note_type){
+                case 'note': $icon = 'images/icon-set/icon_note.svg'; break;
+                case 'telephone': $icon = 'images/icon-set/icon_phone.svg'; break;
+                case 'email': $icon = 'images/icon-set/icon_email.svg'; break;
+                case 'created': $icon = 'images/icon-set/icon_star_out.svg'; break;
+                case 'changed': $icon = 'images/icon-set/icon_doc_file.svg'; break;
+            }
+            $note['icon'] = $icon;
+            if($note['icon'] != '') {
+                Tinebase_Notes::getInstance()->updateNoteType($note);
+            }
+        }
+                
+        $this->setApplicationVersion('Tinebase', '11.40');
+    }
 }

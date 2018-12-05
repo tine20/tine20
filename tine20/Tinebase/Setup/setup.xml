@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.39</version>
+    <version>11.40</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -3796,7 +3796,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/note.png</value>
+                <value>images/icon-set/icon_note.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
@@ -3827,7 +3827,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/apps/kcall.png</value>
+                <value>images/icon-set/icon_phone.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
@@ -3858,7 +3858,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/kontact-mail.png</value>
+                <value>images/icon-set/icon_email.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
@@ -3889,7 +3889,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/knewstuff.png</value>
+                <value>images/icon-set/icon_star_out.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
@@ -3920,7 +3920,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/document-properties.png</value>
+                <value>images/icon-set/icon_doc_file.svg</value>
             </field>
             <field>
                 <name>icon_class</name>

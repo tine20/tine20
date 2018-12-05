@@ -366,7 +366,7 @@ Tine.widgets.activities.getTypeIcon = function (id) {
     var typesStore = Tine.widgets.activities.getTypesStore();
     var typeRecord = typesStore.getById(id);
     if (typeRecord) {
-        return '<img src="' + typeRecord.data.icon + '" ext:qtip="' + Tine.Tinebase.common.doubleEncode(typeRecord.data.description) + '"/>';
+        return '<img src="' + typeRecord.data.icon + '" ext:qtip="' + Tine.Tinebase.common.doubleEncode(typeRecord.data.description) + '" style="height:16px;width:16px" />';
     } else {
         return '';
     }
