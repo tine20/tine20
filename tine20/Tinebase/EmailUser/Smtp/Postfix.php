@@ -352,7 +352,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             return;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Setting aliases for '
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting aliases for '
             . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailAliases']], TRUE));
         
         $userId = $_smtpSettings[$this->_propertyMapping['emailUserId']];
@@ -434,7 +434,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     /**
      * converts raw data from adapter into a single record / do mapping
      *
-     * @param  array $_data
+     * @param  array $_rawdata
      * @return Tinebase_Record_Interface
      */
     protected function _rawDataToRecord(array &$_rawdata)
@@ -458,7 +458,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                         // Get rid of TineEmail -> username mapping.
                         $tineEmailAlias = array_search($_rawdata[$this->_propertyMapping['emailUsername']], $data[$keyMapping]);
                         if ($tineEmailAlias !== false) {
-                            unset($data[$keyMapping][$tineEmailAlias]);
+                            if ($keyMapping === 'emailForwards' ||
+                                $_rawdata[$this->_propertyMapping['emailAddress']] === $_rawdata[$this->_propertyMapping['emailUsername']]
+                            ) {
+                                unset($data[$keyMapping][$tineEmailAlias]);
+                            }
                             $data[$keyMapping] = array_values($data[$keyMapping]);
                         }
                         // sanitize aliases & forwards
@@ -479,7 +483,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         }
         
         $emailUser = new Tinebase_Model_EmailUser($data, TRUE);
-        
+
         $this->_getForwardedAliases($emailUser);
         
         return $emailUser;

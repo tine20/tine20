@@ -337,13 +337,18 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             return;
         }
         
+        if (formField.isXType('combo') || formField.isXType('extuxclearabledatefield') || formField.isXType('datefield') || formField.isXType('uxspinner'))
+        {
+            left = left + ';top: 3px';
+        }
+        
         // create Button
         formField.multiButton = new Ext.Element(document.createElement('img'));
         formField.multiButton.set({
             'src': Ext.BLANK_IMAGE_URL,
             'ext:qtip': Ext.util.Format.htmlEncode(i18n._('Delete value from all selected records')),
             'class': 'tinebase-editmultipledialog-clearer',
-            'style': 'left:' + left
+            'style': 'left:' + left,
             });
         
         formField.multiButton.addClassOnOver('over');

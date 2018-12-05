@@ -171,4 +171,14 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Tinebase', '12.13');
     }
+
+    /**
+     * update note icons
+     */
+    public function update_13()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_40();
+        $this->setApplicationVersion('Tinebase', '12.14');
+    }
 }
