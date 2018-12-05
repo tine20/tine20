@@ -901,7 +901,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param $_link
      * @param $_message
      *
-     * @TODO insert above signature
      * @TODO rethink encrypted mails handling
      */
     protected function _insertDownloadLinkIntoMailBody($_link, $_message)
@@ -912,12 +911,21 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         if ('text/html' === $_message->content_type) {
-            $_message->body .= sprintf(
-                '<br /><a href="%s">%s</a><br />',
+             $link = sprintf(
+                '<br /><a href="%s">%s</a><br /><br />',
                 $_link, urldecode($_link)
             );
+             $signaturePattern = '/(<span class="felamimail-body-signature">-- )/';
         } else {
-            $_message->body .= "\n" . $_link . "\n";
+            $link = "\n" . $_link . "\n\n";
+            $signaturePattern = '/($-- )/';
+        }
+
+        if (preg_match($signaturePattern, $_message->body)) {
+            // insert above signature (if found)
+            $_message->body = preg_replace($signaturePattern, $link . '\\1', $_message->body);
+        } else {
+            $_message->body .= $link;
         }
     }
 

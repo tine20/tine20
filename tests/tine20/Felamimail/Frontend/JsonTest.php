@@ -924,7 +924,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
         $this->assertTrue(!empty($replyMessageFound), 'replied message not found');
         $this->assertTrue(!empty($originalMessage), 'original message not found');
-
         // check headers
         $this->assertTrue(isset($replyMessageFound['headers']['in-reply-to']));
         $this->assertEquals($originalMessage['headers']['message-id'], $replyMessageFound['headers']['in-reply-to']);
@@ -947,7 +946,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $replyMessage['subject'] = 'Re: ' . $_original['subject'];
         $replyMessage['original_id'] = $_original['id'];
         $replyMessage['flags'] = Zend_Mail_Storage::FLAG_ANSWERED;
-
         return $replyMessage;
     }
 
@@ -1093,7 +1091,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
-
     /**
      * forward message test (eml attachment from Filemanager)
      */
@@ -1126,7 +1123,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
         self::assertEquals('test.eml', $attachment['filename']);
         self::assertEquals(51882, $attachment['size']);
     }
-
     /**
      * testSendMessageWithAttachmentWithoutExtension
      *
@@ -1530,7 +1526,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->assertEquals($this->_testSieveScriptName, $activeScriptName);
         $updatedAccount = Felamimail_Controller_Account::getInstance()->get($this->_account->getId());
         $this->assertTrue((bool)$updatedAccount->sieve_vacation_active);
-
         $result = $this->_json->getVacation($this->_account->getId());
 
         $this->assertEquals($this->_account->email, $result['addresses'][0]);
@@ -2014,7 +2009,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         }
 
         $this->assertTrue(!empty($message), 'Sent message not found.');
-
         return $message;
     }
 
@@ -2081,7 +2075,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         }
         $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
         $this->assertTrue(!empty($message), 'Message not found');
-
         return $message;
     }
 
@@ -2260,10 +2253,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
         self::assertEquals(0, count($message['attachments']), 'attachment set: ' . print_r($message, true));
         self::assertContains('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
-        self::assertEquals('</a>', substr($message['body'], -10, 4), 'link has no anchor tag');
+        self::assertContains('</a>', $message['body'],
+            'link has no anchor tag: ' . $message['body']);
 
         // download link id is at the end of message body
-        $downloadLinkId = trim(substr($message['body'], -50, 40));
+        $downloadLinkId = trim(substr($message['body'], -56, 40));
         $dl = Filemanager_Controller_DownloadLink::getInstance()->get($downloadLinkId);
         self::assertTrue(Filemanager_Controller_DownloadLink::getInstance()->validatePassword($dl, 'test'));
     }
@@ -2271,7 +2265,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     /**
      * Its possible to choice the kind of attachment when adding it.
      *
-     * type = filenode: chosen from fm, thats why type -> file, but the filemanager file is supposed to be used as a regular attachment
+     * type = filenode: chosen from fm, thats why type -> file, but the filemanager file
+     *  is supposed to be used as a regular attachment
      *
      * @see 0012950: More attachment methods for mail
      */
@@ -2285,14 +2280,33 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals(16, $message['attachments'][0]['size']);
     }
 
+    public function testAttachmentMethodFilemanagerSystemLink()
+    {
+        // make sure, we have a signature in the account
+        $this->_account->signature = 'my signature';
+        Felamimail_Controller_Account::getInstance()->update($this->_account);
+
+        $message = $this->_testAttachmentType('systemlink_fm', true);
+        self::assertContains('testcontainer/test.txt', $message['body'],
+            'system link missing from body - ' . print_r($message, true));
+        // check if
+        self::assertGreaterThan(
+            strpos($message['body'], 'test.txt'),
+            strpos($message['body'], 'my signature'),
+            'file link should be above signature: '
+            . print_r($message['body'], true)
+        );
+    }
+
     /**
      * @param $type
+     * @param boolean $withSignature
      * @return array
      *
      * @throws Filemanager_Exception_NodeExists
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _testAttachmentType($type)
+    protected function _testAttachmentType($type, $withSignature = false)
     {
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
         $tempfile = $this->_createTempFile('foobar1.txt');
@@ -2308,7 +2322,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
                 'attachment_type' => $type,
             );
 
-        } elseif (in_array($type, array('filenode', 'download_public_fm', 'download_protected_fm'))) {
+        } elseif (in_array($type, array('filenode', 'download_public_fm', 'download_protected_fm', 'systemlink_fm'))) {
             // attach existing file from filemanager
             $nodeController = Filemanager_Controller_Node::getInstance();
             $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
@@ -2341,6 +2355,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             $attachment['password'] = 'test';
         }
 
+        $body = 'foobar';
+        if ($withSignature) {
+            $body .= '<br><br><span class="felamimail-body-signature">-- <br>'
+                . $this->_account->signature . '</span>';
+        }
+
         $messageToSend = [
             'note' => null,
             'content_type' => 'text/html',
@@ -2351,8 +2371,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'cc' => [],
             'bcc' => [],
             'subject' => 'attachment test [' . $type . ']',
-            'body' => 'foobar',
-
+            'body' => $body,
             'attachments' => [$attachment],
             'from_email' => 'vagrant@example.org',
             'customfields' => [],
