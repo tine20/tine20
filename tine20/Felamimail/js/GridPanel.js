@@ -507,6 +507,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 24,
             sortable: true,
             dataIndex: 'flags',
+            align: 'center',
             renderer: this.flagRenderer
         },{
             id: 'subject',
@@ -605,13 +606,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result = '';
             
         if (record.hasFlag('\\Answered')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(i18n._('Answered'))});
+            icons.push({src: 'images/icon-set/icon_email_answer.svg', qtip: Ext.util.Format.htmlEncode(i18n._('Answered'))});
         }   
         if (record.hasFlag('Passed')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(i18n._('Forwarded'))});
+            icons.push({src: 'images/icon-set/icon_email_forward.svg', qtip: Ext.util.Format.htmlEncode(i18n._('Forwarded'))});
         }   
         if (record.hasFlag('Tine20')) {
-            icons.push({src: 'images/favicon.png', qtip: Ext.util.Format.htmlEncode(i18n._('Tine20'))});
+            icons.push({src: 'images/favicon.svg', qtip: Ext.util.Format.htmlEncode(i18n._('Tine20'))});
         }
 //        if (record.hasFlag('\\Recent')) {
 //            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: i18n._('Recent')});
