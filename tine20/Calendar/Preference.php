@@ -58,7 +58,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
 
     /**
-     * send notifications of liturgische events
+     * send notifications of tentative events
      */
     const SEND_NOTIFICATION_FOR_TENTATIVE = 'sendnotificationsfortentative';
 
