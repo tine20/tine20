@@ -214,6 +214,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     /**
      * testUpdateEvent
+     *
+     * @return array
      */
     public function testUpdateEvent()
     {
@@ -239,7 +241,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     /**
      * testDeleteEvent
      */
-    public function testDeleteEvent() {
+    public function testDeleteEvent()
+    {
         $eventData = $this->testCreateEvent();
         
         $this->_uit->deleteEvents(array($eventData['id']));
@@ -261,8 +264,25 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(! empty($searchResultData['results']));
         $resultEventData = $searchResultData['results'][0];
         
-        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
-        return $searchResultData;
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to find event');
+    }
+
+    /**
+     * testSearchEventsWithoutFixedCalendars
+     *
+     * TODO add fixedCalendar (with event) and assertion
+     */
+    public function testSearchEventsWithoutFixedCalendars()
+    {
+        $eventData = $this->testCreateEvent(TRUE);
+
+        $filter = $this->_getEventFilterArray();
+        $searchResultData = $this->_uit->searchEvents($filter, array(), false);
+
+        $this->assertTrue(! empty($searchResultData['results']));
+        $resultEventData = $searchResultData['results'][0];
+
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to find event');
     }
     
     /**
