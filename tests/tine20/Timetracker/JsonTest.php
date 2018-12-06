@@ -655,7 +655,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     protected function _createTsAndSearch($_startDate, $_filterType)
     {
-        //$timesheet = $this->_getTimesheet(NULL, $_startDate);
         $timesheet = $this->_getTimesheet(array('timeaccount_id' => null, 'start_date' => $_startDate));
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_deleteTimeSheets[] = $timesheetData['id'];
@@ -664,10 +663,11 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
+        $filter = $this->_getTimesheetDateFilter($_filterType);
+        $result = $this->_json->searchTimesheets($filter, $this->_getPaging());
 
-        $result = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_filterType), $this->_getPaging());
-
-        $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ' . $_filterType . ' filter');
+        $this->assertEquals(1, $result['totalcount'], 'timesheet not found with '
+            . $_filterType . ' filter: ' . print_r($filter, true));
         $this->assertEquals($timesheet->description, $result['results'][0]['description']);
         $this->assertEquals('array', gettype($result['results'][0]['timeaccount_id']), 'timeaccount_id is not resolved');
         $this->assertEquals('array', gettype($result['results'][0]['account_id']), 'account_id is not resolved');

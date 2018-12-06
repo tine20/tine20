@@ -54,8 +54,11 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     const DAY_THIS = 'dayThis';
     const DAY_LAST = 'dayLast';
     const DAY_NEXT = 'dayNext';
+    const MONTH_THIS = 'monthThis';
+    const MONTH_LAST = 'monthLast';
+    const MONTH_NEXT = 'monthNext';
 
-    // @todo add MONTH/YEAR constants
+    // @todo add YEAR constants
 
     /**
      * date format string
@@ -183,7 +186,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $date = $this->_getDate(NULL, TRUE);
             
             // special values like this week, ...
-            switch($_value) {
+            switch ($_value) {
 
                 /******** anytime ******/
                 case 'anytime':
@@ -207,26 +210,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $value = $this->_getFirstAndLastDayOfWeek($date);
                     break;
                 /******* month *********/
-                case 'monthNext':
-                    $date->add(2, Tinebase_DateTime::MODIFIER_MONTH);
-                case 'monthLast':
-                    $month = $date->get('m');
-                    if ($month > 1) {
-                        $date = $date->setDate($date->get('Y'), $month - 1, 1);
-                    } else {
-                        $date->subMonth(1);
-                    }
-                case 'monthThis':
-                    $dayOfMonth = $date->get('j');
-                    $monthDays = $date->get('t');
-                    
-                    $first = $date->toString('Y-m') . '-01';
-                    $date->add($monthDays-$dayOfMonth, Tinebase_DateTime::MODIFIER_DAY);
-                    $last = $date->toString($this->_dateFormat);
-    
+                case self::MONTH_NEXT:
+                case self::MONTH_LAST:
+                case self::MONTH_THIS:
                     $value = array(
-                        $first, 
-                        $last,
+                        self::getFirstDayOf($_value, $date)->toString($this->_dateFormat),
+                        self::getLastDayOf($_value, $date)->toString($this->_dateFormat),
                     );
                     break;
                     
@@ -421,6 +410,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * 
      * @param string $date
      * @param boolean $usertimezone
+     * @return Tinebase_DateTime
      */
     protected function _getDate($date = NULL, $usertimezone = FALSE)
     {
@@ -435,5 +425,57 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         }
         
         return $date;
+    }
+
+    /**
+     * @param Tinebase_DateTime $date
+     * @param string $value
+     * @return Tinebase_DateTime
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function getFirstDayOf($value, Tinebase_DateTime $date = null)
+    {
+        if (! $date) {
+            $firstDay = Tinebase_DateTime::now();
+        } else {
+            $firstDay = clone($date);
+        }
+
+        switch ($value) {
+            case self::MONTH_NEXT:
+                $firstDay->add(2, Tinebase_DateTime::MODIFIER_MONTH);
+            case self::MONTH_LAST:
+                $month = $firstDay->get('m');
+                if ($month > 1) {
+                    $firstDay = $firstDay->setDate($firstDay->get('Y'), $month - 1, 1);
+                } else {
+                    $firstDay->subMonth(1);
+                }
+            case self::MONTH_THIS:
+                $dayOfMonth = $firstDay->get('j');
+                $firstDay->subDay($dayOfMonth - 1);
+                $firstDay->setTime(0,0,0,0);
+
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('not supported: ' . $value);
+        }
+
+        return $firstDay;
+    }
+
+    /**
+     * @param Tinebase_DateTime $date
+     * @param string $value
+     * @return Tinebase_DateTime
+     */
+    public static function getLastDayOf($value, Tinebase_DateTime $date = null)
+    {
+        $result = clone(self::getFirstDayOf($value, $date));
+        $dayOfMonth = $result->get('j');
+        $monthDays = $result->get('t');
+        $result->addDay($monthDays - $dayOfMonth);
+        $result->setTime(23,59,59);
+        return $result;
     }
 }

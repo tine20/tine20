@@ -1141,16 +1141,16 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
     public function testDailyWtReportApi()
     {
-        // TODO create should not be possible via API?
-        // TODO create via controller/backend?
-        // TODO disallow to edit when clearance is set?
+        // TODO disallow to edit when clearance is set
 
         $this->_testSimpleRecordApi(
             'DailyWTReport',
             null,
             null,
             true,
-            [],
+            [
+                'date' => '2018-08-01'
+            ],
             false
         );
     }

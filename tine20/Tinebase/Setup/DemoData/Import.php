@@ -59,7 +59,7 @@ class Tinebase_Setup_DemoData_Import
             $result = $this->_importDemoDataFile($splFileInfo);
             if ($result) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Import result: ' . print_r($result, true));
+                    . ' Import result: ' . print_r($result['results']->toArray(), true));
                 $importedDemoDataFiles++;
             }
         }

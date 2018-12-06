@@ -9,14 +9,9 @@
  */
 
 /**
- * Test helper
+ * Test class for HumanResources Controller
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for HumanResources Controller(s)
- */
-class HumanResources_ControllerTests extends HumanResources_TestCase
+class HumanResources_Controller_ContractTests extends HumanResources_TestCase
 {
     /**
      * tests for the contract controller
@@ -167,8 +162,7 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         // so we expect 365-52-52-10 = 251 days
         $workingDates = $contractController->getDatesToWorkOn($contract, $start, $stop);
         $this->assertEquals(251, count($workingDates['results']));
-        
-        
+
         // test $respectTakenVacationDays parameter of getDatesToWorkOn 
         $accountController = HumanResources_Controller_Account::getInstance();
         $accounts = $accountController->createMissingAccounts(2013, $contract->employee_id);
@@ -204,93 +198,5 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
 
         // we expect 10 here
         $this->assertEquals(10, count($feastDays), '10 feast days should have been found!');
-    }
-
-    /**
-     * tests if a special property exists in the record set
-     */
-    public function testRecordSet()
-    {
-        $recordSet = new Tinebase_Record_RecordSet('HumanResources_Model_Employee');
-        $employee = $this->_getEmployee();
-        $recordSet->addRecord($employee);
-        $this->assertEquals(1, count($recordSet->supervisor_id));
-    }
-
-    /**
-     * tests if the filter for the employee model gets created properly
-     */
-    public function testFilters()
-    {
-
-        // prepare dates
-        $today = new Tinebase_DateTime();
-        $oneMonthAgo = clone $today;
-        $oneMonthAgo->subMonth(1);
-        $oneMonthAhead = clone $today;
-        $oneMonthAhead->addMonth(1);
-        $twoMonthsAgo = clone $oneMonthAgo;
-        $twoMonthsAgo->subMonth(1);
-
-        $employeeController = HumanResources_Controller_Employee::getInstance();
-
-        $employee1 = $this->_getEmployee('pwulf');
-        $employee1->employment_begin = $oneMonthAgo;
-        $employee1->employment_end = $oneMonthAhead;
-        $employee1 = $employeeController->create($employee1);
-
-        $employee2 = $this->_getEmployee('rwright');
-        $employee2->employment_begin = $oneMonthAgo;
-        $employee2 = $employeeController->create($employee2);
-
-        $filter = new HumanResources_Model_EmployeeFilter(array(
-            array('field' => 'n_given', 'operator' => 'equals', 'value' => 'Paul')
-        ));
-        $result = $employeeController->search($filter);
-
-        $this->assertEquals(1, $result->count());
-        $this->assertEquals('Paul', $result->getFirstRecord()->n_given);
-
-        // test employed filter
-
-        // employee3 is not yet employed
-        $employee3 = $this->_getEmployee('jmcblack');
-        $employee3->employment_begin = $oneMonthAhead;
-        $employee3 = $employeeController->create($employee3);
-        
-        // employee4 has been employed
-        $employee4 = $this->_getEmployee('jsmith');
-        $employee4->employment_begin = $twoMonthsAgo;
-        $employee4->employment_end = $oneMonthAgo;
-        $employee4 = $employeeController->create($employee4);
-
-        $this->assertEquals('Photographer', $employee4->position);
-        
-        $filter = new HumanResources_Model_EmployeeFilter(array(
-            array('field' => 'is_employed', 'operator' => 'equals', 'value' => TRUE)
-        ));
-        $result = $employeeController->search($filter);
-        $msg = 'rwright and pwulf should have been found';
-        $this->assertEquals(2, $result->count(), $msg);
-
-        $names = $result->n_fn;
-
-        // just rwright and pwulf should have been found
-        $this->assertContains('Roberta Wright', $names, $msg);
-        $this->assertContains('Paul Wulf', $names, $msg);
-
-        $filter = new HumanResources_Model_EmployeeFilter(array(
-            array('field' => 'is_employed', 'operator' => 'equals', 'value' => FALSE)
-        ));
-        $result = $employeeController->search($filter);
-
-        $msg = 'jsmith and jmcblack should have been found';
-        $this->assertEquals(2, $result->count(), $msg);
-
-        $names = $result->n_fn;
-
-        // just jsmith and jmcblack should have been found
-        $this->assertContains('John Smith', $names, $msg);
-        $this->assertContains('James McBlack', $names, $msg);
     }
 }

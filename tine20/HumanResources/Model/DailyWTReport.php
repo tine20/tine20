@@ -50,7 +50,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
         'recordName' => 'Daily Working Time Report',
         'recordsName' => 'Daily Working Time Reports', // ngettext('Daily Working Time Report', 'Daily Working Time Reports', n)
         'containerProperty' => null,
-        'titleProperty' => null, // TODO change this?
+        'titleProperty' => 'date',
         'hasRelations' => false, // TODO really no relations?
         'hasCustomFields' => true,
         'hasNotes' => true,
@@ -102,6 +102,11 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                     'modelName'   => 'Employee',
                     'idProperty'  => 'id'
                 ]
+            ],
+            'date' => [
+                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'],
+                'label'         => 'Date', // _('Date')
+                'type'          => 'date',
             ],
             'evaluation_period_start' => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
@@ -187,6 +192,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 'inputFilters'  => ['Zend_Filter_Empty' => null],
                 'default'       => 0,
             ],
+            // @todo minutes?
             'working_time_actual' => [
                 'type'          => 'integer',
                 'label'         => 'Actual Working Time', // _('Actual Working Time')
