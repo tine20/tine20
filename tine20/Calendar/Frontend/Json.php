@@ -292,11 +292,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for events matching given arguments
      *
-     * @param  array $filter
-     * @param  array $paging
+     * @param array $filter
+     * @param array $paging
+     * @param boolean $addFixedCalendars
      * @return array
      */
-    public function searchEvents($filter, $paging)
+    public function searchEvents($filter, $paging, $addFixedCalendars = true)
     {
         $controller = Calendar_Controller_Event::getInstance();
         
@@ -304,9 +305,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
 
-        // find out if fixed calendars should be used
-        $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
-        $useFixedCalendars = is_array($fixedCalendarIds) && ! empty($fixedCalendarIds);
+        if ($addFixedCalendars) {
+            // find out if fixed calendars should be used
+            $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
+            $useFixedCalendars = is_array($fixedCalendarIds) && !empty($fixedCalendarIds);
+        } else {
+            $useFixedCalendars = false;
+        }
         
         $periodFilter = $filter->getFilter('period');
         
