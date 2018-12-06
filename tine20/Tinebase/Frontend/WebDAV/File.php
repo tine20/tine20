@@ -27,7 +27,10 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         ) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to download file: ' . $this->_path);
         }
-        $handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r');
+        if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r'))) {
+            // possible race condition
+            throw new Sabre\DAV\Exception\NotFound('could not open ' . $this->_path);
+        }
          
         return $handle;
     }
