@@ -2647,4 +2647,29 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $message = $this->testFileMessageAsAttachment();
         $this->testFileMessageAsAttachment($message);
     }
+
+    /**
+     * testGetFileLocationsOfMessages
+     */
+    public function testGetFileLocationsOfMessages()
+    {
+        $message = $this->testFileMessageAsAttachment();
+
+        // check search
+        $filter = array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+        ));
+        $result = $this->_json->searchMessages($filter, []);
+        self::assertEquals(1, $result['totalcount']);
+        $message = $result['results'][0];
+        self::assertTrue(isset($message['fileLocations']));
+        self::assertEquals(1, count($message['fileLocations']), 'did not get message file location: '
+            . print_r($message, true));
+
+        // check get
+        $message = $this->_json->getMessage($message['id']);
+        self::assertTrue(isset($message['fileLocations']), 'fileLocations missing from message after get');
+        self::assertEquals(1, count($message['fileLocations']), 'did not get message file location: '
+            . print_r($message, true));
+    }
 }
