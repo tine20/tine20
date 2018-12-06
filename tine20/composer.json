@@ -45,7 +45,7 @@
         "ext-SimpleXML": "*",
         "ext-xml": "*",
         "ext-zip": "*",
-        "zendframework/zendframework1": "1.12.20pl33 as 1.12.20",
+        "zendframework/zendframework1": "1.12.20pl34 as 1.12.20",
         "tine20/composerapploader": "1.0.*",
         "syncroton/syncroton": "dev-master",
         "ezyang/htmlpurifier": "v4.6.0",
