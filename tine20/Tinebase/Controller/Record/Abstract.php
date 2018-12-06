@@ -265,6 +265,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = self::ACTION_GET)
     {
+        if (! $_filter) {
+            $_filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName);
+        }
         $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
         $this->_addDefaultFilter($_filter);
