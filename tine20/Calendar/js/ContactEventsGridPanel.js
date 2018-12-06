@@ -67,17 +67,17 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             typeof this.autoLoad == 'object' ?
                 this.autoLoad : undefined]);
     },
-//    
-//    /**
-//     * called before store queries for data
-//     */
-//    onStoreBeforeload: function(store, options) {
-//        
-//        Tine.Calendar.ContactEventsGridPanel.superclass.onStoreBeforeload.apply(this, arguments);
-//        if (! this.record.id) return false;
-//        
-//        options.params.filter.push({field: 'attender', operator: 'equals', value: {user_type: 'user', user_id: this.record.id}});
-//    },
+
+   /**
+    * called before store queries for data
+    */
+   onStoreBeforeload: function(store, options) {
+
+       Tine.Calendar.ContactEventsGridPanel.superclass.onStoreBeforeload.apply(this, arguments);
+
+       // prevent adding of fixed calendars
+       options.params.addFixedCalendars = false;
+   },
     
     /**
      * initialises filter toolbar
