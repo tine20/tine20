@@ -335,7 +335,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     onSearchComboSelect: function(combo) {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSelect()');
-        
+
+        var selectedRecord = combo.selectedRecord;
         var value = combo.getValue();
         
         if (combo.getValueIsList()) {
@@ -502,7 +503,19 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             this.setFixedHeight(true);
         }
     },
-    
+
+    // save selected record for usage in onAfterEdit
+    onEditComplete: function(ed, value, startValue) {
+        var _ = window.lodash,
+            selectedRecord = _.get(ed, 'field.selectedRecord'),
+            row = ed.row,
+            rowRecord = this.store.getAt(row);
+
+        rowRecord.selectedRecord = selectedRecord;
+
+        Tine.Felamimail.RecipientGrid.superclass.onEditComplete.call(this, ed, value, startValue);
+    },
+
     /**
      * after edit
      * 

@@ -314,3 +314,23 @@
 .felamimail-is-external-recipient .x-grid3-col-address {
     background: yellow;
 }
+
+/***** location renderer ******/
+
+.felamimail-compose-info .x-panel-body {
+    background-color: lightyellow;
+}
+
+.felamimail-location {
+    padding-right: 5px;
+}
+
+.felamimail-location-icon {
+    background-size: 16px;
+    height: 16px;
+    width: 16px;
+    padding-left: 3px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}

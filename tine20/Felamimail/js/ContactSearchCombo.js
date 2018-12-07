@@ -106,7 +106,9 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
             this.setValue(record.get("emails"));
             this.valueIsList = true;
         }
-        
+
+        this.selectedRecord = record;
+
         this.collapse();
         this.fireEvent('blur', this);
         this.fireEvent('select', this, record, index);

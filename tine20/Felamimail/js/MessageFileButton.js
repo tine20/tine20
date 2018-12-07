@@ -14,7 +14,11 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
      */
     mode: 'fileInstant',
 
-    autoAttach: null,
+    /**
+     * @property {bool} isManualSelection
+     */
+    isManualSelection: false,
+
     requiredGrant: 'readGrant',
     allowMultiple: true,
     iconCls: 'action_file',
@@ -22,6 +26,9 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     suggestionsLoaded: false,
 
     initComponent: function() {
+        var _ = window.lodash,
+            me = this;
+
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18n = this.app.i18n;
 
@@ -34,10 +41,16 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
             this.selectLocation.createDelegate(this);
 
         if (this.mode != 'fileInstant') {
-            this.autoAttach = Tine.Felamimail.registry.get('preferences').get('autoAttachNote');
             this.disabled = false;
             this.enableToggle = true;
-            this.pressed = this.autoAttach;
+            this.pressed = Tine.Felamimail.registry.get('preferences').get('autoAttachNote');
+
+            // check suggestions (file_location) for reply/forward
+            if (this.composeDialog) {
+                this.composeDialog.on('load', this.onMessageLoad, this);
+            }
+
+            me.on('toggle', me.onToggle, me);
         }
         this.supr().initComponent.call(this);
     },
@@ -48,81 +61,203 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
             return;
         }
 
-        this.loadMenu();
+        this.showFileMenu();
     },
 
     arrowHandler: function() {
         if (this.mode == 'fileInstant') {
-            return this.loadMenu();
+            return this.showFileMenu();
         }
+
+        this.syncRecipents();
     },
 
-    loadMenu: function () {
+    onToggle: function(btn, pressed) {
+        var _ = window.lodash,
+            me = this;
+
+        if (pressed) {
+            _.each(_.filter(this.menu.items.items, {isRecipientItem: true}), function(item) {
+                item.suspendEvents();
+                item.setChecked(true);
+                item.resumeEvents();
+            });
+        } else {
+            _.each(_.filter(this.menu.items.items, {checked: true}), function(item) {
+                item.suspendEvents();
+                item.setChecked(false);
+                item.resumeEvents();
+            });
+        }
+
+        var selection = me.getSelected();
+        me.fireEvent('selectionchange', me, selection);
+    },
+
+    showFileMenu: function () {
         var _ = window.lodash,
             selection = _.map(this.initialConfig.selections, 'data');
 
         if (! this.suggestionsLoaded || this.mode == 'fileInstant') {
-            this.setIconClass('x-btn-wait');
-            this.hideMenu();
-
-            Tine.Felamimail.getFileSuggestions(selection[0])
-                .then(this.onSuggestionsLoad.createDelegate(this));
+            this.loadSuggestions(selection[0])
+                .then(this.showMenu.createDelegate(this));
         } else {
             this.showMenu();
         }
     },
 
-    onSuggestionsLoad: function(suggestions) {
+    /**
+     * message is loaded in compose dialog
+     *
+     * @param dlg
+     * @param message
+     * @param ticketFn
+     */
+    onMessageLoad: function(dlg, message, ticketFn) {
+        var _ = window.lodash,
+            me = this;
+
+        if (message.get('original_id')) {
+            me.loadSuggestions(message.data).then(function () {
+                // auto file if original_message (from forwared/reply) was filed
+                if (_.find(_.map(me.menu.items, 'suggestion'), { type : 'file_location' })) {
+                    // @TODO: select this suggestion!
+                    var selection = me.getSelected();
+                    me.suspendEvents();
+                    me.toggle(selection.length);
+                    me.resumeEvents();
+                    me.fireEvent('selectionchange', me, selection);
+                }
+            })
+        } else {
+            me.addStaticMenuItems();
+        }
+
+        me.composeDialog.recipientGrid.store.on('add', me.syncRecipents, me);
+        me.composeDialog.recipientGrid.store.on('update', me.syncRecipents, me);
+    },
+
+    syncRecipents: function() {
+        var _ = window.lodash,
+            me = this;
+
+        _.each(me.composeDialog.recipientGrid.store.data.items, function(recipient) {
+            var full = recipient.get('address'),
+                parsed = addressparser.parse(String(full).replace(/,/g, '\\\\,')),
+                email = parsed.length ? parsed[0].address : '';
+
+            if (email) {
+                var fileTarget = {
+                    record_title: full,
+                    model: Tine.Addressbook.Model.EmailAddress,
+                    data: {
+                        email: email
+                    },
+                };
+
+                if (! me.menu.getComponent(email)) {
+                    var checked = me.pressed && !me.isManualSelection;
+                    me.menu.insert(0, {
+                        itemId: email,
+                        isRecipientItem: true,
+                        xtype: 'menucheckitem',
+                        checked: checked,
+                        fileTarget: fileTarget,
+                        // iconCls: fileTarget.model.getIconCls(),
+                        text: Ext.util.Format.htmlEncode(fileTarget.record_title),
+                        checkHandler: function (item) {
+                            var selection = me.getSelected();
+                            me.suspendEvents();
+                            me.toggle(selection.length);
+                            me.resumeEvents();
+                            me.fireEvent('selectionchange', me, selection);
+                        }
+                    });
+
+                    if (checked) {
+                        var selection = me.getSelected();
+                        me.suspendEvents();
+                        me.toggle(selection.length);
+                        me.resumeEvents();
+                        me.fireEvent('selectionchange', me, selection);
+                    }
+                }
+            }
+        });
+    },
+
+
+
+    loadSuggestions: function(message) {
         var _ = window.lodash,
             me = this,
             suggestionIds = [];
 
-        this.menu.removeAll();
+        me.setIconClass('x-btn-wait');
+        me.hideMenu();
+        me.menu.removeAll();
 
-        // suggestions
-        _.each(suggestions, function(suggestion) {
-            var model, record, title,  id, suggestionId, fileTarget;
+        return Tine.Felamimail.getFileSuggestions(message).then(function(suggestions) {
+            //sort by suggestion.type so file_location record survives deduplication
+            _.each(_.sortBy(suggestions, 'type'), function (suggestion) {
+                var model, record, id, suggestionId, fileTarget;
 
-            if (suggestion.type == 'file_location') {
-                model = Tine.Tinebase.data.RecordMgr.get(suggestion.record.model);
-                title = suggestion.record.record_title;
-                id = suggestion.record.record_id;
-            } else {
-                model = Tine.Tinebase.data.RecordMgr.get(suggestion.model);
-                record = Tine.Tinebase.data.Record.setFromJson(suggestion.record, model);
-                title = record.getTitle();
-                id = record.getId();
-            }
-            suggestionId = model.getPhpClassName() + '-' + id;
+                // file_location means message reference is already filed (global registry)
+                if (suggestion.type == 'file_location') {
+                    id = suggestion.record.record_id;
+                    fileTarget = {
+                        record_title: suggestion.record.record_title,
+                        model: Tine.Tinebase.data.RecordMgr.get(suggestion.record.model),
+                        data: id
+                    };
 
-            if (suggestionIds.indexOf(suggestionId) < 0) {
-                fileTarget = {
-                    title: title,
-                    model: model,
-                    data: suggestion.record,
-                };
 
-                me.menu.addItem({
-                    isSuggestedItem: true,
-                    fileTarget: fileTarget,
-                    iconCls: model.getIconCls(),
-                    text: title,
-                    handler: me.selectionHandler
-                });
-                suggestionIds.push(suggestionId);
-            }
+                } else {
+                    model = Tine.Tinebase.data.RecordMgr.get(suggestion.model);
+                    record = Tine.Tinebase.data.Record.setFromJson(suggestion.record, model);
+                    id = record.getId();
+                    fileTarget = {
+                        record_title: record.getTitle(),
+                        model: model,
+                        data: id
+                    };
+
+                }
+                suggestionId = fileTarget.model.getPhpClassName() + '-' + id;
+
+                if (suggestionIds.indexOf(suggestionId) < 0) {
+                    me.menu.addItem({
+                        itemId: suggestionId,
+                        isSuggestedItem: true,
+                        suggestion: suggestion,
+                        fileTarget: fileTarget,
+                        iconCls: fileTarget.model.getIconCls(),
+                        text: Ext.util.Format.htmlEncode(fileTarget.record_title),
+                        handler: me.selectionHandler
+                    });
+                    suggestionIds.push(suggestionId);
+                }
+            });
+
+            me.addStaticMenuItems();
+
+            me.suggestionsLoaded = true;
+            me.setIconClass('action_file');
         });
+    },
 
+    addStaticMenuItems: function() {
+        var _ = window.lodash,
+            me = this;
 
-        // other items
-        this.menu.addItem('-');
-        this.menu.addItem({
-            text: this.app.i18n._('Filemanager ...'),
+        me.menu.addItem('-');
+        me.menu.addItem({
+            text: me.app.i18n._('Filemanager ...'),
             hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
-            handler: this.selectFilemanagerFolder.createDelegate(this)
+            handler: me.selectFilemanagerFolder.createDelegate(me)
         });
-        this.menu.addItem({
-            text: this.app.i18n._('Attachment'),
+        me.menu.addItem({
+            text: me.app.i18n._('Attachment'),
             menu:_.reduce(Tine.Tinebase.data.RecordMgr.items, function(menu, model) {
                 if (model.hasField('attachments') && model.getMeta('appName') != 'Felamimail') {
                     menu.push({
@@ -134,10 +269,6 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                 return menu;
             }, [])
         });
-
-        this.suggestionsLoaded = true;
-        this.showMenu();
-        this.setIconClass('action_file');
     },
 
     /**
@@ -150,23 +281,18 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         var me = this,
             messageFilter = this.initialConfig.selectionModel.getSelectionFilter(),
             messageCount = this.initialConfig.selectionModel.getCount(),
-            locations = [{
-                type: item.fileTarget.model.getMeta('appName') == 'Filemanager' ? 'node' : 'attachment',
-                model: item.fileTarget.model.getPhpClassName(),
-                record_id: item.fileTarget.data
-            }];
+            locations = [me.itemToLocation(item)];
 
         this.setIconClass('x-btn-wait');
         Tine.Felamimail.fileMessages(messageFilter, locations)
             .then(function() {
-                var msg = me.i18n.formatMessage('{messageCount, plural, one {Message was filed} other {# messages where filed}}',
+                var msg = me.app.formatMessage('{messageCount, plural, one {Message was filed} other {# messages where filed}}',
                     {messageCount: messageCount });
-                Ext.ux.MessageBox.msg(me.i18n.formatMessage('Success'), msg);
+                Ext.ux.MessageBox.msg(me.app.formatMessage('Success'), msg);
             })
             .catch(function(error) {
-
                 Ext.Msg.show({
-                    title: me.i18n.formatMessage('Error'),
+                    title: me.app.formatMessage('Error'),
                     msg: error.message,
                     buttons: Ext.MessageBox.OK,
                     icon: Ext.MessageBox.ERROR
@@ -177,36 +303,70 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
                 window.postal.publish({
                     channel: "recordchange",
-                    topic: 'Felamimail.Message',
-                    data: null
+                    topic: 'Felamimail.Message.massupdate',
+                    data: {}
                 });
             });
     },
 
+    /**
+     * returns currently selected locations
+     */
     getSelected: function() {
-        var _ = window.lodash;
+        var _ = window.lodash,
+        me = this;
 
         return _.reduce(this.menu.items.items, function(selected, item) {
             if (item.checked) {
-                // @TODO convert into some representation ?
-                selected.push(item.fileTarget);
+                selected.push(me.itemToLocation(item));
             }
             return selected;
         }, []);
     },
 
+    /**
+     * converts (internal) item representation to location
+     * @param item
+     * @return {{type: string, model: String, record_id: data|{email}|*}}
+     */
+    itemToLocation:function(item) {
+        return {
+            type: item.fileTarget.model.getMeta('appName') == 'Filemanager' ? 'node' : 'attachment',
+            model: item.fileTarget.model.getPhpClassName(),
+            record_id: item.fileTarget.data,
+            record_title: item.fileTarget.record_title
+        };
+    },
+
     selectLocation: function(item, e) {
+        var me = this,
+            selection;
+
         item.setVisible(!item.isSuggestedItem);
         item.selectItem = this.menu.insert(Math.max(0, this.menu.items.indexOf(item)), {
-            text: item.fileTarget ? item.fileTarget.title : item.text,
+            text: item.fileTarget ? Ext.util.Format.htmlEncode(item.fileTarget.record_title) : item.text,
             checked: true,
             instantItem: item,
             fileTarget: item.fileTarget,
             checkHandler: function(item) {
+                var selection = me.getSelected();
+
                 item.setVisible(!item.instantItem.isSuggestedItem);
                 item.instantItem.show();
+
+                me.suspendEvents();
+                me.toggle(selection.length);
+                me.resumeEvents();
+                me.fireEvent('selectionchange', me, selection);
             }
         });
+
+        this.isManualSelection = true;
+        selection = this.getSelected();
+        me.suspendEvents();
+        this.toggle(selection.length);
+        me.resumeEvents();
+        this.fireEvent('selectionchange', this, selection);
     },
 
     selectFilemanagerFolder: function(item, e) {
@@ -226,7 +386,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
             fakeItem = new Ext.menu.Item();
 
         fakeItem.fileTarget = {
-            title: nodeData.name,
+            record_title: nodeData.name,
             model: Tine.Filemanager.Model.Node,
             data: nodeData,
         };
@@ -253,7 +413,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                     if (eventName == 'apply') {
                         var attachRecord = this.getForm().findField('attachRecord').selectedRecord;
                         return {
-                            title: attachRecord.getTitle(),
+                            record_title: attachRecord.getTitle(),
                             model: model,
                             data: attachRecord.data,
                         };
@@ -267,3 +427,17 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         });
     }
 });
+
+Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations) {
+    var _ = window.lodash,
+        formatMessage = Tine.Tinebase.appMgr.get('Felamimail').formatMessage;
+
+    return _.reduce(locations, function(text, location) {
+        var model = _.isString(location.model) ? Tine.Tinebase.data.RecordMgr.get(location.model) : location.model,
+            iconCls = model ? model.getIconCls() : '',
+            icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '';
+
+        return text.concat('<span class="felamimail-location">' + icon +
+            '<span class="felamimail-location-text">' + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>');
+    }, []).join('');
+};

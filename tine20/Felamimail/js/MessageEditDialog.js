@@ -17,9 +17,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Message Compose Dialog</p>
  * <p>This dialog is for composing emails with recipients, body and attachments.
  * you can choose from which account you want to send the mail.</p>
- * <p>
- * TODO         make email note editable
- * </p>
  *
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -185,17 +182,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this
         });
 
-        // TODO think about changing icon onToggle
-        this.action_saveEmailNote = new Ext.Action({
-            text: this.app.i18n._('Save Email Note'),
-            handler: this.onToggleSaveNote,
-            iconCls: 'notes_noteIcon',
-            disabled: false,
-            scope: this,
-            enableToggle: true
-        });
-        this.button_saveEmailNote = Ext.apply(new Ext.Button(this.action_saveEmailNote), {
-            tooltip: this.app.i18n._('Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s).')
+        this.button_fileMessage = new Tine.Felamimail.MessageFileButton({
+            mode: 'selectOnly',
+            composeDialog: this,
+            listeners: {
+                scope: this,
+                selectionchange: this.onFileMessageSelectionChange
+            }
         });
 
         this.action_toggleReadingConfirmation = new Ext.Action({
@@ -254,7 +247,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
                     }),
                     this.action_saveAsDraft,
-                    this.button_saveEmailNote,
+                    this.button_fileMessage,
                     this.action_saveAsTemplate,
                     this.button_toggleReadingConfirmation,
                     this.button_toggleEncrypt,
@@ -833,16 +826,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
-     * toggle save note
-     *
-     * @param {} button
-     * @param {} e
-     */
-    onToggleSaveNote: function (button, e) {
-        this.record.set('note', (!this.record.get('note')));
-    },
-
-    /**
      * toggle mass mailing
      *
      * @param {} button
@@ -854,14 +837,24 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('massMailingFlag', active);
 
         if (active) {
-            this.infoText.show();
+            this.massMailingInfoText.show();
             this.doLayout();
         } else {
-            this.infoText.hide();
+            this.massMailingInfoText.hide();
             this.doLayout();
         }
     },
 
+    onFileMessageSelectionChange: function(btn, selection) {
+
+        var text = this.app.formatMessage('This message will be filed at the following locations:') + '&nbsp;' +
+            Tine.Felamimail.MessageFileButton.getFileLocationText(selection);
+
+        this.messageFileInfoText.update(text);
+        this.messageFileInfoText.setVisible(selection.length);
+        this.doLayout();
+    },
+    
     /**
      * toggle Request Reading Confirmation
      */
@@ -1012,12 +1005,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.getForm().loadRecord(this.record);
         this.attachmentGrid.loadRecord(this.record);
 
-        if (this.record.get('note') && this.record.get('note') == '1') {
-            this.button_saveEmailNote.toggle();
-        }
-
         if (this.record.get('massMailingFlag')) {
-            this.infoText.show();
+            this.massMailingInfoText.show();
         }
 
         this.onAfterRecordLoad();
@@ -1066,6 +1055,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
 
         this.record.set('account_id', account.get('original_id'));
+        
+        if (this.button_fileMessage.pressed) {
+            this.record.set('fileLocations', this.button_fileMessage.getSelected());
+        }
 
         // need to sync once again to make sure we have the correct recipients
         this.recipientGrid.syncRecipientsToRecord();
@@ -1278,11 +1271,20 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: [
                         {
                             // mass mailing info text
+                            cls: 'felamimail-compose-info',
                             html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
                             hidden: true,
-                            ref: '../../infoText',
+                            ref: '../../massMailingInfoText',
                             padding: '2px',
                             height: 20
+                        },
+                        {
+                            // message file info text
+                            cls: 'felamimail-compose-info',
+                            hidden: true,
+                            ref: '../../messageFileInfoText',
+                            padding: '2px',
+                            height: 'auto'
                         },
                         this.accountCombo,
                         {
@@ -1414,8 +1416,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Ext.Button} button
      * @param {Event} event
      * @param {Boolean} closeWindow
-     *
-     * TODO add note editing textfield here
      */
     onApplyChanges: function (closeWindow, emptySubject, passwordSet, nonSystemAccountRecipients) {
         var me = this,

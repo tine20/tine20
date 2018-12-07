@@ -146,10 +146,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
  * @return {Object}
  */
 Tine.Felamimail.Model.Message.getDefaultData = function() {
-    var autoAttachNote = Tine.Felamimail.registry.get('preferences').get('autoAttachNote');
-    
     return {
-        note: autoAttachNote,
         content_type: 'text/html'
     };
 };
