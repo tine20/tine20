@@ -650,7 +650,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = [current($periods)];
         $i = 0;
         foreach ($periods as $period) {
-            if ($result[$i]['until']->compare($period['from']) !== -1) {
+            if ($result[$i]['until'] && $result[$i]['until']->compare($period['from']) !== -1) {
                 if ($result[$i]['until']->compare($period['until']) === -1) {
                     $result[$i]['until'] = $period['until'];
                 }
