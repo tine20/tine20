@@ -904,7 +904,25 @@ class Admin_JsonTest extends TestCase
         $this->assertEquals('supertag', $this->objects['tag']['name']);
         $this->assertEquals(1, count($this->objects['tag']['rights']));
     }
-    
+
+    public function testSearchTagWithoutViewRight()
+    {
+        $tagData = $this->_getTagData();
+        $tagData['rights'] = array(array(
+            'account_id' => $this->_personas['sclever']->getId(),
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'view_right' => true,
+            'use_right' => true
+        ));
+        $this->objects['tag'] = $this->_json->saveTag($tagData);
+        self::assertEquals('supertag', $this->objects['tag']['name']);
+        self::assertEquals(1, count($this->objects['tag']['rights']));
+
+        $result = $this->_json->getTags('supertag', 'name', 'ASC', 0, 10);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        self::assertEquals('supertag', $result['results'][0]['name'], print_r($result, true));
+    }
+
     /**
      * test searchContainers
      */
