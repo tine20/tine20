@@ -17,6 +17,9 @@ describe('QuickLookRegistry', () => {
   let uit
 
   beforeEach(() => {
+    // QL registry is persisted in the Filemanager registry
+    global.registry('Filemanager')
+
     uit = Tine.Filemanager.QuickLookRegistry
 
     // mock for hasRight

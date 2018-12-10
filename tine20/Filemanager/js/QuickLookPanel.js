@@ -35,7 +35,6 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
     /**
      * @type Tine.Filemanager.QuickLookRegistry
-     * @todo make this available without passing it in nodeActions
      */
     registry: null,
 
@@ -56,6 +55,8 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
+
+        this.registry = Tine.Filemanager.QuickLookRegistry;
 
         this.action_close = new Ext.Action({
             text: this.app.i18n._('Close'),

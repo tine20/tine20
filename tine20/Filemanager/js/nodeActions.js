@@ -323,9 +323,7 @@ Tine.Filemanager.nodeActions.Preview = {
                 Tine.Filemanager.QuickLookPanel.openWindow({
                     record: selection,
                     initialApp: this.initialConfig.initialApp || null,
-                    sm: this.initialConfig.sm,
-                    // @todo move registry to global registry
-                    registry: Tine.Filemanager.QuickLookRegistry
+                    sm: this.initialConfig.sm
                 });
             }
         }

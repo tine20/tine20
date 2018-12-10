@@ -20,7 +20,7 @@ Ext.ns('Tine.Filemanager');
 Tine.Filemanager.QuickLookRegistry = function() {
     return {
 
-        items: {},
+        items: null,
         
         /**
          * registers a handler
@@ -29,7 +29,9 @@ Tine.Filemanager.QuickLookRegistry = function() {
          * @param {String} xtype panel xtype
          */
         register: function(contentType, xtype) {
+            this.initItems();
             this.items[contentType] = xtype;
+            Tine.Filemanager.registry.set('quickLookRegistry', this.items);
         },
         
         /**
@@ -39,6 +41,7 @@ Tine.Filemanager.QuickLookRegistry = function() {
          * @return {String}
          */
         get: function(contentType) {
+            this.initItems();
             if (this.items.hasOwnProperty(contentType)) {
                 return this.items[contentType];
             }
@@ -53,11 +56,18 @@ Tine.Filemanager.QuickLookRegistry = function() {
          * @return {Bool}
          */
         has: function(contentType) {
+            this.initItems();
             if (this.items.hasOwnProperty(contentType)) {
                 return true;
             }
             
             return false;
+        },
+
+        initItems: function() {
+            if (! this.items) {
+                this.items = Tine.Filemanager.registry.get('quickLookRegistry') || {};
+            }
         }
     }
 }();
