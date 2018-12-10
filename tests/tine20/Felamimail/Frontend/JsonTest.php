@@ -1275,9 +1275,12 @@ class Felamimail_Frontend_JsonTest extends TestCase
     /**
      * @see 0012160: save emails in filemanager
      *
+     * @param string $locationType one of: 'node', 'path', 'suggestion'
      * @return array
+     *
+     * @todo split up funtion
      */
-    public function testFileMessagesAsNode()
+    public function testFileMessagesAsNode($locationType = 'path')
     {
         $appName = 'Filemanager';
         $user = Tinebase_Core::getUser();
@@ -1306,15 +1309,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $filter = array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'], $message2['id'])
         ));
-        $result = $this->_json->fileMessages($filter, [
-            [
-                'model' => Filemanager_Model_Node::class,
-                'record_id' => [
-                    'path' => $path
-                ],
-                'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE
-            ]
-        ]);
+        $location = $this->_getTestLocation($locationType, $personalFilemanagerContainer, $path);
+        $result = $this->_json->fileMessages($filter, [$location]);
+
+        // assertions!
         $this->assertTrue(isset($result['totalcount']));
         $this->assertEquals(2, $result['totalcount'], 'message should be filed in ' . $appName . ': ' . print_r($result, true));
 
@@ -1361,8 +1359,59 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
+     * @param $locationType
+     * @param $personalFilemanagerContainer
+     * @param $path
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getTestLocation($locationType, $personalFilemanagerContainer, $path)
+    {
+        $nodeWithoutPath = $personalFilemanagerContainer->toArray();
+        unset($nodeWithoutPath['path']);
+        switch ($locationType) {
+            case 'path':
+                $location = [
+                    'model' => Filemanager_Model_Node::class,
+                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
+                    'record_id' => [
+                        'path' => $path
+                    ],
+                ];
+                break;
+            case 'node':
+                $location = [
+                    'model' => Filemanager_Model_Node::class,
+                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
+                    'record_id' => $nodeWithoutPath,
+                ];
+                break;
+            case 'id':
+                $location = [
+                    'model' => Filemanager_Model_Node::class,
+                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
+                    'record_id' => $nodeWithoutPath['id'],
+                ];
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('type not supported');
+        }
+        return $location;
+    }
+
+    public function testFileMessagesAsNodeWithoutPath()
+    {
+        $this->testFileMessagesAsNode('node');
+    }
+
+    public function testFileMessagesAsNodeWithId()
+    {
+        $this->testFileMessagesAsNode('id');
+    }
+
+    /**
      * @param $_appName
-     * @param null $_user
+     * @param Tinebase_Model_User $_user
      * @return NULL|Tinebase_Record_Interface
      */
     protected function _getPersonalContainerNode($_appName, $_user = null)
@@ -2543,7 +2592,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         ]];
         // try to send with wrong param structure
         self::setExpectedException(Tinebase_Exception_Record_NotAllowed::class);
-        $result = $this->_json->fileMessages($filter, [
+        $this->_json->fileMessages($filter, [
             'model' => Addressbook_Model_Contact::class,
             'record_id' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
             'type' => Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT

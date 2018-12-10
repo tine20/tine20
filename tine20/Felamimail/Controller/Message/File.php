@@ -99,6 +99,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
 
         $modelControllers = [];
         foreach ($messages as $message) {
+
             if (! isset($modelControllers[$location->model])) {
                 try {
                     $modelControllers[$location->model] = Tinebase_Core::getApplicationInstance($location->model);
@@ -109,6 +110,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
                 }
             }
             $recordController = $modelControllers[$location->model];
+            /** @var Tinebase_Controller_Record_Abstract $recordController */
             $record = $recordController->fileMessage($location, $message);
             if ($record) {
                 Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record);

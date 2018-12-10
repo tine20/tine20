@@ -680,6 +680,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param array $_tempFileIds
      * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * @throws Filemanager_Exception_NodeExists
      */
     public function createNodes($_filenames, $_type, $_tempFileIds = array(), $_forceOverwrite = FALSE)
     {
@@ -711,6 +712,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * 
      * @param Filemanager_Exception_NodeExists $_fene
      * @param Filemanager_Exception_NodeExists|NULL $_parentNodeExistsException
+     * @return Filemanager_Exception_NodeExists
      */
     protected function _handleNodeExistsException($_fene, $_parentNodeExistsException = NULL)
     {
@@ -1428,28 +1430,48 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      *
      * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
-     * @returns Filemanager_Model_Node
+     * @returns Filemanager_Model_Node|null
      * @throws Filemanager_Exception_NodeExists
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
     {
-        if (! isset($location['record_id']['path']) || $location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
+        if ($location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
             // file message as attachment
             return parent::fileMessage($location, $message);
         }
-        $targetPath = $location['record_id']['path'];
+        if (isset($location['record_id']['path'])) {
+            $targetPath = $location['record_id']['path'];
+        } else {
+            if (is_array($location['record_id'])) {
+                if (! isset($location['record_id']['id'])) {
+                    throw new Tinebase_Exception_InvalidArgument('path or id required in record_id');
+                }
+                $recordId = $location['record_id']['id'];
+            } else {
+                $recordId = $location['record_id'];
+            }
+            $node = $this->get($recordId);
+            $targetPath = $node->path;
+        }
 
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
         $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
 
-        $emlNode = $this->createNodes(
-            array($targetPath . '/' . $filename),
-            Tinebase_Model_Tree_FileObject::TYPE_FILE,
-            array($tempFile->getId()),
-            /* $_forceOverwrite */ true
-        )->getFirstRecord();
+        try {
+            $emlNode = $this->createNodes(
+                array($targetPath . '/' . $filename),
+                Tinebase_Model_Tree_FileObject::TYPE_FILE,
+                array($tempFile->getId()),
+                /* $_forceOverwrite */
+                false
+            )->getFirstRecord();
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $fene->getMessage());
+            return null;
+        }
 
         $emlNode->description = $this->_getMessageNodeDescription($message);
         $emlNode->last_modified_time = Tinebase_DateTime::now();
