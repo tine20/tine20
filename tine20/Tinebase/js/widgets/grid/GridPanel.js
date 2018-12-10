@@ -2004,8 +2004,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         if (e.getTarget('.action_attach')) {
             if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-                Tine.Filemanager.DocumentPreview.openWindow({
-                    record: this.getStore().getAt(row),
+                const record = this.getStore().getAt(row);
+                if (record.get('attachments').length === 0) {
+                    return;
+                }
+                const firstAttachment = new Tine.Tinebase.Model.Tree_Node(record.get('attachments')[0]);
+                Tine.Filemanager.QuickLookPanel.openWindow({
+                    record: firstAttachment,
                     initialApp: this.app,
                     sm: sm
                 });

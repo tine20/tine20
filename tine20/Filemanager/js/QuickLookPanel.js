@@ -45,6 +45,11 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
     layout: 'fit', // hfit?
 
     /**
+     * @type SelectionModel
+     */
+    sm: null,
+
+    /**
      * init panel
      */
     initComponent: function () {
