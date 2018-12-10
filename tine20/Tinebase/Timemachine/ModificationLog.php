@@ -1251,7 +1251,9 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             return true;
         }
 
-        $tine20Service = new Zend_Service_Tine20($tine20Url);
+        $tine20Service = new Zend_Service_Tine20($tine20Url, new Zend_Http_Client(null, [
+            'timeout' => 25
+        ]));
 
         $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
         if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
