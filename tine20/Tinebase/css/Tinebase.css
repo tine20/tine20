@@ -247,6 +247,11 @@ html, body {
 .tinebase-dd-drop-ok-move  .x-dd-drop-icon {
     background-image:url(../../images/icon-set/icon_item_move.svg) !important;
 }
+/* ----- drop-icon-size ------------------------------------------------------*/
+
+.x-dd-drop-icon {
+    background-size: 16px 16px;
+}
 
 /* ----- tree classes --------------------------------------------------------*/
 .tinebase-tree-drop-move  .x-dd-drop-icon {
