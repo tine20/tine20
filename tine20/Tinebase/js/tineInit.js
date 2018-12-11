@@ -963,17 +963,6 @@ Tine.Tinebase.tineInit = {
             Tine.log.warn('_() is deprecated, please use i18n._ instead' + new Error().stack);
             return window.i18n.dgettext('Tinebase', msgid);
         };
-
-
-        Locale.Gettext.prototype.translationsLoaded = function() {
-            return new Promise(function (fulfill) {
-                Tine.__translationData.__isLoaded
-            })
-        };
-        window.i18n.translationsLoaded().then(function() {
-            Tine.Tinebase.prototypeTranslation();
-            fulfill();
-        });
     }
 };
 

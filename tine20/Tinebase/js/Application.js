@@ -29,6 +29,12 @@ Tine.Tinebase.Application = function(config) {
     this.i18n = new Locale.Gettext();
     this.i18n.textdomain(this.appName);
 
+    // auto template selection with gettext
+    this.i18n.formatMessage = function(template) {
+        arguments[0] = this._hidden(template);
+        return formatMessage.apply(formatMessage, arguments);
+    };
+
     this.init();
     if (Tine.CoreData && Tine.CoreData.Manager) {
         Tine.log.debug('Tine.Tinebase.Application - register core data for ' + this.appName)

@@ -159,14 +159,14 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         this.setIconClass('x-btn-wait');
         Tine.Felamimail.fileMessages(messageFilter, locations)
             .then(function() {
-                var msg = formatMessage('{messageCount, plural, one {Message was filed} other {# messages where filed}}',
+                var msg = me.i18n.formatMessage('{messageCount, plural, one {Message was filed} other {# messages where filed}}',
                     {messageCount: messageCount });
-                Ext.ux.MessageBox.msg(formatMessage('Success'), msg);
+                Ext.ux.MessageBox.msg(me.i18n.formatMessage('Success'), msg);
             })
             .catch(function(error) {
 
                 Ext.Msg.show({
-                    title: formatMessage('Error'),
+                    title: me.i18n.formatMessage('Error'),
                     msg: error.message,
                     buttons: Ext.MessageBox.OK,
                     icon: Ext.MessageBox.ERROR
