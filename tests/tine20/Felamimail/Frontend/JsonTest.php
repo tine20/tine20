@@ -2503,9 +2503,15 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals(Addressbook_Model_Contact::class, $suggestion['model']);
     }
 
-    public function testFileMessageAsAttachment()
+    /**
+     * @param null|array $message
+     * @return array|null
+     */
+    public function testFileMessageAsAttachment($message = null)
     {
-        $message = $this->_sendMessage();
+        if (!$message) {
+            $message = $this->_sendMessage();
+        }
         // file message at current contact
         $filter = [[
             'field' => 'id', 'operator' => 'in', 'value' => [$message['id']]
@@ -2525,6 +2531,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($contact);
         self::assertEquals(1, count($attachments), print_r($contact->toArray(), true));
+        return $message;
     }
 
     public function testFileMessageInvalid()
@@ -2548,7 +2555,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testFileMessageDuplicate()
     {
-        $this->testFileMessageAsAttachment();
-        $this->testFileMessageAsAttachment();
+        $message = $this->testFileMessageAsAttachment();
+        $this->testFileMessageAsAttachment($message);
     }
 }
