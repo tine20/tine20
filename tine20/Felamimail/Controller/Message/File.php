@@ -31,6 +31,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
      */
     private function __construct() 
     {
+        $this->_modelControllers = [];
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
     }
     
@@ -59,27 +60,25 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
     /**
      * file messages into Filemanager
      *
-     * @param Felamimail_Model_MessageFilter|Tinebase_Record_RecordSet $messages
+     * @param Felamimail_Model_MessageFilter $messages
      * @param Tinebase_Record_RecordSet $locations
      * @return integer
      */
-    public function fileMessages($messages, $locations)
+    public function fileMessages(Felamimail_Model_MessageFilter $messages, $locations)
     {
         $result = 0;
         foreach ($locations as $location) {
-            if ($messages instanceof Tinebase_Model_Filter_FilterGroup) {
-                $iterator = new Tinebase_Record_Iterator(array(
-                    'iteratable' => $this,
-                    'controller' => $this,
-                    'filter' => $messages,
-                    'function' => 'processFileIteration',
-                ));
-                $iterateResult = $iterator->iterate($location);
+            $iterator = new Tinebase_Record_Iterator(array(
+                'iteratable' => $this,
+                'controller' => $this,
+                'filter' => $messages,
+                'function' => 'processFileIteration',
+            ));
+            $iterateResult = $iterator->iterate($location);
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Filed ' . $iterateResult['totalcount'] . ' message(s).');
-                $result += $iterateResult['totalcount'];
-            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Filed ' . $iterateResult['totalcount'] . ' message(s) to location ' . print_r($location->toArray(), true));
+            $result += $iterateResult['totalcount'];
         }
 
         return $result;
@@ -97,19 +96,25 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' About to file ' . count($messages) . ' messages to location ' . print_r($location->toArray(), true));
 
-        $modelControllers = [];
-        foreach ($messages as $message) {
-
-            if (! isset($modelControllers[$location->model])) {
-                try {
-                    $modelControllers[$location->model] = Tinebase_Core::getApplicationInstance($location->model);
-                } catch (Tinebase_Exception_AccessDenied $tead) {
-                    continue;
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    continue;
-                }
+        if ($location->model === 'Addressbook_Model_EmailAddress') {
+            // @todo this is a little bit unsuspected - maybe it can be improved at some point
+            $location->model = Addressbook_Model_Contact::class;
+            $recordController = Tinebase_Core::getApplicationInstance(Addressbook_Model_Contact::class);
+            if (isset($location['record_id']['email'])) {
+                $location->record_id = Addressbook_Controller_Contact::getInstance()->getContactByEmail($location['record_id']['email']);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Skipping location ' . print_r($location->toArray(), true));
+                $location->record_id = null;
             }
-            $recordController = $modelControllers[$location->model];
+            if ($location->record_id === null) {
+                return;
+            }
+        } else {
+            $recordController = $this->_getRecordController($location->model);
+        }
+
+        foreach ($messages as $message) {
             /** @var Tinebase_Controller_Record_Abstract $recordController */
             $record = $recordController->fileMessage($location, $message);
             if ($record) {
@@ -120,6 +125,22 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
         if (Felamimail_Config::getInstance()->get(Felamimail_Config::DELETE_ARCHIVED_MAIL)) {
             Felamimail_Controller_Message_Flags::getInstance()->addFlags($messages, array(Zend_Mail_Storage::FLAG_DELETED));
         }
+    }
+
+    protected function _getRecordController($model)
+    {
+        if (! isset($this->_modelControllers[$model])) {
+            try {
+                $this->_modelControllers[$model] = Tinebase_Core::getApplicationInstance($model);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' ' . $tead->getMessage());
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' ' . $tenf->getMessage());
+            }
+        }
+        return $this->_modelControllers[$model];
     }
 
     /**

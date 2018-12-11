@@ -585,6 +585,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     * @param  array $_attenderData array with email, firstname and lastname (if available)
     * @param  boolean $_implicitAddMissingContacts
     * @return Addressbook_Model_Contact
+    * @throws Tinebase_Exception_InvalidArgument
     * 
     * @todo filter by fn if multiple matches
     */
@@ -599,27 +600,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $adbController = Addressbook_Controller_Contact::getInstance();
         $oldAdbAcl = $adbController->doContainerACLChecks(false);
         try {
-            $contacts = $adbController->search(new Addressbook_Model_ContactFilter(array(
-                array(
-                    'condition' => 'OR',
-                    'filters' => array(
-                        array('field' => 'email', 'operator' => 'equals', 'value' => $email),
-                        array('field' => 'email_home', 'operator' => 'equals', 'value' => $email)
-                    )
-                ),
-            )), new Tinebase_Model_Pagination(array(
-                'sort' => 'type', // prefer user over contact
-                'dir' => 'DESC',
-                'limit' => 1
-            )));
+            $contact = $adbController->getContactByEmail($email);
         } finally {
             $adbController->doContainerACLChecks($oldAdbAcl);
         }
         
-        if (count($contacts) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . " Found # of contacts " . count($contacts));
-            $result = $contacts->getFirstRecord();
+        if ($contact) {
+            $result = $contact;
             $result->resolveAttenderCleanUp();
         
         } else if ($_implicitAddMissingContacts === TRUE) {

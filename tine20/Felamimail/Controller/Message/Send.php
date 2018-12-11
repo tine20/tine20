@@ -93,7 +93,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         try {
             $this->_resolveOriginalMessage($_message);
             $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
-            $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients);
+            $this->_sendMailViaTransport($mail, $account, $_message, true);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $e);
             $translation = Tinebase_Translation::getTranslation('Felamimail');
@@ -291,111 +291,113 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Account $_account
      * @param boolean $_saveInSent
      * @param Felamimail_Model_Message $_message
-     * @param array $_nonPrivateRecipients
      */
-    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = null, $_saveInSent = false, $_nonPrivateRecipients = array())
+    protected function _sendMailViaTransport(Zend_Mail $_mail,
+                                             Felamimail_Model_Account $_account,
+                                             Felamimail_Model_Message $_message = null,
+                                             $_saveInSent = false)
     {
         $smtpConfig = $_account->getSmtpConfig();
-        if (! empty($smtpConfig) && (isset($smtpConfig['hostname']) || array_key_exists('hostname', $smtpConfig))) {
-            $transport = Felamimail_Transport::getNewInstance($smtpConfig['hostname'], $smtpConfig);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                $debugConfig = $smtpConfig;
-                $whiteList = array('hostname', 'username', 'port', 'auth', 'ssl');
-                foreach ($debugConfig as $key => $value) {
-                    if (! in_array($key, $whiteList)) {
-                        unset($debugConfig[$key]);
-                    }
-                }
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' About to send message via SMTP with the following config: ' . print_r($debugConfig, true));
-            }
-            
-            Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' successful.');
-            
-            // append mail to sent folder
-            if ($_saveInSent) {
-                $this->_saveInSent($transport, $_account, $this->_getAdditionalHeaders($_message));
-            }
-            
-            if ($_message !== null) {
-                // add reply/forward flags if set
-                if (! empty($_message->flags) 
-                    && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
-                    && $_message->original_id instanceof Felamimail_Model_Message
-                ) {
-                    Felamimail_Controller_Message_Flags::getInstance()->addFlags($_message->original_id, array($_message->flags));
-                }
-    
-                // add email notes to contacts (only to/cc)
-                if ($_message->note) {
-                    $this->_addEmailNote($_nonPrivateRecipients, $_message->subject, $_message->getPlainTextBody());
-                }
-            }
-        } else {
+        if (empty($smtpConfig) || ! isset($smtpConfig['hostname'])) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
         }
-    }
-    
-    /**
-     * add email notes to contacts with email addresses in $_recipients
-     *
-     * @param array $_recipients
-     * @param string $_subject
-     * 
-     * @todo add email home (when we have OR filters)
-     * @todo add link to message in sent folder?
-     */
-    protected function _addEmailNote($_recipients, $_subject, $_body)
-    {
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'email', 'operator' => 'in', 'value' => $_recipients)
-            // OR: array('field' => 'email_home', 'operator' => 'in', 'value' => $_recipients)
-        ));
-        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
-        
-        if (count($contacts)) {
-        
-            $translate = Tinebase_Translation::getTranslation($this->_applicationName);
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
-            
-            $truncatedBody = (extension_loaded('mbstring')) ? mb_substr($_body, 0, 4096, 'UTF-8') : substr($_body, 0, 4096);
-            $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ': ' . $truncatedBody;
-            
-            try {
-                foreach ($contacts as $contact) {
-                    if (Tinebase_Core::getUser()->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_EDIT)
-                        || Tinebase_Core::getUser()->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_ADMIN)
-                    ) {
-                        $note = new Tinebase_Model_Note(array(
-                            'note_type_id' => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
-                            'note' => $noteText,
-                            'record_id' => $contact->getId(),
-                            'record_model' => 'Addressbook_Model_Contact',
-                        ));
-                        Tinebase_Notes::getInstance()->addNote($note);
-                    }
-                }
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Saving note failed: ' . $noteText);
-                Tinebase_Exception::log($zdse);
-            }
-        } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no contacts to add notes to.');
+
+        $transport = Felamimail_Transport::getNewInstance($smtpConfig['hostname'], $smtpConfig);
+        $this->_logSendingConfig($smtpConfig);
+        Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Sending successful.');
+
+        if ($_saveInSent) {
+            $sentFolder = $this->_saveInSent($transport, $_account, $this->_getAdditionalHeaders($_message));
+            $this->_fileSentMessage($_message, $sentFolder);
+        }
+
+        // add reply/forward flags if set
+        if ($_message && ! empty($_message->flags)
+            && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
+            && $_message->original_id instanceof Felamimail_Model_Message
+        ) {
+            Felamimail_Controller_Message_Flags::getInstance()->addFlags($_message->original_id, array($_message->flags));
         }
     }
-    
+
+    /**
+     * @param $smtpConfig
+     */
+    protected function _logSendingConfig($smtpConfig)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            $debugConfig = $smtpConfig;
+            $whiteList = array('hostname', 'username', 'port', 'auth', 'ssl');
+            foreach ($debugConfig as $key => $value) {
+                if (! in_array($key, $whiteList)) {
+                    unset($debugConfig[$key]);
+                }
+            }
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' About to send message via SMTP with the following config: ' . print_r($debugConfig, true));
+        }
+    }
+
+    /**
+     * file message to given location(s)
+     *
+     * @todo or use raw message here?
+     *       but we would need to change Felamimail_Controller_Message_File::getInstance()->fileMessages ...
+     *
+     * @param $_message
+     * @param $_sentFolder
+     */
+    protected function _fileSentMessage($_message, $_sentFolder)
+    {
+        if (! $_message || ! $_message->fileLocations || count($_message->fileLocations) === 0) {
+            return;
+        }
+
+        // update cache to fetch new message
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($_sentFolder, 10, 1);
+        $i = 0;
+        while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
+            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
+            $i++;
+        }
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+            ['field' => 'subject', 'operator' => 'equals', 'value' => $_message->subject],
+            ['field' => 'received', 'operator' => 'within', 'value' => Tinebase_Model_Filter_Date::DAY_THIS],
+        ]);
+        $result = Felamimail_Controller_Message::getInstance()->search($filter, new Tinebase_Model_Pagination([
+            'sort' => 'received',
+            'dir' => 'DESC',
+            'limit' => 1,
+        ]));
+        $sentMessage = $result->getFirstRecord();
+
+        if ($sentMessage) {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+                ['field' => 'id', 'operator' => 'in', 'value' => [$sentMessage->getId()]]
+            ]);
+            $locations = $_message->fileLocations instanceof Tinebase_Record_RecordSet
+                ? $_message->fileLocations
+                : new Tinebase_Record_RecordSet(Felamimail_Model_MessageFileLocation::class, $_message->fileLocations, true);
+            try {
+                Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, $locations);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        } else {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Did not find sent message for filing');
+        }
+    }
+
     /**
      * append mail to send folder
-     * 
+     *
      * @param Felamimail_Transport $_transport
      * @param Felamimail_Model_Account $_account
      * @param array $_additionalHeaders
-     * @return void
+     * @return Felamimail_Model_Folder
      */
     protected function _saveInSent(Felamimail_Transport_Interface $_transport, Felamimail_Model_Account $_account, $_additionalHeaders = array())
     {
@@ -427,6 +429,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 . '(' . $zmse->getMessage() . ')'
             );
         }
+
+        return $sentFolder;
     }
     
     /**

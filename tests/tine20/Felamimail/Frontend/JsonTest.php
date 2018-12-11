@@ -532,7 +532,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
-        $messageToSend['note'] = 1;
         $messageToSend['bcc'] = array(Tinebase_Core::getUser()->accountEmailAddress);
 
         $this->_json->saveMessage($messageToSend);
@@ -545,8 +544,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertEquals($message['to'][0], $messageToSend['to'][0], 'recipient not found');
         $this->assertEquals($message['bcc'][0], $messageToSend['bcc'][0], 'bcc recipient not found');
         $this->assertEquals($message['subject'], $messageToSend['subject']);
-
-        $this->_checkEmailNote($contact, $messageToSend['subject']);
 
         // reset sclevers original email address
         $contact->email = $originalEmail;
@@ -601,37 +598,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $result = $reflectionMethod->invokeArgs(new Felamimail_Model_Message(), [$obfuscatedMail]);
 
         $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * check email note
-     *
-     * @param Addressbook_Model_Contact $contact
-     * @param string $subject
-     * @param boolean $shouldFindNote
-     */
-    protected function _checkEmailNote($contact, $subject, $shouldFindNote = true)
-    {
-        // check if email note has been added to contact(s)
-        $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
-        $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
-
-        // check / delete notes
-        $emailNotes = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
-        foreach ($contact->notes as $note) {
-            if ($note->note_type_id == $emailNoteType->getId()) {
-                $this->assertContains($subject, $note->note, 'did not find note subject');
-                $this->assertEquals(Tinebase_Core::getUser()->getId(), $note->created_by);
-                $this->assertContains('aaaaaä', $note->note);
-                $emailNotes->addRecord($note);
-            }
-        }
-        if ($shouldFindNote) {
-            self::assertGreaterThan(0, $emailNotes->count(), 'no email notes found');
-        } else {
-            self::assertEquals(0, $emailNotes->count(), 'email notes found');
-        }
-        Tinebase_Notes::getInstance()->deleteNotes($emailNotes);
     }
 
     /**
@@ -1243,26 +1209,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
      *
      * @see 0008644: error when sending mail with note (wrong charset)
      */
-    public function testSaveMessageNoteWithInvalidChar()
-    {
-        $subject = Tinebase_Core::filterInputForDatabase("\xF0\x9F\x98\x8A\xC2"); // :-) emoji &nbsp;
-        $messageData = $this->_getMessageData('', $subject);
-        $messageData['note'] = true;
-        $messageData['body'] .= "&nbsp;";
-
-        $this->_foldersToClear[] = 'INBOX';
-        $this->_json->saveMessage($messageData);
-        $this->_searchForMessageBySubject($subject);
-
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-        $this->_checkEmailNote($contact, $subject);
-    }
-
-    /**
-     * testSaveMessageNoteWithInvalidChar
-     *
-     * @see 0008644: error when sending mail with note (wrong charset)
-     */
     public function testSaveMessageWithInvalidChar()
     {
         $subject = "\xF0\x9F\x98\x8A"; // :-) emoji
@@ -1422,48 +1368,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
             $_appName,
             $user
         )->getFirstRecord();
-    }
-
-    /**
-     * testMessageNoteForContactWithoutEditGrant
-     */
-    public function testMessageNoteForContactWithoutEditGrant()
-    {
-        // remove edit grant for user
-        $internalContacts = Tinebase_Container::getInstance()->getContainerByName(
-            'Addressbook',
-            'Internal Contacts',
-            Tinebase_Model_Container::TYPE_SHARED);
-        $grants = new Tinebase_Record_RecordSet($internalContacts->getGrantClass(), array(array(
-            'account_id' => $this->_personas['sclever']->getId(),
-            'account_type' => 'user',
-            Tinebase_Model_Grants::GRANT_READ => true,
-            Tinebase_Model_Grants::GRANT_ADD => true,
-            Tinebase_Model_Grants::GRANT_EDIT => true,
-            Tinebase_Model_Grants::GRANT_DELETE => true,
-            Tinebase_Model_Grants::GRANT_ADMIN => true,
-        ), array(
-            'account_id' => Tinebase_Core::getUser()->getId(),
-            'account_type' => 'user',
-            Tinebase_Model_Grants::GRANT_READ => true,
-            Tinebase_Model_Grants::GRANT_ADD => false,
-            Tinebase_Model_Grants::GRANT_EDIT => false,
-            Tinebase_Model_Grants::GRANT_DELETE => false,
-            Tinebase_Model_Grants::GRANT_ADMIN => false,
-        )));
-        Tinebase_Container::getInstance()->setGrants($internalContacts, $grants, TRUE);
-
-        $subject = 'test note';
-        $messageData = $this->_getMessageData('', $subject);
-        $messageData['note'] = true;
-        $messageData['body'] .= "&nbsp;";
-
-        $this->_foldersToClear[] = 'INBOX';
-        $this->_json->saveMessage($messageData);
-        $message = $this->_searchForMessageBySubject($subject);
-
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-        $this->_checkEmailNote($contact, $subject, false);
     }
 
     /**
@@ -2422,7 +2326,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         }
 
         $messageToSend = [
-            'note' => null,
             'content_type' => 'text/html',
             'account_id' => $this->_account->getId(),
             'to' => [
@@ -2597,6 +2500,44 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'record_id' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
             'type' => Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT
         ]);
+    }
+
+    public function testFileMessageOnSend()
+    {
+        $message = $this->_getMessageData();
+        $message['fileLocations'] = [
+            [
+                'model' => Addressbook_Model_Contact::class,
+                'record_id' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
+                'type' => Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT
+            ]
+        ];
+        $this->_sendMessage('INBOX', [],'', 'test', $message);
+        // check if message is attached to contact
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($contact);
+        self::assertEquals(1, count($attachments), print_r($contact->toArray(), true));
+    }
+
+    public function testFileMessageOnSendWithEmail()
+    {
+        $message = $this->_getMessageData();
+        $message['fileLocations'] = [
+            [
+                // class does not exist on the server
+                'model' => 'Addressbook_Model_EmailAddress',
+                'record_id' => [
+                    'email' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+                        Tinebase_Core::getUser()->getId())->email
+                ],
+                'type' => Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT
+            ]
+        ];
+        $this->_sendMessage('INBOX', [],'', 'test', $message);
+        // check if message is attached to contact
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($contact);
+        self::assertEquals(1, count($attachments), print_r($contact->toArray(), true));
     }
 
     /**

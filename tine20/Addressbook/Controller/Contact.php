@@ -1218,4 +1218,27 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     public function inspectGetUserByProperty(Tinebase_Model_User $_user)
     {
     }
+
+    /**
+     * @param $email
+     * @return NULL|Tinebase_Record_Interface
+     */
+    public function getContactByEmail($email)
+    {
+        $contacts = $this->search(new Addressbook_Model_ContactFilter(array(
+            array(
+                'condition' => 'OR',
+                'filters' => array(
+                    array('field' => 'email', 'operator' => 'equals', 'value' => $email),
+                    array('field' => 'email_home', 'operator' => 'equals', 'value' => $email)
+                )
+            ),
+        )), new Tinebase_Model_Pagination(array(
+            'sort' => 'type', // prefer user over contact
+            'dir' => 'DESC',
+            'limit' => 1
+        )));
+
+        return $contacts->getFirstRecord();
+    }
 }
