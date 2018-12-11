@@ -173,7 +173,9 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i++) {
             var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
-            upload.setPaused(true);
+            if (upload) {
+                upload.setPaused(true);
+            }
         }
         this.getSelectionModel().deselectRange(0, this.getSelectionModel().getCount());
     },

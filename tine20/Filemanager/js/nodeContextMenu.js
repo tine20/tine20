@@ -29,7 +29,9 @@ Tine.Filemanager.nodeContextMenu = {
                 fileRecord = fileRecord.fileRecord;
             }
             var upload = Tine.Tinebase.uploadManager.getUpload(fileRecord.get('uploadKey'));
-            upload.setPaused(true);
+            if (upload) {
+                upload.setPaused(true);
+            }
         }
         gridStore.resumeEvents();
         grid.actionUpdater.updateActions(gridStore);
