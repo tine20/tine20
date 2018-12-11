@@ -228,8 +228,10 @@ Tine.Filemanager.nodeActions.Delete = {
 
                     if (node.fileRecord) {
                         var upload = Tine.Tinebase.uploadManager.getUpload(node.fileRecord.get('uploadKey'));
-                        upload.setPaused(true);
-                        Tine.Tinebase.uploadManager.unregisterUpload(upload.id);
+                        if (upload) {
+                            upload.setPaused(true);
+                            Tine.Tinebase.uploadManager.unregisterUpload(upload.id);
+                        }
                     }
 
                 }
