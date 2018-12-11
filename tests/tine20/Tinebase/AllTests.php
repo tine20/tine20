@@ -61,7 +61,6 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_Model_Filter_TextTest::class);
         $suite->addTestSuite(Tinebase_TagsTest::class);
         $suite->addTestSuite(Tinebase_Log_AllTests::class);
-        $suite->addTestSuite(Tinebase_Redis_QueueTest::class);
         $suite->addTestSuite(Tinebase_TempFileTest::class);
         $suite->addTestSuite(Tinebase_Server_AllTests::class);
         $suite->addTestSuite(Tinebase_LockTest::class);
