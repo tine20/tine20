@@ -2456,6 +2456,41 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     }
 
     /**
+     * testGetFileSuggestionsOnCompose
+     */
+    public function testGetFileSuggestionsOnCompose()
+    {
+        $message = $this->testFileMessageAsAttachment();
+        $messageToSend = [
+            'to' => [
+                Tinebase_Core::getUser()->accountEmailAddress
+            ],
+            'original_id' => $message['id'],
+        ];
+        $result = $this->_json->getFileSuggestions($messageToSend);
+        $recipients = array_filter($result, function ($suggestion) {
+            if ($suggestion['type'] === Felamimail_Model_MessageFileSuggestion::TYPE_RECIPIENT) {
+                return true;
+            }
+        });
+        // assert no (original) recipients
+        self::assertGreaterThanOrEqual(0, count($recipients), 'should have no recipients');
+
+        // also check location
+        $locations = array_filter($result, function ($suggestion) {
+            if ($suggestion['type'] === Felamimail_Model_MessageFileSuggestion::TYPE_FILE_LOCATION) {
+                return true;
+            }
+        });
+        self::assertGreaterThanOrEqual(1, count($locations), 'did not get location in suggestions: '
+            . print_r($result, true));
+        $suggestion = array_pop($locations);
+        self::assertEquals(Felamimail_Model_MessageFileLocation::class, $suggestion['model']);
+        self::assertEquals(Addressbook_Model_Contact::class, $suggestion['record']['model']);
+        self::assertEquals(Tinebase_Core::getUser()->accountFullName, $suggestion['record']['record_title']);
+    }
+
+    /**
      * @param null|array $message
      * @return array|null
      */

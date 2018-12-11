@@ -164,7 +164,12 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
                 ]));
             }
         } else {
-            $headers = isset($message->headers) ? $message->headers : [];
+            if ($message->original_id) {
+                $originalMessage = $this->get($message->original_id);
+                $headers = $this->getMessageHeaders($originalMessage, null, true);
+            } else {
+                $headers = isset($message->headers) ? $message->headers : [];
+            }
             foreach (Felamimail_Controller_Message_File::getInstance()->getRecipientContactsOfMessage($message)
                      as $recipient
             ) {
