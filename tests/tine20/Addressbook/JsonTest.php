@@ -100,6 +100,11 @@ class Addressbook_JsonTest extends TestCase
             'dir' => 'ASC',
         );
 
+        // disable "short name" feature as this messes with some tests
+        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::ENABLED_FEATURES);
+        $enabledFeatures[Addressbook_Config::FEATURE_SHORT_NAME] = false;
+        Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
+
         parent::setUp();
     }
 
@@ -657,7 +662,7 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testContactShortName()
     {
-        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::FEATURE_SHORT_NAME);
+        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::ENABLED_FEATURES);
         $enabledFeatures[Addressbook_Config::FEATURE_SHORT_NAME] = true;
 
         Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
