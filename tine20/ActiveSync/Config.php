@@ -43,6 +43,9 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
      */
     const MAX_FILTER_TYPE_CALENDAR = 'maxfiltertypecalendar';
 
+    const LAST_PING_MONITORING_THRESHOLD_DAYS = 'lastPingMonitoringThresholdDays';
+    const LAST_PING_MONITORING_NOTIFICATION_EMAILS = 'lastPingMonitoringNotificationEmails';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -70,7 +73,7 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
             'default'               => FALSE,
         ),
-    self::MAX_FILTER_TYPE_EMAIL => array(
+        self::MAX_FILTER_TYPE_EMAIL => array(
         //_('Filter timeslot for emails')
             'label'                 => 'Filter timeslot for emails',
         //_('For how long in the past the emails should be synchronized.')
@@ -111,6 +114,23 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => Syncroton_Command_Sync::FILTER_6_MONTHS_BACK,
+        ),
+        self::LAST_PING_MONITORING_THRESHOLD_DAYS => array(
+            'label'                 => 'Last ping monitoring threshold',
+            'description'           => 'Last ping monitoring threshold (in days)',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 3,
+        ),
+        self::LAST_PING_MONITORING_NOTIFICATION_EMAILS => array(
+            'label'                 => 'Last ping monitoring notification emails',
+            'description'           => 'Last ping monitoring notification emails',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
         ),
     );
     

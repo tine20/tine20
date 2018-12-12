@@ -35,5 +35,6 @@ class ActiveSync_Model_DeviceFilter extends Tinebase_Model_Filter_FilterGroup
         'owner_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'devicetype'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'friendlyname'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'monitor_lastping'     => array('filter' => Tinebase_Model_Filter_Bool::class),
     );
 }
