@@ -90,10 +90,7 @@
     "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
     "include-path": ["", "vendor/zendframework/zendframework1/library", "library"],
     "config": {
-        "secure-http": false,
-        "platform": {
-            "php": "7.0"
-        }
+        "secure-http": false
     },
     "scripts": {
         "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
