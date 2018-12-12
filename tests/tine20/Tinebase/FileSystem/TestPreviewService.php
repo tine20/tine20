@@ -22,4 +22,20 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
     {
         return array('thumbnail' => array('blob'), 'previews' => array('blob1', 'blob2', 'blob3'));
     }
+
+    /**
+     * Generates previews for files of same type(1)
+     * Files (2) will be merged into a single pdf, unless merge = false is set in $config
+     *
+     * (1) Types: Pdf (pdf, gs), Image (png, jpg, ...), Document (odt, docx, xls, ...)
+     * (2) with target Pdf or Image
+     *
+     * @param $filePaths array of file Paths to convert
+     * @param array $config
+     * @return array|bool
+     */
+    public function getPreviewsForFiles(array $filePaths, array $config)
+    {
+        // TODO: Implement getPreviewsForFiles() method.
+    }
 }
