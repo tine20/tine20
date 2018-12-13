@@ -86,7 +86,8 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Contactsfilter'), id: 'contactsfilter_id', dataIndex: 'contactsfilter_id', hidden: true,  width: 200},
             { header: this.app.i18n._('Emailfilter'),    id: 'emailfilter_id',    dataIndex: 'emailfilter_id',    hidden: true,  width: 200},
             { header: this.app.i18n._('Tasksfilter'),    id: 'tasksfilter_id',    dataIndex: 'tasksfilter_id',    hidden: true,  width: 200},
-            { header: this.app.i18n._('Last Ping'),      id: 'lastping',          dataIndex: 'lastping',          hidden: false, width: 200, renderer: Tine.Tinebase.common.dateTimeRenderer}
+            { header: this.app.i18n._('Last Ping'),      id: 'lastping',          dataIndex: 'lastping',          hidden: false, width: 200, renderer: Tine.Tinebase.common.dateTimeRenderer},
+            { header: this.app.i18n._('Monitor Last Ping'), id: 'monitor_lastping',  dataIndex: 'monitor_lastping',  hidden: false, width: 100}
         ];
     },
 

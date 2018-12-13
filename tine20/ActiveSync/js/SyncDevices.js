@@ -54,6 +54,7 @@ Tine.ActiveSync.Model.SyncDeviceArray = [
     { name: 'pinglifetime' },
     { name: 'pingfolder' },
     { name: 'remotewipe' },
+    { name: 'monitor_lastping' },
     { name: 'calendarfilter_id' },
     { name: 'contactsfilter_id' },
     { name: 'emailfilter_id' },
