@@ -662,6 +662,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testContactShortName()
     {
+        $this->markTestSkipped('FIXME: does not work with de locale ...');
+
         $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::ENABLED_FEATURES);
         $enabledFeatures[Addressbook_Config::FEATURE_SHORT_NAME] = true;
 
