@@ -1010,3 +1010,6 @@ msgstr "Manage list functions in CoreData"
 #: Acl/Rights.php:135
 msgid "View, create, delete or update list functions in CoreData application"
 msgstr "View, create, delete or update list functions in CoreData application"
+
+msgid "This Short Name already exists. How about {0}?"
+msgstr "This Short Name already exists. How about {0}?"

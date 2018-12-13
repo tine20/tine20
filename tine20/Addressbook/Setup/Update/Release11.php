@@ -238,11 +238,22 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 12.0
+     * Adds short name for contacts
      *
      * @return void
      */
     public function update_13()
+    {
+        Setup_SchemaTool::updateSchema([Addressbook_Model_Contact::class]);
+        $this->setApplicationVersion('Addressbook', '11.13');
+    }
+
+    /**
+     * update to 12.0
+     *
+     * @return void
+     */
+    public function update_14()
     {
         $this->setApplicationVersion('Addressbook', '12.0');
     }

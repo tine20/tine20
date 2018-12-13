@@ -4,23 +4,17 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Controller_Event
  * 
  * @package     Calendar
  */
-class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
+class ActiveSync_Controller_DeviceTests extends TestCase
 {
-    
     /**
      * @var ActiveSync_Controller_Device controller
      */
@@ -31,20 +25,10 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
      */
     protected $objects = array();
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller Device Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
     protected function setUp()
     {
+        parent::setUp();
+
         ########### define test device
         $testDevice = ActiveSync_Backend_DeviceTests::getTestDevice();
         
@@ -74,22 +58,7 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
         
         $this->objects['filter'] = $filter;
     }
-    
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        ActiveSync_Controller_Device::getInstance()->delete($this->objects['device']);
-        
-        $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
-        $filterBackend->delete($this->objects['filter']->getId());
-    }
-    
-    
+
     /**
      * test get device
      */
@@ -113,5 +82,17 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
         $device = ActiveSync_Controller_Device::getInstance()->get($this->objects['device']->getId());
         
         $this->assertEquals($device->contactsfilter_id, $this->objects['filter']->getId());
+    }
+
+    public function testMonitorDeviceLastPing()
+    {
+        $device = ActiveSync_Controller_Device::getInstance()->get($this->objects['device']->getId());
+        $device->monitor_lastping = 1;
+        $device->lastping = Tinebase_DateTime::now()->subDay(4); // 3 days is the default config threshold
+        ActiveSync_Controller_Device::getInstance()->update($device);
+        $result = ActiveSync_Controller_Device::getInstance()->monitorDeviceLastPing();
+        self::assertEquals(true, $result);
+
+        // @todo assert notification mails
     }
 }

@@ -525,6 +525,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LABEL                     => 'Suffix', // _('Suffix')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
+            'n_short'                      => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Short Name', // _('Short Name')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
             'org_name'                      => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,

@@ -21,6 +21,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'n_middle', label: 'Middle Name', group: 'Name' }, //_('Middle Name')
     {name: 'n_prefix', label: 'Title', group: 'Name' }, //_('Title')
     {name: 'n_suffix', label: 'Suffix', group: 'Name'}, //_('Suffix')
+    {name: 'n_short', label: 'Short Name', group: 'Name'}, //_('Short Name')
     {name: 'n_fn', label: 'Display Name', group: 'Name', omitDuplicateResolving: true }, //_('Display Name')
     {name: 'n_fileas', group: 'Name', omitDuplicateResolving: true },
     {name: 'bday', label: 'Birthday', type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
@@ -163,6 +164,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
         {label: app.i18n._('Middle Name'),                                              field: 'n_middle'},
+        {label: app.i18n._('Short Name'),                                               field: 'n_short'}, 
         {label: app.i18n._('Company'),                                                  field: 'org_name'},
         {label: app.i18n._('Unit'),                                                     field: 'org_unit'},
         {label: app.i18n._('Phone'),                                                    field: 'telephone',          operators: ['contains']},

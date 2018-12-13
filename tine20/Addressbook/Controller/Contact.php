@@ -559,6 +559,16 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         /** @var Addressbook_Model_Contact $_record */
         $this->_setGeoData($_record);
+
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME)) {
+            // Set Short Name if no Short Name is set or the Short Name Already exists
+            if (!$_record->n_short) {
+                $this->_setShortName($_record);
+            } elseif (! $this->findUnusedShortName([$_record->n_short])) {
+                $this->_setShortName($_record);
+                $this->_throwShortNameException($_record->n_short);
+            }
+        }
         
         if (isset($_record->type) &&  $_record->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             if (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_ALLOW_CREATE_USER]) ||
@@ -585,6 +595,16 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         if ($this->_doUpdateGeoData($_record, $_oldRecord)) {
             $this->_setGeoData($_record);
+        }
+
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME)) {
+            // Set Short Name if no Short Name is set or the Short Name Already exists
+            if (!$_record->n_short) {
+                $this->_setShortName($_record);
+            } elseif ($_record->n_short != $_oldRecord->n_short && ! $this->findUnusedShortName([$_record->n_short])) {
+                $this->_setShortName($_record);
+                $this->_throwShortNameException($_record->n_short);
+            }
         }
         
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
@@ -614,6 +634,22 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         // syncBackendIds is read only property!
         unset($_record->syncBackendIds);
+    }
+
+    /**
+     * @param $shortname
+     * @throws Tinebase_Exception_SystemGeneric
+     *
+     * TODO make translation work
+     */
+    protected function _throwShortNameException($shortname)
+    {
+        $translation = Tinebase_Translation::getTranslation('Addressbook');
+        throw new Tinebase_Exception_SystemGeneric(str_replace(
+            '{0}',
+            $shortname,
+            $translation->_('This Short Name already exists. How about {0}?')
+        ));
     }
 
     /**
@@ -836,6 +872,68 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         $this->_setGeoDataForAddress('adr_one_', $_record);
         $this->_setGeoDataForAddress('adr_two_', $_record);
+    }
+
+    /**
+     * Set Short Name for a Record default 1 letter given 2 letters family
+     * If already exists tries to add one letter from given then one from family
+     * 
+     * @param Addressbook_Model_Contact $_record
+     */
+    protected function _setShortName(Addressbook_Model_Contact $_record)
+    {
+        if (!empty($_record->n_given) && !empty($_record->n_family)) {
+            $name = false;
+            $i = $j = $k = 0;
+            $l = 1;
+       
+            while (! $name) {
+                $names = [];
+                $i = $i+3;
+                while ($j < $i) {
+                    if ($j+1 <= strlen($_record->n_given) && $k+2 <= strlen($_record->n_family)) {
+                        $names[] = strtoupper(substr(Tinebase_Helper::replaceSpecialChars($_record->n_given), 0, $j + 1) . substr(Tinebase_Helper::replaceSpecialChars($_record->n_family), 0, 2 + $k));
+                        $j++;
+                        $names[] = strtoupper(substr(Tinebase_Helper::replaceSpecialChars($_record->n_given), 0, $j + 1) . substr(Tinebase_Helper::replaceSpecialChars($_record->n_family), 0, 2 + $k));
+                        $k++;
+                    } else {
+                        $names[] = strtoupper(substr(Tinebase_Helper::replaceSpecialChars($_record->n_given), 0, 1) . substr(Tinebase_Helper::replaceSpecialChars($_record->n_family), 0, 2) . $l);
+                        $l++;
+                        $j++;
+                    }
+                }
+                $name = $this->findUnusedShortName($names);
+            }
+
+            $_record->n_short = $name;
+        }
+    }
+
+    /**
+     * @param $_value
+     * @return bool
+     */
+    public function findUnusedShortName($_names) {
+        $filter  = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'n_short', 'operator' => 'in', 'value' => $_names)
+        ));
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
+        if (count($contacts) > 0) {
+            foreach ($_names as $name) {
+                $found = false;
+                foreach ($contacts as $contact) {
+                    if ($contact->n_short == $name) {
+                        $found = true;
+                    }
+                }
+                if (!$found) {
+                    return $name;
+                }
+            }
+        } else {
+            return $_names[0];
+        }
+        return null;
     }
     
     /**

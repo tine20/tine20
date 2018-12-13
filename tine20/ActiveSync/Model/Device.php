@@ -23,6 +23,7 @@
  * @property  string  $policykey          the current policykey
  * @property  string  $tasksfilter_id     the tasks filter id
  * @property  boolean $remotewipe
+ * @property  boolean $monitor_lastping
  */
 class ActiveSync_Model_Device extends Tinebase_Record_Abstract
 {
@@ -95,7 +96,8 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract
         'contactsfilter_id'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'emailfilter_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tasksfilter_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'lastping'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'lastping'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'monitor_lastping'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

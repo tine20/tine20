@@ -132,10 +132,17 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 }
                             }
                         }), {
-                            columnWidth: 0.65,
+                            columnWidth: Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureShortName') ? 0.35 : 0.65,
                             fieldLabel: this.app.i18n._('Title'),
                             name: 'n_prefix',
                             maxLength: 64
+                        }, {
+                        // This was Phil's idea...
+                            columnWidth: Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureShortName') ? 0.30 : 0.001,
+                            fieldLabel: this.app.i18n._('Short Name'),
+                            name: 'n_short',
+                            maxLength: 10,
+                            hidden: !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureShortName'),
                         }], [{
                             columnWidth: 0.35,
                             fieldLabel: this.app.i18n._('First Name'),
