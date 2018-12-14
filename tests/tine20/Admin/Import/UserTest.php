@@ -27,16 +27,11 @@ class Admin_Import_UserTest extends TestCase
 
     public function testImportDemoData()
     {
-        $this->markTestSkipped('it imports users with domain harmonie.de and schloss.de, those domains cause issues');
-        //Emails domainpart harmonie.de is not in the list of allowed domains! example.org
-
-        if (!extension_loaded('yaml')) {
-            $this->markTestSkipped('Yaml are not install');
-        }
         $this->_importContainer = $this->_getTestContainer('Admin', 'Tinebase_Model_FullUser');
-        $importer = new Tinebase_Setup_DemoData_ImportSet('Admin', [
+        $importer = new Tinebase_Setup_DemoData_Import('Admin', [
             'container_id' => $this->_importContainer->getId(),
-            'files' => array('Admin.yml')
+            'definition' => 'admin_user_import_csv',
+            'file' => 'user.csv',
         ]);
         $importer->importDemodata();
 
