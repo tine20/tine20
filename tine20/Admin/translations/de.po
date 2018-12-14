@@ -1199,6 +1199,9 @@ msgstr "Quota Nutzung ansehen"
 msgid "Special characters are not allowed in login name."
 msgstr "Der Benutzername darf keine Sonderzeichen enthalten."
 
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr "Bitte Ressourcen im Addressbook oder Stammdaten erstellen."
+
 #~ msgid "IMAP Quota (MB)"
 #~ msgstr "IMAP Kontingent (MB)"
 
