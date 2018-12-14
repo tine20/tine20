@@ -187,7 +187,7 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
             $owner = Tinebase_User::getInstance()->getFullUserById($device->owner_id);
             $plain .= "\n\n" . 'Owner: ' . $owner->accountDisplayName . ' (' . $owner->accountLoginName . ')';
             $plain .= "\n\n" . 'Device: ' . print_r($device->toArray(), true);
-                $subject = 'Tine 2.0 ActiveSync device ping outdated: ' . $device->friendlyname;
+            $subject = 'Tine 2.0 ActiveSync ping outdated for device of user ' . $owner->accountLoginName;
 
             foreach ($recipients as $recipient) {
                 $recipients = array(new Addressbook_Model_Contact(array('email' => $recipient), true));
