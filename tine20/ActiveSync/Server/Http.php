@@ -209,17 +209,10 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             ->get(ActiveSync_Config::DEFAULT_POLICY));
 
         Syncroton_Registry::set(Syncroton_Registry::SLEEP_CALLBACK, function() {
-            Tinebase_Core::getDb()->closeConnection();
-            Tinebase_Core::set(Tinebase_Core::DB, null);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' closing db connection');
             }
-        });
-        Syncroton_Registry::set(Syncroton_Registry::WAKEUP_CALLBACK, function() {
-            Tinebase_Core::setupDatabaseConnection();
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' reestablishing db connection');
-            }
+            Tinebase_Core::getDb()->closeConnection();
         });
     }
 }

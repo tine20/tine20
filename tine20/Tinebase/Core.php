@@ -1142,6 +1142,9 @@ class Tinebase_Core
                 throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');
                 break;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . '  connection id: ' . $db->query('SELECT connection_id()')->fetchColumn());
         
         return $db;
     }
