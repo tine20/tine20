@@ -21,8 +21,6 @@ class HumanResources_Import_DemoDataTest extends TestCase
 
     public function testImportDemoData()
     {
-        static::markTestSkipped('test does not work');
-
         if (!extension_loaded('yaml')) {
             $this->markTestSkipped('Yaml are not install');
         }
@@ -38,6 +36,6 @@ class HumanResources_Import_DemoDataTest extends TestCase
             ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = HumanResources_Controller_Employee::getInstance()->search($filter);
-        self::assertEquals(2, count($result));
+        self::assertEquals(3, count($result));
     }
 }
