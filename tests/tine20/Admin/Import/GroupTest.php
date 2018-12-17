@@ -20,16 +20,8 @@ class Admin_Import_GroupTest extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
     public function testImportDemoData()
     {
-        if (!extension_loaded('yaml')) {
-            $this->markTestSkipped('Yaml are not install');
-        }
         $this->_importContainer = $this->_getTestContainer('Admin', 'Tinebase_Model_Group');
         $importer = new Tinebase_Setup_DemoData_ImportSet('Admin', [
             'container_id' => $this->_importContainer->getId(),
