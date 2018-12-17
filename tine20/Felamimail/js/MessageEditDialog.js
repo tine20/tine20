@@ -1394,6 +1394,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     extractMailFromString: function (string) {
+        string = String(string).trim();
         if (Ext.form.VTypes.email(string)) {
             return string;
         }
