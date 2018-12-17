@@ -15,58 +15,126 @@ Ext.ns('Tine.Filemanager');
  * @singleton
  *
  * @todo think about adding a generalized registry / @see Tine.Tinebase.ExceptionHandlerRegistry and others
- * @todo move it to general registry to prevent x-windows problems?
  */
 Tine.Filemanager.QuickLookRegistry = function() {
     return {
 
         items: null,
-        
+
         /**
          * registers a handler
-         * 
+         *
          * @param {String} contentType
          * @param {String} xtype panel xtype
          */
-        register: function(contentType, xtype) {
+        registerContentType: function(contentType, xtype) {
+            this.register('contentTypes', contentType, xtype);
+        },
+
+        /**
+         * registers a handler
+         *
+         * @param {String} extension
+         * @param {String} xtype panel xtype
+         */
+        registerExtension: function(extension, xtype) {
+            this.register('extensions', extension, xtype);
+        },
+
+        /**
+         * registers a handler
+         *
+         * @param {String} type
+         * @param {String} key
+         * @param {String} value
+         */
+        register: function(type, key, value) {
             this.initItems();
-            this.items[contentType] = xtype;
+            this.items[type][key] = value;
             Tine.Filemanager.registry.set('quickLookRegistry', this.items);
         },
-        
+
         /**
          * returns a xtype for a contentType
-         * 
+         *
          * @param {String} contentType
          * @return {String}
          */
-        get: function(contentType) {
+        getContentType: function(contentType) {
+            return this.get('contentTypes', contentType);
+        },
+
+        /**
+         * returns a xtype
+         *
+         * @param {String} extension
+         * @param {String} xtype panel xtype
+         */
+        getExtension: function(extension, xtype) {
+            return this.get('extensions', extension, xtype);
+        },
+
+        /**
+         * returns a xtype for a key
+         *
+         * @param {String} type
+         * @param {String} key
+         * @return {String}
+         */
+        get: function(type, key) {
             this.initItems();
-            if (this.items.hasOwnProperty(contentType)) {
-                return this.items[contentType];
+            if (this.items[type].hasOwnProperty(key)) {
+                return this.items[type][key];
             }
 
             return null;
         },
-        
+
+        /**
+         * checks if an extension item has been registered already
+         *
+         * @param {String} extension
+         * @param {String} xtype panel xtype
+         */
+        hasExtension: function(extension, xtype) {
+            return this.has('extensions', extension, xtype);
+        },
+
         /**
          * checks if an item has been registered already
-         * 
+         *
          * @param {String} contentType
          * @return {Bool}
          */
-        has: function(contentType) {
+        hasContentType: function(contentType) {
+            return this.has('contentTypes', contentType);
+        },
+
+        /**
+         * checks if an item has been registered already
+         *
+         * @param {String} type
+         * @param {String} key
+         * @return {Bool}
+         */
+        has: function(type, key) {
             this.initItems();
-            if (this.items.hasOwnProperty(contentType)) {
+            if (this.items[type].hasOwnProperty(key)) {
                 return true;
             }
             
             return false;
         },
 
+        /**
+         * fetch items from Filemanager registry
+         */
         initItems: function() {
             if (! this.items) {
-                this.items = Tine.Filemanager.registry.get('quickLookRegistry') || {};
+                this.items = Tine.Filemanager.registry.get('quickLookRegistry') || {
+                    contentTypes: {},
+                    extensions: {}
+                };
             }
         }
     }

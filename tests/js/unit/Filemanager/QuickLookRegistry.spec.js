@@ -28,17 +28,31 @@ describe('QuickLookRegistry', () => {
     }
   })
 
-  it('can register an item', () => {
-    uit.register('text/plain', 'myxtype')
-    expect(uit.has('text/plain')).to.be.true
-    expect(uit.get('text/plain')).to.be.string('myxtype')
+  it('can register a content type', () => {
+    uit.registerContentType('text/plain', 'myxtype')
+    expect(uit.hasContentType('text/plain')).to.be.true
+    expect(uit.getContentType('text/plain')).to.be.string('myxtype')
   })
 
   it('has item for email content type after Felamimail init', () => {
     // initialize Felamimail
     Tine.Felamimail.Application.prototype.registerQuickLookPanel()
 
-    expect(uit.has('message/rfc822')).to.be.true
-    expect(uit.get('message/rfc822')).to.be.string('felamimaildetailspanel')
+    expect(uit.hasContentType('message/rfc822')).to.be.true
+    expect(uit.getContentType('message/rfc822')).to.be.string('felamimaildetailspanel')
+  })
+
+  it('can handle eml extension', () => {
+    uit.registerExtension('eml', 'myxtype')
+    expect(uit.hasExtension('eml')).to.be.true
+    expect(uit.getExtension('eml')).to.be.string('myxtype')
+  })
+
+  it('has item for email extension after Felamimail init', () => {
+    // initialize Felamimail
+    Tine.Felamimail.Application.prototype.registerQuickLookPanel()
+
+    expect(uit.hasExtension('eml')).to.be.true
+    expect(uit.getExtension('eml')).to.be.string('felamimaildetailspanel')
   })
 })

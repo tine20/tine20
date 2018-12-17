@@ -113,8 +113,16 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
         if (this.cardPanelsByRecordId[this.record.id]) {
             previewPanel = this.cardPanel.get(this.cardPanelsByRecordId[this.record.id]);
         } else {
-            if (this.registry.has(this.record.get('contenttype'))) {
-                var previewPanelXtype = this.registry.get(this.record.get('contenttype'));
+            const fileExtension = Tine.Filemanager.Model.Node.getExtension(this.record.get('name'));
+            if (this.registry.hasContentType(this.record.get('contenttype'))) {
+                var previewPanelXtype = this.registry.getContentType(this.record.get('contenttype'));
+                Tine.log.info('Using ' + previewPanelXtype + ' to show ' + this.record.get('contenttype') + ' preview.');
+                previewPanel = Ext.create({
+                    xtype: previewPanelXtype,
+                    nodeRecord: this.record
+                });
+            } else if (this.registry.hasExtension(fileExtension)) {
+                var previewPanelXtype = this.registry.getExtension(fileExtension);
                 Tine.log.info('Using ' + previewPanelXtype + ' to show ' + this.record.get('contenttype') + ' preview.');
                 previewPanel = Ext.create({
                     xtype: previewPanelXtype,

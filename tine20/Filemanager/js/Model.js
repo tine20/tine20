@@ -6,7 +6,9 @@
  * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Filemanager.Model');
-    
+
+require('Tinebase/js/widgets/container/GrantsGrid');
+
 /**
  * @namespace   Tine.Filemanager.Model
  * @class       Tine.Filemanager.Model.Node
@@ -59,10 +61,12 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
             encodedPath = _.map(String(this.get('path')).replace(/(^\/|\/$)/, '').split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/');
 
         return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#/Filemanager/showNode', encodedPath].join('/');
-
-
     }
 });
+
+Tine.Filemanager.Model.Node.getExtension = function(filename) {
+    return filename.split('.').pop();
+};
 
 // register grants for nodes
 Tine.widgets.container.GrantsManager.register('Filemanager_Model_Node', function(container) {
