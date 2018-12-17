@@ -775,7 +775,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $messageId
      * @return string
      */
-    protected function _purifyBodyContent($_content, $messageId)
+    protected function _purifyBodyContent($_content, $messageId = null)
     {
         if (!defined('HTMLPURIFIER_PREFIX')) {
             define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/../../library/HTMLPurifier'));
@@ -817,7 +817,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             'data' => true,
             'cid' => true
         ));
-        $config->set('Felamimail.messageId', $messageId);
+        if ($messageId) {
+            $config->set('Felamimail.messageId', $messageId);
+        }
         
         $this->_transformBodyTags($config);
         
@@ -1283,11 +1285,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $message = Felamimail_Model_Message::createFromMime($content);
         $message->setId($node->getId());
+        $message->body = $this->_purifyBodyContent($message->body);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got Message: ' . print_r($message->toArray(), true));
-
-        // TODO use HTMLpurifier?
 
         return $message;
     }
