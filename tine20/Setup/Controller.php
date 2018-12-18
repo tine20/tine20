@@ -1719,9 +1719,10 @@ class Setup_Controller
                          array('file' => 'tine20_files.tar.bz2', 'param' => 'files')
                     ) as $download) {
                 if (isset($options[$download['param']])) {
-                    $fileUrl = $options['backupUrl'] . '/' . $download['file'];
-                        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Downloading ' . $fileUrl);
                     $targetFile = $tempDir . DIRECTORY_SEPARATOR . $download['file'];
+                    $fileUrl = $options['backupUrl'] . '/' . $download['file'];
+                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Downloading ' . $fileUrl
+                        . ' to ' . $targetFile);
                     if ($download['param'] === 'db') {
                         $mysqlBackupFile = $targetFile;
                     }
