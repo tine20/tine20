@@ -40,7 +40,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             this.enableDD = false;
         }
 
-        this.defaultContainerPath = Tine.Tinebase.container.getMyFileNodePath();
+        // NOTE: fm tree is initially loaded from grid!
+        // this.defaultContainerPath = Tine.Tinebase.container.getMyFileNodePath();
 
         this.dragConfig = {
             ddGroup: this.ddGroup,
