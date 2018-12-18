@@ -513,7 +513,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
-        
+
         return $roleRights;
     }
     
@@ -879,6 +879,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         ]);
         $controller =  Tinebase_Core::getApplicationInstance($app,$model); // @TODO seem not good... 
         $controller::getInstance()->deleteByFilter($filter);
+    }
+
+    /**
+     * skips this test if LDAP or AD user backend is configured
+     */
+    protected function _skipIfLDAPBackend()
+    {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
+        ) {
+            self::markTestSkipped('FIXME: Does not work with LDAP/AD backend');
+        }
     }
 
     /**
