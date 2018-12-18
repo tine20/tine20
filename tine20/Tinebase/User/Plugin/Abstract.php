@@ -35,6 +35,13 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     protected $_config = array();
 
     /**
+     * list of all db connections other than Tinebase_Core::getDb()
+     *
+     * @var array
+     */
+    protected static $_dbConnections =  [];
+
+    /**
      * inspect data used to create user
      * 
      * @param Tinebase_Model_FullUser  $_addedUser
@@ -151,6 +158,15 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
                 MYSQLI_OPT_CONNECT_TIMEOUT => 5
             ];
             $this->_db = Tinebase_Core::createAndConfigureDbAdapter($dbConfig);
+            static::$_dbConnections[] = $this->_db;
+        }
+    }
+
+    public static function disconnectDbConnections()
+    {
+        /** @var Zend_Db_Adapter_Abstract $con */
+        foreach (static::$_dbConnections as $con) {
+            $con->closeConnection();
         }
     }
     
