@@ -673,7 +673,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
 
         var menuitems = this.recordActions.concat(addAction, responseAction || [], copyAction || []);
-        
+
         if (event) {
             this.action_copy_to.setDisabled(event.isRecurInstance() || event.isRecurException() || event.isRecurBase());
             menuitems = menuitems.concat(['-', this.action_cut, this.action_copy_to, '-']);
@@ -1008,21 +1008,21 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.setLoading(false);
             return;
         }
-        
+
         var filterData = this.getAllFilterData(),
             store = event.store;
-        
+
         if (! store) {
             store = this.getStore();
         }
-        
+
         filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
-        
-        Tine.Calendar.searchEvents(filterData, {}, function(r) {
+
+        Tine.Calendar.searchEvents(filterData, {}, /* fixed calendars */ true, function(r) {
             if(r.totalcount == 0) {
                 updatedEvent.outOfFilter = true;
             }
-            
+
             store.replaceRecord(event, updatedEvent);
             this.setLoading(false);
         }, this);
