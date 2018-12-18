@@ -21,8 +21,10 @@ class HumanResources_Import_DemoDataTest extends TestCase
 
     public function testImportDemoData()
     {
+        $this->_skipIfLDAPBackend();
+
         if (!extension_loaded('yaml')) {
-            $this->markTestSkipped('Yaml are not install');
+            $this->markTestSkipped('Yaml is not installed');
         }
         $now = Tinebase_DateTime::now();
         $this->_importContainer = $this->_getTestContainer('HumanResources', 'HumanResources_Model_Employee');
