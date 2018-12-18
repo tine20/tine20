@@ -791,6 +791,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {
         // does nothing => you can't add emails via ActiveSync
+        throw new Syncroton_Exception_Status(Syncroton_Exception_Status::COMMAND_NOT_SUPPORTED);
     }
     
     /**
