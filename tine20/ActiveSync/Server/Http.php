@@ -213,6 +213,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' closing db connection');
             }
             Tinebase_Core::getDb()->closeConnection();
+            Tinebase_User_Plugin_Abstract::disconnectDbConnections();
         });
     }
 }
