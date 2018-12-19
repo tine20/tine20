@@ -391,17 +391,13 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
                             $task->organizer = $user ? $user->getId() : Tinebase_Core::getUser()->getId();
                         }
                     }
-                    
                     break;
                     
                 case 'UID':
                     // it's not possible to change the uid by spec
-                    if (!empty($task->uid)) {
-                        continue;
+                    if (empty($task->uid)) {
+                        $task->uid = $property->getValue();
                     }
-                    
-                    $task->uid = $property->getValue();
-                
                     break;
                     
                 case 'VALARM':
