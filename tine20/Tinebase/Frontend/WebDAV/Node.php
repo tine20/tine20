@@ -16,7 +16,7 @@
  * 
  * @todo extend Tinebase_Frontend_WebDAV_Record? or maybe add a common ancestor
  */
-abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode
+abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\DAV\IProperties
 {
     protected $_path;
     
@@ -145,5 +145,69 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode
         } else if (substr($name, 0, 2) == '._') {
             throw new Sabre\DAV\Exception\Forbidden('no resource files accepted');
         }
+    }
+
+    /**
+     * return etag
+     *
+     * @return string
+     */
+    public function getETag()
+    {
+        return '"' . $this->_node->hash . '"';
+    }
+
+    /**
+     * Returns the content sequence for this container
+     *
+     * @return string
+     */
+    public function getSyncToken()
+    {
+        // this only returns null if the container is not found or if container.content_seq = NULL, this does not look up the content history!
+        return $this->_node->seq;
+    }
+
+    /**
+     * Returns the list of properties
+     *
+     * @param array $requestedProperties
+     * @return array
+     */
+    public function getProperties($requestedProperties)
+    {
+        $properties = array();
+
+        $response = array();
+
+        foreach ($requestedProperties as $prop) {
+            switch($prop) {
+                case '{DAV:}getetag':
+                    $response[$prop] = $this->getETag();
+                    break;
+
+                case '{DAV:}sync-token':
+                    if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
+                        $response[$prop] = $this->getSyncToken();
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
+                    }
+                    break;
+
+                default:
+                    if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
+                    break;
+            }
+        }
+
+        return $response;
+    }
+
+    public function updateProperties($mutations)
+    {
+        return false;
     }
 }

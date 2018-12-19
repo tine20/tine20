@@ -29,7 +29,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * @var string
      */
     protected $_directoryClass = 'Tinebase_Frontend_WebDAV_Directory';
-    
+
     /**
      * return list of children
      * @return array list of children
