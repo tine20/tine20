@@ -239,8 +239,18 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
                ]
         };
+    },
+    
+    onSaveAndClose: function() {
+        if (this.record.data.model == 'Tine.Calendar.Model.Resource') {
+            Ext.MessageBox.alert(this.app.i18n._('Info'), this.app.i18n._('Please create Resources in Addressbook or CoreData.'),function (){this.window.close()},this);
+        } else {
+            Tine.Admin.ContainerEditDialog.superclass.onSaveAndClose.apply(this, arguments);
+        }
     }
 });
+
+
 
 /**
  * Container Edit Popup
