@@ -803,4 +803,12 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                 
         $this->setApplicationVersion('Tinebase', '11.40');
     }
+
+    /**
+     * empty update to enforce collation fix
+     */
+    public function update_40()
+    {
+        $this->setApplicationVersion('Tinebase', '11.41');
+    }
 }

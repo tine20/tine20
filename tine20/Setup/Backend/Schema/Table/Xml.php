@@ -4,7 +4,7 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -20,8 +20,10 @@ class Setup_Backend_Schema_Table_Xml extends Setup_Backend_Schema_Table_Abstract
 
             if ($this->getBackend()->getDb()->getConfig()['charset'] === 'utf8') {
                 $this->charset = 'utf8';
+                $this->collation = 'utf8_unicode_ci';
             } else {
                 $this->charset = 'utf8mb4';
+                $this->collation = 'utf8mb4_unicode_ci';
             }
             
             $this->setName($_tableDefinition->name);
