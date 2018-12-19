@@ -139,7 +139,8 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
     syncRecipents: function() {
         var _ = window.lodash,
-            me = this;
+            me = this,
+            emailsInRecipientGrid = [];
 
         _.each(me.composeDialog.recipientGrid.store.data.items, function(recipient) {
             var full = recipient.get('address'),
@@ -147,6 +148,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                 email = parsed.length ? parsed[0].address : '';
 
             if (email) {
+                emailsInRecipientGrid.push(email);
                 var fileTarget = {
                     record_title: full,
                     model: Tine.Addressbook.Model.EmailAddress,
@@ -182,6 +184,15 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                         me.fireEvent('selectionchange', me, selection);
                     }
                 }
+            }
+        });
+
+        // remove all items no longer in recipient grid
+        _.each(me.menu.items.items, function(item) {
+            // check if in grid
+            if (item.itemId && emailsInRecipientGrid.indexOf(item.itemId) === -1) {
+                // item no longer in grid
+                me.menu.remove(item);
             }
         });
     },
