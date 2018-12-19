@@ -673,7 +673,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
 
         var menuitems = this.recordActions.concat(addAction, responseAction || [], copyAction || []);
-
         if (event && event.get('poll_id') && event.get('editGrant')) {
             require('./PollSetDefiniteEventAction');
             menuitems = menuitems.concat(['-',{
@@ -697,7 +696,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }
             }]);
         }
-
         if (event) {
             this.action_copy_to.setDisabled(event.isRecurInstance() || event.isRecurException() || event.isRecurBase());
             menuitems = menuitems.concat(['-', this.action_cut, this.action_copy_to, '-']);
@@ -1035,7 +1033,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
             filterData.push({field: 'period', operator: 'within', value: me.getCalendarPanel(me.activeView).getView().getPeriod()});
 
-            Tine.Calendar.searchEvents(filterData, {}, function(r) {
+            Tine.Calendar.searchEvents(filterData, {}, /* fixed calendars */ true, function(r) {
                 if (updatedEvent.ui) {
                     updatedEvent.ui.clearDirty();
                 }
