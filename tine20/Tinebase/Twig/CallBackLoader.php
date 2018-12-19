@@ -6,7 +6,7 @@
  * @subpackage  Twig
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -57,7 +57,7 @@ class Tinebase_Twig_CallBackLoader implements Twig_LoaderInterface, Twig_SourceC
      */
     public function exists($name)
     {
-        return $name === $this->_name;
+        return $name === $this->_name || strpos($name, $this->_name . '#~#') === 0;
     }
 
     /**
@@ -100,7 +100,7 @@ class Tinebase_Twig_CallBackLoader implements Twig_LoaderInterface, Twig_SourceC
      */
     function getCacheKey($name)
     {
-        if ($name !== $this->_name) {
+        if ($name !== $this->_name && strpos($name, $this->_name . '#~#') !== 0) {
             throw new Twig_Error_Loader('template ' . $name . ' not found');
         }
         return $name . $this->_creationTimeStamp;
@@ -117,7 +117,7 @@ class Tinebase_Twig_CallBackLoader implements Twig_LoaderInterface, Twig_SourceC
      */
     function isFresh($name, $time)
     {
-        if ($name !== $this->_name) {
+        if ($name !== $this->_name && strpos($name, $this->_name . '#~#') !== 0) {
             throw new Twig_Error_Loader('template ' . $name . ' not found');
         }
         return $time > $this->_creationTimeStamp;
