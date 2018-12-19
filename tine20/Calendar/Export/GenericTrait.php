@@ -168,20 +168,27 @@ trait Calendar_Export_GenericTrait
     {
         parent::_resolveRecords($_records);
 
-        if ('Calendar_Model_Event' !== $_records->getRecordClassName() ||
-                'Calendar_Export_Ods' !== static::class) {
+        if ('Calendar_Model_Event' !== $_records->getRecordClassName()/* ||
+                'Calendar_Export_Ods' !== static::class*/) {
             return;
         }
 
-        Calendar_Model_Attender::resolveAttendee($_records->attendee, false, $_records);
+        if ($_records->attendee) {
+            Calendar_Model_Attender::resolveAttendee($_records->attendee, false, $_records);
+        }
 
-        foreach($_records as $record) {
-            $attendee = $record->attendee->getName();
-            $record->attendee = implode(' & ', $attendee);
+        /**
+         * TODO realy?
+         */
+        if (Calendar_Export_Ods::class === static::class) {
+            foreach ($_records as $record) {
+                $attendee = $record->attendee->getName();
+                $record->attendee = implode(' & ', $attendee);
 
-            $organizer = $record->resolveOrganizer();
-            if ($organizer) {
-                $record->organizer = $organizer->n_fileas;
+                $organizer = $record->resolveOrganizer();
+                if ($organizer) {
+                    $record->organizer = $organizer->n_fileas;
+                }
             }
         }
     }
