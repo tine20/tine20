@@ -160,4 +160,24 @@ sieveFile
                 . ' Could not create email notification template folder: ' . $teb);
         }
     }
+
+    /**
+     * init record observers
+     */
+    protected function _initializeRecordObservers()
+    {
+        self::addDeleteNodeObserver();
+    }
+
+    public static function addDeleteNodeObserver()
+    {
+        $deleteNodeObserver = new Tinebase_Model_PersistentObserver(array(
+            'observable_model'      => Tinebase_Model_Tree_Node::class,
+            'observable_identifier' => NULL,
+            'observer_model'        => Felamimail_Model_MessageFileLocation::class,
+            'observer_identifier'   => 'DeleteMessageFileLocation',
+            'observed_event'        => Tinebase_Event_Observer_DeleteFileNode::class
+        ));
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver($deleteNodeObserver);
+    }
 }

@@ -1249,37 +1249,33 @@ class Felamimail_Frontend_JsonTest extends TestCase
             /*$_subject */
             'abctest'
         );
-        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
-            . '/' . $user->accountLoginName
-            . '/' . $personalFilemanagerContainer->name;
         $filter = array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'], $message2['id'])
         ));
+        $path = $this->_getPersonalFilemanagerPath($personalFilemanagerContainer);
         $location = $this->_getTestLocation($locationType, $personalFilemanagerContainer, $path);
         $result = $this->_json->fileMessages($filter, [$location]);
+        $nodes = $this->_getTestNodes($path);
+        $emlNode = $nodes->getFirstRecord();
 
         // assertions!
-        $this->assertTrue(isset($result['totalcount']));
-        $this->assertEquals(2, $result['totalcount'], 'message should be filed in ' . $appName . ': ' . print_r($result, true));
+        $completeMessage = $this->_assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer);
 
-        // check if message exists in $appName
-        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
-            'field' => 'path',
-            'operator' => 'equals',
-            'value' => $path
-        ), array(
-            'field' => 'name',
-            'operator' => 'contains',
-            'value' => 'test_test'
-        )));
-        $nodeController = Tinebase_Core::getApplicationInstance($appName . '_Model_Node');
-        $emlNode = $nodeController->search($filter)->getFirstRecord();
+        return $completeMessage;
+    }
+
+    protected function _assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer)
+    {
+        $this->assertTrue(isset($result['totalcount']));
+        $this->assertEquals(2, $result['totalcount'], 'message should be filed in Filemanager: ' . print_r($result, true));
+
+        // check if message exists in Filemanager
         $this->assertTrue($emlNode !== null, 'could not find eml file node');
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $emlNode->type);
         $this->assertEquals('message/rfc822', $emlNode->contenttype);
         $this->assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
 
-        $nodeWithDescription = $nodeController->get($emlNode['id']);
+        $nodeWithDescription = Filemanager_Controller_Node::getInstance()->get($emlNode['id']);
         $this->assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
         $this->assertContains($message['received'], $nodeWithDescription->description);
         $this->assertContains('aaaaaä', $nodeWithDescription->description);
@@ -1302,6 +1298,39 @@ class Felamimail_Frontend_JsonTest extends TestCase
         self::assertEquals($personalFilemanagerContainer->name, $fileLocation->record_title);
 
         return $completeMessage;
+    }
+
+    /**
+     * @param null|Tinebase_Model_Container $personalFilemanagerContainer
+     * @return string
+     */
+    protected function _getPersonalFilemanagerPath($personalFilemanagerContainer = null)
+    {
+        if (!$personalFilemanagerContainer) {
+            $personalFilemanagerContainer = $this->_getPersonalContainerNode(
+                'Filemanager',
+                Tinebase_Core::getUser()
+            );
+        }
+
+        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
+            . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $personalFilemanagerContainer->name;
+        return $path;
+    }
+
+    protected function _getTestNodes($path)
+    {
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field' => 'path',
+            'operator' => 'equals',
+            'value' => $path
+        ), array(
+            'field' => 'name',
+            'operator' => 'contains',
+            'value' => 'test_test'
+        )));
+        return Filemanager_Controller_Node::getInstance()->search($filter);
     }
 
     /**
@@ -1353,6 +1382,38 @@ class Felamimail_Frontend_JsonTest extends TestCase
     public function testFileMessagesAsNodeWithId()
     {
         $this->testFileMessagesAsNode('id');
+    }
+
+    /**
+     * file a message, save the node, file the message again
+     */
+    public function testFileMessageAsNodeAndDeleteIt()
+    {
+        $this->testFileMessagesAsNode();
+
+        // delete nodes
+        $nodeController = Filemanager_Controller_Node::getInstance();
+        $path = $this->_getPersonalFilemanagerPath();
+        $testNodes = $this->_getTestNodes($path);
+        $nodeController->deleteNodes($testNodes->path);
+
+        // file them again
+        $this->testFileMessagesAsNode();
+    }
+
+    /**
+     * file a message, save the attachment, file the message again
+     */
+    public function testFileMessageAsAttachmentAndDeleteIt()
+    {
+        $this->testFileMessageAsAttachment();
+
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        // delete contact attachments
+        Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($contact);
+
+        // file it again
+        $this->testFileMessagesAsNode();
     }
 
     /**

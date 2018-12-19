@@ -21,4 +21,16 @@ class Felamimail_Setup_Update_Release12 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([Felamimail_Model_MessageFileLocation::class]);
         $this->setApplicationVersion('Felamimail', '12.1');
     }
+
+    /**
+     * update to 12.2
+     *
+     * update felamimail_message_filelocation table and add delete observer
+     */
+    public function update_1()
+    {
+        Setup_SchemaTool::updateSchema([Felamimail_Model_MessageFileLocation::class]);
+        Felamimail_Setup_Initialize::addDeleteNodeObserver();
+        $this->setApplicationVersion('Felamimail', '12.2');
+    }
 }

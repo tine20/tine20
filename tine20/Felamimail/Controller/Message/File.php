@@ -116,10 +116,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
 
         foreach ($messages as $message) {
             /** @var Tinebase_Controller_Record_Abstract $recordController */
-            $record = $recordController->fileMessage($location, $message);
-            if ($record) {
-                Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record);
-            }
+            $recordController->fileMessage($location, $message);
         }
 
         if (Felamimail_Config::getInstance()->get(Felamimail_Config::DELETE_ARCHIVED_MAIL)) {

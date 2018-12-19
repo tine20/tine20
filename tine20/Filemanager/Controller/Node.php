@@ -1477,8 +1477,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $emlNode->last_modified_time = Tinebase_DateTime::now();
         $this->update($emlNode);
 
-        // return parent node
-        return $this->get($emlNode->parent_id);
+        $parent = $this->get($emlNode->parent_id);
+        Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $parent, $emlNode);
+
+        return $parent;
     }
 
     /**

@@ -2869,7 +2869,9 @@ HumanResources_CliTests.testSetContractsEndDate */
         $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
 
         try {
-            Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $filename, $tempFile);
+            $node = Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $filename, $tempFile);
+            Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record, $node);
+
         } catch (Tinebase_Exception_Duplicate $ted) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' ' . $filename . ' already exists');

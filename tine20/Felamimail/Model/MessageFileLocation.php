@@ -41,7 +41,7 @@ class Felamimail_Model_MessageFileLocation extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 1,
+        'version'           => 2,
         'recordName'        => 'Message File Location', // _('Message File Location') ngettext('Message File Location', 'Message File Locations', n)
         'recordsName'       => 'Message File Locations', // _('Message File Locations')
         'titleProperty'     => 'message_id',
@@ -117,6 +117,14 @@ class Felamimail_Model_MessageFileLocation extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Record Title', // _('Record Title')
             ),
+            // the message node - needed for cleanup
+            'node_id' => [
+                'type'       => 'string',
+                'length'     => 40,
+                'nullable'   => false,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+                'label'      => 'Node ID', // _('Node ID')
+            ],
             'type' => array(
                 'validators' => array(
                     Zend_Filter_Input::ALLOW_EMPTY => false,

@@ -86,7 +86,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
      * @param $record
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function createMessageLocationForRecord($message, $location, $record)
+    public function createMessageLocationForRecord($message, $location, $record, $node)
     {
         if (! $record || ! $record->getId()) {
             throw new Tinebase_Exception_InvalidArgument('existing record is required');
@@ -103,6 +103,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
         $locationToCreate->message_id = $messageId;
         $locationToCreate->message_id_hash = sha1($messageId);
         $locationToCreate->record_id = $record->getId();
+        $locationToCreate->node_id = $node->getId();
         if (empty($locationToCreate->record_title)) {
             $locationToCreate->record_title = $record->getTitle();
         }
@@ -112,5 +113,28 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
                 : Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT;
         }
         $this->create($locationToCreate);
+    }
+
+    /**
+     * implement logic for each controller in this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        if ($_eventObject instanceof Tinebase_Event_Observer_DeleteFileNode) {
+            if (! Setup_Backend_Factory::factory()->tableExists('felamimail_message_filelocation')) {
+                // prevent problems during uninstall
+                return;
+            }
+
+            // delete all MessageFileLocations of observered node that is deleted
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Felamimail_Model_MessageFileLocation::class, [
+                    ['field' => 'node_id', 'operator' => 'equals', 'value' => $_eventObject->observable]
+                ]
+            );
+            $this->deleteByFilter($filter);
+        }
     }
 }

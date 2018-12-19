@@ -1755,6 +1755,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 }
             }
 
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Tinebase_Event_Observer_DeleteFileNode(array(
+               'observable' => $node
+            )));
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
         } finally {
