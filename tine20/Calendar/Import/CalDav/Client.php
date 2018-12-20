@@ -836,11 +836,11 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                     $grants[$user[$i]] = $this->_getWriteGrants();
                     break;
                 case '{DAV:}read-current-user-privilege-set':
-                    continue;
+                    continue 2;
                 default:
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' unknown privilege: ' . $privilege[$i]);
-                    continue;
+                    continue 2;
             }
             $grants[$user[$i]]['account_id'] = $user[$i];
             $grants[$user[$i]]['account_type'] = $type[$i];
