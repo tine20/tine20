@@ -658,7 +658,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 try {
                     $result = array_merge($result, $this->checkForUpdate($id));
                 } catch (Exception $e) {
-                    $failure = 'Could not create auto invoice for contract "' . $contract->title . '" Exception: ' . $e->getCode() . ' has been thrown: "' . $e->getMessage() . '".';
+                    $contractTitle = $contract ? $contract->title : 'unknown';
+                    $failure = 'Could not create auto invoice for contract "' . $contractTitle
+                        . '" Exception: ' . $e->getCode() . ' has been thrown: "' . $e->getMessage() . '".';
                     $this->_autoInvoiceIterationFailures[] = $failure;
                     Tinebase_Exception::log($e, FALSE);
                     continue;
