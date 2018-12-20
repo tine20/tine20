@@ -5,7 +5,7 @@
  * @package     Tasks
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -123,7 +123,6 @@ class Tasks_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract
 
             switch($tine20Property) {
                 case 'completed':
-                    continue;
                     break;
                     
                 case 'description':

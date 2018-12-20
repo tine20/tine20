@@ -14,7 +14,10 @@
     }, {
         "type": "git",
         "url": "https://github.com/tine20/dbal.git"
-    },{
+    }, {
+        "type": "git",
+        "url": "https://github.com/tine20/doctrine2.git"
+    }, {
         "type": "git",
         "url": "https://github.com/tine20/OpenDocument.git"
     }, {
@@ -56,7 +59,7 @@
         "phpoffice/phpword": "v0.14.0 as v0.13.0",
         "metaways/timezoneconvert": "1.*",
         "zendframework/zend-http": "2.5.*",
-        "doctrine/orm": "2.5.*",
+        "doctrine/orm": "2.5.14pl1 as v2.5.14",
         "doctrine/dbal": "v2.5.13pl4 as v2.5.13",
         "twig/twig": "~1.0",
         "phpoffice/phpspreadsheet": "dev-master",
