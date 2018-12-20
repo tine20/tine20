@@ -269,7 +269,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         if (($containerId = Tinebase_Model_Container::pathIsContainer($_path))) {
             if ($this->_options['ignoreAcl'] == TRUE) {
                 $containerIds[] = $containerId;
-            } else if (Tinebase_Core::getUser()->hasGrant($containerId, $this->_requiredGrants)) {
+            } else if (! is_object(Tinebase_Core::getUser()) || Tinebase_Core::getUser()->hasGrant($containerId, $this->_requiredGrants)) {
                 $containerIds[] = $containerId;
             }
         } else if (($ownerId = Tinebase_Model_Container::pathIsPersonalNode($_path))) {
