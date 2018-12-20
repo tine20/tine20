@@ -22,6 +22,7 @@ class Tinebase_ModelConfiguration_Const {
 
     const CONFIG = 'config';
     const CONTROLLER = 'controller';
+    const CONTROLLER_HOOK_BEFORE_UPDATE = 'controllerHookBeforeUpdate';
     const COLUMNS = 'columns';
 
     const DB_COLUMNS = 'dbColumns';

@@ -1385,6 +1385,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if (null !== ($mc = $_record::getConfiguration())) {
+            foreach ($mc->{Tinebase_ModelConfiguration_Const::CONTROLLER_HOOK_BEFORE_UPDATE} as $hook) {
+                call_user_func($hook, $_record, $_oldRecord);
+            }
+        }
     }
 
     /**

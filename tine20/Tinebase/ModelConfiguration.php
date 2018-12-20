@@ -356,6 +356,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_singularContainerMode = NULL;
 
     /**
+     * inspectBeforeUpdateHooks to be called by \Tinebase_Controller_Record_Abstract::_inspectBeforeUpdate
+     *
+     * @var array
+     */
+    protected $_controllerHookBeforeUpdate = [];
+
+    /**
      * Holds the field definitions in an associative array where the key
      * corresponds to the db-table name. Possible definitions and their defaults:
      *
@@ -994,6 +1001,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if (isset($definition[Tinebase_Model_CustomField_Config::DEF_HOOK])) {
                     foreach ($definition[Tinebase_Model_CustomField_Config::DEF_HOOK] as $hook) {
                         $hooks[] = $hook;
+                    }
+                }
+
+                if (isset($definition[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS])) {
+                    foreach ($definition[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS] as $key => $cHooks) {
+                        $this->$key = array_merge($this->$key, $cHooks);
                     }
                 }
             }
