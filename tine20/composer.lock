@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "80b01708b962aa1dd536cbafac021fa6",
+    "content-hash": "0dc221c9a075210d5cf21149ce111b6f",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -567,17 +567,26 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.5.14",
+            "version": "2.5.14pl1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "810a7baf81462a5ddf10e8baa8cb94b6eec02754"
+                "url": "https://github.com/tine20/doctrine2.git",
+                "reference": "6132ee1694bab2e9786be8cc20c17779def75362"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/810a7baf81462a5ddf10e8baa8cb94b6eec02754",
-                "reference": "810a7baf81462a5ddf10e8baa8cb94b6eec02754",
-                "shasum": ""
+            "archive": {
+                "exclude": [
+                    "!vendor",
+                    "tests",
+                    "*phpunit.xml",
+                    ".travis.yml",
+                    "build.xml",
+                    "build.properties",
+                    "composer.phar",
+                    "vendor/satooshi",
+                    "lib/vendor",
+                    "*.swp",
+                    "*coveralls.yml"
+                ]
             },
             "require": {
                 "doctrine/cache": "~1.4",
@@ -611,11 +620,19 @@
                     "Doctrine\\ORM\\": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-0": {
+                    "Doctrine\\Tests\\": "tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "authors": [
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
                 {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
@@ -623,10 +640,6 @@
                 {
                     "name": "Benjamin Eberlei",
                     "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
                 },
                 {
                     "name": "Jonathan Wage",
@@ -639,7 +652,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-12-17T02:57:51+00:00"
+            "time": "2018-07-26T12:32:52+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -4718,6 +4731,12 @@
             "alias_normalized": "0.13.0.0",
             "version": "0.14.0.0",
             "package": "phpoffice/phpword"
+        },
+        {
+            "alias": "v2.5.14",
+            "alias_normalized": "2.5.14.0",
+            "version": "2.5.14.0-patch1",
+            "package": "doctrine/orm"
         },
         {
             "alias": "v2.5.13",
