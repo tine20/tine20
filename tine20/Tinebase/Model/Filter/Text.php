@@ -133,9 +133,9 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
                 $field = 'BINARY ' . $field;
             } elseif ($this->_binary && !$this->_caseSensitive) {
                 if ($db->getConfig()['charset'] === 'utf8') {
-                    $field .= ' COLLATE utf8_unicode_ci';
+                    $field .= ' COLLATE utf8_general_ci';
                 } else {
-                    $field .= ' COLLATE utf8mb4_unicode_ci';
+                    $field .= ' COLLATE utf8mb4_general_ci';
                 }
             }
         }

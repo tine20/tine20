@@ -43,12 +43,12 @@ class Setup_SchemaTool
                 if (Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
                     $dbParams['defaultTableOptions'] = [
                         'charset' => 'utf8mb4',
-                        'collate' => 'utf8mb4_unicode_ci'
+                        'collate' => 'utf8mb4_general_ci'
                     ];
                 } else {
                     $dbParams['defaultTableOptions'] = [
                         'charset' => 'utf8',
-                        'collate' => 'utf8_unicode_ci'
+                        'collate' => 'utf8_general_ci'
                     ];
                 }
             }

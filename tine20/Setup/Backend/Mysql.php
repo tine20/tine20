@@ -106,13 +106,12 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $statement .= implode(",\n", array_filter($statementSnippets)) . "\n)";
 
         if (isset($_table->engine)) {
-            $statement .= " ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset . " COLLATE " .
-                $_table->collation;
+            $statement .= " ENGINE=" . $_table->engine . " DEFAULT CHARSET=" . $_table->charset;
         } else {
             if ($this->_useUtf8mb4) {
-                $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci";
+                $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
             } else {
-                $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci";
+                $statement .= " ENGINE=InnoDB DEFAULT CHARSET=utf8";
             }
         }
 

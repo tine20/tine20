@@ -805,7 +805,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * empty update to enforce collation fix
+     * empty update (was: collation fix - has been moved to 2018.11-develop / Release12)
      */
     public function update_40()
     {
