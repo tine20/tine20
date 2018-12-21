@@ -4,7 +4,7 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -36,11 +36,18 @@ abstract class Setup_Backend_Schema_Table_Abstract extends Setup_Backend_Schema_
     
     
     /**
-     * the table engine (innodb)
+     * the table charset (utf8)
      *
      * @var int
      */
      public $charset = 'utf8';
+
+    /**
+     * the table collation (utf8_unicode_ci)
+     *
+     * @var int
+     */
+    public $collation = 'utf8_unicode_ci';
     
     /**
      * the table columns
