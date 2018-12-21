@@ -1169,7 +1169,10 @@ class Setup_Controller
         // merge config data and active config
         if ($_merge) {
             $activeConfig = Setup_Core::get(Setup_Core::CONFIG);
-            $config = new Zend_Config($activeConfig->getConfigFileData(), true);
+            $configArray = $activeConfig instanceof Tinebase_Config_Abstract
+                ? $activeConfig->getConfigFileData()
+                : $activeConfig->toArray();
+            $config = new Zend_Config($configArray, true);
             $config->merge(new Zend_Config($_data));
         } else {
             $config = new Zend_Config($_data);
