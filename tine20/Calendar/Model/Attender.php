@@ -293,6 +293,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * returns the resolved user_id
      * 
      * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_NotFound
      */
     public function getResolvedUser($event = null, $resolveDisplayContainer = true)
     {
@@ -303,7 +304,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if ($this->user_type === self::USERTYPE_RESOURCE) {
             $resource = $clone->user_id;
             if (! $resource instanceof Calendar_Model_Resource) {
-                throw new Tinebase_Exception_UnexpectedValue('did not get valid resource object');
+                throw new Tinebase_Exception_NotFound('did not get valid resource object');
             }
             // return pseudo contact with resource data
             $result = new Addressbook_Model_Contact(array(
@@ -586,7 +587,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     * @param  boolean $_implicitAddMissingContacts
     * @return Addressbook_Model_Contact
     * @throws Tinebase_Exception_InvalidArgument
-    * 
+    *
     * @todo filter by fn if multiple matches
     */
     public static function resolveEmailToContact($_attenderData, $_implicitAddMissingContacts = TRUE, $defaultData = [])
