@@ -1328,9 +1328,12 @@ class Felamimail_Frontend_JsonTest extends TestCase
         ), array(
             'field' => 'name',
             'operator' => 'contains',
-            'value' => 'test_test'
+            'value' => 'test'
         )));
-        return Filemanager_Controller_Node::getInstance()->search($filter);
+        return Filemanager_Controller_Node::getInstance()->search($filter, new Tinebase_Model_Pagination([
+            'sort' => 'name',
+            'dir'  => 'DESC',
+        ]));
     }
 
     /**

@@ -33,7 +33,8 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
             'tableName' => 'felamimail_message_filelocation',
             'modlogActive' => true
         ));
-        $this->_purgeRecords = false;
+        // we don't want them to stack up
+        $this->_purgeRecords = true;
     }
 
     /**
@@ -131,7 +132,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
             // delete all MessageFileLocations of observered node that is deleted
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 Felamimail_Model_MessageFileLocation::class, [
-                    ['field' => 'node_id', 'operator' => 'equals', 'value' => $_eventObject->observable]
+                    ['field' => 'node_id', 'operator' => 'equals', 'value' => $_eventObject->observable->getId()]
                 ]
             );
             $this->deleteByFilter($filter);

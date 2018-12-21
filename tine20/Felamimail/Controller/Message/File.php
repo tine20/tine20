@@ -103,7 +103,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
             if (isset($location['record_id']['email'])) {
                 $location->record_id = Addressbook_Controller_Contact::getInstance()->getContactByEmail($location['record_id']['email']);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Skipping location ' . print_r($location->toArray(), true));
                 $location->record_id = null;
             }
@@ -112,6 +112,10 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
             }
         } else {
             $recordController = $this->_getRecordController($location->model);
+            if (! $recordController) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Skipping location ' . print_r($location->toArray(), true));
+            }
         }
 
         foreach ($messages as $message) {
@@ -130,11 +134,13 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
             try {
                 $this->_modelControllers[$model] = Tinebase_Core::getApplicationInstance($model);
             } catch (Tinebase_Exception_AccessDenied $tead) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' ' . $tead->getMessage());
+                return null;
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' ' . $tenf->getMessage());
+                return null;
             }
         }
         return $this->_modelControllers[$model];
