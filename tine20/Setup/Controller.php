@@ -481,8 +481,6 @@ class Setup_Controller
             Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
         }
 
-        $this->_enforceCollation();
-
         // we need to clone here because we would taint the app cache otherwise
         // update tinebase first (to biggest major version)
         $tinebase = clone (Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
@@ -519,66 +517,8 @@ class Setup_Controller
             'messages' => $messages,
             'updated'  => $this->_updatedApplications,
         );
-    }
-
-    /**
-     * TODO remove this function in Release 13
-     * TODO or better refactor it once the new update system is available
-     */
-    protected function _enforceCollation()
-    {
-        $db = Setup_Core::getDb();
-        if ($db->getConfig()['charset'] === 'utf8') {
-            $charset = 'utf8';
-            $collation = 'utf8_unicode_ci';
-        } else {
-            $charset = 'utf8mb4';
-            $collation = 'utf8mb4_unicode_ci';
-        }
-
-        $tables = $db->query('SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE "' .
-            SQL_TABLE_PREFIX . '%" AND TABLE_COLLATION <> "' . $collation . '"')->fetchAll(Zend_DB::FETCH_COLUMN, 0);
-
-        if (count($tables) > 0) {
-            $db->query('SET foreign_key_checks = 0');
-            $db->query('SET unique_checks = 0');
-        }
-
-        foreach ($tables as $table) {
-            $db->query('ALTER TABLE `' . $table . '` convert to character set ' . $charset . ' collate ' . $collation);
-            if (SQL_TABLE_PREFIX . 'tree_nodes' === $table) {
-                $setupBackend = new Setup_Backend_Mysql();
-                $setupBackend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                    <collation>utf8mb4_bin</collation>
-                </field>'));
-            }
-        }
-
-        if (count($tables) > 0) {
-            $db->query('SET foreign_key_checks = 1');
-            $db->query('SET unique_checks = 1');
-
-            foreach ($tables as $table) {
-                $db->query('REPAIR TABLE ' . $db->quoteIdentifier($table));
-                $db->query('OPTIMIZE TABLE ' . $db->quoteIdentifier($table));
-            }
-        }
-
-        $columns = $db->query('SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE "' .
-            SQL_TABLE_PREFIX . '%" AND COLLATION_NAME <> "' . $collation . '" AND COLLATION_NAME IS NOT NULL AND (' .
-            'TABLE_NAME <> "' . SQL_TABLE_PREFIX . 'tree_nodes" OR COLUMN_NAME <> "name")')
-            ->fetchAll();
-
-        if (count($columns) > 0) {
-            throw new Tinebase_Exception_Backend_Database('some columns do not have the proper collation: ' .
-                print_r($columns, true));
-        }
-    }
-
+    }    
+    
     /**
      * load the setup.xml file and returns a simplexml object
      *
