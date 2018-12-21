@@ -842,6 +842,8 @@ class Admin_JsonTest extends TestCase
     
     /**
      * try to save tag and update without rights
+     *
+     * @return array
      */
     public function testSaveTagAndUpdateWithoutRights()
     {
@@ -850,8 +852,9 @@ class Admin_JsonTest extends TestCase
         $this->assertEquals($tagData['name'], $this->objects['tag']['name']);
         
         $this->objects['tag']['rights'] = array();
-        $this->setExpectedException('Tinebase_Exception_SystemGeneric');
-        $this->objects['tag'] = $this->_json->saveTag($this->objects['tag']);
+        $result = $this->_json->saveTag($this->objects['tag']);
+        self::assertEquals(0, count($result['rights']));
+        return $result;
     }
 
     /**
@@ -867,10 +870,20 @@ class Admin_JsonTest extends TestCase
             'view_right' => false,
             'use_right' => false
         ));
-        $this->setExpectedException('Tinebase_Exception_SystemGeneric');
-        $this->objects['tag'] = $this->_json->saveTag($tagData);
+        $result = $this->_json->saveTag($tagData);
+        self::assertEquals(0, count($result['rights']));
     }
-    
+
+    /**
+     * try to save tag and update without rights
+     */
+    public function testDeleteTagWithoutRights()
+    {
+        $tag = $this->testSaveTagAndUpdateWithoutRights();
+        $result = $this->_json->deleteTags([$tag['id']]);
+        self::assertEquals('success', $result['status']);
+    }
+
     /**
      * get tag data
      * 
