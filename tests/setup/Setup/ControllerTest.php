@@ -108,6 +108,16 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
     }
 
+    /**
+     * test if app can be uninstalled and installed again
+     */
+    public function testUninstallAndInstallAgain()
+    {
+        $this->_uit->uninstallApplications(array('Filemanager'));
+        $this->_uit->installApplications(array('Filemanager'));
+        self::assertTrue(Setup_Controller::getInstance()->isInstalled('Filemanager'));
+    }
+
     public function testReplicationInstall()
     {
         // uninstall and get instance sequence
