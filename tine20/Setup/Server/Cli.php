@@ -137,7 +137,15 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             . ' Is cli request. method: ' . $this->getRequestMethod());
 
         $setupServer = new Setup_Frontend_Cli();
-        return $setupServer->handle($opts);
+        try {
+            $result = $setupServer->handle($opts);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            echo $e . "\n";
+            $result = -1;
+        }
+
+        return $result;
     }
     
     /**
