@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
+class Tinebase_ContainerTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -38,7 +38,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_instance = Tinebase_Container::getInstance();
 
@@ -83,7 +83,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
         
         Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false);
     }
@@ -129,7 +129,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     protected function _validateOwnerId(Tinebase_Model_Container $_container)
     {
         if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-            $this->assertTrue(empty($_container->owner_id), 'shared container does not have an owner');
+            $this->assertTrue(empty($_container->owner_id), 'shared container should not have an owner: '
+                . print_r($_container->toArray(), true));
         } else {
             $this->assertTrue(! empty($_container->owner_id), 'personal container must have an owner');
         }

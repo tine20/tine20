@@ -202,6 +202,14 @@ class Sales_InvoiceTestCase extends TestCase
         
         $this->_invoiceController = Sales_Controller_Invoice::getInstance();
         $this->_invoiceController->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
+
+        if ($this->_sharedContractsContainerId) {
+            try {
+                Tinebase_Container::getInstance()->deleteContainer($this->_sharedContractsContainerId, true);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // already removed
+            }
+        }
     }
     
     protected function _setReferenceDate()
@@ -269,7 +277,6 @@ class Sales_InvoiceTestCase extends TestCase
                 array(
                     'name'           => 'TEST SALES INVOICES',
                     'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                    'owner_id'       => Tinebase_Core::getUser(),
                     'backend'        => 'SQL',
                     'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
                     'model'          => 'Addressbook_Model_Contact',
