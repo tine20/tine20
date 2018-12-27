@@ -534,7 +534,12 @@ class Tinebase_Application
                     $count = Tinebase_Config::getInstance()->deleteConfigByApplicationId($_application->getId());
                     break;
                 case 'customfield':
-                    $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+                    try {
+                        $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+                    } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
+                        $count = 0;
+                    }
                     break;
                 case 'pobserver':
                     $count = Tinebase_Record_PersistentObserver::getInstance()->deleteByApplication($_application);
@@ -550,6 +555,9 @@ class Tinebase_Application
                     } catch (Tinebase_Exception_Backend $teb) {
                         // nothing to do
                         Tinebase_Exception::log($teb);
+                    } catch (Exception $e) {
+                        // problem!
+                        Tinebase_Exception::log($e);
                     }
                     break;
                 default:
