@@ -714,7 +714,6 @@ abstract class Tinebase_Setup_DemoData_Abstract
                 array(
                     'name'           => $containerName,
                     'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                    'owner_id'       => Tinebase_Core::getUser(),
                     'backend'        => 'SQL',
                     'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
                     'model'          => $this->_appName . '_Model_' . $this->_modelName,
