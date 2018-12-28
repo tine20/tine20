@@ -590,6 +590,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
         /** @var Addressbook_Model_Contact $_record */
         /** @var Addressbook_Model_Contact $_oldRecord */
 
