@@ -513,7 +513,7 @@ class Setup_Controller
             }
         }
 
-        $this->_clearCache();
+        $this->clearCache();
         
         return array(
             'messages' => $messages,
@@ -733,7 +733,7 @@ class Setup_Controller
                 break;
         }
         
-        $this->_clearCache();
+        $this->clearCache();
 
         return $messages;
     }
@@ -1675,7 +1675,7 @@ class Setup_Controller
      */
     public function installApplications($_applications, $_options = null)
     {
-        $this->_clearCache();
+        $this->clearCache();
         
         // check requirements for initial install / add required apps to list
         if (! $this->isInstalled('Tinebase')) {
@@ -1734,7 +1734,7 @@ class Setup_Controller
             }
         }
 
-        $this->_clearCache();
+        $this->clearCache();
 
         Tinebase_Event::reFireForNewApplications();
     }
@@ -1774,7 +1774,7 @@ class Setup_Controller
      */
     public function installFromDump($options)
     {
-        $this->_clearCache();
+        $this->clearCache();
 
         if ($this->isInstalled('Tinebase')) {
             Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tinebase is already installed.');
@@ -1881,6 +1881,7 @@ class Setup_Controller
      * delete list of applications
      *
      * @param array $_applications list of application names
+     * @throws Tinebase_Exception
      */
     public function uninstallApplications($_applications)
     {
@@ -1889,7 +1890,7 @@ class Setup_Controller
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
 
-        $this->_clearCache();
+        $this->clearCache();
 
         //sanitize input
         $_applications = array_unique(array_filter($_applications));
@@ -2463,7 +2464,7 @@ class Setup_Controller
      *
      * @return void
      */
-    protected function _clearCache()
+    public function clearCache()
     {
         // setup cache (via tinebase because it is disabled in setup by default)
         Tinebase_Core::setupCache(TRUE);
