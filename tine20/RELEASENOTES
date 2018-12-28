@@ -10,6 +10,8 @@ GENERAL CHANGES
 
 * Minimum PHP Version: 7.0
 
+* PHP 7.3 is now supported
+
 * Enforcing table structure of addressbook, container and applications
 
 PLEASE NOTE: if your table structure of those three tables does not match exactly
