@@ -321,6 +321,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      */
     public function getAllRegistryData()
     {
+        // clear cache to make sure we have current data...
+        Setup_Controller::getInstance()->clearCache();
+
         $registryData['Setup'] = $this->getRegistryData();
         
         // setup also need some core tinebase regdata
