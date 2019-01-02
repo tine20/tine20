@@ -181,4 +181,14 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_40();
         $this->setApplicationVersion('Tinebase', '12.14');
     }
+
+    /**
+     * ensure tree_filerevision exist for all fileobjects
+     */
+    public function update_14()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_41();
+        $this->setApplicationVersion('Tinebase', '12.15');
+    }
 }
