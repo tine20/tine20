@@ -391,8 +391,14 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             }
         }
 
-        $this->subject = (isset($_headers['subject'])) ? Felamimail_Message::convertText($_headers['subject']) : null;
-        
+        if (isset($_headers['subject'])) {
+            // @see 0008644: error when sending mail with note (wrong charset)
+            // @todo might be removed in the future - but check if database supports utf8mb4 first
+            $this->subject = Tinebase_Core::filterInputForDatabase(Felamimail_Message::convertText($_headers['subject']));
+        } else {
+            $this->subject = null;
+        }
+
         if ((isset($_headers['date']) || array_key_exists('date', $_headers))) {
             $this->sent = Felamimail_Message::convertDate($_headers['date']);
         } elseif ((isset($_headers['resent-date']) || array_key_exists('resent-date', $_headers))) {

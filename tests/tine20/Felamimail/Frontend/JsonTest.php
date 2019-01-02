@@ -1205,18 +1205,17 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
-     * testSaveMessageWithEmojiSubject
+     * testSaveMessageNoteWithInvalidChar
      *
      * @see 0008644: error when sending mail with note (wrong charset)
      */
-    public function testSaveMessageWithEmojiSubject()
+    public function testSaveMessageWithInvalidChar()
     {
         $subject = "\xF0\x9F\x98\x8A"; // :-) emoji
         $messageData = $this->_getMessageData('', $subject);
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($messageData);
-        // note: emojis are no longer invalid!
-        $this->_searchForMessageBySubject($subject);
+        $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
     }
 
     /**
