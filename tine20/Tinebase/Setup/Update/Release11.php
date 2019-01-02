@@ -811,4 +811,35 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Tinebase', '11.41');
     }
+
+    /**
+     * update to 11.42
+     *
+     * ensure tree_filerevision exist for all fileobjects
+     */
+    public function update_41()
+    {
+        $db = $this->getDb();
+        $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        foreach ($db->query('SELECT fo.id, fo.revision from ' . SQL_TABLE_PREFIX . 'tree_fileobjects AS fo LEFT JOIN ' .
+                SQL_TABLE_PREFIX . 'tree_filerevisions AS fr ON fo.id = fr.id AND fo.revision = fr.revision ' .
+                'WHERE fr.id IS NULL AND fo.type = "folder"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+            $db->insert(SQL_TABLE_PREFIX . 'tree_filerevisions', [
+                'id'            => $row['id'],
+                'revision'      => $row['revision'] + 1,
+                'hash'          => Tinebase_Record_Abstract::generateUID(),
+                'size'          => 0,
+                'created_by'    => $user->getId(),
+                'creation_time' => new Zend_Db_Expr('NOW()'),
+            ]);
+
+            $db->update(SQL_TABLE_PREFIX . 'tree_fileobjects', [
+                'revision'          => $row['revision'] + 1,
+                'last_modified_by'  => $user->getId(),
+                'last_modified_time'=> new Zend_Db_Expr('NOW()'),
+            ], 'id = "' . $row['id'] . '"');
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.42');
+    }
 }
