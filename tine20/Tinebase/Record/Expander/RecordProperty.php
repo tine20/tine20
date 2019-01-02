@@ -15,10 +15,7 @@ class Tinebase_Record_Expander_RecordProperty extends Tinebase_Record_Expander_P
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
         $this->_recordsToProcess = $_records;
-        // ??? TODO think about this? getIdFromProperty? we never know which state the records are in?
-        // TODO if there is already an object, we don't want it from the database again!
-        // FIXME guess we have to add an optional parameter to getIdFromProperty
-        $ids = array_filter($_records->getIdFromProperty($this->_property));
+        $ids = array_filter($_records->getIdFromProperty($this->_property, false));
         if (!empty($ids)) {
             $self = $this;
             $this->_rootExpander->_registerDataToFetch(new Tinebase_Record_Expander_DataRequest(
@@ -34,13 +31,12 @@ class Tinebase_Record_Expander_RecordProperty extends Tinebase_Record_Expander_P
 
         /** @var Tinebase_Record_Abstract $record */
         foreach ($this->_recordsToProcess as $record) {
-            // ??? TODO think about this? getIdFromProperty? we never know which state the records are in?
-            // TODO if there is already an object, we don't want it from the database again!
-            // FIXME guess we have to add an optional parameter to getIdFromProperty
-            if (null !== ($id = $record->getIdFromProperty($this->_property)) && false !== ($subRecord =
+            if (null !== ($id = $record->getIdFromProperty($this->_property, false)) && false !== ($subRecord =
                     $_data->getById($id))) {
                 $record->{$this->_property} = $subRecord;
                 $expandData->addRecord($subRecord);
+            } elseif ($record->{$this->_property} instanceof Tinebase_Record_Interface) {
+                $expandData->addRecord($record->{$this->_property});
             }
         }
         // clean up
