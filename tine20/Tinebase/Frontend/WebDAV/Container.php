@@ -210,7 +210,8 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function getETag()
     {
-        return '"' . Tinebase_FileSystem::getInstance()->stat($this->_path)->hash . '"';
+        $node = Tinebase_FileSystem::getInstance()->stat($this->_path);
+        return '"' . (empty($node->hash) ? sha1($node->object_id) : $node->hash) . '"';
     }
     
     /**

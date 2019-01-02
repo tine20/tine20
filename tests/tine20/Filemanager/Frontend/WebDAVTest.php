@@ -389,6 +389,22 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         return $node;
     }
+
+    /**
+     * @return Filemanager_Frontend_WebDAV_File
+     */
+    public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_emptyfile()
+    {
+        $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
+        Tinebase_FileSystem::getInstance()->createFileTreeNode($parent->getContainer(), 'emptyFileTest');
+
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/emptyFileTest');
+
+        $stream = $node->get();
+        static::assertTrue(is_resource($stream));
+        static::assertTrue(empty(stream_get_contents($stream)));
+        static::assertSame('"' . sha1($node->getNode()->object_id) . '"', $node->getETag());
+    }
     
     public function testUpdateFile()
     {
