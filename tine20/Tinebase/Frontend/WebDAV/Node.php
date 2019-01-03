@@ -154,7 +154,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
      */
     public function getETag()
     {
-        return '"' . $this->_node->hash . '"';
+        return '"' . (empty($this->_node->hash) ? sha1($this->_node->object_id) : $this->_node->hash) . '"';
     }
 
     /**
@@ -166,6 +166,16 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     {
         // this only returns null if the container is not found or if container.content_seq = NULL, this does not look up the content history!
         return $this->_node->seq;
+    }
+
+    /**
+     * returns the nodes size
+     *
+     * @return integer
+     */
+    public function getSize()
+    {
+        return (int)$this->_node->size;
     }
 
     /**
@@ -182,6 +192,10 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
         foreach ($requestedProperties as $prop) {
             switch($prop) {
+                case '{DAV:}getcontentlength':
+                    $response[$prop] = $this->getSize();
+                    break;
+
                 case '{DAV:}getetag':
                     $response[$prop] = $this->getETag();
                     break;
@@ -209,5 +223,10 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     public function updateProperties($mutations)
     {
         return false;
+    }
+
+    public function getNode()
+    {
+        return $this->_node;
     }
 }

@@ -141,7 +141,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'isIndexed'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits',
             Zend_Filter_Input::DEFAULT_VALUE => 0),
