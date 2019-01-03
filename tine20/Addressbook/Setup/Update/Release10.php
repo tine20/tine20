@@ -76,7 +76,12 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('addressbook', $declaration);
+        try {
+            $this->_backend->addIndex('addressbook', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('addressbook', 24);
         $this->setApplicationVersion('Addressbook', '10.4');

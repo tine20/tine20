@@ -143,7 +143,12 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('cal_events', $declaration);
+        try {
+            $this->_backend->addIndex('cal_events', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('cal_events', 13);
         $this->setApplicationVersion('Calendar', '10.5');
