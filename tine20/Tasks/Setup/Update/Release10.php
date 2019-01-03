@@ -27,7 +27,12 @@ class Tasks_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('tasks', $declaration);
+        try {
+            $this->_backend->addIndex('tasks', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('tasks', 9);
         $this->setApplicationVersion('Tasks', '10.1');

@@ -46,7 +46,12 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('sales_contracts', $declaration);
+        try {
+            $this->_backend->addIndex('sales_contracts', $declaration);
+        }  catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('sales_contracts', 9);
         $this->setApplicationVersion('Sales', '10.2');
@@ -69,7 +74,12 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('sales_products', $declaration);
+        try {
+            $this->_backend->addIndex('sales_products', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('sales_products', 7);
         $this->setApplicationVersion('Sales', '10.3');
@@ -92,7 +102,12 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('sales_customers', $declaration);
+        try {
+            $this->_backend->addIndex('sales_customers', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('sales_customers', 2);
         $this->setApplicationVersion('Sales', '10.4');
@@ -115,7 +130,12 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('sales_suppliers', $declaration);
+        try {
+            $this->_backend->addIndex('sales_suppliers', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('sales_suppliers', 2);
         $this->setApplicationVersion('Sales', '10.5');
@@ -138,7 +158,12 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('sales_purchase_invoices', $declaration);
+        try {
+            $this->_backend->addIndex('sales_purchase_invoices', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('sales_purchase_invoices', 5);
         $this->setApplicationVersion('Sales', '10.6');
@@ -161,7 +186,12 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('sales_sales_invoices', $declaration);
+        try {
+            $this->_backend->addIndex('sales_sales_invoices', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('sales_sales_invoices', 7);
         $this->setApplicationVersion('Sales', '10.7');
@@ -184,7 +214,12 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('sales_offers', $declaration);
+        try {
+            $this->_backend->addIndex('sales_offers', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('sales_offers', 2);
         $this->setApplicationVersion('Sales', '10.8');
@@ -204,7 +239,13 @@ class Sales_Setup_Update_Release10 extends Setup_Update_Abstract
                 <name>description</name>
                 </field>
             </index>');
-        $this->_backend->addIndex('sales_orderconf', $declaration);
+
+        try {
+            $this->_backend->addIndex('sales_orderconf', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('sales_orderconf', 2);
         $this->setApplicationVersion('Sales', '10.9');
