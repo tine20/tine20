@@ -850,6 +850,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                 'size'          => 0,
                 'created_by'    => $user->getId(),
                 'creation_time' => new Zend_Db_Expr('NOW()'),
+                'preview_count' => 0,
             ]);
 
             $db->update(SQL_TABLE_PREFIX . 'tree_fileobjects', [
