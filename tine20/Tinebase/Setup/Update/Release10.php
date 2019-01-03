@@ -2423,15 +2423,10 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_53()
     {
         if (Setup_Backend_Factory::factory()->supports('mariadb >= 10.0.5')) {
-            ob_start();
-            $cli = new Setup_Frontend_Cli();
-            $opts = new Zend_Console_Getopt(['upgradeMysql564' => []], ['--upgradeMysql564']);
-            $cli->handle($opts, false);
-            $result = ob_get_clean();
-            ob_end_clean();
+            $failures = Setup_Controller::getInstance()->upgradeMysql564();
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' upgradeMysql564 returned: '
-                    . $result);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' upgradeMysql564 failures: '
+                    . print_r($failures, true));
         }
 
         $this->setApplicationVersion('Tinebase', '10.54');

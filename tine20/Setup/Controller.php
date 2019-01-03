@@ -2532,4 +2532,68 @@ class Setup_Controller
 
         return Setup_SchemaTool::compareSchema($options['otherdb']);
     }
+
+    /**
+     * @return array
+     */
+    public function upgradeMysql564()
+    {
+        $setupBackend = Setup_Backend_Factory::factory();
+        if (!$setupBackend->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            return ['DB backend does not support the features - upgrade to mysql >= 5.6.4 or mariadb >= 10.0.5'];
+        }
+
+        $failures = array();
+        $setupUpdate = new Setup_Update_Abstract($setupBackend);
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $xml = $this->getSetupXml($application->name);
+            // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
+
+            // get all MCV2 models for all apps, you never know...
+            $controllerInstance = null;
+            try {
+                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                $failures[] = 'could not get application controller for app: ' . $application->name;
+            }
+            if (null !== $controllerInstance) {
+                try {
+                    $setupUpdate->updateSchema($application->name, $controllerInstance->getModels(true));
+                } catch (Exception $e) {
+                    $failures[] = 'could not update MCV2 schema for app: ' . $application->name;
+                }
+            }
+
+            if (!empty($xml->tables)) {
+                foreach ($xml->tables->table as $table) {
+                    if (!empty($table->requirements) && !$setupBackend->tableExists((string)$table->name)) {
+                        foreach ($table->requirements->required as $requirement) {
+                            if (!$setupBackend->supports((string)$requirement)) {
+                                continue 2;
+                            }
+                        }
+                        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml($table->asXML()));
+                        continue;
+                    }
+
+                    // check for fulltext index
+                    foreach ($table->declaration->index as $index) {
+                        if (empty($index->fulltext)) {
+                            continue;
+                        }
+                        $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                        try {
+                            $setupBackend->addIndex((string)$table->name, $declaration);
+                        } catch (Exception $e) {
+                            $failures[] = (string)$table->name . ': ' . (string)$index->name;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $failures;
+    }
 }
