@@ -14,28 +14,30 @@
  *
  * @package     Tinebase
  * @subpackage  Model
- * @property    string             contenttype
- * @property    Tinebase_DateTime  creation_time
- * @property    string             hash
- * @property    string             indexed_hash
- * @property    string             name
- * @property    Tinebase_DateTime  last_modified_time
- * @property    string             object_id
- * @property    string             parent_id
- * @property    string             size
- * @property    string             revision_size
- * @property    string             type
- * @property    string             revision
- * @property    string             available_revisions
- * @property    string             description
- * @property    string             acl_node
- * @property    array              revisionProps
- * @property    array              notificationProps
- * @property    string             preview_count
- * @property    integer            quota
- * @property    Tinebase_Record_RecordSet grants
- * @property    string             pin_protected_node
- * @property    string             path
+ * @property    string                      contenttype
+ * @property    Tinebase_DateTime           creation_time
+ * @property    string                      hash
+ * @property    string                      indexed_hash
+ * @property    string                      name
+ * @property    Tinebase_DateTime           last_modified_time
+ * @property    string                      object_id
+ * @property    string                      parent_id
+ * @property    string                      size
+ * @property    string                      revision_size
+ * @property    string                      type
+ * @property    string                      revision
+ * @property    string                      available_revisions
+ * @property    string                      description
+ * @property    string                      acl_node
+ * @property    array                       revisionProps
+ * @property    array                       notificationProps
+ * @property    string                      preview_count
+ * @property    integer                     quota
+ * @property    Tinebase_Record_RecordSet   grants
+ * @property    string                      pin_protected_node
+ * @property    string                      path
+ * @property    Tinebase_DateTime           lastavscan_time
+ * @property    boolean                     is_quarantined
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -74,8 +76,8 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      *
      * @var array list of modlog omit fields
      */
-    protected $_modlogOmitFields = array('revision', 'contenttype', 'description', 'revision_size', 'indexed_hash',
-        'hash', 'size', 'preview_count', 'available_revisions', 'path', 'isIndexed');
+    protected $_modlogOmitFields = ['revision', 'contenttype', 'description', 'revision_size', 'indexed_hash', 'hash',
+        'size', 'preview_count', 'available_revisions', 'path', 'isIndexed', 'lastavscan_time', 'is_quarantined'];
 
     /**
      * if foreign Id fields should be resolved on search and get from json
@@ -146,6 +148,8 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits',
             Zend_Filter_Input::DEFAULT_VALUE => 0),
         'pin_protected_node'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lastavscan_time'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_quarantined'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // not persistent
         'container_name' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

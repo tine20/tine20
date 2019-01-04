@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "60b4fd9b39a41e4394dd87207609742c",
+    "content-hash": "43c4f9d2a56f47e7097ef6bffe59ce08",
     "packages": [
+        {
+            "name": "clue/socket-raw",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-socket-raw.git",
+                "reference": "1f9060a973e2bc50389a89d9d2bdb64750fcc8f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-socket-raw/zipball/1f9060a973e2bc50389a89d9d2bdb64750fcc8f1",
+                "reference": "1f9060a973e2bc50389a89d9d2bdb64750fcc8f1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-sockets": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8 || ^5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Socket\\Raw\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "Simple and lightweight OOP wrapper for PHP's low level sockets extension (ext-sockets)",
+            "homepage": "https://github.com/clue/php-socket-raw",
+            "keywords": [
+                "Socket",
+                "client",
+                "datagram",
+                "dgram",
+                "icmp",
+                "ipv6",
+                "server",
+                "stream",
+                "tcp",
+                "udg",
+                "udp",
+                "unix"
+            ],
+            "time": "2018-06-10T19:13:19+00:00"
+        },
         {
             "name": "container-interop/container-interop",
             "version": "1.2.0",
@@ -2367,6 +2422,47 @@
             ],
             "abandoned": "psr/http-server-middleware",
             "time": "2017-10-05T15:55:30+00:00"
+        },
+        {
+            "name": "xenolope/quahog",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jonjomckay/quahog.git",
+                "reference": "55c878ab15c19c5ba8955f3745df9ac32a3b05db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jonjomckay/quahog/zipball/55c878ab15c19c5ba8955f3745df9ac32a3b05db",
+                "reference": "55c878ab15c19c5ba8955f3745df9ac32a3b05db",
+                "shasum": ""
+            },
+            "require": {
+                "clue/socket-raw": "^1.2",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "^1.6",
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Xenolope\\Quahog\\": "src/Quahog"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonjo McKay",
+                    "email": "jonjo@jonjomckay.com"
+                }
+            ],
+            "description": "A PHP client library for ClamAV clamd daemon",
+            "time": "2017-02-22T13:54:27+00:00"
         },
         {
             "name": "zbateson/mail-mime-parser",

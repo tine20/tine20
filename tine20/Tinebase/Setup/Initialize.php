@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -179,6 +179,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemAVScanTask($scheduler);
             Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
             Tinebase_Scheduler_Task::addActionQueueMonitoringTask($scheduler);
         } finally {
