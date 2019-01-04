@@ -322,7 +322,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 }
 
                 Tine.Tinebase.common.reload({
-                    clearCache: true
+                    clearCache: true,
+                    redirectAlways: Tine.Tinebase.configManager.get('redirectAlways'),
+                    redirectUrl: Tine.Tinebase.configManager.get('redirectUrl')
                 });
             }
         });
