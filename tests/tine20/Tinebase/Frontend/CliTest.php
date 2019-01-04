@@ -450,13 +450,15 @@ class Tinebase_Frontend_CliTest extends TestCase
         $models = Tinebase_Application::getInstance()->getModelsOfAllApplications();
 
         $customFieldConfigs = $customFieldController->searchConfig();
-        foreach($customFieldConfigs as $customFieldConfig) {
+        foreach ($customFieldConfigs as $customFieldConfig) {
             $filter = new Tinebase_Model_CustomField_ValueFilter(array(
                 array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $customFieldConfig->id)
             ));
             $customFieldValues = $customFieldController->search($filter);
 
-            $this->assertEquals(0, $customFieldValues->count(), 'custom field values found!');
+            $this->assertEquals(0, $customFieldValues->count(), 'custom field values found: '
+                . print_r($customFieldValues->toArray(), true) . ' of customfield '
+                . print_r($customFieldConfig->toArray(), true));
         }
 
         $customFieldsCreated = 0;
