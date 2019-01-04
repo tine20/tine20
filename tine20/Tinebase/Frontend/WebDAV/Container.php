@@ -18,6 +18,8 @@
  * 
  * @TODO extend from Tinebase_Frontend_WebDAV_Directory 
  *       and remove Tinebase_WebDav_Container_Abstract
+ *
+ * that is why we needed to implement getProperties here, cause we dont inherit properly...
  */
 class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
 {
@@ -223,6 +225,17 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $node = Tinebase_FileSystem::getInstance()->stat($this->_path);
         return '"' . (empty($node->hash) ? sha1($node->object_id) : $node->hash) . '"';
     }
+
+    /**
+     * return size
+     *
+     * @return int
+     */
+    public function getSize()
+    {
+        $node = Tinebase_FileSystem::getInstance()->stat($this->_path);
+        return (int)$node->size;
+    }
     
     /**
      * Renames the node
@@ -251,5 +264,26 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected function _getContainer()
     {
         return $this->_container;
+    }
+
+    /**
+     * Returns the list of properties
+     *
+     * @param array $requestedProperties
+     * @return array
+     */
+    public function getProperties($requestedProperties)
+    {
+        $response = parent::getProperties($requestedProperties);
+
+        foreach ($requestedProperties as $prop) {
+            switch($prop) {
+                case '{http://owncloud.org/ns}size':
+                    $response[$prop] = $this->_getContainer()->size;
+                    break;
+            }
+        }
+
+        return $response;
     }
 }

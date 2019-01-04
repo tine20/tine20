@@ -186,13 +186,17 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
      */
     public function getProperties($requestedProperties)
     {
-        $properties = array();
-
         $response = array();
 
         foreach ($requestedProperties as $prop) {
             switch($prop) {
                 case '{DAV:}getcontentlength':
+                    if ($this->_node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                        $response[$prop] = $this->getSize();
+                    }
+                    break;
+
+                case '{http://owncloud.org/ns}size':
                     $response[$prop] = $this->getSize();
                     break;
 
@@ -209,10 +213,6 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
                     }
-                    break;
-
-                default:
-                    if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
                     break;
             }
         }
