@@ -197,14 +197,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function login()
     {
-        // redirect to REDIRECTURL if set
-        $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, '');
-
-        if ($redirectUrl !== '' && Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTALWAYS, FALSE)) {
-            header('Location: ' . $redirectUrl);
+        if ($this->_redirect()) {
             return;
         }
-        
+
         // check if setup/update required
         $setupController = Setup_Controller::getInstance();
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
@@ -217,27 +213,19 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
         
         $this->_renderMainScreen();
-        
-        /**
-         * old code used to display user registration
-         * @todo must be reworked
-         * 
-        
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
+    }
 
-        header('Content-Type: text/html; charset=utf-8');
-        
-        // check if registration is active
-        if(isset(Tinebase_Core::getConfig()->login)) {
-            $registrationConfig = Tinebase_Core::getConfig()->registration;
-            $view->userRegistration = (isset($registrationConfig->active)) ? $registrationConfig->active : '';
-        } else {
-            $view->userRegistration = 0;
-        }        
-        
-        echo $view->render('jsclient.php');
-        */
+    protected function _redirect()
+    {
+        // redirect to REDIRECTURL if set
+        $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, '');
+
+        if ($redirectUrl !== '' && Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTALWAYS, FALSE)) {
+            header('Location: ' . $redirectUrl);
+            return true;
+        }
+
+        return false;
     }
     
     /**
