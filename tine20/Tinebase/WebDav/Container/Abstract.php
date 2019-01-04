@@ -377,8 +377,6 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      */
     public function getProperties($requestedProperties) 
     {
-        $properties = array();
-        
         $response = array();
         
         foreach ($requestedProperties as $prop) {
@@ -389,17 +387,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
 
                 case '{DAV:}sync-token':
                     if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
                         $response[$prop] = $this->getSyncToken();
                     } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
                     }
-                    break;
-                    
-                default:
-                    if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
                     break;
             }
         }

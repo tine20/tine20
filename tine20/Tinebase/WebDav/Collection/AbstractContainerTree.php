@@ -806,6 +806,23 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     
         foreach ($requestedProperties as $property) {
             switch ($property) {
+                // owncloud specific
+                // owncloud does send paths starting with /webdav ... some comments here say that would be not ok?
+                case '{http://owncloud.org/ns}size':
+                    if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
+                        /*if (count($this->_pathParts) === 1) {
+                            // webdav -> root file system ... what to return? all? all visible? complicated...
+                            // and why return anything? it will not be displayed anyway?
+                        } else*/if (count($this->_pathParts) === 2) {
+                            $size = 0;
+                            foreach ($this->getChildren() as $node) {
+                                $size += $node->getSize();
+                            }
+                            $response[$property] = $size;
+                        }
+                    }
+                    break;
+
                 case '{DAV:}displayname':
                     if (count($this->_getPathParts()) === 2 && $this->getName() !== Tinebase_Model_Container::TYPE_SHARED) {
                         try {
