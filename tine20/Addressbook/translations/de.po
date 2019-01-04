@@ -338,7 +338,7 @@ msgstr "Straße 2"
 #: js/ContactEditDialog.js:338 js/ContactEditDialog.js:367
 #: js/ContactGrid.js:223 js/Model.js:176 js/Model.js:181
 msgid "Region"
-msgstr "Region"
+msgstr "Bundesland"
 
 #: js/ContactEditDialog.js:342 js/ContactEditDialog.js:371 js/Model.js:177
 #: js/Model.js:182
@@ -440,7 +440,7 @@ msgstr "Stadt (privat)"
 
 #: js/ContactGrid.js:228
 msgid "Region (private)"
-msgstr "Region (privat)"
+msgstr "Bundesland (privat)"
 
 #: js/ContactGrid.js:229
 msgid "Postalcode (private)"
@@ -569,7 +569,7 @@ msgstr "Ort (Geschäftliche Anschrift)"
 
 #: js/Model.js:37
 msgid "Region (Company Address)"
-msgstr "Region (Geschäftliche Anschrift)"
+msgstr "Bundesland (Geschäftliche Anschrift)"
 
 #: js/Model.js:38
 msgid "Postal Code (Company Address)"
@@ -601,7 +601,7 @@ msgstr "Ort (Private Anschrift)"
 
 #: js/Model.js:46
 msgid "Region (Private Address)"
-msgstr "Region (Private Anschrift)"
+msgstr "Bundesland (Private Anschrift)"
 
 #: js/Model.js:47
 msgid "Postal Code (Private Address)"
