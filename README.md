@@ -61,8 +61,8 @@ If you found any security relevant issue you can mail us [security@tine20.com](m
 
 ## Server Requirements
 * Webserver like [Apache](https://httpd.apache.org/), [Ngnix](https://www.nginx.com/), …
-* [MySQL](http://www.mysql.com/) >= 5.4 or [MariaDB](https://mariadb.org) >= 5.5
-* [PHP](http://www.php.net/) 5.6 - 7.2, version 7.0 - 7.2 recommended.
+* [MySQL](http://www.mysql.com/) >= 5.4 or [MariaDB](https://mariadb.org) >= 5.5 (mysql5.7 / mariadb 10.0 recommended)
+* [PHP](http://www.php.net/) 7.0 - 7.3, version 7.2 recommended.
   + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring
   + Optional Extensions: Redis, LDAP, Memcache
 
