@@ -1210,7 +1210,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Redirect to this URL after logout.')
             'description'           => 'Redirect to this URL after logout.',
             'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1230,7 +1230,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Redirect to configured redirect URL also for login.')
             'description'           => 'Redirect to configured redirect URL also for login.',
             'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),

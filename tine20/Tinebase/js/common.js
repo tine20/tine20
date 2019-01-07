@@ -46,6 +46,8 @@ Tine.Tinebase.common = {
      * @param {Object} options
      *      {Boolean} keepRegistry
      *      {Boolean} clearCache
+     *      {Boolean} redirectAlways
+     *      {String} redirectUrl
      */
     reload: function(options) {
         options = options || {};
@@ -55,10 +57,19 @@ Tine.Tinebase.common = {
             Tine.Tinebase.tineInit.clearRegistry();
         }
 
-        // give browser some time to clear registry
-        window.setTimeout(function () {
-            window.location.reload(!!options.clearCache);
-        }, 500);
+        if (! options.redirectAlways && options.redirectUrl && options.redirectUrl != '') {
+            // redirect only after logout (redirectAlways == false) - we can't wait for the browser here...
+            // @todo how can we move that to the server?
+            // @see https://github.com/tine20/tine20/issues/6236
+            window.setTimeout(function () {
+                window.location = options.redirectUrl;
+            }, 500);
+        } else {
+            // give browser some time to clear registry
+            window.setTimeout(function () {
+                window.location.reload(!!options.clearCache);
+            }, 500);
+        }
     },
 
     showDebugConsole: function () {
