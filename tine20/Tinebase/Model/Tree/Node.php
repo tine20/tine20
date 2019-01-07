@@ -102,7 +102,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         ],
 
         'filterModel'       => [],
-
+        
         'fields'            => [
             'parent_id'                     => [
                 'type'                          => 'string',
@@ -187,7 +187,8 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'modlogOmit'                    => true,
                 'validators'                    => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Empty::class => 0
+                    Zend_Filter_Empty::class => 0,
+                    Zend_Filter_Input::DEFAULT_VALUE => 0
                 ],
             ],
             'revision_size'                 => [
@@ -204,7 +205,6 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Zend_Filter_Input::DEFAULT_VALUE => 0,
                 ],
             ],
-
             'pin_protected_node'            => [
                 'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],

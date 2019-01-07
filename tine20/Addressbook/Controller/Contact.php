@@ -590,6 +590,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
         /** @var Addressbook_Model_Contact $_record */
         /** @var Addressbook_Model_Contact $_oldRecord */
 
@@ -819,7 +821,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 . ' Updating record locality from Nominatim: ' . $place->city);
             $record->{$address . 'locality'} = $place->city;
         }
-        
+
+        if (empty($record->{$address . 'region'}) && ! empty($place->state)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Updating record region from Nominatim: ' . $place->state);
+            $record->{$address . 'region'} = $place->state;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ($address == 'adr_one_' ? ' Company' : ' Private') . ' Place found: lon/lat ' . $record->{$address . 'lon'} . ' / ' . $record->{$address . 'lat'});
     }

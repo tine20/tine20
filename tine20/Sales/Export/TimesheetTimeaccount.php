@@ -28,6 +28,11 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
      */
     protected $_invoice;
 
+    protected $_contextContract = null;
+    protected $_contextCustomer = null;
+    protected $_contextSumTag = null;
+    protected $_contextSum = null;
+
     /**
      * @var bool
      */
@@ -72,34 +77,34 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
         if (empty($this->_records)) {
             return parent::_getTwigContext($context);
         }
-        
-        $customers = $this->_invoice->relations;
-        $customer = $customers->filter('type', 'CUSTOMER')->getFirstRecord();
-        $contract = $customers->filter('type', 'CONTRACT')->getFirstRecord();
 
+        if (null === $this->_contextContract) {
+            $customers = $this->_invoice->relations;
+            $customer = $customers->filter('type', 'CUSTOMER')->getFirstRecord();
+            $contract = $customers->filter('type', 'CONTRACT')->getFirstRecord();
 
-        $tagSum = 0;
-        $sum = 0;
-        
-        foreach($this->_records as $record) {
-            if (!$record->tags) {
-                continue;
+            $this->_contextContract = $contract ? $contract->related_record->number : '';
+            $this->_contextCustomer = $customer ? $customer->related_record->getTitle() : '';
+
+            $this->_contextSumTag = 0;
+            $this->_contextSum = 0;
+
+            foreach ($this->_records as $record) {
+                if ($record->tags && $record->tags->filter('name', static::TAG_SUM)->count() > 0) {
+                    $this->_contextSumTag += $record->duration;
+                } else {
+                    $this->_contextSum += $record->duration;
+                }
             }
-            
-            if (($record->tags->filter('name', static::TAG_SUM))->count() > 0) {
-                $tagSum += $record->duration;
-            } else {
-                $sum += $record->duration; 
-            }
-        }    
+        }
 
         return parent::_getTwigContext($context + [
                 'invoice' => $this->_invoice,
-                'contract' => $contract ? $contract->related_record->number : '',
-                'customer' => $customer ? $customer->related_record->getTitle() : '',
+                'contract' => $this->_contextContract,
+                'customer' => $this->_contextCustomer,
                 'timeaccount' => $this->_timeaccount,
-                'sumTag' =>  $tagSum,
-                'sum' => $sum
+                'sumTag' =>  $this->_contextSumTag,
+                'sum' => $this->_contextSum
             ]
         );
     }
@@ -111,11 +116,6 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
     protected function _onBeforeExportRecords()
     {
         parent::_onBeforeExportRecords();
-
-        // Maybe somewhere one day there could be something, we throw it out. We are going to export Timetracker_Model_Timesheets not invoices
-        if ($this->_records) {
-            $this->_records->removeAll();
-        }
 
         $filter = new Timetracker_Model_TimesheetFilter([
             [
@@ -142,8 +142,7 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
             'operator' => 'equals',
             'value' => $this->_invoice->getId()
         ]));
-        $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
-        $this->_records = $timesheets;
+        $this->_records = Timetracker_Controller_Timesheet::getInstance()->search($filter);
     }
 
     /**

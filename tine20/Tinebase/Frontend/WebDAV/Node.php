@@ -154,7 +154,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
      */
     public function getETag()
     {
-        return '"' . $this->_node->hash . '"';
+        return '"' . (empty($this->_node->hash) ? sha1($this->_node->object_id) : $this->_node->hash) . '"';
     }
 
     /**
@@ -169,6 +169,16 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     }
 
     /**
+     * returns the nodes size
+     *
+     * @return integer
+     */
+    public function getSize()
+    {
+        return (int)$this->_node->size;
+    }
+
+    /**
      * Returns the list of properties
      *
      * @param array $requestedProperties
@@ -176,12 +186,20 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
      */
     public function getProperties($requestedProperties)
     {
-        $properties = array();
-
         $response = array();
 
         foreach ($requestedProperties as $prop) {
             switch($prop) {
+                case '{DAV:}getcontentlength':
+                    if ($this->_node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                        $response[$prop] = $this->getSize();
+                    }
+                    break;
+
+                case '{http://owncloud.org/ns}size':
+                    $response[$prop] = $this->getSize();
+                    break;
+
                 case '{DAV:}getetag':
                     $response[$prop] = $this->getETag();
                     break;
@@ -196,10 +214,6 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
                     }
                     break;
-
-                default:
-                    if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
-                    break;
             }
         }
 
@@ -209,5 +223,10 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     public function updateProperties($mutations)
     {
         return false;
+    }
+
+    public function getNode()
+    {
+        return $this->_node;
     }
 }

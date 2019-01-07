@@ -95,7 +95,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'available_revisions'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'),
-        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
+        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
         'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
         'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
         'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),

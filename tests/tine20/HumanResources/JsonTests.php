@@ -61,7 +61,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $filter = new HumanResources_Model_AccountFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id'])));
         $result = HumanResources_Controller_Account::getInstance()->search($filter);
-        $this->assertEquals(2, $result->count());
+        $this::assertGreaterThanOrEqual(2, $result->count(), 'should find 2 or more accounts: ' . print_r($result->toArray(), true));
        
         $date->addMonth(2);
         $costCenter2 = $this->_getCostCenter($date);
@@ -1141,16 +1141,16 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
     public function testDailyWtReportApi()
     {
-        // TODO create should not be possible via API?
-        // TODO create via controller/backend?
-        // TODO disallow to edit when clearance is set?
+        // TODO disallow to edit when clearance is set
 
         $this->_testSimpleRecordApi(
             'DailyWTReport',
             null,
             null,
             true,
-            [],
+            [
+                'date' => '2018-08-01'
+            ],
             false
         );
     }

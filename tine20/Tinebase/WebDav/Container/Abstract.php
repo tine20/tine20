@@ -377,8 +377,6 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      */
     public function getProperties($requestedProperties) 
     {
-        $properties = array();
-        
         $response = array();
 
         $quotaData = null;
@@ -391,11 +389,11 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
 
                 case '{DAV:}sync-token':
                     if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
                         $response[$prop] = $this->getSyncToken();
                     } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
                     }
                     break;
@@ -409,7 +407,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                         // 200 GB limit in case no quota provided
                         $response[$prop] = $quotaData['localQuota'] === null ? 200 * 1024 * 1024 * 1024 :
                             $quotaData['localFree'];
-                    } elseif (isset($properties[$prop])) $response[$prop] = $properties[$prop];
+                    }
                     break;
 
                 case '{DAV:}quota-used-bytes':
@@ -421,11 +419,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                             $size = $this->_container->revision_size;
                         }
                         $response[$prop] = $size;
-                    } elseif (isset($properties[$prop])) $response[$prop] = $properties[$prop];
-                    break;
-
-                default:
-                    if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
+                    }
                     break;
             }
         }

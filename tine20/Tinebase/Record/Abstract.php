@@ -1661,9 +1661,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * returns the id of a record property
      *
      * @param string $_property
+     * @param boolean $_getIdFromRecord default true, returns null if property has a record and value is false
      * @return string|null
      */
-    public function getIdFromProperty($_property)
+    public function getIdFromProperty($_property, $_getIdFromRecord = true)
     {
         if (!isset($this->_properties[$_property])) {
             return null;
@@ -1671,7 +1672,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
 
         $value = $this->_properties[$_property];
         if (is_object($value) && $value instanceof Tinebase_Record_Interface) {
-            return $value->getId();
+            return $_getIdFromRecord ? (string)$value->getId() : null;
         } elseif (is_string($value) || is_integer($value)) {
             return (string)$value;
         }
