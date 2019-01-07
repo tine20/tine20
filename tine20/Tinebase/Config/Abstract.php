@@ -862,6 +862,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                     }
                     $this->_mergeAppDefaultsConfigData($target[$key][self::CONTENT], $k, $v);
                 }
+            } elseif ($target[$key][self::TYPE] === self::TYPE_ARRAY) {
+                $target[$key][self::DEFAULT_STR] = $val;
             }
         } elseif (!isset($target[$key][self::TYPE]) || ($target[$key][self::TYPE] !== self::TYPE_OBJECT &&
                 $target[$key][self::TYPE] !== self::TYPE_ARRAY)) {
