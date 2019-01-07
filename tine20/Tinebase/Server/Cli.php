@@ -99,17 +99,22 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         if (! in_array($method, self::getAnonymousMethods($method))) {
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }
-        $result = $tinebaseServer->handle($opts);
-        
-        //@todo remove cli session path
-
-        // convert function result to shell return code
-        if ($result === NULL || $result === TRUE || ! is_int($result)) {
-            $result = 0;
-        } else if ($result === FALSE) {
+        try {
+            $result = $tinebaseServer->handle($opts);
+            // convert function result to shell return code
+            if ($result === NULL || $result === TRUE || ! is_int($result)) {
+                $result = 0;
+            } else if ($result === FALSE) {
+                $result = 1;
+            }
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            echo $e . "\n";
             $result = 1;
         }
         
+        //@todo remove cli session path
+
         // finish profiling here - we won't run in Tinebase_Core again
         Tinebase_Core::finishProfiling();
         Tinebase_Core::getDbProfiling();

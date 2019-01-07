@@ -58,18 +58,16 @@ class Tinebase_Frontend_Cli_Abstract
      * update or create import/export definition
      * 
      * @param Zend_Console_Getopt $_opts
-     * @return boolean
+     * @return int
      */
     public function updateImportExportDefinition(Zend_Console_Getopt $_opts)
     {
+        $this->_checkAdminRight();
+        
         $defs = $_opts->getRemainingArgs();
         if (empty($defs)) {
             echo "No definition given.\n";
-            return FALSE;
-        }
-        
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
+            return 1;
         }
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
@@ -79,7 +77,7 @@ class Tinebase_Frontend_Cli_Abstract
             echo "Imported " . $definitionFilename . " successfully.\n";
         }
         
-        return TRUE;
+        return 0;
     }
 
     /**
@@ -93,14 +91,12 @@ class Tinebase_Frontend_Cli_Abstract
      */
     public function createContainer(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $data = $this->_parseArgs($_opts, array('name', 'type', 'model'), array('owner', 'color'));
 
         if ($data['type'] !== 'shared') {
-            die ('only shared containers supported');
+            die('only shared containers supported');
         }
 
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
@@ -128,9 +124,7 @@ class Tinebase_Frontend_Cli_Abstract
      */
     public function setContainerGrants(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
         
@@ -170,9 +164,7 @@ class Tinebase_Frontend_Cli_Abstract
     public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
         // just admins can perform this action
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $data = $this->_parseArgs($_opts);
         if (! isset($data['demodata'])) {
@@ -384,17 +376,24 @@ class Tinebase_Frontend_Cli_Abstract
     /**
      * check admin right of application
      * 
+     * @param boolean $exitOnNoPermission
      * @return boolean
      */
-    protected function _checkAdminRight()
+    protected function _checkAdminRight($exitOnNoPermission = true)
     {
-        // check if admin for tinebase
+        // check if admin for app
         if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Tinebase_Acl_Rights::ADMIN)) {
             echo "No admin right for application " . $this->_applicationName . "\n";
-            return FALSE;
+            if ($exitOnNoPermission) {
+                // 126 = Command invoked cannot execute / Permission problem or command is not an executable
+                // @see http://tldp.org/LDP/abs/html/exitcodes.html
+                exit(126);
+            } else {
+                return false;
+            }
         }
         
-        return TRUE;
+        return true;
     }
     
     /**

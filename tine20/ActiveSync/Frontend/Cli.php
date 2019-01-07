@@ -34,7 +34,7 @@ class ActiveSync_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $args = $this->_parseArgs($opts, array('user'));
         
-        if ($args['user'] != Tinebase_Core::getUser()->accountLoginName && ! $this->_checkAdminRight()) {
+        if ($args['user'] != Tinebase_Core::getUser()->accountLoginName && ! $this->_checkAdminRight(false)) {
             return 1;
         }
         
