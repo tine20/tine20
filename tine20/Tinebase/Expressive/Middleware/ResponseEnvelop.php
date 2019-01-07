@@ -82,11 +82,14 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             $body = $response->getBody();
             $body->rewind();
             $headerStr = '';
-            foreach($response->getHeaders() as $name => $values) {
+            foreach ($response->getHeaders() as $name => $values) {
                 $headerStr .= "$name: {$values[0]}\n";
             }
 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " response:\n$headerStr\n".$body->getContents());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " Response headers: " . $headerStr);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . " Response body: " . $body->getContents());
         }
         return $response;
     }
