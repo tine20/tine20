@@ -545,23 +545,22 @@ class Setup_Controller
         if (count($tables) > 0) {
             $db->query('SET foreign_key_checks = 0');
             $db->query('SET unique_checks = 0');
-        }
 
-        foreach ($tables as $table) {
-            $db->query('ALTER TABLE `' . $table . '` convert to character set ' . $charset . ' collate ' . $collation);
-            if (SQL_TABLE_PREFIX . 'tree_nodes' === $table) {
-                $setupBackend = new Setup_Backend_Mysql();
-                $setupBackend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                    <collation>utf8mb4_bin</collation>
-                </field>'));
+            foreach ($tables as $table) {
+                $db->query('ALTER TABLE `' . $table . '` convert to character set ' . $charset . ' collate ' .
+                    $collation);
+                if (SQL_TABLE_PREFIX . 'tree_nodes' === $table) {
+                    $setupBackend = new Setup_Backend_Mysql();
+                    $setupBackend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>true</notnull>
+                        <collation>utf8mb4_bin</collation>
+                    </field>'));
+                }
             }
-        }
 
-        if (count($tables) > 0) {
             $db->query('SET foreign_key_checks = 1');
             $db->query('SET unique_checks = 1');
 
@@ -569,6 +568,11 @@ class Setup_Controller
                 $db->query('REPAIR TABLE ' . $db->quoteIdentifier($table));
                 $db->query('OPTIMIZE TABLE ' . $db->quoteIdentifier($table));
             }
+
+            $db->closeConnection();
+
+            // give mysql time to catch up?
+            sleep(10);
         }
 
         $columns = $db->query('SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE "'
