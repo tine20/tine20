@@ -19,7 +19,8 @@
 class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Contact_VCard_Abstract
 {
     // DAVdroid/0.7.2
-    const HEADER_MATCH = '/DAVdroid\/(?P<version>.*)/';
+    // DAVx5/2.2.1-gplay
+    const HEADER_MATCH = '/(DAVdroid|DAVx5)\/(?P<version>.*)/';
 
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,
