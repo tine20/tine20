@@ -378,7 +378,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter = new Calendar_Model_EventFilter(array(), 'AND');
             $filter->addFilterGroup($og);
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' events filter: ' . print_r($filter->toArray(), true));
+
         $records = $controller->search($filter, $pagination, FALSE);
         
         $result = $this->_multipleRecordsToJson($records, $clientFilter, $pagination);
