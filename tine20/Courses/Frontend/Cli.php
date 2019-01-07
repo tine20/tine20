@@ -38,10 +38,8 @@ class Courses_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function resetCoursesInternetAccess()
     {
-        if (! $this->_checkAdminRight()) {
-            return 2;
-        }
-        
+        $this->_checkAdminRight();
+
         $config = Courses_Config::getInstance();
         if (! isset($config->{Courses_Config::INTERNET_ACCESS_GROUP_ON}) || ! isset($config->{Courses_Config::INTERNET_ACCESS_GROUP_FILTERED})) {
             echo "No internet groups defined in config. Exiting\n";

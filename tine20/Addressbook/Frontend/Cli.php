@@ -69,9 +69,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     public function resetAllSyncBackends()
     {
-        if (!$this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         (new Addressbook_Backend_Sql())->resetAllSyncBackendIds();
     }

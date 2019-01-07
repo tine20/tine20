@@ -38,9 +38,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function increaseReplicationMasterId($opts)
     {
-        if (!$this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($opts, array());
         $count = isset($args['count']) ? $args['count'] : 1;
@@ -56,9 +54,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function readModifictionLogFromMaster($opts)
     {
-        if (!$this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_Timemachine_ModificationLog::getInstance()->readModificationLogFromMaster();
 
@@ -73,20 +69,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     */
     public function rebuildPaths($opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $result = Tinebase_Controller::getInstance()->rebuildPaths();
 
-        return $result ? true : -1;
+        return $result ? true : 1;
     }
 
     public function forceResync($_opts)
     {
-        if (!$this->_checkAdminRight()) {
-            return false;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array());
         $userIds = isset($args['userIds']) ? (is_array($args['userIds']) ? $args['userIds'] : [$args['userIds']])
@@ -148,9 +140,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function forceSyncTokenResync($_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array());
 
@@ -179,9 +169,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanModlog()
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
 
@@ -193,9 +181,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanRelations()
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $relations = Tinebase_Relations::getInstance();
         $filter = new Tinebase_Model_Filter_FilterGroup();
@@ -442,9 +428,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function clearTable(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
         $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
@@ -488,9 +472,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function purgeDeletedRecords(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array(), 'tables');
         $doEverything = false;
@@ -541,9 +523,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanNotes(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array(), 'cleanNotesOffset');
 
@@ -654,9 +634,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanCustomfields()
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $customFieldController = Tinebase_CustomField::getInstance();
         $customFieldConfigs = $customFieldController->searchConfig();
@@ -849,9 +827,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function addCustomfield(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         // parse args
         $args = $_opts->getRemainingArgs();
@@ -872,7 +848,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         print_r($cf->toArray());
         echo "\n";
         
-        return TRUE;
+        return 0;
     }
 
     /**
@@ -889,9 +865,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function setCustomfieldAcl(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         // parse args
         $args = $_opts->getRemainingArgs();
@@ -1263,9 +1237,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function undo(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $data = $this->_parseArgs($opts, array('modification_time'));
         
@@ -1326,9 +1298,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function createAllDemoData($_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         // fetch all applications and check if required are installed, otherwise remove app from array
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
@@ -1397,9 +1367,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function clearDeletedFiles()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
         
         $this->_addOutputLogWriter();
         
@@ -1416,9 +1384,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function clearDeletedFilesFromDatabase(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $this->_addOutputLogWriter();
 
@@ -1442,9 +1408,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemSizeRecalculation()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->recalculateRevisionSize();
 
@@ -1462,9 +1426,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function fileSystemCheckIndexing()
     {
 
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->checkIndexing();
 
@@ -1481,9 +1443,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function fileSystemCheckPreviews()
     {
 
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
 
@@ -1498,9 +1458,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function fileSystemRecreateAllPreviews()
     {
 
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem_Previews::getInstance()->deleteAllPreviews();
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
@@ -1517,9 +1475,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function repairTable($opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $this->_addOutputLogWriter();
         
@@ -1546,9 +1502,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function transferRelations($opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $this->_addOutputLogWriter();
         
@@ -1581,9 +1535,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function setDefaultGrantsOfPersistentFilters()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $this->_addOutputLogWriter(6);
 
@@ -1622,9 +1574,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function repairContainerOwner()
     {
-        if (! $this->_checkAdminRight()) {
-            return 2;
-        }
+        $this->_checkAdminRight();
 
         $this->_addOutputLogWriter(6);
         Tinebase_Container::getInstance()->setContainerOwners();
@@ -1640,9 +1590,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function userReport()
     {
-        if (! $this->_checkAdminRight()) {
-            return 2;
-        }
+        $this->_checkAdminRight();
 
         $translation = Tinebase_Translation::getTranslation('Tinebase');
 
@@ -1701,27 +1649,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     public function cleanFileObjects()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->clearFileObjects();
     }
 
     public function clearCache()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 
     public function cleanAclTables()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_Controller::getInstance()->cleanAclTables();
     }
@@ -1748,9 +1690,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function sanitizeGroupListSync(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $data = $this->_parseArgs($opts);
         if (isset($data['dryRun']) && ($data['dryRun'] === '0' || $data['dryRun'] === 'false')) {
@@ -1772,9 +1712,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function resetSchedulerTasks(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_Setup_Initialize::addSchedulerTasks();
 
@@ -1788,9 +1726,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function reportPreviewStatus(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         print_r(Tinebase_FileSystem::getInstance()->reportPreviewStatus());
 

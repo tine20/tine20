@@ -142,10 +142,10 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             echo $e . "\n";
-            $result = -1;
+            $result = 1;
         }
 
-        return $result;
+        exit($result);
     }
     
     /**
