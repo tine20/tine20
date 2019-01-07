@@ -379,9 +379,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 // TODO the SQL field is of course not varchar(255)... so...
                 'validators'                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
-                    Zend_Filter_Input::DEFAULT_VALUE    => 0
                 ],
-                'inputFilters'                  => [Zend_Filter_Empty::class => 0],
                 'modlogOmit'                    => true,
                 'system'                        => true
             ],
