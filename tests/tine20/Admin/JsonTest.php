@@ -1273,8 +1273,7 @@ class Admin_JsonTest extends TestCase
     public function testRegistryForSMTP()
     {
         $smtpConfig = Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP);
-        $primaryDomainConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) && isset($smtpConfig['primarydomain'])
-            ? $smtpConfig['primarydomain'] : '';
+        $primaryDomainConfig = $this->_getPrimaryDomain();
         $secondaryDomainConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) && isset($smtpConfig['secondarydomains'])
             ? $smtpConfig['secondarydomains'] : '';
 
@@ -1282,6 +1281,36 @@ class Admin_JsonTest extends TestCase
 
         $this->assertEquals($registryData['primarydomain'],  $primaryDomainConfig);
         $this->assertEquals($registryData['secondarydomains'], $secondaryDomainConfig);
+    }
+
+    protected function _getPrimaryDomain()
+    {
+        $smtpConfig = Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP);
+        $primaryDomainConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) && isset($smtpConfig['primarydomain'])
+            ? $smtpConfig['primarydomain'] : '';
+        return $primaryDomainConfig;
+    }
+
+    /**
+     * testChangeContactEmailCheckPrimaryDomain
+     *
+     * @todo move to ADB json tests?
+     */
+    public function testChangeContactEmailCheckPrimaryDomain()
+    {
+        $primaryDomain = $this->_getPrimaryDomain();
+        if ($primaryDomain === '') {
+            self::markTestSkipped('test does not work without primary domain cfg');
+        }
+
+        $user = $this->testSaveAccount();
+        $contact = Addressbook_Controller_Contact::getInstance()->get($user['contact_id']);
+        $contact->email = 'somemail@anotherdomain.com';
+        try {
+            Addressbook_Controller_Contact::getInstance()->update($contact);
+            self::fail('update should throw an exception - email should not be updateable: ' . print_r($contact->toArray(), true));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+        }
     }
 
     public function testSearchConfigs()

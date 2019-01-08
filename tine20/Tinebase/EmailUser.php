@@ -381,4 +381,43 @@ class Tinebase_EmailUser
         }
         return $allowedDomains;
     }
+
+    /**
+     * check if email address is in allowed domains
+     *
+     * @param string $_email
+     * @param boolean $_throwException
+     * @param array $_allowedDomains
+     * @return boolean
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    public static function checkDomain($_email, $_throwException = false, $_allowedDomains = null)
+    {
+        $result = true;
+        $allowedDomains = $_allowedDomains ? $_allowedDomains : self::getAllowedDomains();
+
+        if (! empty($allowedDomains)) {
+
+            list($user, $domain) = explode('@', $_email, 2);
+
+            if (! in_array($domain, $allowedDomains)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' Email address ' . $_email . ' not in allowed domains!');
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($allowedDomains, TRUE));
+
+                if ($_throwException) {
+                    throw new Tinebase_Exception_UnexpectedValue(
+                        "Emails domainpart $domain is not in the list of allowed domains! "
+                            . implode(',', $allowedDomains)
+                    );
+                } else {
+                    $result = false;
+                }
+            }
+        }
+
+        return $result;
+    }
 }

@@ -824,7 +824,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function updateContact(Addressbook_Model_Contact $_contact)
     {
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->updateContactInSyncBackend($_contact);
         }
         
@@ -837,10 +837,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param Addressbook_Model_Contact $contact
      * @return integer
      * @throws Exception
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function updateContactInSqlBackend(Addressbook_Model_Contact $_contact)
     {
         $contactId = $_contact->getId();
+
+        // prevent changing of email if it does not match configured domains
+        if (! Tinebase_EmailUser::checkDomain($_contact->email)) {
+            // _('User E-Mail-Address not in allowed domains')
+            throw new Tinebase_Exception_SystemGeneric('User E-Mail-Address not in allowed domains');
+        }
 
         $oldUser = $this->getUserByProperty('contactId', $contactId, 'Tinebase_Model_FullUser');
 
