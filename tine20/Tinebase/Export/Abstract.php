@@ -958,7 +958,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 foreach ($this->_expandCustomFields as $field => $label) {
                     if (!isset($validators[$field])) {
                         $validators[$field] = [];
+                    } else {
+                        unset($this->_expandCustomFields[$field]);
                     }
+                }
+                if (empty($this->_expandCustomFields)) {
+                    $validators = null;
                 }
             }
 
