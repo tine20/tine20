@@ -72,14 +72,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        $smtpConfig = ($this->_manageSmtpEmailUser) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
 
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,
             'manageImapEmailUser'           => $this->_manageImapEmailUser,
             'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
-            'primarydomain'                 => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
-            'secondarydomains'              => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => (
                     isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])

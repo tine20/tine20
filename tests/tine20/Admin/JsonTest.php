@@ -1265,24 +1265,6 @@ class Admin_JsonTest extends TestCase
         $this->assertContains("PHP Version =>", $info['html']);
     }
 
-    /**
-     * Check for smtp domains in registry
-     *
-     * @see 0010305: Undefined value in user edit dialog
-     */
-    public function testRegistryForSMTP()
-    {
-        $smtpConfig = Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP);
-        $primaryDomainConfig = $this->_getPrimaryDomain();
-        $secondaryDomainConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) && isset($smtpConfig['secondarydomains'])
-            ? $smtpConfig['secondarydomains'] : '';
-
-        $registryData = $this->_json->getRegistryData();
-
-        $this->assertEquals($registryData['primarydomain'],  $primaryDomainConfig);
-        $this->assertEquals($registryData['secondarydomains'], $secondaryDomainConfig);
-    }
-
     protected function _getPrimaryDomain()
     {
         $smtpConfig = Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP);

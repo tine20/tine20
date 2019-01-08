@@ -102,6 +102,9 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      */
     const IMAP_ALLOW_SELF_SIGNED_TLS_CERT = 'imapAllowSelfSignedTlsCert';
 
+    const FLAG_ICON_OWN_DOMAIN = 'flagIconOwnDomain';
+    const FLAG_ICON_OTHER_DOMAIN = 'flagIconOtherDomain';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -246,6 +249,28 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'setBySetupModule'      => false,
             'default'               => null,
+        ),
+        self::FLAG_ICON_OWN_DOMAIN => array(
+            //_('URL icon path for own domain')
+            'label'                 => 'URL icon path for own domain',
+            //_('Used to mark messages from configured primary and secondary domains')
+            'description'           => 'Used to mark messages from configured primary and secondary domains',
+            'type'                  => 'string',
+            'default'               => 'favicon/svg',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
+        ),
+        self::FLAG_ICON_OTHER_DOMAIN => array(
+            //_('URL icon path for other domains')
+            'label'                 => 'URL icon path for other domains',
+            //_('Used to mark messages from all other domains')
+            'description'           => 'Used to mark messages from all other domains',
+            'type'                  => 'string',
+            'default'               => 'favicon/svg',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
         ),
     );
     
