@@ -695,6 +695,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $applicationController->setApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
             $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1;
+            Tinebase_FileSystem_Quota::clearConfigCache();
 
             $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
             $this->_rmDir[] = $sharedContainerNode['path'];
@@ -764,6 +765,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $oldQuotaConfig = clone $quotaConfig;
         $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1024;
         $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} = 100;
+        Tinebase_FileSystem_Quota::clearConfigCache();
         $deletePaths =  [];
 
         try {
@@ -855,7 +857,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         }
     }
 
-    public function testCreateFileAndQuota()
+    /*public function testCreateFileAndQuota()
     {
         $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
         $oldQuotaConfig = clone $quotaConfig;
@@ -866,7 +868,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         } finally {
             Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $oldQuotaConfig);
         }
-    }
+    }*/
 
     /**
     * testCreateFileNodeWithUTF8Filenames

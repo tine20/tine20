@@ -820,6 +820,36 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                     }
                     break;
 
+                case '{DAV:}quota-available-bytes':
+                    if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
+                        if (count($this->_pathParts) === 1) {
+                            // webdav -> root file system ...
+                            if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes() &&
+                                    0 === Tinebase_FileSystem_Quota::getPersonalQuotaBytes()) {
+                                // unlimited: RFC 4331: If a resource has no quota enforced or unlimited storage
+                                // ("infinite limits"), the server MAY choose not to return this property
+                                break;
+                            }
+                            $response[$property] = Tinebase_FileSystem_Quota::getPersonalQuotaBytes() ?:
+                                Tinebase_FileSystem_Quota::getRootFreeBytes();
+                        }
+                    }
+                    break;
+
+                case '{DAV:}quota-used-bytes':
+                    if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
+                        if (count($this->_pathParts) === 1) {
+                            // webdav -> root file system ...
+                            if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes()) {
+                                // owncloud displays garbage if we dont have a quota-available-bytes value
+                                // so better not return something here
+                                break;
+                            }
+                            $response[$property] = Tinebase_FileSystem_Quota::getRootUsedBytes();
+                        }
+                    }
+                    break;
+
                 case '{DAV:}displayname':
                     if (count($this->_getPathParts()) === 2 && $this->getName() !== Tinebase_Model_Container::TYPE_SHARED) {
                         try {
