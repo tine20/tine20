@@ -406,26 +406,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql imp
      */
     protected function _checkDomain($_email, $_throwException = false)
     {
-        $result = true;
-        
-        if (! empty($this->_config['alloweddomains'])) {
-
-            list($user, $domain) = explode('@', $_email, 2);
-            
-            if (! in_array($domain, $this->_config['alloweddomains'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Email address ' . $_email . ' not in allowed domains!');
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($this->_config['alloweddomains'], TRUE));
-                
-                if ($_throwException) {
-                    throw new Tinebase_Exception_UnexpectedValue('Email address not in allowed domains!');
-                } else {
-                    $result = false;
-                }
-            }
-        }
-        
-        return $result;
+        return Tinebase_EmailUser::checkDomain($_email, $_throwException, $this->_config['alloweddomains']);
     }
     
     /**

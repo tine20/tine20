@@ -17,6 +17,6 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_Record_NotAllowed extends Tinebase_Exception //  extends BadFunctionCallException
+class Tinebase_Exception_Record_NotAllowed extends Tinebase_Exception
 {
 }
