@@ -200,7 +200,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
             var emailValue = this.getForm().findField('accountEmailAddress').getValue();
-            if (! this.checkEmailDomain(emailValue)) {
+            if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
                 result = false;
                 this.getForm().markInvalid([{
                     id: 'accountEmailAddress',
@@ -220,29 +220,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         return result;
-    },
-    
-    /**
-     * check valid email domain (if email domain is set in config)
-     * 
-     * @param {String} email
-     * @return {Boolean}
-     * 
-     * TODO use this for smtp aliases, too
-     */
-    checkEmailDomain: function(email) {
-        if (! Tine.Admin.registry.get('primarydomain') || ! email) {
-            return true;
-        }
-        
-        var allowedDomains = [Tine.Admin.registry.get('primarydomain')],
-            emailDomain = email.split('@')[1];
-            
-        if (Ext.isString(Tine.Admin.registry.get('secondarydomains'))) {
-            allowedDomains = allowedDomains.concat(Tine.Admin.registry.get('secondarydomains').split(','));
-        }
-        
-        return (allowedDomains.indexOf(emailDomain) !== -1);
     },
     
     /**
@@ -649,9 +626,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ])
         };
         
-        // TODO how to fetch smtp config if Felamimail isn't installed?
-        var smtpPrimarydomain = Tine.Admin.registry.get('primarydomain');
-        var smtpSecondarydomains = Tine.Admin.registry.get('secondarydomains');
+        var smtpPrimarydomain = Tine.Tinebase.registry.get('primarydomain');
+        var smtpSecondarydomains = Tine.Tinebase.registry.get('secondarydomains');
 
         var domains = (smtpSecondarydomains && smtpSecondarydomains.length) ? smtpSecondarydomains.split(',') : [];
         if (smtpPrimarydomain.length) {

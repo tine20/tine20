@@ -851,6 +851,33 @@ Tine.Tinebase.common = {
             return Math.floor(x);
         }
         return Math.ceil(x);
+    },
+
+    /**
+     * check valid email domain (if email domain is set in config)
+     *
+     * @param {String} email
+     * @return {Boolean}
+     */
+    checkEmailDomain: function(email) {
+        Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - email: ' + email);
+
+        if (! Tine.Tinebase.registry.get('primarydomain') || ! email) {
+            Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no primarydomain config found or no mail given');
+            return true;
+        }
+
+        var allowedDomains = [Tine.Tinebase.registry.get('primarydomain')],
+            emailDomain = email.split('@')[1];
+
+        if (Ext.isString(Tine.Tinebase.registry.get('secondarydomains'))) {
+            allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('secondarydomains').split(','));
+        }
+
+        Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - allowedDomains:');
+        Tine.log.debug(allowedDomains);
+
+        return (allowedDomains.indexOf(emailDomain) !== -1);
     }
 };
 

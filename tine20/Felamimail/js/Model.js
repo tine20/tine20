@@ -70,7 +70,23 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
         var flags = this.get('flags') || [];
         return flags.indexOf(flag) >= 0;
     },
-    
+
+    /**
+     * returns icon for message with TINE20 flag
+     *  depending on the configured icons and the sender domain
+     *
+     * @returns {String}
+     */
+    getTine20Icon: function() {
+        let flagConfigKey;
+        if (Tine.Tinebase.common.checkEmailDomain(this.get('from_email'))) {
+            flagConfigKey = 'flagIconOwnDomain';
+        } else {
+            flagConfigKey = 'flagIconOtherDomain';
+        }
+        return Tine.Tinebase.configManager.get(flagConfigKey, 'Felamimail');
+    },
+
     /**
      * adds given flag to message
      * 
