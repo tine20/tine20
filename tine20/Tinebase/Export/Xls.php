@@ -122,6 +122,26 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     }
 
     /**
+     * get export format string (csv, ...)
+     *
+     * @return string
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getFormat()
+    {
+        if ('Xlsx' === $this->_excelVersion) {
+            // excel2007 extension is .xlsx
+            return 'xlsx';
+        }
+
+        if ($this->_format === null) {
+            throw new Tinebase_Exception_NotFound('Format string not found.');
+        }
+        
+        return $this->_format;
+    }
+
+    /**
      * output result
      *
      * @param string $_target
