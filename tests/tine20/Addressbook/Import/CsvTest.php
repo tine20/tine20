@@ -394,7 +394,10 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         self::assertTrue((3 === $result['totalcount'] || 4 === $result['totalcount']), 'should have added 3 or 4 contacts');
         self::assertEquals('Straßbough', $result['results'][1]['adr_one_locality'],
                 'should have changed the locality of contact #2: ' . print_r($result['results'][1]->toArray(), true));
-        self::assertEquals('Gartencenter Röhr & Vater', $result['results'][3]['n_family']);
+        $n_family = $result['results'][3]['n_family'];
+        self::assertTrue('Gartencenter Röhr & Vater' === $n_family
+            || 'Dr. Schutheiss' === $n_family,
+            print_r($result['results']->toArray(), true));
     }
 
     public function testSplitField()

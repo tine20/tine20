@@ -4,10 +4,9 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
- * @todo        add testSetImage (NOTE: we can't test the upload yet, so we needd to simulate the upload)
  */
 
 /**
@@ -2407,5 +2406,36 @@ Steuernummer 33/111/32212";
         self::assertEquals(1, count($contactWithUnlockedProjectSaved['relations']),'project relation should not be removed!');
         self::assertTrue(isset($contactWithUnlockedProjectSaved['relations'][0]['related_record']));
         self::assertEquals('blabla', $contactWithUnlockedProjectSaved['relations'][0]['related_record']['description']);
+    }
+
+    public function testSetImage()
+    {
+        // create tempfile
+        $tempFileBackend = new Tinebase_TempFile();
+        $image = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/images/favicon.png';
+        $tempFile = $tempFileBackend->createTempFile($image);
+
+        // save contact with tempfile
+        $contact = $this->_getContactData();
+        $contact['jpegphoto'] = 'index.php?method=Tinebase.getImage&application=Tinebase&location=tempFile&id='
+            . $tempFile->getId() . '&width=88&height=118&ratiomode=0&mtime=1546880445806';
+        $savedContactWithImage = $this->_uit->saveContact($contact);
+
+        // save contact again
+        $savedContactWithImageAgain = $this->_uit->saveContact($savedContactWithImage);;
+
+        // check if image is still there
+        self::assertTrue(isset($savedContactWithImageAgain['jpegphoto']));
+        self::assertEquals($savedContactWithImage['jpegphoto'], $savedContactWithImageAgain['jpegphoto'],
+            'image should not change!');
+        return $savedContactWithImageAgain;
+    }
+
+    public function testRemoveImage()
+    {
+        $contact = $this->testSetImage();
+        $contact['jpegphoto'] = '';
+        $savedContactToRemoveImage = $this->_uit->saveContact($contact);
+        self::assertEquals('images/icon-set/icon_undefined_contact.svg', $savedContactToRemoveImage['jpegphoto'], 'image not removed');
     }
 }

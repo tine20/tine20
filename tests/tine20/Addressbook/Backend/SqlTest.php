@@ -251,7 +251,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $contact->jpegphoto = '';
         $updatedContact = $this->_backend->update($contact);
         
-        $this->assertEquals(0, $updatedContact->jpegphoto);
+        $this->assertEquals('', $updatedContact->jpegphoto);
     }
     
     /**

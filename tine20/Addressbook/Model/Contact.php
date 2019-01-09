@@ -460,9 +460,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_VIRTUAL,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
-                    Zend_Filter_Input::DEFAULT_VALUE    => 0
                 ],
-                self::INPUT_FILTERS             => [Zend_Filter_Empty::class => 0],
                 self::OMIT_MOD_LOG              => true,
                 self::SYSTEM                    => true
             ],
