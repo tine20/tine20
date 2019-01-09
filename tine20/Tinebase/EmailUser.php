@@ -396,7 +396,7 @@ class Tinebase_EmailUser
         $result = true;
         $allowedDomains = $_allowedDomains ? $_allowedDomains : self::getAllowedDomains();
 
-        if (! empty($allowedDomains)) {
+        if (! empty($_email) && ! empty($allowedDomains)) {
 
             list($user, $domain) = explode('@', $_email, 2);
 

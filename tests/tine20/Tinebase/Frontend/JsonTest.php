@@ -656,8 +656,12 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $profileData['tel_home'] = 'mustnotchange';
         $profileData['email_home'] = 'email@userprofile.set';
-        
-        $this->_instance->updateUserProfile($profileData);
+
+        try {
+            $this->_instance->updateUserProfile($profileData);
+        } catch (Exception $e) {
+            self::fail($e . ' profileData: ' . print_r($profileData, true));
+        }
         
         $updatedProfile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
         $updatedProfileData = $updatedProfile['userProfile'];

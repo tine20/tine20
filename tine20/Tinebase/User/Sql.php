@@ -834,7 +834,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * update contact data(first name, last name, ...) of user in local sql storage
      * 
-     * @param Addressbook_Model_Contact $contact
+     * @param Addressbook_Model_Contact $_contact
      * @return integer
      * @throws Exception
      * @throws Tinebase_Exception_SystemGeneric
@@ -845,8 +845,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         // prevent changing of email if it does not match configured domains
         if (! Tinebase_EmailUser::checkDomain($_contact->email)) {
-            // _('User E-Mail-Address not in allowed domains')
-            throw new Tinebase_Exception_SystemGeneric('User E-Mail-Address not in allowed domains');
+            // _('User E-Mail-Address {0} not in allowed domains')
+            $translation = Tinebase_Translation::getTranslation('Tinebase');
+            throw new Tinebase_Exception_SystemGeneric(str_replace(
+                '{0}',
+                $_contact->email,
+                $translation->_('User E-Mail-Address {0} not in allowed domains')
+            ));
         }
 
         $oldUser = $this->getUserByProperty('contactId', $contactId, 'Tinebase_Model_FullUser');
