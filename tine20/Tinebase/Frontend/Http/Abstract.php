@@ -81,6 +81,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'newCsv':
             case 'csv':
             case 'xls':
+            case 'xlsx':
             case 'doc':
             case 'docx':
                 $result = $export->generate($_filter);
