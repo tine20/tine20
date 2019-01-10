@@ -530,9 +530,41 @@ class Setup_Controller
         $db = Setup_Core::getDb();
         $dbConfig = $db->getConfig();
         if ($dbConfig['charset'] === 'utf8') {
+            $check = $db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE "' .
+                    SQL_TABLE_PREFIX . '%" AND TABLE_COLLATION LIKE "utf8mb4%"' .
+                    ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '"')->fetchColumn();
+            if (0 !== (int)$check) {
+                throw new Tinebase_Exception_Backend(
+                    'you already have some utf8mb4 tables, but your db config says utf8, this is bad!');
+            }
+
+            $check = $db->query('SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE "' .
+                SQL_TABLE_PREFIX . '%" AND CHARACTER_SET_NAME IS NOT NULL AND CHARACTER_SET_NAME LIKE "utf8mb4%"' .
+                ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '"')->fetchColumn();
+            if (0 !== (int)$check) {
+                throw new Tinebase_Exception_Backend(
+                    'you already have some utf8mb4 columns, but your db config says utf8, this is bad!');
+            }
+
             $charset = 'utf8';
             $collation = 'utf8_unicode_ci';
         } else {
+            $check = $db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE "' .
+                SQL_TABLE_PREFIX . '%" AND TABLE_COLLATION LIKE "utf8\\_%"' .
+                ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '"')->fetchColumn();
+            if (0 !== (int)$check) {
+                throw new Tinebase_Exception_Backend(
+                    'you still have some utf8 tables, but your db config says utf8mb4, this is bad!');
+            }
+
+            $check = $db->query('SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE "' .
+                SQL_TABLE_PREFIX . '%" AND CHARACTER_SET_NAME IS NOT NULL AND CHARACTER_SET_NAME LIKE "utf8\\_%"' .
+                ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '"')->fetchColumn();
+            if (0 !== (int)$check) {
+                throw new Tinebase_Exception_Backend(
+                    'you still have some utf8 columns, but your db config says utf8mb4, this is bad!');
+            }
+
             $charset = 'utf8mb4';
             $collation = 'utf8mb4_unicode_ci';
         }
