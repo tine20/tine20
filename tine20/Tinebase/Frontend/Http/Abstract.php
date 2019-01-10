@@ -110,6 +110,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'newCsv':
             case 'newPDF':
             case 'xls':
+            case 'xlsx':
             case 'doc':
             case 'docx':
                 // redirect output to client browser
