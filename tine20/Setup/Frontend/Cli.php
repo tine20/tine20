@@ -1199,19 +1199,25 @@ class Setup_Frontend_Cli
             throw new Tinebase_Exception_Backend_Database('innodb_file_per_table seems not to be turned on: ' . $ift);
         }
 
+        $dbConfig = $db->getConfig();
         try {
-            $db->query('ALTER DATABASE ' . $db->quoteIdentifier($db->getConfig()['dbname']) .
+            $db->query('ALTER DATABASE ' . $db->quoteIdentifier($dbConfig['dbname']) .
                 ' CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci');
         } catch (Zend_Db_Exception $zde) {
             Tinebase_Exception::log($zde);
         }
-
-        $tables = $db->listTables();
+        
+        $tables = $db->query('SELECT DISTINCT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE "' .
+            SQL_TABLE_PREFIX . '%" AND CHARACTER_SET_NAME IS NOT NULL AND CHARACTER_SET_NAME NOT LIKE "utf8mb4%"' .
+            ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '"')->fetchAll(Zend_Db::FETCH_COLUMN);
 
         $db->query('SET foreign_key_checks = 0');
         $db->query('SET unique_checks = 0');
         foreach ($tables as $table) {
-            $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+            if ($db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
+                    '" AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '" AND ROW_FORMAT <> "Dynamic"')->fetchColumn()) {
+                $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+            }
 
             if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
                 $setupBackend = new Setup_Backend_Mysql();
