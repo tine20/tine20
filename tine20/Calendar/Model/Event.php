@@ -64,6 +64,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     const RANGE_THISANDFUTURE = 'THISANDFUTURE';
 
     const XPROPS_IMIP_PROPERTIES = 'imipProperties';
+    const XPROPS_REPLICATABLE = 'calendarReplicatable';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -848,5 +849,27 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (isset($this->_properties['xprops']) && is_array($this->_properties['xprops'])) {
             $this->_properties['xprops'] = json_encode($this->_properties['xprops']);
         }
+    }
+
+    public function isReplicable()
+    {
+        $container = $this->container_id;
+        if (empty($container)) {
+            return false;
+        }
+        if (! $container instanceof Tinebase_Model_Container) {
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($container);
+            } catch (Tinebase_Exception_NotFound $e) {
+                Tinebase_Exception::log($e);
+                return false;
+            }
+        }
+
+        if (isset($container->xprops()[self::XPROPS_REPLICATABLE]) && $container->xprops()[self::XPROPS_REPLICATABLE]) {
+            return true;
+        }
+
+        return false;
     }
 }

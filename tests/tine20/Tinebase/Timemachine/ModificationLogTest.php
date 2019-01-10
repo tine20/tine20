@@ -432,6 +432,123 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $this->assertEquals(1, $newRole->members->filter('account_id', 'test3')->count(), 'record set diff modified didn\'t work, test3 not found');
     }
 
+    public function testCalendarEventNoReplicatable()
+    {
+        $container = new Tinebase_Model_Container([
+            'name'              => 'unittest test cal repl container',
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'backend'           => 'sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
+        ]);
+        $container = Tinebase_Container::getInstance()->addContainer($container);
+
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $eventCntr = Calendar_Controller_Event::getInstance();
+
+        $event = new Calendar_Model_Event([], true);
+        $event->container_id = $container;
+        static::assertFalse($event->isReplicable(), 'expected event not to be replicatable');
+        $event->dtstart = Tinebase_DateTime::now();
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->summary = 'St. Martin';
+        $event->organizer = Tinebase_Core::getUser()->contact_id;
+
+        $eventCntr->create($event);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->getReplicationModificationsByInstanceSeq($instance_seq);
+        $containerModifications = $modifications->filter('record_type', Calendar_Model_Event::class);
+        static::assertSame(0, $containerModifications->count(), 'should have 0 mod logs to process');
+    }
+
+    public function testCalendarEventReplication()
+    {
+        $container = new Tinebase_Model_Container([
+            'name'              => 'unittest test cal repl container',
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'backend'           => 'sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => Calendar_Model_Event::class,
+            'xprops'            => [Calendar_Model_Event::XPROPS_REPLICATABLE => true],
+        ]);
+        $container = Tinebase_Container::getInstance()->addContainer($container);
+
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $eventCntr = Calendar_Controller_Event::getInstance();
+
+        $event = new Calendar_Model_Event([], true);
+        $event->container_id = $container;
+        static::assertTrue($event->isReplicable(), 'expected event to be replicatable');
+        $event->dtstart = Tinebase_DateTime::now();
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->summary = 'St. Martin';
+        $event->organizer = Tinebase_Core::getUser()->contact_id;
+        //$event->rrule
+
+        $createdEvent = $eventCntr->create($event);
+
+        $updatedEvent = clone $createdEvent;
+        $updatedEvent->summary = 'Nikolaus';
+        $updatedEvent->dtstart->subDay(1);
+        $updatedEvent->dtend->subDay(1);
+        $updatedEvent = $eventCntr->update($updatedEvent);
+
+        $eventCntr->delete($updatedEvent->getId());
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->getReplicationModificationsByInstanceSeq($instance_seq);
+        $containerModifications = $modifications->filter('record_type', Calendar_Model_Event::class);
+        static::assertSame(3, $containerModifications->count(), 'should have 3 mod logs to process');
+
+        // rollback
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Tinebase_Container::getInstance()->addContainer($container);
+
+        // create the event
+        $mod = $containerModifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $containerModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$mod]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        $newEvent = $eventCntr->get($createdEvent->getId());
+        static::assertSame($createdEvent->summary, $newEvent->summary);
+        static::assertSame($createdEvent->container_id, $newEvent->container_id);
+        static::assertEquals($createdEvent->organizer, $newEvent->organizer);
+        static::assertEquals($createdEvent->dtstart, $newEvent->dtstart);
+        static::assertEquals($createdEvent->dtend, $newEvent->dtend);
+
+        // update the event
+        $mod = $containerModifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $containerModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$mod]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        $newEvent = $eventCntr->get($updatedEvent->getId());
+        static::assertSame($updatedEvent->summary, $newEvent->summary);
+        static::assertSame($updatedEvent->container_id, $newEvent->container_id);
+        static::assertEquals($updatedEvent->organizer, $newEvent->organizer);
+        static::assertEquals($updatedEvent->dtstart, $newEvent->dtstart);
+        static::assertEquals($updatedEvent->dtend, $newEvent->dtend);
+
+        // delete the event
+        $mod = $containerModifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $containerModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$mod]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        try {
+            $eventCntr->get($updatedEvent->getId());
+            static::fail('expect not found exception');
+        } catch (Tinebase_Exception_NotFound $e) {}
+    }
+
     public function testContainerReplication()
     {
         $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();

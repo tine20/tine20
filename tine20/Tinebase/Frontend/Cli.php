@@ -1732,4 +1732,46 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    /**
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function reReplicateContainer(Zend_Console_Getopt $opts)
+    {
+        $this->_checkAdminRight();
+
+        $data = $this->_parseArgs($opts);
+        if (!isset($data['container'])) {
+            echo 'usage: --reReplicateContainer -- container={containerId}' . PHP_EOL;
+            return 1;
+        }
+
+        $db = Tinebase_Core::getDb();
+        $transId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+        /** @var Tinebase_Model_Container $container */
+        $container = Tinebase_Container::getInstance()->get($data['container']);
+        $container->application_id;
+        $container->model;
+
+        $filter = new Tinebase_Model_ContainerContentFilter([
+            ['field' => 'container_id', 'operator' => 'equals',  'value' => $container->getId()],
+        ]);
+        $result = array_keys(Tinebase_Container::getInstance()->getContentBackend()
+            ->search($filter, null, ['record_id']));
+
+        if (count($result) > 0) {
+            $db->query('SELECT @i := (SELECT MAX(instance_seq) FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog)');
+
+            $db->query('UPDATE ' . SQL_TABLE_PREFIX .
+                'timemachine_modlog SET instance_seq = @i:=@i+1 WHERE record_type = "' . $container->model .
+                '" AND application_id = "' . $container->application_id . '" AND record_id IN ("' .
+                join('","', $result) . '") ORDER BY instance_seq ASC');
+        }
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+
+        return 0;
+    }
 }

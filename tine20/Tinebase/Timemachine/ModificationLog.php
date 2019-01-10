@@ -373,6 +373,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     }
 
     /**
+     * returns the maximum instance_seq of entries that should be replicated
+     *
      * @return int
      */
     public function getMaxInstanceSeq()
