@@ -850,7 +850,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw new Tinebase_Exception_SystemGeneric(str_replace(
                 ['{0}', '{1}'],
                 [$_contact->email, implode(',', Tinebase_EmailUser::getAllowedDomains())],
-                $translation->_('User E-Mail-Address {0} not in allowed domains {1}')
+                $translation->_('User E-Mail-Address {0} not in allowed domains [{1}]')
             ));
         }
 
