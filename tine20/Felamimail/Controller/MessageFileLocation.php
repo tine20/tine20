@@ -158,11 +158,15 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
     /**
      * @param $message
      * @return mixed
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _getMessageId($message)
     {
         if (! isset($message->headers['message-id'])) {
             $headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message, null, true);
+            if (! isset($headers['message-id'])) {
+                throw new Tinebase_Exception_NotFound('no message-id header found');
+            }
             $messageId = $headers['message-id'];
         } else {
             $messageId = $message->headers['message-id'];
