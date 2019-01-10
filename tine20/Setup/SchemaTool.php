@@ -40,7 +40,8 @@ class Setup_SchemaTool
             $dbParams['user'] = $dbParams['username'];
             $db = Setup_Core::getDb();
             if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-                if (Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
+                if ($db->getConfig()['charset'] !== 'utf8' &&
+                        Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
                     $dbParams['defaultTableOptions'] = [
                         'charset' => 'utf8mb4',
                         'collate' => 'utf8mb4_general_ci'
