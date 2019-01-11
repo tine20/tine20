@@ -191,4 +191,16 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release11->update_41();
         $this->setApplicationVersion('Tinebase', '12.15');
     }
+
+    /**
+     * update to 12.16
+     *
+     * fix role name unique key
+     */
+    public function update_15()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_58();
+        $this->setApplicationVersion('Tinebase', '12.16');
+    }
 }
