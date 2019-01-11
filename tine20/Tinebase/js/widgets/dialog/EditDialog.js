@@ -896,8 +896,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }
         });
-
-        if (! omitCopyTitle) {
+        if (! omitCopyTitle && !(recordClass.getMeta('copyNoAppendTitle'))) {
             recordData[titleProperty] = String.format(i18n._('{0} (copy)'), recordData[titleProperty]);
         }
 
