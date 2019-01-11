@@ -101,6 +101,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     protected $_areaLocksToInvalidate = [];
 
+    protected $_originalSmtpConfig = null;
+
     /**
      * set up tests
      */
@@ -155,6 +157,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_AreaLock::getInstance()->resetValidAuth($area);
         }
 
+        if ($this->_originalSmtpConfig) {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_originalSmtpConfig);
+        }
+
         Tinebase_Lock_UnitTestFix::clearLocks();
     }
 
@@ -181,7 +187,24 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         Tinebase_Core::getDbProfiling();
     }
-    
+
+    /**
+     * @todo why not use example.org?
+     */
+    protected function _setMailDomainIfEmpty()
+    {
+        // if mailing is not installed, as with pgsql
+        if (empty($this->_smtpConfig->primarydomain)) {
+            if (! $this->_originalSmtpConfig) {
+                $this->_originalSmtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP,
+                    new Tinebase_Config_Struct(array()));
+            }
+            $updatedConfig = clone($this->_originalSmtpConfig);
+            $updatedConfig->primarydomain = 'unittest.test';
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $updatedConfig);
+        }
+    }
+
     /**
      * test needs transaction
      */

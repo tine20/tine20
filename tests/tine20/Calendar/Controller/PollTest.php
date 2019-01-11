@@ -549,13 +549,7 @@ EOT;
 
     public function testPublicApiAddAttenderNotification()
     {
-        // if mailing is not installed, as with pgsql
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
-        if (empty($smtpConfig->primarydomain)) {
-            $smtpConfig->primarydomain = 'unittest.test';
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
-        }
-
+        $this->_setMailDomainIfEmpty();
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
         static::resetMailer();
@@ -593,12 +587,7 @@ EOT;
      */
     public function testDefiniteEventNotification()
     {
-        // if mailing is not installed, as with pgsql
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
-        if (empty($smtpConfig->primarydomain)) {
-            $smtpConfig->primarydomain = 'unittest.test';
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
-        }
+        $this->_setMailDomainIfEmpty();
 
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
@@ -638,12 +627,7 @@ EOT;
 
     public function testSupressDeleteNotifications()
     {
-        // if mailing is not installed, as with pgsql
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
-        if (empty($smtpConfig->primarydomain)) {
-            $smtpConfig->primarydomain = 'unittest.test';
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
-        }
+        $this->_setMailDomainIfEmpty();
 
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
