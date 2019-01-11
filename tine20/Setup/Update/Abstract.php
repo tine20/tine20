@@ -118,7 +118,7 @@ class Setup_Update_Abstract
         $stmt = $select->query();
         $rows = $stmt->fetchAll();
 
-        $result = (count($rows) > 0 && isset($rows[0]['version'])) ? $rows[0]['version'] : 0;
+        $result = (count($rows) > 0 && isset($rows[0]['version'])) ? (int)$rows[0]['version'] : 0;
         
         return $result;
     }

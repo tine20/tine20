@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.42</version>
+    <version>11.43</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -1670,7 +1670,7 @@
 
         <table>
             <name>roles</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1721,6 +1721,8 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                    <notnull>true</notnull>
+                    <default>1970-01-01 00:00:00</default>
                 </field>
                 <field>
                     <name>seq</name>
