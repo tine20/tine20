@@ -1221,6 +1221,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'n_given'     => true,
             'n_fileas'    => true,
             'n_fn'        => true,
+            'n_short'     => true,
             'account_id'  => true,
         ]);
     }
