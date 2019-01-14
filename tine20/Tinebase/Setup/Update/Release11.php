@@ -866,7 +866,6 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '11.43');
     }
 
-
     /**
      * update to 11.44
      *
@@ -905,5 +904,22 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         if ($this->getTableVersion('tree_filerevisions') < 3) {
             $this->setTableVersion('tree_filerevisions', 3);
         }
+    }
+
+    /**
+     * update to 11.45
+     *
+     * reimport templates
+     */
+    public function update_44()
+    {
+        $setupController = Setup_Controller::getInstance();
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $setupController->createImportExportDefinitions($application);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.45');
     }
 }
