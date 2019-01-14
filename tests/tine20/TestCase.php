@@ -189,9 +189,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo why not use example.org?
+     * set primary domain
      */
-    protected function _setMailDomainIfEmpty()
+    protected function _setMailDomainIfEmpty($domain = 'example.org')
     {
         // if mailing is not installed, as with pgsql
         if (empty($this->_smtpConfig->primarydomain)) {
@@ -200,7 +200,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                     new Tinebase_Config_Struct(array()));
             }
             $updatedConfig = clone($this->_originalSmtpConfig);
-            $updatedConfig->primarydomain = 'unittest.test';
+            $updatedConfig->primarydomain = $domain;
             Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $updatedConfig);
         }
     }
