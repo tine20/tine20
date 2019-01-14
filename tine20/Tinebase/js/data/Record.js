@@ -261,12 +261,12 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     };
     f.getMeta = function(name) {
         var value = null;
-        switch(name) {
+        switch (name) {
             case ('phpClassName'):
                 value = p.appName + '_Model_' + p.modelName;
                 break;
             default:
-                value = p[name];
+                value = p.hasOwnProperty(name) ? p[name] : null;
         }
         return value;
     };
