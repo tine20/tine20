@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>12.20</version>
+    <version>12.21</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -3154,7 +3154,7 @@
 
         <table>
             <name>tree_filerevisions</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3182,6 +3182,18 @@
                 </field>
                 <field>
                     <name>preview_count</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <field>
+                    <name>preview_status</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <field>
+                    <name>preview_error_count</name>
                     <type>integer</type>
                     <notnull>true</notnull>
                     <default>0</default>

@@ -3439,6 +3439,24 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     }
 
     /**
+     * @param string $_hash
+     * @param integer $_status
+     */
+    public function updatePreviewStatus($_hash, $_status)
+    {
+        $this->_fileObjectBackend->updatePreviewStatus($_hash, $_status);
+    }
+
+    /**
+     * @param string $_hash
+     * @param integer $_count
+     */
+    public function updatePreviewErrorCount($_hash, $_count)
+    {
+        $this->_fileObjectBackend->updatePreviewErrorCount($_hash, $_count);
+    }
+
+    /**
      * check the folder tree up to the root for notification settings and either send notification immediately
      * or create alarm for it to be send in the future. Alarms aggregate!
      *

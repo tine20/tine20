@@ -153,7 +153,7 @@ class Tinebase_FileSystem_Previews
      */
     public function createPreviews($_id, $_revision = null)
     {
-        $node = $_id instanceof Tinebase_Model_Tree_Node ? $_id : Tinebase_FileSystem::getInstance()->get($_id, $_revision);
+        $node = $_id instanceof Tinebase_Model_Tree_Node ? $_id : $this->_fsController->get($_id, $_revision);
 
         try {
             return $this->createPreviewsFromNode($node);
@@ -176,11 +176,18 @@ class Tinebase_FileSystem_Previews
      */
     public function canNodeHavePreviews(Tinebase_Model_Tree_Node $node)
     {
-        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE || empty($node->hash) || $node->size == 0 ||
-                Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
-                ->{Tinebase_Config::FILESYSTEM_PREVIEW_MAX_FILE_SIZE} < $node->size) {
+        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE
+            || empty($node->hash)
+            || $node->size == 0
+            || $node->preview_status > 0
+            || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
+                {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_FILE_SIZE} < $node->size
+            || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
+                {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT} < $node->preview_error_count
+        ) {
             return false;
         }
+
         $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);
 
         return $this->isSupportedFileExtension($fileExtension);
@@ -197,36 +204,72 @@ class Tinebase_FileSystem_Previews
             return true;
         }
 
-        $fileSystem = Tinebase_FileSystem::getInstance();
-        $path = $fileSystem->getRealPathForHash($node->hash);
+        if ($this->hasPreviews($node)) {
+            return true;
+        }
+        
+        $path = $this->_fsController->getRealPathForHash($node->hash);
         $tempPath = Tinebase_TempFile::getTempPath() . '.' . pathinfo($node->name, PATHINFO_EXTENSION);
         if (!is_file($path)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' file ' . $node->getId() . ' ' . $node->name . ' is not present in filesystem: ' . $path);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' file ' . $node->getId() . ' '
+                    . $node->name . ' is not present in filesystem: ' . $path);
+            }
             return false;
         }
         if (false === copy($path, $tempPath)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' could not copy file ' . $node->getId() . ' ' . $node->name . ' ' . $path . ' to temp path: '
-                . $tempPath);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not copy file '
+                    . $node->getId() . ' ' . $node->name . ' ' . $path . ' to temp path: ' . $tempPath);
+            }
             return false;
         }
 
-        try {
-            $config = $this->_getConfig();
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-            if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' preview creation for file ' . $node->getId() . ' ' . $node->name . ' failed');
+        try {
+            try {
+                $config = $this->_getConfig();
+
+                if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' timed out');
+                    }
+
+                    $this->_fsController->updatePreviewErrorCount($node->hash, $node->preview_error_count + 1);
+                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                    $transactionId = null;
+
+                    return false;
                 }
+            } catch (Tinebase_FileSystem_Preview_BadRequestException $exception) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
+                }
+
+                $this->_fsController->updatePreviewStatus($node->hash, 1);
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+
+                return false;
+            } catch (Exception $exception) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
+                }
+
                 return false;
             }
+            $transactionId = null;
         } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+
             unlink($tempPath);
         }
 
-        foreach($config as $key => $cnf) {
+
+        foreach ($config as $key => $cnf) {
             if (!isset($result[$key])) {
                 return false;
             }
@@ -235,11 +278,11 @@ class Tinebase_FileSystem_Previews
         // reduce deadlock risk. We (remove and) create the base folder outside the transaction. This will fill
         // the stat cache and the update on the directory tree hashes will happen without prio read locks
         $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
-        if (!$fileSystem->isDir($basePath)) {
-            $fileSystem->mkdir($basePath);
+        if (!$this->_fsController->isDir($basePath)) {
+            $this->_fsController->mkdir($basePath);
         } else {
-            $fileSystem->rmdir($basePath, true);
-            $fileSystem->mkdir($basePath);
+            $this->_fsController->rmdir($basePath, true);
+            $this->_fsController->mkdir($basePath);
         }
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
@@ -247,8 +290,8 @@ class Tinebase_FileSystem_Previews
 
             $files = array();
             $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
-            if (!$fileSystem->isDir($basePath)) {
-                $fileSystem->mkdir($basePath);
+            if (!$this->_fsController->isDir($basePath)) {
+                $this->_fsController->mkdir($basePath);
             }
 
             $maxCount = 0;
@@ -265,8 +308,10 @@ class Tinebase_FileSystem_Previews
             unset($result);
 
             if ((int)$node->preview_count !== $maxCount) {
-                $fileSystem->updatePreviewCount($node->hash, $maxCount);
+                $this->_fsController->updatePreviewCount($node->hash, $maxCount);
             }
+
+
 
             foreach ($files as $name => &$blob) {
                 $tempFile = Tinebase_TempFile::getTempPath();
@@ -280,9 +325,11 @@ class Tinebase_FileSystem_Previews
                     }
 
                     // this means we create a file node of type preview
-                    $fileSystem->setStreamOptionForNextOperation(Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW,
-                        true);
-                    $fileSystem->copyTempfile($fh, $name);
+                    $this->_fsController->setStreamOptionForNextOperation(
+                        Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW,
+                        true
+                    );
+                    $this->_fsController->copyTempfile($fh, $name);
                     fclose($fh);
                 } finally {
                     unlink($tempFile);
@@ -320,11 +367,10 @@ class Tinebase_FileSystem_Previews
             throw new Tinebase_Exception_NotFound('type ' . $_type . ' not configured');
         }
 
-        $fileSystem = Tinebase_FileSystem::getInstance();
         $path = $this->_getBasePath() . '/' . substr($_node->hash, 0, 3) . '/' . substr($_node->hash, 3)
                 . '/' . $_type . '_' . $_num . '.' . $config[$_type]['filetype'];
 
-        return $fileSystem->stat($path);
+        return $this->_fsController->stat($path);
     }
 
     /**
@@ -334,6 +380,16 @@ class Tinebase_FileSystem_Previews
      */
     public function hasPreviews(Tinebase_Model_Tree_Node $_node)
     {
+        if (empty($_node->hash) || strlen($_node->hash) < 4) {
+            throw new Tinebase_Exception_InvalidArgument('node needs to have proper hash set');
+        }
+
+        try {
+            $this->_fsController->stat($this->_getBasePath() . '/' . substr($_node->hash, 0, 3) . '/' . substr($_node->hash, 3));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return false;
+        }
+
         return $_node->preview_count > 0;
     }
 
@@ -342,11 +398,10 @@ class Tinebase_FileSystem_Previews
      */
     public function deletePreviews(array $_hashes)
     {
-        $fileSystem = Tinebase_FileSystem::getInstance();
         $basePath = $this->_getBasePath();
         foreach($_hashes as $hash) {
             try {
-                $fileSystem->rmdir($basePath . '/' . substr($hash, 0, 3) . '/' . substr($hash, 3), true);
+                $this->_fsController->rmdir($basePath . '/' . substr($hash, 0, 3) . '/' . substr($hash, 3), true);
                 // these hashes are unchecked, there may not be previews for them! => catch, no logging (debug at most)
             } catch(Tinebase_Exception_NotFound $tenf) {}
         }
@@ -357,6 +412,6 @@ class Tinebase_FileSystem_Previews
      */
     public function deleteAllPreviews()
     {
-        return Tinebase_FileSystem::getInstance()->rmdir($this->_getBasePath(), true);
+        return $this->_fsController->rmdir($this->_getBasePath(), true);
     }
 }

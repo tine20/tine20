@@ -118,7 +118,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.id') . ' AND ' .
                 $this->_db->quoteIdentifier('tree_filerevisions.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier('tree_fileobjects.revision')),
-                /* select */ array('hash', 'size', 'preview_count', 'lastavscan_time', 'is_quarantined')
+                /* select */ array('hash', 'size', 'preview_count', 'preview_status', 'preview_error_count', 'lastavscan_time', 'is_quarantined')
             )->joinLeft(
             /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),

@@ -131,7 +131,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             /* table  */ array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' AND ' 
                 . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier($this->_tableName . '.revision')),
-            /* select */ array('hash', 'size', 'preview_count', 'lastavscan_time', 'is_quarantined')
+            /* select */ array('hash', 'size', 'preview_count', 'preview_status', 'preview_error_count', 'lastavscan_time', 'is_quarantined')
         )->joinLeft(
             /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
@@ -159,12 +159,42 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      */
     public function updatePreviewCount($_hash, $_count)
     {
-        $this->_db->update($this->_tablePrefix . $this->_revisionsTableName, array('preview_count' => (int)$_count), $this->_db->quoteInto('hash = ?', $_hash));
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            array('preview_count' => (int)$_count),
+            $this->_db->quoteInto('hash = ?', $_hash)
+        );
+    }
+
+    /**
+     * @param string $_hash
+     * @param integer $_status
+     */
+    public function updatePreviewStatus($_hash, $_status)
+    {
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            array('preview_status' => (int)$_status),
+            $this->_db->quoteInto('hash = ?', $_hash)
+        );
+    }
+
+    /**
+     * @param string $_hash
+     * @param integer $_count
+     */
+    public function updatePreviewErrorCount($_hash, $_count)
+    {
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            array('preview_error_count' => (int)$_count),
+            $this->_db->quoteInto('hash = ?', $_hash)
+        );
     }
 
     /**
      * get value of next revision for given fileobject
-     * 
+     *
      * @param Tinebase_Model_Tree_FileObject $_objectId
      * @return int
      */
@@ -288,6 +318,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 : null,
             'is_quarantined' => $_record->is_quarantined ? 1 : 0,
             'preview_count' => (int)$_record->preview_count,
+            'preview_status' => (int)$_record->preview_status,
+            'preview_error_count' => (int)$_record->preview_error_count,
             'revision' => false === $createRevision ? $currentRecord->revision : $this->_getNextRevision($_record),
         );
 

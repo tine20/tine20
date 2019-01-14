@@ -648,6 +648,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
     const FILESYSTEM_PREVIEW_SERVICE_VERSION = 'previewServiceVersion';
     const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
+    const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
@@ -2101,6 +2102,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setByAdminModule'      => true,
                     'setBySetupModule'      => FALSE,
                     'default'               => 51904512, // == 49.5 * 1024 * 1024,
+                ),
+                self::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT => array(
+                    //_('Max per preview preview service error count, for trying to generate preview.')
+                    'label'                 => 'Max perp review preview service error count, for trying to generate preview.',
+                    //_('Max per preview preview service error count, for trying to generate preview.')
+                    'description'           => 'Max per preview preview service error count, for trying to generate preview.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 5,
                 ),
                 self::FILESYSTEM_AVSCAN_MODE => [
                     //_('Antivirus Scan Mode')
