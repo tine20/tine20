@@ -117,7 +117,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
         $allMemberIds = array();
         foreach ($lists as $list) {
-            $allMemberIds = array_merge($list->members, $allMemberIds);
+            if (is_array($list->members)) {
+                $allMemberIds = array_merge($list->members, $allMemberIds);
+            }
         }
         $allMemberIds = array_unique($allMemberIds);
 
