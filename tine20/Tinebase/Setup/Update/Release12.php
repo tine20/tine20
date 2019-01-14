@@ -203,4 +203,14 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
         $release10->update_58();
         $this->setApplicationVersion('Tinebase', '12.16');
     }
+
+    /**
+     * update to 12.17
+     *
+     * just an empty update - the migration is done in the Setup_Controller
+     */
+    public function update_16()
+    {
+        $this->setApplicationVersion('Tinebase', '12.17');
+    }
 }

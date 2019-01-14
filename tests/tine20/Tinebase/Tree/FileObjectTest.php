@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -50,7 +50,7 @@ class Tinebase_Tree_FileObjectTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Tinebase_Tree_FileObject();
+        $this->_backend = new Tinebase_Tree_FileObject(null, [Tinebase_Config::FILESYSTEM_MODLOGACTIVE => true]);
         
         $this->objects['objects'] = array();
     }

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  */
@@ -482,6 +482,9 @@ class Setup_Controller
         }
 
         $this->_enforceCollation();
+
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->fsAVupdates();
 
         // we need to clone here because we would taint the app cache otherwise
         // update tinebase first (to biggest major version)

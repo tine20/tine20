@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
@@ -783,7 +783,6 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.39');
     }
-
     public function addIsSystemToCustomFieldConfig()
     {
         if (!$this->_backend->columnExists('is_system', 'customfield_config')) {
@@ -842,7 +841,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
             }
         }
 
-        $this->setApplicationVersion('Tinebase', '11.41');
+        $this->setApplicationVersion('Tinebase', '11.40');
     }
 
     /**
@@ -890,9 +889,49 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 12.0
+     * update to 11.44
+     *
+     * add lastavscan_time and is_quarantined to tree_filerevisions
+     * add scheduler task to av scan fs once a day
      */
     public function update_43()
+    {
+        $this->fsAVupdates();
+
+        Tinebase_Scheduler_Task::addFileSystemAVScanTask(Tinebase_Core::getScheduler());
+
+        $this->setApplicationVersion('Tinebase', '11.44');
+    }
+
+    public function fsAVupdates()
+    {
+        if (!$this->_backend->columnExists('lastavscan_time', 'tree_filerevisions')) {
+            $this->_backend->addCol('tree_filerevisions', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>lastavscan_time</name>
+                    <type>datetime</type>
+                </field>'));
+        }
+
+        if (!$this->_backend->columnExists('is_quarantined', 'tree_filerevisions')) {
+            $this->_backend->addCol('tree_filerevisions', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>is_quarantined</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('tree_filerevisions') < 3) {
+            $this->setTableVersion('tree_filerevisions', 3);
+        }
+    }
+
+    /**
+     * update to 12.0
+     */
+    public function update_44()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }

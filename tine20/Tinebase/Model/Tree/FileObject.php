@@ -11,17 +11,19 @@
 /**
  * class to hold data representing one object which can be inserted into the tree
  * 
- * @property  string   name
- * @property  string   revision
- * @property  string   available_revisions
- * @property  string   description
- * @property  string   contenttype
- * @property  integer  size
- * @property  integer  revision_size
- * @property  string   indexed_hash
- * @property  string   hash
- * @property  string   type
- * @property  integer  preview_count
+ * @property  string            name
+ * @property  string            revision
+ * @property  array             available_revisions
+ * @property  string            description
+ * @property  string            contenttype
+ * @property  integer           size
+ * @property  integer           revision_size
+ * @property  string            indexed_hash
+ * @property  string            hash
+ * @property  string            type
+ * @property  integer           preview_count
+ * @property  Tinebase_DateTime lastavscan_time
+ * @property  boolean           is_quarantined
  */
 class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 {
@@ -103,7 +105,9 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'type'                  => array(
             'presence' => 'required',
             array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW))
-        )
+        ),
+        'lastavscan_time'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_quarantined'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
