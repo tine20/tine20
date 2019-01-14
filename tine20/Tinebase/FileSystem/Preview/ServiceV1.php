@@ -56,7 +56,7 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
-                            . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getMessage());
+                            . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getBody());
                     }
                     if ($synchronRequest) {
                         return false;

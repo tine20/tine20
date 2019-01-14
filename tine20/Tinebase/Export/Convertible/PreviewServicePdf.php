@@ -27,7 +27,7 @@ trait Tinebase_Export_Convertible_PreviewServicePdf
         copy($from, $suffixed);
 
         $previewService = Tinebase_Core::getPreviewService();
-        if (false === ($result = $previewService->getPreviewsForFile($suffixed, ['onlyPdf' => true]))) {
+        if (false === ($result = $previewService->getPreviewsForFile($suffixed, ['synchronRequest' => true, ['fileType' => 'pdf',]]))) {
             Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ .
                 ' preview service did not succeed');
             throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed');
