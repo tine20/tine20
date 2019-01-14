@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -97,6 +97,7 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
             $node = Tinebase_FileSystem::getInstance()->createAclNode($basepath . '/Vacation Templates');
             Felamimail_Config::getInstance()->set(Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID, $node->getId());
         } catch (Tinebase_Exception_Backend $teb) {
+            Tinebase_Exception::log($teb);
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' Could not create vacation template folder: ' . $teb);
         }
@@ -156,6 +157,7 @@ sieveFile
             }
 
         } catch (Tinebase_Exception_Backend $teb) {
+            Tinebase_Exception::log($teb);
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' Could not create email notification template folder: ' . $teb);
         }
