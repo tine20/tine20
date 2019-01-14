@@ -174,8 +174,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             } else {
                 $grants = new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class,
                     [new Calendar_Model_ResourceGrants([
-                        'account_id'      => '0',
-                        'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                        'account_id' => '0',
+                        'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                     ])]);
             }
             unset($_record->grants);
@@ -183,14 +183,14 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId();
             // create a calendar for this resource
             $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-                'name'              => $_record->name,
-                'hierarchy'         => $_record->hierarchy,
-                'color'             => '#333399',
-                'type'              => Tinebase_Model_Container::TYPE_SHARED,
-                'backend'           => $this->_backend->getType(),
-                'application_id'    => $appId,
-                'model'             => Calendar_Model_Event::class,
-                'xprops'            => ['Tinebase' => ['Container' =>
+                'name' => $_record->name,
+                'hierarchy' => $_record->hierarchy,
+                'color' => '#333399',
+                'type' => Tinebase_Model_Container::TYPE_SHARED,
+                'backend' => $this->_backend->getType(),
+                'application_id' => $appId,
+                'model' => Calendar_Model_Event::class,
+                'xprops' => ['Tinebase' => ['Container' =>
                     ['GrantsModel' => Calendar_Model_ResourceGrants::class]]],
             )), $grants, true);
 
@@ -198,8 +198,11 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             $createdRecord = parent::create($_record);
 
             $container->xprops()['Calendar']['Resource']['resource_id'] = $createdRecord->getId();
+            $resource_type = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)->getValue($_record['type']);
+            $container->xprops()['Calendar']['Resource']['resource_icon'] = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)
+                ->getKeyfieldRecordByValue($resource_type)['icon'];
             Tinebase_Container::getInstance()->update($container);
-
+           
 
             $updateObserver = new Tinebase_Model_PersistentObserver(array(
                 'observable_model'      => 'Tinebase_Model_Container',

@@ -396,8 +396,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'RESOURCE', 'value' => 'Resource', 'system' => true), //_('Resource')
-                    array('id' => 'ROOM', 'value' => 'Room', 'system' => true), //_('Room')
+                    array('id' => 'RESOURCE', 'value' => 'Resource', 'icon' => 'icon_resource', 'system' => true), //_('Resource') @todo not right icons
+                    array('id' => 'ROOM', 'value' => 'Room', 'icon' => 'icon_room', 'system' => true), //_('Room')
                 ),
                 'default' => 'RESOURCE'
             )
