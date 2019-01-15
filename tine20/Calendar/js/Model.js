@@ -82,6 +82,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     containersName: 'Calendars',
     copyOmitFields: ['uid', 'recurid'],
     allowBlankContainer: false,
+    copyNoAppendTitle: true,
     
     /**
      * default duration for new events
