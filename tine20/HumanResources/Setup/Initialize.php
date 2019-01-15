@@ -92,8 +92,16 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     {
         self::createReportTemplatesFolder();
     }
-    
-    
+
+    /**
+     * init scheduler tasks
+     */
+    protected function _initializeSchedulerTasks()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        HumanResources_Scheduler_Task::addCalculateDailyWorkingTimeReportsTask($scheduler);
+    }
+
     /**
      * create reporting templates folder
      */

@@ -79,12 +79,33 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
      *  don't have their is_cleared flag set get updated. Older reports can be
      *  created/updated manually in the UI
      *
-     * @todo implement
-     * @todo add daily scheduler job for this
+     * @return boolean
      */
     public function calculateAllReports()
     {
-        // @todo loop active employees
+        // @todo filter some more? for example only current employees with active contracts?
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class);
+        $iterator = new Tinebase_Record_Iterator(array(
+            'iteratable' => $this,
+            'controller' => $this,
+            'filter'     => $filter,
+            'function'   => 'calculateReportsForEmployees',
+        ));
+        $iterator->iterate();
+        return true;
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @return array
+     */
+    public function calculateReportsForEmployees(Tinebase_Record_RecordSet $_records)
+    {
+        $result = [];
+        foreach ($_records as $employee) {
+            $result[$employee->getId()] = $this->calculateReportsForEmployee($employee);
+        }
+        return $result;
     }
 
     /**

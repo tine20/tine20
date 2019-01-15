@@ -105,6 +105,15 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         // @todo implement
     }
 
+    public function testCalculateAllReports()
+    {
+        // TODO add fixture
+
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports();
+
+        // TODO add assertions
+    }
+
     protected function _createTimesheets()
     {
         // use TS importer (also creates TAs)
