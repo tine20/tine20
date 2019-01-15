@@ -1022,14 +1022,19 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                             . ' Downloading attachment: ' . $attachmentInfo);
                                 
-                                $stream = fopen($url, 'r');
-                                $attachment = new Tinebase_Model_Tree_Node(array(
-                                    'name'         => rawurldecode($name),
-                                    'type'         => Tinebase_Model_Tree_FileObject::TYPE_FILE,
-                                    'contenttype'  => (string) $property['FMTTYPE'],
-                                    'tempFile'     => $stream,
+                                $stream = @fopen($url, 'r');
+                                if ($stream) {
+                                    $attachment = new Tinebase_Model_Tree_Node(array(
+                                        'name' => rawurldecode($name),
+                                        'type' => Tinebase_Model_Tree_FileObject::TYPE_FILE,
+                                        'contenttype' => (string)$property['FMTTYPE'],
+                                        'tempFile' => $stream,
                                     ), true);
-                                $attachments->addRecord($attachment);
+                                    $attachments->addRecord($attachment);
+                                } else {
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                        . ' Could not open url (maybe no permissions?): ' . $attachmentInfo . ' - Skipping attachment');
+                                }
                             } else {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                                     . ' Url not found (got 404): ' . $attachmentInfo . ' - Skipping attachment');
