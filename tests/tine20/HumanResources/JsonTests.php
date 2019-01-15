@@ -1139,22 +1139,37 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals($id, $employeeJson['contracts'][0]['id']);
     }
 
-    public function testDailyWtReportApi()
+    public function testDailyWtReportApi($delete = true)
     {
-        // TODO disallow to edit when clearance is set
-
-        $this->_testSimpleRecordApi(
+        return $this->_testSimpleRecordApi(
             'DailyWTReport',
             null,
             null,
-            true,
+            $delete,
             [
                 'date' => '2018-08-01'
             ],
             false
         );
     }
-    
+
+    /**
+     * disallow to edit when clearance is set
+     */
+    public function testUpdateClearedDailyWtReport()
+    {
+        $report = $this->testDailyWtReportApi(false);
+        $report['is_cleared'] = 1;
+        $updatedReport = $this->_json->saveDailyWtReport($report);
+        $updatedReport['vacation_time'] = 5;
+        try {
+            $this->_json->saveDailyWtReport($updatedReport);
+            self::fail('cleared report can not be updated');
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            // passed
+        }
+    }
+
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10176
      */
