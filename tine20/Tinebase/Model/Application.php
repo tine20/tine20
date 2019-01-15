@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -42,13 +42,13 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
         self::VERSION       => 5,
         'recordName'        => 'Application',
         'recordsName'       => 'Applications', // ngettext('Application', 'Applications', n)
-        'hasRelations'      => FALSE,
-        'hasCustomFields'   => FALSE,
-        'hasNotes'          => FALSE,
-        'hasTags'           => FALSE,
-        'modlogActive'      => FALSE,
-        'hasAttachments'    => FALSE,
-        'createModule'      => FALSE,
+        'hasRelations'      => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'modlogActive'      => false,
+        'hasAttachments'    => false,
+        'createModule'      => false,
 
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',
@@ -104,6 +104,11 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
+            ),
+            // hack for modlogs to be written
+            'created_by'        => array(
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ),
         )
     );
