@@ -4,7 +4,7 @@
  *
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Michael Spahn <m.spahn@metaways.de>
- * @copyright    Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
