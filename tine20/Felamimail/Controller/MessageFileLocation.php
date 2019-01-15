@@ -64,13 +64,21 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
      */
     public function getLocationsByReference($referenceString)
     {
-        if (strpos(' ', $referenceString) !== false) {
+        if (is_array($referenceString)) {
+            // only use the first element?
+            $referenceString = array_pop($referenceString);
+        }  
+      
+        if (strpos(',', $referenceString) !== false) {
+            $references = explode(',', $referenceString);
+        } else if (strpos(' ', $referenceString) !== false) {
             $references = explode(' ', $referenceString);
         } else {
             $references = [$referenceString];
         }
 
-        $hashedReferences = array_map('sha1', $references);
+        $trimmedReferences = array_map('trim', $references);
+        $hashedReferences = array_map('sha1', $trimmedReferences);
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_MessageFileLocation::class, [
                 ['field' => 'message_id_hash', 'operator' => 'in', 'value' => $hashedReferences]
