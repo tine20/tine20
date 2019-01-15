@@ -73,11 +73,33 @@ sieveFile
     }
 
     /**
+     * update to 11.2
+     *
+     * ensure vacation template folder is present
+     */
+    public function update_1()
+    {
+        if (Tinebase_Core::isReplicationMaster()) {
+            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'Felamimail',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            );
+            try {
+                Tinebase_FileSystem::getInstance()->stat($basepath . '/Vacation Templates');
+            } catch (Tinebase_Exception_NotFound $e) {
+                Felamimail_Setup_Initialize::createVacationTemplatesFolder();
+            }
+        }
+
+        $this->setApplicationVersion('Felamimail', '11.2');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_1()
+    public function update_2()
     {
         $this->setApplicationVersion('Felamimail', '12.0');
     }

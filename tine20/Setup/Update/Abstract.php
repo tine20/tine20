@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Update
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -28,16 +28,6 @@ class Setup_Update_Abstract
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
-
-    /**
-     * @var null|boolean
-     */
-    protected $_isReplicationSlave = null;
-
-    /**
-     * @var null|boolean
-     */
-    protected $_isReplicationMaster = null;
 
     /** 
      * the constructor

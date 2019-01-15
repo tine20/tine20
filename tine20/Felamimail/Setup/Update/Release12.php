@@ -33,4 +33,16 @@ class Felamimail_Setup_Update_Release12 extends Setup_Update_Abstract
         Felamimail_Setup_Initialize::addDeleteNodeObserver();
         $this->setApplicationVersion('Felamimail', '12.2');
     }
+
+    /**
+     * update to 12.3
+     *
+     * ensure vacation template folder is present
+     */
+    public function update_2()
+    {
+        $release11 = new Felamimail_Setup_Update_Release11($this->_backend);
+        $release11->update_1();
+        $this->setApplicationVersion('Tinebase', '12.3');
+    }
 }

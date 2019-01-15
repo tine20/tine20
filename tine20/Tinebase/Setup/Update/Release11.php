@@ -929,9 +929,26 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 12.0
+     * update to 11.45
+     *
+     * reimport templates
      */
     public function update_44()
+    {
+        $setupController = Setup_Controller::getInstance();
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $setupController->createImportExportDefinitions($application);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.45');
+    }
+
+    /**
+     * update to 12.0
+     */
+    public function update_45()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }
