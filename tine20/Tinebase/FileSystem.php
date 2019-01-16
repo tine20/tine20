@@ -739,8 +739,8 @@ class Tinebase_FileSystem implements
 
     public function getEffectiveAndLocalQuota(Tinebase_Model_Tree_Node $node)
     {
-        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
-        $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        $quotaConfig = Tinebase_FileSystem_Quota::getConfig();
+        $total = Tinebase_FileSystem_Quota::getRootQuotaBytes();
         $effectiveQuota = $total;
         $localQuota = null !== $node->quota ? (int)$node->quota : null;
         if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
@@ -748,7 +748,7 @@ class Tinebase_FileSystem implements
         } else {
             $localSize = $node->revision_size;
         }
-        $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
+        $totalByUser = Tinebase_FileSystem_Quota::getPersonalQuotaBytes();
         $personalNode = null;
         if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
             $personalNode = $this->stat('/Filemanager/folders/personal');
@@ -757,13 +757,7 @@ class Tinebase_FileSystem implements
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
 
-        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
-            $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
-                Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE));
-        } else {
-            $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
-                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE));
-        }
+        $totalUsage = Tinebase_FileSystem_Quota::getRootUsedBytes();
         $effectiveUsage = $totalUsage;
 
 
