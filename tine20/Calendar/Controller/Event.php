@@ -3215,6 +3215,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $oldKeepAttenderStatus = $this->_keepAttenderStatus;
         $this->_keepAttenderStatus = true;
+        $oldDoContainerAcl = $this->_doContainerACLChecks;
+        $this->_doContainerACLChecks = false;
+        $oldSendNotifications = $this->_sendNotifications;
+        $this->_sendNotifications = false;
         try {
             if (Tinebase_Timemachine_ModificationLog::CREATED === $_modification->change_type) {
                 if (!$_dryRun) {
@@ -3245,6 +3249,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         } finally {
             $this->_keepAttenderStatus = $oldKeepAttenderStatus;
+            $this->_doContainerACLChecks = $oldDoContainerAcl;
+            $this->_sendNotifications = $oldSendNotifications;
         }
     }
 
@@ -3255,36 +3261,45 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
     {
+        $oldDoContainerAcl = $this->_doContainerACLChecks;
+        $this->_doContainerACLChecks = false;
+        $oldSendNotifications = $this->_sendNotifications;
+        $this->_sendNotifications = false;
 
-        switch ($_modification->change_type) {
-            case Tinebase_Timemachine_ModificationLog::CREATED:
-                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
-                $model = $_modification->record_type;
-                /** @var Calendar_Model_Event $record */
-                $record = new $model($diff->diff);
-                $record->attendee = null;
-                $this->create($record);
-                break;
+        try {
+            switch ($_modification->change_type) {
+                case Tinebase_Timemachine_ModificationLog::CREATED:
+                    $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                    $model = $_modification->record_type;
+                    /** @var Calendar_Model_Event $record */
+                    $record = new $model($diff->diff);
+                    $record->attendee = null;
+                    $this->create($record);
+                    break;
 
-            case Tinebase_Timemachine_ModificationLog::UPDATED:
-                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
-                if (isset($diff->diff['attendee'])) {
-                    $d = $diff->diff;
-                    unset($d['attendee']);
-                    $diff->diff = $d;
-                }
-                $record = $this->get($_modification->record_id, null, true, true);
-                $record->applyDiff($diff);
-                $this->update($record);
-                break;
+                case Tinebase_Timemachine_ModificationLog::UPDATED:
+                    $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                    if (isset($diff->diff['attendee'])) {
+                        $d = $diff->diff;
+                        unset($d['attendee']);
+                        $diff->diff = $d;
+                    }
+                    $record = $this->get($_modification->record_id, null, true, true);
+                    $record->applyDiff($diff);
+                    $this->update($record);
+                    break;
 
-            case Tinebase_Timemachine_ModificationLog::DELETED:
-                $this->delete($_modification->record_id);
-                break;
+                case Tinebase_Timemachine_ModificationLog::DELETED:
+                    $this->delete($_modification->record_id);
+                    break;
 
-            default:
-                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' .
-                    $_modification->change_type);
+                default:
+                    throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' .
+                        $_modification->change_type);
+            }
+        } finally {
+            $this->_doContainerACLChecks = $oldDoContainerAcl;
+            $this->_sendNotifications = $oldSendNotifications;
         }
     }
 }
