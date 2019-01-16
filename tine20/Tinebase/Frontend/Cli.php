@@ -1761,8 +1761,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (count($result) > 0) {
             $db->query('SELECT @i := (SELECT MAX(instance_seq) FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog)');
 
-            $db->query('UPDATE ' . SQL_TABLE_PREFIX .
-                'timemachine_modlog SET instance_seq = @i:=@i+1 WHERE record_type = "' . $container->model .
+            $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'timemachine_modlog SET instance_seq = @i:=@i+1, instance_id = "'
+                . Tinebase_Core::getTinebaseId() . '" WHERE record_type = "' . $container->model .
                 '" AND application_id = "' . $container->application_id . '" AND record_id IN ("' .
                 join('","', $result) . '") ORDER BY instance_seq ASC');
         }
