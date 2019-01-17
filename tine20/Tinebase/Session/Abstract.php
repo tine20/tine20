@@ -402,6 +402,9 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
             $options['cookie_secure'] = true;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Session options: ' . print_r($options, true));
         
         Zend_Session::setOptions($options);
     }
