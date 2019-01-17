@@ -440,61 +440,31 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        // TODO remove this loop in Release 13
-        $maxLoops = 50;
-        do {
-            $result = $this->_updateApplications();
-            if ($_opts->v && ! empty($result['messages']) && (50 === $maxLoops || $result['updated'] > 0)) {
-                echo "Messages:\n";
-                foreach ($result['messages'] as $message) {
-                    echo "  " . $message . "\n";
-                }
-            }
-            $maxLoops--;
-        } while (isset($result['updated']) && $result['updated'] > 0 && $maxLoops > 0);
-        
-        return ($maxLoops > 0) ? 0 : 1;
+        return $this->_updateApplications();
     }
     
     /**
      * update all applications
      * 
-     * @return array
+     * @return int
      */
     protected function _updateApplications()
     {
-        static $ran = false;
-
+        // TODO remove this loop in Release 13
+        $ran = false;
         $controller = Setup_Controller::getInstance();
-        try {
-            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
-                    . ' Could not get applications');
-            Tinebase_Exception::log($e);
-            return array();
-        }
-        
-        foreach ($applications as $key => &$application) {
-            try {
-                if (! $controller->updateNeeded($application)) {
-                    unset($applications[$key]);
-                }
-            } catch (Setup_Exception_NotFound $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Failed to check if an application needs an update:' . $e->getMessage());
-                unset($applications[$key]);
+
+        $maxLoops = 50;
+        do {
+            $result = $controller->updateApplications();
+
+            if (!$ran || $result['updated'] > 0) {
+                echo "Updated " . $result['updated'] . " application(s).\n";
             }
-        }
+            $ran = true;
+        } while (isset($result['updated']) && $result['updated'] > 0 && --$maxLoops > 0);
 
-        $result = $controller->updateApplications($applications);
-
-        if (!$ran || $result['updated'] > 0) {
-            echo "Updated " . $result['updated'] . " application(s).\n";
-        }
-        $ran = true;
-
-        return $result;
+        return ($maxLoops > 0) ? 0 : 1;
     }
 
     /**
