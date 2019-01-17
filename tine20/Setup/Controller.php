@@ -605,7 +605,16 @@ class Setup_Controller
         $release11->addIsSystemToCustomFieldConfig();
         $adbRelease11 = new Addressbook_Setup_Update_Release11(Setup_Backend_Factory::factory());
         $adbRelease11->fixContactData();
-        Setup_SchemaTool::updateAllSchema();
+
+        try {
+            Setup_SchemaTool::updateAllSchema();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Schema update failed - retrying once ...');
+            $this->clearCache();
+            sleep(5);
+            Setup_SchemaTool::updateAllSchema();
+        }
 
         for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
             $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
