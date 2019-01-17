@@ -40,7 +40,12 @@ Tine.Tinebase.AdminPanel = Ext.extend(Ext.TabPanel, {
      * @private
      */
     initComponent: function () {
-        this.items = new Tine.Tinebase.Admin.UserProfileConfigPanel({});
+        this.items = [
+            new Tine.Admin.config.GridPanel({
+                configApp: Tine.Tinebase.appMgr.get('Tinebase')
+            }),
+            new Tine.Tinebase.Admin.UserProfileConfigPanel({})
+        ];
         
         Tine.Tinebase.AdminPanel.superclass.initComponent.call(this);
     }

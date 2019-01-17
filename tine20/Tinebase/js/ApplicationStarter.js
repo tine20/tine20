@@ -391,7 +391,33 @@ Tine.Tinebase.ApplicationStarter = {
             var appName = app.name;
             Tine.log.info('ApplicationStarter::createStructure for app ' + appName);
             Ext.namespace('Tine.' + appName);
-            
+
+            if (! Tine[appName].AdminPanel) {
+                Tine[appName].AdminPanel = Ext.extend(Ext.TabPanel, {
+                    border: false,
+                    activeTab: 0,
+                    appName: appName,
+                    initComponent: function () {
+                        this.app = Tine.Tinebase.appMgr.get(this.appName);
+                        this.items = [
+                            new Tine.Admin.config.GridPanel({
+                                configApp: this.app
+                            })
+                        ];
+                        this.supr().initComponent.call(this);
+                    }
+                });
+                Tine[appName].AdminPanel.openWindow = function (config) {
+                    return Tine.WindowFactory.getWindow({
+                        width: 600,
+                        height: 470,
+                        name: 'Tine.' + appName + '.AdminPanel',
+                        contentPanelConstructor: 'Tine.' + appName + '.AdminPanel',
+                        contentPanelConstructorConfig: config
+                    });
+                };
+            }
+
             var models = Tine[appName].registry ? Tine[appName].registry.get('models') : null;
             
             if (models) {
