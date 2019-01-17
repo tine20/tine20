@@ -95,9 +95,12 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
     },
 
     onButtonApply: function() {
-        this.fireEvent.apply(this, ['apply'].concat(this.getEventData('apply')));
-        this.purgeListeners();
-        this.window.close();
+        var eventData = this.getEventData('apply');
+        if (this.fireEvent.apply(this, ['beforeapply'].concat(eventData)) !== false) {
+            this.fireEvent.apply(this, ['apply'].concat(eventData));
+            this.purgeListeners();
+            this.window.close();
+        }
     },
 
     getCanonicalPathSegment: function () {
