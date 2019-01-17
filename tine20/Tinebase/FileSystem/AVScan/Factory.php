@@ -28,19 +28,17 @@ class Tinebase_FileSystem_AVScan_Factory
      */
     public static function getScanner()
     {
-        switch (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
-                ->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+        $mode = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+            ->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE};
+        switch ($mode) {
             case self::MODE_QUAHOG:
                 return new Tinebase_FileSystem_AVScan_Quahog();
             default:
-                if (isset(static::$_scanners[Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
-                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}])) {
-                    return new static::$_scanners[Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
-                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}]();
+                if (isset(static::$_scanners[$mode])) {
+                    return new static::$_scanners[$mode]();
                 }
         }
 
-        throw new Tinebase_Exception_NotImplemented('no scanner for mode "' . Tinebase_Config::getInstance()
-                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} . '" implemented');
+        throw new Tinebase_Exception_NotImplemented('no av scanner for mode "' . $mode . '" implemented');
     }
 }

@@ -56,6 +56,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @var bool
      */
     protected $_inCopyOrMoveNode = false;
+
+    /**
+     * where to throw on access to a quarantined node or not
+     *
+     * @var bool
+     */
+    protected $_throwOnGetQuarantined = true;
     
     /**
      * holds the instance of the singleton
@@ -96,7 +103,22 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
-    
+
+    /**
+     * get/set whether to throw on access on quarantined file
+     *
+     * @param null|boolean $_val
+     * @return bool
+     */
+    public function doThrowOnGetQuarantined($_val = null)
+    {
+        $result = $this->_throwOnGetQuarantined;
+        if (null !== $_val) {
+            $this->_throwOnGetQuarantined = (bool)$_val;
+        }
+        return $result;
+    }
+
     /**
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::update()
@@ -301,6 +323,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         /** @var Tinebase_Model_Tree_Node $record */
         $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+
+        if ($record->is_quarantined) {
+            throw new Filemanager_Exception('File is quarantined');
+        }
+
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
 
         $this->_backend->checkPathACL($nodePath, 'get');
@@ -602,7 +629,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             throw new Filemanager_Exception('Is a directory');
         }
         
-        return $this->_backend->stat($_path->statpath, $_revision);
+        $node = $this->_backend->stat($_path->statpath, $_revision);
+        if ($node->is_quarantined) {
+            throw new Filemanager_Exception('File is quarantined');
+        }
+
+        return $node;
     }
     
     /**
