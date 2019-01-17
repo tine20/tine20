@@ -6,7 +6,7 @@
  * @subpackage  Session
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Guilherme Striquer Bisotto <guilherme.bisotto@serpro.gov.br>
- * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
