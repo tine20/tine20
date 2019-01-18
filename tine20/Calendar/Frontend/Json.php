@@ -694,6 +694,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $result = array();
         $addressBookFE = new Addressbook_Frontend_Json();
+        $searchAttendersConfig = Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER};
 
         if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_USER, $filters['type'])) {
             $contactFilter = array(array('condition' => 'OR', 'filters' => array(
@@ -702,6 +703,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             )));
             if (isset($filters['userFilter'])) {
                 $contactFilter[] = $filters['userFilter'];
+            }
+            if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER})) {
+                $contactFilter = [['condition' => 'AND', 'filters' => [
+                    $contactFilter,
+                    $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER}
+                ]]];
             }
             $contactPaging = $paging;
             $contactPaging['sort'] = array('type', 'n_fileas');
@@ -718,6 +725,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $groupFilter[] = $filters['groupFilter'];
             }
             $groupFilter[] = array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP);
+            if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP})) {
+                $groupFilter = [['condition' => 'AND', 'filters' => [
+                    $groupFilter,
+                    $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP}
+                ]]];
+            }
             $groupPaging = $paging;
             $groupPaging['sort'] = 'name';
             $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $groupPaging);
@@ -737,6 +750,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 if (!empty($filters['resourceFilter'])) {
                     $resourceFilter[] = $filters['resourceFilter'];
                 }
+            }
+            if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE})) {
+                $resourceFilter = [['condition' => 'AND', 'filters' => [
+                    $resourceFilter,
+                    $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE}
+                ]]];
             }
             $resourcePaging = $paging;
             $resourcePaging['sort'] = 'name';

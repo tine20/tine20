@@ -233,6 +233,12 @@ class Calendar_Config extends Tinebase_Config_Abstract
      */
     const POLL_GTC = 'pollGTC';
 
+    const SEARCH_ATTENDERS_FILTER = 'searchAttendersFilter';
+    const SEARCH_ATTENDERS_FILTER_USER = 'user';
+    const SEARCH_ATTENDERS_FILTER_GROUP = 'group';
+    const SEARCH_ATTENDERS_FILTER_RESOURCE = 'resource';
+
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -640,6 +646,53 @@ class Calendar_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => 10,
+        ],
+        self::SEARCH_ATTENDERS_FILTER => [
+            //_('Search Attenders Additional Filters')
+            self::LABEL             => 'Search Attenders Additional Filters',
+            //_('Search Attenders Additional Filters')
+            self::DESCRIPTION       => 'Search Attenders Additional Filters',
+            self::TYPE              => self::TYPE_OBJECT,
+            self::CLASSNAME         => Tinebase_Config_Struct::class,
+            self::CONTENT           => [
+                self::SEARCH_ATTENDERS_FILTER_USER      => [
+                    //_('User Additional Filters')
+                    self::LABEL                 => 'User Additional Filters',
+                    //_('User Additional Filters')
+                    self::DESCRIPTION           => 'User Additional Filters',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                self::SEARCH_ATTENDERS_FILTER_GROUP     => [
+                    //_('Group Additional Filters')
+                    self::LABEL                 => 'Group Additional Filters',
+                    //_('Group Additional Filters')
+                    self::DESCRIPTION           => 'Group Additional Filters',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                self::SEARCH_ATTENDERS_FILTER_RESOURCE  => [
+                    //_('Resource Additional Filters')
+                    self::LABEL                 => 'Resource Additional Filters',
+                    //_('Resource Additional Filters')
+                    self::DESCRIPTION           => 'Resource Additional Filters',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => [],
+                ],
+            ],
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [],
         ],
     );
     

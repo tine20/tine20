@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  */
@@ -56,7 +56,7 @@ class Tinebase_Tree implements Tinebase_Controller_Interface
 
     public function get($_id)
     {
-        return Filemanager_Controller_Node::getInstance()->get($_id);
+        return Tinebase_FileSystem::getInstance()->get($_id);
     }
 
     public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)

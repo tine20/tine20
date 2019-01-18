@@ -2122,9 +2122,104 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
     }
 
+    public function testSearchAttendeersConfigUserFilter()
+    {
+        $allIds = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(), null,
+            false, true);
+        static::assertGreaterThanOrEqual(2, count($allIds), 'test needs at least 2 ids');
+        
+        $oldConfig = clone Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER};
+        Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER}
+            ->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER} = ['condition' => 'AND', 'filters' =>
+                [['field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id]]];
+
+        try {
+            $filter = json_decode('[{
+                "field":"type",
+                "value":["user"]
+            }, {
+                "field":"userFilter",
+                "value":{
+                    "field":"id",
+                    "operator":"in",
+                    "value":[]
+                }
+            }]', true);
+            $filter[1]['value']['value'] = $allIds;
+
+            $result = $this->_uit->searchAttenders($filter, [], [], []);
+            $this->assertEquals(1, count($result['user']['results']));
+        } finally {
+            Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER} = $oldConfig;
+        }
+    }
+
+    public function testSearchAttendeersConfigGroupFilter()
+    {
+        $allIds = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(), null, false,
+            true);
+        static::assertGreaterThanOrEqual(2, count($allIds), 'test needs at least 2 ids');
+
+        $oldConfig = clone Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER};
+        Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER}
+            ->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP} = ['condition' => 'AND', 'filters' =>
+            [['field' => 'id', 'operator' => 'equals', 'value' => $allIds[0]]]];
+
+        try {
+            $filter = json_decode('[{
+                "field":"type",
+                "value":["group"]
+            }, {
+                "field":"id",
+                "operator":"in",
+                "value":null
+            }]', true);
+            $filter[1]['value'] = $allIds;
+
+            $result = $this->_uit->searchAttenders($filter, [], [], []);
+            $this->assertEquals(1, count($result['group']['results']));
+        } finally {
+            Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER} = $oldConfig;
+        }
+    }
+
+    public function testSearchAttendeersConfigResourceFilter()
+    {
+        $resController = Calendar_Controller_Resource::getInstance();
+        $resController->create($this->_getResource());
+        $resource = $this->_getResource();
+        $resource->name = 'blablub';
+        $resController->create($resource);
+        $allIds = $resController->search(new Calendar_Model_ResourceFilter(), null, false, true);
+        static::assertGreaterThanOrEqual(2, count($allIds), 'test needs at least 2 ids');
+
+        $oldConfig = clone Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER};
+        Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER}
+            ->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE} = ['condition' => 'AND', 'filters' =>
+            [['field' => 'id', 'operator' => 'equals', 'value' => $allIds[0]]]];
+
+        try {
+            $filter = json_decode('[{
+                "field":"type",
+                "value":["resource"]
+            }, {
+                "field":"id",
+                "operator":"in",
+                "value":null
+            }]', true);
+            $filter[1]['value'] = $allIds;
+
+            $result = $this->_uit->searchAttenders($filter, [], [], []);
+            $this->assertEquals(1, count($result['resource']['results']));
+        } finally {
+            Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER} = $oldConfig;
+        }
+    }
+
     public function testSearchAttendeersByTypeAndId()
     {
-        $allIds = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter())->getId();
+        $allIds = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(), null,
+            false, true);
 
         $filter = json_decode('[{
             "field":"type",
