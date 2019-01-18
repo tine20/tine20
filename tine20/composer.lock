@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0dc221c9a075210d5cf21149ce111b6f",
+    "content-hash": "bafca51070f887569340ba6e84ccb2a2",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -4811,22 +4811,10 @@
     ],
     "aliases": [
         {
-            "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch34",
-            "package": "zendframework/zendframework1"
-        },
-        {
-            "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
-            "version": "3.5.3.0-patch1",
-            "package": "sabre/vobject"
-        },
-        {
-            "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0",
-            "version": "0.14.0.0",
-            "package": "phpoffice/phpword"
+            "alias": "v2.5.13",
+            "alias_normalized": "2.5.13.0",
+            "version": "2.5.13.0-patch4",
+            "package": "doctrine/dbal"
         },
         {
             "alias": "v2.5.14",
@@ -4835,21 +4823,34 @@
             "package": "doctrine/orm"
         },
         {
-            "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0",
-            "version": "2.5.13.0-patch4",
-            "package": "doctrine/dbal"
+            "alias": "v0.13.0",
+            "alias_normalized": "0.13.0.0",
+            "version": "0.14.0.0",
+            "package": "phpoffice/phpword"
+        },
+        {
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
+        },
+        {
+            "alias": "1.12.20",
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch34",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "syncroton/syncroton": 20,
-        "phpoffice/phpspreadsheet": 20
+        "phpoffice/phpspreadsheet": 20,
+        "syncroton/syncroton": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0",
+        "ext-spl": "*",
+        "ext-simplexml": "*",
         "ext-ctype": "*",
         "ext-date": "*",
         "ext-dom": "*",
@@ -4859,10 +4860,9 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "ext-spl": "*",
-        "ext-simplexml": "*",
         "ext-xml": "*",
-        "ext-zip": "*"
+        "ext-zip": "*",
+        "php": "^5.6 | ^7.0"
     },
     "platform-dev": [],
     "platform-overrides": {

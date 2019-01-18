@@ -1,115 +1,149 @@
 {
-    "name": "tine20/server",
-    "description": "Tine 2.0 Server",
-    "type": "project",
-    "keywords": ["Groupware", "Collaboration", "CRM", "Calendar", "Addressbook", "Teamwork", "Tasks", "Timetracking"],
-    "homepage": "http://www.tine20.org",
-    "license" : ["AGPL-3.0", "BSD-3-Clause", "LGPL-2.1+", "MIT"],
-    "repositories": [{
+  "name": "tine20/server",
+  "description": "Tine 2.0 Server",
+  "type": "project",
+  "keywords": [
+    "Groupware",
+    "Collaboration",
+    "CRM",
+    "Calendar",
+    "Addressbook",
+    "Teamwork",
+    "Tasks",
+    "Timetracking"
+  ],
+  "homepage": "http://www.tine20.org",
+  "license": [
+    "AGPL-3.0",
+    "BSD-3-Clause",
+    "LGPL-2.1+",
+    "MIT"
+  ],
+  "repositories": [
+    {
       "type": "git",
       "url": "https://github.com/tine20/composerapploader.git"
-    }, {
-        "type": "git",
-        "url": "https://github.com/tine20/zendframework1.git"
-    }, {
-        "type": "git",
-        "url": "https://github.com/tine20/dbal.git"
-    }, {
-        "type": "git",
-        "url": "https://github.com/tine20/doctrine2.git"
-    }, {
-        "type": "git",
-        "url": "https://github.com/tine20/OpenDocument.git"
-    }, {
-        "type": "git",
-        "url": "https://github.com/tine20/timezoneconvert.git"
-    }, {
-        "type": "git",
-        "url": "https://github.com/tine20/syncroton.git"
-    }, {
-        "type": "git",
-        "url": "https://github.com/tine20/vobject.git"
-    }, {
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/zendframework1.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/dbal.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/doctrine2.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/OpenDocument.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/timezoneconvert.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/syncroton.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/vobject.git"
+    },
+    {
       "type": "git",
       "url": "https://github.com/paulmhh/PHPWord"
-    }],
-    "require": {
-        "php": "^7.0",
-        "ext-ctype": "*",
-        "ext-date": "*",
-        "ext-dom": "*",
-        "ext-gd": "*",
-        "ext-hash": "*",
-        "ext-iconv": "*",
-        "ext-json": "*",
-        "ext-mbstring": "*",
-        "ext-openssl": "*",
-        "ext-SPL": "*",
-        "ext-SimpleXML": "*",
-        "ext-xml": "*",
-        "ext-zip": "*",
-        "zendframework/zendframework1": "1.12.20pl34 as 1.12.20",
-        "tine20/composerapploader": "1.0.*",
-        "syncroton/syncroton": "dev-master",
-        "ezyang/htmlpurifier": "v4.6.0",
-        "phpoffice/phpexcel": "1.8.*",
-        "sabre/dav": "1.8.*",
-        "sabre/vobject": "3.5.3pl1 as 2.1.0",
-        "metaways/opendocument": "1.1",
-        "phpoffice/phpword": "v0.14.0 as v0.13.0",
-        "metaways/timezoneconvert": "1.*",
-        "zendframework/zend-http": "2.5.*",
-        "doctrine/orm": "2.5.14pl1 as v2.5.14",
-        "doctrine/dbal": "v2.5.13pl4 as v2.5.13",
-        "twig/twig": "~1.0",
-        "phpoffice/phpspreadsheet": "dev-master",
-        "nikic/fast-route": "^1.2",
-        "zendframework/zend-stratigility": "^2.1",
-        "zendframework/zend-diactoros": "^1.6",
-        "mtdowling/cron-expression": "^1.2 | ^2.0",
-        "symfony/dependency-injection": "^3.4",
-        "symfony/config": "^3.3",
-        "sentry/sentry": "^1.8",
-        "zbateson/mail-mime-parser": "1.*",
-        "xenolope/quahog": "^2.1",
-        "http-interop/http-middleware": "^0.5.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "4.6.*",
-        "phing/phing": "2.16.*",
-        "tedivm/jshrink": "~1.0",
-        "zendframework/zend-psr7bridge": "^0.2"
-    },
-    "autoload": {
-        "files": [],
-        "psr-0": {
-            "": ["", "library"],
-            "TimeZoneConvert": "library/TimeZoneConvert/lib/",
-            "Zend_": ["vendor/zendframework/zendframework1/library"],
-            "qCal": "library/qCal/lib"
-        },
-        "classmap": [
-            "library/idnaconvert"
-        ]
-    },
-    "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
-    "include-path": ["", "vendor/zendframework/zendframework1/library", "library"],
-    "config": {
-        "secure-http": false,
-        "platform": {
-            "php": "7.0.8"
-        }
-    },
-    "scripts": {
-        "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
-        "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
-        "build": "./vendor/bin/phing",
-        "post-install-cmd": [
-            "git submodule update --init"
-        ]
-    },
-    "support": {
-        "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
-        "source": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM"
     }
+  ],
+  "require": {
+    "doctrine/dbal": "v2.5.13pl4 as v2.5.13",
+    "doctrine/orm": "2.5.14pl1 as v2.5.14",
+    "ext-SPL": "*",
+    "ext-SimpleXML": "*",
+    "ext-ctype": "*",
+    "ext-date": "*",
+    "ext-dom": "*",
+    "ext-gd": "*",
+    "ext-hash": "*",
+    "ext-iconv": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
+    "ext-xml": "*",
+    "ext-zip": "*",
+    "ezyang/htmlpurifier": "v4.6.0",
+    "http-interop/http-middleware": "^0.5.0",
+    "metaways/opendocument": "1.1",
+    "metaways/timezoneconvert": "1.*",
+    "mtdowling/cron-expression": "^1.2 | ^2.0",
+    "nikic/fast-route": "^1.2",
+    "php": "^5.6 | ^7.0",
+    "phpoffice/phpexcel": "1.8.*",
+    "phpoffice/phpspreadsheet": "dev-master",
+    "phpoffice/phpword": "v0.14.0 as v0.13.0",
+    "sabre/dav": "1.8.*",
+    "sabre/vobject": "3.5.3pl1 as 2.1.0",
+    "sentry/sentry": "^1.8",
+    "symfony/config": "^3.3",
+    "symfony/dependency-injection": "^3.4",
+    "syncroton/syncroton": "dev-master",
+    "tine20/composerapploader": "1.0.*",
+    "twig/twig": "~1.0",
+    "xenolope/quahog": "^2.1",
+    "zbateson/mail-mime-parser": "1.*",
+    "zendframework/zend-diactoros": "^1.6",
+    "zendframework/zend-http": "2.5.*",
+    "zendframework/zend-stratigility": "^2.1",
+    "zendframework/zendframework1": "1.12.20pl34 as 1.12.20"
+  },
+  "require-dev": {
+    "phing/phing": "2.16.*",
+    "phpunit/phpunit": "4.6.*",
+    "tedivm/jshrink": "~1.0",
+    "zendframework/zend-psr7bridge": "^0.2"
+  },
+  "autoload": {
+    "files": [],
+    "psr-0": {
+      "": [
+        "",
+        "library"
+      ],
+      "TimeZoneConvert": "library/TimeZoneConvert/lib/",
+      "Zend_": [
+        "vendor/zendframework/zendframework1/library"
+      ],
+      "qCal": "library/qCal/lib"
+    },
+    "classmap": [
+      "library/idnaconvert"
+    ]
+  },
+  "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
+  "include-path": [
+    "",
+    "vendor/zendframework/zendframework1/library",
+    "library"
+  ],
+  "config": {
+    "secure-http": false,
+    "platform": {
+      "php": "7.0.8"
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
+    "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
+    "build": "./vendor/bin/phing",
+    "post-install-cmd": [
+      "git submodule update --init"
+    ]
+  },
+  "support": {
+    "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
+    "source": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM"
+  }
 }
