@@ -478,6 +478,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             plain: true,
             activeTab: 0,
             plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tine.Addressbook.editDialog.mainTabPanel'
+            }, {
                 ptype : 'ux.tabpanelkeyplugin'
             }],
             defaults: {
