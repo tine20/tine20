@@ -96,6 +96,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.tooltip = config.header;
             }
 
+            if(fieldDefinition.type == 'date') {
+                config.width = 90;
+            }
+
             // If no label exists, don't use in grid
             if (! fieldDefinition.label) {
                 return null;
