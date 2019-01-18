@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  ModelConfiguration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -62,14 +62,21 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_CONTAINER = 'container';
     const TYPE_DATETIME = 'datetime';
+    const TYPE_DATE = 'date';
     const TYPE_FLOAT = 'float';
     const TYPE_FULLTEXT = 'fulltext';
     const TYPE_INTEGER = 'integer';
+    const TYPE_JSON = 'json';
     const TYPE_KEY_FIELD = 'keyfield';
+    const TYPE_MONEY = 'money';
+    const TYPE_NUMBERABLE_INT = 'numberableInt';
+    const TYPE_NUMBERABLE_STRING = 'numberableStr';
     const TYPE_RECORD = 'record';
     const TYPE_RECORDS = 'records';
     const TYPE_STRING = 'string';
+    const TYPE_STRING_AUTOCOMPLETE = 'stringAutocomplete';
     const TYPE_TEXT = 'text';
+    const TYPE_TIME = 'time';
     const TYPE_USER = 'user';
     const TYPE_VIRTUAL = 'virtual';
 

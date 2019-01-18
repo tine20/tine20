@@ -5,13 +5,14 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Common\Persistence\Mapping\MappingException;
+use Tinebase_ModelConfiguration_Const as MCC;
 
 /**
  * Tinebase_Record_DoctrineMappingDriver
@@ -26,26 +27,25 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
      * @var array modelConfigType => Doctrine2Type
      */
     protected static $_typeMap = array(
-        'string'        => 'string',
-        'stringAutocomplete' => 'string',
-        'text'          => 'text',
-        'fulltext'      => 'text',
-        'datetime'      => 'datetime',
-        'date'          => 'datetime',
-        // TODO use datetime here?
-        'time'          => 'time',
-        'integer'       => 'integer',
-        'bigint'        => 'bigint',
-        'numberableInt' => 'integer',
-        'numberableStr' => 'string',
-        'float'         => 'float',
-        'json'          => 'text',
-        'container'     => 'string',
-        'record'        => 'string',
-        'keyfield'      => 'string',
-        'user'          => 'string',
-        'boolean'       => 'boolean',
-        'money'         => 'float',
+        MCC::TYPE_STRING                => 'string',
+        MCC::TYPE_STRING_AUTOCOMPLETE   => 'string',
+        MCC::TYPE_TEXT                  => 'text',
+        MCC::TYPE_FULLTEXT              => 'text',
+        MCC::TYPE_DATETIME              => 'datetime',
+        MCC::TYPE_DATE                  => 'datetime',
+        MCC::TYPE_TIME                  => 'time',
+        MCC::TYPE_INTEGER               => 'integer',
+        MCC::TYPE_BIGINT                => 'bigint',
+        MCC::TYPE_NUMBERABLE_INT        => 'integer',
+        MCC::TYPE_NUMBERABLE_STRING     => 'string',
+        MCC::TYPE_FLOAT                 => 'float',
+        MCC::TYPE_JSON                  => 'text',
+        MCC::TYPE_CONTAINER             => 'string',
+        MCC::TYPE_RECORD                => 'string',
+        MCC::TYPE_KEY_FIELD             => 'string',
+        MCC::TYPE_USER                  => 'string',
+        MCC::TYPE_BOOLEAN               => 'boolean',
+        MCC::TYPE_MONEY                 => 'float',
         // TODO replace that with a single type 'datetime_separated'?
 //        'datetime_separated' => 'date',
         'datetime_separated_date' => 'date',
