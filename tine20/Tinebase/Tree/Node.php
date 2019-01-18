@@ -353,19 +353,24 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * return direct children of tree node
      * 
      * @param  string|Tinebase_Model_Tree_Node  $nodeId  the id of the node
+     * @param  bool $ignoreAcl default is true
      * @return Tinebase_Record_RecordSet
      */
-    public function getChildren($nodeId)
+    public function getChildren($nodeId, $ignoreAcl = true)
     {
         $nodeId = $nodeId instanceof Tinebase_Model_Tree_Node ? $nodeId->getId() : $nodeId;
-        
+
+        $options = [];
+        if ($ignoreAcl) {
+            $options['ignoreAcl'] = true;
+        }
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'parent_id',
                 'operator'  => 'equals',
                 'value'     => $nodeId
             )
-        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, $options);
         $children = $this->search($searchFilter);
         
         return $children;
