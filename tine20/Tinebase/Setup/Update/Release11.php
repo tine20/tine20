@@ -922,4 +922,17 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.45');
     }
+
+    /**
+     * update history Icon
+     */
+    public function update_45()
+    {
+        $note = Tinebase_Notes::getInstance()->getNoteTypeByName('changed');
+        if ($note !== null) {
+            $note['icon'] = 'images/icon-set/icon_file.svg';
+            Tinebase_Notes::getInstance()->updateNoteType($note);
+        }
+        $this->setApplicationVersion('Tinebase', '11.46');
+    }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.45</version>
+    <version>11.46</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -3932,7 +3932,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/icon-set/icon_doc_file.svg</value>
+                <value>images/icon-set/icon_file.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
