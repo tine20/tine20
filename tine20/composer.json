@@ -22,11 +22,11 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/tine20/composerapploader.git"
+      "url": "https://github.com/paulmhh/PHPWord"
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/zendframework1.git"
+      "url": "https://github.com/tine20/composerapploader.git"
     },
     {
       "type": "git",
@@ -42,11 +42,11 @@
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/timezoneconvert.git"
+      "url": "https://github.com/tine20/syncroton.git"
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/syncroton.git"
+      "url": "https://github.com/tine20/timezoneconvert.git"
     },
     {
       "type": "git",
@@ -54,7 +54,7 @@
     },
     {
       "type": "git",
-      "url": "https://github.com/paulmhh/PHPWord"
+      "url": "https://github.com/tine20/zendframework1.git"
     }
   ],
   "require": {

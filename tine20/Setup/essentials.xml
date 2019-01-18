@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <essential>
-    <enviroment name="PHP" version="5.5"/>
+    <enviroment name="PHP" version="5.6"/>
     <extensions>
+        <extension name="SPL" />
+        <extension name="SimpleXML" />
         <extension name="ctype" />
         <extension name="date" />
         <extension name="dom" />
@@ -11,8 +13,6 @@
         <extension name="json" />
         <extension name="mbstring" />
         <extension name="openssl" />
-        <extension name="SPL" />
-        <extension name="SimpleXML" />
         <extension name="xml" />
         <extension name="zip" />
     </extensions>
