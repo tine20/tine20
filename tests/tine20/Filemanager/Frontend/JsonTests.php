@@ -857,19 +857,6 @@ class Filemanager_Frontend_JsonTests extends TestCase
         }
     }
 
-    /*public function testCreateFileAndQuota()
-    {
-        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
-        $oldQuotaConfig = clone $quotaConfig;
-        $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1024;
-        $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} = 100;
-
-        try {
-        } finally {
-            Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $oldQuotaConfig);
-        }
-    }*/
-
     /**
     * testCreateFileNodeWithUTF8Filenames
     * 
