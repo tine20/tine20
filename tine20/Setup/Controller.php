@@ -464,13 +464,15 @@ class Setup_Controller
             /** @var Tinebase_Model_Application $application */
             foreach ($applicationController->getApplications() as $application) {
                 /** @var Setup_Update_Abstract $class */
-                if (null === $minMajor || $application->getMajorVersion() < $minMajor) {
+                if ($application->status !== Tinebase_Application::DISABLED && (null === $minMajor || $application->getMajorVersion() < $minMajor)) {
                     $minMajor = $application->getMajorVersion();
                 }
             }
 
             foreach ($applicationController->getApplications() as $application) {
-                if ($application->getMajorVersion() > $minMajor) continue;
+                if ($application->getMajorVersion() > $minMajor) {
+                    continue;
+                }
 
                 /** @var Setup_Update_Abstract $class */
                 $class = $application->name . '_Setup_Update_' . $application->getMajorVersion();
