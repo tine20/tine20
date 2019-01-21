@@ -25,12 +25,12 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
     protected $_startDate = null;
     protected $_endDate = null;
-    protected $_reports = [];
-    protected $_reportResult = [
-        'created' => 0,
-        'updated' => 0,
-        'errors' => 0,
-    ];
+    protected $_reportsByDay = [];
+    /**
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_oldReports = null;
+    protected $_reportResult = null;
 
     /**
      * the constructor
@@ -100,9 +100,17 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         Tinebase_DateTime $startDate = null,
         Tinebase_DateTime $endDate = null
     ) {
+        // init some member vars
         $this->_employee = $employee;
         $this->_startDate = $startDate ? $startDate : $this->_getStartDate();
         $this->_endDate = $endDate ? $endDate : $this->_getEndDate();
+        $this->_reportsByDay = [];
+        $this->_reportResult = [
+            'created' => 0,
+            'updated' => 0,
+            'errors' => 0,
+        ];;
+        $this->_oldReports = new Tinebase_Record_RecordSet(HumanResources_Model_DailyWTReport::class);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Calculating Daily Reports for ' . $employee->getTitle()
@@ -115,8 +123,6 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         // @todo fetch all sickness/holiday/... of an employee
 
         // @todo loop all days from first of last month to present day
-
-        // @todo create/update WorkingTimeReports for each day
 
         return $this->_reportResult;
     }
@@ -135,23 +141,34 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     {
         $day = $dayDT->format('Y-m-d');
 
-        if (isset($this->_reports[$day])) {
-            return $this->_reports[$day];
+        if (isset($this->_reportsByDay[$day])) {
+            return $this->_reportsByDay[$day];
         }
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_DailyWTReport::class, [
-            ['field' => 'employee_id', 'operator' => 'in', 'value' => [$this->_employee->getId()]],
-            ['field' => 'date', 'operator' => 'equals', 'value' => $day],
+            ['field' => 'employee_id', 'operator' => 'AND', 'value' => [
+                ['field' => ':id', 'operator' => 'equals', 'value' => $this->_employee->getId()]
+            ]],
+            ['field' => 'date', 'operator' => 'equals', 'value' => $day . ' 00:00:00'],
         ]);
         $result = HumanResources_Controller_DailyWTReport::getInstance()->search($filter);
+
         if ($result->getFirstRecord()) {
-            return $result->getFirstRecord();
+            $report = $result->getFirstRecord();
+            $this->_oldReports->addRecord($report);
+            $newReport = clone($report);
+
+            // @todo reset all time fields
+            $newReport->working_time_actual = 0;
         } else {
-            return new HumanResources_Model_DailyWTReport([
+            $newReport = new HumanResources_Model_DailyWTReport([
                 'employee_id' => $this->_employee->getId(),
                 'date' => $day,
             ]);
         }
+
+        $this->_reportsByDay[$day] = $newReport;
+        return $newReport;
     }
 
     protected function _calcTimesheets()
@@ -177,29 +194,35 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
         // calc
         foreach ($timesheets as $timesheet) {
-            $this->_updateReportWithTimesheet($timesheet);
+            $dailyReport = $this->_getReportForDay($timesheet->start_date);
+            $dailyReport->working_time_actual += $timesheet->duration;
         }
+        $this->_updateReports();
     }
 
-    protected function _updateReportWithTimesheet($timesheet)
+    /**
+     * update the reports
+     */
+    protected function _updateReports()
     {
-        $dailyReport = $this->_getReportForDay($timesheet->start_date);
-        $dailyReport->working_time_actual += $timesheet->duration;
+        foreach ($this->_reportsByDay as $dailyReport) {
+            if ($dailyReport->getId()) {
 
-        $this->_saveReport($dailyReport);
-    }
+                // get current report
+                $currentReport = $this->_oldReports->getById($dailyReport->getId());
 
-    protected function _saveReport($dailyReport)
-    {
-        if ($dailyReport->getId()) {
-            $this->update($dailyReport);
-            $this->_reportResult['updated']++;
-        } else {
-            $this->create($dailyReport);
-            $this->_reportResult['created']++;
+                // @todo check diff of all timefields
+                if ($currentReport->working_time_actual != $dailyReport->working_time_actual) {
+                    $this->update($dailyReport);
+                    $this->_reportResult['updated']++;
+                }
+            } else {
+                $this->create($dailyReport);
+                $this->_reportResult['created']++;
+            }
         }
 
-        // @todo error?
+        // @todo do something on error?
     }
 
     /**

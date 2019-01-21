@@ -13,6 +13,8 @@
  */
 class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCase
 {
+    protected $_ts;
+
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEnd()
     {
         // create employee & contract
@@ -34,16 +36,14 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         // create report
         $start = new Tinebase_DateTime('2018-08-01 00:00:00');
         $end = new Tinebase_DateTime('2018-08-31 23:59:59');
-        $result = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($employee, $start, $end);
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($employee, $start, $end);
 
         // assert!
-        self::assertGreaterThanOrEqual(3, $result['created'], print_r($result, true));
-        self::assertGreaterThanOrEqual(1, $result['updated'], print_r($result, true));
-        self::assertEquals(0, $result['errors']);
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_DailyWTReport::class, [
-            ['field' => 'employee_id', 'operator' => 'in', 'value' => [$employee->getId()]]
-        ]);
-        $result = HumanResources_Controller_DailyWTReport::getInstance()->search($filter);
+        self::assertGreaterThanOrEqual(3, $calcResult['created'], print_r($calcResult, true));
+        self::assertGreaterThanOrEqual(0, $calcResult['updated'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['errors']);
+
+        $result = $this->_getReportsForEmployee($employee);
         self::assertGreaterThanOrEqual(3, count($result), 'should have more than (or equal) 3 daily reports');
 
         // check times
@@ -52,6 +52,41 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
             self::assertNotNull($report);
             self::assertEquals($workTime, $report->working_time_actual);
             // @todo add more assertions (absence_time*, evaluation_period*, break_time*, working_time_target, working_time_correction, ...)
+        }
+
+        return $employee;
+    }
+
+    protected function _getReportsForEmployee($employee)
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_DailyWTReport::class, [
+            ['field' => 'employee_id', 'operator' => 'in', 'value' => [$employee->getId()]]
+        ]);
+        return HumanResources_Controller_DailyWTReport::getInstance()->search($filter);
+    }
+
+    public function testCalculateReportsForEmployeeTimesheetsWithStartAndEndUpdate()
+    {
+        $employee = $this->testCalculateReportsForEmployeeTimesheetsWithStartAndEnd();
+
+        // add a new TS
+        $ts = $this->_ts->filter('description', 'Probe')->getFirstRecord();
+        unset($ts->id);
+        Timetracker_Controller_Timesheet::getInstance()->create($ts);
+
+        $start = new Tinebase_DateTime('2018-08-01 00:00:00');
+        $end = new Tinebase_DateTime('2018-08-31 23:59:59');
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($employee, $start, $end);
+        self::assertGreaterThanOrEqual(0, $calcResult['created'], print_r($calcResult, true));
+        self::assertGreaterThanOrEqual(1, $calcResult['updated'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['errors']);
+
+        // check times
+        $result = $this->_getReportsForEmployee($employee);
+        foreach (['2018-08-02 00:00:00' => 360, '2018-08-08 00:00:00' => 120, '2018-08-07 00:00:00' => 900] as $day => $workTime) {
+            $report = $result->filter('date', $day)->getFirstRecord();
+            self::assertNotNull($report);
+            self::assertEquals($workTime, $report->working_time_actual);
         }
     }
 
@@ -74,6 +109,6 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
     {
         // use TS importer (also creates TAs)
         $importer = new Timetracker_Import_TimesheetTest();
-        $importer->testImportDemoData();
+        $this->_ts = $importer->testImportDemoData();
     }
 }

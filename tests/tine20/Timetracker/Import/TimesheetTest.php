@@ -43,5 +43,6 @@ class Timetracker_Import_TimesheetTest extends TestCase
         $result_timesheet = Timetracker_Controller_TimeSheet::getInstance()->search($filter_timesheet);
 
         self::assertEquals(4, count($result_timesheet));
+        return $result_timesheet;
     }
 }
