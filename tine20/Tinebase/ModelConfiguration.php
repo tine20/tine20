@@ -1499,6 +1499,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     return Tinebase_Model_Note::class;
                 case 'container':
                     return Tinebase_Model_Container::class;
+                case 'record':
+                    return $this->_recordFields[$field]['config']['recordClassName'];
                 case 'records':
                     return $this->_recordsFields[$field]['config']['recordClassName'];
             }

@@ -17,6 +17,22 @@
  */
 class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
 {
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
+    {
+        parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+
+        if (Tinebase_Application::getInstance()->isInstalled('GDPR')) {
+            $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
+                [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'intendedPurpose' => [],
+                    ]
+                ];
+            $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, $expanderDef);
+            $expander->expand($records);
+        }
+    }
+
    /**
     * parent converts Tinebase_Record_RecordSet to external format
     * this resolves Image Paths
@@ -38,11 +54,18 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
 
         $this->_appendRecordPaths($_records, $_filter);
 
-        $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
+        $expanderDef = [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'container_id' => [],
             ],
-        ]);
+        ];
+        if (Tinebase_Application::getInstance()->isInstalled('GDPR')) {
+            $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
+                [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
+                    'intendedPurpose' => [],
+            ];
+        }
+        $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, $expanderDef);
         $expander->expand($_records);
 
         // TODO container_id of duplicate records need to be dehydrated, too - see \Addressbook_JsonTest::testDuplicateCheck

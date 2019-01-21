@@ -6,7 +6,7 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -50,6 +50,9 @@ class Tinebase_Record_Expander_Factory
             case 'record':
                 return new Tinebase_Record_Expander_RecordProperty($propModel, $_property, $_definition, $_rootExpander,
                      $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
+            case 'records':
+                return new Tinebase_Record_Expander_RecordsProperty($propModel, $_property, $_definition,
+                    $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
             case 'relation':
                 return new Tinebase_Record_Expander_Relations($_model, $propModel, $_property, $_definition,
                     $_rootExpander);
