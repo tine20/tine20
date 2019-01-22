@@ -480,6 +480,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, Zend_Translate $translate = null)
     {
+        $recordProperties = [];
+        /** @var Tinebase_Record_Interface $model */
+        if (($model = $modification->record_type) && ($mc = $model::getConfiguration())) {
+            $recordProperties = $mc->recordFields;
+        }
         $modifiedAttribute = $modification->modified_attribute;
 
         // new ModificationLog implementation
@@ -497,27 +502,54 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                     $return .= ' ' . $translate->_($attribute) . ' (' . $diff->getTranslatedDiffText() . ')';
                 } else {
                     $oldData = $diff->oldData[$attribute];
-                    if(is_array($oldData)) {
-                        $oldDataString = '';
-                        foreach($oldData as $key => $val) {
-                            if (is_object($val)) {
-                                $val = $val->toArray();
+
+                    if (isset($recordProperties[$attribute]) && ($oldData || $value) &&
+                            isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
+                            $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
+                            method_exists($controller, 'get')) {
+                        if ($oldData) {
+                            try {
+                                $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
+                            } catch(Tinebase_Exception_NotFound $e) {
+                                $oldDataString = $oldData;
                             }
-                            $oldDataString .= ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
+                        } else {
+                            $oldDataString = '';
+                        }
+                        if ($value) {
+                            try {
+                                $valueString = $controller->get($value, null, false, true)->getTitle();
+                            } catch(Tinebase_Exception_NotFound $e) {
+                                $valueString = $value;
+                            }
+                        } else {
+                            $valueString = '';
                         }
                     } else {
-                        $oldDataString = $oldData;
-                    }
-                    if(is_array($value)) {
-                        $valueString = '';
-                        foreach($value as $key => $val) {
-                            if (is_object($val)) {
-                                $val = $val->toArray();
+                        if (is_array($oldData)) {
+                            $oldDataString = '';
+                            foreach ($oldData as $key => $val) {
+                                if (is_object($val)) {
+                                    $val = $val->toArray();
+                                }
+                                $oldDataString .= ' ' . $key . ': ' . (is_array($val) ? (isset($val['id']) ? $val['id'] : print_r($val,
+                                        true)) : $val);
                             }
-                            $valueString .= ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
+                        } else {
+                            $oldDataString = $oldData;
                         }
-                    } else {
-                        $valueString = $value;
+                        if (is_array($value)) {
+                            $valueString = '';
+                            foreach ($value as $key => $val) {
+                                if (is_object($val)) {
+                                    $val = $val->toArray();
+                                }
+                                $valueString .= ' ' . $key . ': ' . (is_array($val) ? (isset($val['id']) ? $val['id'] : print_r($val,
+                                        true)) : $val);
+                            }
+                        } else {
+                            $valueString = $value;
+                        }
                     }
 
                     if (null !== $oldDataString || (null !== $valueString && '' !== $valueString)) {
