@@ -210,7 +210,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
 };
 
 /**
- * default timesheets backend
+ * default contact backend
  */
 Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Addressbook',

@@ -39,7 +39,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @cfg {Record} foreignRecordClass needed for explicit defined filters
      */
     foreignRecordClass : null,
-    
+
+    /**
+     * @cfg {String} foreignRefIdField optional, defaults to idProperty
+     * might differ for foreignRecords (many to many relation) filter
+     *  -> foreignRefId is not yet part of modelConfiguration :-(
+     */
+    foreignRefIdField: null,
+
     /**
      * @cfg {String} linkType {relation|foreignId} needed for explicit defined filters
      */
@@ -135,25 +142,25 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
             operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
         }, this);
-        
+
         // we need this to detect operator changes
         Ext.each(operators, function(o) {o.toString = this.objectToString}, this);
-        
+
         this.operatorStore = new Ext.data.JsonStore({
             fields: ['operator', 'label'],
             data: operators
         });
-        
+
         if ( this.operatorStore.getCount() > 0) {
             this.defaultOperator = this.operatorStore.getAt(0).get('operator');
         }
     },
-    
+
     /**
      * init an explicit filter row
      */
     initExplicit: function() {
-        this.foreignField = this.foreignRecordClass.getMeta('idProperty');
+        this.foreignField = this.foreignRefIdField || this.foreignRecordClass.getMeta('idProperty');
 
         var foreignApp = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName')),
             i18n;
@@ -251,10 +258,15 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 });
             } else {
                 // get value for idField if our own operator is not definedBy
-                if (filter.get('operator') != 'definedBy') {
+
+                // auto switch not to equals as we auto switch definedBy to notDefinedBy
+                var op = filter.get('operator'),
+                    opMap = {not: 'equals'};
+
+                if (op != 'definedBy') {
                     value.push({
-                        field: ':' + foreignRecordClass.getMeta('idProperty'),
-                        operator: filter.get('operator'),
+                        field: ':' + (me.foreignRefIdField || foreignRecordClass.getMeta('idProperty')),
+                        operator: opMap[op] || op,
                         value: filter.formFields.value.value
                     });
                 }
@@ -325,7 +337,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             // explicit chose right operator /equals / in /definedBy: left sided values create (multiple) subfilters in filterToolbar
             var foreignRecordDefinition = filter.foreignRecordDefinition,
                 foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
-                foreignRecordIdProperty = foreignRecordClass.getMeta('idProperty'),
+                foreignRecordIdProperty = me.foreignRefIdField || foreignRecordClass.getMeta('idProperty'),
                 parentFilters = [];
                 
             Ext.each(value, function(filterData, i) {
@@ -373,9 +385,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
             // a single id filter is always displayed in the parent Toolbar with our own filterRow
             else if (value.length == 1 && [foreignRecordIdProperty, ':' + foreignRecordIdProperty].indexOf(value[0].field) > -1) {
+                // switch back to not when operator is notDefinedby as we switched not to equals
+                var op = value[0].operator,
+                    opMap = { notDefinedBy: 'not' },
+                    finalOp = opMap[op] || op;
+
                 filter.set('value', value[0].value);
-                filter.formFields.operator.setValue(value[0].operator);
-                this.onOperatorChange(filter, value[0].operator, true);
+                filter.formFields.operator.setValue(finalOp);
+                this.onOperatorChange(filter, finalOp, true);
             }
 
             // a single registered filter is always displayed in the parent Toolbar with our own filterRow
@@ -477,9 +494,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
         operator.origGetValue = operator.getValue.createDelegate(operator);
         
-        // op is always AND atm.
         operator.getValue = function() {
-            return 'AND';
+            // auto switch operator for negating single line filters
+            var op = operator.origGetValue(),
+                opMap = {
+                    not: 'notDefinedBy:AND'
+                };
+
+            return opMap[op] || 'AND';
         };
         
 //        var origSetValue = operator.setValue.createDelegate(operator);
@@ -540,8 +562,15 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         switch(operator) {
             case 'equals':
             case 'not':
-                
-                value = Tine.widgets.form.RecordPickerManager.get(this.foreignRecordClass.getMeta('appName'), this.foreignRecordClass, Ext.apply({
+                //@TODO find it
+                var pickerRecordClass = this.foreignRecordClass;
+                if (this.foreignRefIdField) {
+                    // many 2 many relation
+                    var foreignRecordConfig = _.get(this.foreignRecordClass.getModelConfiguration(), 'fields.' + this.foreignRefIdField + '.config');
+                    pickerRecordClass = Tine.Tinebase.data.RecordMgr.get(foreignRecordConfig.appName, foreignRecordConfig.modelName);
+                }
+
+                value = Tine.widgets.form.RecordPickerManager.get(pickerRecordClass.getMeta('appName'), pickerRecordClass, Ext.apply({
                     filter: filter,
                     blurOnSelect: true,
                     width: this.filterValueWidth,
