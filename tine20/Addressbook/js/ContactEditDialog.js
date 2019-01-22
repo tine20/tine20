@@ -260,7 +260,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     labelIcon: 'images/icon-set/icon_email.svg',
                     name: 'email',
                     vtype: 'email',
-                    maxLength: 64
+                    maxLength: 64,
+                    disabled: (this.checkDisableEmailField())                     
                 }, {
                     fieldLabel: this.app.i18n._('E-Mail (private)'),
                     labelIcon: 'images/icon-set/icon_email.svg',
@@ -587,6 +588,21 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     },
 
     /**
+     * checkDisableEmailField
+     */
+    checkDisableEmailField: function () {
+         if (this.record.get('email')){
+
+            if (Tine.Tinebase.registry.get('primarydomain') && Tine.Tinebase.registry.get('primarydomain') !== ''
+                && this.record.get('type') === 'user')
+            {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    /**
      * onRecordLoad
      */
     onRecordLoad: function () {
@@ -605,6 +621,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.mapPanel.onRecordLoad(this.record);
             }
         }
+        console.warn(this.checkDisableEmailField());
         if (this.record.id) {
             this.groupsPanel.store.loadData(this.record.get('groups'));
         }
