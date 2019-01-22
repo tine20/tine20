@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -27,6 +27,9 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         1 => 'OR',
         2 => 'equals', //expects ID as value
         3 => 'in', //expects IDs as value
+        4 => 'not', //expects ID as value
+        5 => 'notin', //expects IDs as value
+        6 => 'notDefinedBy:AND',
     );
     
     /**
@@ -65,17 +68,19 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     {
         $this->_foreignIds = NULL;
         $this->_valueIsNull = null === $_value;
-        if ($this->_operator === 'equals' || $this->_operator === 'in') {
-            $this->_value = array('field' => 'id', 'operator' => $this->_operator, 'value' => $_value);
-            $this->_foreignIds = (array) $_value;
-        } else {
-            $this->_value = (array) $_value;
-        }
 
-        $this->_removePrefixes();
-        
-        // @todo move this to another place?
-        $this->_setFilterGroup();
+        // id(s) is/are to be provided directly as value
+        if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
+                $this->_operator === 'notin') {
+            $this->_foreignIds = (array) $_value;
+            $this->_value = null;
+
+        } else {
+            // (not)definedBy filter, value contains the subfilter
+            $this->_value = (array)$_value;
+            $this->_removePrefixes();
+            $this->_setFilterGroup();
+        }
     }
     
     /**
@@ -112,7 +117,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             $this->_options['filtergroup'],
             $this->_value,
-            $this->_operator,
+            strpos($this->_operator, 'OR') !== false ? 'OR' : 'AND',
             $this->_options
         );
     }
@@ -154,17 +159,58 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         if ($this->_id) {
             $result['id'] = $this->_id;
         }
-        
-        $filters = $this->_getForeignFiltersForToArray($_valueToJson);
-        
-        if ($this->_options && isset($this->_options['isGeneric']) && $this->_options['isGeneric']) {
-            $result['value'] = $this->_getGenericFilterInformation();
-            $result['value']['filters'] = $filters;
+
+        if (null !== $this->_filterGroup) {
+            $filters = $this->_getForeignFiltersForToArray($_valueToJson);
+
+            if ($this->_options && isset($this->_options['isGeneric']) && $this->_options['isGeneric']) {
+                $result['value'] = $this->_getGenericFilterInformation();
+                $result['value']['filters'] = $filters;
+            } else {
+                $result['value'] = $filters;
+            }
         } else {
-            $result['value'] = $filters;
+            if ($_valueToJson && !empty($this->_foreignIds)) {
+                if (count($this->_foreignIds) > 1) {
+                    foreach ($this->_foreignIds as $key => $value) {
+                        $result['value'][$key] = $this->_resolveRecord($value);
+                    }
+                } else {
+                    $result['value'] = $this->_resolveRecord($this->_foreignIds[0]);
+                }
+            } else {
+                $result['value'] = $this->_foreignIds;
+            }
         }
         
         return $result;
+    }
+
+    /**
+     * resolves a record
+     *
+     * @param string $value
+     * @return array|string
+     */
+    protected function _resolveRecord($value)
+    {
+        $controller = $this->_getController();
+        if ($controller === NULL) {
+            return $value;
+        }
+
+        try {
+            if (method_exists($controller, 'get')) {
+                $recordArray = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ false)->toArray();
+            } else {
+                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . ' Controller ' . get_class($controller) . ' has no get method');
+                return $value;
+            }
+        } catch (Exception $e) {
+            $recordArray = $value;
+        }
+
+        return $recordArray;
     }
     
     /**
@@ -215,6 +261,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     protected function _filterGroupToArrayWithoutCondition(&$result, Tinebase_Model_Filter_FilterGroup $_filtergroup, $_valueToJson)
     {
         $filterObjects = $_filtergroup->getFilterObjects();
+        /** @var Tinebase_Model_Filter_Abstract $filter */
         foreach ($filterObjects as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
                 $this->_filterGroupToArrayWithoutCondition($result, $filter, $_valueToJson);

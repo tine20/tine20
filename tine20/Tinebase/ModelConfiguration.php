@@ -1356,9 +1356,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     $this->_filterModel[$fieldKey]['options'] = $config;
 
                     // set id filter controller
-                    if ($type === 'record') {
-                        $this->_filterModel[$fieldKey]['options']['filtergroup'] = $config['appName'] . '_Model_' . $config['modelName'] . 'Filter';
-                        $this->_filterModel[$fieldKey]['options']['controller']  = $config['appName'] . '_Controller_' . $config['modelName'];
+                    if ($type === 'record' || $type === 'records') {
+                        $this->_filterModel[$fieldKey]['options']['filtergroup'] = (isset($config['recordClassName']) ? $config['recordClassName'] : ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
+                        $this->_filterModel[$fieldKey]['options']['controller']  = isset($config['controllerClassName']) ? $config['controllerClassName'] : ($config['appName'] . '_Controller_' . $config['modelName']);
                     }
                 }
             }

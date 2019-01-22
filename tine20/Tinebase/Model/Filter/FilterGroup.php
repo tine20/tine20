@@ -598,7 +598,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 // special handling for foreign record filtering: creates a subfilter with CONDITION_AND
                 // NOTE: maybe this should be fixed in the client / this is just sanitizing here
                 // equals is also valid (for Tinebase_Model_Filter_ForeignId)
-                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND, 'equals', 'in'])) {
+                // TODO this needs to go away!
+                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND, 'equals', 'in', 'not', 'notin', 'notDefinedBy:AND'])) {
                     // add a sub-query filter
                     $data['value'] = [
                         ['field' => 'query', 'operator' => $data['operator'], 'value' => $data['value']]

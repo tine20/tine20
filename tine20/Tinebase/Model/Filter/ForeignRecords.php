@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -24,11 +24,6 @@
  */
 class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_ForeignId
 {
-    /**
-     * @var null|Tinebase_Record_RecordSet
-     */
-    protected $_mappingRecords = null;
-
     /**
      * set options
      *
@@ -57,17 +52,19 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if (! is_array($this->_mappingRecords)) {
-            $this->_mappingRecords = $this->_getController()->search($this->_filterGroup);
+        if (! is_array($this->_foreignIds) && null !== $this->_filterGroup) {
+            $this->_foreignIds = array_keys($this->_getController()
+                ->search($this->_filterGroup, null, false, $this->_options['refIdField']));
         }
 
         // TODO allow to configure id property or get it from model config
+        $orgField = $this->_field;
         $this->_field = 'id';
 
-        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)',
-            count($this->_mappingRecords) === 0
-                ? new Zend_Db_Expr('NULL')
-                : $this->_mappingRecords->{$this->_options['refIdField']}
-        );
+        try {
+            parent::appendFilterSql($_select, $_backend);
+        } finally {
+            $this->_field = $orgField;
+        }
     }
 }
