@@ -340,7 +340,18 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveContact($recordData, $duplicateCheck = TRUE)
     {
-        return $this->_save($recordData, Addressbook_Controller_Contact::getInstance(), 'Contact', 'id', array($duplicateCheck));
+        $adbController = Addressbook_Controller_Contact::getInstance();
+        $context = $adbController->getRequestContext() ?: [];
+        try {
+            $context['jsonFE'] = true;
+            $adbController->setRequestContext($context);
+
+            return $this->_save($recordData, $adbController, 'Contact', 'id', array($duplicateCheck));
+
+        } finally {
+            unset($context['jsonFE']);
+            $adbController->setRequestContext($context);
+        }
     }
     
 
