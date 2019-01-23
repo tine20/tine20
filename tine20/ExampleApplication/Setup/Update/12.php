@@ -11,8 +11,8 @@
  */
 class ExampleApplication_Setup_Update_12 extends Setup_Update_Abstract
 {
-    const RELEASE012_UPDATE001 = 'release012::update001';
-    const RELEASE012_UPDATE002 = 'release012::update002';
+    const RELEASE012_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
