@@ -428,6 +428,57 @@ class Setup_Controller
         
         return $applications;
     }
+
+    protected function _getUpdatesByPrio(&$applicationCount)
+    {
+        $applicationController = Tinebase_Application::getInstance();
+
+        $updatesByPrio = [];
+        $minMajor = null;
+        /** @var Tinebase_Model_Application $application */
+        foreach ($applicationController->getApplications() as $application) {
+            /** @var Setup_Update_Abstract $class */
+            if ($application->status !== Tinebase_Application::DISABLED && (null === $minMajor || $application->getMajorVersion() < $minMajor)) {
+                $minMajor = $application->getMajorVersion();
+            }
+        }
+
+        foreach ($applicationController->getApplications() as $application) {
+            if ($application->getMajorVersion() > $minMajor) {
+                continue;
+            }
+
+            /** @var Setup_Update_Abstract $class */
+            $class = $application->name . '_Setup_Update_' . $application->getMajorVersion();
+            if (class_exists($class)) {
+                $updates = $class::getAllUpdates();
+                $allUpdates = [];
+                foreach ($updates as $prio => $byPrio) {
+                    foreach ($byPrio as &$update) {
+                        $update['prio'] = $prio;
+                    }
+                    unset($update);
+                    $allUpdates += $byPrio;
+                }
+
+                if ($stateUpdates = json_decode($applicationController->getApplicationState(
+                    Tinebase_Core::getTinebaseId(), Tinebase_Application::STATE_UPDATES, true), true)) {
+                    $allUpdates = array_diff_key($allUpdates, $stateUpdates);
+                }
+                if (!empty($allUpdates)) {
+                    ++$applicationCount;
+                }
+                foreach ($allUpdates as $update) {
+                    if (!isset($updatesByPrio[$update['prio']])) {
+                        $updatesByPrio[$update['prio']] = [];
+                    }
+                    $updatesByPrio[$update['prio']][] = $update;
+                }
+            }
+        }
+
+        return $updatesByPrio;
+    }
     
     /**
      * updates installed applications. does nothing if no applications are installed
@@ -444,10 +495,9 @@ class Setup_Controller
             throw new Tinebase_Exception('could not create setup user');
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
-        $applicationController = Tinebase_Application::getInstance();
 
         if ($_applications === null) {
-            $_applications = $applicationController->getApplications();
+            $_applications = Tinebase_Application::getInstance()->getApplications();
         }
 
         // TODO remove this in Version 13
@@ -459,49 +509,7 @@ class Setup_Controller
         $iterationCount = 0;
 
         do {
-            $updatesByPrio = [];
-            $minMajor = null;
-            /** @var Tinebase_Model_Application $application */
-            foreach ($applicationController->getApplications() as $application) {
-                /** @var Setup_Update_Abstract $class */
-                if ($application->status !== Tinebase_Application::DISABLED && (null === $minMajor || $application->getMajorVersion() < $minMajor)) {
-                    $minMajor = $application->getMajorVersion();
-                }
-            }
-
-            foreach ($applicationController->getApplications() as $application) {
-                if ($application->getMajorVersion() > $minMajor) {
-                    continue;
-                }
-
-                /** @var Setup_Update_Abstract $class */
-                $class = $application->name . '_Setup_Update_' . $application->getMajorVersion();
-                if (class_exists($class)) {
-                    $updates = $class::getAllUpdates();
-                    $allUpdates = [];
-                    foreach ($updates as $prio => $byPrio) {
-                        foreach ($byPrio as &$update) {
-                            $update['prio'] = $prio;
-                        }
-                        unset($update);
-                        $allUpdates += $byPrio;
-                    }
-
-                    if ($stateUpdates = json_decode($applicationController->getApplicationState(
-                            Tinebase_Core::getTinebaseId(), Tinebase_Application::STATE_UPDATES, true), true)) {
-                        $allUpdates = array_diff_key($allUpdates, $stateUpdates);
-                    }
-                    if (!empty($allUpdates)) {
-                        ++$result['updated'];
-                    }
-                    foreach ($allUpdates as $update) {
-                        if (!isset($updatesByPrio[$update['prio']])) {
-                            $updatesByPrio[$update['prio']] = [];
-                        }
-                        $updatesByPrio[$update['prio']][] = $update;
-                    }
-                }
-            }
+            $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
 
             if (empty($updatesByPrio)) {
                 return $result;
@@ -1040,8 +1048,14 @@ class Setup_Controller
      * @param Tinebase_Model_Application $_application
      * @return boolean
      */
-    public function updateNeeded($_application)
+    public function updateNeeded($_application = null)
     {
+        if (null === $_application) {
+            $count = 0;
+            $this->_getUpdatesByPrio($count);
+            return $count > 0;
+        }
+
         $setupXml = $this->getSetupXml($_application->name, true);
         if (! $setupXml) {
             return false;

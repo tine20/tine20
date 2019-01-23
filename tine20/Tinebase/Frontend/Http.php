@@ -202,14 +202,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         // check if setup/update required
-        $setupController = Setup_Controller::getInstance();
-        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        foreach ($applications as $application) {
-            if ($setupController->updateNeeded($application)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . " " . $application->name . ' needs an update');
-                return $this->setupRequired();
-            }
+        if (Setup_Controller::getInstance()->updateNeeded()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' updates required');
+            return $this->setupRequired();
         }
 
         return $this->mainScreen();
