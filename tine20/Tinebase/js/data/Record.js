@@ -82,6 +82,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     containersName: 'containers',
     /**
+     * @cfg: {bool} copyNoAppendTitle
+     * don't append "(copy)" string to title when record is copied
+     */
+    copyNoAppendTitle: null,
+    /**
      * default filter
      * @type {string}
      */
@@ -266,7 +271,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
                 value = p.appName + '_Model_' + p.modelName;
                 break;
             default:
-                value = p.hasOwnProperty(name) ? p[name] : null;
+                value = p[name];
         }
         return value;
     };
