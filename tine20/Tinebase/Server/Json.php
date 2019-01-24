@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -387,7 +387,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
             return $response;
             
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             return $this->_handleException($request, $exception);
         }
     }
@@ -396,12 +396,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      * handle exceptions
      * 
      * @param Zend_Json_Server_Request_Http $request
-     * @param Exception $exception
+     * @param Throwable $exception
      * @return Zend_Json_Server_Response
      */
     protected function _handleException($request, $exception)
     {
-        $server = self::_getServer();
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
+        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+        Tinebase_Exception::log($exception, $suppressTrace);
         
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
         $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');
@@ -411,16 +413,13 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $exceptionData['appName'] = $exception->getAppName();
             $exceptionData['title'] = $exception->getTitle();
         }
-        
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
-        
-        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+
         if ($suppressTrace !== TRUE) {
             $exceptionData['trace'] = Tinebase_Exception::getTraceAsArray($exception);
         }
-        
-        Tinebase_Exception::log($exception, $suppressTrace);
-        
+
+
+        $server = self::_getServer();
         $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
         
         $response = $server->getResponse();

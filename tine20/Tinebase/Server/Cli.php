@@ -107,7 +107,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
             } else if ($result === FALSE) {
                 $result = 1;
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Tinebase_Exception::log($e);
             echo $e . "\n";
             $result = 1;

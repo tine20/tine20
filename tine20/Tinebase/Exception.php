@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -48,9 +48,9 @@ class Tinebase_Exception extends Exception
     /**
      * the constructor
      * 
-     * @param message[optional]
-     * @param code[optional]
-     * @param previous[optional]
+     * @param string $message
+     * @param int $code
+     * @param Throwable $previous
      */
     public function __construct($message = null, $code = null, $previous = null)
     {
@@ -105,11 +105,11 @@ class Tinebase_Exception extends Exception
     /**
      * log exception (remove confidential information from trace)
      * 
-     * @param Exception $exception
+     * @param Throwable $exception
      * @param boolean $suppressTrace
      * @param mixed $additionalData
      */
-    public static function log(Exception $exception, $suppressTrace = null, $additionalData = null)
+    public static function log(Throwable $exception, $suppressTrace = null, $additionalData = null)
     {
         if (! is_object(Tinebase_Core::getLogger())) {
             // no logger -> exception happened very early
@@ -121,11 +121,11 @@ class Tinebase_Exception extends Exception
     }
 
     /**
-     * @param Exception $exception
+     * @param Throwable $exception
      * @param null $suppressTrace
      * @param null $additionalData
      */
-    public static function logExceptionToLogger(Exception $exception, $suppressTrace = null, $additionalData = null)
+    public static function logExceptionToLogger(Throwable $exception, $suppressTrace = null, $additionalData = null)
     {
         $logMethod = $exception instanceof Tinebase_Exception ? $exception->getLogLevelMethod() : 'err';
         $logLevel = strtoupper($logMethod);
@@ -157,9 +157,9 @@ class Tinebase_Exception extends Exception
     }
 
     /**
-     * @param Exception $exception
+     * @param Throwable $exception
      */
-    public static function sendExceptionToSentry(Exception $exception)
+    public static function sendExceptionToSentry(Throwable $exception)
     {
         $sentryClient = Tinebase_Core::getSentry();
         if (! $sentryClient) {

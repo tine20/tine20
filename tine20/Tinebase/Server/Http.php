@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -112,7 +112,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
 
             header('HTTP/1.0 403 Forbidden');
 
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             Tinebase_Exception::log($exception, false);
             
             try {
@@ -132,7 +132,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 
                 $server->handle(array('method' => $this->_method));
                 
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 header('HTTP/1.0 503 Service Unavailable');
             }
         }
