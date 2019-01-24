@@ -627,6 +627,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $periodFilters = [];
         foreach ($periods as $period) {
+            if (! $period['from']) {
+                $period['from'] = Tinebase_DateTime::now();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Sanitizing "from" to ' . $period['from']->toString());
+            }
+            if (! $period['until']) {
+                $period['until'] = Tinebase_DateTime::now()->addMonth(Calendar_Config::getInstance()->get(
+                    Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL, 1));
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Sanitizing "until" to ' . $period['until']->toString());
+            }
             $periodFilters[] = [
                 'field' => 'period',
                 'operator' => 'within',
