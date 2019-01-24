@@ -129,6 +129,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         if (! this.operators) {
             this.operators = [];
         }
+
+        if (this.appName && ! this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+
+        if (this.app) {
+            this.label = this.app.i18n._hidden(this.label);
+        }
         
         
         if (this.defaultOperator === null) {
@@ -746,7 +754,7 @@ Tine.widgets.grid.FilterRegistry = function() {
             if (! filters[key]) {
                 filters[key] = [];
             }
-            
+            Ext.applyIf(filter, {appName: appName, modelName: modelName});
             filters[key].push(filter);
         },
         
