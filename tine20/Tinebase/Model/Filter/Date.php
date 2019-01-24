@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        add year to 'inweek' filter?
@@ -21,6 +21,9 @@
  */
 class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
 {
+    const BEFORE_OR_IS_NULL = 'beforeOrIsNull';
+    const AFTER_OR_IS_NULL = 'afterOrIsNull';
+
     /**
      * @var array list of allowed operators
      */
@@ -99,6 +102,14 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No filter value found, skipping operator: ' . $operator);
             }
+        }
+
+        if (isset($this->_options[self::BEFORE_OR_IS_NULL]) && $this->_options[self::BEFORE_OR_IS_NULL] &&
+                strpos($this->_operator, 'before') === 0) {
+            $_select->orWhere($field . ' IS NULL');
+        } elseif (isset($this->_options[self::AFTER_OR_IS_NULL]) && $this->_options[self::AFTER_OR_IS_NULL] &&
+                strpos($this->_operator, 'after') === 0) {
+            $_select->orWhere($field . ' IS NULL');
         }
     }
     

@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -15,6 +15,7 @@
  * 
  * @package     ExampleApplication
  * @subpackage  Model
+ * @property Tinebase_DateTime datetime
  */
 class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 {
@@ -133,6 +134,19 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                     Tinebase_Numberable::CONFIG_OVERRIDE => 'Tinebase_Container::getNumberableConfig',
                 )
             ),
+            'datetime'  => [
+                'validators'  => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
+                'label'       => 'datetime', // _('datetime')
+                'type'        => 'datetime',
+                'nullable'    => true,
+                'filterDefinition'  => [
+                    'filter'    => Tinebase_Model_Filter_DateTime::class,
+                    'options'   => [
+                        Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
+                        Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
+                    ]
+                ]
+            ]
         )
     );
 }
