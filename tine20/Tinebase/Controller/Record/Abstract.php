@@ -1281,6 +1281,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
                 } else {
                     $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
+                    $updatedRecord->{$property} = $record->{$property};
                 }
             }
         }
