@@ -32,6 +32,7 @@
  * @property string                         seq
  * @property string                         uid
  * @property string                         etag
+ * @property string                         class
  * @property int                            container_id
  * @property string                         organizer
  * @property Tinebase_Record_RecordSet      attendee
@@ -41,7 +42,9 @@
  * @property string                         transp
  * @property string                         status
  * @property string                         summary
+ * @property string                         description
  * @property string                         external_seq
+ * @property Tinebase_Record_RecordSet      exdate
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {

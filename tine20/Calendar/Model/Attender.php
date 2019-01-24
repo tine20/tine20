@@ -14,6 +14,7 @@
  * @property Tinebase_DateTime alarm_snooze_time
  * @property string transp
  * @property string user_id
+ * @property string status
  */
 class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {

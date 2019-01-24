@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f502e8ad68b66411648315e835045fef",
+    "content-hash": "65d16a329a68c1025dc38d9948a85642",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -534,12 +534,12 @@
             "version": "v2.5.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "73e4be7c7b3ba26f96b781a40b33feba4dfa6d45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/73e4be7c7b3ba26f96b781a40b33feba4dfa6d45",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/73e4be7c7b3ba26f96b781a40b33feba4dfa6d45",
                 "reference": "73e4be7c7b3ba26f96b781a40b33feba4dfa6d45",
                 "shasum": ""
             },
@@ -1356,11 +1356,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.1",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "9c1ec2d7fc161ae25ce33a1049dc419065bd1ff0"
+                "reference": "1809f2b115a8c637b3c308ee469c864b77c8e14d"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -1384,7 +1384,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2017-10-06T09:51:27+00:00"
+            "time": "2019-01-24T11:17:53+00:00"
         },
         {
             "name": "tine20/composerapploader",
