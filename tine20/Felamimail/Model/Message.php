@@ -194,7 +194,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
 
         $data = [];
         foreach (['date' => 'sent'] as $headerKey => $property) {
-            $data[$property] = new Tinebase_DateTime($message->getHeader($headerKey)->getDateTime());
+            $headerValue = $message->getHeader($headerKey);
+            if ($headerValue) {
+                $data[$property] = new Tinebase_DateTime($headerValue->getDateTime());
+            }
         }
         foreach (['subject', ] as $headerKey) {
             $data[$headerKey] = $message->getHeaderValue($headerKey);
