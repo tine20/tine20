@@ -134,6 +134,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
 
+        // e.g. {name = 'someApp'}
+        this.app = Tine.Tinebase.appMgr.get(this.app);
+
         if (this.app) {
             this.label = this.app.i18n._hidden(this.label);
         }
