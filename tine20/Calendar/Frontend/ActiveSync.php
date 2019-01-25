@@ -258,6 +258,9 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         /** @var Calendar_Model_Event $entry */
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . " calendar data " . print_r($entry->toArray(), true));
+
+        // fill attendee cache ATTENTION this is needed by some of the code below!
+        Calendar_Model_Attender::resolveAttendee($entry->attendee, FALSE);
         
         $syncrotonEvent = new Syncroton_Model_Event();
         $syncrotonEvent->meetingStatus = $this->_getMeetingStatus($entry);
@@ -299,9 +302,6 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                         $this->_syncFolderId       != $this->_getDefaultContainerId()) {
                         break;
                     }
-                    
-                    // fill attendee cache
-                    Calendar_Model_Attender::resolveAttendee($entry->attendee, FALSE);
                     
                     $attendees = array();
                 
@@ -553,6 +553,8 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             } else {
                 return 1;
             }
+        } elseif (null === Calendar_Model_Attender::getOwnAttender($_event->attendee)) {
+            return 0;
         } else {
             if (Calendar_Model_Event::STATUS_CANCELED === $_event->status) {
                 return 7;
