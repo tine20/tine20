@@ -50,7 +50,7 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
     public function getProperties($requestedProperties)
     {
         $combinedSequence = 0;
-        $containers = Tinebase_Container::getInstance()->getContainerByACL($this->_user, 'Addressbook', Tinebase_Model_Grants::GRANT_SYNC);
+        $containers = Tinebase_Container::getInstance()->getContainerByACL($this->_user, Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_SYNC);
         foreach ($containers as $container) {
             $combinedSequence += $container->content_seq;
         }
@@ -90,7 +90,7 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
      */
     public function createFile($name, $vobjectData = null)
     {
-        $container = Tinebase_Container::getInstance()->getDefaultContainer('Addressbook_Model_Contact', $this->_user);
+        $container = Tinebase_Container::getInstance()->getDefaultContainer(Addressbook_Model_Contact::class, $this->_user);
         $object = Addressbook_Frontend_WebDAV_Contact::create($container, $name, $vobjectData);
     
         return $object->getETag();

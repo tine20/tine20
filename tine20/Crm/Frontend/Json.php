@@ -160,7 +160,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getDefaultContainer()
     {
-        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Crm_Preference::DEFAULTLEADLIST);
+        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class, NULL, Crm_Preference::DEFAULTLEADLIST);
         $defaultContainerArray = $defaultContainer->toArray();
         $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
             Tinebase_Core::getUser(),

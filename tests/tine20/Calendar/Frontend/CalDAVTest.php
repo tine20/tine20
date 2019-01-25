@@ -173,7 +173,7 @@ class Calendar_Frontend_CalDAVTest extends TestCase
         
         $collection->createDirectory($randomName);
         
-        $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $container = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         
         $this->assertTrue($container instanceof Tinebase_Model_Container);
     }
@@ -197,7 +197,7 @@ class Calendar_Frontend_CalDAVTest extends TestCase
             )
         );
         
-        $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $container = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         $this->assertTrue($container instanceof Tinebase_Model_Container);
         
         $subCollection = $collection->getChild('B1B3BEA0-F1F9-409F-B1A0-43E41119F851');
@@ -226,7 +226,7 @@ class Calendar_Frontend_CalDAVTest extends TestCase
             )
         );
         
-        $container = Tinebase_Container::getInstance()->getContainerByName('Tasks', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $container = Tinebase_Container::getInstance()->getContainerByName(Tasks_Model_Task::class, $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         $this->assertTrue($container instanceof Tinebase_Model_Container);
 
         Calendar_Frontend_WebDAV::clearClassCache();
@@ -290,7 +290,7 @@ END:VCALENDAR&#13;
         $server->httpRequest = $request;
         $server->exec();
 
-        $container = Tinebase_Container::getInstance()->getContainerByName('Tasks', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $container = Tinebase_Container::getInstance()->getContainerByName(Tasks_Model_Task::class, $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         $this->assertTrue($container instanceof Tinebase_Model_Container);
 
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);

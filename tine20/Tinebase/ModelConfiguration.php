@@ -941,14 +941,17 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * the constructor (must be called by the singleton pattern)
      *
      * @var array $modelClassConfiguration
+     * @var string $recordClass
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception
      */
-    public function __construct($modelClassConfiguration)
+    public function __construct($modelClassConfiguration, $recordClass)
     {
         if (! $modelClassConfiguration) {
             throw new Tinebase_Exception('The model class configuration must be submitted!');
         }
+        /** @var Tinebase_Record_Interface $recordClass */
+        $recordClass::inheritModelConfigHook($modelClassConfiguration);
 
         // some crude validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
@@ -1043,7 +1046,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 'validators'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'filterDefinition' => array(
                     'filter'  => $this->_filterModelMapping['container'],
-                    'options' => array('applicationName' => $this->_appName)
+                    'options' => array('modelName' => $recordClass)
                 )
             );
         } else {
@@ -1273,12 +1276,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
 
             // set converters
-            if (isset($fieldDef['converters']) && is_array($fieldDef['converters'])) {
-                if (count($fieldDef['converters'])) {
-                    $this->_converters[$fieldKey] = $fieldDef['converters'];
+            foreach ((isset($fieldDef['converters']) && is_array($fieldDef['converters'])) ? $fieldDef['converters'] :
+                         (isset($this->_converterDefaultMapping[$fieldDef[self::TYPE]]) ?
+                             $this->_converterDefaultMapping[$fieldDef[self::TYPE]] : []) as $converter) {
+                if (!isset($this->_converters[$fieldKey])) {
+                    $this->_converters[$fieldKey] = [];
                 }
-            } elseif(isset($this->_converterDefaultMapping[$fieldDef[self::TYPE]])) {
-                $this->_converters[$fieldKey] = $this->_converterDefaultMapping[$fieldDef[self::TYPE]];
+                $this->_converters[$fieldKey][] = new $converter();
             }
 
             if (isset($fieldDef['recursiveResolving'])) {
@@ -1511,11 +1515,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * populate model config properties
      * 
      * @param string $fieldKey
-     * @param array $fieldDef
+     * @param array &$fieldDef
      */
     protected function _populateProperties($fieldKey, &$fieldDef)
     {
         switch ($fieldDef[self::TYPE]) {
+            case self::TYPE_JSON:
+            case self::TYPE_MODEL:
             case 'string':
             case 'text':
             case 'fulltext':
@@ -1524,11 +1530,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             case 'float':
             case 'boolean':
             case 'container':
-                break;
-            case self::TYPE_JSON:
-                if (isset($fieldDef[self::JSON_SCHEMA_CALLBACK])) {
-                    $fieldDef[self::JSON_SCHEMA] = call_user_func($fieldDef[self::JSON_SCHEMA_CALLBACK]);
-                }
                 break;
             case 'datetime_separated_date':
             case 'date':
@@ -1566,18 +1567,30 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
                 }
             case 'records':
-                if (!isset($fieldDef['config'])) {
+                if (!isset($fieldDef[self::CONFIG])) {
                     break;
                 }
-                $fieldDef['config']['recordClassName']     = isset($fieldDef['config']['recordClassName'])     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
+                if (!isset($fieldDef[self::CONFIG][self::RECORD_CLASS_NAME])) {
+                    $fieldDef[self::CONFIG][self::RECORD_CLASS_NAME] = $this->_getPhpClassName($fieldDef[self::CONFIG]);
+                }
                 $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
                 $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
                 if ($fieldDef[self::TYPE] == 'record') {
                     $fieldDef['config']['length'] = 40;
                     $this->_recordFields[$fieldKey] = $fieldDef;
                 } else {
-                    $fieldDef['config']['dependentRecords'] = (isset($fieldDef['config']['dependentRecords']) || array_key_exists('dependentRecords', $fieldDef['config'])) ? $fieldDef['config']['dependentRecords'] : FALSE;
+                    $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
                     $this->_recordsFields[$fieldKey] = $fieldDef;
+                    if (isset($fieldDef[self::CONFIG][self::STORAGE]) && self::TYPE_JSON === $fieldDef[self::CONFIG][self::STORAGE] &&
+                            !isset($this->_converters[$fieldKey])) {
+                        $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_JsonRecordSet()];
+                    }
+                }
+                break;
+            case self::TYPE_DYNAMIC_RECORD:
+                if (isset($fieldDef[self::CONFIG][self::REF_MODEL_FIELD]) && !isset($this->_converters[$fieldKey])) {
+                    $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_DynamicRecord(
+                        $fieldDef[self::CONFIG][self::REF_MODEL_FIELD])];
                 }
                 break;
             case 'custom':

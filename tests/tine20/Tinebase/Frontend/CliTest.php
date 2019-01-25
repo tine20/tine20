@@ -168,7 +168,7 @@ class Tinebase_Frontend_CliTest extends TestCase
     {
         $newContact = new Addressbook_Model_Contact(array(
             'n_family'          => 'PHPUNIT',
-            'container_id'      => $this->_getPersonalContainer('Addressbook')->getId(),
+            'container_id'      => $this->_getPersonalContainer(Addressbook_Model_Contact::class)->getId(),
             'tel_cell_private'  => '+49TELCELLPRIVATE',
             'tags'              => array(array('name' => 'temptag')),
         ));
@@ -187,7 +187,7 @@ class Tinebase_Frontend_CliTest extends TestCase
     {
         $newLead = new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUNIT Lead',
-            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId(),
+            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class)->getId(),
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,

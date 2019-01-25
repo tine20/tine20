@@ -1344,7 +1344,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testDeleteContainerAndEvents()
     {
         $fe = new Tinebase_Frontend_Json_Container();
-        $container = $fe->addContainer('Calendar', 'testdeletecontacts', Tinebase_Model_Container::TYPE_SHARED, '');
+        $container = $fe->addContainer('Calendar', 'testdeletecontacts', Tinebase_Model_Container::TYPE_SHARED, 'Event');
         // test if model is set automatically
         $this->assertEquals($container['model'], 'Calendar_Model_Event');
         
@@ -1613,7 +1613,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         $event = $this->_getEvent(TRUE);
         $event->organizer = $this->_personas['pwulf']->contact_id;
-        $event->container_id = $this->_getPersonalContainer('Calendar', $this->_personas['pwulf'])->getId();
+        $event->container_id = $this->_getPersonalContainer(Calendar_Model_Event::class, $this->_personas['pwulf'])->getId();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
@@ -1980,7 +1980,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $importScheduler = Tinebase_Controller_ScheduledImport::getInstance();
         $record = $importScheduler->runNextScheduledImport();
 
-        $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', 'remote_caldav_calendar', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser()->getId());
+        $container = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, 'remote_caldav_calendar', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser()->getId());
         $this->_testCalendars[] = $container;
         $this->assertTrue($container instanceof Tinebase_Model_Container, 'Container was not created');
 

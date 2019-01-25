@@ -33,6 +33,8 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
      */
     protected $_containerModel = 'Tinebase_Model_Tree_Node';
 
+    protected $_model = Filemanager_Model_Node::class;
+
     /**
      * @return array
      * @throws \Sabre\DAV\Exception\NotFound

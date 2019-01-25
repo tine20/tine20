@@ -121,7 +121,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     {
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
+            Addressbook_Model_Contact::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );

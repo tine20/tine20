@@ -46,7 +46,7 @@ class Tinebase_ScheduledImportTest extends TestCase
             array(
                 'user_id'           => $this->_originalTestUser->getId(),
                 'interval'          => Tinebase_Model_Import::INTERVAL_HOURLY,
-                'model'             => Calendar_Controller::getInstance()->getDefaultModel(),
+                'model'             => Calendar_Model_Event::class,
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
                 'sourcetype'        => Tinebase_Model_Import::SOURCETYPE_REMOTE,
                 'source'            => $source,
@@ -61,7 +61,7 @@ class Tinebase_ScheduledImportTest extends TestCase
         
         $record = $this->_uit->create($import);
 
-        $this->assertEquals(Calendar_Controller::getInstance()->getDefaultModel(), $this->_uit->get($record->getId())->model);
+        $this->assertEquals(Calendar_Model_Event::class, $this->_uit->get($record->getId())->model);
 
         return $record;
     }

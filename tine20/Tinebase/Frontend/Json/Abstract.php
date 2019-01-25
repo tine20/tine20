@@ -108,22 +108,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         return $ret;
     }
-    
-    /**
-     * returns the default model or null if it does not exist
-     *
-     * @return string
-     */
-    public function getDefaultModel()
-    {
-        if (is_string($this->_defaultModel)) {
-            return $this->_defaultModel;
-        }
-        if ($this->_configuredModels && is_array($this->_configuredModels) && count($this->_configuredModels) > 0) {
-            return $this->_configuredModels[0];
-        }
-        return NULL;
-    }
 
     /**
      * Return a single record

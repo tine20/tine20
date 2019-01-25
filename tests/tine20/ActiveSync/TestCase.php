@@ -98,7 +98,7 @@ abstract class ActiveSync_TestCase extends TestCase
         }
         try {
             $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_applicationName, 
+                $recordClass,
                 'ContainerWithSyncGrant-' . $this->_applicationName, 
                 Tinebase_Model_Container::TYPE_PERSONAL,
                 Tinebase_Core::getUser()
@@ -130,10 +130,17 @@ abstract class ActiveSync_TestCase extends TestCase
         if (isset($this->objects['container']['withoutSyncGrant'])) {
             return $this->objects['container']['withoutSyncGrant'];
         }
+
+        switch ($this->_applicationName) {
+            case 'Calendar':    $recordClass = 'Calendar_Model_Event'; break;
+            case 'Addressbook': $recordClass = 'Addressbook_Model_Contact'; break;
+            case 'Tasks':       $recordClass = 'Tasks_Model_Task'; break;
+            default: throw new Exception('handle this model!');
+        }
         
         try {
             $containerWithoutSyncGrant = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_applicationName, 
+                $recordClass,
                 'ContainerWithoutSyncGrant-' . $this->_applicationName, 
                 Tinebase_Model_Container::TYPE_PERSONAL,
                 Tinebase_Core::getUser()
@@ -228,7 +235,7 @@ abstract class ActiveSync_TestCase extends TestCase
     {
         $personalContainer = ($personalContainer) ? $personalContainer : Tinebase_Container::getInstance()->getPersonalContainer(
             Tinebase_Core::getUser(),
-            'Calendar', 
+            Calendar_Model_Event::class,
             Tinebase_Core::getUser(),
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();

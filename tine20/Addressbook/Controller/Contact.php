@@ -138,7 +138,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function getDefaultAddressbook()
     {
-        return Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Addressbook_Preference::DEFAULTADDRESSBOOK);
+        return Tinebase_Container::getInstance()->getDefaultContainer($this->_modelName, NULL, Addressbook_Preference::DEFAULTADDRESSBOOK);
     }
     
     /**

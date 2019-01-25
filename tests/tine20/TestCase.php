@@ -322,11 +322,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * get personal container
      * 
-     * @param string $applicationName
+     * @param string $modelName
      * @param Tinebase_Model_User $user
      * @return Tinebase_Model_Container
      */
-    protected function _getPersonalContainer($applicationName, $user = null)
+    protected function _getPersonalContainer($modelName, $user = null)
     {
         if ($user === null) {
             $user = Tinebase_Core::getUser();
@@ -335,7 +335,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         /** @var Tinebase_Model_Container $personalContainer */
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             $user,
-            $applicationName, 
+            $modelName,
             $user,
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();
@@ -930,7 +930,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $user = Tinebase_Core::getUser();
         $container = Tinebase_FileSystem::getInstance()->getPersonalContainer(
             $user,
-            'Filemanager', $user
+            Filemanager_Model_Node::class, $user
         )->getFirstRecord();
         $filepaths = ['/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
             . '/' . $user->accountLoginName

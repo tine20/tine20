@@ -409,7 +409,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         ]);
         Calendar_Controller::getInstance()->getInvitationContainer($externalAttender);
 
-        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Model_Grants::GRANT_EDIT);
+        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), Calendar_Model_Event::class, Tinebase_Model_Grants::GRANT_EDIT);
 
         foreach ($containers as $container) {
             if ($container->name === 'externer@example.org') {

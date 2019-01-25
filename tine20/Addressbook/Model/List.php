@@ -99,6 +99,10 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'label'             => null,
                 'options'           => array()
             ),
+            'container_id'      => array(
+                'filter'  => Tinebase_Model_Filter_Container::class,
+                'options' => array('modelName' => Addressbook_Model_Contact::class),
+            )
         ),
 
         'fields'            => array(

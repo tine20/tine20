@@ -93,7 +93,7 @@ class Crm_AbstractTest extends TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId(),
+            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class)->getId(),
             'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description',
             'end'           => NULL,

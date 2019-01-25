@@ -20,6 +20,8 @@
  */
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'Tinebase';
+    
     /**
      * access log rotation in days
      *

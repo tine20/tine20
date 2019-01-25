@@ -68,8 +68,8 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      */
     protected function _setOptions(array $_options)
     {
-        if (! isset($_options['applicationName'])) {
-            throw new Tinebase_Exception_InvalidArgument('Container filter needs the applicationName option');
+        if (! isset($_options['modelName'])) {
+            throw new Tinebase_Exception_InvalidArgument('Container filter needs the modelName option');
         }
         
         $_options['ignoreAcl'] = isset($_options['ignoreAcl']) ? $_options['ignoreAcl'] : false;
@@ -295,16 +295,16 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     protected function _resolveContainerNode($_node, $_ownerId = NULL)
     {
         $currentAccount = Tinebase_Core::getUser();
-        $appName = $this->_options['applicationName'];
+        $modelName = $this->_options['modelName'];
         
         switch ($_node) {
             case 'all':        return Tinebase_Container::getInstance()->getContainerByACL($currentAccount,
-                $appName, $this->_requiredGrants, TRUE, $this->_options['ignoreAcl']);
+                $modelName, $this->_requiredGrants, TRUE, $this->_options['ignoreAcl']);
             case 'personal':   return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount,
-                $appName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
-            case 'shared':     return $this->_getSharedContainer($currentAccount, $appName);
+                $modelName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+            case 'shared':     return $this->_getSharedContainer($currentAccount, $modelName);
             case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName,
+                return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $modelName,
                     $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'internal':
                 // @todo remove legacy code

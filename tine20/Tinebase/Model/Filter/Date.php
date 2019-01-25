@@ -453,21 +453,15 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $firstDay = clone($date);
         }
 
+        $firstDay->setDate($firstDay->format('Y'), $firstDay->format('m'), 1)->setTime(0, 0, 0, 0);
         switch ($value) {
             case self::MONTH_NEXT:
-                $firstDay->add(2, Tinebase_DateTime::MODIFIER_MONTH);
+                $firstDay->add(1, Tinebase_DateTime::MODIFIER_MONTH);
+                break;
             case self::MONTH_LAST:
-                $month = $firstDay->get('m');
-                if ($month > 1) {
-                    $firstDay = $firstDay->setDate($firstDay->get('Y'), $month - 1, 1);
-                } else {
-                    $firstDay->subMonth(1);
-                }
+                $firstDay->add(-1, Tinebase_DateTime::MODIFIER_MONTH);
+                break;
             case self::MONTH_THIS:
-                $dayOfMonth = $firstDay->get('j');
-                $firstDay->subDay($dayOfMonth - 1);
-                $firstDay->setTime(0,0,0,0);
-
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('not supported: ' . $value);
@@ -480,14 +474,16 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @param Tinebase_DateTime $date
      * @param string $value
      * @return Tinebase_DateTime
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public static function getLastDayOf($value, Tinebase_DateTime $date = null)
     {
-        $result = clone(self::getFirstDayOf($value, $date));
-        $dayOfMonth = $result->get('j');
-        $monthDays = $result->get('t');
-        $result->addDay($monthDays - $dayOfMonth);
-        $result->setTime(23,59,59);
-        return $result;
+        $result = static::getFirstDayOf($value, $date);
+        return $result->addDay($result->get('t') - 1)->setTime(23,59,59);
+    }
+
+    public static function getEndOfYesterday()
+    {
+        return Tinebase_DateTime::now()->subDay(1)->setTime(23,59,59);
     }
 }

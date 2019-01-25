@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -19,6 +19,8 @@
 class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 {
     const TABLE_NAME = 'timetracker_timeaccount';
+
+    const MODEL_NAME_PART = 'Timeaccount';
 
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -70,8 +72,8 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             '%s - %s',
             array('number', 'title')
         ),
-        'appName'           => 'Timetracker',
-        'modelName'         => 'Timeaccount',
+        'appName'           => Timetracker_Config::APP_NAME,
+        'modelName'         => self::MODEL_NAME_PART,
 
         // TODO add this when we convert container to MCV2
 //       'associations' => [\Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_ONE => [

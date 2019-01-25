@@ -62,7 +62,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Crm', 
+            Crm_Model_Lead::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );
@@ -103,7 +103,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
 
         $addressbookPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
+            Addressbook_Model_Contact::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );
@@ -155,7 +155,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
 
         $tasksPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Tasks', 
+            Tasks_Model_Task::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );

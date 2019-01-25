@@ -104,7 +104,7 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account);
+                    $this->deletePersonalFolder($_eventObject->account, Inventory_Model_InventoryItem::class);
                 }
                 break;
         }

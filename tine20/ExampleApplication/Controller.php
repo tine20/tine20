@@ -106,7 +106,7 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account);
+                    $this->deletePersonalFolder($_eventObject->account, ExampleApplication_Model_ExampleRecord::class);
                 }
                 break;
         }

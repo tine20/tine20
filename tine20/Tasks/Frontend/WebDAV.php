@@ -17,4 +17,5 @@
  */
 class Tasks_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContainerTree
 {
+    protected $_model = Tasks_Model_Task::class;
 }

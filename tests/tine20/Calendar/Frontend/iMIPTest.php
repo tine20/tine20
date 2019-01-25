@@ -452,7 +452,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
     {
         $this->testExternalInvitationRequestProcess();
         $containerFrontend = new Tinebase_Frontend_Json_Container();
-        $result = $containerFrontend->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null, null);
+        $result = $containerFrontend->getContainer(Calendar_Model_Event::class, Tinebase_Model_Container::TYPE_SHARED, null, null);
         
         foreach ($result as $container) {
             if ($container['name'] === 'l.kneschke@caldav.org') {

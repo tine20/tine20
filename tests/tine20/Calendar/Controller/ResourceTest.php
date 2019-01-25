@@ -50,7 +50,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $calenderFrontend->saveResource($resourceArrayFromDB);
         
         $containerFrontend = new Tinebase_Frontend_Json_Container();
-        $result = $containerFrontend->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, '');
+        $result = $containerFrontend->getContainer(Calendar_Model_Event::class, Tinebase_Model_Container::TYPE_SHARED, '');
 
         $found = false;
         foreach($result as $container) {
@@ -429,7 +429,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
 
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         $json = new Tinebase_Frontend_Json_Container();
-        $containers = $json->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null);
+        $containers = $json->getContainer(Calendar_Model_Event::class, Tinebase_Model_Container::TYPE_SHARED, null);
 
         $this->assertTrue(is_array($containers));
         foreach ($containers as $container) {
@@ -441,7 +441,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         // try with sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
-        $containers = $json->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null);
+        $containers = $json->getContainer(Calendar_Model_Event::class, Tinebase_Model_Container::TYPE_SHARED, null);
 
         $this->assertTrue(is_array($containers));
         $this->assertTrue(count($containers) > 0);

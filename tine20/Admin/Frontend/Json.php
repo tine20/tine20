@@ -1118,18 +1118,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveContainer($recordData)
     {
         $application = Tinebase_Application::getInstance()->getApplicationById($recordData['application_id'])->name;
-        if (empty($recordData['model'])) {
-            $recordData['model'] = Tinebase_Core::getApplicationInstance($application)->getDefaultModel();
-        } else {
-            $applicationModelParts = \explode('.', $recordData['model']);
-
-            if (0 === \count($applicationModelParts) && false === \strpos($recordData['model'], '_Model_')) {
-                throw new \InvalidArgumentException('Invalid model specified.');
-            }
-            // Handling if a model is either in php format like Application_Model_Foobar or Application.Model.Foobar
-            $recordData['model'] = \strstr($recordData['model'], '_Model_') ? $recordData['model'] : $application . '_Model_' . \end($applicationModelParts);
-            \reset($applicationModelParts);
+        if (!isset($recordData['model']) || empty($recordData['model']) ||
+                !($applicationModelParts = \explode('.', $recordData['model'])) ||
+                    (1 === \count($applicationModelParts) && false === \strpos($recordData['model'], '_Model_'))) {
+            throw new \InvalidArgumentException('Invalid model specified.');
         }
+        // Handling if a model is either in php format like Application_Model_Foobar or Application.Model.Foobar
+        $recordData['model'] = \strpos($recordData['model'], '_Model_') !== false ? $recordData['model'] :
+            $application . '_Model_' . \end($applicationModelParts);
+        \reset($applicationModelParts);
+
         $additionalArguments = ((isset($recordData['note']) || array_key_exists('note', $recordData))) ? array(array('note' => $recordData['note'])) : array();
         return $this->_save($recordData, Admin_Controller_Container::getInstance(), 'Tinebase_Model_Container', 'id', $additionalArguments);
     }

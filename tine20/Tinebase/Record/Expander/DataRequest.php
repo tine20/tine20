@@ -13,6 +13,9 @@
 class Tinebase_Record_Expander_DataRequest
 {
     public $prio;
+    /**
+     * @var Tinebase_Controller_Record_Interface
+     */
     public $controller;
     public $ids;
     public $callback;
@@ -41,12 +44,12 @@ class Tinebase_Record_Expander_DataRequest
         }
 
         // get instances from datacache
-        $data = static::_getInstancesFromCache($this->controller->getDefaultModel(), $this->ids);
+        $data = static::_getInstancesFromCache($this->controller->getModel(), $this->ids);
 
         if (!empty($this->ids)) {
             /** TODO make sure getMultiple doesnt do any resolving, customfields etc */
             $newRecords = $this->controller->getMultiple($this->ids);
-            static::_addInstancesToCache($this->controller->getDefaultModel(), $newRecords);
+            static::_addInstancesToCache($this->controller->getModel(), $newRecords);
             $data->mergeById($newRecords);
         }
 

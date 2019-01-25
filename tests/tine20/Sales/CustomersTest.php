@@ -88,13 +88,13 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
     {
         $container = Tinebase_Container::getInstance()->getSharedContainer(
             Tinebase_Core::getUser()->getId(),
-            Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            Addressbook_Model_Contact::class,
             'WRITE'
         );
         
         $containerContracts = Tinebase_Container::getInstance()->getSharedContainer(
             Tinebase_Core::getUser()->getId(),
-            Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+            Sales_Model_Contract::class,
             'WRITE'
         );
         
@@ -301,7 +301,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         
         $containerContracts = Tinebase_Container::getInstance()->getSharedContainer(
             Tinebase_Core::getUser()->getId(),
-            Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+            Sales_Model_Contract::class,
             'WRITE'
         );
         
