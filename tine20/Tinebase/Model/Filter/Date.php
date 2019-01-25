@@ -107,7 +107,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $_select->where($dbCommand->setDate($field). $operator, new Zend_Db_Expr($dbCommand->setDateValue($value[$num])));
                 }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No filter value found, skipping operator: ' . $operator);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' No filter value found, skipping operator: ' . $operator);
             }
         }
 

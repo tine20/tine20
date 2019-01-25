@@ -32,6 +32,7 @@
  * @property string                         seq
  * @property string                         uid
  * @property string                         etag
+ * @property string                         class
  * @property int                            container_id
  * @property string                         organizer
  * @property Tinebase_Record_RecordSet      attendee
@@ -42,9 +43,10 @@
  * @property string                         status
  * @property string                         summary
  * @property string                         recurid
- * @property array                          exdate
  * @property string                         poll_id
+ * @property string                         description
  * @property string                         external_seq
+ * @property Tinebase_Record_RecordSet      exdate
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
@@ -65,7 +67,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
     const XPROPS_IMIP_PROPERTIES = 'imipProperties';
     const XPROPS_REPLICATABLE = 'calendarReplicatable';
-    
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -221,7 +223,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
     protected static $_freebusyCleanUpKeys = null;
     protected static $_freebusyCleanUpVisibilty = null;
-    
+
     /**
      * sets record related properties
      * 

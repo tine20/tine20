@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bafca51070f887569340ba6e84ccb2a2",
+    "content-hash": "3d09ac6190c36d474894fb2d45b2fa22",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -578,7 +578,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -721,7 +721,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
@@ -1043,7 +1043,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1075,7 +1075,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1355,17 +1355,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "00003fbe6853e95133c68abb47cafba3e95bb303"
+                "reference": "bf00f0cc5f55c354018f9a9ef15e6e3e1a229051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/00003fbe6853e95133c68abb47cafba3e95bb303",
-                "reference": "00003fbe6853e95133c68abb47cafba3e95bb303",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/bf00f0cc5f55c354018f9a9ef15e6e3e1a229051",
+                "reference": "bf00f0cc5f55c354018f9a9ef15e6e3e1a229051",
                 "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
                 "ext-dom": "*",
+                "ext-fileinfo": "*",
                 "ext-gd": "*",
                 "ext-iconv": "*",
                 "ext-libxml": "*",
@@ -1440,7 +1441,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2018-12-10T07:10:37+00:00"
+            "time": "2019-01-02T04:42:54+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -1791,7 +1792,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
+                "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
@@ -2479,7 +2480,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -2612,11 +2613,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "dev-master",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "3bc0d5591fcd719c2dc78bd9ffad42d1561fe471"
+                "reference": "1809f2b115a8c637b3c308ee469c864b77c8e14d"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -2640,7 +2641,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2018-05-16T12:42:25+00:00"
+            "time": "2019-01-24T11:17:53+00:00"
         },
         {
             "name": "tine20/composerapploader",
@@ -4843,8 +4844,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpoffice/phpspreadsheet": 20,
-        "syncroton/syncroton": 20
+        "phpoffice/phpspreadsheet": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -4862,7 +4862,7 @@
         "ext-openssl": "*",
         "ext-xml": "*",
         "ext-zip": "*",
-        "php": "^5.6 | ^7.0"
+        "php": "^7.0"
     },
     "platform-dev": [],
     "platform-overrides": {
