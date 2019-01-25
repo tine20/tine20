@@ -208,6 +208,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
      */
     const TENTATIVE_NOTIFICATIONS_FILTER = 'filter';
 
+    const ASSIGN_ORGANIZER_MEETING_STATUS_ON_EDIT_GRANT = 'assignOrgMeetingStatusOnEditGrant';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -565,6 +567,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             ),
             'default'               => array(),
         ),
+        self::ASSIGN_ORGANIZER_MEETING_STATUS_ON_EDIT_GRANT => [
+            self::LABEL                 => 'Assign organizer meeting status on editGrant',
+            //_('Assign organizer meeting status on editGrant')
+            self::DESCRIPTION           => 'Assign organizer meeting status on editGrant',
+            //_('Assign organizer meeting status on editGrant')
+            self::TYPE                  => self::TYPE_BOOL,
+            self::DEFAULT_STR           => false,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYSETUPMODULE      => false,
+            self::SETBYADMINMODULE      => false,
+        ],
     );
     
     /**

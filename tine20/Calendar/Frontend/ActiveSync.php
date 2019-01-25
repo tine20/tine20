@@ -554,6 +554,14 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                 return 1;
             }
         } elseif (null === Calendar_Model_Attender::getOwnAttender($_event->attendee)) {
+            if (Calendar_Config::getInstance()->{Calendar_Config::ASSIGN_ORGANIZER_MEETING_STATUS_ON_EDIT_GRANT} &&
+                    $_event->{Tinebase_Model_Grants::GRANT_EDIT}) {
+                if (Calendar_Model_Event::STATUS_CANCELED === $_event->status) {
+                    return 5;
+                } else {
+                    return 1;
+                }
+            }
             return 0;
         } else {
             if (Calendar_Model_Event::STATUS_CANCELED === $_event->status) {
