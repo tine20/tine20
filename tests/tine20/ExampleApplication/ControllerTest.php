@@ -5,7 +5,7 @@
 * @package     ExampleApplication
 * @subpackage  Test
 * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
-* @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+* @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
 * @author      Stefanie Stamer <s.stamer@metaways.de>
 */
 
@@ -43,5 +43,24 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         $result = ob_get_clean();
 
         $this->assertEquals('catched record update for observing id: exampleIdentifier', $result);
+    }
+
+    public function testDateFilter()
+    {
+        $exampleRecord = $this->_getExampleRecord();
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($exampleRecord);
+        static::assertNull($exampleRecord->datetime);
+
+        $result = ExampleApplication_Controller_ExampleRecord::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(ExampleApplication_Model_ExampleRecord::class,
+            [['field' => 'datetime', 'operator' => 'before', 'value' => Tinebase_DateTime::now()]])
+        );
+        static::assertSame(1, $result->count());
+
+        $result = ExampleApplication_Controller_ExampleRecord::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(ExampleApplication_Model_ExampleRecord::class,
+                [['field' => 'datetime', 'operator' => 'after', 'value' => Tinebase_DateTime::now()]])
+        );
+        static::assertSame(1, $result->count());
     }
 }
