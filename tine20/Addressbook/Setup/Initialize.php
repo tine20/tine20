@@ -83,7 +83,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     protected function _getInternalAddressbook()
     {
         if ($this->_internalAddressbook === NULL) {
-            $this->_internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+            $this->_internalAddressbook = Tinebase_Container::getInstance()->getContainerByName(
+                Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         } 
         
         return $this->_internalAddressbook;
@@ -254,7 +255,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         if ($internalAddressbook === NULL) {
             try {
                 $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName(
-                    'Addressbook',
+                    Addressbook_Model_Contact::class,
                     'Internal Contacts',
                     Tinebase_Model_Container::TYPE_SHARED);
             } catch (Tinebase_Exception_NotFound $tenf) {

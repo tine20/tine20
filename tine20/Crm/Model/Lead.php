@@ -265,7 +265,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         if (! isset($relation['related_record']['container_id']) || empty($relation['related_record']['container_id'])) {
                             // use default container for app
                             $data['related_record']['container_id'] = Tinebase_Container::getInstance()->getDefaultContainer(
-                                ($relation['type'] == 'TASK') ? 'Tasks' : 'Addressbook',
+                                ($relation['type'] == 'TASK') ? Tasks_Model_Task::class : Addressbook_Model_Contact::class,
                                 NULL,
                                 ($relation['type'] == 'TASK') ? Tasks_Preference::DEFAULTTASKLIST : Addressbook_Preference::DEFAULTADDRESSBOOK
                             )->getId();

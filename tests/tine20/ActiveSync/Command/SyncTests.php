@@ -85,7 +85,7 @@ class ActiveSync_Command_SyncTests extends TestCase
      */
     public function testSyncOfContacts()
     {
-        $container = $this->_getPersonalContainer('Addressbook');
+        $container = $this->_getPersonalContainer(Addressbook_Model_Contact::class);
         
         $this->_syncFolder();
         $this->_requestInitialSynckey($container);
@@ -208,7 +208,7 @@ class ActiveSync_Command_SyncTests extends TestCase
      */
     public function testCreateContact()
     {
-        $personalContainer = $this->_getPersonalContainer('Addressbook');
+        $personalContainer = $this->_getPersonalContainer(Addressbook_Model_Contact::class);
         
         $this->testSyncOfContacts();
         
@@ -287,7 +287,7 @@ class ActiveSync_Command_SyncTests extends TestCase
      */
     public function testSyncOfEvents()
     {
-        $personalContainer = $this->_getPersonalContainer('Calendar');
+        $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class);
         
         // add a test event
         $event = new Calendar_Model_Event(array(

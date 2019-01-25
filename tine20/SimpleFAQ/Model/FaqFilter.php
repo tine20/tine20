@@ -38,6 +38,6 @@ class SimpleFAQ_Model_FaqFilter extends Tinebase_Model_Filter_FilterGroup
             'idProperty' => 'simple_faq.id',
             'applicationName' => 'SimpleFAQ',
         )),
-        'container_id'      => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'SimpleFAQ')),
+        'container_id'      => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('modelName' => SimpleFAQ_Model_Faq::class)),
     );
 }

@@ -62,6 +62,6 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
      */
     public function getDefaultInventory()
     {
-        return Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Inventory_Preference::DEFAULT_INVENTORYITEM_CONTAINER);
+        return Tinebase_Container::getInstance()->getDefaultContainer($this->_modelName, NULL, Inventory_Preference::DEFAULT_INVENTORYITEM_CONTAINER);
     }
 }

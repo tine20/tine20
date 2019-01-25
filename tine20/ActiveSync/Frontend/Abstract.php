@@ -499,7 +499,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     protected function _getSyncableFolders()
     {
-        $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
+        $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName . '_Model_' . $this->_modelName, Tinebase_Model_Grants::GRANT_SYNC);
         
         return $containers;
     }

@@ -31,7 +31,7 @@
  *     protected $_applicationName = 'myapp';
  *     protected $_filterModel = array (
  *         'name'       => array('filter' => 'Tinebase_Model_Filter_Text'),
- *         'container'  => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'myApp')),
+ *         'container'  => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('modelName' => 'myModel')),
  *         'created_by' => array('filter' => 'Tinebase_Model_Filter_User'),
  *         'some_id'    => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Someapp_Model_SomeFilter', 'controller' => 'Myapp_Controller_Some')),
  *         'custom'     => array('custom' => true),  // will be ignored and you must handle this filter your own!

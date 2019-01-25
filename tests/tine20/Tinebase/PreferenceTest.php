@@ -295,7 +295,7 @@ class Tinebase_PreferenceTest extends TestCase
      */
     public function testSetFixedCalendarsPreference()
     {
-        $personalContainer = $this->_getPersonalContainer('Calendar');
+        $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class);
         $data =
           array (
             'Calendar' =>

@@ -582,7 +582,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _getOtherUserNodes()
     {
-        $result = $this->_backend->getOtherUsers(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
+        $result = $this->_backend->getOtherUsers(Tinebase_Core::getUser(), $this->_modelName, Tinebase_Model_Grants::GRANT_READ);
         return $result;
     }
 
@@ -928,8 +928,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         $ownerId = ($_type === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) ? Tinebase_Core::getUser()->getId() : NULL;
         try {
-            $existingContainer = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_applicationName, $_name, $_type, $ownerId);
+            $existingContainer = Tinebase_Container::getInstance()->getContainerByName(Filemanager_Model_Node::class,
+                $_name, $_type, $ownerId);
             throw new Filemanager_Exception_NodeExists('Container ' . $_name . ' of type ' . $_type . ' already exists.');
         } catch (Tinebase_Exception_NotFound $tenf) {
             // go on

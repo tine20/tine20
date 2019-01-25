@@ -130,7 +130,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         }
 
         if ($_eventObject->deletePersonalContainers()) {
-            $this->deletePersonalFolder($_eventObject->account);
+            $this->deletePersonalFolder($_eventObject->account, Calendar_Model_Event::class);
         }
     }
 
@@ -239,7 +239,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         $eventController->doContainerACLChecks($oldState);
 
         // get all personal containers
-        $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $this->getDefaultModel(), $accountId, '*', true);
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, Calendar_Model_Event::class, $accountId, '*', true);
         if ($containers->count() > 0) {
             // take the first one and make it an invitation container
             $container = $containers->getByIndex(0);
@@ -278,7 +278,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
 
         $tbc = Tinebase_Container::getInstance();
         try {
-            $oldContainer = $tbc->getContainerByName('Calendar', $emailAddress, Tinebase_Model_Container::TYPE_SHARED);
+            $oldContainer = $tbc->getContainerByName(Calendar_Model_Event::class, $emailAddress, Tinebase_Model_Container::TYPE_SHARED);
 
             // TODO fix me!
             // bad, we should move the events from $oldContainer to $container
@@ -326,7 +326,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         }
         
         try {
-            $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $containerName, Tinebase_Model_Container::TYPE_SHARED);
+            $container = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, $containerName, Tinebase_Model_Container::TYPE_SHARED);
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' No invitation container found. Creating a new one for organizer ' . $containerName);

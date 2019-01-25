@@ -99,6 +99,6 @@ interface Tinebase_Controller_Record_Interface
      * returns the model name
      *
      * @return string
-     *
-    public function getDefaultModel();*/
+     */
+    public function getModel();
 }

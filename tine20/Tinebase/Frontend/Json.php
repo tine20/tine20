@@ -1001,7 +1001,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $appController = Tinebase_Core::getApplicationInstance($application->name);
                 $models = $appController->getModels();
                 $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
-                $appRegistry['defaultModel'] = $appController->getDefaultModel();
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 // do not add prefs if user has no run right
             }
@@ -1082,7 +1081,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $registryData['relatableModels'][] = $relModel;
         }
         $registryData['models'] = $applicationJson->getModelsConfiguration();
-        $registryData['defaultModel'] = $applicationJson->getDefaultModel();
 
         return $registryData;
     }

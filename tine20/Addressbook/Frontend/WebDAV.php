@@ -24,6 +24,8 @@ class Addressbook_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractCon
      */
     protected $_canSupportDelegations = false;
 
+    protected $_model = Addressbook_Model_Contact::class;
+
     /**
      * (non-PHPdoc)
      *

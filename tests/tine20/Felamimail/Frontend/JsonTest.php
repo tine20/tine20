@@ -1422,16 +1422,16 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
-     * @param $_appName
+     * @param $_modelName
      * @param Tinebase_Model_User $_user
      * @return NULL|Tinebase_Record_Interface
      */
-    protected function _getPersonalContainerNode($_appName, $_user = null)
+    protected function _getPersonalContainerNode($_modelName, $_user = null)
     {
         $user = ($_user) ? $_user : Tinebase_Core::getUser();
         return Tinebase_FileSystem::getInstance()->getPersonalContainer(
             $user,
-            $_appName,
+            $_modelName,
             $user
         )->getFirstRecord();
     }

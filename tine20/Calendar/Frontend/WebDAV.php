@@ -17,6 +17,8 @@
  */
 class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContainerTree
 {
+    protected $_model = Calendar_Model_Event::class;
+
     /**
      * (non-PHPdoc)
      * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()

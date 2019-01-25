@@ -98,7 +98,7 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Appli
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account);
+                    $this->deletePersonalFolder($_eventObject->account, Crm_Model_Lead::class);
                 }
                 break;
         }

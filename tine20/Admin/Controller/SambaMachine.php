@@ -286,4 +286,14 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
+
+    /**
+     * returns the model name
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return Admin_Model_SambaMachine::class;
+    }
 }

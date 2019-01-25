@@ -309,60 +309,6 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     }
     
     /**
-     * return all container, which the user has the requested right for
-     *
-     * used to get a list of all containers accesssible by the current user
-     * 
-     * @param string $_application the application name
-     * @param int $_right the required right
-     * @param   bool   $_onlyIds return only ids
-     * @return Tinebase_Record_RecordSet|array
-     * @todo write test for that
-     */
-    public function getContainerByACL($_application, $_right, $_onlyIds = FALSE)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getContainerByACL($this->accountId, $_application, $_right, $_onlyIds);
-        
-        return $result;
-    }
-
-    /**
-     * return all personal container of the current user
-     *
-     * used to get a list of all personal containers accesssible by the current user
-     * 
-     * @param string $_application the application name
-     * @return Tinebase_Record_RecordSet
-     * @todo write test for that
-     */
-    public function getPersonalContainer($_application, $_owner, $_grant)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getPersonalContainer($this, $_application, $_owner, $_grant);
-        
-        return $result;
-    }
-    
-    /**
-     * get shared containers
-     * 
-     * @param string|Tinebase_Model_Application $_application
-     * @param array|string $_grant
-     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
-     */
-    public function getSharedContainer($_application, $_grant)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getSharedContainer($this, $_application, $_grant);
-        
-        return $result;
-    }
-    
-    /**
      * get containers of other users
      * 
      * @param string|Tinebase_Model_Application $_application

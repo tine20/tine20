@@ -93,7 +93,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account);
+                    $this->deletePersonalFolder($_eventObject->account, Addressbook_Model_Contact::class);
                 }
 
                 //make to be deleted accounts (user) contact a normal contact

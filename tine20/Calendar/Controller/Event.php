@@ -912,7 +912,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      *
      * @param   Tinebase_Record_Interface $_record
      * @param   bool                      $_checkBusyConflicts
-     * @param   string                    $range
+     * @param   bool                      $skipEvent
      * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
@@ -2683,7 +2683,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function getDefaultCalendar()
     {
-        return Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Calendar_Preference::DEFAULTCALENDAR);
+        return Tinebase_Container::getInstance()->getDefaultContainer($this->_modelName, NULL, Calendar_Preference::DEFAULTCALENDAR);
     }
     
     /**

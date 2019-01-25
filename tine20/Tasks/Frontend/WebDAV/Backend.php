@@ -40,7 +40,7 @@ class Tasks_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBackend
         
         if (count($principalParts) == 2) {
             $owner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $principalParts[1]);
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', $owner, Tinebase_Model_Grants::GRANT_READ);
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), Calendar_Model_Event::class, $owner, Tinebase_Model_Grants::GRANT_READ);
             $containers->sort('name');
         } else {
             throw new Sabre\DAV\Exception\PreconditionFailed('unsupported pricipalUri');

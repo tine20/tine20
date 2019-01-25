@@ -271,7 +271,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         }
         
         if (! static::$_configurationObject) {
-            static::$_configurationObject = new Tinebase_ModelConfiguration(static::$_modelConfiguration);
+            static::$_configurationObject = new Tinebase_ModelConfiguration(static::$_modelConfiguration, static::class);
         }
     
         return static::$_configurationObject;
@@ -424,6 +424,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                             new $modelName($_data[$fieldName], $this->bypassFilters, $this->convertDates) :
                             new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters,
                                 $this->convertDates);
+                        $this->{$fieldName}->runConvertToRecord();
                     }
                 }
             }
@@ -1380,7 +1381,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             if (isset($this->_properties[$key])) {
                 /** @var Tinebase_Model_Converter_Interface $converter */
                 foreach ($converters as $converter) {
-                    $this->_properties[$key] = $converter::convertToRecord($this->_properties[$key]);
+                    $this->_properties[$key] = $converter->convertToRecord($this, $key, $this->_properties[$key]);
                 }
             }
         }
@@ -1393,10 +1394,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_properties[$key])) {
-                foreach ($converters as $converter) {
+            foreach ($converters as $converter) {
+                if (isset($this->_properties[$key])) {
                     /** @var Tinebase_Model_Converter_Interface $converter */
-                    $this->_properties[$key] = $converter::convertToData($this->_properties[$key]);
+                    $this->_properties[$key] = $converter->convertToData($this, $key, $this->_properties[$key]);
                 }
             }
         }
@@ -1510,6 +1511,13 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 $this->$property = $oldValue;
             }
         }
+    }
+
+    /**
+     * @param array $_defintiion
+     */
+    public static function inheritModelConfigHook(array &$_defintion)
+    {
     }
 
     /**

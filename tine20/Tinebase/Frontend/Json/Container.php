@@ -36,29 +36,29 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * 
      * @todo move getOtherUsers to own function
      * 
-     * @param  string $application
+     * @param  string $model
      * @param  string $containerType
      * @param  string $owner
      * @param  array $requiredGrants
      * @return array
      */
-    public function getContainer($application, $containerType, $owner, $requiredGrants = NULL)
+    public function getContainer($model, $containerType, $owner, $requiredGrants = NULL)
     {
         if (!$requiredGrants) {
             $requiredGrants = Tinebase_Model_Grants::GRANT_READ;
         }
         switch($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, $requiredGrants);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, $owner, $requiredGrants);
                 $containers->sort('name');
                 break;
                 
             case Tinebase_Model_Container::TYPE_SHARED:
-                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, $requiredGrants);
+                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, $requiredGrants);
                 break;
                 
             case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                $containers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, $requiredGrants);
+                $containers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $model, $requiredGrants);
                 break;
                 
             default:
@@ -79,13 +79,9 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * @return  array new container
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function addContainer($application, $name, $containerType, $modelName = '')
+    public function addContainer($application, $name, $containerType, $modelName)
     {
-        if (empty($modelName)) {
-            $modelName = Tinebase_Core::getApplicationInstance($application)->getDefaultModel();
-        } else {
-            $modelName = strstr($modelName, '_Model_') ? $modelName : $application . '_Model_' . $modelName;
-        }
+        $modelName = strstr($modelName, '_Model_') ? $modelName : $application . '_Model_' . $modelName;
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => $name,

@@ -26,7 +26,7 @@ class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $user = Tinebase_Core::getUser();
-        $container = $user->getPersonalContainer('Tasks', $user, Tinebase_Model_Grants::GRANT_ADMIN);
+        $container = Tinebase_Container::getInstance()->getPersonalContainer($user, Tasks_Model_Task::class, $user, Tinebase_Model_Grants::GRANT_ADMIN);
         $container_id = $container[0]->getId();
         $backend = new Tasks_Backend_Sql();
         

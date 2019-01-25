@@ -60,7 +60,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
         
         $collection->createDirectory($randomName);
         
-        $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $container = Tinebase_Container::getInstance()->getContainerByName(Addressbook_Model_Contact::class, $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         
         $this->assertTrue($container instanceof Tinebase_Model_Container);
     }

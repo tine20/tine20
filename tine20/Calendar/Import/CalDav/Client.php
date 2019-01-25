@@ -246,7 +246,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         try {
             while (true) {
-                $existingCalendar = Tinebase_Container::getInstance()->getContainerByName($this->appName, $displayname . $counter, $type, Tinebase_Core::getUser());
+                $existingCalendar = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, $displayname . $counter, $type, Tinebase_Core::getUser());
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                     . ' Got calendar: ' . $existingCalendar->name . ' (id: ' . $existingCalendar->getId() . ')');

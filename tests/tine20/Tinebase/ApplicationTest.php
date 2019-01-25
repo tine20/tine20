@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -343,8 +343,8 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_FreeDay::class,
                 HumanResources_Model_WorkingTime::class,
                 HumanResources_Model_FreeTime::class,
-                HumanResources_Model_Break::class,
                 HumanResources_Model_DailyWTReport::class,
+                HumanResources_Model_Break::class,
             ),
             'Inventory' => array(
                 Inventory_Model_Status::class,
@@ -400,6 +400,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_AccessLog::class,
                 Tinebase_Model_AreaLockConfig::class,
                 Tinebase_Model_AreaLockState::class,
+                Tinebase_Model_BLConfig::class,
                 Tinebase_Model_ContainerContent::class,
                 Tinebase_Model_Application::class,
                 Tinebase_Model_Registration::class,

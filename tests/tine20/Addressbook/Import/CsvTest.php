@@ -62,7 +62,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      */
     public function testImportDuplicates()
     {
-        $internalContainer = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        $internalContainer = Tinebase_Container::getInstance()->getContainerByName(Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         $options = array(
             'container_id'  => $internalContainer->getId(),
         );

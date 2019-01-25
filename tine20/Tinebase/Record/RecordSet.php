@@ -482,6 +482,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $this->offsetUnset(key($this->_listOfRecords));
         }
     }
+
+    public function removeLast()
+    {
+        if (count($this->_listOfRecords) > 0) {
+            end($this->_listOfRecords);
+            $this->offsetUnset(key($this->_listOfRecords));
+        }
+    }
+
     /**
      * required by ArrayAccess interface
      */
@@ -615,9 +624,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function getFirstRecord()
     {
         if (count($this->_listOfRecords) > 0) {
-            foreach ($this->_listOfRecords as $idx => $record) {
-                return $record;
-            }
+            reset($this->_listOfRecords);
+            return current($this->_listOfRecords);
         } else {
             return NULL;
         }

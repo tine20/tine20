@@ -25,7 +25,6 @@ abstract class Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_Record_ModlogTrait;
 
-
     /**
      * Model name
      *
@@ -487,7 +486,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             if ($this->_doContainerACLChecks) {
                 if ($_containerId === NULL) {
-                    $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
+                    $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_modelName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
                     $record->container_id = $containers[0]->getId();
                 } else {
                     $record->container_id = $_containerId;
@@ -585,7 +584,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $containerIds = ($this->_doContainerACLChecks && $_ignoreACL !== TRUE)
            ? Tinebase_Container::getInstance()->getContainerByACL(
                Tinebase_Core::getUser(),
-               $this->_applicationName,
+               $this->_modelName,
                $this->_getMultipleGrant,
                TRUE)
            : NULL;
@@ -712,7 +711,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 throw new Tinebase_Exception_SystemGeneric('Container must be given');
             }
 
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_modelName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
             $_record->container_id = $containers[0]->getId();
         }
     }
@@ -1840,7 +1839,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             // check delete grant in source container
-            $containerIdsWithDeleteGrant = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_DELETE, TRUE);
+            $containerIdsWithDeleteGrant = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_modelName, Tinebase_Model_Grants::GRANT_DELETE, TRUE);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Containers with delete grant: ' . print_r($containerIdsWithDeleteGrant, true));
             foreach ($records as $index => $record) {
@@ -2887,5 +2886,13 @@ HumanResources_CliTests.testSetContractsEndDate */
             return null;
         }
         return $record;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->_modelName;
     }
 }

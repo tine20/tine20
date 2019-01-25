@@ -253,7 +253,11 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
 
         if ($containerModel === 'Tinebase_Model_Container') {
             if ('' === $model) {
-                $model = static::$_defaultModel;
+                if ($this instanceof Tinebase_Controller_Record_Abstract) {
+                    $model = $this->getModel();
+                } else {
+                    $model = static::$_defaultModel;
+                }
             }
             // attention, currently everybody who has admin rights on a personal container is the owner of it
             // even if multiple users have admin rights on that personal container! (=> multiple owners)

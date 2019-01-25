@@ -43,7 +43,7 @@ class Addressbook_Setup_DemoDataTests extends PHPUnit_Framework_TestCase
         Addressbook_Setup_DemoData::getInstance()->createDemoData(array('locale' => 'de'));
         ob_end_clean();
         
-        $c = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), 'Addressbook', FALSE);
+        $c = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, FALSE);
         $id = $c->getId();
         $id = $id[1];
         $filter = new Addressbook_Model_ContactFilter(array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $id)));

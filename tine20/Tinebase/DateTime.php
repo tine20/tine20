@@ -332,18 +332,6 @@ class Tinebase_DateTime extends DateTime
     }
     
     /**
-     * Returns the UNIX timestamp representation of this datetime.
-     * 
-     * NOTE: PHP < 5.3.0 dosn't have this fn, so we overwrite it
-     *
-     * @return string  UNIX timestamp
-     */
-    public function getTimestamp()
-    {
-        return $this->format('U');
-    }
-    
-    /**
      * Returns true when both date objects or date parts are equal.
      *
      * @param  DateTime                        $date    Date to equal with

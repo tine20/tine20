@@ -95,7 +95,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         // make sure account root node exists
         $this->_getPersonalFilemanagerContainer();
 
-        Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
+        Tinebase_Container::getInstance()->getDefaultContainer('Filemanager_Model_Node');
 
         $this->_createdNodesJson = null;
     }
@@ -1792,7 +1792,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->moveNodes(array('/shared/Parent'), array($path . '/Parent'), false);
     
         try {
-            $c = Tinebase_Container::getInstance()->getContainerByName('Filemanager', 'Parent', Tinebase_FileSystem::FOLDER_TYPE_SHARED);
+            $c = Tinebase_Container::getInstance()->getContainerByName(Filemanager_Model_Node::class, 'Parent', Tinebase_FileSystem::FOLDER_TYPE_SHARED);
             $this->fail('Container doesn\'t get deleted');
         } catch (Tinebase_Exception_NotFound $e) {
         }
@@ -1869,7 +1869,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         if (!$this->_personalContainer) {
             $user = Tinebase_Core::getUser();
-            $this->_personalContainer = Tinebase_FileSystem::getInstance()->getPersonalContainer($user, 'Filemanager', $user)->getFirstRecord();
+            $this->_personalContainer = Tinebase_FileSystem::getInstance()->getPersonalContainer($user, Filemanager_Model_Node::class, $user)->getFirstRecord();
         }
         
         return $this->_personalContainer;

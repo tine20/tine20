@@ -92,7 +92,7 @@ class ActiveSync_Command_PingTests extends TestCase
     {
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Tinebase_Core::getUser(),
-            'Addressbook', 
+            Addressbook_Model_Contact::class,
             Tinebase_Core::getUser(),
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();
@@ -193,7 +193,7 @@ class ActiveSync_Command_PingTests extends TestCase
     {
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Tinebase_Core::getUser(),
-            'Calendar', 
+            Calendar_Model_Event::class,
             Tinebase_Core::getUser(),
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();

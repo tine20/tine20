@@ -1121,4 +1121,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
+
+    /**
+     * returns the model name
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return Calendar_Model_Event::class;
+    }
 }

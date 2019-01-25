@@ -157,7 +157,7 @@ class Tinebase_ContainerTest extends TestCase
     public function testGetContainerByName()
     {
         $container = $this->_instance->getContainerByName(
-            'Addressbook',
+            Addressbook_Model_Contact::class,
             $this->objects['initialContainer']->name,
             $this->objects['initialContainer']->type,
             Tinebase_Core::getUser()->getId()
@@ -458,7 +458,7 @@ class Tinebase_ContainerTest extends TestCase
         $container = $this->_instance->getContainerById($this->objects['initialContainer']);
         $this->assertTrue(is_object($container));
         
-        $containers = $this->_instance->getPersonalContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
+        $containers = $this->_instance->getPersonalContainer(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
         $container = $containers->find('name', $this->objects['initialContainer']->name);
         $this->assertTrue(is_object($container));
     }
@@ -470,7 +470,7 @@ class Tinebase_ContainerTest extends TestCase
     {
         $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::GRANT_READ));
 
-        $readableContainer = $this->_instance->getContainerByACL(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
+        $readableContainer = $this->_instance->getContainerByACL(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_READ);
         $this->assertEquals('Tinebase_Record_RecordSet', get_class($readableContainer), 'wrong type');
         $this->assertTrue(count($readableContainer) >= 2);
         foreach($readableContainer as $container) {
@@ -548,7 +548,7 @@ class Tinebase_ContainerTest extends TestCase
         Tinebase_User::getInstance()->setStatus($user, 'enabled');
         
         $container = Tinebase_Container::getInstance()->getPersonalContainer(
-            $user, 'Calendar', $user, Tinebase_Model_Grants::GRANT_READ
+            $user, Calendar_Model_Event::class, $user, Tinebase_Model_Grants::GRANT_READ
         )->getFirstRecord();
 
         $this->assertTrue($container !== null);
@@ -633,7 +633,7 @@ class Tinebase_ContainerTest extends TestCase
         $filter = new Tinebase_Model_ContainerFilter(array(
             array('field' => 'owner_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
             array('field' => 'application_id', 'operator' => 'equals', 'value' =>
-                Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId())
+                Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId())
         ));
         $result = Tinebase_Container::getInstance()->search($filter);
         

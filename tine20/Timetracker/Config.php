@@ -18,6 +18,8 @@
  */
 class Timetracker_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'Timetracker';
+
     /**
      * Feature bookmark for timeaccounts
      */

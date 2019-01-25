@@ -70,6 +70,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public static function resetConfiguration();
 
     /**
+     * @param array $_defintiion
+     */
+    public static function inheritModelConfigHook(array &$_defintion);
+
+    /**
      * sets identifier of record
      * 
      * @param string $_id

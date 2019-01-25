@@ -33,6 +33,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      */
     protected $_applicationName;
 
+    protected $_model;
+
     /**
      * container model name
      *
@@ -340,7 +342,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             }
         } else {
             $container = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_getApplicationName(),
+                $this->_model,
                 (string) $name,
                 Tinebase_Model_Container::TYPE_SHARED
             );
@@ -423,7 +425,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
         } else {
             $container = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_getApplicationName(),
+                $this->_model,
                 (string) $name,
                 Tinebase_Model_Container::TYPE_PERSONAL,
                 $accountId
@@ -591,7 +593,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 if ($this->_getApplicationName() === 'Filemanager' || $this->_clientSupportsDelegations()) {
                     $containers = $this->_containerController->getPersonalContainer(
                         Tinebase_Core::getUser(),
-                        $this->_getApplicationName(),
+                        $this->_model,
                         $accountId,
                         array(
                             Tinebase_Model_Grants::GRANT_READ,
@@ -600,7 +602,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                     );
                 } else {
                     // NOTE: seems to be the expected behavior for non-delegation clients
-                    $containers = $this->_containerController->getContainerByACL(Tinebase_Core::getUser(), $this->_getApplicationName(),  array(
+                    $containers = $this->_containerController->getContainerByACL(Tinebase_Core::getUser(), $this->_model, array(
                         Tinebase_Model_Grants::GRANT_READ,
                         Tinebase_Model_Grants::GRANT_SYNC
                     ));
@@ -630,7 +632,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     {
         $containers = $this->_containerController->getSharedContainer(
             Tinebase_Core::getUser(),
-            $this->_getApplicationName(),
+            $this->_model ?: $this->_getApplicationName(),
             array(
                 Tinebase_Model_Grants::GRANT_READ,
                 Tinebase_Model_Grants::GRANT_SYNC
@@ -1007,11 +1009,15 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
         try {
             if ($this->_containerModel === 'Tinebase_Model_Container') {
+                if (empty($this->_model)) {
+                    throw new Tinebase_Exception_Backend('model needs to be known to create a container!');
+                }
+
                 $newContainer = new Tinebase_Model_Container(array_merge($properties, array(
                     'type' => $containerType,
                     'backend' => 'Sql',
                     'application_id' => $this->_getApplication()->getId(),
-                    'model' => Tinebase_Core::getApplicationInstance($this->_getApplicationName())->getDefaultModel()
+                    'model' => $this->_model,
                 )));
                 $container = Tinebase_Container::getInstance()->addContainer($newContainer);
 

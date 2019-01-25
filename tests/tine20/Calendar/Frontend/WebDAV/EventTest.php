@@ -100,7 +100,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         //Import event for sclever
         $sclever = $this->_personas['sclever'];
-        $personalContainer = $this->_getPersonalContainer('Calendar', $sclever->accountId);
+        $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class, $sclever->accountId);
         Tinebase_Core::set(Tinebase_Core::USER, $sclever);
         $event = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
 
@@ -110,7 +110,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
 
         //Import same file for pwulf
         $pwulf = $this->_personas['pwulf'];
-        $personalContainer = $this->_getPersonalContainer('Calendar', $pwulf->accountId);
+        $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class, $pwulf->accountId);
         Tinebase_Core::set(Tinebase_Core::USER, $pwulf);
         $event = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
 

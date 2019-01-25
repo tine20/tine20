@@ -39,7 +39,7 @@ class Crm_Export_PdfTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_testContainer = $this->_getPersonalContainer('Crm');
+        $this->_testContainer = $this->_getPersonalContainer(Crm_Model_Lead::class);
 
         $this->objects['lead'] = new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit',

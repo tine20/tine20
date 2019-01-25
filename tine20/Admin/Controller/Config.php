@@ -283,4 +283,14 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
     {
         return $this->_configBackend->has($_ids, $_getDeleted);
     }
+
+    /**
+     * returns the model name
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return Tinebase_Model_Config::class;
+    }
 }

@@ -59,7 +59,7 @@ class Admin_JsonTest extends TestCase
         ));
         
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+            $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName(Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
 
             $this->objects['initialGroup']->container_id = $internalAddressbook->getId();
             $this->objects['updatedGroup']->container_id = $internalAddressbook->getId();
@@ -1101,7 +1101,7 @@ class Admin_JsonTest extends TestCase
             "name" => "asdfgsadfg",
             "color" => "#008080",
             "application_id" => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            "model" => "",
+            "model" => Addressbook_Model_Contact::class,
             "note" => "",
             'xprops' => '{a":"b"}',
         ));
@@ -1118,7 +1118,7 @@ class Admin_JsonTest extends TestCase
             "name" => "asdfgsadfg",
             "color" => "#008080",
             "application_id" => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            "model" => "",
+            "model" => Addressbook_Model_Contact::class,
             "note" => "",
         ));
 
@@ -1138,7 +1138,7 @@ class Admin_JsonTest extends TestCase
             "name" => "asdfgsadfg",
             "color" => "#008080",
             "application_id" => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            "model" => "",
+            "model" => Addressbook_Model_Contact::class,
             "note" => "",
             'xprops' => '{"a":"b"}',
         ));
@@ -1198,6 +1198,7 @@ class Admin_JsonTest extends TestCase
             'type'              => $_type,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => Addressbook_Model_Contact::class,
         );
         
         $container = $this->_json->saveContainer($data);
@@ -1249,7 +1250,7 @@ class Admin_JsonTest extends TestCase
         $userArray = $this->_createUser();
         Tinebase_Group::getInstance()->setGroupMembers($adminGroup->getId(), array($userArray['accountId']));
         
-        $containers = Tinebase_Container::getInstance()->getContainerByACL($userArray['accountId'], 'Addressbook', Tinebase_Model_Grants::GRANT_ADD);
+        $containers = Tinebase_Container::getInstance()->getContainerByACL($userArray['accountId'], Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_ADD);
         $this->assertTrue(count($containers->filter('name', 'testcontainer')) === 1, 'testcontainer ' . print_r($containerUpdated, TRUE) . ' not found: ' . print_r($containers->toArray(), TRUE));
     }
     

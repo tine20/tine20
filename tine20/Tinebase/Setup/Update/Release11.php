@@ -565,9 +565,8 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         foreach ($containers as $container) {
             if (!isset($models[$container['application_id']])) {
-                $models[$container['application_id']] = Tinebase_Core::getApplicationInstance(
-                    Tinebase_Application::getInstance()->getApplicationById($container['application_id'])->name, '',
-                    true)->getDefaultModel();
+                throw new Tinebase_Exception('you have to update to the max minor version of each major version. ' .
+                    'Do not make major version jumps. This is what happens. No other way than doing it right.');
             }
 
             if ($models[$container['application_id']]) {

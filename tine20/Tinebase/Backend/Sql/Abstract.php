@@ -46,6 +46,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     const FETCH_ALL         = 'fetch_all';
 
+    const MODEL_NAME        = 'modelName';
+    const TABLE_NAME        = 'tableName';
+    const TABLE_PREFIX      = 'tablePrefix';
+    const MODLOG_ACTIVE     = 'modlogActive';
+
     /**
      * backend type
      *
@@ -150,11 +155,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_db        = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
-        $this->_modelName            = (isset($_options['modelName']) || array_key_exists('modelName', $_options))            ? $_options['modelName']    : $this->_modelName;
-        $this->_tableName            = (isset($_options['tableName']) || array_key_exists('tableName', $_options))            ? $_options['tableName']    : $this->_tableName;
+        $this->_modelName    = isset($_options[self::MODEL_NAME])    ? $_options[self::MODEL_NAME]    : $this->_modelName;
+        $this->_tableName    = isset($_options[self::TABLE_NAME])    ? $_options[self::TABLE_NAME]    : $this->_tableName;
         /** @noinspection PhpUndefinedFieldInspection */
-        $this->_tablePrefix          = (isset($_options['tablePrefix']) || array_key_exists('tablePrefix', $_options))          ? $_options['tablePrefix']  : $this->_db->table_prefix;
-        $this->_modlogActive         = (isset($_options['modlogActive']) || array_key_exists('modlogActive', $_options))         ? $_options['modlogActive'] : $this->_modlogActive;
+        $this->_tablePrefix  = isset($_options[self::TABLE_PREFIX])  ? $_options[self::TABLE_PREFIX]  : $this->_db->table_prefix;
+        $this->_modlogActive = isset($_options[self::MODLOG_ACTIVE]) ? $_options[self::MODLOG_ACTIVE] : $this->_modlogActive;
         
         foreach ($this->_additionalColumns as $name => $query) {
             $this->_additionalColumns[$name] = str_replace("{prefix}", $this->_tablePrefix, $query);

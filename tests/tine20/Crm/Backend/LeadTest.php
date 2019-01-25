@@ -51,7 +51,7 @@ class Crm_Backend_LeadTest extends TestCase
         parent::setUp();
         $this->_backend = new Crm_Backend_Lead();
 
-        $this->_testContainer = $this->_getPersonalContainer('Crm');
+        $this->_testContainer = $this->_getPersonalContainer(Crm_Model_Lead::class);
     }
 
     /**

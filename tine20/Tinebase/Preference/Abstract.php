@@ -870,9 +870,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $result = array();
         $appName = ($_appName !== NULL) ? $_appName : $this->_application;
+        $model = Tinebase_Core::getApplicationInstance($appName)->getDefaultModel();
         
-        $myContainers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $appName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $appName, [Tinebase_Model_Grants::GRANT_ADD, Tinebase_Model_Grants::GRANT_READ], false, true);
+        $myContainers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
+        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, [Tinebase_Model_Grants::GRANT_ADD, Tinebase_Model_Grants::GRANT_READ], false, true);
 
         foreach ($myContainers as $container) {
             $result[] = array($container->getId(), $container->name);
@@ -894,9 +895,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     protected function _getDefaultContainerPreferenceDefaults(Tinebase_Model_Preference $_preference, $_accountId, $_appName = NULL, $_optionName = self::DEFAULTCONTAINER_OPTIONS)
     {
         $appName = ($_appName !== NULL) ? $_appName : $this->_application;
+        $model = Tinebase_Core::getApplicationInstance($appName)->getDefaultModel();
         
         $accountId = ($_accountId) ? $_accountId : Tinebase_Core::getUser()->getId();
-        $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $appName, $accountId, 0, true);
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $model, $accountId, 0, true);
         
         $_preference->value  = $containers->sort('creation_time')->getFirstRecord()->getId();
         $_preference->options = '<?xml version="1.0" encoding="UTF-8"?>
