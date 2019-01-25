@@ -399,4 +399,36 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(0, count($status), 'no folders should be found for update');
     }
+
+    public function testAddMessageToCache()
+    {
+        $message = new Felamimail_Model_Message([
+            'subject' => 'test',
+            'account_id' => $this->_account->getId(),
+            'folder_id' => $this->_folder->getId(),
+            'to' => [
+                ['email' => 'somemail@somedomain.com', 'name' => 'someone'],
+                ['email' => 'somemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail' .
+                    '@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail@somedomain.comsomemail',
+                'name' => 'someone'],
+            ]
+        ]);
+        $result = $this->_controller->addMessageToCache($message);
+        self::assertTrue($result !== false);
+    }
 }
