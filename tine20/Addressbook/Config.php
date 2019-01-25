@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -106,6 +106,8 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNC_BACKENDS = 'syncBackends';
+
+    const DEFAULT_TEL_COUNTRY_CODE = 'defaultTelCountryCode';
 
     /**
      * (FEATURE_LIST_VIEW-PHPdoc)
@@ -263,6 +265,17 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => array()
         ),
+        self::DEFAULT_TEL_COUNTRY_CODE => [
+            //_('Default telephone country code')
+            self::LABEL                 => 'Default telephone country code',
+            //_('Default telephone country code')
+            self::DESCRIPTION           => 'Default telephone country code',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => 'DE',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
     );
     
     /**

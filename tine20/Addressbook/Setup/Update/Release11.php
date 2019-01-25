@@ -236,4 +236,39 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', 26);
         $this->setApplicationVersion('Addressbook', '11.13');
     }
+
+    /**
+     * renormalize telephone numbers to apply country code
+     *
+     * @return void
+     */
+    public function update_13()
+    {
+        // fill normalized columns with data
+        $db = Tinebase_Core::getDb();
+        $select = $db->select();
+        $columns = array('id', 'tel_assistent', 'tel_car', 'tel_cell', 'tel_cell_private', 'tel_fax', 'tel_fax_home', 'tel_home', 'tel_pager', 'tel_work', 'tel_other', 'tel_prefer');
+
+            // get all telephone columns
+        $select->from(SQL_TABLE_PREFIX . 'addressbook', $columns);
+        $result = $db->query($select);
+        $data = array();
+        array_shift($columns);
+
+        $results = $result->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        foreach ($results as $row) {
+            foreach ($columns as $col) {
+                if (!empty($row[$col])) {
+                    $data[$col . '_normalized'] = Addressbook_Model_Contact::normalizeTelephoneNum((string)$row[$col]);
+                }
+            }
+            if (count($data) > 0) {
+                $db->update(SQL_TABLE_PREFIX . 'addressbook', $data, $db->quoteInto('id = ?', $row['id']));
+                $data = array();
+            }
+        }
+
+        $this->setApplicationVersion('Addressbook', '11.14');
+    }
 }
