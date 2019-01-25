@@ -74,7 +74,7 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
 
             foreach ($calls as $_record) {
                 // resolve telephone number to contacts if possible
-                $telNumber = Addressbook_Model_Contact::normalizeTelephoneNoCountry(
+                $telNumber = Addressbook_Model_Contact::normalizeTelephoneNum(
                     $phoneController->resolveInternalNumber($_record->destination));
 
                 if (null === $telNumber)

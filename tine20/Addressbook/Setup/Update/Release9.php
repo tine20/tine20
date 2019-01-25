@@ -306,7 +306,7 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
             foreach ($results as $row) {
                 foreach ($columns as $col) {
                     if (!empty($row[$col])) {
-                        $data[$col . '_normalized'] = Addressbook_Model_Contact::normalizeTelephoneNoCountry((string)$row[$col]);
+                        $data[$col . '_normalized'] = Addressbook_Model_Contact::normalizeTelephoneNum((string)$row[$col]);
                     }
                 }
                 if (count($data) > 0) {
