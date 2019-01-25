@@ -37,6 +37,7 @@
  * @package     HumanResources
  * @subpackage  Model
  *
+ * @property Tinebase_DateTime          date
  * @property Tinebase_DateTime          evaluation_period_start
  * @property Tinebase_DateTime          evaluation_period_end
  * @property boolean                    is_cleared

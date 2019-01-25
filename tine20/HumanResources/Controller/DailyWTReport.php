@@ -117,7 +117,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         ], '', [Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL => true]);
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
-            'controller' => $this,
+            'controller' => HumanResources_Controller_Employee::getInstance(),
             'filter'     => $filter,
             'function'   => 'calculateReportsForEmployees',
         ));

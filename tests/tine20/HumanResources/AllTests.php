@@ -25,6 +25,7 @@ class HumanResources_AllTests
         $suite->addTestSuite(HumanResources_Controller_ContractTests::class);
         $suite->addTestSuite(HumanResources_Controller_EmployeeTests::class);
         $suite->addTestSuite(HumanResources_Controller_DailyWTReportTests::class);
+        $suite->addTestSuite(HumanResources_Export_MonthlyWTReportTest::class);
         $suite->addTestSuite(HumanResources_Model_WorkingTimeSchemeTest::class);
         $suite->addTestSuite(HumanResources_ModelConfigurationTest::class);
         $suite->addTestSuite(HumanResources_Import_DemoDataTest::class);
