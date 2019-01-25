@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -38,16 +38,23 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
-        'Employee',
         'Account',
-        'ExtraFreeTime',
+        HumanResources_Model_BLDailyWTReport_BreakTimeConfig::MODEL_NAME_PART,
+        HumanResources_Model_BLDailyWTReport_Config::MODEL_NAME_PART,
+        HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::MODEL_NAME_PART,
         'Contract',
+        'CostCenter',
+        HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
+        'Employee',
+        'ExtraFreeTime',
         'FreeDay',
         'FreeTime',
-        'CostCenter',
-        'WorkingTime',
-        'DailyWTReport',
-        'Break'];
+        HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
+        HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
+        HumanResources_Model_WageType::MODEL_NAME_PART,
+        HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
+    ];
+
     protected $_defaultModel = 'Employee';
     
     /**
@@ -56,6 +63,42 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function __construct()
     {
         $this->_applicationName = 'HumanResources';
+    }
+
+    public function saveMonthlyWTReport($data)
+    {
+        if (!isset($data['id']) || empty($data['id'])) {
+            throw new Tinebase_Exception_Record_NotAllowed('monthly wt reports can\'t be created');
+        }
+
+        $mwtrCtrl = HumanResources_Controller_MonthlyWTReport::getInstance();
+        $oldContext = $mwtrCtrl->getRequestContext() ?: [];
+
+        try {
+            $mwtrCtrl->setRequestContext([HumanResources_Controller_MonthlyWTReport::RC_JSON_REQUEST => true]);
+            return $this->_save($data, $mwtrCtrl, HumanResources_Model_MonthlyWTReport::class);
+
+        } finally {
+            $mwtrCtrl->setRequestContext($oldContext);
+        }
+    }
+
+    public function saveDailyWTReport($data)
+    {
+        if (!isset($data['id']) || empty($data['id'])) {
+            throw new Tinebase_Exception_Record_NotAllowed('daily wt reports can\'t be created');
+        }
+
+        $dwtrCtrl = HumanResources_Controller_DailyWTReport::getInstance();
+        $oldContext = $dwtrCtrl->getRequestContext() ?: [];
+
+        try {
+            $dwtrCtrl->setRequestContext([HumanResources_Controller_DailyWTReport::RC_JSON_REQUEST => true]);
+            return $this->_save($data, $dwtrCtrl, HumanResources_Model_DailyWTReport::class);
+
+        } finally {
+            $dwtrCtrl->setRequestContext($oldContext);
+        }
     }
 
     /**
@@ -295,7 +338,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchWorkingTimes($filter, $paging)
     {
-        return $this->_search($filter, $paging, HumanResources_Controller_WorkingTime::getInstance(), 'HumanResources_Model_WorkingTimeFilter');
+        return $this->_search($filter, $paging, HumanResources_Controller_WorkingTimeScheme::getInstance(),
+            'HumanResources_Model_WorkingTimeSchemeFilter');
     }
 
     /**
@@ -306,7 +350,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getWorkingTime($id)
     {
-        return $this->_get($id, HumanResources_Controller_WorkingTime::getInstance());
+        return $this->_get($id, HumanResources_Controller_WorkingTimeScheme::getInstance());
     }
 
     /**
@@ -317,7 +361,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveWorkingTime($recordData)
     {
-        return $this->_save($recordData, HumanResources_Controller_WorkingTime::getInstance(), 'WorkingTime');
+        return $this->_save($recordData, HumanResources_Controller_WorkingTimeScheme::getInstance(), 'WorkingTimeScheme');
     }
 
     /**
@@ -328,7 +372,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteWorkingTime($ids)
     {
-        return $this->_delete($ids, HumanResources_Controller_WorkingTime::getInstance());
+        return $this->_delete($ids, HumanResources_Controller_WorkingTimeScheme::getInstance());
     }
 
     /**
@@ -487,8 +531,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             
             // find out weekdays to disable
-            if (is_object($json)) {
-                foreach($json->days as $index => $hours) {
+            if (is_array($json)) {
+                foreach($json['days'] as $index => $hours) {
                     $hours = intval($hours);
                     if ($hours === 0) {
                         $day = clone $startDay;

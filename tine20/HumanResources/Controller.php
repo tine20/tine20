@@ -100,7 +100,7 @@ class HumanResources_Controller extends Tinebase_Controller_Event
         $result->addRecord(new CoreData_Model_CoreData(array(
             'id' => 'hr_wtm',
             'application_id' => $application,
-            'model' => 'HumanResources_Model_WorkingTime',
+            'model' => 'HumanResources_Model_WorkingTimeScheme',
             'label' => 'Working time model' // _('Working time model')
         )));
 

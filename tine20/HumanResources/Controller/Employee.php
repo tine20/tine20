@@ -500,7 +500,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         
         if (isset($contractData['workingTimeModelId'])) {
             try {
-                $workingTimeModel = HumanResources_Controller_WorkingTime::getInstance()->get($contractData['workingTimeModelId']);
+                $workingTimeModel = HumanResources_Controller_WorkingTimeScheme::getInstance()->get($contractData['workingTimeModelId']);
             } catch (Exception $e) {
                 if ($cliCall) {
                     die('The Working Time Model with the id ' . $contractData['workingTimeModelId'] . ' could not be found!' . chr(10));
@@ -519,6 +519,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             'feast_calendar_id'  => $feastCalendar ? $feastCalendar->toArray() : NULL,
             'vacation_days'      => isset($contractData['vacationDays']) ? $contractData['vacationDays'] : NULL,
             'workingtime_json'   => $workingTimeModel ? $workingTimeModel->json : '',
+            'working_time_scheme'=> $workingTimeModel->getId(),
             'start_date'         => $contractData['startDate']
         );
     }

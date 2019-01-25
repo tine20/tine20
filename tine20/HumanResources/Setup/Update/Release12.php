@@ -14,7 +14,9 @@ class HumanResources_Setup_Update_Release12 extends Setup_Update_Abstract
     {
         $this->updateSchema('HumanResources', array('HumanResources_Model_Account', 'HumanResources_Model_Contract',
             'HumanResources_Model_CostCenter', 'HumanResources_Model_Employee', 'HumanResources_Model_ExtraFreeTime',
-            'HumanResources_Model_FreeDay', 'HumanResources_Model_FreeTime', 'HumanResources_Model_WorkingTime'));
+            'HumanResources_Model_FreeDay', 'HumanResources_Model_FreeTime',
+            'HumanResources_Model_WorkingTimeScheme'
+        ));
         $this->setApplicationVersion('HumanResources', '12.1');
     }
 
@@ -26,7 +28,7 @@ class HumanResources_Setup_Update_Release12 extends Setup_Update_Abstract
 
     public function update_2()
     {
-        $this->updateSchema('HumanResources', array('HumanResources_Model_WorkingTime'));
+        $this->updateSchema('HumanResources', [HumanResources_Model_WorkingTimeScheme::class]);
         $this->setApplicationVersion('HumanResources', '12.3');
     }
 
