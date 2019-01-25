@@ -921,6 +921,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         } catch (Zend_Db_Statement_Exception $zdse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' failed to add message to cache: ' . $zdse->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Message: ' . print_r($_message, true));
 
             $result = FALSE;
         }
