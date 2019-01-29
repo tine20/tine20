@@ -624,7 +624,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.mapPanel.onRecordLoad(this.record);
             }
         }
-        console.warn(this.checkDisableEmailField());
         if (this.record.id) {
             this.groupsPanel.store.loadData(this.record.get('groups'));
         }
