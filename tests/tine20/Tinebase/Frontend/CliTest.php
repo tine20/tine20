@@ -204,6 +204,8 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testTriggerAsyncEvents()
     {
+        Tinebase_Lock::clearLocks();
+
         $scheduler = Tinebase_Core::getScheduler();
         $serverTime = null;
         /** @var Tinebase_Model_SchedulerTask $task */

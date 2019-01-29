@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -22,6 +22,26 @@ class Tinebase_Lock
      * @var string
      */
     protected static $backend = null;
+
+    /**
+     * tries to release all locked locks (catches and logs exceptions silently)
+     * removes all lock objects
+     */
+    public static function clearLocks()
+    {
+        /** @var Tinebase_Lock_Abstract $lock */
+        foreach (static::$locks as $lock) {
+            try {
+                if ($lock->isLocked()) {
+                    $lock->release();
+                }
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
+
+        static::$locks = [];
+    }
 
     public static function keepLocksAlive()
     {
