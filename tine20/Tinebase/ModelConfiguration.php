@@ -1513,7 +1513,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @param string $fieldKey
      * @param array $fieldDef
      */
-    protected function _populateProperties($fieldKey, $fieldDef)
+    protected function _populateProperties($fieldKey, &$fieldDef)
     {
         switch ($fieldDef[self::TYPE]) {
             case 'string':
@@ -1523,8 +1523,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             case self::TYPE_BIGINT:
             case 'float':
             case 'boolean':
-                break;
             case 'container':
+                break;
+            case self::TYPE_JSON:
+                if (isset($fieldDef[self::JSON_SCHEMA_CALLBACK])) {
+                    $fieldDef[self::JSON_SCHEMA] = call_user_func($fieldDef[self::JSON_SCHEMA_CALLBACK]);
+                }
                 break;
             case 'datetime_separated_date':
             case 'date':
@@ -1560,10 +1564,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if (isset($this->_filterModel[$fieldKey]['options'])) {
                     $this->_filterModel[$fieldKey]['options']['controller'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Controller');
                     $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
-                } else {
-                    break;
                 }
             case 'records':
+                if (!isset($fieldDef['config'])) {
+                    break;
+                }
                 $fieldDef['config']['recordClassName']     = isset($fieldDef['config']['recordClassName'])     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
                 $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
                 $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';

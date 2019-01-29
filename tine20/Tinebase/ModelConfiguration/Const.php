@@ -39,6 +39,9 @@ class Tinebase_ModelConfiguration_Const {
     const INPUT_FILTERS = 'inputFilters';
     const IS_VIRTUAL = 'isVirtual';
 
+    const JSON_SCHEMA = 'jsonSchema';
+    const JSON_SCHEMA_CALLBACK = 'jsonSchemaCallback';
+
     const LABEL = 'label';
     const LENGTH = 'length';
 
