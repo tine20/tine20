@@ -77,13 +77,21 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      * @returns {String}
      */
     getTine20Icon: function() {
-        let flagConfigKey;
-        if (Tine.Tinebase.common.checkEmailDomain(this.get('from_email'))) {
+        let flagConfigKey = null,
+            email = this.get('from_email');
+        if (Tine.Tinebase.common.checkEmailDomain(email)) {
             flagConfigKey = 'flagIconOwnDomain';
         } else {
-            flagConfigKey = 'flagIconOtherDomain';
+            let otherDomainRegex = Tine.Tinebase.configManager.get('flagIconOtherDomainRegex', 'Felamimail');
+            if (email.match(otherDomainRegex)) {
+                flagConfigKey = 'flagIconOtherDomain';
+            }
         }
-        return Tine.Tinebase.configManager.get(flagConfigKey, 'Felamimail');
+        if (flagConfigKey) {
+            return Tine.Tinebase.configManager.get(flagConfigKey, 'Felamimail');
+        } else {
+            return 'images/favicon.svg';
+        }
     },
 
     /**

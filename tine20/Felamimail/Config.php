@@ -104,6 +104,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
 
     const FLAG_ICON_OWN_DOMAIN = 'flagIconOwnDomain';
     const FLAG_ICON_OTHER_DOMAIN = 'flagIconOtherDomain';
+    const FLAG_ICON_OTHER_DOMAIN_REGEX = 'flagIconOtherDomainRegex';
 
     /**
      * (non-PHPdoc)
@@ -268,6 +269,16 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'description'           => 'Used to mark messages from all other domains',
             'type'                  => 'string',
             'default'               => 'favicon/svg',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
+        ),
+        self::FLAG_ICON_OTHER_DOMAIN_REGEX => array(
+            //_('Other domain regex for FLAG_ICON_OTHER_DOMAIN')
+            'label'                 => 'Other domain regex for FLAG_ICON_OTHER_DOMAIN',
+            //_('Other domain regex for FLAG_ICON_OTHER_DOMAIN')
+            'description'           => 'Other domain regex for FLAG_ICON_OTHER_DOMAIN',
+            'type'                  => 'string',
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'setBySetupModule'      => false,

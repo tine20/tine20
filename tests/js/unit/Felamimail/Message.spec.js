@@ -37,6 +37,12 @@ describe('Message', () => {
         definition: {
           type: 'string'
         }
+      },
+      flagIconOtherDomainRegex: {
+        value: '\\.org',
+        definition: {
+          type: 'string'
+        }
       }
     })
   })
@@ -73,5 +79,12 @@ describe('Message', () => {
       from_email: 'somemail@somedomain.org'
     })
     expect(recordFromOtherDomain.getTine20Icon()).to.equal('otherdomain.icon')
+  })
+
+  it('returns correct flag icon for other tine20 client', () => {
+    const recordFromOtherDomain = new Tine.Felamimail.Model.Message({
+      from_email: 'somemail@somedomain.com'
+    })
+    expect(recordFromOtherDomain.getTine20Icon()).to.equal('images/favicon.svg')
   })
 })
