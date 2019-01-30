@@ -83,6 +83,15 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
      */
     public function calculateAllReports()
     {
+        if (! HumanResources_Config::getInstance()->featureEnabled(
+            HumanResources_Config::FEATURE_CALCULATE_DAILY_REPORTS)
+        ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' FEATURE_CALCULATE_DAILY_REPORTS disabled - Skipping.'
+            );
+            return true;
+        }
+
         // @todo filter some more? for example only current employees with active contracts?
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class);
         $iterator = new Tinebase_Record_Iterator(array(

@@ -52,7 +52,14 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const EXTRA_FREETIME_TYPE = 'extraFreetimeType';
-    
+
+    /**
+     * calculate daily reports
+     *
+     * @var string
+     */
+    const FEATURE_CALCULATE_DAILY_REPORTS = 'calculateDailyRepots';
+
     /**
      * id of (filsystem) container for vacation templates
      *
@@ -131,6 +138,26 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
         ),
+        self::ENABLED_FEATURES => [
+            //_('Enabled Features')
+            self::LABEL                 => 'Enabled Features',
+            //_('Enabled Features in HumanResources Application.')
+            self::DESCRIPTION           => 'Enabled Features in HumanResources Application.',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+                self::FEATURE_CALCULATE_DAILY_REPORTS => [
+                    self::LABEL                 => 'Calculate Daily Reports',
+                    //_('Calculate Daily Reports')
+                    self::DESCRIPTION           => 'Activate to calculate daily reports with a nightly scheduler job',
+                    //_('Activate to calculate daily reports with a nightly scheduler job')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::EXTRA_FREETIME_TYPE => array(
             //_('Extra freetime type')
             'label'                 => 'Extra freetime type',
