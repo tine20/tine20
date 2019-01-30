@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -222,6 +222,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const TENTATIVE_NOTIFICATIONS_FILTER = 'filter';
+
+    const ASSIGN_ORGANIZER_MEETING_STATUS_ON_EDIT_GRANT = 'assignOrgMeetingStatusOnEditGrant';
 
     /**
      * @var string
@@ -693,6 +695,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => [],
+        ],
+        self::ASSIGN_ORGANIZER_MEETING_STATUS_ON_EDIT_GRANT => [
+            self::LABEL                 => 'Assign organizer meeting status on editGrant',
+            //_('Assign organizer meeting status on editGrant')
+            self::DESCRIPTION           => 'Assign organizer meeting status on editGrant',
+            //_('Assign organizer meeting status on editGrant')
+            self::TYPE                  => self::TYPE_BOOL,
+            self::DEFAULT_STR           => false,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYSETUPMODULE      => false,
+            self::SETBYADMINMODULE      => false,
         ],
     );
     
