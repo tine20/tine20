@@ -866,7 +866,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         $messageToCache = $this->_createMessageToCache($_message, $_folder);
-        $cachedMessage = $this->_addMessageToCache($messageToCache);
+        $cachedMessage = $this->addMessageToCache($messageToCache);
 
         if ($cachedMessage !== false) {
             if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($_message)) {
@@ -921,11 +921,22 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param Felamimail_Model_Message $_message
      * @return Felamimail_Model_Message|bool
      */
-    protected function _addMessageToCache(Felamimail_Model_Message $_message)
+    public function addMessageToCache(Felamimail_Model_Message $_message)
     {
-        // TODO remove filterInputForDatabase when we finally support utf8mb4!
-        $_message->from_email = Tinebase_Core::filterInputForDatabase(mb_substr($_message->from_email, 0, 254));
+        $_message->from_email = $this->_filterEmailAddressBeforeAddingToCache($_message->from_email);
         $_message->from_name  = Tinebase_Core::filterInputForDatabase(mb_substr($_message->from_name,  0, 254));
+        foreach (['to', 'cc', 'bcc'] as $type) {
+            $recipients = $_message->{$type};
+            if (! is_array($recipients)) {
+                continue;
+            }
+            foreach ($recipients as $key => $value) {
+                if (isset($value['email'])) {
+                    $recipients[$key]['email'] = $this->_filterEmailAddressBeforeAddingToCache($value['email']);
+                }
+            }
+            $_message->{$type} = $recipients;
+        }
         
         try {
             $result = $this->_backend->create($_message);
@@ -933,12 +944,22 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' failed to add message to cache: ' . $zdse->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Message: ' . print_r($_message, true));
+                __METHOD__ . '::' . __LINE__ . ' Message: ' . print_r($_message->toArray(), true));
 
             $result = FALSE;
         }
         
         return $result;
+    }
+
+    /**
+     * @param $email
+     * @return string
+     */
+    public function _filterEmailAddressBeforeAddingToCache($email)
+    {
+        // TODO remove filterInputForDatabase when we finally support utf8mb4!
+        return Tinebase_Core::filterInputForDatabase(mb_substr($email, 0, 254));
     }
     
     /**
