@@ -337,7 +337,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $filter = $filterData;
         }
-        $affectedFolders = Felamimail_Controller_Message_Flags::getInstance()->clearFlags($filter, (array) $flags);
+        Felamimail_Controller_Message_Flags::getInstance()->clearFlags($filter, (array) $flags);
         
         return array(
             'status' => 'success'

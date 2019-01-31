@@ -787,7 +787,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
         // try with a filter
         $filter = array(
-            array('field' => 'id', 'operator' => 'in', array($message['id']))
+            array('field' => 'id', 'operator' => 'in', 'value' => array($message['id']))
         );
         $this->_json->clearFlags($filter, Zend_Mail_Storage::FLAG_SEEN);
 
