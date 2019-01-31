@@ -444,7 +444,7 @@ class Setup_Controller
         }
 
         foreach ($applicationController->getApplications() as $application) {
-            if ($application->getMajorVersion() > $minMajor) {
+            if ($application->status === Tinebase_Application::DISABLED || $application->getMajorVersion() > $minMajor) {
                 continue;
             }
 
@@ -1045,6 +1045,8 @@ class Setup_Controller
     /**
      * checks if update is required
      *
+     * TODO remove $_application parameter and legacy code
+     *
      * @param Tinebase_Model_Application $_application
      * @return boolean
      */
@@ -1056,6 +1058,7 @@ class Setup_Controller
             return $count > 0;
         }
 
+        // TODO remove legacy code below
         $setupXml = $this->getSetupXml($_application->name, true);
         if (! $setupXml) {
             return false;
@@ -2193,6 +2196,26 @@ class Setup_Controller
             if (!isset($_options[self::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS])) {
                 // look for import definitions and put them into the db
                 $this->createImportExportDefinitions($application);
+            }
+
+            // fill update state with all available updates of the current version, as we do not need to run them again
+            /** @var Setup_Update_Abstract $class */
+            $class = $application->name . '_Setup_Update_' . $application->getMajorVersion();
+            if (class_exists($class) && !empty($updatesByPrio = $class::getAllUpdates())) {
+                if (!($state = json_decode(Tinebase_Application::getInstance()->getApplicationState(
+                    Tinebase_Core::getTinebaseId(), Tinebase_Application::STATE_UPDATES, true), true))) {
+                    $state = [];
+                }
+                $now = Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG);
+
+                foreach ($updatesByPrio as $updates) {
+                    foreach (array_keys($updates) as $updateKey) {
+                        $state[$updateKey] = $now;
+                    }
+                }
+
+                Tinebase_Application::getInstance()->setApplicationState(Tinebase_Core::getTinebaseId(),
+                    Tinebase_Application::STATE_UPDATES, json_encode($state));
             }
         } catch (Exception $e) {
             Tinebase_Exception::log($e, /* suppress trace */ false);
