@@ -197,7 +197,13 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
      * @return {Array}
      */
     getColumns: function() {
-        return Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n).concat([
+        var _ = window.lodash,
+            baseCols = Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n);
+
+        // NOTE: contact grid basecols have memberroles with different data layout
+        baseCols = _.filter(baseCols, function(c) {return c.id != 'memberroles'});
+
+        return baseCols.concat([
             { id: 'memberroles', header: this.app.i18n._('List Roles'), dataIndex: 'memberroles', renderer: this.listMemberRoleRenderer }
         ]);
     },

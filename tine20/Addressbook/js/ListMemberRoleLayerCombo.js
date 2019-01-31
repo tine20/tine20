@@ -27,28 +27,23 @@ Tine.Addressbook.ListMemberRoleLayerCombo = Ext.extend(Tine.widgets.grid.PickerG
      */
     gridRecordClass: Tine.Addressbook.Model.ListRole,
 
-    /**
-     * sets values to innerForm (grid)
-     */
-    setFormValue: function (value) {
+    stripData: function(value) {
         var listRoles = [];
         if (Ext.isArray(value)) {
             Ext.each(value, function (role) {
-                listRoles.push(role.list_role_id);
+                if (role.list_role_id) {
+                    listRoles.push(role.list_role_id);
+                } else {
+                    listRoles.push(role);
+                }
             });
         }
 
-        this.setStoreFromArray(listRoles);
+        return listRoles;
     },
 
-    /**
-     * retrieves values from grid
-     *
-     * @returns {*|Array}
-     */
-    getFormValue: function () {
-        var listRoles = this.getFromStoreAsArray(),
-            result = [];
+    wrapData: function(listRoles) {
+        var result = [];
 
         Ext.each(listRoles, function(role) {
             result.push({
@@ -58,5 +53,32 @@ Tine.Addressbook.ListMemberRoleLayerCombo = Ext.extend(Tine.widgets.grid.PickerG
         }, this);
 
         return result;
+    },
+
+    setValue: function(value) {
+        this.supr().setValue.call(this, this.stripData(value));
+    },
+
+    /**
+     * sets values to innerForm (grid)
+     */
+    setFormValue: function (value) {
+        this.setStoreFromArray(this.stripData(value));
+    },
+
+    getValue: function() {
+        var value = this.supr().getValue.call(this);
+        return Tine.Tinebase.common.assertComparable(this.wrapData(value));
+    },
+
+    /**
+     * retrieves values from grid
+     *
+     * @returns {*|Array}
+     */
+    getFormValue: function () {
+        var listRoles = this.getFromStoreAsArray();
+
+        return this.wrapData(listRoles);
     },
 });
