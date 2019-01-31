@@ -232,20 +232,24 @@ class Tinebase_FileSystem_Previews
             }
         }
 
-        // reduce deadlock risk. We fill the stat path cache outside the transaction in the hope that
-        // rmdir / mkdir will make updates on the tree structure versus the root directly, without reading first
+        // reduce deadlock risk. We (remove and) create the base folder outside the transaction. This will fill
+        // the stat cache and the update on the directory tree hashes will happen without prio read locks
         $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
-        $fileSystem->isDir($basePath);
+        if (!$fileSystem->isDir($basePath)) {
+            $fileSystem->mkdir($basePath);
+        } else {
+            $fileSystem->rmdir($basePath, true);
+            $fileSystem->mkdir($basePath);
+        }
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         try {
 
             $files = array();
             $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
-            if ($fileSystem->isDir($basePath)) {
-                $fileSystem->rmdir($basePath, true);
+            if (!$fileSystem->isDir($basePath)) {
+                $fileSystem->mkdir($basePath);
             }
-            $fileSystem->mkdir($basePath);
 
             $maxCount = 0;
             foreach ($config as $key => $cnf) {
@@ -330,16 +334,7 @@ class Tinebase_FileSystem_Previews
      */
     public function hasPreviews(Tinebase_Model_Tree_Node $_node)
     {
-        if (empty($_node->hash) || strlen($_node->hash) < 4) {
-            throw new Tinebase_Exception_InvalidArgument('node needs to have proper hash set');
-        }
-
-        try {
-            Tinebase_FileSystem::getInstance()->stat($this->_getBasePath() . '/' . substr($_node->hash, 0, 3) . '/' . substr($_node->hash, 3));
-            return true;
-        } catch(Tinebase_Exception_NotFound $tenf) {
-            return false;
-        }
+        return $_node->preview_count > 0;
     }
 
     /**
