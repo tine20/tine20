@@ -271,4 +271,24 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Addressbook', '11.14');
     }
+
+    /**
+     * @return Set shortnames
+     */
+    public function update_14()
+    {
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME)) {
+            $controller = Addressbook_Controller_Contact::getInstance();
+            $userContacts = $controller->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    'Addressbook_Model_Contact',[['field' => 'typer', 'operator' => 'equals', 'value' => 'user']]
+                )
+            );
+            foreach ($userContacts as $contact) {
+                $controller->update($contact);
+            }
+        }
+
+        $this->setApplicationVersion('Addressbook', '11.15');
+    }
 }
