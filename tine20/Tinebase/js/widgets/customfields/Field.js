@@ -92,7 +92,8 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                             resizable: true,
                             recordClass: eval(recordConfig.value.records),
                             allowLinkingItself: false,
-                            editDialog: editDialog
+                            editDialog: editDialog,
+                            additionalFilterSpec: recordConfig.additionalFilterSpec
                         });
                         break;
                     case 'recordlist':

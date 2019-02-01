@@ -104,7 +104,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @cfg {Bool} readOnly
      */
     readOnly: false,
-    
+
+    /**
+     * config spec for additionalFilters - passed to RecordPicker
+     *
+     * @type: {object} e.g.
+     * additionalFilterConfig: {config: { 'name': 'configName', 'appName': 'myApp'}}
+     * additionalFilterConfig: {preference: {'appName': 'myApp', 'name': 'preferenceName}}
+     * additionalFilterConfig: {favorite: {'appName': 'myApp', 'id': 'favoriteId', 'name': 'optionallyuseaname'}}
+     */
+    additionalFilterSpec: null,
+
     /**
      * @private
      */
@@ -112,6 +122,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.contextMenuItems = (this.contextMenuItems !== null) ? this.contextMenuItems : [];
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         this.searchComboConfig = this.searchComboConfig || {};
+        this.searchComboConfig.additionalFilterSpec = this.additionalFilterSpec;
         
         this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
@@ -119,7 +130,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initStore();
         this.initGrid();
         this.initActionsAndToolbars();
-
 
         this.on('afterrender', this.onAfterRender, this);
 

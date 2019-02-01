@@ -98,7 +98,17 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      * @type {Array}
      */
     additionalFilters: null,
-    
+
+    /**
+     * config spec for additionalFilters
+     *
+     * @type: {object} e.g.
+     * additionalFilterConfig: {config: { 'name': 'configName', 'appName': 'myApp'}}
+     * additionalFilterConfig: {preference: {'appName': 'myApp', 'name': 'preferenceName}}
+     * additionalFilterConfig: {favorite: {'appName': 'myApp', 'id': 'favoriteId', 'name': 'optionallyuseaname'}}
+     */
+    additionalFilterSpec: null,
+
     triggerAction: 'all',
     pageSize: 50,
     minChars: 3,
@@ -132,7 +142,25 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.on('beforequery', this.onBeforeQuery, this);
         this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
         this.initTemplate();
-        
+
+        if (this.additionalFilterSpec) {
+            this.additionalFilters = this.additionalFilters || [];
+            if (this.additionalFilterSpec.config) {
+                this.additionalFilters = this.additionalFilters.concat(Tine.Tinebase.configManager.get(
+                    this.additionalFilterSpec.config.name, this.additionalFilterSpec.config.appName));
+            }
+            // @TODO: we might need a JSON.parse - implement when needed
+            if (this.additionalFilterSpec.preference) {
+                this.additionalFilters = this.additionalFilters.concat(
+                    Tine.Tinebase.appMgr.get(this.additionalFilterSpec.preference.appName)
+                        .getRegistry().get('preferences').get(this.additionalFilterSpec.preference.name)
+                );
+            }
+            if (this.additionalFilterSpec.favorite) {
+                Tine.log.warn('Implement me');
+            }
+
+        }
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
     
