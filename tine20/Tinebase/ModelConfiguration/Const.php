@@ -33,6 +33,7 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER = 'filter';
     const FILTER_DEFINITION = 'filterDefinition';
     const FILTER_GROUP = 'filtergroup';
+    const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
 
     const INDEXES = 'indexes';

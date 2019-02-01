@@ -11,6 +11,8 @@
  * @todo        this should be splitted into smaller parts!
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * abstract record controller class for Tine 2.0 applications
  *
@@ -2525,7 +2527,8 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         $filterArray = isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [];
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND');
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND',
+            isset($_fieldConfig[TMCC::FILTER_OPTIONS]) ? $_fieldConfig[TMCC::FILTER_OPTIONS] : []);
 
         $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 

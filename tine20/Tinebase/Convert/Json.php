@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_ModelConfiguration_Const as MCC;
+
 /**
  * convert functions for records from/to json (array) format
  *
@@ -506,7 +508,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 $filterArray = $config['addFilters'];
             }
 
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray,
+                Tinebase_Model_Filter_FilterGroup::CONDITION_AND, isset($config[MCC::FILTER_OPTIONS]) ?
+                    $config[MCC::FILTER_OPTIONS] : []);
 
             $paging = NULL;
             if (isset($config['paging']) && is_array($config['paging'])) {
