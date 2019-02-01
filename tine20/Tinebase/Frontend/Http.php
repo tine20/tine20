@@ -208,6 +208,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             return $this->setupRequired();
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' rendering mainscreen');
+
         return $this->mainScreen();
     }
 
@@ -217,6 +220,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, '');
 
         if ($redirectUrl !== '' && Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTALWAYS, FALSE)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' redirecting to ' . $redirectUrl);
             header('Location: ' . $redirectUrl);
             return true;
         }
