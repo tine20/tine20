@@ -630,8 +630,8 @@ class Setup_Frontend_Cli
         }
         
         echo "Currently installed applications:\n";
-        foreach($applications as $application) {
-            echo "* $application\n";
+        foreach ($applications as $application) {
+            echo "* " . $application->name . " (Version: " . $application->version . ")\n";
         }
         
         return 0;
