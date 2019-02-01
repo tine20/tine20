@@ -31,7 +31,7 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
     {
         $release11 = new Addressbook_Setup_Update_Release11($this->_backend);
         $release11->update_14();
-        $this->addApplicationUpdate('Tinebase', '12.5', self::RELEASE012_UPDATE001);
+        $this->addApplicationUpdate('Addressbook', '12.5', self::RELEASE012_UPDATE001);
     }
 
     public function update002()
