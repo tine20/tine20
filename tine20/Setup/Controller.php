@@ -489,6 +489,8 @@ class Setup_Controller
      */
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
     {
+        $this->clearCache();
+
         if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
             throw new Tinebase_Exception('could not create setup user');
         }
