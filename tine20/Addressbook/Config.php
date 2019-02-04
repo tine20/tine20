@@ -101,6 +101,12 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const FEATURE_STRUCTUREPANEL = 'featureStructurePanel';
 
     /**
+     * Filter configuration for site record pickers
+     * @var string
+     */
+    const SITE_FILTER = 'siteFilter';
+
+    /**
      * config for the syncBackends
      *
      * @var string
@@ -254,6 +260,15 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
             'setBySetupModule'      => true,
+        ),
+        self::SITE_FILTER => array(
+            // _('Site Filter')
+            'label'                 => 'Site Filter',
+            // _('Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter.')
+            'description'           => 'Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
         ),
         self::SYNC_BACKENDS => array(
             //_('Sync Backends')
