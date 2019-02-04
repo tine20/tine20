@@ -522,7 +522,7 @@ class Addressbook_JsonTest extends TestCase
             'sort' => array('note_type_id', 'creation_time')
         ));
         $this->assertEquals($_changedNoteNumber, $history['totalcount'], print_r($history, TRUE));
-        $changedNote = preg_replace('\s*GDPR_DataProvenance \([^)]+\)', '',
+        $changedNote = preg_replace('/\s*GDPR_DataProvenance \([^)]+\)/', '',
             $history['results'][$_changedNoteNumber - 1]);
         foreach ((array) $_expectedText as $text) {
             $this->assertContains($text, $changedNote['note'], print_r($changedNote, TRUE));
