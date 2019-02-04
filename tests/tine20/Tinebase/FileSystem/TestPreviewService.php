@@ -36,6 +36,20 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
      */
     public function getPreviewsForFiles(array $filePaths, array $config)
     {
-        // TODO: Implement getPreviewsForFiles() method.
+        return array('thumbnail' => array('blob'), 'previews' => array('blob1', 'blob2', 'blob3'));
+    }
+
+
+    /**
+     * Uses the DocumentPreviewService to generate pdfs for a documentfile.
+     *
+     * @param $filePath
+     * @param $synchronRequest bool should the request be prioritized
+     * @return string file blob
+     * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
+     */
+    public function getPdfForFile($filePath, $synchronRequest = false)
+    {
+        return "blob";
     }
 }
