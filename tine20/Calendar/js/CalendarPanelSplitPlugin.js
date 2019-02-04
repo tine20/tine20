@@ -154,8 +154,10 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                 this.attendeeViews.add('main', view);
                 
                 this.calPanel.add({
+                    layout: 'fit',
                     border: false,
                     flex: 1,
+                    height: this.calPanel.getHeight(), // <- initialHeight
                     items: view
                 });
             } else {
@@ -170,7 +172,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             
             this.attendeeViews.removeKey('main');
         }
-        
+
         this.calPanel.doLayout();
     },
     
@@ -204,6 +206,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             attendee: attendee,
             plain: true,
             flex: 1,
+            height: this.calPanel.getHeight(), // <- initialHeight
             activeItem: 0,
             items: view
         });
@@ -284,10 +287,10 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
      * @param {Object} e Event
      */
     onScroll: function(activeView, e) {
-        if (! (activeView && activeView.scroller && activeView.scroller.dom)) {
+        if (! (activeView && activeView.scroller && activeView.scroller.dom && activeView.getHeight() > 100)) {
             return;
         }
-        
+
         var scrollTop = activeView.scroller.dom.scrollTop;
 
         this.attendeeViews.each(function(view) {
