@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -276,6 +276,23 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $this->setExpectedException('Tinebase_Exception_AccessDenied');
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
+    }
+
+    /**
+     * attempt to search an private event of pwulf
+     *  -> test user has no private grant
+     */
+    public function testPrivateSearchViaContainerFail()
+    {
+        $persistentEvent = $this->_createEventInPersonasCalendar('pwulf', 'pwulf', 'pwulf', Calendar_Model_Event::CLASS_PRIVATE);
+
+        $result = $this->_uit->search(new Calendar_Model_EventFilter([[
+            'field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId()
+        ]]));
+        static::assertSame(1, $result->count(), 'did not find created event, expect freebusy cleaned up event');
+        /** @var Calendar_Model_Event $event */
+        $event = $result->getFirstRecord();
+        static::assertEmpty($event->summary);
     }
     
     /**

@@ -313,14 +313,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @param string $applicationName
      * @param string $model
+     * @param boolean $shared
      * @return Tinebase_Model_Container
      */
-    protected function _getTestContainer($applicationName, $model = null)
+    protected function _getTestContainer($applicationName, $model = null, $shared = false)
     {
         return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'PHPUnit ' . $model .' container',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'       => Tinebase_Core::getUser(),
+            'name'           => 'PHPUnit ' . $model . ($shared ? ' shared' : '') . ' container',
+            'type'           => $shared ? Tinebase_Model_Container::TYPE_SHARED :
+                Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'       => $shared ? null : Tinebase_Core::getUser(),
             'backend'        => 'Sql',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId(),
             'model'          => $model,
