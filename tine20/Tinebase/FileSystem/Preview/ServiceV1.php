@@ -26,9 +26,14 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
     }
 
     /**
+     * Uses the DocumentPreviewService to generate previews (images or pdf) for a file.
+     *
+     * {@inheritDoc}
+     *
      * @param $_filePath
      * @param array $_config
      * @return array|bool
+     * @throws Zend_Http_Client_Exception
      */
     public function getPreviewsForFile($_filePath, array $_config)
     {
@@ -43,6 +48,55 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
         $httpClient->setParameterPost('config', json_encode($_config));
         $httpClient->setFileUpload($_filePath, 'file');
 
+        $this->_requestPreviews($httpClient, $synchronRequest);
+    }
+
+    /**
+     * Uses the DocumentPreviewService to generate previews (images or pdf files) for multiple files of same type.
+     *
+     * {@inheritDoc}
+     *
+     * @param $filePaths array of file Paths to convert
+     * @param array $config
+     * @return array|bool
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function getPreviewsForFiles(array $filePaths, array $config)
+    {
+        throw new Tinebase_Exception_NotImplemented("GetPreviewsForFiles not implemented in Preview_ServiceV1");
+    }
+
+    /**
+     * @param boolean $_synchronRequest
+     * @return Zend_Http_Client
+     */
+    protected function _getHttpClient($_synchronRequest)
+    {
+        return Tinebase_Core::getHttpClient($this->_url, array('timeout' => ($_synchronRequest ? 10 : 300)));
+    }
+
+    protected function _processJsonResponse(array $responseJson)
+    {
+        $response = array();
+        foreach ($responseJson as $key => $urls) {
+            $response[$key] = array();
+            foreach ($urls as $url) {
+                $blob = file_get_contents($url);
+                if (false === $blob) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' couldn\'t read fileblob from url: ' . $url);
+                    }
+                    return false;
+                }
+                $response[$key][] = $blob;
+            }
+        }
+
+        return $response;
+    }
+
+    protected function _requestPreviews($httpClient, $synchronRequest)
+    {
         $tries = 0;
         $timeStarted = time();
         $responseJson = null;
@@ -64,8 +118,7 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                 }
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
-                        . __LINE__ . ' preview service call failed: ' . $e->getMessage());
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' preview service call failed: ' . $e->getMessage());
                 }
                 if ($synchronRequest) {
                     return false;
@@ -75,43 +128,16 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
             if ($run < 5) {
                 sleep(5 - $run);
             }
-        } while(++$tries < 4 && time() - $timeStarted < 180);
+        } while (++$tries < 4 && time() - $timeStarted < 180);
 
         if (is_array($responseJson)) {
             return $this->_processJsonResponse($responseJson);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
-                . '::' . __LINE__ . ' Got empty/non-json response');
-        }
-
-        return false;
-    }
-
-    protected function _processJsonResponse(array $responseJson)
-    {
-        $response = array();
-        foreach($responseJson as $key => $urls) {
-            $response[$key] = array();
-            foreach($urls as $url) {
-                $blob = file_get_contents($url);
-                if (false === $blob) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
-                        . '::' . __LINE__ . ' couldn\'t read fileblob from url: ' . $url);
-                    return false;
-                }
-                $response[$key][] = $blob;
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Got empty/non-json response');
             }
         }
 
-        return $response;
-    }
-
-    /**
-     * @param boolean $_synchronRequest
-     * @return Zend_Http_Client
-     */
-    protected function _getHttpClient($_synchronRequest)
-    {
-        return Tinebase_Core::getHttpClient($this->_url, array('timeout' => ($_synchronRequest ? 10 : 300)));
+        return false;
     }
 }
