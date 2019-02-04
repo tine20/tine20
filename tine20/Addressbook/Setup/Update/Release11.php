@@ -285,7 +285,11 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
                 )
             );
             foreach ($userContacts as $contact) {
-                $controller->update($contact);
+                try {
+                    $controller->update($contact);
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e);
+                }
             }
         }
 
