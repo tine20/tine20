@@ -1768,6 +1768,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 . Tinebase_Core::getTinebaseId() . '" WHERE record_type = "' . $container->model .
                 '" AND application_id = "' . $container->application_id . '" AND record_id IN ("' .
                 join('","', $result) . '") ORDER BY instance_seq ASC');
+
+            $autoInc = $db->query('SELECT @i:=@i+1')->fetchColumn();
+
+            $db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . 'timemachine_modlog AUTO_INCREMENT ' . $autoInc);
         }
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
