@@ -416,6 +416,10 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
                 throw new Tinebase_Exception_InvalidArgument('ACL model not supported ');
         }
 
+        if (!$result && Tinebase_Model_Grants::GRANT_ADMIN !== $_grant) {
+            return $this->hasGrant($_containerId, Tinebase_Model_Grants::GRANT_ADMIN, $_aclModel);
+        }
+
         return $result;
     }
     

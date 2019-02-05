@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -2338,5 +2338,62 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             $this->_controller->get($event->getId());
             static::fail('event should not be found, it should have been deleted');
         } catch (Tinebase_Exception_NotFound $tenf) {}
+    }
+
+    public function testGetPrivateEventInSharedContainer()
+    {
+        $sharedContainer = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+        Tinebase_Container::getInstance()->setGrants($sharedContainer, new Tinebase_Record_RecordSet(
+            Tinebase_Model_Grants::class, [[
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_EDIT => true,
+                Tinebase_Model_Grants::GRANT_ADMIN => true,
+                Tinebase_Model_Grants::GRANT_ADD => true,
+            ]]), true, false);
+
+        // create private sclever event
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
+        $event = $this->_getEvent();
+        $event->class = Calendar_Model_Event::CLASS_PRIVATE;
+        $event->container_id = $sharedContainer->getId();
+        $createdEvent = $this->_controller->create($event);
+
+        // try to access it as original test user
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        try {
+            $this->_controller->get($createdEvent->getId());
+            static::fail('expect access denied to private event');
+        } catch (Tinebase_Exception_AccessDenied $e) {}
+    }
+
+    public function testSearchPrivateEventInSharedContainer()
+    {
+        $sharedContainer = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+        Tinebase_Container::getInstance()->setGrants($sharedContainer, new Tinebase_Record_RecordSet(
+            Tinebase_Model_Grants::class, [[
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_EDIT => true,
+            Tinebase_Model_Grants::GRANT_ADMIN => true,
+            Tinebase_Model_Grants::GRANT_ADD => true,
+        ]]), true, false);
+
+        // create private sclever event
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
+        $event = $this->_getEvent();
+        $event->class = Calendar_Model_Event::CLASS_PRIVATE;
+        $event->container_id = $sharedContainer->getId();
+        $createdEvent = $this->_controller->create($event);
+
+        // try to access it as original test user
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        $result = $this->_controller->search(new Calendar_Model_EventFilter([[
+            'field' => 'id', 'operator' => 'equals', 'value' => $createdEvent->getId()
+        ]]));
+        static::assertSame(1, $result->count(), 'did not find created event, expect freebusy cleaned up event');
+        /** @var Calendar_Model_Event $event */
+        $event = $result->getFirstRecord();
+        static::assertEmpty($event->summary);
     }
 }
