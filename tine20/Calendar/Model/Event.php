@@ -485,15 +485,14 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         $hasGrant = isset($this->_properties[$_grant]) && (bool)$this->{$_grant};
         
-        if ($this->class !== Calendar_Model_Event::CLASS_PUBLIC) {
-            $hasGrant &= (
+        if ($hasGrant && $this->class !== Calendar_Model_Event::CLASS_PUBLIC) {
+            $hasGrant =
                 // private grant
                 $this->{Calendar_Model_EventPersonalGrants::GRANT_PRIVATE} ||
                 // I'm organizer
                 Tinebase_Core::getUser()->contact_id == ($this->organizer instanceof Addressbook_Model_Contact ? $this->organizer->getId() : $this->organizer) ||
                 // I'm attendee
-                Calendar_Model_Attender::getOwnAttender($this->attendee)
-            );
+                Calendar_Model_Attender::getOwnAttender($this->attendee);
         }
         
         return $hasGrant;

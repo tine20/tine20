@@ -352,14 +352,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @param string $applicationName
      * @param string $model
+     * @param boolean $shared
      * @return Tinebase_Model_Container
      */
-    protected function _getTestContainer($applicationName, $model)
+    protected function _getTestContainer($applicationName, $model, $shared = false)
     {
         return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'PHPUnit ' . $model .' container',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'       => Tinebase_Core::getUser(),
+            'name'           => 'PHPUnit ' . $model . ($shared ? ' shared' : '') . ' container',
+            'type'           => $shared ? Tinebase_Model_Container::TYPE_SHARED :
+                Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'       => $shared ? null : Tinebase_Core::getUser(),
             'backend'        => 'Sql',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId(),
             'model'          => $model,
@@ -886,14 +888,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return strip_tags($zip->getFromName('word/document.xml'));
     }
-    
+
     protected function clear($app,$model)
     {
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , [
             ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
         ]);
-        $controller =  Tinebase_Core::getApplicationInstance($app,$model); // @TODO seem not good... 
+        $controller =  Tinebase_Core::getApplicationInstance($app,$model); // @TODO seem not good...
         $controller::getInstance()->deleteByFilter($filter);
     }
 

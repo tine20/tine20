@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -271,20 +271,30 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     . ' Required grants not set in grants filter: ' . print_r($grantsFilter->toArray(), true));
             }
         }
-        
+
+        /** @var Calendar_Model_Event $event */
         foreach ($events as $event) {
             $containerId = $event->container_id instanceof Tinebase_Model_Container
                 ? $event->container_id->getId()
                 : $event->container_id;
-            
+
             // either current user is organizer or has admin right on container
-            if (   $event->organizer === $currentContact
-                || (isset($containerGrants[$containerId]) && $containerGrants[$containerId]->account_grants[Tinebase_Model_Grants::GRANT_ADMIN])
-            ) {
+            if ($event->organizer === $currentContact) {
                 foreach ($this->_recordBasedGrants as $grant) {
                     $event->{$grant} = true;
                 }
                 
+                // has all rights => no need to filter
+                continue;
+            }
+            if (isset($containerGrants[$containerId]) && $containerGrants[$containerId]
+                    ->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]) {
+                foreach ($this->_recordBasedGrants as $grant) {
+                    if (Calendar_Model_EventPersonalGrants::GRANT_PRIVATE !== $grant) {
+                        $event->{$grant} = true;
+                    }
+                }
+
                 // has all rights => no need to filter
                 continue;
             }
@@ -310,7 +320,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                             if (   $attendee->displaycontainer_id instanceof Tinebase_Model_Container
                                 && $attendee->displaycontainer_id->account_grants 
                                 && (    $attendee->displaycontainer_id->account_grants[$grant]
-                                     || $attendee->displaycontainer_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]
+                                     || ($attendee->displaycontainer_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]
+                                        && Calendar_Model_EventPersonalGrants::GRANT_PRIVATE !== $grant)
                                    )
                             ) {
                                 $event->{$grant} = true;
