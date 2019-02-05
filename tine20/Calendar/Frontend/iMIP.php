@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -437,7 +437,15 @@ class Calendar_Frontend_iMIP
 
                 $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             } else {
-                if ($event->external_seq > $existingEvent->external_seq) {
+                if ($event->external_seq > $existingEvent->external_seq ||
+                        (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['LAST-MODIFIED']) &&
+                        isset($existingEvent->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['LAST-MODIFIED'])
+                        && $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['LAST-MODIFIED'] >
+                            $existingEvent->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['LAST-MODIFIED']) ||
+                        (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['DTSTAMP']) &&
+                            isset($existingEvent->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['DTSTAMP'])
+                            && $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['DTSTAMP'] >
+                            $existingEvent->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['DTSTAMP'])) {
                     // updates event with .ics
                     $event->id = $existingEvent->id;
                     $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($event);

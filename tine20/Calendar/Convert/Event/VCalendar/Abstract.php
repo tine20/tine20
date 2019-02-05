@@ -755,8 +755,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             }
             
             switch ($property->name) {
-                case 'CREATED':
                 case 'DTSTAMP':
+                    $imipProps['DTSTAMP'] = trim($property->serialize());
+                case 'CREATED':
                     if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
                         $event->{$property->name == 'CREATED' ? 'creation_time' : 'last_modified_time'} = $this->_convertToTinebaseDateTime($property);
                     }
@@ -764,6 +765,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     
                 case 'LAST-MODIFIED':
                     $event->last_modified_time = $this->_convertToTinebaseDateTime($property);
+                    $imipProps['LAST-MODIFIED'] = trim($property->serialize());
                     break;
                 
                 case 'ATTENDEE':

@@ -588,7 +588,42 @@ class Calendar_Frontend_iMIPTest extends TestCase
         
         $this->fail("autoProcess did not throw TOPROCESS Exception");
     }
-    
+
+    public function testGoogleExternalInviteAndUpdate()
+    {
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('external invite autoProcess throws Exception: ' . get_class($e) . ': ' . $e->getMessage());
+        }
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        static::assertSame('test', $createdEvent->summary);
+
+        // test external invite update
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_update1.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('external invite autoProcess throws Exception: ' . get_class($e) . ': ' . $e->getMessage());
+        }
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($createdEvent->getId());
+        static::assertSame('test update', $updatedEvent->summary);
+    }
+
     /**
      * testInvitationExternalReply
      */
