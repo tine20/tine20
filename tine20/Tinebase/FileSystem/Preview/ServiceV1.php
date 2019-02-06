@@ -140,4 +140,23 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
 
         return false;
     }
+
+    /**
+     * Uses the DocumentPreviewService to generate a pdf for a documentfile.
+     *
+     * @param $filePath
+     * @param $synchronRequest bool should the request be prioritized
+     * @return string file blob
+     * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
+     * @throws Zend_Http_Client_Exception
+     */
+    public function getPdfForFile($filePath, $synchronRequest = false)
+    {
+        if (false === ($result = $this->getPreviewsForFile($filePath, ['synchronRequest' => $synchronRequest, ['fileType' => 'pdf',]]))) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ .
+                ' preview service did not succeed');
+            throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed');
+        }
+        return $result[0][0];
+    }
 }

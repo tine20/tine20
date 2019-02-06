@@ -113,6 +113,16 @@ interface Tinebase_FileSystem_Preview_ServiceInterface
      * @return array|bool
      */
     public function getPreviewsForFiles(array $filePaths, array $config);
+
+    /**
+     * Uses the DocumentPreviewService to generate pdfs for a documentfile.
+     *
+     * @param $filePath
+     * @param $synchronRequest bool should the request be prioritized
+     * @return string file blob
+     * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
+    */
+    public function getPdfForFile($filePath, $synchronRequest = false);
 }
 
 

@@ -20,18 +20,14 @@ trait Tinebase_Export_Convertible_PreviewServicePdf
      */
     public function convertToPdf($from)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . ' Converting from ' . $from . ' to PDF');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Converting from ' . $from . ' to PDF');
+        }
 
         $suffixed = $from . '.' . $this->getFormat();
         copy($from, $suffixed);
 
-        $previewService = Tinebase_Core::getPreviewService();
-        if (false === ($result = $previewService->getPreviewsForFile($suffixed, ['synchronRequest' => true, ['fileType' => 'pdf',]]))) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ .
-                ' preview service did not succeed');
-            throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed');
-        }
+        $result = Tinebase_Core::getPreviewService()->getPdfForFile($suffixed, true);
 
         file_put_contents($suffixed, $result[0][0]);
         
