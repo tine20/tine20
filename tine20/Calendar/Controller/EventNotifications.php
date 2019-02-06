@@ -238,6 +238,7 @@
                         $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                     }
 
+                    $updates = null;
                     // NOTE: toUpdate are all attendee to be notified
                     if (count($attendeeMigration['toUpdate']) > 0) {
                         $updates = $this->_getUpdates($_event, $_oldEvent);
@@ -262,7 +263,7 @@
                         }
                     }
 
-                    if (!$organizerIsAttender) {
+                    if (! $organizerIsAttender) {
                         $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', $notificationLevel, $updates);
                     }
                 } else {
