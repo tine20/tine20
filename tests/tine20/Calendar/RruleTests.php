@@ -20,7 +20,6 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  */
 class Calendar_RruleTests extends PHPUnit_Framework_TestCase
 {
-    
     public function setUp()
     {
         
@@ -565,6 +564,31 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
         $this->assertEquals(1, count($recurSet));
         $this->assertEquals('2010-07-10 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+
+    /**
+     * test monthly interval=12  in january
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function testMonthlyIntervalJanuary()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'test monthly interval count',
+            'dtstart'       => '2019-01-05 09:00:00',
+            'dtend'         => '2019-01-05 10:00:00',
+            'originator_tz' => 'Europe/Berlin',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+
+        $event->rrule = 'FREQ=MONTHLY;INTERVAL=1;COUNT=12;BYDAY=1SA'; // until 2019-12-07 !
+
+        $presEvent = Calendar_Controller_Event::getInstance()->create($event);
+        $date = $presEvent->rrule_until->format('Y-m-d');
+
+        $this->assertEquals('2019-12-07', $date, 'forward skip failed');
     }
     
     /**
