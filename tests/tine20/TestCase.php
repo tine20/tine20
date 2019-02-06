@@ -161,7 +161,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_originalSmtpConfig);
         }
 
-        Tinebase_Lock_UnitTestFix::clearLocks();
+        Tinebase_Lock::clearLocks();
     }
 
     /**
