@@ -61,6 +61,7 @@ class Setup_Controller
 
     const MAX_DB_PREFIX_LENGTH = 10;
     const INSTALL_NO_IMPORT_EXPORT_DEFINITIONS = 'noImportExportDefinitions';
+    const INSTALL_NO_REPLICATION_SLAVE_CHECK = 'noReplicationSlaveCheck';
 
     /**
      * don't clone. Use the singleton.
@@ -1852,6 +1853,13 @@ class Setup_Controller
     public function installApplications($_applications, $_options = null)
     {
         $this->clearCache();
+
+        if (!isset($_options[self::INSTALL_NO_REPLICATION_SLAVE_CHECK]) ||
+                !$_options[self::INSTALL_NO_REPLICATION_SLAVE_CHECK]) {
+            if (Setup_Core::isReplicationSlave()) {
+                throw new Setup_Exception('Replication slaves can not install an app');
+            }
+        }
         
         // check requirements for initial install / add required apps to list
         if (! $this->isInstalled('Tinebase')) {
@@ -2373,6 +2381,9 @@ class Setup_Controller
     {
         if ($this->_backend === null) {
             throw new Setup_Exception('No setup backend available');
+        }
+        if (Setup_Core::isReplicationSlave()) {
+            throw new Setup_Exception('Replication slaves can not uninstall an app');
         }
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);

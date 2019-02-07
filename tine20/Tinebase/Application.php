@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * @todo        add 'getTitleTranslation' function?
@@ -802,7 +802,8 @@ class Tinebase_Application
                 Setup_Core::set(Setup_Core::CHECKDB, true);
                 Setup_Controller::destroyInstance();
                 Setup_Controller::getInstance()->installApplications([$record->getId() => $record->name],
-                    [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true]);
+                    [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true,
+                        Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true]);
                 break;
 
             default:
