@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>12.23</version>
+    <version>12.24</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -225,7 +225,7 @@
 
         <table>
             <name>accounts</name>
-            <version>15</version>
+            <version>16</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -282,6 +282,11 @@
                 <field>
                     <name>last_password_change</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>password_must_change</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>status</name>

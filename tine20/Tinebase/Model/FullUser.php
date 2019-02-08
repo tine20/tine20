@@ -37,6 +37,7 @@
  * @property    Tinebase_Model_EmailUser    imapUser
  * @property    Tinebase_Model_EmailUser    smtpUser
  * @property    Tinebase_DateTime           accountLastPasswordChange      date when password was last changed
+ * @property    bool                         password_must_change
  *
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
@@ -203,6 +204,11 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                     self::VISIBILITY_DISPLAYED,
                 ], Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED],
             ],
+            'password_must_change' => [
+                'type'                  => 'boolean',
+                'default'               => false,
+                'validators'            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
         ],
     ];
 
@@ -365,17 +371,15 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      */
     protected function _sqlPasswordChangeNeeded()
     {
-        if (empty($this->accountLastPasswordChange)) {
-            return true;
-        }
+        if (empty($this->accountLastPasswordChange) || $this->password_must_change) return true;
+
         $passwordChangeDays = Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER);
 
         if ($passwordChangeDays > 0) {
             $now = Tinebase_DateTime::now();
             return $this->accountLastPasswordChange->isEarlier($now->subDay($passwordChangeDays));
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
