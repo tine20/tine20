@@ -1162,12 +1162,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     timeout: 300000 // 5 minutes
                 }, me.getAdditionalSaveParams(me));
             } else {
-                me.afterIsRendered().then(me.onRecordLoad.bind(me));
-                var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
-                    wrapTicket = ticketFn();
+                me.afterIsRendered().then(function() {
+                    me.onRecordLoad();
+                    var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
+                        wrapTicket = ticketFn();
 
-                me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
-                wrapTicket();
+                    me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
+                    wrapTicket();
+                }.bind(me));
+
             }
         }, function (message) {
             me.saving = false;
