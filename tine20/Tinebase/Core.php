@@ -1763,13 +1763,19 @@ class Tinebase_Core
         return $hostname;
     }
 
+    const GET_URL_PATH = 'path';
+    const GET_URL_HOST = 'host';
+    const GET_URL_PROTOCOL = 'protocol';
+    const GET_URL_NO_PROTO = 'noProtocol';
+    const GET_URL_FULL = 'full';
+
     /**
      * returns requested url part
      *
      * @param string $part
      * @return string
      */
-    public static function getUrl($part = 'full')
+    public static function getUrl($part = self::GET_URL_FULL)
     {
         if (empty($url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL))) {
             if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
@@ -1791,16 +1797,19 @@ class Tinebase_Core
         }
 
         switch ($part) {
-            case 'path':
+            case self::GET_URL_PATH:
                 $url = $pathname;
                 break;
-            case 'host':
+            case self::GET_URL_HOST:
                 $url = $hostname;
                 break;
-            case 'protocol':
+            case self::GET_URL_PROTOCOL:
                 $url = $protocol;
                 break;
-            case 'full':
+            case self::GET_URL_NO_PROTO:
+                $url = '//' . $hostname . $pathname;
+                break;
+            case self::GET_URL_FULL:
             default:
                 $url = $protocol . '://' . $hostname . $pathname;
                 break;

@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
  */
 
@@ -28,9 +28,9 @@ class ActiveSync_AllTests
         $suite->addTest(ActiveSync_Controller_AllTests::suite());
         $suite->addTest(ActiveSync_Backend_AllTests::suite());
         
-        $suite->addTestSuite('ActiveSync_TimezoneConverterTest');
-        $suite->addTestSuite('ActiveSync_Frontend_JsonTests');
-        $suite->addTestSuite('ActiveSync_Server_PluginTests');
+        $suite->addTestSuite(ActiveSync_TimezoneConverterTest::class);
+        $suite->addTestSuite(ActiveSync_Frontend_JsonTests::class);
+        $suite->addTestSuite(ActiveSync_Server_PluginTests::class);
         
         return $suite;
     }
