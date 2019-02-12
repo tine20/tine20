@@ -238,25 +238,23 @@
                         $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                     }
 
-                    $updates = null;
+                    $updates = $this->_getUpdates($_event, $_oldEvent);
+                    if (empty($updates)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " empty update, nothing to notify about");
+                        return;
+                    }
+
+                    // compute change type
+                    if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
+                        $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
+                    } else if (count(array_diff(array_keys($updates), array('attendee'))) > 0) {
+                        $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
+                    } else {
+                        $notificationLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+                    }
+
                     // NOTE: toUpdate are all attendee to be notified
                     if (count($attendeeMigration['toUpdate']) > 0) {
-                        $updates = $this->_getUpdates($_event, $_oldEvent);
-
-                        if (empty($updates)) {
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " empty update, nothing to notify about");
-                            return;
-                        }
-
-                        // compute change type
-                        if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
-                            $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
-                        } else if (count(array_diff(array_keys($updates), array('attendee'))) > 0) {
-                            $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
-                        } else {
-                            $notificationLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
-                        }
-
                         // send notifications
                         foreach ($attendeeMigration['toUpdate'] as $attender) {
                             $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
