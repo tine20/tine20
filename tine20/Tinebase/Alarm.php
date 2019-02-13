@@ -6,7 +6,7 @@
  * @subpackage  Alarm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -106,6 +106,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             ' Sending ' . count($alarms) . ' alarms (limit: ' . $limit . ').');
 
         // loop alarms and call sendAlarm in controllers
+        /** @var Tinebase_Model_Alarm $alarm */
         foreach ($alarms as $alarm) {
             list($appName, , $itemName) = explode('_', $alarm->model);
             $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
