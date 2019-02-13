@@ -29,7 +29,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 $file .= (strpos($file, '?') ? '&' : '?') . 'version=' . Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
             }
 
-            $baseUrl = Tinebase_Core::getUrl() ;
+            $baseUrl = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NO_PROTO);
 
             if (TINE20_BUILDTYPE == 'DEBUG') {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
@@ -66,7 +66,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
         $scriptSrcs = array("'self'", "'unsafe-eval'", 'https://versioncheck.tine20.net');
         if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
-            $scriptSrcs[] = Tinebase_Core::getUrl('protocol') . '://' . Tinebase_Core::getUrl('host') . ":10443";
+            $scriptSrcs[] = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL) . '://' .
+                Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST) . ":10443";
         }
         $scriptSrc = implode(' ', $scriptSrcs);
         $header += [
