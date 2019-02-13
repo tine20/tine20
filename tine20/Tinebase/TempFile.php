@@ -153,6 +153,16 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ' . print_r($uploadedFile, true));
             }
         }
+
+        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($fh = fopen($path, 'r'));
+            fclose($fh);
+            if ($avResult->result === Tinebase_FileSystem_AVScan_Result::RESULT_FOUND) {
+                unlink($path);
+                throw new Tinebase_Exception_Backend('av scan found: ' . $avResult->message);
+            }
+        }
         
         return $this->createTempFile($path, $name, $type, $size, $error);
     }
@@ -233,6 +243,24 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 $size += (double) $bytesWritten;
             }
             fclose($fChunk);
+        }
+
+        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($fJoin);
+            if ($avResult->result === Tinebase_FileSystem_AVScan_Result::RESULT_FOUND) {
+                fclose($fJoin);
+                unlink($path);
+                foreach ($_tempFiles as $tempFile) {
+                    unlink($tempFile->path);
+                    try {
+                        $this->delete($tempFile);
+                    } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
+                    }
+                }
+                throw new Tinebase_Exception_Backend('av scan found: ' . $avResult->message);
+            }
         }
         
         fclose($fJoin);
