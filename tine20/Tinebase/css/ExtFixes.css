@@ -34,5 +34,5 @@
 .x-tree-node-expanded .x-tree-node-icon,
 .x-tree-node-leaf .x-tree-node-icon,
 .ext-strict .x-menu-item-icon {
-    background-size: 16px 16px;
+    background-size: 16px 16px !important;
 }
