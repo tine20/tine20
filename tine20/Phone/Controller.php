@@ -5,7 +5,7 @@
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -83,7 +83,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         $vmController = Voipmanager_Controller_Snom_Phone::getInstance();
         $backend = Phone_Backend_Factory::factory($this->_callBackendType);
 
-        $number = $this->_cleanNumber($_number);
+        $number = Addressbook_Model_Contact::normalizeTelephoneNum($_number, ',');
 
         if ($_phoneId === NULL && $_lineId === NULL) {
             
@@ -133,16 +133,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
             $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskContext->name, $number, 1, "WD $number");
         }
     }
-    
-    /**
-     * removes illegal chars from telephone number
-     * @param string $_number
-     */
-    protected function _cleanNumber($_number)
-    {
-        return preg_replace('/[^\d+]/','',$_number);
-    }
-    
+
     /**
      * Search for calls matching given filter
      *
