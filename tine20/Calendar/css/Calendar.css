@@ -179,13 +179,14 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 
 /**** status icons ****/
 .cal-status-icon {
-    background-size: 14px 14px;
+    background-size: 13px 13px;
     background-repeat:no-repeat;
-    background-position: 0px -2px;
+    background-position: 0px -1px;
     margin: 0px -1px 0px -1px;
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     cursor: pointer;
+
 }
 
 .cal-recurring {
@@ -195,6 +196,7 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     height: 12px;
     padding: 0 2px;
     vertical-align: text-bottom;
+    background-size: 13px 13px;
 }
 
 .cal-recurring.exception {
