@@ -517,6 +517,7 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'pin_protected_node', label: 'Pin Protected' }, // _('Pin Protected')
     { name: 'quota', label: 'Quota'}, // _('Quota')
     { name: 'effectiveAndLocalQuota', label: 'Effective Quota' }, // _('Effective Quota')
+    { name: 'is_quarantined', label: 'Is Quarantined' }, // _('Is Quarantined') // TODO add type bool/int?
 
     { name: 'relations' },
     { name: 'customfields' },
