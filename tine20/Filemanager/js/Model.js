@@ -103,10 +103,16 @@ Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision', 
         availableRevisions = record.get('available_revisions');
 
     // NOTE we have to encode the path here because it might contain quotes or other bad chars
-    return (Ext.isArray(availableRevisions) && availableRevisions.indexOf(String(revision)) >= 0)
-        ? '<a href="#"; onclick="Tine.Filemanager.downloadFileByEncodedPath(\'' + btoa(record.get('path')) + '\',' + revision
-            + '); return false;">' + revisionString + '</a>'
-        : revisionString;
+    if (Ext.isArray(availableRevisions) && availableRevisions.indexOf(String(revision)) >= 0) {
+       /* if (revision.is_quarantined == '1') {
+            return '<img src="images/icon-set/icon_virus.svg" >' + revisionString; @ToDo needs field revision_quarantine
+        }*/
+        return '<a href="#"; onclick="Tine.Filemanager.downloadFileByEncodedPath(\'' + btoa(record.get('path')) + '\',' + revision
+            + '); return false;">' + revisionString + '</a>';
+
+    }else {
+        return revisionString;
+    }
 });
 
 
