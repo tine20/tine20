@@ -270,22 +270,18 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     $contact->$value = Tinebase_Translation::getRegionCodeByCountryName($data->$fieldName);
                     
                     break;
-                    
+
                 case 'adr_one_street':
-                    if (strtolower($this->_device->devicetype) == 'palm') {
-                        // palm pre sends the whole address in the <Contacts:BusinessStreet> tag
-                        unset($contact->adr_one_street);
-                    } else {
-                        // TODO do this for all fields? this is a generic problem with the sync...
-                        // we might fetch the field length from MCV2 when available
-                        $fieldLength = 64;
-                        if (mb_strlen($data->$fieldName) > $fieldLength) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                                . ' field truncated: ' . $fieldName . ' / was: ' . $data->$fieldName);
-                        }
-                        $contact->$value = mb_substr($data->$fieldName, 0, $fieldLength);
+                case 'adr_two_street':
+                    // TODO do this for all fields? this is a generic problem with the sync...
+                    // we might fetch the field length from MCV2 when available
+                    $fieldLength = 64;
+                    if (mb_strlen($data->$fieldName) > $fieldLength) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' field truncated: ' . $fieldName . ' / was: ' . $data->$fieldName);
                     }
-                    
+                    $contact->$value = mb_substr($data->$fieldName, 0, $fieldLength);
+
                     break;
                     
                 case 'email':
