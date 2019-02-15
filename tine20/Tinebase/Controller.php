@@ -10,6 +10,8 @@
  * 
  */
 
+use \Psr\Http\Message\RequestInterface;
+
 /**
  * the class provides functions to handle applications
  * 
@@ -971,6 +973,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ]))->toArray());
         });
 
+        $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->post('/autodiscover.xml', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicApiMSAutodiscoverXml', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
     }
 
     /**
@@ -1203,5 +1211,73 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             Tinebase_Container::getInstance()->forceSyncTokenResync(new Tinebase_Model_ContainerFilter($filter));
         }
+    }
+
+    public function publicApiMSAutodiscoverXml()
+    {
+        $tinebaseConfig = Tinebase_Config::getInstance();
+        if (!$tinebaseConfig->featureEnabled(Tinebase_Config::FEATURE_AUTODISCOVER)) {
+            throw new Tinebase_Exception_AccessDenied('this feature is not activated');
+        }
+
+        /** @var \Zend\Diactoros\Request $request */
+        $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
+        $body = (string)$request->getBody();
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' request body: ' . $body);
+        $reqXml = simplexml_load_string($body);
+        $view = new Zend_View();
+        $view->setScriptPath(__DIR__ . '/views/autodiscover');
+        $response = new \Zend\Diactoros\Response();
+        $response = $response->withHeader('Content-Type', 'text/xml');
+
+        if (!$reqXml || empty($reqXml->Request) || empty($reqXml->Request->AcceptableResponseSchema)) {
+            $response->getBody()->write($view->render('error.php'));
+
+        } elseif (strpos($reqXml->Request->AcceptableResponseSchema, 'mobilesync')) {
+            $view->schema = $reqXml->Request->AcceptableResponseSchema;
+            if (!empty($reqXml->Request->EMailAddress)) {
+                $view->email = $reqXml->Request->EMailAddress;
+            }
+            $view->url = Tinebase_Core::getUrl() . '/Microsoft-Server-ActiveSync';
+            $view->serverName = $tinebaseConfig->{Tinebase_Config::BRANDING_TITLE};
+            $response->getBody()->write($view->render('mobilesync.php'));
+
+        } elseif (strpos($reqXml->Request->AcceptableResponseSchema, 'outlook') && $tinebaseConfig
+                ->featureEnabled(Tinebase_Config::FEATURE_AUTODISCOVER_MAILCONFIG)) {
+            $protocols = [];
+            $imapConfig = $tinebaseConfig->{Tinebase_Config::IMAP};
+            // TODO: make host configurable independently, as 'localhost' wont help external clients
+            if ($imapConfig && $imapConfig->host) {
+                $protocols['IMAP']['Server'] = $imapConfig->host;
+                $protocols['IMAP']['Port'] = $imapConfig->port;
+                $protocols['IMAP']['SSL'] = $imapConfig->ssl ? 'on' : 'off';
+                $protocols['IMAP']['SPA'] = 'off';
+                $protocols['IMAP']['AuthRequired'] = 'on';
+            }
+            $smtpConfig = $tinebaseConfig->{Tinebase_Config::SMTP};
+            if ($smtpConfig && $smtpConfig->host) {
+                $protocols['SMTP']['Server'] = $smtpConfig->host;
+                $protocols['SMTP']['Port'] = $smtpConfig->port;
+                $protocols['SMTP']['SSL'] = $smtpConfig->ssl ? 'on' : 'off';
+                $protocols['SMTP']['SPA'] = 'off';
+                $protocols['SMTP']['AuthRequired'] = 'on';
+            }
+            if (empty($protocols)) {
+                $response->getBody()->write($view->render('error.php'));
+            } else {
+                $view->schema = $reqXml->Request->AcceptableResponseSchema;
+                $view->protocols = $protocols;
+                $response->getBody()->write($view->render('outlook.php'));
+            }
+        } else {
+            $response->getBody()->write($view->render('error.php'));
+        }
+
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' response body: ' .
+                (string)$response->getBody());
+
+        return $response;
     }
 }

@@ -89,7 +89,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 .' Is Routing request. uri: ' . $this->_request->getUri()->getPath() . '?'
-                . $this->_request->getUri()->getQuery());
+                . $this->_request->getUri()->getQuery() . ' method: ' . $this->_request->getMethod());
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::'
                 . __LINE__ .' REQUEST: ' . print_r($this->_request, true));
 

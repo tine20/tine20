@@ -191,6 +191,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_SEARCH_PATH = 'featureSearchPath';
 
+    const FEATURE_AUTODISCOVER = 'autodiscover';
+
+    const FEATURE_AUTODISCOVER_MAILCONFIG = 'autodiscoverMailConfig';
+
     /**
      * user defined page title postfix for browser page title
      * 
@@ -1163,6 +1167,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),
+                self::FEATURE_AUTODISCOVER  => [
+                    self::LABEL                 => 'Autodiscover',
+                    //_('Autodiscover')
+                    self::DESCRIPTION           => 'Autodiscover',
+                    //_('Autodiscover')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
+                self::FEATURE_AUTODISCOVER_MAILCONFIG  => [
+                    self::LABEL                 => 'Autodiscover mail config',
+                    //_('Autodiscover mail config')
+                    self::DESCRIPTION           => 'Autodiscover mail config',
+                    //_('Autodiscover mail config')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
             ],
             self::DEFAULT_STR => [],
         ],
