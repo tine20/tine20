@@ -46,7 +46,12 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @cfg {Bool} useBBar
      */
     useBBar: false,
-    
+
+    /**
+     * @cfg {Bool} readOnly
+     */
+    readOnly: false,
+
     /**
      * @private
      */
