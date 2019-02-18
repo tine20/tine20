@@ -20,6 +20,7 @@ class Tinebase_Frontend_AutodiscoverTests extends TestCase
         $enabledFeatures = Tinebase_Config::getInstance()->get(Tinebase_Config::ENABLED_FEATURES);
         Tinebase_Config::getInstance()->clearCache();
         $enabledFeatures[Tinebase_Config::FEATURE_AUTODISCOVER] = true;
+        $enabledFeatures[Tinebase_Config::FEATURE_AUTODISCOVER_MAILCONFIG] = true;
 
         Tinebase_Config::getInstance()->set(Tinebase_Config::ENABLED_FEATURES, $enabledFeatures);
 
