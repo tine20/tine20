@@ -72,7 +72,7 @@ class Tinebase_Exception extends Exception
      * @param Exception $exception
      * @return array
      */
-    public static function getTraceAsArray(Exception $exception)
+    public static function getTraceAsArray(Throwable $exception)
     {
         $trace = $exception->getTrace();
         $traceArray = array();
