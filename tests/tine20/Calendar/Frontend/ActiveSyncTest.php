@@ -1152,9 +1152,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $this->assertEquals($event->description, $updatedEvent->description, 'description mismatch: ' . print_r($updatedEvent->toArray(), true));
     }
 
-    protected function _createEvent()
+    /**
+     * @param string $attendeeStatus
+     * @param boolean $addScleverAttendee
+     * @return Tinebase_Record_Interface
+     */
+    protected function _createEvent($attendeeStatus = Calendar_Model_Attender::STATUS_ACCEPTED, $addScleverAttendee = false)
     {
-        $event = ActiveSync_TestCase::getTestEvent();
+        $event = ActiveSync_TestCase::getTestEvent(null, $attendeeStatus, $addScleverAttendee);
         $event->summary = 'testtermin';
         $event->description = 'some text';
         $event->dtstart = new Tinebase_DateTime('2013-10-22 16:00:00');
@@ -1472,5 +1477,29 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         static::assertNotNull($exception, 'we lost an exception');
         static::assertTrue(isset($exception->customfields[$cfCfg->name]), 'we lost a customfield');
         static::assertEquals(__METHOD__, $exception->customfields[$cfCfg->name], 'we lost a customfield');
+    }
+
+    public function testAndroidNonOrganizerAttenderMeetingStatus()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        $event = $this->_createEvent(Calendar_Model_Attender::STATUS_ACCEPTED, true);
+        $serverId = $event->getId();
+
+        $scleverAttendee = $event->attendee
+            ->filter('status', Calendar_Model_Attender::STATUS_NEEDSACTION)
+            ->getFirstRecord();
+        $scleverAttendee->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $scleverAttendee, $scleverAttendee->status_authkey);
+
+        // non-organizer view
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID), $event->creation_time);
+
+        $syncrotonEventtoCreate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        self::assertEquals(3, $syncrotonEventtoCreate->meetingStatus, 'meetingStatus should be 3 - '
+            . 'This event is a meeting, and the user is not the meeting organizer; the meeting was received from someone else.');
+        self::assertEquals(3, $syncrotonEventtoCreate->responseType, 'responseType should be 3 - '
+            . 'Accepted. The user has accepted the meeting request.');
+        self::assertEquals(0, $syncrotonEventtoCreate->responseRequested);
     }
 }
