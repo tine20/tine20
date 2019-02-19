@@ -137,7 +137,7 @@ class Tinebase_Auth
             'bindRequiresDn' => true,
             'useStartTls' => false,
             'useSsl' => false,
-            'port' => 0,
+            'port' => 389,
             'baseDn' => '',
             'accountFilterFormat' => NULL,
             'accountCanonicalForm' => '2',

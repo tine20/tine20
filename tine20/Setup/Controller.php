@@ -1177,9 +1177,6 @@ class Setup_Controller
      */
     protected function _updateAuthentication($_authenticationData)
     {
-        // this is a dangerous TRACE as there might be passwords in here!
-        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_authenticationData, TRUE));
-
         $this->_enableCaching();
         
         if (isset($_authenticationData['authentication'])) {

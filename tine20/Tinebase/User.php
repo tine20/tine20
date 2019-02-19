@@ -139,7 +139,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'bindRequiresDn' => true,
             'useStartTls' => false,
             'useSsl' => false,
-            'port' => 0,
+            'port' => 389,
             'useRfc2307bis' => false,
             'userDn' => '',
             'userFilter' => 'objectclass=posixaccount',
