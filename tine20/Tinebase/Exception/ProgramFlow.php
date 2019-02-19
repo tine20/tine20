@@ -24,13 +24,6 @@
 class Tinebase_Exception_ProgramFlow extends Tinebase_Exception
 {
     /**
-     * send this to sentry?
-     *
-     * @var bool
-     */
-    protected $_logToSentry = false;
-
-    /**
      * default log level for Tinebase_Exception::log()
      *
      * @var string
