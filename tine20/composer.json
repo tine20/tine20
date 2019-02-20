@@ -23,7 +23,7 @@
     }],
     "require": {
         "php": "^5.6 | ^7.0",
-        "zendframework/zendframework1": "1.12.20pl33 as 1.12.20",
+        "zendframework/zendframework1": "1.12.20pl35 as 1.12.20",
         "tine20/composerapploader": "1.0.*",
         "syncroton/syncroton": "1.4.3",
         "ezyang/htmlpurifier": "v4.6.0",
