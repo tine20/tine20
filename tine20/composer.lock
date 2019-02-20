@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d960bbbbe2a13c529ed45d42b806d325",
+    "content-hash": "34f7df2f0b0ca6d6134545f99d6b6741",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -3106,11 +3106,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl34",
+            "version": "1.12.20pl35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "f0419fef81bda4699b1eac6604da1738112cb46e"
+                "reference": "c0930a69ebb717e7a5e4aaa304d8dc10e65fef46"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3127,7 +3127,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2018-12-06T07:41:12+00:00"
+            "time": "2019-02-20T08:00:22+00:00"
         }
     ],
     "packages-dev": [
@@ -3807,6 +3807,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2015-10-02T06:51:40+00:00"
         },
         {
@@ -4471,7 +4472,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch34",
+            "version": "1.12.20.0-patch35",
             "package": "zendframework/zendframework1"
         }
     ],
