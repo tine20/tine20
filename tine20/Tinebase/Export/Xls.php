@@ -129,7 +129,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
      */
     public function getFormat()
     {
-        if ('Xlsx' === $this->_excelVersion) {
+        if ('xls' === $this->_format && 'Xlsx' === $this->_excelVersion) {
             // excel2007 extension is .xlsx
             return 'xlsx';
         }
