@@ -542,6 +542,14 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             $fixedDocumentPart
         );
 
+        $fixedDocumentPart = preg_replace_callback(
+            '|\{%[^}]*%[^}]*\}|U',
+            function ($match) {
+                return strip_tags($match[0]);
+            },
+            $fixedDocumentPart
+        );
+
         return $fixedDocumentPart;
     }
 }

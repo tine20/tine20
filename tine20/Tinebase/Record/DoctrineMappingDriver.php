@@ -122,6 +122,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
     protected function _mapFields(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
     {
         $virtualFields = array_keys($modelConfig->getVirtualFields());
+        $mappedFields = [];
         foreach ($modelConfig->getFields() + $modelConfig->getDbColumns() as $fieldName => $config) {
             if (in_array($fieldName, $virtualFields, true)) {
                 continue;
@@ -130,21 +131,20 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
             self::mapTypes($config);
 
             if (! $config['doctrineIgnore']) {
-                try {
-
-                    $metadata->mapField($config);
-                } catch (\Doctrine\ORM\Mapping\MappingException $dome) {
-                    // TODO ignore or fix exceptions like
-                    //  "Property "id" in "Timetracker_Model_Timeaccount" was already declared,
-                    //   but it must be declared only once"
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' ' . $dome->getMessage());
-
-                    if (!isset($config['columnName'])) {
-                        $config['columnName'] = $config['fieldName'];
-                    }
-                    $metadata->addInheritedFieldMapping($config);
+                if (!isset($config['columnName'])) {
+                    $config['columnName'] = $config['fieldName'];
                 }
+                if (isset($mappedFields[$config['fieldName']])) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('field ' . $config['fieldName'] .
+                        ' already mapped');
+                }
+
+                if ($metadata->hasAssociation($config['fieldName'])) {
+                    $metadata->addInheritedFieldMapping($config);
+                } else {
+                    $metadata->mapField($config);
+                }
+                $mappedFields[$config['fieldName']] = true;
             }
         }
     }

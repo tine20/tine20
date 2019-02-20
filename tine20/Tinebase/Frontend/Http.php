@@ -659,7 +659,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getPostalXWindow()
     {
         $context = [
-            'path' => Tinebase_Core::getUrl('path'),
+            'path' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
         ];
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML(
            'Tinebase/js/postal-xwindow-client.js',

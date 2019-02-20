@@ -82,6 +82,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                         }
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
+                        Tinebase_Exception::log($e, false);
                     }
                 }
                 
@@ -134,6 +135,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 
             } catch (Throwable $e) {
                 header('HTTP/1.0 503 Service Unavailable');
+                Tinebase_Exception::log($e, false);
             }
         }
     }

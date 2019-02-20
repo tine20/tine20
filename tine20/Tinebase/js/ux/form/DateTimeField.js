@@ -192,6 +192,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         }, this.dateConf || {}));
         
         this.timeField = new Ext.form.TimeField(Ext.apply({
+            noFix: true,
             lazyRender: false,
             increment: this.increment,
             renderTo: this.el,

@@ -1346,7 +1346,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $messageSubject = $translate->_('Your Tine 2.0 account has been deactivated');
             
             $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), /* $_ignoreACL = */ true);
-            Tinebase_Notification::getInstance()->send(/* sender = */ null, array($recipient), $messageSubject, $messageBody);
+            $oldValue = Tinebase_Notification::getInstance()->blockDisabledAccounts(false);
+            try {
+                Tinebase_Notification::getInstance()->send(null, array($recipient), $messageSubject, $messageBody);
+            } finally {
+                Tinebase_Notification::getInstance()->blockDisabledAccounts($oldValue);
+            }
             
         } catch (Exception $e) {
             Tinebase_Exception::log($e);

@@ -7,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 class Calendar_Model_RruleFilter extends Tinebase_Model_Filter_Text
 {
@@ -32,14 +32,17 @@ class Calendar_Model_RruleFilter extends Tinebase_Model_Filter_Text
             return;
         }
 
-        foreach (array_shift($this->getValue()) as $key => $value) {
-            if (false === $value) {
-                continue;
-            }
-            if ('notin' === $this->_operator) {
-                $_select->where('rrule NOT LIKE ?', '%' . strtoupper($key) . '%');
-            } else {
-                $_select->orWhere('rrule LIKE ?', '%' . strtoupper($key) . '%');
+        $value = $this->getValue();
+        if (is_array($value) && is_array($value = array_shift($value))) {
+            foreach ($value as $key => $val) {
+                if (false === $val) {
+                    continue;
+                }
+                if ('notin' === $this->_operator) {
+                    $_select->where('rrule NOT LIKE ?', '%' . strtoupper($key) . '%');
+                } else {
+                    $_select->orWhere('rrule LIKE ?', '%' . strtoupper($key) . '%');
+                }
             }
         }
     }

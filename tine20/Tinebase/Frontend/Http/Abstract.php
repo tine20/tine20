@@ -49,45 +49,63 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $format);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_options, TRUE));
 
-        switch ($switchFormat) {
-            case 'pdf':
-                $ids = $_controller->search($_filter, NULL, FALSE, TRUE, 'export');
-                
-                // loop records
-                foreach ($ids as $id) {
-                    if (! empty($id)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating pdf for ' . $_filter->getModelName() . '  id ' . $id);
-                        $record = $_controller->get($id);
-                        $export->generate($record);
-                    } else {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $_filter->getModelName() . ' id empty!');
+        try {
+            switch ($switchFormat) {
+                case 'pdf':
+                    $ids = $_controller->search($_filter, NULL, FALSE, TRUE, 'export');
+
+                    // loop records
+                    foreach ($ids as $id) {
+                        if (! empty($id)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating pdf for ' . $_filter->getModelName() . '  id ' . $id);
+                            $record = $_controller->get($id);
+                            $export->generate($record);
+                        } else {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $_filter->getModelName() . ' id empty!');
+                        }
                     }
-                }
-                
-                // render pdf
-                try {
-                    $pdfOutput = $export->render();
-                } catch (Zend_Pdf_Exception $e) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
-                    exit;
-                }
-                
+
+                    // render pdf
+                    try {
+                        $pdfOutput = $export->render();
+                    } catch (Zend_Pdf_Exception $e) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
+                        exit;
+                    }
+
+                    break;
+
+                case 'ods':
+                    $result = $export->generate();
+                    break;
+                case 'newPDF':
+                case 'newCsv':
+                case 'csv':
+                case 'xls':
+                case 'xlsx':
+                case 'doc':
+                case 'docx':
+                    $result = $export->generate($_filter);
                 break;
-                
-            case 'ods':
-                $result = $export->generate();
-                break;
-            case 'newPDF':
-            case 'newCsv':
-            case 'csv':
-            case 'xls':
-            case 'xlsx':
-            case 'doc':
-            case 'docx':
-                $result = $export->generate($_filter);
-                break;
-            default:
-                throw new Tinebase_Exception_UnexpectedValue('Format ' . $format . ' not supported.');
+                default:
+                    throw new Tinebase_Exception_UnexpectedValue('Format ' . $format . ' not supported.');
+            }
+        } catch (Tinebase_Exception_UnexpectedValue $e) {
+            if ($e->getMessage() === 'Format ' . $format . ' not supported.') {
+                throw $e;
+            }
+            $result = null;
+            $export = new Tinebase_Export_ErrorReport($e);
+            $format = 'txt';
+            $switchFormat = 'error';
+        } catch (Exception $e) {
+            if (strpos(get_class($e), 'Zend_Db') === 0) {
+                throw $e;
+            }
+            $result = null;
+            $export = new Tinebase_Export_ErrorReport($e);
+            $format = 'txt';
+            $switchFormat = 'error';
         }
 
         // write headers
@@ -113,6 +131,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'xlsx':
             case 'doc':
             case 'docx':
+            case 'error':
                 // redirect output to client browser
                 if (null === $result) {
                     $export->write();

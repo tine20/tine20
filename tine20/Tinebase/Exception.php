@@ -72,7 +72,7 @@ class Tinebase_Exception extends Exception
      * @param Exception $exception
      * @return array
      */
-    public static function getTraceAsArray(Exception $exception)
+    public static function getTraceAsArray(Throwable $exception)
     {
         $trace = $exception->getTrace();
         $traceArray = array();
@@ -141,10 +141,10 @@ class Tinebase_Exception extends Exception
         if ($suppressTrace === null) {
             try {
                 $config = Tinebase_Core::getConfig();
-                $suppressTrace = (isset($config->suppressExceptionTraces)) ? $config->suppressExceptionTraces : true;
+                $suppressTrace = (isset($config->suppressExceptionTraces)) ? $config->suppressExceptionTraces : false;
             } catch (Exception $e) {
                 // catch all config exceptions here
-                $suppressTrace = true;
+                $suppressTrace = false;
             }
         }
 

@@ -128,9 +128,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if ($exception === false) {
             try {
                 Tinebase_Core::initFramework();
-            } catch (Exception $exception) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
+            } catch (Throwable $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' .
+                    get_class($e) . ' ' . $e->getMessage());
+                $exception = $e;
             }
         }
         
@@ -173,13 +174,16 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         try {
             $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
             $output = (string) $output;
-        } catch (ErrorException $ee) {
+        } catch (Throwable $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Got non-json response, last json error: ' . json_last_error_msg());
-                foreach ($response as $r) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' response: ' . print_r($r->getResult(), true));
+                    . ' Got non-json response, last json error: ' . json_last_error_msg() . ' ' . get_class($e) . ' ' .
+                    $e->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    foreach ($response as $r) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' response: ' . print_r($r->getResult(), true));
+                    }
                 }
             }
 
@@ -193,8 +197,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             try {
                 $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
                 $output = (string) $output;
-            } catch (ErrorException $eee) {
-                $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg());
+            } catch (Throwable $e) {
+                $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg() . ' ' .
+                    get_class($e) . ' ' . $e->getMessage());
                 $output = $this->_handleException($this->_request, $exception);
             }
         }
@@ -401,9 +406,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     protected function _handleException($request, $exception)
     {
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
         $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
-        Tinebase_Exception::log($exception, $suppressTrace);
+        if ($exception instanceof Tinebase_Exception_ProgramFlow) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
+                $exception->getMessage());
+        } else {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
+                $exception->getMessage());
+            Tinebase_Exception::log($exception, $suppressTrace);
+        }
         
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
         $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');

@@ -22,6 +22,11 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
      * @cfg emptyOnZero
      */
     emptyOnZero: null,
+
+    /**
+     * $cfg {String} baseUnit minutes|seconds
+     */
+    baseUnit: 'minutes',
     
     initComponent: function() {
         this.preventMark = false;
@@ -37,6 +42,9 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
         if(! value || value == '00:00') {
             value = this.emptyOnZero ? '' : '00:00';
         } else if(! value.toString().match(/:/)) {
+            if (this.baseUnit == 'seconds') {
+                value = value/60;
+            }
             var hours = Math.floor(value / 60),
                 minutes = value - hours * 60;
 
@@ -54,7 +62,7 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
                 value = hours + ':00';
             }
         }
-        
+
         Tine.Timetracker.DurationSpinner.superclass.setValue.call(this, value);
     },
     
@@ -97,6 +105,10 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
                 this.markInvalid(i18n._('Not a valid time'));
                 return;
             }
+        }
+
+        if (this.baseUnit == 'seconds') {
+            value = value* 60;
         }
 
         this.setValue(value);

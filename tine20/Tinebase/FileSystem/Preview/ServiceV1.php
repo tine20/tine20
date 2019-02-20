@@ -48,7 +48,7 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
         $httpClient->setParameterPost('config', json_encode($_config));
         $httpClient->setFileUpload($_filePath, 'file');
 
-        $this->_requestPreviews($httpClient, $synchronRequest);
+        return $this->_requestPreviews($httpClient, $synchronRequest);
     }
 
     /**
