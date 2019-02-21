@@ -566,30 +566,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2010-07-10 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
 
-    /**
-     * test monthly interval=12  in january
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_Validation
-     */
-    public function testMonthlyIntervalJanuary()
-    {
-        $event = new Calendar_Model_Event(array(
-            'uid'           => Tinebase_Record_Abstract::generateUID(),
-            'summary'       => 'test monthly interval count',
-            'dtstart'       => '2019-01-05 09:00:00',
-            'dtend'         => '2019-01-05 10:00:00',
-            'originator_tz' => 'Europe/Berlin',
-            Tinebase_Model_Grants::GRANT_EDIT     => true,
-        ));
 
-        $event->rrule = 'FREQ=MONTHLY;INTERVAL=1;COUNT=12;BYDAY=1SA'; // until 2019-12-07 !
-
-        $presEvent = Calendar_Controller_Event::getInstance()->create($event);
-        $date = $presEvent->rrule_until->format('Y-m-d');
-
-        $this->assertEquals('2019-12-07', $date, 'forward skip failed');
-    }
     
     /**
      * @see #5170
@@ -1114,6 +1091,52 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             $translated = Calendar_Model_Rrule::getRruleFromString($rruleString);
             $this->assertEquals($translated, $translated);
         }
+    }
+
+    public function testATIS()
+    {
+        $event1 = $this->helperIntervalOccurrence('2019-01-05 09:00:00', 'MONTHLY', '1' , '12', 'BYDAY=1SA'); //until 2019-12-07 !
+
+        $event2 = $this->helperIntervalOccurrence('2019-01-05 09:00:00', 'MONTHLY', '1' , '24', 'BYDAY=1SA'); //until 2020-12-05 !
+
+        $event3 = $this->helperIntervalOccurrence('2019-02-05 09:00:00', 'MONTHLY', '1' , '12', 'BYDAY=1SA'); //until 2020-01-04 !
+
+        $event4 = $this->helperIntervalOccurrence('2019-02-05 09:00:00', 'MONTHLY', '1' , '24', 'BYDAY=1SA'); //until 2021-01-02 !
+
+        $this->assertEquals('2019-12-07',$event1->rrule_until->format('Y-m-d'), 'rrule are failed');
+        $this->assertEquals('2020-12-05',$event2->rrule_until->format('Y-m-d'), 'rrule are failed');
+        $this->assertEquals('2020-01-04',$event3->rrule_until->format('Y-m-d'), 'rrule are failed');
+        $this->assertEquals('2021-01-02',$event4->rrule_until->format('Y-m-d'), 'rrule are failed');
+
+
+    }
+
+    /**
+     * test monthly interval=12  in january
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function helperIntervalOccurrence($dtstart, $freq, $interval, $count, $by)
+    {
+        $date = new Tinebase_DateTime($dtstart);
+
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'test monthly interval count',
+            'dtstart'       => $date,
+            'dtend'         => $date->getClone()->addHour('1'),
+            'originator_tz' => 'Europe/Berlin',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+
+        $event->rrule = 'FREQ=' . $freq . ';INTERVAL=' . $interval . ';COUNT=' . $count . ';' . $by;
+
+        //$event->rrule = 'FREQ=MONTHLY;INTERVAL=1;COUNT=12;BYDAY=1SA'; //
+
+        $presEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+        return $presEvent;
     }
 }
 
