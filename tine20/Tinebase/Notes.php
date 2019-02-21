@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notes
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        delete notes completely or just set the is_deleted flag?
@@ -487,12 +487,12 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             foreach ($diff->diff as $attribute => $value) {
 
                 if (is_array($value) && isset($value['model']) && isset($value['added'])) {
-                    $diff = new Tinebase_Record_RecordSetDiff($value);
+                    $tmpDiff = new Tinebase_Record_RecordSetDiff($value);
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' fetching translated text for diff: ' . print_r($diff->toArray(), true));
+                        . ' fetching translated text for diff: ' . print_r($tmpDiff->toArray(), true));
 
-                    $return .= ' ' . $translate->_($attribute) . ' (' . $diff->getTranslatedDiffText() . ')';
+                    $return .= ' ' . $translate->_($attribute) . ' (' . $tmpDiff->getTranslatedDiffText() . ')';
                 } else {
                     $oldData = $diff->oldData[$attribute];
                     if(is_array($oldData)) {
