@@ -1178,24 +1178,24 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Event} e
      */
     onKeyDown: function(e) {
-        if (e.ctrlKey) {
-            switch (e.getKey()) {
-                case e.N:
-                case e.M:
-                    this.onMessageCompose();
-                    e.preventDefault();
-                    break;
-                case e.R:
-                    this.onMessageReplyTo();
-                    e.preventDefault();
-                    break;
-                case e.L:
-                    this.onMessageForward();
-                    e.preventDefault();
-                    break;
-            }
+        switch (e.getKey()) {
+            case e.N:
+            case e.M:
+                this.onMessageCompose();
+                e.preventDefault();
+                break;
+            case e.R:
+                this.onMessageReplyTo();
+                e.preventDefault();
+                break;
+            case e.L:
+                this.onMessageForward();
+                e.preventDefault();
+                break;
         }
-        
+
+        // TODO add keys to "help" message box of generic grid onKeyDown()
+
         Tine.Felamimail.GridPanel.superclass.onKeyDown.call(this, e);
     },
     
