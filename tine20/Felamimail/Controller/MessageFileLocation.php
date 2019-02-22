@@ -106,7 +106,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
         }
 
         $cache = Tinebase_Core::getCache();
-        $cacheId = 'getLocationsForMessage' . $message->getId();
+        $cacheId = Tinebase_Helper::convertCacheId('getLocationsForMessage' . $message->getId());
         if ($cache->test($cacheId)) {
             $locations = $cache->load($cacheId);
             if (count($locations) > 0) {
@@ -159,7 +159,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
 
         // invalidate location cache
         $cache = Tinebase_Core::getCache();
-        $cacheId = 'getLocationsForMessage' . $message->getId();
+        $cacheId = Tinebase_Helper::convertCacheId('getLocationsForMessage' . $message->getId());
         $cache->remove($cacheId);
     }
 
