@@ -44,7 +44,6 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
 
     /**
      * try to add an account
-     *
      */
     public function testAddContainer()
     {
@@ -56,7 +55,13 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
 
         Tinebase_Container::getInstance()->deleteContainer($container['id']);
     }
-        
+
+    public function testGetContainer()
+    {
+        $containers = $this->_backend->getContainer('Addressbook_Model_Contact', Tinebase_Model_Container::TYPE_SHARED, false);
+        self::assertGreaterThanOrEqual(1, count($containers), 'should find at least INTERNAL CONTACTS');
+    }
+
     /**
      * try to add an account
      *
