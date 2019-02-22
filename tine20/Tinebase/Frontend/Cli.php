@@ -1155,8 +1155,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         $warn = 'last duration > 60 sec - ' . $lastDuration;
                     }
 
-                    if ($now - $lastDurationUpdate > 60 && null === $warn) {
-                        $warn = 'last duration update > 60 sec - ' . ($now - $lastDurationUpdate);
+                    if ($now - $lastDurationUpdate > 70 && null === $warn) {
+                        $warn = 'last duration update > 70 sec - ' . ($now - $lastDurationUpdate);
                     }
 
 
