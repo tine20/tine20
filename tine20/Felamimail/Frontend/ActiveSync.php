@@ -714,7 +714,8 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         
         if ($_collectionData->deletesAsMoves === true && !empty($account->trash_folder)) {
             // move message to trash folder
-            $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, $account->trash_folder);
+            $trashFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account->getId(),
+                Felamimail_Model_Folder::FOLDER_TRASH);
             Felamimail_Controller_Message_Move::getInstance()->moveMessages($_serverId, $trashFolder);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " moved entry $_serverId to trash folder");
         } else {

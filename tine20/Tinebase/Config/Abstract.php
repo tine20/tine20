@@ -415,8 +415,14 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 $cachedConfigFile = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
 
                 if (file_exists($cachedConfigFile)) {
-                    /** @noinspection PhpIncludeInspection */
-                    $cachedConfigData = include($cachedConfigFile);
+                    try {
+                        /** @noinspection PhpIncludeInspection */
+                        $cachedConfigData = include($cachedConfigFile);
+                    } catch (Throwable $e) {
+                        unlink($cachedConfigFile);
+                        $cachedConfigData = false;
+                        Tinebase_Exception::log($e);
+                    }
                 } else {
                     $cachedConfigData = false;
                 }

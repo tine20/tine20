@@ -185,6 +185,24 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         return $message;
     }
+
+    public function testDeleteMessageToTrashWithTrashDeleted()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        $message = $this->_createTestMessage();
+
+        // delete trash folder
+        $folder  = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
+        $trashFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($folder->account_id,
+            Felamimail_Model_Folder::FOLDER_TRASH);
+        Felamimail_Controller_Folder::getInstance()->delete($folder->account_id, $trashFolder->globalname);
+
+        $xml = simplexml_load_string('<Collection><DeletesAsMoves>1</DeletesAsMoves></Collection>');
+        $syncCol = new Syncroton_Model_SyncCollection();
+        $syncCol->setFromSimpleXMLElement($xml);
+
+        $controller->deleteEntry($message->folder_id, $message->getId(), $syncCol);
+    }
     
     /**
      * test seen flag

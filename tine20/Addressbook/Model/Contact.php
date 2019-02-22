@@ -994,9 +994,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      * @param  string $telNumber
      * @return string|null
      */
-    public static function normalizeTelephoneNum($telNumber)
+    public static function normalizeTelephoneNum($telNumber, $additionalAllowedChars = '')
     {
-        $telNumber = preg_replace('/[^\d\+()]/u', '', $telNumber);
+        $telNumber = preg_replace('/[^\d\+()' . $additionalAllowedChars . ']/u', '', $telNumber);
 
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
         try {

@@ -5,7 +5,7 @@
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Jan Schneider <edv@janschneider.net>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -53,19 +53,8 @@ class Phone_Backend_Snom_Webserver
      */
     public function dialNumber($_phoneAddress, $_number, $_user = NULL, $_pass = NULL)
     {
-        // @todo move number cleanup elsewhere?
-        // @todo remove hardcoded international area code
-        $_number = str_replace(' ',   '', $_number);
-        $_number = str_replace('-',   '', $_number);
-        $_number = str_replace('(0)', '', $_number);
-        if (strlen($_number) == 0) {
+        if (strlen($_number) === 0) {
             throw new Phone_Exception_Snom('No number to dial');
-        }
-        if (substr($_number, 0, 2) == '00') {
-            $_number = '+' . substr($_number, 2);
-        }
-        else if (substr($_number, 0, 1) == '0') {
-            $_number = '+49' . substr($_number, 1);
         }
         $responseBody = $this->sendCommand($_phoneAddress, array('number' => $_number), $_user, $_pass);
     }

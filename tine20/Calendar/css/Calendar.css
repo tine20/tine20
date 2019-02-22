@@ -45,6 +45,10 @@
     background-image:url(../../images/icon-set/icon_resource.svg) !important;
 }
 
+.cal-calendartree-resource-icon .x-tree-node-icon {
+    background-image: none;
+}
+
 .cal-year-view {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-workweek.png) !important;
 }

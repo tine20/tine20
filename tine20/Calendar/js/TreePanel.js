@@ -206,10 +206,25 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Object} attr
      */
     onBeforeCreateNode: function(attr) {
+        var xprops = lodash.get(attr, 'xprops'),
+            resourceIcon;
+        
         this.supr().onBeforeCreateNode.apply(this, arguments);
         
         if (attr.container) {
             attr.container.capabilites_private = true;
+        }
+
+        if (Ext.isString(xprops)) {
+            xprops = Ext.decode(xprops);
+        }
+
+        resourceIcon = lodash.get(xprops, 'Calendar.Resource.resource_icon');
+        
+        if (resourceIcon) {
+            attr.icon = resourceIcon;
+            attr.cls = attr.cls || '';
+            attr.cls += ' cal-calendartree-resource-icon';
         }
     },
     

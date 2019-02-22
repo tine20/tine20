@@ -700,7 +700,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
         var params = {
             method: 'Tinebase_Container.getContainer',
-            application: this.app.appName,
+            model: this.recordClass.getPhpClassName(),
             containerType: type,
             requiredGrants: this.requiredGrants,
             owner: owner
