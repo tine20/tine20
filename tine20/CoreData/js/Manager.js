@@ -121,6 +121,23 @@ Tine.CoreData.Manager = function() {
          */
         registerEditDialog: function (id, constructor) {
             editDialogs[id] = constructor;
+        },
+
+        /**
+         * is id registered in area
+         *
+         * @param area
+         * @param id
+         * @return {*|boolean}
+         */
+        isRegistered: function(area, id) {
+            var map = {
+                gird: grids,
+                toolbars: toolbars,
+                editDialogs: editDialogs
+            };
+
+            return map[area] && map[area].hasOwnProperty(id);
         }
     };
 }();
