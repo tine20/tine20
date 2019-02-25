@@ -60,7 +60,6 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
      * @param $filePaths array of file Paths to convert
      * @param array $config
      * @return array|bool
-     * @throws Tinebase_Exception_NotImplemented
      */
     public function getPreviewsForFiles(array $filePaths, array $config)
     {
@@ -181,10 +180,21 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
     public function getPdfForFile($filePath, $synchronRequest = false)
     {
         if (false === ($result = $this->getPreviewsForFile($filePath, ['synchronRequest' => $synchronRequest, ['fileType' => 'pdf',]]))) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ .
-                ' preview service did not succeed');
+            Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ . ' preview service did not succeed');
             throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed');
         }
         return $result[0][0];
+    }
+
+    /**
+     * Merges multiple pdf files into a single one.
+     *
+     * @param $filePaths array of file paths
+     * @param bool $synchronousRequest
+     * @return string path to file
+     */
+    public function mergePdfFiles($filePaths, $synchronousRequest = false)
+    {
+        throw new Tinebase_Exception_NotImplemented("MergePdfFiles not implemented in Preview_ServiceV1");
     }
 }

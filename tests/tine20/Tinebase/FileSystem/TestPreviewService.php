@@ -102,4 +102,16 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
     {
 
     }
+
+    /**
+     * Merges multiple pdf files into a single one.
+     *
+     * @param $filePaths array of file paths
+     * @param $synchronousRequest
+     * @return string path to file
+     */
+    public function mergePdfFiles($filePaths, $synchronousRequest = false)
+    {
+        return "blob";
+    }
 }

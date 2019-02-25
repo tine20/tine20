@@ -123,6 +123,16 @@ interface Tinebase_FileSystem_Preview_ServiceInterface
      * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
     */
     public function getPdfForFile($filePath, $synchronRequest = false);
+
+    /**
+     * Merges multiple pdf files into a single one.
+     *
+     * @param $filePaths array of file paths
+     * @param $synchronousRequest
+     * @return string path to file
+     * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
+     */
+    public function mergePdfFiles($filePaths, $synchronousRequest = false);
 }
 
 
