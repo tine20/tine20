@@ -420,6 +420,10 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
             keyfieldName: 'eventClasses',
             defaultAll: true
         },
+        {label: i18n._('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
+        //{label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
+        //{label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
         {
             filtertype: 'calendar.rrule',
             app: app
