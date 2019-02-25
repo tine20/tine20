@@ -247,7 +247,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      */
     public function peekJobId()
     {
-        return $this->_redis->lGet($this->_queueStructName, 0);
+        return $this->_redis->lGet($this->_queueStructName, -1);
     }
 
     /**
