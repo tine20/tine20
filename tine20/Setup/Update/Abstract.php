@@ -20,6 +20,7 @@ class Setup_Update_Abstract
     const CLASS_CONST = 'class';
     const FUNCTION_CONST = 'function';
 
+    const PRIO_TINEBASE_BEFORE_STRUCT = 90;
     const PRIO_TINEBASE_STRUCTURE = 100;
     const PRIO_TINEBASE_UPDATE = 300;
     const PRIO_NORMAL_APP_STRUCTURE = 500;
