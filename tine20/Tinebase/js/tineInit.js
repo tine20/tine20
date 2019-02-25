@@ -107,6 +107,17 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.common.reload({
                     clearCache: true
                 });
+            } else if (window.isMainWindow && e.getKey() === e.ESC) {
+                // select first row of current grid panel if available
+                var app = Tine.Tinebase.MainScreen.getActiveApp(),
+                    centerPanel = app.getMainScreen().getCenterPanel(),
+                    grid = centerPanel && Ext.isFunction(centerPanel.getGrid) ? centerPanel.getGrid() : null,
+                    sm = grid ? grid.getSelectionModel() : null;
+                if (sm) {
+                    sm.selectFirstRow();
+                    grid.getView().focusRow(0);
+                }
+
             } else if (e.ctrlKey && e.getKey() === e.S ) {
                 Ext.ux.screenshot.ux(window, {download: true, grabMouse: !e.shiftKey});
             }

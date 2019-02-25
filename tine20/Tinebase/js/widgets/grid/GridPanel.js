@@ -1930,43 +1930,68 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     onKeyDown: function(e){
-        if (e.ctrlKey) {
-            switch (e.getKey()) {
-                case e.A:
-                    // select only current page
-                    this.grid.getSelectionModel().selectAll(true);
-                    e.preventDefault();
-                    break;
-                case e.E:
-                    if (this.action_editInNewWindow && !this.action_editInNewWindow.isDisabled()) {
-                        this.onEditInNewWindow.call(this, {
-                            actionType: 'edit'
-                        });
-                        e.preventDefault();
-                    }
-                    break;
-                case e.N:
-                    if (this.action_addInNewWindow && !this.action_addInNewWindow.isDisabled()) {
-                        this.onEditInNewWindow.call(this, {
-                            actionType: 'add'
-                        });
-                        e.preventDefault();
-                    }
-                    break;
-                case e.F:
-                    if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
-                        e.preventDefault();
-                        this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
-                    }
-                    break;
-            }
-        } else {
-            if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
-                if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
-                    this.onDeleteRecords.call(this);
+        switch (e.getKey()) {
+            case e.A:
+                // select only current page
+                this.grid.getSelectionModel().selectAll(true);
+                e.preventDefault();
+                break;
+            case e.C:
+                if (this.action_editCopyInNewWindow && !this.action_editCopyInNewWindow.isDisabled()) {
+                    this.onEditInNewWindow.call(this, {
+                        actionType: 'copy'
+                    });
                     e.preventDefault();
                 }
-            }
+                break;
+            case e.E:
+                if (this.action_editInNewWindow && !this.action_editInNewWindow.isDisabled()) {
+                    this.onEditInNewWindow.call(this, {
+                        actionType: 'edit'
+                    });
+                    e.preventDefault();
+                }
+                break;
+            case e.N:
+                if (this.action_addInNewWindow && !this.action_addInNewWindow.isDisabled()) {
+                    this.onEditInNewWindow.call(this, {
+                        actionType: 'add'
+                    });
+                    e.preventDefault();
+                }
+                break;
+            case e.F:
+                if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
+                    e.preventDefault();
+                    this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
+                }
+                break;
+            case e.R:
+                this.store.reload();
+                break;
+            default:
+                if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
+                    if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
+                        this.onDeleteRecords.call(this);
+                        e.preventDefault();
+                    }
+                }
+                if (e.browserEvent.key === '?') {
+                    // TODo translate key bindings
+                    // TODO only show keys of actions that are available
+                    var helpText = 'A: select all visible rows<br/>' +
+                        'C: copy record<br/>' +
+                        'E: edit record<br/>' +
+                        'N: new record<br/>' +
+                        'F: find<br/>' +
+                        'R: reload grid<br/>';
+                    Ext.MessageBox.show({
+                        title: i18n._('Grid Panel Key Bindings'),
+                        msg: helpText,
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.INFO
+                    });
+                }
         }
     },
 

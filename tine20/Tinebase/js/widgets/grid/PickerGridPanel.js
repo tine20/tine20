@@ -446,21 +446,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     onKeyDown: function(e){
-        if (e.ctrlKey) {
-            switch (e.getKey()) {
-                case e.A:
-                    // select all records
-                    this.getSelectionModel().selectAll(true);
-                    e.preventDefault();
-                    break;
-            }
-        } else {
-            switch (e.getKey()) {
-                case e.DELETE:
-                    // delete selected record(s)
-                    this.onRemove();
-                    break;
-            }
+        switch (e.getKey()) {
+            case e.A:
+                // select all records
+                this.getSelectionModel().selectAll(true);
+                e.preventDefault();
+                break;
+            case e.DELETE:
+                // delete selected record(s)
+                this.onRemove();
+                break;
         }
     },
 
