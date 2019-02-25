@@ -26,5 +26,7 @@ require('./ux/util/screenshot');
 module.exports = {
     director: director,
     postal: postal,
-    lodash: lodash
+    lodash: lodash,
+    _: lodash,
+    twing: twing
 };
