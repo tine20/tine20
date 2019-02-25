@@ -8,9 +8,7 @@
  * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
-?><?xml version="1.0" encoding="utf-8"?>
-<Autodiscover xmlns="http://schemas.microsoft.com/exchange/autodiscover/responseschema/2006">
-    <Response xmlns="<?php echo $this->schema;?>">
+?>
         <Account>
             <AccountType>email</AccountType>
             <Action>settings</Action>
@@ -23,5 +21,3 @@
                 </Protocol>
             <?php } ?>
         </Account>
-    </Response>
-</Autodiscover>
