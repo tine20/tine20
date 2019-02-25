@@ -132,7 +132,7 @@ Tine.CoreData.Manager = function() {
          */
         isRegistered: function(area, id) {
             var map = {
-                gird: grids,
+                grid: grids,
                 toolbars: toolbars,
                 editDialogs: editDialogs
             };
