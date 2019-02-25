@@ -1089,7 +1089,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function measureActionQueue($start)
     {
         $end = microtime(true);
-        $duration = ($end - $start) / 1000000;
+        $duration = $end - $start;
         $now = time();
         $lastUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
             Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE);
