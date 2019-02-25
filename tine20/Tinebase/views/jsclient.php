@@ -21,6 +21,7 @@ $maskiconColor = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_M
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-Tine20-Version" content="<?php echo TINE20_PACKAGESTRING ?>" />
+    <meta name="google" content="notranslate">
 
     <link rel="icon" type="image/png" href="favicon/16" sizes="16x16">
     <link rel="icon" type="image/png" href="favicon/32" sizes="32x32">
