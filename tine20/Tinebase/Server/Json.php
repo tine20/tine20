@@ -67,7 +67,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
              * METHOD: POST
              * Origin:http://other.site
              * Referer:http://other.site/example.html
-             * Standard-JSON-Rquest-Headers...
+             * Standard-JSON-Request-Headers...
              * 
              * We have to add two additional headers to our standard response
              * 
