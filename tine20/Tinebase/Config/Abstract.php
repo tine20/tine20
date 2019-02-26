@@ -848,25 +848,34 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         return (isset($properties[$_name]) || array_key_exists($_name, $properties)) ? $properties[$_name] : NULL;
     }
 
+    /**
+     * @param $target
+     * @param $key
+     * @param $val
+     */
     protected function _mergeAppDefaultsConfigData(&$target, $key, $val)
     {
         if (!isset($target[$key])) {
             return;
         }
         if (is_array($val)) {
-            if ($target[$key][self::TYPE] === self::TYPE_OBJECT && $target[$key][self::CLASSNAME] ===
-                    Tinebase_Config_Struct::class && isset($target[$key][self::CONTENT])) {
+            if (   $target[$key][self::TYPE] === self::TYPE_OBJECT
+                && $target[$key][self::CLASSNAME] === Tinebase_Config_Struct::class
+                && isset($target[$key][self::CONTENT])
+            ) {
                 foreach ($val as $k => $v) {
                     if (!isset($target[$key][self::CONTENT][$k])) {
                         continue;
                     }
                     $this->_mergeAppDefaultsConfigData($target[$key][self::CONTENT], $k, $v);
                 }
-            } elseif ($target[$key][self::TYPE] === self::TYPE_ARRAY) {
+            } elseif (in_array($target[$key][self::TYPE], [self::TYPE_ARRAY, self::TYPE_KEYFIELD_CONFIG])) {
                 $target[$key][self::DEFAULT_STR] = $val;
             }
-        } elseif (!isset($target[$key][self::TYPE]) || ($target[$key][self::TYPE] !== self::TYPE_OBJECT &&
-                $target[$key][self::TYPE] !== self::TYPE_ARRAY)) {
+        } elseif (!isset($target[$key][self::TYPE])
+            || ($target[$key][self::TYPE] !== self::TYPE_OBJECT &&
+                $target[$key][self::TYPE] !== self::TYPE_ARRAY)
+        ) {
             $target[$key][self::DEFAULT_STR] = $val;
         }
     }
