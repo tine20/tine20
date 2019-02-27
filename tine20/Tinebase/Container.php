@@ -923,8 +923,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         } catch (Tinebase_Exception_NotFound $tenf) {
             // continue...
         }
-        
-        $select = $this->_getSelect(array(self::ALLCOL, "CONCAT(container.order, COALESCE(hierarchy, ''), name) as o"))
+
+        $select = $this->_getSelect(array(self::ALLCOL, "CONCAT(COALESCE(hierarchy, ''), name) as hierachyName"))
             ->distinct()
             ->joinLeft(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
@@ -935,7 +935,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_SHARED);
         
-        $select->order('o');
+        $select->order(['order', 'hierachyName']);
 
         $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, __CLASS__ . '::addGrantsSqlCallback');
 
