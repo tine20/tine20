@@ -914,7 +914,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             // continue...
         }
 
-        $select = $this->_getSelect()
+        $select = $this->_getSelect(array(self::ALLCOL, "CONCAT(container.order, COALESCE(hierarchy, ''), name) as o"))
             ->distinct()
             ->joinLeft(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
@@ -924,12 +924,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_SHARED);
-
-        // TODO maybe this could be removed or changed to a preference later
-        $sortOrder = Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_CONTAINER_CUSTOM_SORT)
-            ? array('container.order', 'container.name')
-            : 'container.name';
-        $select->order($sortOrder);
+        
+        $select->order('o');
 
         $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, __CLASS__ . '::addGrantsSqlCallback');
 
