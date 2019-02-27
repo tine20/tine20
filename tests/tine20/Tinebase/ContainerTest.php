@@ -436,6 +436,58 @@ class Tinebase_ContainerTest extends TestCase
         $this->_instance->deleteContainer($container->getId(), TRUE);
     }
 
+    public function testGetSharedContainerOrder()
+    {
+        // expected sorting is order 9, then order 20, hierarchy containerTest1 (!) then name containerTest20, then 21
+        $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest9',
+            'order'          => 9,
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
+        )));
+
+        $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest20',
+            'order'          => 20,
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
+        )));
+
+        $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest21',
+            'order'          => 20,
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
+        )));
+
+        $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest22',
+            'order'          => 20,
+            'hierarchy'      => 'containerTest1',
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
+        )));
+
+        $result = $this->_instance->getSharedContainer(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, '*');
+
+        while ('containerTest9' !== $result->getFirstRecord()->name) { $result->removeFirst(); }
+        static::assertEquals('containerTest9', $result->getFirstRecord()->name);
+        $result->removeFirst();
+        static::assertEquals('containerTest22', $result->getFirstRecord()->name);
+        $result->removeFirst();
+        static::assertEquals('containerTest20', $result->getFirstRecord()->name);
+        $result->removeFirst();
+        static::assertEquals('containerTest21', $result->getFirstRecord()->name);
+    }
+
     /**
      * testGetSearchContainerWithoutReadButWithAdminGrant
      */
