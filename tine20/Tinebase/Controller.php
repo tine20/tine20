@@ -1234,42 +1234,47 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (!$reqXml || empty($reqXml->Request) || empty($reqXml->Request->AcceptableResponseSchema)) {
             $response->getBody()->write($view->render('error.php'));
 
-        } elseif (strpos($reqXml->Request->AcceptableResponseSchema, 'mobilesync')) {
+        } elseif (strpos($reqXml->Request->AcceptableResponseSchema, 'mobilesync') ||
+                strpos($reqXml->Request->AcceptableResponseSchema, 'outlook')) {
+
             $view->schema = $reqXml->Request->AcceptableResponseSchema;
             if (!empty($reqXml->Request->EMailAddress)) {
                 $view->email = $reqXml->Request->EMailAddress;
             }
             $view->url = Tinebase_Core::getUrl() . '/Microsoft-Server-ActiveSync';
             $view->serverName = $tinebaseConfig->{Tinebase_Config::BRANDING_TITLE};
+            $view->account = '';
+
+            if (strpos($reqXml->Request->AcceptableResponseSchema, 'outlook') && $tinebaseConfig
+                    ->featureEnabled(Tinebase_Config::FEATURE_AUTODISCOVER_MAILCONFIG)) {
+                $protocols = [];
+                $imapConfig = $tinebaseConfig->{Tinebase_Config::IMAP};
+                // TODO: make host configurable independently, as 'localhost' wont help external clients
+                if ($imapConfig && $imapConfig->host) {
+                    $protocols['IMAP']['Server'] = $imapConfig->host;
+                    $protocols['IMAP']['Port'] = $imapConfig->port;
+                    $protocols['IMAP']['SSL'] = $imapConfig->ssl ? 'on' : 'off';
+                    $protocols['IMAP']['SPA'] = 'off';
+                    $protocols['IMAP']['AuthRequired'] = 'on';
+                }
+                $smtpConfig = $tinebaseConfig->{Tinebase_Config::SMTP};
+                if ($smtpConfig && $smtpConfig->host) {
+                    $protocols['SMTP']['Server'] = $smtpConfig->host;
+                    $protocols['SMTP']['Port'] = $smtpConfig->port;
+                    $protocols['SMTP']['SSL'] = $smtpConfig->ssl ? 'on' : 'off';
+                    $protocols['SMTP']['SPA'] = 'off';
+                    $protocols['SMTP']['AuthRequired'] = 'on';
+                }
+                if (!empty($protocols)) {
+                    $subView = new Zend_View();
+                    $subView->setScriptPath(__DIR__ . '/views/autodiscover');
+                    $subView->protocols = $protocols;
+                    $view->account = $subView->render('outlook.php');
+                }
+            }
+
             $response->getBody()->write($view->render('mobilesync.php'));
 
-        } elseif (strpos($reqXml->Request->AcceptableResponseSchema, 'outlook') && $tinebaseConfig
-                ->featureEnabled(Tinebase_Config::FEATURE_AUTODISCOVER_MAILCONFIG)) {
-            $protocols = [];
-            $imapConfig = $tinebaseConfig->{Tinebase_Config::IMAP};
-            // TODO: make host configurable independently, as 'localhost' wont help external clients
-            if ($imapConfig && $imapConfig->host) {
-                $protocols['IMAP']['Server'] = $imapConfig->host;
-                $protocols['IMAP']['Port'] = $imapConfig->port;
-                $protocols['IMAP']['SSL'] = $imapConfig->ssl ? 'on' : 'off';
-                $protocols['IMAP']['SPA'] = 'off';
-                $protocols['IMAP']['AuthRequired'] = 'on';
-            }
-            $smtpConfig = $tinebaseConfig->{Tinebase_Config::SMTP};
-            if ($smtpConfig && $smtpConfig->host) {
-                $protocols['SMTP']['Server'] = $smtpConfig->host;
-                $protocols['SMTP']['Port'] = $smtpConfig->port;
-                $protocols['SMTP']['SSL'] = $smtpConfig->ssl ? 'on' : 'off';
-                $protocols['SMTP']['SPA'] = 'off';
-                $protocols['SMTP']['AuthRequired'] = 'on';
-            }
-            if (empty($protocols)) {
-                $response->getBody()->write($view->render('error.php'));
-            } else {
-                $view->schema = $reqXml->Request->AcceptableResponseSchema;
-                $view->protocols = $protocols;
-                $response->getBody()->write($view->render('outlook.php'));
-            }
         } else {
             $response->getBody()->write($view->render('error.php'));
         }
