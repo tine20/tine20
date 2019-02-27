@@ -158,7 +158,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                    ' field: ' . $field . ' => filter: ' . get_class($filter)
+                    ' field: ' . $this->_field . ' => filter: ' . get_class($filter)
                     . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
             }
         }
