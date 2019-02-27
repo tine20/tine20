@@ -166,13 +166,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
 
     /**
-     * FEATURE_CONTAINER_CUSTOM_SORT
-     *
-     * @var string
-     */
-    const FEATURE_CONTAINER_CUSTOM_SORT = 'featureContainerCustomSort';
-
-    /**
      * FEATURE_SHOW_ACCOUNT_EMAIL
      *
      * @var string
@@ -1137,14 +1130,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION                   =>
                         'Show toggle button to switch on or off the advanced search for the quickfilter',
                     //_('Show toggle button to switch on or off the advanced search for the quickfilter')
-                    self::TYPE                          => self::TYPE_BOOL,
-                    self::DEFAULT_STR                   => true,
-                ),
-                self::FEATURE_CONTAINER_CUSTOM_SORT => array(
-                    self::LABEL                         => 'Container Custom Sort', //_('Container Custom Sort')
-                    self::DESCRIPTION                   =>
-                        'Allows to sort containers by setting the sort order in Admin/Container',
-                    //_('Allows to sort containers by setting the sort order in Admin/Container')
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),
