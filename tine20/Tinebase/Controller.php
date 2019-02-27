@@ -92,6 +92,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         // make sure pw is always replaced in Logger
         Tinebase_Core::getLogger()->addReplacement($password);
 
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            throw new Tinebase_Exception_MaintenanceMode();
+        }
+
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
 
         $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
