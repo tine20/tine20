@@ -59,9 +59,8 @@ class Tinebase_Frontend_AutodiscoverTests extends TestCase
         if (($imap && $imap->host) || ($smtp && $smtp->host)) {
             static::assertSame('email', (string)$responseXml->Response->Account->AccountType);
             static::assertSame('settings', (string)$responseXml->Response->Account->Action);
-        } else {
-            static::assertSame('600', (string)$responseXml->Response->Error->ErrorCode);
         }
+        static::assertSame('MobileSync', (string)$responseXml->Response->Action->Settings->Server->Type);
     }
 
     public function testMobilesyncRequest()
