@@ -387,8 +387,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             else if (value.length == 1 && [foreignRecordIdProperty, ':' + foreignRecordIdProperty].indexOf(value[0].field) > -1) {
                 // switch back to not when operator is notDefinedby as we switched not to equals
                 var op = value[0].operator,
-                    opMap = { notDefinedBy: 'not' },
-                    finalOp = opMap[op] || op;
+                    opMap = { 'notDefinedBy:AND': 'not' },
+                    finalOp = opMap[operator] || op;
 
                 filter.set('value', value[0].value);
                 filter.formFields.operator.setValue(finalOp);
