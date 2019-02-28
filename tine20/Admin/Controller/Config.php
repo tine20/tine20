@@ -83,6 +83,9 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
         $configRecords = new Tinebase_Record_RecordSet('Tinebase_Model_Config');
 
         $appConfigObject = Tinebase_Config::getAppConfig($appname);
+        if (! $appConfigObject) {
+            return $configRecords;
+        }
         $appConfigDefinitions = $appConfigObject->getProperties();
         $appDBConfig = $this->_configBackend->search($_filter);
 
