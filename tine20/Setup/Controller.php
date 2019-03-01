@@ -508,13 +508,24 @@ class Setup_Controller
             }
         }
 
+        $this->updateAllImportExportDefinitions();
+
         $this->clearCache();
         
         return array(
             'messages' => $messages,
             'updated'  => $this->_updatedApplications,
         );
-    }    
+    }
+
+    public function updateAllImportExportDefinitions()
+    {
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications()->filter('status', Tinebase_Application::ENABLED)
+                as $application) {
+            $this->createImportExportDefinitions($application);
+        }
+    }
     
     /**
      * load the setup.xml file and returns a simplexml object
@@ -2018,16 +2029,30 @@ class Setup_Controller
                 DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'definitions';
     
             if (file_exists($path)) {
-                foreach (new DirectoryIterator($path) as $item) {
-                    $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
-                    if (preg_match("/\.xml/", $filename)) {
+                $lambda = function($path, $applicaiton) {
+                    if (preg_match("/\.xml/", $path)) {
                         try {
-                            Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($filename, $_application);
+                            Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($path,
+                                $applicaiton);
                         } catch (Exception $e) {
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                                . ' Not installing import/export definion from file: ' . $filename
+                                . ' Not installing import/export definion from file: ' . $path
                                 . ' / Error message: ' . $e->getMessage());
                         }
+                    }
+                };
+                foreach (new DirectoryIterator($path) as $item) {
+                    if ($item->isDir()) {
+                        try {
+                            $otherApp = Tinebase_Application::getInstance()->getApplicationByName($item->getFilename());
+                        } catch (Tinebase_Exception_NotFound $e) {
+                            continue;
+                        }
+                        foreach (new DirectoryIterator($item->getPathname()) as $otherItem) {
+                            $lambda($otherItem->getPathname(), $otherApp);
+                        }
+                    } else {
+                        $lambda($item->getPathname(), $_application);
                     }
                 }
             }
@@ -2058,25 +2083,44 @@ class Setup_Controller
                     $fileSystem->mkdir($templateAppPath->statpath);
                 }
 
-                foreach (new DirectoryIterator($path) as $item) {
-                    if (!$item->isFile()) {
-                        continue;
-                    }
+                $lambda = function($item, $fileSystem, $templateAppPath) {
                     if (false === ($content = file_get_contents($item->getPathname()))) {
                         Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                             . ' Could not import template: ' . $item->getPathname());
-                        continue;
+                        return;
                     }
                     if (false === ($file = $fileSystem->fopen($templateAppPath->statpath . '/' . $item->getFileName(), 'w'))) {
                         Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                             . ' could not open ' . $templateAppPath->statpath . '/' . $item->getFileName() . ' for writting');
-                        continue;
+                        return;
                     }
                     fwrite($file, $content);
                     if (true !== $fileSystem->fclose($file)) {
                         Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                             . ' write to ' . $templateAppPath->statpath . '/' . $item->getFileName() . ' did not succeed');
-                        continue;
+                        return;
+                    }
+                };
+
+                foreach (new DirectoryIterator($path) as $item) {
+                    if ($item->isDir()) {
+                        try {
+                            $otherApp = Tinebase_Application::getInstance()->getApplicationByName($item->getFilename());
+                        } catch (Tinebase_Exception_NotFound $e) {
+                            continue;
+                        }
+                        $otherTemplateAppPath = Tinebase_Model_Tree_Node_Path::createFromPath($basepath . '/templates/'
+                            . $otherApp->name);
+                        if (! $fileSystem->isDir($otherTemplateAppPath->statpath)) {
+                            $fileSystem->mkdir($otherTemplateAppPath->statpath);
+                        }
+                        foreach (new DirectoryIterator($item->getPathname()) as $otherItem) {
+                            if ($otherItem->isFile()) {
+                                $lambda($otherItem, $fileSystem, $otherTemplateAppPath);
+                            }
+                        }
+                    } else {
+                        $lambda($item, $fileSystem, $templateAppPath);
                     }
                 }
             }

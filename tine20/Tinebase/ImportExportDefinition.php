@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -256,6 +256,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $existing = $this->getByName($definition->name, true);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $definition->setId($existing->getId());
+            $definition->is_deleted = $existing->is_deleted;
             $result = $this->_backend->update($definition);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
