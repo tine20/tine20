@@ -530,7 +530,8 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'tags' },
 
     { name: 'revisionProps' },
-    { name: 'notificationProps' }
+    { name: 'notificationProps' },
+    { name: 'is_quarantined', type: 'boolean'}
 ]);
 /**
  * @namespace   Tine.Tinebase.Model

@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Filemanager.nodeActions');
 
@@ -94,18 +94,7 @@ Tine.Filemanager.nodeActions.Edit = {
         }
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
-        // run default updater
-        Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, grants, records, isFilterSelect);
-
-        var _ = window.lodash,
-            disabled = _.isFunction(action.isDisabled) ? action.isDisabled() : action.disabled;
-
-        // if enabled check for not accessible node and disable
-        if (! disabled) {
-            action.setDisabled(window.lodash.reduce(records, function(disabled, record) {
-                return disabled || record.isVirtual();
-            }, false));
-        }
+        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect);
     }
 };
 
@@ -182,6 +171,9 @@ Tine.Filemanager.nodeActions.SystemLink = {
             // prompt: true,
             icon: Ext.MessageBox.INFO
         });
+    },
+    actionUpdater: function(action, grants, records, isFilterSelect) {
+        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect);
     }
 };
 
@@ -295,12 +287,13 @@ Tine.Filemanager.nodeActions.Download = {
         Tine.Filemanager.downloadFile(this.initialConfig.selections[0]);
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
+
         var enabled = !isFilterSelect
             && records && records.length == 1
             && records[0].get('type') != 'folder'
             && window.lodash.get(records, '[0].data.account_grants.downloadGrant', false);
 
-        action.setDisabled(!enabled);
+        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect, enabled);
     }
 };
 
@@ -327,6 +320,9 @@ Tine.Filemanager.nodeActions.Preview = {
                 });
             }
         }
+    },
+    actionUpdater: function(action, grants, records, isFilterSelect) {
+        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect);
     }
 };
 
@@ -378,11 +374,37 @@ Tine.Filemanager.nodeActions.Publish = {
         }, this);
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
+
         var enabled = !isFilterSelect
             && records && records.length == 1
             && window.lodash.get(records, '[0].data.account_grants.publishGrant', false);
 
-        action.setDisabled(!enabled);
+        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect, enabled);
+    }
+};
+
+/**
+ *
+ * helper for disabled field
+ * @param action
+ * @param grants
+ * @param records
+ * @param isFilterSelect
+ * @returns {*}
+ */
+Tine.Filemanager.nodeActions.checkDisabled = function(action, grants, records, isFilterSelect, enabled = true)
+{
+    // run default updater
+    Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, grants, records, isFilterSelect);
+
+    var _ = window.lodash,
+        disabled = _.isFunction(action.isDisabled) ? action.isDisabled() : action.disabled;
+
+    // if enabled check for not accessible node and disable
+    if (! disabled || !enabled){
+        action.setDisabled(window.lodash.reduce(records, function(disabled, record) {
+            return disabled || record.isVirtual() || record.get('is_quarantined') == '1';
+        }, false));
     }
 };
 
