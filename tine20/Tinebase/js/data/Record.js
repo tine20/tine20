@@ -165,8 +165,23 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * @return {String}
      */
     getTitle: function() {
+        var _ = window.lodash,
+            me = this;
+
         if (Tine.Tinebase.data.TitleRendererManager.has(this.appName, this.modelName)) {
             return Tine.Tinebase.data.TitleRendererManager.get(this.appName, this.modelName)(this);
+        } else if (String(this.titleProperty).match(/{/)) {
+            if (! this.constructor.titleTwing) {
+                var opts = {},
+                    loader;
+
+                opts[this.constructor.getPhpClassName() + 'Title'] = Tine.Tinebase.appMgr.get(this.appName).i18n._hidden(this.titleProperty);
+                loader = new twing.TwingLoaderArray(opts);
+
+                this.constructor.titleTwing = new twing.TwingEnvironment(loader);
+            }
+
+            return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data);
         } else {
             var s = this.titleProperty ? this.titleProperty.split('.') : [null];
             return (s.length > 0 && this.get(s[0]) && this.get(s[0])[s[1]]) ? this.get(s[0])[s[1]] : s[0] ? this.get(this.titleProperty) : '';

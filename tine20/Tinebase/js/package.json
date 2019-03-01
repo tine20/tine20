@@ -39,6 +39,7 @@
     "postal.xwindow": "github:tine20/postal.xwindow",
     "store2": "^2.5.9",
     "svg-url-loader": "^2.3.2",
+    "twing": "^2.2.1",
     "vue": "^2.5.9",
     "vue-router": "^3.0.1"
   },

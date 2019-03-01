@@ -926,17 +926,12 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     {
         $titleProperty = static::$_configurationObject->titleProperty;
 
-        // use vsprintf formatting if it is an array
-        if (is_array($titleProperty)) {
-            if (! is_array($titleProperty[1])) {
-                $propertyValues = array($this->{$titleProperty[1]});
-            } else {
-                $propertyValues = array();
-                foreach($titleProperty[1] as $property) {
-                    $propertyValues[] = $this->$property;
-                }
-            }
-            return vsprintf($titleProperty[0], $propertyValues);
+        if (strpos(static::$_configurationObject->titleProperty, '{') !== false) {
+            $translation = Tinebase_Translation::getTranslation($this->getApplication());
+            $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
+            $templateString = $translation->translate($titleProperty);
+            $template = $twig->getEnvironment()->createTemplate($templateString);
+            return $template->render($this->_properties);
         } else {
             return $this->$titleProperty;
         }

@@ -17,6 +17,7 @@ require('script-loader!store2');
 require('script-loader!store2/src/store.bind.js');
 require('postal.xwindow');
 require('postal.request-response');
+var twing = require('twing');
 
 // include traditional stuff as defined in jsb2
 require('./../../Tinebase/Tinebase.jsb2');
@@ -27,5 +28,6 @@ module.exports = {
     director: director,
     postal: postal,
     lodash: lodash,
-    _: lodash
+    _: lodash,
+    twing: twing
 };
