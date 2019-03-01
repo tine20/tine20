@@ -348,15 +348,17 @@ Tine.Tinebase.ApplicationStarter = {
         
         var fieldTypeKey = (fieldconfig && fieldconfig.type) ? fieldconfig.type : (filterconfig && filterconfig.type) ? filterconfig.type : 'default',
             label = (filterconfig && filterconfig.hasOwnProperty('label')) ? filterconfig.label : (fieldconfig && fieldconfig.hasOwnProperty('label')) ? fieldconfig.label : null,
-            globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
+            globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation'))),
+            i18n = globalI18n ? window.i18n : app.i18n;
         
         if (! label) {
             return null;
         }
         // prepare filter
         var filter = {
-            label: globalI18n ? i18n._(label) : app.i18n._(label),
-            field: fieldKey
+            label: i18n._hidden(label),
+            field: fieldKey,
+            gender: i18n._hidden('GENDER_' + label)
         };
         
         if (filterconfig) {
