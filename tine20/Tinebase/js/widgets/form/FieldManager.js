@@ -111,6 +111,11 @@ Tine.widgets.form.FieldManager = function() {
                         field.suffix = ' %';
                     }
 
+                    if (fieldDefinition.specialType && fieldDefinition.specialType === 'durationSec') {
+                        field.xtype = 'tinedurationspinner';
+                        field.baseUnit = 'seconds';
+                    }
+
                     if (fieldDefinition.max) {
                         field.maxValue = fieldDefinition.max;
                     }
