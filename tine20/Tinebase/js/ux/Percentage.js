@@ -161,13 +161,17 @@ Ext.ux.PercentRenderer = function(percent) {
 Ext.ux.PercentRendererWithName = function(value, metadata, record) {
   
     var metaStyle = '';
-    
+
     if(record.fileRecord) {
         record = record.fileRecord;
     }
-    
     if(record.get('type') == 'folder') {
+
         metadata.css = 'x-tinebase-typefolder';
+
+    }else if(record.get('is_quarantined') == '1') {
+
+        metadata.css = 'x-tinebase-virus';
     }
     else {
 
@@ -178,6 +182,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         }
                
         metadata.css += 'standardFileClass_16x16';
+
     }
     
     

@@ -76,6 +76,13 @@ table.x-btn.x-type-data-safe {
     padding-left: 19px;
 }
 
+.x-tinebase-virus .x-grid3-cell-inner {
+    background-image:url(../../images/icon-set/icon_virus.svg);
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-left: 19px;
+}
+
 .action_publish {
     background-image: url("../../images/icon-set/icon_publish.svg") !important;
     background-repeat: no-repeat;
