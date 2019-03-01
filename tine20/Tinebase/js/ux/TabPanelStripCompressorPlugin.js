@@ -94,7 +94,7 @@ Ext.ux.TabPanelStripCompressorPlugin.prototype = {
             toExpand = me.getDynamic(lis),
             potential = _.reduce(toExpand, function(p, li) {
                 var originalWidth = me.originalWidth[li.id];
-                return p.concat(originalWidth - Ext.fly(li).child('.x-tab-strip-inner', true).offsetWidth);
+                return p.concat(Math.max(0, originalWidth - Ext.fly(li).child('.x-tab-strip-inner', true).offsetWidth));
             }, []),
             widths = me.getExpandWidth(potential, by);
 
