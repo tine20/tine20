@@ -626,6 +626,10 @@ class Setup_Controller
         $adbRelease11 = new Addressbook_Setup_Update_Release11(Setup_Backend_Factory::factory());
         $adbRelease11->fixContactData();
 
+        // TODO remove this in release 13
+        $release12 = new Tinebase_Setup_Update_12(Setup_Backend_Factory::factory());
+        $release12->addPreviewStatusAndErrorCount();
+
         for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
             $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
         }

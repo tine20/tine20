@@ -20,16 +20,18 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
-            ]
+            ],
+        ],
+        self::PRIO_TINEBASE_STRUCTURE => [
+            self::RELEASE012_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
+            ],
         ],
         self::PRIO_TINEBASE_UPDATE        => [
             self::RELEASE012_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
-            ],
-            self::RELEASE012_UPDATE003          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -57,7 +59,13 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         $this->addApplicationUpdate('Tinebase', '12.20', self::RELEASE012_UPDATE002);
     }
 
-    public function update_003()
+    public function update003()
+    {
+        $this->addPreviewStatusAndErrorCount();
+        $this->addApplicationUpdate('Tinebase', '12.21', self::RELEASE012_UPDATE003);
+    }
+
+    public function addPreviewStatusAndErrorCount()
     {
         if (!$this->_backend->columnExists('preview_status', 'tree_filerevisions')) {
             $this->_backend->addCol('tree_filerevisions', new Setup_Backend_Schema_Field_Xml(
@@ -82,7 +90,5 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         if ($this->getTableVersion('tree_filerevisions') < 4) {
             $this->setTableVersion('tree_filerevisions', 4);
         }
-
-        $this->addApplicationUpdate('Tinebase', '12.21', self::RELEASE012_UPDATE003);
     }
 }
