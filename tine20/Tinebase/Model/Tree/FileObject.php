@@ -22,6 +22,8 @@
  * @property  string            hash
  * @property  string            type
  * @property  integer           preview_count
+ * @property  integer           preview_status
+ * @property  integer           preview_error_count
  * @property  Tinebase_DateTime lastavscan_time
  * @property  boolean           is_quarantined
  */
@@ -100,6 +102,8 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
         'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
         'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'preview_status'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'preview_error_count'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
         'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
@@ -126,7 +130,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      *
      * @var array list of modlog omit fields
      */
-    protected $_modlogOmitFields = array('indexed_hash', 'preview_count', 'revision_size', 'available_revisions');
+    protected $_modlogOmitFields = array('indexed_hash', 'preview_count', 'preview_status', 'preview_error_count', 'revision_size', 'available_revisions');
 
     protected static $_isReplicable = true;
     

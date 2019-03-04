@@ -32,6 +32,8 @@
  * @property    array                       revisionProps
  * @property    array                       notificationProps
  * @property    string                      preview_count
+ * @property    integer                     preview_status
+ * @property    integer                     preview_error_count
  * @property    integer                     quota
  * @property    Tinebase_Record_RecordSet   grants
  * @property    string                      pin_protected_node
@@ -199,6 +201,24 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'preview_count'                 => [
+                'type'                          => 'integer',
+                'modlogOmit'                    => true,
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'Digits',
+                    Zend_Filter_Input::DEFAULT_VALUE => 0,
+                ],
+            ],
+            'preview_status'                 => [
+                'type'                          => 'integer',
+                'modlogOmit'                    => true,
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'Digits',
+                    Zend_Filter_Input::DEFAULT_VALUE => 0,
+                ],
+            ],
+            'preview_error_count'                 => [
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
                 'validators'                    => [
