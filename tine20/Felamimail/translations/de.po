@@ -387,7 +387,7 @@ msgstr "Abwesenheitsnotiz bearbeiten"
 
 #: js/TreeContextMenu.js:144
 msgid "Edit Filter Rules"
-msgstr "Filter Regeln bearbeiten"
+msgstr "Filterregeln bearbeiten"
 
 #: js/TreeContextMenu.js:158 js/sieve/NotificationDialog.js:72
 msgid "Notifications"
