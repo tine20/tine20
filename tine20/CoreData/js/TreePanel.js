@@ -93,7 +93,8 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
                         path: path + '/' + coreData.application_id.id,
                         id: coreData.application_id.id,
                         text: coreDataApp.i18n._(coreData.application_id.name),
-                        attributes: coreData.application_id
+                        attributes: coreData.application_id,
+                        singleClickExpand: true
                     });
                 }
 
