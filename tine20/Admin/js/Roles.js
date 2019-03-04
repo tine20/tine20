@@ -279,7 +279,9 @@ Tine.Admin.Roles.Main = {
                 forceFit:true,
                 ignoreAdd: true,
                 emptyText: this.translation.gettext('No roles to display')
-            })            
+            }),
+            enableHdMenu: false,
+            plugins: [new Ext.ux.grid.GridViewMenuPlugin()]
         });
         
         this.gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
