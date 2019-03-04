@@ -1048,6 +1048,10 @@
         {
           "text": "FileSelectionDialog.js",
           "path": "js/"
+        },
+        {
+          "text": "BLConfigPanel.js",
+          "path": "js/BL/"
         }
       ]
     },

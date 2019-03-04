@@ -25,7 +25,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var boolean
      */
     protected $_hasCaptcha = null;
-    
+
+    /**
+     * All full configured models
+     *
+     * @var array
+     */
+    protected $_configuredModels = [
+        'Tinebase_Model_BLConfig',
+    ];
+
     /**
      * wait for changes
      * 
