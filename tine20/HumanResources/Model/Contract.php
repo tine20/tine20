@@ -134,7 +134,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                     self::MODEL_NAME        => HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
                 ],
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
-                self::LABEL             => 'Workingtime', // _('Workingtime')
+                self::LABEL             => 'Working time scheme', // _('Working time scheme')
             ],
             'is_editable' => array(
                 'label' => NULL,

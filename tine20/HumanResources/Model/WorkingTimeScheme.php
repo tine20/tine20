@@ -54,7 +54,8 @@ class HumanResources_Model_WorkingTimeScheme extends Tinebase_Record_NewAbstract
         self::TITLE_PROPERTY        => self::FLDS_TITLE,
         self::APP_NAME              => HumanResources_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
-        
+        self::EXPOSE_JSON_API       => true,
+
         self::TABLE                 => [
             self::NAME                  => 'humanresources_workingtime',
         ],

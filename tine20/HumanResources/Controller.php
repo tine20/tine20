@@ -98,10 +98,24 @@ class HumanResources_Controller extends Tinebase_Controller_Event
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
 
         $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => 'hr_wtm',
+            'id' => 'hr_wagetype',
+            'application_id' => $application,
+            'model' => HumanResources_Model_WageType::class,
+            'label' => 'Wage types' // _('Wage types')
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'hr_freetimetype',
+            'application_id' => $application,
+            'model' => HumanResources_Model_FreeTimeType::class,
+            'label' => 'Free time types' // _('Free time types')
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'hr_wts',
             'application_id' => $application,
             'model' => 'HumanResources_Model_WorkingTimeScheme',
-            'label' => 'Working time model' // _('Working time model')
+            'label' => 'Working time scheme' // _('Working time scheme')
         )));
 
         return $result;

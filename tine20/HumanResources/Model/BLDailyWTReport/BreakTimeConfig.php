@@ -43,6 +43,10 @@ class HumanResources_Model_BLDailyWTReport_BreakTimeConfig extends Tinebase_Reco
     protected static $_modelConfiguration = [
         self::APP_NAME      => HumanResources_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
+        self::RECORD_NAME   => 'Break Time', // _('Break Time')
+        self::RECORDS_NAME  => 'Break Times', // _('Break Times')
+                          // _('After exceeding {{time_worked|date("H:i", "GMT")}} of working time {{break_time|date("H:i", "GMT")}} break time gets deducted automatically.')
+        self::TITLE_PROPERTY=> 'After exceeding {{time_worked|date("H:i", "GMT")}} of working time {{break_time|date("H:i", "GMT")}} break time gets deducted automatically.',
 
 
         self::FIELDS        => [
