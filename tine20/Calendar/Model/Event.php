@@ -575,7 +575,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $this->exdate = NULL;
                 
                 $lastOccurrence = Calendar_Model_Rrule::computeNextOccurrence($this, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $this->dtend, $rrule->count -1);
-                $this->rrule_until = $lastOccurrence->dtend;
+                if ($lastOccurrence) {
+                    $this->rrule_until = $lastOccurrence->dtend;
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Could not find last occurrence of event ' . $this->getId());
+                }
                 $this->exdate = $exdates;
             } else {
                 $this->rrule_until = $rrule->until;
