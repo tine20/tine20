@@ -200,7 +200,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             newRecord.set(key, val);
         });
 
-        this.store.insert(0 , [newRecord]);
+        if (this.fireEvent('beforeaddrecord', newRecord, this) !== false) {
+            this.store.insert(0 , [newRecord]);
+        }
 
         return true;
     },
