@@ -401,7 +401,11 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 break;
                 
             case 'disconnected':
-                $controller->callDisconnected($call);
+                try {
+                    $controller->callDisconnected($call);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                }
                 break;
 
             default:
