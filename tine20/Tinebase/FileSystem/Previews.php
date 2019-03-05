@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -209,7 +209,6 @@ class Tinebase_FileSystem_Previews
         }
         
         $path = $this->_fsController->getRealPathForHash($node->hash);
-        $tempPath = Tinebase_TempFile::getTempPath() . '.' . pathinfo($node->name, PATHINFO_EXTENSION);
         if (!is_file($path)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' file ' . $node->getId() . ' '
@@ -217,54 +216,47 @@ class Tinebase_FileSystem_Previews
             }
             return false;
         }
-        if (false === copy($path, $tempPath)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not copy file '
-                    . $node->getId() . ' ' . $node->name . ' ' . $path . ' to temp path: ' . $tempPath);
-            }
-            return false;
-        }
-
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         try {
-            try {
-                $config = $this->_getConfig();
-
-                if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' timed out');
-                    }
-
-                    $this->_fsController->updatePreviewErrorCount($node->hash, $node->preview_error_count + 1);
-                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                    $transactionId = null;
-
-                    return false;
-                }
-            } catch (Tinebase_FileSystem_Preview_BadRequestException $exception) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
-                }
-
-                $this->_fsController->updatePreviewStatus($node->hash, 1);
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                $transactionId = null;
-
-                return false;
-            } catch (Exception $exception) {
+            $tempPath = Tinebase_TempFile::getTempPath() . '.' . pathinfo($node->name, PATHINFO_EXTENSION);
+            if (false === copy($path, $tempPath)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not copy file '
+                        . $node->getId() . ' ' . $node->name . ' ' . $path . ' to temp path: ' . $tempPath);
                 }
+                return false;
+            }
+
+            $config = $this->_getConfig();
+
+            if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' timed out');
+                }
+
+                $this->_fsController->updatePreviewErrorCount($node->hash, $node->preview_error_count + 1);
 
                 return false;
             }
-            $transactionId = null;
-        } finally {
-            if (null !== $transactionId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
+
+        } catch (Tinebase_FileSystem_Preview_BadRequestException $exception) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
             }
 
+            $this->_fsController->updatePreviewStatus($node->hash, 1);
+
+            return false;
+
+        } catch (Exception $exception) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
+            }
+            Tinebase_Exception::log($exception);
+
+            return false;
+
+        } finally {
             unlink($tempPath);
         }
 
@@ -276,7 +268,7 @@ class Tinebase_FileSystem_Previews
         }
 
         // reduce deadlock risk. We (remove and) create the base folder outside the transaction. This will fill
-        // the stat cache and the update on the directory tree hashes will happen without prio read locks
+        // the stat cache and the update on the directory tree hashes will happen without prior read locks
         $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
         if (!$this->_fsController->isDir($basePath)) {
             $this->_fsController->mkdir($basePath);
