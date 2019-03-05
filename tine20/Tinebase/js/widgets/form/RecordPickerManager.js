@@ -33,7 +33,7 @@ Tine.widgets.form.RecordPickerManager = function() {
     
             var appName = Ext.isString(appName) ? appName : appName.appName,
                 modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
-                key = appName+modelName;
+                key = appName+modelName+(config.allowMultiple ? 's' : '');
 
             if(items[key]) {   // if registered
                 if(Ext.isString(items[key])) { // xtype
@@ -42,13 +42,17 @@ Tine.widgets.form.RecordPickerManager = function() {
                     return new items[key](config);
                 }
             } else {    // not registered, create default
-                var defaultconfig = {
+                var pickerClass = config.allowMultiple ?
+                        Tine.Tinebase.widgets.form.RecordsPickerCombo :
+                        Tine.Tinebase.widgets.form.RecordPickerComboBox,
+                    defaultconfig = {
                     recordClass: Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                     recordProxy: Tine[appName][modelName.toLowerCase() + 'Backend'],
                     loadingText: i18n._('Searching...')
                 };
                 Ext.apply(defaultconfig, config);
-                return new Tine.Tinebase.widgets.form.RecordPickerComboBox(defaultconfig);
+
+                return new pickerClass(defaultconfig);
             }
         },
         

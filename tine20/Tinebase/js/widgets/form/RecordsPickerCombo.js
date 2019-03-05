@@ -99,6 +99,7 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
 
         var oldValue = this.currentValue;
         this.currentValue = value;
+        this.value = value;
         Tine.Tinebase.common.assertComparable(this.currentValue);
 
         if (JSON.stringify(value) != JSON.stringify(oldValue)){

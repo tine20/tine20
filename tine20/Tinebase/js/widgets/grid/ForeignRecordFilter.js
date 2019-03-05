@@ -178,7 +178,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         }
 
         if (! this.operators) {
-            this.operators = ['equals', 'not', 'definedBy'];
+            this.operators = ['equals', 'not', 'in', /*'notin',*/ 'definedBy'];
         }
 
         // get operators from registry
@@ -190,12 +190,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     app = Tine.Tinebase.appMgr.get(appName),
                     label = app ? app.i18n._hidden(def.label) : def.label;
 
-                this.operators.push({
-                    operator: Ext.apply(def, {
-                        foreignRecordClass: foreignRecordClass
-                    }),
-                    label: label
-                });
+                if (foreignRecordClass == this.foreignRecordClass) {
+                    this.operators.push({
+                        operator: Ext.apply(def, {
+                            foreignRecordClass: foreignRecordClass
+                        }),
+                        label: label
+                    });
+                }
             }, this);
         }
 
@@ -297,7 +299,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             operator = filter.get('operator') || filter.formFields.operator.origGetValue(),
             isRegisteredOperator = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == operator;}), 'operator', false);
         
-        if (isRegisteredOperator || ['equals', 'not', 'oneOf'].indexOf(operator) >= 0) {
+        if (isRegisteredOperator || ['equals', 'not', 'in', 'notin'].indexOf(operator) >= 0) {
             // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
             return filter.formFields.value.origSetValue(arguments.length ? arguments[1] : value);
         }
@@ -562,6 +564,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         switch(operator) {
             case 'equals':
             case 'not':
+            case 'in':
+            case 'notin':
                 //@TODO find it
                 var pickerRecordClass = this.foreignRecordClass;
                 if (this.foreignRefIdField) {
@@ -578,7 +582,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     listAlign: 'tr-br',
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
-                    renderTo: el
+                    renderTo: el,
+                    allowMultiple: ['in', 'notin'].indexOf(operator) > -1
                 }, this.pickerConfig));
                 
                 value.on('specialkey', function(field, e){
