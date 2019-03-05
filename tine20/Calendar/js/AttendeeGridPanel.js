@@ -708,14 +708,23 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             schedulingInfo = this.record.getSchedulingData(),
             encodedSchedulingInfo = Ext.encode(schedulingInfo);
 
-        if (encodedSchedulingInfo == this.encodedSchedulingInfo && !force) return;
+        if (encodedSchedulingInfo == this.encodedSchedulingInfo && !force) {
+            return;
+        }
+
+        if (! schedulingInfo.dtend || ! schedulingInfo.dtstart) {
+            // dtend & dtstart are required
+            return;
+        }
 
         // @TODO have load spinner?
         this.encodedSchedulingInfo = encodedSchedulingInfo;
 
         // clear state
         this.store.each(function(attendee) {
-            if (Ext.isArray(force) && force.indexOf(attendee.id) < 0) return;
+            if (Ext.isArray(force) && force.indexOf(attendee.id) < 0) {
+                return;
+            }
 
             attendee.set('fbInfo', '...');
             attendee.commit();
