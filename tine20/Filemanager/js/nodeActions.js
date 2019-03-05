@@ -401,9 +401,11 @@ Tine.Filemanager.nodeActions.checkDisabled = function(action, grants, records, i
         disabled = _.isFunction(action.isDisabled) ? action.isDisabled() : action.disabled;
 
     // if enabled check for not accessible node and disable
-    if (! disabled || !enabled){
+    if (! disabled || !enabled) {
+
         action.setDisabled(window.lodash.reduce(records, function(disabled, record) {
-            return disabled || record.isVirtual() || record.get('is_quarantined') == '1';
+            var isVirtual = _.isFunction(record.isVirtual) ? record.isVirtual() : false;
+            return disabled || isVirtual || record.get('is_quarantined') == '1';
         }, false));
     }
 };
