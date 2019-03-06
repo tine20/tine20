@@ -68,8 +68,8 @@ class Tinebase_ImageHelper
             throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');
         }
         if (! (isset($imgInfo['channels']) || array_key_exists('channels', $imgInfo))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Image of type ' . $imgInfo['mime']
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Image of type ' . $imgInfo['mime']
                     . ' had no channel information. Setting channels to 0.');
             $imgInfo['channels'] = 0;
         }
