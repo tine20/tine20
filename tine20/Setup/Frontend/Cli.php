@@ -1188,12 +1188,22 @@ class Setup_Frontend_Cli
         foreach ($tables as $table) {
             if ($db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
                     '" AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '" AND ROW_FORMAT <> "Dynamic"')->fetchColumn()) {
-                $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+                try {
+                    $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+                } catch (Zend_Db_Statement_Exception $e) {
+                    if ($db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
+                            '" AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '" AND ROW_FORMAT <> "Dynamic"')
+                            ->fetchColumn()) {
+                        throw $e;
+                    }
+                }
             }
 
             if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
                 $setupBackend = new Setup_Backend_Mysql();
+                $db->query('SET foreign_key_checks = 1');
                 $setupBackend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+                $db->query('SET foreign_key_checks = 0');
                 $setupBackend->dropIndex('tree_nodes', 'parent_id-name');
             }
 
@@ -1201,7 +1211,7 @@ class Setup_Frontend_Cli
                 ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
 
             if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
-                $setupBackend = new Setup_Backend_Mysql();
+                $setupBackend = new Setup_Backend_Mysql(true);
                 $setupBackend->alterCol('tree_nodes', new Setup_Backend_Schema_Field_Xml('<field>
                     <name>name</name>
                     <type>text</type>
