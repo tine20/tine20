@@ -523,7 +523,7 @@ class Setup_Controller
         /** @var Tinebase_Model_Application $application */
         foreach (Tinebase_Application::getInstance()->getApplications()->filter('status', Tinebase_Application::ENABLED)
                 as $application) {
-            $this->createImportExportDefinitions($application);
+            $this->createImportExportDefinitions($application, Tinebase_Core::isReplicationSlave());
         }
     }
     
