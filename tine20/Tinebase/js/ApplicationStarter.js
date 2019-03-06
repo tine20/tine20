@@ -443,8 +443,11 @@ Tine.Tinebase.ApplicationStarter = {
                     }
 
                     var containerProperty = modelConfig.hasOwnProperty('containerProperty') ? modelConfig.containerProperty : null;
-                    
-                    modelName = modelName.replace(/_/, '');
+
+                    // NOTE: we need to preserve original modelName.
+                    //       - otherwise we can't referece
+                    //       - otherwise we can't compute phpClassName
+                    // modelName = modelName.replace(/_/, '');
                     
                     Ext.namespace('Tine.' + appName, 'Tine.' + appName + '.Model');
                     

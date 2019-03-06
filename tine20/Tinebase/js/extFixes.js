@@ -349,11 +349,19 @@ Ext.form.DateField.prototype.getValue = function(){
  * @private
  */
 Ext.form.TimeField.prototype.getValue = function(){
-    // return the value that was set (has time information when unchanged in client) 
-    // and not just the date part!
-    var value =  this.fullDateTime;
-    
-    return value ? this.parseDate(value).dateFormat('H:i') : "";
+    var value =  this.fullDateTime,
+        dtValue = "";
+
+    if (value) {
+        var dtValue = this.parseDate(value);
+        dtValue.toJSON = function() {
+            return this.format('H:i:s');
+        }
+    }
+
+    return dtValue;
+    // always return in ISO time format
+    // return value ? this.parseDate(value).dateFormat('H:i:s') : "";
 };
 
 /**
@@ -1141,3 +1149,23 @@ Ext.form.Field.prototype.getAutoCreate = function() {
     }
     return cfg;
 };
+
+/**
+ * preserve dateformat
+ */
+Ext.data.Field = Ext.data.Field.createSequence(function(config) {
+    if (config.type == 'date') {
+        var dateFormat = this.dateFormat,
+             convert = this.convert;
+
+        this.convert = function(v) {
+            var d = convert(v);
+            if (Ext.isDate(d)) {
+                d.toJSON = function() {
+                    return this.format(dateFormat);
+                }
+            }
+            return d;
+        };
+    }
+});

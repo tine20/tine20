@@ -14,3 +14,14 @@ GENERAL CHANGES
 * Support for Oracle has been dropped
 * MySQL Version needs to be greater or equal to 5.7.5
 * MariaDB Version needs to be greater or equal to 10.0.2
+
+### MySQL with UTF8 MB4 charset
+
+We changed the default charset to UTF8MB4. All tables in the Tine 2.0 Database can be converted using a CLI method.
+This requires either MySQL 5.7.7+ or MariaDB 10.2.2+ with default settings. Earlier versions are supported
+ with non default settings. MySQL 5.6+ and MariaDB 10.0+ need to set:
+    innodb_large_prefix = 1
+    innodb_file_format = 'Barracuda'
+    innodb_file_per_table = 'ON'
+The conversion script will test these settings and abort if prerequisites are not met.
+the CLI method to convert to utf8mb4 is "setup.php --migrateUtf8mb4"
