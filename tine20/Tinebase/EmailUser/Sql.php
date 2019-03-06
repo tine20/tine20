@@ -75,6 +75,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * the constructor
      * 
      * @param array $_options
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function __construct(array $_options = array())
     {
@@ -91,6 +92,10 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         // merge _config and email backend config
         if ($this->_subconfigKey) {
+            if (! isset($emailConfig[$this->_subconfigKey])) {
+                throw new Tinebase_Exception_UnexpectedValue(
+                    'Email user config is broken - subconfig key "' . $this->_subconfigKey . '" missing');
+            }
             // flatten array
             $emailConfig = array_merge($emailConfig[$this->_subconfigKey], $emailConfig);
         }
