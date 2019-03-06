@@ -72,8 +72,6 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
 
         var value = new Ext.ux.form.ClearableTextField({
             filter: filter,
-            width: this.filterValueWidth,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             renderTo: el,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             emptyText: this.emptyText,

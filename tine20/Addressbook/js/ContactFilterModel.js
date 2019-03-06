@@ -45,10 +45,8 @@ Tine.Addressbook.ContactFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, 
         var value = new Tine.Addressbook.SearchCombo({
             app: this.app,
             filter: filter,
-            width: this.filterValueWidth,
             listWidth: 400,
             listAlign : 'tr-br?',
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el,
             getValue: function() {

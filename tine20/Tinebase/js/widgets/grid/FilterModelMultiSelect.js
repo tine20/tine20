@@ -72,8 +72,6 @@ Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterMo
         var value = new Tine.widgets.grid.FilterModelMultiSelectValueField(Ext.apply({
             app: this.app,
             filter: filter,
-            width: this.filterValueWidth,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el
         }, this.multiselectFieldConfig));

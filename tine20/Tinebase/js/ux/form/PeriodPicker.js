@@ -153,7 +153,8 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
         var rangeCombo = this.getRangeCombo();
         rangeCombo.render(this.el.child('.ux-pp-range'));
-        rangeCombo.setWidth(this.getEl().getWidth() * 0.4);
+
+        this.onResize(this.getEl().getWidth(), this.getEl().getHeight());
 
         this.setValue(this.value);
         this.mon(this.getEl(), 'click', this.onClick, this);
@@ -193,7 +194,14 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
     onResize: function (w, h) {
         Ext.ux.form.PeriodPicker.superclass.onResize.apply(this, arguments);
 
-        this.getRangeCombo().setWidth(this.getEl().getWidth() * 0.4);
+        var rw = Math.floor(this.getEl().getWidth() * 0.4),
+            cw = Math.floor(this.getEl().getWidth() * 0.6);
+
+        this.el.select('.ux-pp-range').setWidth(rw);
+        this.getRangeCombo().wrap.setWidth(rw);
+        this.getRangeCombo().setWidth(rw);
+
+        this.el.select('.ux-pp-controls').setWidth(cw);
     },
 
     getRangeCombo: function() {

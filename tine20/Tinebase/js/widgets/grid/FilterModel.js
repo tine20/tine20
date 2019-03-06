@@ -95,12 +95,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
     valueField: null,
 
     /**
-     * @cfg filterValueWidth
-     * @type Integer
-     */
-    filterValueWidth: 200,
-
-    /**
      * @cfg dateFilterSupportsPeriod
      * @type Boolean
      */
@@ -327,8 +321,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         if (operatorStore.getCount() > 1) {
             var operator = new Ext.form.ComboBox({
                 filter: filter,
-                width: 80,
-                id: 'tw-ftb-frow-operatorcombo-' + filter.id,
                 mode: 'local',
                 lazyInit: false,
                 emptyText: i18n._('select a operator'),
@@ -357,15 +349,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         } else if (this.operators[0] == 'freeform') {
             var operator = new Ext.form.TextField({
                 filter: filter,
-                width: 100,
                 emptyText: this.emptyTextOperator || '',
                 value: filter.get('operator') ? filter.get('operator') : '',
                 renderTo: el
             });
         } else {
             var operator = new Ext.form.Label({
+                readOnly: true,
                 filter: filter,
-                width: 100,
                 style: {margin: '0px 10px'},
                 getValue: function() { return operatorStore.getAt(0).get('operator'); },
                 text : operatorStore.getAt(0).get('label'),
@@ -424,6 +415,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             valueField.disableTrigger = (newOperator != 'contains');
             valueField.checkTrigger();
         }
+
+        var width = valueField.el.up('.tw-ftb-frow-value').getWidth() -10;
+        if (valueField.wrap) {
+            valueField.wrap.setWidth(width);
+        }
+        valueField.setWidth(width);
     },
     
     /**
@@ -434,11 +431,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      */
     valueRenderer: function(filter, el) {
         var value,
-            fieldWidth = this.filterValueWidth,
             commonOptions = {
                 filter: filter,
-                width: fieldWidth,
-                id: 'tw-ftb-frow-valuefield-' + filter.id,
                 renderTo: el,
                 value: filter.data.value ? filter.data.value : this.defaultValue
             };
@@ -602,7 +596,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         filter.withinCombo = new Ext.form.ComboBox({
             hidden: valueType != 'withinCombo',
             filter: filter,
-            width: this.filterValueWidth,
             renderTo: el,
             mode: 'local',
             lazyInit: false,
@@ -648,11 +641,13 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     this.pp = new Ext.ux.form.PeriodPicker({
                         range: range,
                         periodIncludesUntil: true,
-                        width: me.filterValueWidth - 18,
                         cls: 'x-pp-combo',
                         'renderTo': this.wrap
                     });
                     this.pp.on('change', me.onFiltertrigger, me , {buffer: 250});
+                    filter.withinCombo.on('resize', function(cmp, w) {
+                        this.pp.setSize(w-18);
+                    });
                 }
                 this.pp.show();
                 if (value.from) {
@@ -693,7 +688,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         filter.datePicker = new Ext.form.DateField({
             hidden: valueType != 'datePicker',
             filter: filter,
-            width: this.filterValueWidth,
             value: pickerValue,
             renderTo: el,
             listeners: {
@@ -710,7 +704,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         filter.numberfield = new Ext.form.NumberField({
             hidden: valueType != 'numberfield',
             filter: filter,
-            width: this.filterValueWidth,
             value: pickerValue,
             renderTo: el,
             minValue: 1,

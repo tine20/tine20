@@ -84,10 +84,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @type {Boolean}
      */
     customFilterSorting: false,
-    
-    filterFieldWidth: 240,
-    filterValueWidth: 200,
-    
+
     /**
      * @cfg {String} row prefix (defaults to i18n._('Show'))
      */
@@ -150,9 +147,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     '<td class="tw-ftb-frow-pbutton"></td>',
                     '<td class="tw-ftb-frow-mbutton"></td>',
                     '<td class="tw-ftb-frow-prefix">{prefix}</td>',
-                    '<td class="tw-ftb-frow-field" width="' + this.filterFieldWidth + 'px">{field}</td>',
-                    '<td class="tw-ftb-frow-operator" width="90px" >{operator}</td>',
-                    '<td class="tw-ftb-frow-value" width="' + this.filterValueWidth + 'px">{value}</td>',
+                    '<td class="tw-ftb-frow-field">{field}</td>',
+                    '<td class="tw-ftb-frow-operator">{operator}</td>',
+                    '<td class="tw-ftb-frow-value">{value}</td>',
                     '<td class="tw-ftb-frow-searchbutton"></td>',
                     //'<td class="tw-ftb-frow-deleteallfilters"></td>',
                     //'<td class="tw-ftb-frow-savefilterbutton"></td>',
@@ -212,7 +209,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             handler: this.onLoadFilter
         });
     },
-    
+
     /**
      * @private
      */
@@ -364,10 +361,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // field
         filter.formFields.field = new Ext.form.ComboBox({
             filter: filter,
-            width: this.filterFieldWidth,
             minListWidth: 240, // will be ignored if width is heigher
             resizable: true,
-            id: 'tw-ftb-frow-fieldcombo-' + filter.id,
+            // id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
             emptyText: i18n._('select a field'),
@@ -499,21 +495,32 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 
         if (this.rendered) {
             this.arrangeButtons();
-            
-            this.filterStore.each(function(filter){
-                for (var formItemName in filter.formFields) {
-                    if (filter.formFields[formItemName] && typeof filter.formFields[formItemName].syncSize == 'function') {
-                        filter.formFields[formItemName].setWidth(filter.formFields[formItemName].width);
-                        if (filter.formFields[formItemName].wrap) {
-                            filter.formFields[formItemName].wrap.setWidth(filter.formFields[formItemName].width);
-                        }
-                        filter.formFields[formItemName].syncSize();
-                    }
-                }
-            }, this);
+            this.fixWidths();
         }
     },
-    
+
+    fixWidths: function() {
+        var aw = this.getWidth()-250,
+            dim = {
+                'tw-ftb-frow-field': Math.floor(aw*0.45),
+                'tw-ftb-frow-operator': Math.floor(aw*0.17),
+                'tw-ftb-frow-value': Math.floor(aw*0.38)
+            };
+
+        for (var cls in dim) {
+            this.el.select('.' + cls).setWidth(dim[cls]);
+            this.el.select('.' + cls + ' div[class^=x-form-field-wrap] *[id^=ext-comp-]').each(function(el) {
+                var cmp = Ext.getCmp(el.id);
+                if (cmp) {
+                    if (cmp.wrap) {
+                        cmp.wrap.setWidth(dim[cls]);
+                    }
+                    cmp.setWidth(dim[cls]);
+                }
+            });
+        }
+    },
+
     /**
      * called  when a filter action is to be triggered (start new search)
      * @private
@@ -579,6 +586,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 filter.formFields.value.selectText.defer(50, filter.formFields.value);
             }
         }
+
+        this.fixWidths();
     },
     
     /**

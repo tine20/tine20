@@ -85,7 +85,6 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     operatorRenderer: function (filter, el) {
         var operator = new Ext.form.ComboBox({
             filter: filter,
-            width: 80,
             id: 'tw-ftb-frow-operatorcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
@@ -118,8 +117,6 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         var value = new Ext.Button({
             text: i18n._('Define ...'),
             filter: filter,
-            width: this.filterValueWidth,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             renderTo: el,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),

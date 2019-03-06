@@ -58,9 +58,7 @@ Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFilte
                 var value = new Tine.Crm.Contact.TypeComboBox({
                     filter: filter,
                     blurOnSelect: true,
-                    width: this.filterValueWidth,
                     listAlign: 'tr-br',
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     renderTo: el
                 });

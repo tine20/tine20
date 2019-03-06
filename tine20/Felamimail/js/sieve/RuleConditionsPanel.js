@@ -34,8 +34,7 @@ Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterT
     defaultFilter: 'from',
     neverAllowSaving: true,
     showSearchButton: false,
-    filterFieldWidth: 160,
-    
+
     customFilterSorting: true,
     
     // unused fn
