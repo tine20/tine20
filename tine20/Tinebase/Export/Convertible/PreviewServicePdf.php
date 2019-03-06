@@ -29,7 +29,7 @@ trait Tinebase_Export_Convertible_PreviewServicePdf
 
         $result = Tinebase_Core::getPreviewService()->getPdfForFile($suffixed, true);
 
-        file_put_contents($suffixed, $result[0][0]);
+        file_put_contents($suffixed, $result);
         
         $name = $suffixed . '.pdf';
         rename($suffixed, $name);
