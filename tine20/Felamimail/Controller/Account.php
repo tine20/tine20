@@ -56,7 +56,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @var Felamimail_Backend_Account
      */
     protected $_backend;
-    
+
+    const ACCOUNT_CAPABILITIES_CACHEID = 'Felamimail_Account_Capabilities';
+
     /**
      * the constructor
      *
@@ -353,18 +355,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if ((isset($diff['display_format']) || array_key_exists('display_format', $diff))) {
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
         }
-        
-        try {
-            $felamimailSession = Felamimail_Session::getSessionNamespace();
-            
-            // reset capabilities if imap host / port changed
-            if (isset($felamimailSession->account) && ((isset($diff['host']) || array_key_exists('host', $diff)) || (isset($diff['port']) || array_key_exists('port', $diff)))) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Resetting capabilities for account ' . $_record->name);
-                unset($felamimailSession->account[$_record->getId()]);
-            }
-        } catch (Zend_Session_Exception $zse) {
-            // nothing to do
+
+        // reset capabilities if imap host / port changed
+        if (isset($diff['host']) || isset($diff['port'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Resetting capabilities for account ' . $_record->name);
+            $cacheId = Tinebase_Helper::convertCacheId(self::ACCOUNT_CAPABILITIES_CACHEID . '_' . $_record->getId());
+            Tinebase_Core::getCache()->remove($cacheId);
         }
     }
 
@@ -549,24 +546,20 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     /**
      * get imap server capabilities and save delimiter / personal namespace in account
      *
+     * - capabilities are saved in the cache
+     *
      * @param Felamimail_Model_Account $_account
      * @return array capabilities
      */
     public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
-        try {
-            $felamimailSession = Felamimail_Session::getSessionNamespace();
-            
-            if (isset($felamimailSession->account) && is_array($felamimailSession->account) && array_key_exists($_account->getId(), $felamimailSession->account)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                    . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
-                
-                return $felamimailSession->account[$_account->getId()];
-            }
-        } catch (Zend_Session_Exception $zse) {
-            // nothing to do
+        $cacheId = Tinebase_Helper::convertCacheId(self::ACCOUNT_CAPABILITIES_CACHEID . '_' . $_account->getId());
+        $cache = Tinebase_Core::getCache();
+
+        if ($cache->test($cacheId)) {
+            return $cache->load($cacheId);
         }
-        
+
         $imapBackend = ($_imapBackend !== NULL) ? $_imapBackend : $this->_getIMAPBackend($_account, TRUE);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -591,8 +584,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getTraceAsString());
         }
         
-        // save capabilities in SESSION
-        $felamimailSession->account[$_account->getId()] = $capabilities;
+        // save capabilities in cache
+        $cache->save($capabilities, $cacheId);
         
         return $capabilities;
     }
