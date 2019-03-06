@@ -568,6 +568,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dataIndex: 'size',
             hidden: true,
             renderer: Ext.util.Format.fileSize
+        },{
+            id: 'fileLocations',
+            header: this.app.i18n._("Message File Locations"),
+            width: 120,
+            sortable: true,
+            dataIndex: 'fileLocations',
+            hidden: true,
+            renderer: Tine.Felamimail.MessageFileButton.getFileLocationText
         }];
     },
     
@@ -611,10 +619,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             const icon = record.getTine20Icon();
             icons.push({src: icon, qtip: Ext.util.Format.htmlEncode(i18n._('Tine20'))});
         }
-//        if (record.hasFlag('\\Recent')) {
-//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: i18n._('Recent')});
-//        }   
-        
+
         Ext.each(icons, function(icon) {
             result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + Tine.Tinebase.common.doubleEncode(icon.qtip) + '">';
         }, this);
@@ -1440,9 +1445,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         frame.contentWindow.focus();
         frame.contentWindow.print();
-        
-        // removeing frame chrashes chrome
-//        setTimeout(function(){Ext.removeNode(frame);}, 100);
     },
     
     /**

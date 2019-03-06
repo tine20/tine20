@@ -46,6 +46,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'reading_conf' },
       { name: 'massMailingFlag', type: 'bool' },
       { name: 'reply_to' },
+      { name: 'fileLocations' },
       { name: 'from_node' } // JS only - contains node data if opened from Filemanager
     ], {
     appName: 'Felamimail',
