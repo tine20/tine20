@@ -4342,3 +4342,6 @@ msgstr ""
 #: Acl/Rights.php:200
 msgid "The right to access the replication data of all applications."
 msgstr ""
+
+msgid "The right Resource Admin must be set once."
+msgstr ""

@@ -418,13 +418,32 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param   array   $recordData
      * @return  array   created/updated Resource
+     * @throws
      */
     public function saveResource($recordData)
     {
         if(array_key_exists ('max_number_of_people', $recordData) && $recordData['max_number_of_people'] == '') {
            $recordData['max_number_of_people'] = null;
         }
-        
+
+        $check = false;
+        if ($recordData['grants']) {
+
+            foreach ($recordData['grants'] as $grant) {
+                try {
+                    if ($grant['resourceAdminGrant'] == true) {
+                        $check = true;
+                        break;
+                    }
+                } catch (Exception $e) {
+                }
+            }
+            if (!$check) {
+                throw new Calendar_Exception_ResourceAdminGrant();
+            }
+
+        }
+
         return $this->_save($recordData, Calendar_Controller_Resource::getInstance(), 'Resource');
     }
     

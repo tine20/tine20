@@ -1537,7 +1537,8 @@ class Calendar_JsonTests extends Calendar_TestCase
      * assert grant handling
      */
     public function testSaveResource($grants = [Calendar_Model_ResourceGrants::RESOURCE_READ => true,
-         Calendar_Model_ResourceGrants::EVENTS_EDIT => true, Calendar_Model_ResourceGrants::RESOURCE_INVITE => true])
+         Calendar_Model_ResourceGrants::EVENTS_EDIT => true, Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+        Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true])
     {
         $resoureData = array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
@@ -1565,7 +1566,10 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSaveResourcesWithoutRights()
     {
+
         static::setExpectedException(Tinebase_Exception_AccessDenied::class, 'No Permission.');
+        $this->testSaveResource(array(Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true));
+        static::setExpectedException(Calendar_Exception_ResourceAdminGrant::class, 'The right Resource Admin must be set once.');
         $this->testSaveResource(array());
     }
 
