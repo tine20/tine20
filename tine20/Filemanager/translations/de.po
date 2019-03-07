@@ -386,7 +386,7 @@ msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
 
 #: js/DocumentPreview.js:140
 msgid "No preview available yet - Please try again in a few minutes."
-msgstr "Noch eine Vorschau verfügbar - Bitte versuchen Sie es in einigen Minuten erneut."
+msgstr "Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einigen Minuten erneut."
 
 #: js/NotificationGridPanel.js:58
 msgid "Notification"
