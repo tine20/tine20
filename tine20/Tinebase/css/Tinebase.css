@@ -695,6 +695,7 @@ span:hover.tinebase-showheaders-link {
     height: 12px;
     vertical-align: text-bottom;
     padding-right: 4px;
+    transform: scale(1.3);
 }
 
 .x-grid .tine-keyfield-icon {

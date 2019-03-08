@@ -198,11 +198,9 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             $createdRecord = parent::create($_record);
 
             $container->xprops()['Calendar']['Resource']['resource_id'] = $createdRecord->getId();
-            $resource_type = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)->getValue($_record['type']);
-            $container->xprops()['Calendar']['Resource']['resource_icon'] = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)
-                ->getKeyfieldRecordByValue($resource_type)['icon'];
-            Tinebase_Container::getInstance()->update($container);
-           
+
+            $this->_setIconXprops($_record, $container);
+
 
             $updateObserver = new Tinebase_Model_PersistentObserver(array(
                 'observable_model'      => 'Tinebase_Model_Container',
@@ -297,7 +295,12 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             if ($container->name !== $result->name || $container->hierarchy !== $result->hierarchy) {
                 $container->name = $result->name;
                 $container->hierarchy = $result->hierarchy;
+
                 Tinebase_Container::getInstance()->update($container);
+            }
+
+            if ($currentRecord->type !== $result->type) {
+                $this->_setIconXprops($_record, $container);
             }
 
             if ($currentRecord->name != $result->name) {
@@ -354,6 +357,16 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 
         Tinebase_Core::set(Tinebase_Core::USER, $currentUser);
         Calendar_Controller_Event::getInstance()->doContainerACLChecks($aclChecks);
+    }
+
+
+    protected function _setIconXprops($_record, $_container)
+    {
+
+        $resource_type = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)->getValue($_record['type']);
+        $_container->xprops()['Calendar']['Resource']['resource_icon'] = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)
+            ->getKeyfieldRecordByValue($resource_type)['icon'];
+        Tinebase_Container::getInstance()->update($_container);
     }
 
     protected function _checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.',

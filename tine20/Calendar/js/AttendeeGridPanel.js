@@ -886,18 +886,20 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     renderAttenderMemberofName: function(name) {
         return Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderGroupName.apply(this, arguments);
     },
-    
+
     renderAttenderResourceName: function(name) {
-        if (typeof name.getTitle == 'function') {
-            return Ext.util.Format.htmlEncode(name.getTitle());
-        }
-        if (name.name) {
-            return Ext.util.Format.htmlEncode(name.name);
-        }
-        if (Ext.isString(name)) {
-            return Ext.util.Format.htmlEncode(name);
-        }
-        return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+        var icon = name.container_id['xprops']['Calendar']['Resource']['resource_icon']
+
+            if (typeof name.getTitle == 'function') {
+                return Ext.util.Format.htmlEncode(name.getTitle());
+            }
+            if (name.name) {
+                name =  Ext.util.Format.htmlEncode(name.name);
+            }else {
+
+                return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+            }
+        return '<img class="tine-keyfield-icon" src="' + icon + '"/> ' + name;
     },
     
     
@@ -954,7 +956,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             qtipText =  '',
             userId = attender.get('user_id'),
             hasAccount = userId && ((userId.get && userId.get('account_id')) || userId.account_id);
-            
         switch (type) {
             case 'user':
                 cssClass += hasAccount || ! userId ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon';
