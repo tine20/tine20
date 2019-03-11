@@ -133,7 +133,7 @@ Tine.Calendar.FreeBusyInfo.prototype = {
     getStateOfAllAttendees: function() {
         var _ = window.lodash;
 
-        _.reduce(this.statusMap, function(result, value, key) {
+        return _.reduce(this.statusMap, function(result, value, key) {
             return Math.max(result, value);
         }, 0);
     }
