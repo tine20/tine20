@@ -499,7 +499,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             Tinebase_Core::get(Tinebase_Core::CACHE)
         );
         
-        $syncrotonEvent->timezone = $timeZoneConverter->encodeTimezone(Tinebase_Core::getUserTimezone());
+        $syncrotonEvent->timezone = $timeZoneConverter->encodeTimezone($entry->originator_tz);
         $syncrotonEvent->dtStamp = $entry->creation_time;
         $syncrotonEvent->uID = $entry->uid;
         
