@@ -78,14 +78,14 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      * returns internal addressbook
      * 
      * @return Tinebase_Model_Container
-     * @todo replace with setDefaultInternalAddressbook
      */
     protected function _getInternalAddressbook()
     {
         if ($this->_internalAddressbook === NULL) {
-            $this->_internalAddressbook = Tinebase_Container::getInstance()->getContainerByName(
-                Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
-        } 
+            $this->_internalAddressbook = Tinebase_Container::getInstance()->getContainerById(
+                Admin_Controller_User::getDefaultInternalAddressbook()
+            );
+        }
         
         return $this->_internalAddressbook;
     }
