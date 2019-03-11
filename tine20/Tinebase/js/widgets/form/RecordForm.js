@@ -33,39 +33,69 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
     initComponent: function() {
         var appName = this.recordClass.getMeta('appName'),
             app = Tine.Tinebase.appMgr.get(appName),
-            fieldNames = this.recordClass.getFieldNames(),
-            modelConfig = this.recordClass.getModelConfiguration(),
-            fieldsToExclude = ['description', 'tags', 'notes', 'attachments', 'relations', 'customfields'];
-
-        Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
-        fieldsToExclude.push(this.recordClass.getMeta('idProperty'));
+            fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(this.recordClass);
 
         this.items = [];
 
         // sometimes we need the instances from registry (e.g. printing)
         this.editDialog.recordForm = this;
 
-        Ext.each(fieldNames, function(fieldName) {
-            var fieldDefinition = modelConfig.fields[fieldName];
-            // exclude: genericFields, idProperty, wellKnown(description, tags, customfields, relations, attachments, notes)
-            if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && ! fieldDefinition.shy) {
-                var field = Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog');
-                if (field) {
-                    // apply basic layout
-                    field.columnWidth = 1;
-                    // add edit dialog
-                    // TODO do this for all fields??
-                    if (this.editDialog) {
-                        field.editDialog = this.editDialog;
-                    }
+        Ext.each(fieldDefinitions, function(fieldDefinition) {
 
-                    this.items.push([field]);
+            var field = Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog');
+            if (field) {
+                // apply basic layout
+                field.columnWidth = 1;
+                // add edit dialog
+                // TODO do this for all fields??
+                if (this.editDialog) {
+                    field.editDialog = this.editDialog;
                 }
+
+                this.items.push([field]);
             }
         }, this);
 
         Tine.widgets.form.RecordForm.superclass.initComponent.call(this);
     }
 });
+
+/**
+ * get fieldDefinitions of all fields which should be present in recordForm
+ *
+ * @param recordClass
+ * @return []
+ */
+Tine.widgets.form.RecordForm.getFieldDefinitions = function(recordClass) {
+    var fieldNames = recordClass.getFieldNames(),
+        modelConfig = recordClass.getModelConfiguration(),
+        fieldsToExclude = ['description', 'tags', 'notes', 'attachments', 'relations', 'customfields'];
+
+    Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
+    fieldsToExclude.push(recordClass.getMeta('idProperty'));
+
+    return _.reduce(fieldNames, function(fieldDefinitions, fieldName) {
+        var fieldDefinition = modelConfig.fields[fieldName];
+        if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && ! fieldDefinition.shy) {
+            fieldDefinitions.push(fieldDefinition);
+        }
+        return fieldDefinitions;
+    }, []);
+};
+
+Tine.widgets.form.RecordForm.getFormHeight = function(recordClass) {
+    var fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass),
+        formHeight = 38+23+5; // btnfooter + tabpanel + paddings
+
+    Ext.each(fieldDefinitions, function(fieldDefinition) {
+        var app = Tine.Tinebase.appMgr.get(recordClass.getMeta('appName')),
+            field = Tine.widgets.form.FieldManager.get(app, recordClass, fieldDefinition.fieldName, 'editDialog'),
+            height = field.height+25 || 42;
+
+        formHeight += height;
+    });
+
+    return formHeight;
+};
 
 Ext.reg('recordform', Tine.widgets.form.RecordForm);

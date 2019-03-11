@@ -67,7 +67,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     /**
      * @cfg {Int} width of new window
      */
-    width: 500,
+    width: 600,
     /**
      * @cfg {Int} height of new window
      */

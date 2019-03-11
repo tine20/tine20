@@ -617,7 +617,8 @@ Tine.Tinebase.ApplicationStarter = {
                                 var id = cfg.recordId ? cfg.recordId : ( (cfg.record && cfg.record.id) ? cfg.record.id : 0 );
                                 var window = Tine.WindowFactory.getWindow({
                                     width: edp.windowWidth ? edp.windowWidth : 600,
-                                    height: edp.windowHeight ? edp.windowHeight : 230,
+                                    height: edp.windowHeight ? edp.windowHeight :
+                                        Tine.widgets.form.RecordForm.getFormHeight(Tine[appName].Model[modelName]),
                                     name: edp.windowNamePrefix + id,
                                     contentPanelConstructor: 'Tine.' + appName + '.' + editDialogName,
                                     contentPanelConstructorConfig: cfg
