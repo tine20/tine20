@@ -943,6 +943,24 @@ Zeile 3</AirSyncBase:Data>
         $this->assertTrue(is_array($syncrotonEvent->categories));
         $this->assertTrue(in_array('test tag', $syncrotonEvent->categories), 'tag not found in categories: ' . print_r($syncrotonEvent->categories, TRUE));
     }
+
+    /**
+     * testEventTimezone
+     *
+     * @see 0007346: events with tags are not synced
+     */
+    public function testEventTimezone()
+    {
+        $event = ActiveSync_TestCase::getTestEvent();
+        $event->originator_tz =  'Europe/Moscow';
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $syncrotonEvent = $controller->toSyncrotonModel($event);
+
+        $this->assertEquals($syncrotonEvent->timezone, 'TP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==');
+
+    }
     
     /**
      * testEventWithAlarmToSyncrotonModel
