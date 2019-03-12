@@ -274,6 +274,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "DurationSpinner.js",
+          "path": "js/ux/form/"
+        },
+        {
           "text": "LockCombo.js",
           "path": "js/ux/form/"
         },

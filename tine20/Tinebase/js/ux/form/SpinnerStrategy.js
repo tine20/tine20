@@ -120,6 +120,7 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
 Ext.ux.form.Spinner.DateStrategy = function(config){
     Ext.ux.form.Spinner.DateStrategy.superclass.constructor.call(this, config);
 };
+Ext.ux.form.Spinner.DateStrategy.isNegRe = /^ *- */;
 
 Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
     defaultValue : new Date(),
@@ -132,7 +133,12 @@ Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
     spin : function(field, down, alternate){
         Ext.ux.form.Spinner.DateStrategy.superclass.spin.call(this, field, down, alternate);
 
-        var v = field.getRawValue();
+        var v = field.getRawValue(),
+            isNegValue = v.match(Ext.ux.form.Spinner.DateStrategy.isNegRe);
+
+        if (isNegValue) {
+            v = v.replace(Ext.ux.form.Spinner.DateStrategy.isNegRe, '');
+        }
         
         v = Date.parseDate(v, this.format);
         var dir = (down == true) ? -1 : 1 ;
@@ -143,10 +149,23 @@ Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
             this.defaultValue = Date.parseDate(this.defaultValue, this.format);
         }
 
+        // transition form 0
+        if (v.format('H:i:s') == '00:00:00' /*&& this.allowNegative*/) {
+            isNegValue = down;
+        }
+
+        if (isNegValue) {
+            dir = dir*-1;
+        }
+
         v = (v) ? v.add(dtconst, dir*incr) : this.defaultValue;
 
+        if (v.format('H:i:s') == '00:00:00') {
+            isNegValue = false;
+        }
+
         v = this.fixBoundries(v);
-        field.setRawValue(Ext.util.Format.date(v,this.format));
+        field.setRawValue((isNegValue ? '- ' : '') + Ext.util.Format.date(v,this.format));
     },
     
     //private
