@@ -949,6 +949,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         } 
         
         echo $message . "\n";
+
+        try {
+            Tinebase_Exception::log(new Tinebase_Exception($message));
+        } catch (Throwable $t) {}
+
         return 2;
     }
     
@@ -985,6 +990,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return 0;
         } else {
             echo $message . "\n";
+            try {
+                Tinebase_Exception::log(new Tinebase_Exception($message));
+            } catch (Throwable $t) {}
             return 2;
         }
     }
@@ -1024,6 +1032,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $message .= ': ' . $e->getMessage();
             $result = 2;
         }
+
+        if ('CRON OK' !== $message) {
+            try {
+                Tinebase_Exception::log(new Tinebase_Exception($message));
+            } catch (Throwable $t) {}
+        }
         
         echo $message . "\n";
         return $result;
@@ -1052,6 +1066,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $message .= ' FAIL: ' . $e->getMessage();
             $result = 2;
         }
+
+        if (strpos($message, 'LOGINS OK') !== 0) {
+            try {
+                Tinebase_Exception::log(new Tinebase_Exception($message));
+            } catch (Throwable $t) {}
+        }
         
         echo $message . "\n";
         return $result;
@@ -1076,6 +1096,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         } catch (Exception $e) {
             $message .= ' FAIL: ' . $e->getMessage();
             $result = 2;
+        }
+
+        if (strpos($message, 'ACTIVE USERS OK') !== 0) {
+            try {
+                Tinebase_Exception::log(new Tinebase_Exception($message));
+            } catch (Throwable $t) {}
         }
 
         echo $message . "\n";
@@ -1173,8 +1199,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $message = 'QUEUE FAIL: ' . get_class($e) . ' - ' . $e->getMessage();
                     $result = 2;
                 }
+
+                if ('QUEUE OK' !== $message) {
+                    try {
+                        Tinebase_Exception::log(new Tinebase_Exception($message));
+                    } catch (Throwable $t) {}
+                }
             }
         }
+
         echo $message . "\n";
         return $result;
     }
@@ -1217,6 +1250,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             } catch (Exception $e) {
                 $message = 'CACHE FAIL: ' . $e->getMessage();
                 $result = 2;
+            }
+
+            if (strpos($message, 'CACHE OK') !== 0) {
+                try {
+                    Tinebase_Exception::log(new Tinebase_Exception($message));
+                } catch (Throwable $t) {}
             }
         }
         echo $message . "\n";
