@@ -276,7 +276,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         name: 'duration',
                         selectOnFocus: true,
                         allowBlank: false,
-                        xtype: 'tinedurationspinner'
+                        xtype: 'durationspinner'
                         }, {
                         fieldLabel: this.app.i18n._('Date'),
                         columnWidth: 0.25,

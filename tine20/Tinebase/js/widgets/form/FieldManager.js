@@ -112,7 +112,7 @@ Tine.widgets.form.FieldManager = function() {
                     }
 
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'durationSec') {
-                        field.xtype = 'tinedurationspinner';
+                        field.xtype = 'durationspinner';
                         field.baseUnit = 'seconds';
                     }
 
