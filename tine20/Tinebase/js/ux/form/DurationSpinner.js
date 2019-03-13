@@ -38,34 +38,7 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     },
 
     setValue: function(value) {
-        if(! value || value == '00:00') {
-            value = this.emptyOnZero ? '' : '00:00';
-        } else if(! value.toString().match(/:/)) {
-            if (this.baseUnit == 'seconds') {
-                value = value/60;
-            }
-            var isNegValue = value < 0,
-                hours = Math.floor(Math.abs(value) / 60),
-                minutes = Math.abs(value) - hours * 60;
-
-            if (hours < 10) {
-                hours = '0' + hours;
-            }
-
-            if (minutes < 10) {
-                minutes = '0' + minutes;
-            }
-
-            if (minutes !== 0) {
-                value = hours + ':' + minutes;
-            } else {
-                value = hours + ':00';
-            }
-
-            if (isNegValue) {
-                value = '- ' + value;
-            }
-        }
+        value = Ext.ux.form.DurationSpinner.durationRenderer(value, this);
 
         Ext.ux.form.DurationSpinner.superclass.setValue.call(this, value);
     },
@@ -133,4 +106,35 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     }
 });
 
+Ext.ux.form.DurationSpinner.durationRenderer = function(value, config) {
+    if(! value || value == '00:00') {
+        value = config.emptyOnZero ? '' : '00:00';
+    } else if(! value.toString().match(/:/)) {
+        if (config.baseUnit == 'seconds') {
+            value = value/60;
+        }
+        var isNegValue = value < 0,
+            hours = Math.floor(Math.abs(value) / 60),
+            minutes = Math.abs(value) - hours * 60;
+
+        if (hours < 10) {
+            hours = '0' + hours;
+        }
+
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+
+        if (minutes !== 0) {
+            value = hours + ':' + minutes;
+        } else {
+            value = hours + ':00';
+        }
+
+        if (isNegValue) {
+            value = '- ' + value;
+        }
+    }
+    return value;
+};
 Ext.reg('durationspinner', Ext.ux.form.DurationSpinner);
