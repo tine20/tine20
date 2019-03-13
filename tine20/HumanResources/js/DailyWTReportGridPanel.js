@@ -37,13 +37,14 @@ Tine.HumanResources.DailyWTReportGridPanel = Ext.extend(Tine.widgets.grid.GridPa
     },
 
     onCalculateAllReports: function(btn) {
-        var me = this;
+        var me = this,
+            apiName = 'calculateAll' + this.recordClass.getMeta('modelName') + 's';
 
         // NOTE: loading animation not possible with medium btn
         btn.setDisabled(true);
         me.pagingToolbar.refresh.disable();
 
-        Tine.HumanResources.calculateAllReports().then(function() {
+        Tine.HumanResources[apiName]().then(function() {
             btn.setDisabled(false);
             me.loadGridData();
         });

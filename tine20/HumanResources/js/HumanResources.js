@@ -11,6 +11,8 @@
 Ext.namespace('Tine.HumanResources');
 
 require('./DailyWTReportGridPanel');
+require('./MonthlyWTReportGridPanel');
+require('./MonthlyWTReportEditDialog');
 
 Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 

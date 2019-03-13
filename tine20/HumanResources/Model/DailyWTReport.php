@@ -72,7 +72,6 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
         'recordName' => 'Daily Working Time Report',
         'recordsName' => 'Daily Working Time Reports', // ngettext('Daily Working Time Report', 'Daily Working Time Reports', n)
         'containerProperty' => null,
-        'titleProperty' => 'date',
         'hasRelations' => false, // TODO really no relations?
         'hasCustomFields' => true,
         'hasNotes' => true,
@@ -88,6 +87,9 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 
         'appName' => 'HumanResources',
         'modelName' => self::MODEL_NAME_PART,
+
+        self::TITLE_PROPERTY=> "{# {{date - sorting! #}{% if working_time_actual %}{{ working_time_actual |date('H:i', 'GMT')}}{% else %}00:00{% endif %} - {{ date | localizeddate('full', 'none', app.request.locale ) }}",
+
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [

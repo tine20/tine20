@@ -61,7 +61,7 @@ class HumanResources_Model_WageType extends Tinebase_Record_Abstract
         self::SINGULAR_CONTAINER_MODE   => true,
         self::HAS_PERSONAL_CONTAINER    => false,
 
-        self::CREATE_MODULE             => true,
+        self::CREATE_MODULE             => false,
         self::APP_NAME                  => HumanResources_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::TABLE                     => [
