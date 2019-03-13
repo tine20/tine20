@@ -100,7 +100,11 @@ Tine.Tinebase.common = {
      * @see Ext.util.Format.date
      * @return {String} localised date and time
      */
-    dateTimeRenderer: function ($_iso8601) {
+    dateTimeRenderer: function ($_iso8601, metadata) {
+        if (metadata) {
+            metadata.css = 'tine-gird-cell-datetime';
+        }
+
         var dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
         
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
@@ -113,7 +117,11 @@ Tine.Tinebase.common = {
      * @see Ext.util.Format.date
      * @return {String} localised date
      */
-    dateRenderer: function (date) {
+    dateRenderer: function (date, metadata) {
+        if (metadata) {
+            metadata.css = 'tine-gird-cell-date';
+        }
+
         var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
         
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium'));
@@ -168,7 +176,11 @@ Tine.Tinebase.common = {
      * @see Ext.util.Format.date
      * @return {String} localised time
      */
-    timeRenderer: function (date) {
+    timeRenderer: function (date, metadata) {
+        if (metadata) {
+            metadata.css = 'tine-gird-cell-time';
+        }
+
         var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
         
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', 'medium'));

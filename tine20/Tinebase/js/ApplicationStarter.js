@@ -168,9 +168,23 @@ Tine.Tinebase.ApplicationStarter = {
                                     return Tine.Tinebase.common.percentRenderer(value, config.type);
                                 };
                                 break;
+                            case 'durationSec':
+                                gridRenderer = function(value, cell, record) {
+                                    return Ext.ux.form.DurationSpinner.durationRenderer(value, {
+                                        baseUnit: 'seconds'
+                                    });
+                                };
+                                break;
                             default:
                                 gridRenderer = Ext.util.Format.htmlEncode;
                         }
+
+                        gridRenderer = gridRenderer.createSequence(function(value, metadata, record) {
+                            if (metadata) {
+                                metadata.css = 'tine-gird-cell-number';
+                            }
+                        });
+
                     }
                     break;
                 case 'user':
