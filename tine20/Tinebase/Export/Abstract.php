@@ -800,10 +800,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $fn($propertyValue);
                 }
                 if (true === $first || $this->_lastGroupValue !== $propertyValue) {
-                    $this->_lastGroupValue = $propertyValue;
                     if (false === $first) {
                         $this->_endGroup();
                     }
+                    $this->_lastGroupValue = $propertyValue;
                     $this->_currentRecord = $record;
                     $this->_startGroup();
                 }
