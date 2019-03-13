@@ -25,12 +25,14 @@ class Tinebase_ModelConfiguration_Const {
     const CONTROLLER = 'controller';
     const CONTROLLER_HOOK_BEFORE_UPDATE = 'controllerHookBeforeUpdate';
     const COLUMNS = 'columns';
+    const COPY_OMIT = 'copyOmit';
     const CREATE_MODULE = 'createModule';
 
     const DB_COLUMNS = 'dbColumns';
     const DEFAULT_VAL = 'default';
     const DEPENDENT_RECORDS = 'dependentRecords';
 
+    const EXPOSE_HTTP_API = 'exposeHttpApi';
     const EXPOSE_JSON_API = 'exposeJsonApi';
 
     const FIELDS = 'fields';
@@ -71,6 +73,7 @@ class Tinebase_ModelConfiguration_Const {
     const RECORD_NAME = 'recordName';
     const RECORDS_NAME = 'recordsName';
 
+    const SHY = 'shy';
     const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
     const SPECIAL_TYPE = 'specialType';
     const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
@@ -104,7 +107,7 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_USER = 'user';
     const TYPE_VIRTUAL = 'virtual';
 
-    const UNIQUE = 'unique';
+    const UNIQUE_CONSTRAINTS = 'uniqueConstraints';
     const UNSIGNED = 'unsigned';
 
     const VALIDATORS = 'validators';

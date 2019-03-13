@@ -512,7 +512,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             'setZeroHeight'     => $rowDimension->getZeroHeight()
         );
         $cellIterator = $row->getCellIterator($startColumn, $endColumn);
-        
+
         $replace = array('${GROUP_END}', '${/GROUP_END}');
         /** @var Cell $cell */
         foreach($cellIterator as $cell) {
