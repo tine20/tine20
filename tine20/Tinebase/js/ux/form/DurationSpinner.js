@@ -30,7 +30,8 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     initComponent: function() {
         this.preventMark = false;
         this.strategy = new Ext.ux.form.Spinner.TimeStrategy({
-            incrementValue : 15
+            incrementValue : 15,
+            allowNegative: this.allowNegative
         });
         this.format = this.strategy.format;
 

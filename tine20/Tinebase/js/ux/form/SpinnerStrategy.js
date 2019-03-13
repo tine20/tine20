@@ -123,6 +123,7 @@ Ext.ux.form.Spinner.DateStrategy = function(config){
 Ext.ux.form.Spinner.DateStrategy.isNegRe = /^ *- */;
 
 Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
+    allowNegative: true,
     defaultValue : new Date(),
     format : "Y-m-d",
     incrementValue : 1,
@@ -150,7 +151,7 @@ Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
         }
 
         // transition form 0
-        if (v.format('H:i:s') == '00:00:00' /*&& this.allowNegative*/) {
+        if (v.format('H:i:s') == '00:00:00' && this.allowNegative) {
             isNegValue = down;
         }
 
