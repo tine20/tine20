@@ -16,10 +16,8 @@
     background-image:url(../../images/icon-set/icon_timeaccount.svg) !important;
 }
 
-.action_create_accounts {
-    background-image:url(../../images/icon-set/icon_magic_wand.svg) !important;
-}
-
+.action_create_reports,
+.action_create_accounts,
 .applyContactData {
     background-image:url(../../images/icon-set/icon_magic_wand.svg) !important;
 }

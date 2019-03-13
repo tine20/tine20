@@ -101,6 +101,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
     }
 
+    public function calculateAllReports()
+    {
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports();
+    }
+
     /**
      * Search for records matching given arguments
      *

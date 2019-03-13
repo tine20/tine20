@@ -155,7 +155,7 @@ class HumanResources_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION           => 'Activate to calculate daily reports with a nightly scheduler job',
                     //_('Activate to calculate daily reports with a nightly scheduler job')
                     self::TYPE                  => self::TYPE_BOOL,
-                    self::DEFAULT_STR           => false,
+                    self::DEFAULT_STR           => true,
                 ],
             ],
             self::DEFAULT_STR => [],

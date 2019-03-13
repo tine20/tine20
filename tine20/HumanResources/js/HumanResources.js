@@ -10,6 +10,8 @@
 
 Ext.namespace('Tine.HumanResources');
 
+require('./DailyWTReportGridPanel');
+
 Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 
     hasMainScreen: true,

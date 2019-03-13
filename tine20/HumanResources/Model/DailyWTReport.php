@@ -129,9 +129,9 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 
         'fields' => [
             'employee_id' => [
-                'label' => 'Employee',
-                'type'  => 'record',
-                'validators' => [
+                self::LABEL                 => 'Employee',
+                self::TYPE                  => 'record',
+                self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
@@ -140,131 +140,151 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                     'appName'     => 'HumanResources',
                     'modelName'   => 'Employee',
                 ],
+                self::DISABLED              => true,
             ],
             'monthlywtreport' => [
-                'label' => 'Monthly Working Time Report',
-                'type'  => 'record',
-                'inputFilters'  => ['Zend_Filter_Empty' => false],
-                'validators' => [
+                self::LABEL                 => 'Monthly Working Time Report',
+                self::TYPE                  => 'record',
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => false],
+                self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
-                'config' => [
+                self::CONFIG                => [
                     'appName'     => HumanResources_Config::APP_NAME,
                     'modelName'   => HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
                 ],
+                self::DISABLED              => true,
             ],
             'date' => [
-                'validators' => [
+                self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
-                'label'         => 'Date', // _('Date')
-                'type'          => 'date',
+                self::LABEL                 => 'Date', // _('Date')
+                self::TYPE                  => 'date',
+                self::DISABLED              => true,
             ],
             // kommt aus WorkingTime, z.b. von 9-17 uhr, kann auf tagesbasis im report geändert werden, siehe correction properties
             // änderungen stoßen neuberechnung an
             'evaluation_period_start' => [
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'label'         => 'Evaluation Start Time', // _('Evaluation Start Time')
-                'type'          => 'time',
-                'nullable'      => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                 => 'Evaluation Start Time', // _('Evaluation Start Time')
+                self::TYPE                  => 'time',
+                self::NULLABLE              => true,
+                self::DISABLED              => true,
             ],
             'evaluation_period_end' => [ // kommt aus WorkingTime
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'label'         => 'Evaluation End Time', // _('Evaluation End Time')
-                'type'          => 'time',
-                'nullable'      => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                 => 'Evaluation End Time', // _('Evaluation End Time')
+                self::TYPE                  => 'time',
+                self::NULLABLE              => true,
+                self::DISABLED              => true,
             ],
             'evaluation_period_start_correction' => [
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'label'         => 'Evaluation Start Time Correction', // _('Evaluation Start Time Correction')
-                'type'          => 'time',
-                'nullable'      => true,
-                'inputFilters'  => ['Zend_Filter_Empty' => null],
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                 => 'Corrected Evaluation Start Time', // _('Corrected Evaluation Start Time')
+                self::TYPE                  => 'time',
+                self::NULLABLE              => true,
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
             ],
             'evaluation_period_end_correction' => [
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'label'         => 'Evaluation End Time Correction', // _('Evaluation End Time Correction')
-                'type'          => 'time',
-                'nullable'      => true,
-                'inputFilters'  => ['Zend_Filter_Empty' => null],
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                 => 'Corrected Evaluation End Time', // _('Corrected Evaluation End Time')
+                self::TYPE                  => 'time',
+                self::NULLABLE              => true,
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
             ],
+
+            // ziel zeit aus WorkingTime
+            'working_time_target' => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::LABEL                 => 'Target Working Time', // _('Target Working Time')
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DISABLED              => true,
+            ],
+            'working_time_target_correction' => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::LABEL                 => 'Target Working Time Correction', // _('Target Working Time Correction')
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+            ],
+
             //  zeit zwischen den zetteln (brutto pausenzeit - in transportklasse) + break_time_deduction
             'break_time_net'    => [
-                'label'         => 'Break Time Net', // _('Break Time Net')
-                'type'          => 'integer',
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'nullable'      => true,
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::LABEL                 => 'Break Time Net', // _('Break Time Net')
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DISABLED              => true,
             ],
             // WorkingTime - passiert, wenn MA zu wenig pause gemacht hat
-            'break_time_deduction' => [
-                'label'         => 'Break Deduction Time', // _('Break Deduction Time')
-                'type'          => 'integer',
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'nullable'      => true,
+            'break_time_deduction' => [self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::LABEL                 => 'Break Deduction Time', // _('Break Deduction Time')
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DISABLED              => true,
             ],
             'working_times'  => [
                 self::TYPE                  => self::TYPE_RECORDS,
                 self::NULLABLE              => true,
+                self::SHY                   => true,
                 self::CONFIG                => [
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME            => HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
                     self::STORAGE               => self::TYPE_JSON,
                 ],
-            ],
-            // manuelles feld für korrekturen ("musterschüler")
-            'working_time_correction' => [
-                'type'          => 'integer',
-                'label'         => 'Working Time Correction', // _('Working Time Correction')
-                'nullable'      => true,
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'  => ['Zend_Filter_Empty' => null],
+                self::DISABLED              => true,
             ],
             // echte arbeitszeit nach regelanwendung
             'working_time_actual' => [
-                'type'          => 'integer',
-                'label'         => 'Actual Working Time', // _('Actual Working Time')
-                'nullable'      => true,
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'  => ['Zend_Filter_Empty' => null],
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::LABEL                 => 'Actual Working Time', // _('Actual Working Time')
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DISABLED              => true,
             ],
-            'working_time_target_correction' => [
-                'type'          => 'integer',
-                'label'         => 'Target Working Time', // _('Target Working Time')
-                'nullable'      => true,
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'  => ['Zend_Filter_Empty' => null],
-            ],
-            // ziel zeit aus WorkingTime
-            'working_time_target' => [
-                'type'          => 'integer',
-                'label'         => 'Target Working Time', // _('Target Working Time')
-                'nullable'      => true,
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'  => ['Zend_Filter_Empty' => null],
+            // manuelles feld für korrekturen ("musterschüler")
+            'working_time_correction' => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::LABEL                 => 'Working Time Correction', // _('Working Time Correction')
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
             ],
             // z.b. krankheit, urlaub, feiertag (bei regelarbeit leer)
             'system_remark' => [
-                'label'         => 'System Remark', // _('System Remark')
-                'type'          => 'string',
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'nullable'      => true,
+                self::LABEL                 => 'System Remark', // _('System Remark')
+                self::TYPE                  => 'string',
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NULLABLE              => true,
+                self::DISABLED              => true,
             ],
             'user_remark' => [
-                'label'         => 'Remark', // _('Remark')
-                'type'          => 'text',
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'nullable'      => true,
+                self::LABEL                 => 'Remark', // _('Remark')
+                self::TYPE                  => 'text',
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NULLABLE              => true,
             ],
             // monatsprotokoll rechnet ab - nach übergabe an lohnbuchhaltung
             'is_cleared' => [
-                'label'         => 'Is Cleared', // _('Is Cleared')
-                'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
-                'type'          => 'boolean',
-                'default'       => 0,
-                'shy'           => true,
-                'copyOmit'      => true,
+                self::LABEL                 => 'Is Cleared', // _('Is Cleared')
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::TYPE                  => 'boolean',
+                self::DEFAULT_VAL           => 0,
+                self::SHY                   => true,
+                self::COPY_OMIT             => true,
+                self::DISABLED              => true,
             ],
         ]
     ];

@@ -169,7 +169,7 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
 
         var weekdayFieldDefaults = {
             
-            xtype: 'tinedurationspinner',
+            xtype: 'durationspinner',
             baseUnit: 'seconds',
             anchor: '100%',
             labelSeparator: '',
@@ -230,7 +230,7 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
                                 }
                             ), {
                                 fieldLabel: this.app.i18n._('Working Hours per week'),
-                                xtype: 'tinedurationspinner',
+                                xtype: 'durationspinner',
                                 baseUnit: 'seconds',
                                 name: 'working_hours',
                                 disabled: true,
