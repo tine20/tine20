@@ -23,6 +23,12 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     emptyOnZero: null,
 
     /**
+     * allow negative values
+     * @cfg allowNegative bool
+     */
+    allowNegative: true,
+
+    /**
      * $cfg {String} baseUnit minutes|seconds
      */
     baseUnit: 'minutes',
