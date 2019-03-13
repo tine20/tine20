@@ -1590,9 +1590,18 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $this->relations = null;
 
         $relations = Tinebase_Relations::getInstance();
+        $filter = function($relation) {
+            /** @var Tinebase_Model_Relation $relation */
+            /** @var Tinebase_Record_Interface $model */
+            $model = $relation->related_model;
+            return $model::generatesPaths();
+        };
+
         $result = array(
-            'parents'  => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_PARENT, true)->asArray(),
-            'children' => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_CHILD, true)->asArray()
+            'parents'  => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_PARENT, true)
+                ->filter($filter)->asArray(),
+            'children' => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_CHILD, true)
+                ->filter($filter)->asArray()
         );
 
         $this->relations = $oldRelations;
