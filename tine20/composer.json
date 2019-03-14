@@ -72,6 +72,7 @@
     "ext-openssl": "*",
     "ext-xml": "*",
     "ext-zip": "*",
+    "composer/semver": "^1.4",
     "doctrine/dbal": "v2.5.13pl4 as v2.5.13",
     "doctrine/orm": "2.5.14pl1 as v2.5.14",
     "ezyang/htmlpurifier": "v4.6.0",

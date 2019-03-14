@@ -296,7 +296,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_writeGenericHeader = (bool)$this->_config->header;
         }
         if ($this->_config->template) {
-            $this->_templateFileName = $this->_config->template;
+            $this->_templateFileName = $this->_parseTemplatePath($this->_config->template);
         }
         if ($this->_config->templateFileId) {
             try {
@@ -453,6 +453,59 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $cfConfig->definition->label;
             }
         }
+    }
+
+    protected function _parseTemplatePath($_path)
+    {
+        if (strpos($_path, 'tine20://') !== 0) {
+            return $_path;
+        }
+
+        $versionConstraint = null;
+        if (preg_match('#/([^/]+)-v([\. \d\^\~\|]+)(\.[^./]+)$#', $_path, $match) && preg_match('/\d/', $match[2])) {
+            $versionConstraint = $match[2];
+            $startsWith = $match[1];
+            $endsWith = $match[3];
+        } else {
+            $pathParts = pathinfo($_path);
+            $startsWith = $pathParts['filename'];
+            $endsWith = '.' . $pathParts['extension'];
+        }
+        $dir = dirname(substr($_path, 9));
+        $parent = Tinebase_FileSystem::getInstance()->stat($dir);
+        $match = null;
+        $matchVersion = null;
+        $fileNameRegex = '/^' . preg_quote($startsWith) . '(-v[\.\d]+)?' . preg_quote($endsWith) . '$/';
+
+        /** @var Tinebase_Model_Tree_Node $node */
+        foreach (Tinebase_FileSystem::getInstance()->getTreeNodeChildren($parent) as $node) {
+            if (preg_match($fileNameRegex, $node->name)) {
+                if (null !== $versionConstraint) {
+                    if (preg_match('/-v([\.\d]+)\.[^\.]+$/', $node->name, $vers) &&
+                            \Composer\Semver\Semver::satisfies($vers[1], $versionConstraint) && (null === $matchVersion
+                            || version_compare($matchVersion, $vers[1]) < 1)) {
+                        $match = $node;
+                        $matchVersion = $vers[1];
+                    }
+                } else {
+                    if (null === $match) {
+                        $match = $node;
+                    } else {
+                        if (preg_match('/-v([\.\d]+)\.[^\.]+$/', $match->name, $oldVer) &&
+                                preg_match('/-v([\.\d]+)\.[^\.]+$/', $node->name, $newVers) &&
+                                version_compare($oldVer[1], $newVers[1]) < 1) {
+                            $match = $node;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (null === $match) {
+            throw new Tinebase_Exception('could not find template for path: ' . $_path);
+        }
+        return Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode(
+            $match, true))->streamwrapperpath;
     }
 
     /**
