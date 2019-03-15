@@ -32,6 +32,8 @@ class HumanResources_Model_WageType extends Tinebase_Record_Abstract
 
     const ID_FEAST      = '30';
     const ID_SALARY     = '31';
+    const ID_VACATION   = '32';
+    const ID_SICK       = '33';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
