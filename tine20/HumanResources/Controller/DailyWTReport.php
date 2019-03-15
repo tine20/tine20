@@ -49,6 +49,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
     protected $_monthlyWTR = [];
 
+    public $lastReportCalculationResult = null;
+
     /**
      * the constructor
      *
@@ -122,6 +124,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             'function'   => 'calculateReportsForEmployees',
         ));
         $iterator->iterate();
+
         return true;
     }
 
@@ -135,6 +138,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         foreach ($_records as $employee) {
             $result[$employee->getId()] = $this->calculateReportsForEmployee($employee);
         }
+
+        $this->lastReportCalculationResult = $result;
         return $result;
     }
 

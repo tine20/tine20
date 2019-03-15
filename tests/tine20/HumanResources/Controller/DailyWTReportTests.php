@@ -15,6 +15,40 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 {
     protected $_ts;
 
+    public function testCalculateAllReports()
+    {
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        HumanResources_Config::getInstance()->{Tinebase_Config::ENABLED_FEATURES}
+            ->{HumanResources_Config::FEATURE_CALCULATE_DAILY_REPORTS} = true;
+
+        // create employee & contract
+        // @todo generalize?
+        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
+        $employee->dfcom_id = '36118993923739652';
+
+        $contractController = HumanResources_Controller_Contract::getInstance();
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+        $employee = $employeeController->create($employee, false);
+        $contract = $this->_getContract(new Tinebase_DateTime('2018-07-01 00:00:00'));
+        $contract->employee_id = $employee->getId();
+        //  @todo add more contract properties ?
+        $contractController->create($contract);
+
+        $this->_createTimesheets();
+
+        static::assertSame(true, HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports());
+
+        $days = (int)Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST)->format('t');
+        $days += (int)Tinebase_Model_Filter_Date::getEndOfYesterday()->format('j');
+
+        $reportResult = HumanResources_Controller_DailyWTReport::getInstance()->lastReportCalculationResult;
+        static::assertCount(1, $reportResult, 'expect reports being generated for one employee');
+        $reportResult = current($reportResult);
+        static::assertSame(0, $reportResult['updated']);
+        static::assertSame(0, $reportResult['errors']);
+        static::assertSame($days, $reportResult['created']);
+    }
+
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEnd()
     {
         // create employee & contract
@@ -122,15 +156,6 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
     public function testCalculateReportsForEmployeeSickness()
     {
         // @todo implement
-    }
-
-    public function testCalculateAllReports()
-    {
-        // TODO add fixture
-
-        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports();
-
-        // TODO add assertions
     }
 
     protected function _createTimesheets()
