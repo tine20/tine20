@@ -127,6 +127,7 @@
      * @param String                     $_action
      * @param Tinebase_Record_Interface  $_oldEvent
      * @param Array                      $_additionalData
+     * @throws Calendar_Exception
      *
      * @refactor split up this function, it's way too long
      */
@@ -227,9 +228,12 @@
                 }
                 break;
             case 'changed':
-                $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
-
                 if (! $organizerIsExternal) {
+                    if (! $_oldEvent) {
+                        throw new Calendar_Exception('missing oldEvent ... can not get attendee migration');
+                    }
+
+                    $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
                     foreach ($attendeeMigration['toCreate'] as $attender) {
                         $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                     }
