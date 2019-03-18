@@ -1059,6 +1059,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // create path for this message id
         if (! is_dir($path . $messageId)) {
+            if (file_exists($path . $messageId)) {
+                unlink($path . $messageId);
+            }
+
             mkdir($path . $messageId);
             
             $part = $this->getMessagePart($messageId, $partId);
