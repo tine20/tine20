@@ -238,7 +238,9 @@ class Tinebase_FileSystem_Previews
         if (!$fileSystem->isDir($basePath)) {
             $fileSystem->mkdir($basePath);
         } else {
-            $fileSystem->rmdir($basePath, true);
+            if ($fileSystem->fileExists($basePath)) {
+                $fileSystem->rmdir($basePath, true);
+            }
             $fileSystem->mkdir($basePath);
         }
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
