@@ -203,9 +203,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $data[$headerKey] = $message->getHeaderValue($headerKey);
         }
         $from = $message->getHeader('from');
-        $data['from_email'] = $from->getValue();
-        $data['from_name'] = $from->getPersonName();
-        foreach(['to', 'cc', 'bcc'] as $headerKey) {
+        if ($from) {
+            $data['from_email'] = $from->getValue();
+            $data['from_name'] = $from->getPersonName();
+        }
+        foreach (['to', 'cc', 'bcc'] as $headerKey) {
             $headerValue = $message->getHeader($headerKey);
             if (! $headerValue) {
                 continue;
