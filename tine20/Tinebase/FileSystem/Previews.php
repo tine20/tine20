@@ -207,7 +207,7 @@ class Tinebase_FileSystem_Previews
         if ($this->hasPreviews($node)) {
             return true;
         }
-        
+
         $path = $this->_fsController->getRealPathForHash($node->hash);
         if (!is_file($path)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
@@ -273,7 +273,9 @@ class Tinebase_FileSystem_Previews
         if (!$this->_fsController->isDir($basePath)) {
             $this->_fsController->mkdir($basePath);
         } else {
-            $this->_fsController->rmdir($basePath, true);
+            if ($fileSystem->fileExists($basePath)) {
+                $this->_fsController->rmdir($basePath, true);
+            }
             $this->_fsController->mkdir($basePath);
         }
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
