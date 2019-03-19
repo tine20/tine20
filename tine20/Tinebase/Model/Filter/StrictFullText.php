@@ -29,7 +29,8 @@ class Tinebase_Model_Filter_StrictFullText extends Tinebase_Model_Filter_FullTex
     public function appendFilterSql($_select, $_backend)
     {
         // mysql supports full text for InnoDB as of 5.6
-        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') &&
+                Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX)) {
             parent::appendFilterSql($_select, $_backend);
         } else {
             if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .

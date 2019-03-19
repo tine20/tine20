@@ -2545,6 +2545,9 @@ class Setup_Controller
         if (!$setupBackend->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
             return ['DB backend does not support the features - upgrade to mysql >= 5.6.4 or mariadb >= 10.0.5'];
         }
+        if (!Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX)) {
+            return ['full text index feature is disabled'];
+        }
 
         $failures = array();
         $setupUpdate = new Setup_Update_Abstract($setupBackend);

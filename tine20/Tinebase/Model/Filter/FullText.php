@@ -62,7 +62,8 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         }
         // mysql supports full text for InnoDB as of 5.6.4
         // full text can't do a pure negative search...
-        $useMysqlFullText = false === $not && Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5');
+        $useMysqlFullText = false === $not && Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')
+            && Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX);
 
         $values = static::sanitizeValue($this->_value, $useMysqlFullText);
 
