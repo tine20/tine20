@@ -91,7 +91,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.signatureEditor = new Ext.form.HtmlEditor({
             fieldLabel: this.app.i18n._('Signature'),
             name: 'signature',
-            autoHeight: true,
             getDocMarkup: function(){
                 var markup = '<span id="felamimail\-body\-signature">'
                     + '</span>';
@@ -120,41 +119,57 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 autoScroll: true,
                 border: false,
                 frame: true,
-                xtype: 'columnform',
-                formDefaults: commonFormDefaults,
-                items: [[{
-                    fieldLabel: this.app.i18n._('Account Name'),
-                    name: 'name',
-                    allowBlank: false
-                }, {
-                    fieldLabel: this.app.i18n._('User Email'),
-                    name: 'email',
-                    allowBlank: false,
-                    vtype: 'email'
-                }, {
-                    fieldLabel: this.app.i18n._('User Name (From)'),
-                    name: 'from'
-                }, {
-                    fieldLabel: this.app.i18n._('Organization'),
-                    name: 'organization'
-                }, this.signatureEditor,
-                {
-                    fieldLabel: this.app.i18n._('Signature position'),
-                    name: 'signature_position',
-                    typeAhead     : false,
-                    triggerAction : 'all',
-                    lazyRender    : true,
-                    editable      : false,
-                    mode          : 'local',
-                    forceSelection: true,
-                    value: 'below',
-                    xtype: 'combo',
-                    store: [
-                        ['above', this.app.i18n._('Above the quote')],
-                        ['below',  this.app.i18n._('Below the quote')]
-                    ]
-                }
-                ]]
+                layout: 'border',
+                items: [
+                    {
+                        region: 'north',
+                        xtype: 'columnform',
+                        formDefaults: commonFormDefaults,
+                        items: [[{
+                            fieldLabel: this.app.i18n._('Account Name'),
+                            name: 'name',
+                            allowBlank: false
+                        }, {
+                            fieldLabel: this.app.i18n._('User Email'),
+                            name: 'email',
+                            allowBlank: false,
+                            vtype: 'email'
+                        }, {
+                            fieldLabel: this.app.i18n._('User Name (From)'),
+                            name: 'from'
+                        }, {
+                            fieldLabel: this.app.i18n._('Organization'),
+                            name: 'organization'
+                        }, {
+                            fieldLabel: this.app.i18n._('Signature position'),
+                            name: 'signature_position',
+                            typeAhead: false,
+                            triggerAction: 'all',
+                            lazyRender: true,
+                            editable: false,
+                            mode: 'local',
+                            forceSelection: true,
+                            value: 'below',
+                            xtype: 'combo',
+                            store: [
+                                ['above', this.app.i18n._('Above the quote')],
+                                ['below', this.app.i18n._('Below the quote')]
+                            ]
+                        }]]
+                    }, {
+                        region: 'center',
+                        // TODO use vbox layout? onResize? height adjusts only to a certain value ...
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype:'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: 1
+                        },
+                        items: [[this.signatureEditor]]
+                    }
+                ]
             }, {
                 title: this.app.i18n._('IMAP'),
                 autoScroll: true,
