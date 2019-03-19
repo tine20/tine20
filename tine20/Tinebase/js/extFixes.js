@@ -360,8 +360,6 @@ Ext.form.TimeField.prototype.getValue = function(){
     }
 
     return dtValue;
-    // always return in ISO time format
-    // return value ? this.parseDate(value).dateFormat('H:i:s') : "";
 };
 
 /**
@@ -1154,19 +1152,25 @@ Ext.form.Field.prototype.getAutoCreate = function() {
 /**
  * preserve dateformat
  */
-Ext.data.Field = Ext.data.Field.createSequence(function(config) {
-    if (config.type == 'date') {
-        var dateFormat = this.dateFormat,
-             convert = this.convert;
-
-        this.convert = function(v) {
-            var d = convert(v);
-            if (Ext.isDate(d)) {
-                d.toJSON = function() {
-                    return this.format(dateFormat);
-                }
-            }
-            return d;
-        };
-    }
-});
+// FIXME: this is not working ... currently it breaks the Admin/user/EditDialog if "sambaSAM" is empty:
+// var response = {
+//  responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
+// };
+// this.samRecord = Tine.Admin.samUserBackend.recordReader(response);
+//
+// Ext.data.Field = Ext.data.Field.createSequence(function(config) {
+//     if (config.type == 'date') {
+//         var dateFormat = this.dateFormat,
+//              convert = this.convert;
+//
+//         this.convert = function(v) {
+//             var d = convert(v);
+//             if (Ext.isDate(d)) {
+//                 d.toJSON = function() {
+//                     return this.format(dateFormat);
+//                 }
+//             }
+//             return d;
+//         };
+//     }
+// });
