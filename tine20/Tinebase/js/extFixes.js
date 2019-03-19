@@ -1152,25 +1152,19 @@ Ext.form.Field.prototype.getAutoCreate = function() {
 /**
  * preserve dateformat
  */
-// FIXME: this is not working ... currently it breaks the Admin/user/EditDialog if "sambaSAM" is empty:
-// var response = {
-//  responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
-// };
-// this.samRecord = Tine.Admin.samUserBackend.recordReader(response);
-//
-// Ext.data.Field = Ext.data.Field.createSequence(function(config) {
-//     if (config.type == 'date') {
-//         var dateFormat = this.dateFormat,
-//              convert = this.convert;
-//
-//         this.convert = function(v) {
-//             var d = convert(v);
-//             if (Ext.isDate(d)) {
-//                 d.toJSON = function() {
-//                     return this.format(dateFormat);
-//                 }
-//             }
-//             return d;
-//         };
-//     }
-// });
+Ext.data.Field = Ext.apply(Ext.data.Field.createSequence(function(config) {
+    if (config && config.type == 'date') {
+        var dateFormat = this.dateFormat,
+             convert = this.convert;
+
+        this.convert = function(v) {
+            var d = convert(v);
+            if (Ext.isDate(d)) {
+                d.toJSON = function() {
+                    return this.format(dateFormat);
+                }
+            }
+            return d;
+        };
+    }
+}), {prototype: Ext.data.Field.prototype});
