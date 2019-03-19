@@ -1183,6 +1183,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Event} e
      */
     onKeyDown: function(e) {
+        // no keys for quickadds etc.
+        if (e.getTarget('input') || e.getTarget('textarea')) return;
+
         switch (e.getKey()) {
             case e.N:
             case e.M:

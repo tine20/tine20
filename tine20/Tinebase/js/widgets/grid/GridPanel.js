@@ -1930,6 +1930,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     onKeyDown: function(e){
+        // no keys for quickadds etc.
+        if (e.getTarget('input') || e.getTarget('textarea')) return;
+
         switch (e.getKey()) {
             case e.A:
                 // select only current page

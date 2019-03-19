@@ -446,6 +446,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     onKeyDown: function(e){
+        // no keys for quickadds etc.
+        if (e.getTarget('input') || e.getTarget('textarea')) return;
+        
         switch (e.getKey()) {
             case e.A:
                 // select all records
