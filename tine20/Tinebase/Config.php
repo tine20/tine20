@@ -180,6 +180,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_REMEMBER_POPUP_SIZE = 'featureRememberPopupSize';
 
     /**
+     * FEATURE_FULLTEXT_INDEX
+     *
+     * @var string
+     */
+    const FEATURE_FULLTEXT_INDEX = 'featureFullTextIndex';
+
+    /**
      * FEATURE_PATH
      *
      * @var string
@@ -1149,6 +1156,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),
+                self::FEATURE_FULLTEXT_INDEX              => [
+                    self::LABEL                         => 'Create FullText Indices', // _('Create FullText Indices')
+                    self::DESCRIPTION                   => 'Create FullText Indices',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
+                ],
                 self::FEATURE_SEARCH_PATH           => array(
                     self::LABEL                         => 'Search Paths',
                     self::DESCRIPTION                   => 'Search Paths',

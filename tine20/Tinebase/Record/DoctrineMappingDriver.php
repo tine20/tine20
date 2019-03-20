@@ -79,7 +79,8 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         $table['name'] = SQL_TABLE_PREFIX . $table['name'];
 
         // mysql supports full text for InnoDB as of 5.6.4 for everybody else: remove full text index
-        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') ) {
+        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') ||
+                ! Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX)) {
             $this->_removeFullTextIndex($table);
         }
 
