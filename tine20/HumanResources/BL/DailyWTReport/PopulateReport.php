@@ -40,6 +40,9 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         $someBreak = $_context->getLastElementOfClassBefore(HumanResources_BL_DailyWTReport_BreakTime::class,
             $_context->getCurrentExecutionOffset());
 
+        $_data->result->working_times =
+            new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_WorkingTime::class);
+
         /** @var HumanResources_BL_DailyWTReport_TimeSlot $timeSlot */
         foreach ($_data->timeSlots as $timeSlot) {
             if (0 === $timeSlot->durationInSec()) {
@@ -49,13 +52,20 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             if (null !== $lastSlot && null !== $someBreak) {
                 $timePaused = $someBreak->calculateTimePaused($lastSlot, $timeSlot);
             }
-            $timeWorked += $timeSlot->durationInSec();
+            $duration = $timeSlot->durationInSec();
+            $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
+                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => HumanResources_Model_WageType::ID_SALARY,
+                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $duration,
+                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_START => $timeSlot->start->format('H:i:s'),
+                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_END => $timeSlot->end->format('H:i:s'),
+            ]));
+
+            $timeWorked += $duration;
 
             $lastSlot = $timeSlot;
         }
 
         $_data->result->working_time_actual = $timeWorked;
-        $timeWorked += $_data->result->working_time_correction;
         $_data->result->break_time_net = $timePaused;
 
         $dayOfWeek = $_data->date->format('w') - 1;
@@ -65,14 +75,6 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         $workingTimeTarget = $_data->result->working_time_target_correction !== null ?
             $_data->result->working_time_target_correction : $_data->result->working_time_target;
 
-        $_data->result->working_times =
-            new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_WorkingTime::class);
-        if ($timeWorked > 0) {
-            $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
-                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => HumanResources_Model_WageType::ID_SALARY,
-                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
-            ]));
-        }
         if ($_data->feastTimes) {
             $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => HumanResources_Model_WageType::ID_FEAST,

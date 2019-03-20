@@ -62,6 +62,13 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
         Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($rs,
             HumanResources_Model_MonthlyWTReport::getConfiguration());
 
+        $expander = new Tinebase_Record_Expander(HumanResources_Model_MonthlyWTReport::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID => [],
+            ],
+        ]);
+        $expander->expand($rs);
+
         $this->_records = $this->_monthlyWTR->dailywtreports;
         $this->_records->sort('date');
     }

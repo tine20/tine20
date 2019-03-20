@@ -25,6 +25,8 @@ class HumanResources_Model_BLDailyWTReport_WorkingTime extends Tinebase_Record_N
     const MODEL_NAME_PART = 'BLDailyWTReport_WorkingTime';
     const FLDS_WAGE_TYPE = 'wage_type';
     const FLDS_DURATION = 'duration';
+    const FLDS_START = 'start';
+    const FLDS_END = 'end';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -53,6 +55,12 @@ class HumanResources_Model_BLDailyWTReport_WorkingTime extends Tinebase_Record_N
             self::FLDS_DURATION         => [
                 self::TYPE                  => self::TYPE_INTEGER,
             ],
+            self::FLDS_START            => [
+                self::TYPE                  => self::TYPE_TIME,
+            ],
+            self::FLDS_END              => [
+                self::TYPE                  => self::TYPE_TIME,
+            ]
         ],
     ];
 }
