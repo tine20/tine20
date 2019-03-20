@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import getTwingEnv from "twingEnv";
+
 Ext.ns('Tine.Tinebase', 'Tine.Tinebase.data');
 
 Tine.Tinebase.data.Record = function(data, id) {
@@ -172,13 +174,15 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             return Tine.Tinebase.data.TitleRendererManager.get(this.appName, this.modelName)(this);
         } else if (String(this.titleProperty).match(/{/)) {
             if (! this.constructor.titleTwing) {
-                var opts = {},
-                    loader;
+                var twingEnv = getTwingEnv();
+                var loader = twingEnv.getLoader();
 
-                opts[this.constructor.getPhpClassName() + 'Title'] = Tine.Tinebase.appMgr.get(this.appName).i18n._hidden(this.titleProperty);
-                loader = new twing.TwingLoaderArray(opts);
+                loader.setTemplate(
+                    this.constructor.getPhpClassName() + 'Title',
+                    Tine.Tinebase.appMgr.get(this.appName).i18n._hidden(this.titleProperty)
+                );
 
-                this.constructor.titleTwing = new twing.TwingEnvironment(loader);
+                this.constructor.titleTwing = twingEnv;
             }
 
             return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data);

@@ -16770,6 +16770,11 @@
         }
       }
     },
+    "twing-intl": {
+      "version": "0.0.1",
+      "resolved": "https://registry.npmjs.org/twing-intl/-/twing-intl-0.0.1.tgz",
+      "integrity": "sha512-veF3lVR5ZekbXxGmp+RSoitTeAc4l5SvHzURxnMXggcVDDsQg4ZNETMLTnLLxvg3mf77KLcXnkm16ur7lNB59g=="
+    },
     "type-check": {
       "version": "0.3.2",
       "resolved": "https://registry.npmjs.org/type-check/-/type-check-0.3.2.tgz",
