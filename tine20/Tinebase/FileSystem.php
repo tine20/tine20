@@ -680,6 +680,10 @@ class Tinebase_FileSystem implements
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_file($finfo, $_hashFile);
                 if ($mimeType !== false) {
+                    if (PHP_VERSION_ID >= 70300 && ($mimeLen = strlen($mimeType)) % 2 === 0 &&
+                            substr($mimeType, 0, $mimeLen / 2) === substr($mimeType, $mimeLen / 2)) {
+                        $mimeType = substr($mimeType, 0, $mimeLen / 2);
+                    }
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                             " Setting file contenttype to " . $mimeType);
