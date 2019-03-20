@@ -5,6 +5,9 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+require('../../../css/widgets/PickerGridPanel.css');
+
 Ext.ns('Tine.widgets.grid');
 
 /**
@@ -115,16 +118,40 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     additionalFilterSpec: null,
 
+    cls: 'x-wdgt-pickergrid',
+
     /**
      * @private
      */
     initComponent: function() {
+        if (this.autoData) {
+            var _ = window.lodash,
+                me = this,
+                parent = me.findParentBy(function (c) {
+                    return c.editDialog
+                }),
+                editDialog = _.get(parent, 'editDialog');
+
+            editDialog.on('load', me.onRecordLoad, me);
+            editDialog.on('recordUpdate', me.onRecordUpdate, me);
+
+            this.editDialog = editDialog;
+        }
+
+        if (this.disabled) {
+            this.disabled = false;
+            this.readOnly = true;
+        }
+
         this.contextMenuItems = (this.contextMenuItems !== null) ? this.contextMenuItems : [];
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         this.searchComboConfig = this.searchComboConfig || {};
         this.searchComboConfig.additionalFilterSpec = this.additionalFilterSpec;
         
         this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
+        if (String(this.labelField).match(/{/)) {
+            this.labelField = this.labelField.match(/(?:{{\s*)(\w+)/)[1];
+        }
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
         
         this.initStore();
@@ -168,7 +195,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (!this.store) {
             this.store = new Ext.data.SimpleStore({
                 sortInfo: this.defaultSortInfo || {
-                    field: this.recordClass.getMeta('titleProperty'),
+                    field: this.labelField,
                     order: 'DESC'
                 },
                 fields: this.recordClass
@@ -332,15 +359,11 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (!this.columns) {
                 var labelColumn = {
                     id: this.labelField,
-                    // TODO use translated records name here
-                    //header: String.format(i18n._('Selected {0}'),
-                    //    this.recordClass.getMeta('recordsName')),
                     header: this.recordClass.getRecordsName(),
-                    dataIndex: this.labelField
+                    dataIndex: this.labelField,
+                    renderer: this.labelRenderer ? this.labelRenderer : function(v,m,r) { return Ext.isFunction(r.getTitle) ? r.getTitle() : v}
                 };
-                if (this.labelRenderer != Ext.emptyFn) {
-                    labelColumn.renderer = this.labelRenderer;
-                }
+
                 this.columns = [labelColumn];
             } else {
                 // convert string cols
@@ -478,6 +501,40 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.loadMask.hide.defer(100, this.loadMask);
         }
         return Promise.resolve();
+    },
+
+    onRecordLoad: function() {
+        var me = this,
+            recordsdata = _.get(me.editDialog.record, 'data.' + me.fieldName) || [],
+            selectRowAfterAdd = me.selectRowAfterAdd,
+            highlightRowAfterAdd = me.highlightRowAfterAdd;
+
+        me.highlightRowAfterAdd = false;
+        me.selectRowAfterAdd = false;
+
+        me.store.clearData();
+        _.each(recordsdata, function(recordData) {
+            var record = Tine.Tinebase.data.Record.setFromJson(recordData, me.recordClass);
+            me.store.addSorted(record);
+        });
+
+        (function() {
+            me.highlightRowAfterAdd = highlightRowAfterAdd;
+            me.selectRowAfterAdd = selectRowAfterAdd;
+        }).defer(300, me)
+    },
+
+    onRecordUpdate: function() {
+        var me = this,
+            data = [];
+
+        Tine.Tinebase.common.assertComparable(data);
+
+        me.store.each(function(record) {
+            data.push(record.data);
+        });
+
+        me.editDialog.record.set(me.fieldName, data);
     }
 });
 
