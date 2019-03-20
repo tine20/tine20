@@ -559,7 +559,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if (field.formField.isXType('timefield')) {
                 var value = this.interRecord.get(field.key);
                 if (value) {
-                    field.formField.setValue(new Date(value));
+                    field.formField.setValue(Date.parseDate(value, Date.patterns.ISO8601Time));
                 }
             }
             // handle DateTimeFields to set original value
