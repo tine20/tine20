@@ -244,7 +244,7 @@ class Tinebase_FileSystem_Previews
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
             }
 
-            $this->_fsController->updatePreviewStatus($node->hash, 1);
+            $this->_fsController->updatePreviewStatus($node->hash, $exception->getHttpStatus());
 
             return false;
 

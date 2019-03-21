@@ -39,6 +39,7 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
      * @param array $config
      * @return array|bool
      * @throws Zend_Http_Client_Exception
+     * @throws Tinebase_FileSystem_Preview_BadRequestException
      */
     public function getPreviewsForFiles(array $_filePaths, array $_config)
     {

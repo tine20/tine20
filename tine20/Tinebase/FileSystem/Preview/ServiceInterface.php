@@ -62,6 +62,7 @@ interface Tinebase_FileSystem_Preview_ServiceInterface
      * @param $filePath
      * @param array $config
      * @return array|bool
+     * @throws Tinebase_FileSystem_Preview_BadRequestException
      */
     public function getPreviewsForFile($filePath, array $config);
 
@@ -111,6 +112,7 @@ interface Tinebase_FileSystem_Preview_ServiceInterface
      * @param $filePaths array of file Paths to convert
      * @param array $config
      * @return array|bool
+     * @throws Tinebase_FileSystem_Preview_BadRequestException
      */
     public function getPreviewsForFiles(array $filePaths, array $config);
 
@@ -120,6 +122,7 @@ interface Tinebase_FileSystem_Preview_ServiceInterface
      * @param $filePath
      * @param $synchronRequest bool should the request be prioritized
      * @return string file blob
+     * @Throws Tinebase_FileSystem_Preview_BadRequestException
      * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
     */
     public function getPdfForFile($filePath, $synchronRequest = false);
