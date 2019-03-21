@@ -153,6 +153,11 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         } catch (Exception $e) {
             Tinebase_FileSystem::getInstance()->unlink($path);
+
+            if ($e instanceof Tinebase_Exception_Record_NotAllowed && $e->getMessage() === 'quota exceeded') {
+                throw new Sabre\DAV\Exception\InsufficientStorage($e->getMessage());
+            }
+
             throw $e;
         }
 
