@@ -33,11 +33,7 @@ class Tinebase_Record_PathTest extends TestCase
      * @throws Tinebase_Exception_NotFound
      */
     protected function setUp(): void
-{
-        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
-            $this->markTestSkipped('mysql 5.6.4+ | mariadb >= 10.0.5+ required');
-        }
-
+    {
         $this->_uit = Tinebase_Record_Path::getInstance();
 
         if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {

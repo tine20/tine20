@@ -53,6 +53,7 @@ class Tinebase_Lock
 
         /** @var Tinebase_Lock_Abstract $lock */
         foreach (static::$locks as $lock) {
+            // each lock will check that it is still owns the lock
             $lock->keepAlive();
         }
     }
@@ -88,16 +89,13 @@ class Tinebase_Lock
 
     /**
      * @param string $id
-     * @return bool|null bool on success / failure, null if not supported
+     * @return bool
      */
     public static function releaseLock($id)
     {
         $id = static::preFixId($id);
         if (isset(static::$locks[$id])) {
             return static::$locks[$id]->release();
-        }
-        if (static::getBackend($id) === null) {
-            return null;
         }
         return false;
     }
@@ -112,40 +110,11 @@ class Tinebase_Lock
      */
     protected static function getBackend($id)
     {
-        if (null === static::$backend) {
-            $db = Tinebase_Core::getDb();
-            if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-                Tinebase_Lock_Mysql::checkCapabilities();
-            }
+        return new Tinebase_Lock_Mysql($id);
+    }
 
-            $config = Tinebase_Config::getInstance();
-            $cachingBackend = null;
-            if ($config->caching && $config->caching->backend) {
-                $cachingBackend = ucfirst($config->caching->backend);
-            }
-
-            if (Tinebase_Lock_Mysql::supportsMultipleLocks()) {
-                static::$backend = Tinebase_Lock_Mysql::class;
-            } elseif ($cachingBackend === 'Redis' && extension_loaded('redis')) {
-                $host = $config->caching->host ? $config->caching->host :
-                    ($config->caching->redis && $config->caching->redis->host ?
-                        $config->caching->redis->host : 'localhost');
-                $port = $config->caching->port ? $config->caching->port :
-                    ($config->caching->redis && $config->caching->redis->port ? $config->caching->redis->port : 6379);
-                static::$backend = Tinebase_Lock_Redis::class;
-                Tinebase_Lock_Redis::connect($host, $port);
-            } elseif ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-                static::$backend = Tinebase_Lock_Mysql::class;
-            } elseif($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-                static::$backend = Tinebase_Lock_Pgsql::class;
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
-                    . __LINE__ .' no lock backend found');
-                return null;
-            }
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                .' lock backend is: ' . static::$backend);
-        }
-        return new static::$backend($id);
+    public static function resetKeepAliveTime()
+    {
+        static::$lastKeepAlive = null;
     }
 }
