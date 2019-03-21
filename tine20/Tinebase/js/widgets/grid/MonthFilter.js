@@ -75,6 +75,12 @@ Tine.widgets.grid.MonthFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
                 filter.datePicker.show();
                 filter.formFields.value = filter.datePicker;
         }
+
+        var width = filter.formFields.value.el.up('.tw-ftb-frow-value').getWidth() -10;
+        if (filter.formFields.value.wrap) {
+            filter.formFields.value.wrap.setWidth(width);
+        }
+        filter.formFields.value.setWidth(width);
     },
     
     /**
@@ -89,8 +95,6 @@ Tine.widgets.grid.MonthFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
             filter.textfield = new Ext.ux.form.ClearableTextField({
                 filter: filter,
                 hidden: true,
-                width: this.filterValueWidth,
-                id: 'tw-ftb-frow-valuefield-' + filter.id,
                 renderTo: el,
                 value: filter.data.value ? filter.data.value : '',
                 emptyText: this.emptyText,

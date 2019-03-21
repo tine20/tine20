@@ -274,6 +274,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "DurationSpinner.js",
+          "path": "js/ux/form/"
+        },
+        {
           "text": "LockCombo.js",
           "path": "js/ux/form/"
         },
@@ -1030,10 +1034,6 @@
           "path": "js/"
         },
         {
-          "text": "layoutFixes.js",
-          "path": "js/touch/"
-        },
-        {
           "text": "PresenceObserver.js",
           "path": "js/"
         },
@@ -1052,6 +1052,10 @@
         {
           "text": "FileSelectionDialog.js",
           "path": "js/"
+        },
+        {
+          "text": "BLConfigPanel.js",
+          "path": "js/BL/"
         }
       ]
     },

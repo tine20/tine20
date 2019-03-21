@@ -11,7 +11,8 @@ module.exports = {
   },
   globals: {
     Tine: true,
-    Ext: true
+    Ext: true,
+    _: true
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
   extends: [

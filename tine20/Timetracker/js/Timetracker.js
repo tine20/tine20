@@ -20,10 +20,10 @@ Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'timeacco
     return record.get('number') ? (record.get('number') + ' - ' + record.get('title') + closedText) : '';
 });
 
-Tine.Tinebase.data.TitleRendererManager.register('Timetracker', 'Timeaccount', function(record) {
-    var closedText = record.get('is_open') ? '' : (' (' + Tine.Tinebase.appMgr.get('Timetracker').i18n._('closed') + ')');
-    return record.get('number') ? (record.get('number') + ' - ' + record.get('title') + closedText) : '';
-});
+// Tine.Tinebase.data.TitleRendererManager.register('Timetracker', 'Timeaccount', function(record) {
+//     var closedText = record.get('is_open') ? '' : (' (' + Tine.Tinebase.appMgr.get('Timetracker').i18n._('closed') + ')');
+//     return record.get('number') ? (record.get('number') + ' - ' + record.get('title') + closedText) : '';
+// });
 
 Tine.Tinebase.data.TitleRendererManager.register('Timetracker', 'Timesheet', function(record) {
     var timeaccount = record.get('timeaccount_id'),

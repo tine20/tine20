@@ -42,19 +42,22 @@ Tine.widgets.customfields.Renderer = function(){
                     var app = cfDefinition.options && Ext.isString(cfDefinition.options.app) ? cfDefinition.options.app : app;
                     var keyFieldName = cfDefinition.options && Ext.isString(cfDefinition.options.keyFieldName) ? cfDefinition.options.keyFieldName : cfName;
                     renderers[key] = function(customfields) {
+                        customfields = customfields || {}
                         return Tine.Tinebase.widgets.keyfield.Renderer.render(app, keyFieldName, customfields[cfName]);
                     };
                     
                 } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1) {
                     renderers[key] = function(customfields) {
                         var recordClass = eval(cfDefinition.recordConfig.value.records);
-                                                
+                        customfields = customfields || {}
+
                         return Ext.isObject(customfields[cfName]) && customfields[cfName].hasOwnProperty(recordClass.getMeta('titleProperty'))
                             ? customfields[cfName][recordClass.getMeta('titleProperty')]
                             : customfields[cfName];
                     };
                 } else {
                     renderers[key] = function(customfields) {
+                        customfields = customfields || {}
                         switch (cfDefinition.type)
                         {
                             case 'date':

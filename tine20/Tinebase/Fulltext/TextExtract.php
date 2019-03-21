@@ -91,7 +91,9 @@ class Tinebase_Fulltext_TextExtract
         if ($result !== 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' tika did not return status 0: ' . print_r($output, true) . ' ' . print_r($result, true));
-            unlink($tempFileName);
+            if (file_exists($tempFileName)) {
+                unlink($tempFileName);
+            }
             return false;
         }
 

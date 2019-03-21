@@ -168,9 +168,23 @@ Tine.Tinebase.ApplicationStarter = {
                                     return Tine.Tinebase.common.percentRenderer(value, config.type);
                                 };
                                 break;
+                            case 'durationSec':
+                                gridRenderer = function(value, cell, record) {
+                                    return Ext.ux.form.DurationSpinner.durationRenderer(value, {
+                                        baseUnit: 'seconds'
+                                    });
+                                };
+                                break;
                             default:
                                 gridRenderer = Ext.util.Format.htmlEncode;
                         }
+
+                        gridRenderer = gridRenderer.createSequence(function(value, metadata, record) {
+                            if (metadata) {
+                                metadata.css = 'tine-gird-cell-number';
+                            }
+                        });
+
                     }
                     break;
                 case 'user':
@@ -617,7 +631,8 @@ Tine.Tinebase.ApplicationStarter = {
                                 var id = cfg.recordId ? cfg.recordId : ( (cfg.record && cfg.record.id) ? cfg.record.id : 0 );
                                 var window = Tine.WindowFactory.getWindow({
                                     width: edp.windowWidth ? edp.windowWidth : 600,
-                                    height: edp.windowHeight ? edp.windowHeight : 230,
+                                    height: edp.windowHeight ? edp.windowHeight :
+                                        Tine.widgets.form.RecordForm.getFormHeight(Tine[appName].Model[modelName]),
                                     name: edp.windowNamePrefix + id,
                                     contentPanelConstructor: 'Tine.' + appName + '.' + editDialogName,
                                     contentPanelConstructorConfig: cfg

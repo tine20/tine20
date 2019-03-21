@@ -1930,6 +1930,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     onKeyDown: function(e){
+        // no keys for quickadds etc.
+        if (e.getTarget('input') || e.getTarget('textarea')) return;
+
         switch (e.getKey()) {
             case e.A:
                 // select only current page
@@ -1967,7 +1970,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 break;
             case e.R:
-                this.store.reload();
+                this.bufferedLoadGridData();
                 break;
             default:
                 if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
@@ -2219,9 +2222,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (mode == 'local') {
             this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
         } else {
-            this.bufferedLoadGridData({
-                removeStrategy: 'keepBuffered'
-            });
+            this.bufferedLoadGridData();
         }
     },
 
@@ -2473,7 +2474,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onAfterEdit: function(ids) {
         this.editBuffer = this.editBuffer.diff(ids);
-
         this.bufferedLoadGridData({
             removeStrategy: 'keepBuffered'
         });

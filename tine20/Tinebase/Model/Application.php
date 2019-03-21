@@ -54,12 +54,13 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
         'appName'           => 'Tinebase',
         'modelName'         => 'Application',
         self::TABLE         => [
-            self::NAME          => 'applications',
-            self::INDEXES       => [
+            self::NAME                  => 'applications',
+            self::UNIQUE_CONSTRAINTS    => [
                 'name'                      => [
                     self::COLUMNS               => ['name'],
-                    self::UNIQUE                => true,
                 ],
+            ],
+            self::INDEXES               => [
                 'status'                    => [
                     self::COLUMNS               => ['status'],
                 ],

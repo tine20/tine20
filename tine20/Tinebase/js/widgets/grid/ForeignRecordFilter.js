@@ -469,7 +469,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         } else {
             operator = new Ext.form.ComboBox({
                 filter: filter,
-                width: 80,
                 id: 'tw-ftb-frow-operatorcombo-' + filter.id,
                 mode: 'local',
                 lazyInit: false,
@@ -547,6 +546,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         }
         
         filter.formFields.value = this.valueRenderer(filter, el);
+
+        var width = filter.formFields.value.el.up('.tw-ftb-frow-value').getWidth() -10;
+        if (filter.formFields.value.wrap) {
+            filter.formFields.value.wrap.setWidth(width);
+        }
+        filter.formFields.value.setWidth(width);
     },
     
     /**
@@ -577,10 +582,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 value = Tine.widgets.form.RecordPickerManager.get(pickerRecordClass.getMeta('appName'), pickerRecordClass, Ext.apply({
                     filter: filter,
                     blurOnSelect: true,
-                    width: this.filterValueWidth,
                     listWidth: 500,
                     listAlign: 'tr-br',
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     renderTo: el,
                     allowMultiple: ['in', 'notin'].indexOf(operator) > -1
@@ -617,8 +620,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                         value = new Ext.Button({
                             text: i18n._(this.startDefinitionText),
                             filter: filter,
-                            width: this.filterValueWidth,
-                            id: 'tw-ftb-frow-valuefield-' + filter.id,
                             renderTo: el,
                             handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
                             scope: this

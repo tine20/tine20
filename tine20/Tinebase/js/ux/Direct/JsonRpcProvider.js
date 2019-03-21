@@ -143,7 +143,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
         xhr.responseText = [];
         Ext.each(rs, function(rpcresponse, i) {
             xhr.responseText[i] = {
-                type: rpcresponse.result ? 'rpc' : 'exception',
+                type: rpcresponse.hasOwnProperty('result') ? 'rpc' : 'exception',
                 result: rpcresponse.result,
                 tid: rpcresponse.id,
                 error: rpcresponse.error

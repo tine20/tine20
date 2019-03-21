@@ -26,14 +26,14 @@ trait Tinebase_Controller_SingletonTrait
     /**
      * holds the instance of the singleton
      *
-     * @var Tinebase_Controller_Abstract
+     * @var self
      */
     private static $_instance = null;
 
     /**
      * the singleton pattern
      *
-     * @return Tinebase_Controller_Abstract
+     * @return self
      */
     public static function getInstance()
     {
@@ -49,5 +49,10 @@ trait Tinebase_Controller_SingletonTrait
         self::$_instance = null;
     }
 
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton
+     */
     private function __construct() {}
 }

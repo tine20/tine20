@@ -1,0 +1,12 @@
+.x-form-element .x-wdgt-pickergrid {
+    border: 1px solid #b5b8c8;
+}
+
+.x-form-element .x-wdgt-pickergrid .x-panel-tbar-noheader .x-toolbar, .x-panel-mc .x-panel-tbar .x-toolbar,
+.x-form-element .x-wdgt-pickergrid .x-panel-bbar .x-toolbar {
+    border: none;
+}
+
+.x-form-element .x-wdgt-pickergrid .x-toolbar {
+    background-image: none;
+}

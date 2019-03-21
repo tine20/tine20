@@ -127,6 +127,12 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         if (['in', 'notin'].indexOf(newOperator) > -1) {
             filter.formFields.value.setValue(oldValues);
         }
+
+        var width = filter.formFields.value.el.up('.tw-ftb-frow-value').getWidth() -10;
+        if (filter.formFields.value.wrap) {
+            filter.formFields.value.wrap.setWidth(width);
+        }
+        filter.formFields.value.setWidth(width);
     },
     
     /**
@@ -179,10 +185,8 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
             recordClass: this.recordClass,
             filter: filter,
             blurOnSelect: true,
-            width: this.filterValueWidth,
 //            listWidth: 500,
 //            listAlign: 'tr-br',
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el
         });
@@ -201,8 +205,6 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         return new Tine.widgets.grid.PickerFilterValueField(Ext.apply({
             app: this.app,
             filter: filter,
-            width: this.filterValueWidth,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el
         }, this.multiselectFieldConfig));

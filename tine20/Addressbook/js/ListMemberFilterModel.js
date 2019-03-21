@@ -48,8 +48,6 @@ Tine.Addressbook.ListMemberFilterModel = Ext.extend(Tine.widgets.grid.FilterMode
             blurOnSelect: true,
             recordClass: this.field == 'list' ? Tine.Addressbook.Model.List : Tine.Addressbook.Model.Contact,
             filter: filter,
-            width: this.filterValueWidth,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el
         });

@@ -15,7 +15,6 @@
  */
 class Tinebase_Export_DocTest extends TestCase
 {
-
     public function testDocTwigFunctions()
     {
         /** @var Addressbook_Export_Doc $export */

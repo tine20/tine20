@@ -418,13 +418,32 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param   array   $recordData
      * @return  array   created/updated Resource
+     * @throws
      */
     public function saveResource($recordData)
     {
         if(array_key_exists ('max_number_of_people', $recordData) && $recordData['max_number_of_people'] == '') {
            $recordData['max_number_of_people'] = null;
         }
-        
+
+        $check = false;
+        if ($recordData['grants']) {
+
+            foreach ($recordData['grants'] as $grant) {
+                try {
+                    if ($grant['resourceAdminGrant'] == true) {
+                        $check = true;
+                        break;
+                    }
+                } catch (Exception $e) {
+                }
+            }
+            if (!$check) {
+                throw new Calendar_Exception_ResourceAdminGrant();
+            }
+
+        }
+
         return $this->_save($recordData, Calendar_Controller_Resource::getInstance(), 'Resource');
     }
     
@@ -717,7 +736,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER})) {
                 $contactFilter = [['condition' => 'AND', 'filters' => [
-                    $contactFilter,
+                    $contactFilter[0],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER}
                 ]]];
             }
@@ -738,7 +757,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $groupFilter[] = array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP);
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP})) {
                 $groupFilter = [['condition' => 'AND', 'filters' => [
-                    $groupFilter,
+                    $groupFilter[0],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP}
                 ]]];
             }
@@ -764,7 +783,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE})) {
                 $resourceFilter = [['condition' => 'AND', 'filters' => [
-                    $resourceFilter,
+                    $resourceFilter[0],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE}
                 ]]];
             }

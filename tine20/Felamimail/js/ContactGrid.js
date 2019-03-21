@@ -85,10 +85,9 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         this.defaultFilters = [
             {field: 'email_query', operator: 'contains', value: '@'}
         ];
-        
+
         Tine.Felamimail.ContactGridPanel.superclass.initFilterPanel.call(this, {
-            filterFieldWidth: 100,
-            filterValueWidth: 100
+            useQuickFilter: false
         });
     },
     

@@ -48,6 +48,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected $_cloneRowStyles = array();
 
+    protected $_cloneGroupEndRowStyles = null;
+
+    protected $_cloneGroupEndRow = null;
+
     protected $_excelVersion;
 
 
@@ -206,6 +210,37 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                 call_user_func(array($rowDimension, $func), $value);
             }
         }
+    }
+
+    protected function _endGroup()
+    {
+        if (null === $this->_cloneGroupEndRow) {
+            return;
+        }
+
+        $this->_rowCount += 1;
+        //insert cloned row
+        if ($this->_rowOffset > 0) {
+            $newRowOffset = $this->_rowOffset + $this->_rowCount - 1;
+            $sheet = $this->_spreadsheet->getActiveSheet();
+
+            if ($this->_rowCount > 1) {
+                $sheet->insertNewRowBefore($newRowOffset);
+            }
+
+            foreach($this->_cloneGroupEndRow as $newRow) {
+                $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
+                $cell->setValue(preg_replace('/\$\{twig[^}]+\}/', '$0#' . $this->_rowCount, $newRow['value']));
+                $cell->setXfIndex($newRow['XFIndex']);
+            }
+
+            $rowDimension = $sheet->getRowDimension($newRowOffset);
+            foreach($this->_cloneGroupEndRowStyles as $func => $value) {
+                call_user_func(array($rowDimension, $func), $value);
+            }
+        }
+
+        $this->_renderTwigTemplate();
     }
 
     protected function _createDocument()
@@ -433,7 +468,61 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             );
             $cell->setValue(null);
             $cell->setXfIndex(0);
-            // TODO update replacement cache in case we implement it
+        }
+
+        if ($this->_config->group) {
+            $this->_findGroupEnd();
+        }
+    }
+
+    protected function _findGroupEnd()
+    {
+        if (null === ($block = $this->_findCell('${GROUP_END}'))) {
+            return;
+        }
+        $startColumn = $block->getColumn();
+        $rowOffset = $block->getRow();
+
+        if (null === ($block = $this->_findCell('${/GROUP_END}'))) {
+            return;
+        }
+
+        $endColumn = $block->getColumn();
+        if ($block->getRow() !== $rowOffset) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' block tags need to be in the same row');
+            throw new Tinebase_Exception_UnexpectedValue('block tags need to be in the same row');
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found group end...');
+
+        $sheet = $this->_spreadsheet->getActiveSheet();
+
+        /** @var  $rowIterator */
+        $rowIterator = $sheet->getRowIterator($rowOffset);
+        $row = $rowIterator->current();
+        $rowDimension = $sheet->getRowDimension($row->getRowIndex());
+        $this->_cloneGroupEndRowStyles = array(
+            'setCollapsed'      => $rowDimension->getCollapsed(),
+            'setOutlineLevel'   => $rowDimension->getOutlineLevel(),
+            'setRowHeight'      => $rowDimension->getRowHeight(),
+            'setVisible'        => $rowDimension->getVisible(),
+            'setXfIndex'        => $rowDimension->getXfIndex(),
+            'setZeroHeight'     => $rowDimension->getZeroHeight()
+        );
+        $cellIterator = $row->getCellIterator($startColumn, $endColumn);
+
+        $replace = array('${GROUP_END}', '${/GROUP_END}');
+        /** @var Cell $cell */
+        foreach($cellIterator as $cell) {
+            $this->_cloneGroupEndRow[] = array(
+                'column'        => $cell->getColumn(),
+                'value'         => str_replace($replace, '', $cell->getValue()),
+                'XFIndex'       => $cell->getXfIndex()
+            );
+            $cell->setValue(null);
+            $cell->setXfIndex(0);
         }
     }
 

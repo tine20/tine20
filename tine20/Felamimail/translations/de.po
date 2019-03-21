@@ -138,7 +138,7 @@ msgstr[1] "Konten"
 
 #: js/AccountEditDialog.js:126
 msgid "Account Name"
-msgstr "Konto Name"
+msgstr "Kontoname"
 
 #: js/AccountEditDialog.js:130
 msgid "User Email"

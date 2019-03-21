@@ -17,7 +17,7 @@ Ext.ns('Tine.Tinebase');
  * @singleton   
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-
+Tine.Tinebase.MainScreen = null;
 Tine.Tinebase.MainScreenPanel = function(config) {
     this.addEvents(
         /**

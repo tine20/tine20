@@ -68,10 +68,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         'multipleEdit'      => TRUE,
         'requiredRight'     => 'manage',
 
-        'titleProperty'     => array(
-            '%s - %s',
-            array('number', 'title')
-        ),
+        'titleProperty'     => '{{number}} - {{title}}{% if not is_open %} (closed) {% endif %}',
         'appName'           => Timetracker_Config::APP_NAME,
         'modelName'         => self::MODEL_NAME_PART,
 

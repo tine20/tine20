@@ -112,7 +112,7 @@ Tine.widgets.form.FieldManager = function() {
                     }
 
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'durationSec') {
-                        field.xtype = 'tinedurationspinner';
+                        field.xtype = 'durationspinner';
                         field.baseUnit = 'seconds';
                     }
 
@@ -160,6 +160,22 @@ Tine.widgets.form.FieldManager = function() {
                 case 'record':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
                         var picker = Tine.widgets.form.RecordPickerManager.get(
+                            fieldDefinition.config.appName,
+                            fieldDefinition.config.modelName,
+                            Ext.apply(field, config)
+                        );
+                        field = picker;
+                    }
+                    break;
+                case 'records':
+                    if (category == 'editDialog') {
+                        field.xtype = 'wdgt.pickergrid';
+                        field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
+                        field.autoData = true;
+                        field.fieldName = fieldName;
+                        field.height = 170; // 5 records
+                    } else {
+                        var picker = Tine.widgets.form.RecordsPickerManager.get(
                             fieldDefinition.config.appName,
                             fieldDefinition.config.modelName,
                             Ext.apply(field, config)

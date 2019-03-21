@@ -385,8 +385,8 @@ msgid "We are happy make you a non-binding offer."
 msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
 
 #: js/DocumentPreview.js:140
-msgid "No preview available."
-msgstr "Keine Vorschau verfügbar."
+msgid "No preview available yet - Please try again in a few minutes."
+msgstr "Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einigen Minuten erneut."
 
 #: js/NotificationGridPanel.js:58
 msgid "Notification"

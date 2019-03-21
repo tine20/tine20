@@ -624,6 +624,13 @@ span .x-tab-strip-text.tine-favicon {
     background-image:url("../../library/ExtJS/resources/images/default/s.gif");
 }
 
+.tine-gird-cell-date,
+.tine-gird-cell-datetime,
+.tine-gird-cell-time,
+.tine-gird-cell-number {
+    text-align: right;
+}
+
 .tine-editorgrid-row-invalid, .x-grid3-row-selected .tine-editorgrid-row-invalid {
     border: 1px dotted red!important;
 }

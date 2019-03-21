@@ -52,7 +52,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Schema update failed - retrying once ...');
-            $this->clearCache();
+            Setup_Controller::getInstance()->clearCache();
             sleep(5);
             Setup_SchemaTool::updateAllSchema();
         }

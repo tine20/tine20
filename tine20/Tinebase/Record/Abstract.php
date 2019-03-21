@@ -1322,17 +1322,12 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 ($this->has('name') ? $this->name : $this->{$this->_identifier});
         }
         
-        // use vsprintf formatting if it is an array
-        if (is_array($c->titleProperty)) {
-            if (! is_array($c->titleProperty[1])) {
-                $propertyValues = array($this->{$c->titleProperty[1]});
-            } else {
-                $propertyValues = array();
-                foreach($c->titleProperty[1] as $property) {
-                    $propertyValues[] = $this->{$property};
-                }
-            }
-            return vsprintf($c->titleProperty[0], $propertyValues);
+        if (strpos($c->titleProperty, '{') !== false) {
+            $translation = Tinebase_Translation::getTranslation($this->getApplication());
+            $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
+            $templateString = $translation->translate($c->titleProperty);
+            $template = $twig->getEnvironment()->createTemplate($templateString);
+            return $template->render($this->_properties);
         } else {
             return $this->{$c->titleProperty};
         }
@@ -1595,9 +1590,18 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $this->relations = null;
 
         $relations = Tinebase_Relations::getInstance();
+        $filter = function($relation) {
+            /** @var Tinebase_Model_Relation $relation */
+            /** @var Tinebase_Record_Interface $model */
+            $model = $relation->related_model;
+            return $model::generatesPaths();
+        };
+
         $result = array(
-            'parents'  => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_PARENT, true)->asArray(),
-            'children' => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_CHILD, true)->asArray()
+            'parents'  => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_PARENT, true)
+                ->filter($filter)->asArray(),
+            'children' => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_CHILD, true)
+                ->filter($filter)->asArray()
         );
 
         $this->relations = $oldRelations;

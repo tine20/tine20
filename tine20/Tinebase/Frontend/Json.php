@@ -25,7 +25,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var boolean
      */
     protected $_hasCaptcha = null;
-    
+
+    /**
+     * All full configured models
+     *
+     * @var array
+     */
+    protected $_configuredModels = [
+        'Tinebase_Model_BLConfig',
+    ];
+
     /**
      * wait for changes
      * 
@@ -834,7 +843,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
             'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
             'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
-            'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5'),
+            'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') &&
+                Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX),
         );
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

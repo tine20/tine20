@@ -137,7 +137,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             }
 
             me.add({
-                html: '<b>' + me.app.i18n._('No preview available.') + '</b>' + text,
+                html: '<b>' + me.app.i18n._('No preview available yet - Please try again in a few minutes.') + '</b>' + text,
                 xtype: 'panel',
                 frame: true,
                 border: true

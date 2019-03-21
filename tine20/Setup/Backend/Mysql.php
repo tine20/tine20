@@ -70,10 +70,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
     protected $_useUtf8mb4 = true;
 
-    public function __construct()
+    public function __construct($_forceUtf8mb4 = false)
     {
         parent::__construct();
-        if ($this->_db->getConfig()['charset'] === 'utf8') {
+        if (!$_forceUtf8mb4 && $this->_db->getConfig()['charset'] === 'utf8') {
             $this->_useUtf8mb4 = false;
         }
     }
@@ -362,7 +362,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         } elseif (!empty($_key->unique)) {
             $snippet = "  UNIQUE KEY `" . $_key->name . "`" ;
         } elseif (!empty($_key->fulltext)) {
-            if (!$this->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            if (!$this->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') ||
+                    !Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX)) {
                 if (Setup_Core::isLogLevel(Zend_Log::WARN)) Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
                     ' full text search is only supported on mysql 5.6.4+ / mariadb 10.0.5+ ... do yourself a favor and migrate. You need to add the missing full text indicies yourself manually now after migrating. Skipping creation of full text index!');
                 return '';

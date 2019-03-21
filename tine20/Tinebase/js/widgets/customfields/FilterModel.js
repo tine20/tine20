@@ -107,19 +107,16 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     cfValueRenderer: function(filter, el) {        
-        var valueType   = this.getValueType(filter),
-            fieldWidth  = this.filterValueWidth;
+        var valueType   = this.getValueType(filter);
                     
         filter.valueFields = {};
         
         filter.valueFields.selectionComboBox = Tine.widgets.customfields.Field.get(this.app, this.cfConfig, {
             hidden: valueType !== 'selectionComboBox',
-            width: fieldWidth,
             minListWidth: 350,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             resizable: true,
             filter: filter,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             renderTo: el,
             listeners: {
                 scope: this,

@@ -658,7 +658,7 @@ class Setup_Controller
         /** @var Tinebase_Model_Application $application */
         foreach (Tinebase_Application::getInstance()->getApplications()->filter('status', Tinebase_Application::ENABLED)
                 as $application) {
-            $this->createImportExportDefinitions($application);
+            $this->createImportExportDefinitions($application, Tinebase_Core::isReplicationSlave());
         }
     }
     
@@ -2956,6 +2956,9 @@ class Setup_Controller
         $setupBackend = Setup_Backend_Factory::factory();
         if (!$setupBackend->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
             return ['DB backend does not support the features - upgrade to mysql >= 5.6.4 or mariadb >= 10.0.5'];
+        }
+        if (!Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX)) {
+            return ['full text index feature is disabled'];
         }
 
         $failures = array();

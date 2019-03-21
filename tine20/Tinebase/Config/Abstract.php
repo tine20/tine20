@@ -293,17 +293,21 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
-        if (is_object($_value) && $_value instanceof Tinebase_Record_Interface) {
-            $_value = $_value->toArray(true);
-        }
+        try {
+            if (is_object($_value) && $_value instanceof Tinebase_Record_Interface) {
+                $_value = $_value->toArray(true);
+            }
 
-        $configRecord = new Tinebase_Model_Config(array(
-            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
-            "name"              => $_name,
-            "value"             => json_encode($_value),
-        ));
-        
-        $this->_saveConfig($configRecord);
+            $configRecord = new Tinebase_Model_Config(array(
+                "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
+                "name"              => $_name,
+                "value"             => json_encode($_value),
+            ));
+
+            $this->_saveConfig($configRecord);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // during installation we may not have access to the application yet.. dangerous terrain
+        }
 
         $this->_mergedConfigCache[$_name] = $this->_rawToConfig($_value, $_name);
     }
@@ -935,7 +939,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $features = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $features = $this->get(self::ENABLED_FEATURES);
-            if ('Tinebase' === $this->_appName && !Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            if ('Tinebase' === $this->_appName && (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')
+                    || !$features->{Tinebase_Config::FEATURE_FULLTEXT_INDEX})) {
                 $features->{Tinebase_Config::FEATURE_SEARCH_PATH} = false;
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
