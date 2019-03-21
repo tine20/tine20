@@ -353,7 +353,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 
             $regConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             $tinebaseFeatures = $regConfig->Tinebase->{Tinebase_Config::ENABLED_FEATURES}->toArray();
-            static::assertEquals(6, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
+            static::assertGreaterThanOrEqual(6, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
 
             $db->delete(SQL_TABLE_PREFIX . 'config', $db->quoteIdentifier('application_id') . $db->quoteInto(' = ?',
                 Tinebase_Core::getTinebaseId()) . ' AND ' . $db->quoteIdentifier('name') . $db->quoteInto(' = ?',
