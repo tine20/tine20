@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Lock
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -24,15 +24,8 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
 
     public function keepAlive()
     {
-        if ($this->_isLocked) {
-            $db = Tinebase_Core::getDb();
-            if (!($stmt = $db->query('SELECT IS_USED_LOCK("' . $this->_lockId . '") = CONNECTION_ID()')) ||
-                    !$stmt->setFetchMode(Zend_Db::FETCH_NUM) ||
-                    !($row = $stmt->fetch()) ||
-                    $row[0] != 1) {
-                throw new Tinebase_Exception_Backend('lock is not held by us anymore');
-            }
-        }
+        $db = Tinebase_Core::getDb();
+        $db->query('SELECT now()')->fetchAll();
     }
 
     /**
@@ -43,20 +36,18 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
         if ($this->_isLocked) {
             throw new Tinebase_Exception_Backend('trying to acquire a lock on a locked lock');
         }
-        $db = Tinebase_Core::getDb();
-        // first check if the lock is free, that means, not yet aquired possible by our own session
-        // belows get_lock would allow to aquire the lock inside our own mysql session multiple times
-        if (($stmt = $db->query('SELECT IS_FREE_LOCK("' . $this->_lockId . '")')) &&
-                $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
-                ($row = $stmt->fetch()) &&
-                $row[0] != 1) {
-            return false;
+        if (!static::$supportsMultipleLocks && static::$mysqlLockId !== null) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                .' your mysql version does not support multiple locks per session, configure a better lock backend');
+            $this->_isLocked = true;
+            return null;
         }
-        $stmt->closeCursor();
+        $db = Tinebase_Core::getDb();
         if (($stmt = $db->query('SELECT GET_LOCK("' . $this->_lockId . '", 0)')) &&
                 $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                 ($row = $stmt->fetch()) &&
                 $row[0] == 1) {
+            static::$mysqlLockId = $this->_lockId;
             $this->_isLocked = true;
             return true;
         }
@@ -72,15 +63,41 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
         if (!$this->_isLocked) {
             throw new Tinebase_Exception_Backend('trying to release an unlocked lock');
         }
+        if (!static::$supportsMultipleLocks && static::$mysqlLockId !== $this->_lockId) {
+            $this->_isLocked = false;
+            return null;
+        }
 
         $db = Tinebase_Core::getDb();
         if (($stmt = $db->query('SELECT RELEASE_LOCK("' . $this->_lockId . '")')) &&
                 $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                 ($row = $stmt->fetch()) &&
                 $row[0] == 1) {
+            static::$mysqlLockId = null;
             $this->_isLocked = false;
             return true;
         }
         return false;
+    }
+
+    /**
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function checkCapabilities()
+    {
+        if (Setup_Backend_Factory::factory()->supports('mysql >= 5.7.5 | mariadb >= 10.0.2')) {
+            static::$supportsMultipleLocks = true;
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            .' mysql support for multiple locks: ' . var_export(static::$supportsMultipleLocks, true));
+    }
+
+    /**
+     * @return bool
+     */
+    public static function supportsMultipleLocks()
+    {
+        return static::$supportsMultipleLocks;
     }
 }

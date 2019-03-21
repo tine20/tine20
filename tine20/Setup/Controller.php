@@ -1067,11 +1067,6 @@ class Setup_Controller
      */
     public function updateNeeded($_application = null)
     {
-        $setupBackend = Setup_Backend_Factory::factory();
-        if (!$setupBackend->supports('mysql >= 5.7.5 | mariadb >= 10.0.5')) {
-            throw new Tinebase_Exception_Backend('mysql >= 5.7.5 | mariadb >= 10.0.5 required');
-        }
-
         if (null === $_application) {
             $count = 0;
             $this->_getUpdatesByPrio($count);

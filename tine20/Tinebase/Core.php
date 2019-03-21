@@ -2140,7 +2140,11 @@ class Tinebase_Core
      */
     public static function acquireMultiServerLock($id)
     {
-        return Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
+        $result = Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
+        if ( true === $result || null === $result ) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -2151,7 +2155,11 @@ class Tinebase_Core
      */
     public static function releaseMultiServerLock($id)
     {
-        return Tinebase_Lock::releaseLock($id . '::' . static::getTinebaseId());
+        $result = Tinebase_Lock::releaseLock($id . '::' . static::getTinebaseId());
+        if ( true === $result || null === $result ) {
+            return true;
+        }
+        return false;
     }
 
     /**
