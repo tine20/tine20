@@ -64,11 +64,21 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             // if ( $routeHandler->requiresRights() ) {
             // foreach ($routeHandler->getRequiredRights() as $right) {
             // if (! $user->hasRight($routeHandler->getApplicationName(), $right)) {
+
+            return $delegate->handle($request);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' in a public route');
-        }
 
-        return $delegate->handle($request);
+            $routeHandler->setPublicRoles();
+
+            try {
+                return $delegate->handle($request);
+            } finally {
+                // TODO eventually we want this to happen in the ResponseEnvelop actually! if expanding would happen
+                // TODO there... if expanding happens inside the delegate above we are fine
+                $routeHandler->unsetPublicRoles();
+            }
+        }
     }
 }

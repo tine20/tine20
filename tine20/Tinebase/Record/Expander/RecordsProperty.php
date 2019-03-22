@@ -25,7 +25,7 @@ class Tinebase_Record_Expander_RecordsProperty extends Tinebase_Record_Expander_
             $ids = array_unique($ids);
             $self = $this;
             $this->_rootExpander->_registerDataToFetch(new Tinebase_Record_Expander_DataRequest(
-                $this->_prio, Tinebase_Core::getApplicationInstance($this->_model), $ids,
+                $this->_prio, Tinebase_Core::getApplicationInstance($this->_model, '', true), $ids,
                 // workaround: [$this, '_setData'] doesn't work, even so it should!
                 function ($_data) use ($self) {
                     $self->_setData($_data);

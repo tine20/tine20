@@ -1990,6 +1990,61 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     }
 
     /**
+     * create a new system container
+     * - by default user group gets READ grant
+     * - by default admin group gets all grants
+     *
+     * NOTE: this should never be called in user land and only in admin/setup contexts
+     *
+     * @param Tinebase_Model_Application|string $application app record, app id or app name
+     * @param string $model the model the container contains
+     * @param string $name
+     * @param string $idConfig save id in config if given
+     * @param Tinebase_Record_RecordSet $grants use this to overwrite default grants
+     * @return Tinebase_Model_Container
+     */
+    public function createSystemContainer($application, $model, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL)
+    {
+        $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Creating system container for model ' . $model);
+
+        $newContainer = new Tinebase_Model_Container(array(
+            'name'              => $name,
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'backend'           => 'Sql',
+            'application_id'    => $application->getId(),
+            'model'             => $model
+        ));
+
+        $grants = ($grants) ? $grants : Tinebase_Model_Grants::getDefaultGrants();
+        $newContainer = $this->addContainer($newContainer, $grants, TRUE);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Created new system container ' . $name . ' for application ' . $application->name);
+
+        if ($configId !== NULL) {
+            $configClass = $application->name . '_Config';
+            if (@class_exists($configClass)) {
+                $config = call_user_func(array($configClass, 'getInstance'));
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Setting system container config "' . $configId . '" = ' . $newContainer->getId());
+
+                $config->set($configId, $newContainer->getId());
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not find preferences class ' . $configClass);
+            }
+        }
+
+        $this->resetClassCache();
+
+        return $newContainer;
+    }
+
+    /**
      * Updates existing container and clears the cache entry of the container
      *
      * @param Tinebase_Record_Interface $_record
