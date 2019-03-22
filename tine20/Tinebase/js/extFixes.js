@@ -354,8 +354,11 @@ Ext.form.TimeField.prototype.getValue = function(){
 
     if (value) {
         var dtValue = this.parseDate(value);
-        dtValue.toJSON = function() {
-            return this.format('H:i:s');
+        if (Ext.isDate(dtValue)) {
+            dtValue = dtValue.clone();
+            dtValue.toJSON = function () {
+                return this.format('H:i:s');
+            }
         }
     }
 
@@ -1153,15 +1156,14 @@ Ext.form.Field.prototype.getAutoCreate = function() {
  * preserve dateformat
  */
 Ext.data.Field = Ext.apply(Ext.data.Field.createSequence(function(config) {
-    if (config && config.type == 'date') {
-        var dateFormat = this.dateFormat,
-             convert = this.convert;
+    if (config && config.type == 'date' && config.dateFormat) {
+        var convert = this.convert;
 
         this.convert = function(v) {
             var d = convert(v);
             if (Ext.isDate(d)) {
                 d.toJSON = function() {
-                    return this.format(dateFormat);
+                    return this.format(config.dateFormat);
                 }
             }
             return d;

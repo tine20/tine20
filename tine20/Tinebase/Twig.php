@@ -77,7 +77,30 @@ class Tinebase_Twig
             return json_encode($string);
         });
 
+        $this->_twigEnvironment->addExtension(new Twig_Extensions_Extension_Intl());
+
         $this->_addTwigFunctions();
+
+        $this->_addGlobals();
+    }
+
+    protected function _addGlobals()
+    {
+        $tbConfig = Tinebase_Config::getInstance();
+
+        $globals = [
+            'branding'          => [
+                'logo'              => Tinebase_Core::getInstallLogo(),
+                'title'             => $tbConfig->{Tinebase_Config::BRANDING_TITLE},
+                'description'       => $tbConfig->{Tinebase_Config::BRANDING_DESCRIPTION},
+                'weburl'            => $tbConfig->{Tinebase_Config::BRANDING_WEBURL},
+            ],
+            'user'              => [
+                'locale'            => Tinebase_Core::getLocale(),
+                'timezone'          => Tinebase_Core::getUserTimezone(),
+            ],
+        ];
+        $this->_twigEnvironment->addGlobal('app', $globals);
     }
 
     /**

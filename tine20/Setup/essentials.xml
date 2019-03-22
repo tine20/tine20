@@ -10,6 +10,7 @@
         <extension name="gd" />
         <extension name="hash" />
         <extension name="iconv" />
+        <extension name="intl" />
         <extension name="json" />
         <extension name="mbstring" />
         <extension name="openssl" />

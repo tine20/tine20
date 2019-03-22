@@ -337,7 +337,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         
         if (this.dateField && this.timeField) {
             this.dateField.setValue(value);
-            this.timeField.setValue(value);
+            this.timeField.setValue(Ext.isDate(value) ? value.clone() : value);
         }
         
         this.value = value;
