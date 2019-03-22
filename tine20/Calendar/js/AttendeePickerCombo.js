@@ -77,7 +77,7 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
      * create bogus attendee record for directly entered email-addresses
      */
     getValue: function() {
-        var raw = this.getRawValue();
+        var raw = _.get(this, 'el.dom') ? this.getRawValue() : Ext.value(this.value, '');
         if (Ext.form.VTypes.email(raw)) {
             this.value = raw;
             this.selectedRecord = new Tine.Calendar.Model.Attender(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
