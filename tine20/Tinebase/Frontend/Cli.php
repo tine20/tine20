@@ -927,6 +927,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function monitoringCheckDB()
     {
+        $result = 0;
         $message = 'DB CONNECTION FAIL';
         try {
             if (! Setup_Core::isRegistered(Setup_Core::CONFIG)) {
@@ -944,17 +945,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         if ($dbcheck) {
-            echo "DB CONNECTION OK | connecttime={$time}ms;;;;\n";
-            return 0;
-        } 
+            $message = "DB CONNECTION OK | connecttime={$time}ms;;;;";
+        } else {
+            $result = 2;
+        }
         
         echo $message . "\n";
+        $this->_logMonitoringResult($result, $message);
 
-        try {
-            Tinebase_Exception::log(new Tinebase_Exception($message));
-        } catch (Throwable $t) {}
-
-        return 2;
+        return $result;
     }
     
     /**
@@ -967,6 +966,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $message = 'CONFIG FAIL';
         $configcheck = FALSE;
+        $result = 0;
         
         $configfile = Setup_Core::getConfigFilePath();
         if ($configfile) {
@@ -986,15 +986,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         if ($configcheck) {
-            echo "CONFIG FILE OK\n";
-            return 0;
+            $message = "CONFIG FILE OK";
         } else {
-            echo $message . "\n";
-            try {
-                Tinebase_Exception::log(new Tinebase_Exception($message));
-            } catch (Throwable $t) {}
-            return 2;
+            $result = 2;
         }
+
+        echo $message . "\n";
+        $this->_logMonitoringResult($result, $message);
+
+        return $result;
     }
     
     /**
@@ -1033,14 +1033,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $result = 2;
         }
 
-        if ('CRON OK' !== $message) {
-            try {
-                Tinebase_Exception::log(new Tinebase_Exception($message));
-            } catch (Throwable $t) {}
-        }
-        
+        $this->_logMonitoringResult($result, $message);
         echo $message . "\n";
         return $result;
+    }
+
+    protected function _logMonitoringResult($result, $message)
+    {
+        if ($result > 0) {
+            try {
+                Tinebase_Exception::log(new Tinebase_Exception($message));
+            } catch (Throwable $t) {
+                // just logging
+            }
+        }
     }
     
     /**
@@ -1067,11 +1073,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $result = 2;
         }
 
-        if (strpos($message, 'LOGINS OK') !== 0) {
-            try {
-                Tinebase_Exception::log(new Tinebase_Exception($message));
-            } catch (Throwable $t) {}
-        }
+        $this->_logMonitoringResult($result, $message);
         
         echo $message . "\n";
         return $result;
@@ -1098,11 +1100,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $result = 2;
         }
 
-        if (strpos($message, 'ACTIVE USERS OK') !== 0) {
-            try {
-                Tinebase_Exception::log(new Tinebase_Exception($message));
-            } catch (Throwable $t) {}
-        }
+        $this->_logMonitoringResult($result, $message);
 
         echo $message . "\n";
         return $result;
@@ -1200,11 +1198,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $result = 2;
                 }
 
-                if ('QUEUE OK' !== $message) {
-                    try {
-                        Tinebase_Exception::log(new Tinebase_Exception($message));
-                    } catch (Throwable $t) {}
-                }
+                $this->_logMonitoringResult($result, $message);
             }
         }
 
@@ -1252,11 +1246,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $result = 2;
             }
 
-            if (strpos($message, 'CACHE OK') !== 0) {
-                try {
-                    Tinebase_Exception::log(new Tinebase_Exception($message));
-                } catch (Throwable $t) {}
-            }
+            $this->_logMonitoringResult($result, $message);
         }
         echo $message . "\n";
         return $result;
