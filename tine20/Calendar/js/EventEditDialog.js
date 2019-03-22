@@ -398,14 +398,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // auto location
         this.attendeeGridPanel.on('afteredit', function(o) {
-            if (o.field == 'user_id'
-                && o.record.get('user_type') == 'resource'
-                && o.record.get('user_id')
-                && o.record.get('user_id').type == 'ROOM'
-            ) {
-                this.getForm().findField('location').setValue(
-                    this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'))
-                );
+            if (o.field == 'user_id' && o.record.get('user_type') == 'resource' ) {
+                var typeId = _.get(o.record, 'data.user_id.type'),
+                    type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId);
+
+                if (type.get('is_location')) {
+                    this.getForm().findField('location').setValue(
+                        this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'))
+                    );
+                }
             }
         }, this);
         
