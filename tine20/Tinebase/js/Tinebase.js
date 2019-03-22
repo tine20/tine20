@@ -27,6 +27,5 @@ module.exports = {
     director: director,
     postal: postal,
     lodash: lodash,
-    _: lodash,
-    twing: twing
+    _: lodash
 };
