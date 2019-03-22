@@ -159,6 +159,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initActionsAndToolbars();
 
         this.on('afterrender', this.onAfterRender, this);
+        this.on('rowdblclick', this.onRowDblClick,     this);
 
         Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
     },
@@ -446,6 +447,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // check if already in
         if (! this.store.getById(record.id)) {
             this.store.add([record]);
+            this.fireEvent('add', this, [record]);
         }
         
         picker.reset();
@@ -535,6 +537,41 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         });
 
         me.editDialog.record.set(me.fieldName, data);
+    },
+
+    // NOTE: picker picks independed records - so lets support to open them w.o. restirctions
+    onRowDblClick: function(grid, row, col) {
+        var me = this,
+            appName = me.recordClass.getMeta('appName'),
+            modelName = me.recordClass.getMeta('modelName'),
+            editDialogClass = Tine[appName][modelName + 'EditDialog'],
+            record = me.store.getAt(row);
+
+        if (editDialogClass) {
+            editDialogClass.openWindow({
+                record: record,
+                recordId: record.getId(),
+                listeners: {
+                    scope: me,
+                    'update': function (updatedRecord) {
+                        if (!updatedRecord.data) {
+                            updatedRecord = Tine.Tinebase.data.Record.setFromJson(updatedRecord, me.recordClass)
+                        }
+
+                        var idx = me.store.indexOfId(updatedRecord.id),
+                            isSelected = me.getSelectionModel().isSelected(idx);
+
+                        me.getStore().removeAt(idx);
+                        me.getStore().insert(idx, [updatedRecord]);
+                        if (isSelected) {
+                            me.getSelectionModel().selectRow(idx, true);
+                        }
+
+                        me.fireEvent('update', this, updatedRecord);
+                    }
+                }
+            });
+        }
     }
 });
 
