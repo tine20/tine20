@@ -2676,7 +2676,13 @@ class Setup_Controller
 
         /** @var Tinebase_Model_Application $application */
         foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
-            $xml = $this->getSetupXml($application->name);
+            try {
+                $xml = $this->getSetupXml($application->name);
+            } catch (Setup_Exception_NotFound $senf) {
+                // app is not available any more
+                $failures[] = $senf->getMessage();
+                continue;
+            }
             // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
 
             // get all MCV2 models for all apps, you never know...
