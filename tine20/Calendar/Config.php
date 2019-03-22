@@ -400,22 +400,23 @@ class Calendar_Config extends Tinebase_Config_Abstract
             //_('Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.')
             'description'           => 'Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'options'               => array('recordModel' => Calendar_Model_ResourceType::class),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'RESOURCE', 'value' => 'Resource', 'icon' => 'images/icon-set/icon_resource.svg', 'system' => true), //_('Resource') @todo default resource icon!
-                    array('id' => 'ROOM', 'value' => 'Room', 'icon' => 'images/icon-set/icon_resource_room1.svg', 'system' => true), //_('Room')
-                    array('id' => 'BOARD', 'value' => 'Board', 'icon' => 'images/icon-set/icon_resource_board.svg', 'system' => true), //_('Board')
-                    array('id' => 'CABLE', 'value' => 'Cable', 'icon' => 'images/icon-set/icon_resource_cable.svg', 'system' => true), //_('Cable')
-                    array('id' => 'CAR', 'value' => 'Car', 'icon' => 'images/icon-set/icon_resource_car.svg', 'system' => true), //_('Car')
-                    array('id' => 'COFFEE', 'value' => 'Coffee', 'icon' => 'images/icon-set/icon_resource_coffee.svg', 'system' => true), //_('Coffee')
-                    array('id' => 'HOMEOFFICE', 'value' => 'Homeoffice', 'icon' => 'images/icon-set/icon_resource_homeoffice.svg', 'system' => true), //_('Homeoffice')
-                    array('id' => 'LAMP', 'value' => 'Lamp', 'icon' => 'images/icon-set/icon_resource_lamp.svg', 'system' => true), //_('Lamp')
-                    array('id' => 'LAPTOP', 'value' => 'Laptop', 'icon' => 'images/icon-set/icon_resource_laptop.svg', 'system' => true), //_('Laptop')
-                    array('id' => 'MATERIAL', 'value' => 'Material', 'icon' => 'images/icon-set/icon_resource_material.svg', 'system' => true), //_('Material')
-                    array('id' => 'PROJECTOR', 'value' => 'Projector', 'icon' => 'images/icon-set/icon_resource_projector.svg', 'system' => true), //_('Projector')
-                    array('id' => 'TRAVEL', 'value' => 'Travel', 'icon' => 'images/icon-set/icon_resource_trolly.svg', 'system' => true), //_('Travel')
+                    array('id' => 'RESOURCE', 'is_location' => 0, 'value' => 'Resource', 'icon' => 'images/icon-set/icon_resource.svg', 'system' => true), //_('Resource') @todo default resource icon!
+                    array('id' => 'ROOM', 'is_location' => 1, 'value' => 'Room', 'icon' => 'images/icon-set/icon_resource_room1.svg', 'system' => true), //_('Room')
+                    array('id' => 'BOARD', 'is_location' => 0, 'value' => 'Board', 'icon' => 'images/icon-set/icon_resource_board.svg', 'system' => true), //_('Board')
+                    array('id' => 'CABLE', 'is_location' => 0, 'value' => 'Cable', 'icon' => 'images/icon-set/icon_resource_cable.svg', 'system' => true), //_('Cable')
+                    array('id' => 'CAR', 'is_location' => 1, 'value' => 'Car', 'icon' => 'images/icon-set/icon_resource_car.svg', 'system' => true), //_('Car')
+                    array('id' => 'COFFEE', 'is_location' => 0, 'value' => 'Coffee', 'icon' => 'images/icon-set/icon_resource_coffee.svg', 'system' => true), //_('Coffee')
+                    array('id' => 'HOMEOFFICE', 'is_location' => 1, 'value' => 'Homeoffice', 'icon' => 'images/icon-set/icon_resource_homeoffice.svg', 'system' => true), //_('Homeoffice')
+                    array('id' => 'LAMP', 'is_location' => 0, 'value' => 'Lamp', 'icon' => 'images/icon-set/icon_resource_lamp.svg', 'system' => true), //_('Lamp')
+                    array('id' => 'LAPTOP', 'is_location' => 0, 'value' => 'Laptop', 'icon' => 'images/icon-set/icon_resource_laptop.svg', 'system' => true), //_('Laptop')
+                    array('id' => 'MATERIAL', 'is_location' => 0, 'value' => 'Material', 'icon' => 'images/icon-set/icon_resource_material.svg', 'system' => true), //_('Material')
+                    array('id' => 'PROJECTOR', 'is_location' => 0, 'value' => 'Projector', 'icon' => 'images/icon-set/icon_resource_projector.svg', 'system' => true), //_('Projector')
+                    array('id' => 'TRAVEL', 'is_location' => 1, 'value' => 'Travel', 'icon' => 'images/icon-set/icon_resource_trolly.svg', 'system' => true), //_('Travel')
                 ),
                 'default' => 'RESOURCE'
             )

@@ -1110,6 +1110,25 @@ Tine.Calendar.Model.Resource.getFilterModel = function() {
 
 /**
  * @namespace   Tine.Calendar.Model
+ * @class       Tine.Calendar.Model.ResourceType
+ * @extends     Tine.Tinebase.data.Record
+ * ResourceType Record Definition
+ */
+Tine.Calendar.Model.ResourceType = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'is_location'},
+    {name: 'value'},
+    {name: 'icon'},
+    {name: 'color'},
+    {name: 'system'},
+], {
+    appName: 'Calendar',
+    modelName: 'ResourceType',
+    idProperty: 'id'
+});
+
+/**
+ * @namespace   Tine.Calendar.Model
  * @class       Tine.Calendar.Model.iMIP
  * @extends     Tine.Tinebase.data.Record
  * iMIP Record Definition

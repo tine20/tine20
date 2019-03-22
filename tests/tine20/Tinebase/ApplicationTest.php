@@ -287,6 +287,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Calendar' => array(
                 Calendar_Model_Resource::class,
+                Calendar_Model_ResourceType::class,
                 Calendar_Model_ResourceGrants::class,
                 Calendar_Model_iMIP::class,
                 Calendar_Model_Rrule::class,
