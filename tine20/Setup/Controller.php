@@ -2566,7 +2566,7 @@ class Setup_Controller
             // get all MCV2 models for all apps, you never know...
             $controllerInstance = null;
             try {
-                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name);
+                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name, '', true);
             } catch(Tinebase_Exception_NotFound $tenf) {
                 $failures[] = 'could not get application controller for app: ' . $application->name;
             }
