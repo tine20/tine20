@@ -43,6 +43,11 @@ class HumanResources_BL_DailyWTReport_TimeSlot
     public $timeAccountId;
 
     /**
+     * @var string
+     */
+    public $timeSheetId;
+
+    /**
      * @return int
      */
     public function durationInSec()

@@ -44,6 +44,7 @@
  * @property integer                    break_time_deduction
  * @property integer                    working_time_correction
  * @property integer                    working_time_actual
+ * @property integer                    working_time_total
  * @property integer                    working_time_target
  * @property integer                    working_time_target_correction
  * @property integer                    break_time_net
@@ -72,18 +73,15 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
         'recordName' => 'Daily Working Time Report',
         'recordsName' => 'Daily Working Time Reports', // ngettext('Daily Working Time Report', 'Daily Working Time Reports', n)
         'containerProperty' => null,
-        'hasRelations' => false, // TODO really no relations?
+        'hasRelations' => true,
         'hasCustomFields' => true,
         'hasNotes' => true,
         'hasTags' => true,
         'modlogActive' => true,
-        'hasAttachments' => false,
 
         'createModule'    => true,
         'exposeHttpApi'     => true,
         'exposeJsonApi'     => true,
-
-        'isDependent'     => false, // TODO remove?
 
         'appName' => 'HumanResources',
         'modelName' => self::MODEL_NAME_PART,
@@ -264,6 +262,15 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
             ],
+            'working_time_total' => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::LABEL                 => 'Total Working Time', // _('Total Working Time')
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DISABLED              => true,
+            ],
             // z.b. krankheit, urlaub, feiertag (bei regelarbeit leer)
             'system_remark' => [
                 self::LABEL                 => 'System Remark', // _('System Remark')
@@ -301,6 +308,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
         $result->break_time_deduction = 0;
         $result->working_time_actual = 0;
         $result->working_time_target = 0;
+        $result->working_time_total = 0;
         $result->working_times = null;
         $result->evaluation_period_start = null;
         $result->evaluation_period_end = null;

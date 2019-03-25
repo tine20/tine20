@@ -86,11 +86,16 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
                     '2018-08-07 00:00:00' => 5 * 3600 - 1800,
                     '2018-08-08 00:00:00' => 2 * 3600,
                  ] as $day => $workTime) {
-            $report = $result->filter('date', $day)->getFirstRecord();
+            $report = $result->find('date', $day);
             self::assertNotNull($report);
             self::assertEquals($workTime, $report->working_time_actual);
             // @todo add more assertions (absence_time*, evaluation_period*, break_time*, working_time_target, working_time_correction, ...)
         }
+
+        $jsonFE = new HumanResources_Frontend_Json();
+        $saved_report = $jsonFE->getDailyWtReport($result->find('date', $day)->getId());
+        static::assertTrue(is_array($saved_report['working_times'][0]['wage_type']), 'wage_type in working times is not resolved');
+
 
         return $employee;
     }

@@ -17,6 +17,8 @@
  */
 class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
 {
+    public $allowTimesheetOverlap = false;
+
     /**
      * @var Tinebase_DateTime
      */
@@ -62,6 +64,17 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
     {
         $this->timeSlots = [];
         $_timeSheets->sort('start_time');
+        $relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
+        $relation = new Tinebase_Model_Relation(
+            [
+                'own_model'         => HumanResources_Model_DailyWTReport::class,
+                'own_backend'       => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'own_id'            => $this->result->getId(),
+                'related_model'     => Timetracker_Model_Timesheet::class,
+                'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'related_degree'    => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type'              => HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
+            ], true);
 
         /** @var Timetracker_Model_Timesheet $timeSheet */
         foreach ($_timeSheets as $timeSheet) {
@@ -69,15 +82,21 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
             $timeSlot->start = new Tinebase_DateTime($timeSheet->start_date->format('Y-m-d ') . $timeSheet->start_time);
             $timeSlot->end = $timeSlot->start->getClone()->addMinute($timeSheet->duration);
             $timeSlot->timeAccountId = $timeSheet->getIdFromProperty('timeaccount_id');
+            $timeSlot->timeSheetId = $timeSheet->getId();
 
             // TODO add same day assertions? which TZ?
-            if (false !== ($lastSlot = end($this->timeSlots))) {
+            if ($this->allowTimesheetOverlap || false !== ($lastSlot = end($this->timeSlots))) {
                 if ($timeSlot->start->isEarlier($lastSlot->end)) {
                     throw new Tinebase_Exception_BL('timesheets must not overlap');
                 }
             }
+            $newRelation = clone $relation;
+            $newRelation->related_id = $timeSheet->getId();
+            $relations->addRecord($newRelation);
 
             $this->timeSlots[] = $timeSlot;
         }
+
+        $this->result->relations = $relations;
     }
 }

@@ -66,6 +66,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         }
 
         $_data->result->working_time_actual = $timeWorked;
+        $_data->result->working_time_total = $timeWorked + $_data->result->working_time_correction;
         $_data->result->break_time_net = $timePaused;
 
         $dayOfWeek = $_data->date->format('w') - 1;

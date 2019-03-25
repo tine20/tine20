@@ -214,6 +214,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             try {
                 $monthlyWTR = $this->_getOrCreateMonthlyWTR();
                 $dateStr = $this->_currentDate->format('Y-m-d');
+                /** @var HumanResources_Model_DailyWTReport $oldReport */
                 $oldReport = null;
                 if (isset($existingReports[$dateStr])) {
                     $oldReport = $existingReports[$dateStr];
@@ -237,9 +238,6 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 $blPipeData = new HumanResources_BL_DailyWTReport_Data();
                 $blPipeData->workingTimeModel = $contract->working_time_scheme;
                 $blPipeData->date = $this->_currentDate->getClone();
-                if (isset($timeSheets[$dateStr])) {
-                    $blPipeData->convertTimeSheetsToTimeSlots($timeSheets[$dateStr]);
-                }
                 if (isset($freeTimes[$dateStr])) {
                     $blPipeData->freeTimes = $timeSheets[$dateStr];
                 }
@@ -251,6 +249,14 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         'monthlywtreport' => $monthlyWTR->getId(),
                         'date' => clone $this->_currentDate,
                     ]);
+                $blPipeData->allowTimesheetOverlap = true;
+                if (isset($timeSheets[$dateStr])) {
+                    if ($blPipe->hasInstanceOf(HumanResources_BL_DailyWTReport_BreakTime::class) ||
+                        $blPipe->hasInstanceOf(HumanResources_BL_DailyWTReport_LimitWorkingTime::class)) {
+                        $blPipeData->allowTimesheetOverlap = false;
+                    }
+                    $blPipeData->convertTimeSheetsToTimeSlots($timeSheets[$dateStr]);
+                }
 
                 $blPipe->execute($blPipeData);
 
