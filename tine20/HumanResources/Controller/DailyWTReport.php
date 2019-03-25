@@ -409,6 +409,10 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         $result = [];
         /** @var HumanResources_Model_DailyWTReport $dwtr */
         foreach (HumanResources_Controller_DailyWTReport::getInstance()->search($filter) as $dwtr) {
+            $dwtr->relations = Tinebase_Relations::getInstance()->getRelations(
+                HumanResources_Model_DailyWTReport::class,
+                Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                $dwtr->getId());
             $result[$dwtr->date->format('Y-m-d')] = $dwtr;
         }
         return $result;
