@@ -124,19 +124,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initComponent: function() {
-        if (this.autoData) {
-            var _ = window.lodash,
-                me = this,
-                parent = me.findParentBy(function (c) {
-                    return c.editDialog
-                }),
-                editDialog = _.get(parent, 'editDialog');
-
-            editDialog.on('load', me.onRecordLoad, me);
-            editDialog.on('recordUpdate', me.onRecordUpdate, me);
-
-            this.editDialog = editDialog;
-        }
 
         if (this.disabled) {
             this.disabled = false;
@@ -505,9 +492,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return Promise.resolve();
     },
 
-    onRecordLoad: function() {
+    setValue: function(recordsdata) {
         var me = this,
-            recordsdata = _.get(me.editDialog.record, 'data.' + me.fieldName) || [],
             selectRowAfterAdd = me.selectRowAfterAdd,
             highlightRowAfterAdd = me.highlightRowAfterAdd;
 
@@ -526,7 +512,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }).defer(300, me)
     },
 
-    onRecordUpdate: function() {
+    getValue: function() {
         var me = this,
             data = [];
 
@@ -536,8 +522,15 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             data.push(record.data);
         });
 
-        me.editDialog.record.set(me.fieldName, data);
+        return data;
     },
+
+    /* needed for isFormField cycle */
+    markInvalid: Ext.form.Field.prototype.markInvalid,
+    clearInvalid: Ext.form.Field.prototype.clearInvalid,
+    getMessageHandler: Ext.form.Field.prototype.getMessageHandler,
+    getName: Ext.form.Field.prototype.getName,
+    validate: function() { return true; },
 
     // NOTE: picker picks independed records - so lets support to open them w.o. restirctions
     onRowDblClick: function(grid, row, col) {

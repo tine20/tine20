@@ -171,7 +171,7 @@ Tine.widgets.form.FieldManager = function() {
                     if (category == 'editDialog') {
                         field.xtype = 'wdgt.pickergrid';
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
-                        field.autoData = true;
+                        field.isFormField = true;
                         field.fieldName = fieldName;
                         field.height = 170; // 5 records
                     } else {
