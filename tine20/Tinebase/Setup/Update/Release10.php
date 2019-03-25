@@ -831,6 +831,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_16()
     {
+        $this->setContainerModels();
         $this->_addIsDeletedToTreeNodes();
 
         // this is needed for filesystem operations
@@ -2632,5 +2633,31 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_59()
     {
         $this->setApplicationVersion('Tinebase', '11.0');
+    }
+
+    public function setContainerModels()
+    {
+        $models = [];
+        $containers = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container', ['id', 'application_id'])
+            ->where($this->_db->quoteIdentifier('model') . ' IS NULL OR ' . $this->_db->quoteIdentifier('model')
+                . ' = ' . $this->_db->quote(''))->query()->fetchAll(Zend_DB::FETCH_ASSOC);
+
+        foreach ($containers as $container) {
+            if (!isset($models[$container['application_id']])) {
+                $models[$container['application_id']] = Tinebase_Core::getApplicationInstance(
+                    Tinebase_Application::getInstance()->getApplicationById($container['application_id'])->name, '',
+                    true)->getDefaultModel();
+            }
+
+            if ($models[$container['application_id']]) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Setting model ' . $models[$container['application_id']] . ' for container ' . $container['id']);
+                $this->_db->update(SQL_TABLE_PREFIX . 'container', ['model' => $models[$container['application_id']]],
+                    $this->_db->quoteInto('id = ?', $container['id']));
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Could not find default model for app id ' . $container['application_id']);
+            }
+        }
     }
 }
