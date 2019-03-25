@@ -79,7 +79,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
             $_monthlyWTR->working_time_actual - $_monthlyWTR->working_time_target +
             $_monthlyWTR->working_time_correction;
 
-        $current = $this->update($_monthlyWTR);
+        $current = $this->_backend->update($_monthlyWTR);
         if (null !== ($_nextMonthlyWTR = $this->getNextMonthlyWTR($current))) {
             $this->recalculateReport($_nextMonthlyWTR, $current);
         }
