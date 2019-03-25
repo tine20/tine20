@@ -535,9 +535,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     // NOTE: picker picks independed records - so lets support to open them w.o. restirctions
     onRowDblClick: function(grid, row, col) {
         var me = this,
-            appName = me.recordClass.getMeta('appName'),
-            modelName = me.recordClass.getMeta('modelName'),
-            editDialogClass = Tine[appName][modelName + 'EditDialog'],
+            editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(me.recordClass),
             record = me.store.getAt(row);
 
         if (editDialogClass) {

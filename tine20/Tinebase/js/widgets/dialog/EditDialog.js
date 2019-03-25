@@ -1354,3 +1354,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
     }
 });
+
+Tine.widgets.dialog.EditDialog.getConstructor = function(recordClass) {
+    var appName = recordClass.getMeta('appName'),
+        modelName = recordClass.getMeta('modelName'),
+        editDialogClass = Tine[appName][modelName + 'EditDialog'];
+
+    return editDialogClass;
+};

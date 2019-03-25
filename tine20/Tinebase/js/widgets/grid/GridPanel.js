@@ -2111,7 +2111,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         var totalcount = this.selectionModel.getCount(),
             selectedRecords = [],
             fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
-            editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
+            editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass),
             additionalConfig = additionalConfig ? additionalConfig : {};
         
         // add "multiple_edit_dialog" plugin to dialog, if required

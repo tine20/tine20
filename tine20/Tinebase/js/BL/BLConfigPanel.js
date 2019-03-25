@@ -121,9 +121,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
     openEditDialog: function(configWrapper) {
 
         var recordClass = Tine.Tinebase.data.RecordMgr.get(configWrapper.get('classname')),
-            appName = recordClass.getMeta('appName'),
-            modelName = recordClass.getMeta('modelName'),
-            editDialogClass = Tine[appName][modelName + 'EditDialog'],
+            editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass),
             configRecord = configWrapper.get('configRecord') || {};
 
         if (! configRecord.data) {
