@@ -517,20 +517,6 @@ Tine.Tinebase.ApplicationStarter = {
                         }, this);
                     }
                     
-                    // collect the filterModel
-                    var filterModel = [];
-                    Ext.iterate(modelConfig.filterModel, function(key, filter) {
-                        var f = this.getFilter(key, filter, modelConfig);
-                        
-                        if (f) {
-                            Tine.widgets.grid.FilterRegistry.register(appName, modelName, f);
-                        }
-                    }, this);
-                    
-                    // TODO: registry loses info if gridpanel resides in an editDialog
-                    // delete filterModel as all filters are in the filter registry now
-                    // delete modelConfig.filterModel;
-                    
                     Tine[appName].Model[modelArrayName] = modelArray;
                     
                     // create model
@@ -539,13 +525,17 @@ Tine.Tinebase.ApplicationStarter = {
                             Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
                                'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group,copyOmitFields')
                         );
-                        Tine[appName].Model[modelName].getFilterModel = function() {
-                            return filterModel;
-                        }
                     }
-                    
-                    Ext.namespace('Tine.' + appName);
-                    
+
+                    // register filters
+                    Ext.iterate(modelConfig.filterModel, function(key, filter) {
+                        var f = this.getFilter(key, filter, modelConfig);
+
+                        if (f) {
+                            Tine.widgets.grid.FilterRegistry.register(appName, modelName, f);
+                        }
+                    }, this);
+
                     // create recordProxy
                     var recordProxyName = modelName.toLowerCase() + 'Backend';
                     if (! Tine[appName].hasOwnProperty(recordProxyName)) {
