@@ -126,7 +126,7 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
             days[index] = parseFloat(values['weekdays_' + index]);
         }
         
-        return Ext.encode({days: days});
+        return {days: days};
     },
 
     /**
