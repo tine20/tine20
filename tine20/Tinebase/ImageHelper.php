@@ -94,8 +94,8 @@ class Tinebase_ImageHelper
             return false;
         }
         try {
-            $imgInfo = getimagesize($_file);
-            if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
+            $imgInfo = @getimagesize($_file);
+            if ($imgInfo && isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
                 return true;
             }
         } catch (Exception $e) {
