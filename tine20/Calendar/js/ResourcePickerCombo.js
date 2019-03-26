@@ -31,7 +31,7 @@ Tine.Calendar.ResourcePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
                         '<table>',
                             '<tr>',
                                 '<td style="min-width: 20px;" class="tine-grid-row-action-icon cal-attendee-type-resource">&nbsp</td>',
-                                '<td width="100%">{[Tine.Tinebase.EncodingHelper.encode(values.name)]}</td>',
+                                '<td width="100%">{[Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderResourceName(values)]}</td>',
                             '</tr>',
                             '<tr>',
                                 '<td style="min-width: 20px;">&nbsp</td>',
