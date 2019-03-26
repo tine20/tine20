@@ -1211,7 +1211,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     
     public function getUserId()
     {
-        return $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id;
+        return $this->user_id instanceof Tinebase_Record_Interface ? $this->user_id->getId() : $this->user_id;
     }
     
     public function getKey()
