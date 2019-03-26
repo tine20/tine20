@@ -141,6 +141,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                     'modelName'   => 'Employee',
                 ],
                 self::DISABLED              => true,
+                self::QUERY_FILTER          => true,
             ],
             'monthlywtreport' => [
                 self::LABEL                 => 'Monthly Working Time Report',
@@ -155,6 +156,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                     'modelName'   => HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
                 ],
                 self::DISABLED              => true,
+                self::QUERY_FILTER          => true,
             ],
             'date' => [
                 self::VALIDATORS            => [
@@ -278,12 +280,14 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,
                 self::DISABLED              => true,
+                self::QUERY_FILTER          => true,
             ],
             'user_remark' => [
                 self::LABEL                 => 'Remark', // _('Remark')
                 self::TYPE                  => 'text',
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,
+                self::QUERY_FILTER          => true,
             ],
             // monatsprotokoll rechnet ab - nach übergabe an lohnbuchhaltung
             'is_cleared' => [

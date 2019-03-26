@@ -110,6 +110,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                     self::APP_NAME                      => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME                    => HumanResources_Model_Employee::MODEL_NAME_PART,
                 ],
+                self::QUERY_FILTER                  => true,
             ],
             self::FLDS_MONTH                    => [
                 self::LABEL                         => 'Month', // _('Month')
@@ -120,6 +121,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                     Zend_Filter_Input::ALLOW_EMPTY          => false,
                     Zend_Filter_Input::PRESENCE             => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::QUERY_FILTER                  => true,
             ],
             self::FLDS_DAILY_WT_REPORTS         => [
                 self::LABEL                         => 'Daily Working Time Reports', // _('Daily Working Time Reports')
