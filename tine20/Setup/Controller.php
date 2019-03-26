@@ -3008,10 +3008,11 @@ class Setup_Controller
                             continue;
                         }
                         $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                        // TODO should check if index already exists
                         try {
                             $setupBackend->addIndex((string)$table->name, $declaration);
                         } catch (Exception $e) {
-                            $failures[] = (string)$table->name . ': ' . (string)$index->name;
+                            $failures[] = (string)$table->name . ': ' . (string)$index->name . '(error: ' . $e->getMessage() . ')';
                         }
                     }
                 }
