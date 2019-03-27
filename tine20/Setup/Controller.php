@@ -789,15 +789,13 @@ class Setup_Controller
                     );
                 }
             }
-            $superUserRole->rights = $rights;
-            $superUserRole->members = array(
-                array(
-                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                    'account_id' => $_user->getId()
-                )
-            );
 
             $roleController->create($superUserRole);
+            $roleController->setRoleRights($superUserRole->getId(), $rights);
+            $roleController->setRoleMemberships(array(
+                'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'id' => $_user->getId()
+            ), [$superUserRole->getId()]);
         } finally {
             Tinebase_Model_Role::setIsReplicable(true);
             $roleController->modlogActive($oldModLog);
