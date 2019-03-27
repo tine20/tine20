@@ -37,7 +37,11 @@ module.exports = merge(common, {
                 enforce: 'post',
                 exclude: /(node_modules|ux)/,
                 include: path.resolve(__dirname, '../../')
-            }
+            },
+            {
+                test: /\.js$/,
+                use: ['webpack-conditional-loader']
+            },
         ]
     },
     resolve: {

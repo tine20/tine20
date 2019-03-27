@@ -102,6 +102,7 @@
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.5.3",
     "webpack": "^3.8.1",
+    "webpack-conditional-loader": "^1.0.12",
     "webpack-dev-server": "^2.9.4",
     "webpack-merge": "^4.1.1",
     "webpack-uglify-js-plugin": "^1.1.9",
