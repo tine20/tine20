@@ -639,26 +639,28 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 'deleted_by',
                 'originator_tz',
             ];
-            if (static::$_freebusyCleanUpVisibilty > 10) {
-                $keys[] = 'container_id';
-            }
-            if (static::$_freebusyCleanUpVisibilty > 20) {
+            if (static::$_freebusyCleanUpVisibilty > Calendar_Config::FREEBUSY_INFO_ALLOW_DATETIME) {
                 $keys[] = 'organizer';
             }
-            if (static::$_freebusyCleanUpVisibilty > 30) {
+            if (static::$_freebusyCleanUpVisibilty > Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER) {
                 $keys[] = 'attendee';
             }
+            if (static::$_freebusyCleanUpVisibilty > Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
+                $keys[] = 'container_id';
+            }
+
             static::$_freebusyCleanUpKeys = array_flip($keys);
         }
         
         $this->_properties = array_intersect_key($this->_properties, static::$_freebusyCleanUpKeys);
 
-        if (40 === static::$_freebusyCleanUpVisibilty) {
+        if (static::$_freebusyCleanUpVisibilty < Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
+            $oldAttendee->removeAll();
+        } elseif (static::$_freebusyCleanUpVisibilty < Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE) {
             /** @var Calendar_Model_Attender $attendee */
             $oldAttendee = $oldAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_RESOURCE);
-        } elseif (static::$_freebusyCleanUpVisibilty < 40) {
-            $oldAttendee->removeAll();
         }
+        
         $this->attendee = $oldAttendee;
 
         return TRUE;

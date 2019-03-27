@@ -1224,7 +1224,7 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 10);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_DATETIME);
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getTestUser());
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES, true);
         $searchResultData = $this->_uit->searchEvents($filter, array());
@@ -1234,47 +1234,47 @@ class Calendar_JsonTests extends Calendar_TestCase
         if (!$doAllTesting) {
             return $eventData;
         }
-        $this->_assertFreebusyData($eventData, 10);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_DATETIME);
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 20);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER);
 
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        $this->_assertFreebusyData($eventData, 20);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER);
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 30);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE);
 
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        $this->_assertFreebusyData($eventData, 30);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE);
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 40);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR);
 
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        $this->_assertFreebusyData($eventData, 40);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR);
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 50);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE);
 
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        $this->_assertFreebusyData($eventData, 50);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE);
 
         return null;
     }
@@ -1286,27 +1286,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         static::assertTrue(empty($eventData['tags']), 'tags not empty');
         static::assertTrue(empty($eventData['notes']), 'notes not empty');
         static::assertTrue(empty($eventData['alarms']), 'alarms not empty');
-        if ($accessLevel < 20) {
+        if ($accessLevel < Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR) {
             static::assertFalse(isset($eventData['container_id']), 'container_id not empty');
         } else {
             static::assertTrue(isset($eventData['container_id']) && !empty($eventData['container_id']),
                 'container_id empty');
         }
-        if ($accessLevel < 30) {
+        if ($accessLevel < Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER) {
             static::assertFalse(isset($eventData['organizer']), 'organizer not empty');
         } else {
             static::assertTrue(isset($eventData['organizer']) && !empty($eventData['organizer']), 'organizer empty');
         }
-        if ($accessLevel < 40) {
+        if ($accessLevel < Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
             static::assertTrue(empty($eventData['attendee']), 'attendee not empty');
         } else {
             static::assertFalse(empty($eventData['attendee']), 'attendee empty');
         }
 
-        if ($accessLevel === 40) {
+        if ($accessLevel === Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
             static::assertEquals(1, count($eventData['attendee']), 'number of attendees wrong');
         }
-        if ($accessLevel === 50) {
+        if ($accessLevel === Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE) {
             static::assertEquals(2, count($eventData['attendee']), 'number of attendees wrong');
         }
     }
