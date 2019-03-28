@@ -15,10 +15,10 @@ trait Tinebase_Export_Convertible_PreviewServicePdf
 {
     /**
      * @param $from
+     * @param array $intermediateFormats check if the docService supports this transformation before use
      * @return string
-     * @throws Tinebase_Exception_NotFound
      */
-    public function convertToPdf($from)
+    public function convertToPdf($from, $intermediateFormats = [])
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Converting from ' . $from . ' to PDF');
@@ -27,7 +27,7 @@ trait Tinebase_Export_Convertible_PreviewServicePdf
         $suffixed = $from . '.' . $this->getFormat();
         copy($from, $suffixed);
 
-        $result = Tinebase_Core::getPreviewService()->getPdfForFile($suffixed, true);
+        $result = Tinebase_Core::getPreviewService()->getPdfForFile($suffixed, true, $intermediateFormats);
 
         file_put_contents($suffixed, $result);
         
