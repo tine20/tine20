@@ -2,6 +2,7 @@
 <essential>
     <enviroment name="PHP" version="5.6"/>
     <extensions>
+        <extension name="bcmath" />
         <extension name="SPL" />
         <extension name="SimpleXML" />
         <extension name="ctype" />
