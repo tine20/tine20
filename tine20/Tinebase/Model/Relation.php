@@ -273,4 +273,48 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
             . ($this->related_record instanceof Tinebase_Record_Interface ? ' ' . $this->related_record->getTitle()
                 : '');
     }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSetOne
+     * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @return null|Tinebase_Record_RecordSetDiff
+     */
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
+    {
+        $setOne = [];
+        $mapOne = [];
+        /** @var self $relation */
+        foreach ($_recordSetOne as $relation) {
+            $key = $relation->related_model . $relation->related_id . $relation->related_degree .
+                $relation->own_model . $relation->own_id . $relation->type;
+            $setOne[] = $key;
+            $mapOne[$key] = $relation;
+        }
+
+        $setTwo = [];
+        $mapTwo = [];
+        /** @var self $relation */
+        foreach ($_recordSetTwo as $relation) {
+            $key = $relation->related_model . $relation->related_id . $relation->related_degree .
+                $relation->own_model . $relation->own_id . $relation->type;
+            $setTwo[] = $key;
+            $mapTwo[$key] = $relation;
+        }
+
+        $deleted = [];
+        foreach (array_diff($setOne, $setTwo) as $delKey) {
+            $deleted[] = $mapOne[$delKey];
+        }
+        $added = [];
+        foreach (array_diff($setTwo, $setOne) as $addKey) {
+            $added[] = $mapTwo[$addKey];
+        }
+
+        return new Tinebase_Record_RecordSetDiff([
+                'model'     => static::class,
+                'added'     => new Tinebase_Record_RecordSet(static::class, $added),
+                'removed'   => new Tinebase_Record_RecordSet(static::class, $deleted),
+                'modified'  => new Tinebase_Record_RecordSet(Tinebase_Record_Diff::class),
+            ]);
+    }
 }

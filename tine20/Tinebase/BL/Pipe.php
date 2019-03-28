@@ -102,4 +102,15 @@ class Tinebase_BL_Pipe implements Tinebase_BL_PipeContext
         }
         return null;
     }
+
+    public function hasInstanceOf($_class)
+    {
+        if (empty($this->_pipe)) $this->_init();
+
+        foreach($this->_pipe as $pipeElement) {
+            if ($pipeElement instanceof $_class) return true;
+        }
+
+        return false;
+    }
 }

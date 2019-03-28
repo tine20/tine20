@@ -656,11 +656,11 @@ class Crm_JsonTest extends Crm_AbstractTest
                     break;
                 case 'relations':
                     $diffSet = new Tinebase_Record_RecordSetDiff($diff->diff['relations']);
-                    $this->assertEquals(0, count($diffSet->added));
-                    $this->assertEquals(1, count($diffSet->removed));
-                    $this->assertEquals(1, count($diffSet->modified), 'relations modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
-                    $this->assertTrue(isset($diffSet->modified[0]['diff']['type']));
-                    $this->assertEquals('CUSTOMER', $diffSet->modified[0]['diff']['type'], 'type diff is not correct: ' . print_r($diffSet->toArray(), TRUE));
+                    $this->assertEquals(1, count($diffSet->added));
+                    $this->assertEquals(2, count($diffSet->removed));
+                    $this->assertEquals(0, count($diffSet->modified), 'relations modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
+                    $this->assertTrue(isset($diffSet->added[0]['type']));
+                    $this->assertEquals('CUSTOMER', $diffSet->added[0]['type'], 'type diff is not correct: ' . print_r($diffSet->toArray(), TRUE));
                     break;
                 case 'tags':
                     $diffSet = new Tinebase_Record_RecordSetDiff($diff->diff['tags']);
