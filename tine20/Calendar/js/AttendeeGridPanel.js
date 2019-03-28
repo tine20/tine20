@@ -887,21 +887,33 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderGroupName.apply(this, arguments);
     },
 
-    renderAttenderResourceName: function(name) {
+    renderAttenderResourceName: function (name) {
+
+        if (arguments['1'] != 'attendeeFilterModel') {
+            try {
+                return this.renderAttenderResourceIcon(name);
+            } catch (e) {
+
+            }
+        }
+        if (typeof name.getTitle == 'function') {
+            return Ext.util.Format.htmlEncode(name.getTitle());
+        }
+        if (name.name) {
+            return Ext.util.Format.htmlEncode(name.name);
+        }
+        if (Ext.isString(name)) {
+            return Ext.util.Format.htmlEncode(name);
+        }
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+    },
+
+    renderAttenderResourceIcon: function(name) {
+
         var icon = name.container_id['xprops']['Calendar']['Resource']['resource_icon']
 
-            if (typeof name.getTitle == 'function') {
-                return Ext.util.Format.htmlEncode(name.getTitle());
-            }
-            if (name.name) {
-                name =  Ext.util.Format.htmlEncode(name.name);
-            }else {
-
-                return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
-            }
-        return '<img class="tine-keyfield-icon" src="' + icon + '"/> ' + name;
+        return '<img class="tine-keyfield-icon" src="' + icon + '"/>' + Ext.util.Format.htmlEncode(name.name);
     },
-    
     
     renderAttenderDispContainer: function(displaycontainer_id, metadata, attender) {
         metadata.attr = 'style = "overflow: none;"';
