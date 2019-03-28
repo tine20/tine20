@@ -5,6 +5,7 @@
     <order>51</order>
     <depends>
         <application>Calendar</application>
+        <application>CoreData</application>
     </depends>
     <status>enabled</status>
 </application>
