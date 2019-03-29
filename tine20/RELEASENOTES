@@ -12,6 +12,10 @@ GENERAL CHANGES
 
 * PHP 7.3 is now supported
 
+* PHP extension intl is now mandatory
+
+* PHP extension bcmath is required for AD integration
+
 * MySQL with UTF8 MB4 charset
 
 We changed the default charset to UTF8MB4. All tables in the Tine 2.0 Database can be converted using a CLI method.
