@@ -198,6 +198,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
                     TMCC::LABEL             => 'Clock out reason',
                     TMCC::TYPE              => TMCC::TYPE_RECORD,
                     TMCC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
+                    TMCC::NULLABLE          => true,
                     TMCC::CONFIG            => [
                         TMCC::APP_NAME          => HumanResources_Config::APP_NAME,
                         TMCC::MODEL_NAME        => HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
