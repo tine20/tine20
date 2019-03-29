@@ -47,6 +47,7 @@ class Tinebase_ModelConfiguration_Const {
     const HAS_NOTES = 'hasNotes';
     const HAS_PERSONAL_CONTAINER = 'hasPersonalContainer';
     const HAS_RELATIONS = 'hasRelations';
+    const HAS_SYSTEM_CUSTOM_FIELDS = 'hasSystemCustomFields';
     const HAS_TAGS = 'hasTags';
 
     const INDEXES = 'indexes';
