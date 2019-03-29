@@ -240,6 +240,12 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const SEARCH_ATTENDERS_FILTER_GROUP = 'group';
     const SEARCH_ATTENDERS_FILTER_RESOURCE = 'resource';
 
+    const FREEBUSY_INFO_ALLOW_DATETIME = 10;
+    const FREEBUSY_INFO_ALLOW_ORGANIZER = 20;
+    const FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE = 30;
+    const FREEBUSY_INFO_ALLOW_CALENDAR = 40;
+    const FREEBUSY_INFO_ALLOW_ALL_ATTENDEE = 50;
+
 
     /**
      * (non-PHPdoc)
@@ -648,11 +654,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
             self::TYPE              => self::TYPE_KEYFIELD,
                 self::OPTIONS           => [
                     'records'               => [
-                        ['id' => 10,  'value' => 'only date & time'], //_('only date & time')
-                        ['id' => 20,  'value' => 'and calendar'], //_('and calendar')
-                        ['id' => 30,  'value' => 'and organizer'], //_('and organizer')
-                        ['id' => 40,  'value' => 'and resources'], //_('and resources')
-                        ['id' => 50,  'value' => 'and other attendees'], //_('and other attendees')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_DATETIME,  'value' => 'only date & time'], //_('only date & time')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER,  'value' => 'and organizer'], //_('and organizer')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE,  'value' => 'and resources'], //_('and resources')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR,  'value' => 'and calendar'], //_('and calendar')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE,  'value' => 'and other attendees'], //_('and other attendees')
                     ],
                 ],
             self::CLIENTREGISTRYINCLUDE => true,
