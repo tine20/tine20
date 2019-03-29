@@ -63,8 +63,8 @@ If you found any security relevant issue you can mail us [security@tine20.com](m
 * Webserver like [Apache](https://httpd.apache.org/), [Ngnix](https://www.nginx.com/), …
 * [MySQL](http://www.mysql.com/) >= 5.4 or [MariaDB](https://mariadb.org) >= 5.5 (mysql5.7 / mariadb 10.0 recommended)
 * [PHP](http://www.php.net/) 7.0 - 7.3, version 7.2 recommended.
-  + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring
-  + Optional Extensions: Redis, LDAP, Memcache
+  + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring, intl, 
+  + Optional Extensions: Redis, LDAP, Memcache, bcmath (for ActiveDirectory)
 
 ## Licenses, Copyrights and Trademarks 
 Tine 2.0 - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.
