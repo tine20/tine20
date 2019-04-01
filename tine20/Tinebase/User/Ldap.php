@@ -690,7 +690,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         );
         
         if (count($accounts) !== 1) {
-            throw new Tinebase_Exception_NotFound('User with ' . $_property . ' =  ' . $value . ' not found.');
+            throw new Tinebase_Exception_NotFound('User with ' . $_property . ' = "' . $value . '" not found.');
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
