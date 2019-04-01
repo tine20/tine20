@@ -96,6 +96,9 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
     }
 
     /**
+     * @param $httpClient Zend_Http_Client
+     * @param $synchronRequest bool
+     * @return bool
      * @throws Tinebase_FileSystem_Preview_BadRequestException
      */
     protected function _requestPreviews($httpClient, $synchronRequest)
@@ -135,7 +138,10 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                                 __METHOD__ . '::' . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getBody()
                             );
                         }
-                        throw new Tinebase_FileSystem_Preview_BadRequestException("Preview creation failed. Status Code: " . $response->getStatus());
+                        throw new Tinebase_FileSystem_Preview_BadRequestException(
+                            "Preview creation failed. Status Code: " . $response->getStatus(),
+                            $response->getStatus()
+                        );
                     case 413:
                     case 415:
                     case 422:
@@ -144,7 +150,10 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                                 __METHOD__ . '::' . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getBody()
                             );
                         }
-                        throw new Tinebase_FileSystem_Preview_BadRequestException("Preview creation failed. Status Code: " . $response->getStatus());
+                        throw new Tinebase_FileSystem_Preview_BadRequestException(
+                            "Preview creation failed. Status Code: " . $response->getStatus(),
+                            $response->getStatus()
+                        );
                     default:
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                             Tinebase_Core::getLogger()->notice(
