@@ -1804,4 +1804,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    public function testNotification()
+    {
+        $this->_checkAdminRight();
+
+        $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $messageSubject = 'Tine 2.0 test notification';
+        $messageBody = 'Tine 2.0 test notification has been sent successfully';
+        Tinebase_Notification::getInstance()->send(null, array($recipient), $messageSubject, $messageBody);
+        return 0;
+    }
 }
