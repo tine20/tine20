@@ -299,10 +299,13 @@ Tine.Tinebase.ApplicationStarter = {
             case 'datetime_separated_date':
                 filter.valueType = 'date';
                 break;
+            case 'money':
+                filter.valueType = 'money';
+                break;
             case 'float':
             case 'integer':
-            case 'money':
                 filter.valueType = 'number';
+                break;
         }
         return filter;
     },
@@ -358,7 +361,8 @@ Tine.Tinebase.ApplicationStarter = {
         var filter = {
             label: i18n._hidden(label),
             field: fieldKey,
-            gender: i18n._hidden('GENDER_' + label)
+            gender: i18n._hidden('GENDER_' + label),
+            specialType: fieldconfig ? fieldconfig.specialType : null
         };
         
         if (filterconfig) {

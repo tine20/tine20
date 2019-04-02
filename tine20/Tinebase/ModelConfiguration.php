@@ -439,6 +439,8 @@ class Tinebase_ModelConfiguration {
      * float                     Float               float    float                         float             Tinebase_Model_Filter_Int                 extuxnumberfield
      * float       percent       Float               float    float                         float             Tinebase_Model_Filter_Int
      * float       money         value and currency  float    float                         int               Tinebase_Model_Filter_Int
+     * note: money is an own type so we can separate currency
+     * money                     Float               float    float                         float             Tinebase_Model_Filter_Int
      * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
