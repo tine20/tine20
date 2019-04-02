@@ -21,11 +21,13 @@ class HumanResources_Setup_Uninitialize extends Setup_Uninitialize
      */
     protected function _uninitializeCORSystemCustomField()
     {
-        $appId = Tinebase_Application::getInstance()->getApplicationByName(Timetracker_Config::APP_NAME)->getId();
+        try {
+            $appId = Tinebase_Application::getInstance()->getApplicationByName(Timetracker_Config::APP_NAME)->getId();
 
-        Tinebase_CustomField::getInstance()->deleteCustomField(
-            Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
-                HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON, null, true)
-        );
+            Tinebase_CustomField::getInstance()->deleteCustomField(
+                Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
+                    HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON, null, true)
+            );
+        } catch (Tinebase_Exception_NotFound $tenf) {}
     }
 }

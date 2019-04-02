@@ -208,11 +208,11 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         for ($this->_currentDate = clone $this->_startDate; $this->_endDate->isLaterOrEquals($this->_currentDate);
                 $this->_currentDate->addDay(1)) {
 
-            // then we calculate each day in a transaction
-            $dailyTransaction = new Tinebase_TransactionManager_Handle();
-
+            // then we calculate each day in a transaction, see dailyTransaction
             try {
                 $monthlyWTR = $this->_getOrCreateMonthlyWTR();
+
+                $dailyTransaction = new Tinebase_TransactionManager_Handle();
                 $dateStr = $this->_currentDate->format('Y-m-d');
                 /** @var HumanResources_Model_DailyWTReport $oldReport */
                 $oldReport = null;

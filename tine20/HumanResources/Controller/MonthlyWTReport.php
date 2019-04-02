@@ -132,7 +132,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         if (isset($this->_requestContext[self::RC_JSON_REQUEST])) {
-            throw new Tinebase_Exception_Record_NotAllowed('daily wt reports can\'t be created');
+            throw new Tinebase_Exception_Record_NotAllowed('monthly wt reports can\'t be created');
         }
     }
 
