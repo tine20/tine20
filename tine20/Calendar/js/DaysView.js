@@ -673,11 +673,36 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
                     this.abortCreateEvent(event);
                 }
             }, this);
-            
+
+            // snap correction for rangeadds
+            var box = event.ui.resizeable.el.getBox(),
+                mouseXY = Ext.EventObject.getXY(),
+                startX = mouseXY[0],
+                startY = mouseXY[1],
+                handleX = box.x + box.width,
+                handleY = box.y + box.height;
+
+            event.ui.resizeable.correctionX = handleX - startX;
+            event.ui.resizeable.correctionY = handleY - startY;
+
+            event.ui.resizeable.snap = function(value, inc, min) {
+                var pos = this.activeHandle.position;
+
+                if (pos == 'south' && inc == this.heightIncrement) {
+                    value = value - this.correctionY;
+                } else if (pos == 'east' && inc == this.widthIncrement) {
+                    value = value - this.correctionX;
+                }
+
+                return Ext.Resizable.prototype.snap.call(this, value, inc, min);
+            };
+
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
             
             event.ui.resizeable[rzPos].onMouseDown.call(event.ui.resizeable[rzPos], e);
-            //event.ui.resizeable.startSizing.defer(2000, event.ui.resizeable, [e, event.ui.resizeable[rzPos]]);
+
+            // adjust initial size to avoid flickering when start resizing
+            event.ui.resizeable.onMouseMove(Ext.EventObject);
         } else {
             this.startEditSummary(event);
         }
@@ -938,7 +963,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         }
 
         rz.heightIncrement = this.getTimeOffset(this.timeIncrement);
-        rz.maxHeight = maxHeight,
+        rz.maxHeight = maxHeight;
 
         rz.event = event;
         rz.originalHeight = rz.el.getHeight();
