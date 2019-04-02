@@ -379,7 +379,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     showWestCardPanel: function() {
         // add save favorites button to toolbar if favoritesPanel exists
         var westPanel = this.getWestPanel(),
-            favoritesPanel = Ext.isFunction(westPanel.getFavoritesPanel) ? westPanel.getFavoritesPanel() : false,
+            favoritesPanel = westPanel.hasFavoritesPanel ? westPanel.getFavoritesPanel() : false,
             westPanelToolbar = this.westRegionPanel.getTopToolbar();
 
         westPanelToolbar.removeAll();
