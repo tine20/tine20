@@ -759,7 +759,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $_preferenceName
      * @param Tinebase_Record_RecordSet $_preferences
      */
-    protected function _getDefaultPreference($_preferenceName, $_preferences = NULL)
+    public function _getDefaultPreference($_preferenceName, $_preferences = NULL)
     {
         if ($_preferences !== NULL) {
             $defaults = $_preferences->filter('type', Tinebase_Model_Preference::TYPE_ADMIN);
