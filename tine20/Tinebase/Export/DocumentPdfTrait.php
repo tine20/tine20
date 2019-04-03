@@ -8,18 +8,20 @@
  *
  */
 
-trait Tinebase_Export_AbstractPdfTrait
+trait Tinebase_Export_DocumentPdfTrait
 {
     /**
      * @var null|Tinebase_FileSystem_Preview_ServiceInterface
      */
     protected $_previewService = null;
 
+    protected $_format = 'pdf';
+
 
     /**
-    * @var null|String
-    */
-    protected $_oldFormat = null;
+     * @return string
+     */
+    protected abstract function _getOldFormat();
 
     /**
      * the constructor
@@ -31,9 +33,10 @@ trait Tinebase_Export_AbstractPdfTrait
     public function __construct(
         Tinebase_Model_Filter_FilterGroup $_filter = null,
         Tinebase_Controller_Record_Interface $_controller = null,
-        array $_additionalOptions = []
+        array $_additionalOptions = [],
+        $_previewService = null
     ) {
-        $this->_previewService = Tinebase_Core::getPreviewService();
+        $this->_previewService = $_previewService !== null ? $_previewService : Tinebase_Core::getPreviewService();
 
         parent::__construct($_filter, $_controller, $_additionalOptions);
     }
@@ -46,7 +49,7 @@ trait Tinebase_Export_AbstractPdfTrait
      */
     public function write($_target = null)
     {
-        $tempfile = Tinebase_TempFile::getTempPath() . '.' . $this->_oldFormat;
+        $tempfile = Tinebase_TempFile::getTempPath() . '.' . $this->_getOldFormat();
         parent::save($tempfile);
 
         $previewUrl = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL};
