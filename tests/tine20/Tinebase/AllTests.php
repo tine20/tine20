@@ -75,6 +75,9 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_StateTest::class);
         $suite->addTestSuite(Tinebase_FilterSyncTokenTest::class);
         $suite->addTestSuite(Tinebase_Frontend_AutodiscoverTests::class);
+        $suite->addTestSuite(Tinebase_FileSystem_PreviewTest::class);
+        $suite->addTestSuite(Tinebase_FileSystem_Preview_ServiceV2LiveTest::class);
+        $suite->addTestSuite(Tinebase_FileSystem_Preview_ServiceV2Test::class);
 
 
         $suite->addTest(Tinebase_User_AllTests::suite());
