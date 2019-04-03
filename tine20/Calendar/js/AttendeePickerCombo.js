@@ -77,13 +77,15 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
      * create bogus attendee record for directly entered email-addresses
      */
     getValue: function() {
-        var raw = _.get(this, 'el.dom') ? this.getRawValue() : Ext.value(this.value, '');
-        if (Ext.form.VTypes.email(raw)) {
-            this.value = raw;
-            this.selectedRecord = new Tine.Calendar.Model.Attender(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-                'user_type': 'user',
-                'user_id': this.value
-            }));
+        if (this.el.dom) {
+            var raw = _.get(this, 'el.dom') ? this.getRawValue() : Ext.value(this.value, '');
+            if (Ext.form.VTypes.email(raw)) {
+                this.value = raw;
+                this.selectedRecord = new Tine.Calendar.Model.Attender(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                    'user_type': 'user',
+                    'user_id': this.value
+                }));
+            }
         }
         return Tine.Calendar.AttendeePickerCombo.superclass.getValue.apply(this, arguments);
     },
