@@ -63,8 +63,8 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
             static::assertTrue(is_array($container->xprops), 'xprops is not an array');
             static::assertTrue(isset($container->xprops['Calendar']['Resource']['resource_id']),
                 'xprops Calendar Resource resource_id is missing');
-            static::assertTrue(isset($container->xprops['Calendar']['Resource']['resource_icon']),
-                'xprops Calendar Resource resource_icon is missing');
+            static::assertTrue(isset($container->xprops['Calendar']['Resource']['resource_type']),
+                'xprops Calendar Resource resource_type is missing');
             break;
         }
         static::assertTrue($found, 'did not find resources shared container');

@@ -362,10 +362,9 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 
     protected function _setIconXprops($_record, $_container)
     {
-
         $resource_type = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)->getValue($_record['type']);
-        $_container->xprops()['Calendar']['Resource']['resource_icon'] = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)
-            ->getKeyfieldRecordByValue($resource_type)['icon'];
+        $_container->xprops()['Calendar']['Resource']['resource_type'] = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)
+            ->getKeyfieldRecordByValue($resource_type)['id'];
         Tinebase_Container::getInstance()->update($_container);
     }
 
