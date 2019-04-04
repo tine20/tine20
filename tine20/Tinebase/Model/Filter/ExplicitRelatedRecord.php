@@ -46,7 +46,7 @@ class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_
         $filtergroup = $this->_options['own_filtergroup'];
         $controller = $this->_options['own_controller'];
 
-        if (!($this->_value[0]['value'])) {
+        if (!isset($this->_value[0]) || !($this->_value[0]['value'])) {
             $relationFilter = new Tinebase_Model_RelationFilter(array(
                 array('field' => 'own_model',     'operator' => 'equals', 'value' => $_modelName),
                 array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model']),
