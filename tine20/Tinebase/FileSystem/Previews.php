@@ -273,7 +273,7 @@ class Tinebase_FileSystem_Previews
         if (!$this->_fsController->isDir($basePath)) {
             $this->_fsController->mkdir($basePath);
         } else {
-            if ($fileSystem->fileExists($basePath)) {
+            if ($this->_fsController->fileExists($basePath)) {
                 $this->_fsController->rmdir($basePath, true);
             }
             $this->_fsController->mkdir($basePath);

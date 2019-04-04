@@ -114,7 +114,7 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ . ' preview service did not succeed');
             }
-            throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed');
+            throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed: service occupied');
         }
         return $result[0][0];
     }
