@@ -38,17 +38,18 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
-        'Account',
         HumanResources_Model_BLDailyWTReport_BreakTimeConfig::MODEL_NAME_PART,
         HumanResources_Model_BLDailyWTReport_Config::MODEL_NAME_PART,
         HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::MODEL_NAME_PART,
         'Contract',
         'CostCenter',
         'Employee',
+        'Account',
         HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
         'ExtraFreeTime',
         'FreeDay',
         'FreeTime',
+        HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
         HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
         HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
         HumanResources_Model_WageType::MODEL_NAME_PART,
