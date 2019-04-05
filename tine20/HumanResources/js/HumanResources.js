@@ -60,3 +60,15 @@ Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'accoun
     
     return v.year;
 });
+
+// working time schema translations
+Tine.widgets.grid.RendererManager.register('HumanResources', 'WorkingTimeScheme', 'type', function(v) {
+    var i18n = Tine.Tinebase.appMgr.get('HumanResources').i18n;
+    switch(String(v)) {
+        case 'template': v = i18n._('Template'); break;
+        case 'individual': v = i18n._('Individual'); break;
+        case 'shared': v = i18n._('Shared'); break;
+    }
+
+    return v;
+});

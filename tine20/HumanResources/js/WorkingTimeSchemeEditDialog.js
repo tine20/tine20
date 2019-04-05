@@ -195,7 +195,7 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
             activeTab: 0,
             border: false,
             items: [{
-            title: this.app.i18n._('Working Time Model'),
+            title: this.app.i18n._('Working Time Schema'),
             autoScroll: true,
             border: false,
             frame: true,
@@ -209,8 +209,8 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
                     name: 'type',
                     fieldLabel: this.app.i18n._('Type'),
                     store: [
-                        ['template', this.app.i18n._('Template (individual working time models are created for each contract)')],
-                        ['shared', this.app.i18n._('Shared (this working time models can be shared among contracts)')]
+                        ['template', this.app.i18n._('Template (individual working time schemas are created for each contract)')],
+                        ['shared', this.app.i18n._('Shared (this working time schemas can be shared among contracts)')]
                     ]
                 }),{
                     xtype: 'fieldset',

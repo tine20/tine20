@@ -12,7 +12,7 @@
 
 
 /**
- * working time model
+ * working time schema
  *
  * @package     HumanResources
  * @subpackage  Model

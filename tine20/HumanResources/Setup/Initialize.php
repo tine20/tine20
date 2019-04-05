@@ -118,22 +118,23 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeWageTypes()
     {
+        $translate = Tinebase_Translation::getTranslation('HumanResources');
         $wageTypes = [
-            //['id' => '01', 'number' => '1000', 'name' => 'Default wage type', 'system' => true,  'wage_factor' => 100, 'additional_wage' => false], // _('Default wage type')
-            ['id' => HumanResources_Model_WageType::ID_SALARY, 'number' => '2000', 'name' => 'Salary',            'system' => true,  'wage_factor' => 100, 'additional_wage' => false], // _('Salary')
-            //['id' => '03', 'number' => '2500', 'name' => 'Business trip',     'system' => false, 'wage_factor' => 100, 'additional_wage' => false], // _('Business trip')
-            //['id' => '04', 'number' => '3000', 'name' => 'Sunday bonus',      'system' => false, 'wage_factor' =>  50, 'additional_wage' => true ], // _('Sunday bonus')
-            ['id' => HumanResources_Model_WageType::ID_FEAST, 'number' => '3100', 'name' => 'Feast day',      'system' => false, 'wage_factor' =>  100, 'additional_wage' => false], // _('Feast day')
-            //['id' => '05', 'number' => '3200', 'name' => 'Feast day bonus',   'system' => false, 'wage_factor' => 125, 'additional_wage' => true ], // _('Feast day bonus')
-            //['id' => '06', 'number' => '3400', 'name' => 'Overtime',          'system' => false, 'wage_factor' => 125, 'additional_wage' => false], // _('Overtime')
-            //['id' => '07', 'number' => '3450', 'name' => 'Overtime bonus',    'system' => false, 'wage_factor' => 150, 'additional_wage' => false], // _('Overtime bonus')
-            //['id' => '08', 'number' => '3600', 'name' => 'Late shift bonus',  'system' => false, 'wage_factor' => 105, 'additional_wage' => true ], // _('Late shift bonus')
-            //['id' => '09', 'number' => '3800', 'name' => 'Night bonus',       'system' => false, 'wage_factor' => 115, 'additional_wage' => true ], // _('Night bonus')
-            ['id' => HumanResources_Model_WageType::ID_VACATION, 'number' => '5000', 'name' => 'Vacation',          'system' => true,  'wage_factor' => 100, 'additional_wage' => false], // _('Vacation')
-            ['id' => HumanResources_Model_WageType::ID_SICK, 'number' => '5500', 'name' => 'Sickness',          'system' => true,  'wage_factor' => 100, 'additional_wage' => false], // _('Sickness')
-            //['id' => '11', 'number' => '6000', 'name' => 'Break',             'system' => true,  'wage_factor' =>   0, 'additional_wage' => false], // _('Break')
-            //['id' => '12', 'number' => '7000', 'name' => 'Stand by',          'system' => false, 'wage_factor' =>  20, 'additional_wage' => false], // _('Stand by')
-            //['id' => '13', 'number' => '9000', 'name' => 'Unpaid',            'system' => true,  'wage_factor' =>   0, 'additional_wage' => false], // _('Unpaid')
+            //['id' => '01', 'number' => '1000', 'name' => $translate->_('Default wage type'), 'system' => true,  'wage_factor' => 100, 'additional_wage' => false],
+            ['id' => HumanResources_Model_WageType::ID_SALARY, 'number' => '2000', 'name' => $translate->_('Salary'),            'system' => true,  'wage_factor' => 100, 'additional_wage' => false],
+            //['id' => '03', 'number' => '2500', 'name' => $translate->_('Business trip'),     'system' => false, 'wage_factor' => 100, 'additional_wage' => false],
+            //['id' => '04', 'number' => '3000', 'name' => $translate->_('Sunday bonus'),      'system' => false, 'wage_factor' =>  50, 'additional_wage' => true ],
+            ['id' => HumanResources_Model_WageType::ID_FEAST, 'number' => '3100', 'name' => $translate->_('Feast day'),      'system' => false, 'wage_factor' =>  100, 'additional_wage' => false],
+            //['id' => '05', 'number' => '3200', 'name' => $translate->_('Feast day bonus'),   'system' => false, 'wage_factor' => 125, 'additional_wage' => true ],
+            //['id' => '06', 'number' => '3400', 'name' => $translate->_('Overtime'),          'system' => false, 'wage_factor' => 125, 'additional_wage' => false],
+            //['id' => '07', 'number' => '3450', 'name' => $translate->_('Overtime bonus'),    'system' => false, 'wage_factor' => 150, 'additional_wage' => false],
+            //['id' => '08', 'number' => '3600', 'name' => $translate->_('Late shift bonus'),  'system' => false, 'wage_factor' => 105, 'additional_wage' => true ],
+            //['id' => '09', 'number' => '3800', 'name' => $translate->_('Night bonus'),       'system' => false, 'wage_factor' => 115, 'additional_wage' => true ],
+            ['id' => HumanResources_Model_WageType::ID_VACATION, 'number' => '5000', 'name' => $translate->_('Vacation'),          'system' => true,  'wage_factor' => 100, 'additional_wage' => false],
+            ['id' => HumanResources_Model_WageType::ID_SICK, 'number' => '5500', 'name' => $translate->_('Sickness'),          'system' => true,  'wage_factor' => 100, 'additional_wage' => false],
+            //['id' => '11', 'number' => '6000', 'name' => $translate->_('Break'),             'system' => true,  'wage_factor' =>   0, 'additional_wage' => false],
+            //['id' => '12', 'number' => '7000', 'name' => $translate->_('Stand by'),          'system' => false, 'wage_factor' =>  20, 'additional_wage' => false],
+            //['id' => '13', 'number' => '9000', 'name' => $translate->_('Unpaid'),            'system' => true,  'wage_factor' =>   0, 'additional_wage' => false],
         ];
 
         $wtCntrl = HumanResources_Controller_WageType::getInstance();
@@ -144,19 +145,21 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeFreeTimeTypes()
     {
+        $translate = Tinebase_Translation::getTranslation('HumanResources');
         $freeTimeTypes = [
-            ['id' => HumanResources_Model_FreeTimeType::ID_SICKNESS, 'abbreviation' => '[S]', 'name' => '[S] Sickness',        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SICK, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '02', 'abbreviation' => '[D]', 'name' => '[D] Visit doctor',    'system' => false, 'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            ['id' => HumanResources_Model_FreeTimeType::ID_VACATION, 'abbreviation' => '[V]', 'name' => '[V] Vacation',        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_VACATION, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '04', 'abbreviation' => '[BT]', 'name' => '[BT] Business trip',  'system' => false, 'wage_type' => '03', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => true],
-            //['id' => '05', 'abbreviation' => '[FD]', 'name' => '[FD] Feast day',      'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '06', 'abbreviation' => '[FT]', 'name' => '[FT] Flex time',      'system' => true,  'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '07', 'abbreviation' => '[BK]', 'name' => '[BK] Break',          'system' => true,  'wage_type' => '13', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            //['id' => '08', 'abbreviation' => '[T]', 'name' => '[T] Training',        'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            ['id' => HumanResources_Model_FreeTimeType::ID_SICKNESS, 'abbreviation' => '[S]', 'name' => $translate->_('[S] Sickness'),        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SICK, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '02', 'abbreviation' => '[D]', 'name' => $translate->_('[D] Visit doctor'),    'system' => false, 'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
+            ['id' => HumanResources_Model_FreeTimeType::ID_VACATION, 'abbreviation' => '[V]', 'name' => $translate->_('[V] Vacation'),        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_VACATION, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '04', 'abbreviation' => '[BT]', 'name' => $translate->_('[BT] Business trip'),  'system' => false, 'wage_type' => '03', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => true],
+            //['id' => '05', 'abbreviation' => '[FD]', 'name' => $translate->_('[FD] Feast day'),      'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '06', 'abbreviation' => '[FT]', 'name' => $translate->_('[FT] Flex time'),      'system' => true,  'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '07', 'abbreviation' => '[BK]', 'name' => $translate->_('[BK] Break'),          'system' => true,  'wage_type' => '13', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
+            //['id' => '08', 'abbreviation' => '[T]', 'name' => $translate->_('[T] Training'),        'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
         ];
 
         $fttCntrl = HumanResources_Controller_FreeTimeType::getInstance();
         foreach ($freeTimeTypes as $ftt) {
+            $ftt['abbreviation'] = preg_replace(['/.*\[/', '/\].*/'], '', $ftt['name']);
             $fttCntrl->create(new HumanResources_Model_FreeTimeType($ftt));
         }
     }

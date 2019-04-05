@@ -503,13 +503,13 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 $workingTimeModel = HumanResources_Controller_WorkingTimeScheme::getInstance()->get($contractData['workingTimeModelId']);
             } catch (Exception $e) {
                 if ($cliCall) {
-                    die('The Working Time Model with the id ' . $contractData['workingTimeModelId'] . ' could not be found!' . chr(10));
+                    die('The Working Time Schema with the id ' . $contractData['workingTimeModelId'] . ' could not be found!' . chr(10));
                 } else {
                     throw $e;
                 }
             }
             if ($cliCall) {
-                echo 'Found Working Time Model "' . $workingTimeModel->title . '"' . chr(10);
+                echo 'Found Working Time Schema "' . $workingTimeModel->title . '"' . chr(10);
             }
         } else {
             $workingTimeModel = NULL;

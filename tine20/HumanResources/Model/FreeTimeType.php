@@ -129,7 +129,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                 self::TYPE              => self::TYPE_BOOLEAN,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::DEFAULT_VAL       => false,
-                self::LABEL             => 'Enable Timetracking', // _('Enable Timetracking')
+                self::LABEL             => 'Enable Freetime Timetracking', // _('Enable Freetime Timetracking')
             ],
             'timeaccount' => [
                 self::TYPE              => self::TYPE_RECORD,
