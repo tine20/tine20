@@ -981,7 +981,12 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             
             this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
         }, rz);
-        
+
+        // adjust initial size to avoid flickering when start resizing
+        if (e.getTarget('.x-resizable-handle-south')) {
+            event.ui.resizeable.onMouseMove(e);
+        }
+
         event.ui.markDirty();
         
         // NOTE: Ext keeps proxy if element is not destroyed (diff !=0)
