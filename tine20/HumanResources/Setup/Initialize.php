@@ -145,9 +145,9 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     protected function _initializeFreeTimeTypes()
     {
         $freeTimeTypes = [
-            ['id' => '01', 'abbreviation' => '[S]', 'name' => '[S] Sickness',        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SICK, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            ['id' => HumanResources_Model_FreeTimeType::ID_SICKNESS, 'abbreviation' => '[S]', 'name' => '[S] Sickness',        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SICK, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
             //['id' => '02', 'abbreviation' => '[D]', 'name' => '[D] Visit doctor',    'system' => false, 'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            ['id' => '03', 'abbreviation' => '[V]', 'name' => '[V] Vacation',        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_VACATION, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            ['id' => HumanResources_Model_FreeTimeType::ID_VACATION, 'abbreviation' => '[V]', 'name' => '[V] Vacation',        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_VACATION, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
             //['id' => '04', 'abbreviation' => '[BT]', 'name' => '[BT] Business trip',  'system' => false, 'wage_type' => '03', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => true],
             //['id' => '05', 'abbreviation' => '[FD]', 'name' => '[FD] Feast day',      'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
             //['id' => '06', 'abbreviation' => '[FT]', 'name' => '[FT] Flex time',      'system' => true,  'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false],

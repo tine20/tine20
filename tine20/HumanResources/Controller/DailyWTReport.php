@@ -239,7 +239,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 $blPipeData->workingTimeModel = $contract->working_time_scheme;
                 $blPipeData->date = $this->_currentDate->getClone();
                 if (isset($freeTimes[$dateStr])) {
-                    $blPipeData->freeTimes = $timeSheets[$dateStr];
+                    $blPipeData->freeTimes = $freeTimes[$dateStr];
                 }
                 $blPipeData->feastTimes = $this->_getFeastTimes($dateStr, $contract->feast_calendar_id);
 
@@ -357,7 +357,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
      */
     protected function _getEndDate()
     {
-        return Tinebase_Model_Filter_Date::getEndOfYesterday();
+        return Tinebase_DateTime::now()->setTime(23,59,59);
     }
 
     /**
@@ -469,10 +469,22 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             HumanResources_Model_FreeTimeFilter::class,
             $filterData
         );
+        $freeTimes = HumanResources_Controller_FreeTime::getInstance()->search($filter);
+        if ($freeTimes->count() === 0) return [];
+
+        Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($freeTimes,
+            HumanResources_Model_FreeTime::getConfiguration());
+        // expand required properties
+        $expander = new Tinebase_Record_Expander(HumanResources_Model_FreeTime::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'type' => [],
+            ],
+        ]);
+        $expander->expand($freeTimes);
 
         $result = [];
         /** @var HumanResources_Model_FreeTime $ft */
-        foreach (HumanResources_Controller_FreeTime::getInstance()->search($filter) as $ft) {
+        foreach ($freeTimes as $ft) {
             /** @var HumanResources_Model_FreeDay $fd */
             foreach ($ft->freedays as $fd) {
                 $day = $fd->date->format('Y-m-d');

@@ -15,31 +15,39 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 {
     protected $_ts;
 
+    /** @var HumanResources_Model_Employee */
+    protected $employee;
+
+    protected function _createBasicData()
+    {
+        // create employee & contract
+        // @todo generalize?
+        $this->employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
+        $this->employee->dfcom_id = '36118993923739652';
+
+        $contractController = HumanResources_Controller_Contract::getInstance();
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+        $this->employee = $employeeController->create($this->employee, false);
+        $contract = $this->_getContract(new Tinebase_DateTime('2018-07-01 00:00:00'));
+        $contract->employee_id = $this->employee->getId();
+        //  @todo add more contract properties ?
+        $contractController->create($contract);
+    }
+
     public function testCalculateAllReports()
     {
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         HumanResources_Config::getInstance()->{Tinebase_Config::ENABLED_FEATURES}
             ->{HumanResources_Config::FEATURE_CALCULATE_DAILY_REPORTS} = true;
 
-        // create employee & contract
-        // @todo generalize?
-        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
-        $employee->dfcom_id = '36118993923739652';
-
-        $contractController = HumanResources_Controller_Contract::getInstance();
-        $employeeController = HumanResources_Controller_Employee::getInstance();
-        $employee = $employeeController->create($employee, false);
-        $contract = $this->_getContract(new Tinebase_DateTime('2018-07-01 00:00:00'));
-        $contract->employee_id = $employee->getId();
-        //  @todo add more contract properties ?
-        $contractController->create($contract);
+        $this->_createBasicData();
 
         $this->_createTimesheets();
 
         static::assertSame(true, HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports());
 
         $days = (int)Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST)->format('t');
-        $days += (int)Tinebase_Model_Filter_Date::getEndOfYesterday()->format('j');
+        $days += (int)Tinebase_DateTime::now()->format('j');
 
         $reportResult = HumanResources_Controller_DailyWTReport::getInstance()->lastReportCalculationResult;
         static::assertCount(1, $reportResult, 'expect reports being generated for one employee');
@@ -51,32 +59,21 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEnd()
     {
-        // create employee & contract
-        // @todo generalize?
-        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
-        $employee->dfcom_id = '36118993923739652';
-
-        $contractController = HumanResources_Controller_Contract::getInstance();
-        $employeeController = HumanResources_Controller_Employee::getInstance();
-        $employee = $employeeController->create($employee, false);
-        $contract = $this->_getContract(new Tinebase_DateTime('2018-07-01 00:00:00'));
-        $contract->employee_id = $employee->getId();
-        //  @todo add more contract properties ?
-        $contractController->create($contract);
+        $this->_createBasicData();
 
         $this->_createTimesheets();
 
         // create report
         $start = new Tinebase_DateTime('2018-08-01 00:00:00');
         $end = new Tinebase_DateTime('2018-08-31 23:59:59');
-        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($employee, $start, $end);
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
 
         // assert!
         self::assertGreaterThanOrEqual(3, $calcResult['created'], print_r($calcResult, true));
         self::assertGreaterThanOrEqual(0, $calcResult['updated'], print_r($calcResult, true));
         self::assertEquals(0, $calcResult['errors']);
 
-        $result = $this->_getReportsForEmployee($employee);
+        $result = $this->_getReportsForEmployee($this->employee);
         self::assertGreaterThanOrEqual(3, count($result), 'should have more than (or equal) 3 daily reports');
 
         // check times
@@ -97,7 +94,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         static::assertTrue(is_array($saved_report['working_times'][0]['wage_type']), 'wage_type in working times is not resolved');
 
 
-        return $employee;
+        return $this->employee;
     }
 
     protected function _getReportsForEmployee($employee)
@@ -155,12 +152,62 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
     public function testCalculateReportsForEmployeeVacation()
     {
-        // @todo implement
+        $this->_createBasicData();
+
+        HumanResources_Controller_FreeTime::getInstance()->create(
+            new HumanResources_Model_FreeTime([
+                'employee_id'       => $this->employee->getId(),
+                'account_id'        => $this->employee->account_id,
+                'type'              => HumanResources_Model_FreeTimeType::ID_VACATION,
+                'freedays'          => [
+                    ['date' => '2018-08-01']
+                ]
+            ])
+        );
+
+        $start = new Tinebase_DateTime('2018-08-01 00:00:00');
+        $end = new Tinebase_DateTime('2018-08-01 23:59:59');
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+        self::assertEquals(1, $calcResult['created'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['updated'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['errors'], print_r($calcResult, true));
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        self::assertEquals(1, count($result), 'should have 1 daily report');
+        $result = $result->getFirstRecord();
+        self::assertCount(1, $result->working_times);
+        self::assertEquals(8 * 3600, $result->working_times->getFirstRecord()->duration);
+        self::assertEquals(HumanResources_Model_WageType::ID_VACATION, $result->working_times->getFirstRecord()->wage_type);
     }
 
     public function testCalculateReportsForEmployeeSickness()
     {
-        // @todo implement
+        $this->_createBasicData();
+
+        HumanResources_Controller_FreeTime::getInstance()->create(
+            new HumanResources_Model_FreeTime([
+                'employee_id'       => $this->employee->getId(),
+                'account_id'        => $this->employee->account_id,
+                'type'              => HumanResources_Model_FreeTimeType::ID_SICKNESS,
+                'freedays'          => [
+                    ['date' => '2018-08-01']
+                ]
+            ])
+        );
+
+        $start = new Tinebase_DateTime('2018-08-01 00:00:00');
+        $end = new Tinebase_DateTime('2018-08-01 23:59:59');
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+        self::assertEquals(1, $calcResult['created'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['updated'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['errors'], print_r($calcResult, true));
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        self::assertEquals(1, count($result), 'should have 1 daily report');
+        $result = $result->getFirstRecord();
+        self::assertCount(1, $result->working_times);
+        self::assertEquals(8 * 3600, $result->working_times->getFirstRecord()->duration);
+        self::assertEquals(HumanResources_Model_WageType::ID_SICK, $result->working_times->getFirstRecord()->wage_type);
     }
 
     protected function _createTimesheets()

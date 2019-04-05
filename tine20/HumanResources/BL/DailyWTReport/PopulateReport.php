@@ -84,7 +84,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         } elseif ($_data->freeTimes) {
             $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE =>
-                    $_data->freeTimes->getFirstRecord()->freedays->type->wage_type,
+                    $_data->freeTimes->getFirstRecord()->type->wage_type,
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
             ]));
         }
