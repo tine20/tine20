@@ -31,7 +31,8 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $contract = $this->_getContract(new Tinebase_DateTime('2018-07-01 00:00:00'));
         $contract->employee_id = $this->employee->getId();
         //  @todo add more contract properties ?
-        $contractController->create($contract);
+        $contract = $contractController->create($contract);
+        $this->employee->contracts = new Tinebase_Record_RecordSet(HumanResources_Model_Contract::class, [$contract]);
     }
 
     public function testCalculateAllReports()
@@ -148,6 +149,36 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
     public function testCalculateReportsForEmployeeTimesheetsWithoutStartAndEnd()
     {
         // @todo implement
+    }
+
+    public function testCalculateReportsForEmployeeFeast()
+    {
+        $this->_createBasicData();
+
+        $start = new Tinebase_DateTime('2018-08-01 00:00:00');
+
+        $contract = $this->employee->getValidContract($start);
+        Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event([
+            'summary' => 'unittest feast',
+            'container_id' => $contract->feast_calendar_id,
+            'dtstart' => '2018-08-01 00:00:00',
+            'dtend' => '2018-08-01 23:59:59',
+        ]));
+
+        $end = new Tinebase_DateTime('2018-08-01 23:59:59');
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+        self::assertEquals(1, $calcResult['created'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['updated'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['errors'], print_r($calcResult, true));
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        self::assertEquals(1, count($result), 'should have 1 daily report');
+        /** @var HumanResources_Model_DailyWTReport $result */
+        $result = $result->getFirstRecord();
+        self::assertCount(1, $result->working_times);
+        self::assertEquals(8 * 3600, $result->working_times->getFirstRecord()->duration);
+        self::assertEquals(HumanResources_Model_WageType::ID_FEAST, $result->working_times->getFirstRecord()->wage_type);
+        self::assertEquals('unittest feast', $result->system_remark);
     }
 
     public function testCalculateReportsForEmployeeVacation()

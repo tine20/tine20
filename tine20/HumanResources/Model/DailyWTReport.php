@@ -49,6 +49,7 @@
  * @property integer                    working_time_target_correction
  * @property integer                    break_time_net
  * @property Tinebase_Record_RecordSet  working_times
+ * @property string                     system_remark
  */
 class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 {

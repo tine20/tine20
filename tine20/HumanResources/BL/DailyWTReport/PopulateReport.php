@@ -20,6 +20,8 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
     /** @var HumanResources_Model_BLDailyWTReport_PopulateReportConfig */
     protected $_config;
 
+    protected $wageTypes = [];
+
     public function __construct(HumanResources_Model_BLDailyWTReport_PopulateReportConfig $_config)
     {
         $this->_config = $_config;
@@ -81,12 +83,39 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => HumanResources_Model_WageType::ID_FEAST,
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
             ]));
+            $_data->result->system_remark = $_data->feastTimes->getFirstRecord()->summary;
         } elseif ($_data->freeTimes) {
+            $_data->freeTimes->sort(function($r1, $r2) {
+                if ($r1->type->wage_type === HumanResources_Model_WageType::ID_SICK && $r2->type->wage_type !==
+                    HumanResources_Model_WageType::ID_SICK) return 1;
+                if ($r1->type->wage_type === HumanResources_Model_WageType::ID_VACATION && $r2->type->wage_type !==
+                    HumanResources_Model_WageType::ID_SICK && $r2->type->wage_type !==
+                    HumanResources_Model_WageType::ID_VACATION) return 1;
+                return strcmp((string)$r1->getId(), (string)$r2->getId());
+            });
+            $wageType = $_data->freeTimes->getFirstRecord()->type->wage_type;
             $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
-                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE =>
-                    $_data->freeTimes->getFirstRecord()->type->wage_type,
+                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $wageType,
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
             ]));
+            $_data->result->system_remark = $this->getWageType($wageType)->name;
         }
+    }
+
+    /**
+     * @param string $id
+     * @return HumanResources_Model_WageType
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function getWageType($id)
+    {
+        if (isset($this->wageTypes[$id])) {
+            return $this->wageTypes[$id];
+        }
+
+        $wageType = HumanResources_Controller_WageType::getInstance()->get($id);
+        $this->wageTypes[$id] = $wageType;
+        return $wageType;
     }
 }
