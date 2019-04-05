@@ -208,8 +208,6 @@ class Tinebase_Frontend_CliTest extends TestCase
             self::markTestSkipped('FIXME: this currently fails with enabled previews - might be some locking issue in the test setup');
         }
 
-        Tinebase_Lock::clearLocks();
-
         $scheduler = Tinebase_Core::getScheduler();
         $serverTime = null;
         /** @var Tinebase_Model_SchedulerTask $task */
