@@ -1431,6 +1431,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.gridConfig.quickaddMandatory) {
             Grid = Ext.ux.grid.QuickaddGridPanel;
             this.gridConfig.validate = true;
+
+            // TODO allow to configure this?
+            this.gridConfig.resetAllOnNew = true;
         } else {
             Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
         }
