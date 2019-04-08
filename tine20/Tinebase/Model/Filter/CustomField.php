@@ -267,26 +267,35 @@ switch ($type) {
     {
         $result = parent::toArray($valueToJson);
         if (strtolower($this->_cfRecord->definition['type']) == 'record') {
-            try {
-                $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
-                $controller = Tinebase_Core::getApplicationInstance($modelName);
-                if (is_string($result['value']['value'])) {
-                    $result['value']['value'] = $controller->get($result['value']['value'])->toArray();
-                } else if (is_array($result['value']['value'])) {
-                    //  this is very bad - @refactor
-                    foreach ($result['value']['value'] as $key => $subfilter) {
-                        if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value']) &&
+            if ($valueToJson) {
+                try {
+                    $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
+                    $controller = Tinebase_Core::getApplicationInstance($modelName);
+                    if (is_string($result['value']['value'])) {
+                        $result['value']['value'] = $controller->get($result['value']['value'])->toArray();
+                    } else if (is_array($result['value']['value'])) {
+                        //  this is very bad - @refactor
+                        foreach ($result['value']['value'] as $key => $subfilter) {
+                            if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value']) &&
                                 is_string($subfilter['value'])) {
-                            $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                                $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                            }
                         }
-                    }
 
-                } else {
-                    // TODO do we need to do something in this case?
+                    } else {
+                        // TODO do we need to do something in this case?
+                    }
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
+                    Tinebase_Exception::log($e);
                 }
-            } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
-                Tinebase_Exception::log($e);
+            } else if (is_array($result['value']['value'])) {
+                // return hydrated value
+                foreach ($result['value']['value'] as $key => $subfilter) {
+                    if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value']) && is_array($subfilter['value'])) {
+                        $result['value']['value'][$key]['value'] = $subfilter['value']['id'];
+                    }
+                }
             }
         }
         
