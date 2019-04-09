@@ -101,7 +101,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $_record = new HumanResources_Model_WorkingTimeScheme(array(
             'title' => $translate->_('Full-time 37.5 hours'),
             'working_hours' => '37.5',
-            'type'  => HumanResources_Model_WorkingTimeScheme::TYPES_SHARED,
+            'type'  => HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE,
             'json'  => ["days"=>[28800,28800,28800,28800,19800,0,0]],
             HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE => $blPipe,
         ));
@@ -109,7 +109,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $_record = new HumanResources_Model_WorkingTimeScheme(array(
             'title' => $translate->_('Part-time 20 hours'),
             'working_hours' => '20',
-            'type'  => HumanResources_Model_WorkingTimeScheme::TYPES_SHARED,
+            'type'  => HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE,
             'json'  => ["days"=>[14400,14400,14400,14400,14400,0,0]],
             HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE => $blPipe,
         ));
@@ -124,7 +124,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             ['id' => HumanResources_Model_WageType::ID_SALARY, 'number' => '2000', 'name' => $translate->_('Salary'),            'system' => true,  'wage_factor' => 100, 'additional_wage' => false],
             //['id' => '03', 'number' => '2500', 'name' => $translate->_('Business trip'),     'system' => false, 'wage_factor' => 100, 'additional_wage' => false],
             //['id' => '04', 'number' => '3000', 'name' => $translate->_('Sunday bonus'),      'system' => false, 'wage_factor' =>  50, 'additional_wage' => true ],
-            ['id' => HumanResources_Model_WageType::ID_FEAST, 'number' => '3100', 'name' => $translate->_('Feast day'),      'system' => false, 'wage_factor' =>  100, 'additional_wage' => false],
+            ['id' => HumanResources_Model_WageType::ID_FEAST, 'number' => '3100', 'name' => $translate->_('Feast day'),      'system' => true, 'wage_factor' =>  100, 'additional_wage' => false],
             //['id' => '05', 'number' => '3200', 'name' => $translate->_('Feast day bonus'),   'system' => false, 'wage_factor' => 125, 'additional_wage' => true ],
             //['id' => '06', 'number' => '3400', 'name' => $translate->_('Overtime'),          'system' => false, 'wage_factor' => 125, 'additional_wage' => false],
             //['id' => '07', 'number' => '3450', 'name' => $translate->_('Overtime bonus'),    'system' => false, 'wage_factor' => 150, 'additional_wage' => false],
@@ -147,14 +147,14 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     {
         $translate = Tinebase_Translation::getTranslation('HumanResources');
         $freeTimeTypes = [
+            // NOTE: no feastday type as feastdays are treated via feastday cal which is shared and not per user
             ['id' => HumanResources_Model_FreeTimeType::ID_SICKNESS, 'abbreviation' => '[S]', 'name' => $translate->_('[S] Sickness'),        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SICK, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
             //['id' => '02', 'abbreviation' => '[D]', 'name' => $translate->_('[D] Visit doctor'),    'system' => false, 'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
             ['id' => HumanResources_Model_FreeTimeType::ID_VACATION, 'abbreviation' => '[V]', 'name' => $translate->_('[V] Vacation'),        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_VACATION, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
             //['id' => '04', 'abbreviation' => '[BT]', 'name' => $translate->_('[BT] Business trip'),  'system' => false, 'wage_type' => '03', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => true],
-            //['id' => '05', 'abbreviation' => '[FD]', 'name' => $translate->_('[FD] Feast day'),      'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '06', 'abbreviation' => '[FT]', 'name' => $translate->_('[FT] Flex time'),      'system' => true,  'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '07', 'abbreviation' => '[BK]', 'name' => $translate->_('[BK] Break'),          'system' => true,  'wage_type' => '13', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            //['id' => '08', 'abbreviation' => '[T]', 'name' => $translate->_('[T] Training'),        'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '05', 'abbreviation' => '[FT]', 'name' => $translate->_('[FT] Flex time'),      'system' => true,  'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '06', 'abbreviation' => '[BK]', 'name' => $translate->_('[BK] Break'),          'system' => true,  'wage_type' => '13', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
+            //['id' => '07', 'abbreviation' => '[T]', 'name' => $translate->_('[T] Training'),        'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
         ];
 
         $fttCntrl = HumanResources_Controller_FreeTimeType::getInstance();
