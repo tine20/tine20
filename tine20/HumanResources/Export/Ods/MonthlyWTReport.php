@@ -45,6 +45,11 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
         };
     }
 
+    public function getFormat()
+    {
+        return 'newOds';
+    }
+
     protected function _onBeforeExportRecords()
     {
         parent::_onBeforeExportRecords();

@@ -62,7 +62,33 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
         $export->generate();
         $export->save($tempfile);
 
-        $this->assertGreaterThan(0, filesize($tempfile));
-        //unlink($tempfile);
+        $this->assertGreaterThan(4000, filesize($tempfile));
+        unlink($tempfile);
+    }
+
+    public function testHTTPfe()
+    {
+        $dailWTRT = new HumanResources_Controller_DailyWTReportTests();
+        $employee = $dailWTRT->testCalculateReportsForEmployeeTimesheetsWithStartAndEnd();
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employee->getId()]
+        ]);
+        $data = HumanResources_Controller_MonthlyWTReport::getInstance()->search($filter)->getFirstRecord();
+
+        $httpFE = new HumanResources_Frontend_Http();
+
+        ob_start();
+        $httpFE->exportMonthlyWTReportt('', [
+            'recordData' => $data->toArray(),
+            'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
+                new Tinebase_Model_ImportExportDefinitionFilter([
+                    'model' => HumanResources_Model_MonthlyWTReport::class,
+                    'name' => 'monthlyWTReport'
+                ]))->getFirstRecord()->getId()
+        ]);
+        $obData = ob_get_clean(); ob_end_clean();
+
+        $this->assertGreaterThan(4000, strlen($obData));
     }
 }

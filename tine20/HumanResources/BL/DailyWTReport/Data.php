@@ -85,7 +85,7 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
             $timeSlot->timeSheetId = $timeSheet->getId();
 
             // TODO add same day assertions? which TZ?
-            if ($this->allowTimesheetOverlap || false !== ($lastSlot = end($this->timeSlots))) {
+            if (!$this->allowTimesheetOverlap && false !== ($lastSlot = end($this->timeSlots))) {
                 if ($timeSlot->start->isEarlier($lastSlot->end)) {
                     throw new Tinebase_Exception_BL('timesheets must not overlap');
                 }
