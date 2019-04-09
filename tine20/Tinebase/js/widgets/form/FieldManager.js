@@ -72,6 +72,8 @@ Tine.widgets.form.FieldManager = function() {
             field.name = fieldName;
             field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
+            // make field available via recordForm.formfield_NAME
+            field.ref = '../../formfield_' + fieldName;
 
             if (fieldDefinition['default']) {
                 field['default'] = i18n._hidden(fieldDefinition['default']);
