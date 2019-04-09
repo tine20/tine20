@@ -2077,10 +2077,13 @@ class Setup_Controller
      */
     public function uninstallApplications($_applications)
     {
-        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
-            throw new Tinebase_Exception('could not create setup user');
+        try {
+            $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
+        } catch (Exception $e) {
+            // try without setup user - Addressbook might be already uninstalled
+            Tinebase_Exception::log($e);
         }
-        Tinebase_Core::set(Tinebase_Core::USER, $user);
 
         $this->clearCache();
 
