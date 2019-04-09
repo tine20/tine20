@@ -66,10 +66,6 @@ class Setup_Frontend_Cli
             Setup_Core::set(Setup_Core::USER, Tinebase_User::SYSTEM_USER_SETUP);
         }
 
-        $lang = $_opts->lang ? $_opts->lang : getenv('LANGUAGE');
-
-        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale($lang));
-
         $result = 0;
         if (isset($_opts->install)) {
             $result = $this->_install($_opts);
