@@ -50,6 +50,7 @@
  * @property integer                    break_time_net
  * @property Tinebase_Record_RecordSet  working_times
  * @property string                     system_remark
+ * @property boolean                    calculation_failure
  */
 class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 {
@@ -300,6 +301,13 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::COPY_OMIT             => true,
                 self::DISABLED              => true,
             ],
+            'calculation_failure' => [
+                self::LABEL                 => 'Calculation Failure', // _('Calculation Failure')
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::TYPE                  => 'boolean',
+                self::DEFAULT_VAL           => 0,
+                self::COPY_OMIT             => true,
+            ],
         ]
     ];
 
@@ -317,6 +325,9 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
         $result->working_times = null;
         $result->evaluation_period_start = null;
         $result->evaluation_period_end = null;
+        $result->calculation_failure = 0;
+        $result->system_remark = '';
+
         return $result;
     }
 

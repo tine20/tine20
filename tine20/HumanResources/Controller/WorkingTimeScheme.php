@@ -141,7 +141,7 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
                 $_record->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE} = new Tinebase_Record_RecordSet(
                     HumanResources_Model_BLDailyWTReport_Config::class,
                     $_record->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE});
-                
+
                 $_record->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE}->sort(
                     function(Tinebase_Model_BLConfig $val1, Tinebase_Model_BLConfig $val2) {
                         return $val1->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD}

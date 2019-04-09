@@ -162,6 +162,14 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         Tinebase_DateTime $startDate = null,
         Tinebase_DateTime $endDate = null
     ) {
+        // we should never run in FE context, so we reset the RC and use RAII to restate it
+        $oldRC = $this->_requestContext;
+        $that = $this;
+        $this->_requestContext = [];
+        $rcRaii = new Tinebase_RAII(function() use ($oldRC, $that) {
+            $that->_requestContext = $oldRC;
+        });
+
         // init some member vars
         $this->_monthlyWTR = [];
         $this->_employee = $employee;
@@ -208,12 +216,16 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         for ($this->_currentDate = clone $this->_startDate; $this->_endDate->isLaterOrEquals($this->_currentDate);
                 $this->_currentDate->addDay(1)) {
 
+            // we need those two also in an error case
+            $dateStr = $this->_currentDate->format('Y-m-d');
+            $monthlyWTR = null;
+
             // then we calculate each day in a transaction, see dailyTransaction
             try {
                 $monthlyWTR = $this->_getOrCreateMonthlyWTR();
 
                 $dailyTransaction = new Tinebase_TransactionManager_Handle();
-                $dateStr = $this->_currentDate->format('Y-m-d');
+
                 /** @var HumanResources_Model_DailyWTReport $oldReport */
                 $oldReport = null;
                 if (isset($existingReports[$dateStr])) {
@@ -222,6 +234,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' old report for day ' .
                                 $this->_currentDate->toString() . ' is already cleared, skipping');
+                        $dailyTransaction->commit();
                         continue;
                     }
                 }
@@ -231,6 +244,19 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 'employee ' .
                             $employee->getId() . ' ' . $employee->getTitle() . ' has no valid contract at ' .
                             $this->_currentDate->toString());
+
+                    if (isset($existingReports[$dateStr])) {
+                        $oldReport = $existingReports[$dateStr]->getCleanClone();
+                        $oldReport->calculation_failure = 1;
+                        $oldReport->system_remark =
+                            Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)
+                                ->_('No valid contract for this date');
+
+                        $this->update($oldReport);
+                        $this->_reportResult['errors'] += 1;
+                    }
+
+                    $dailyTransaction->commit();
                     continue;
                 }
 
@@ -279,6 +305,32 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not create daily wt report for '
                     . $this->_currentDate->toString());
                 $this->_reportResult['errors'] += 1;
+
+                if (isset($existingReports[$dateStr])) {
+                    $oldReport = $existingReports[$dateStr]->getCleanClone();
+                    $oldReport->calculation_failure = 1;
+                    $oldReport->system_remark =
+                        Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)
+                            ->_('unexpected error: ') . $e->getMessage();
+
+                    $this->update($oldReport);
+                } else {
+                    if (null !== $monthlyWTR) {
+                        $this->create(new HumanResources_Model_DailyWTReport([
+                            'employee_id' => $employee,
+                            'monthlywtreport' => $monthlyWTR->getId(),
+                            'date' => clone $this->_currentDate,
+                            'calculation_failure' => 1,
+                            'system_remark' =>
+                                Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)
+                                    ->_('unexpected error: ') . $e->getMessage(),
+                        ]));
+                    } else {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' no monthly WTR available!');
+                    }
+                }
+
+                $dailyTransaction->commit();
             }
 
             unset($dailyTransaction); // will trigger a rollback if not committed
@@ -289,6 +341,9 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             ksort($this->_monthlyWTR);
             HumanResources_Controller_MonthlyWTReport::getInstance()->recalculateReport(current($this->_monthlyWTR));
         }
+
+        // to satifisfy unused variable check
+        unset($rcRaii);
 
         return $this->_reportResult;
     }
