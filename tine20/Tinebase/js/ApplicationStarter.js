@@ -525,6 +525,9 @@ Tine.Tinebase.ApplicationStarter = {
                             Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
                                'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group,copyOmitFields')
                         );
+
+                        // called from legacy code - but all filters should come from registy (see below)
+                        Tine[appName].Model[modelName].getFilterModel = function() { return [];};
                     }
 
                     // register filters
