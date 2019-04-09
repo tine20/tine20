@@ -105,4 +105,49 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
 
         return $timeaccount;
     }
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+        $this->_sortBLPipe($_record);
+    }
+
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        $this->_sortBLPipe($_record);
+    }
+
+    protected function _sortBLPipe($_record)
+    {
+        if (!empty($_record->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE})) {
+            if (is_array($_record->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE})) {
+
+                $_record->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE} = new Tinebase_Record_RecordSet(
+                    HumanResources_Model_BLDailyWTReport_Config::class,
+                    $_record->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE});
+                
+                $_record->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE}->sort(
+                    function(Tinebase_Model_BLConfig $val1, Tinebase_Model_BLConfig $val2) {
+                        return $val1->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD}
+                            ->cmp($val2->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD});
+                    });
+            }
+        }
+    }
 }

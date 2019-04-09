@@ -70,4 +70,14 @@ class HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig extends Tineba
     {
         return new HumanResources_BL_DailyWTReport_LimitWorkingTime($this);
     }
+
+    /**
+     * The comparison function must return an integer less than, equal to, or
+     * greater than zero if this is considered to be
+     * respectively less than, equal to, or greater than the argument.
+     */
+    public function cmp(Tinebase_BL_ElementConfigInterface $_element)
+    {
+        return -1;
+    }
 }

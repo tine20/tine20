@@ -72,4 +72,24 @@ class HumanResources_Model_BLDailyWTReport_BreakTimeConfig extends Tinebase_Reco
     {
         return new HumanResources_BL_DailyWTReport_BreakTime($this);
     }
+
+    /**
+     * The comparison function must return an integer less than, equal to, or
+     * greater than zero if this is considered to be
+     * respectively less than, equal to, or greater than the argument.
+     */
+    public function cmp(Tinebase_BL_ElementConfigInterface $_element)
+    {
+        if ($_element instanceof HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig) {
+            return 1;
+        }
+        if ($_element instanceof HumanResources_Model_BLDailyWTReport_PopulateReportConfig) {
+            return -1;
+        }
+        if ($_element instanceof HumanResources_Model_BLDailyWTReport_BreakTimeConfig) {
+            return $this->{self::FLDS_TIME_WORKED} < $_element->{self::FLDS_TIME_WORKED} ? -1 :
+                ($this->{self::FLDS_TIME_WORKED} > $_element->{self::FLDS_TIME_WORKED} ? 1 : 0);
+        }
+        return 0;
+    }
 }
