@@ -45,6 +45,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $switchFormat = $format;
         }
 
+        if (strpos($format, 'new') === 0) {
+            $format = strtolower(substr($format, 3));
+        }
+
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $format);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_options, TRUE));
@@ -78,6 +82,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 case 'ods':
                     $result = $export->generate();
                     break;
+                case 'newOds':
                 case 'newPDF':
                 case 'newCsv':
                 case 'csv':
@@ -125,6 +130,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'pdf':
                 echo $pdfOutput;
                 break;
+            case 'newOds':
             case 'newCsv':
             case 'newPDF':
             case 'xls':
