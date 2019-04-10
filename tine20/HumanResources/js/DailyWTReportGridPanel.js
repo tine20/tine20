@@ -11,6 +11,26 @@ Ext.ns('Tine.HumanResources');
 Tine.HumanResources.DailyWTReportGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     initComponent: function() {
+
+        Ext.applyIf(this, {
+            filterConfig: {},
+            defaultFilters: [
+                {field: 'date', operator: 'within', value: 'monthThis'}/*,
+                {field: 'employee_id', operator: 'equals', value: null}*/
+            ]
+        });
+
+        // show ftb initially
+        Ext.apply(this.filterConfig, {
+            quickFilterConfig: {
+                detailsToggleBtnConfig: {
+                    initialState: {
+                        detailsButtonPressed: true
+                    }
+                }
+            }
+        });
+
         Tine.HumanResources.DailyWTReportGridPanel.superclass.initComponent.apply(this, arguments);
     },
 

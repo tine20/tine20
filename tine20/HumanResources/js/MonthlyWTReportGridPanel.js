@@ -9,4 +9,12 @@ Ext.ns('Tine.HumanResources');
 
 // NOTE: recordClass and some other config is injected by appStarter
 Tine.HumanResources.MonthlyWTReportGridPanel = Ext.extend(Tine.HumanResources.DailyWTReportGridPanel, {
+    initComponent: function() {
+        this.defaultFilters = [
+            {field: 'month', operator: 'equals', value: new Date().format('Y-m')}/*,
+            {field: 'employee_id', operator: 'equals', value: null}*/
+        ];
+
+        Tine.HumanResources.MonthlyWTReportGridPanel.superclass.initComponent.apply(this, arguments);
+    },
 });
