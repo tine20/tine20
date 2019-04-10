@@ -82,6 +82,9 @@ Tine.widgets.form.FieldManager = function() {
             switch (fieldType) {
                 case 'money':
                     field.xtype = 'extuxmoneyfield';
+                    if (fieldDefinition.hasOwnProperty('allowNegative')) {
+                        field.allowNegative = fieldDefinition.allowNegative;
+                    }
                     break;
                 case 'date':
                     field.xtype = 'datefield';
