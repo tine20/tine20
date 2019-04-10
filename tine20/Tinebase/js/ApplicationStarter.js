@@ -307,10 +307,13 @@ Tine.Tinebase.ApplicationStarter = {
             case 'time':
                 filter.valueType = 'time';
                 break;
+            case 'money':
+                filter.valueType = 'money';
+                break;
             case 'float':
             case 'integer':
-            case 'money':
                 filter.valueType = 'number';
+                break;
         }
         return filter;
     },
@@ -366,7 +369,8 @@ Tine.Tinebase.ApplicationStarter = {
         var filter = {
             label: i18n._hidden(label),
             field: fieldKey,
-            gender: i18n._hidden('GENDER_' + label)
+            gender: i18n._hidden('GENDER_' + label),
+            specialType: fieldconfig ? fieldconfig.specialType : null
         };
         
         if (filterconfig) {
@@ -516,7 +520,7 @@ Tine.Tinebase.ApplicationStarter = {
                             modelArray.push(this.getField(field, field.key));
                         }, this);
                     }
-                    
+
                     Tine[appName].Model[modelArrayName] = modelArray;
                     
                     // create model

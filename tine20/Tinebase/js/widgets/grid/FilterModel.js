@@ -147,6 +147,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'user':
                 case 'bool':
                 case 'number':
+                case 'money':
                 case 'percentage':
                 case 'combo':
                 case 'time':
@@ -177,6 +178,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'group':
                 case 'user':
                 case 'number':
+                case 'money':
                 case 'country':
                 default:
                     break;
@@ -294,6 +296,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     this.operators.push('equals', 'before', 'after', 'within', 'inweek');
                     break;
                 case 'number':
+                case 'money':
                 case 'percentage':
                     this.operators.push('equals', 'greater', 'less');
                     break;
@@ -532,9 +535,32 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 value = new Tine.widgets.CountryCombo(Ext.apply(commonOptions, {
                 }));
                 break;
+            case 'number':
+                if (filter.specialType == 'percent') {
+                    Ext.apply(commonOptions, {
+                        useThousandSeparator: false,
+                        suffix: ' %'
+                    });
+                }
+                value = new Ext.ux.form.NumberField(Ext.apply(commonOptions, {
+                    decimalPrecision: 2,
+                    decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
+                }));
+                break;
+            case 'money':
+                value = new Ext.ux.form.MoneyField(Ext.apply(commonOptions, {
+                    listeners: {
+                        scope: this,
+                        specialkey: function(field, e){
+                            if(e.getKey() == e.ENTER){
+                                this.onFiltertrigger();
+                            }
+                        }
+                    }
+                }));
+                break;
             case 'customfield':
             case 'string':
-            case 'number':
             default:
                 value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
                     emptyText: this.emptyText,

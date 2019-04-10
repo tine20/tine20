@@ -473,7 +473,7 @@ class Tinebase_Core
         // setup a temporary user locale. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as session timeout
         // @todo add fallback locale to config file
-        Tinebase_Core::set(self::LOCALE, new Zend_Locale('en_US'));
+        Tinebase_Core::set('locale', new Zend_Locale('en_US'));
         
         Tinebase_Core::setupUserLocale();
         
@@ -1280,7 +1280,7 @@ class Tinebase_Core
         }
         
         // save in registry
-        self::set(self::LOCALE, $locale);
+        self::set('locale', $locale);
         
         $localeString = (string)$locale;
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Setting user locale: " . $localeString);
