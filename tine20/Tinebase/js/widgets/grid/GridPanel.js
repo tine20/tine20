@@ -523,6 +523,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} config
      */
     initFilterPanel: function(config) {
+        config = Ext.apply(config || {}, this.filterConfig);
+
         if (! this.filterToolbar && ! this.editDialog) {
             var filterModels = [];
             if (this.modelConfig) {
@@ -537,7 +539,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 filterModels: filterModels,
                 defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
                 filters: this.defaultFilters || []
-            }, config || {}));
+            }, config));
             
             this.plugins = this.plugins || [];
             this.plugins.push(this.filterToolbar);
