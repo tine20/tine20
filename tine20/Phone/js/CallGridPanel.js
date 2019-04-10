@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Phone');
 
@@ -153,8 +153,15 @@ Tine.Phone.CallGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * is called on dial a number
      */
     onDialNumber: function() {
-        var record = this.grid.getSelectionModel().getSelected();
-        var number = record ? record.get('destination') : false;
+        var record = this.grid.getSelectionModel().getSelected(),
+            number = false;
+        if (record) {
+            if (record.get('resolved_destination') != '') {
+                number = record.get('resolved_destination');
+            } else {
+                number = record.get('destination');
+            }
+        }
         Tine.Phone.dialPhoneNumber(number);
     },
     
