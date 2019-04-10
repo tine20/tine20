@@ -30,8 +30,8 @@ Tine.Calendar.ResourcePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
                     '<div class="x-combo-list-item">',
                         '<table>',
                             '<tr>',
-                                '<td style="min-width: 20px;" class="tine-grid-row-action-icon cal-attendee-type-resource">&nbsp</td>',
-                                '<td width="100%">{[Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderResourceName(values)]}</td>',
+                                '<td style="min-width: 20px;">{[this.encodeIconTypes(values.type)]}</td>',
+                                '<td width="100%">{[Tine.Tinebase.EncodingHelper.encode(values.name)]}</td>',
                             '</tr>',
                             '<tr>',
                                 '<td style="min-width: 20px;">&nbsp</td>',
@@ -47,6 +47,12 @@ Tine.Calendar.ResourcePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
                             return '';
                         }
                         return Tine.Tinebase.EncodingHelper.encode(hierarchy);
+                    },
+                    encodeIconTypes: function(type) {
+                            icon = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes')
+                                .getById(type).get('icon');
+
+                            return '<img class="tine-grid-row-action-icon" src="' + icon + '"/>';
                     }
                 }
             );
