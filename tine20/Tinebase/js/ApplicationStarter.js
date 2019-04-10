@@ -208,6 +208,15 @@ Tine.Tinebase.ApplicationStarter = {
                     gridRenderer = Tine.Tinebase.common.booleanRenderer;
                     break;
                 case 'money':
+                    if (config.hasOwnProperty('specialType')) {
+                        if (config.specialType == 'zeroMoney') {
+                            // if this option is set, zero values are hidden in the grid
+                            gridRenderer = function (value) {
+                                return Ext.util.Format.money(value, {zeroMoney: true});
+                            }
+                            break;
+                        }
+                    }
                     gridRenderer = Ext.util.Format.money;
                     break;
                 case 'attachments':
