@@ -709,4 +709,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         exit;
     }
+
+    /**
+     * openIDCLogin
+     *
+     * @return boolean
+     */
+    public function openIDCLogin()
+    {
+        $oidc = Tinebase_Auth_Factory::factory('OpenIdConnect');
+        // request gets redirected to login page on success
+        return $oidc->providerAuthRequest();
+    }
 }

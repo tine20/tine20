@@ -507,6 +507,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.getAllRegistryData',
             'Tinebase.authenticate',
             'Tinebase.login',
+            'Tinebase.openIDCLogin',
             'Tinebase.getAvailableTranslations',
             'Tinebase.getTranslations',
             'Tinebase.setLocale'

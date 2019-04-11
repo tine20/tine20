@@ -120,6 +120,51 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
 
     /**
+     * create new user session (via openID connect)
+     *
+     * @param   string                           $oidcResponse
+     * @param   \Zend\Http\PhpEnvironment\Request $request
+     *
+     * @return  bool
+     * @throws  Tinebase_Exception_MaintenanceMode
+     */
+    public function loginOIDC($oidcResponse, \Zend\Http\PhpEnvironment\Request $request)
+    {
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            throw new Tinebase_Exception_MaintenanceMode();
+        }
+
+        $ssoConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SSO};
+        if (! $ssoConfig->{Tinebase_Config::SSO_ACTIVE}) {
+            throw new Tinebase_Exception('sso client config inactive');
+        }
+
+        $adapterName = $ssoConfig->{Tinebase_Config::SSO_ADAPTER};
+        $authAdapter = Tinebase_Auth_Factory::factory($adapterName);
+        $authAdapter->setOICDResponse($oidcResponse);
+        $authResult = $authAdapter->authenticate();
+        $adapterUser = $authAdapter->getLoginUser();
+        if (! $adapterUser) {
+            return false;
+        }
+        $loginName = $adapterUser->accountLoginName;
+
+        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
+            $adapterName);
+
+        $user = $this->_validateAuthResult($authResult, $accessLog);
+
+        if (!($user instanceof Tinebase_Model_FullUser)) {
+            return false;
+        }
+
+        // TODO make credential cache work without PW
+        $this->_loginUser($user, $accessLog, Tinebase_Record_Abstract::generateUID(20));
+
+        return true;
+    }
+
+    /**
      * @param Tinebase_Model_FullUser $user
      * @param \Zend\Http\Request $request
      * @param string|null $clientIdString
@@ -300,6 +345,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _initUserSession($fixCookieHeader = true)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Init user session');
+
         // FIXME 0010508: Session_Validator_AccountStatus causes problems
         //Tinebase_Session::registerValidatorAccountStatus();
 
@@ -308,7 +356,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
             Tinebase_Session::registerValidatorHttpUserAgent();
         } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
         }
         
         // we only need to activate ip session validation for non-encrypted connections
@@ -316,7 +365,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONIPVALIDATION, $ipSessionValidationDefault)) {
             Tinebase_Session::registerValidatorIpAddress();
         } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
         }
         
         if ($fixCookieHeader && Zend_Session::getOptions('use_cookies')) {
@@ -333,7 +383,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             header(array_pop($cookieHeaders), true);
             /** end of fix **/
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Save account object in session');
+
         Tinebase_Session::getSessionNamespace()->currentAccount = Tinebase_Core::getUser();
     }
     
