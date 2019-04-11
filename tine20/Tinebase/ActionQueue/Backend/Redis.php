@@ -17,6 +17,8 @@ use Zend_RedisProxy as Redis;
  */
 class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend_Interface
 {
+    const QUEUE_NAME = 'TinebaseQueue';
+
     /** 
      * configurations for connecting with Redis-Queues
      * 
@@ -26,7 +28,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         'port'              => 6379,
         'timeout'           => 5,
         'maxRetry'          => 10,
-        'queueName'         => 'TinebaseQueue',
+        'queueName'         => self::QUEUE_NAME,
         'redisQueueSuffix'  => 'Queue',
         'redisDataSuffix'   => 'Data',
         'redisDaemonSuffix' => 'Daemon',

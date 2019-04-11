@@ -672,9 +672,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
 
     const ACTIONQUEUE = 'actionqueue';
-    const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_ACTIVE = 'active';
+    const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_HOST = 'host';
+    const ACTIONQUEUE_LONG_RUNNING = 'longRunning';
     const ACTIONQUEUE_PORT = 'port';
     const ACTIONQUEUE_NAME = 'queueName';
     const ACTIONQUEUE_MONITORING_DURATION_WARN = 'durationWarn';
@@ -963,7 +964,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'                           => array()
         ),
-        self::ACTIONQUEUE => array(
+        self::ACTIONQUEUE => [
             //_('Action queue configuration')
             'label'                 => 'Action queue configuration',
             //_('Action queue configuration.')
@@ -973,46 +974,50 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
-            'content'               => array(
-                self::ACTIONQUEUE_BACKEND       => array(
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'Direct'
-                ),
-                self::ACTIONQUEUE_ACTIVE       => array(
+            'content'               => [
+                self::ACTIONQUEUE_ACTIVE        => [
                     'type'                              => Tinebase_Config::TYPE_BOOL,
-                    'default'                           => false
-                ),
-                self::ACTIONQUEUE_HOST       => array(
+                    'default'                           => false,
+                ],
+                self::ACTIONQUEUE_BACKEND       => [
                     'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'localhost'
-                ),
-                self::ACTIONQUEUE_PORT       => array(
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 6379
-                ),
-                self::ACTIONQUEUE_NAME       => array(
+                    'default'                           => 'Direct',
+                ],
+                self::ACTIONQUEUE_HOST          => [
                     'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'TinebaseQueue'
-                ),
-                self::ACTIONQUEUE_MONITORING_DURATION_WARN       => array(
+                    'default'                           => 'localhost',
+                ],
+                self::ACTIONQUEUE_LONG_RUNNING  => [
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => '',
+                ],
+                self::ACTIONQUEUE_PORT          => [
                     'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 60
-                ),
-                self::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN     => array(
+                    'default'                           => 6379,
+                ],
+                self::ACTIONQUEUE_NAME          => [
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'TinebaseQueue',
+                ],
+                self::ACTIONQUEUE_MONITORING_DURATION_WARN       => [
                     'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 180
-                ),
-                self::ACTIONQUEUE_MONITORING_DURATION_CRIT       => array(
+                    'default'                           => 60,
+                ],
+                self::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN     => [
                     'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 3600
-                ),
-                self::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT     => array(
+                    'default'                           => 180,
+                ],
+                self::ACTIONQUEUE_MONITORING_DURATION_CRIT       => [
                     'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 3600
-                ),
-            ),
-            'default'                           => array()
-        ),
+                    'default'                           => 3600,
+                ],
+                self::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT     => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600,
+                ],
+            ],
+            'default'                           => [],
+        ],
         self::USERBACKEND => array(
                                    //_('User Configuration')
             'label'                 => 'User Configuration',
