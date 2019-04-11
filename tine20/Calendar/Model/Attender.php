@@ -1179,18 +1179,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
 
         if ($eventAttendees instanceof Tinebase_Record_RecordSet && $_sort) {
-            // sort by name
-            $eventAttendees->sort(function($a1, $a2) {
-                switch ($type) {
-                    case self::USERTYPE_USER:
-                    case self::USERTYPE_GROUPMEMBER:
-                        return $a1->user_id->n_fn > $a2->user_id->n_fn;
-                    case self::USERTYPE_GROUP:
-                    case self::USERTYPE_RESOURCE:
-                    case Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF:
-                        return $a1->user_id->name > $a2->user_id->name;
-                }
-                return true;
+            $eventAttendees->sort(function(Calendar_Model_Attender $a1, Calendar_Model_Attender $a2) {
+                return $a1->getName() > $a2->getName();
             });
         }
     }
