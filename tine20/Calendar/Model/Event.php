@@ -585,7 +585,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'dtend',
             'transp',
             'seq',
-            'uid',
+            //'uid', to avoid leaking the uid on freebusy which might be missued in spoofing attacks
             'is_all_day_event',
             'rrule',
             'rrule_until',

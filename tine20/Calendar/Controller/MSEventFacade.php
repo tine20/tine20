@@ -94,6 +94,11 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         return self::$_instance;
     }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
+    }
     
     /**
      * get user contact id
@@ -1098,5 +1103,66 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         // NOTE: we always refetch the base event as it might be touched in the meantime
         $currBaseEvent = $this->_eventController->get($_baseEvent, null, false);
         $_exception->last_modified_time = $currBaseEvent->last_modified_time;
+    }
+
+    public function getExistingEventByUID($_uid, $_assumeExternalOrganizer, $_action, $_grant, $_getDeleted = false)
+    {
+        $filters = new Calendar_Model_EventFilter(array(
+            array('field' => 'uid',          'operator' => 'equals', 'value' => $_uid),
+        ));
+        if ($_getDeleted) {
+            $filters->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
+                Tinebase_Model_Filter_Bool::VALUE_NOTSET));
+        }
+
+        $event = null;
+        if ($_assumeExternalOrganizer) {
+            $event = $this->_getExistingEventByUIDExternal($filters);
+        }
+        if (null === $event) {
+            $event = $this->_getExistingEventByUIDInternal($filters, $_action, $_grant);
+        }
+        if (null === $event && !$_assumeExternalOrganizer) {
+            $event = $this->_getExistingEventByUIDExternal($filters);
+        }
+
+        return $event;
+    }
+
+    /**
+     * @param $_filter
+     * @param $_grant
+     * @return null|Tinebase_Record_Abstract
+     */
+    protected function _getExistingEventByUIDInternal($_filter, $_action, $_grant)
+    {
+        $events = Calendar_Controller_MSEventFacade::getInstance()->search($_filter, null, false, false, $_action);
+        if (null !== $_grant) {
+            $events = $events->filter($_grant, true);
+        }
+        return $events->getFirstRecord();
+    }
+
+    /**
+     * @param $_filter
+     * @param $_grant
+     * @return null|Tinebase_Record_Abstract
+     */
+    protected function _getExistingEventByUIDExternal($_filter)
+    {
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $oldCalenderAcl = $calCtrl->doContainerACLChecks(false);
+        try {
+            /** @var Calendar_Model_Event $event */
+            $event = Calendar_Controller_MSEventFacade::getInstance()->search($_filter)->getFirstRecord();
+        } finally {
+            $calCtrl->doContainerACLChecks($oldCalenderAcl);
+        }
+
+        if (null !== $event && !$event->hasExternalOrganizer()) {
+            return null;
+        }
+
+        return $event;
     }
 }

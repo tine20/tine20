@@ -123,6 +123,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
 
         try {
+            /** @var Calendar_Model_Event $event */
             $event = $converter->toTine20Model($vobjectData);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
@@ -141,7 +142,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (strlen($id) > 40) {
             $id = sha1($id);
         }
-        
         $event->setId($id);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -152,23 +152,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         // check if there is already an existing event with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an event gets moved to another container
-        $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET),
-            array('condition' => 'OR', 'filters' => array(
-                array(
-                    'field'     => 'id',
-                    'operator'  => 'equals',
-                    'value'     => $id
-                ),
-                array(
-                    'field'     => 'uid',
-                    'operator'  => 'equals',
-                    'value'     => $id
-                )
-            ))
-        ));
-        /** @var Calendar_Model_Event $existingEvent */
-        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
+        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID($event->uid,
+            $event->hasExternalOrganizer(), 'sync', null, true);
         
         if ($existingEvent === null) {
             if (get_class($converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
@@ -237,7 +222,17 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
 
             $vevent = new self($container, $existingEvent);
-            $vevent->put($vobjectData);
+
+            $calCtrl = Calendar_Controller_Event::getInstance();
+            $oldCalenderAcl = $calCtrl->doContainerACLChecks();
+            try {
+                if ($existingEvent->hasExternalOrganizer()) {
+                    $calCtrl->doContainerACLChecks(false);
+                }
+                $vevent->put($vobjectData);
+            } finally {
+                $calCtrl->doContainerACLChecks($oldCalenderAcl);
+            }
         }
         
         return $vevent;
