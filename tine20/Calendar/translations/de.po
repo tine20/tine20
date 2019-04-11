@@ -2304,6 +2304,12 @@ msgstr ""
 msgid "Assign organizer meeting status on editGrant"
 msgstr ""
 
+msgid "Monday"
+msgstr "Montag"
+
+msgid "Sunday"
+msgstr "Sonntag"
+
 #~ msgid "{headerDate, date, full}"
 #~ msgstr "{headerDate, date, full}"
 
@@ -2328,17 +2334,17 @@ msgstr ""
 #~ msgid "If enabled every created event is always privat."
 #~ msgstr "Wenn aktiviert ist jeder neu erstellte Termin privat."
 
-#~ msgid "Me"
-#~ msgstr "Meine"
+msgid "Me"
+msgstr "Meine"
 
-#~ msgid "Intelligent"
-#~ msgstr "Intelligent"
+msgid "Intelligent"
+msgstr "Intelligent"
 
-#~ msgid "Calendar owner"
-#~ msgstr "Kalender Besitzer"
+msgid "Calendar owner"
+msgstr "Kalender Besitzer"
 
-#~ msgid "Filtered attendee"
-#~ msgstr "Gefilterte Teilnehmer"
+msgid "Filtered attendee"
+msgstr "Gefilterte Teilnehmer"
 
 #~ msgid "Search for records ..."
 #~ msgstr "Suche nach Einträgen ..."

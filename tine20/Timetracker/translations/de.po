@@ -440,6 +440,9 @@ msgstr "Hiermit können Sie die zu verwendende ODS-Export Konfiguration einstell
 msgid "default"
 msgstr "Standard"
 
+msgid "A Tag which is available in context menu for fast assignment"
+msgstr "Ein Tag, das im Kontextmenü zur schnellen Zuordnung verfügbar ist"
+
 #~ msgid "New Timesheet"
 #~ msgstr "Neuer Stundenzettel"
 

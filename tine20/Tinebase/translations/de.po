@@ -4376,3 +4376,6 @@ msgstr ""
 
 msgid "The right Resource Admin must be set once."
 msgstr "Das Recht Ressourcen Administration muss mindestens einmal festgelegt werden."
+
+msgid "- The last filter I used -"
+msgstr "- Der letzte ausgewählte Filter -"

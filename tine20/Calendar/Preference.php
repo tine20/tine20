@@ -435,15 +435,16 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::FIRSTDAYOFWEEK:
+                $translate = Tinebase_Translation::getTranslation($this->_application);
                 $preference->value = 1;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <option>
-                            <label>Sunday</label>
+                            <label>' . $translate->_('Sunday'). '</label>
                             <value>0</value>
                         </option>
                         <option>
-                            <label>Monday</label>
+                            <label>' . $translate->_('Monday') . '</label>
                             <value>1</value>
                         </option>
                     </options>';

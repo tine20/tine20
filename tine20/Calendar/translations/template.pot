@@ -2341,3 +2341,9 @@ msgstr ""
 #: Config.php:711 Config.php:713
 msgid "Assign organizer meeting status on editGrant"
 msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
