@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tasks</name>
-    <version>11.1</version>
+    <version>11.3</version>
     <order>30</order>
     <depends>
         <application>Admin</application>
@@ -9,7 +9,7 @@
     <tables>
         <table>
             <name>tasks</name>
-            <version>10</version>
+            <version>11</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -109,7 +109,7 @@
                     <name>priority</name>
                     <type>text</type>
                     <length>40</length>
-                    <default>NORMAL</default>
+                    <default>200</default>
                     <notnull>true</notnull>
                 </field>
                 <field>
