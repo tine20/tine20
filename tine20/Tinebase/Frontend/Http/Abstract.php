@@ -205,7 +205,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $filesystemPath
      * @param int|null $revision
      * @param boolean $ignoreAcl
-     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_AccessDenied
      */
     protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null, $ignoreAcl = false)
     {
@@ -226,13 +226,18 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                     'revision' => $revision
                 )
             ));
-            $handle = fopen($filesystemPath, 'r', false, $streamContext);
+            $handle = @fopen($filesystemPath, 'r', false, $streamContext);
         } else {
-            $handle = fopen($filesystemPath, 'r');
+            $handle = @fopen($filesystemPath, 'r');
         }
 
-        fpassthru($handle);
-        fclose($handle);
+        if ($handle) {
+            fpassthru($handle);
+            fclose($handle);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not open file: ' . $filesystemPath);
+        }
     }
 
     /**
