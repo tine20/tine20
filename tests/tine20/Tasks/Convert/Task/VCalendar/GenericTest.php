@@ -68,7 +68,7 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends PHPUnit_Framework_TestCas
         #var_dump($task->toArray());
         
         $this->assertEquals(Tasks_Model_Task::CLASS_PUBLIC,      $task->class);
-        $this->assertEquals('NORMAL',                            $task->priority);
+        $this->assertEquals(Tasks_Model_Priority::NORMAL,        $task->priority);
         $this->assertEquals('IN-PROCESS',                        $task->status);
         $this->assertEquals('New Task',                          $task->summary);
         $this->assertEquals("2013-07-14 16:00:00",               (string)$task->due);
