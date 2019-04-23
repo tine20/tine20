@@ -182,9 +182,14 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             }
 
             $importer = $record->getOption('plugin');
-            $resource = $record->getOption('importFileByScheduler')
-                ? Tinebase_Helper::getFileOrUriContents($options['url'])
-                : null;
+            if ($record->getOption('importFileByScheduler')) {
+                $resource = Tinebase_Helper::getFileOrUriContents($options['url']);
+                if (!$resource) {
+                    throw new Tinebase_Exception_NotFound('url not found or timeout');
+                }
+            } else {
+                $resource = null;
+            }
 
             $importer = new $importer($options);
             $importer->import($resource);

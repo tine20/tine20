@@ -292,8 +292,17 @@ switch ($type) {
             } else if (is_array($result['value']['value'])) {
                 // return hydrated value
                 foreach ($result['value']['value'] as $key => $subfilter) {
-                    if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value']) && is_array($subfilter['value'])) {
-                        $result['value']['value'][$key]['value'] = $subfilter['value']['id'];
+                    if (isset($subfilter['field'])
+                        && $subfilter['field'] === ':id'
+                        && isset($subfilter['value'])
+                        && is_array($subfilter['value'])
+                    ) {
+                        if (isset($subfilter['value']['id'])) {
+                            $result['value']['value'][$key]['value'] = $subfilter['value']['id'];
+                        } else {
+                            // set empty id value
+                            $result['value']['value'][$key]['value'] = '';
+                        }
                     }
                 }
             }
