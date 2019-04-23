@@ -265,4 +265,53 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         echo 'Updated ' . $result['totalcount'] . ' Record(s)';
     }
+
+    const ROLE_ID = 'roleId';
+    const ROLE_NAME = 'roleName';
+
+    public function setListRoleIdByName($opts)
+    {
+        $params = $this->_parseArgs($opts, [self::ROLE_ID, self::ROLE_NAME]);
+
+        $listRoleBackend = new Tinebase_Backend_Sql([
+            'modelName' => Addressbook_Model_ListRole::class,
+            'tableName' => 'addressbook_list_role',
+        ]);
+
+        $roles = $listRoleBackend->search(new Addressbook_Model_ListRoleFilter([
+            ['field' => 'name', 'operator' => 'equals', 'value' => $params[self::ROLE_NAME]],
+        ]));
+
+        if ($roles->count() === 0) {
+            $listRoleBackend->create(new Addressbook_Model_ListRole([
+                'id'    => $params[self::ROLE_ID],
+                'name'  => $params[self::ROLE_NAME],
+            ]));
+
+            echo 'created role as it didn\'t exist yet' . PHP_EOL;
+        } else {
+            $db = Tinebase_Core::getDb();
+            $roleWithId = $roles->find('id', $params[self::ROLE_ID]);
+            if (null === $roleWithId) {
+                $roleWithId = $roles->getFirstRecord();
+                // there is a cascade foreign key constraint on membership => update is enough to get it done
+                $db->update(SQL_TABLE_PREFIX . 'addressbook_list_role',
+                    ['id' => $params[self::ROLE_ID]],
+                    'id = ' . $db->quote($roleWithId->getId()));
+                $roleWithId->setId($params[self::ROLE_ID]);
+            }
+            $roles->removeRecord($roleWithId);
+
+            while ($roles->count() > 0) {
+                $role = $roles->getFirstRecord();
+                $roles->removeRecord($role);
+
+                $db->update(SQL_TABLE_PREFIX . 'adb_list_m_role',
+                    ['list_role_id' => $params[self::ROLE_ID]],
+                    'list_role_id = ' . $db->quote($role->getId()));
+
+                $listRoleBackend->delete($role->getId());
+            }
+        }
+    }
 }
