@@ -74,6 +74,10 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveTask($recordData)
     {
+        if (empty($recordData['status'])) {
+            // sanitize status - client allows to send empty status
+            $recordData['status'] = 'NEEDS-ACTION';
+        }
         return $this->_save($recordData, Tasks_Controller_Task::getInstance(), 'Task');
     }
     
