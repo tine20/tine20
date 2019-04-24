@@ -292,7 +292,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
             $controller = Addressbook_Controller_Contact::getInstance();
             $userContacts = $controller->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                    'Addressbook_Model_Contact',[['field' => 'typer', 'operator' => 'equals', 'value' => 'user']]
+                    'Addressbook_Model_Contact',[['field' => 'type', 'operator' => 'equals', 'value' => 'user']]
                 )
             );
             foreach ($userContacts as $contact) {
