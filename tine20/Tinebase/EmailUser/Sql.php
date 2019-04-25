@@ -598,6 +598,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     public function copyFromInstance($fromInstance)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Copy email users from instance ' . $fromInstance);
+
         $select = $this->_db->select()
             ->from(array($this->_userTable))
             ->where('instancename = ?', $fromInstance);

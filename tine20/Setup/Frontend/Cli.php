@@ -700,7 +700,7 @@ class Setup_Frontend_Cli
                 list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
                 if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
                     $newEmailAddress = $userPart . '@' . $allowedDomains[0];
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
                     $user->accountEmailAddress = $newEmailAddress;
                 }
