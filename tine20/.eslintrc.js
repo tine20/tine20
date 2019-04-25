@@ -54,7 +54,10 @@ module.exports = {
           YEAR: /\d{4}(-\d{4})?/
         }
       }
-    ]
-
+    ],
+    //@fixme
+    "vue/no-use-v-if-with-v-for": ["error", {
+      "allowUsingIterationVar": true
+    }]
   }
 }

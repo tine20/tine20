@@ -105,7 +105,7 @@ class AreaLocks {
   getConfig (area) {
     const _ = window.lodash
     const config = Tine.Tinebase.configManager.get('areaLocks', 'Tinebase')
-    const areaConfig = _.find(_.get(config, 'records', []), {area: area})
+    const areaConfig = _.find(_.get(config, 'records', []), { area: area })
 
     return areaConfig
   }
@@ -123,7 +123,7 @@ class AreaLocks {
     const _ = window.lodash
     let lockStates = Tine.Tinebase.registry.get('areaLocks')
 
-    return _.find(lockStates, {area: area})
+    return _.find(lockStates, { area: area })
   }
 
   /**
@@ -142,7 +142,7 @@ class AreaLocks {
 
     let lockStates = Tine.Tinebase.registry.get('areaLocks') || []
 
-    _.remove(lockStates, {area: area})
+    _.remove(lockStates, { area: area })
     lockStates.push(lockState)
     Tine.Tinebase.registry.set('areaLocks', lockStates)
   }
@@ -246,4 +246,4 @@ class AreaLocks {
   }
 }
 
-export {AreaLocks, providers}
+export { AreaLocks, providers }

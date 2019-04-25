@@ -12,10 +12,13 @@ module.exports = merge(common, {
                 loader: 'babel-loader',
                 exclude: [
                     /node_modules/,
-                    '/!(chai-as-promised)/'
+                    /!(chai-as-promised)/
                 ],
                 options: {
-                    plugins: ['@babel/plugin-transform-runtime'],
+                    plugins: [
+                        '@babel/plugin-transform-runtime',
+                        '@babel/plugin-transform-modules-commonjs'
+                    ],
                     presets: [
                         ["@babel/env"/*, { "modules": false }*/]
 

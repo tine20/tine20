@@ -2,8 +2,8 @@
  * @license     http://creativecommons.org/licenses/publicdomain Public Domain
  * @author      Koji Horaguchi <horaguchi@horaguchi.net>
  */
-if (typeof Locale == 'undefined') {
-  Locale = function (category, locale) {
+if (typeof window.Locale == 'undefined') {
+  window.Locale = function (category, locale) {
     this._instance = true;
     this.LC_ALL =      'C';
     this.LC_COLLATE =  'C';

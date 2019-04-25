@@ -184,7 +184,7 @@ export default {
       transferingPoll: true,
       showPoll: true,
       poll: {},
-      activeAttendee: {name: '', email: '', id: null},
+      activeAttendee: { name: '', email: '', id: null },
       forceNewAttendee: false,
       showGtc: false,
       gtcText: '',
@@ -196,7 +196,7 @@ export default {
       defaultStatus: 'NEEDS-ACTION',
       askTineLogin: false,
       wrongLogin: false,
-      login: {user: '', password: ''},
+      login: { user: '', password: '' },
       loginErrorMessage: '',
       newAccountContact: false,
       showCalendarModal: false,
@@ -210,7 +210,7 @@ export default {
     poll () {
       if (this.activeAttendee.id === null || this.newAccountContact === true) {
         _.each(this.poll.alternative_dates, (date) => {
-          this.activeAttendee[date.id] = {status: this.defaultStatus}
+          this.activeAttendee[date.id] = { status: this.defaultStatus }
         })
       } else {
         _.each(this.poll.attendee_status, (attendee) => {
@@ -264,7 +264,7 @@ export default {
 
       let needUpdate = false
 
-      let payload = {status: []}
+      let payload = { status: [] }
       if (this.activeAttendee.id === null || this.newAccountContact) {
         action = 'put'
         needUpdate = true
@@ -305,7 +305,7 @@ export default {
 
       let url = this.baseUrl + 'Calendar/poll/' + this.poll.id
 
-      let options = {auth: {password: this.password}}
+      let options = { auth: { password: this.password } }
 
       axios[action](url, payload, options).then((response) => {
         if (action === 'put' && this.activeAttendee.id === null) {
@@ -373,7 +373,7 @@ export default {
 
         this.poll = response.data
 
-        this.formatMessage.setup({locale: this.poll.config.locale || 'en'})
+        this.formatMessage.setup({ locale: this.poll.config.locale || 'en' })
 
         if (this.poll.config.has_gtc === true) {
           this.hidegtcmessage = false
@@ -484,7 +484,7 @@ export default {
       return attendee.user_type + '-' + _.get(attendee.user_id, 'id', attendee.user_id)
     },
     statusName (status) {
-      let statusName = _.get(_.find(_.get(this.poll, 'config.status_available.records', {}), {id: status}), 'value', status)
+      let statusName = _.get(_.find(_.get(this.poll, 'config.status_available.records', {}), { id: status }), 'value', status)
       return this.fmHidden(statusName)
     },
     nextStatus (attendee, id) {

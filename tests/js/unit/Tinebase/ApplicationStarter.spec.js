@@ -42,6 +42,9 @@ describe('ApplicationStarter', () => {
 
     // TODO maybe add a mock for this?
     Tine.Tinebase.appMgr = new Tine.Tinebase.AppManager()
+
+    let director = require('director')
+    Tine.Tinebase.router = new director.Router().init()
   })
 
   it('can execute init', () => {
@@ -635,6 +638,6 @@ describe('ApplicationStarter', () => {
           'virtualFields': [],
           'group': null
         }
-      }}
+      } }
   }
 })
