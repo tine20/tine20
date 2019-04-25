@@ -39,7 +39,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
      * @return {String}
      */
     getIconCls: function(target) {
-        switch(target){
+        switch (target){
             case 'PreferencesTreePanel':
                 return 'PreferencesTreePanel-CalendarIconCls';
                 break;
@@ -55,7 +55,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
 
         new Tine.Calendar.AddressbookGridPanelHook({app: this});
 
-        if (Tine.Felamimail) {
+        if (Tine.Felamimail && Tine.Felamimail.MimeDisplayManager) {
             Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
         }
 
