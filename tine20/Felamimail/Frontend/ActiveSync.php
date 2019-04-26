@@ -558,7 +558,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         }
         
         $storeResponse->total = $totalCount;
-        if (count($storeResponse->result) > 0) {
+        if (is_array($storeResponse->result) && count($storeResponse->result) > 0) {
             $storeResponse->range = array($store->options['range'][0], $store->options['range'][1]);
         }
         
