@@ -40,6 +40,6 @@ class Admin_Import_GroupTest extends TestCase
                 $count++;
             }
         }
-        self::assertEquals(6, $count);
+        self::assertEquals(count($groups), $count);
     }
 }
