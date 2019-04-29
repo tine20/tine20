@@ -26,6 +26,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected $_additionalOptions = array(
         'container_id'      => '',
+        'dates' => array('added_date','warranty','invoice_date'),
     );
     
     /**
@@ -65,6 +66,8 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _doConversions($_data)
     {
+        if($this->_options['demoData'])$_data = $this->_getDay($_data, $this->_additionalOptions['dates']);
+
         $result = parent::_doConversions($_data);
         
         if ((isset($result['warranty']) || array_key_exists('warranty', $result)) && (empty($_data['warranty']))) {
@@ -99,7 +102,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
             }
             $result["status"] = $statusRecord['id'];
         }
-        
+
         return $result;
     }
 }
