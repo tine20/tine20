@@ -38,7 +38,10 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 var recordData = Ext.util.JSON.decode(Ext.util.JSON.encode(editDialog.record.data));
 
                 editDialog.getForm().items.each(function (field) {
-                    if (field instanceof Ext.form.ComboBox || ! Ext.isString(recordData[name])) {
+                    if (
+                          (field instanceof Ext.form.ComboBox || ! Ext.isString(recordData[name]))
+                        && Ext.isFunction(field.getRawValue)
+                    ) {
                         var name = field.getName(),
                             isCustomField = String(name).match(/^customfield_(.*)/),
                             string = field.getRawValue();
