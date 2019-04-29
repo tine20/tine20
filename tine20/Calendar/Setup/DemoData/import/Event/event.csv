@@ -1,5 +1,5 @@
 summary,description,date,time,duration,rrule,members,resources,groups,is_all_day_event,status
-Projektbesprechung Alpha,,0,9:00,2,,"test;Jan, Ulrich;Cfeitl","Raum b225","Users;Arbeiter",0,
-Kunde,Anfoderungsanalyse,-1,15,1,,"test,Kunde1","Büro2",,0,
-Mittag,Alle gehen Essen,0,14,1,FREQ=DAILY;INTERVAL=1,"test","Mensa",,0,
-Firmenfeier,,4,,,,,,,1,
+Projektbesprechung Alpha,,today,9:00,2,,"test;Jan, Ulrich;Cfeitl","Raum b225","Users;Arbeiter",0,
+Kunde,Anfoderungsanalyse,monday,15,1,,"test,Kunde1","Büro2",,0,
+Mittag,Alle gehen Essen,lastMonday,14,1,FREQ=DAILY;INTERVAL=1,"test","Mensa",,0,
+Firmenfeier,,wednesday2week,,,,,,,1,
