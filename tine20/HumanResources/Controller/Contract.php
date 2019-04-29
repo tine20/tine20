@@ -283,7 +283,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
                     $employee = HumanResources_Controller_Employee::getInstance()->get($employee);
                 }
                 $recordWts->{HumanResources_Model_WorkingTimeScheme::FLDS_TITLE} = $employee['number'] . ' ' .
-                    $employee['n_fn'] . ' ' . $_record->start_date->format('Y-m-d');
+                    $employee['n_fn'] . ' ' . $_record->start_date->getClone()
+                        ->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d');
 
                 $recordWts = $wtsController->create($recordWts);
             }
