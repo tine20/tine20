@@ -40,8 +40,8 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
 
     const TT_TS_SYSCF_CLOCK_OUT_REASON = 'clock_out_reason';
 
-    const ID_SICKNESS = '01';
-    const ID_VACATION = '03';
+    const ID_SICKNESS = 'sickness';
+    const ID_VACATION = 'vacation';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

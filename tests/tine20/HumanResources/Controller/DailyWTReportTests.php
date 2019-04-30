@@ -177,6 +177,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $result = $result->getFirstRecord();
         self::assertCount(1, $result->working_times);
         self::assertEquals(8 * 3600, $result->working_times->getFirstRecord()->duration);
+        self::assertEquals(8 * 3600, $result->working_time_total);
         self::assertEquals(HumanResources_Model_WageType::ID_FEAST, $result->working_times->getFirstRecord()->wage_type);
         self::assertEquals('unittest feast', $result->system_remark);
     }
@@ -208,7 +209,10 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $result = $result->getFirstRecord();
         self::assertCount(1, $result->working_times);
         self::assertEquals(8 * 3600, $result->working_times->getFirstRecord()->duration);
+        self::assertEquals(8 * 3600, $result->working_time_total);
         self::assertEquals(HumanResources_Model_WageType::ID_VACATION, $result->working_times->getFirstRecord()->wage_type);
+        self::assertEquals(HumanResources_Controller_WageType::getInstance()->get(
+            HumanResources_Model_WageType::ID_VACATION)->name, $result->system_remark);
     }
 
     public function testCalculateReportsForEmployeeSickness()

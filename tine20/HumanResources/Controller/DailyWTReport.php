@@ -386,6 +386,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             // turn off acl?
             /** @var Calendar_Model_Event $event */
             foreach (Calendar_Controller_Event::getInstance()->search($filter) as $event) {
+                $event->dtstart->setTimezone($event->originator_tz);
                 $day = $event->dtstart->format('Y-m-d');
                 if (!isset($this->_feastDays[$feastCalendarId][$day])) {
                     $this->_feastDays[$feastCalendarId][$day] =

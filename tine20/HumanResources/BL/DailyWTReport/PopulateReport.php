@@ -84,6 +84,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
             ]));
             $_data->result->system_remark = $_data->feastTimes->getFirstRecord()->summary;
+            $_data->result->working_time_total += $_data->result->working_time_target;
         } elseif ($_data->freeTimes) {
             $_data->freeTimes->sort(function($r1, $r2) {
                 if ($r1->type->wage_type === HumanResources_Model_WageType::ID_SICK && $r2->type->wage_type !==
@@ -99,6 +100,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
             ]));
             $_data->result->system_remark = $this->getWageType($wageType)->name;
+            $_data->result->working_time_total += $_data->result->working_time_target;
         }
     }
 
