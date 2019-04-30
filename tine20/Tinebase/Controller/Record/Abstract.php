@@ -793,7 +793,12 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _handleRecordCreateOrUpdateException(Exception $e)
     {
-        Tinebase_Exception::log($e);
+        if ($e instanceof Tinebase_Exception_ProgramFlow) {
+            // log as ERROR? or better INFO? NOTICE?
+            Tinebase_Exception::logExceptionToLogger($e);
+        } else {
+            Tinebase_Exception::log($e);
+        }
 
         Tinebase_TransactionManager::getInstance()->rollBack();
 

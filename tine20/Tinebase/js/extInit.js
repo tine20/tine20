@@ -139,7 +139,7 @@ Date.prototype.toJSON = function(key) {
  * additional formats
  */
 Ext.util.Format = Ext.apply(Ext.util.Format, {
-    money: function (v) {
+    money: function (v , metadata) {
         var _ = window.lodash,
             currencySymbol = Tine.Tinebase.registry.get('currencySymbol');
         
@@ -152,8 +152,11 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         if (locale.includes('_')) {
             locale = locale.split('_')[0];
         }
-        
+        if( (metadata && metadata.zeroMoney && v == '0')) {
+            return '';
+        }
         return v.toLocaleString(locale) + " " + currencySymbol;
+
     },
     percentage: function(v){
         if(v === null) {

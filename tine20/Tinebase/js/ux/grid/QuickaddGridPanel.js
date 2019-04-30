@@ -205,8 +205,13 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     if (this.resetAllOnNew) {
                         var columns = this.colModel.config;
                         for (var i = 0, len = columns.length; i < len; i++) {
-                            if(columns[i].quickaddField != undefined){
-                               columns[i].quickaddField.setValue('');
+                            if (columns[i].quickaddField != undefined) {
+                                if (columns[i].quickaddField.xtype === 'extuxmoneyfield') {
+                                    // prevent 0,00 € in moneyfields
+                                    columns[i].quickaddField.setRawValue('');
+                                } else {
+                                    columns[i].quickaddField.setValue('');
+                                }
                             }
                         }
                     }

@@ -5,7 +5,7 @@
  * Test class for Tinebase_Frontend_Json_PersistentFilter
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  */
@@ -447,5 +447,64 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         $this->assertTrue(isset($searchResult['results'][0]['filters'][0]['value']['filters'][0]['value']));
         $filterContact = $searchResult['results'][0]['filters'][0]['value']['filters'][0]['value'];
         $this->assertTrue(! isset($filterContact['relations']), 'relations should not be resolved:' . print_r($filterContact, true));
+    }
+
+    /**
+     * testFilterDehydration
+     */
+    public function testFilterDehydration()
+    {
+        // create record custom field
+        $cf = $this->_createCustomField('site', Addressbook_Model_Contact::class, 'record', [
+            'name' => 'site',
+            'label' => 'Standort',
+            'uiconfig' => array(
+                'order' => '',
+                'group' => '',
+                'tab' => ''),
+            'type' => 'record',
+            'recordConfig' => array(
+                'value' => array('records' => 'Tine.Addressbook.Model.Contact'),
+                'additionalFilterSpec' => [
+                    'config' => [
+                        'name' => 'siteFilter',
+                        'appName' => 'Addressbook'
+                    ]
+                ]
+            )
+        ]);
+        $userContact = Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()->contact_id);
+        Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_family' => 'test heini',
+            'customfields' => [
+                'site' => $userContact->getId()
+            ]
+        ]));
+
+        // save filter with "expanded" contact -> should be hydrated!
+        $filter = [
+            'name' => 'my filter',
+            'model' => Addressbook_Model_Contact::class,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'description' => '',
+            'filters' => [
+                ["field" => "customfield", "operator" => "AND", "value" => [
+                    "cfId" => $cf->getId(),"value" => [
+                        ["field" => ":id","operator" => "equals","value" => $userContact->toArray()]
+                    ]
+                ]
+            ]]
+        ];
+        $result = $this->_uit->savePersistentFilter($filter);
+
+        // get backend record
+        $backend = new Tinebase_PersistentFilter_Backend_Sql();
+        $filterData = $backend->getRawDataByProperty($result['id'], 'id');
+        self::assertContains('"value":"' . $userContact->getId(), $filterData['filters'], print_r($filterData, true));
+
+        // search by persistent filter - should find one contact
+        $adbJson = new Addressbook_Frontend_Json();
+        $result = $adbJson->searchContacts($result['id'], []);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
     }
 }

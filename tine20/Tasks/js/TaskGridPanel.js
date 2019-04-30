@@ -155,12 +155,15 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             editor: {
                 xtype: 'widget-keyfieldcombo',
                 app: 'Tasks',
-                keyFieldName: 'taskStatus'
+                keyFieldName: 'taskStatus',
+                allowEmpty: false
             },
             quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                 app: 'Tasks',
                 keyFieldName: 'taskStatus',
-                value: 'NEEDS-ACTION'
+                value: 'NEEDS-ACTION',
+                // TODO make this work ...
+                allowEmpty: false
             })
         }, {
             id: 'completed',

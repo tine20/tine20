@@ -546,10 +546,16 @@ class Tinebase_Relations
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Don\'t update related record because user has no update grant');
         } else {
-            /** @var Tinebase_Record_Interface $record */
-            $record = $appController->$method($_relation->related_record,
-                $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
-            $_relation->related_id = $record->getId();
+            try {
+                /** @var Tinebase_Record_Interface $record */
+                $record = $appController->$method($_relation->related_record,
+                    $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
+                $_relation->related_id = $record->getId();
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                // some right might prevent the update ... skipping update
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Don\'t update related record: ' . $tead->getMessage());
+            }
         }
 
         switch ($_relation->related_model) {

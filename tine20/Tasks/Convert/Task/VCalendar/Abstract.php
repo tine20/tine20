@@ -102,16 +102,16 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
         }
 
         switch($task->priority) {
-             case 'LOW':
+             case Tasks_Model_Priority::LOW:
                  $vtodo->add('PRIORITY', 9);
                  break;
                  
-             case 'NORMAL':
+             case Tasks_Model_Priority::NORMAL:
                  $vtodo->add('PRIORITY', 0);
                  break;
                  
-             case 'HIGH':
-             case 'URGENT':
+             case Tasks_Model_Priority::HIGH:
+             case Tasks_Model_Priority::URGENT:
                  $vtodo->add('PRIORITY', 1);
                  break;
         }
@@ -262,7 +262,7 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
         $task = $_task;
         
         $task->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-        $task->priority = 'NORMAL';
+        $task->priority = Tasks_Model_Priority::NORMAL;
         $task->status = 'NEEDS-ACTION';
         
         foreach($_vtodo->children() as $property) {
@@ -355,22 +355,28 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
                     if (is_numeric($property->getValue())) {
                         switch ($property->getValue()) {
                             case '0':
-                                $task->priority = 'NORMAL';
+                                $task->priority = Tasks_Model_Priority::NORMAL;
                                 
                                 break;
                                 
                             case '1':
-                                $task->priority = 'HIGH';
+                                $task->priority = Tasks_Model_Priority::HIGH;
                                 
                                 break;
                                 
                             case '9':
-                                $task->priority = 'LOW';
+                                $task->priority = Tasks_Model_Priority::LOW;
                                 
                                 break;
                             }
                     } else {
-                        $task->priority = $property->getValue();
+                        $val = $property->getValue();
+                        $upperVal = strtoupper($val);
+                        if (isset(Tasks_Model_Priority::$upperStringMapping[$upperVal])) {
+                            $task->priority = Tasks_Model_Priority::$upperStringMapping[$upperVal];
+                        } else {
+                            $task->priority = $val;
+                        }
                     }
                     
                     break;

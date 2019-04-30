@@ -291,7 +291,7 @@ Tine.Filemanager.nodeActions.Download = {
             && records[0].get('type') != 'folder'
             && window.lodash.get(records, '[0].data.account_grants.downloadGrant', false);
 
-        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect, enabled);
+        action.setDisabled(!enabled);
     }
 };
 

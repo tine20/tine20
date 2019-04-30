@@ -423,7 +423,7 @@ class Tinebase_Helper
     /**
      * fetches contents from file or uri
      *
-     * @param string $source
+     * @param string $filenameOrUrl
      * @return string|null
      */
     public static function getFileOrUriContents($filenameOrUrl)

@@ -260,31 +260,43 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
-    public function getByProperty($value, $property = 'name', $getDeleted = FALSE) 
+    public function getByProperty($value, $property = 'name', $getDeleted = false)
+    {
+        $rawData = $this->getRawDataByProperty($value, $property, $getDeleted)  ;
+        $result = $this->_rawDataToRecord($rawData);
+        
+        return $result;
+    }
+
+    /**
+     * @param $value
+     * @param string $property
+     * @param bool $getDeleted
+     * @return mixed
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getRawDataByProperty($value, $property = 'name', $getDeleted = false)
     {
         $select = $this->_getSelect(self::ALLCOL, $getDeleted)
             ->limit(1);
-        
+
         if ($value !== NULL) {
             $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $property) . ' = ?', $value);
         } else {
             $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $property) . ' IS NULL');
         }
-        
+
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
+
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
-        
+
         if (!$queryResult) {
             $messageValue = ($value !== NULL) ? $value : 'NULL';
             throw new Tinebase_Exception_NotFound($this->_modelName . " record with $property = $messageValue not found!");
         }
-        
-        $result = $this->_rawDataToRecord($queryResult);
-        
-        return $result;
+        return $queryResult;
     }
     
     /**
