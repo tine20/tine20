@@ -76,8 +76,6 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
         return $this->returnValueGetPdfForFile;
     }
 
-
-
     public function setReturnValueGetPreviewsForFile($value)
     {
         $this->returnValueGetPreviewsForFile = $value;
@@ -113,44 +111,5 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
     public function mergePdfFiles($filePaths, $synchronousRequest = false)
     {
         return $this->returnValueGetPdfForFile;
-    }
-
-
-
-    public function setReturnValueGetPreviewsForFile($value)
-    {
-        $this->returnValueGetPreviewsForFile = $value;
-    }
-
-    public function setReturnValueGetPreviewsForFiles($value)
-    {
-        $this->returnValueGetPreviewsForFiles = $value;
-    }
-
-    public function setReturnValueGetPdfForFile($value)
-    {
-        $this->returnValueGetPdfForFile = $value;
-    }
-
-    public function setThrowExceptionGetPreviewsForFile($throwExceptionGetPreviewsForFile)
-    {
-        $this->throwExceptionGetPreviewsForFile = $throwExceptionGetPreviewsForFile;
-    }
-
-    public function setThrowExceptionGetPreviewsForFiles($throwExceptionGetPreviewsForFiles)
-    {
-
-    }
-
-    /**
-     * Merges multiple pdf files into a single one.
-     *
-     * @param $filePaths array of file paths
-     * @param $synchronousRequest
-     * @return string path to file
-     */
-    public function mergePdfFiles($filePaths, $synchronousRequest = false)
-    {
-        return "blob";
     }
 }
