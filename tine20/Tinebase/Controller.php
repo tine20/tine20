@@ -983,6 +983,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });
+
+        $r->addGroup('/Autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->post('/Autodiscover.xml', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicApiMSAutodiscoverXml', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
     }
 
     /**
