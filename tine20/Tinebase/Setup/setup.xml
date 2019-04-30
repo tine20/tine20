@@ -2033,7 +2033,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
-                        <!-- add onupdate/ondelete? -->
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>
             </declaration>

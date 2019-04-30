@@ -7,8 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- * @todo remove cli session/cache path (add http://aidanlister.com/2004/04/recursively-deleting-a-folder-in-php/ to helpers?)
  */
 
 /**
@@ -113,8 +111,6 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
             $result = 1;
         }
         
-        //@todo remove cli session path
-
         // finish profiling here - we won't run in Tinebase_Core again
         Tinebase_Core::finishProfiling();
         Tinebase_Core::getDbProfiling();

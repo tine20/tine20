@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Phone</name>
-    <version>12.0</version>
+    <version>12.2</version>
     <order>11</order>
     <depends>
         <application>Admin</application>
@@ -66,7 +66,7 @@
         <table>
             <!-- @todo add constraints to phone_id/line_id? -->
             <name>phone_callhistory</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -130,6 +130,11 @@
                     <type>text</type>
                     <length>64</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>resolved_destination</name>
+                    <type>text</type>
+                    <length>64</length>
                 </field>
                 <field>
                     <name>contact_id</name>

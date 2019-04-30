@@ -41,8 +41,9 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         'hasAttachments'    => true,
         'createModule'      => true,
         'containerProperty' => null,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
-        'titleProperty'     => 'title',
+        'titleProperty'     => 'description',
         'appName'           => 'Timetracker',
         'modelName'         => 'Timesheet',
 

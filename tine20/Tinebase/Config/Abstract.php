@@ -67,8 +67,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     const TYPE_RECORD = 'record';
 
+    const APP_NAME = 'appName';
+    const MODEL_NAME = 'modelName';
+
+    // @TODO: remove TYPE_RECORD_CONTROLLER and derive it from modelName!
     const TYPE_RECORD_CONTROLLER = 'recordController';
-    
+
     /**
      * float config type
      * 

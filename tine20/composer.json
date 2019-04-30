@@ -59,6 +59,7 @@
   ],
   "require": {
     "php": "^7.0",
+    "ext-bcmath": "*",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-ctype": "*",

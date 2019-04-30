@@ -24,4 +24,11 @@ interface Tinebase_BL_ElementConfigInterface
      * @return Tinebase_BL_ElementInterface
      */
     public function getNewBLElement();
+
+    /**
+     * The comparison function must return an integer less than, equal to, or
+     * greater than zero if this is considered to be
+     * respectively less than, equal to, or greater than the argument.
+     */
+    public function cmp(Tinebase_BL_ElementConfigInterface $_element);
 }

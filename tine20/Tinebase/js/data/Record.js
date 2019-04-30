@@ -8,7 +8,10 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+// @see https://github.com/ericmorand/twing/issues/332
+// #if process.env.NODE_ENV !== 'unittest'
 import getTwingEnv from "twingEnv";
+// #endif
 
 Ext.ns('Tine.Tinebase', 'Tine.Tinebase.data');
 

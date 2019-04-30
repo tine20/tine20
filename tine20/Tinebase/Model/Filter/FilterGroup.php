@@ -277,6 +277,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function setFromArray($_data)
     {
+        if (! $_data) {
+            // sanitize data
+            $_data = array();
+        }
+
         $this->_filterObjects = array();
         
         foreach ($_data as $key => $filterData) {

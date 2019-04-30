@@ -528,6 +528,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     /**
+     * allows to fetch record form fields
+     *
+     * @param name
+     * @returns {*}
+     */
+    getRecordFormField: function(name) {
+        return this.recordForm['formfield_' + name];
+    },
+
+    /**
      * fix fields (used for preselecting form fields when called in dependency to another record)
      * @return {Boolean}
      */

@@ -48,6 +48,12 @@ div.page
 
 .gridpanelrenderer_header_logo {
   float: right;
+  padding-bottom: 8px;
+}
+
+.gridpanelrenderer_header_logo img {
+  max-width: 400px;
+  max-height: 80px;
 }
 
 .table-noborder table, .table-noborder th, .table-noborder tr, .table-noborder td {

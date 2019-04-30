@@ -4,11 +4,13 @@ var path = require('path');
 var webpack = require('webpack');
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
-    path: 'Tinebase/js',
-    fullPath: false,
+    // path: 'Tinebase/js',
+    // fullPath: false,
+    keepInMemory: true,
     filename: 'webpack-assets-FAT.json',
     prettyPrint: true
 });
+var VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 var baseDir  = path.resolve(__dirname , '../../'),
     entryPoints = {};
@@ -30,6 +32,16 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
 
 module.exports = {
     entry: entryPoints,
+    optimization:{
+        splitChunks: {
+            cacheGroups: {
+                vendors: {
+                    // automaticNamePrefix: '',
+                    test: /(?!x)x/ // never matches - we don't use vendors cache yet
+                },
+            }
+        }
+    },
     output: {
         path: baseDir + '/',
         // avoid public path, see #13430.
@@ -39,7 +51,8 @@ module.exports = {
         libraryTarget: "umd"
     },
     plugins: [
-        assetsPluginInstance
+        assetsPluginInstance,
+        new VueLoaderPlugin()
     ],
     module: {
         rules: [
@@ -57,13 +70,18 @@ module.exports = {
                 loader: 'vue-loader'
             },
             {
-                test: /\.es6\.js$/,
+                test: /\.js$/,
                 loader: 'babel-loader',
-                exclude: /node_modules/,
+                exclude: [
+                    /node_modules/,
+                ],
                 options: {
-                    plugins: ['@babel/plugin-transform-runtime'],
+                    plugins: [
+                        "@babel/plugin-transform-runtime",
+                        "@babel/plugin-syntax-dynamic-import"
+                    ],
                     presets: [
-                        ["@babel/env"/*, { "modules": false }*/]
+                        ["@babel/preset-env"/*, { "modules": false }*/]
                     ]
                 }
             },

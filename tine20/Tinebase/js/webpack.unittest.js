@@ -12,10 +12,13 @@ module.exports = merge(common, {
                 loader: 'babel-loader',
                 exclude: [
                     /node_modules/,
-                    '/!(chai-as-promised)/'
+                    /!(chai-as-promised)/
                 ],
                 options: {
-                    plugins: ['@babel/plugin-transform-runtime'],
+                    plugins: [
+                        '@babel/plugin-transform-runtime',
+                        '@babel/plugin-transform-modules-commonjs'
+                    ],
                     presets: [
                         ["@babel/env"/*, { "modules": false }*/]
 
@@ -37,7 +40,11 @@ module.exports = merge(common, {
                 enforce: 'post',
                 exclude: /(node_modules|ux)/,
                 include: path.resolve(__dirname, '../../')
-            }
+            },
+            {
+                test: /\.js$/,
+                use: ['webpack-conditional-loader']
+            },
         ]
     },
     resolve: {

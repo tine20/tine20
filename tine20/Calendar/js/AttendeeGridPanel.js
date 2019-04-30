@@ -887,21 +887,25 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderGroupName.apply(this, arguments);
     },
 
-    renderAttenderResourceName: function(name) {
-        var icon = name.container_id['xprops']['Calendar']['Resource']['resource_icon']
+    renderAttenderResourceName: function (name, metadata) {
+        var icon =  metadata && metadata.noIcon ? '' : this.renderAttenderResourceIcon(name),
+            displayName = Ext.isString(name) ? name :
+                Ext.isFunction(name.getTitle) ? name.getTitle() :
+                name.name ? name.name : Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
 
-            if (typeof name.getTitle == 'function') {
-                return Ext.util.Format.htmlEncode(name.getTitle());
-            }
-            if (name.name) {
-                name =  Ext.util.Format.htmlEncode(name.name);
-            }else {
 
-                return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
-            }
-        return '<img class="tine-keyfield-icon" src="' + icon + '"/> ' + name;
+        return icon + Ext.util.Format.htmlEncode(displayName);
     },
-    
+
+    renderAttenderResourceIcon: function(name) {
+        try {
+            // WTF: why is the icon in the xprops? shouldn't we resolve it on runtime?
+            var icon = name.container_id['xprops']['Calendar']['Resource']['resource_icon'];
+            return '<img class="tine-keyfield-icon" src="' + icon + '"/>';
+        } catch (e) {}
+
+        return '';
+    },
     
     renderAttenderDispContainer: function(displaycontainer_id, metadata, attender) {
         metadata.attr = 'style = "overflow: none;"';

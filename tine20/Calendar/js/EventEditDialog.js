@@ -404,7 +404,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
                 if (type.get('is_location')) {
                     this.getForm().findField('location').setValue(
-                        this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'))
+                        this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'), {noIcon: true})
                     );
                 }
             }

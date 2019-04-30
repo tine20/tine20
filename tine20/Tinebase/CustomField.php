@@ -124,6 +124,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
             $this->_writeModLog($result, null);
 
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+            $transId = null;
+
             if ($_record->is_system) {
                 $app = Tinebase_Application::getInstance()->getApplicationById($_record->application_id);
                 /** @var Tinebase_Record_Interface $model */
@@ -139,8 +142,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                     . ' Created new custom field ' . $_record->name . ' for application ' . $_record->application_id);
             }
 
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
+
         } finally {
             if (null !== $transId) {
                 Tinebase_TransactionManager::getInstance()->rollBack();

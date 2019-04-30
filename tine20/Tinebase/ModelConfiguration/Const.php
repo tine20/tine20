@@ -31,6 +31,7 @@ class Tinebase_ModelConfiguration_Const {
     const DB_COLUMNS = 'dbColumns';
     const DEFAULT_VAL = 'default';
     const DEPENDENT_RECORDS = 'dependentRecords';
+    const DISABLED = 'disabled';
 
     const EXPOSE_HTTP_API = 'exposeHttpApi';
     const EXPOSE_JSON_API = 'exposeJsonApi';
@@ -46,6 +47,7 @@ class Tinebase_ModelConfiguration_Const {
     const HAS_NOTES = 'hasNotes';
     const HAS_PERSONAL_CONTAINER = 'hasPersonalContainer';
     const HAS_RELATIONS = 'hasRelations';
+    const HAS_SYSTEM_CUSTOM_FIELDS = 'hasSystemCustomFields';
     const HAS_TAGS = 'hasTags';
 
     const INDEXES = 'indexes';
@@ -67,6 +69,7 @@ class Tinebase_ModelConfiguration_Const {
 
     const QUERY_FILTER = 'queryFilter';
 
+    const READ_ONLY = 'readOnly';
     const REF_ID_FIELD = 'refIdField';
     const REF_MODEL_FIELD = 'refModelField';
     const RECORD_CLASS_NAME = 'recordClassName';

@@ -126,7 +126,6 @@ class Calendar_Frontend_iMIPTest extends TestCase
         static::assertContains('RECURRENCE-ID:20180906T110000', $vCalBlob);
         static::assertContains('X-MICROSOFT-CDO-OWNERAPPTID:1983350753', $vCalBlob);
     }
-
     /**
      * testExternalInvitationRequestAutoProcess
      */
@@ -175,7 +174,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'REQUEST',
-            'originator'     => 'l.kneschke@caldav.org',
+            'originator'     => 'l.Kneschke@caldav.org',
         ));
 
         if ($_doAutoProcess) {
@@ -410,7 +409,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
                 'id'             => Tinebase_Record_Abstract::generateUID(),
                 'ics'            => $ics,
                 'method'         => 'REQUEST',
-                'originator'     => 'l.kneschke@caldav.org',
+                'originator'     => 'l.Kneschke@caldav.org',
         ));
         
         Calendar_Controller_EventNotificationsTests::flushMailer();
@@ -717,7 +716,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'REPLY',
-            'originator'     => 'mail@corneliusweiss.de',
+            'originator'     => 'mail@Corneliusweiss.de',
         ));
 
         $this->assertEquals(1, $iMIP->getEvent()->seq);
@@ -732,7 +731,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         // force creation of external attendee
         $externalAttendee = new Calendar_Model_Attender(array(
             'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'       => 'mail@corneliusweiss.de',
+            'user_id'       => 'mail@cOrneliusweiss.de',
             'status'        => Calendar_Model_Attender::STATUS_NEEDSACTION
         ));
 
@@ -775,7 +774,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'CANCEL',
-            'originator'     => 'l.kneschke@caldav.org',
+            'originator'     => 'l.kneschke@calDav.org',
         ));
 
         // TEST CANCEL
@@ -811,7 +810,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'CANCEL',
-            'originator'     => 'l.kneschke@caldav.org',
+            'originator'     => 'l.kneschke@caldav.Org',
         ));
 
         // TEST CANCEL
@@ -859,7 +858,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'id' => Tinebase_Record_Abstract::generateUID(),
             'ics' => $ics,
             'method' => 'REQUEST',
-            'originator' => 'l.kneschke@caldav.org',
+            'originator' => 'l.kneschkE@caldav.org',
         ));
         $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_TENTATIVE);
         unset($iMIP->existing_event);
@@ -884,7 +883,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'id' => Tinebase_Record_Abstract::generateUID(),
             'ics' => $ics,
             'method' => 'REQUEST',
-            'originator' => 'l.kneschke@caldav.org',
+            'originator' => 'l.kNeschke@caldav.org',
         ));
         $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_DECLINED);
         $messages = Calendar_Controller_EventNotificationsTests::getMessages();

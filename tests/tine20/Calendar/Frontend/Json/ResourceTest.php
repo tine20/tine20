@@ -762,6 +762,8 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         try {
             $this->jsonFE->saveResource($resource);
             static::fail('empty grants are not allowed');
-        } catch (Tinebase_Exception_Backend $teb) {}
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            static::assertEquals('No Permission.', $tead->getMessage());
+        }
     }
 }

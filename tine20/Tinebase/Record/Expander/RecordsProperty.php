@@ -54,9 +54,6 @@ class Tinebase_Record_Expander_RecordsProperty extends Tinebase_Record_Expander_
             $record->{$this->_property} = $result;
         }
 
-        // clean up
-        $this->_recordsToProcess = null;
-
         $this->expand($_data);
     }
 }

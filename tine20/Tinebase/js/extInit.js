@@ -18,13 +18,16 @@
  * create console pseudo object when firebug is disabled/not installed
  */
 if (! window.console) window.console = {};
-for (fn in {
+(function() {
+    for (var fn in {
         // maximum possible console functions based on firebug
         log: null , debug: null, info: null, warn: null, error: null, assert: null, dir: null, dirxml: null, group: null,
         groupEnd: null, time: null, timeEnd: null, count: null, trace: null, profile: null, profileEnd: null
     }) {
-    window.console[fn] = window.console[fn] || function() {};
-}
+        window.console[fn] = window.console[fn] || function() {};
+    }
+})();
+
 
 /** -------------------- Extjs Framework Initialisation -------------------- **/
 
@@ -139,7 +142,7 @@ Date.prototype.toJSON = function(key) {
  * additional formats
  */
 Ext.util.Format = Ext.apply(Ext.util.Format, {
-    money: function (v) {
+    money: function (v , metadata) {
         var _ = window.lodash,
             currencySymbol = Tine.Tinebase.registry.get('currencySymbol');
         
@@ -152,8 +155,11 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         if (locale.includes('_')) {
             locale = locale.split('_')[0];
         }
-        
+        if( (metadata && metadata.zeroMoney && v == '0')) {
+            return '';
+        }
         return v.toLocaleString(locale) + " " + currencySymbol;
+
     },
     percentage: function(v){
         if(v === null) {

@@ -416,9 +416,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * 
      * @param int|Tinebase_Model_Container $container
      * @param string                       $action    one of {create|update|delete}
+     * @param boolean $fireEvent
      * @return Tinebase_Model_Container
      */
-    protected function _setRecordMetaDataAndUpdate($container, $action)
+    protected function _setRecordMetaDataAndUpdate($container, $action, $fireEvent = true)
     {
         if (! $container instanceof Tinebase_Model_Container) {
             $container = $this->getContainerById($container);
@@ -427,7 +428,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $this->_clearCache($container);
         
-        return $this->update($container, true);
+        return $this->update($container, true, $fireEvent);
     }
 
     /**
@@ -1694,7 +1695,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 new Tinebase_Model_Container(array('id' => $containerId), true)
             );
             
-            $this->_setRecordMetaDataAndUpdate($containerId, 'update');
+            $this->_setRecordMetaDataAndUpdate($containerId, 'update', false);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
@@ -2048,10 +2049,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * Updates existing container and clears the cache entry of the container
      *
      * @param Tinebase_Record_Interface $_record
-     * @param boolean $_updateDeleted = false;
+     * @param boolean $_updateDeleted = false
+     * @param boolean $_fireEvent = true
      * @return Tinebase_Record_Interface Record|NULL
      */
-    public function update(Tinebase_Record_Interface $_record, $_updateDeleted = false)
+    public function update(Tinebase_Record_Interface $_record, $_updateDeleted = false, $_fireEvent = true)
     {
         $this->_clearCache($_record);
 
@@ -2066,9 +2068,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         unset($oldContainer->account_grants);
         $this->_writeModLog($result, $oldContainer);
 
-        $event = new Tinebase_Event_Record_Update();
-        $event->observable = $result;
-        Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        if ($_fireEvent) {
+            $event = new Tinebase_Event_Record_Update();
+            $event->observable = $result;
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        }
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 

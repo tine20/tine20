@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -127,7 +127,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'label'             => null,
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'default'           => '1',
+                'default'           => Tasks_Model_Priority::NORMAL,
             ),
             'status'            => array(
                 'label'             => null,
@@ -283,6 +283,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * @todo should we get the locale pref for each single user here instead of the default?
      * @todo move lead stuff to Crm(_Model_Lead)?
      * @todo add getSummary to Addressbook_Model_Contact for linked contacts?
+     * @todo what about priority translation here?
      */
     public function getNotificationMessage()
     {

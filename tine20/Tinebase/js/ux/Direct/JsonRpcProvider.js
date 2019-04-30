@@ -62,7 +62,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
                 if (e.status == 'failure') {
                     reject(e);
                 } else if (e.type == 'exception') {
-                    reject (new Error(e.error.message), e.error);
+                    reject (e.error);
                 } else {
                     fulfill(result);
                 }

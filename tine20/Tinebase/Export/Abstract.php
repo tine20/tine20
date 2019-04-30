@@ -625,8 +625,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $name .= $this->_translate->_($this->_config->label, $this->_locale);
         }
         $tineTranslate = Tinebase_Translation::getTranslation('Tinebase');
-        return mb_strtolower($tineTranslate->_('Export', $this->_locale) . ' ' .
+        $result =  mb_strtolower($tineTranslate->_('Export', $this->_locale) . '_' .
             $this->_translate->_($_appName, $this->_locale) . $model . $name . '.' . $_format);
+        return str_replace(' ', '', $result);
     }
 
 

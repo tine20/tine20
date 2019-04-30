@@ -1087,8 +1087,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'textfield',
                     anchor: '100%',
                     labelSeparator: '',
-                    columnWidth: 0.5,
-                    readOnly: true
+                    columnWidth: 0.5
                 },
                 items: this.initSmtp()
             }]

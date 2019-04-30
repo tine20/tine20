@@ -454,6 +454,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * float                     Float               float    float                         float             Tinebase_Model_Filter_Int                 extuxnumberfield
      * float       percent       Float               float    float                         float             Tinebase_Model_Filter_Int
      * float       money         value and currency  float    float                         int               Tinebase_Model_Filter_Int
+     * note: money is an own type so we can separate currency
+     * money                     Float               float    float                         float             Tinebase_Model_Filter_Int
      * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
@@ -1138,7 +1140,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         }
 
         foreach ($hooks as $hook) {
-            call_user_func_array($hook, [&$this->_fields]);
+            if (is_callable($hook)) {
+                call_user_func_array($hook, [&$this->_fields]);
+            } else {
+                if (! $result && Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
+                    . '::' . __LINE__ . ' Configured hook is not callable: ' . print_r($hook, true));
+            }
         }
 
         // holds the filters used for the query-filter, if any

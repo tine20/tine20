@@ -45,6 +45,10 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     },
 
     setValue: function(value) {
+        if (value === "" || value === null || value === undefined) {
+            return;
+        }
+
         value = Ext.ux.form.DurationSpinner.durationRenderer(value, this);
 
         Ext.ux.form.DurationSpinner.superclass.setValue.call(this, value);

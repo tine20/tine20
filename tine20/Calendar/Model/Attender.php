@@ -994,8 +994,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * @param Tinebase_Record_RecordSet|array   $eventAttendees 
      * @param bool                              $resolveDisplayContainers
      * @param Calendar_Model_Event|array        $_events
+     * @param bool                              $_sort
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function resolveAttendee($eventAttendees, $resolveDisplayContainers = TRUE, $_events = NULL)
+    public static function resolveAttendee($eventAttendees, $resolveDisplayContainers = true, $_events = null, $_sort = false)
     {
         if (empty($eventAttendees)) {
             return;
@@ -1161,6 +1163,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 
                 $attender->status_authkey = NULL;
             }
+        }
+
+        if ($eventAttendees instanceof Tinebase_Record_RecordSet && $_sort) {
+            $eventAttendees->sort(function(Calendar_Model_Attender $a1, Calendar_Model_Attender $a2) {
+                return $a1->getName() > $a2->getName();
+            });
         }
     }
     
