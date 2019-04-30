@@ -632,7 +632,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         }
         var split = relm.split('_Model_'); 
         var recordClass = Tine[split[0]].Model[split[1]];
-        var record = new recordClass(recData);
+        var record = Tine.Tinebase.data.Record.setFromJson(recData, recordClass);
         var result = '';
         if (recData) {
             result = Ext.util.Format.htmlEncode(record.getTitle());
