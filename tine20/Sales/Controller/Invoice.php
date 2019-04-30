@@ -1783,7 +1783,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         return $invoice;
     }
-    
+
 
     /**
      * @param $files
@@ -1792,17 +1792,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      */
     protected function _mergePdfFiles($files) {
         $mergedPdf = Tinebase_TempFile::getTempPath();
+        file_put_contents($mergedPdf, Tinebase_Core::getPreviewService()->mergePdfFiles($files, true));
 
-        $cmd = "gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=$mergedPdf ";
-        foreach ($files as $file) {
-            $cmd .= $file . ' ';
-        }
-        $result = shell_exec($cmd);
-
-        if ($result === null) {
-            throw new Tinebase_Exception('ghostscript failed or is not installed');
-        }
-        
         return $mergedPdf;
     }
 }

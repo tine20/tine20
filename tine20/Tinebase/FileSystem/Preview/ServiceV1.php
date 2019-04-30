@@ -190,7 +190,7 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
     {
         if (false === ($result = $this->getPreviewsForFile($filePath, ['synchronRequest' => $synchronRequest, ['fileType' => 'pdf',]]))) {
             Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ . ' preview service did not succeed');
-            throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed');
+            throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed: service occupied');
         }
         return $result[0][0];
     }

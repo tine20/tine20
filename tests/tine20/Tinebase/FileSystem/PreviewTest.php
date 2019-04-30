@@ -120,7 +120,7 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
 
     public function testCreatePreviewsFormNodeFailUnusableFile()
     {
-        $this->_previewService->setThrowExceptionGetPreviewsForFile(new Tinebase_FileSystem_Preview_BadRequestException("File not usable"));
-        $this->assertCreatePreviewsFormNode(0, 1, 0);
+        $this->_previewService->setThrowExceptionGetPreviewsForFile(new Tinebase_FileSystem_Preview_BadRequestException("File not usable", 400));
+        $this->assertCreatePreviewsFormNode(0, 400, 0);
     }
 }
