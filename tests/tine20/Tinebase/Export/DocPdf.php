@@ -9,9 +9,15 @@
  */
 
 
-trait Tinebase_Export_PdfForDocTrait
+class Tinebase_Export_DocPdf extends Tinebase_Export_DocMock
 {
-    use \Tinebase_Export_AbstractPdfTrait;
+    use Tinebase_Export_DocumentPdfTrait;
 
-    protected $_oldFormat = 'docx';
+    /**
+     * @return string
+     */
+    protected function _getOldFormat()
+    {
+        return 'doc';
+    }
 }

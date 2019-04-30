@@ -20,7 +20,7 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
 {
     protected $returnValueGetPreviewsForFile = array('thumbnail' => array('blob'), 'previews' => array('blob1', 'blob2', 'blob3'));
     protected $returnValueGetPreviewsForFiles = array('thumbnail' => array('blob'), 'previews' => array('blob1', 'blob2', 'blob3'));
-    protected $returnValueGetPdfForFile = "blob";
+    protected $returnValueGetPdfForFile = "%PDF-1.0"; //the mimetype is correct, but it not a valid pdf
 
     /**
      * @var Exception
@@ -71,7 +71,46 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
      * @return string file blob
      * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
      */
-    public function getPdfForFile($filePath, $synchronRequest = false)
+    public function getPdfForFile($filePath, $synchronRequest = false, $intermediateFormats = [])
+    {
+        return $this->returnValueGetPdfForFile;
+    }
+
+
+
+    public function setReturnValueGetPreviewsForFile($value)
+    {
+        $this->returnValueGetPreviewsForFile = $value;
+    }
+
+    public function setReturnValueGetPreviewsForFiles($value)
+    {
+        $this->returnValueGetPreviewsForFiles = $value;
+    }
+
+    public function setReturnValueGetPdfForFile($value)
+    {
+        $this->returnValueGetPdfForFile = $value;
+    }
+
+    public function setThrowExceptionGetPreviewsForFile($throwExceptionGetPreviewsForFile)
+    {
+        $this->throwExceptionGetPreviewsForFile = $throwExceptionGetPreviewsForFile;
+    }
+
+    public function setThrowExceptionGetPreviewsForFiles($throwExceptionGetPreviewsForFiles)
+    {
+
+    }
+
+    /**
+     * Merges multiple pdf files into a single one.
+     *
+     * @param $filePaths array of file paths
+     * @param $synchronousRequest
+     * @return string path to file
+     */
+    public function mergePdfFiles($filePaths, $synchronousRequest = false)
     {
         return $this->returnValueGetPdfForFile;
     }
