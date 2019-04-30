@@ -18,9 +18,28 @@
  */
 class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Preview_ServiceInterface
 {
+    protected $returnValueGetPreviewsForFile = array('thumbnail' => array('blob'), 'previews' => array('blob1', 'blob2', 'blob3'));
+    protected $returnValueGetPreviewsForFiles = array('thumbnail' => array('blob'), 'previews' => array('blob1', 'blob2', 'blob3'));
+    protected $returnValueGetPdfForFile = "%PDF-1.0"; //the mimetype is correct, but it not a valid pdf
+
+    /**
+     * @var Exception
+     */
+    protected $throwExceptionGetPreviewsForFile = null;
+
+    /**
+     * @var Exception
+     */
+    protected $throwExceptionGetPreviewsForFiles = null;
+
+
     public function getPreviewsForFile($_filePath, array $_config)
     {
-        return array('thumbnail' => array('blob'), 'previews' => array('blob1', 'blob2', 'blob3'));
+        if ($this->throwExceptionGetPreviewsForFile != null) {
+            throw $this->throwExceptionGetPreviewsForFile;
+        }
+
+        return $this->returnValueGetPreviewsForFile;
     }
 
     /**
@@ -36,7 +55,11 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
      */
     public function getPreviewsForFiles(array $filePaths, array $config)
     {
-        return array('thumbnail' => array('blob'), 'previews' => array('blob1', 'blob2', 'blob3'));
+        if ($this->throwExceptionGetPreviewsForFiles != null) {
+            throw $this->throwExceptionGetPreviewsForFiles;
+        }
+
+        return $this->returnValueGetPreviewsForFiles;
     }
 
 
@@ -48,7 +71,46 @@ class Tinebase_FileSystem_TestPreviewService implements Tinebase_FileSystem_Prev
      * @return string file blob
      * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
      */
-    public function getPdfForFile($filePath, $synchronRequest = false)
+    public function getPdfForFile($filePath, $synchronRequest = false, $intermediateFormats = [])
+    {
+        return $this->returnValueGetPdfForFile;
+    }
+
+
+
+    public function setReturnValueGetPreviewsForFile($value)
+    {
+        $this->returnValueGetPreviewsForFile = $value;
+    }
+
+    public function setReturnValueGetPreviewsForFiles($value)
+    {
+        $this->returnValueGetPreviewsForFiles = $value;
+    }
+
+    public function setReturnValueGetPdfForFile($value)
+    {
+        $this->returnValueGetPdfForFile = $value;
+    }
+
+    public function setThrowExceptionGetPreviewsForFile($throwExceptionGetPreviewsForFile)
+    {
+        $this->throwExceptionGetPreviewsForFile = $throwExceptionGetPreviewsForFile;
+    }
+
+    public function setThrowExceptionGetPreviewsForFiles($throwExceptionGetPreviewsForFiles)
+    {
+
+    }
+
+    /**
+     * Merges multiple pdf files into a single one.
+     *
+     * @param $filePaths array of file paths
+     * @param $synchronousRequest
+     * @return string path to file
+     */
+    public function mergePdfFiles($filePaths, $synchronousRequest = false)
     {
         return "blob";
     }
