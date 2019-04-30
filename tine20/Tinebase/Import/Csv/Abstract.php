@@ -39,6 +39,33 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      * @var array
      */
     protected $_headline = array();
+
+    // this week
+    protected $_monday       = NULL;
+    protected $_tuesday      = NULL;
+    protected $_wednesday    = NULL;
+    protected $_thursday     = NULL;
+    protected $_friday       = NULL;
+    protected $_saturday     = NULL;
+    protected $_sunday       = NULL;
+
+    // last week
+    protected $_lastMonday   = NULL;
+    protected $_lastFriday   = NULL;
+    protected $_lastSaturday = NULL;
+    protected $_lastSunday   = NULL;
+
+    // next week
+    protected $_nextMonday     = NULL;
+    protected $_nextWednesday  = NULL;
+    protected $_nextFriday     = NULL;
+
+    protected $_wednesday2week = NULL;
+    protected $_friday2week    = NULL;
+
+    // next year
+    protected $_nextyear       = NULL;
+    protected $_next2year       = NULL;
     
     /**
      * special delimiters
@@ -69,14 +96,95 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             'mapUndefinedFieldsEnable'    => 0,
             'mapUndefinedFieldsTo'        => 'description'
         ));
+
+        $this->_days();
         
         parent::__construct($_options);
-        
+
         if (empty($this->_options['model'])) {
             throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs model in config.');
         }
         
         $this->_setController();
+    }
+
+    /**
+     *
+     * @param Tinebase_DateTime $now
+     */
+    protected function _days(Tinebase_DateTime $now = NULL)
+    {
+        // find out where we are
+        if (! $now) {
+            $now = new Tinebase_DateTime();
+        }
+        $weekday = $now->format('w');
+
+        $subdaysLastMonday = 6 + $weekday;    // Monday last Week
+        $subdaysLastFriday = 2 + $weekday;    // Friday last Week
+
+        // this week
+        $this->_monday = new Tinebase_DateTime();
+        $this->_monday->sub(date_interval_create_from_date_string(($weekday - 1) . ' days'));
+        $this->_tuesday = new Tinebase_DateTime();
+        $this->_tuesday->sub(date_interval_create_from_date_string(($weekday - 2) . ' days'));
+        $this->_wednesday = new Tinebase_DateTime();
+        $this->_wednesday->sub(date_interval_create_from_date_string(($weekday - 3) . ' days'));
+        $this->_thursday = new Tinebase_DateTime();
+        $this->_thursday->sub(date_interval_create_from_date_string(($weekday - 4) . ' days'));
+        $this->_friday = new Tinebase_DateTime();
+        $this->_friday->sub(date_interval_create_from_date_string(($weekday - 5) . ' days'));
+        $this->_saturday = clone $this->_friday;
+        $this->_saturday->add(date_interval_create_from_date_string('1 day'));
+        $this->_sunday = clone $this->_friday;
+        $this->_sunday->add(date_interval_create_from_date_string('2 days'));
+
+        // last week
+        $this->_lastMonday = clone $this->_monday;
+        $this->_lastMonday->subWeek(1);
+        $this->_lastWednesday = clone $this->_wednesday;
+        $this->_lastWednesday->subWeek(1);
+        $this->_lastFriday = clone $this->_friday;
+        $this->_lastFriday->subWeek(1);
+        $this->_lastThursday = clone $this->_thursday;
+        $this->_lastThursday->subWeek(1);
+        $this->_lastSaturday = clone $this->_saturday;
+        $this->_lastSaturday->subWeek(1);
+        $this->_lastSunday = clone $this->_sunday;
+        $this->_lastSunday->subWeek(1);
+
+        $this->_nextMonday = clone $this->_monday;
+        $this->_nextMonday->addWeek(1);
+        $this->_nextTuesday = clone $this->_tuesday;
+        $this->_nextTuesday->addWeek(1);
+        $this->_nextWednesday = clone $this->_wednesday;
+        $this->_nextWednesday->addWeek(1);
+        $this->_nextThursday = clone $this->_thursday;
+        $this->_nextThursday->addWeek(1);
+        $this->_nextFriday = clone $this->_friday;
+        $this->_nextFriday->addWeek(1);
+
+        $this->_wednesday2week = clone $this->_nextWednesday;
+        $this->_wednesday2week->addWeek(1);
+        $this->_friday2week = clone $this->_nextFriday;
+        $this->_friday2week->addWeek(1);
+
+        $this->_nextyear = new Tinebase_DateTime();
+        $this->_nextyear->addYear(1);
+        $this->_next2year = new Tinebase_DateTime();
+        $this->_next2year->addYear(2);
+
+
+    }
+
+    protected function _getDay($date)
+    {
+        if($date != null && $date != 'today')
+        {
+            return $this->{'_'.$date};
+        }
+
+        return new Tinebase_DateTime();
     }
 
     /**
