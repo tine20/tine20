@@ -72,6 +72,17 @@ Tine.Admin.config.FieldManager = function() {
                         constr = Tine.Tinebase.widgets.keyfield.ConfigField;
                         break;
 
+                    case 'record':
+                        var recordOptions = configRecord.get('options'),
+                            recordClass = Tine.Tinebase.data.RecordMgr.get(recordOptions.appName, recordOptions.modelName);
+
+                        options = Ext.apply({
+                            recordClass: recordClass
+                        }, options);
+
+                        constr = Tine.Tinebase.widgets.form.RecordPickerComboBox;
+                        break;
+
                     default:
                         constr = null;
                         break;

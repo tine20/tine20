@@ -189,7 +189,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             var stateId = this.ftb.recordClass.getMeta('appName') + '-' + this.ftb.recordClass.getMeta('recordName') + '-FilterToolbar-QuickfilterPlugin';
         }
         
-        this.detailsToggleBtn = new Ext.Button({
+        this.detailsToggleBtn = new Ext.Button(Ext.apply({
             style: {'margin-top': '2px'},
             enableToggle: true,
             text: i18n._('show details'),
@@ -215,11 +215,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                     this.criteriaText.setWidth(this.quickFilterGroup.getWidth() - this.detailsToggleBtn.getWidth());
                 }
             }
-        });
+        }, this.detailsToggleBtnConfig));
         
         this.ftb.hide();
     },
-    
+
     /**
      * called when a filter is added to the filtertoolbar
      * 

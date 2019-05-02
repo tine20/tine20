@@ -209,7 +209,7 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         
         if ($_valueToJson) {
             try {
-                Calendar_Model_Attender::resolveAttendee($this->_value);
+                Calendar_Model_Attender::resolveAttendee($this->_value, true, null, true);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
                 Tinebase_Exception::log($teia);
             }

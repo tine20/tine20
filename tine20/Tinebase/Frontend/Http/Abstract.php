@@ -45,6 +45,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $switchFormat = $format;
         }
 
+        if (strpos($format, 'new') === 0) {
+            $format = strtolower(substr($format, 3));
+        }
+
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $format);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_options, TRUE));
@@ -78,6 +82,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 case 'ods':
                     $result = $export->generate();
                     break;
+                case 'newOds':
                 case 'newPDF':
                 case 'newCsv':
                 case 'csv':
@@ -125,6 +130,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'pdf':
                 echo $pdfOutput;
                 break;
+            case 'newOds':
             case 'newCsv':
             case 'newPDF':
             case 'xls':
@@ -205,7 +211,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $filesystemPath
      * @param int|null $revision
      * @param boolean $ignoreAcl
-     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_AccessDenied
      */
     protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null, $ignoreAcl = false)
     {
@@ -226,13 +232,18 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                     'revision' => $revision
                 )
             ));
-            $handle = fopen($filesystemPath, 'r', false, $streamContext);
+            $handle = @fopen($filesystemPath, 'r', false, $streamContext);
         } else {
-            $handle = fopen($filesystemPath, 'r');
+            $handle = @fopen($filesystemPath, 'r');
         }
 
-        fpassthru($handle);
-        fclose($handle);
+        if ($handle) {
+            fpassthru($handle);
+            fclose($handle);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not open file: ' . $filesystemPath);
+        }
     }
 
     /**

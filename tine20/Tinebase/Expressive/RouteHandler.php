@@ -24,6 +24,7 @@
 class Tinebase_Expressive_RouteHandler
 {
     const IS_PUBLIC = 'isPublic';
+    const PUBLIC_USER_ROLES = 'publicUserRoles';
     const CLASS_NAME = 'class';
     const METHOD = 'method';
 
@@ -39,6 +40,8 @@ class Tinebase_Expressive_RouteHandler
     protected $_vars = null;
 
     protected $_isPublic = false;
+    protected $_publicUserRoles = null;
+    protected $_publicUserRolesIds = null;
 
     protected $_class = null;
     protected $_method = null;
@@ -57,6 +60,9 @@ class Tinebase_Expressive_RouteHandler
     {
         if (isset($_options[self::IS_PUBLIC])) {
             $this->_isPublic = (bool) $_options[self::IS_PUBLIC];
+            if (isset($_options[self::PUBLIC_USER_ROLES])) {
+                $this->_publicUserRoles = $_options[self::PUBLIC_USER_ROLES];
+            }
         }
         if (isset($_options[self::PIPE_INJECT])) {
             $this->_pipeInjectData = $_options[self::PIPE_INJECT];
@@ -83,6 +89,9 @@ class Tinebase_Expressive_RouteHandler
         ];
         if (false !== $this->_isPublic) {
             $result[self::IS_PUBLIC] = $this->_isPublic;
+            if (null !== $this->_publicUserRoles) {
+                $result[self::PUBLIC_USER_ROLES] = $this->_publicUserRoles;
+            }
         }
         if (!empty($this->_pipeInjectData)) {
             $result[self::PIPE_INJECT] = $this->_pipeInjectData;
@@ -174,5 +183,30 @@ class Tinebase_Expressive_RouteHandler
         }
 
         return call_user_func_array($callable, $orderedParams);
+    }
+
+    public function setPublicRoles()
+    {
+        if (null === $this->_publicUserRoles) return;
+
+        if (null === $this->_publicUserRolesIds) {
+            $this->_publicUserRolesIds = Tinebase_Acl_Roles::getInstance()->search(new Tinebase_Model_RoleFilter([
+                ['field' => 'name', 'operator' => 'in', 'value' => $this->_publicUserRoles]
+            ]))->getArrayOfIds();
+        }
+
+        $currentUser = Tinebase_Core::getUser();
+        if (! $currentUser) {
+            $currentUser = Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS);
+            Tinebase_Core::set(Tinebase_Core::USER, $currentUser);
+        }
+
+        Tinebase_Acl_Roles::getInstance()->injectRoleMemberships($this->_publicUserRolesIds, $currentUser->getId());
+    }
+
+    public function unsetPublicRoles()
+    {
+        if (null === $this->_publicUserRoles) return;
+        Tinebase_Acl_Roles::getInstance()->unInjectRoleMemberships(Tinebase_Core::getUser()->getId());
     }
 }

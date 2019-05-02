@@ -523,6 +523,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} config
      */
     initFilterPanel: function(config) {
+        config = Ext.apply(config || {}, this.filterConfig);
+
         if (! this.filterToolbar && ! this.editDialog) {
             var filterModels = [];
             if (this.modelConfig) {
@@ -537,7 +539,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 filterModels: filterModels,
                 defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
                 filters: this.defaultFilters || []
-            }, config || {}));
+            }, config));
             
             this.plugins = this.plugins || [];
             this.plugins.push(this.filterToolbar);
@@ -1431,6 +1433,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.gridConfig.quickaddMandatory) {
             Grid = Ext.ux.grid.QuickaddGridPanel;
             this.gridConfig.validate = true;
+
+            // TODO allow to configure this?
+            this.gridConfig.resetAllOnNew = true;
         } else {
             Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
         }
@@ -2111,7 +2116,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         var totalcount = this.selectionModel.getCount(),
             selectedRecords = [],
             fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
-            editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
+            editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass),
             additionalConfig = additionalConfig ? additionalConfig : {};
         
         // add "multiple_edit_dialog" plugin to dialog, if required

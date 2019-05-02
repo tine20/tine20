@@ -10,6 +10,8 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as MCC;
+
 class Tinebase_Record_Expander_Factory
 {
     /**
@@ -51,8 +53,14 @@ class Tinebase_Record_Expander_Factory
                 return new Tinebase_Record_Expander_RecordProperty($propModel, $_property, $_definition, $_rootExpander,
                      $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
             case 'records':
-                return new Tinebase_Record_Expander_RecordsProperty($propModel, $_property, $_definition,
-                    $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
+                if (isset($fieldDef[MCC::CONFIG][MCC::STORAGE]) && MCC::TYPE_JSON ===
+                        $fieldDef[MCC::CONFIG][MCC::STORAGE]) {
+                    return new Tinebase_Record_Expander_JsonStorageProperty($propModel, $_property, $_definition,
+                        $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
+                } else {
+                    return new Tinebase_Record_Expander_RecordsProperty($propModel, $_property, $_definition,
+                        $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
+                }
             case 'relation':
                 return new Tinebase_Record_Expander_Relations($_model, $propModel, $_property, $_definition,
                     $_rootExpander);

@@ -359,6 +359,14 @@ Tine.Tinebase.ExceptionHandler = function() {
         window.onerror.createSequence(onWindowError) :
         onWindowError;
 
+    window.addEventListener("unhandledrejection", function(promiseRejectionEvent) {
+        var error = promiseRejectionEvent.reason;
+
+        // unhandled from jsonrpcprovider
+        if (_.get(error, 'code') && _.get(error, 'data')) {
+            handleRequestException(error.data);
+        }
+    });
     return {
         handleException: handleException,
         handleRequestException: handleRequestException

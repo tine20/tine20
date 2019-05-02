@@ -92,12 +92,13 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 )
             ),
             'type'            => array(
-                'label' => 'Type', // _('Type')
-                'type'  => 'keyfield',
-                'name'  => HumanResources_Config::FREETIME_TYPE,
-                'queryFilter' => TRUE,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'nullable' => true,
+                self::LABEL             => 'Type', // _('Type')
+                self::TYPE              => self::TYPE_KEY_FIELD,
+                self::OPTIONS           => array('recordModel' => HumanResources_Model_FreeTimeType::class),
+                self::NAME              => HumanResources_Config::FREETIME_TYPE,
+                self::QUERY_FILTER      => TRUE,
+                self::VALIDATORS        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::NULLABLE          => true,
             ),
             'description'          => array(
                 'label' => 'Description', // _('Description')
@@ -107,12 +108,13 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 'nullable' => true,
             ),
             'status'          => array(
-                'label' => 'Status', // _('Status')
-                'queryFilter' => TRUE,
-                'type'  => 'keyfield',
-                'name'  => HumanResources_Config::VACATION_STATUS,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'nullable' => true,
+                self::LABEL             => 'Status', // _('Status')
+                self::QUERY_FILTER      => TRUE,
+                self::TYPE              => self::TYPE_KEY_FIELD,
+                self::OPTIONS           => array('recordModel' => HumanResources_Model_FreeTimeStatus::class),
+                self::NAME              => HumanResources_Config::VACATION_STATUS,
+                self::VALIDATORS        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::NULLABLE          => true,
             ),
             'firstday_date'   => array(
                 'label' => 'First Day', // _('First Day')

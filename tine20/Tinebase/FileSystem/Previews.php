@@ -244,7 +244,7 @@ class Tinebase_FileSystem_Previews
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
             }
 
-            $this->_fsController->updatePreviewStatus($node->hash, 1);
+            $this->_fsController->updatePreviewStatus($node->hash, $exception->getHttpStatus());
 
             return false;
 
@@ -273,7 +273,7 @@ class Tinebase_FileSystem_Previews
         if (!$this->_fsController->isDir($basePath)) {
             $this->_fsController->mkdir($basePath);
         } else {
-            if ($fileSystem->fileExists($basePath)) {
+            if ($this->_fsController->fileExists($basePath)) {
                 $this->_fsController->rmdir($basePath, true);
             }
             $this->_fsController->mkdir($basePath);

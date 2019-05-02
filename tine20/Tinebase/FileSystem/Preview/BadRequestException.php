@@ -10,8 +10,17 @@
 
 class Tinebase_FileSystem_Preview_BadRequestException extends Tinebase_Exception_ProgramFlow
 {
-    public function __construct($_message)
+    protected $_httpStatus;
+
+    public function __construct($_message, $_httpStatus)
     {
+        $this->_httpStatus = $_httpStatus;
+
         parent::__construct($_message);
+    }
+
+    public function getHttpStatus()
+    {
+        return $this->_httpStatus;
     }
 }

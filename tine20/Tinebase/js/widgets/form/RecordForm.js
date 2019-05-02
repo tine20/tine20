@@ -84,8 +84,16 @@ Tine.widgets.form.RecordForm.getFieldDefinitions = function(recordClass) {
 };
 
 Tine.widgets.form.RecordForm.getFormHeight = function(recordClass) {
-    var fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass),
+    var dlgConstructor = Tine.widgets.dialog.EditDialog.getConstructor(recordClass),
+        fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass),
         formHeight = 38+23+5; // btnfooter + tabpanel + paddings
+
+    if (dlgConstructor) {
+        // toolbar
+        if (dlgConstructor.prototype.hasOwnProperty('initButtons')) {
+            formHeight += 30;
+        }
+    }
 
     Ext.each(fieldDefinitions, function(fieldDefinition) {
         var app = Tine.Tinebase.appMgr.get(recordClass.getMeta('appName')),

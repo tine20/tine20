@@ -10,6 +10,7 @@ import * as global from 'globalFakes'
 import AbstractProvider from 'AreaLocks/AbstractProvider'
 
 require('configManager')
+require('PresenceObserver')
 
 describe('AreaLocks', () => {
   global.log()
@@ -21,8 +22,9 @@ describe('AreaLocks', () => {
   beforeEach(() => {
     global.registry()
 
+    // @TODO: get rid of inject-loader, it hurts with phantomjs
     /* eslint import/no-webpack-loader-syntax: off */
-    let fileInjector = require('inject-loader!AreaLocks')
+    let fileInjector = require('inject-loader!AreaLocks.es6')
 
     // mock the providers
     mockProvider = sinon.spy()

@@ -113,8 +113,9 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createGroups()
     {
         $fe = new Admin_Frontend_Json();
-        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName(Addressbook_Model_Contact::class,
-            'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerById(
+            Admin_Controller_User::getDefaultInternalAddressbook()
+        );
         foreach ($this->_groups as $groupArray) {
             $groupArray['container_id'] = $internalAddressbook->getId();
             $members = array();
@@ -199,8 +200,9 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 ));
 
                 if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                    $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName(
-                        Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+                    $internalAddressbook = Tinebase_Container::getInstance()->getContainerById(
+                        Admin_Controller_User::getDefaultInternalAddressbook()
+                    );
 
                     $user->container_id = $internalAddressbook->getId();
 

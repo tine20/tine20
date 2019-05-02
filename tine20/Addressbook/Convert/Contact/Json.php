@@ -21,7 +21,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
     {
         parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
 
-        if (Tinebase_Application::getInstance()->isInstalled('GDPR')) {
+        if (Tinebase_Application::getInstance()->isInstalled('GDPR', true)) {
             $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
                 [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -59,7 +59,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
                 'container_id' => [],
             ],
         ];
-        if (Tinebase_Application::getInstance()->isInstalled('GDPR')) {
+        if (Tinebase_Application::getInstance()->isInstalled('GDPR', true)) {
             $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
                 [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
                     'intendedPurpose' => [],

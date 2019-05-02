@@ -39,6 +39,7 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
      * @param array $config
      * @return array|bool
      * @throws Zend_Http_Client_Exception
+     * @throws Tinebase_FileSystem_Preview_BadRequestException
      */
     public function getPreviewsForFiles(array $_filePaths, array $_config)
     {
@@ -86,5 +87,35 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
         }
 
         return $response;
+    }
+
+    /**
+     * Merges multiple pdf files into a single one.
+     *
+     * @param $filePaths array of file paths
+     * @param bool $synchronousRequest
+     * @return string path to file
+     * @throws Zend_Http_Client_Exception
+     * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function mergePdfFiles($filePaths, $synchronousRequest = false)
+    {
+        foreach ($filePaths as $filePath) {
+            if (mime_content_type($filePath) != 'application/pdf') {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $filePath . 'is not a PDF file');
+                }
+                throw new Tinebase_Exception_InvalidArgument($filePath . " is not a PDF file");
+            }
+        }
+
+        if (false === ($result = $this->getPreviewsForFiles($filePaths, ['synchronRequest' => $synchronousRequest, ['fileType' => 'pdf', 'merge' => true,]]))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ . ' preview service did not succeed');
+            }
+            throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed: service occupied');
+        }
+        return $result[0][0];
     }
 }

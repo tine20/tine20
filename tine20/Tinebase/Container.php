@@ -416,9 +416,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * 
      * @param int|Tinebase_Model_Container $container
      * @param string                       $action    one of {create|update|delete}
+     * @param boolean $fireEvent
      * @return Tinebase_Model_Container
      */
-    protected function _setRecordMetaDataAndUpdate($container, $action)
+    protected function _setRecordMetaDataAndUpdate($container, $action, $fireEvent = true)
     {
         if (! $container instanceof Tinebase_Model_Container) {
             $container = $this->getContainerById($container);
@@ -427,7 +428,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $this->_clearCache($container);
         
-        return $this->update($container, true);
+        return $this->update($container, true, $fireEvent);
     }
 
     /**
@@ -1694,7 +1695,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 new Tinebase_Model_Container(array('id' => $containerId), true)
             );
             
-            $this->_setRecordMetaDataAndUpdate($containerId, 'update');
+            $this->_setRecordMetaDataAndUpdate($containerId, 'update', false);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
@@ -1990,13 +1991,69 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     }
 
     /**
+     * create a new system container
+     * - by default user group gets READ grant
+     * - by default admin group gets all grants
+     *
+     * NOTE: this should never be called in user land and only in admin/setup contexts
+     *
+     * @param Tinebase_Model_Application|string $application app record, app id or app name
+     * @param string $model the model the container contains
+     * @param string $name
+     * @param string $idConfig save id in config if given
+     * @param Tinebase_Record_RecordSet $grants use this to overwrite default grants
+     * @return Tinebase_Model_Container
+     */
+    public function createSystemContainer($application, $model, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL)
+    {
+        $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Creating system container for model ' . $model);
+
+        $newContainer = new Tinebase_Model_Container(array(
+            'name'              => $name,
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'backend'           => 'Sql',
+            'application_id'    => $application->getId(),
+            'model'             => $model
+        ));
+
+        $grants = ($grants) ? $grants : Tinebase_Model_Grants::getDefaultGrants();
+        $newContainer = $this->addContainer($newContainer, $grants, TRUE);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Created new system container ' . $name . ' for application ' . $application->name);
+
+        if ($configId !== NULL) {
+            $configClass = $application->name . '_Config';
+            if (@class_exists($configClass)) {
+                $config = call_user_func(array($configClass, 'getInstance'));
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Setting system container config "' . $configId . '" = ' . $newContainer->getId());
+
+                $config->set($configId, $newContainer->getId());
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not find preferences class ' . $configClass);
+            }
+        }
+
+        $this->resetClassCache();
+
+        return $newContainer;
+    }
+
+    /**
      * Updates existing container and clears the cache entry of the container
      *
      * @param Tinebase_Record_Interface $_record
-     * @param boolean $_updateDeleted = false;
+     * @param boolean $_updateDeleted = false
+     * @param boolean $_fireEvent = true
      * @return Tinebase_Record_Interface Record|NULL
      */
-    public function update(Tinebase_Record_Interface $_record, $_updateDeleted = false)
+    public function update(Tinebase_Record_Interface $_record, $_updateDeleted = false, $_fireEvent = true)
     {
         $this->_clearCache($_record);
 
@@ -2011,9 +2068,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         unset($oldContainer->account_grants);
         $this->_writeModLog($result, $oldContainer);
 
-        $event = new Tinebase_Event_Record_Update();
-        $event->observable = $result;
-        Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        if ($_fireEvent) {
+            $event = new Tinebase_Event_Record_Update();
+            $event->observable = $result;
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        }
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 

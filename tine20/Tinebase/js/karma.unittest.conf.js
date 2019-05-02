@@ -1,6 +1,8 @@
 let path = require('path')
 let basePath = path.resolve(__dirname, "../../../tests/js/unit")
 
+process.env.CHROME_BIN = require('puppeteer').executablePath()
+
 module.exports = function (config) {
     config.set({
         // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -74,11 +76,22 @@ module.exports = function (config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         // browsers: ['PhantomJS', 'Chrome', 'ChromeWithoutSecurity', 'Firefox', 'Safari', 'IE'],
-        browsers: ['PhantomJS'],
+        browsers: ['ChromeHeadlessCloud'],
         customLaunchers: {
             ChromeWithoutSecurity: {
                 base: 'Chrome',
                 flags: ['--disable-web-security']
+            },
+            ChromeHeadlessCloud: {
+                base: 'ChromeHeadless',
+                flags: ['--disable-web-security', '--no-sandbox']
+            },
+            PhantomJSCustom: {
+                base: 'PhantomJS',
+                settings: {
+                    webSecurityEnabled: false
+                },
+                flags: ['--load-images=false'],
             }
         },
 

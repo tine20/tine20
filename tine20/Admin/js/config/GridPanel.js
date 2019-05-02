@@ -52,6 +52,7 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             autoExpandColumn: 'value',
             gridType: Ext.grid.EditorGridPanel,
             clicksToEdit: 'auto',
+            onEditComplete: this.onEditComplete
         };
 
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
@@ -125,10 +126,10 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             o.record.beginEdit();
 
             if (o.record.get('source') == 'DEFAULT') {
-                var def = o.record.get('default');
-                o.value = String(def).match(/^[{\[]]/) ? def : Ext.encode(def);
+                o.value = o.record.get('default');
             }
 
+            o.value = String(o.value).match(/^[{\[]/) ? o.value : Ext.encode(o.value);
             o.record.set('value', Ext.decode(o.value));
 
             colModel.config[o.column].setEditor(
@@ -139,6 +140,23 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 })
             );
         }
+    },
+
+    onEditComplete: function(ed, value, startValue) {
+        var type = _.get(ed, 'record.data.type');
+
+        switch (type) {
+            case 'record':
+                value = _.get(ed, 'field.selectedRecord.data');
+                Tine.Tinebase.common.assertComparable(value);
+                break;
+
+            default:
+                break;
+
+        }
+
+        Ext.grid.EditorGridPanel.prototype.onEditComplete.call(this, ed, value, startValue);
     },
 
     /**
@@ -234,6 +252,13 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 break;
             case 'keyFieldConfig':
                 value = '...';
+                break;
+            case 'record':
+                var recordOptions = record.get('options'),
+                    recordClass = Tine.Tinebase.data.RecordMgr.get(recordOptions.appName, recordOptions.modelName),
+                    record = Tine.Tinebase.data.Record.setFromJson(value, recordClass);
+
+                value = record.getTitle();
                 break;
             default:
                 break;

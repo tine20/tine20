@@ -511,11 +511,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.el.select('.' + cls).setWidth(dim[cls]);
             this.el.select('.' + cls + ' div[class^=x-form-field-wrap] *[id^=ext-comp-]').each(function(el) {
                 var cmp = Ext.getCmp(el.id);
-                if (cmp) {
+                if (cmp && !cmp.isInnerFTBCmp) {
+                    var width = dim[cls] + (cmp.FTBWidthCorrection || 0);
                     if (cmp.wrap) {
-                        cmp.wrap.setWidth(dim[cls]);
+                        cmp.wrap.setWidth(width);
                     }
-                    cmp.setWidth(dim[cls]);
+                    cmp.setWidth(width);
                 }
             });
         }

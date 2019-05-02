@@ -499,7 +499,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * 
      * @return string|int ID
      */
-    public function getDefaultInternalAddressbook()
+    public static function getDefaultInternalAddressbook()
     {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
         if (empty($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])) {

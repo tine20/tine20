@@ -145,7 +145,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $requests = Zend_Json::decode($json);
         } else {
             $isBatchedRequest = false;
-            $requests = array(Zend_Json::decode($json));
+            $requests = empty($json) ? array(null) : array(Zend_Json::decode($json));
         }
 
         $this->_logRequests($requests);

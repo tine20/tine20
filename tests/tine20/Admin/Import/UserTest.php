@@ -27,6 +27,11 @@ class Admin_Import_UserTest extends TestCase
 
     public function testImportDemoData()
     {
+        // skip test if domain != 'example.org'
+        if (! Tinebase_EmailUser::checkDomain('test@example.org')) {
+            self::markTestSkipped('example.org domain is not allowed by config');
+        }
+
         $this->_importContainer = $this->_getTestContainer('Admin', 'Tinebase_Model_FullUser');
         $importer = new Tinebase_Setup_DemoData_Import('Admin', [
             'container_id' => $this->_importContainer->getId(),

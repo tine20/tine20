@@ -9,7 +9,7 @@ Ext.ns('Tine.widgets.grid');
 
 Tine.widgets.grid.FilterPanel = function(config) {
     this.filterToolbarConfig = config;
-    Ext.copyTo(this, config, 'useQuickFilter');
+    Ext.copyTo(this, config, 'useQuickFilter,quickFilterConfig');
 
     // the plugins won't work there
     delete this.filterToolbarConfig.plugins;
@@ -121,9 +121,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         Tine.widgets.grid.FilterPanel.superclass.initComponent.call(this);
 
         if (this.useQuickFilter) {
-            this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
-                syncFields: false
-            });
+            this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
+                syncFields: false,
+            }, this.quickFilterConfig));
             this.quickFilterPlugin.init(this);
         }
     },

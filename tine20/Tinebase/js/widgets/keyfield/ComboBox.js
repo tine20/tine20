@@ -46,6 +46,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
     mode          : 'local',
     displayField  : 'i18nValue',
     valueField    : 'id',
+    forceSelection: true,
     /* end config */
     
     initComponent: function() {

@@ -33,7 +33,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         'getRoleMemberships' => array(),
         'hasRight'           => array(),
     );
-    
+
+    protected static $injectRoleMembers;
+
     /**
      * holdes the _instance of the singleton
      *
@@ -394,6 +396,50 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         return $accountIds;
     }
 
+    public function injectRoleMemberships($roles, $accountId, $type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    {
+        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+            $accountId        = Tinebase_Model_User::convertUserIdToInt($accountId);
+            $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . implode('', $groupMemberships) . $type);
+        } else if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+            $accountId = Tinebase_Model_Group::convertGroupIdToInt($accountId);
+
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . $type);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $type);
+        }
+
+        if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
+            unset($this->_classCache[__FUNCTION__][$classCacheId]);
+        }
+
+        static::$injectRoleMembers[$type][$accountId] = $roles;
+    }
+
+    public function unInjectRoleMemberships($accountId, $type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    {
+        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+            $accountId        = Tinebase_Model_User::convertUserIdToInt($accountId);
+            $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . implode('', $groupMemberships) . $type);
+        } else if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+            $accountId = Tinebase_Model_Group::convertGroupIdToInt($accountId);
+
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . $type);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $type);
+        }
+
+        if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
+            unset($this->_classCache[__FUNCTION__][$classCacheId]);
+        }
+
+        unset(static::$injectRoleMembers[$type][$accountId]);
+    }
+
     /**
      * get list of role memberships
      *
@@ -438,6 +484,10 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $stmt = $this->_getDb()->query($select);
         
         $memberships = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+
+        if (isset(static::$injectRoleMembers[$type][$accountId])) {
+            $memberships = array_unique(array_merge($memberships, static::$injectRoleMembers[$type][$accountId]));
+        }
         
         $this->_classCache[__FUNCTION__][$classCacheId] = $memberships;
         

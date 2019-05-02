@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -22,28 +22,28 @@ class Tasks_Model_Priority extends Tinebase_Config_KeyFieldRecord
      * 
      * @var string
      */
-    const LOW         = 'LOW';
+    const LOW         = '100';
 
     /**
      * prio constant: NORMAL
      * 
      * @var string
      */
-    const NORMAL      = 'NORMAL';
+    const NORMAL      = '200';
     
     /**
      * prio constant: HIGH
      * 
      * @var string
      */
-    const HIGH        = 'HIGH';
+    const HIGH        = '300';
     
     /**
      * prio constant: URGENT
      * 
      * @var string
      */
-    const URGENT      = 'URGENT';
+    const URGENT      = '400';
     
     /**
      * application the record belongs to
@@ -51,7 +51,14 @@ class Tasks_Model_Priority extends Tinebase_Config_KeyFieldRecord
      * @var string
      */
     protected $_application = 'Tasks';
-    
+
+    public static $upperStringMapping = [
+        'LOW'       => self::LOW,
+        'NORMAL'    => self::NORMAL,
+        'HIGH'      => self::HIGH,
+        'URGENT'    => self::URGENT,
+    ];
+
     /**
      * return priority mapping (e.g. for ActiveSync)
      * 

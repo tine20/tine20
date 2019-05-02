@@ -1018,15 +1018,13 @@ class Setup_Controller
                     );
                 }
             }
-            $superUserRole->rights = $rights;
-            $superUserRole->members = array(
-                array(
-                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                    'account_id' => $_user->getId()
-                )
-            );
 
             $roleController->create($superUserRole);
+            $roleController->setRoleRights($superUserRole->getId(), $rights);
+            $roleController->setRoleMemberships(array(
+                'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'id' => $_user->getId()
+            ), [$superUserRole->getId()]);
         } finally {
             Tinebase_Model_Role::setIsReplicable(true);
             $roleController->modlogActive($oldModLog);
@@ -2079,10 +2077,13 @@ class Setup_Controller
      */
     public function uninstallApplications($_applications)
     {
-        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
-            throw new Tinebase_Exception('could not create setup user');
+        try {
+            $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
+        } catch (Exception $e) {
+            // try without setup user - Addressbook might be already uninstalled
+            Tinebase_Exception::log($e);
         }
-        Tinebase_Core::set(Tinebase_Core::USER, $user);
 
         $this->clearCache();
 
@@ -2966,13 +2967,19 @@ class Setup_Controller
 
         /** @var Tinebase_Model_Application $application */
         foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
-            $xml = $this->getSetupXml($application->name);
+            try {
+                $xml = $this->getSetupXml($application->name);
+            } catch (Setup_Exception_NotFound $senf) {
+                // app is not available any more
+                $failures[] = $senf->getMessage();
+                continue;
+            }
             // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
 
             // get all MCV2 models for all apps, you never know...
             $controllerInstance = null;
             try {
-                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name);
+                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name, '', true);
             } catch(Tinebase_Exception_NotFound $tenf) {
                 $failures[] = 'could not get application controller for app: ' . $application->name;
             }
@@ -3002,10 +3009,11 @@ class Setup_Controller
                             continue;
                         }
                         $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                        // TODO should check if index already exists
                         try {
                             $setupBackend->addIndex((string)$table->name, $declaration);
                         } catch (Exception $e) {
-                            $failures[] = (string)$table->name . ': ' . (string)$index->name;
+                            $failures[] = (string)$table->name . ': ' . (string)$index->name . '(error: ' . $e->getMessage() . ')';
                         }
                     }
                 }

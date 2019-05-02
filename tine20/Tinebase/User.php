@@ -476,7 +476,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $username = $username->accountLoginName;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
 
         if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
             $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();

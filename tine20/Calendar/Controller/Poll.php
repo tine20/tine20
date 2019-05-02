@@ -500,8 +500,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
     {
         $locale = Tinebase_Core::getLocale();
 
-        $jsFiles = ['Calendar/js/pollClient/src/index.es6.js'];
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar";
+        $jsFiles[] = 'Calendar/js/pollClient/src/index.es6.js';
 
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles);
     }

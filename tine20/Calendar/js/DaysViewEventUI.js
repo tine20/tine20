@@ -220,6 +220,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                     handles: 's',
                     disableTrackOver: true,
                     dynamic: true,
+                    minHeight: view.getTimeOffset(view.timeGranularity),
+                    heightIncrement: view.getTimeOffset(view.timeGranularity),
                     listeners: {
                         scope: view,
                         resize: view.onEventResize,

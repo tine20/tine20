@@ -201,7 +201,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
         this.getRangeCombo().wrap.setWidth(rw);
         this.getRangeCombo().setWidth(rw);
 
-        this.el.select('.ux-pp-controls').setWidth(cw-18);
+        this.el.select('.ux-pp-controls').setWidth(cw);
     },
 
     getRangeCombo: function() {
@@ -219,6 +219,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 allowEmpty: false,
                 editable: false,
                 store: fieldDef,
+                isInnerFTBCmp: true,
                 // value: this.range,
                 listeners: {
                     scope: this,

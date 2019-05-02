@@ -51,6 +51,10 @@ div.page
     text-align: right;
     margin-bottom: 1cm;
 }
+.rp-print-single-logo img {
+    max-width: 400px;
+    max-height: 80px;
+}
 
 .rp-print-single-image {
     text-align: left;

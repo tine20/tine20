@@ -28,6 +28,10 @@ import FormatMessage from 'format-message'
 require('Locale')
 require('Locale/Gettext')
 
+_.each(Tine.__translationData.msgs, function (msgs, category) {
+  Locale.Gettext.prototype._msgs[category] = new Locale.Gettext.PO(msgs)
+})
+
 let gettext = new Locale.Gettext()
 gettext.textdomain('Calendar')
 

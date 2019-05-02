@@ -62,12 +62,12 @@ class Tasks_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'LOW',    'value' => 'low',      'icon' => 'images/icon-set/icon_prio_low.svg', 'system' => true), //_('low')
-                    array('id' => 'NORMAL', 'value' => 'normal',   'icon' => 'images/icon-set/icon_prio_normal.svg', 'system' => true), //_('normal')
-                    array('id' => 'HIGH',   'value' => 'high',     'icon' => 'images/icon-set/icon_prio_high.svg', 'system' => true), //_('high')
-                    array('id' => 'URGENT', 'value' => 'urgent',   'icon' => 'images/icon-set/icon_prio_urgent.svg', 'system' => true), //_('urgent')
+                    array('id' => Tasks_Model_Priority::LOW,    'value' => 'low',      'icon' => 'images/icon-set/icon_prio_low.svg', 'system' => true), //_('low')
+                    array('id' => Tasks_Model_Priority::NORMAL, 'value' => 'normal',   'icon' => 'images/icon-set/icon_prio_normal.svg', 'system' => true), //_('normal')
+                    array('id' => Tasks_Model_Priority::HIGH,   'value' => 'high',     'icon' => 'images/icon-set/icon_prio_high.svg', 'system' => true), //_('high')
+                    array('id' => Tasks_Model_Priority::URGENT, 'value' => 'urgent',   'icon' => 'images/icon-set/icon_prio_urgent.svg', 'system' => true), //_('urgent')
                 ),
-                'default' => 'NORMAL'
+                'default' => Tasks_Model_Priority::NORMAL,
             )
         ),
     );

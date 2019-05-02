@@ -104,6 +104,40 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     {
         $this->_resolveBeforeToArray($_records, $config, $multiple);
 
+        // I protest against this code. and actually I rather would have it in the FE, we could have the relations
+        // renderer expose a hook and every loaded module (TT) can hook in there and then resolve such things by
+        // making a search query. then it would really only be executed when needed and having the client do things
+        // is great anyway
+        if (class_exists('Timetracker_Model_Timesheet') && $_records->getFirstRecord()->has('relations')) {
+            $ts = [];
+            foreach ($_records as $record) {
+                if (!empty($record->relations)) {
+                    /** @var Tinebase_Model_Relation $relation */
+                    foreach ($record->relations as $relation) {
+                        if ($relation->related_model === Timetracker_Model_Timesheet::class && $relation->related_record
+                                instanceof Tinebase_Record_Interface) {
+                            if (isset($ts[$relation->related_record->getId()])) {
+                                $relation->related_record = $ts[$relation->related_record->getId()];
+                            } else {
+                                $ts[$relation->related_record->getId()] = $relation->related_record;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!empty($ts)) {
+                $ts = new Tinebase_Record_RecordSet(Timetracker_Model_Timesheet::class, array_values($ts));
+                // expand required properties
+                $expander = new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'timeaccount_id' => [],
+                    ],
+                ]);
+                $expander->expand($ts);
+
+            }
+        }
+
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->setConvertDates(true);
 

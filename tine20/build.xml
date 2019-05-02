@@ -275,7 +275,12 @@
             <available file="${project.basedir}/${name}/js/webpack.prod.js"/>
             <then>
                 <echo message="Starting webpack build..." />
-                <exec command="./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
+                <exec command="node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
+                <fail message="Build failed ... webpack-assets-FAT.json not found">
+                    <condition>
+                        <not><available file="${project.basedir}/${name}/js/webpack-assets-FAT.json"/></not>
+                    </condition>
+                </fail>
             </then>
         </if>
 

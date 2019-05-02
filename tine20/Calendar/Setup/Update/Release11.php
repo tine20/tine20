@@ -331,12 +331,31 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setApplicationVersion('Calendar', '11.13');
     }
 
+    public function update_13()
+    {
+        $records = Calendar_Controller_Resource::getInstance()->getAll();
+
+        foreach ($records as $record)
+        {
+            $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
+            $resource_type = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)->getValue($record['type']);
+            $container->xprops()['Calendar']['Resource']['resource_icon'] = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)
+                ->getKeyfieldRecordByValue($resource_type)['icon'];
+
+            Tinebase_Container::getInstance()->update($container);
+        }
+
+
+
+        $this->setApplicationVersion('Calendar', '11.14');
+    }
+
     /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_13()
+    public function update_14()
     {
         $this->setApplicationVersion('Calendar', '12.0');
     }
