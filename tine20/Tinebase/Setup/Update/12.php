@@ -14,6 +14,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -32,6 +33,12 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+        ],
+        self::PRIO_TINEBASE_UPDATE        => [
+            self::RELEASE012_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -90,5 +97,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         if ($this->getTableVersion('tree_filerevisions') < 4) {
             $this->setTableVersion('tree_filerevisions', 4);
         }
+    }
+
+    public function update004()
+    {
+        $this->addApplicationUpdate('Tinebase', '12.22', self::RELEASE012_UPDATE004);
     }
 }
