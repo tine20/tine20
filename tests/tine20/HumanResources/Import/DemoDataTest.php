@@ -23,9 +23,6 @@ class HumanResources_Import_DemoDataTest extends TestCase
     {
         $this->_skipIfLDAPBackend();
 
-        if (!extension_loaded('yaml')) {
-            $this->markTestSkipped('Yaml is not installed');
-        }
         $now = Tinebase_DateTime::now();
         $this->_importContainer = $this->_getTestContainer('HumanResources', 'HumanResources_Model_Employee');
         $importer = new Tinebase_Setup_DemoData_ImportSet('HumanResources', [
@@ -38,6 +35,6 @@ class HumanResources_Import_DemoDataTest extends TestCase
             ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = HumanResources_Controller_Employee::getInstance()->search($filter);
-        self::assertEquals(3, count($result));
+        self::assertEquals(2, count($result));
     }
 }

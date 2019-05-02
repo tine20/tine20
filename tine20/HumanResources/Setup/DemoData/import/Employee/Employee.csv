@@ -1,5 +1,3 @@
 Mitarbeiternummer,Eintrittsdatum aktuell,Austrittsdatum aktuell,Kontonummer der Mitarbeiterbankverbindung,Bankbezeichnung der Mitarbeiterbankverbindung,Bankleitzahl der Mitarbeiterbankverbindung,Bezeichnung der gesetzlichen Krankenkasse des Mitarbeiters,user,supervisor,division,costcenter
-2,1985-11-01,2018-02-02,123456789,Haspa,200505055,Barma GEK,m.schreiber,,SE,SE
-3,1985-11-01,2018-02-02,123456789,Haspa,200505055,Barma GEK,j.baum,m.schreiber,SE,SE
-5,1985-11-01,2018-02-02,123456789,Haspa,200505055,Barma GEK,e.eichmann,m.schreiber,SE,SE
-
+3,lastMonday,nextyear,123456789,Haspa,200505055,Barma GEK,j.baum,m.schreiber,SE,SE
+5,lastMonday,nextyear,123456789,Haspa,200505055,Barma GEK,e.eichmann,m.schreiber,SE,SE
