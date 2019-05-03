@@ -248,7 +248,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     protected function _inspectBeforeSoftDelete(array $_ids)
     {
         if (!empty($_ids)) {
+            list($accountId, $now) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+            /** @var Tinebase_Model_Tree_Node $node */
             foreach($this->getMultiple($_ids) as $node) {
+                $node->last_modified_by = $accountId;
+                $node->last_modified_time = $now;
                 $this->_writeModLog(null, $node);
             }
         }
