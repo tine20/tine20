@@ -1143,7 +1143,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             if (is_callable($hook)) {
                 call_user_func_array($hook, [&$this->_fields]);
             } else {
-                if (! $result && Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
                     . '::' . __LINE__ . ' Configured hook is not callable: ' . print_r($hook, true));
             }
         }
