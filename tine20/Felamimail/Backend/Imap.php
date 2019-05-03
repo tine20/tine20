@@ -310,10 +310,17 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * safe if you don't take precautions.
      *
      * @return array message ids
+     * @throws Tinebase_Exception_Backend
      */
     public function search(array $params)
     {
-        if (!is_array($result = $this->_protocol->search($params, $this->_useUid))) {
+        $result = $this->_protocol->search($params, $this->_useUid);
+        if (empty($result)) {
+            $result = [];
+        }
+        if (!is_array($result)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__
+                . '::' . __LINE__ . ' Did not get array result: ' . print_r($result, true));
             throw new Tinebase_Exception_Backend('email backend failure');
         }
         
