@@ -11,7 +11,7 @@
 /**
  * webpack tine 2.0 app-loader
  *
- * - does not realy load a source format
+ * - does not really load a source format
  *   -> it's just there to inject initial javascript of the apps
  * - finds all apps at BUILDTIME so their javascript code gets build
  * - injects a RUNTIME app loader so application js is only included on demand

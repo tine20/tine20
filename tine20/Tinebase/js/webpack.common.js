@@ -33,14 +33,20 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
 module.exports = {
     entry: entryPoints,
     optimization:{
-        splitChunks: {
-            cacheGroups: {
-                vendors: {
-                    // automaticNamePrefix: '',
-                    test: /(?!x)x/ // never matches - we don't use vendors cache yet
-                },
-            }
-        }
+        /**
+         * NOTE: there are some problems with auto/common chunk splitting atm
+         *    i) common chunks might be placed in an application dir and the application might not be installed
+         *       thus the chunk would be missing in the installation. It might be an option to place all chunks
+         *       inside Tinebase (e.g. via automaticNamePrefix: 'Tinebase/js' but then also app specific chunks (also
+         *       of custom apps from buildtime) would be part of tinebase.
+         *   ii) our module name is <app>/js/<app>-FAT.js. This leads to a automatic <app>/js prefix in the gernerated
+         *       chunk names and thus to a deep awkward directory structure
+         *  iii) using name function config should help. but it's not clear how to use it to split/merge the chunks
+         *       this needs more investigations an might not even be possible
+         *
+         *  => we disable common chunks splitting for  now
+         */
+        splitChunks: false
     },
     output: {
         path: baseDir + '/',
