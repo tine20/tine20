@@ -26,9 +26,6 @@ class Sales_Import_InvoiceTest extends TestCase
 
     public function testImportDemoData()
     {
-        if (!extension_loaded('yaml')) {
-            $this->markTestSkipped('Yaml are not install');
-        }
         self::clear('Sales', 'Invoice');
         $now = Tinebase_DateTime::now();
         $this->_importContainer = $this->_getTestContainer('Sales', 'Sales_Model_Invoice');

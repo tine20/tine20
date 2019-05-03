@@ -25,6 +25,7 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected $_additionalOptions = array(
         'container_id' => '',
+        'dates' => array('start_date','end_date')
     );
 
     /**
@@ -46,6 +47,9 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
     protected function _doConversions($_data)
     {
         $result = parent::_doConversions($_data);
+
+        if($this->_options['demoData']) $result = $this->_getDay($result, $this->_additionalOptions['dates']);
+
         $result = $this->_setCustomers($result);
         $result = $this->_setCostCenter($result);
         $result = $this->_setContact($result);
@@ -91,8 +95,10 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
                     foreach ($addresses as $address) {
                         if ($address['customer_id'] == $customer_id) {
                             $result['billing_address_id'] = $address['id'];
+                            break;
                         }
                     }
+                    break;
                 }
             }
         }
@@ -122,6 +128,7 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
                             'related_id' => $costCenter['id'],
                             'type' => 'LEAD_COST_CENTER'
                         );
+                    break;
                 }
             }
         }

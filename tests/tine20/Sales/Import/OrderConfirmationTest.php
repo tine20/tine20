@@ -31,6 +31,7 @@ class Sales_Import_OrderConfirmationTest extends TestCase
         $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_OrderConfirmation', [
             'definition' => 'sales_import_orderconfirmation_csv',
+            'file' => 'orderConfirmation.csv',
         ]);
         $importer->importDemodata();
         $filter = Sales_Model_OrderConfirmationFilter::getFilterForModel('Sales_Model_OrderConfirmation', [

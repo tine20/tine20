@@ -30,6 +30,7 @@ class Sales_Import_OfferTest extends TestCase
         $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_Offer', [
             'definition' => 'sales_import_offer_csv',
+            'file' => 'offer.csv',
         ]);
         $importer->importDemodata();
         $filter = Sales_Model_OfferFilter::getFilterForModel('Sales_Model_Offer', [
