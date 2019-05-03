@@ -41,6 +41,7 @@ class Tinebase_Setup_DemoData_ImportSet
     public function __construct($appName, $options = [])
     {
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($appName);
+        $this->_options['demoData'] = true;
         $this->_options = array_merge($this->_options, $options);
     }
 

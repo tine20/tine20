@@ -94,7 +94,8 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             'headline'                    => 0,
             'use_headline'                => 1,
             'mapUndefinedFieldsEnable'    => 0,
-            'mapUndefinedFieldsTo'        => 'description'
+            'mapUndefinedFieldsTo'        => 'description',
+            'demoData'                    => false
         ));
 
         $this->_days();
@@ -177,14 +178,17 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
 
     }
 
-    protected function _getDay($date)
+    protected function _getDay($data,$dates)
     {
-        if($date != null && $date != 'today')
-        {
-            return $this->{'_'.$date};
+        foreach ($dates as $date) {
+            if($date != null && $data[$date] != 'today') {
+                $data[$date] = $this->{'_' . $data[$date]};
+            }else
+            {
+                $data[$date] = new Tinebase_DateTime();
+            }
         }
-
-        return new Tinebase_DateTime();
+        return $data;
     }
 
     /**
