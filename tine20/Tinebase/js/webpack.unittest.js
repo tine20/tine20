@@ -1,29 +1,12 @@
-let path = require('path')
-const merge = require('webpack-merge');
-const prod = require('./webpack.prod.js');
+const path = require('path')
+const merge = require('webpack-merge')
+const prod = require('./webpack.prod.js')
+const _ = require('lodash')
 
 module.exports = merge(prod, {
     entry: null,
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                exclude: [
-                    /node_modules/,
-                    /!(chai-as-promised)/
-                ],
-                options: {
-                    plugins: [
-                        '@babel/plugin-transform-runtime',
-                        '@babel/plugin-transform-modules-commonjs'
-                    ],
-                    presets: [
-                        ["@babel/env"/*, { "modules": false }*/]
-
-                    ]
-                }
-            },
             {
                 // instrument only testing sources with Istanbul
                 // https://github.com/webpack-contrib/istanbul-instrumenter-loader/issues/73
@@ -53,3 +36,17 @@ module.exports = merge(prod, {
         ],
     }
 });
+
+// adopt babel-loader to cope with inject-loader
+let rules = module.exports.module.rules
+let babelLoader = _.find(rules, {loader: 'babel-loader'})
+let presetEnv = _.find(babelLoader.options.presets, function(preset) {
+    return preset[0] == '@babel/preset-env'
+})
+
+// needed for inject loader to work
+babelLoader.options.plugins.push('@babel/plugin-transform-modules-commonjs')
+
+// inject loader does not work with useBuiltIns -> we really need to get rid of it!
+presetEnv.pop()
+
