@@ -20,19 +20,24 @@
 --
 
 CREATE TABLE IF NOT EXISTS `dovecot_users` (
-`userid`        VARCHAR( 40 ) NOT NULL ,
-`domain`        VARCHAR( 80 ) NOT NULL DEFAULT '',
-`username`      VARCHAR( 80 ) NOT NULL ,
-`password`      VARCHAR( 256 ) NOT NULL ,
-`quota_bytes`   BIGINT NOT NULL DEFAULT '0',
-`quota_message` INT NOT NULL DEFAULT '0',
-`uid`           VARCHAR( 20 ) DEFAULT NULL ,
-`gid`           VARCHAR( 20 ) DEFAULT NULL ,
-`home`          VARCHAR( 256 ) DEFAULT NULL ,
-`last_login`    DATETIME DEFAULT NULL ,
-PRIMARY KEY (`userid`, `domain`),
-UNIQUE (`username`)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+`userid` varchar(80) NOT NULL,
+`domain` varchar(80) NOT NULL DEFAULT '',
+`username` varchar(80) NOT NULL,
+`loginname` varchar(255) DEFAULT NULL,
+`password` varchar(100) NOT NULL,
+`quota_bytes` bigint(20) NOT NULL DEFAULT '2000',
+`quota_message` int(11) NOT NULL DEFAULT '0',
+`quota_sieve_bytes` bigint(20) NOT NULL DEFAULT '0',
+`quota_sieve_script` int(11) NOT NULL DEFAULT '0',
+`uid` varchar(20) DEFAULT NULL,
+`gid` varchar(20) DEFAULT NULL,
+`home` varchar(256) DEFAULT NULL,
+`last_login` datetime DEFAULT NULL,
+`last_login_unix` int(11) DEFAULT NULL,
+`instancename` varchar(40) DEFAULT NULL,
+PRIMARY KEY (`userid`,`domain`),
+UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
 --
@@ -458,9 +463,13 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         
         $rawData[$this->_propertyMapping['emailHome']] = str_replace($search, $replace, $this->_config['emailHome']);
         $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
+
+        // set primary email address as optional login name
+        $rawData['loginname'] = $_user->accountEmailAddress;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' ' . print_r($rawData, true));
+
         return $rawData;
     }
 

@@ -203,6 +203,15 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $this->assertTrue($hashPw->validate($rawDovecotUser['password'], $newPassword), 'password mismatch');
     }
 
+    public function testSetLoginName()
+    {
+        // fetch dovecot user from db
+        $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
+        $rawDovecotUser = $dovecot->getRawUserById(Tinebase_Core::getUser());
+        self::assertTrue(isset($rawDovecotUser['loginname']), 'loginname property not found');
+        self::assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $rawDovecotUser['loginname']);
+    }
+
     /**
      * testDuplicateUserId
      *
