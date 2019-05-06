@@ -2,7 +2,7 @@
 <config>
     <name>tasks_import_demo_csv</name>
     <model>Tasks_Model_Task</model>
-    <plugin>Tinebase_Import_Csv_Generic</plugin>
+    <plugin>Tasks_Import_Csv</plugin>
     <type>import</type>
     <headline>1</headline>
     <dryrun>0</dryrun>
