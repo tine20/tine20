@@ -155,7 +155,12 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
     {
         if (is_array($this->_value)) {
             foreach ($this->_value as &$value) {
-                $value = (string) $value;
+                if (is_array($value)) {
+                    // use the first element of the array
+                    $value = array_pop($value);
+                } else {
+                    $value = (string) $value;
+                }
             }
         } else {
             $this->_value = (string) $this->_value;
