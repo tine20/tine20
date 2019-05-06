@@ -128,7 +128,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $this->assertEquals(array_merge(array(
             'emailUserId' => $this->_objects['user']->getId(),
             'emailUsername' => $this->_objects['user']->imapUser->emailUsername,
-            'emailMailQuota' => null,
+            'emailMailQuota' => 2097152000,
             'emailUID' => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID' => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin' => null,
