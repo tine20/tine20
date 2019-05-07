@@ -1753,7 +1753,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 __METHOD__ . '::' . __LINE__ . ' ... xlsx created: ' . $xlsx);
             
             $xlsxFiles[$timeaccount->getTitle()] = $xlsx;
-            $pdfFiles[] = $export->convert(Tinebase_Export_Convertible::PDF, $xlsx);
+            $pdfFiles[] = $export->convertToPdf($xlsx, ['ods']);
         }
         
         foreach ($xlsxFiles as $account => $file) {

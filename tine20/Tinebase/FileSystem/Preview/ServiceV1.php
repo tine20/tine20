@@ -60,6 +60,7 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
      * @param $filePaths array of file Paths to convert
      * @param array $config
      * @return array|bool
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function getPreviewsForFiles(array $filePaths, array $config)
     {
@@ -181,14 +182,31 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
      *
      * @param $filePath
      * @param $synchronRequest bool should the request be prioritized
+     * @param array $intermediateFormats
      * @return string file blob
-     * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
-     * @throws Zend_Http_Client_Exception
+     * @throws Tinebase_Exception_NotImplemented
      * @throws Tinebase_FileSystem_Preview_BadRequestException
+     * @throws Zend_Http_Client_Exception
      */
-    public function getPdfForFile($filePath, $synchronRequest = false)
+    public function getPdfForFile($filePath, $synchronRequest = false, $intermediateFormats = [])
     {
-        if (false === ($result = $this->getPreviewsForFile($filePath, ['synchronRequest' => $synchronRequest, ['fileType' => 'pdf',]]))) {
+        if ([] !== $intermediateFormats) {
+            throw new Tinebase_Exception_NotImplemented("getPdfForFile with intermediate formats not implemented in Preview_ServiceV1");
+        }
+        return $this->_getSingleFile($filePath, ['fileType' => 'pdf',], $synchronRequest);
+    }
+
+    /**
+     * @param $filePath
+     * @param $config
+     * @param $synchronRequest
+     * @return mixed
+     * @throws Tinebase_FileSystem_Preview_BadRequestException
+     * @throws Zend_Http_Client_Exception
+     */
+    protected function _getSingleFile($filePath, $config, $synchronRequest)
+    {
+        if (false === ($result = $this->getPreviewsForFile($filePath, ['synchronRequest' => $synchronRequest, $config]))) {
             Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ . ' preview service did not succeed');
             throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed: service occupied');
         }
