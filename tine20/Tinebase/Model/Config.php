@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -14,6 +14,9 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property string         name
+ * @property string         value
  */
 class Tinebase_Model_Config extends Tinebase_Record_Abstract 
 {

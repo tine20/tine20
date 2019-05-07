@@ -15,6 +15,8 @@
  */
 class ExampleApplication_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'ExampleApplication';
+
     /**
      * ExampleApplication Status
      * 
@@ -28,6 +30,8 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
 
     const EXAMPLE_STRING = 'exampleString';
 
+    const EXAMPLE_RECORD = 'exampleRecord';
+
     const EXAMPLE_MAILCONFIG = 'exampleMailConfig';
     const SMTP = 'smtp';
     const IMAP = 'imap';
@@ -40,6 +44,16 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::EXAMPLE_RECORD        => [
+            self::LABEL                 => 'Example Label',
+            self::DESCRIPTION           => 'explain some stuff here',
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => self::APP_NAME,
+                self::MODEL_NAME            => ExampleApplication_Model_ExampleRecord::MODEL_NAME_PART,
+            ],
+            self::SETBYADMINMODULE      => true,
+        ],
         self::EXAMPLE_MAILCONFIG => array(
             self::LABEL              => 'Example Mail Config',
             self::DESCRIPTION        => 'explain some stuff here',

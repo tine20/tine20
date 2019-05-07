@@ -2388,7 +2388,34 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     {
         return self::$_properties;
     }
-    
+
+    public static function resolveRecordValue($val, $definition)
+    {
+        if ($val && isset($definition['type']) && Tinebase_Config::TYPE_RECORD === $definition['type']) {
+            if (isset($definition[Tinebase_Config::TYPE_RECORD_CONTROLLER])) {
+                try {
+                    $val = $definition[Tinebase_Config::TYPE_RECORD_CONTROLLER]::getInstance()->get($val);
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e);
+                }
+            } elseif (isset($definition[Tinebase_Config::OPTIONS][Tinebase_Config::APPLICATION_NAME]) &&
+                isset($definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME])) {
+                $ctrlName = $definition[Tinebase_Config::OPTIONS][Tinebase_Config::APPLICATION_NAME] .
+                    '_Controller_' .
+                    $definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME];
+                if (class_exists($ctrlName)) {
+                    try {
+                        $val = $ctrlName::getInstance()->get($val);
+                    } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
+                    }
+                }
+            }
+        }
+
+        return $val;
+    }
+
     /**
      * get config for client registry
      * 
@@ -2415,16 +2442,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         try {
                             $type = isset($definition['type']) ? $definition['type'] : null;
                             if ($type) {
-                                $val = $config->{$name};
-                                if ($val && Tinebase_Config::TYPE_RECORD === $type &&
-                                        isset($definition[Tinebase_Config::TYPE_RECORD_CONTROLLER])) {
-                                    try {
-                                        $val = $definition[Tinebase_Config::TYPE_RECORD_CONTROLLER]::getInstance()
-                                            ->get($val);
-                                    } catch(Exception $e) {
-                                        Tinebase_Exception::log($e);
-                                    }
-                                }
+                                $val = static::resolveRecordValue($config->{$name}, $definition);
                                 $configRegistryItem = new Tinebase_Config_Struct(array(
                                     'value' => $val,
                                     'definition' => new Tinebase_Config_Struct($definition),
