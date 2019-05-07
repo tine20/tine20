@@ -30,6 +30,54 @@ class Tinebase_ControllerServerTest extends ServerTestCase
     }
 
     /**
+     * @group ServerTests
+     */
+    public function testValidEmailLogin()
+    {
+        $oldAuthByEmail = Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL};
+        $oldSplit = Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit;
+        try {
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit = false;
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} = true;
+            $request = $this->_getTestRequest();
+            $credentials = $this->getTestCredentials();
+            $account = $this->getAccountByName($credentials['username']);
+
+            $result = Tinebase_Controller::getInstance()->login($account->accountEmailAddress, $credentials['password'],
+                $request);
+
+            static::assertTrue($result);
+        } finally {
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} = $oldAuthByEmail;
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit = $oldSplit;
+        }
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testInvalidEmailLogin()
+    {
+        $oldAuthByEmail = Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL};
+        $oldSplit = Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit;
+        try {
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit = false;
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} = false;
+            $request = $this->_getTestRequest();
+            $credentials = $this->getTestCredentials();
+            $account = $this->getAccountByName($credentials['username']);
+
+            $result = Tinebase_Controller::getInstance()->login($account->accountEmailAddress, $credentials['password'],
+                $request);
+
+            static::assertFalse($result);
+        } finally {
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} = $oldAuthByEmail;
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit = $oldSplit;
+        }
+    }
+
+    /**
      * @return Tinebase_Http_Request
      */
     protected function _getTestRequest()
