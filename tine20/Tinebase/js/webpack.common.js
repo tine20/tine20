@@ -87,11 +87,7 @@ module.exports = {
                         "@babel/plugin-syntax-dynamic-import"
                     ],
                     presets: [
-                        ["@babel/preset-env", {
-                            // NOTE: vue-bootstrap and file-selector are still on v2 :-(
-                            "corejs": "2",
-                            "useBuiltIns": "usage"
-                        }]
+                        ["@babel/preset-env"/*, { "modules": false }*/]
                     ]
                 }
             },

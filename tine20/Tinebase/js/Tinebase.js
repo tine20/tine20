@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+require('core-js/fn/promise');
 var lodash = require('lodash');
 var director = require('director');
 var postal = require('postal');
