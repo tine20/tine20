@@ -27,9 +27,10 @@ Tine.widgets.tree.ContextMenu = {
      * create new Ext.menu.Menu with actions
      * 
      * @param {} config has the node name, actions, etc.
+     * @param [] additional menu plugins
      * @return {}
      */
-    getMenu: function(config) {
+    getMenu: function(config, plugins) {
         
         this.config = config;
                 
@@ -163,16 +164,21 @@ Tine.widgets.tree.ContextMenu = {
                 Tine.log.warn('Tine.widgets.tree.ContextMenu.getMenu: can\'t cope with action :');
                 Tine.log.warn(action);
             }
-
         }
 
         /******************* return menu **********************/
+
+        var menuPlugins = [{
+            ptype: 'ux.itemregistry',
+            key:   'Tinebase-MainContextMenu'
+        }];
+
+        if (plugins) {
+            menuPlugins = menuPlugins.concat(plugins);
+        }
         
         return new Ext.menu.Menu({
-            plugins: [{
-                ptype: 'ux.itemregistry',
-                key:   'Tinebase-MainContextMenu'
-            }],
+            plugins: menuPlugins,
             items: items
         });
     },
