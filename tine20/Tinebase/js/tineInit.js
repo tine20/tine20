@@ -90,7 +90,13 @@ Tine.Tinebase.tineInit = {
     lsPrefix: Tine.Tinebase.common.getUrl('path') + 'Tine',
     
     onPreferenceChangeRegistered: false,
-    
+
+    initCustomJS: function() {
+        _.each(_.get(window, 'Tine.customJS', []), function(initCustomJS) {
+            initCustomJS()
+        })
+    },
+
     initWindow: function () {
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
@@ -981,6 +987,7 @@ Ext.onReady(async function () {
     Tine.Tinebase.tineInit.initAjax();
 
     Tine.Tinebase.tineInit.initRegistry(false, function() {
+        Tine.Tinebase.tineInit.initCustomJS();
         Tine.Tinebase.tineInit.checkClientVersion();
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
