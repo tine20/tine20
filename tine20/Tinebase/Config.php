@@ -49,6 +49,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
 
     /**
+     * allow authentication by email as optional replacement for username too
+     *
+     * @var string
+     */
+    const AUTHENTICATION_BY_EMAIL = 'authenticationByEmail';
+
+    /**
      * save automatic alarms when creating new record
      *
      * @var string
@@ -855,6 +862,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::AUTHENTICATION_BY_EMAIL => [
+            self::LABEL                 => 'Authentication by Email',
+            self::DESCRIPTION           => 'Authentication by Email', // _('Authentication by Email')
+            self::TYPE                  => self::TYPE_BOOL,
+            self::DEFAULT_STR           => false,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::USERBACKENDTYPE => array(
                                    //_('User Backend')
             'label'                 => 'User Backend',

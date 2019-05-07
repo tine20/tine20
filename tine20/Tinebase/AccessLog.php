@@ -298,7 +298,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             'li'         => Tinebase_DateTime::now(),
             'result'     => $authResult->getCode(),
             'clienttype' => $clientIdString,
-            'login_name' => $loginName ? $loginName : $authResult->getIdentity(),
+            'login_name' => $authResult->getIdentity(),
             'user_agent' => $userAgent
         ), true);
 
