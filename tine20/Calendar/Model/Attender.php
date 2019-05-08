@@ -343,7 +343,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function isSame($compareTo)
     {
-        $compareToSet = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($compareTo));
+        $compareToSet = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $compareTo instanceof Calendar_Model_Attender ? [$compareTo] : []);
         return !!self::getAttendee($compareToSet, $this);
     }
 
