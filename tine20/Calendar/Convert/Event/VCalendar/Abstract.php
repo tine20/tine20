@@ -32,12 +32,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * @var string
      */
     protected $_method;
-
-    /**
-     * @var Calendar_Model_Attender
-     */
-    protected $_calendarUser = NULL;
-
+    
     /**
      * options array
      * @var array
@@ -46,7 +41,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * 
      * current options:
      *  - onlyBasicData (only use basic event data when converting from VCALENDAR to Tine 2.0)
-     *  - addAttachmentsURL
      */
     protected $_options = array();
     
@@ -58,21 +52,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     {
         $this->_options = $options;
     }
-
-    /**
-     * sets current calendar user
-     *
-     * @param Calendar_Model_Attender $_calUser
-     * @return Calendar_Model_Attender oldUser
-     */
-    public function setCalendarUser(Calendar_Model_Attender $_calUser)
-    {
-        $oldUser = $this->_calendarUser;
-        $this->_calendarUser = $_calUser;
-
-        return $oldUser;
-    }
-
+    
     /**
      * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
      *
@@ -389,13 +369,13 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
         foreach($event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();
-
+            
             $parameters = array(
                 'CN'       => $eventAttendee->getName(),
                 'CUTYPE'   => $this->_getAttendeeCUType($eventAttendee),
                 'PARTSTAT' => $eventAttendee->status,
                 'ROLE'     => "{$eventAttendee->role}-PARTICIPANT",
-                'RSVP'     => $eventAttendee->isSame($this->_calendarUser) ? 'TRUE' : 'FALSE',
+                'RSVP'     => 'FALSE'
             );
             if (strpos($attendeeEmail, '@') !== false) {
                 $parameters['EMAIL'] = $attendeeEmail;
