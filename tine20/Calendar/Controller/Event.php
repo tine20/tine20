@@ -1159,6 +1159,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Calendar_Model_Event $_recurInstance
      * @param  bool                 $_checkBusyConflicts
      * @return Calendar_Model_Event
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function updateRecurSeries($_recurInstance, $_checkBusyConflicts = FALSE)
     {
@@ -1171,12 +1172,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $newBaseEvent->exdate = $baseEvent->exdate;
 
         $rrule = $baseEvent->rrule;
-        /*if (!$rrule instanceof Calendar_Model_Rrule) {
-            $rrule = new Calendar_Model_Rrule([], true);
-            $rrule->setFromString($baseEvent->rrule);
-            $baseEvent->rrule = $rrule;
-        }*/
         $newRrule = $newBaseEvent->rrule;
+
+        if (! $rrule) {
+            throw new Tinebase_Exception_InvalidArgument('No rrule in baseevent found!');
+        }
+
         if ((string)$rrule === (string)$newRrule) {
             $originalDtStart = $_recurInstance->getOriginalDtStart();
             if ($rrule->freq === Calendar_Model_Rrule::FREQ_WEEKLY && !empty($rrule->byday) &&
