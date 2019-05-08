@@ -740,7 +740,9 @@ Tine.Tinebase.tineInit = {
         // load initial js of user enabled apps
         // @TODO: move directly after login (login should return requested parts of registry)
         var appLoader = require('./app-loader!app-loader.js');
-        return appLoader(Tine.Tinebase.registry.get('userApplications'));
+        return appLoader(Tine.Tinebase.registry.get('userApplications')).then(function() {
+            return Tine.Tinebase.tineInit.initCustomJS();
+        });
     },
 
     /**
@@ -987,7 +989,6 @@ Ext.onReady(async function () {
     Tine.Tinebase.tineInit.initAjax();
 
     Tine.Tinebase.tineInit.initRegistry(false, function() {
-        Tine.Tinebase.tineInit.initCustomJS();
         Tine.Tinebase.tineInit.checkClientVersion();
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
