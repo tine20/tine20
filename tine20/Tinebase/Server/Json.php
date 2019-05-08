@@ -137,6 +137,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $json = $this->_request->getContent();
         $json = Tinebase_Core::filterInputForDatabase($json);
 
+        if (empty($json)) {
+            // nginx cuts the JSON POST payload if out of disk space ...
+            throw new Tinebase_Exception_SystemGeneric('Got empty JSON request - server out of disk space?');
+        }
+
         if (substr($json, 0, 1) == '[') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' batched request');
@@ -144,7 +149,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $requests = Zend_Json::decode($json);
         } else {
             $isBatchedRequest = false;
-            $requests = empty($json) ? array(null) : array(Zend_Json::decode($json));
+            $requests = array(Zend_Json::decode($json));
         }
 
         $this->_logRequests($requests);
