@@ -1168,6 +1168,12 @@ Ext.form.Field.prototype.getAutoCreate = function() {
     return cfg;
 };
 
+Ext.override(Ext.EventObject, {
+    getSignature: function() {
+        return String(this.browserEvent.timeStamp) + '-' + this.getXY();
+    }
+});
+
 /**
  * preserve dateformat
  */
