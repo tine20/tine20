@@ -33,7 +33,15 @@ Tine.Tinebase.MainContextMenu = Ext.extend(Ext.menu.Menu, {
             this.items.get(0).hide();
         }
         this.supr().onRender.call(this);
+    },
+
+    onHide : function(){
+        if (this.isVisible()) {
+            Tine.Tinebase.MainContextMenu.hideEventSignature = Ext.EventObject.getSignature();
+        }
+        this.supr().onHide.call(this);
     }
+
 });
 
 /**
@@ -44,10 +52,11 @@ Tine.Tinebase.MainContextMenu = Ext.extend(Ext.menu.Menu, {
  * @returns {Ext.Component}
  */
 Tine.Tinebase.MainContextMenu.showIf = function(e) {
-    var menu = new Tine.Tinebase.MainContextMenu({});
+    var menu = Tine.Tinebase.MainContextMenu.menu = new Tine.Tinebase.MainContextMenu({});
 
     if (menu.items.length) {
         menu.showAt(e.getXY());
+        return menu;
     }
 };
 
@@ -59,7 +68,7 @@ Tine.Tinebase.MainContextMenu.showIf = function(e) {
  * @returns {Ext.util.MixedCollection}
  */
 Tine.Tinebase.MainContextMenu.getItems = function(e) {
-    var menu = new Tine.Tinebase.MainContextMenu({});
+    var menu = Tine.Tinebase.MainContextMenu.menu = new Tine.Tinebase.MainContextMenu({});
 
     return menu.items;
 };
@@ -76,4 +85,16 @@ Tine.Tinebase.MainContextMenu.getCmp = function(e) {
         component = target ? Ext.ComponentMgr.get(target.id) : null;
 
     return component;
+};
+
+Tine.Tinebase.MainContextMenu.isVisible = function() {
+    return Tine.Tinebase.MainContextMenu.hideEventSignature
+        && Tine.Tinebase.MainContextMenu.hideEventSignature == Ext.EventObject.getSignature();
+};
+
+
+Tine.Tinebase.MainContextMenu.hide = function() {
+    if (Tine.Tinebase.MainContextMenu.menu && Tine.Tinebase.MainContextMenu.menu.hide) {
+        Tine.Tinebase.MainContextMenu.menu.hide();
+    }
 };
