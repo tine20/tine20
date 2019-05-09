@@ -335,6 +335,11 @@ Ext.form.DateField.prototype.getValue = function(){
 };
 
 /**
+ * Need this for ArrowEvents to navigate.
+ */
+Ext.KeyNav.prototype.forceKeyDown = Ext.isGecko;
+
+/**
  * We need to overwrite to preserve original time information because 
  * Ext.form.TimeField does not support seconds
  * 
