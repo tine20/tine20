@@ -318,7 +318,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type String
      */
     groupTextTpl: null,
-    
+
+    /**
+     * cols to exclude
+     *
+     * @type String[]
+     * @cfg hideColumns
+     */
+    hideColumns: null,
+
     /**
      * @property selectionModel
      * @type Tine.widgets.grid.FilterSelectionModel
@@ -383,6 +391,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.editDialogConfig = this.editDialogConfig || {};
         this.editBuffer = [];
         this.deleteQueue = [];
+
+        this.hideColumns = this.hideColumns || [];
         
         // init generic stuff
         if (this.modelConfig) {
@@ -564,7 +574,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 if (['relations', 'customfields'].indexOf(key) !== -1) {
                     return;
                 }
-                
+
+                if (this.hideColumns.indexOf(key) !== -1) {
+                    return;
+                }
+
                 if (config) {
                     columns.push(config);
                 }

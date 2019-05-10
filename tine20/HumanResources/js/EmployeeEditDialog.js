@@ -157,7 +157,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             frame: false,
             border: true,
             autoScroll: true,
-            layout: 'border'
+            layout: 'border',
+            hideColumns: ['employee_id']
         });
         
         this.vacationGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
