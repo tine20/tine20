@@ -406,6 +406,8 @@ class Calendar_Frontend_iMIP
                 if ($event->external_seq > $existingEvent->external_seq) {
                     // updates event with .ics
                     $event->id = $existingEvent->id;
+                    $event->last_modified_time = $existingEvent->last_modified_time;
+                    $event->seq = $existingEvent->seq;
                     $calCtrl = Calendar_Controller_Event::getInstance();
                     $oldCalenderAcl = $calCtrl->doContainerACLChecks();
                     try {
