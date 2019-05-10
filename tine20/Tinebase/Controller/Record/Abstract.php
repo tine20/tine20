@@ -2225,6 +2225,8 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Record_Interface $_record
      * @return void
+     *
+     * TODO refactor -> make this public / add acl check if required
      */
     protected function _saveAlarms(Tinebase_Record_Interface $_record)
     {
