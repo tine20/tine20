@@ -95,7 +95,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         return self::$_instance;
     }
 
-    public static function destroyInstance()
+    public static function unsetInstance()
     {
         self::$_instance = null;
     }

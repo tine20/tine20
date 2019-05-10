@@ -573,7 +573,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
 
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
-        Calendar_Controller_MSEventFacade::destroyInstance();
+        Calendar_Controller_MSEventFacade::unsetInstance();
 
         $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
         $iMIP->method = 'REQUEST';
@@ -615,7 +615,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
                 '/files/google_external_invite_addAttender.ics');
 
             Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
-            Calendar_Controller_MSEventFacade::destroyInstance();
+            Calendar_Controller_MSEventFacade::unsetInstance();
 
             $id = '3evgs2i0jdkofmibc9u5cah0a9@googlePcomffffffffffffffff';
             $event = Calendar_Frontend_WebDAV_Event::create(Tinebase_Container::getInstance()->getPersonalContainer(
@@ -664,7 +664,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
 
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
-        Calendar_Controller_MSEventFacade::destroyInstance();
+        Calendar_Controller_MSEventFacade::unsetInstance();
 
         $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
         $iMIP->method = 'REQUEST';
@@ -699,7 +699,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
 
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
-        Calendar_Controller_MSEventFacade::destroyInstance();
+        Calendar_Controller_MSEventFacade::unsetInstance();
 
         $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
         $iMIP->method = 'REQUEST';
