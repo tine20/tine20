@@ -595,7 +595,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         $vcalendar = self::getVObject($blob);
         
         $result = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        
+
         foreach ($vcalendar->VEVENT as $vevent) {
             if (! isset($vevent->{'RECURRENCE-ID'})) {
                 $event = new Calendar_Model_Event();
@@ -604,6 +604,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     $this->_parseEventExceptions($event, $vcalendar, $options);
                 }
                 $result->addRecord($event);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Converted ' . count($result) . ' events from VCALENDAR blob.');
             }
         }
         

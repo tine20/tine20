@@ -592,4 +592,116 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
     }
+
+    /**
+     * fetch data from ics file and put it into the matching tine20 events
+     * example:
+     *  php tine20.php --method=Calendar.fetchDataFromIcs -v -d --username test --password test my.ics
+     *
+     * @param $_opts
+     * @return int
+     *
+     * NOTE: currently only alarms are supported
+     *
+     * TODO add more fields that can be processed / imported
+     */
+    public function fetchDataFromIcs($_opts)
+    {
+        // might not be necessary on your system
+        ini_set('memory_limit', '1G');
+
+        $args = $this->_parseArgs($_opts, array(), 'filename');
+
+        if ($_opts->d) {
+            $args['dryrun'] = 1;
+            if ($_opts->v) {
+                echo "Doing dry run.\n";
+            }
+        }
+
+        if (! isset($args['filename'])) {
+            if ($_opts->v) {
+                echo "No filename given.\n";
+            }
+            return 1;
+        }
+
+        $now = Tinebase_DateTime::now();
+        foreach ((array) $args['filename'] as $filename) {
+            $resource = fopen($filename, 'r');
+
+            // TODO allow to define the client
+            $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+            $events = $converter->toTine20RecordSet($resource);
+
+            if ($_opts->v) {
+                echo "Got " . count($events) . " events to process from " . $filename . ".\n";
+            }
+
+            foreach ($events as $event) {
+                if (count($event->alarms) > 0) {
+                    $alarmsToSet = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
+
+                    foreach ($event->alarms as $alarm) {
+                        // check if alarms are pending and alarm time is after NOW()
+                        if ($alarm->sent_status === Tinebase_Model_Alarm::STATUS_PENDING && $alarm->alarm_time->isLater($now)) {
+                            $alarmsToSet->addRecord($alarm);
+                        }
+                    }
+                    if (count($alarmsToSet) > 0) {
+                        // check if event is in db
+                        $existingEventsFilter = new Calendar_Model_EventFilter(array(
+                            array('field' => 'uid', 'operator' => 'in', 'value' => $event->uid),
+                        ));
+                        $existingEvents = Calendar_Controller_Event::getInstance()->search($existingEventsFilter);
+                        if (count($existingEvents) == 1) {
+                            if ($_opts->v) {
+                                echo "Found matching event with uid" . $event->uid . "\n";
+                            }
+                            if (! $_opts->d) {
+                                // save alarms!
+                                $tine20Event = $existingEvents->getFirstRecord();
+                                $tine20Event = Calendar_Controller_Event::getInstance()->get($tine20Event);
+                                if ($tine20Event->alarms && count($tine20Event->alarms) > 0) {
+                                    if ($_opts->v) {
+                                        echo "Preserving existing alarms ...\n";
+                                    }
+                                } else {
+                                    // TODO allow to configure this - currently alarms are only set for the current user attender
+                                    $currentUserAttender = new Calendar_Model_Attender(array(
+                                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                                        'user_id'   => Tinebase_Core::getUser()->contact_id
+                                    ));
+                                    $alarmsToSet->setOption('attendee', Calendar_Controller_Alarm::attendeeToOption($currentUserAttender));
+                                    if ($_opts->v) {
+                                        echo "Setting alarms: ...\n";
+                                        print_r($alarmsToSet->toArray());
+                                    }
+
+                                    $tine20Event->alarms = $alarmsToSet;
+                                    // TODO make this public - atm this needs to be done by hand
+                                    Calendar_Controller_Event::getInstance()->_saveAlarms($tine20Event);
+                                }
+                            }
+                        } else if (count($existingEvents) > 1) {
+                            if ($_opts->v) {
+                                echo "Got " . count($existingEvents) . " events for uid" . $event->uid . ". skipping ...\n";
+                            }
+                        } else if ($_opts->v) {
+                            echo "No matching event with uid" . $event->uid . " found.\n";
+                        }
+                    } else if ($_opts->v) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($event->alarms->toArray(), true));
+                        echo "Event with " . $event->uid . " has no pending alarms in the future.\n";
+                    }
+                } else if ($_opts->v) {
+                    echo "Event with " . $event->uid . " has no alarms.\n";
+                }
+            }
+
+            fclose($resource);
+        }
+
+        return 0;
+    }
 }
