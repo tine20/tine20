@@ -642,6 +642,52 @@ class Calendar_Frontend_iMIPTest extends TestCase
         }
     }
 
+    public function testGoogleExternalInviteMultipleAttendeeConcurrencyHandling()
+    {
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        $unitAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+        // test external invite 2nd user
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($createdEvent->getId());
+        static::assertSame(3, $updatedEvent->attendee->count(), 'attendee count mismatch');
+        $scleverAttender = Calendar_Model_Attender::getOwnAttender($updatedEvent->attendee);
+        static::assertNotNull($scleverAttender, 'sclever attender not found');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $scleverAttender->status);
+        $unitAttender = $updatedEvent->attendee->find('user_id', $unitAttender->user_id);
+        static::assertNotNull($unitAttender, 'unit attender not found');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'dtstart', 'operator' => 'equals', 'value' => $createdEvent->dtstart]
+        ]));
+
+        static::assertEquals(1, $events->count());
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($events->getFirstRecord()->attendee);
+        static::assertNotNull($ownAttender, 'lost own attendee');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+    }
+
     public function testGoogleExternalInviteAddAttenderConcurrencyHandling()
     {
         // test external invite
