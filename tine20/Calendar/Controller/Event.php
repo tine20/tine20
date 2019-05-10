@@ -2785,6 +2785,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // preserve old authkey
         $attender->status_authkey = $currentAttender->status_authkey;
 
+        if ($attender->diff($currentAttender)->isEmpty()) {
+            return;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . " Updating attender: " . print_r($attender->toArray(), TRUE));
 
