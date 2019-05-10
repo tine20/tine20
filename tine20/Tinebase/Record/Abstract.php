@@ -794,10 +794,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                                 continue;
                             }
                             
-                            $value[$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
+                            $value[$dataKey] = (int)$dataValue == 0 || is_array($dataValue) ? NULL : new Tinebase_DateTime($dataValue);
                         }
                     } else {
-                        $value = (int)$value == 0 ? NULL : new Tinebase_DateTime($value);
+                        $value = (int)$value == 0 || is_array($value) ? NULL : new Tinebase_DateTime($value);
                         
                     }
                 } catch (Tinebase_Exception_Date $zde) {
