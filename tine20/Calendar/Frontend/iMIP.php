@@ -444,6 +444,8 @@ class Calendar_Frontend_iMIP
                             $existingEvent->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['DTSTAMP'])) {
                     // updates event with .ics
                     $event->id = $existingEvent->id;
+                    $event->last_modified_time = $existingEvent->last_modified_time;
+                    $event->seq = $existingEvent->seq;
                     $calCtrl = Calendar_Controller_Event::getInstance();
                     $oldCalenderAcl = $calCtrl->doContainerACLChecks();
                     try {
