@@ -653,6 +653,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _freeBusyCleanup(Tinebase_Record_RecordSet $_events, $_action)
     {
+        if (!$this->_doContainerACLChecks) return;
+
         /** @var Calendar_Model_Event $event */
         foreach ($_events as $event) {
             $doFreeBusyCleanup = $event->doFreeBusyCleanup();
@@ -1758,8 +1760,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * inspect update of one record
      * 
-     * @param   Tinebase_Record_Interface $_record      the update record
-     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @param   Calendar_Model_Event $_record      the update record
+     * @param   Calendar_Model_Event $_oldRecord   the current persistent record
      * @return  void
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
@@ -2570,35 +2572,30 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} ");
         
         $currentAttendee = $_currentEvent->attendee;
-        
-        $diff = $currentAttendee->getMigration($_event->attendee->getArrayOfIds());
+
+        $diff = Calendar_Model_Attender::getMigration($currentAttendee, $_event->attendee);
 
         $calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
         
         // delete attendee
-        $this->_backend->deleteAttendee($diff['toDeleteIds']);
-        foreach ($diff['toDeleteIds'] as $deleteAttenderId) {
+        $toDeleteIds = $diff['toDelete']->getArrayOfIds();
+        $this->_backend->deleteAttendee($toDeleteIds);
+        foreach ($toDeleteIds as $deleteAttenderId) {
             $idx = $currentAttendee->getIndexById($deleteAttenderId);
             if ($idx !== FALSE) {
                 $currentAttenderToDelete = $currentAttendee[$idx];
                 $this->_increaseDisplayContainerContentSequence($currentAttenderToDelete, $_event, Tinebase_Model_ContainerContent::ACTION_DELETE);
             }
         }
-        
-        // create/update attendee
-        /** @var Calendar_Model_Attender $attender */
-        foreach ($_event->attendee as $attender) {
-            $attenderId = $attender->getId();
-            $idx = ($attenderId) ? $currentAttendee->getIndexById($attenderId) : FALSE;
-            
-            if ($idx !== FALSE) {
-                $currentAttender = $currentAttendee[$idx];
-                if ($_isRescheduled || !$attender->diff($currentAttender)->isEmpty()) {
-                    $this->_updateAttender($attender, $currentAttender, $_event, $_isRescheduled, $calendar);
-                }
-            } else {
-                $this->_createAttender($attender, $_event, FALSE, $calendar);
-            }
+
+        foreach ($diff['toCreate'] as $attender) {
+            $this->_createAttender($attender, $_event, FALSE, $calendar);
+        }
+
+        foreach ($diff['toUpdate'] as $attender) {
+            ($currentAttender = $currentAttendee->getById($attender->getId())) ?:
+                ($currentAttender = Calendar_Model_Attender::getAttendee($currentAttendee, $attender));
+            $this->_updateAttender($attender, $currentAttender, $_event, $_isRescheduled, $calendar);
         }
     }
 

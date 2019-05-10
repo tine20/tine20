@@ -802,13 +802,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     {
         $result = array(
             'toDelete' => new Tinebase_Record_RecordSet('Calendar_Model_Attender'),
-            'toCreate' => clone $_update,
+            'toCreate' => $_update->getClone(true), // shallow copy! as we set the id below, we do NOT want to actuall recrods to be cloned!
             'toUpdate' => new Tinebase_Record_RecordSet('Calendar_Model_Attender'),
         );
         
         foreach($_current as $currAttendee) {
             $updateAttendee = self::getAttendee($result['toCreate'], $currAttendee);
             if ($updateAttendee) {
+                $updateAttendee->setId($currAttendee->getId());
                 $result['toUpdate']->addRecord($updateAttendee);
                 $result['toCreate']->removeRecord($updateAttendee);
             } else {

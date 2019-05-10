@@ -143,7 +143,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      * @param string $id
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public function testCreateEventWithExternalOrganizer($targetContainer = null, $id = null)
+    public function testCreateEventWithExternalOrganizer($targetContainer = null, $id = null, $extendedChecks = true)
     {
         if (!isset($_SERVER['HTTP_USER_AGENT'])) {
             $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
@@ -165,7 +165,10 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $this->assertEquals('New Event', $record->summary);
         $this->assertEquals('l.kneschke@metaways.de', $container->name, 'event no in invitation calendar');
-        $this->assertTrue(!! $ownAttendee, 'own attendee missing');
+        if (!$extendedChecks) {
+            return $event;
+        }
+        $this->assertTrue(!!$ownAttendee, 'own attendee missing');
         $this->assertEquals(1, $record->seq, 'tine20 seq starts with 1');
         $this->assertEquals(0, $record->external_seq, 'external seq not set -> 0');
         
@@ -297,13 +300,14 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      */
     public function testCreateEventWhichExistsAlreadyInAnotherContainer()
     {
-        $this->_testNeedsTransaction();
-        
         $existingEvent = $this->testCreateEventWithExternalOrganizer()->getRecord();
         
         // save event as sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
-        $existingEventForSclever = $this->testCreateEventWithExternalOrganizer($this->_getTestContainer('Calendar', Calendar_Model_Event::class), $existingEvent->getId())->getRecord();
+
+        $existingEventForSclever = $this->testCreateEventWithExternalOrganizer($this->_getTestContainer('Calendar',
+            Calendar_Model_Event::class), $existingEvent->getId(), false)->getRecord();
+
         $this->_testCalendars[] = Tinebase_Container::getInstance()->getContainerById($existingEventForSclever->container_id);
         
         $this->assertEquals($existingEvent->uid, $existingEventForSclever->uid);
