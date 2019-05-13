@@ -222,6 +222,22 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
 
             $vevent = new self($container, $existingEvent);
+            /** @var Calendar_Model_Event $existingEvent */
+            $existingEvent = clone $existingEvent;
+            $existingEvent->alarms = $event->alarms;
+            $existingEvent->transp = $event->transp;
+            if (null === ($contactId = $container->getOwner())) {
+                $contactId = Tinebase_Core::getUser()->contact_id;
+            } else {
+                $contactId = Tinebase_User::getInstance()->getUserById($contactId)->contact_id;
+            }
+            if (null !== ($attender = $event->attendee->find('user_id', $contactId))) {
+                if (null !== ($oldAttender = $existingEvent->attendee->find('user_id', $contactId))) {
+                    $existingEvent->attendee->removeRecord($oldAttender);
+                    $attender->setId($oldAttender->getId());
+                }
+                $existingEvent->attendee->addRecord($attender);
+            }
 
             $calCtrl = Calendar_Controller_Event::getInstance();
             $oldCalenderAcl = $calCtrl->doContainerACLChecks();
@@ -229,7 +245,22 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 if ($existingEvent->hasExternalOrganizer()) {
                     $calCtrl->doContainerACLChecks(false);
                 }
-                $vevent->put($vobjectData);
+                $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVObject($vobjectData);
+                $xTine20Container = null;
+                foreach ($vobject->children() as $component) {
+                    if (isset($component->{'X-TINE20-CONTAINER'})) {
+                        try {
+                            $xTine20Container = Tinebase_Container::getInstance()
+                                ->get($component->{'X-TINE20-CONTAINER'});
+                        } catch (Tinebase_Exception_NotFound $e) {}
+                        break;
+                    }
+                }
+                $vcalendar = $converter->fromTine20Model($existingEvent);
+                if (null !== $xTine20Container) {
+                    static::_addXPropsToVEvent($vcalendar, $xTine20Container);
+                }
+                $vevent->put($vcalendar->serialize());
             } finally {
                 $calCtrl->doContainerACLChecks($oldCalenderAcl);
             }
@@ -631,21 +662,26 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     {
         if ($this->_vevent == null) {
             $this->_vevent = $this->_getConverter()->fromTine20Model($this->getRecord());
-            
-            foreach ($this->_vevent->children() as $component) {
-                if ($component->name == 'VEVENT') {
-                    // NOTE: we store the requested container here to have an origin when the event is moved
-                    $component->add('X-TINE20-CONTAINER', $this->_container->getId());
-                    
-                    if (isset($component->{'VALARM'}) && !$this->_container->isPersonalOf(Tinebase_Core::getUser())) {
-                        // prevent duplicate alarms
-                        $component->add('X-MOZ-LASTACK', Tinebase_DateTime::now()->addYear(100)->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
-                    }
-                }
-            }
+
+            static::_addXPropsToVEvent($this->_vevent, $this->_container);
         }
         
         return $this->_vevent->serialize();
+    }
+
+    protected static function _addXPropsToVEvent($_vevent, $_container)
+    {
+        foreach ($_vevent->children() as $component) {
+            if ($component->name == 'VEVENT') {
+                // NOTE: we store the requested container here to have an origin when the event is moved
+                $component->add('X-TINE20-CONTAINER', $_container->getId());
+
+                if (isset($component->{'VALARM'}) && !$_container->isPersonalOf(Tinebase_Core::getUser())) {
+                    // prevent duplicate alarms
+                    $component->add('X-MOZ-LASTACK', Tinebase_DateTime::now()->addYear(100)->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
+                }
+            }
+        }
     }
     
     /**
