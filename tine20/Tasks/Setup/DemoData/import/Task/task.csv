@@ -1,3 +1,3 @@
 summary,due,priority,description,percent,status,completed
-Abgabe Zulassung,2018-08-20 13:00:00,NORMAL,test den import,50,COMPLETED,
-Einkauf Bürobedarf,2018-08-20 13:00:00,normal,test den import,50,NEEDS-ACTION,
+Abgabe Zulassung,today,NORMAL,test den import,50,COMPLETED,
+Einkauf Bürobedarf,monday,normal,test den import,50,NEEDS-ACTION,
