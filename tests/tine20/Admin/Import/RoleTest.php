@@ -27,12 +27,6 @@ class Admin_Import_RoleTest extends TestCase
 
     public function testImportDemoData()
     {
-        $this->markTestSkipped('roles are imported multiple times, transaction seems not to work?');
-        // also the problem ist the unique key on name and deleted_time => this needs global fixing!
-
-        if (!extension_loaded('yaml')) {
-            $this->markTestSkipped('Yaml are not install');
-        }
         $this->_importContainer = $this->_getTestContainer('Admin', 'Tinebase_Model_Role');
         $importer = new Tinebase_Setup_DemoData_ImportSet('Admin', [
             'container_id' => $this->_importContainer->getId(),

@@ -47,6 +47,6 @@ class Admin_Import_UserTest extends TestCase
                 $count++;
             }
         }
-        self::assertEquals(7, $count);
+        self::assertEquals(count($users), $count);
     }
 }
