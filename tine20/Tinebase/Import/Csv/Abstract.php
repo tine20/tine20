@@ -181,7 +181,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     protected function _getDay($data,$dates)
     {
         foreach ($dates as $date) {
-            if($date != null && $data[$date] != 'today') {
+            if($data[$date] != '' && $data[$date] != 'today') {
                 $data[$date] = $this->{'_' . $data[$date]};
             }else
             {

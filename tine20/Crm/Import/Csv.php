@@ -24,7 +24,9 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected $_additionalOptions = array(
         'container_id' => '',
+        'dates' => array('start','end','end_scheduled','resubmission_date'),
     );
+
 
     /**
      * constructs a new importer from given config
@@ -89,6 +91,8 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
                 $data[$fieldName] = $keyField->getKeyfieldDefault()->getId();
             }
         }
+
+        if($this->_options['demoData']) $data = $this->_getDay($data, $this->_additionalOptions['dates']);
 
         return $data;
     }

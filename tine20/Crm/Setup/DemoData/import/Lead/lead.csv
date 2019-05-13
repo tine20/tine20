@@ -1,0 +1,3 @@
+lead_name,leadstate_id,leadtype_id,leadsource_id,start,description,end,turnover,probability,end_scheduled,resubmission_date,tags,CUSTOMER,PARTNER,RESPONSIBLE,TASK,PRODUCT
+Konzert,3,2,4,today,Konzerte in der Elbphilharmonie,wednesday2week,1654784,60,nextWednesday,nextMonday,Harmonie,j.baum,e.eichman,Test Respon,"Verkauf Karten;Verkauf Fan",Ocester
+ACB,1,1,1,friday,Des,,165,100,,,Test,s.rattle,t.bar,test,"Verkauf 1;Verkauf 2",Own
