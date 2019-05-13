@@ -57,6 +57,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
     const MODEL_NAME_PART = 'DailyWTReport';
 
     const FLDS_MONTHLYWTREPORT = 'monthlywtreport';
+    const FLDS_WORKING_TIMES = 'working_times';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -236,7 +237,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DISABLED              => true,
             ],
-            'working_times'  => [
+            self::FLDS_WORKING_TIMES  => [
                 self::TYPE                  => self::TYPE_RECORDS,
                 self::NULLABLE              => true,
                 self::SHY                   => true,

@@ -69,13 +69,21 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
 
         $expander = new Tinebase_Record_Expander(HumanResources_Model_MonthlyWTReport::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID => [],
+                HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'division_id' => [],
+                    ],
+                ],
             ],
         ]);
         $expander->expand($rs);
 
+        $this->_monthlyWTR->working_times = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_WorkingTime::class);
         $this->_records = $this->_monthlyWTR->dailywtreports;
         $this->_records->sort('date');
+        foreach ($this->_records as $dailyWTR) {
+            $this->_monthlyWTR->working_times->merge($dailyWTR->working_times);
+        }
     }
 
     /**

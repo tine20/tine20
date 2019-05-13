@@ -199,7 +199,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'contracts' => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'working_time_scheme' => []
+                        'working_time_scheme' => [Tinebase_Record_Expander::GET_DELETED => true]
                     ],
                 ],
             ],

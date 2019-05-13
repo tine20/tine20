@@ -16,6 +16,7 @@
  *
  * @proeprty HumanResources_Model_Employee  employee_id
  * @property Tinebase_Record_RecordSet      dailywtreports
+ * @property Tinebase_Record_RecordSet      working_times
  * @proeprty string                         month
  * @property boolean                        is_cleared
  * @property integer                        working_time_actual
@@ -182,6 +183,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                 self::LABEL                         => 'Working Time Balance Previous Month', // _('Working Time Balance Previous Month')
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,
+            ],
+            HumanResources_Model_DailyWTReport::FLDS_WORKING_TIMES => [
+                self::TYPE                          => self::TYPE_VIRTUAL,
             ],
         ],
     ];
