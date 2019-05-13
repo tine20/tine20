@@ -25,6 +25,7 @@ class Sales_Import_PurchaseInvoice_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected $_additionalOptions = array(
         'container_id' => '',
+        'dates'        => array('date','due_at','payed_at','discount_until')
     );
 
     /**
@@ -46,6 +47,9 @@ class Sales_Import_PurchaseInvoice_Csv extends Tinebase_Import_Csv_Abstract
     protected function _doConversions($_data)
     {
         $result = parent::_doConversions($_data);
+
+        if($this->_options['demoData']) $result = $this->_getDay($result, $this->_additionalOptions['dates']);
+
         $result = $this->_setCostCenter($result);
         $result = $this->_setContact($result);
         $result = $this->_setSupplier($result);

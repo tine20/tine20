@@ -31,6 +31,7 @@ class Sales_Import_PurchaseInvoiceTest extends TestCase
         $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_PurchaseInvoice', [
             'definition' => 'sales_import_purchaseinvoice_csv',
+            'file' => 'purchaseinvoice.csv',
         ]);
         $importer->importDemodata();
         $filter = Sales_Model_PurchaseInvoiceFilter::getFilterForModel('Sales_Model_PurchaseInvoice', [
