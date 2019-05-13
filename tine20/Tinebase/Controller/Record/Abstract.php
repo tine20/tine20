@@ -576,7 +576,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Expander $_expander
      * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $this->_checkRight(self::ACTION_GET);
 
@@ -588,7 +588,16 @@ abstract class Tinebase_Controller_Record_Abstract
                $this->_getMultipleGrant,
                TRUE)
            : NULL;
-        $records = $this->_backend->getMultiple($_ids, $containerIds);
+        if ($_getDeleted && $this->_backend->getModlogActive()) {
+            $this->_backend->setModlogActive(false);
+            try {
+                $records = $this->_backend->getMultiple($_ids, $containerIds);
+            } finally {
+                $this->_backend->setModlogActive(true);
+            }
+        } else {
+            $records = $this->_backend->getMultiple($_ids, $containerIds);
+        }
 
         if ($_expander !== null) {
             $_expander->expand($records);

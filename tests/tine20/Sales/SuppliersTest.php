@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -24,7 +24,12 @@ class Sales_SuppliersTest extends TestCase
      * @var Sales_Frontend_Json
      */
     protected $_json;
-    
+
+    public function publicSetUp()
+    {
+        $this->setUp();
+    }
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -43,7 +48,7 @@ class Sales_SuppliersTest extends TestCase
      * 
      * @return array
      */
-    protected function _createSupplier()
+    public function _createSupplier()
     {
         $container = Tinebase_Container::getInstance()->getSharedContainer(
             Tinebase_Core::getUser()->getId(),

@@ -21,7 +21,7 @@ class Tinebase_Record_Expander_RecordProperty extends Tinebase_Record_Expander_P
             $this->_rootExpander->_registerDataToFetch(new Tinebase_Record_Expander_DataRequest(
                 $this->_prio, Tinebase_Core::getApplicationInstance($this->_model, '', true), $ids,
                 // workaround: [$this, '_setData'] doesn't work, even so it should!
-                function($_data) use($self) {$self->_setData($_data);}));
+                function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted));
         }
     }
 
