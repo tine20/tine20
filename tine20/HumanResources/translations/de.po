@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2019-04-05 17:11+0200\n"
+"PO-Revision-Date: 2019-05-13 10:54+0200\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -174,7 +174,7 @@ msgstr "Verschiedenes"
 #: js/AccountEditDialog.js:165 js/FreeTimeEditDialog.js:527
 #: js/EmployeeEditDialog.js:502 js/ExtraFreeTimeEditDialog.js:153
 #: Model/WageType.php:87 Model/Account.php:113 Model/ExtraFreeTime.php:91
-#: Model/FreeTimeType.php:93 Model/FreeTime.php:107 Model/Employee.php:102
+#: Model/FreeTimeType.php:96 Model/FreeTime.php:107 Model/Employee.php:102
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -187,7 +187,7 @@ msgid_plural "Employees"
 msgstr[0] "Mitarbeiter"
 msgstr[1] "Mitarbeiter"
 
-#: js/DailyWTReportGridPanel.js:19
+#: js/DailyWTReportGridPanel.js:39
 msgid "Calculate all Reports"
 msgstr "Berechnen alle Berichte"
 
@@ -590,25 +590,21 @@ msgstr "Bereitschaft"
 msgid "Unpaid"
 msgstr "Unbezahlt"
 
-#: Setup/Initialize.php:150
+#: Setup/Initialize.php:151
 msgid "[S] Sickness"
 msgstr "[K] Krankheit"
 
-#: Setup/Initialize.php:151
+#: Setup/Initialize.php:152
 msgid "[D] Visit doctor"
 msgstr "[A] Arzt"
 
-#: Setup/Initialize.php:152
+#: Setup/Initialize.php:153
 msgid "[V] Vacation"
 msgstr "[U] Urlaub"
 
-#: Setup/Initialize.php:153
+#: Setup/Initialize.php:154
 msgid "[BT] Business trip"
 msgstr "[D] Dienstreise"
-
-#: Setup/Initialize.php:154
-msgid "[FD] Feast day"
-msgstr "[F] Feiertag"
 
 #: Setup/Initialize.php:155
 msgid "[FT] Flex time"
@@ -706,71 +702,83 @@ msgstr "Berichtsvorlagen Node ID"
 msgid "Timetracker Timeaccount for Workingtime Tracking"
 msgstr "Zeitkonto für Personalzeiterfassung"
 
-#: Model/DailyWTReport.php:74
+#: Controller/DailyWTReport.php:253
+msgid "No valid contract for this date"
+msgstr "Für dieses Datum existiert kein gültiger Vertrag"
+
+#: Controller/DailyWTReport.php:314 Controller/DailyWTReport.php:326
+msgid "unexpected error: "
+msgstr "Unerwarteter Fehler: "
+
+#: Model/DailyWTReport.php:76
 msgid "Daily Working Time Report"
 msgid_plural "Daily Working Time Reports"
 msgstr[0] "Täglicher Arbeitszeit Bericht"
 msgstr[1] "Tägliche Arbeitszeit Berichte"
 
-#: Model/DailyWTReport.php:166
+#: Model/DailyWTReport.php:168
 msgid "Date"
 msgstr "Datum"
 
-#: Model/DailyWTReport.php:174
+#: Model/DailyWTReport.php:176
 msgid "Evaluation Start Time"
 msgstr "Auswertungs Startzeit"
 
-#: Model/DailyWTReport.php:181
+#: Model/DailyWTReport.php:183
 msgid "Evaluation End Time"
 msgstr "Auswertungs Endzeit"
 
-#: Model/DailyWTReport.php:188
+#: Model/DailyWTReport.php:190
 msgid "Corrected Evaluation Start Time"
 msgstr "Korrigierte Auswertungs Startzeit"
 
-#: Model/DailyWTReport.php:195
+#: Model/DailyWTReport.php:197
 msgid "Corrected Evaluation End Time"
 msgstr "Korrigierte Auswertungs Endzeit"
 
-#: Model/DailyWTReport.php:205 Model/MonthlyWTReport.php:159
+#: Model/DailyWTReport.php:207 Model/MonthlyWTReport.php:159
 msgid "Target Working Time"
 msgstr "Soll Arbeitszeit"
 
-#: Model/DailyWTReport.php:214
+#: Model/DailyWTReport.php:216
 msgid "Target Working Time Correction"
 msgstr "Soll Arbeitszeit Korrektur"
 
-#: Model/DailyWTReport.php:224
+#: Model/DailyWTReport.php:226
 msgid "Break Time Net"
 msgstr "Netto Pausenzeit"
 
-#: Model/DailyWTReport.php:232
+#: Model/DailyWTReport.php:234
 msgid "Break Deduction Time"
 msgstr "Pausenzeit Abzug"
 
-#: Model/DailyWTReport.php:252 Model/MonthlyWTReport.php:151
+#: Model/DailyWTReport.php:254 Model/MonthlyWTReport.php:151
 msgid "Actual Working Time"
 msgstr "Ist Arbeitszeit"
 
-#: Model/DailyWTReport.php:262 Model/MonthlyWTReport.php:166
+#: Model/DailyWTReport.php:264 Model/MonthlyWTReport.php:166
 msgid "Working Time Correction"
 msgstr "Arbeitszeit Korrektur"
 
-#: Model/DailyWTReport.php:270
+#: Model/DailyWTReport.php:272
 msgid "Total Working Time"
 msgstr "Gesamt Arbeitszeit"
 
-#: Model/DailyWTReport.php:278
+#: Model/DailyWTReport.php:280
 msgid "System Remark"
 msgstr "System Anmerkung"
 
-#: Model/DailyWTReport.php:286
+#: Model/DailyWTReport.php:288
 msgid "Remark"
 msgstr "Anmerkung"
 
-#: Model/DailyWTReport.php:294 Model/MonthlyWTReport.php:138
+#: Model/DailyWTReport.php:296 Model/MonthlyWTReport.php:138
 msgid "Is Cleared"
 msgstr "Abgerechnet"
+
+#: Model/DailyWTReport.php:305
+msgid "Calculation Failure"
+msgstr "Berechnungsfehler"
 
 #: Model/MonthlyWTReport.php:57
 msgid "Monthly Working Time Report"
@@ -794,21 +802,21 @@ msgstr "Arbeitszeit Saldo"
 msgid "Working Time Balance Previous Month"
 msgstr "Vormonats Saldo Arbeitszeit"
 
-#: Model/WageType.php:53 Model/FreeTimeType.php:110
+#: Model/WageType.php:53 Model/FreeTimeType.php:113
 msgid "Wage type"
 msgid_plural "Wage types"
 msgstr[0] "Lohnart"
 msgstr[1] "Lohnarten"
 
-#: Model/WageType.php:76 Model/FreeTimeType.php:82
+#: Model/WageType.php:76 Model/FreeTimeType.php:85
 msgid "Abbreviation"
 msgstr "Abkürzung"
 
-#: Model/WageType.php:82 Model/FreeTimeType.php:88
+#: Model/WageType.php:82 Model/FreeTimeType.php:91
 msgid "Name"
 msgstr "Name"
 
-#: Model/WageType.php:94 Model/FreeTimeType.php:100
+#: Model/WageType.php:94 Model/FreeTimeType.php:103
 msgid "System"
 msgstr "System"
 
@@ -833,13 +841,11 @@ msgstr "Sonderurlaub"
 msgid "Start time"
 msgstr "Startzeit"
 
-#: Model/BLDailyWTReport/BreakTimeConfig.php:46
-msgid "Break Time"
-msgstr "Pausenzeit"
-
 #: Model/BLDailyWTReport/BreakTimeConfig.php:47
-msgid "Break Times"
-msgstr "Pausenzeiten"
+msgid "Break Time"
+msgid_plural "Break Times"
+msgstr[0] "Pausenzeit"
+msgstr[1] "Pausenzeiten"
 
 #: Model/BLDailyWTReport/BreakTimeConfig.php:48
 msgid "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted automatically."
@@ -853,37 +859,35 @@ msgstr "Arbeitszeit"
 msgid "Break time"
 msgstr "Pausenzeit"
 
-#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:46
-msgid "Work Time Limit"
-msgstr "Arbeitzeitlimitierung"
-
 #: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:47
-msgid "Work Time Limits"
-msgstr "Arbeitzeitlimits"
+msgid "Work Time Limit"
+msgid_plural "Work Time Limits"
+msgstr[0] "Arbeitzeitlimitierung"
+msgstr[1] "Arbeitzeitlimitierungen"
 
 #: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:48
 msgid "Working time is evaluated from {{start_time|date(\"H:i\")}} until {{end_time|date(\"H:i\")}}."
 msgstr "Arbeitszeit wird ausgewertet von {{start_time|date(\"H:i\")}} bis {{end_time|date(\"H:i\")}}."
 
-#: Model/FreeTimeType.php:58
+#: Model/FreeTimeType.php:61
 msgid "Absence reason"
 msgid_plural "Absence reasons"
 msgstr[0] "Abwesenheitsgrund"
 msgstr[1] "Abwesenheitsgründe"
 
-#: Model/FreeTimeType.php:117
+#: Model/FreeTimeType.php:120
 msgid "Allow Booking"
 msgstr "Buchung erlauben"
 
-#: Model/FreeTimeType.php:123
+#: Model/FreeTimeType.php:126
 msgid "Allow Planning"
 msgstr "Plaung erlauben"
 
-#: Model/FreeTimeType.php:129
+#: Model/FreeTimeType.php:132
 msgid "Enable Freetime Timetracking"
 msgstr "Abwesenheits-Zeiterfassung aktivieren"
 
-#: Model/FreeTimeType.php:139
+#: Model/FreeTimeType.php:142
 msgid "Timeaccount"
 msgstr "Zeitkonto"
 
@@ -1102,6 +1106,15 @@ msgstr "Private Daten des Mitarbeiters bearbeiten"
 #: Acl/Rights.php:94
 msgid "Edit birthday, account data and other private information of employee records"
 msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Mitarbeiters"
+
+#~ msgid "[FD] Feast day"
+#~ msgstr "[F] Feiertag"
+
+#~ msgid "Break Times"
+#~ msgstr "Pausenzeiten"
+
+#~ msgid "Work Time Limits"
+#~ msgstr "Arbeitzeitlimits"
 
 #~ msgid "Workingtime"
 #~ msgstr "Arbeitszeit"

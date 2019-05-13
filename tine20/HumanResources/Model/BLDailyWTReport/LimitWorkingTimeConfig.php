@@ -43,8 +43,8 @@ class HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig extends Tineba
     protected static $_modelConfiguration = [
         self::APP_NAME      => HumanResources_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
-        self::RECORD_NAME   => 'Work Time Limit', // _('Work Time Limit')
-        self::RECORDS_NAME  => 'Work Time Limits', // _('Work Time Limits')
+        self::RECORD_NAME   => 'Work Time Limit',
+        self::RECORDS_NAME  => 'Work Time Limits', // ngettext('Work Time Limit', 'Work Time Limits', n)
                           // _('Working time is evaluated from {{start_time|date("H:i")}} until {{end_time|date("H:i")}}.')
         self::TITLE_PROPERTY=> 'Working time is evaluated from {{start_time|date("H:i")}} until {{end_time|date("H:i")}}.',
 
