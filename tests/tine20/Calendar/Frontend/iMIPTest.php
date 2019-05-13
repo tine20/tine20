@@ -673,6 +673,69 @@ class Calendar_Frontend_iMIPTest extends TestCase
         }
     }
 
+    public function testGoogleExternalInviteMultipleAttendeeConcurrencyHandlingWebDAV()
+    {
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        $unitAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+        $personalCal = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(),
+            Calendar_Model_Event::class, Tinebase_Core::getUser())->getFirstRecord();
+        Tinebase_Container::getInstance()->addGrants($personalCal, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['sclever'], [Tinebase_Model_Grants::GRANT_EDIT]);
+
+        $oldHTTPAgent = $_SERVER['HTTP_USER_AGENT'];
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        try {
+            $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) .
+                '/files/google_external_invite_addAttender.ics');
+            $vcalendar = str_replace('PARTSTAT=NEEDS-ACTION;RSVP=
+  TRUE;CN=sclever', 'PARTSTAT=ACCEPTED;RSVP=
+  TRUE;CN=sclever', $vcalendar);
+
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+            Calendar_Controller_MSEventFacade::unsetInstance();
+
+            $id = '3evgs2i0jdkofmibc9u5cah0a9@googlePcomffffffffffffffff';
+            $event = Calendar_Frontend_WebDAV_Event::create(Tinebase_Container::getInstance()->getPersonalContainer(
+                $this->_personas['sclever'], Calendar_Model_Event::class,
+                $this->_personas['sclever'])->getFirstRecord(),
+                "$id.ics", $vcalendar);
+            $record = $event->getRecord();
+
+            static::assertSame($createdEvent->uid, $record->uid, 'uid does not match');
+            static::assertSame($createdEvent->getId(), $record->getId());
+            $scleverAttender = Calendar_Model_Attender::getOwnAttender($record->attendee);
+            static::assertNotNull($scleverAttender, 'lost own attendee');
+            static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $scleverAttender->status);
+
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+
+            $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+                ['field' => 'dtstart', 'operator' => 'equals', 'value' => $createdEvent->dtstart]
+            ]));
+
+            static::assertEquals(1, $events->count());
+            $ownAttender = Calendar_Model_Attender::getOwnAttender($events->getFirstRecord()->attendee);
+            static::assertNotNull($ownAttender, 'lost own attendee');
+            static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+            $scleverAttender = $events->getFirstRecord()->attendee->find('user_id', $scleverAttender->user_id);
+            static::assertNotNull($scleverAttender, 'lost sclever attendee');
+            static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $scleverAttender->status);
+        } finally {
+            $_SERVER['HTTP_USER_AGENT'] = $oldHTTPAgent;
+        }
+    }
+
     public function testGoogleExternalInviteMultipleAttendeeConcurrencyHandling()
     {
         // test external invite
