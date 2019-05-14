@@ -230,6 +230,9 @@ Tine.Tinebase.ApplicationStarter = {
                 case 'image':
                     gridRenderer = Tine.widgets.grid.imageRenderer;
                     break;
+                case 'json':
+                    gridRenderer = Tine.widgets.grid.jsonRenderer;
+                    break;
                 case 'relation':
                     var cc = config.config;
                     

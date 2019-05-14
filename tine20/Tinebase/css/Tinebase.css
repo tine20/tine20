@@ -7,6 +7,12 @@ html, body {
     height:100%;
 }
 
+.string { color: green; }
+.number { color: darkorange; }
+.boolean { color: blue; }
+.null { color: magenta; }
+.key { color: red; }
+
 .ApplicationIconCls {
     background-image:url(../../images/icon-set/icon_debug.svg);
 }

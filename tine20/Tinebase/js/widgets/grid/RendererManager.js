@@ -9,6 +9,7 @@ Ext.ns('Tine.widgets.grid');
 
 require('./AttachmentRenderer');
 require('./ImageRenderer');
+require('./jsonRenderer');
 
 /**
  * central renderer manager
@@ -96,6 +97,9 @@ Tine.widgets.grid.RendererManager = function() {
                     break;
                 case 'image':
                     renderer = Tine.widgets.grid.imageRenderer;
+                    break;
+                case 'json':
+                    renderer = Tine.widgets.grid.jsonRenderer;
                     break;
                 default:
                     renderer = this.defaultRenderer;
