@@ -110,6 +110,7 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
                 }) as $dailyWTR) {
             $weekSummary->working_time_actual = $weekSummary->working_time_actual + $dailyWTR->working_time_actual;
             $weekSummary->working_time_correction = $weekSummary->working_time_correction + $dailyWTR->working_time_correction;
+            $weekSummary->working_time_total = $weekSummary->working_time_total + $dailyWTR->working_time_total;
             $weekSummary->working_time_target = $weekSummary->working_time_target + $dailyWTR->working_time_target;
             $weekSummary->working_time_target_correction = $weekSummary->working_time_target_correction + $dailyWTR->working_time_target_correction;
             $weekSummary->working_times->merge($dailyWTR->working_times);
