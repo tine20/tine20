@@ -236,6 +236,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * get name of attender
      * 
      * @return string
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function getName()
     {
@@ -260,7 +261,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $name;
                 break;
             default:
-                throw new Exception("type " . $this->user_type . " not yet supported");
+                throw new Tinebase_Exception_InvalidArgument("type " . $this->user_type . " not yet supported");
                 break;
         }
     }
@@ -1181,7 +1182,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
         if ($eventAttendees instanceof Tinebase_Record_RecordSet && $_sort) {
             $eventAttendees->sort(function(Calendar_Model_Attender $a1, Calendar_Model_Attender $a2) {
-                return $a1->getName() > $a2->getName();
+                try {
+                    return $a1->getName() > $a2->getName();
+                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                    Tinebase_Exception::log($teia);
+                    return true;
+                }
             });
         }
     }
