@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.widgets.form');
 
+import 'widgets/form/JsonField';
+
 /**
  * central form field manager
  * - get form field for a given field
@@ -205,6 +207,10 @@ Tine.widgets.form.FieldManager = function() {
                 case 'numberableInt':
                     field.xtype = 'textfield';
                     field.disabled = true;
+                    break;
+                case 'json':
+                    field.xtype = 'tw-jsonfield';
+                    field.height = 150; // 12 lines
                     break;
                 default:
                     field.xtype = 'textfield';

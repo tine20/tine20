@@ -170,12 +170,10 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                         cls: 'x-ux-display-background-border',
                         xtype: 'ux.displaytextarea'
                     });
+
                     if (fieldType === 'json') {
                         Ext.apply(field, {
-                            renderer: Tine.widgets.grid.jsonRenderer.displayField,
-                            htmlEncode: false,
-                            nl2br: true,
-                            xtype: 'ux.displayfield'
+                            type: 'code/json'
                         });
                     }
                     textDisplayAreas.push(field);

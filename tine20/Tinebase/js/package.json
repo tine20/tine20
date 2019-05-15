@@ -16,6 +16,7 @@
     ]
   },
   "dependencies": {
+    "ace-builds": "^1.4.4",
     "axios": "^0.17.1",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.19",
