@@ -85,13 +85,6 @@ module.exports = function (config) {
             ChromeHeadlessCloud: {
                 base: 'ChromeHeadless',
                 flags: ['--disable-web-security', '--no-sandbox']
-            },
-            PhantomJSCustom: {
-                base: 'PhantomJS',
-                settings: {
-                    webSecurityEnabled: false
-                },
-                flags: ['--load-images=false'],
             }
         },
 

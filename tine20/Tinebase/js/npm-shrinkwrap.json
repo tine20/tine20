@@ -7495,16 +7495,6 @@
         "minimist": "1.2.0"
       }
     },
-    "karma-phantomjs-launcher": {
-      "version": "1.0.4",
-      "resolved": "https://registry.npmjs.org/karma-phantomjs-launcher/-/karma-phantomjs-launcher-1.0.4.tgz",
-      "integrity": "sha1-0jyjSAG9qYY60xjju0vUBisTrNI=",
-      "dev": true,
-      "requires": {
-        "lodash": "^4.0.1",
-        "phantomjs-prebuilt": "^2.1.7"
-      }
-    },
     "karma-safari-launcher": {
       "version": "1.0.0",
       "resolved": "https://registry.npmjs.org/karma-safari-launcher/-/karma-safari-launcher-1.0.0.tgz",
@@ -13824,51 +13814,6 @@
       "resolved": "https://registry.npmjs.org/performance-now/-/performance-now-2.1.0.tgz",
       "integrity": "sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=",
       "dev": true
-    },
-    "phantomjs-prebuilt": {
-      "version": "2.1.16",
-      "resolved": "https://registry.npmjs.org/phantomjs-prebuilt/-/phantomjs-prebuilt-2.1.16.tgz",
-      "integrity": "sha1-79ISpKOWbTZHaE6ouniFSb4q7+8=",
-      "dev": true,
-      "requires": {
-        "es6-promise": "^4.0.3",
-        "extract-zip": "^1.6.5",
-        "fs-extra": "^1.0.0",
-        "hasha": "^2.2.0",
-        "kew": "^0.7.0",
-        "progress": "^1.1.8",
-        "request": "^2.81.0",
-        "request-progress": "^2.0.1",
-        "which": "^1.2.10"
-      },
-      "dependencies": {
-        "fs-extra": {
-          "version": "1.0.0",
-          "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-1.0.0.tgz",
-          "integrity": "sha1-zTzl9+fLYUWIP8rjGR6Yd/hYeVA=",
-          "dev": true,
-          "requires": {
-            "graceful-fs": "^4.1.2",
-            "jsonfile": "^2.1.0",
-            "klaw": "^1.0.0"
-          }
-        },
-        "jsonfile": {
-          "version": "2.4.0",
-          "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-2.4.0.tgz",
-          "integrity": "sha1-NzaitCi4e72gzIO1P6PWM6NcKug=",
-          "dev": true,
-          "requires": {
-            "graceful-fs": "^4.1.6"
-          }
-        },
-        "progress": {
-          "version": "1.1.8",
-          "resolved": "https://registry.npmjs.org/progress/-/progress-1.1.8.tgz",
-          "integrity": "sha1-4mDHj2Fhzdmw5WzD4Khd4Xx6V74=",
-          "dev": true
-        }
-      }
     },
     "pify": {
       "version": "4.0.1",
