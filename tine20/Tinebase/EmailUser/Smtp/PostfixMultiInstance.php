@@ -94,82 +94,23 @@ query = SELECT destination FROM smtp_destinations WHERE source='%s'
 -- -----------------------------------------------------
  */
 
- /**
-  * plugin to handle postfix smtp accounts
-  *
-  * @package    Tinebase
-  * @subpackage EmailUser
-  *
-  * @todo extend Tinebase_EmailUser_Smtp_Postfix
-  */
-class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sql implements Tinebase_EmailUser_Smtp_Interface
+/**
+ * plugin to handle postfix smtp accounts
+ *
+ * @package    Tinebase
+ * @subpackage EmailUser
+ *
+ * @todo extend Tinebase_EmailUser_Smtp_Postfix some more (use _propertyMapping)
+ */
+class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Smtp_Postfix implements Tinebase_EmailUser_Smtp_Interface
 {
-    /**
-     * destination table name with prefix
-     *
-     * @var string
-     */
-    protected $_destinationTable = NULL;
-    
     /**
      * subconfig for user email backend (for example: dovecot)
      * 
      * @var string
      */
     protected $_subconfigKey = 'postfixmultiinstance';
-    
-    /**
-     * postfix config
-     * 
-     * @var array 
-     */
-    protected $_config = array(
-        'prefix'            => 'smtp_',
-        'userTable'         => 'users',
-        'destinationTable'  => 'destinations',
-        'emailScheme'       => 'ssha256',
-        'domain'            => null,
-        'alloweddomains'    => array(),
-        'adapter'           => Tinebase_Core::PDO_MYSQL
-    );
-    
-    /**
-     * user properties mapping
-     *
-     * @var array
-     */
-    protected $_propertyMapping = array(
-        'emailPassword'     => 'passwd', 
-        'emailUserId'       => 'userid',
-        'emailAddress'      => 'email',
-        'emailForwardOnly'  => 'forward_only',
-        'emailUsername'     => 'username',
-        'emailAliases'      => 'source',
-        'emailForwards'     => 'destination'
-    );
-    
-    protected $_defaults = array(
-        'emailPort'   => 25,
-        'emailSecure' => Tinebase_EmailUser_Model_Account::SECURE_TLS,
-        'emailAuth'   => 'plain'
-    );
-    
-    /**
-     * the constructor
-     */
-    public function __construct(array $_options = array())
-    {
-        parent::__construct($_options);
-        
-        // set domain and allowed domains from smtp config
-        $this->_config['domain'] = !empty($this->_config['primarydomain']) ? $this->_config['primarydomain'] : null;
-        $this->_config['alloweddomains'] = Tinebase_EmailUser::getAllowedDomains($this->_config);
 
-        $this->_clientId = Tinebase_Core::getTinebaseId();
-        
-        $this->_destinationTable = $this->_config['prefix'] . $this->_config['destinationTable'];
-    }
-    
     /**
      * get the basic select object to fetch records from the database
      *  
@@ -226,17 +167,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sq
         unset($emailUserData[$this->_propertyMapping['emailForwards']]);
         unset($emailUserData[$this->_propertyMapping['emailAliases']]);
     }
-    
-    /**
-    * interceptor after add
-    *
-    * @param array $emailUserData
-    */
-    protected function _afterAddOrUpdate(&$emailUserData)
-    {
-        $this->_setAliasesAndForwards($emailUserData);
-    }
-    
+
     /**
      * set email aliases and forwards
      * 
@@ -305,20 +236,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sq
             ));
         }
     }
-    
-    /**
-     * add destination
-     * 
-     * @param array $destinationData
-     */
-    protected function _addDestination($destinationData)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Insert into table destinations: ' . print_r($destinationData, true));
-        
-        $this->_db->insert($this->_destinationTable, $destinationData);
-    }
-    
+
     /**
      * set aliases
      * 
@@ -409,7 +327,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sq
     /**
      * converts raw data from adapter into a single record / do mapping
      *
-     * @param  array $_data
+     * @param  array $_rawdata
      * @return Tinebase_Record_Interface
      */
     protected function _rawDataToRecord(array &$_rawdata)
@@ -503,67 +421,15 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sq
     /**
      * returns array of raw email user data
      *
-     * @param  Tinebase_Model_EmailUser $_user
-     * @param  Tinebase_Model_EmailUser $_newUserProperties
+     * @param  Tinebase_Model_FullUser $_user
+     * @param  Tinebase_Model_FullUser $_newUserProperties
      * @throws Tinebase_Exception_UnexpectedValue
      * @return array
      */
     protected function _recordToRawData(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $_newUserProperties)
     {
-        $rawData = array();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->toArray(), true));
-        
-        if (isset($_newUserProperties->smtpUser)) {
-            foreach ($_newUserProperties->smtpUser as $key => $value) {
-                $property = (isset($this->_propertyMapping[$key]) || array_key_exists($key, $this->_propertyMapping)) ? $this->_propertyMapping[$key] : false;
-                if ($property) {
-                    switch ($key) {
-                        case 'emailPassword':
-                            $rawData[$property] = Hash_Password::generate($this->_config['emailScheme'], $value);
-                            break;
-                            
-                        case 'emailAliases':
-                            $rawData[$property] = array();
-                            
-                            foreach((array)$value as $address) {
-                                if ($this->_checkDomain($address) === true) {
-                                    $rawData[$property][] = $address;
-                                }
-                            }
-                            break;
-                            
-                        case 'emailForwards':
-                            $rawData[$property] = is_array($value) ? $value : array();
-                            
-                            break;
-                            
-                        default:
-                            $rawData[$property] = $value;
-                            break;
-                    }
-                }
-            }
-        }
-        
-        if (!empty($_user->accountEmailAddress)) {
-            $this->_checkDomain($_user->accountEmailAddress, TRUE);
-        }
-        
-        $rawData[$this->_propertyMapping['emailAddress']]  = $_user->accountEmailAddress;
-        $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
-        $rawData[$this->_propertyMapping['emailUsername']] = $this->_getEmailUserName($_user);
-        
-        if (empty($rawData[$this->_propertyMapping['emailAddress']])) {
-            $rawData[$this->_propertyMapping['emailAliases']]  = null;
-            $rawData[$this->_propertyMapping['emailForwards']] = null;
-        }
-        
-        if (empty($rawData[$this->_propertyMapping['emailForwards']])) {
-            $rawData[$this->_propertyMapping['emailForwardOnly']] = 0;
-        }
-        
-        $rawData['client_idnr'] = $this->_clientId;
+        $rawData = parent::_recordToRawData($_user, $_newUserProperties);
+
         if (isset($rawData['id'])) {
             unset($rawData['id']);
         }
@@ -574,18 +440,5 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sq
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
         
         return $rawData;
-    }
-    
-    /**
-     * check if email address is in allowed domains
-     * 
-     * @param string $_email
-     * @param boolean $_throwException
-     * @return boolean
-     * @throws Tinebase_Exception_Record_NotAllowed
-     */
-    protected function _checkDomain($_email, $_throwException = false)
-    {
-        return Tinebase_EmailUser::checkDomain($_email, $_throwException, $this->_config['alloweddomains']);
     }
 }
