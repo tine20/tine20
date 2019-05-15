@@ -19,16 +19,18 @@
 --
 
 CREATE TABLE IF NOT EXISTS `smtp_users` (
-  `userid` varchar(40) NOT NULL,
-  `client_idnr` varchar(40) NOT NULL,
-  `username` varchar(80) NOT NULL,
-  `passwd` varchar(80) NOT NULL,
-  `email` varchar(80) DEFAULT NULL,
-  `forward_only` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`userid`, `client_idnr`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
+`email` varchar(80) NOT NULL,
+`username` varchar(80) NOT NULL,
+`passwd` varchar(100) NOT NULL,
+`quota` int(10) DEFAULT '10485760',
+`userid` varchar(80) NOT NULL,
+`encryption_type` varchar(20) NOT NULL DEFAULT 'md5',
+`client_idnr` varchar(40) NOT NULL,
+`forward_only` tinyint(1) NOT NULL DEFAULT '0',
+PRIMARY KEY (`userid`,`client_idnr`),
+UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
@@ -37,12 +39,13 @@ CREATE TABLE IF NOT EXISTS `smtp_users` (
 --
 
 CREATE TABLE IF NOT EXISTS `smtp_destinations` (
-  `userid` VARCHAR( 40 ) NOT NULL ,
-  `source` VARCHAR( 80 ) NOT NULL ,
-  `destination` VARCHAR( 80 ) NOT NULL ,
-  CONSTRAINT `smtp_destinations::userid--smtp_users::userid` FOREIGN KEY (`userid`) 
-  REFERENCES `smtp_users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=Innodb DEFAULT CHARSET=utf8;
+`userid` varchar(80) NOT NULL,
+`source` varchar(80) NOT NULL,
+`destination` varchar(80) NOT NULL,
+KEY `smtp_destinations::userid--smtp_users::userid` (`userid`),
+CONSTRAINT `smtp_destinations::userid--smtp_users::userid` FOREIGN KEY (`userid`) REFERENCES `smtp_users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- --------------------------------------------------------
 
 --
@@ -80,9 +83,9 @@ query = SELECT destination FROM smtp_destinations WHERE source='%s'
 -- -----------------------------------------------------
  */
 
- /**
+/**
  * plugin to handle postfix smtp accounts
- * 
+ *
  * @package    Tinebase
  * @subpackage EmailUser
  */
@@ -145,10 +148,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     {
         parent::__construct($_options);
         
-        // set domain from smtp config
+        // set domain and allowed domains from smtp config
         $this->_config['domain'] = !empty($this->_config['primarydomain']) ? $this->_config['primarydomain'] : null;
         $this->_config['alloweddomains'] = Tinebase_EmailUser::getAllowedDomains($this->_config);
-        
+
         $this->_clientId = Tinebase_Core::getTinebaseId();
         
         $this->_destinationTable = $this->_config['prefix'] . $this->_config['destinationTable'];
@@ -524,8 +527,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     /**
      * returns array of raw email user data
      *
-     * @param  Tinebase_Model_EmailUser $_user
-     * @param  Tinebase_Model_EmailUser $_newUserProperties
+     * @param  Tinebase_Model_FullUser $_user
+     * @param  Tinebase_Model_FullUser $_newUserProperties
      * @throws Tinebase_Exception_UnexpectedValue
      * @return array
      * 
