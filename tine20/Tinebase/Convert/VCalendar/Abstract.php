@@ -60,8 +60,18 @@ abstract class Tinebase_Convert_VCalendar_Abstract
         }
         
         $blob = Tinebase_Core::filterInputForDatabase($blob);
-        
-        $vcalendar = self::readVCalBlob($blob);
+
+        try {
+            $vcalendar = self::readVCalBlob($blob);
+        } catch (Sabre\VObject\ParseException $svpe) {
+            // try again with utf8_encoded blob
+            $utf8_blob = Tinebase_Helper::mbConvertTo($blob);
+            // alse replace some linebreaks and \x00's
+            $search = array("\r\n", "\x00");
+            $replace = array("\n", '');
+            $utf8_blob = str_replace($search, $replace, $utf8_blob);
+            $vcalendar = self::readVCalBlob($utf8_blob);
+        }
         
         return $vcalendar;
     }
