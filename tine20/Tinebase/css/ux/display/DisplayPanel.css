@@ -92,10 +92,6 @@
     /*background-image:url(../../../../themes/tine20/resources/images/tine20/form/text-bg.gif);*/
 /*}*/
 
-.x-form-display-field {
-    overflow: scroll;
-}
-
 .x-ux-displayfield-text {
     background-image: none;
 }
