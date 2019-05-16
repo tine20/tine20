@@ -571,12 +571,13 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * Returns a set of records identified by their id's
      *
-     * @param   array $_ids       array of record identifiers
-     * @param   bool  $_ignoreACL don't check acl grants
-     * @param   Tinebase_Record_Expander $_expander
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @param   array $_ids array of record identifiers
+     * @param   bool $_ignoreACL don't check acl grants
+     * @param Tinebase_Record_Expander $_expander
+     * @param   bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $this->_checkRight(self::ACTION_GET);
 

@@ -279,11 +279,15 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
     /**
      * Returns a set of leads identified by their id's
      *
-     * @param   array array of record identifiers
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @param $_ids
+     * @param bool $_ignoreACL
+     * @param Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
      * @throws Tinebase_Exception_NotImplemented
+     * @internal param array $array of record identifiers
      */
-    public function getMultiple($_ids)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         throw new Tinebase_Exception_NotImplemented('Not Implemented');
     }

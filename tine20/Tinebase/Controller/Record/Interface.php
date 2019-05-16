@@ -26,14 +26,18 @@ interface Tinebase_Controller_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function get($_id);
-    
+
     /**
      * Returns a set of leads identified by their id's
-     * 
-     * @param   array array of record identifiers
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     *
+     * @param $_ids
+     * @param bool $_ignoreACL
+     * @para $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
+     * @internal param array $array of record identifiers
      */
-    public function getMultiple($_ids);
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false);
     
     /**
      * Gets all entries

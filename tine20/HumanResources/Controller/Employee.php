@@ -266,18 +266,20 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         
         parent::_deleteLinkedObjects($_record);
     }
-    
-    
+
+
     /**
      * Returns a set of records identified by their id's
      *
-     * @param   array $_ids       array of record identifiers
-     * @param   bool  $_ignoreACL don't check acl grants
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @param   array $_ids array of record identifiers
+     * @param   bool $_ignoreACL don't check acl grants
+     * @param null|Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        $records = parent::getMultiple($_ids, $_ignoreACL, $_expander);
+        $records = parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
         $this->_doPrivateCleanup($records);
         return $records;
     }

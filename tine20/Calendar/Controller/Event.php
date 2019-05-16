@@ -627,17 +627,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         return $events;
     }
-    
+
     /**
      * Returns a set of records identified by their id's
      *
-     * @param   array $_ids       array of record identifiers
-     * @param   bool  $_ignoreACL don't check acl grants
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @param   array $_ids array of record identifiers
+     * @param   bool $_ignoreACL don't check acl grants
+     * @param null|Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        $events = parent::getMultiple($_ids, $_ignoreACL, $_expander);
+        $events = parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
         if ($_ignoreACL !== true) {
             $this->_freeBusyCleanup($events, 'get');
         }
