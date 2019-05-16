@@ -14,6 +14,7 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -30,6 +31,10 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE012_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -82,5 +87,15 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         throw new Tinebase_Exception_NotImplemented('TODO fix me');
 
         $this->addApplicationUpdate('HumanResources', '12.8', self::RELEASE012_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Tinebase_Core::getDb()->update(SQL_TABLE_PREFIX . HumanResources_Model_FreeTimeType::TABLE_NAME, [
+                'id' => 'sickness'
+            ], 'id = "01"');
+        Tinebase_Core::getDb()->update(SQL_TABLE_PREFIX . HumanResources_Model_FreeTimeType::TABLE_NAME, [
+            'id' => 'vacation'
+        ], 'id = "03"');
     }
 }
