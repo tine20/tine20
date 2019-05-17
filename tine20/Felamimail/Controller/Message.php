@@ -742,9 +742,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (!defined('HTMLPURIFIER_PREFIX')) {
             define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/../../library/HTMLPurifier'));
         }
-        
+
         $config = Tinebase_Core::getConfig();
-        $path = ($config->caching && $config->caching->active && $config->caching->path) 
+
+        $path = ($config->caching && $config->caching->active && $config->caching->path)
             ? $config->caching->path : Tinebase_Core::getTempDir();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -758,7 +759,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config = HTMLPurifier_Config::create(NULL, $configSchema);
         $config->set('HTML.DefinitionID', 'purify message body contents');
         $config->set('HTML.DefinitionRev', 1);
-        
+        // keep the whole document even if it has <html>/<body> tags
+        $config->set('Core.ConvertDocumentToFragment', false);
+
         // @see: http://htmlpurifier.org/live/configdoc/plain.html#Attr.EnableID
         $config->set('Attr.EnableID', TRUE);
 
