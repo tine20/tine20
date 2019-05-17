@@ -664,25 +664,30 @@ class Tinebase_Relations
                             $appController->getAlarms($records);
                         }
                     } else {
-                        throw new Tinebase_Exception_AccessDenied('Controller ' . get_class($appController) . ' has no method ' . $getMultipleMethod);
+                        throw new Tinebase_Exception_AccessDenied('Controller ' . get_class($appController)
+                            . ' has no method ' . $getMultipleMethod);
                     }
                 } catch (Tinebase_Exception_AccessDenied $tea) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__
                         . ' Removing relations from result. Got exception: ' . $tea->getMessage());
                     $removeReason = Tinebase_Model_Relation::REMOVED_BY_ACL;
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not find controller for model: ' . $modelName . '! you have broken relations: ' . join(',', $relations->id));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' Could not find controller for model: ' . $modelName
+                        . '! you have broken relations: ' . join(',', $relations->id));
                     $_relations->removeRecords($relations);
                     continue;
                 } catch (Tinebase_Exception_AreaLocked $teal) {
                     $removeReason = Tinebase_Model_Relation::REMOVED_BY_AREA_LOCK;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__
                         . ' AreaLocked for model: ' . $modelName);
                 }
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                " Resolving " . count($relations) . " relations");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " Resolving " . count($relations) . " relations");
 
             /** @var Tinebase_Model_Relation $relation */
             foreach ($relations as $relation) {
