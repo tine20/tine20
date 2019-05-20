@@ -3077,15 +3077,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param boolean $dry run
      * 
      * @return number of updated events
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function repairAttendee($calendarId, $from, $until, $dry = false)
     {
         $container = Tinebase_Container::getInstance()->getContainerById($calendarId);
         if ($container->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
-            throw new Calendar_Exception('Only allowed for personal containers!');
+            throw new Tinebase_Exception_InvalidArgument('Only allowed for personal containers!');
         }
         if ($container->owner_id !== Tinebase_Core::getUser()->getId()) {
-            throw new Calendar_Exception('Only allowed for own containers!');
+            throw new Tinebase_Exception_InvalidArgument('Only allowed for own containers!');
         }
         
         $updateCount = 0;

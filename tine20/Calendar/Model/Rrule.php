@@ -640,7 +640,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         if (! isset($freqMap[$rrule->freq])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Invalid RRULE:' . print_r($rrule->toArray(), true));
-            throw new Calendar_Exception('Invalid freq in RRULE: ' . $rrule->freq);
+            throw new Tinebase_Exception_InvalidArgument('Invalid freq in RRULE: ' . $rrule->freq);
         }
         $rangeDate->add($interval, $freqMap[$rrule->freq]);
         $attempts = 0;
