@@ -472,7 +472,7 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         record = data.records[0],
         recordId = record.get(record.idProperty);
 
-    record.id = recordId ? recordId : 0;
+    record.id = recordId ? recordId : Tine.Tinebase.data.Record.generateUID();
 
     return record;
 };
