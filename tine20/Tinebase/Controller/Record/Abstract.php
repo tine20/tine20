@@ -2896,6 +2896,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         try {
             $node = Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $filename, $tempFile);
             Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record, $node);
+            $this->_setFileMessageNote($record, $node);
 
         } catch (Tinebase_Exception_Duplicate $ted) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -2903,6 +2904,29 @@ HumanResources_CliTests.testSetContractsEndDate */
             return null;
         }
         return $record;
+    }
+
+    protected function _setFileMessageNote($record, $node)
+    {
+        $translation = Tinebase_Translation::getTranslation();
+        $noteText = str_replace(
+            ['{0}'],
+            [$node->name],
+            $translation->_('A Message has been filed to this record. Subject: "{0}"')
+        );
+
+        // TODO add link to node attachment (like attachment icon in grid)
+
+        $noteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
+        $note = new Tinebase_Model_Note([
+            'note_type_id'      => (string) $noteType->getId(),
+            'note'              => mb_substr($noteText, 0, Tinebase_Notes::MAX_NOTE_LENGTH),
+            'record_model'      => $this->_modelName,
+            'record_backend'    => ucfirst(strtolower('sql')),
+            'record_id'         => $record->getId(),
+        ]);
+        $record->notes->addRecord($note);
+        Tinebase_Notes::getInstance()->setNotesOfRecord($record);
     }
 
     /**

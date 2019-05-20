@@ -88,7 +88,6 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
 
         'fields'            => [
             'note_type_id'                  => [
-                //'type'                          => 'record',
                 'validators'                    => [
                     'presence' => 'required',
                     Zend_Filter_Input::ALLOW_EMPTY => false

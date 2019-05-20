@@ -137,7 +137,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     {
         $imap = Felamimail_Backend_ImapFactory::factory($_account);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Get subfolders of root for account ' . $_account->getId());
         $result = $imap->getFolders('', '%');
         

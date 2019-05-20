@@ -246,7 +246,7 @@ class Tinebase_Translation
      * @param  Zend_Locale $_locale [optional]
      * @return Zend_Translate_Adapter
      */
-    public static function getTranslation($_applicationName, Zend_Locale $_locale = NULL)
+    public static function getTranslation($_applicationName = 'Tinebase', Zend_Locale $_locale = NULL)
     {
         $locale = $_locale
             ?: Tinebase_Core::getLocale()
