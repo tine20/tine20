@@ -93,4 +93,26 @@ sieveFile
 
         $this->setApplicationVersion('Felamimail', '11.2');
     }
+
+    /**
+     * update to 11.3
+     *
+     * Make vacation reason a longtext field
+     */
+    public function update_2()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>reason</name>
+                <!--Long text!-->
+                <length>2147483647</length>
+                <type>text</type>
+            </field>
+        ');
+
+        $this->_backend->alterCol('felamimail_sieve_vacation', $declaration);
+
+        $this->setTableVersion('felamimail_sieve_vacation', 4);
+        $this->setApplicationVersion('Felamimail', '11.3');
+    }
 }
