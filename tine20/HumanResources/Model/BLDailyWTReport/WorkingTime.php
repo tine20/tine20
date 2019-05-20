@@ -44,6 +44,8 @@ class HumanResources_Model_BLDailyWTReport_WorkingTime extends Tinebase_Record_N
         self::APP_NAME      => HumanResources_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
 
+        self::TITLE_PROPERTY=> "{# {{start - sorting! #}{{ duration |date('H:i', 'GMT')}}{% if start and end %} ({{ start |date('H:i', 'GMT')}} - {{ end |date('H:i', 'GMT')}}){% endif %} - {{wage_type.name}}",
+
         self::FIELDS        => [
             self::FLDS_WAGE_TYPE        => [
                 self::TYPE                  => self::TYPE_RECORD,

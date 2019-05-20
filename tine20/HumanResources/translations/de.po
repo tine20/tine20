@@ -777,8 +777,8 @@ msgid "Is Cleared"
 msgstr "Abgerechnet"
 
 #: Model/DailyWTReport.php:305
-msgid "Calculation Failure"
-msgstr "Berechnungsfehler"
+msgid "Calculation Error"
+msgstr "Fehler bei der Berechnung"
 
 #: Model/MonthlyWTReport.php:57
 msgid "Monthly Working Time Report"

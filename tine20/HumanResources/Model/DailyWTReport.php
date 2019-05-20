@@ -239,8 +239,8 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             ],
             self::FLDS_WORKING_TIMES  => [
                 self::TYPE                  => self::TYPE_RECORDS,
+                self::LABEL                 => 'Working Times', // _('Working Times')
                 self::NULLABLE              => true,
-                self::SHY                   => true,
                 self::CONFIG                => [
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME            => HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
@@ -303,7 +303,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::DISABLED              => true,
             ],
             'calculation_failure' => [
-                self::LABEL                 => 'Calculation Failure', // _('Calculation Failure')
+                self::LABEL                 => 'Calculation Error', // _('Calculation Error')
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
                 self::TYPE                  => 'boolean',
                 self::DEFAULT_VAL           => 0,
