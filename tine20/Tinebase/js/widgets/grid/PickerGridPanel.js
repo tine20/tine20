@@ -168,6 +168,11 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     item.disabled = readOnly;
                 }
             }, this);
+            tbar[readOnly ? 'hide' : 'show']();
+        }
+        var bbar = this.getBottomToolbar();
+        if (bbar) {
+            bbar[readOnly ? 'hide' : 'show']();
         }
         if (_.get(this, 'actionRemove.setDisabled')) {
             this.actionRemove.setDisabled(readOnly);

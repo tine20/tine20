@@ -180,6 +180,7 @@ Tine.widgets.form.FieldManager = function() {
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
                         field.isFormField = true;
                         field.fieldName = fieldName;
+                        field.hideHeaders = true;
                         field.height = 170; // 5 records
                     } else {
                         var picker = Tine.widgets.form.RecordsPickerManager.get(
