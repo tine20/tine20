@@ -23,7 +23,9 @@ class HumanResources_Convert_Contract_Json extends Tinebase_Convert_Json
 
         $expanderDef = [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME => [],
+                HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME => [
+                    Tinebase_Record_Expander::GET_DELETED => true,
+                ],
             ],
         ];
         $expander = new Tinebase_Record_Expander(HumanResources_Model_Contract::class, $expanderDef);

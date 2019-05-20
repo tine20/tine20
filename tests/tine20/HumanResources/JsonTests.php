@@ -286,6 +286,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
         $savedContract = $this->_json->saveContract($contract->toArray(true));
         static::assertTrue(is_array($savedContract[0]['working_time_scheme']));
+
+        HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->delete($savedContract[0]['working_time_scheme']['id']);
+
+        $savedContract = $this->_json->getContract($savedContract[0]['id']);
+        static::assertTrue(is_array($savedContract[0]['working_time_scheme']), 'expect deleted WTS to be resolved');
     }
 
     /**
