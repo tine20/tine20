@@ -1151,7 +1151,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 //      baseEvent of the series. As createRecurException can't
                 //      deal with this situation we delete whole series here
                 $this->_deleteExdateRange($exdate, Calendar_Model_Event::RANGE_ALL);
-            } else {
+            } else if ($nextRegularRecurEvent) {
                 $this->createRecurException($nextRegularRecurEvent, TRUE, TRUE);
             }
         }
