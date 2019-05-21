@@ -243,11 +243,18 @@ abstract class Tinebase_Controller_Record_Abstract
             'currentUser' => $currentUser,
         ];
 
+        if (method_exists($this, 'doGrantChecks')) {
+            $oldvalues['doGrantChecks'] = $this->doGrantChecks(false);
+        }
+
         return function () use ($oldvalues) {
             $this->doContainerACLChecks($oldvalues['containerACLChecks']);
             $this->doRightChecks($oldvalues['rightChecks']);
             if ($oldvalues['currentUser']) {
                 Tinebase_Core::set(Tinebase_Core::USER, $oldvalues['currentUser']);
+            }
+            if (isset($oldvalues['doGrantChecks'])) {
+                $this->doGrantChecks($oldvalues['doGrantChecks']);
             }
         };
     }
