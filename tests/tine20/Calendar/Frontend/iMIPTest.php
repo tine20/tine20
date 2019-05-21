@@ -586,6 +586,10 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
     public function testGoogleExternalInviteAddAttenderFelamiMailFE()
     {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
         $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
@@ -617,6 +621,15 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $unitAttender = $iMIPevent->attendee->find('user_id', $unitAttender->user_id);
         static::assertNotNull($unitAttender, 'unit attender not found');
         static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+    }
+
+    protected function _smtpConfigReadyForIMIPTest()
+    {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (!isset($smtpConfig['primarydomain'])) {
+            return false;
+        }
+        return true;
     }
 
     public function testGoogleExternalInviteAddAttenderConcurrencyHandlingWebDAV()
@@ -738,6 +751,10 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
     public function testGoogleExternalInviteMultipleAttendeeConcurrencyHandling()
     {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
         $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
@@ -784,6 +801,10 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
     public function testGoogleExternalInviteAddAttenderConcurrencyHandling()
     {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
         $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
@@ -820,8 +841,11 @@ class Calendar_Frontend_iMIPTest extends TestCase
     }
 
     public function testGoogleExternalInviteAddAttender()
-
     {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
         $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
@@ -1147,15 +1171,14 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
     public function testGoogleExternalInviteLongUID()
     {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_inviteLongUID.ics');
         $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
         $iMIP->method = 'REQUEST';
-        /*try {
-            $this->_iMIPFrontend->autoProcess($iMIP);
-        } catch (Exception $e) {
-            $this->fail('external invite autoProcess throws Exception: ' . get_class($e) . ': ' . $e->getMessage());
-        }*/
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
         $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
@@ -1165,7 +1188,6 @@ class Calendar_Frontend_iMIPTest extends TestCase
         static::assertSame('3evgs2i0jdkofmibc9u5cah0a9@googlePcomffffffffffffffff', $createdEvent->uid);
         $ownAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
         static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
-
 
         // test external invite update
         $iMIP = $this->_createiMIPFromFile('google_external_inviteLongUID.ics');
@@ -1180,11 +1202,6 @@ class Calendar_Frontend_iMIPTest extends TestCase
         static::assertSame($createdEvent->uid, $existingEvent->uid, 'uid does not match');
         static::assertSame($createdEvent->getId(), $existingEvent->getId());
 
-        /*try {
-            $this->_iMIPFrontend->autoProcess($iMIP);
-        } catch (Exception $e) {
-            $this->fail('external invite autoProcess throws Exception: ' . get_class($e) . ': ' . $e->getMessage());
-        }*/
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
         $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
