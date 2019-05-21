@@ -2,6 +2,7 @@ const merge = require('webpack-merge');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin')
 const common = require('./webpack.common.js');
+const BrotliPlugin = require('brotli-webpack-plugin');
 
 module.exports = merge(common, {
     devtool: 'source-map',
@@ -21,6 +22,7 @@ module.exports = merge(common, {
         new UnminifiedWebpackPlugin({
             postfix : 'debug'
         }),
+        new BrotliPlugin({})
     ],
 });
 
