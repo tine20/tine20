@@ -135,15 +135,13 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                     self::REF_ID_FIELD                  => HumanResources_Model_DailyWTReport::FLDS_MONTHLYWTREPORT,
                 ]
             ],
-            self::FLDS_IS_CLEARED               => [
-                self::LABEL                         => 'Is Cleared', // _('Is Cleared')
-                self::TYPE                          => self::TYPE_BOOLEAN,
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => true,
-                    Zend_Filter_Input::DEFAULT_VALUE    => 0
-                ],
+            self::FLDS_WORKING_TIME_BALANCE_PREVIOUS => [
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
+                self::DISABLED                      => true,
+                self::LABEL                         => 'Working Time Balance Previous Month', // _('Working Time Balance Previous Month')
+                self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,
-                self::COPY_OMIT                     => true,
             ],
             self::FLDS_WORKING_TIME_ACTUAL      => [
                 self::TYPE                          => self::TYPE_INTEGER,
@@ -172,17 +170,19 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
                 self::DISABLED                      => true,
-                self::LABEL                         => 'Working Time Balance', // _('Working Time Balance')
+                self::LABEL                         => 'Total Working Time Balance', // _('Total Working Time Balance')
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,
             ],
-            self::FLDS_WORKING_TIME_BALANCE_PREVIOUS => [
-                self::TYPE                          => self::TYPE_INTEGER,
-                self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
-                self::DISABLED                      => true,
-                self::LABEL                         => 'Working Time Balance Previous Month', // _('Working Time Balance Previous Month')
-                self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            self::FLDS_IS_CLEARED               => [
+                self::LABEL                         => 'Is Cleared', // _('Is Cleared')
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::DEFAULT_VALUE    => 0
+                ],
                 self::DEFAULT_VAL                   => 0,
+                self::COPY_OMIT                     => true,
             ],
             HumanResources_Model_DailyWTReport::FLDS_WORKING_TIMES => [
                 self::TYPE                          => self::TYPE_VIRTUAL,
