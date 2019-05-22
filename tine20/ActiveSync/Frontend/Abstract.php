@@ -604,12 +604,17 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         // check if contentfilter has a container limitation
         $filter = $this->_getContentFilter(0);
         
-        // @TODO work with multiple container filters?
-        $containerFilter = $filter->getFilter('container_id', FALSE, TRUE);
-        if ($containerFilter && $containerFilter instanceof Tinebase_Model_Filter_Container) {
-            $containerFilter->setRequiredGrants(array(Tinebase_Model_Grants::GRANT_SYNC));
-            $wantedFolders = $containerFilter->getContainerIds();
-            
+        $containerFilters = $filter->getFilter('container_id', TRUE, TRUE);
+        if ($containerFilters) {
+            $wantedFolders = [];
+            foreach ($containerFilters as $containerFilter) {
+                if ($containerFilter instanceof Tinebase_Model_Filter_Container) {
+                    $containerFilter->setRequiredGrants(array(Tinebase_Model_Grants::GRANT_SYNC));
+                    $wantedFolders = array_merge($wantedFolders,$containerFilter->getContainerIds());
+                }
+            }
+            $wantedFolders = array_unique($wantedFolders);
+
             foreach($allowedFolders as $allowedFolder) {
                 if (! in_array($allowedFolder->getId(), $wantedFolders)) {
                     $allowedFolders->removeRecord($allowedFolder);
