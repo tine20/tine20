@@ -931,7 +931,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
             $templateString = $translation->translate($titleProperty);
             $template = $twig->getEnvironment()->createTemplate($templateString);
-            return $template->render($this->_properties);
+            return $template->render(is_array($this->_properties) ? $this->_properties : []);
         } else {
             return $this->$titleProperty;
         }
