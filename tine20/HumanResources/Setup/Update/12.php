@@ -97,5 +97,7 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         Tinebase_Core::getDb()->update(SQL_TABLE_PREFIX . HumanResources_Model_FreeTimeType::TABLE_NAME, [
             'id' => 'vacation'
         ], 'id = "03"');
+
+        $this->addApplicationUpdate('HumanResources', '12.9', self::RELEASE012_UPDATE004);
     }
 }
