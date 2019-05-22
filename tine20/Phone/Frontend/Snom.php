@@ -397,7 +397,11 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 break;
                 
             case 'connected':
-                $controller->callConnected($call);
+                try {
+                    $controller->callConnected($call);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                }
                 break;
                 
             case 'disconnected':
