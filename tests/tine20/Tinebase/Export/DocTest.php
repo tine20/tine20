@@ -64,13 +64,12 @@ class Tinebase_Export_DocTest extends TestCase
         }
     }
 
-    public function testDocConvertToPdf() {
-
+    public function testDocConvertToPdf()
+    {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} != true
             || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_VERSION}  < 2
         ) {
-            $this->markTestSkipped();
-            return;
+            $this->markTestSkipped('no docservice configured');
         }
 
         $export = Tinebase_Export::factory(new Addressbook_Model_ContactFilter(),
@@ -87,13 +86,15 @@ class Tinebase_Export_DocTest extends TestCase
 
         $export->generate();
 
+        $file = null;
         try {
             $file = $export->convert(Tinebase_Export_Convertible::PDF);
-
             $this->assertEquals('application/pdf', mime_content_type($file));
 
         } finally {
-            unlink($file);
+            if ($file) {
+                unlink($file);
+            }
         }
     }
 }
