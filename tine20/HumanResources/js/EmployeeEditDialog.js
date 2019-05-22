@@ -170,7 +170,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             autoScroll: true,
             layout: 'border',
             freetimeType: 'VACATION',
-            editDialogRecordProperty: 'vacation'
+            editDialogRecordProperty: 'vacation',
+            hideColumns: ['employee_id']
         });
         this.sicknessGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
             app: this.app,
@@ -181,7 +182,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             autoScroll: true,
             layout: 'border',
             freetimeType: 'SICKNESS',
-            editDialogRecordProperty: 'sickness'
+            editDialogRecordProperty: 'sickness',
+            hideColumns: ['employee_id']
         });
             
         var tabs = [{
