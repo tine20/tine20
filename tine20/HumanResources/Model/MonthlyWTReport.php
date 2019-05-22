@@ -184,7 +184,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                 self::DEFAULT_VAL                   => 0,
                 self::COPY_OMIT                     => true,
             ],
+            // data-transport for exports
             HumanResources_Model_DailyWTReport::FLDS_WORKING_TIMES => [
+                self::SHY                           => true,
                 self::TYPE                          => self::TYPE_VIRTUAL,
             ],
         ],
