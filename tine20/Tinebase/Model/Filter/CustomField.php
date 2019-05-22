@@ -123,7 +123,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $type = $this->_cfRecord->definition['type'];
         }
 
-switch ($type) {
+        $filterClass = null;
+        switch ($type) {
             case 'string':
             case 'text':
                 $filterClass = Tinebase_Model_Filter_Text::class;
