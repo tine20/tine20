@@ -63,4 +63,37 @@ class Tinebase_Export_DocTest extends TestCase
             unlink($tmpFile);
         }
     }
+
+    public function testDocConvertToPdf() {
+
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} != true
+            || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_VERSION}  < 2
+        ) {
+            $this->markTestSkipped();
+            return;
+        }
+
+        $export = Tinebase_Export::factory(new Addressbook_Model_ContactFilter(),
+            [
+                'format'             => 'doc',
+                'definitionFilename' => dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_doc.xml',
+                'template'           => dirname(__DIR__) . '/files/export/addressbook_contact_twigFunctions.docx',
+                'recordData'         => [
+                    'n_given'       => 'testName',
+                    'n_family'      => 'moreTest',
+                    'bday'          => '2000-01-02'
+                ]
+            ], Addressbook_Controller_Contact::getInstance());
+
+        $export->generate();
+
+        try {
+            $file = $export->convert(Tinebase_Export_Convertible::PDF);
+
+            $this->assertEquals('application/pdf', mime_content_type($file));
+
+        } finally {
+            unlink($file);
+        }
+    }
 }

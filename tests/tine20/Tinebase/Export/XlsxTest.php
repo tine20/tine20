@@ -338,4 +338,31 @@ class Tinebase_Export_XlsxTest extends TestCase
         static::assertArrayHasKey('Raum', $flippedArrayData, $msg);
         static::assertArrayHasKey('Vorname', $flippedArrayData, $msg);
     }
+
+    public function testConvertToPdf()
+    {
+        /** @var Addressbook_Export_Xls $export */
+        $export = Tinebase_Export::factory(new Addressbook_Model_ContactFilter(),
+            [
+                'format'             => 'xls',
+                'definitionFilename' => dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_xls.xml',
+                'template'           => dirname(__DIR__) . '/files/export/addressbook_contact_twigFunctions.xlsx',
+                'recordData'         => [
+                    'n_given'       => 'testName',
+                    'n_family'      => 'moreTest',
+                    'bday'          => '2000-01-02'
+                ]
+            ], Addressbook_Controller_Contact::getInstance());
+
+        $export->generate();
+
+        try {
+            $file = $export->convert(Tinebase_Export_Convertible::PDF);
+
+            $this->assertEquals('application/pdf', mime_content_type($file));
+
+        } finally {
+            unlink($file);
+        }
+    }
 }
