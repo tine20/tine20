@@ -133,7 +133,6 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 'type'         => 'integer',
                 'nullable'     => true,
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'        => NULL,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             
