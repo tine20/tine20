@@ -55,6 +55,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      * @param string                    $_messagePlain the message as plain text
      * @param string                    $_messageHtml the message as html
      * @param string|array              $_attachments
+     * @throws Zend_Mail_Protocol_Exception
      */
     public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL)
     {
@@ -112,10 +113,22 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         }
         
         // send
-        if(! empty($_recipient->email)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $_recipient->email);
+        if (! empty($_recipient->email)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $_recipient->email);
             $mail->addTo($_recipient->email, $_recipient->n_fn);
-            Tinebase_Smtp::getInstance()->sendMessage($mail);
+            try {
+                Tinebase_Smtp::getInstance()->sendMessage($mail);
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                if (preg_match('/^5\.1\.1/', $zmpe->getMessage())) {
+                    // User unknown in virtual mailbox table
+                    // TODO check Felamimail - there is a similar error handling. should be generalized!
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+                } else {
+                    throw $zmpe;
+                }
+            }
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Not sending notification email to ' . $_recipient->n_fn . '. No email address available.');
