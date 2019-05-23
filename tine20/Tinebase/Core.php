@@ -489,6 +489,9 @@ class Tinebase_Core
         Tinebase_Core::setupContainer();
     }
 
+    /**
+     * setup DI container
+     */
     protected static function setupContainer()
     {
         if (self::isRegistered(self::CONTAINER)) {
@@ -496,6 +499,9 @@ class Tinebase_Core
         }
 
         $cacheFile = self::getCacheDir() . '/cachedTine20Container.php';
+        if (! is_writable($cacheFile)) {
+            $cacheFile = self::getTempDir() . '/cachedTine20Container.php';
+        }
 
         // be aware of race condition between is_file and include_once => somebody may have deleted the file
         // yes it does get deleted! => check result of include_once
