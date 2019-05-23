@@ -393,7 +393,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      * @param Tinebase_Model_EmailUser $emailUser
      * @param integer $usersId
      */
-    protected function _getForwardedAliases(Tinebase_Model_EmailUser $emailUser, $usersId)
+    protected function _getForwardedAliases(Tinebase_Model_EmailUser $emailUser, $usersId = null)
     {
         if (! $emailUser->emailForwardOnly) {
             return;

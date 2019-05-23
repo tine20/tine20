@@ -498,8 +498,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      *   user where aliases are directly mapped to forward addresses 
      * 
      * @param Tinebase_Model_EmailUser $emailUser
+     * @param integer $usersId
+     *
+     * TODO generalize $usersId / @see \Tinebase_EmailUser_Smtp_PostfixMultiInstance::_getForwardedAliases
      */
-    protected function _getForwardedAliases(Tinebase_Model_EmailUser $emailUser)
+    protected function _getForwardedAliases(Tinebase_Model_EmailUser $emailUser, $usersId = null)
     {
         if (! $emailUser->emailForwardOnly) {
             return;
