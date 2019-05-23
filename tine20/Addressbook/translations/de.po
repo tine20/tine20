@@ -1132,3 +1132,6 @@ msgstr "Exportieren als DOC"
 
 msgid "Export as ..."
 msgstr "Exportieren als ..."
+
+msgid "Manage list email options"
+msgstr "E-Mail Optionen von Listen verwalten"
