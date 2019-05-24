@@ -597,7 +597,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
         if (($_record->is_cleared || $_oldRecord->is_cleared) && (!isset($this->_requestContext[self::RC_ALLOW_IS_CLEARED]) ||
                 !$this->_requestContext[self::RC_ALLOW_IS_CLEARED])) {
-            throw new Tinebase_Exception_Record_NotAllowed('It is not allowed to update a cleared report');
+            throw new Tinebase_Exception_SystemGeneric('It is not allowed to update a cleared report');
         }
     }
 
