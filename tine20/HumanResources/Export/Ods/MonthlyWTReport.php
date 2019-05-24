@@ -74,6 +74,15 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
                         'division_id' => [],
                     ],
                 ],
+                HumanResources_Model_MonthlyWTReport::FLDS_DAILY_WT_REPORTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'working_times' => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                'wage_type' => [],
+                            ],
+                        ],
+                    ],
+                ]
             ],
         ]);
         $expander->expand($rs);
