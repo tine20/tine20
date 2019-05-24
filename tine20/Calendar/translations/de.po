@@ -93,7 +93,7 @@ msgstr "Dieser Kontakt ist Teilnehmer einer Termin-Umfrage und wurde vom System 
 
 #: Controller/Poll.php:898
 msgid "Attendance Confirmation for Poll \"%1$s\""
-msgstr "Teilname Bestätigung für die Termin-Umfrage „%1$s“"
+msgstr "Teilnahmebestätigung für die Termin-Umfrage „%1$s“"
 
 #: Controller/Poll.php:940
 msgid "%1$s is scheduled for %2$s"
