@@ -99,7 +99,7 @@ msgstr ""
 
 #: Controller/Poll.php:898
 msgid "Attendance Confirmation for Poll \"%1$s\""
-msgstr "Teilname Bestätigung für die Termin-Umfrage „%1$s“"
+msgstr "Teilnahmebestätigung für die Termin-Umfrage „%1$s“"
 
 #: Controller/Poll.php:940
 msgid "%1$s is scheduled for %2$s"
@@ -2464,6 +2464,12 @@ msgstr ""
 msgid "Assign organizer meeting status on editGrant"
 msgstr ""
 
+msgid "Monday"
+msgstr "Montag"
+
+msgid "Sunday"
+msgstr "Sonntag"
+
 msgid "Me"
 msgstr "Meine"
 
@@ -2475,12 +2481,6 @@ msgstr "Kalender Besitzer"
 
 msgid "Filtered attendee"
 msgstr "Gefilterte Teilnehmer"
-
-msgid "Monday"
-msgstr "Montag"
-
-msgid "Sunday"
-msgstr "Sonntag"
 
 msgid "{headerDate, date, full}"
 msgstr "{headerDate, date, full}"
