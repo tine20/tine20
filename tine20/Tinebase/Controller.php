@@ -1022,6 +1022,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Cache_Exception
+     *
+     * @todo fix $size param - it should not be allowed to set it to png/svg
      */
     public function getFavicon($size = 16, $ext = 'png')
     {
@@ -1033,6 +1035,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             return $response
                 ->withAddedHeader('Content-Type', 'image/svg+xml');
+        } else if ($size === 'png') {
+            $size = 16;
+            $ext = 'png';
         }
         $mime = Tinebase_ImageHelper::getMime($ext);
         if (! in_array($mime, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
@@ -1053,7 +1058,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (array_key_exists($size, $config)) {
                 $icon = $config[$size];
             } else {
-                foreach($config as $s => $i) {
+                foreach ($config as $s => $i) {
                     if (! is_numeric($s)) continue;
                     $diffs[$s] = abs($size - $s);
                 }

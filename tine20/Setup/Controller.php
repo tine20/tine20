@@ -2569,13 +2569,10 @@ class Setup_Controller
             }
         }
         
-        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($appsToSort, true));
-        
         // re-sort apps
         $count = 0;
         while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
-            
-            foreach($appsToSort as $name => $depends) {
+            foreach ($appsToSort as $name => $depends) {
 
                 if (empty($depends)) {
                     // no dependencies left -> copy app to result set
@@ -2595,7 +2592,8 @@ class Setup_Controller
         
         if ($count == MAXLOOPCOUNT) {
             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                " Some Applications could not be installed because of (cyclic?) dependencies: " . print_r(array_keys($appsToSort), TRUE));
+                " Some Applications could not be installed because of dependencies (app => depends): "
+                . print_r($appsToSort, TRUE));
         }
         
         return $result;
