@@ -79,10 +79,10 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         // check times
         foreach ([
-                    '2018-08-02 02:00:00' => 6 * 3600 - 1800,
-                    '2018-08-06 02:00:00' => 5 * 3600 - 1800,
-                    '2018-08-07 02:00:00' => 5 * 3600 - 1800,
-                    '2018-08-08 02:00:00' => 2 * 3600,
+                    '2018-08-02 00:00:00' => 6 * 3600 - 1800,
+                    '2018-08-06 00:00:00' => 5 * 3600 - 1800,
+                    '2018-08-07 00:00:00' => 5 * 3600 - 1800,
+                    '2018-08-08 00:00:00' => 2 * 3600,
                  ] as $day => $workTime) {
             $report = $result->find('date', $day);
             self::assertNotNull($report);
@@ -131,10 +131,10 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         // check times
         foreach ([
-                     '2018-08-02 02:00:00' => 6 * 3600 - 1800,
-                     '2018-08-06 02:00:00' => 5 * 3600 - 1800,
-                     '2018-08-07 02:00:00' => 5 * 3600 - 1800,
-                     '2018-08-08 02:00:00' => 2 * 3600,
+                     '2018-08-02 00:00:00' => 6 * 3600 - 1800,
+                     '2018-08-06 00:00:00' => 5 * 3600 - 1800,
+                     '2018-08-07 00:00:00' => 5 * 3600 - 1800,
+                     '2018-08-08 00:00:00' => 2 * 3600,
                  ] as $day => $workTime) {
             $report = $result->filter('date', $day)->getFirstRecord();
             if ($report->date->format('Y-m-d') === $ts->start_date) {
