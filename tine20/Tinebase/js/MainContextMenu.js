@@ -36,7 +36,7 @@ Tine.Tinebase.MainContextMenu = Ext.extend(Ext.menu.Menu, {
     },
 
     onHide : function(){
-        if (this.isVisible()) {
+        if (this.isVisible() && Ext.isFunction(Ext.EventObject.getSignature)) {
             Tine.Tinebase.MainContextMenu.hideEventSignature = Ext.EventObject.getSignature();
         }
         this.supr().onHide.call(this);
