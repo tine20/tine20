@@ -137,6 +137,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         'playbook',
         'blackberry',
         'bb10',
+        // android supports multiple folders since 4.4
         Syncroton_Model_Device::TYPE_ANDROID
     );
     
@@ -579,14 +580,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     protected function _deviceSupportsMultipleFolders()
     {
-        if (strtolower($this->_device->devicetype) === Syncroton_Model_Device::TYPE_ANDROID) {
-            // android supports multiple folders since 4.4 (we assume >= 5.0)
-            return version_compare($this->_device->getMajorVersion(), '5', '>=');
-        } else if (in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders())) {
-            return true;
-        } else {
-            return false;
-        }
+        return in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders());
     }
     
     /**
