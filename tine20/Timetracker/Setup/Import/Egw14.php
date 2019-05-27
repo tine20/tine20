@@ -267,7 +267,7 @@ class Timetracker_Setup_Import_Egw14
         // init environment
         Tinebase_Core::setupConfig();
         Tinebase_Core::setupLogger();
-        Tinebase_Core::set('locale', new Zend_Locale('de_DE'));
+        Tinebase_Core::setLocale('de_DE');
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, 'UTC');
         Tinebase_Core::setupDatabaseConnection();
         Tinebase_Core::setupCache();

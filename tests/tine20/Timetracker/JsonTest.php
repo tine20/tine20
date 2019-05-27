@@ -629,7 +629,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     protected function _dateFilterTest($_type = 'weekThis')
     {
         $oldLocale = Tinebase_Core::getLocale();
-        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
+        Tinebase_Core::setLocale(new Zend_Locale('en_US'));
 
         // date is last/this sunday (1. day of week in the US)
         $today = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(12, 0, 0);
@@ -639,12 +639,12 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_createTsAndSearch($lastSunday, $_type);
 
         // change locale to de_DE -> timesheet should no longer be found because monday is the first day of the week
-        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('de_DE'));
+        Tinebase_Core::setLocale(new Zend_Locale('de_DE'));
         $search = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_type), $this->_getPaging());
         // if today is sunday -> ts should be found in german locale!
         $this->assertEquals(($dayOfWeek == 0) ? 1 : 0, $search['totalcount'], 'filter not working in german locale');
 
-        Tinebase_Core::set(Tinebase_Core::LOCALE, $oldLocale);
+        Tinebase_Core::setLocale($oldLocale);
     }
 
     /**

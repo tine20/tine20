@@ -835,7 +835,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         switch ($_value) {
 
             case self::YES_NO_OPTIONS:
-                $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+                $locale = Tinebase_Core::getLocale();
                 $question = Zend_Locale::getTranslationList('Question', $locale);
 
                 list($yes, $dummy) = explode(':', $question['yes']);

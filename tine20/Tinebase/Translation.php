@@ -511,7 +511,7 @@ class Tinebase_Translation
     {
         $date = ($date !== null) ? clone($date) : Tinebase_DateTime::now();
         $timezone = ($timezone !== null) ? $timezone : Tinebase_Core::getUserTimezone();
-        $locale = ($locale !== null) ? $locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $locale = ($locale !== null) ? $locale : Tinebase_Core::getLocale();
         
         $date = new Zend_Date($date->getTimestamp());
         $date->setTimezone($timezone);
