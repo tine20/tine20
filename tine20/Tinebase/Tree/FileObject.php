@@ -652,9 +652,15 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 break;
 
             case Tinebase_Timemachine_ModificationLog::UPDATED:
-                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+
+                try {
                 /** @var Tinebase_Model_Tree_FileObject $record */
                 $record = $this->get($_modification->record_id, true);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    break;
+                }
+
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $currentRecord = clone $record;
                 $record->applyDiff($diff);
                 $this->_prepareReplicationRecord($record);
@@ -668,7 +674,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
-                $this->softDelete(array($_modification->record_id));
+                try {
+                    $this->softDelete(array($_modification->record_id));
+                } catch (Tinebase_Exception_NotFound $tenf) {}
                 break;
 
             default:
