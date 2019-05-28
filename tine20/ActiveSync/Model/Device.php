@@ -124,6 +124,7 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract
                 }
                 break;
             default:
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " FIXME (broken logic): trying to get major version of unknown device type");
                 break;
         }
         
