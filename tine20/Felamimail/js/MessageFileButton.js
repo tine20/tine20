@@ -202,7 +202,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         // remove all items no longer in recipient grid
         _.each(me.menu.items.items, function(item) {
             // check if in grid
-            if (item.itemId && emailsInRecipientGrid.indexOf(item.itemId) === -1) {
+            if (_.get(item, 'itemId') && emailsInRecipientGrid.indexOf(item.itemId) === -1) {
                 // item no longer in grid
                 me.menu.remove(item);
             }
@@ -297,25 +297,31 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     },
 
     addDownloadMenuItem: function() {
-        var me = this;
+        if (! _.isFunction(_.get(this, 'initialConfig.selectionModel.getSelectionFilter'))) return;
 
-        if (me.initialConfig.record) {
+        var me = this,
+            messageFilter = this.initialConfig.selectionModel.getSelectionFilter(),
+            messageIds = messageFilter.length == 1 && messageFilter[0].field == 'id' ?
+                messageFilter[0].value : null,
+            messageCount = this.initialConfig.selectionModel.getCount();
+
+        if (messageCount == 1 && messageIds) {
             me.menu.addItem('-');
             me.menu.addItem({
                 text: me.app.i18n._('Download'),
-                iconCls: 'action_email_download',
+                iconCls: 'action_download',
                 // hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
-                handler: me.onMessageDownload.createDelegate(me),
+                handler: me.onMessageDownload.createDelegate(me, [messageIds])
             });
         }
     },
 
-    onMessageDownload: function() {
+    onMessageDownload: function(messageId) {
         var downloader = new Ext.ux.file.Download({
             params: {
                 method: 'Felamimail.downloadMessage',
                 requestType: 'HTTP',
-                messageId: this.initialConfig.record.id
+                messageId: messageId
             }
         }).start();
     },
