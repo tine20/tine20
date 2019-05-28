@@ -43,15 +43,15 @@
     background-image:url(../../images/icon-set/icon_trash_empty.svg) !important;
 }
 
-.x-btn .action_saveAsDraft {
+.action_saveAsDraft {
     background-image:url(../../images/icon-set/icon_drafts.svg) !important;
 }
 
-.x-btn .action_saveAsTemplate {
+.action_saveAsTemplate {
     background-image:url(../../images/icon-set/icon_folder_template.svg) !important;
 }
 
-.x-btn .action_email_download {
+.action_email_download {
     background-image:url(../../images/icon-set/icon_download.svg) !important;
 }
 

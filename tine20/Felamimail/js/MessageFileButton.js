@@ -52,6 +52,18 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
             me.on('toggle', me.onToggle, me);
         }
+
+        // grid selection interface for DisplayPanel/Dialog
+        if (! this.initialConfig.selectionModel && this.initialConfig.record) {
+            this.initialConfig.selectionModel = {
+                getSelectionFilter: function() {
+                    return [{field: 'id', operator: 'equals', value: me.initialConfig.record.id }];
+                },
+                getCount: function() {
+                    return 1
+                }
+            };
+        }
         this.supr().initComponent.call(this);
     },
 
@@ -252,6 +264,8 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
             me.addStaticMenuItems();
 
+            me.addDownloadMenuItem();
+
             me.suggestionsLoaded = true;
             me.setIconClass('action_file');
         });
@@ -280,6 +294,30 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                 return menu;
             }, [])
         });
+    },
+
+    addDownloadMenuItem: function() {
+        var me = this;
+
+        if (me.initialConfig.record) {
+            me.menu.addItem('-');
+            me.menu.addItem({
+                text: me.app.i18n._('Download'),
+                iconCls: 'action_email_download',
+                // hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
+                handler: me.onMessageDownload.createDelegate(me),
+            });
+        }
+    },
+
+    onMessageDownload: function() {
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'Felamimail.downloadMessage',
+                requestType: 'HTTP',
+                messageId: this.initialConfig.record.id
+            }
+        }).start();
     },
 
     /**
