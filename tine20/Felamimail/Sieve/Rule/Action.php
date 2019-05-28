@@ -23,7 +23,8 @@ class Felamimail_Sieve_Rule_Action
     const KEEP      = 'keep';
     const REJECT    = 'reject';
     const REDIRECT  = 'redirect';
-    
+    const VACATION  = 'vacation';
+
     /**
      * type of action
      * 
@@ -103,6 +104,7 @@ class Felamimail_Sieve_Rule_Action
      * quote string for usage in Sieve script 
      * 
      * @param   string  $string     the string to quote
+     * @return string
      * 
      * @todo generalize this
      */
@@ -116,7 +118,7 @@ class Felamimail_Sieve_Rule_Action
         }
     }
     
-/**
+    /**
      * return values as array
      * 
      * @return array
