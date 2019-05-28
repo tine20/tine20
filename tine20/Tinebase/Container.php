@@ -1568,22 +1568,36 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         foreach ($_records as $record) {
             if (isset($record[$_containerProperty])) {
                 $containerId = Tinebase_Model_Container::convertContainerId($record[$_containerProperty]);
-                if (! isset($containerIds[$containerId])) {
+                if (!isset($containerIds[$containerId])) {
                     $containerIds[$containerId] = $containerId;
                 }
             }
         }
-        
+
         if (empty($containerIds)) {
             return array();
         }
-        
+
+        return $this->getContainerWithGrants($containerIds, $_accountId);
+    }
+
+    /**
+     * @param array $_containerIds
+     * @param string $_accountId
+     * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Select_Exception
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function getContainerWithGrants(array $_containerIds, $_accountId)
+    {
         $accountId = $_accountId instanceof Tinebase_Record_Interface
             ? $_accountId->getId()
             : $_accountId;
         
         $select = $this->_getSelect('*', TRUE)
-            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", $containerIds)
+            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", $_containerIds)
             ->joinLeft(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
