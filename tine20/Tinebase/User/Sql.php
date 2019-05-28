@@ -288,7 +288,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     $user->sambaSAM  = $syncUser->sambaSAM;
                 }
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $user->getId());
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $user->getId());
             }
         }
         
