@@ -57,6 +57,23 @@ class Setup_Initialize
 
             self::createInitialRights($_application);
         }
+
+        // prefill applications update state
+        $now = Tinebase_DateTime::now()->toString();
+        $appMajorV = (int)$_application->getMajorVersion();
+        $updates = [];
+        for ($majorV = 0; $majorV <= $appMajorV; ++$majorV) {
+            /** @var Setup_Update_Abstract $class */
+            $class = $_application->name . '_Setup_Update_' . $majorV;
+            if (class_exists($class)) {
+                $updates += array_values($class::getAllUpdates());
+            }
+        }
+        if (!empty($updates)) {
+            array_walk($updates, function (&$val) { $val = key($val); });
+            Tinebase_Application::getInstance()->setApplicationState($_application, Tinebase_Application::STATE_UPDATES,
+                json_encode(array_fill_keys($updates, $now)));
+        }
     }
     
     /**
