@@ -564,7 +564,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         if (isset($this->_requestContext[self::RC_JSON_REQUEST])) {
-            throw new Tinebase_Exception_Record_NotAllowed('daily wt reports can\'t be created');
+            // _("daily wt reports can't be created")
+            throw new Tinebase_Exception_SystemGeneric("daily wt reports can't be created");
         }
     }
 
@@ -597,6 +598,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
         if (($_record->is_cleared || $_oldRecord->is_cleared) && (!isset($this->_requestContext[self::RC_ALLOW_IS_CLEARED]) ||
                 !$this->_requestContext[self::RC_ALLOW_IS_CLEARED])) {
+            // _('It is not allowed to update a cleared report')
             throw new Tinebase_Exception_SystemGeneric('It is not allowed to update a cleared report');
         }
     }

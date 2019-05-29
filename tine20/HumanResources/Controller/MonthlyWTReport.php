@@ -132,7 +132,8 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         if (isset($this->_requestContext[self::RC_JSON_REQUEST])) {
-            throw new Tinebase_Exception_Record_NotAllowed('monthly wt reports can\'t be created');
+            // _("monthly wt reports can't be created")
+            throw new Tinebase_Exception_SystemGeneric("monthly wt reports can't be created");
         }
     }
 
@@ -161,7 +162,8 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         }
 
         if ($_record->is_cleared && $_oldRecord->is_cleared) {
-            throw new Tinebase_Exception_Record_NotAllowed('It is not allowed to update a cleared report');
+            // _('It is not allowed to update a cleared report')
+            throw new Tinebase_Exception_SystemGeneric('It is not allowed to update a cleared report');
         }
     }
 
@@ -188,7 +190,8 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         if ($updatedRecord->is_cleared && !$currentRecord->is_cleared) {
             // previous month needs to be cleared first!
             if (null !== ($prev = $this->getPreviousMonthlyWTR($updatedRecord)) && !$prev->is_cleared) {
-                throw new Tinebase_Exception_Record_NotAllowed('previous months need to be cleared first');
+                // _('previous months need to be cleared first')
+                throw new Tinebase_Exception_SystemGeneric('previous months need to be cleared first');
             }
 
             $rs = new Tinebase_Record_RecordSet(HumanResources_Model_MonthlyWTReport::class, [$updatedRecord]);
@@ -210,7 +213,8 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         } elseif (!$updatedRecord->is_cleared && $currentRecord->is_cleared) {
             // next month must not be cleared!
             if (null !== ($next = $this->getNextMonthlyWTR($updatedRecord)) && $next->is_cleared) {
-                throw new Tinebase_Exception_Record_NotAllowed('following months need to be uncleared first');
+                // _('following months need to be uncleared first')
+                throw new Tinebase_Exception_SystemGeneric('following months need to be uncleared first');
             }
 
             $rs = new Tinebase_Record_RecordSet(HumanResources_Model_MonthlyWTReport::class, [$updatedRecord]);

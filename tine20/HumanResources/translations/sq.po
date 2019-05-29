@@ -171,7 +171,7 @@ msgid "Description"
 msgstr "Përshkrimi"
 
 #: js/FreeTimeEmployeeFilter.js:31 js/EmployeeEditDialog.js:187
-#: js/EmployeeEditDialog.js:200 Model/MonthlyWTReport.php:102
+#: js/EmployeeEditDialog.js:200 Model/MonthlyWTReport.php:103
 #: Model/CostCenter.php:73 Model/FreeTime.php:74 Model/Employee.php:38
 #: Model/Contract.php:80
 msgid "Employee"
@@ -702,96 +702,120 @@ msgstr ""
 msgid "unexpected error: "
 msgstr ""
 
-#: Model/DailyWTReport.php:76
+#: Controller/DailyWTReport.php:567
+msgid "daily wt reports can't be created"
+msgstr ""
+
+#: Controller/DailyWTReport.php:601 Controller/MonthlyWTReport.php:165
+msgid "It is not allowed to update a cleared report"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:135
+msgid "monthly wt reports can't be created"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:193
+msgid "previous months need to be cleared first"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:216
+msgid "following months need to be uncleared first"
+msgstr ""
+
+#: Model/DailyWTReport.php:77
 msgid "Daily Working Time Report"
 msgid_plural "Daily Working Time Reports"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/DailyWTReport.php:168
+#: Model/DailyWTReport.php:169
 msgid "Date"
 msgstr ""
 
-#: Model/DailyWTReport.php:176
+#: Model/DailyWTReport.php:177
 msgid "Evaluation Start Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:183
+#: Model/DailyWTReport.php:184
 msgid "Evaluation End Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:190
+#: Model/DailyWTReport.php:191
 msgid "Corrected Evaluation Start Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:197
+#: Model/DailyWTReport.php:198
 msgid "Corrected Evaluation End Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:207 Model/MonthlyWTReport.php:159
+#: Model/DailyWTReport.php:208 Model/MonthlyWTReport.php:158
 msgid "Target Working Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:216
+#: Model/DailyWTReport.php:217
 msgid "Target Working Time Correction"
 msgstr ""
 
-#: Model/DailyWTReport.php:226
+#: Model/DailyWTReport.php:227
 msgid "Break Time Net"
 msgstr ""
 
-#: Model/DailyWTReport.php:234
+#: Model/DailyWTReport.php:235
 msgid "Break Deduction Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:254 Model/MonthlyWTReport.php:151
+#: Model/DailyWTReport.php:242
+msgid "Working Times"
+msgstr ""
+
+#: Model/DailyWTReport.php:255 Model/MonthlyWTReport.php:150
 msgid "Actual Working Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:264 Model/MonthlyWTReport.php:166
+#: Model/DailyWTReport.php:265 Model/MonthlyWTReport.php:165
 msgid "Working Time Correction"
 msgstr ""
 
-#: Model/DailyWTReport.php:272
+#: Model/DailyWTReport.php:273
 msgid "Total Working Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:280
+#: Model/DailyWTReport.php:281
 msgid "System Remark"
 msgstr ""
 
-#: Model/DailyWTReport.php:288
+#: Model/DailyWTReport.php:289
 msgid "Remark"
 msgstr ""
 
-#: Model/DailyWTReport.php:296 Model/MonthlyWTReport.php:138
+#: Model/DailyWTReport.php:297 Model/MonthlyWTReport.php:178
 msgid "Is Cleared"
 msgstr ""
 
-#: Model/DailyWTReport.php:305
-msgid "Calculation Failure"
+#: Model/DailyWTReport.php:306
+msgid "Calculation Error"
 msgstr ""
 
-#: Model/MonthlyWTReport.php:57
+#: Model/MonthlyWTReport.php:58
 msgid "Monthly Working Time Report"
 msgid_plural "Monthly Working Time Reports"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/MonthlyWTReport.php:116
+#: Model/MonthlyWTReport.php:117
 msgid "Month"
 msgstr ""
 
-#: Model/MonthlyWTReport.php:127
+#: Model/MonthlyWTReport.php:128
 msgid "Daily Working Time Reports"
 msgstr ""
 
-#: Model/MonthlyWTReport.php:174
-msgid "Working Time Balance"
+#: Model/MonthlyWTReport.php:142
+msgid "Working Time Balance Previous Month"
 msgstr ""
 
-#: Model/MonthlyWTReport.php:182
-msgid "Working Time Balance Previous Month"
+#: Model/MonthlyWTReport.php:173
+msgid "Total Working Time Balance"
 msgstr ""
 
 #: Model/WageType.php:53 Model/FreeTimeType.php:113
