@@ -411,7 +411,6 @@ class ActiveSync_Command_SyncTests extends TestCase
 
         $folders = $emailController->getAllFolders();
 
-
         foreach ($folders as $folder) {
             if (strtoupper($folder->displayName) == 'INBOX') {
                 break;
@@ -492,6 +491,8 @@ class ActiveSync_Command_SyncTests extends TestCase
 
         // activate for xml output
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+
+        self::assertNotNull($syncDoc);
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');

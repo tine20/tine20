@@ -855,19 +855,26 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             
             // create new account and update capabilities
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($systemAccount, 'create');
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
             
             $systemAccount = $this->_backend->create($systemAccount);
             $_accounts->addRecord($systemAccount);
             $this->_addedDefaultAccount = TRUE;
+
+            if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
+                $this->_autoCreateSystemAccountFolders($systemAccount);
+            }
             
             // set as default account preference
             Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
             
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account "' . $systemAccount->name . '".');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Created new system account "' . $systemAccount->name . '".');
             
         } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName . '. No email address given.');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not create system account for user ' . $fullUser->accountLoginName . '. No email address given.');
         }
     }
     
@@ -878,7 +885,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param boolean $_force
      * @return boolean
      */
-    protected function _addFolderDefaults($_account, $_force = FALSE)
+    protected function _addFolderDefaults(Felamimail_Model_Account $_account, $_force = FALSE)
     {
         // set some default settings if not set
         $folderDefaults = Felamimail_Config::getInstance()->get(Felamimail_Config::SYSTEM_ACCOUNT_FOLDER_DEFAULTS, array(
@@ -899,6 +906,28 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_addNamespaceToFolderConfig($_account);
         
         return $changed;
+    }
+
+    /**
+     * @param Felamimail_Model_Account $_account
+     */
+    protected function _autoCreateSystemAccountFolders(Felamimail_Model_Account $_account)
+    {
+        try {
+            foreach ([
+                         Felamimail_Model_Folder::FOLDER_DRAFTS,
+                         Felamimail_Model_Folder::FOLDER_SENT,
+                         Felamimail_Model_Folder::FOLDER_TEMPLATES,
+                         Felamimail_Model_Folder::FOLDER_TRASH
+                     ] as $folder) {
+                $systemFolderField = $this->_getSystemFolderField($folder);
+                $folderName = $_account->{$systemFolderField};
+                $this->_createSystemFolder($_account, $folderName);
+            }
+        } catch (Exception $e) {
+            // skip creation at this point
+            Tinebase_Exception::log($e);
+        }
     }
     
     /**
