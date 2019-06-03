@@ -17,6 +17,8 @@ class Tinebase_Record_Expander_JsonStorageProperty extends Tinebase_Record_Expan
         foreach ($_records as $record) {
             $data = $record->{$this->_property};
             if ($data instanceof Tinebase_Record_RecordSet && $data->count() > 0) {
+                // TODO we should delay this expanding until the current run of \Tinebase_Record_Expander::_fetchData finished!
+                // ?? really, this too? ... probably not
                 $this->expand($data);
             }
         }

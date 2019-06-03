@@ -15,7 +15,7 @@ class Tinebase_Record_Expander_RecordsProperty extends Tinebase_Record_Expander_
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
         $ids = [];
-        $this->_recordsToProcess = $_records;
+        $this->_addRecordsToProcess($_records);
         foreach ($_records->{$this->_property} as $data) {
             if (is_array($data)) {
                 $ids = array_merge($ids, $data);
@@ -54,6 +54,7 @@ class Tinebase_Record_Expander_RecordsProperty extends Tinebase_Record_Expander_
             $record->{$this->_property} = $result;
         }
 
+        // TODO we should delay this expanding until the current run of \Tinebase_Record_Expander::_fetchData finished!
         $this->expand($_data);
     }
 }

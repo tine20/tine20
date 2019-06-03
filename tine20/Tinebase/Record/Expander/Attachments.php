@@ -16,6 +16,7 @@ class Tinebase_Record_Expander_Attachments extends Tinebase_Record_Expander_Prop
     {
         $data = Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($_records);
 
+        // TODO we should delay this expanding until the current run of \Tinebase_Record_Expander::_fetchData finished!
         $this->expand($data);
     }
 

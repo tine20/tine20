@@ -36,7 +36,7 @@ class Tinebase_Record_Expander_PropertyClass_User extends Tinebase_Record_Expand
     }
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
-        $this->_recordsToProcess = $_records;
+        $this->_addRecordsToProcess($_records);
         $ids = [];
         foreach ($this->_propertiesToProcess as $property) {
             // ??? TODO think about this? getIdFromProperty? we never know which state the records are in?
@@ -71,9 +71,8 @@ class Tinebase_Record_Expander_PropertyClass_User extends Tinebase_Record_Expand
                 }
             }
         }
-        // clean up
-        $this->_recordsToProcess = null;
 
+        // TODO we should delay this expanding until the current run of \Tinebase_Record_Expander::_fetchData finished!
         $this->expand($expandData);
     }
 }
