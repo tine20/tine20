@@ -117,6 +117,8 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
                     /** @var HumanResources_Model_DailyWTReport $dailyWTR */
                     return $dailyWTR->date->format('W') === $week;
                 }) as $dailyWTR) {
+            $weekSummary->break_time_deduction = $weekSummary->break_time_deduction + $dailyWTR->break_time_deduction;
+            $weekSummary->break_time_net = $weekSummary->break_time_net + $dailyWTR->break_time_net;
             $weekSummary->working_time_actual = $weekSummary->working_time_actual + $dailyWTR->working_time_actual;
             $weekSummary->working_time_correction = $weekSummary->working_time_correction + $dailyWTR->working_time_correction;
             $weekSummary->working_time_total = $weekSummary->working_time_total + $dailyWTR->working_time_total;
