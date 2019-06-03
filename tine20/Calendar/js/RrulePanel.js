@@ -323,10 +323,10 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         this.count = new Ext.form.NumberField({
             requiredGrant : 'editGrant',
             style         : 'text-align:right;',
-            //fieldLabel    : this.intervalBeforeString,
             width         : 40,
             minValue      : 1,
             disabled      : true,
+            allowDecimals : false,
             allowBlank    : false
         });
         
