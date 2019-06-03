@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -72,7 +72,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         'deleted_time'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'seq'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        );
+    );
     
    /**
      * key in $_validators/$_properties array for the filed which 

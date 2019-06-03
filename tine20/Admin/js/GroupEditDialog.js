@@ -164,6 +164,15 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     recordClass: Tine.Tinebase.Model.Container,
                     recordProxy: Tine.Admin.sharedAddressbookBackend,
                     disabled: this.group.get('visibility') === 'hidden'
+                }], [{
+                    columnWidth: 1,
+                    xtype: 'textfield',
+                    fieldLabel: this.translation.gettext('E-Mail'),
+                    name: 'email',
+                    anchor: '100%',
+                    vtype: 'email',
+                    maxLength: 255,
+                    allowBlank: true
                 }]]
             }, {
                 xtype: 'tinerecordpickergrid',
