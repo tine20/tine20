@@ -732,7 +732,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onFileRecords: function() {
         var filePicker = new Tine.Filemanager.FilePickerDialog({
-            windowTitle: this.app.i18n._('Select Save Location'),
+            windowTitle: this.app.i18n._('Select Message File Location'),
             singleSelect: true,
             requiredGrants: ['addGrant'],
             constraint: 'folder'

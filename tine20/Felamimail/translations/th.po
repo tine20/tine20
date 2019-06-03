@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # jaruwan <luca.ingianni@gmail.com>, 2014
 # jaruwan <luca.ingianni@gmail.com>, 2014
@@ -9,136 +9,319 @@ msgstr ""
 "PO-Revision-Date: 2018-11-28 11:10+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Model/MessageFileLocation.php:45
-msgid "Message File Location"
-msgid_plural "Message File Locations"
-msgstr[0] ""
+#: Preference.php:65
+msgid "All inboxes"
+msgstr "กล่องข้อความเข้าทั้งหมด"
 
-#: Model/MessageFileLocation.php:46
-msgid "Message File Locations"
+#: Preference.php:113
+msgid "Default Email Account"
+msgstr "บัญชีอีเมลหลัก"
+
+#: Preference.php:114
+msgid "The default email account to use when sending mails."
+msgstr "บัญชีอีเมลหลักที่ใช้ส่งอีเมล"
+
+#: Preference.php:117
+msgid "Email Update Interval"
+msgstr "ความถี่ในการอัพเดทอีเมล"
+
+#: Preference.php:118
+msgid "How often should Felamimail check for new Emails (in minutes)."
+msgstr "ต้องการให้ Felamimail เช็คอีเมลใหม่ บ่อยแค่ไหน (เป็นนาที)"
+
+#: Preference.php:121
+msgid "Use for mailto links"
+msgstr "ใช้สำหรับเชื่อมต่อ เมลไปยัง"
+
+#: Preference.php:122
+msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
+msgstr "ใช้ Felamimail ในการเชื่อมต่อเมลไปยัง หรือไม่ก็ใช้ค่าหลักที่ลูกค้าตั้งไว้บนเดสก์ท็อป"
+
+#: Preference.php:125
+msgid "Use for NOTES"
+msgstr "ใช้สำหรับบันทึก"
+
+#: Preference.php:126
+msgid "Save Note default Value."
+msgstr "ค่าหลักของบันทึกโน๊ต"
+
+#: Preference.php:129
+msgid "Confirm Delete"
+msgstr "ยืนยันการลบ"
+
+#: Preference.php:130
+msgid "Show confirmation dialog when deleting mails."
+msgstr "แสดงข้อความยืนยันเมื่อกำลังลบเมล"
+
+#: Preference.php:133
+msgid ".eml file Attachment in forwarded mails"
 msgstr ""
 
-#: Model/MessageFileLocation.php:89
-msgid "Message ID Hash"
+#: Preference.php:134
+msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr ""
 
-#: Model/MessageFileLocation.php:96
-msgid "Message ID"
+#: js/GridDetailsPanel.js:117 js/MailDetailsPanel.js:152
+msgid "Message not available."
+msgstr "ข้อความไม่มีอยู่ "
+
+#: js/MessageFileButton.js:35
+msgid "File Message"
 msgstr ""
 
-#: Model/MessageFileLocation.php:104
-msgid "Model"
+#: js/MessageFileButton.js:280
+msgid "Filemanager ..."
 msgstr ""
 
-#: Model/MessageFileLocation.php:111
-msgid "Record ID"
+#: js/MessageFileButton.js:285 js/AttachmentUploadGrid.js:83
+msgid "Attachment"
 msgstr ""
 
-#: Model/MessageFileLocation.php:118
-msgid "Record Title"
+#: js/MessageFileButton.js:311 js/AttachmentUploadGrid.js:59
+msgid "Download"
 msgstr ""
 
-#: Model/MessageFileLocation.php:125
-msgid "Type"
+#: js/MessageFileButton.js:344
+msgid "{messageCount, plural, one {Message was filed} other {# messages where filed}}"
 msgstr ""
 
-#: Model/Message.php:368
-msgid "Reading Confirmation:"
-msgstr "การยืนยันการอ่าน:"
-
-#: Model/Message.php:369
-msgid "Your message:"
-msgstr "ข้อความของคุณ:"
-
-#: Model/Message.php:370
-msgid "Received on"
-msgstr "ได้รับแล้วเมื่อ"
-
-#: Model/Message.php:371
-msgid "Was read by:"
-msgstr "ได้อ่านแล้ว โดย:"
-
-#: Model/Message.php:372
-msgid "on"
-msgstr "เมื่อ"
-
-#: js/MessageDisplayDialog.js:49 js/GridPanel.js:286
-msgid "Delete"
-msgstr "ลบ"
-
-#: js/MessageDisplayDialog.js:56 js/GridPanel.js:241
-msgid "Reply"
-msgstr "ตอบ"
-
-#: js/MessageDisplayDialog.js:62 js/GridPanel.js:250
-msgid "Reply To All"
-msgstr "ตอบทุกคน"
-
-#: js/MessageDisplayDialog.js:68 js/GridPanel.js:259
-msgid "Forward"
-msgstr "ส่งต่อ"
-
-#: js/MessageDisplayDialog.js:74
-msgid "Save"
-msgstr "บันทึก"
-
-#: js/MessageDisplayDialog.js:81 js/GridPanel.js:333
-msgid "Print Message"
-msgstr "พิมพ์ข้อความ"
-
-#: js/MessageDisplayDialog.js:87 js/GridPanel.js:324 js/GridPanel.js:1462
-#: js/GridPanel.js:1478
-msgid "Print Preview"
-msgstr "พิมพ์หน้าพรีวิว"
-
-#: js/TreePanel.js:691
-msgid "Total Messages:"
-msgstr "ข้อความทั้งหมด:"
-
-#: js/TreePanel.js:695
-msgid "Unread Messages:"
-msgstr "ข้อความที่ยังไม่ได้อ่าน:"
-
-#: js/TreePanel.js:699
-msgid "Name on Server:"
-msgstr "ชื่อบนเซิร์ฟเวอร์:"
-
-#: js/TreePanel.js:703
-msgid "Last update:"
-msgstr "ปรับปรุงล่าสุด:"
-
-#: js/TreePanel.js:723
-#, python-brace-format
-msgid "Fetching messages... ({0} done)"
+#: js/MessageFileButton.js:346
+msgid "Success"
 msgstr ""
 
-#: js/TreePanel.js:739
-#, python-brace-format
-msgid "{0} unread message"
-msgid_plural "{0} unread messages"
-msgstr[0] "{0} ข้อความที่ยังไม่ได้อ่าน"
-
-#: js/PGPDetailsPanel.js:22
-#, python-brace-format
-msgid "Mailvelope decryption Error [{0}]"
+#: js/MessageFileButton.js:350
+msgid "Error"
 msgstr ""
 
-#: js/PGPDetailsPanel.js:33
-#, python-brace-format
-msgid "To decrypt this message please install {0} with API support enabled"
+#: js/MessageFileButton.js:460
+msgid "File Messages as Attachment"
 msgstr ""
 
-#: js/PGPDetailsPanel.js:36
-msgid "PGP encrypted Message"
+#: js/AccountEditDialog.js:79
+msgid "Add New Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:92
+msgid "Signature"
+msgstr "ลายเซ็นต์"
+
+#: js/AccountEditDialog.js:118 js/Model.js:452
+msgid "Account"
+msgid_plural "Accounts"
+msgstr[0] "บัญชี"
+
+#: js/AccountEditDialog.js:129
+msgid "Account Name"
+msgstr "ชื่อบัญชี"
+
+#: js/AccountEditDialog.js:133
+msgid "User Email"
+msgstr "อีเมลของผู้ใช้"
+
+#: js/AccountEditDialog.js:138
+msgid "User Name (From)"
+msgstr "ชื่อผู้ใช้ (จาก)"
+
+#: js/AccountEditDialog.js:141
+msgid "Organization"
+msgstr "องค์กร"
+
+#: js/AccountEditDialog.js:144
+msgid "Signature position"
+msgstr "ตำแหน่งของลายเซ็นต์"
+
+#: js/AccountEditDialog.js:155
+msgid "Above the quote"
+msgstr "เหนือคำที่อ้างมา"
+
+#: js/AccountEditDialog.js:156
+msgid "Below the quote"
+msgstr "ใต้คำที่อ้างมา"
+
+#: js/AccountEditDialog.js:174
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/AccountEditDialog.js:181 js/AccountEditDialog.js:224
+#: js/AccountEditDialog.js:279
+msgid "Host"
+msgstr "แม่ข่าย"
+
+#: js/AccountEditDialog.js:185
+msgid "Port (Default: 143 / SSL: 993)"
+msgstr "พอร์ต (Default: 143 / SSL: 993)"
+
+#: js/AccountEditDialog.js:191 js/AccountEditDialog.js:233
+#: js/AccountEditDialog.js:288
+msgid "Secure Connection"
+msgstr "การเชื่อมต่อที่ปลอดภัย"
+
+#: js/AccountEditDialog.js:202 js/AccountEditDialog.js:243
+#: js/AccountEditDialog.js:258 js/AccountEditDialog.js:298
+#: js/ContactGrid.js:118
+msgid "None"
+msgstr "ไม่มีเลย"
+
+#: js/AccountEditDialog.js:203 js/AccountEditDialog.js:244
+#: js/AccountEditDialog.js:299
+msgid "TLS"
+msgstr "TLS"
+
+#: js/AccountEditDialog.js:204 js/AccountEditDialog.js:245
+msgid "SSL"
+msgstr "SSL"
+
+#: js/AccountEditDialog.js:207
+msgid "Username"
+msgstr "ชื่อผู้ใช้"
+
+#: js/AccountEditDialog.js:211
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+#: js/AccountEditDialog.js:217
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/AccountEditDialog.js:227
+msgid "Port (Default: 25)"
+msgstr "พอร์ต (Default: 25)"
+
+#: js/AccountEditDialog.js:248
+msgid "Authentication"
+msgstr "การอนุญาต"
+
+#: js/AccountEditDialog.js:259
+msgid "Login"
+msgstr "ลงบันทึกเข้า"
+
+#: js/AccountEditDialog.js:260
+msgid "Plain"
+msgstr "ธรรมดา"
+
+#: js/AccountEditDialog.js:263
+msgid "Username (optional)"
+msgstr "ชื่อผู้ใช้ (ไม่บังคับ)"
+
+#: js/AccountEditDialog.js:266
+msgid "Password (optional)"
+msgstr "รหัสผ่าน (ไม่บังคับ)"
+
+#: js/AccountEditDialog.js:272
+msgid "Sieve"
+msgstr "กรอง"
+
+#: js/AccountEditDialog.js:283
+msgid "Port (Default: 2000)"
+msgstr "พอร์ต (Default: 2000)"
+
+#: js/AccountEditDialog.js:302 js/sieve/NotificationDialog.js:85
+msgid "Notification Email"
+msgstr ""
+
+#: js/AccountEditDialog.js:307
+msgid "Other Settings"
+msgstr "ค่าติดตั้งอื่น ๆ"
+
+#: js/AccountEditDialog.js:314
+msgid "Sent Folder Name"
+msgstr "ชื่อของแฟ้ม ส่งแล้ว"
+
+#: js/AccountEditDialog.js:320
+msgid "Trash Folder Name"
+msgstr "ชื่อของแฟ้ม ขยะ"
+
+#: js/AccountEditDialog.js:326
+msgid "Drafts Folder Name"
+msgstr "ชื่อของแฟ้ม โครงร่าง"
+
+#: js/AccountEditDialog.js:332
+msgid "Templates Folder Name"
+msgstr "ชื่อของแฟ้มแม่แบบ"
+
+#: js/AccountEditDialog.js:338
+msgid "Display Format"
+msgstr "รูปแบบที่ใช้"
+
+#: js/AccountEditDialog.js:349 js/AccountEditDialog.js:365
+msgid "HTML"
+msgstr "HTML"
+
+#: js/AccountEditDialog.js:350 js/AccountEditDialog.js:366
+msgid "Plain Text"
+msgstr "ข้อความธรรมดา"
+
+#: js/AccountEditDialog.js:351
+msgid "Depending on content type (experimental)"
+msgstr "ขึ้นอยู่กับประเภทเนื้อหา (ช่วงทดลอง)"
+
+#: js/AccountEditDialog.js:354
+msgid "Compose Format"
+msgstr ""
+
+#: js/AccountEditDialog.js:369
+msgid "Preserve Format"
+msgstr ""
+
+#: js/AccountEditDialog.js:380
+msgid "No"
+msgstr ""
+
+#: js/AccountEditDialog.js:381
+msgid "Yes"
+msgstr ""
+
+#: js/AccountEditDialog.js:384 js/MessageEditDialog.js:1298
+msgid "Reply-To Email"
+msgstr ""
+
+#: js/RecipientGrid.js:235
+msgid "Click here to set To/CC/BCC."
+msgstr "กดที่นี่เพื่อตั้งเป็น To/CC/BCC"
+
+#: js/RecipientGrid.js:239 js/RecipientGrid.js:263
+msgid "To:"
+msgstr "To:"
+
+#: js/RecipientGrid.js:242 js/RecipientGrid.js:264
+msgid "Cc:"
+msgstr "Cc:"
+
+#: js/RecipientGrid.js:245 js/RecipientGrid.js:265
+msgid "Bcc:"
+msgstr "Bcc:"
+
+#: js/RecipientGrid.js:393
+msgid "Remove"
+msgstr "เอาออก"
+
+#: js/GridPanelHook.js:34 js/GridPanelHook.js:103
+msgid "Compose email"
+msgstr "เขียนอีเมล"
+
+#: js/GridPanelHook.js:49 js/Model.js:195 js/GridPanel.js:535
+msgid "To"
+msgstr "ถึง"
+
+#: js/GridPanelHook.js:62
+msgid "CC"
+msgstr ""
+
+#: js/GridPanelHook.js:75
+msgid "BCC"
+msgstr ""
+
+#: js/GridPanelHook.js:88 js/MessageEditDialog.js:223
+msgid "Mass Mailing"
 msgstr ""
 
 #: js/TreeContextMenu.js:23
@@ -155,8 +338,8 @@ msgid "New {0}"
 msgstr "ใหม่ {0}"
 
 #: js/TreeContextMenu.js:64 js/TreeContextMenu.js:67 js/TreeContextMenu.js:70
-#: js/FolderFilterModel.js:30 js/GridPanel.js:560 js/Model.js:59
-#: js/Model.js:570
+#: js/FolderFilterModel.js:30 js/Model.js:60 js/Model.js:592
+#: js/GridPanel.js:557
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "แฟ้มเอกสาร"
@@ -209,6 +392,63 @@ msgstr "ทำเครื่องหมายแฟ้มว่าอ่าน
 msgid "Update Folder List"
 msgstr "ปรับปรุงรายชื่อแฟ้ม"
 
+#: js/ContactGrid.js:273
+msgid "Add as \"To\""
+msgstr "เพิ่มเป็น \"To\""
+
+#: js/ContactGrid.js:284
+msgid "Add as \"Cc\""
+msgstr "เพิ่มเป็น \"Cc\""
+
+#: js/ContactGrid.js:295
+msgid "Add as \"Bcc\""
+msgstr "เพิ่มเป็น \"Bcc\""
+
+#: js/ContactGrid.js:306
+msgid "Remove from recipients"
+msgstr "เอาออกจากผู้รับ"
+
+#: js/ContactGrid.js:360 js/MessageEditDialog.js:696
+msgid "Loading Mail Addresses"
+msgstr "กำลังโหลดที่อยู่อีเมล"
+
+#: js/MailDetailsPanel.js:79
+msgid "Open in Felamimail"
+msgstr ""
+
+#: js/MailDetailsPanel.js:171 js/sieve/RuleConditionsPanel.js:74
+#: js/MessageEditDialog.js:1309 js/Model.js:192 js/GridPanel.js:510
+msgid "Subject"
+msgstr "หัวเรื่อง"
+
+#: js/MailDetailsPanel.js:172 js/MessageEditDialog.js:1145
+msgid "From"
+msgstr "จาก"
+
+#: js/MailDetailsPanel.js:173
+msgid "Add"
+msgstr "เพิ่ม"
+
+#: js/MailDetailsPanel.js:174
+msgid "Add contact to addressbook"
+msgstr "เพิ่มการติดต่อไปยังสมุดที่อยู่"
+
+#: js/MailDetailsPanel.js:175
+msgid "Date"
+msgstr "วันที่"
+
+#: js/MailDetailsPanel.js:177 js/MailDetailsPanel.js:445
+msgid "Show or hide header information"
+msgstr "แสดงหรือซ่อนหัวข้อของข้อมูล"
+
+#: js/MailDetailsPanel.js:288 js/MessageEditDialog.js:1076 js/GridPanel.js:495
+msgid "Attachments"
+msgstr "สิ่งที่แนบมาด้วย"
+
+#: js/MailDetailsPanel.js:304
+msgid "{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}"
+msgstr ""
+
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
 msgstr "ตัวกรองผู้รับ"
@@ -222,6 +462,33 @@ msgstr "ผู้รับทั้งหมด"
 msgid "\"{0}\" recipients"
 msgstr "\"{0}\" ผู้รับ"
 
+#: js/TreePanel.js:691
+msgid "Total Messages:"
+msgstr "ข้อความทั้งหมด:"
+
+#: js/TreePanel.js:695
+msgid "Unread Messages:"
+msgstr "ข้อความที่ยังไม่ได้อ่าน:"
+
+#: js/TreePanel.js:699
+msgid "Name on Server:"
+msgstr "ชื่อบนเซิร์ฟเวอร์:"
+
+#: js/TreePanel.js:703
+msgid "Last update:"
+msgstr "ปรับปรุงล่าสุด:"
+
+#: js/TreePanel.js:723
+#, python-brace-format
+msgid "Fetching messages... ({0} done)"
+msgstr ""
+
+#: js/TreePanel.js:739
+#, python-brace-format
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] "{0} ข้อความที่ยังไม่ได้อ่าน"
+
 #: js/RecipientPickerDialog.js:63
 msgid "(new message)"
 msgstr "(ข้อความใหม่)"
@@ -231,513 +498,48 @@ msgstr "(ข้อความใหม่)"
 msgid "Select recipients for \"{0}\""
 msgstr "เลือกผู้รับสำหรับ \"{0}\""
 
-#: js/GridPanel.js:112
-msgid "No Messages found."
-msgstr ""
-
-#: js/GridPanel.js:231
-msgid "Compose"
-msgstr "เขียน"
-
-#: js/GridPanel.js:267
-msgid "Toggle highlighting"
-msgstr "เปิดปิดการเน้นให้เด่น"
-
-#: js/GridPanel.js:276
-msgid "Mark read/unread"
-msgstr "ทำเครื่องหมาย อ่านแล้ว/ ยังไม่ได้อ่าน"
-
-#: js/GridPanel.js:296
-msgid "Move"
-msgstr ""
-
-#: js/GridPanel.js:307
-msgid "File Message"
-msgstr ""
-
-#: js/GridPanel.js:316
-msgid "Add Account"
-msgstr "เพิ่มบัญชี"
-
-#: js/GridPanel.js:492
-msgid "Id"
-msgstr "รหัส"
-
-#: js/GridPanel.js:499 js/MessageEditDialog.js:1080 js/MailDetailsPanel.js:287
-msgid "Attachments"
-msgstr "สิ่งที่แนบมาด้วย"
-
-#: js/GridPanel.js:506 js/Model.js:176
-msgid "Flags"
-msgstr "ป้าย"
-
-#: js/GridPanel.js:513 js/Model.js:170 js/MessageEditDialog.js:1304
-#: js/sieve/RuleConditionsPanel.js:75 js/MailDetailsPanel.js:171
-#: Controller/Message/Send.php:367
-msgid "Subject"
-msgstr "หัวเรื่อง"
-
-#: js/GridPanel.js:519 js/Model.js:171 js/sieve/RuleConditionsPanel.js:71
-msgid "From (Email)"
-msgstr "จาก (อีเมล)"
-
-#: js/GridPanel.js:525 js/Model.js:172
-msgid "From (Name)"
-msgstr "จาก (ชื่อ)"
-
-#: js/GridPanel.js:531
-msgid "Sender"
-msgstr "ผู้ส่ง"
-
-#: js/GridPanel.js:538 js/GridPanelHook.js:49 js/Model.js:173
-msgid "To"
-msgstr "ถึง"
-
-#: js/GridPanel.js:545 js/Model.js:564
-msgid "Sent"
-msgstr "ส่งแล้ว"
-
-#: js/GridPanel.js:553 js/Model.js:179
-msgid "Received"
-msgstr "ได้รับแล้ว"
-
-#: js/GridPanel.js:568 js/sieve/RuleConditionsPanel.js:76
-msgid "Size"
-msgstr "ขนาด"
-
-#: js/GridPanel.js:608 Controller/Message/Flags.php:25
-msgid "Answered"
-msgstr "ตอบแล้ว"
-
-#: js/GridPanel.js:611
-msgid "Forwarded"
-msgstr "ส่งต่อแล้ว"
-
-#: js/GridPanel.js:614
-msgid "Tine20"
-msgstr ""
-
-#: js/GridPanel.js:617
-msgid "Recent"
-msgstr "ล่าสุด"
-
-#: js/GridPanel.js:732
-msgid "Select Save Location"
-msgstr ""
-
-#: js/GridPanel.js:762
-msgid "Filing Messages"
-msgstr ""
-
-#: js/GridPanel.js:797
-msgid "Error Filing Message"
-msgstr ""
-
-#: js/GridPanel.js:798
-msgid "Could not file message."
-msgstr ""
-
-#: js/GridPanel.js:1096
-msgid "Send Reading Confirmation"
-msgstr "ส่งการยืนยันการอ่าน"
-
-#: js/GridPanel.js:1097
-msgid "Do you want to send a reading confirmation message?"
-msgstr "คุณต้องการส่งข้อความยืนยันการอ่านหรือไม่?"
-
-#: js/GridPanelHook.js:34 js/GridPanelHook.js:103
-msgid "Compose email"
-msgstr "เขียนอีเมล"
-
-#: js/GridPanelHook.js:62
-msgid "CC"
-msgstr ""
-
-#: js/GridPanelHook.js:75
-msgid "BCC"
-msgstr ""
-
-#: js/GridPanelHook.js:88 js/MessageEditDialog.js:228
-msgid "Mass Mailing"
-msgstr ""
-
-#: js/ContactGrid.js:119 js/AccountEditDialog.js:187
-#: js/AccountEditDialog.js:228 js/AccountEditDialog.js:243
-#: js/AccountEditDialog.js:283
-msgid "None"
-msgstr "ไม่มีเลย"
-
-#: js/ContactGrid.js:274
-msgid "Add as \"To\""
-msgstr "เพิ่มเป็น \"To\""
-
-#: js/ContactGrid.js:285
-msgid "Add as \"Cc\""
-msgstr "เพิ่มเป็น \"Cc\""
-
-#: js/ContactGrid.js:296
-msgid "Add as \"Bcc\""
-msgstr "เพิ่มเป็น \"Bcc\""
-
-#: js/ContactGrid.js:307
-msgid "Remove from recipients"
-msgstr "เอาออกจากผู้รับ"
-
-#: js/ContactGrid.js:361 js/MessageEditDialog.js:701
-msgid "Loading Mail Addresses"
-msgstr "กำลังโหลดที่อยู่อีเมล"
-
-#: js/Model.js:55
-msgid "Message"
-msgid_plural "Messages"
-msgstr[0] "ข้อความ"
-
-#: js/Model.js:169
-msgid "Subject/From"
-msgstr "หัวเรื่อง/ จาก"
-
-#: js/Model.js:174
-msgid "Cc"
-msgstr "Cc"
-
-#: js/Model.js:175
-msgid "Bcc"
-msgstr "Bcc"
-
-#: js/Model.js:430 js/AccountEditDialog.js:119
-msgid "Account"
-msgid_plural "Accounts"
-msgstr[0] "บัญชี"
-
-#: js/Model.js:433
-msgid "Email Accounts"
-msgid_plural "Email Accounts"
-msgstr[0] "บัญชีอีเมล"
-
-#: js/Model.js:564
-msgid "INBOX"
-msgstr "กล่องข้อความเข้า"
-
-#: js/Model.js:564
-msgid "Drafts"
-msgstr "โครงร่าง"
-
-#: js/Model.js:564
-msgid "Templates"
-msgstr "แม่แบบ"
-
-#: js/Model.js:564
-msgid "Junk"
-msgstr "ขย"
-
-#: js/Model.js:564
-msgid "Trash"
-msgstr "ขยะ"
-
-#: js/Model.js:573 js/Model.js:693 js/Model.js:759
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "บันทึกรายชื่อ"
-
-#: js/Model.js:690
-msgid "Vacation"
-msgid_plural "Vacations"
-msgstr[0] "พักร้อน"
-
-#: js/Model.js:756
-msgid "Rule"
-msgid_plural "Rules"
-msgstr[0] "ระเบียบ"
-
-#: js/Model.js:883
-msgid "Flag"
-msgid_plural "Flags"
-msgstr[0] "ป้าย"
-
-#: js/Model.js:886
-msgid "Flag list"
-msgid_plural "Flag lists"
-msgstr[0] "รายชื่อป้ายต่างๆ"
-
-#: js/Felamimail.js:39
-msgid "New Mail"
-msgstr "เมลใหม่"
-
-#: js/Felamimail.js:95
-msgid "Email"
-msgstr "อีเมล"
-
-#: js/Felamimail.js:132
-msgid "Active Vacation Message"
-msgstr "ข้อความลาพักที่ใช้อยู่"
-
-#: js/Felamimail.js:133
+#: js/PGPDetailsPanel.js:22
 #, python-brace-format
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr "บัญชีอีเมล \"{0}\" มีข้อความที่ใช้สำหรับพักร้อนเปิดอยู่"
+msgid "Mailvelope decryption Error [{0}]"
+msgstr ""
 
-#: js/Felamimail.js:170
+#: js/PGPDetailsPanel.js:33
 #, python-brace-format
-msgid "Poll URL: {0}"
+msgid "To decrypt this message please install {0} with API support enabled"
 msgstr ""
 
-#: js/Felamimail.js:191
+#: js/PGPDetailsPanel.js:36
+msgid "PGP encrypted Message"
+msgstr ""
+
+#: js/MessageDisplayDialog.js:51 js/GridPanel.js:291
+msgid "Delete"
+msgstr "ลบ"
+
+#: js/MessageDisplayDialog.js:58 js/GridPanel.js:246
+msgid "Reply"
+msgstr "ตอบ"
+
+#: js/MessageDisplayDialog.js:64 js/GridPanel.js:255
+msgid "Reply To All"
+msgstr "ตอบทุกคน"
+
+#: js/MessageDisplayDialog.js:70 js/GridPanel.js:264
+msgid "Forward"
+msgstr "ส่งต่อ"
+
+#: js/MessageDisplayDialog.js:85 js/GridPanel.js:329
+msgid "Print Message"
+msgstr "พิมพ์ข้อความ"
+
+#: js/MessageDisplayDialog.js:91 js/GridPanel.js:320 js/GridPanel.js:1487
+#: js/GridPanel.js:1503
+msgid "Print Preview"
+msgstr "พิมพ์หน้าพรีวิว"
+
+#: js/sieve/NotificationDialog.js:49
 #, python-brace-format
-msgid "{0} as default mailer"
-msgstr ""
-
-#: js/Felamimail.js:617
-msgid "New mails"
-msgstr "เมลใหม่"
-
-#: js/Felamimail.js:618
-#, python-brace-format
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr "คุณมี {0} เมลใหม่(s) ในแฟ้ม {1} ({2})"
-
-#: js/Felamimail.js:738
-#, python-brace-format
-msgid "IMAP Credentials for {0}"
-msgstr "IMAP อ้างอิงสำหรับ {0}"
-
-#: js/Felamimail.js:741
-msgid "Credentials"
-msgstr "ตัวอ้างอิง"
-
-#: js/Felamimail.js:930 js/Felamimail.js:963
-msgid "IMAP Error"
-msgstr "ข้อผิดพลาด IMAP"
-
-#: js/Felamimail.js:931
-msgid "No connection to IMAP server."
-msgstr "ไม่มีการติดต่อไปยังเซิร์ฟเวอร์ IMAP"
-
-#: js/Felamimail.js:947
-msgid "IMAP Credentials Error"
-msgstr "IMAP ตัวอ้างอิงผิดพลาด"
-
-#: js/Felamimail.js:948
-msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr "ตัวอ้างอิงอีเมลของคุณผิด กรุณาติดต่อผู้ดูแลระบบ"
-
-#: js/Felamimail.js:964
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
-msgstr "หนึ่งในแฟ้มของคุณถูกลบหรือโดนเปลี่ยนชื่อโดยผู้ใช้คนอื่น กรุณาอัพเดทรายชื่อแฟ้มของบัญชีนี้"
-
-#: js/Felamimail.js:993
-msgid "SMTP Error"
-msgstr "ข้อผิดพลาด SMTP"
-
-#: js/Felamimail.js:994
-msgid "No connection to SMTP server."
-msgstr "ไม่มีการติดต่อไปยังเซิร์ฟเวอร์ SMTP"
-
-#: js/Felamimail.js:1002
-msgid "Sieve Error"
-msgstr "กรองข้อผิดพลาด"
-
-#: js/Felamimail.js:1003
-msgid "No connection to Sieve server."
-msgstr "ไม่มีการติดต่อไปยังเซิร์ฟเวอร์ที่กรอง"
-
-#: js/Felamimail.js:1011
-msgid "Save Sieve Script Error"
-msgstr "จัดเก็บตัวกรองข้อผิดพลาดด้านสคริป"
-
-#: js/Felamimail.js:1012
-msgid "Could not save script on Sieve server."
-msgstr "ไม่สามารถจัดเก็บสคริปบนตัวให้บริการกรอง"
-
-#: js/FolderSelectPanel.js:75
-msgid "Cancel"
-msgstr "ยกเลิก"
-
-#: js/FolderSelectPanel.js:84
-msgid "Ok"
-msgstr "ตกลง"
-
-#: js/FolderSelectPanel.js:175
-#, python-brace-format
-msgid "Folders of account {0}"
-msgstr "แฟ้มของบัญชี {0}"
-
-#: js/FolderSelectPanel.js:176
-msgid "Folders of all accounts"
-msgstr "แฟ้มของทุกบัญชี"
-
-#: js/RecipientGrid.js:235
-msgid "Click here to set To/CC/BCC."
-msgstr "กดที่นี่เพื่อตั้งเป็น To/CC/BCC"
-
-#: js/RecipientGrid.js:239 js/RecipientGrid.js:263
-msgid "To:"
-msgstr "To:"
-
-#: js/RecipientGrid.js:242 js/RecipientGrid.js:264
-msgid "Cc:"
-msgstr "Cc:"
-
-#: js/RecipientGrid.js:245 js/RecipientGrid.js:265
-msgid "Bcc:"
-msgstr "Bcc:"
-
-#: js/RecipientGrid.js:392
-msgid "Remove"
-msgstr "เอาออก"
-
-#: js/MessageEditDialog.js:157
-msgid "Send"
-msgstr "ส่ง"
-
-#: js/MessageEditDialog.js:165
-msgid "Search Recipients"
-msgstr "ค้นหาผู้รับ"
-
-#: js/MessageEditDialog.js:173
-msgid "Save As Draft"
-msgstr "บันทึกเป็นโครงร่าง"
-
-#: js/MessageEditDialog.js:181
-msgid "Save As Template"
-msgstr "บันทึกเป็นแม่แบบ"
-
-#: js/MessageEditDialog.js:190
-msgid "Save Email Note"
-msgstr "บันทึกเป็นบันทึกอีเมล"
-
-#: js/MessageEditDialog.js:198
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the"
-" recipient(s) contact(s)."
-msgstr "ใช้ปุ่มเปิดปิดนี้เพื่อบันทึกข้อความอีเมลแบบข้อความที่ได้แนบไว้กับการติดต่อ(s) กับผู้รับ(s)"
-
-#: js/MessageEditDialog.js:202
-msgid "Reading Confirmation"
-msgstr "การยืนยันการอ่าน"
-
-#: js/MessageEditDialog.js:210
-msgid "Activate this toggle button to receive a reading confirmation."
-msgstr "ใช้ปุ่มเปิดปิดนี้เพื่อรับการยืนยันการอ่าน"
-
-#: js/MessageEditDialog.js:214
-msgid "Encrypt Email"
-msgstr ""
-
-#: js/MessageEditDialog.js:224
-msgid "Encrypt email using Mailvelope"
-msgstr ""
-
-#: js/MessageEditDialog.js:236
-msgid ""
-"Activate this toggle button to send the mail as separate mail to each "
-"recipient."
-msgstr ""
-
-#: js/MessageEditDialog.js:254
-msgid "Click to search for and add recipients from the Addressbook."
-msgstr "กดปุ่สำหรับค้นหาและเพิ่มผู้รับจากสมุดที่อยู่"
-
-#: js/MessageEditDialog.js:464
-msgid "Encrypted Content"
-msgstr ""
-
-#: js/MessageEditDialog.js:752
-msgid "Fwd:"
-msgstr "ส่งต่อ:"
-
-#: js/MessageEditDialog.js:755
-#, python-brace-format
-msgid "{0} Message"
-msgstr "{0} ข้อความ"
-
-#: js/MessageEditDialog.js:809 js/MessageEditDialog.js:814
-msgid "Failed"
-msgstr "ได้ล้มเหลว"
-
-#: js/MessageEditDialog.js:810
-#, python-brace-format
-msgid "{0} account setting empty."
-msgstr "ค่าติดตั้งบัญชี {0} ว่าง"
-
-#: js/MessageEditDialog.js:815 js/MessageEditDialog.js:1348
-msgid "Files are still uploading."
-msgstr "ยังคงอัปโหลดไฟล์อยู่"
-
-#: js/MessageEditDialog.js:950
-#, python-brace-format
-msgid "On {0}, {1} wrote"
-msgstr "บน {0}, {1} ได้เขียนแล้ว"
-
-#: js/MessageEditDialog.js:955
-msgid "Original message"
-msgstr "ข้อความดั้งเดิม"
-
-#: js/MessageEditDialog.js:993 js/MessageEditDialog.js:1314
-msgid "Compose email:"
-msgstr "เขียนอีเมล:"
-
-#: js/MessageEditDialog.js:1149 js/MailDetailsPanel.js:172
-msgid "From"
-msgstr "จาก"
-
-#: js/MessageEditDialog.js:1236
-msgid "Convert to formated text"
-msgstr ""
-
-#: js/MessageEditDialog.js:1242 js/MessageEditDialog.js:1249
-#: Controller/Message/Send.php:367
-msgid "Body"
-msgstr "ข้อความ"
-
-#: js/MessageEditDialog.js:1281
-msgid ""
-"NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get"
-" his or her own copy."
-msgstr ""
-
-#: js/MessageEditDialog.js:1293 js/AccountEditDialog.js:369
-msgid "Reply-To Email"
-msgstr ""
-
-#: js/MessageEditDialog.js:1297
-msgid "Add email address here for reply-to"
-msgstr ""
-
-#: js/MessageEditDialog.js:1452
-msgid "Warning"
-msgstr ""
-
-#: js/MessageEditDialog.js:1453
-msgid ""
-"Some attachments are of type \"systemlinks\" whereas some of the recipients "
-"(marked yellow), couldn't be validated to be accounts on this installation. "
-"Only recipients with an active account will be able to open those "
-"attachments."
-msgstr ""
-
-#: js/MessageEditDialog.js:1453
-msgid "Do you really want to send?"
-msgstr ""
-
-#: js/MessageEditDialog.js:1496
-msgid "Empty subject"
-msgstr "ล้างหัวเรื่อง"
-
-#: js/MessageEditDialog.js:1497
-msgid "Do you really want to send a message with an empty subject?"
-msgstr "คุณแน่ใจว่าต้องการส่งข้อความที่ไม่มีหัวเรื่อง"
-
-#: js/MessageEditDialog.js:1530
-msgid "No recipients set."
-msgstr "ไม่ได้ตั้งผู้รับ"
-
-#: js/MessageEditDialog.js:1552
-#, python-brace-format
-msgid ""
-"Cannot encrypt message. Public keys for the following recipients are "
-"missing: {0}"
+msgid "Notification for {0}"
 msgstr ""
 
 #: js/sieve/RuleEditDialog.js:106
@@ -784,6 +586,15 @@ msgstr "กำจัดเมล"
 msgid "Keep mail"
 msgstr "เก็บเมล"
 
+#: js/sieve/RulesDialog.js:51
+msgid "Sieve Filter Rules"
+msgstr "กรองระเบียบตัวกรอง"
+
+#: js/sieve/RulesDialog.js:94
+#, python-brace-format
+msgid "Sieve Filter Rules for {0}"
+msgstr "กรองระเบียบตัวกรองสำหรับ {0}"
+
 #: js/sieve/RulesGridPanel.js:81
 msgid "Move up"
 msgstr "ย้ายขึ้น"
@@ -829,52 +640,6 @@ msgstr "หัวเรื่อง \"{0}\" มี \"{1}\""
 #, python-brace-format
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr "หัวเรื่อง \"{0}\" ตรงกับ \"{1}\""
-
-#: js/sieve/NotificationDialog.js:49
-#, python-brace-format
-msgid "Notification for {0}"
-msgstr ""
-
-#: js/sieve/NotificationDialog.js:85 js/AccountEditDialog.js:287
-msgid "Notification Email"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:72
-msgid "From (Email and Name)"
-msgstr "จาก (อีเมลและชื่อ)"
-
-#: js/sieve/RuleConditionsPanel.js:73
-msgid "To (Email)"
-msgstr "ถึง (อีเมล)"
-
-#: js/sieve/RuleConditionsPanel.js:74
-msgid "To (Email CC)"
-msgstr "ถึง (อีเมล CC)"
-
-#: js/sieve/RuleConditionsPanel.js:77
-msgid "Header contains"
-msgstr "หัวเรื่องบรรจุ"
-
-#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
-msgid "Header name"
-msgstr "ชื่อหัวเรื่อง"
-
-#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
-msgid "Header value"
-msgstr "ค่าหัวเรื่อง"
-
-#: js/sieve/RuleConditionsPanel.js:79
-msgid "Header regex"
-msgstr "นิพจน์ปรกติของหัวเรื่อง"
-
-#: js/sieve/RulesDialog.js:51
-msgid "Sieve Filter Rules"
-msgstr "กรองระเบียบตัวกรอง"
-
-#: js/sieve/RulesDialog.js:94
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
-msgstr "กรองระเบียบตัวกรองสำหรับ {0}"
 
 #: js/sieve/VacationEditDialog.js:77
 #, python-brace-format
@@ -949,196 +714,41 @@ msgstr "แม่แบบข้อความ"
 msgid "Choose Template ..."
 msgstr "เลือกแม่แบบ ..."
 
-#: js/AccountEditDialog.js:79
-msgid "Add New Account"
-msgstr ""
+#: js/sieve/RuleConditionsPanel.js:70 js/Model.js:193 js/GridPanel.js:516
+msgid "From (Email)"
+msgstr "จาก (อีเมล)"
 
-#: js/AccountEditDialog.js:92
-msgid "Signature"
-msgstr "ลายเซ็นต์"
+#: js/sieve/RuleConditionsPanel.js:71
+msgid "From (Email and Name)"
+msgstr "จาก (อีเมลและชื่อ)"
 
-#: js/AccountEditDialog.js:126
-msgid "Account Name"
-msgstr "ชื่อบัญชี"
+#: js/sieve/RuleConditionsPanel.js:72
+msgid "To (Email)"
+msgstr "ถึง (อีเมล)"
 
-#: js/AccountEditDialog.js:130
-msgid "User Email"
-msgstr "อีเมลของผู้ใช้"
+#: js/sieve/RuleConditionsPanel.js:73
+msgid "To (Email CC)"
+msgstr "ถึง (อีเมล CC)"
 
-#: js/AccountEditDialog.js:135
-msgid "User Name (From)"
-msgstr "ชื่อผู้ใช้ (จาก)"
+#: js/sieve/RuleConditionsPanel.js:75 js/GridPanel.js:565
+msgid "Size"
+msgstr "ขนาด"
 
-#: js/AccountEditDialog.js:138
-msgid "Organization"
-msgstr "องค์กร"
+#: js/sieve/RuleConditionsPanel.js:76
+msgid "Header contains"
+msgstr "หัวเรื่องบรรจุ"
 
-#: js/AccountEditDialog.js:142
-msgid "Signature position"
-msgstr "ตำแหน่งของลายเซ็นต์"
+#: js/sieve/RuleConditionsPanel.js:77 js/sieve/RuleConditionsPanel.js:79
+msgid "Header name"
+msgstr "ชื่อหัวเรื่อง"
 
-#: js/AccountEditDialog.js:153
-msgid "Above the quote"
-msgstr "เหนือคำที่อ้างมา"
+#: js/sieve/RuleConditionsPanel.js:77 js/sieve/RuleConditionsPanel.js:79
+msgid "Header value"
+msgstr "ค่าหัวเรื่อง"
 
-#: js/AccountEditDialog.js:154
-msgid "Below the quote"
-msgstr "ใต้คำที่อ้างมา"
-
-#: js/AccountEditDialog.js:159
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/AccountEditDialog.js:166 js/AccountEditDialog.js:209
-#: js/AccountEditDialog.js:264
-msgid "Host"
-msgstr "แม่ข่าย"
-
-#: js/AccountEditDialog.js:170
-msgid "Port (Default: 143 / SSL: 993)"
-msgstr "พอร์ต (Default: 143 / SSL: 993)"
-
-#: js/AccountEditDialog.js:176 js/AccountEditDialog.js:218
-#: js/AccountEditDialog.js:273
-msgid "Secure Connection"
-msgstr "การเชื่อมต่อที่ปลอดภัย"
-
-#: js/AccountEditDialog.js:188 js/AccountEditDialog.js:229
-#: js/AccountEditDialog.js:284
-msgid "TLS"
-msgstr "TLS"
-
-#: js/AccountEditDialog.js:189 js/AccountEditDialog.js:230
-msgid "SSL"
-msgstr "SSL"
-
-#: js/AccountEditDialog.js:192
-msgid "Username"
-msgstr "ชื่อผู้ใช้"
-
-#: js/AccountEditDialog.js:196
-msgid "Password"
-msgstr "รหัสผ่าน"
-
-#: js/AccountEditDialog.js:202
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/AccountEditDialog.js:212
-msgid "Port (Default: 25)"
-msgstr "พอร์ต (Default: 25)"
-
-#: js/AccountEditDialog.js:233
-msgid "Authentication"
-msgstr "การอนุญาต"
-
-#: js/AccountEditDialog.js:244
-msgid "Login"
-msgstr "ลงบันทึกเข้า"
-
-#: js/AccountEditDialog.js:245
-msgid "Plain"
-msgstr "ธรรมดา"
-
-#: js/AccountEditDialog.js:248
-msgid "Username (optional)"
-msgstr "ชื่อผู้ใช้ (ไม่บังคับ)"
-
-#: js/AccountEditDialog.js:251
-msgid "Password (optional)"
-msgstr "รหัสผ่าน (ไม่บังคับ)"
-
-#: js/AccountEditDialog.js:257
-msgid "Sieve"
-msgstr "กรอง"
-
-#: js/AccountEditDialog.js:268
-msgid "Port (Default: 2000)"
-msgstr "พอร์ต (Default: 2000)"
-
-#: js/AccountEditDialog.js:292
-msgid "Other Settings"
-msgstr "ค่าติดตั้งอื่น ๆ"
-
-#: js/AccountEditDialog.js:299
-msgid "Sent Folder Name"
-msgstr "ชื่อของแฟ้ม ส่งแล้ว"
-
-#: js/AccountEditDialog.js:305
-msgid "Trash Folder Name"
-msgstr "ชื่อของแฟ้ม ขยะ"
-
-#: js/AccountEditDialog.js:311
-msgid "Drafts Folder Name"
-msgstr "ชื่อของแฟ้ม โครงร่าง"
-
-#: js/AccountEditDialog.js:317
-msgid "Templates Folder Name"
-msgstr "ชื่อของแฟ้มแม่แบบ"
-
-#: js/AccountEditDialog.js:323
-msgid "Display Format"
-msgstr "รูปแบบที่ใช้"
-
-#: js/AccountEditDialog.js:334 js/AccountEditDialog.js:350
-msgid "HTML"
-msgstr "HTML"
-
-#: js/AccountEditDialog.js:335 js/AccountEditDialog.js:351
-msgid "Plain Text"
-msgstr "ข้อความธรรมดา"
-
-#: js/AccountEditDialog.js:336
-msgid "Depending on content type (experimental)"
-msgstr "ขึ้นอยู่กับประเภทเนื้อหา (ช่วงทดลอง)"
-
-#: js/AccountEditDialog.js:339
-msgid "Compose Format"
-msgstr ""
-
-#: js/AccountEditDialog.js:354
-msgid "Preserve Format"
-msgstr ""
-
-#: js/AccountEditDialog.js:365
-msgid "No"
-msgstr ""
-
-#: js/AccountEditDialog.js:366
-msgid "Yes"
-msgstr ""
-
-#: js/MailDetailsPanel.js:79
-msgid "Open in Felamimail"
-msgstr ""
-
-#: js/MailDetailsPanel.js:152 js/GridDetailsPanel.js:117
-msgid "Message not available."
-msgstr "ข้อความไม่มีอยู่ "
-
-#: js/MailDetailsPanel.js:173
-msgid "Add"
-msgstr "เพิ่ม"
-
-#: js/MailDetailsPanel.js:174
-msgid "Add contact to addressbook"
-msgstr "เพิ่มการติดต่อไปยังสมุดที่อยู่"
-
-#: js/MailDetailsPanel.js:175
-msgid "Date"
-msgstr "วันที่"
-
-#: js/MailDetailsPanel.js:177 js/MailDetailsPanel.js:430
-msgid "Show or hide header information"
-msgstr "แสดงหรือซ่อนหัวข้อของข้อมูล"
-
-#: js/AttachmentUploadGrid.js:59
-msgid "Download"
-msgstr ""
-
-#: js/AttachmentUploadGrid.js:83
-msgid "Attachment"
-msgstr ""
+#: js/sieve/RuleConditionsPanel.js:78
+msgid "Header regex"
+msgstr "นิพจน์ปรกติของหัวเรื่อง"
 
 #: js/AttachmentUploadGrid.js:92
 msgid "Filemanager (Download link)"
@@ -1180,214 +790,394 @@ msgstr ""
 msgid "This file is already attached to this record."
 msgstr ""
 
-#: Preference.php:65
-msgid "All inboxes"
-msgstr "กล่องข้อความเข้าทั้งหมด"
+#: js/MessageEditDialog.js:156
+msgid "Send"
+msgstr "ส่ง"
 
-#: Preference.php:113
-msgid "Default Email Account"
-msgstr "บัญชีอีเมลหลัก"
+#: js/MessageEditDialog.js:164
+msgid "Search Recipients"
+msgstr "ค้นหาผู้รับ"
 
-#: Preference.php:114
-msgid "The default email account to use when sending mails."
-msgstr "บัญชีอีเมลหลักที่ใช้ส่งอีเมล"
+#: js/MessageEditDialog.js:172
+msgid "Save As Draft"
+msgstr "บันทึกเป็นโครงร่าง"
 
-#: Preference.php:117
-msgid "Email Update Interval"
-msgstr "ความถี่ในการอัพเดทอีเมล"
+#: js/MessageEditDialog.js:180
+msgid "Save As Template"
+msgstr "บันทึกเป็นแม่แบบ"
 
-#: Preference.php:118
-msgid "How often should Felamimail check for new Emails (in minutes)."
-msgstr "ต้องการให้ Felamimail เช็คอีเมลใหม่ บ่อยแค่ไหน (เป็นนาที)"
+#: js/MessageEditDialog.js:197
+msgid "Reading Confirmation"
+msgstr "การยืนยันการอ่าน"
 
-#: Preference.php:121
-msgid "Use for mailto links"
-msgstr "ใช้สำหรับเชื่อมต่อ เมลไปยัง"
+#: js/MessageEditDialog.js:205
+msgid "Activate this toggle button to receive a reading confirmation."
+msgstr "ใช้ปุ่มเปิดปิดนี้เพื่อรับการยืนยันการอ่าน"
 
-#: Preference.php:122
-msgid ""
-"Use Felamimail in mailto links, otherwise use the default desktop client."
-msgstr "ใช้ Felamimail ในการเชื่อมต่อเมลไปยัง หรือไม่ก็ใช้ค่าหลักที่ลูกค้าตั้งไว้บนเดสก์ท็อป"
-
-#: Preference.php:125
-msgid "Use for NOTES"
-msgstr "ใช้สำหรับบันทึก"
-
-#: Preference.php:126
-msgid "Save Note default Value."
-msgstr "ค่าหลักของบันทึกโน๊ต"
-
-#: Preference.php:129
-msgid "Confirm Delete"
-msgstr "ยืนยันการลบ"
-
-#: Preference.php:130
-msgid "Show confirmation dialog when deleting mails."
-msgstr "แสดงข้อความยืนยันเมื่อกำลังลบเมล"
-
-#: Preference.php:133
-msgid ".eml file Attachment in forwarded mails"
+#: js/MessageEditDialog.js:209
+msgid "Encrypt Email"
 msgstr ""
 
-#: Preference.php:134
-msgid ""
-"Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
+#: js/MessageEditDialog.js:219
+msgid "Encrypt email using Mailvelope"
 msgstr ""
 
-#: Config.php:111
-msgid "Vacation Templates Node ID"
+#: js/MessageEditDialog.js:231
+msgid "Activate this toggle button to send the mail as separate mail to each recipient."
 msgstr ""
 
-#: Config.php:120
-msgid "Email Notification Templates Node ID"
+#: js/MessageEditDialog.js:249
+msgid "Click to search for and add recipients from the Addressbook."
+msgstr "กดปุ่สำหรับค้นหาและเพิ่มผู้รับจากสมุดที่อยู่"
+
+#: js/MessageEditDialog.js:459
+msgid "Encrypted Content"
 msgstr ""
 
-#: Config.php:129
-msgid "Custom Vacation Message"
-msgstr "จัดทำข้อความพักร้อน"
+#: js/MessageEditDialog.js:747
+msgid "Fwd:"
+msgstr "ส่งต่อ:"
 
-#: Config.php:131
-msgid "User is allowed to set custom vacation message for system account"
-msgstr "ผู้ใช้สามารถตั้งข้อความพักร้อนด้วยตัวเองสำหรับบัญชีระบบได้"
+#: js/MessageEditDialog.js:750
+#, python-brace-format
+msgid "{0} Message"
+msgstr "{0} ข้อความ"
 
-#: Config.php:140
-msgid "Cache email body"
-msgstr "แคชข้อความของอีเมล"
+#: js/MessageEditDialog.js:804 js/MessageEditDialog.js:809
+msgid "Failed"
+msgstr "ได้ล้มเหลว"
 
-#: Config.php:142
-msgid ""
-"Should the email body be cached (recommended for slow IMAP server "
-"connections)"
-msgstr "ควรให้ข้อความของอีเมลมีการจัดเก็บ (แนะนำสำหรับการติดต่อระบบ IMAP ที่ล่าช้า)"
+#: js/MessageEditDialog.js:805
+#, python-brace-format
+msgid "{0} account setting empty."
+msgstr "ค่าติดตั้งบัญชี {0} ว่าง"
 
-#: Config.php:151
-msgid "Delete Archived Mail"
+#: js/MessageEditDialog.js:810 js/MessageEditDialog.js:1353
+msgid "Files are still uploading."
+msgstr "ยังคงอัปโหลดไฟล์อยู่"
+
+#: js/MessageEditDialog.js:851
+msgid "{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}"
 msgstr ""
 
-#: Config.php:161
-msgid "Enabled Features"
+#: js/MessageEditDialog.js:946
+#, python-brace-format
+msgid "On {0}, {1} wrote"
+msgstr "บน {0}, {1} ได้เขียนแล้ว"
+
+#: js/MessageEditDialog.js:951
+msgid "Original message"
+msgstr "ข้อความดั้งเดิม"
+
+#: js/MessageEditDialog.js:989 js/MessageEditDialog.js:1319
+msgid "Compose email:"
+msgstr "เขียนอีเมล:"
+
+#: js/MessageEditDialog.js:1232
+msgid "Convert to formated text"
 msgstr ""
 
-#: Config.php:163
-msgid "Enabled Features in Felamimail Application."
+#: js/MessageEditDialog.js:1238 js/MessageEditDialog.js:1245
+msgid "Body"
+msgstr "ข้อความ"
+
+#: js/MessageEditDialog.js:1278
+msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
 msgstr ""
 
-#: Config.php:171
-msgid "Tine 2.0 Flag"
+#: js/MessageEditDialog.js:1302
+msgid "Add email address here for reply-to"
 msgstr ""
 
-#: Config.php:173
-msgid "Add a Tine 2.0 flag to sent messages"
+#: js/MessageEditDialog.js:1456
+msgid "Warning"
 msgstr ""
 
-#: Config.php:179
-msgid "Show Reply-To"
+#: js/MessageEditDialog.js:1457
+msgid "Some attachments are of type \"systemlinks\" whereas some of the recipients (marked yellow), couldn't be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments."
 msgstr ""
 
-#: Config.php:181
-msgid "Show Reply-To field in message compose dialog"
+#: js/MessageEditDialog.js:1457
+msgid "Do you really want to send?"
 msgstr ""
 
-#: Config.php:189
-msgid "Filter E-Mail URIs"
+#: js/MessageEditDialog.js:1500
+msgid "Empty subject"
+msgstr "ล้างหัวเรื่อง"
+
+#: js/MessageEditDialog.js:1501
+msgid "Do you really want to send a message with an empty subject?"
+msgstr "คุณแน่ใจว่าต้องการส่งข้อความที่ไม่มีหัวเรื่อง"
+
+#: js/MessageEditDialog.js:1534
+msgid "No recipients set."
+msgstr "ไม่ได้ตั้งผู้รับ"
+
+#: js/MessageEditDialog.js:1556
+#, python-brace-format
+msgid "Cannot encrypt message. Public keys for the following recipients are missing: {0}"
 msgstr ""
 
-#: Config.php:191
-msgid ""
-"Should the email body uris be filtered. Only anchors with URIs are allowed "
-"if this is turned on"
-msgstr ""
+#: js/Model.js:56
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "ข้อความ"
 
-#: Config.php:208
-msgid "System Account Folder Defaults"
-msgstr ""
+#: js/Model.js:191
+msgid "Subject/From"
+msgstr "หัวเรื่อง/ จาก"
 
-#: Config.php:210
-msgid "Paths of the special folders (like Sent, Trash, ...)"
-msgstr ""
+#: js/Model.js:194 js/GridPanel.js:522
+msgid "From (Name)"
+msgstr "จาก (ชื่อ)"
 
-#: Config.php:219
-msgid "Allow self signed TLS cert for IMAP connection"
-msgstr ""
+#: js/Model.js:196
+msgid "Cc"
+msgstr "Cc"
 
-#: Config.php:229
-msgid "Sieve Redirect Only Internal"
-msgstr ""
+#: js/Model.js:197
+msgid "Bcc"
+msgstr "Bcc"
 
-#: Config.php:231
-msgid ""
-"Allow only sieve redirect rules to internal (primary/secondary) email "
-"addresses"
-msgstr ""
+#: js/Model.js:198 js/GridPanel.js:502
+msgid "Flags"
+msgstr "ป้าย"
 
-#: Config.php:240 Config.php:242
-msgid "Sieve Notification Bounces Reporting Email"
-msgstr ""
+#: js/Model.js:201 js/GridPanel.js:550
+msgid "Received"
+msgstr "ได้รับแล้ว"
 
-#: Acl/Rights.php:106
-msgid "manage email accounts"
-msgstr "จัดการบัญชีอีเมล"
+#: js/Model.js:455
+msgid "Email Accounts"
+msgid_plural "Email Accounts"
+msgstr[0] "บัญชีอีเมล"
 
-#: Acl/Rights.php:107
-msgid "Edit and delete email accounts"
-msgstr "แก้ไขและลบบัญชีอีเมล"
+#: js/Model.js:586
+msgid "INBOX"
+msgstr "กล่องข้อความเข้า"
 
-#: Acl/Rights.php:110
-msgid "Add email accounts"
-msgstr "เพิ่มบัญชีอีเมล"
-
-#: Acl/Rights.php:111
-msgid "Create new email accounts"
-msgstr "สร้างบัญชีอีเมลใหม่"
-
-#: Controller/Sieve.php:338
-msgid "Out of Office reply from %1$s"
-msgstr "ไม่ได้อยู่ที่บริษัท ตอบจาก %1$s"
-
-#: Controller/Sieve.php:677
-msgid "You have new mail from "
-msgstr ""
-
-#: Controller/Message/Flags.php:26
-msgid "Seen"
-msgstr "เห็นแล้ว"
-
-#: Controller/Message/Flags.php:27
-msgid "Deleted"
-msgstr "ลบแล้ว"
-
-#: Controller/Message/Flags.php:28
-msgid "Draft"
+#: js/Model.js:586
+msgid "Drafts"
 msgstr "โครงร่าง"
 
-#: Controller/Message/Flags.php:29
-msgid "Flagged"
-msgstr "ติดป้ายชื่อแล้ว"
+#: js/Model.js:586 js/GridPanel.js:542
+msgid "Sent"
+msgstr "ส่งแล้ว"
 
-#: Controller/Message/Send.php:103
-msgid "Bad recipient address syntax"
+#: js/Model.js:586
+msgid "Templates"
+msgstr "แม่แบบ"
+
+#: js/Model.js:586
+msgid "Junk"
+msgstr "ขย"
+
+#: js/Model.js:586
+msgid "Trash"
+msgstr "ขยะ"
+
+#: js/Model.js:595 js/Model.js:715 js/Model.js:781
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "บันทึกรายชื่อ"
+
+#: js/Model.js:712
+msgid "Vacation"
+msgid_plural "Vacations"
+msgstr[0] "พักร้อน"
+
+#: js/Model.js:778
+msgid "Rule"
+msgid_plural "Rules"
+msgstr[0] "ระเบียบ"
+
+#: js/Model.js:905
+msgid "Flag"
+msgid_plural "Flags"
+msgstr[0] "ป้าย"
+
+#: js/Model.js:908
+msgid "Flag list"
+msgid_plural "Flag lists"
+msgstr[0] "รายชื่อป้ายต่างๆ"
+
+#: js/GridPanel.js:117
+msgid "No Messages found."
 msgstr ""
 
-#: Controller/Message/Send.php:105
-msgid "Recipient address rejected"
+#: js/GridPanel.js:236
+msgid "Compose"
+msgstr "เขียน"
+
+#: js/GridPanel.js:272
+msgid "Toggle highlighting"
+msgstr "เปิดปิดการเน้นให้เด่น"
+
+#: js/GridPanel.js:281
+msgid "Mark read/unread"
+msgstr "ทำเครื่องหมาย อ่านแล้ว/ ยังไม่ได้อ่าน"
+
+#: js/GridPanel.js:301
+msgid "Move"
 msgstr ""
 
-#: Controller/Message/Send.php:575
-msgid "Invalid address format"
+#: js/GridPanel.js:312
+msgid "Add Account"
+msgstr "เพิ่มบัญชี"
+
+#: js/GridPanel.js:488
+msgid "Id"
+msgstr "รหัส"
+
+#: js/GridPanel.js:528
+msgid "Sender"
+msgstr "ผู้ส่ง"
+
+#: js/GridPanel.js:605 Controller/Message/Flags.php:25
+msgid "Answered"
+msgstr "ตอบแล้ว"
+
+#: js/GridPanel.js:608
+msgid "Forwarded"
+msgstr "ส่งต่อแล้ว"
+
+#: js/GridPanel.js:612
+msgid "Tine20"
 msgstr ""
 
-#: Controller/Message/Send.php:586
-#, python-format
-msgid "Error: %s"
-msgstr "ข้อผิดพลาด: %s"
-
-#: Controller/Message/Send.php:588
-msgid "Could not send message"
-msgstr "ไม่สามารถส่งข้อความได้"
-
-#: Controller/Message/Send.php:855
-msgid "My Mail Download Links"
+#: js/GridPanel.js:622
+msgid "Filed as:"
 msgstr ""
+
+#: js/GridPanel.js:735
+msgid "Select Message File Location"
+msgstr ""
+
+#: js/GridPanel.js:765
+msgid "Filing Messages"
+msgstr ""
+
+#: js/GridPanel.js:800
+msgid "Error Filing Message"
+msgstr ""
+
+#: js/GridPanel.js:801
+msgid "Could not file message."
+msgstr ""
+
+#: js/GridPanel.js:1099
+msgid "Send Reading Confirmation"
+msgstr "ส่งการยืนยันการอ่าน"
+
+#: js/GridPanel.js:1100
+msgid "Do you want to send a reading confirmation message?"
+msgstr "คุณต้องการส่งข้อความยืนยันการอ่านหรือไม่?"
+
+#: js/Felamimail.js:39
+msgid "New Mail"
+msgstr "เมลใหม่"
+
+#: js/Felamimail.js:95
+msgid "Email"
+msgstr "อีเมล"
+
+#: js/Felamimail.js:132
+msgid "Active Vacation Message"
+msgstr "ข้อความลาพักที่ใช้อยู่"
+
+#: js/Felamimail.js:133
+#, python-brace-format
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "บัญชีอีเมล \"{0}\" มีข้อความที่ใช้สำหรับพักร้อนเปิดอยู่"
+
+#: js/Felamimail.js:170
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr ""
+
+#: js/Felamimail.js:191
+#, python-brace-format
+msgid "{0} as default mailer"
+msgstr ""
+
+#: js/Felamimail.js:617
+msgid "New mails"
+msgstr "เมลใหม่"
+
+#: js/Felamimail.js:618
+#, python-brace-format
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "คุณมี {0} เมลใหม่(s) ในแฟ้ม {1} ({2})"
+
+#: js/Felamimail.js:738
+#, python-brace-format
+msgid "IMAP Credentials for {0}"
+msgstr "IMAP อ้างอิงสำหรับ {0}"
+
+#: js/Felamimail.js:741
+msgid "Credentials"
+msgstr "ตัวอ้างอิง"
+
+#: js/Felamimail.js:930 js/Felamimail.js:963
+msgid "IMAP Error"
+msgstr "ข้อผิดพลาด IMAP"
+
+#: js/Felamimail.js:931
+msgid "No connection to IMAP server."
+msgstr "ไม่มีการติดต่อไปยังเซิร์ฟเวอร์ IMAP"
+
+#: js/Felamimail.js:947
+msgid "IMAP Credentials Error"
+msgstr "IMAP ตัวอ้างอิงผิดพลาด"
+
+#: js/Felamimail.js:948
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr "ตัวอ้างอิงอีเมลของคุณผิด กรุณาติดต่อผู้ดูแลระบบ"
+
+#: js/Felamimail.js:964
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgstr "หนึ่งในแฟ้มของคุณถูกลบหรือโดนเปลี่ยนชื่อโดยผู้ใช้คนอื่น กรุณาอัพเดทรายชื่อแฟ้มของบัญชีนี้"
+
+#: js/Felamimail.js:993
+msgid "SMTP Error"
+msgstr "ข้อผิดพลาด SMTP"
+
+#: js/Felamimail.js:994
+msgid "No connection to SMTP server."
+msgstr "ไม่มีการติดต่อไปยังเซิร์ฟเวอร์ SMTP"
+
+#: js/Felamimail.js:1002
+msgid "Sieve Error"
+msgstr "กรองข้อผิดพลาด"
+
+#: js/Felamimail.js:1003
+msgid "No connection to Sieve server."
+msgstr "ไม่มีการติดต่อไปยังเซิร์ฟเวอร์ที่กรอง"
+
+#: js/Felamimail.js:1011
+msgid "Save Sieve Script Error"
+msgstr "จัดเก็บตัวกรองข้อผิดพลาดด้านสคริป"
+
+#: js/Felamimail.js:1012
+msgid "Could not save script on Sieve server."
+msgstr "ไม่สามารถจัดเก็บสคริปบนตัวให้บริการกรอง"
+
+#: js/FolderSelectPanel.js:75
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: js/FolderSelectPanel.js:84
+msgid "Ok"
+msgstr "ตกลง"
+
+#: js/FolderSelectPanel.js:175
+#, python-brace-format
+msgid "Folders of account {0}"
+msgstr "แฟ้มของบัญชี {0}"
+
+#: js/FolderSelectPanel.js:176
+msgid "Folders of all accounts"
+msgstr "แฟ้มของทุกบัญชี"
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"
@@ -1416,3 +1206,250 @@ msgstr "โครงร่างทั้งหมด"
 #: Setup/Initialize.php:68
 msgid "All mails with the draft flag"
 msgstr "เมลทั้งหมดที่มีป้ายร่าง"
+
+#: Config.php:115
+msgid "Vacation Templates Node ID"
+msgstr ""
+
+#: Config.php:124
+msgid "Email Notification Templates Node ID"
+msgstr ""
+
+#: Config.php:133
+msgid "Custom Vacation Message"
+msgstr "จัดทำข้อความพักร้อน"
+
+#: Config.php:135
+msgid "User is allowed to set custom vacation message for system account"
+msgstr "ผู้ใช้สามารถตั้งข้อความพักร้อนด้วยตัวเองสำหรับบัญชีระบบได้"
+
+#: Config.php:144
+msgid "Cache email body"
+msgstr "แคชข้อความของอีเมล"
+
+#: Config.php:146
+msgid "Should the email body be cached (recommended for slow IMAP server connections)"
+msgstr "ควรให้ข้อความของอีเมลมีการจัดเก็บ (แนะนำสำหรับการติดต่อระบบ IMAP ที่ล่าช้า)"
+
+#: Config.php:155
+msgid "Delete Archived Mail"
+msgstr ""
+
+#: Config.php:165
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:167
+msgid "Enabled Features in Felamimail Application."
+msgstr ""
+
+#: Config.php:175
+msgid "Tine 2.0 Flag"
+msgstr ""
+
+#: Config.php:177
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr ""
+
+#: Config.php:183
+msgid "Show Reply-To"
+msgstr ""
+
+#: Config.php:185
+msgid "Show Reply-To field in message compose dialog"
+msgstr ""
+
+#: Config.php:193
+msgid "Filter E-Mail URIs"
+msgstr ""
+
+#: Config.php:195
+msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
+msgstr ""
+
+#: Config.php:212
+msgid "System Account Folder Defaults"
+msgstr ""
+
+#: Config.php:214
+msgid "Paths of the special folders (like Sent, Trash, ...)"
+msgstr ""
+
+#: Config.php:223
+msgid "Allow self signed TLS cert for IMAP connection"
+msgstr ""
+
+#: Config.php:233
+msgid "Sieve Redirect Only Internal"
+msgstr ""
+
+#: Config.php:235
+msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
+msgstr ""
+
+#: Config.php:244 Config.php:246
+msgid "Sieve Notification Bounces Reporting Email"
+msgstr ""
+
+#: Config.php:255
+msgid "URL icon path for own domain"
+msgstr ""
+
+#: Config.php:257
+msgid "Used to mark messages from configured primary and secondary domains"
+msgstr ""
+
+#: Config.php:266
+msgid "URL icon path for other domains"
+msgstr ""
+
+#: Config.php:268
+msgid "Used to mark messages from all other domains"
+msgstr ""
+
+#: Config.php:277 Config.php:279
+msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
+msgstr ""
+
+#: Controller/Message/Flags.php:26
+msgid "Seen"
+msgstr "เห็นแล้ว"
+
+#: Controller/Message/Flags.php:27
+msgid "Deleted"
+msgstr "ลบแล้ว"
+
+#: Controller/Message/Flags.php:28
+msgid "Draft"
+msgstr "โครงร่าง"
+
+#: Controller/Message/Flags.php:29
+msgid "Flagged"
+msgstr "ติดป้ายชื่อแล้ว"
+
+#: Controller/Message/Send.php:103
+msgid "Bad recipient address syntax"
+msgstr ""
+
+#: Controller/Message/Send.php:105
+msgid "Recipient address rejected"
+msgstr ""
+
+#: Controller/Message/Send.php:579
+msgid "Invalid address format"
+msgstr ""
+
+#: Controller/Message/Send.php:590
+#, python-format
+msgid "Error: %s"
+msgstr "ข้อผิดพลาด: %s"
+
+#: Controller/Message/Send.php:592
+msgid "Could not send message"
+msgstr "ไม่สามารถส่งข้อความได้"
+
+#: Controller/Message/Send.php:859
+msgid "My Mail Download Links"
+msgstr ""
+
+#: Controller/Sieve.php:338
+msgid "Out of Office reply from %1$s"
+msgstr "ไม่ได้อยู่ที่บริษัท ตอบจาก %1$s"
+
+#: Controller/Sieve.php:677
+msgid "You have new mail from "
+msgstr ""
+
+#: Model/MessageFileSuggestion.php:49
+msgid "Message File Suggestion"
+msgid_plural "Message File Suggestions"
+msgstr[0] ""
+
+#: Model/MessageFileSuggestion.php:50
+msgid "Message File Suggestions"
+msgstr ""
+
+#: Model/MessageFileLocation.php:45
+msgid "Message File Location"
+msgid_plural "Message File Locations"
+msgstr[0] ""
+
+#: Model/MessageFileLocation.php:46
+msgid "Message File Locations"
+msgstr ""
+
+#: Model/MessageFileLocation.php:89
+msgid "Message ID Hash"
+msgstr ""
+
+#: Model/MessageFileLocation.php:96
+msgid "Message ID"
+msgstr ""
+
+#: Model/MessageFileLocation.php:104
+msgid "Model"
+msgstr ""
+
+#: Model/MessageFileLocation.php:111
+msgid "Record ID"
+msgstr ""
+
+#: Model/MessageFileLocation.php:118
+msgid "Record Title"
+msgstr ""
+
+#: Model/MessageFileLocation.php:126
+msgid "Node ID"
+msgstr ""
+
+#: Model/MessageFileLocation.php:133
+msgid "Type"
+msgstr ""
+
+#: Model/Message.php:374
+msgid "Reading Confirmation:"
+msgstr "การยืนยันการอ่าน:"
+
+#: Model/Message.php:375
+msgid "Your message:"
+msgstr "ข้อความของคุณ:"
+
+#: Model/Message.php:376
+msgid "Received on"
+msgstr "ได้รับแล้วเมื่อ"
+
+#: Model/Message.php:377
+msgid "Was read by:"
+msgstr "ได้อ่านแล้ว โดย:"
+
+#: Model/Message.php:378
+msgid "on"
+msgstr "เมื่อ"
+
+#: Acl/Rights.php:106
+msgid "manage email accounts"
+msgstr "จัดการบัญชีอีเมล"
+
+#: Acl/Rights.php:107
+msgid "Edit and delete email accounts"
+msgstr "แก้ไขและลบบัญชีอีเมล"
+
+#: Acl/Rights.php:110
+msgid "Add email accounts"
+msgstr "เพิ่มบัญชีอีเมล"
+
+#: Acl/Rights.php:111
+msgid "Create new email accounts"
+msgstr "สร้างบัญชีอีเมลใหม่"
+
+#~ msgid "Save"
+#~ msgstr "บันทึก"
+
+#~ msgid "Recent"
+#~ msgstr "ล่าสุด"
+
+#~ msgid "Save Email Note"
+#~ msgstr "บันทึกเป็นบันทึกอีเมล"
+
+#~ msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
+#~ msgstr "ใช้ปุ่มเปิดปิดนี้เพื่อบันทึกข้อความอีเมลแบบข้อความที่ได้แนบไว้กับการติดต่อ(s) กับผู้รับ(s)"
