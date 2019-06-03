@@ -848,9 +848,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onFileMessageSelectionChange: function(btn, selection) {
-
-        var text = this.app.formatMessage('This message will be filed at the following locations:') + '&nbsp;' +
-            Tine.Felamimail.MessageFileButton.getFileLocationText(selection);
+        var text = this.app.formatMessage('{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}', {
+                locationCount: selection.length,
+                locationsHtml: Tine.Felamimail.MessageFileButton.getFileLocationText(selection, ', ')
+            });
 
         this.messageFileInfoText.update(text);
         this.messageFileInfoText.setVisible(selection.length);

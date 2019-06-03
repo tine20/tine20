@@ -568,14 +568,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dataIndex: 'size',
             hidden: true,
             renderer: Ext.util.Format.fileSize
-        },{
-            id: 'fileLocations',
-            header: this.app.i18n._("Message File Locations"),
-            width: 120,
-            sortable: true,
-            dataIndex: 'fileLocations',
-            hidden: true,
-            renderer: Tine.Felamimail.MessageFileButton.getFileLocationText
         }];
     },
     
@@ -610,20 +602,28 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result = '';
             
         if (record.hasFlag('\\Answered')) {
-            icons.push({src: 'images/icon-set/icon_email_answer.svg', qtip: Ext.util.Format.htmlEncode(i18n._('Answered'))});
+            icons.push({src: 'images/icon-set/icon_email_answer.svg', qtip: i18n._('Answered')});
         }   
         if (record.hasFlag('Passed')) {
-            icons.push({src: 'images/icon-set/icon_email_forward.svg', qtip: Ext.util.Format.htmlEncode(i18n._('Forwarded'))});
+            icons.push({src: 'images/icon-set/icon_email_forward.svg', qtip: i18n._('Forwarded')});
         }   
         if (record.hasFlag('Tine20')) {
             const icon = record.getTine20Icon();
-            icons.push({src: icon, qtip: Ext.util.Format.htmlEncode(i18n._('Tine20'))});
+            icons.push({src: icon, qtip: i18n._('Tine20')});
         }
 
         Ext.each(icons, function(icon) {
-            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + Tine.Tinebase.common.doubleEncode(icon.qtip) + '">';
+            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + Ext.util.Format.htmlEncode(icon.qtip) + '">';
         }, this);
-        
+
+        let fileLocations = record.get('fileLocations');
+        if (_.isArray(fileLocations) && fileLocations.length) {
+            result += '<img class="FelamimailFlagIcon MessageFileIcon" src="images/icon-set/icon_download.svg" ' +
+                'ext:qtitle="' + Ext.util.Format.htmlEncode(i18n._('Filed as:')) + '"' +
+                'ext:qtip="' + Ext.util.Format.htmlEncode(Tine.Felamimail.MessageFileButton.getFileLocationText(fileLocations, '<br>')) + '"' +
+            '>';
+        }
+
         return result;
     },
 
@@ -1108,7 +1108,29 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
     },
-    
+
+    /**
+     * open first file location when file icon is clicked
+     */
+    onRowClick: function(grid, row, e) {
+        if (e.getTarget('.MessageFileIcon')) {
+            let record = this.getStore().getAt(row);
+            let fileLocation = record.get('fileLocations')[0];
+            let recordClass = Tine.Tinebase.data.RecordMgr.get(fileLocation.model);
+            let recordData = {};
+            let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
+            recordData[recordClass.getMeta('idProperty')] = fileLocation.record_id;
+
+            editDialogClass.openWindow({
+                record: Tine.Tinebase.data.Record.setFromJson(recordData, recordClass),
+                recordId: fileLocation.record_id
+            });
+            e.stopEvent();
+        }
+
+        Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
+    },
+
     /**
      * row doubleclick handler
      * 
