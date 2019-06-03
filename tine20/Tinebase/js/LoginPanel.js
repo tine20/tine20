@@ -40,7 +40,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     loginMethod: 'Tinebase.login',
 
     /**
-     * @cfg {String} onLogin callback after successfull login
+     * @cfg {String} onLogin callback after successful login
      */
     onLogin: Ext.emptyFn,
     
@@ -179,6 +179,13 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     text: i18n._('Login'),
                     scope: this,
                     handler: this.onLoginPress
+                }, {
+                    xtype: 'button',
+                    width: 120,
+                    text: i18n._('Login via OpenID Connect'),
+                    scope: this,
+                    handler: this.onOIDCLoginPress,
+                    hidden: Tine.Tinebase.registry.get('sso') == false
                 }]
             });
         }
@@ -435,6 +442,53 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         this.initLayout();
         
         this.supr().initComponent.call(this);
+
+        this.checkOIDCLogin();
+    },
+
+    checkOIDCLogin: function() {
+        var oidcResponse = window.location.hash;
+        if (oidcResponse.match(/access_token/)) {
+            Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
+            Ext.Ajax.request({
+                scope: this,
+                params: {
+                    method: 'Tinebase.openIDCLogin',
+                    oidcResponse: oidcResponse
+                },
+                timeout: 60000, // 1 minute
+                success: this.onLoginSuccess
+            });
+        }
+    },
+
+    onLoginSuccess: function(response) {
+        var responseData = Ext.util.JSON.decode(response.responseText);
+        if (responseData.success === true) {
+            Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
+            window.document.title = this.originalTitle;
+            response.responseData = responseData;
+            this.onLogin.call(this.scope, response);
+        } else {
+            var modSsl = Tine.Tinebase.registry.get('modSsl');
+            var resultMsg = modSsl ? i18n._('There was an error verifying your certificate!') :
+                i18n._('Your username and/or your password are wrong!');
+            Ext.MessageBox.show({
+                title: i18n._('Login failure'),
+                msg: resultMsg,
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.ERROR,
+                fn: function () {
+                    this.getLoginPanel().getForm().findField('password').focus(true);
+                    if (document.getElementById('useCaptcha')) {
+                        if (typeof responseData.c1 != 'undefined') {
+                            document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
+                            document.getElementById('contImgCaptcha').style.visibility = 'visible';
+                        }
+                    }
+                }.createDelegate(this)
+            });
+        }
     },
     
     initLayout: function () {
@@ -489,40 +543,19 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     otp: values.otp
                 },
                 timeout: 60000, // 1 minute
-                success:function(response) {
-                    var responseData = Ext.util.JSON.decode(response.responseText);
-                    if (responseData.success === true) {
-                        Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
-                        window.document.title = this.originalTitle;
-                        response.responseData = responseData;
-                        this.onLogin.call(this.scope, response);
-                    } else {
-                        var modSsl = Tine.Tinebase.registry.get('modSsl');
-                        var resultMsg = modSsl ? i18n._('There was an error verifying your certificate!') :
-                            i18n._('Your username and/or your password are wrong!');
-                        Ext.MessageBox.show({
-                            title: i18n._('Login failure'),
-                            msg: resultMsg,
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.ERROR,
-                            fn: function () {
-                                this.getLoginPanel().getForm().findField('password').focus(true);
-                                if(document.getElementById('useCaptcha')) {
-                                    if(typeof responseData.c1 != 'undefined') {
-                                        document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
-                                        document.getElementById('contImgCaptcha').style.visibility = 'visible';
-                                    }
-                                }
-                            }.createDelegate(this)
-                        });
-                    }
-                }
+                success: this.onLoginSuccess
             });
         } else {
+
             Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     },
-    
+
+    onOIDCLoginPress: function() {
+        Ext.MessageBox.wait(i18n._('Redirecting to SSO Identity Provider'), i18n._('Please wait!'));
+        window.location.href = 'http://localhost:4000/index.php?method=Tinebase.openIDCLogin';
+    },
+
     onRender: function (ct, position) {
         this.supr().onRender.apply(this, arguments);
         

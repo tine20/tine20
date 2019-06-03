@@ -10,6 +10,8 @@
  * 
  */
 
+use Jumbojett\OpenIDConnectClient;
+
 /**
  * Json interface to Tinebase
  * 
@@ -572,7 +574,28 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $this->_getLoginFailedResponse();
         }
     }
-    
+
+    /**
+     * @param $oidcResponse
+     * @return array
+     */
+    public function openIDCLogin($oidcResponse)
+    {
+        Tinebase_Core::startCoreSession();
+
+        // try to login user
+        $success = Tinebase_Controller::getInstance()->loginOIDC(
+            $oidcResponse,
+            Tinebase_Core::get(Tinebase_Core::REQUEST)
+        );
+
+        if ($success === true) {
+            return $this->_getLoginSuccessResponse(Tinebase_Core::getUser()->accountLoginName);
+        } else {
+            return $this->_getLoginFailedResponse();
+        }
+    }
+
     /**
      * Returns TRUE if there is a captcha
      * @return boolean
@@ -805,8 +828,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
 
-            // secondfactor config
+             // secondfactor config
             'secondFactor' => $this->_getSecondFactorConfig(),
+
+            // sso
+            'sso'               => Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ACTIVE},
 
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(

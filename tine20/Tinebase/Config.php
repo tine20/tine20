@@ -683,6 +683,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
     const QUOTA_SKIP_IMAP_QUOTA = 'skipImapQuota';
 
+    const SSO = 'sso';
+    const SSO_ACTIVE = 'active';
+    const SSO_PROVIDER_URL = 'providerUrl';
+    const SSO_CLIENT_ID = 'clientId';
+    const SSO_CLIENT_SECRET = 'clientSecret';
+    const SSO_REDIRECT_URL = 'redirectUrl';
+    const SSO_ADAPTER = 'adapter';
+
     const TINE20_URL = 'tine20URL';
 
     const FILTER_SYNC_TOKEN = 'filterSyncToken';
@@ -2303,6 +2311,45 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setByAdminModule'      => true,
                     'setBySetupModule'      => false,
                     'default'               => false,
+                ),
+            ),
+            'default'               => array(),
+        ),
+        self::SSO => array(
+            //_('SSO client settings')
+            'label'                 => 'SSO client settings',
+            //_('SSO client settings')
+            'description'           => 'SSO client settings',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'content'               => array(
+                self::SSO_ACTIVE => array(
+                    'type' => Tinebase_Config::TYPE_BOOL,
+                    'default' => false
+                ),
+                self::SSO_ADAPTER => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => 'OpenIdConnect'
+                ),
+                // for example 'https://accounts.google.com/'
+                self::SSO_PROVIDER_URL => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => ''
+                ),
+                self::SSO_CLIENT_ID => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => ''
+                ),
+                self::SSO_CLIENT_SECRET => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => ''
+                ),
+                self::SSO_REDIRECT_URL => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => ''
                 ),
             ),
             'default'               => array(),

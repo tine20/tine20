@@ -36,3 +36,17 @@ This requires either MySQL 5.7.7+ or MariaDB 10.2.2+ with default settings. Earl
     innodb_file_per_table = 'ON'
 The conversion script will test these settings and abort if prerequisites are not met.
 the CLI method to convert to utf8mb4 is "setup.php --migrateUtf8mb4"
+
+### OpenID Connect support
+
+SSO via OpenID Connect has been added. Add this to your config to make it work:
+
+    'sso' => [
+        'active' => true,
+        'providerUrl' => 'OIDC_PROVIDER_URL',
+        'clientId' => 'CLIENT_ID_STRING',
+        'clientSecret' => 'CLIENT_SECRET_STRING',
+        'redirectUrl' => 'YOUR_LOCAL_TINE_URL',
+    ],
+
+You also have to add the users email address (known by the sso provider) as "open id" in the user record.

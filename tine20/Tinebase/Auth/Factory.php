@@ -81,7 +81,7 @@ class Tinebase_Auth_Factory
                 if (class_exists($authProviderClass)) {
                     $instance = new $authProviderClass($_options);
                 } else {
-                    throw new Tinebase_Exception_InvalidArgument('Unknown authentication backend');
+                    throw new Tinebase_Exception_InvalidArgument('Unknown authentication backend: ' . $authProviderClass);
                 }
                 break;
         }
