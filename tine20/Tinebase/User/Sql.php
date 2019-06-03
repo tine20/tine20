@@ -1099,7 +1099,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'creation_time'         => $_user->creation_time,
             'last_modified_by'      => $_user->last_modified_by,
             'last_modified_time'    => $_user->last_modified_time,
-            'is_deleted'            => $_user->is_deleted,
+            'is_deleted'            => $_user->is_deleted ? $_user->is_deleted : 0,
             'deleted_time'          => $_user->deleted_time,
             'deleted_by'            => $_user->deleted_by,
             'seq'                   => $_user->seq,

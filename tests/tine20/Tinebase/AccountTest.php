@@ -35,7 +35,8 @@ class Tinebase_AccountTest extends TestCase
         ));
         
         $this->assertNotEmpty($account->accountId);
-        
+        $this->assertEquals(0, $account->is_deleted);
+
         return $account;
     }
     
