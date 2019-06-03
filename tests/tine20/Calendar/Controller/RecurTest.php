@@ -1062,6 +1062,17 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertCount(6, $constrainEvent->exdate);
     }
 
+    public function testRecurIdWithSpecialChar()
+    {
+        $constraintEventWithBadUid = $this->_getRecurEvent();
+        $constraintEventWithBadUid->uid = 'MS-OS:[11242,123213,5234';
+        $constraintEventWithBadUid->recurid = $constraintEventWithBadUid->uid . '-';
+        $events = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+        $events->addRecord($constraintEventWithBadUid);
+        $filteredEvents = Calendar_Model_Rrule::getExceptionsByCandidate($events, $constraintEventWithBadUid);
+        self::assertEquals(1, count($filteredEvents));
+    }
+
     /**
      * returns a simple recure event
      *

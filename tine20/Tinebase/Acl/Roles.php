@@ -272,16 +272,19 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $role = $this->_getRolesBackend()->getByProperty($_roleName, 'name');
         return $role;
     }
-    
+
     /**
-     * Get multiple roles
+     * Returns a set of records identified by their id's
      *
-     * @param string|array $_ids Ids
-     * @return Tinebase_Record_RecordSet
+     * @param   array $_ids array of record identifiers
+     * @param   bool $_ignoreACL don't check acl grants
+     * @param Tinebase_Record_Expander $_expander
+     * @param   bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Role
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        return $this->_getRolesBackend()->getMultiple($_ids, $_ignoreACL, $_expander);
+        return $this->_getRolesBackend()->getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
     }
     
     /**

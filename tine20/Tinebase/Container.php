@@ -295,7 +295,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $this->setGrants($container->getId(), $event->grants, TRUE, FALSE);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-            . __LINE__ . ' Created new ' . $_container->type . ' container for account id ' . $accountId);
+            . __LINE__ . ' Created new ' . $_container->type . ' container for account id ' . $accountId
+            . ' with container_id ' . $container->getId());
 
         return $container;
     }

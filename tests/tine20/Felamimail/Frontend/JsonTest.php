@@ -2244,7 +2244,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testAttachmentMethodPublicDownloadLinkUpload()
     {
-        Zend_Registry::set('locale', new Zend_Locale('en'));
+        Tinebase_Core::setLocale('en');
         $message = $this->_testAttachmentType('download_public');
 
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
@@ -2277,7 +2277,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testAttachmentMethodProtectedDownloadLink()
     {
-        Zend_Registry::set('locale', new Zend_Locale('en'));
+        Tinebase_Core::setLocale('en');
         $message = $this->_testAttachmentType('download_protected');
 
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
@@ -2584,6 +2584,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($contact);
         self::assertEquals(1, count($attachments), print_r($contact->toArray(), true));
+        // check if email note is generated
+        $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Addressbook_Model_Contact::class, $contact->getId());
+        self::assertEquals(1, count($notes), 'record has no notes');
+        $note = $notes->getFirstRecord();
+        self::assertEquals(3, $note->note_type_id, '3 is email type ' . print_r($note->toArray(), true));
         return $message;
     }
 

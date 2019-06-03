@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -32,4 +32,14 @@ interface Tinebase_Auth_Interface extends Zend_Auth_Adapter_Interface
      * @return Zend_Auth_Adapter_Interface Provides a fluent interface
      */
     public function setCredential($credential);
+
+    /**
+     * @return bool
+     */
+    public function supportsAuthByEmail();
+
+    /**
+     * @return self
+     */
+    public function getAuthByEmailBackend();
 }

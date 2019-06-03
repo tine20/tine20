@@ -22,7 +22,9 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
      *
      * @var array
      */
-    protected $_additionalOptions = array();
+    protected $_additionalOptions = array(
+        'dates' => array('employment_begin','employment_end')
+    );
 
     protected $_costCenter;
 
@@ -47,6 +49,8 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
             }
         }
 
+        if($this->_options['demoData']) $result = $this->_getDay($result, $this->_additionalOptions['dates']);
+
         $result = $this->_setUser($result);
 
         return $result;
@@ -54,26 +58,24 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
 
     protected function _inspectAfterImport($importedRecord)
     {
-        foreach (Tinebase_Container::getInstance()->getAll() as $constainer)
+        try
         {
-            if($constainer['name'] == 'Events')
-            {
-                $event_id = $constainer['id'];
-            }
+            $event_id = Tinebase_Container::getInstance()->getContainerByName('Calendar_Model_Event', 'Events','shared')['event_id'];
+            $contract_Model = new HumanResources_Model_Contract(array(
+                'start_date' => Tinebase_DateTime::now(),
+                'employee_id' => $importedRecord['id'],
+                'feast_calendar_id' => $event_id,
+                'vacation_days' => '27',
+                'workingtime_json' => '{"days":[8,8,8,8,5.5,0,0]}'
+            ));
+            HumanResources_Controller_Contract::getInstance()->create($contract_Model);
+        }catch(Exception $e)
+        {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Dont exist Calendar Container: Events');
         }
-        
-        $contract_Model = new HumanResources_Model_Contract(array(
-            'start_date' => Tinebase_DateTime::now(),
-            'employee_id' => $importedRecord['id'],
-            'feast_calendar_id' => $event_id,
-            'vacation_days' => '27',
-            'workingtime_json' => '{"days":[8,8,8,8,5.5,0,0]}'
-        ));
-        
-        HumanResources_Controller_Contract::getInstance()->create($contract_Model);
-        
-        
-        
+
+
         foreach (Sales_Controller_CostCenter::getInstance()->getAll() as $costCenter)
         {
             if($costCenter['remark'] == $this->_costCenter )

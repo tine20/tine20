@@ -121,11 +121,12 @@ interface Tinebase_FileSystem_Preview_ServiceInterface
      *
      * @param $filePath
      * @param $synchronRequest bool should the request be prioritized
+     * @param array $intermediateFormats
      * @return string file blob
      * @Throws Tinebase_FileSystem_Preview_BadRequestException
      * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
     */
-    public function getPdfForFile($filePath, $synchronRequest = false);
+    public function getPdfForFile($filePath, $synchronRequest = false, $intermediateFormats = []);
 
     /**
      * Merges multiple pdf files into a single one.

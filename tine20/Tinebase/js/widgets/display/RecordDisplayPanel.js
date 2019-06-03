@@ -164,12 +164,18 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             }
 
             if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && !fieldDefinition.shy) {
-                if (fieldType === 'text') {
+                if (fieldType === 'text' || fieldType === 'json') {
                     Ext.apply(field, {
                         flex: 1,
                         cls: 'x-ux-display-background-border',
                         xtype: 'ux.displaytextarea'
                     });
+
+                    if (fieldType === 'json') {
+                        Ext.apply(field, {
+                            type: 'code/json'
+                        });
+                    }
                     textDisplayAreas.push(field);
                 } else if (fieldType === 'image') {
                     // should be the first area

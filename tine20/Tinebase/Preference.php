@@ -291,7 +291,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
         switch ($_value) {
 
             case Tinebase_Preference::TIMEZONE:
-                $locale =  Tinebase_Core::get(Tinebase_Core::LOCALE);
+                $locale =  Tinebase_Core::getLocale();
 
                 $availableTimezonesTranslations = Zend_Locale::getTranslationList('citytotimezone', $locale);
                 $availableTimezones = DateTimeZone::listIdentifiers();

@@ -236,6 +236,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * get name of attender
      * 
      * @return string
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function getName()
     {
@@ -260,7 +261,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $name;
                 break;
             default:
-                throw new Exception("type " . $this->user_type . " not yet supported");
+                throw new Tinebase_Exception_InvalidArgument("type " . $this->user_type . " not yet supported");
                 break;
         }
     }
@@ -789,13 +790,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     {
         $result = array(
             'toDelete' => new Tinebase_Record_RecordSet('Calendar_Model_Attender'),
-            'toCreate' => clone $_update,
+            'toCreate' => $_update->getClone(true), // shallow copy! as we set the id below, we do NOT want to actuall recrods to be cloned!
             'toUpdate' => new Tinebase_Record_RecordSet('Calendar_Model_Attender'),
         );
         
         foreach($_current as $currAttendee) {
             $updateAttendee = self::getAttendee($result['toCreate'], $currAttendee);
             if ($updateAttendee) {
+                $updateAttendee->setId($currAttendee->getId());
                 $result['toUpdate']->addRecord($updateAttendee);
                 $result['toCreate']->removeRecord($updateAttendee);
             } else {
@@ -914,7 +916,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     break;
                     
                 default:
-                    throw new Calendar_Exception("type $type not supported");
+                    throw new Tinebase_Exception_InvalidArgument("type $type not supported");
                     
                     break;
             }
@@ -1167,7 +1169,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
         if ($eventAttendees instanceof Tinebase_Record_RecordSet && $_sort) {
             $eventAttendees->sort(function(Calendar_Model_Attender $a1, Calendar_Model_Attender $a2) {
-                return $a1->getName() > $a2->getName();
+                try {
+                    return $a1->getName() > $a2->getName();
+                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                    Tinebase_Exception::log($teia);
+                    return true;
+                }
             });
         }
     }

@@ -1296,6 +1296,65 @@ class Admin_JsonTest extends TestCase
         }
     }
 
+    protected function createExampleAppRecord()
+    {
+        return ExampleApplication_Controller_ExampleRecord::getInstance()->create(
+            new ExampleApplication_Model_ExampleRecord([
+                'name' => Tinebase_Record_Abstract::generateUID(),
+            ]));
+    }
+
+    protected function prepareExampleAppConfig()
+    {
+        $record = $this->createExampleAppRecord();
+        ExampleApplication_Config::getInstance()->{ExampleApplication_Config::EXAMPLE_RECORD} = $record->getId();
+        return $record;
+    }
+
+    public function testSearchConfigsRecord()
+    {
+        $initialRecord = $this->prepareExampleAppConfig();
+
+        $result = $this->_json->searchConfigs([
+            'application_id' => Tinebase_Application::getInstance()
+                ->getApplicationByName(ExampleApplication_Config::APP_NAME)->getId()
+        ], []);
+
+        $this->assertGreaterThanOrEqual(2, $result['totalcount']);
+
+        $exampleRecord = null;
+        foreach($result['results'] as $configData) {
+            if ($configData['name'] === ExampleApplication_Config::EXAMPLE_RECORD) {
+                $exampleRecord = $configData;
+                break;
+            }
+        }
+
+        static::assertNotNull($exampleRecord);
+        static::assertContains($initialRecord->name, $exampleRecord['value']);
+
+        return $exampleRecord;
+    }
+
+    public function testGetConfigRecord()
+    {
+        $exampleRecord = $this->testSearchConfigsRecord();
+
+        $fetchedExampleRecord = $this->_json->getConfig($exampleRecord['id']);
+
+        static::assertEquals($exampleRecord['value'], $fetchedExampleRecord['value']);
+    }
+
+    public function testUpdateConfigRecord()
+    {
+        $exampleRecord = $this->testSearchConfigsRecord();
+        $newExampleRecord = $this->createExampleAppRecord();
+        $exampleRecord['value'] = json_encode($newExampleRecord->toArray());
+
+        $result = $this->_json->saveConfig($exampleRecord);
+        static::assertContains($newExampleRecord->name, $result['value']);
+    }
+
     public function testSearchConfigs()
     {
         $result = $this->_json->searchConfigs(array(

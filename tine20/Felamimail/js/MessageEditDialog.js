@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+require('./MessageFileButton');
+
 Ext.namespace('Tine.Felamimail');
 
 /**

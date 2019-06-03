@@ -48,7 +48,7 @@ class Setup_Core extends Tinebase_Core
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
-        Setup_Core::set('locale', new Zend_Locale('en_US'));
+        Setup_Core::setLocale('en_US');
         Setup_Core::set(Tinebase_Core::USERTIMEZONE, 'UTC');
         
         Setup_Core::setupUserLocale();

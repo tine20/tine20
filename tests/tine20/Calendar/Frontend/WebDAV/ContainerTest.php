@@ -192,10 +192,10 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      * @param boolen $_useNumericId
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public function testCreateFile($_useNumericId = false)
+    public function testCreateFile($_useNumericId = false, $skipAssertions = false, $file = '/../../Import/files/lightning.ics')
     {
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
-        
+        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . $file);
+
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
 
         if (true === $_useNumericId) {
@@ -203,13 +203,15 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         } else {
             $id = Tinebase_Record_Abstract::generateUID();
         }
-        
-        $etag = $container->createFile("$id.ics", $vcalendarStream);
-        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
-        $record = $event->getRecord();
-        
-        $this->assertTrue($event instanceof Calendar_Frontend_WebDAV_Event);
-        $this->assertEquals($id, $record->getId(), 'ID mismatch');
+
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics",
+            $vcalendarStream);
+
+        if (!$skipAssertions) {
+            $record = $event->getRecord();
+            $this->assertTrue($event instanceof Calendar_Frontend_WebDAV_Event);
+            $this->assertEquals($id, $record->getId(), 'ID mismatch');
+        }
         
         return $event;
     }
@@ -220,7 +222,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetChildren($skipAssertions = true)
     {
-        $event = $this->testCreateFile()->getRecord();
+        $event = $this->testCreateFile(false, $skipAssertions)->getRecord();
         
         // reschedule to match period filter
         $event->dtstart = Tinebase_DateTime::now();
@@ -247,7 +249,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         Calendar_Config::getInstance()->set(Calendar_Config::SKIP_DOUBLE_EVENTS, 'shared');
         $children = $this->testGetChildren(true);
-        $this->assertEquals(2, count($children));
+        $this->assertEquals(1, count($children));
     }*/
     
     /**
@@ -329,7 +331,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     public function testCalendarQueryPropertyFilter()
     {
         $event1 = $this->testCreateFile()->getRecord();
-        $event2 = $this->testCreateFile()->getRecord();
+        $event2 = $this->testCreateFile(false, false, '/../../Import/files/lightning_allday.ics')->getRecord();
         
         // reschedule to match period filter
         $event1->dtstart = Tinebase_DateTime::now();

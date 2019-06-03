@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */ 
 
@@ -20,7 +20,25 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
     const ACCTNAME_FORM_USERNAME  = 2;
     const ACCTNAME_FORM_BACKSLASH = 3;
     const ACCTNAME_FORM_PRINCIPAL = 4;
-    
+
+    protected $_noCanonicalIdentityTreatment = false;
+
+    /**
+     * __construct() - Sets configuration options
+     *
+     * @param  Zend_Db_Adapter_Abstract $zendDb If null, default database adapter assumed
+     * @param  string                   $tableName
+     * @param  string                   $identityColumn
+     * @param  string                   $credentialColumn
+     * @param  string                   $credentialTreatment
+     */
+    public function __construct(Zend_Db_Adapter_Abstract $zendDb = null, $tableName = null, $identityColumn = null,
+        $credentialColumn = null, $credentialTreatment = null, $noCanonicalIdentityTreatment = false)
+    {
+        $this->_noCanonicalIdentityTreatment = $noCanonicalIdentityTreatment;
+
+        parent::__construct($zendDb, $tableName, $identityColumn, $credentialColumn, $credentialTreatment);
+    }
     /**
      * setIdentity() - set the value to be used as the identity
      *
@@ -29,7 +47,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
      */
     public function setIdentity($value)
     {
-        $canonicalName = $this->getCanonicalAccountName($value);
+        $canonicalName = $this->_noCanonicalIdentityTreatment ? $value : $this->getCanonicalAccountName($value);
         
         $this->_identity = $canonicalName;
         return $this;
@@ -184,6 +202,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
 
         $this->_authenticateResultInfo['code'] = Zend_Auth_Result::SUCCESS;
         $this->_authenticateResultInfo['messages'][] = 'Authentication successful.';
+        $this->_authenticateResultInfo['identity'] = $resultIdentity['login_name'];
         return $this->_authenticateCreateAuthResult();
     }
 
@@ -229,5 +248,21 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
     protected function _getAccountDomainNameShort()
     {
         return Tinebase_Auth::getBackendConfiguration('accountDomainNameShort', NULL);
+    }
+
+    /**
+     * @return bool
+     */
+    public function supportsAuthByEmail()
+    {
+        return true;
+    }
+
+    /**
+     * @return Tinebase_Auth_Interface
+     */
+    public function getAuthByEmailBackend()
+    {
+        return Tinebase_Auth_Factory::factory(Tinebase_Auth::SQL_EMAIL);
     }
 }

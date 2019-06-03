@@ -181,7 +181,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     protected function _getDay($data,$dates)
     {
         foreach ($dates as $date) {
-            if($date != null && $data[$date] != 'today') {
+            if($data[$date] != '' && $data[$date] != 'today') {
                 $data[$date] = $this->{'_' . $data[$date]};
             }else
             {
@@ -265,14 +265,23 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                 __METHOD__ . '::' . __LINE__ . ' Got empty raw data - skipping.');
             return $data;
         }
-        
-        if (! empty($this->_headline)) {
-            if (sizeof($this->_headline) != sizeof($_data)) {
-                $arrayWithEmptyValues = array_fill(sizeof($_data), sizeof($this->_headline)-sizeof($_data), '');
+
+        if (!empty($this->_headline)) {
+            $headlineSize = sizeof($this->_headline);
+            $dataSize = sizeof($_data);
+            if ($headlineSize > $dataSize) {
+                $arrayWithEmptyValues = array_fill($dataSize, $headlineSize - $dataSize, '');
                 if (is_array($arrayWithEmptyValues)) {
                     $_data = array_merge($_data, $arrayWithEmptyValues);
                 }
+            } elseif ($dataSize > $headlineSize) {
+                // TODO throw an exception if this happens?
+                $arrayWithUnknownValues = array_fill($headlineSize, $dataSize - $headlineSize, 'unknown');
+                if (is_array($arrayWithUnknownValues)) {
+                    $this->_headline = array_merge($this->_headline, $arrayWithUnknownValues);
+                }
             }
+
             $_data_indexed = array_combine($this->_headline, $_data);
         }
 

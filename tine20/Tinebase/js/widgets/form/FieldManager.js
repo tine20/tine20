@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.widgets.form');
 
+import 'widgets/form/JsonField';
+
 /**
  * central form field manager
  * - get form field for a given field
@@ -178,6 +180,7 @@ Tine.widgets.form.FieldManager = function() {
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
                         field.isFormField = true;
                         field.fieldName = fieldName;
+                        field.hideHeaders = true;
                         field.height = 170; // 5 records
                     } else {
                         var picker = Tine.widgets.form.RecordsPickerManager.get(
@@ -205,6 +208,10 @@ Tine.widgets.form.FieldManager = function() {
                 case 'numberableInt':
                     field.xtype = 'textfield';
                     field.disabled = true;
+                    break;
+                case 'json':
+                    field.xtype = 'tw-jsonfield';
+                    field.height = 150; // 12 lines
                     break;
                 default:
                     field.xtype = 'textfield';

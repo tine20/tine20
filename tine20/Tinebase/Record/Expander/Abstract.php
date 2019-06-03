@@ -15,6 +15,7 @@ abstract class Tinebase_Record_Expander_Abstract
     const EXPANDER_PROPERTIES = 'properties';
     const EXPANDER_PROPERTY_CLASSES = 'propertyClasses';
     const EXPANDER_REPLACE_GET_TITLE = 'replaceGetTitle';
+    const GET_DELETED = 'getDeleted';
 
     const PROPERTY_CLASS_USER = 'user';
 

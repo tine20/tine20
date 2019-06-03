@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>12.3</version>
+    <version>12.4</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -819,7 +819,7 @@
         </table>
         <table>
             <name>felamimail_sieve_vacation</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -854,6 +854,8 @@
                 </field>
                 <field>
                     <name>reason</name>
+                    <!--Long text!-->
+                    <length>2147483647</length>
                     <type>text</type>
                 </field>
                 <field>

@@ -6,7 +6,7 @@
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009-2013 Serpro (http://www.serpro.gov.br)
- * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Mário César Kolling <mario.koling@serpro.gov.br>
  */
 
@@ -63,5 +63,21 @@ class Tinebase_Auth_ModSsl extends Zend_Auth_Adapter_ModSsl implements Tinebase_
         /** @noinspection PhpUndefinedMethodInspection */
         parent::setPassword($credential);
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function supportsAuthByEmail()
+    {
+        return false;
+    }
+
+    /**
+     * @return self
+     */
+    public function getAuthByEmailBackend()
+    {
+        throw new Tinebase_Exception_NotImplemented('do not call ' . __METHOD__);
     }
 }

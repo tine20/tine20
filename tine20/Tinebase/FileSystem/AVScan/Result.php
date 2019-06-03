@@ -15,6 +15,7 @@ class Tinebase_FileSystem_AVScan_Result
     const RESULT_OK = \Xenolope\Quahog\Client::RESULT_OK;
     const RESULT_FOUND = \Xenolope\Quahog\Client::RESULT_FOUND;
     const RESULT_ERROR = \Xenolope\Quahog\Client::RESULT_ERROR;
+    const RESULT_RELOADING = 'RELOADING';
 
     public $result;
     public $message;

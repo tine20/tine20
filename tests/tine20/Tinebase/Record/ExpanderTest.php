@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -268,6 +268,43 @@ class Tinebase_Record_ExpanderTest extends TestCase
         } finally {
             $adbController->resolveCustomfields($oldCustomfields);
         }
+    }
+
+    public function testExpandGetDeleted()
+    {
+        $supplierTest = new Sales_SuppliersTest();
+        $supplierTest->publicSetUp();
+        $supplier = $supplierTest->_createSupplier();
+
+        $supplier = Sales_Controller_Supplier::getInstance()->get($supplier['id']);
+
+        static::assertTrue(is_string($supplier->cpextern_id), 'cpextern_id is not a string');
+
+        $suppliers = new Tinebase_Record_RecordSet(Sales_Model_Supplier::class, [$supplier]);
+        $expander = new Tinebase_Record_Expander(Sales_Model_Supplier::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'cpextern_id' => [],
+            ],
+        ]);
+        $expander->expand($suppliers);
+
+        static::assertTrue(is_object($supplier->cpextern_id), 'cpextern_id is not a object');
+        $supplier->cpextern_id = $supplier->cpextern_id->getId();
+
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        Addressbook_Controller_Contact::getInstance()->delete($supplier->cpextern_id);
+        $expander->expand($suppliers);
+        static::assertTrue(is_string($supplier->cpextern_id), 'cpextern_id is not a string');
+
+        $expander = new Tinebase_Record_Expander(Sales_Model_Supplier::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'cpextern_id' => [Tinebase_Record_Expander::GET_DELETED => true,],
+            ],
+        ]);
+        $expander->expand($suppliers);
+
+        static::assertTrue(is_object($supplier->cpextern_id), 'cpextern_id is not a object');
     }
 
     public function testExpandNotes()

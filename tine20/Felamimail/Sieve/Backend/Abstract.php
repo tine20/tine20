@@ -145,6 +145,7 @@ abstract class Felamimail_Sieve_Backend_Abstract
             $require[] = '"fileinto"';
             $require[] = '"reject"';
             $require[] = '"copy"';
+            $require[] = '"vacation"';
             
             foreach ($this->_rules as $rule) {
                 if ($rule->hasRegexCondition()) {

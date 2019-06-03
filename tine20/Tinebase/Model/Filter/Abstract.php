@@ -192,12 +192,17 @@ abstract class Tinebase_Model_Filter_Abstract
      * sets operator
      *
      * @param string $_operator
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function setOperator($_operator)
     {
         if (empty($_operator) && isset($this->_operators[0])) {
             // try to use default/first operator
             $_operator = $this->_operators[0];
+        }
+
+        if (! is_array($this->_operators)) {
+            throw new Tinebase_Exception_UnexpectedValue("no allowed operators defined");
         }
         
         if (! in_array($_operator, $this->_operators)) {

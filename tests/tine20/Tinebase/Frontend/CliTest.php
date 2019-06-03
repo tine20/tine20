@@ -565,12 +565,10 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * testUserReport
-     *
-     * TODO maybe set locale to EN to ease string testing
      */
     public function testUserReport()
     {
-        Zend_Registry::set('locale', new Zend_Locale('en'));
+        Tinebase_Core::setLocale('en');
         ob_start();
         $result = $this->_cli->userReport();
         $out = ob_get_clean();

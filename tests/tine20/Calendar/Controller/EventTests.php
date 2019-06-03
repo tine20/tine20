@@ -166,6 +166,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testUpdateAttendeeStatus()
     {
+        $this->_controller->setCalendarUser(new Calendar_Model_Attender([
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id' => Tinebase_Core::getUser()->contact_id,
+        ]));
+        
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
         $event->attendee[1] = new Calendar_Model_Attender(array(

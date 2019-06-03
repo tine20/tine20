@@ -978,8 +978,10 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             }
             var ui = event.ui;
             var rzInfo = ui.getRzInfo(this);
-            
-            this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
+
+            if (this.durationEl) {
+                this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
+            }
         }, rz);
 
         // adjust initial size to avoid flickering when start resizing

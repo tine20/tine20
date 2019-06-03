@@ -318,7 +318,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type String
      */
     groupTextTpl: null,
-    
+
+    /**
+     * cols to exclude
+     *
+     * @type String[]
+     * @cfg hideColumns
+     */
+    hideColumns: null,
+
     /**
      * @property selectionModel
      * @type Tine.widgets.grid.FilterSelectionModel
@@ -383,6 +391,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.editDialogConfig = this.editDialogConfig || {};
         this.editBuffer = [];
         this.deleteQueue = [];
+
+        this.hideColumns = this.hideColumns || [];
         
         // init generic stuff
         if (this.modelConfig) {
@@ -564,7 +574,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 if (['relations', 'customfields'].indexOf(key) !== -1) {
                     return;
                 }
-                
+
+                if (this.hideColumns.indexOf(key) !== -1) {
+                    return;
+                }
+
                 if (config) {
                     columns.push(config);
                 }
@@ -2206,20 +2220,32 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.log.debug(record, mode);
 
         if (record && Ext.isFunction(record.copy)) {
-            var idx = this.getStore().indexOfId(record.id);
+            var idx = this.getStore().indexOfId(record.id),
+                isSelected = this.getGrid().getSelectionModel().isSelected(idx),
+                store = this.getStore();
+
             if (idx >= 0) {
-                // only run do this in local mode as we reload the store in remote mode
-                // NOTE: this would otherwise delete the record if a record proxy exists!
-                if (mode == 'local') {
-                    var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
-                    this.getStore().removeAt(idx);
-                    this.getStore().insert(idx, [record]);
-                    if (isSelected) {
-                        this.getGrid().getSelectionModel().selectRow(idx, true);
-                    }
+                // merge fresh data
+                var current = store.getAt(idx);
+
+                _.each(record.data, function(v, k) {
+                    Tine.Tinebase.common.assertComparable(v);
+                    current.set(k, v);
+                });
+                if (mode != 'local') {
+                    current.commit();
                 }
             } else {
-                this.getStore().add([record]);
+                store.add([record]);
+            }
+
+            // sort new/edited record
+            store.remoteSort = false;
+            store.sort(store.sortInfo.field, store.sortInfo.direction)
+            store.remoteSort = this.storeRemoteSort;
+
+            if (isSelected) {
+                this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
             }
             this.addToEditBuffer(record);
         }
@@ -2227,7 +2253,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (mode == 'local') {
             this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
         } else {
-            this.bufferedLoadGridData();
+            this.bufferedLoadGridData({
+                removeStrategy: 'keepBuffered',
+            });
         }
     },
 

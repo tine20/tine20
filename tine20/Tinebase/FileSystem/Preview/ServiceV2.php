@@ -90,6 +90,22 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
     }
 
     /**
+     * Uses the DocumentPreviewService to generate a pdf for a documentfile.
+     *
+     * @param $filePath
+     * @param $synchronRequest bool should the request be prioritized
+     * @param array $intermediateFormats
+     * @return string file blob
+     * @throws Tinebase_FileSystem_Preview_BadRequestException
+     * @throws Zend_Http_Client_Exception
+     */
+    public function getPdfForFile($filePath, $synchronRequest = false, $intermediateFormats = [])
+    {
+        $intermediateFormats []= 'pdf';
+        return $this->_getSingleFile($filePath, ['fileType' => $intermediateFormats,], $synchronRequest);
+    }
+
+    /**
      * Merges multiple pdf files into a single one.
      *
      * @param $filePaths array of file paths
@@ -105,6 +121,9 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
             if (mime_content_type($filePath) != 'application/pdf') {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $filePath . 'is not a PDF file');
+                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $filePath . ' has mimi type '. mime_content_type($filePath));
                 }
                 throw new Tinebase_Exception_InvalidArgument($filePath . " is not a PDF file");
             }

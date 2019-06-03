@@ -30,6 +30,7 @@ class Sales_Import_Division extends TestCase
         $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_Division', [
             'definition' => 'sales_import_division_csv',
+            'file' => 'division.csv'
         ]);
         $importer->importDemodata();
         $filter = Sales_Model_DivisionFilter::getFilterForModel('Sales_Model_Division', [

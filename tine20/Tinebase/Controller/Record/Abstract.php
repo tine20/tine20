@@ -243,11 +243,18 @@ abstract class Tinebase_Controller_Record_Abstract
             'currentUser' => $currentUser,
         ];
 
+        if (method_exists($this, 'doGrantChecks')) {
+            $oldvalues['doGrantChecks'] = $this->doGrantChecks(false);
+        }
+
         return function () use ($oldvalues) {
             $this->doContainerACLChecks($oldvalues['containerACLChecks']);
             $this->doRightChecks($oldvalues['rightChecks']);
             if ($oldvalues['currentUser']) {
                 Tinebase_Core::set(Tinebase_Core::USER, $oldvalues['currentUser']);
+            }
+            if (isset($oldvalues['doGrantChecks'])) {
+                $this->doGrantChecks($oldvalues['doGrantChecks']);
             }
         };
     }
@@ -571,12 +578,13 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * Returns a set of records identified by their id's
      *
-     * @param   array $_ids       array of record identifiers
-     * @param   bool  $_ignoreACL don't check acl grants
-     * @param   Tinebase_Record_Expander $_expander
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @param   array $_ids array of record identifiers
+     * @param   bool $_ignoreACL don't check acl grants
+     * @param Tinebase_Record_Expander $_expander
+     * @param   bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $this->_checkRight(self::ACTION_GET);
 
@@ -588,7 +596,16 @@ abstract class Tinebase_Controller_Record_Abstract
                $this->_getMultipleGrant,
                TRUE)
            : NULL;
-        $records = $this->_backend->getMultiple($_ids, $containerIds);
+        if ($_getDeleted && $this->_backend->getModlogActive()) {
+            $this->_backend->setModlogActive(false);
+            try {
+                $records = $this->_backend->getMultiple($_ids, $containerIds);
+            } finally {
+                $this->_backend->setModlogActive(true);
+            }
+        } else {
+            $records = $this->_backend->getMultiple($_ids, $containerIds);
+        }
 
         if ($_expander !== null) {
             $_expander->expand($records);
@@ -2225,6 +2242,8 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Record_Interface $_record
      * @return void
+     *
+     * TODO refactor -> make this public / add acl check if required
      */
     protected function _saveAlarms(Tinebase_Record_Interface $_record)
     {
@@ -2884,6 +2903,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         try {
             $node = Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $filename, $tempFile);
             Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record, $node);
+            $this->_setFileMessageNote($record, $node);
 
         } catch (Tinebase_Exception_Duplicate $ted) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -2891,6 +2911,29 @@ HumanResources_CliTests.testSetContractsEndDate */
             return null;
         }
         return $record;
+    }
+
+    protected function _setFileMessageNote($record, $node)
+    {
+        $translation = Tinebase_Translation::getTranslation();
+        $noteText = str_replace(
+            ['{0}'],
+            [$node->name],
+            $translation->_('A Message has been filed to this record. Subject: "{0}"')
+        );
+
+        // TODO add link to node attachment (like attachment icon in grid)
+
+        $noteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
+        $note = new Tinebase_Model_Note([
+            'note_type_id'      => (string) $noteType->getId(),
+            'note'              => mb_substr($noteText, 0, Tinebase_Notes::MAX_NOTE_LENGTH),
+            'record_model'      => $this->_modelName,
+            'record_backend'    => ucfirst(strtolower('sql')),
+            'record_id'         => $record->getId(),
+        ]);
+        $record->notes->addRecord($note);
+        Tinebase_Notes::getInstance()->setNotesOfRecord($record);
     }
 
     /**

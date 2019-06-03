@@ -473,7 +473,7 @@ class Tinebase_Core
         // setup a temporary user locale. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as session timeout
         // @todo add fallback locale to config file
-        Tinebase_Core::set('locale', new Zend_Locale('en_US'));
+        Tinebase_Core::setLocale('en_US');
         
         Tinebase_Core::setupUserLocale();
         
@@ -489,6 +489,9 @@ class Tinebase_Core
         Tinebase_Core::setupContainer();
     }
 
+    /**
+     * setup DI container
+     */
     protected static function setupContainer()
     {
         if (self::isRegistered(self::CONTAINER)) {
@@ -496,6 +499,9 @@ class Tinebase_Core
         }
 
         $cacheFile = self::getCacheDir() . '/cachedTine20Container.php';
+        if (! is_writable($cacheFile)) {
+            $cacheFile = self::getTempDir() . '/cachedTine20Container.php';
+        }
 
         // be aware of race condition between is_file and include_once => somebody may have deleted the file
         // yes it does get deleted! => check result of include_once
@@ -1278,22 +1284,37 @@ class Tinebase_Core
                 self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
             }
         }
-        
+
         // save in registry
-        self::set('locale', $locale);
+        self::setLocale($locale);
         
         $localeString = (string)$locale;
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Setting user locale: " . $localeString);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) self::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . " Setting user locale: " . $localeString);
         
         // set correct ctype locale, to make sure that the filesystem functions like basename() are working correctly with utf8 chars
         $ctypeLocale = setlocale(LC_CTYPE, 0);
         if (! preg_match('/utf-?8/i', $ctypeLocale)) {
             // use en_US as fallback locale if region string is missing
             $newCTypeLocale = ((strpos($localeString, '_') !== FALSE) ? $localeString : 'en_US') . '.UTF8';
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__
                 . ' Setting CTYPE locale from "' . $ctypeLocale . '" to "' . $newCTypeLocale . '".');
             setlocale(LC_CTYPE, $newCTypeLocale);
         }
+    }
+
+    /**
+     * set locale in registry
+     *
+     * @param mixed $locale
+     */
+    public static function setLocale($locale)
+    {
+        if (! $locale instanceof Zend_Locale) {
+            $locale = Tinebase_Translation::getLocale($locale);
+        }
+        self::set(self::LOCALE, $locale);
     }
 
     /**

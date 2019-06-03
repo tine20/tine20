@@ -48,6 +48,18 @@ class Admin_Import_Role_Csv extends Tinebase_Import_Csv_Abstract
         return $result;
     }
 
+    protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
+    {
+        try {
+            $role = Tinebase_Role::getInstance()->getRoleByName($_record['name']);
+            $this->_inspectAfterImport($role);
+            $this->_importResult['duplicatecount']++;
+        } catch (Tinebase_Exception $e) {
+            return parent::_importRecord($_record, $_resolveStrategy, $_recordData);
+        }
+
+    }
+
     /**
      * do conversions
      *

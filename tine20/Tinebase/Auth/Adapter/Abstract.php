@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 abstract class Tinebase_Auth_Adapter_Abstract implements Tinebase_Auth_Interface
@@ -73,4 +73,20 @@ abstract class Tinebase_Auth_Adapter_Abstract implements Tinebase_Auth_Interface
      * @return Zend_Auth_Result
      */
     abstract public function authenticate();
+
+    /**
+     * @return bool
+     */
+    public function supportsAuthByEmail()
+    {
+        return false;
+    }
+
+    /**
+     * @return self
+     */
+    public function getAuthByEmailBackend()
+    {
+        throw new Tinebase_Exception_NotImplemented('do not call ' . __METHOD__);
+    }
 }

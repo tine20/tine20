@@ -174,11 +174,13 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      *
      * @param array $_ids
      * @param bool $_ignoreACL
+     * @param null|Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
      * @return Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        $result = parent::getMultiple($_ids, $_ignoreACL, $_expander);
+        $result = parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
         if (true !== $_ignoreACL) {
             $this->_removeHiddenListMembers($result);
         }

@@ -246,7 +246,7 @@ class Tinebase_Translation
      * @param  Zend_Locale $_locale [optional]
      * @return Zend_Translate_Adapter
      */
-    public static function getTranslation($_applicationName, Zend_Locale $_locale = NULL)
+    public static function getTranslation($_applicationName = 'Tinebase', Zend_Locale $_locale = NULL)
     {
         $locale = $_locale
             ?: Tinebase_Core::getLocale()
@@ -511,7 +511,7 @@ class Tinebase_Translation
     {
         $date = ($date !== null) ? clone($date) : Tinebase_DateTime::now();
         $timezone = ($timezone !== null) ? $timezone : Tinebase_Core::getUserTimezone();
-        $locale = ($locale !== null) ? $locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $locale = ($locale !== null) ? $locale : Tinebase_Core::getLocale();
         
         $date = new Zend_Date($date->getTimestamp());
         $date->setTimezone($timezone);

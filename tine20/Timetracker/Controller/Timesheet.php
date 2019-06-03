@@ -23,7 +23,14 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @var boolean
      */
     protected $_doCheckDeadline = TRUE;
-    
+
+    /**
+     * custom acl switch
+     *
+     * @var boolean
+     */
+    protected $_doTimesheetContainerACLChecks = TRUE;
+
     /**
      * check deadline or not
      * 
@@ -277,8 +284,22 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     {
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
-    }    
-    
+    }
+
+    /**
+     * set/get checking ACL rights
+     *
+     * NOTE: as our business logic here needs $this->>_doContainerACLChecks to be turned off
+     *       we introduce a new switch to turn off all grants checking here
+     *
+     * @param  boolean $setTo
+     * @return boolean
+     */
+    public function doContainerACLChecks($setTo = NULL)
+    {
+        return $this->_setBooleanMemberVar('_doTimesheetContainerACLChecks', $setTo);
+    }
+
     /**
      * check grant for action
      *
@@ -295,6 +316,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
+        if (! $this->_doTimesheetContainerACLChecks) {
+            return TRUE;
+        }
+
         $isAdmin = false;
         // users with MANAGE_TIMEACCOUNTS have all grants here
         if ( $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)

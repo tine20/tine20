@@ -526,7 +526,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
-        });
+        }, [{
+            ptype: 'ux.itemregistry',
+            key: 'Filemanager-Node-GridPanel-ContextMenu'
+        }]);
 
         this.folderContextMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getContainerName(),

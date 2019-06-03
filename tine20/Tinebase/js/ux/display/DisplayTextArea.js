@@ -27,10 +27,16 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
 
     initComponent: function() {
         this.supr().initComponent.call(this);
+        var langMatches = String(this.type).match(/^code\/(.*)/);
+        this.lang = langMatches ? langMatches[1]: undefined;
 
         if (this.type == 'text/plain') {
             this.htmlEncode = true;
             this.nl2br = true;
+        } else if (this.lang) {
+            this.htmlEncode = false;
+            this.nl2br = true;
+            this.linkify = false;
         } else {
             // rich content needs to be prepared by the server!
             this.linkify = false;
@@ -41,9 +47,32 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
     applyRenderer: Ext.ux.display.DisplayField.prototype.applyRenderer,
 
     afterRender: function() {
+        var me = this;
+
         this.supr().afterRender.call(this);
+
         if (this.value) {
             this.setValue(this.value);
+        }
+
+        if ( this.lang ) {
+            import(/* webpackChunkName: "Tinebase/js/ace" */ 'widgets/ace').then(function() {
+                me.ed = ace.edit(me.el.id, {
+                    mode: 'ace/mode/' + me.lang,
+                    fontFamily: 'monospace',
+                    fontSize: 12
+                });
+
+                me.ed.setOptions({
+                    readOnly: true,
+                    highlightActiveLine: false,
+                    highlightGutterLine: false
+                });
+
+                if (me.value) {
+                    me.ed.setValue(me.value);
+                }
+            });
         }
     },
 
@@ -53,6 +82,11 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
         }
 
         this.value = value;
+
+        if (this.ed) {
+            this.ed.setValue(Ext.isString(this.value) ? this.value : JSON.stringify(this.value, undefined, 4), -1);
+            return;
+        }
 
         if (! this.rendered) {
             return;
@@ -73,6 +107,7 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
         if (this.linkify) {
             Tine.Tinebase.common.linkifyText(v, this.getEl());
         }
+
     }
 });
 

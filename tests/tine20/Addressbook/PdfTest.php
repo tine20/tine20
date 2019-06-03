@@ -99,8 +99,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testContactPdfLocale()
     {
-        // set de_DE locale
-        Zend_Registry::set('locale', new Zend_Locale('de'));
+        Tinebase_Core::setLocale('de');
         
         $contact = $this->_createContact();
         

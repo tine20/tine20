@@ -82,7 +82,7 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
     }
 
-    public function assertCreatePreviewsFormNode($preview_count, $preview_status, $preview_error_count)
+    public function assertCreatePreviewsFormNode($preview_count, $preview_status, $preview_error_count_min, $preview_error_count_max)
     {
         $path = $this->_basePath . '/PHPUNIT';
         $this->_fileSystem->mkdir($path);
@@ -97,18 +97,24 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
 
         $node = $this->_fileSystem->stat($path);
 
+        //create preview could already have run
+        $this->_previews->createPreviewsFromNode($node);
+
+        $node = $this->_fileSystem->stat($path);
+
         $this->assertEquals($preview_count, $node->preview_count, "preview count:");
         $this->assertEquals($preview_status, $node->preview_status, "preview status:");
-        $this->assertEquals($preview_error_count, $node->preview_error_count, "preview error count:");
+        $this->assertTrue(
+            $node->preview_error_count <= $preview_error_count_max && $node->preview_error_count >= $preview_error_count_min,
+            "preview error count ($node->preview_error_count) not in interval [$preview_error_count_min, $preview_error_count_max]"
+        );
 
         return $node;
     }
 
     public function testCreatePreviewsFormNodeSuccess()
     {
-        $this->markTestSkipped('FIXME');
-
-        $node = $this->assertCreatePreviewsFormNode(3, 0, 0);
+        $node = $this->assertCreatePreviewsFormNode(3, 0, 0, 0);
         self::assertTrue(
             $this->_previews->hasPreviews($node)
         );
@@ -116,17 +122,14 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
 
     public function testCreatePreviewsFormNodeFailPreviewCreationFailed()
     {
-        $this->markTestSkipped('FIXME');
-
         $this->_previewService->setReturnValueGetPreviewsForFile(false);
-        $this->assertCreatePreviewsFormNode(0, 0, 1);
+        //if createPreviews has run while file creation, it will also run a second time (because there are no previews for the file)
+        $this->assertCreatePreviewsFormNode(0, 0, 1, 2);
     }
 
     public function testCreatePreviewsFormNodeFailUnusableFile()
     {
-        $this->markTestSkipped('FIXME');
-
         $this->_previewService->setThrowExceptionGetPreviewsForFile(new Tinebase_FileSystem_Preview_BadRequestException("File not usable", 400));
-        $this->assertCreatePreviewsFormNode(0, 400, 0);
+        $this->assertCreatePreviewsFormNode(0, 400, 0, 0);
     }
 }

@@ -24,7 +24,7 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
     protected $_resources;
 
     protected $_groups;
-    
+
     protected $_secretaryGrants = array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADD);
 
 
@@ -44,7 +44,6 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
      */
     protected function _addData()
     {
-        $this->_test = $this->_options['container_id'];
         $result['container_id'] = $this->_options['container_id'];
         return $result;
     }
@@ -66,6 +65,49 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
         return $result;
     }
 
+
+    /**
+     * create records
+     * @param array $_recordData
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _createRecordToImport($_recordData)
+    {
+        $importedRecord = parent::_createRecordToImport($_recordData);
+        if(!empty($_recordData['container_name']) && empty($importedRecord['container_id']))
+        {
+            $importedRecord['container_id'] = $this->_setContainer($_recordData, $importedRecord);
+        }
+        return $importedRecord;
+    }
+
+    /**
+     * set container id for records
+     * @param $_recordData
+     * @return string
+     */
+    protected function _setContainer($_recordData,$importedRecord)
+    {
+        $containers = Tinebase_Container::getInstance()->getAll();
+        foreach ($containers as $container)
+        {
+            if($container['name'] == $_recordData['container_name'])
+            {
+                return $container['id'];
+            }
+        }
+        $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'           => $_recordData['container_name'],
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'owner_id'       => Tinebase_Core::getUser(),
+            'backend'        => 'SQL',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'color'          => '#00FF00',
+            'model'             => Calendar_Model_Event::class,
+        ), true));
+        return $container->getId();
+    }
+
     /**
      *  set the current date plus 'dtday' and/or 'dthours' form import.
      *
@@ -75,10 +117,8 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
      */
     protected function _setDate($result)
     {
-        $date = new Tinebase_DateTime();
-
         $time = explode(':', $result['time']);
-        $date->addDay($result['date']);
+        $date = $this->_getDay($result['date']);
         $date->setTime(
             (integer)$time['0'],
             isset($time['1']) ? (integer)$time['1'] : 0,

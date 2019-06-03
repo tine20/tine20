@@ -5,7 +5,9 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
- 
+
+require('./MessageFileButton');
+
 Ext.ns('Tine.Felamimail');
 
 Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPanel, {
@@ -70,11 +72,13 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
             iconCls: 'action_email_forward'
         });
 
-        this.action_download = new Ext.Action({
-            text: this.app.i18n._('Save'),
-            handler: this.onMessageDownload.createDelegate(this),
-            iconCls: 'action_email_download',
-            disabled: this.record.id.match(/_/)
+        this.action_fileRecord = new Tine.Felamimail.MessageFileButton({
+            disabled: this.record.id.match(/_/),
+            record: this.record,
+            scale: 'medium',
+            rowspan: 2,
+            iconAlign:'top',
+            arrowAlign:'right'
         });
 
         this.action_print = new Ext.Action({
@@ -133,12 +137,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         ]);
 
         if (this.hasDownloadAction) {
-            actions.push(Ext.apply(new Ext.Button(this.action_download), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign:'top',
-                arrowAlign:'right'
-            }));
+            actions.push(this.action_fileRecord);
         }
 
         this.tbar = new Ext.Toolbar({
@@ -192,20 +191,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         this.fireEvent('remove', Ext.encode(this.record.data));
         this.window.close();
     },
-    
-    /**
-     * download message
-     */
-    onMessageDownload: function() {
-        var downloader = new Ext.ux.file.Download({
-            params: {
-                method: 'Felamimail.downloadMessage',
-                requestType: 'HTTP',
-                messageId: this.record.id
-            }
-        }).start();
-    },
-    
+
     /**
      * delete message handler
      */

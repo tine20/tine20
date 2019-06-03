@@ -90,7 +90,6 @@ Tine.Tinebase.ApplicationStarter = {
                     break;
                 case 'record':
                 case 'records':
-                    fieldDefinition.config.modelName = fieldDefinition.config.modelName.replace(/_/, '');
                     field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
                     field.getRecordClass = function() {
                         return Tine.Tinebase.data.RecordMgr.get(field.type);
@@ -229,6 +228,9 @@ Tine.Tinebase.ApplicationStarter = {
                     break;
                 case 'image':
                     gridRenderer = Tine.widgets.grid.imageRenderer;
+                    break;
+                case 'json':
+                    gridRenderer = Tine.widgets.grid.jsonRenderer;
                     break;
                 case 'relation':
                     var cc = config.config;

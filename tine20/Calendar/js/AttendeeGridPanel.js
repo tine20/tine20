@@ -897,13 +897,14 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return icon + Ext.util.Format.htmlEncode(displayName);
     },
 
-    renderAttenderResourceIcon: function(name) {
+    renderAttenderResourceIcon: function (name) {
         try {
-            // WTF: why is the icon in the xprops? shouldn't we resolve it on runtime?
-            var icon = name.container_id['xprops']['Calendar']['Resource']['resource_icon'];
+            var ResourceId = name.type,
+            icon = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes')
+                .getById(ResourceId).get('icon');
             return '<img class="tine-keyfield-icon" src="' + icon + '"/>';
-        } catch (e) {}
-
+        } catch (e) {
+        }
         return '';
     },
     

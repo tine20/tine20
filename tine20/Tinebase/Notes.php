@@ -322,8 +322,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $model = get_class($_record);
         $backend = ucfirst(strtolower($_backend));
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), TRUE));
-        
         $currentNotes = $this->getNotesOfRecord($model, $_record->getId(), $backend);
         $notes = $_record->$_notesProperty;
         
@@ -353,7 +351,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                                 . ' Note is invalid! '
                                 . $terv->getMessage()
-                                //. print_r($noteArray, TRUE)
                             );
                         }
                     }
@@ -375,7 +372,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         // add new notes
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($notesToSet) . ' note(s) to record.');
         foreach ($notesToSet as $note) {
-            //if (in_array($note->getId(), $toAttach)) {
             if (!$note->getId()) {
                 $note->record_model = $model;
                 $note->record_backend = $backend;
@@ -462,7 +458,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $noteType = $this->getNoteTypeByName($_type);
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => $noteType->getId(),
-            'note'              => substr($noteText, 0, self::MAX_NOTE_LENGTH),
+            'note'              => mb_substr($noteText, 0, self::MAX_NOTE_LENGTH),
             'record_model'      => $modelName,
             'record_backend'    => ucfirst(strtolower($_backend)),
             'record_id'         => $id,

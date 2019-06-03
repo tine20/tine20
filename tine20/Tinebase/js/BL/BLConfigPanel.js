@@ -59,7 +59,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
             }, []),
             typeAhead: true,
             triggerAction: 'all',
-            emptyText: _('Add new Element...'),
+            emptyText: i18n._('Add new Element...'),
             selectOnFocus:true,
         });
 
@@ -67,7 +67,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
         this.columns = [
             {
                 id:'classname',
-                header: _('Type'),
+                header: i18n._('Type'),
                 width: 125,
                 sortable: false,
                 dataIndex: 'classname',
@@ -75,7 +75,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
                 renderer: Tine.widgets.grid.RendererManager.get('Tinebase', 'BLConfig', 'classname', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL)
             }, {
                 id: 'configRecord',
-                header: _('Config'),
+                header: i18n._('Config'),
                 width: 400,
                 sortable: false,
                 dataIndex: 'configRecord',

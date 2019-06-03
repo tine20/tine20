@@ -762,7 +762,6 @@ msgid "Configs"
 msgstr "Konfigurationen"
 
 #: js/Models.js:492
-#, fuzzy
 msgid "Path"
 msgstr "Pfad"
 
@@ -1664,7 +1663,6 @@ msgid "Notes"
 msgstr "Notizen"
 
 #: js/widgets/ActivitiesGridPanel.js:109 js/widgets/ActivitiesPanel.js:79
-#, fuzzy
 msgid "Note"
 msgstr "Notiz"
 
@@ -3556,15 +3554,15 @@ msgstr "Pfad zu einem benutzerdefinierten Favicon."
 
 #: Config.php:1453
 msgid "Use login name instead of full name"
-msgstr ""
+msgstr "Login Namen anstatt des kompletten Namens verwenden"
 
 #: Config.php:1455
 msgid "Use login name instead of full name for webdav."
-msgstr ""
+msgstr "Login Namen anstatt des kompletten Namens für WebDAV verwenden."
 
 #: Config.php:1464
 msgid "List of WebDav agent strings that will be denied"
-msgstr ""
+msgstr "Liste der WebDAV Agent-Stings die abgelehnt werden"
 
 #: Config.php:1466
 msgid "List of WebDav agent strings that will be denied."
@@ -3851,15 +3849,15 @@ msgstr[1] "Rollen MItglieder"
 
 #: Model/RoleMember.php:49
 msgid "role_id"
-msgstr ""
+msgstr "role_id"
 
 #: Model/RoleMember.php:55
 msgid "account_type"
-msgstr ""
+msgstr "account_type"
 
 #: Model/RoleMember.php:61
 msgid "account_id"
-msgstr ""
+msgstr "account_id"
 
 #: Model/Container.php:70
 msgid "Container"
@@ -3872,8 +3870,9 @@ msgid "Order"
 msgstr "Reihenfolge"
 
 #: Model/Container.php:113
+#, fuzzy
 msgid "Application"
-msgstr ""
+msgstr "Applikation"
 
 #: Model/Container.php:118
 msgid "Owner"
@@ -4378,5 +4377,263 @@ msgid "The right Resource Admin must be set once."
 msgstr ""
 "Das Recht Ressourcen Administration muss mindestens einmal festgelegt werden."
 
+msgid "- The last filter I used -"
+msgstr "- Der letzte ausgewählte Filter -"
+
+msgid "You are not allowed to remove all (admin) grants for this container."
+msgstr ""
+"Sie sind nicht berechtigt alle (Administrativen) Berechtigungen für "
+"diesen Ordner zu entfernen."
+
+msgid "Personal containers can have only one owner!"
+msgstr "Persönliche Ordner können lediglich einen Eigentümer haben!"
+
+msgid "Add new Element..."
+msgstr "Neues Element zufügen…"
+
+msgid "Grant"
+msgid_plural "Grants"
+msgstr[0] "Berechtigung"
+msgstr[1] "Berechtigungen"
+
+msgid "Is Quarantined"
+msgstr "Unter Quarantäne"
+
+msgid "Not a valid time"
+msgstr "Kein gültiger Zeitpunkt"
+
+msgid "No access to {0}"
+msgstr "Kein Zugriff auf {0}"
+
+msgid "Hierarchy/Name"
+msgstr "Hierarchie/Name"
+
+msgid "Grid Panel Key Bindings"
+msgstr "Tastenkürzel Listenansicht"
+
+msgid "User E-Mail-Address {0} not in allowed domains"
+msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
+
+msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
+msgstr ""
+"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
+
+msgid "Accesslog rotation in days"
+msgstr "Zugriffslog-Rotation in Tagen"
+
+msgid "Trusted Proxies"
+msgstr "Vertrauenswürdige Proxies"
+
+msgid "If this is set, the HTTP_X_FORWARDED_FOR header is used."
+msgstr "Wenn gesetzt, wird die Kopfzeile HTTP_X_FORWARDED_FOR genutzt."
+
+msgid "Authentication by Email"
+msgstr "Authentifikation per E-Mail"
+
+msgid "Create FullText Indices"
+msgstr "Volltext Indizes anlegen"
+
+msgid "Autodiscover"
+msgstr "Autoermittlung"
+
+msgid "Autodiscover mail config"
+msgstr "Autoermittlung E-Mail Konfiguration"
+
+msgid "Sentry Loglevel Bitmask"
+msgstr "Sentra Loglevel Bitmaske"
+
+msgid "Support NTLM V2 authentication"
+msgstr "Unterstütze NTML V2 Authentifikation"
+
+msgid ""
+"Support NTLM V2 authentication and store account password as ntlm v2 hash"
+msgstr ""
+"Unterstütze NTML V2 Authentifikation und speichern des Passworts als html "
+"v2 Hash"
+
+msgid "Update NTLM V2 password has on login"
+msgstr "NTLM V2 Passwort Hash beim Login aktualisieren"
+
+msgid "NTLM V2 password hash encryption key"
+msgstr "NTML V2 Passwort Hash Schlüssel"
+
+msgid ""
+"Encryption key used to encrypt and decrypt the NTLM V2 password hash when "
+"stored in the database."
+msgstr ""
+"Schlüssel der zum Verschlüsseln und Entschlüsseln des NTLM V2 Passwort "
+"Hash in der Datenbank verwendet wird."
+
+msgid "User password policy"
+msgstr "Nutzer Passwort Richtlinie"
+
+msgid "User password policy settings."
+msgstr "Nutzer Passwort Richtlinien Einstellungen."
+
+msgid "Download password policy"
+msgstr "Download Passwort Richtlinie"
+
+msgid "Download password policy settings."
+msgstr "Download Passwort Richtlinien Einstellungen."
+
+msgid ""
+"Set Tine 2.0 maintenance mode. Possible values: \"off\", \"normal\" (only "
+"users having the maintenance right can login) and \"all\""
+msgstr ""
+"Tine 2.0 in den Wartungsmodus setzten. Mögliche Werte: „off“, "
+"„normal“ (nur Nutzer mit dem Wartungsmodus Recht können sich einloggen) "
+"und „all“"
+
+msgid "custom help url"
+msgstr "Angepasste Hilfe URL"
+
+msgid "Custom url for help."
+msgstr "Angepasste URL für die Hilfe."
+
+msgid "custom shop url"
+msgstr "Angepasste Shop URL"
+
+msgid "Custom url for the shop."
+msgstr "Angepasste URL für den Shop."
+
+msgid "custom bugreport url"
+msgstr "Angepasste Bugreport URL"
+
+msgid "Custom bugreport url."
+msgstr "Angepasste URL für Burreports."
+
+msgid "custom favicon paths"
+msgstr "Angepasster Favicon Pfad"
+
+msgid "Paths to custom favicons."
+msgstr "Angepasster Pfad für Favicons."
+
+msgid "custom svg favicon paths"
+msgstr "Angepasster SVG Favicon Pfad"
+
+msgid "Paths to custom svg favicon."
+msgstr "Angepasster Pfad für SVG Favicons."
+
+msgid "Mask Icon Color"
+msgstr "Maik-Icon Farbe"
+
+msgid "Background color of mask icon (safari pinned tab)."
+msgstr "Hintergrund-Farbe des Mask-Icons (Safari Angebetete Tabs)."
+
+msgid "Installation logo"
+msgstr "Installations-Logo"
+
+msgid "Path to custom installation logo."
+msgstr "Pfad zum angepassten Installations-Logo."
+
+msgid "custom website url"
+msgstr "Angepasste Webseiten URL"
+
+msgid "Custom url used for logo on login page."
+msgstr "Angepasste URL das für das Logo der Login-Seite verwendet wird."
+
+msgid ""
+"List of WebDav agent strings that will be denied. Expects a list of "
+"regular expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
+msgstr ""
+"Liste der WebDAV Agent-Stings die abgelehnt werden. Eine Liste von "
+"regulären Ausdrücken wird erwartet - wie z.B.: [„/iPhone/„,“/iOS/„,“/"
+"Android/„]"
+
+msgid "Enable SyncToken plugin"
+msgstr "SyncToken Plugin aktivieren"
+
+msgid "Enable the use of the SyncToken plugin."
+msgstr "Aktiviere die Nutzung des SyncToken Plugins."
+
+msgid "Class for preview service"
+msgstr "Klasse des Preview-Services"
+
+msgid "Class to use, to connect to preview service."
+msgstr "Klassename der zur Verbindung zum Preview-Service verwendet wird."
+
+msgid "Max file size for preview service"
+msgstr "Maximale Dateigröße für den Preview-Service"
+
+msgid "Max file size for preview service."
+msgstr "Maximale Dateigröße für den Preview-Service."
+
+msgid ""
+"Max per preview preview service error count, for trying to generate "
+"preview."
+msgstr "Maximale Fehlerzahl beim versuch ein Preview zu erzeugen."
+
+msgid "Antivirus Scan Mode"
+msgstr "Antivirus Scan-Modus"
+
+msgid "Antivirus Scan URL"
+msgstr "Antivirus Scan URL"
+
+msgid "Filter sync token settings"
+msgstr "Filter-Sync Token Einstellungen"
+
+msgid "Max age in days"
+msgstr "Maximales Alter in Tagen"
+
+msgid "Max amount in total"
+msgstr "Maximale Gesamtanzahl"
+
+msgid "Max amount per filter"
+msgstr "Maximalanzahl pro Filter"
+
+msgid "Show UI"
+msgstr "Zeige Oberfläche"
+
+msgid "Should the quota UI elements be rendered or not."
+msgstr ""
+"Sollen die Kontingentsanzeige Oberflächenelemente angezeigt werden oder "
+"nicht."
+
+msgid "Name of the role to notify if soft quota is exceeded"
+msgstr ""
+"Namen der Rolle die benachrichtigt werden soll wenn die Soft-Quote "
+"überschritten ist"
+
+msgid "Skip Imap Quota Notfication"
+msgstr "IMAP Kontingents-Benachrichtigungen unterdrücken"
+
 msgid "Tine20 URL"
 msgstr "Tine20 URL"
+
+msgid ""
+"The full URL including scheme, hostname, optional port and optional uri "
+"part under which tine20 is reachable."
+msgstr ""
+"Die vollständige URL mit Schema, Hostnamen, optionalen Port und "
+"optionalen URI Anteil unter der diese Installation erreichbar ist. "
+
+msgid "Hierarchy"
+msgstr "Hierarchie"
+
+msgid "Area Lock Configuration"
+msgid_plural "Area Lock Configurations"
+msgstr[0] "Bereichs-Beschränkungs Konfiguration"
+msgstr[1] "Bereichs-Beschränkungs Konfigurationen"
+
+msgid "Provider"
+msgstr "Provider"
+
+msgid "Provider Configuration"
+msgstr "Provider Konfiguration"
+
+msgid "Scheduler task"
+msgid_plural "Scheduler tasks"
+msgstr[0] "Zeitplan Aufgabe"
+msgstr[1] "Zeitplan Aufgaben"
+
+msgid "Configuration"
+msgstr "Konfiguration"
+
+msgid "Last run"
+msgstr "Letzter Ausführung"
+
+msgid "Last run duration"
+msgstr "Dauer der letzten Ausführung"
+
+msgid "Next run"
+msgstr "Nächste Ausführung"

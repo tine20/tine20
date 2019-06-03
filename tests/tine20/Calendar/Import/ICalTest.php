@@ -319,4 +319,18 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $dtstart->setTimezone(Tinebase_Core::getUserTimezone());
         self::assertEquals('20171006T150001', $dtstart->format('Ymd\THis'));
     }
+
+    public function testImportWithBadEncoding()
+    {
+        $importEvents = $this->_importHelper('bad_encoding.ics', 15, false, array(
+            'onlyBasicData' => true
+        ));
+        $uebungen = 0;
+        foreach ($importEvents as $event) {
+            if (preg_match('/^Übung/', $event->summary)) {
+                $uebungen++;
+            }
+        }
+        self::assertEquals(4, $uebungen, print_r($importEvents->summary, true));
+    }
 }

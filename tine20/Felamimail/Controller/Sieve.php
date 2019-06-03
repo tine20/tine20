@@ -673,7 +673,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
 
         $fileSystem = Tinebase_FileSystem::getInstance();
         $translate = Tinebase_Translation::getTranslation('Felamimail');
-        $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $locale = Tinebase_Core::getLocale();
         $subject = $translate->_('You have new mail from ', $locale);
         if (empty($adminBounceEmail = Felamimail_Config::getInstance()->
                 {Felamimail_Config::SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL}) ||

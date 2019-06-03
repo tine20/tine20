@@ -84,6 +84,6 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
             return false;
         }
 
-        return $result['status'] === Tinebase_FileSystem_AVScan_Result::RESULT_OK;
+        return $result === Tinebase_FileSystem_AVScan_Result::RESULT_RELOADING;
     }
 }

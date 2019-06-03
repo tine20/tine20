@@ -2,7 +2,7 @@
 <config>
     <name>sales_import_product_csv</name>
     <model>Sales_Model_Product</model>
-    <plugin>Tinebase_Import_Csv_Generic</plugin>
+    <plugin>Sales_Import_Product_Csv</plugin>
     <type>import</type>
     <headline>1</headline>
     <dryrun>0</dryrun>

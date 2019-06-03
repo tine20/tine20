@@ -367,12 +367,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         Tinebase_Session::writeClose(true);
 
         $filesToWatch = $filesToWatch ? $filesToWatch : $this->_getFilesToWatch($_fileType);
-        if ($_fileType == 'js' && TINE20_BUILDTYPE != 'DEVELOPMENT') {
-            $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
-            if (! empty($customJSFiles)) {
-                $filesToWatch = array_merge($filesToWatch, (array)$customJSFiles);
-            }
-        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') Got files to watch: ' . print_r($filesToWatch, true));
@@ -416,6 +410,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
             if ($_fileType != 'lang') {
                 // adds new server version etag for client version check
+                echo "Tine = Tine || {}; Tine.clientVersion = Tine.clientVersion || {};";
                 echo "Tine.clientVersion.assetHash = '$serverETag';";
             }
         }

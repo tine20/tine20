@@ -90,7 +90,13 @@ Tine.Tinebase.tineInit = {
     lsPrefix: Tine.Tinebase.common.getUrl('path') + 'Tine',
     
     onPreferenceChangeRegistered: false,
-    
+
+    initCustomJS: function() {
+        _.each(_.get(window, 'Tine.customJS', []), function(initCustomJS) {
+            initCustomJS()
+        })
+    },
+
     initWindow: function () {
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
@@ -140,10 +146,17 @@ Tine.Tinebase.tineInit = {
                 return;
             }
 
-            e.stopPropagation();
-            e.preventDefault();
+            // allow native context menu on second context click
+            if (Tine.Tinebase.MainContextMenu.isVisible()) {
+                Tine.Tinebase.MainContextMenu.hide();
+                return;
+            }
 
-            Tine.Tinebase.MainContextMenu.showIf(e);
+            // deny native context menu if we have an oown one
+            if (Tine.Tinebase.MainContextMenu.showIf(e)) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
         }, this);
 
         Ext.getBody().on('click', function(e) {
@@ -734,7 +747,9 @@ Tine.Tinebase.tineInit = {
         // load initial js of user enabled apps
         // @TODO: move directly after login (login should return requested parts of registry)
         var appLoader = require('./app-loader!app-loader.js');
-        return appLoader(Tine.Tinebase.registry.get('userApplications'));
+        return appLoader(Tine.Tinebase.registry.get('userApplications')).then(function() {
+            return Tine.Tinebase.tineInit.initCustomJS();
+        });
     },
 
     /**

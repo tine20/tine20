@@ -1,7 +1,7 @@
 Inventarnummer,Name,Beschreibung,Anschaffung,Standort,Garantie,Status,Preis,Kostenstelle,Rechnung,Rechnungsdatum,Abgeschrieben,Seriennummer,Verfügbare Anzahl,Totale Anzahl
-113,Büro-Stuhl,Variante 1,2015-06-12,B121,2016-06-12,1,150,2,1,2015-06-12,1,12345,1,6
-114,Büro-Stuhl,Variante 2,2016-06-12,Meeting-Raum,2018-06-08,1,155,2,2,2016-06-12,1,12346,10,20
-115,Büro-Stuhl,Variante 3,2018-06-08,K20,2019-06-08,1,169,2,3,2018-06-08,1,12347,2,2
-116,Tisch,Klein,2002-04-01,Stock 1,2019-06-08,0,100,2,4,2002-04-01,1,12348,0,20
-117,Tisch,Groß,2018-06-07,Stock 1,2019-06-08,0,200,2,5,2018-06-07,1,12349,2,10
-118,Tisch,Rund,2018-06-07,Stock EG,2019-06-08,1,250,2,6,2018-06-07,1,12350,1,5
+113,Büro-Stuhl,Variante 1,friday,B121,nextyear,1,150,2,1,friday2week,1,12345,1,6
+114,Büro-Stuhl,Variante 2,monday,Meeting-Raum,nextyear,1,155,2,2,friday2week,1,12346,10,20
+115,Büro-Stuhl,Variante 3,today,K20,nextyear,1,169,2,3,friday2week,1,12347,2,2
+116,Tisch,Klein,today,Stock 1,nextyear,0,100,2,4,friday2week,1,12348,0,20
+117,Tisch,Groß,today,Stock 1,nextyear,0,200,2,5,friday2week,1,12349,2,10
+118,Tisch,Rund,nextyear,Stock EG,nextyear,1,250,2,6,friday2week,1,12350,1,5

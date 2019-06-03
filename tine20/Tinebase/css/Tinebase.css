@@ -7,6 +7,13 @@ html, body {
     height:100%;
 }
 
+/* see ace-tm styles */
+.string { color: rgb(3, 106, 7); }
+.number { color: rgb(0, 0, 205); }
+.boolean { color: rgb(88, 92, 246); }
+.null { color: magenta; }
+.key { color: rgb(49, 132, 149); }
+
 .ApplicationIconCls {
     background-image:url(../../images/icon-set/icon_debug.svg);
 }

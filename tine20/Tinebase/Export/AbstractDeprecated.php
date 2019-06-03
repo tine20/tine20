@@ -165,7 +165,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
         $this->_controller = ($_controller !== NULL) ? $_controller : Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = $this->_getExportConfig($_additionalOptions);
-        $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $this->_locale = Tinebase_Core::getLocale();
         if (isset($_additionalOptions['sortInfo'])) {
             if (isset($_additionalOptions['sortInfo']['field'])) {
                 $this->_sortInfo['sort'] = $_additionalOptions['sortInfo']['field'];

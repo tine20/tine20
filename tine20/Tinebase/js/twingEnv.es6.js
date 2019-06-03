@@ -15,7 +15,9 @@ export default function getTwingEnv () {
   if (!twingEnv) {
     let loader = new TwingLoaderArray([])
 
-    twingEnv = new TwingEnvironment(loader)
+    twingEnv = new TwingEnvironment(loader, {
+      autoescape: false
+    })
 
     twingEnv.addGlobal('app', {
       branding: _.filter(Tine.Tinebase.registry.getAll(), function (v, k) { return k.match(/^branding/) }),

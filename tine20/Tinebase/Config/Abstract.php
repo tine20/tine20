@@ -67,10 +67,13 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     const TYPE_RECORD = 'record';
 
-    const APP_NAME = 'appName';
+    const APPLICATION_NAME = 'appName';
     const MODEL_NAME = 'modelName';
 
     // @TODO: remove TYPE_RECORD_CONTROLLER and derive it from modelName!
+    /**
+     * @deprecated
+     */
     const TYPE_RECORD_CONTROLLER = 'recordController';
 
     /**
@@ -181,7 +184,21 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         return $config;
     }
-    
+
+    /**
+     * @todo JSON encode all config data via update script! remove this function
+     *
+     * @deprecated
+     * @param string $val
+     * @return string
+     */
+    public static function uncertainJsonDecode($val)
+    {
+        $result = json_decode($val, TRUE);
+        if (null === $result && strtolower($val) !== '{null}') $result = $val;
+
+        return $result;
+    }
     /**
      * retrieve a value and return $default if there is no element set.
      *
@@ -213,9 +230,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
         
         if (true === $dbAvailable && null !== ($config = $this->_loadConfig($name))) {
-            $dbConfigArray = json_decode($config->value, TRUE);
-            // @todo JSON encode all config data via update script!
-            if (null === $dbConfigArray && strtolower($config->value) !== '{null}') $dbConfigArray = $config->value;
+            $dbConfigArray = static::uncertainJsonDecode($config->value);
         }
 
         $data = null;

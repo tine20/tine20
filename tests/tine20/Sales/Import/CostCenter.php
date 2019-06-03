@@ -31,6 +31,7 @@ class Sales_Import_CostCenter extends TestCase
         $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_CostCenter', [
             'definition' => 'sales_import_costcenter_csv',
+            'file' => 'costcenter.csv',
         ]);
         $importer->importDemodata();
         $filter = Sales_Model_CostCenterFilter::getFilterForModel('Sales_Model_CostCenter', [

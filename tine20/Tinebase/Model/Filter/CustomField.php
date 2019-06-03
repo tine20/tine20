@@ -123,7 +123,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $type = $this->_cfRecord->definition['type'];
         }
 
-switch ($type) {
+        $filterClass = null;
+        switch ($type) {
             case 'string':
             case 'text':
                 $filterClass = Tinebase_Model_Filter_Text::class;
@@ -179,6 +180,9 @@ switch ($type) {
                     'options' => $this->_valueFilterOptions
                 ]);
             $this->_operators = $this->_valueFilter->getOperators();
+        } else {
+            // allow default operators
+            $this->_operators = ['contains', 'AND', 'OR'];
         }
 
         parent::__construct($_fieldOrData, $_operator, $_value, $_options);

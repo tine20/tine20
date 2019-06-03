@@ -3201,7 +3201,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     if (is_array($fileNode->available_revisions) && count($fileNode->available_revisions) > $numRev) {
                         $revisions = $fileNode->available_revisions;
                         sort($revisions, SORT_NUMERIC);
-                        $count += $this->_fileObjectBackend->deleteRevisions($fileNode->object_id, array_slice($revisions, 0, count($revisions) - $numRevisions));
+                        $count += $this->_fileObjectBackend->deleteRevisions($fileNode->object_id, array_slice($revisions, 0, count($revisions) - $numRev));
                     }
                 }
 

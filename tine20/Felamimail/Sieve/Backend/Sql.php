@@ -207,6 +207,7 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             $this->_rulesBackend->deleteByProperty($this->_accountId, 'account_id');
+            $id = 1;
             foreach ($this->_rules as $rule) {
                 $ruleRecord = new Felamimail_Model_Sieve_Rule();
                 $ruleRecord->setFromFSR($rule);
@@ -214,6 +215,11 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
                 $ruleRecord->conditions = Zend_Json::encode($ruleRecord->conditions);
                 if (is_array($ruleRecord->action_argument)) {
                     $ruleRecord->action_argument = Zend_Json::encode($ruleRecord->action_argument);
+                }
+                if (! $ruleRecord->getId()) {
+                    // TODO check if ID is already set?
+                    // TODO use UUID?
+                    $ruleRecord->setId($id++);
                 }
                 $this->_rulesBackend->create($ruleRecord);
             }

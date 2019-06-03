@@ -33,14 +33,12 @@ class ExampleApplication_Setup_Update_12 extends Setup_Update_Abstract
     // gets executed 2nd
     public function update001()
     {
-        /** app version 12.0 should be of course 12.1 or similar */
-        $this->addApplicationUpdate('ExampleApplication', '12.0', self::RELEASE012_UPDATE001);
+        $this->addApplicationUpdate('ExampleApplication', '12.1', self::RELEASE012_UPDATE001);
     }
 
     // gets executed first
     public function update002()
     {
-        /** app version 12.0 should be of course 12.2 or similar */
-        $this->addApplicationUpdate('ExampleApplication', '12.0', self::RELEASE012_UPDATE002);
+        $this->addApplicationUpdate('ExampleApplication', '12.2', self::RELEASE012_UPDATE002);
     }
 }

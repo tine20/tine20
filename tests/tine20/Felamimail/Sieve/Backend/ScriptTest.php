@@ -123,12 +123,33 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         $script->addRule($rule);
         
         $sieveScript = $script->getSieve();
-        #echo $sieveScript;
         $this->assertContains('if anyof (address :contains "From" "info@example.com")', $sieveScript);
         $this->assertContains('fileinto "INBOX/UNITTEST";', $sieveScript);
         $this->assertContains('Felamimail_Sieve_Rule', $sieveScript);
     }
-    
+
+    public function testAutoReplyAction()
+    {
+        $script    = new Felamimail_Sieve_Backend_Script();
+        $rule      = new Felamimail_Sieve_Rule();
+        $action    = new Felamimail_Sieve_Rule_Action();
+
+        $action->setType(Felamimail_Sieve_Rule_Action::VACATION)
+            ->setArgument('my reason');
+
+        $rule->setEnabled(true)
+            ->setId(12)
+            ->setAction($action);
+
+        $script->addRule($rule);
+
+        $sieveScript = $script->getSieve();
+        $this->assertContains('require ["fileinto","reject","copy","vacation"]', $sieveScript,
+            'vacation extension is required in script: ' . $sieveScript);
+        $this->assertContains('vacation "my reason";', $sieveScript);
+        $this->assertContains('Felamimail_Sieve_Rule', $sieveScript);
+    }
+
     /**
      * test enabled vacation
      */

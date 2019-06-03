@@ -52,6 +52,18 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
             me.on('toggle', me.onToggle, me);
         }
+
+        // grid selection interface for DisplayPanel/Dialog
+        if (! this.initialConfig.selectionModel && this.initialConfig.record) {
+            this.initialConfig.selectionModel = {
+                getSelectionFilter: function() {
+                    return [{field: 'id', operator: 'equals', value: me.initialConfig.record.id }];
+                },
+                getCount: function() {
+                    return 1
+                }
+            };
+        }
         this.supr().initComponent.call(this);
     },
 
@@ -190,7 +202,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         // remove all items no longer in recipient grid
         _.each(me.menu.items.items, function(item) {
             // check if in grid
-            if (item.itemId && emailsInRecipientGrid.indexOf(item.itemId) === -1) {
+            if (_.get(item, 'itemId') && emailsInRecipientGrid.indexOf(item.itemId) === -1) {
                 // item no longer in grid
                 me.menu.remove(item);
             }
@@ -252,6 +264,8 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
             me.addStaticMenuItems();
 
+            me.addDownloadMenuItem();
+
             me.suggestionsLoaded = true;
             me.setIconClass('action_file');
         });
@@ -280,6 +294,36 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                 return menu;
             }, [])
         });
+    },
+
+    addDownloadMenuItem: function() {
+        if (! _.isFunction(_.get(this, 'initialConfig.selectionModel.getSelectionFilter'))) return;
+
+        var me = this,
+            messageFilter = this.initialConfig.selectionModel.getSelectionFilter(),
+            messageIds = messageFilter.length == 1 && messageFilter[0].field == 'id' ?
+                messageFilter[0].value : null,
+            messageCount = this.initialConfig.selectionModel.getCount();
+
+        if (messageCount == 1 && messageIds) {
+            me.menu.addItem('-');
+            me.menu.addItem({
+                text: me.app.i18n._('Download'),
+                iconCls: 'action_download',
+                // hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
+                handler: me.onMessageDownload.createDelegate(me, [messageIds])
+            });
+        }
+    },
+
+    onMessageDownload: function(messageId) {
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'Felamimail.downloadMessage',
+                requestType: 'HTTP',
+                messageId: messageId
+            }
+        }).start();
     },
 
     /**

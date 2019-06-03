@@ -19,6 +19,8 @@
  */
 class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 {
+    const MODEL_NAME_PART = 'ExampleRecord';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *

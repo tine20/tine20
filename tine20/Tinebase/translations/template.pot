@@ -4345,3 +4345,6 @@ msgstr ""
 
 msgid "The right Resource Admin must be set once."
 msgstr ""
+
+msgid "- The last filter I used -"
+msgstr ""

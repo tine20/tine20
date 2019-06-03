@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2015-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -90,7 +90,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
         $appDBConfig = $this->_configBackend->search($_filter);
 
         foreach ($appConfigDefinitions as $name => $definition) {
-            if (array_key_exists('setByAdminModule', $definition) && $definition['setByAdminModule']) {
+            if (isset($definition['setByAdminModule']) && $definition['setByAdminModule']) {
                 $configFromFile = $appConfigObject->getConfigFileSection($name);
                 $configFromDb = $appDBConfig->filter('name', $name)->getFirstRecord();
 
@@ -112,6 +112,17 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
 
                 // exclude config's which the admin can't set
                 if ($configRecord->source != Tinebase_Model_Config::SOURCE_FILE) {
+
+                    if (isset($definition['type']) && Tinebase_Config_Abstract::TYPE_RECORD === $definition['type']) {
+                        $val = Tinebase_Config::resolveRecordValue(
+                            Tinebase_Config_Abstract::uncertainJsonDecode($configRecord->value), $definition);
+                        if ($val instanceof Tinebase_Record_Interface) {
+                            $val = $val->toArray(true);
+                        }
+
+                        $configRecord->value = json_encode($val);
+                    }
+
                     $configRecords->addRecord($configRecord);
                 }
             }
@@ -160,12 +171,39 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
         $this->_mergeDefinition($configRecord, $definition);
         $configRecord->source = Tinebase_Model_Config::SOURCE_DB;
 
+        if (isset($definition['type']) && Tinebase_Config_Abstract::TYPE_RECORD === $definition['type']) {
+            $val = Tinebase_Config::resolveRecordValue(
+                Tinebase_Config_Abstract::uncertainJsonDecode($configRecord->value), $definition);
+            if ($val instanceof Tinebase_Record_Interface) {
+                $val = $val->toArray(true);
+            }
+
+            $configRecord->value = json_encode($val);
+        }
+
         return $configRecord;
     }
 
 
 
     /*************** add / update / delete lead *****************/
+
+    protected function _inspectRecord(Tinebase_Model_Config $_config, Tinebase_Model_Application $_app)
+    {
+        $appConfigObject = Tinebase_Config::getAppConfig($_app->name);
+        $definition = $appConfigObject->getDefinition($_config->name);
+
+        if (isset($definition['type']) && Tinebase_Config_Abstract::TYPE_RECORD === $definition['type'] && ($val =
+                json_decode($_config->value, true))) {
+            if (is_array($val) && isset($val['id']) && !empty($val['id'])) {
+                $val = $val['id'];
+            } else {
+                $val = null;
+            }
+
+            $_config->value = json_encode($val);
+        }
+    }
 
     /**
      * add one record
@@ -182,6 +220,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
             throw new Tinebase_Exception_AccessDenied("You do not have admin rights for $app->name");
         }
 
+        $this->_inspectRecord($_record, $app);
         $createdRecord = $this->_configBackend->create($_record);
 
         return $this->get($createdRecord->getId());
@@ -202,6 +241,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
             throw new Tinebase_Exception_AccessDenied("You do not have admin rights for $app->name");
         }
 
+        $this->_inspectRecord($_record, $app);
         $this->_configBackend->update($_record);
 
         return $this->get($_record->getId());
@@ -239,11 +279,15 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
     /**
      * Returns a set of leads identified by their id's
      *
-     * @param   array array of record identifiers
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @param $_ids
+     * @param bool $_ignoreACL
+     * @param Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
      * @throws Tinebase_Exception_NotImplemented
+     * @internal param array $array of record identifiers
      */
-    public function getMultiple($_ids)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         throw new Tinebase_Exception_NotImplemented('Not Implemented');
     }

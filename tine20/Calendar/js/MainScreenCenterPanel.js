@@ -1013,7 +1013,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             me = this,
             promise = Promise.resolve();
 
-        updatedEvent.markDirty();
+        if (updatedEvent.ui) {
+            updatedEvent.ui.markDirty();
+        }
         store.replaceRecord(event, updatedEvent);
 
         if (! event.inPeriod(view.getPeriod())) {

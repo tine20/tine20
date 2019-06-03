@@ -140,7 +140,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             var regItems = Ext.ux.ItemRegistry.itemMap['Tine.Tinebase.MainMenu.userActions'] || [];
             
             Ext.each(regItems, function(reg) {
-                var addItem = def = reg.item;
+                var addItem = reg.item;
 
                 this.userActions.push(addItem);
             }, this);
