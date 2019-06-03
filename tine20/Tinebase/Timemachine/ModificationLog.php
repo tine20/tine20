@@ -889,15 +889,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         }
 
         return $modifications;
-
-        /** old
-
-        $this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->toArray(), $_curRecord->getModlogOmitFields());
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Logged ' . count($modifications) . ' modifications.');
-        
-        return $modifications; */
     }
     
     /**
@@ -1173,7 +1164,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 self::increaseRecordSequence($_newRecord, $_curRecord);
                 break;
             default:
-                throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete}.');
+                throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete|undelete}.');
                 break;
         }
         
