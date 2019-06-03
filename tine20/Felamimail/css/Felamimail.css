@@ -316,9 +316,9 @@
 }
 
 /***** location renderer ******/
-
+.preview-panel-felamimail-filelocations,
 .felamimail-compose-info .x-panel-body {
-    background-color: lightyellow;
+    background-color: #ffffaa;
 }
 
 .felamimail-location {
