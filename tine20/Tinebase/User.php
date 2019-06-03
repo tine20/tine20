@@ -619,6 +619,16 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
         }
 
+        if ($currentUser->is_deleted) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Undeleteting user ' . $user->accountLoginName);
+            $currentUser->visibility = Tinebase_Model_FullUser::VISIBILITY_DISPLAYED;
+            $currentUser->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'undelete');
+            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
+            $recordNeedsUpdate = false;
+        }
+
         if ($recordNeedsUpdate) {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
             $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
