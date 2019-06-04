@@ -2891,6 +2891,7 @@ HumanResources_CliTests.testSetContractsEndDate */
      * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
      * @returns Tinebase_Record_Interface|null
+     * @throws Zend_Db_Statement_Exception
      */
     public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
     {
@@ -2908,6 +2909,14 @@ HumanResources_CliTests.testSetContractsEndDate */
         } catch (Tinebase_Exception_Duplicate $ted) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' ' . $filename . ' already exists');
+            return null;
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (preg_match('/Duplicate entry/', $zdse->getMessage())) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Location already exists');
+            } else {
+                throw $zdse;
+            }
             return null;
         }
         return $record;
