@@ -162,8 +162,8 @@ class Crm_Import_CsvTest extends ImportTestCase
             }
         }
 
-        $this->assertGreaterThan(1, count($importNotifications),
-            'expecting 2 or more mails (at least for unittest + sclever) / messages:'
+        $this->assertGreaterThan(0, count($importNotifications),
+            'expecting 1 or more mails (at least for unittest + sclever) / messages:'
             . print_r($messages, true));
         $firstMessage = $importNotifications[0];
         $this->assertContains('neuer lead 2', $firstMessage->getBodyText()->getContent(), 'lead name missing');
