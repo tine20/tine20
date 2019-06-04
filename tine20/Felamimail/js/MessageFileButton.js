@@ -494,7 +494,20 @@ Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations, glue
             iconCls = model ? model.getIconCls() : '',
             icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '';
 
-        return text.concat('<span class="felamimail-location">' + icon +
+        return text.concat('<span class="felamimail-location" ' +
+            'onclick="Tine.Felamimail.MessageFileButton.locationClickHandler(\'' + model.getPhpClassName() + "','" + location.record_id + '\')">' + icon +
             '<span class="felamimail-location-text">' + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>');
     }, []).join(glue);
+};
+
+Tine.Felamimail.MessageFileButton.locationClickHandler = function (recordClassName, recordId) {
+    let recordClass = Tine.Tinebase.data.RecordMgr.get(recordClassName);
+    let recordData = {};
+    let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
+    recordData[recordClass.getMeta('idProperty')] = recordId;
+
+    editDialogClass.openWindow({
+        record: Tine.Tinebase.data.Record.setFromJson(recordData, recordClass),
+        recordId: recordId
+    });
 };

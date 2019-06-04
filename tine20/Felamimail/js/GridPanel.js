@@ -1116,15 +1116,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (e.getTarget('.MessageFileIcon')) {
             let record = this.getStore().getAt(row);
             let fileLocation = record.get('fileLocations')[0];
-            let recordClass = Tine.Tinebase.data.RecordMgr.get(fileLocation.model);
-            let recordData = {};
-            let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
-            recordData[recordClass.getMeta('idProperty')] = fileLocation.record_id;
+            Tine.Felamimail.MessageFileButton.locationClickHandler(fileLocation.model, fileLocation.record_id);
 
-            editDialogClass.openWindow({
-                record: Tine.Tinebase.data.Record.setFromJson(recordData, recordClass),
-                recordId: fileLocation.record_id
-            });
             e.stopEvent();
         }
 

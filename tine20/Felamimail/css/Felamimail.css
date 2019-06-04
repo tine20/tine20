@@ -101,6 +101,10 @@
     padding-left: 2px;
 }
 
+.FelamimailFlagIcon.MessageFileIcon {
+    cursor: pointer;
+}
+
 /**** preview *****/
 
 .preview-panel-felamimail {
@@ -323,6 +327,7 @@
 
 .felamimail-location {
     padding-right: 5px;
+    cursor: pointer;
 }
 
 .felamimail-location-icon {
