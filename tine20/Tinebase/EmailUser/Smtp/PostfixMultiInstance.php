@@ -124,7 +124,6 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
         $userIDMap    = $this->_db->quoteIdentifier($this->_userTable . '.id');
         $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']);
 
-
         $select = $this->_db->select()
             ->from($this->_userTable)
             ->group(array($this->_userTable . '.userid', $this->_userTable . '.client_idnr'))
@@ -241,6 +240,9 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      * set aliases
      * 
      * @param array $_smtpSettings
+     * @throws Tinebase_Exception_SystemGeneric
+     *
+     * @todo remove code duplication with parent::_createAliasDestinations
      */
     protected function _createAliasDestinations($_smtpSettings)
     {
@@ -254,6 +256,10 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
         $users_id = $_smtpSettings['id'];
             
         foreach ($_smtpSettings[$this->_propertyMapping['emailAliases']] as $aliasAddress) {
+            if ($aliasAddress === $_smtpSettings['email']) {
+                throw new Tinebase_Exception_SystemGeneric('It is not allowed to set an alias equal to the main email address');
+            }
+
             // check if in primary or secondary domains
             if (! empty($aliasAddress) && $this->_checkDomain($aliasAddress)) {
                 
