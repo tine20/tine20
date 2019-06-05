@@ -89,7 +89,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
      */
     public function testAddUser()
     {
-        $user = TestCase::getTestUser();
+        $user = TestCase::getTestUser([
+            'accountLoginName'      => 'phpunitpostfix',
+            'accountEmailAddress'   => 'phpunitpostfix@' . $this->_mailDomain,
+        ]);
         $user->smtpUser = new Tinebase_Model_EmailUser(array(
             'emailAddress'     => $user->accountEmailAddress,
             'emailForwardOnly' => true,

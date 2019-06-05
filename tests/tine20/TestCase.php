@@ -818,21 +818,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * returns a test user object
      *
+     * @param array $userdata
      * @return Tinebase_Model_FullUser
      */
-    public static function getTestUser()
+    public static function getTestUser($userdata = [])
     {
         $emailDomain = TestServer::getPrimaryMailDomain();
 
-        $user  = new Tinebase_Model_FullUser(array(
+        $user = new Tinebase_Model_FullUser(array_merge([
             'accountLoginName'      => 'tine20phpunituser',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit User',
             'accountEmailAddress'   => 'phpunit@' . $emailDomain,
-        ));
+        ], $userdata));
 
         return $user;
     }
