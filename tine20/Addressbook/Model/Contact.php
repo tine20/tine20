@@ -685,6 +685,27 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
         }
+
+        // truncate some values if too long
+        // TODO add generic code for this? maybe it should be configurable
+        foreach ([
+            'n_fn' => 255,
+            'n_fileas' => 255,
+            'org_name' => 255,
+            'n_given' => 64,
+            'n_middle' => 64,
+            'n_prefix' => 64,
+            'n_suffix' => 64,
+            'n_short' => 64,
+         ] as $field => $allowedLength) {
+            if (isset($_data[$field]) && mb_strlen($_data[$field]) > $allowedLength) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Field has been truncated: '
+                        . $field . ' original data: ' . $_data[$field]);
+                $_data[$field] = mb_substr($_data[$field], 0, $allowedLength);
+            }
+        }
+
         return $_data;
     }
     
