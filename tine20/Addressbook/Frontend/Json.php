@@ -133,6 +133,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
+        // TODO discuss this behaviour - do we still need it when we have the group mailing sieve rules?
         $oldFeatureValue = null;
         $adbConfig = Addressbook_Config::getInstance();
         try {

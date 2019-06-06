@@ -125,7 +125,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'email'             => array(
-                'label'             => 'Email', //_('Email')
+                'label'             => 'E-Mail', //_('E-Mail')
                 'type'              => 'string',
                 'queryFilter'       => true,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
