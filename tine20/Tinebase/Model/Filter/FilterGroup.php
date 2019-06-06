@@ -327,8 +327,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _createForeignRecordFilterFromArray($_filterData)
     {
+        if (! isset($_filterData['value']['filters'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__
+                . ' Skipping filter (foreign record filter syntax problem) -> '
+                . static::class . ' with filter data: ' . print_r($_filterData, TRUE));
+            return;
+        }
+
         $filterData = $_filterData;
-                
+
         $filterData['value'] = $_filterData['value']['filters'];
         $filterData['options'] = array(
             'isGeneric'         => TRUE
@@ -364,7 +372,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 //                }
                 break;
             default:
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__
+                    . ' Skipping filter (foreign record filter syntax problem) -> '
                     . static::class . ' with filter data: ' . print_r($_filterData, TRUE));
                 return;
         }
