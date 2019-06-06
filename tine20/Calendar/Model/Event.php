@@ -64,10 +64,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     const RANGE_ALL           = 'ALL';
     const RANGE_THIS          = 'THIS';
     const RANGE_THISANDFUTURE = 'THISANDFUTURE';
-
     const XPROPS_IMIP_PROPERTIES = 'imipProperties';
     const XPROPS_REPLICATABLE = 'calendarReplicatable';
-
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -220,10 +218,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     protected $_filters = [
         'organizer'     => array(array('Empty', null)),
     ];
-
     protected static $_freebusyCleanUpKeys = null;
     protected static $_freebusyCleanUpVisibilty = null;
-
     /**
      * sets record related properties
      * 
@@ -591,13 +587,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             throw new Tinebase_Exception_Record_Validation('rrule until must not be before dtstart');
         }
     }
-
     public static function resetFreeBusyCleanupCache()
     {
         static::$_freebusyCleanUpVisibilty = null;
         static::$_freebusyCleanUpKeys = null;
     }
-
     /**
      * cleans up data to only contain freebusy infos
      * removes all fields except dtstart/dtend/id/modlog fields
@@ -624,7 +618,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 'dtend',
                 'transp',
                 'seq',
-                //'uid', to avoid leaking the uid on freebusy which might be missued in spoofing attacks
+                // TODO add again (but after recurrence calculation
+                // remove it to avoid leaking the uid on freebusy which might be missued in spoofing attacks
+                'uid',
                 'is_all_day_event',
                 'rrule',
                 'rrule_until',
@@ -660,9 +656,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             /** @var Calendar_Model_Attender $attendee */
             $oldAttendee = $oldAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_RESOURCE);
         }
-        
-        $this->attendee = $oldAttendee;
 
+        $this->attendee = $oldAttendee;
         return TRUE;
     }
     
@@ -722,11 +717,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {
             $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE, $this->convertDates);
         }
-
         if (isset($_data['poll_id']) && is_array($_data['poll_id'])) {
             $_data['poll_id'] = new Calendar_Model_Poll($_data['poll_id'], $this->bypassFilters, $this->convertDates);
         }
-
         parent::setFromArray($_data);
     }
     
