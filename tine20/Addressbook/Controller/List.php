@@ -557,7 +557,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $memberrolesToSet = (!$record->memberroles instanceof Tinebase_Record_RecordSet)
                 ? new Tinebase_Record_RecordSet(
                     'Addressbook_Model_ListMemberRole',
-                    $record->memberroles,
+                    is_array($record->memberroles) ? $record->memberroles : [],
                     /* $_bypassFilters */ true
                 ) : $record->memberroles;
 

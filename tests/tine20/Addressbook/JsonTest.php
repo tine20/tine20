@@ -2096,6 +2096,7 @@ Steuernummer 33/111/32212";
 
     /**
      * @see 0011584: allow to set group member roles
+     * @return array
      */
     public function testCreateListWithMemberAndRole($listRoleName = 'my test role')
     {
@@ -2220,6 +2221,24 @@ Steuernummer 33/111/32212";
         //Save the list again...
         $list = $this->_uit->saveList($list);
         self::assertEquals(1, count($list['relations']), 'relation missing from list');
+    }
+
+    public function testUpdateListEmail()
+    {
+        $list = $this->testCreateListWithMemberAndRole();
+        $list['email'] = 'somelistemail@' . $this->_getMailDomain();
+        // client sends empty memberroles like that ...
+        $list['memberroles'] = '';
+        $updatedList = $this->_uit->saveList($list);
+        self::assertEquals($list['email'], $updatedList['email']);
+        $updatedList['email'] = 'somelistemailupdated@' . $this->_getMailDomain();
+        $updatedListAgain = $this->_uit->saveList($updatedList);
+        self::assertEquals($updatedList['email'], $updatedListAgain['email']);
+    }
+
+    public function testUpdateListEmailOfSystemGroup()
+    {
+        // TODO implement
     }
 
     public function testSearchListsByMember()
