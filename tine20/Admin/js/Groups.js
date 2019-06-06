@@ -238,6 +238,7 @@ Tine.Admin.Groups.Main = {
             columns: [
                 { id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 50, hidden: true },
                 { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
+                { id: 'email', header: this.translation.gettext('E-Mail'), dataIndex: 'email', width: 50 },
                 { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' },
                 { id: 'creation_time',      header: i18n._('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
                 { id: 'created_by',         header: i18n._('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true },
