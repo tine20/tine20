@@ -1355,6 +1355,9 @@ msgstr "Konten hinzufügen"
 msgid "Create new email accounts"
 msgstr "Neue Konten hinzufügen"
 
+msgid "Auto-Reply mail with this text"
+msgstr "Nachricht mit folgendem Text beantworten"
+
 #~ msgid "Quota usage"
 #~ msgstr "Kontingentnutzung"
 
