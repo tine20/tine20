@@ -96,6 +96,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception_MaintenanceMode();
         }
 
+        // sanitize loginname - we might not support invalid/out of range characters
+        $loginName = Tinebase_Core::filterInputForDatabase($loginName);
+
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
 
         $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
@@ -340,10 +343,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * login failed
      * 
-     * @param  string                    $loginName
+     * @param  Zend_Auth_Result          $authResult
      * @param  Tinebase_Model_AccessLog  $accessLog
      */
-    protected function _loginFailed($authResult, Tinebase_Model_AccessLog $accessLog)
+    protected function _loginFailed(Zend_Auth_Result $authResult, Tinebase_Model_AccessLog $accessLog)
     {
         // @todo update sql schema to allow empty sessionid column
         $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
