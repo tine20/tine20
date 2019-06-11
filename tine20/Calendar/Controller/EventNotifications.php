@@ -586,23 +586,35 @@
                             
                             switch ($attender->status) {
                                 case Calendar_Model_Attender::STATUS_ACCEPTED:
-                                    $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                                     break;
                                     
                                 case Calendar_Model_Attender::STATUS_DECLINED:
-                                    $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                                     break;
                                     
                                 case Calendar_Model_Attender::STATUS_TENTATIVE:
-                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                                     break;
                                     
                                 case Calendar_Model_Attender::STATUS_NEEDSACTION:
-                                    $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                                     break;
+
+                                default:
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                        __METHOD__ . '::' . __LINE__ . ' Unknown status for attender '
+                                        . print_r($attender->toArray(), true));
+                                    $messageSubject = sprintf($translate->_('Unknown status update from %1$s for event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                             }
                         } else {
-                            $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
+                            $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ),
+                                $_event->summary, $startDateString);
                         }
                         
                         // we don't send iMIP parts to organizers with an account cause event is already up to date
@@ -618,8 +630,9 @@
                 break;
 
             default:
-                $messageSubject = 'unknown action';
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
+                $messageSubject = $translate->_('Unknown action');
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . " Unknown action '$_action'");
                 break;
         }
         if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
