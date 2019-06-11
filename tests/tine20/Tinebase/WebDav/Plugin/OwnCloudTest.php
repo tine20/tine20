@@ -86,12 +86,27 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
      */
     public function testGetProperties()
     {
+        $responseDoc = $this->_execPropfindRequest();
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
+
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:id');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    }
+
+    /**
+     * @param string|null $body
+     * @return DOMDocument
+     */
+    protected function _execPropfindRequest($body = null)
+    {
         $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => '/remote.php/webdav/' . Tinebase_Core::getUser()->accountDisplayName,
             'HTTP_DEPTH' => '0',
         ));
-        $request->setBody(static::REQUEST_BODY);
+        $request->setBody($body ? $body : static::REQUEST_BODY);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
@@ -101,12 +116,28 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
         //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        return $responseDoc;
+    }
+
+    /**
+     * test testGetSizeProperty
+     */
+    public function testGetSizeProperty()
+    {
+        $body = '<?xml version="1.0" encoding="utf-8"?>
+<propfind xmlns="DAV:">
+    <prop>
+        <resourcetype xmlns="DAV:"/>
+        <size xmlns="http://owncloud.org/ns"/>
+    </prop>
+</propfind>';
+        $responseDoc = $this->_execPropfindRequest($body);
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
 
-        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:id');
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:size');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(0, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }
 
     /**
