@@ -1258,13 +1258,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  bool                  $_allFollowing
      * @param  bool                  $_checkBusyConflicts
      * @return Calendar_Model_Event  exception Event | updated baseEvent
-     * 
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_ConcurrencyConflict
+     *
      * @todo replace $_allFollowing param with $range
      * @deprecated replace with create/update/delete
      */
     public function createRecurException($_event, $_deleteInstance = FALSE, $_allFollowing = FALSE, $_checkBusyConflicts = FALSE)
     {
         $baseEvent = $this->getRecurBaseEvent($_event);
+
+        if (! $baseEvent) {
+            throw new Tinebase_Exception_NotFound('base event of a recurring series not found');
+        }
         
         if ($baseEvent->last_modified_time != $_event->last_modified_time) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
