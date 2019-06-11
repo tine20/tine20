@@ -1671,21 +1671,27 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         try {
 
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            
+
             $where = $this->_getContainerAclTable()->getAdapter()->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
             $this->_getContainerAclTable()->delete($where);
-            
+
             foreach ($_grants as $recordGrants) {
                 $data = array(
-                    'container_id'  => $containerId,
-                    'account_id'    => $recordGrants['account_id'],
-                    'account_type'  => $recordGrants['account_type'],
+                    'container_id' => $containerId,
+                    'account_id' => $recordGrants['account_id'],
+                    'account_type' => $recordGrants['account_type'],
                 );
-                
+
                 foreach ($recordGrants as $grantName => $grant) {
                     if (in_array($grantName, $recordGrants->getAllGrants()) && $grant === TRUE) {
                         $data['id'] = $recordGrants->generateUID();
-                        $this->_getContainerAclTable()->insert($data + array('account_grant' => $grantName));
+                        try {
+                            $this->_getContainerAclTable()->insert($data + array('account_grant' => $grantName));
+                        } catch (Zend_Db_Statement_Exception $zdse) {
+                            if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                                throw $zdse;
+                            }
+                        }
                     }
                 }
             }
@@ -1695,7 +1701,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants), true),
                 new Tinebase_Model_Container(array('id' => $containerId), true)
             );
-            
+
             $this->_setRecordMetaDataAndUpdate($containerId, 'update', false);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);

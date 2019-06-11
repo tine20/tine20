@@ -2911,7 +2911,7 @@ HumanResources_CliTests.testSetContractsEndDate */
                 . ' ' . $filename . ' already exists');
             return null;
         } catch (Zend_Db_Statement_Exception $zdse) {
-            if (preg_match('/Duplicate entry/', $zdse->getMessage())) {
+            if (Tinebase_Exception::isDbDuplicate($zdse)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Location already exists');
             } else {
