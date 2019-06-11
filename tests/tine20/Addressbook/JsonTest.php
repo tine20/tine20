@@ -2238,7 +2238,44 @@ Steuernummer 33/111/32212";
 
     public function testUpdateListEmailOfSystemGroup()
     {
-        // TODO implement
+        $lists = $this->_uit->searchLists([[
+            'field'    => 'type',
+            'operator' => 'equals',
+            'value'    => Addressbook_Model_List::LISTTYPE_GROUP,
+        ]], []);
+        self::assertGreaterThan(0, $lists['totalcount'], 'no system groups found');
+        $list = $lists['results'][0];
+
+        $systemGroupEmail = $list['email'];
+        // try to overwrite it with jsmith
+        $jsmith = Tinebase_User::getInstance()->getFullUserByLoginName('jsmith');
+        Tinebase_Core::setUser($jsmith);
+        $list['email'] = Tinebase_Record_Abstract::generateUID(10) . '@' . $this->_getMailDomain();
+        try {
+            $this->_uit->saveList($list);
+            self::fail('jsmith should not be able to update the record');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            self::assertContains('permission', $tead->getMessage());
+        }
+
+        // give jsmith edit grant
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $container = Tinebase_Container::getInstance()->getContainerById($list['container_id']['id']);
+        $this->_setPersonaGrantsForTestContainer(
+            $container,
+            'jsmith',
+            false,
+            true,
+            [],
+            true
+        );
+        Tinebase_Core::setUser($jsmith);
+        try {
+            $this->_uit->saveList($list);
+            self::fail('jsmith should not be able to update the record');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            self::assertContains('ACCOUNTS', $tead->getMessage());
+        }
     }
 
     public function testSearchListsByMember()

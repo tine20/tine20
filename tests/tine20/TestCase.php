@@ -103,6 +103,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     protected $_originalSmtpConfig = null;
 
+    protected $_originalGrants = [];
+
     /**
      * set up tests
      */
@@ -142,7 +144,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
 
         if ($this->_originalTestUser instanceof Tinebase_Model_User) {
-            Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+            Tinebase_Core::setUser($this->_originalTestUser);
         }
 
         if ($this->_invalidateRolesCache) {
@@ -159,6 +161,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         if ($this->_originalSmtpConfig) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_originalSmtpConfig);
+        }
+
+        foreach ($this->_originalGrants as $container => $grants) {
+            Tinebase_Container::getInstance()->setGrants($container, $grants, true);
         }
 
         Tinebase_Lock_UnitTestFix::clearLocks();
@@ -550,11 +556,21 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param boolean $personaAdminGrant
      * @param boolean $userAdminGrant
      * @param array $additionalGrants
+     * @param boolean $restoreOldGrants
      */
-    protected function _setPersonaGrantsForTestContainer($container, $persona, $personaAdminGrant = false, $userAdminGrant = true, $additionalGrants = [])
+    protected function _setPersonaGrantsForTestContainer(
+        $container,
+        $persona,
+        $personaAdminGrant = false,
+        $userAdminGrant = true,
+        $additionalGrants = [],
+        $restoreOldGrants = false)
     {
         $container = $container instanceof Tinebase_Model_Container ? $container : Tinebase_Container::getInstance()
             ->getContainerById($container);
+        if ($restoreOldGrants) {
+            $this->_originalGrants[$container->getId()] = Tinebase_Container::getInstance()->getGrantsOfContainer($container, true);
+        }
         $grantClass = $container->getGrantClass();
         $grants = new Tinebase_Record_RecordSet($grantClass, array(array(
             'account_id'    => $this->_personas[$persona]->getId(),

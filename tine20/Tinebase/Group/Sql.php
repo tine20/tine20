@@ -167,9 +167,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param  mixed $_groupId
      * @param  array $_groupMembers
+     * @return void
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
+        if (! is_array($_groupMembers)) {
+            $_groupMembers = [];
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Setting ' . count($_groupMembers) . ' new groupmembers for group ' . $_groupId);
         
@@ -185,6 +190,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param  mixed  $_groupId
      * @param  array  $_groupMembers
+     * @throws Zend_Db_Statement_Exception
+     * @return void
      */
     public function setGroupMembersInSqlBackend($_groupId, $_groupMembers)
     {

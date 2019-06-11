@@ -1613,7 +1613,7 @@ class Tinebase_Core
     {
         return self::get(self::LOCALE);
     }
-        
+
     /**
      * get current user account
      *
@@ -1622,6 +1622,16 @@ class Tinebase_Core
     public static function getUser()
     {
         return self::get(self::USER);
+    }
+
+    /**
+     * set current user account
+     *
+     * @param Tinebase_Model_FullUser $user the user account record
+     */
+    public static function setUser($user)
+    {
+        self::set(self::USER, $user);
     }
 
     /**
