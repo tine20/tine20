@@ -802,6 +802,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             __METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . ' ' . print_r($requestedProperties, true));
         
         $response = array();
+        $pathParts = $this->_getPathParts();
     
         foreach ($requestedProperties as $property) {
             switch ($property) {
@@ -809,10 +810,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 // owncloud does send paths starting with /webdav ... some comments here say that would be not ok?
                 case '{http://owncloud.org/ns}size':
                     if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
-                        /*if (count($this->_pathParts) === 1) {
+                        /*if (count($pathParts) === 1) {
                             // webdav -> root file system ... what to return? all? all visible? complicated...
                             // and why return anything? it will not be displayed anyway?
-                        } else*/if (count($this->_pathParts) === 2) {
+                        } else*/if (count($pathParts) === 2) {
                             $size = 0;
                             foreach ($this->getChildren() as $node) {
                                 $size += $node->getSize();
@@ -824,7 +825,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
                 case '{DAV:}quota-available-bytes':
                     if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
-                        if (count($this->_pathParts) === 1) {
+                        if (count($pathParts) === 1) {
                             // webdav -> root file system ...
                             if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes() &&
                                     0 === Tinebase_FileSystem_Quota::getPersonalQuotaBytes()) {
@@ -840,7 +841,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
                 case '{DAV:}quota-used-bytes':
                     if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
-                        if (count($this->_pathParts) === 1) {
+                        if (count($pathParts) === 1) {
                             // webdav -> root file system ...
                             if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes()) {
                                 // owncloud displays garbage if we dont have a quota-available-bytes value
