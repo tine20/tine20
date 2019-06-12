@@ -156,18 +156,14 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     
     /**
      * collected tempforary files
+     * @property {Array} tempFiles
      */
-    tempFiles: new Array(),
+    tempFiles: null,
     
     /**
      * did the last chunk upload fail
      */
     lastChunkUploadFailed: false,
-    
-    /**
-     * current chunk to upload
-     */
-    currentChunk: null,
     
     /**
      * how many retries were made while trying to upload current chunk

@@ -85,7 +85,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * create node
      * 
      * @param array $filename
-     * @param string $type directory or file
+     * @param string $type mimetype
      * @param string $tempFileId
      * @param boolean $forceOverwrite
      * @return array
@@ -108,11 +108,11 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param boolean $forceOverwrite
      * @return array
      */
-    public function createNodes($filenames, $type, $tempFileIds = array(), $forceOverwrite = false)
+    public function createNodes($filenames, $types, $tempFileIds = array(), $forceOverwrite = false)
     {
         // do not convert $type to array!
-        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $type, (array)$tempFileIds, $forceOverwrite);
-        
+        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $types, (array)$tempFileIds, $forceOverwrite);
+
         return $this->_multipleRecordsToJson($nodes);
     }
     

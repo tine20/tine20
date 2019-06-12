@@ -882,7 +882,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         var files = fileSelector.getFileList();
 
-        var filePathsArray = [], uploadKeyArray = [], promises = [];
+        var filePathsArray = [], uploadKeyArray = [], fileTypesArray= [], promises = [];
 
         Ext.each(files, function (file) {
             var promise = new Promise(function (fullfill, reject) {
@@ -904,6 +904,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     });
 
                     filePathsArray.push(filePath);
+                    fileTypesArray.push('vnd.adobe.partial-upload; final_type=' + file.type);
                     uploadKeyArray.push(Tine.Tinebase.uploadManager.queueUpload(upload));
                 }, me).then(function () {
                     fullfill();
@@ -921,7 +922,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
             var params = {
                 filenames: filePathsArray,
-                type: "file",
+                types: fileTypesArray,
                 tempFileIds: [],
                 forceOverwrite: false
             };
