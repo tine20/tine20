@@ -345,4 +345,12 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         
         return $handle;
     }
+
+    public function createTempFileFromNode($node)
+    {
+        $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
+        $path = self::getTempPath();
+        file_put_contents($path, $content);
+        return $this->createTempFile($path);
+    }
 }
