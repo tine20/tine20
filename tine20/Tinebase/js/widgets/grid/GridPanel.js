@@ -2224,19 +2224,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 isSelected = this.getGrid().getSelectionModel().isSelected(idx),
                 store = this.getStore();
 
-
             if (idx >= 0) {
                 // merge fresh data
                 var current = store.getAt(idx);
-                current.beginEdit();
 
                 _.each(record.data, function(v, k) {
                     Tine.Tinebase.common.assertComparable(v);
                     current.set(k, v);
                 });
-
-                // NOTE: non local stores save data remotely
-                if (mode == 'local') {
+                if (mode != 'local') {
                     current.commit();
                 }
             } else {
