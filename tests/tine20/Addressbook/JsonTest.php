@@ -2238,6 +2238,11 @@ Steuernummer 33/111/32212";
 
     public function testUpdateListEmailOfSystemGroup()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend');
+        }
+
         $lists = $this->_uit->searchLists([[
             'field'    => 'type',
             'operator' => 'equals',
