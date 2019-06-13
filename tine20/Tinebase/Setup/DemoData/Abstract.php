@@ -94,26 +94,26 @@ abstract class Tinebase_Setup_DemoData_Abstract
             'groupData' => array(
                 'visibility' => 'displayed', 'name' => 'Managers', 'description' => 'Managers of the company'
             ),
-            'groupMembers' => array('pwulf')
+            'members' => array('pwulf')
         ),
         array(
             'groupData' => array(
                 'visibility' => 'displayed', 'name' => 'HumanResources', 'description' => 'Human Resources Managment'
             ),
-            'groupMembers' => 
+            'members' => 
                 array('sclever', 'pwulf')
             ),
         array(
             'groupData' => array(
                 'visibility' => 'displayed', 'name' => 'Secretary', 'description' => 'Secretarys of the company'
             ),
-            'groupMembers' => array('sclever', 'pwulf')
+            'members' => array('sclever', 'pwulf')
         ),
         array(
             'groupData' => array(
                 'visibility' => 'displayed', 'name' => 'Controllers', 'description' => 'Controllers of the company'
             ),
-            'groupMembers' => array('rwright', 'pwulf')
+            'members' => array('rwright', 'pwulf')
         ),
     );
 

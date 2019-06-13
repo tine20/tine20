@@ -78,7 +78,8 @@ Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.ge
     {name: 'description'},
     {name: 'container_id'},
     {name: 'visibility'},
-    {name: 'email'}
+    {name: 'email'},
+    {name: 'members'}
 ]), {
     appName: 'Admin',
     modelName: 'Group',
@@ -104,6 +105,13 @@ Tine.Admin.Model.Group.getDefaultData = function () {
         container_id: internalAddressbook
     };
 };
+
+Tine.Admin.groupBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Admin',
+    modelName: 'Group',
+    recordClass: Tine.Admin.Model.Group,
+    idProperty: 'id'
+});
 
 /**
  * @namespace Tine.Admin.Model

@@ -2138,6 +2138,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         // give sclever role the grants to add nodes
         $secretaryRole = Tinebase_Role::getInstance()->getRoleByName('secretary role');
+
+        // TODO make sure, sclever is in secretary role!
+
         $node['grants'][] = array(
             'account_id' => $secretaryRole->getId(),
             'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE,

@@ -52,9 +52,8 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
     }
 
     /**
-     * @param null|Tinebase_Model_User $user
+     * @param null|Tinebase_Model_User $_user
      * @param null|array $_grants
-     * @param bool $_removeRoleRight
      * @return array
      */
     protected function _prepareTestResourceAcl($_user = null, $_grants = null)
@@ -446,6 +445,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
             }
         }
         try {
+            // TODO make sure, pwulf has MANAGE_RESOURCES!
             Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('pwulf'));
             $this->jsonFE->saveResource($resource);
         } finally {

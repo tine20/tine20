@@ -86,7 +86,7 @@ Tine.Admin.Groups.Main = {
      */
     openEditWindow: function (record) {
         var popupWindow = Tine.Admin.Groups.EditDialog.openWindow({
-            group: record,
+            record: record,
             listeners: {
                 scope: this,
                 'update': function (record) {

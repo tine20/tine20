@@ -222,6 +222,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE)
     {
         $_container->isValid(TRUE);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' Add new container: ' . print_r($_container->toArray(), true) . ' with the following grants: '
+            . print_r($_grants instanceof Tinebase_Record_RecordSet ? $_grants->toArray() : $_grants, true));
         
         if ($_ignoreAcl !== TRUE) {
             switch ($_container->type) {
