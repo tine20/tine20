@@ -1621,7 +1621,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         }
         if (!isset($this->_properties[$_property])) {
             $this->_properties[$_property] = array();
-        } else if (is_string($this->_properties[$_property])) {
+        } elseif (is_string($this->_properties[$_property])) {
             $this->_properties[$_property] = json_decode($this->_properties[$_property], true);
         }
 

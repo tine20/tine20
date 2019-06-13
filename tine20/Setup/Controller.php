@@ -492,6 +492,9 @@ class Setup_Controller
     {
         $this->clearCache();
 
+        // required for update path to Adb 12.7 ... can be removed once we drop updatability from < 12.7 to 12.7+
+        Tinebase_Group_Sql::doJoinXProps(false);
+
         if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
             throw new Tinebase_Exception('could not create setup user');
         }

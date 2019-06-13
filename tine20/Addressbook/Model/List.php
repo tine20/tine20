@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -72,6 +72,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'modlogActive'      => true,
         'hasAttachments'    => false,
         'createModule'      => true,
+        self::HAS_XPROPS    => true,
 
         'containerProperty' => 'container_id',
 

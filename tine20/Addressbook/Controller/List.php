@@ -448,6 +448,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $list->container_id = (empty($group->container_id)) ?
                 Addressbook_Controller::getDefaultInternalAddressbook() : $group->container_id;
             $list->members = (isset($group->members)) ? $this->_getContactIds($group->members) : array();
+            $list->xprops = $group->xprops;
 
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update', $list);
@@ -479,6 +480,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             'container_id' => (empty($group->container_id)) ? Addressbook_Controller::getDefaultInternalAddressbook()
                 : $group->container_id,
             'members' => (isset($group->members)) ? $this->_getContactIds($group->members) : array(),
+            'xprops' => $group->xprops,
         ));
 
         // add modlog info

@@ -49,6 +49,7 @@ class Tinebase_ModelConfiguration_Const {
     const HAS_RELATIONS = 'hasRelations';
     const HAS_SYSTEM_CUSTOM_FIELDS = 'hasSystemCustomFields';
     const HAS_TAGS = 'hasTags';
+    const HAS_XPROPS = 'hasXProps';
 
     const INDEXES = 'indexes';
     const INPUT_FILTERS = 'inputFilters';

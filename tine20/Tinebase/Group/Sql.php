@@ -19,6 +19,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 {
     use Tinebase_Controller_Record_ModlogTrait;
 
+    protected static $_doJoinXProps = true;
 
     /**
      * Model name
@@ -802,30 +803,37 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param string|array $_ids Ids
      * @return Tinebase_Record_RecordSet
-     * 
-     * @todo this should return the container_id, too
      */
     public function getMultiple($_ids)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
         
         if (! empty($_ids)) {
-            $select = $this->groupsTable->select();
-            $select->where($this->_db->quoteIdentifier('id') . ' IN (?)', array_unique((array) $_ids));
-            
-            $rows = $this->groupsTable->fetchAll($select);
+            $rows = $this->_getSelect()->where($this->_db->quoteIdentifier($this->_tableName . '.id') . ' IN (?)',
+                array_unique((array) $_ids))->query()->fetchAll();
+
             foreach ($rows as $row) {
-                $result->addRecord(new Tinebase_Model_Group($row->toArray(), TRUE));
+                $group = new Tinebase_Model_Group($row, true);
+                $group->runConvertToRecord();
+                $result->addRecord($group);
             }
         }
         
         return $result;
     }
-    
+
+    /**
+     * required for update path to Adb 12.7 ... can be removed once we drop updatability from < 12.7 to 12.7+
+     */
+    public static function doJoinXProps($join = true)
+    {
+        static::$_doJoinXProps = $join;
+    }
+
     /**
      * get the basic select object to fetch records from the database
      * 
-     * NOTE: container_id is joined from addressbook lists table
+     * NOTE: container_id, xprops is joined from addressbook lists table
      *  
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param boolean $_getDeleted get deleted records (if modlog is active)
@@ -838,10 +846,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $select->from(array($this->_tableName => SQL_TABLE_PREFIX . $this->_tableName), $_cols);
         
         if ($this->_addressBookInstalled === true) {
+            $joinCols = ['container_id', 'xprops'];
+            if (!static::$_doJoinXProps) {
+                unset($joinCols[1]);
+            }
             $select->joinLeft(
                 array('addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'),
-                $this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'), 
-                array('container_id')
+                $this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'),
+                $joinCols
             );
         }
         

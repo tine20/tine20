@@ -64,6 +64,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             ['InArray', [self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED]],
             Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED
         ),
+        'xprops'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'created_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_by'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -184,5 +185,20 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             $currentMembers = array_merge($currentMembers, $add);
         }
         $this->members = $currentMembers;
+    }
+
+    // TODO remove the runConvert methods when migration to Modelconfig!
+    public function runConvertToRecord()
+    {
+        if (isset($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
+        }
+    }
+
+    public function runConvertToData()
+    {
+        if (isset($this->_properties['xprops']) && is_array($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_encode($this->_properties['xprops']);
+        }
     }
 }
