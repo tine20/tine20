@@ -496,7 +496,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if(!$_group->isValid()) {
             throw new Tinebase_Exception_Record_Validation('invalid group object');
         }
-        
+
+        // prevent changing of email if it does not match configured domains
+        Tinebase_EmailUser::checkDomain($_group->email, true);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Creating new group ' . $_group->name 
             //. print_r($_group->toArray(), true)
@@ -553,6 +556,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function updateGroupInSqlBackend(Tinebase_Model_Group $_group)
     {
+        // prevent changing of email if it does not match configured domains
+        Tinebase_EmailUser::checkDomain($_group->email, true);
+
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_group);
 
         $oldGroup = $this->getGroupById($groupId);

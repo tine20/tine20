@@ -389,7 +389,7 @@ class Tinebase_EmailUser
      * @param boolean $_throwException
      * @param array $_allowedDomains
      * @return boolean
-     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public static function checkDomain($_email, $_throwException = false, $_allowedDomains = null)
     {
@@ -408,10 +408,13 @@ class Tinebase_EmailUser
                     __METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($allowedDomains, TRUE));
 
                 if ($_throwException) {
-                    throw new Tinebase_Exception_UnexpectedValue(
-                        "Emails domainpart $domain is not in the list of allowed domains! "
-                            . implode(',', $allowedDomains)
-                    );
+                    // _('User E-Mail-Address {0} not in allowed domains')
+                    $translation = Tinebase_Translation::getTranslation('Tinebase');
+                    throw new Tinebase_Exception_SystemGeneric(str_replace(
+                        ['{0}', '{1}'],
+                        [$_email, implode(',', Tinebase_EmailUser::getAllowedDomains())],
+                        $translation->_('E-Mail-Address {0} not in allowed domains [{1}]')
+                    ));
                 } else {
                     $result = false;
                 }
