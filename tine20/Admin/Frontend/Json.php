@@ -622,6 +622,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $groupArray['members'] = $this->getGroupMembers($id);
+        $groupArray['xprops'] = Tinebase_Helper::jsonDecode($groupArray['xprops']);
         
         return $groupArray;
     }

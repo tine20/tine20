@@ -245,7 +245,8 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     {name: 'paths', omitDuplicateResolving: true},
     {name: 'relations', omitDuplicateResolving: true},
     {name: 'customfields', omitDuplicateResolving: true},
-    {name: 'tags'}
+    {name: 'tags'},
+    {name: 'xprops'}
 ], {
     appName: 'Addressbook',
     modelName: 'List',

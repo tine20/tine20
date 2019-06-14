@@ -24,6 +24,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Admin',
     recordClass: Tine.Admin.Model.Group,
     recordProxy: Tine.Admin.groupBackend,
+    evalGrants: false,
 
     /**
      * @private
@@ -44,6 +45,10 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function () {
+        var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
+            editDialog: this
+        });
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -138,7 +143,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 app: this.appName,
                 record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })
+            }),
+            mailingListPanel
             ]
         };
     },
