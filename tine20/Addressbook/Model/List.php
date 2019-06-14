@@ -39,6 +39,10 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      */
     const LISTTYPE_GROUP = 'group';
 
+    const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
+    const XPROP_SIEVE_ALLOW_EXTERNAL = 'sieveAllowExternal';
+    const XPROP_SIEVE_ALLOW_ONLY_MEMBERS = 'sieveAllowOnlyMembers';
+
     /**
      * name of fields which require manage accounts to be updated
      *

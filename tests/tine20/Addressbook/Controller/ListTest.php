@@ -268,4 +268,17 @@ class Addressbook_Controller_ListTest extends TestCase
                 . '(): ' . print_r($listRecord->toArray(), TRUE));
         }
     }
+
+    public function testListSieveRule()
+    {
+        $list = $this->testAddList();
+        $list->members = array($this->objects['contact2']);
+        $list->email = 'foo@bar.de';
+
+        $list = $this->_instance->update($list);
+
+        $list = $this->_instance->addListMember($list, $this->objects['contact1']);
+
+        Felamimail_Sieve_AdbList::createFromList($list);
+    }
 }
