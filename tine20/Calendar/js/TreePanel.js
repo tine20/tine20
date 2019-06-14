@@ -144,6 +144,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
     initContextMenu: function() {
         this.supr().initContextMenu.call(this);
+        this.contextModel = 'Event';
         this.action_editResource = new Ext.Action({
             iconCls: 'cal-resource',
             hidden: true,
