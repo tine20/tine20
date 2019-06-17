@@ -494,82 +494,88 @@ class Setup_Controller
 
         // required for update path to Adb 12.7 ... can be removed once we drop updatability from < 12.7 to 12.7+
         Tinebase_Group_Sql::doJoinXProps(false);
+        try {
 
-        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
-            throw new Tinebase_Exception('could not create setup user');
-        }
-        Tinebase_Core::set(Tinebase_Core::USER, $user);
-
-        if ($_applications === null) {
-            $_applications = Tinebase_Application::getInstance()->getApplications();
-
-            /** @var Tinebase_Model_Application $tinebase */
-            $tinebase = $_applications->find('name', 'Tinebase');
-            $setupXml = $this->getSetupXml($tinebase->name);
-            list($majV,) = explode('.', $setupXml->version, 2);
-            if (abs((int)$majV - (int)$tinebase->getMajorVersion()) > 1) {
-                throw new Setup_Exception_Dependency('Tinebase version ' . $tinebase->version .
-                    ' can not be updated to ' . $setupXml->version);
+            if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+                throw new Tinebase_Exception('could not create setup user');
             }
-        }
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
 
-        // TODO remove this in Version 13
-        //return array(
-        //            'messages' => $messages,
-        //            'updated'  => $this->_updatedApplications,
-        //        );
-        $result = $this->_legacyUpdateApplications($_applications);
-        $iterationCount = 0;
+            if ($_applications === null) {
+                $_applications = Tinebase_Application::getInstance()->getApplications();
 
-        do {
-            $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
-
-            if (empty($updatesByPrio)) {
-                return $result;
+                /** @var Tinebase_Model_Application $tinebase */
+                $tinebase = $_applications->find('name', 'Tinebase');
+                $setupXml = $this->getSetupXml($tinebase->name);
+                list($majV,) = explode('.', $setupXml->version, 2);
+                if (abs((int)$majV - (int)$tinebase->getMajorVersion()) > 1) {
+                    throw new Setup_Exception_Dependency('Tinebase version ' . $tinebase->version .
+                        ' can not be updated to ' . $setupXml->version);
+                }
             }
 
-            ksort($updatesByPrio);
-            $db = Setup_Core::getDb();
-            $classes = [];
+            // TODO remove this in Version 13
+            //return array(
+            //            'messages' => $messages,
+            //            'updated'  => $this->_updatedApplications,
+            //        );
+            $result = $this->_legacyUpdateApplications($_applications);
+            $iterationCount = 0;
 
-            try {
-                $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());
+            do {
+                $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
 
-                foreach ($updatesByPrio as $prio => $updates) {
-                    foreach ($updates as $update) {
-                        $className = $update[Setup_Update_Abstract::CLASS_CONST];
-                        $functionName = $update[Setup_Update_Abstract::FUNCTION_CONST];
-                        if (!isset($classes[$className])) {
-                            $classes[$className] = new $className($this->_backend);
-                        }
-                        $class = $classes[$className];
-
-                        try {
-                            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-
-                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                                . ' Updating ' . $className . '::' . $functionName
-                            );
-
-                            $class->$functionName();
-
-                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-                        } catch (Exception $e) {
-                            Tinebase_TransactionManager::getInstance()->rollBack();
-                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                            throw $e;
-                        }
-                    }
+                if (empty($updatesByPrio)) {
+                    return $result;
                 }
 
-            } finally {
-                $this->_cleanUpUpdate();
-            }
-        } while (++$iterationCount < 5);
+                ksort($updatesByPrio);
+                $db = Setup_Core::getDb();
+                $classes = [];
 
-        throw new Tinebase_Exception('endless update loop');
+                try {
+                    $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());
+
+                    foreach ($updatesByPrio as $prio => $updates) {
+                        foreach ($updates as $update) {
+                            $className = $update[Setup_Update_Abstract::CLASS_CONST];
+                            $functionName = $update[Setup_Update_Abstract::FUNCTION_CONST];
+                            if (!isset($classes[$className])) {
+                                $classes[$className] = new $className($this->_backend);
+                            }
+                            $class = $classes[$className];
+
+                            try {
+                                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+                                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                    . ' Updating ' . $className . '::' . $functionName
+                                );
+
+                                $class->$functionName();
+
+                                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+                            } catch (Exception $e) {
+                                Tinebase_TransactionManager::getInstance()->rollBack();
+                                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                                throw $e;
+                            }
+                        }
+                    }
+
+                } finally {
+                    $this->_cleanUpUpdate();
+                }
+            } while (++$iterationCount < 5);
+
+            throw new Tinebase_Exception('endless update loop');
+
+        // required for update path to Adb 12.7 ... can be removed once we drop updatability from < 12.7 to 12.7+
+        } finally {
+            Tinebase_Group_Sql::doJoinXProps();
+        }
     }
 
     protected function _legacyUpdateApplications(Tinebase_Record_RecordSet $_applications = null)
