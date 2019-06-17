@@ -637,6 +637,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 unset($savedLead['relations'][$key]);
             }
         }
+        Crm_Controller_Lead::getInstance()->resolveCustomfields(true);
         $savedLead['customfields'][$this->_cfcName] = '5678';
         $updatedLead = $this->_getUit()->saveLead($savedLead);
         
