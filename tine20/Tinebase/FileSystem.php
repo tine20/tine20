@@ -1867,10 +1867,12 @@ class Tinebase_FileSystem implements
      * @param  string|Tinebase_Model_Tree_Node  $_parentId
      * @param  string                           $_name
      * @param  string                           $_fileType
+     * @param  string                           $_mimeType
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Model_Tree_Node
      */
-    public function createFileTreeNode($_parentId, $_name, $_fileType = Tinebase_Model_Tree_FileObject::TYPE_FILE)
+    public function createFileTreeNode($_parentId, $_name, $_fileType = Tinebase_Model_Tree_FileObject::TYPE_FILE,
+        $_mimeType = null)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
@@ -1894,6 +1896,7 @@ class Tinebase_FileSystem implements
                 $object->is_deleted = 0;
                 $object->type = $_fileType;
                 $object->preview_count = 0;
+                $object->contenttype = $_mimeType;
                 $this->_fileObjectBackend->update($object);
                 //we can use _treeNodeBackend as we called get further up
                 $treeNode = $this->_treeNodeBackend->update($deletedNode);
@@ -1901,10 +1904,12 @@ class Tinebase_FileSystem implements
 
                 $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId : $this->get($parentId);
 
-                $fileObject = new Tinebase_Model_Tree_FileObject(array(
+                $fileObject = new Tinebase_Model_Tree_FileObject([
                     'type' => $_fileType,
-                    'contentytype' => null,
-                ));
+                ]);
+                if (null !== $_mimeType) {
+                    $fileObject->contenttype = $_mimeType;
+                }
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'create');
 
                 // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
