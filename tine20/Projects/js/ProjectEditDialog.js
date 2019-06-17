@@ -62,7 +62,13 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Projects.ProjectEditDialog.superclass.onRecordUpdate.call(this);
         var _ = window.lodash,
             relations = this.record.get('relations');
-        
+
+        relations = relations.filter(function (element) {
+            if (element.type == 'COWORKER' || element.type == 'RESPONSIBLE') {
+                return null;
+            } else return element;
+        });
+
         relations = _.concat(relations, this.contactLinkPanel.getData());
         this.record.set('relations', relations);
     },
