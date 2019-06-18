@@ -6,7 +6,7 @@
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -29,7 +29,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      *
      * @var string
      */
-    protected $_modelName = 'Tinebase_Model_CredentialCache';
+    protected $_modelName = Tinebase_Model_CredentialCache::class;
     
     /**
      * holds credential cache id/key pair for current request

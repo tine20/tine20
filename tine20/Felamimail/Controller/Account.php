@@ -119,6 +119,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if ($_filter === NULL) {
             $_filter = new Felamimail_Model_AccountFilter(array());
         }
+        $this->_addedDefaultAccount = false;
         
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
@@ -204,7 +205,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         $userFilter = $_filter->getFilter('user_id');
-        
+
+        // fix me!
+        // TODO fix this for shared / adb list accounts!!!
+
         // force a $userFilter filter (ACL)
         if ($userFilter === NULL || $userFilter->getOperator() !== 'equals' || $userFilter->getValue() !== Tinebase_Core::getUser()->getId()) {
             if (! is_object(Tinebase_Core::getUser())) {
@@ -225,7 +229,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         // add user id
-        $_record->user_id = Tinebase_Core::getUser()->getId();
+        if ($_record->type !== Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST &&
+                $_record->type !== Tinebase_EmailUser_Model_Account::TYPE_SHARED) {
+            $_record->user_id = Tinebase_Core::getUser()->getId();
+        }
         
         // use the imap host as smtp host if empty
         if (! $_record->smtp_hostname) {
@@ -238,12 +245,27 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         // add imap & smtp credentials
-        $_record->credentials_id = $this->_createCredentials($_record->user, $_record->password);
-        if ($_record->smtp_user && $_record->smtp_password) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
-            $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
+        if ($_record->type === Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST ||
+                $_record->type === Tinebase_EmailUser_Model_Account::TYPE_SHARED) {
+            $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
+            if ($_record->smtp_user && $_record->smtp_password) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
+                }
+                $_record->smtp_credentials_id = $this->_createSharedCredentials($_record->smtp_user, $_record->smtp_password);
+            } else {
+                $_record->smtp_credentials_id = $_record->credentials_id;
+            }
         } else {
-            $_record->smtp_credentials_id = $_record->credentials_id;
+            $_record->credentials_id = $this->_createCredentials($_record->user, $_record->password);
+            if ($_record->smtp_user && $_record->smtp_password) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
+                }
+                $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
+            } else {
+                $_record->smtp_credentials_id = $_record->credentials_id;
+            }
         }
         
         $this->_checkSignature($_record);
@@ -275,11 +297,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        // set as default account if it is the only account
-        $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
-        if ($accountCount == 1) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $_createdRecord->name . ' as new default email account.');
-            Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
+        if ($_createdRecord->type === Tinebase_EmailUser_Model_Account::TYPE_USER) {
+            // set as default account if it is the only account
+            $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
+            if ($accountCount == 1) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $_createdRecord->name . ' as new default email account.');
+                }
+                Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
+            }
         }
     }
     
@@ -292,12 +318,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if ($_record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
+        if ($_record->type !== $_oldRecord->type) {
+            throw new Tinebase_Exception_UnexpectedValue('type can not change');
+        }
+
+        if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->_beforeUpdateSystemAccount($_record, $_oldRecord);
         } else {
             $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
         }
-        
+
         $this->_checkSignature($_record);
     }
     
@@ -347,7 +377,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _beforeUpdateStandardAccount($_record, $_oldRecord)
     {
-        $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
+        if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
+            $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
+        } else {
+            $this->_beforeUpdateSharedAccountCredentials($_record, $_oldRecord);
+        }
         
         $diff = $_record->diff($_oldRecord)->diff;
         
@@ -362,6 +396,67 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 . ' Resetting capabilities for account ' . $_record->name);
             $cacheId = Tinebase_Helper::convertCacheId(self::ACCOUNT_CAPABILITIES_CACHEID . '_' . $_record->getId());
             Tinebase_Core::getCache()->remove($cacheId);
+        }
+    }
+
+    /**
+     * update shared / adb list account credentials
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _beforeUpdateSharedAccountCredentials($_record, $_oldRecord)
+    {
+        // get old credentials
+        $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
+
+        $credentials = null;
+        if ($_oldRecord->credentials_id) {
+            $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
+            $credentials->key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
+            try {
+                $credentialsBackend->getCachedCredentials($credentials);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // create new credentials in this case
+                Tinebase_Exception::log($tenf);
+                $credentials = null;
+            }
+        }
+
+        if (! $credentials) {
+            $credentials = new Tinebase_Model_CredentialCache(array(
+                'username'  => '',
+                'password'  => ''
+            ));
+        }
+
+        // check if something changed
+        if (
+            ! $_oldRecord->credentials_id
+            ||  (! empty($_record->user) && $_record->user !== $credentials->username)
+            ||  (! empty($_record->password) && $_record->password !== $credentials->password)
+        ) {
+            $newPassword = ($_record->password) ? $_record->password : $credentials->password;
+            $newUsername = ($_record->user) ? $_record->user : $credentials->username;
+
+            $_record->credentials_id = $this->_createSharedCredentials($newUsername, $newPassword);
+            $imapCredentialsChanged = true;
+        } else {
+            $imapCredentialsChanged = false;
+        }
+
+        if ($_record->smtp_user && $_record->smtp_password) {
+            // create extra smtp credentials
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
+            $_record->smtp_credentials_id = $this->_createSharedCredentials($_record->smtp_user, $_record->smtp_password);
+
+        } else if (
+            $imapCredentialsChanged
+            && (! $_record->smtp_credentials_id || $_record->smtp_credentials_id == $_oldRecord->credentials_id)
+        ) {
+            // use imap credentials for smtp auth as well
+            $_record->smtp_credentials_id = $_record->credentials_id;
         }
     }
 
@@ -949,7 +1044,30 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         return $email;
     }
-    
+
+    /**
+     * create a shared credential cache and return new credentials id
+     *
+     * @param Felamimail_Model_Account $_account
+     * @param string $_key
+     * @return string
+     */
+    protected function _createSharedCredentials($_username, $_password)
+    {
+        $cc = Tinebase_Auth_CredentialCache::getInstance();
+        $adapter = explode('_', get_class($cc->getCacheAdapter()));
+        $adapter = end($adapter);
+        try {
+            $cc->setCacheAdapter('Shared');
+            $sharedCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_username, $_password,
+                null, true /* save in DB */, Tinebase_DateTime::now()->addYear(100));
+
+            return $sharedCredentials->getId();
+        } finally {
+            $cc->setCacheAdapter($adapter);
+        }
+    }
+
     /**
      * create account credentials and return new credentials id
      *

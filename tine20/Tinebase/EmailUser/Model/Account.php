@@ -34,7 +34,17 @@ abstract class Tinebase_EmailUser_Model_Account extends Tinebase_Record_Abstract
      *
      */
     const SECURE_SSL = 'ssl';
-    
+
+    /**
+     * adb list account
+     */
+    const TYPE_ADB_LIST = 'adblist';
+
+    /**
+     * shared account
+     */
+    const TYPE_SHARED = 'shared';
+
     /**
      * system account
      *
