@@ -5,7 +5,7 @@
  * @package     Admin
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -43,7 +43,13 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_APPS = 'manage_apps';
-    
+
+    /**
+     * the right to manage email accounts
+     * @staticvar string
+     */
+    const MANAGE_EMAILACCOUNTS = 'manage_emailaccounts';
+
     /**
      * the right to manage shared tags
      * @staticvar string
@@ -85,7 +91,13 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const VIEW_ACCOUNTS = 'view_accounts';
-    
+
+    /**
+     * the right to view email accounts
+     * @staticvar string
+     */
+    const VIEW_EMAILACCOUNTS = 'view_emailaccounts';
+
     /**
      * the right to view applications
      * @staticvar string
@@ -180,7 +192,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $addRights = array (
             self::MANAGE_ACCESS_LOG, 
             self::MANAGE_ACCOUNTS,
-            self::MANAGE_APPS, 
+            self::MANAGE_EMAILACCOUNTS,
+            self::MANAGE_APPS,
             self::MANAGE_SHARED_TAGS,
             self::MANAGE_ROLES,
             self::MANAGE_COMPUTERS,
@@ -188,7 +201,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CUSTOMFIELDS,
             self::VIEW_ACCESS_LOG,
             self::VIEW_ACCOUNTS,
-            self::VIEW_APPS, 
+            self::VIEW_EMAILACCOUNTS,
+            self::VIEW_APPS,
             self::VIEW_ROLES,
             self::VIEW_COMPUTERS,
             self::VIEW_CONTAINERS,
@@ -218,6 +232,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_ACCOUNTS   => array(
                 'text'          => $translate->_('manage accounts'),
                 'description'   => $translate->_('add and edit users and groups, add group members, change user passwords'),
+            ),
+            self::MANAGE_EMAILACCOUNTS   => array(
+                'text'          => $translate->_('manage email accounts'),
+                'description'   => $translate->_('add and edit shared and personal email accounts'),
             ),
             self::MANAGE_APPS   => array(
                 'text'          => $translate->_('manage applications'),
@@ -250,6 +268,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::VIEW_ACCOUNTS   => array(
                 'text'          => $translate->_('view accounts'),
                 'description'   => $translate->_('view accounts list and details'),
+            ),
+            self::MANAGE_EMAILACCOUNTS   => array(
+                'text'          => $translate->_('view email accounts'),
+                'description'   => $translate->_('view shared and personal email accounts'),
             ),
             self::VIEW_APPS   => array(
                 'text'          => $translate->_('view applications'),
