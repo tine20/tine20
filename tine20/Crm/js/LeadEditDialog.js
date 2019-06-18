@@ -182,22 +182,24 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         for (var i=0; i < relations.length; i++) {
             var newLinkObject = relations[i]['related_record'];
-            relations[i]['related_record']['relation'] = null;
-            delete relations[i]['related_record']['relation'];
-            newLinkObject.relation = relations[i];
-            newLinkObject.relation_type = relations[i]['type'].toLowerCase();
-            
-            if ((newLinkObject.relation_type === 'responsible' 
-              || newLinkObject.relation_type === 'customer' 
-              || newLinkObject.relation_type === 'partner')) {
-                contacts.push(newLinkObject);
-            } else if (newLinkObject.relation_type === 'task') {
-                tasks.push(newLinkObject);
-            } else if (newLinkObject.relation_type === 'product') {
-                newLinkObject.remark_description = (relations[i].remark) ? relations[i].remark.description : '';
-                newLinkObject.remark_price = (relations[i].remark) ? relations[i].remark.price : 0;
-                newLinkObject.remark_quantity = (relations[i].remark) ? relations[i].remark.quantity : 1;
-                products.push(newLinkObject);
+            if (newLinkObject) {
+                relations[i]['related_record']['relation'] = null;
+                delete relations[i]['related_record']['relation'];
+                newLinkObject.relation = relations[i];
+                newLinkObject.relation_type = relations[i]['type'].toLowerCase();
+
+                if ((newLinkObject.relation_type === 'responsible'
+                        || newLinkObject.relation_type === 'customer'
+                        || newLinkObject.relation_type === 'partner')) {
+                    contacts.push(newLinkObject);
+                } else if (newLinkObject.relation_type === 'task') {
+                    tasks.push(newLinkObject);
+                } else if (newLinkObject.relation_type === 'product') {
+                    newLinkObject.remark_description = (relations[i].remark) ? relations[i].remark.description : '';
+                    newLinkObject.remark_price = (relations[i].remark) ? relations[i].remark.price : 0;
+                    newLinkObject.remark_quantity = (relations[i].remark) ? relations[i].remark.quantity : 1;
+                    products.push(newLinkObject);
+                }
             }
         }
         
