@@ -295,7 +295,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
                 'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                 Tinebase_Model_Grants::GRANT_ADD         => true,
                 Tinebase_Model_Grants::GRANT_EDIT        => true,
-                Tinebase_Model_Grants::GRANT_DELETE      => true,
+//                Tinebase_Model_Grants::GRANT_DELETE      => true,
             )
         ));
         $tbc->setGrants($container->getId(), $grants, true, false);
@@ -342,7 +342,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
                     'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                     Tinebase_Model_Grants::GRANT_ADD         => true,
                     Tinebase_Model_Grants::GRANT_EDIT        => true,
-                    Tinebase_Model_Grants::GRANT_DELETE      => true,
+//                    Tinebase_Model_Grants::GRANT_DELETE      => true,
                 )
             ));
             Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
