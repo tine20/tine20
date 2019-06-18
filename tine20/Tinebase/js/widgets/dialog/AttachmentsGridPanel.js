@@ -191,9 +191,9 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         var selectedRows = this.getSelectionModel().getSelections(),
             rowRecord = selectedRows[0];
 
-        if (prefs.get('dbClickAction') === 'download' && downloadsAllowed && !this.readOnly) {
+        if (prefs.get('dbClickAction') === 'download' && downloadsAllowed) {
             this.onDownload();
-        } else if (prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file' && !this.readOnly) {
+        } else if (prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file') {
             this.action_preview.execute();
         }
     },
