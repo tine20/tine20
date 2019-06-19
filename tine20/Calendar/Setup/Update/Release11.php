@@ -5,7 +5,7 @@
  * @package     Calendar
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
@@ -369,5 +369,13 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 
 
         $this->setApplicationVersion('Calendar', '11.15');
+    }
+
+    public function update_15()
+    {
+        $update10 = new Calendar_Setup_Update_Release10($this->_backend);
+        $update10->update_11();
+
+        $this->setApplicationVersion('Calendar', '11.16');
     }
 }
