@@ -520,7 +520,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         unset($data['members']);
         unset($data['container_id']);
-        
+        unset($data['xprops']);
+
         $this->groupsTable->insert($data);
 
         $newGroup = clone $_group;
