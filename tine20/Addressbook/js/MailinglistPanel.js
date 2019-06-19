@@ -93,7 +93,7 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         var _ = window.lodash,
             evalGrants = editDialog.evalGrants;
 
-        var isMailinglist = _.get(record, 'data.xprops.use_as_mailinglist', false);
+        var isMailinglist = _.get(record, 'data.xprops.useAsMailinglist', false);
 
         // TODO check right here, too
         var hasRight = Tine.Tinebase.common.hasRight('manage', 'Addressbook', 'list_email_options'),
@@ -125,7 +125,7 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         if (! xprops) {
             xprops = {};
         }
-        xprops.use_as_mailinglist = isMailingList;
+        xprops.useAsMailinglist = isMailingList;
         _.forOwn(this.checkboxes, function(checkbox, key) {
             xprops[key] = isMailingList ? checkbox.getValue() : false;
         });
