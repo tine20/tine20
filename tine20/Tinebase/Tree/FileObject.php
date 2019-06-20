@@ -180,21 +180,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $stmt->fetchAll();
 
-        $select = $this->_db->select()
-            ->from($this->_tablePrefix . $this->_revisionsTableName, new Zend_Db_Expr('MAX(' .
-                $this->_db->quoteIdentifier('revision') . ') + 1 AS ' . $this->_db->quoteIdentifier('revision')))
-            ->where($this->_db->quoteIdentifier($this->_tablePrefix . $this->_revisionsTableName . '.id') . ' = ?', $objectId);
-
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetchAll();
-        if (empty($queryResult)) {
-            $revision = 1;
-        } else {
-            $revision = (int)$queryResult[0]['revision'];
-            if (0 === $revision) {
-                $revision = 1;
-            }
-        }
+        $revision = $this->getNextByProperty('revision', $objectId, 'id', $this->_revisionsTableName);
 
         // increase revision
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $objectId);
