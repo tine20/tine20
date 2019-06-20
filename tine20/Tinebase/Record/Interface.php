@@ -350,4 +350,9 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return bool
      */
     public static function generatesPaths();
+
+    /**
+     * @return string
+     */
+    public function getNotesTranslatedText();
 }

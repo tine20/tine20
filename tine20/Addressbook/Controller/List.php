@@ -567,7 +567,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 }
             }
 
-            $currentMemberroles = $this->_getMemberRoles($record);
+            $currentMemberroles = $this->getMemberRoles($record);
             $diff = $currentMemberroles->diff($memberrolesToSet);
             if (count($diff['added']) > 0) {
                 $diff['added']->list_id = $updatedRecord->getId();
@@ -592,7 +592,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _getRelatedData($record)
     {
-        $memberRoles = $this->_getMemberRoles($record);
+        $memberRoles = $this->getMemberRoles($record);
         if (count($memberRoles) > 0) {
             $record->memberroles = $memberRoles;
         }
@@ -603,7 +603,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param Addressbook_Model_List $record
      * @return Tinebase_Record_RecordSet|Addressbook_Model_ListMemberRole
      */
-    protected function _getMemberRoles($record)
+    public function getMemberRoles($record)
     {
         $result = $this->getMemberRolesBackend()->getMultipleByProperty($record->getId(), 'list_id');
         return $result;

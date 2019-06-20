@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -250,28 +250,22 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             $members = array();
         }
 
-        if (!empty($this->memberroles)) {
+        if (!is_object($this->memberroles)) {
+            $this->memberroles = Addressbook_Controller_List::getInstance()->getMemberRoles($this);
+        }
 
-            $listRoles = array();
+        if ($this->memberroles->count() > 0) {
+
+            $pathController = Tinebase_Record_Path::getInstance();
             /** @var Addressbook_Model_ListMemberRole $role */
             foreach($this->memberroles as $role)
             {
-                $listRoles[$role->list_role_id] = $role->list_role_id;
                 if (isset($members[$role->contact_id])) {
                     unset($members[$role->contact_id]);
                 }
+                $pathController->addToRebuildQueue($role);
+                $members[] = $role;
             }
-
-            $pathController = Tinebase_Record_Path::getInstance();
-            $pathController->addAfterRebuildQueueHook(array(array('Addressbook_Model_ListRole', 'setParent')));
-            Addressbook_Model_ListRole::setParent($this);
-
-            $memberRoles = Addressbook_Controller_ListRole::getInstance()->getMultiple($listRoles, true)->asArray();
-            foreach($memberRoles as $memberRole) {
-                $pathController->addToRebuildQueue($memberRole);
-                $members[] = $memberRole;
-            }
-
         }
 
         $result['children'] = array_merge($result['children'], $members);

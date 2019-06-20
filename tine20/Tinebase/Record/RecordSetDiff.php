@@ -80,7 +80,7 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
                 foreach ($this->{$action} as $data) {
                     /** @var Tinebase_Record_Abstract $record */
                     $record = new $model($data, true);
-                    $str .= ($first ? '' : ', ') . $record->getTitle();
+                    $str .= ($first ? '' : ', ') . $record->getNotesTranslatedText();
                     $first = false;
                 }
                 $result[] = $str;

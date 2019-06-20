@@ -39,7 +39,9 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      * @var array|null
      */
     protected $_modelsUsingPath = array(
-        'Addressbook_Model_Contact'
+        Addressbook_Model_Contact::class,
+        Addressbook_Model_List::class,
+        // don't ever add listrole or listmemberrole here! why? read the code and until you do, dont touch paths at all
     );
     
     /**
