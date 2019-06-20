@@ -207,6 +207,7 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             $this->_rulesBackend->deleteByProperty($this->_accountId, 'account_id');
+            $id = 1;
             foreach ($this->_rules as $rule) {
                 $ruleRecord = new Felamimail_Model_Sieve_Rule();
                 $ruleRecord->setFromFSR($rule);
@@ -215,11 +216,14 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
                 if (is_array($ruleRecord->action_argument)) {
                     $ruleRecord->action_argument = Zend_Json::encode($ruleRecord->action_argument);
                 }
-                if (! $ruleRecord->getId()) {
-                    // TODO use UUID? autoincrement?
-                    $id = $this->_rulesBackend->getNextByProperty('id', $this->_accountId, 'account_id');
-                    $ruleRecord->setId($id);
+                if ($ruleRecord->getId()) {
+                    // prevent duplicate ids
+                    $id = max($id, (int) $ruleRecord->getId());
                 }
+                $ruleRecord->setId($id++);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Creating rule record: ' . print_r($ruleRecord->toArray(), true));
+
                 $this->_rulesBackend->create($ruleRecord);
             }
             
