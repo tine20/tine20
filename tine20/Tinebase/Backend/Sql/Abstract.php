@@ -1939,4 +1939,28 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
 
         return $select->query()->fetchAll(Zend_Db::FETCH_COLUMN);
     }
+
+    public function getNextByProperty($property, $id, $idProp = 'id', $tablename = null)
+    {
+        if (! $tablename) {
+            $tablename = $this->_tableName;
+        }
+        $select = $this->_db->select()
+            ->from($this->_tablePrefix . $tablename, new Zend_Db_Expr('MAX(' .
+                $this->_db->quoteIdentifier($property) . ') + 1 AS ' . $this->_db->quoteIdentifier($property)))
+            ->where($this->_db->quoteIdentifier($this->_tablePrefix . $tablename . '.' . $idProp) . ' = ?', $id);
+
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+        if (empty($queryResult)) {
+            $result = 1;
+        } else {
+            $result = (int)$queryResult[0][$property];
+            if (0 === $result) {
+                $result = 1;
+            }
+        }
+
+        return $result;
+    }
 }
