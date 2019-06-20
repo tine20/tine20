@@ -89,7 +89,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
      */
     public function testAddUser()
     {
-        $user = TestCase::getTestUser();
+        $user = TestCase::getTestUser([
+            'accountLoginName'      => 'phpunitpostfix',
+            'accountEmailAddress'   => 'phpunitpostfix@' . $this->_mailDomain,
+        ]);
         $user->smtpUser = new Tinebase_Model_EmailUser(array(
             'emailAddress'     => $user->accountEmailAddress,
             'emailForwardOnly' => true,
@@ -213,7 +216,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $expectedDestinations = array(
             'bla@' . $this->_mailDomain => array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain),
             'blubb@' . $this->_mailDomain => array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain),
-            'phpunit@' . $this->_mailDomain => array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain),
+            'phpunitpostfix@' . $this->_mailDomain => array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain),
         );
         foreach ($expectedDestinations as $source => $destinations) {
             $foundDestinations = array();
@@ -222,7 +225,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
                     $foundDestinations[] = $row['destination'];
                 }
             }
-            $this->assertEquals(2, count($foundDestinations));
+            $this->assertEquals(2, count($foundDestinations), 'source: ' . $source
+                . ' / queryResult:' . print_r($queryResult, true));
             $this->assertTrue($foundDestinations == $destinations, print_r($destinations, TRUE));
         }
     }

@@ -2,10 +2,11 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philip Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philip Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         refactor this (don't use Ext.getCmp, etc.)
+ * TODO         extend Tine.widgets.dialog.EditDialog
  */
 
 /*global Ext, Tine, Locale*/
@@ -344,7 +345,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.items = this.getFormContents();
         
-        Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
+        Tine.Admin.Roles.EditDialog.superclass.initComponent.call(this);
     },
     
     onRender: function (ct, position) {

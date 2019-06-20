@@ -109,6 +109,8 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
     /**
      * creates the groups if not created already
+     *
+     * TODO why is this using Admin_Frontend_Json? fix that!
      */
     protected function _createGroups()
     {
@@ -119,12 +121,13 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         foreach ($this->_groups as $groupArray) {
             $groupArray['container_id'] = $internalAddressbook->getId();
             $members = array();
-            foreach($groupArray['groupMembers'] as $member) {
+            foreach ($groupArray['members'] as $member) {
                 $members[] = $this->_personas[$member]->getId();
             }
             
             try {
-                $this->_groups[$groupArray['groupData']['name']] = $fe->saveGroup($groupArray['groupData'], $members);
+                $groupArray['groupData']['members'] = $members;
+                $this->_groups[$groupArray['groupData']['name']] = $fe->saveGroup($groupArray['groupData']);
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
                 echo 'Group "' . $groupArray['groupData']['name'] . '" already exists. Skipping...' . PHP_EOL;
@@ -319,10 +322,9 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createSharedTags()
     {
         $appList = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->toArray();
-        $adminJson = new Admin_Frontend_Json();
-        
-        foreach($this->_tagNames as $tagName) {
-            $savedSharedTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
+
+        foreach ($this->_tagNames as $tagName) {
+            Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
                 'type'  => Tinebase_Model_Tag::TYPE_SHARED,
                 'name'  => $tagName,
                 'description' => 'this is the shared tag ' . $tagName,

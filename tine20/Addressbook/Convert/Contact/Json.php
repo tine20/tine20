@@ -54,6 +54,8 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
 
         $this->_appendRecordPaths($_records, $_filter);
 
+        // TODO container + account_grants of duplicate records need to be dehydrated, too
+        // @see \Addressbook_JsonTest::testDuplicateCheck
         $expanderDef = [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'container_id' => [],
@@ -68,7 +70,6 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
         $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, $expanderDef);
         $expander->expand($_records);
 
-        // TODO container_id of duplicate records need to be dehydrated, too - see \Addressbook_JsonTest::testDuplicateCheck
         $dehydrator = Tinebase_Record_Hydration_Factory::createDehydrator(Tinebase_Record_Hydration_Factory::TYPE_ARRAY,
             Addressbook_Model_Contact::class, [
                 Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,

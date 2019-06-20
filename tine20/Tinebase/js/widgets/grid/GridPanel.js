@@ -2220,32 +2220,20 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.log.debug(record, mode);
 
         if (record && Ext.isFunction(record.copy)) {
-            var idx = this.getStore().indexOfId(record.id),
-                isSelected = this.getGrid().getSelectionModel().isSelected(idx),
-                store = this.getStore();
-
+            var idx = this.getStore().indexOfId(record.id);
             if (idx >= 0) {
-                // merge fresh data
-                var current = store.getAt(idx);
-
-                _.each(record.data, function(v, k) {
-                    Tine.Tinebase.common.assertComparable(v);
-                    current.set(k, v);
-                });
-                if (mode != 'local') {
-                    current.commit();
+                // only run do this in local mode as we reload the store in remote mode
+                // NOTE: this would otherwise delete the record if a record proxy exists!
+                if (mode == 'local') {
+                    var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
+                    this.getStore().removeAt(idx);
+                    this.getStore().insert(idx, [record]);
+                    if (isSelected) {
+                        this.getGrid().getSelectionModel().selectRow(idx, true);
+                    }
                 }
             } else {
-                store.add([record]);
-            }
-
-            // sort new/edited record
-            store.remoteSort = false;
-            store.sort(store.sortInfo.field, store.sortInfo.direction)
-            store.remoteSort = this.storeRemoteSort;
-
-            if (isSelected) {
-                this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
+                this.getStore().add([record]);
             }
             this.addToEditBuffer(record);
         }
@@ -2253,9 +2241,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (mode == 'local') {
             this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
         } else {
-            this.bufferedLoadGridData({
-                removeStrategy: 'keepBuffered',
-            });
+            this.bufferedLoadGridData();
         }
     },
 

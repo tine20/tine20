@@ -12,6 +12,8 @@
 
 Ext.ns('Tine.Addressbook');
 
+require('Addressbook/js/MailinglistPanel');
+
 /**
  * @namespace   Tine.Addressbook
  * @class       Tine.Addressbook.ListEditDialog
@@ -52,6 +54,11 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     getFormItems: function () {
+        var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
+            app: this.app,
+            editDialog: this
+        });
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -87,8 +94,15 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Name'),
                                     name: 'name',
                                     maxLength: 64
-                                }],
-                                [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                }], [{
+                                    columnWidth: 1,
+                                    xtype: 'textfield',
+                                    fieldLabel: this.app.i18n._('E-Mail'),
+                                    name: 'email',
+                                    vtype: 'email',
+                                    maxLength: 255,
+                                    allowBlank: true
+                                }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
                                         columnWidth: 1,
                                         fieldLabel: this.app.i18n._('List type'),
                                         name: 'list_type',
@@ -149,7 +163,8 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 app: this.appName,
                 record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })
+            }),
+            mailingListPanel
             ]
         };
     },

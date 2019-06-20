@@ -15,6 +15,7 @@ class Tinebase_Record_Expander_Note extends Tinebase_Record_Expander_Property
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
         if (null !== ($data = Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records, $this->_property))) {
+            // TODO we should delay this expanding until the current run of \Tinebase_Record_Expander::_fetchData finished!
             $this->expand($data);
         }
     }

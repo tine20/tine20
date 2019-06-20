@@ -23,7 +23,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'n_suffix', label: 'Suffix', group: 'Name'}, //_('Suffix')
     {name: 'n_short', label: 'Short Name', group: 'Name'}, //_('Short Name')
     {name: 'n_fn', label: 'Display Name', group: 'Name', omitDuplicateResolving: true }, //_('Display Name')
-    {name: 'n_fileas', group: 'Name', omitDuplicateResolving: true, sortType: Ext.data.SortTypes.asUCString },
+    {name: 'n_fileas', group: 'Name', omitDuplicateResolving: true },
     {name: 'bday', label: 'Birthday', type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
     {name: 'org_name', label: 'Company', group: 'Company' }, //_('Company')
     {name: 'org_unit', label: 'Unit', group: 'Company' }, //_('Unit')
@@ -245,7 +245,8 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     {name: 'paths', omitDuplicateResolving: true},
     {name: 'relations', omitDuplicateResolving: true},
     {name: 'customfields', omitDuplicateResolving: true},
-    {name: 'tags'}
+    {name: 'tags'},
+    {name: 'xprops'}
 ], {
     appName: 'Addressbook',
     modelName: 'List',

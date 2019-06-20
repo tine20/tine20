@@ -46,6 +46,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FEATURE_SHOW_REPLY_TO = 'showReplyTo';
 
     /**
+     * Create template, trash, sent, draft and junks folders for system accounts
+     *
+     * @var string
+     */
+    const FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS = 'systemAccountAutoCreateFolders';
+
+    /**
      * Tine 2.0 filter message uris (only allow <a> uris)
      *
      * @var string
@@ -183,6 +190,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     //_('Show Reply-To')
                     self::DESCRIPTION           => 'Show Reply-To field in message compose dialog',
                     //_('Show Reply-To field in message compose dialog')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
+                self::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS   => [
+                    self::LABEL                 => 'Auto-Create Folders',
+                    //_('Auto-Create Folders')
+                    self::DESCRIPTION           => 'Create template, trash, sent, draft and junks folders for system accounts',
+                    //_('Create template, trash, sent, draft and junks folders for system accounts')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],

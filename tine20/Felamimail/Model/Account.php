@@ -63,7 +63,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         'type'        => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
             Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
-            array('InArray', array(self::TYPE_USER, self::TYPE_SYSTEM)),
+            array('InArray', array(self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED)),
         ),
     // imap server config
         'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),

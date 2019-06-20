@@ -13,8 +13,20 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
 {
     const RELEASE012_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
+        // ATTENTION !!! PRIO TB !!! NOT NORMAL APP !!!
+        // this is because Tinebase_Group_Sql will join the column xprops created here
+        // DO NOT ADD ANYMORE UPDATES INTO THIS, use normal_app_structure instead (except well... except "except" of course)
+        self::PRIO_TINEBASE_STRUCTURE       => [
+            self::RELEASE012_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
+            ],
+        ],
+
+
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE012_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
@@ -39,5 +51,25 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
         $release11 = new Addressbook_Setup_Update_Release11($this->_backend);
         $release11->update_15();
         $this->addApplicationUpdate('Addressbook', '12.6', self::RELEASE012_UPDATE002);
+    }
+
+    public function update003()
+    {
+        if (! $this->_backend->columnExists('xprops', 'addressbook_lists')) {
+            $this->_backend->addCol('addressbook_lists', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('addressbook_lists') < 7) {
+            $this->setTableVersion('addressbook_lists', 7);
+        }
+
+        $this->addApplicationUpdate('Addressbook', '12.7', self::RELEASE012_UPDATE003);
+
+        Tinebase_Group_Sql::doJoinXProps();
     }
 }

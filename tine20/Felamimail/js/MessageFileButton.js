@@ -440,6 +440,8 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
             nodeData = _.get(nodes[0], 'nodeRecord', nodes[0]),
             fakeItem = new Ext.menu.Item();
 
+        nodeData = _.get(nodeData, 'data', nodeData);
+
         fakeItem.fileTarget = {
             record_title: nodeData.name,
             model: Tine.Filemanager.Model.Node,
@@ -483,7 +485,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     }
 });
 
-Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations) {
+Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations, glue='') {
     var _ = window.lodash,
         formatMessage = Tine.Tinebase.appMgr.get('Felamimail').formatMessage;
 
@@ -492,7 +494,20 @@ Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations) {
             iconCls = model ? model.getIconCls() : '',
             icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '';
 
-        return text.concat('<span class="felamimail-location">' + icon +
+        return text.concat('<span class="felamimail-location" ' +
+            'onclick="Tine.Felamimail.MessageFileButton.locationClickHandler(\'' + model.getPhpClassName() + "','" + location.record_id + '\')">' + icon +
             '<span class="felamimail-location-text">' + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>');
-    }, []).join('');
+    }, []).join(glue);
+};
+
+Tine.Felamimail.MessageFileButton.locationClickHandler = function (recordClassName, recordId) {
+    let recordClass = Tine.Tinebase.data.RecordMgr.get(recordClassName);
+    let recordData = {};
+    let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
+    recordData[recordClass.getMeta('idProperty')] = recordId;
+
+    editDialogClass.openWindow({
+        record: Tine.Tinebase.data.Record.setFromJson(recordData, recordClass),
+        recordId: recordId
+    });
 };

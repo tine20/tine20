@@ -360,6 +360,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @param string $_fileType
      * @param array $filesToWatch
+     * @throws Tinebase_Exception
      */
     protected function _deliverChangedFiles($_fileType, $filesToWatch=null)
     {
@@ -403,9 +404,14 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 if (file_exists($file)) {
                     readfile($file);
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __CLASS__ . '::' . __METHOD__
-                        . ' (' . __LINE__ .') File ' . $file . ' does not exist');
+                    if (preg_match('/^Tinebase/', $file)) {
+                        // this is critical!
+                        throw new Tinebase_Exception('client file does not exist: ' . $file);
+                    } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(
+                            __CLASS__ . '::' . __METHOD__
+                            . ' (' . __LINE__ .') File ' . $file . ' does not exist');
+                    }
                 }
             }
             if ($_fileType != 'lang') {

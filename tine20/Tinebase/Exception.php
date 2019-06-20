@@ -240,4 +240,16 @@ class Tinebase_Exception extends Exception
     {
         return $this->_title;
     }
+
+    /**
+     * @param Zend_Db_Statement_Exception $zdse
+     * @return bool
+     */
+    public static function isDbDuplicate(Zend_Db_Statement_Exception $zdse)
+    {
+        if (preg_match('/Duplicate entry/', $zdse->getMessage())) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -222,6 +222,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE)
     {
         $_container->isValid(TRUE);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' Add new container: ' . print_r($_container->toArray(), true) . ' with the following grants: '
+            . print_r($_grants instanceof Tinebase_Record_RecordSet ? $_grants->toArray() : $_grants, true));
         
         if ($_ignoreAcl !== TRUE) {
             switch ($_container->type) {
@@ -1568,22 +1572,36 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         foreach ($_records as $record) {
             if (isset($record[$_containerProperty])) {
                 $containerId = Tinebase_Model_Container::convertContainerId($record[$_containerProperty]);
-                if (! isset($containerIds[$containerId])) {
+                if (!isset($containerIds[$containerId])) {
                     $containerIds[$containerId] = $containerId;
                 }
             }
         }
-        
+
         if (empty($containerIds)) {
             return array();
         }
-        
+
+        return $this->getContainerWithGrants($containerIds, $_accountId);
+    }
+
+    /**
+     * @param array $_containerIds
+     * @param string $_accountId
+     * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Select_Exception
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function getContainerWithGrants(array $_containerIds, $_accountId)
+    {
         $accountId = $_accountId instanceof Tinebase_Record_Interface
             ? $_accountId->getId()
             : $_accountId;
         
         $select = $this->_getSelect('*', TRUE)
-            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", $containerIds)
+            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", $_containerIds)
             ->joinLeft(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
@@ -1671,21 +1689,27 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         try {
 
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            
+
             $where = $this->_getContainerAclTable()->getAdapter()->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
             $this->_getContainerAclTable()->delete($where);
-            
+
             foreach ($_grants as $recordGrants) {
                 $data = array(
-                    'container_id'  => $containerId,
-                    'account_id'    => $recordGrants['account_id'],
-                    'account_type'  => $recordGrants['account_type'],
+                    'container_id' => $containerId,
+                    'account_id' => $recordGrants['account_id'],
+                    'account_type' => $recordGrants['account_type'],
                 );
-                
+
                 foreach ($recordGrants as $grantName => $grant) {
                     if (in_array($grantName, $recordGrants->getAllGrants()) && $grant === TRUE) {
                         $data['id'] = $recordGrants->generateUID();
-                        $this->_getContainerAclTable()->insert($data + array('account_grant' => $grantName));
+                        try {
+                            $this->_getContainerAclTable()->insert($data + array('account_grant' => $grantName));
+                        } catch (Zend_Db_Statement_Exception $zdse) {
+                            if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                                throw $zdse;
+                            }
+                        }
                     }
                 }
             }
@@ -1695,7 +1719,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants), true),
                 new Tinebase_Model_Container(array('id' => $containerId), true)
             );
-            
+
             $this->_setRecordMetaDataAndUpdate($containerId, 'update', false);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);

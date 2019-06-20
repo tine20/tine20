@@ -216,11 +216,14 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
                 if (is_array($ruleRecord->action_argument)) {
                     $ruleRecord->action_argument = Zend_Json::encode($ruleRecord->action_argument);
                 }
-                if (! $ruleRecord->getId()) {
-                    // TODO check if ID is already set?
-                    // TODO use UUID?
-                    $ruleRecord->setId($id++);
+                if ($ruleRecord->getId()) {
+                    // prevent duplicate ids
+                    $id = max($id, (int) $ruleRecord->getId());
                 }
+                $ruleRecord->setId($id++);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Creating rule record: ' . print_r($ruleRecord->toArray(), true));
+
                 $this->_rulesBackend->create($ruleRecord);
             }
             

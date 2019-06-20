@@ -601,15 +601,17 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * gets a single group
      *
-     * @param int $groupId
+     * @param string $id
      * @return array
+     *
+     * @todo use abstract _get
      */
-    public function getGroup($groupId)
+    public function getGroup($id)
     {
         $groupArray = array();
         
-        if ($groupId) {
-            $group = Admin_Controller_Group::getInstance()->get($groupId);
+        if ($id) {
+            $group = Admin_Controller_Group::getInstance()->get($id);
             
             $groupArray = $group->toArray();
             
@@ -619,7 +621,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
         }
         
-        $groupArray['groupMembers'] = $this->getGroupMembers($groupId);
+        $groupArray['members'] = $this->getGroupMembers($id);
+        $groupArray['xprops'] = Tinebase_Helper::jsonDecode($groupArray['xprops']);
         
         return $groupArray;
     }
@@ -684,32 +687,30 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save group data from edit form
      *
-     * @param   array $groupData        group data
-     * @param   array $groupMembers     group members (array of ids)
-     * 
+     * @param   array $recordData        group data
      * @return  array
+     * @todo use _save
      */
-    public function saveGroup($groupData, $groupMembers)
+    public function saveGroup($recordData)
     {
         // unset if empty
-        if (empty($groupData['id'])) {
-            unset($groupData['id']);
+        if (empty($recordData['id'])) {
+            unset($recordData['id']);
         }
-        
-        $group = new Tinebase_Model_Group($groupData);
-        $group->members = $groupMembers;
-        
+
+        $group = new Tinebase_Model_Group($recordData);
+
         // this needs long execution time because cache invalidation may take long
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(60); // 1 minute
-        
+
         if ( empty($group->id) ) {
             $group = Admin_Controller_Group::getInstance()->create($group);
         } else {
             $group = Admin_Controller_Group::getInstance()->update($group);
         }
-        
+
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
-        
+
         return $this->getGroup($group->getId());
     }
    

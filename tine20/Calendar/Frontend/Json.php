@@ -418,7 +418,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param   array   $recordData
      * @return  array   created/updated Resource
-     * @throws
+     * @throws Calendar_Exception_ResourceAdminGrant
      */
     public function saveResource($recordData)
     {
@@ -431,7 +431,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
             foreach ($recordData['grants'] as $grant) {
                 try {
-                    if ($grant['resourceAdminGrant'] == true) {
+                    if (isset($grant['resourceAdminGrant']) && $grant['resourceAdminGrant'] == true) {
                         $check = true;
                         break;
                     }

@@ -155,11 +155,12 @@ class Felamimail_Controller_AccountTest extends TestCase
      */
     public function testResetAccountCapabilities()
     {
-        $this->_controller->updateCapabilities($this->_account);
-        
         $account = clone($this->_account);
-        $account->host = 'unittest.org';
         $account->type = Felamimail_Model_Account::TYPE_USER;
+        $account->setId(null);
+        $account = $this->_controller->create($account);
+
+        $account->host = 'unittest.org';
         $this->_controller->update($account);
 
         $cacheId = Tinebase_Helper::convertCacheId(

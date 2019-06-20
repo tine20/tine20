@@ -126,10 +126,10 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             o.record.beginEdit();
 
             if (o.record.get('source') == 'DEFAULT') {
-                o.value = o.record.get('default');
+                def = o.record.get('default');
+                o.value = String(def).match(/^[{\[]]/) ? def : Ext.encode(def);
             }
 
-            o.value = String(o.value).match(/^[{\[]/) ? o.value : Ext.encode(o.value);
             o.record.set('value', Ext.decode(o.value));
 
             colModel.config[o.column].setEditor(

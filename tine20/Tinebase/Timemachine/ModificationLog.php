@@ -1173,7 +1173,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 self::increaseRecordSequence($_newRecord, $_curRecord);
                 break;
             default:
-                throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete}.');
+                throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete|undelete}.');
                 break;
         }
         

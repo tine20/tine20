@@ -22,7 +22,7 @@ class Tinebase_Record_Expander_Relations extends Tinebase_Record_Expander_Proper
 
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
-        $this->_recordsToProcess = $_records;
+        $this->_addRecordsToProcess($_records);
         $ids = $_records->getArrayOfIds();
         if (!empty($ids)) {
             $self = $this;
@@ -49,9 +49,7 @@ class Tinebase_Record_Expander_Relations extends Tinebase_Record_Expander_Proper
             }
         }
 
-        // clean up
-        $this->_recordsToProcess = null;
-
+        // TODO we should delay this expanding until the current run of \Tinebase_Record_Expander::_fetchData finished!
         $this->expand($expandData);
     }
 

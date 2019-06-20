@@ -332,7 +332,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         switch(_value) {
             case 'blocked':
-                gridValue = "<img src='images/oxygen/16x16/status/security-medium.png' width='16' height='16'/>";
+                gridValue = "<img src='images/icon-set/icon_action_minus.svg' width='16' height='16'/>";
                 break;
 
             case 'enabled':
@@ -344,7 +344,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 break;
 
             case 'expired':
-                gridValue = "<img src='images/oxygen/16x16/status/user-away.png' width='16' height='16'/>";
+                gridValue = "<img src='images/icon-set/icon_time.svg' width='16' height='16'/>";
                 break;
 
             default:

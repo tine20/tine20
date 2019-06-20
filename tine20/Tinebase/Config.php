@@ -78,6 +78,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const CACHE = 'caching';
 
+    const CREDENTIAL_CACHE_SHARED_KEY = 'credentialCacheSharedKey';
+
     /**
      * DEFAULT_LOCALE
      *
@@ -2365,6 +2367,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule' => true,
             'setBySetupModule' => true,
         ),
+        self::CREDENTIAL_CACHE_SHARED_KEY => [
+            //_('shared credential cache cryptographic key')
+            self::LABEL                 => 'shared credential cache cryptographic key',
+            //_('shared credential cache cryptographic key')
+            self::DESCRIPTION           => 'shared credential cache cryptographic key',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => null,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+        ]
     );
 
     /**

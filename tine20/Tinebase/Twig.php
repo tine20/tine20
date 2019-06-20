@@ -212,6 +212,14 @@ class Tinebase_Twig
                             $record->{$property}->{$subProperty} === $value;
                 }, null) : null;
         }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('filterBySubProperty',
+            function ($records, $property, $subProperty, $value) {
+                return $records instanceof Tinebase_Record_RecordSet ?
+                    $records->filter(function($record) use($property, $subProperty, $value) {
+                        return $record->{$property} instanceof Tinebase_Record_Interface &&
+                            $record->{$property}->{$subProperty} === $value;
+                    }, null) : null;
+            }));
     }
 
     public function addExtension(Twig_ExtensionInterface $extension)

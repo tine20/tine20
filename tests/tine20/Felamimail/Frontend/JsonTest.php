@@ -1193,7 +1193,11 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
         $templatesFolder = $this->_getFolder($this->_account->templates_folder, FALSE);
         if ($templatesFolder) {
-            $this->_json->deleteFolder($templatesFolder['id'], $this->_account->getId());
+            try {
+                $this->_json->deleteFolder($templatesFolder['id'], $this->_account->getId());
+            } catch (Felamimail_Exception_IMAPFolderNotFound $feifnf) {
+                // do nothing
+            }
         }
         $returned = $this->_json->saveMessageInFolder($this->_account->templates_folder, $messageToSave);
         $this->_foldersToClear = array($this->_account->templates_folder);

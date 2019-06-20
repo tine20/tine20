@@ -54,6 +54,9 @@ class Tinebase_Record_Expander_DataRequest
             /** TODO Tinebase_Container / Tinebase_User_Sql etc. do not have the propery mehtod signature! */
             if ($this->controller instanceof Tinebase_Controller_Record_Abstract) {
                 $newRecords = $this->controller->getMultiple($this->ids, false, null, $this->_getDeleted);
+            } elseif ($this->controller instanceof Tinebase_Container) {
+                $newRecords = new Tinebase_Record_RecordSet(Tinebase_Model_Container::class,
+                    $this->controller->getContainerWithGrants($this->ids, Tinebase_Core::getUser()));
             } else {
                 $newRecords = $this->controller->getMultiple($this->ids);
             }

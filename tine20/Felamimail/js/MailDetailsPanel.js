@@ -177,6 +177,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             '{[this.showHeaders("' + this.i18n._('Show or hide header information') + '")]}',
             '</div>',
             '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, values)]}</div>',
+            '<div class="preview-panel-felamimail-filelocations">{[this.showFileLocations(values)]}</div>',
             '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
             '</div>',{
                 app: this.app,
@@ -293,6 +294,20 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     }
 
                     return result;
+                },
+
+                showFileLocations: function(messageData) {
+                    let fileLocations = _.get(messageData, 'fileLocations', []);
+
+                    if (fileLocations.length) {
+                        let app = Tine.Tinebase.appMgr.get('Felamimail');
+                        let text = app.formatMessage('{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}', {
+                            locationCount: fileLocations.length,
+                            locationsHtml: Tine.Felamimail.MessageFileButton.getFileLocationText(fileLocations, ', ')
+                        });
+
+                        return text;
+                    }
                 }
             });
     },

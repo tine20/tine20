@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>12.6</version>
+    <version>12.7</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -46,7 +46,7 @@
         </table>
         <table>
             <name>addressbook_lists</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -90,6 +90,11 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
                 </field>
                 <field>
                     <name>created_by</name>

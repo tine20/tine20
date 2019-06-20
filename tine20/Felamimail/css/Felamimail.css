@@ -101,6 +101,10 @@
     padding-left: 2px;
 }
 
+.FelamimailFlagIcon.MessageFileIcon {
+    cursor: pointer;
+}
+
 /**** preview *****/
 
 .preview-panel-felamimail {
@@ -316,13 +320,14 @@
 }
 
 /***** location renderer ******/
-
+.preview-panel-felamimail-filelocations,
 .felamimail-compose-info .x-panel-body {
-    background-color: lightyellow;
+    background-color: #ffffaa;
 }
 
 .felamimail-location {
     padding-right: 5px;
+    cursor: pointer;
 }
 
 .felamimail-location-icon {

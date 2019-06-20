@@ -845,15 +845,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $contactId = $_contact->getId();
 
         // prevent changing of email if it does not match configured domains
-        if (! Tinebase_EmailUser::checkDomain($_contact->email)) {
-            // _('User E-Mail-Address {0} not in allowed domains')
-            $translation = Tinebase_Translation::getTranslation('Tinebase');
-            throw new Tinebase_Exception_SystemGeneric(str_replace(
-                ['{0}', '{1}'],
-                [$_contact->email, implode(',', Tinebase_EmailUser::getAllowedDomains())],
-                $translation->_('User E-Mail-Address {0} not in allowed domains [{1}]')
-            ));
-        }
+        Tinebase_EmailUser::checkDomain($_contact->email, true);
 
         $oldUser = $this->getUserByProperty('contactId', $contactId, 'Tinebase_Model_FullUser');
 
@@ -1099,14 +1091,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'creation_time'         => $_user->creation_time,
             'last_modified_by'      => $_user->last_modified_by,
             'last_modified_time'    => $_user->last_modified_time,
-            'is_deleted'            => $_user->is_deleted,
+            'is_deleted'            => $_user->is_deleted ? $_user->is_deleted : 0,
             'deleted_time'          => $_user->deleted_time,
             'deleted_by'            => $_user->deleted_by,
             'seq'                   => $_user->seq,
             'xprops'                => $_user->xprops,
         );
         
-        $unsetIfEmpty = array('seq', 'creation_time', 'created_by', 'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_time', 'deleted_by');
+        $unsetIfEmpty = array('seq', 'creation_time', 'created_by', 'last_modified_by', 'last_modified_time');
         foreach ($unsetIfEmpty as $property) {
             if (empty($accountData[$property])) {
                 unset($accountData[$property]);

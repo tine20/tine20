@@ -214,6 +214,7 @@ Tine.widgets.tree.ContextMenu = {
                     params.application = this.scope.app.appName || this.scope.appName;
                     params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
                     params.modelName = this.scope.app.getMainScreen().getActiveContentType();
+                    if(params.modelName == '') params.modelName = this.scope.contextModel;
                 } 
                 else if (this.backendModel == 'Folder') {
                     var parentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(parentNode.attributes.folder_id);

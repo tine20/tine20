@@ -1402,6 +1402,9 @@ msgstr "Konten hinzufügen"
 msgid "Create new email accounts"
 msgstr "Neue Konten hinzufügen"
 
+msgid "Auto-Reply mail with this text"
+msgstr "Nachricht mit folgendem Text beantworten"
+
 msgid "Quota usage"
 msgstr "Kontingentnutzung"
 
@@ -1429,22 +1432,6 @@ msgstr "E-Mailnotiz bearbeiten:"
 msgid "Vacation Templates Container ID"
 msgstr "Container ID für Abwesenheitsnotizvorlagen"
 
-msgid "Warning"
-msgstr "Warnung"
-
-msgid ""
-"Some attachments are of type \"systemlinks\" whereas some of the "
-"recipients (marked yellow), couldn't be validated to be accounts on this "
-"installation. Only recipients with an active account will be able to open "
-"those attachments."
-msgstr ""
-"Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger (gelb "
-"markiert) sind keine Benutzer dieser Instanz. Nur Empfänger mit einem "
-"aktiven Benutzerkonto können diese Links öffnen."
-
-msgid "Do you really want to send?"
-msgstr "Wollen Sie die Nachricht wirklich absenden?"
-
 msgid "Filemanager ..."
 msgstr "Dateimanager ..."
 
@@ -1466,3 +1453,107 @@ msgstr "Nachrichten als Anhang ablegen"
 
 msgid "Open in Felamimail"
 msgstr "Im E-Mail-Modul öffnen"
+
+msgid ""
+"{locationCount, plural, one {This message is filed at the following "
+"location} other {This message is filed at the following locations}}: "
+"{locationsHtml}"
+msgstr ""
+"{locationCount, plural, one {Diese Nachricht ist an folgendem Ort "
+"abgelegt} other {Diese Nachricht ist an folgenden Orten abgelegt}}: "
+"{locationsHtml}"
+
+msgid ""
+"{locationCount, plural, one {This message will be filed at the following "
+"location} other {This message will be filed at the following locations}}: "
+"{locationsHtml}"
+msgstr ""
+"{locationCount, plural, one {Diese Nachricht wird an folgendem Ort "
+"abgelegt} other {Diese Nachricht wird an folgenden Orten abgelegt}}: "
+"{locationsHtml}"
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid ""
+"Some attachments are of type \"systemlinks\" whereas some of the "
+"recipients (marked yellow), couldn't be validated to be accounts on this "
+"installation. Only recipients with an active account will be able to open "
+"those attachments."
+msgstr ""
+"Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger (gelb "
+"markiert) sind keine Benutzer dieser Instanz. Nur Empfänger mit einem "
+"aktiven Benutzerkonto können diese Links öffnen."
+
+msgid "Do you really want to send?"
+msgstr "Wollen Sie die Nachricht wirklich absenden?"
+
+msgid "Filed as:"
+msgstr "Abgelebt unter:"
+
+msgid "Select Message File Location"
+msgstr "Ablageort für Nachricht auswählen"
+
+msgid "Enabled Features in Felamimail Application."
+msgstr "Eingeschaltete Features für die Felamimail Anwendung."
+
+msgid "Show Reply-To"
+msgstr "Zeige Antworten-An"
+
+msgid "Show Reply-To field in message compose dialog"
+msgstr "Zeige Antwort-An Feld im Nachricht Verfassen Dialog"
+
+msgid "URL icon path for own domain"
+msgstr "URL des icon Pfades für die eigene Domain"
+
+msgid "Used to mark messages from configured primary and secondary domains"
+msgstr ""
+"Wird genutzt um Nachrichten zu markieren die von der konfigurierten "
+"primären oder sekundären Domain stammen"
+
+msgid "URL icon path for other domains"
+msgstr "URL des icon Pfades für andere Domains"
+
+msgid "Used to mark messages from all other domains"
+msgstr ""
+"Wird genutzt um Nachrichten zu markieren die von anderen Domains stammen"
+
+msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
+msgstr "Regulärer Ausdruck für andere Domains FLAG_ICON_OTHER_DOMAIN"
+
+msgid "Message File Suggestion"
+msgid_plural "Message File Suggestions"
+msgstr[0] "Vorschlag für Ablageort"
+msgstr[1] "Vorschlage für Ablageorte"
+
+msgid "Message File Suggestions"
+msgstr "Vorschläge für Ablageorte"
+
+msgid "Message File Location"
+msgid_plural "Message File Locations"
+msgstr[0] "Ablageort der Nachricht"
+msgstr[1] "Ablageorte der Nachricht"
+
+msgid "Message File Locations"
+msgstr "Nachrichten Ablageorte"
+
+msgid "Message ID Hash"
+msgstr "Nachrichten Hash ID"
+
+msgid "Message ID"
+msgstr "Nachrichten ID"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Record ID"
+msgstr "Datensatz ID"
+
+msgid "Record Title"
+msgstr "Datensatz Titel"
+
+msgid "Node ID"
+msgstr "Node ID"
+
+msgid "Type"
+msgstr "Typ"

@@ -1899,7 +1899,6 @@ msgid "Time"
 msgstr "Zeit"
 
 #: js/widgets/ActivitiesPanel.js:252
-#, fuzzy
 msgid "User"
 msgstr "Benutzer"
 
@@ -3870,9 +3869,8 @@ msgid "Order"
 msgstr "Reihenfolge"
 
 #: Model/Container.php:113
-#, fuzzy
 msgid "Application"
-msgstr "Applikation"
+msgstr ""
 
 #: Model/Container.php:118
 msgid "Owner"

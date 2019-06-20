@@ -286,9 +286,13 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
      */
     function _getName(VCard $_card, $_data)
     {
-        $_data['n_fn'] = $_card->getProperty('FN')->value;
-        
-        $components = $_card->getProperty('N')->getComponents();
+        if ($_card->getProperty('FN')) {
+            $_data['n_fn'] = $_card->getProperty('FN')->value;
+        }
+
+        if ($_card->getProperty('N')) {
+            $components = $_card->getProperty('N')->getComponents();
+        }
         $_data['n_family'] = (isset($components[0])) ? $components[0] : '';
         $_data['n_given']  = (isset($components[1])) ? $components[1] : '';
         $_data['n_middle'] = (isset($components[2])) ? $components[2] : '';

@@ -19,6 +19,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 {
     use Tinebase_Controller_Record_ModlogTrait;
 
+    protected static $_doJoinXProps = true;
 
     /**
      * Model name
@@ -167,9 +168,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param  mixed $_groupId
      * @param  array $_groupMembers
+     * @return void
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
+        if (! is_array($_groupMembers)) {
+            $_groupMembers = [];
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Setting ' . count($_groupMembers) . ' new groupmembers for group ' . $_groupId);
         
@@ -185,6 +191,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param  mixed  $_groupId
      * @param  array  $_groupMembers
+     * @throws Zend_Db_Statement_Exception
+     * @return void
      */
     public function setGroupMembersInSqlBackend($_groupId, $_groupMembers)
     {
@@ -489,7 +497,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if(!$_group->isValid()) {
             throw new Tinebase_Exception_Record_Validation('invalid group object');
         }
-        
+
+        // prevent changing of email if it does not match configured domains
+        Tinebase_EmailUser::checkDomain($_group->email, true);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Creating new group ' . $_group->name 
             //. print_r($_group->toArray(), true)
@@ -509,7 +520,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         unset($data['members']);
         unset($data['container_id']);
-        
+        unset($data['xprops']);
+
         $this->groupsTable->insert($data);
 
         $newGroup = clone $_group;
@@ -546,6 +558,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function updateGroupInSqlBackend(Tinebase_Model_Group $_group)
     {
+        // prevent changing of email if it does not match configured domains
+        Tinebase_EmailUser::checkDomain($_group->email, true);
+
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_group);
 
         $oldGroup = $this->getGroupById($groupId);
@@ -789,30 +804,37 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param string|array $_ids Ids
      * @return Tinebase_Record_RecordSet
-     * 
-     * @todo this should return the container_id, too
      */
     public function getMultiple($_ids)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
         
         if (! empty($_ids)) {
-            $select = $this->groupsTable->select();
-            $select->where($this->_db->quoteIdentifier('id') . ' IN (?)', array_unique((array) $_ids));
-            
-            $rows = $this->groupsTable->fetchAll($select);
+            $rows = $this->_getSelect()->where($this->_db->quoteIdentifier($this->_tableName . '.id') . ' IN (?)',
+                array_unique((array) $_ids))->query()->fetchAll();
+
             foreach ($rows as $row) {
-                $result->addRecord(new Tinebase_Model_Group($row->toArray(), TRUE));
+                $group = new Tinebase_Model_Group($row, true);
+                $group->runConvertToRecord();
+                $result->addRecord($group);
             }
         }
         
         return $result;
     }
-    
+
+    /**
+     * required for update path to Adb 12.7 ... can be removed once we drop updatability from < 12.7 to 12.7+
+     */
+    public static function doJoinXProps($join = true)
+    {
+        static::$_doJoinXProps = $join;
+    }
+
     /**
      * get the basic select object to fetch records from the database
      * 
-     * NOTE: container_id is joined from addressbook lists table
+     * NOTE: container_id, xprops is joined from addressbook lists table
      *  
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param boolean $_getDeleted get deleted records (if modlog is active)
@@ -825,10 +847,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $select->from(array($this->_tableName => SQL_TABLE_PREFIX . $this->_tableName), $_cols);
         
         if ($this->_addressBookInstalled === true) {
+            $joinCols = ['container_id', 'xprops'];
+            if (!static::$_doJoinXProps) {
+                unset($joinCols[1]);
+            }
             $select->joinLeft(
                 array('addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'),
-                $this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'), 
-                array('container_id')
+                $this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'),
+                $joinCols
             );
         }
         
