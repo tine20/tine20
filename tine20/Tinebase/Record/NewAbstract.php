@@ -1577,4 +1577,12 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         }
         return true;
     }
+
+    /**
+     * @return string
+     */
+    public function getNotesTranslatedText()
+    {
+        return $this->getTitle();
+    }
 }

@@ -1144,19 +1144,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             array('field' => 'contact_id',  'operator' => 'equals', 'value' => $this->getId())
         )));
 
-        $listRoles = array();
         /** @var Addressbook_Model_ListMemberRole $listMemberRole */
         foreach($listMemberRoles as $listMemberRole) {
-            $listRoles[$listMemberRole->list_role_id] = $listMemberRole->list_role_id;
             $lists->removeById($listMemberRole->list_id);
         }
 
-        if (count($listRoles) > 0) {
-            $listRoles = Addressbook_Controller_ListRole::getInstance()->getMultiple($listRoles, true)->asArray();
-        }
-
         $result = parent::getPathNeighbours();
-        $result['parents'] = array_merge($result['parents'], $lists->asArray(), $listRoles);
+        $result['parents'] = array_merge($result['parents'], $lists->asArray(), $listMemberRoles->asArray());
 
         $listController->doContainerACLChecks($oldAclCheck);
 
