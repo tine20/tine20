@@ -538,7 +538,8 @@ Tine.Tinebase.ApplicationStarter = {
                     if (! Tine[appName].Model.hasOwnProperty(modelName)) {
                         Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], 
                             Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
-                               'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group,copyOmitFields')
+                               'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
+                                'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle')
                         );
 
                         // called from legacy code - but all filters should come from registy (see below)
