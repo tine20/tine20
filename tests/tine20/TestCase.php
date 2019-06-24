@@ -714,7 +714,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $classParts = explode('_', get_called_class());
         $realModelName = $classParts[0] . '_Model_' . $modelName;
         /** @var Tinebase_Record_Abstract $realModelName */
-        $configuration = $realModelName::getConfiguration();
+        if (class_exists($realModelName)) {
+            $configuration = $realModelName::getConfiguration();
+        } else {
+            $configuration = null;
+        }
 
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         if ($nameField) {
@@ -749,7 +753,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $savedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
-        self::assertEquals(1, $result['totalcount']);
+        self::assertEquals(1, $result['totalcount'], print_r($result['results'], true));
 
         if (null !== $configuration && $configuration->modlogActive && $recordWasUpdated) {
             self::assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),

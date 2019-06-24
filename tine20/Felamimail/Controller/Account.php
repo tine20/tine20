@@ -99,6 +99,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
 
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
+    }
+
     public function setImapConfig()
     {
         $this->_imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
@@ -122,9 +127,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_addedDefaultAccount = false;
         
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-        
+
+        $idFilter = $_filter->getFilter('id');
+
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
-        if ($this->_useSystemAccount && ! $_onlyIds) {
+        if (! $idFilter && $this->_useSystemAccount && ! $_onlyIds) {
             $systemAccountFound = FALSE;
             // check if resultset contains system account and add config values
             foreach ($result as $account) {
@@ -201,9 +208,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        if (! $this->doContainerACLChecks()) {
+            return;
+        }
+
         $userFilter = $_filter->getFilter('user_id');
 
         // fix me!
