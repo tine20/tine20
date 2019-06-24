@@ -896,26 +896,31 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $persistentFilters = array();
         }
 
-        $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+        // manage email user settings
+        $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
+        $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
+        $smtpConfig = $manageSmtpEmailUser ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
         
         $userRegistryData = array(
-            'accountBackend'     => Tinebase_User::getConfiguredBackend(),
-            'areaLocks'          => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
-            'timeZone'           => Tinebase_Core::getUserTimezone(),
-            'currentAccount'     => $user->toArray(),
-            'userContact'        => $userContactArray,
-            'jsonKey'            => Tinebase_Core::get('jsonKey'),
-            'userApplications'   => $user->getApplications()->toArray(),
-            'NoteTypes'          => $this->getNoteTypes(),
-            'stateInfo'          => Tinebase_State::getInstance()->loadStateInfo(),
-            'mustchangepw'       => $user->mustChangePassword(),
-            'confirmLogout'      => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
-            'advancedSearch'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0),
-            'persistentFilters'  => $persistentFilters,
+            'accountBackend' => Tinebase_User::getConfiguredBackend(),
+            'areaLocks' => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
+            'timeZone' => Tinebase_Core::getUserTimezone(),
+            'currentAccount' => $user->toArray(),
+            'userContact' => $userContactArray,
+            'jsonKey' => Tinebase_Core::get('jsonKey'),
+            'userApplications' => $user->getApplications()->toArray(),
+            'NoteTypes' => $this->getNoteTypes(),
+            'manageImapEmailUser' => $manageImapEmailUser,
+            'manageSmtpEmailUser' => $manageSmtpEmailUser,
+            'stateInfo' => Tinebase_State::getInstance()->loadStateInfo(),
+            'mustchangepw' => $user->mustChangePassword(),
+            'confirmLogout' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
+            'advancedSearch' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0),
+            'persistentFilters' => $persistentFilters,
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
-            'sessionLifeTime'    => Tinebase_Session_Abstract::getSessionLifetime(),
-            'primarydomain'      => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
-            'secondarydomains'   => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
+            'sessionLifeTime' => Tinebase_Session_Abstract::getSessionLifetime(),
+            'primarydomain' => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
+            'secondarydomains' => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

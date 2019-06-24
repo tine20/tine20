@@ -56,7 +56,8 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function () {
         var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
             app: this.app,
-            editDialog: this
+            editDialog: this,
+            disabled: ! (Tine.Tinebase.registry.get('manageImapEmailUser') && Tine.Tinebase.registry.get('manageSmtpEmailUser'))
         });
 
         return {

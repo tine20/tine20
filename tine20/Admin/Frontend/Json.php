@@ -35,16 +35,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_manageSAM = false;
     
     /**
-     * @var bool
-     */
-    protected $_manageImapEmailUser = FALSE;
-    
-    /**
-     * @var bool
-     */
-    protected $_manageSmtpEmailUser = FALSE;
-    
-    /**
      * constructs Admin_Frontend_Json
      */
     public function __construct()
@@ -52,14 +42,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // manage samba sam?
         if (isset(Tinebase_Core::getConfig()->samba)) {
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
-        }
-
-        // manage email user settings
-        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
-            $this->_manageImapEmailUser = TRUE;
-        }
-        if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
-            $this->_manageSmtpEmailUser = TRUE;
         }
     }
     
@@ -75,8 +57,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,
-            'manageImapEmailUser'           => $this->_manageImapEmailUser,
-            'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => (
                     isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])
