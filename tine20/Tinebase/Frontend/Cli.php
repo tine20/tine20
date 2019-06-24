@@ -1164,23 +1164,31 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, '');
                     }
 
-                    if ($lastDuration > 3600) {
-                        throw new Tinebase_Exception('last duration > 3600 sec - ' . $lastDuration);
+                    if ($lastDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_CRIT}) {
+                        throw new Tinebase_Exception('last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_CRIT} . ' sec - ' . $lastDuration);
                     }
-                    if ($now - $lastDurationUpdate > 3600) {
-                        throw new Tinebase_Exception('last duration update > 3600 sec - ' . ($now - $lastDurationUpdate));
-                    }
-
-                    if ($diff > 60 && null === $warn) {
-                        $warn = 'last job id change > 60 sec - ' . $diff;
+                    if ($now - $lastDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT}) {
+                        throw new Tinebase_Exception('last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT} . ' sec - ' . ($now - $lastDurationUpdate));
                     }
 
-                    if ($lastDuration > 60 && null === $warn) {
-                        $warn = 'last duration > 60 sec - ' . $lastDuration;
+                    if ($diff > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last job id change > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - ' . $diff;
                     }
 
-                    if ($now - $lastDurationUpdate > 70 && null === $warn) {
-                        $warn = 'last duration update > 70 sec - ' . ($now - $lastDurationUpdate);
+                    if ($lastDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - ' . $lastDuration;
+                    }
+
+                    if ($now - $lastDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN}
+                        && null === $warn
+                    ) {
+                        $warn = 'last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN} . ' sec - '
+                            . ($now - $lastDurationUpdate);
                     }
 
 
