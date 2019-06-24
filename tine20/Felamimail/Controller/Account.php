@@ -924,6 +924,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $folderName = $_account->{$systemFolderField};
                 $this->_createSystemFolder($_account, $folderName);
             }
+        } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
         } catch (Exception $e) {
             // skip creation at this point
             Tinebase_Exception::log($e);
@@ -938,7 +940,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _getAccountEmail(Tinebase_Model_FullUser $_user)
     {
-        $email = ((! $_user->accountEmailAddress || empty($_user->accountEmailAddress)) && (isset($this->_imapConfig['user']) || array_key_exists('user', $this->_imapConfig))) 
+        $email = ((! $_user->accountEmailAddress || empty($_user->accountEmailAddress))
+            && (isset($this->_imapConfig['user']) || array_key_exists('user', $this->_imapConfig))
+        )
             ? $this->_imapConfig['user']
             : $_user->accountEmailAddress;
             
