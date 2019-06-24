@@ -42,7 +42,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected $_rowCount = 0;
 
-    protected $_columnCount = 0;
+    protected $_columnCount = 1;
 
     protected $_cloneRow;
 
@@ -179,7 +179,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     public function generate()
     {
         $this->_rowCount = 0;
-        $this->_columnCount = 0;
+        $this->_columnCount = 1;
         $this->_createDocument();
         $this->_exportRecords();
         $this->_replaceTine20ImagePaths();
@@ -188,7 +188,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     protected function _startRow()
     {
         $this->_rowCount += 1;
-        $this->_columnCount = 0;
+        $this->_columnCount = 1;
 
         //insert cloned row
         if ($this->_rowOffset > 0) {
