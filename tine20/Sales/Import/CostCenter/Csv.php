@@ -28,7 +28,13 @@ class Sales_Import_CostCenter_Csv extends Tinebase_Import_Csv_Generic
     {
         $result = parent::_doConversions($_data);
         if($result['number'] == '') {
-            $result['number'] = rand('100', '999');
+            while(!isset($existCostCenter)) {
+                $result['number'] = rand('100', '999');
+                $filter = Sales_Model_CostCenterFilter::getFilterForModel('Sales_Model_CostCenter', [
+                    ['field' => 'number', 'operator' => 'equals', 'value' => $result['number']]
+                ]);
+                $existCostCenter = Sales_Controller_CostCenter::getInstance()->search($filter);
+            }
         }
         return $result;
     }
