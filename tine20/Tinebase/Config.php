@@ -675,6 +675,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE_HOST = 'host';
     const ACTIONQUEUE_PORT = 'port';
     const ACTIONQUEUE_NAME = 'queueName';
+    const ACTIONQUEUE_MONITORING_DURATION_WARN = 'durationWarn';
+    const ACTIONQUEUE_MONITORING_LASTUPDATE_WARN = 'lastUpdateWarn';
+    const ACTIONQUEUE_MONITORING_DURATION_CRIT = 'durationCrit';
+    const ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT = 'lastUpdateCrit';
 
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
@@ -987,6 +991,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::ACTIONQUEUE_NAME       => array(
                     'type'                              => Tinebase_Config::TYPE_STRING,
                     'default'                           => 'TinebaseQueue'
+                ),
+                self::ACTIONQUEUE_MONITORING_DURATION_WARN       => array(
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 60
+                ),
+                self::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN     => array(
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 180
+                ),
+                self::ACTIONQUEUE_MONITORING_DURATION_CRIT       => array(
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600
+                ),
+                self::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT     => array(
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600
                 ),
             ),
             'default'                           => array()
