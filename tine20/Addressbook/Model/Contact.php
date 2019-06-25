@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use Tinebase_NewModelConfiguration as MC;
-
 /**
  * class to hold contact data
  * 

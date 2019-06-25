@@ -1601,6 +1601,6 @@ class Admin_JsonTest extends TestCase
             'name',
             'email'
         );
-        self::assertEquals('Templates', $account['templates_folder']);
+        self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
     }
 }

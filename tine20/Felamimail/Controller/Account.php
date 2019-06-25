@@ -122,7 +122,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         if ($_filter === NULL) {
-            $_filter = new Felamimail_Model_AccountFilter(array());
+            $_filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class);
         }
         $this->_addedDefaultAccount = false;
         
@@ -311,7 +311,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         if ($_createdRecord->type === Tinebase_EmailUser_Model_Account::TYPE_USER) {
             // set as default account if it is the only account
-            $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
+            $accountCount = $this->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class));
             if ($accountCount == 1) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $_createdRecord->name . ' as new default email account.');
