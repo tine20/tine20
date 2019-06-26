@@ -45,6 +45,8 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
 
     protected $_twigName = '';
 
+    protected $_postPCallMap = [];
+
     /**
      * @param string $documentTemplate The fully qualified template filename.
      * @param bool   $inMemory
@@ -95,6 +97,85 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             $this->_temporaryDocumentRels = $this->fixBrokenMacros(
                 $this->zipClass->getFromName('word/_rels/document.xml.rels'));
         }
+
+        $this->_postPCallMap = [
+            'TC' => [
+                'FILL' => function(&$data, $offset, array $params) {
+                    $tc1Pos = false;
+                    if (false === ($tcPos = strrpos($data, '<w:tc>', $offset - strlen($data))) &&
+                            false === ($tc1Pos = strrpos($data, '<w:tc ', $offset - strlen($data)))) {
+                        throw new Tinebase_Exception('could not find <w:tc in tc_fill');
+                    }
+                    if (false === $tcPos || (false !== $tc1Pos && $tc1Pos > $tcPos)) $tcPos = $tc1Pos;
+                    if (false === ($tcPrPos = strpos($data, '<w:tcPr', $tcPos)) || $tcPrPos > $offset) {
+                        if (false === ($gtPos = strpos($data, '>', $tcPos))) {
+                            throw new Tinebase_Exception('could not find > for <w:tc in tc_fill');
+                        }
+                        $data = substr($data, 0, $gtPos + 1) . '<w:tcPr><w:shd w:fill="' . $params[0] . '"/></w:tcPr>' .
+                            substr($data, $gtPos + 1);
+                    } elseif (false === ($shdPos = strpos($data, '<w:shd ', $tcPrPos)) || $shdPos > $offset) {
+                        if (false === ($gtPos = strpos($data, '>', $tcPrPos))) {
+                            throw new Tinebase_Exception('could not find > for <w:tcPr in tc_fill');
+                        }
+                        $data = substr($data, 0, $gtPos + 1) . '<w:shd w:fill="' . $params[0] . '"/>' .
+                            substr($data, $gtPos + 1);
+                    } elseif (false === ($fillPos = strpos($data, 'w:fill="', $shdPos)) || $fillPos > $offset) {
+                        if (false === ($gtPos = strpos($data, '/>', $shdPos))) {
+                            throw new Tinebase_Exception('could not find /> for <w:shd in tc_fill');
+                        }
+                        $data = substr($data, 0, $gtPos + 1) . 'w:fill="' . $params[0] . '"' .
+                            substr($data, $gtPos + 1);
+                    } else {
+                        $fillPos += 8;
+                        if (false === ($quotePos = strpos($data, '"', $fillPos))) {
+                            throw new Tinebase_Exception('could not find " for w:fill=" in tc_fill');
+                        }
+                        $data = substr($data, 0, $fillPos) . $params[0] . substr($data, $quotePos);
+                    }
+                },
+            ],
+            /*'TR' => [
+                'FILL' => function(&$data, $offset, array $params) {
+                    $tr1Pos = false;
+                    if (false === ($trPos = strrpos($data, '<w:tr>', $offset - strlen($data))) &&
+                            false === ($tr1Pos = strrpos($data, '<w:tr ', $offset - strlen($data)))) {
+                        throw new Tinebase_Exception('could not find <w:tr in tr_fill');
+                    }
+                    if (false === $trPos || (false !== $tr1Pos && $tr1Pos > $trPos)) $trPos = $tr1Pos;
+                    if (false === ($trPrPos = strpos($data, '<w:trPr', $trPos)) || $trPrPos > $offset) {
+                        if (false === ($gtPos = strpos($data, '>', $trPos))) {
+                            throw new Tinebase_Exception('could not find > for <w:tr in tr_fill');
+                        }
+                        $data = substr($data, 0, $gtPos + 1) . '<w:trPr><w:shd w:fill="' . $params[0] . '"/></w:trPr>' .
+                            substr($data, $gtPos + 1);
+                    } else {
+                        if (false === ($offset1 = strpos($data, '</w:trPr>', $trPos)) || $offset1 > $offset) {
+                            throw new Tinebase_Exception(('could not find </w:trPr> in tr_fill'));
+                        }
+                        $offset = $offset1;
+                        if (false === ($shdPos = strpos($data, '<w:shd ', $trPrPos)) || $shdPos > $offset) {
+                            if (false === ($gtPos = strpos($data, '>', $trPrPos))) {
+                                throw new Tinebase_Exception('could not find > for <w:trPr in tr_fill');
+                            }
+                            $data = substr($data, 0, $gtPos + 1) . '<w:shd w:fill="' . $params[0] . '"/>' .
+                                substr($data, $gtPos + 1);
+                        } elseif (false === ($fillPos = strpos($data, 'w:fill="', $shdPos)) || $fillPos > $offset) {
+                            if (false === ($gtPos = strpos($data, '/>', $shdPos))) {
+                                throw new Tinebase_Exception('could not find /> for <w:shd in tr_fill');
+                            }
+                            $data = substr($data, 0, $gtPos + 1) . 'w:fill="' . $params[0] . '"' .
+                                substr($data, $gtPos + 1);
+                        } else {
+                            $fillPos += 8;
+                            if (false === ($quotePos = strpos($data, '"', $fillPos))) {
+                                throw new Tinebase_Exception('could not find " for w:fill=" in tr_fill');
+                            }
+                            $data = substr($data, 0, $fillPos) . $params[0] . substr($data, $quotePos);
+                        }
+                    }
+                },
+            ],*/
+        ];
     }
 
     /**
@@ -119,6 +200,31 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     public function getParent()
     {
         return $this->_parent;
+    }
+
+    public function postProcessMarkers()
+    {
+        while (preg_match('/(POSTP_\w+)\~\!\§/', $this->tempDocumentMainPart, $m, PREG_OFFSET_CAPTURE)) {
+            $this->tempDocumentMainPart = substr($this->tempDocumentMainPart, 0, $m[0][1]) .
+                substr($this->tempDocumentMainPart, $m[0][1] + strlen($m[0][0]));
+
+            $callStack = explode('_', $m[1][0]);
+            array_shift($callStack);
+            $this->callPostProcessor($this->tempDocumentMainPart, $m[0][1], $callStack, $this->_postPCallMap);
+        }
+    }
+
+    protected function callPostProcessor(&$data, $offset, &$callStack, $callMap)
+    {
+        $key = array_shift($callStack);
+        if (!isset($callMap[$key])) {
+            throw new Exception('did not find ' . $key . ' in post processor call map');
+        }
+        if (is_callable($callMap[$key])) {
+            $callMap[$key]($data, $offset, $callStack);
+        } else {
+            $this->callPostProcessor($data, $offset, $callStack, $callMap[$key]);
+        }
     }
 
     public function replaceTine20ImagePaths()

@@ -62,6 +62,15 @@ class Addressbook_Export_DocTest extends TestCase
         static::assertEquals($contentHashToBe, $contentHashIs, 'generated document does not match expectation');
     }
 
+    public function testTableWithPOSTPmarkers()
+    {
+        $this->_genericExportTest(array(
+            'definition' => __DIR__ . '/definitions/adb_doc_tableWithPOSTPmarkers.xml',
+            'template' => 'file://' . __DIR__ . '/templates/tableWithPOSTPmarkers.docx',
+            'filename' => __METHOD__ . '_'
+        ));
+    }
+
     public function testRecordBlock()
     {
         $this->_genericExportTest(array(
