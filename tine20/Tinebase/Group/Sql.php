@@ -172,8 +172,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
-        if (! is_array($_groupMembers)) {
-            $_groupMembers = [];
+        if ($_groupMembers === null) {
+            // do nothing
+            return;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
