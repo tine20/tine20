@@ -400,9 +400,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         ));
         $status = $this->_controller->getFolderStatus($filter);
 
-        // this finds sclevers Junk folder... ok or not ok?
-        $this->assertLessThanOrEqual(1, count($status), 'max one folder should be found for update: '
-            . print_r($status->toArray(), true));
+        $this->assertEquals(0, count($status), 'no folders should be found for update');
     }
 
     public function testAddMessageToCache()

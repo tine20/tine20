@@ -67,9 +67,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     private function __construct()
     {
         $this->_modelName = 'Felamimail_Model_Account';
-        $this->_doContainerACLChecks = FALSE;
-        $this->_doRightChecks = TRUE;
-        $this->_purgeRecords = FALSE;
+        $this->_doContainerACLChecks = true;
+        $this->_doRightChecks = true;
+        $this->_purgeRecords = false;
         
         $this->_backend = new Felamimail_Backend_Account();
         
