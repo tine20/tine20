@@ -126,6 +126,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         static::assertContains('RECURRENCE-ID:20180906T110000', $vCalBlob);
         static::assertContains('X-MICROSOFT-CDO-OWNERAPPTID:1983350753', $vCalBlob);
     }
+
     /**
      * testExternalInvitationRequestAutoProcess
      */
@@ -133,6 +134,19 @@ class Calendar_Frontend_iMIPTest extends TestCase
     {
         return $this->_testExternalImap('invitation_request_external.ics', 5, 'test mit extern', $_doAssertation,
             $_doAutoProcess);
+    }
+
+    /**
+     * testExternalInvitationRequestAutoProcess
+     */
+    public function testBadTZ()
+    {
+        $iMIP = $this->_testExternalImap('invitation_bad_tz.ics', 2, 'test');
+        $event = $iMIP->getEvent();
+
+        // VCalendar will default to UTC on broken / bad TZ (like BRT), that them somehow defaults to UserTZ!
+        // if that is such a good idea?
+        static::assertEquals(Tinebase_Core::getUserTimezone(), $event->originator_tz);
     }
 
     public function testExternalInvitationRequestMultiImport()
@@ -164,6 +178,17 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'organizer, vagrant and sclever should have accepted');
     }
 
+    /**
+     * @param $icsFilename
+     * @param $numAttendee
+     * @param $summary
+     * @param bool $_doAssertation
+     * @param bool $_doAutoProcess
+     * @return Calendar_Model_iMIP
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Statement_Exception
+     */
     protected function _testExternalImap($icsFilename, $numAttendee, $summary, $_doAssertation = true,
         $_doAutoProcess = true)
     {
