@@ -160,6 +160,49 @@ class Addressbook_Controller_ListTest extends TestCase
         
         return $list;
     }
+
+    public function testListAsMailinglist()
+    {
+        Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
+        $accountCtrl = Felamimail_Controller_Account::getInstance();
+        
+        $this->objects['initialList']->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
+        $this->objects['initialList']->email = 'test@foo.bar';
+
+        $list = $this->testAddList();
+        $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
+            ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
+        ]))->getFirstRecord();
+        static::assertNotNull($account, 'could not get account');
+        static::assertSame($list->email, $account->name);
+
+        // test change email
+        $list->email = 'shoo@foo.bar';
+        $this->_instance->update($list);
+
+        $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
+            ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
+        ]))->getFirstRecord();
+        static::assertNotNull($account, 'could not get account');
+        static::assertSame($list->email, $account->name);
+
+        // test delete account
+        $list->email = '';
+        $this->_instance->update($list);
+
+        $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
+            ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
+        ]))->getFirstRecord();
+        static::assertNull($account, 'account was not deleted');
+
+        return $list;
+    }
     
     /**
      * try to get a list
@@ -280,5 +323,7 @@ class Addressbook_Controller_ListTest extends TestCase
         $list = $this->_instance->addListMember($list, $this->objects['contact1']);
 
         Felamimail_Sieve_AdbList::createFromList($list);
+
+        // TODO fixme, finish this test
     }
 }

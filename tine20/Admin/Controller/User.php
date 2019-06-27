@@ -321,9 +321,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param  Tinebase_Model_FullUser  $_account           the account
      * @param  string                     $_password           the new password
      * @param  string                     $_passwordRepeat  the new password again
+     * @param  boolean                    $_ignorePwdPolicy
      * @return Tinebase_Model_FullUser
      */
-    public function create(Tinebase_Model_FullUser $_user, $_password, $_passwordRepeat)
+    public function create(Tinebase_Model_FullUser $_user, $_password, $_passwordRepeat, $_ignorePwdPolicy = false)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -339,7 +340,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_password = '';
             $_passwordRepeat = '';
         }
-        Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
+        if (!$_ignorePwdPolicy) {
+            Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
+        }
 
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -392,11 +395,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         $event = new Admin_Event_AddAccount(array(
-            'account' => $user
+            'account' => $user,
+            'pwd'     => $_password,
         ));
         Tinebase_Event::fireEvent($event);
-        
-        $this->setAccountPassword($user, $_password, $_passwordRepeat);
+
+        if (!empty($_password)) {
+            $this->setAccountPassword($user, $_password, $_passwordRepeat);
+        }
 
         return $user;
     }

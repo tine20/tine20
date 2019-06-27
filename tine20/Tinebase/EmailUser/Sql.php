@@ -251,30 +251,6 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         }
     }
     
-    protected function _getConfiguredSystemDefaults()
-    {
-        $systemDefaults = array();
-        
-        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
-        if (!empty($this->_config[$hostAttribute])) {
-            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
-        }
-        
-        if (!empty($this->_config['port'])) {
-            $systemDefaults['emailPort'] = $this->_config['port'];
-        }
-        
-        if (!empty($this->_config['ssl'])) {
-            $systemDefaults['emailSecure'] = $this->_config['ssl'];
-        }
-        
-        if (!empty($this->_config['auth'])) {
-            $systemDefaults['emailAuth'] = $this->_config['auth'];
-        }
-        
-        return $systemDefaults;
-    }
-    
     /**
      * update/set email user password
      * 

@@ -90,15 +90,10 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
                 ? array($records->getById($recordGrant->{$this->_recordColumn}))
                 : $records->filter($aclIdProperty, $recordGrant->{$this->_recordColumn});
             foreach ($recordsToUpdate as $record) {
-                // NOTICE: this is strange - we have to remove the record and add it
-                //   again to make sure that grants are updated ...
-                //   maybe we should add a "replace" method?
-                $records->removeRecord($record);
                 if (!$record->grants instanceof Tinebase_Record_RecordSet) {
                     $record->grants = new Tinebase_Record_RecordSet($this->_modelName);
                 }
                 $record->grants->addRecord($recordGrant);
-                $records->addRecord($record);
             }
         }
         

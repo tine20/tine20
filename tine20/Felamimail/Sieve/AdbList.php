@@ -39,7 +39,10 @@ class Felamimail_Sieve_AdbList
             } else {
                 // only internal email addresses are allowed to mail!
                 // TODO FIX ME, get list of allowed domains!
-                $result .= 'if address :is :domain "from" ["tine20.org"] {' . PHP_EOL;
+                if (empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
+                    throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
+                }
+                $result .= 'if address :is :domain "from" ["' . join('","', $internalDomains) . '"] {' . PHP_EOL;
             }
 
             $this->_addRecieverList($result);

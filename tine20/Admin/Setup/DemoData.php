@@ -183,7 +183,6 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         foreach ($this->_personas as $login => $fullName) {
             try {
                 $user = Tinebase_User::getInstance()->getFullUserByLoginName($login);
-                $contact = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
             } catch (Tinebase_Exception_NotFound $e) {
                 list($given, $last) = explode(' ', $fullName);
 
@@ -202,6 +201,11 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'accountEmailAddress'   => $login . '@' . $emailDomain,
                 ));
 
+                $pwd = $this->_getUserPassword($user);
+                $user->imapUser = new Tinebase_Model_EmailUser(['emailPassword' => $pwd]);
+                $user->smtpUser = new Tinebase_Model_EmailUser(['emailPassword' => $pwd]);
+                $user = Admin_Controller_User::getInstance()->create($user, $pwd, $pwd);
+                /*
                 if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
                     $internalAddressbook = Tinebase_Container::getInstance()->getContainerById(
                         Admin_Controller_User::getDefaultInternalAddressbook()
@@ -230,10 +234,11 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $listBackend->addListMember($group->list_id, $user->contact_id);
                 }
 
-                $this->_setUserPassword($user);
+                $this->_setUserPassword($user);*/
             }
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
                 $ar = array_merge($this->_dataMapping[$login], $this->_dataMapping['default']);
                 $filename = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'DemoData' . DIRECTORY_SEPARATOR . 'persona_' . $login . '.jpg';
                 if (file_exists($filename)) {
@@ -296,8 +301,9 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * give additional testusers a password
      * 
      * @param Tinebase_Model_User $user
+     * @return string
      */
-    protected function _setUserPassword($user)
+    protected function _getUserPassword($user)
     {
         $testconfig = $this->_getTestConfig();
         $password =
@@ -313,7 +319,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             echo "\033[33mUser \"" . $user->accountDisplayName . "\" got a random password: \"" . $password . "\"\033[0m" . PHP_EOL;
         }
         
-        Tinebase_User::getInstance()->setPassword($user, $password);
+        return $password;
     }
     
     /**

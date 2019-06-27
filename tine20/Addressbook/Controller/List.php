@@ -329,6 +329,13 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         /** @var Addressbook_Model_List $_createdRecord */
         $this->_fireChangeListeEvent($_createdRecord);
+
+        if (isset($_createdRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+                $_createdRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
+                preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_createdRecord->email)) {
+
+            $this->_createMailAccount($_createdRecord);
+        }
     }
 
     /**
@@ -365,6 +372,44 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
     }
 
+    protected function _createMailAccount($_list)
+    {
+        $mailAccount = new Felamimail_Model_Account([
+            'user_id'       => $_list->getId(),
+            'email'         => $_list->email,
+            'name'          => $_list->email,
+            'from'          => $_list->email,
+            'type'          => Felamimail_Model_Account::TYPE_ADB_LIST,
+        ]);
+
+        // TODO FIX ME, how?
+        $imapConfig = Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->toArray();
+        if (isset($imapConfig['useEmailAsUsername']) && $imapConfig['useEmailAsUsername']) {
+            $mailAccount->user = $_list->email;
+        } else {
+            $mailAccount->user =
+                Felamimail_Model_Account::_appendDomainOrInstance($_list->email, $imapConfig);
+        }
+        $mailAccount->smtp_user = $mailAccount->user;
+
+        Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($mailAccount, false);
+        Felamimail_Controller_Account::getInstance()->create($mailAccount);
+    }
+
+    /**
+     * @param Felamimail_Model_Account $_list
+     * @return Felamimail_Model_Account
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getMailAccount($_list)
+    {
+        return Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $_list->getId()],
+            ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
+        ]))->getFirstRecord();
+    }
+
     /**
      * inspect update of one record (after update)
      *
@@ -376,6 +421,35 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
         $this->_fireChangeListeEvent($updatedRecord);
+
+        if (isset($updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+                $updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
+                preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $updatedRecord->email)) {
+
+            if (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+                    $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
+                    preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
+
+                // do diff, check password etc ?
+                if ($updatedRecord->email !== $currentRecord->email) {
+                    if (null === ($mailAccount = $this->_getMailAccount($updatedRecord))) {
+                        $this->_createMailAccount($updatedRecord);
+                    } else {
+                        $mailAccount->email = $updatedRecord->email;
+                        $mailAccount->name = $updatedRecord->email;
+                        $mailAccount->from = $updatedRecord->email;
+                        Felamimail_Controller_Account::getInstance()->update($mailAccount);
+                    }
+                }
+            } else {
+                $this->_createMailAccount($updatedRecord);
+            }
+
+        } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+                $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
+                preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
+            Felamimail_Controller_Account::getInstance()->delete($this->_getMailAccount($currentRecord)->getId());
+        }
     }
 
     /**
@@ -441,24 +515,28 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Update list ' . $group->name);
 
-            $list->name = $group->name;
-            $list->description = $group->description;
-            $list->email = $group->email;
-            $list->type = Addressbook_Model_List::LISTTYPE_GROUP;
-            $list->container_id = (empty($group->container_id)) ?
+            $upList = clone $list;
+            $upList->name = $group->name;
+            $upList->description = $group->description;
+            $upList->email = $group->email;
+            $upList->type = Addressbook_Model_List::LISTTYPE_GROUP;
+            $upList->container_id = (empty($group->container_id)) ?
                 Addressbook_Controller::getDefaultInternalAddressbook() : $group->container_id;
-            $list->members = (isset($group->members)) ? $this->_getContactIds($group->members) : array();
-            $list->xprops = $group->xprops;
+            $upList->members = (isset($group->members)) ? $this->_getContactIds($group->members) : array();
+            $upList->xprops = $group->xprops;
 
             // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update', $list);
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($upList, 'update', $upList);
 
-            $list = $this->_backend->update($list);
-            $list = $this->get($list->getId());
+            $upList = $this->_backend->update($upList);
+            $this->_inspectAfterUpdate($upList, $upList, $list);
+            $list = $this->get($upList->getId());
 
         } catch (Tinebase_Exception_NotFound $tenf) {
             $list = $this->createByGroup($group);
             $group->list_id = $list->getId();
+
+            $this->_inspectAfterCreate($list, $list);
         }
 
         return $list;

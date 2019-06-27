@@ -170,6 +170,8 @@ class Tinebase_EmailUser
      * @var array
      */
     private static $_configs = array();
+
+    private static $_configuredBackends = [];
     
     /**
      * the constructor
@@ -187,7 +189,14 @@ class Tinebase_EmailUser
     private function __clone() 
     {
     }
-    
+
+    public static function clearCaches()
+    {
+        self::$_configuredBackends = [];
+        self::$_configs = [];
+        self::$_backends = [];
+    }
+
     /**
      * the singleton pattern
      *
@@ -235,6 +244,10 @@ class Tinebase_EmailUser
      */
     public static function getConfiguredBackend($configType = Tinebase_Config::IMAP)
     {
+        if (isset(self::$_configuredBackends[$configType])) {
+            return self::$_configuredBackends[$configType];
+        }
+
         $config = self::getConfig($configType);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
         
@@ -247,7 +260,9 @@ class Tinebase_EmailUser
         if (!isset(self::$_supportedBackends[$backend])) {
             throw new Tinebase_Exception_NotFound("Config for type $configType / $backend not found.");
         }
-        
+
+        self::$_configuredBackends[$configType] = $backend;
+
         return $backend;
     }
     
