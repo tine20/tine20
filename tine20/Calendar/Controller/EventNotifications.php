@@ -152,11 +152,7 @@
             return;
         }
 
-        if ($_event->dtend === NULL) {
-            throw new Tinebase_Exception_UnexpectedValue('no dtend set in event');
-        }
-        
-        if (Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend)) {
+        if ($_event->dtend && Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend)) {
             if ($_action == 'alarm' || ! ($_event->isRecurException() || $_event->rrule)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . " Skip notifications to past events");
@@ -165,7 +161,7 @@
         }
         
         $notificationPeriodConfig = Calendar_Config::getInstance()->get(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM);
-        if (Tinebase_DateTime::now()->subWeek($notificationPeriodConfig)->isLater($_event->dtend)) {
+        if ($_event->dtend && Tinebase_DateTime::now()->subWeek($notificationPeriodConfig)->isLater($_event->dtend)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Skip notifications to past events (MAX_NOTIFICATION_PERIOD_FROM: " . $notificationPeriodConfig . " week(s))");
             return;
