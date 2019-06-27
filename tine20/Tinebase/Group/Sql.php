@@ -167,9 +167,15 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param  mixed $_groupId
      * @param  array $_groupMembers
+     * @return void
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
+        if ($_groupMembers === null) {
+            // do nothing
+            return;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Setting ' . count($_groupMembers) . ' new groupmembers for group ' . $_groupId);
         
