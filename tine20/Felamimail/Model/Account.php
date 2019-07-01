@@ -50,6 +50,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         # self::VERSION => 25,
         'recordName' => 'Account',
         'recordsName' => 'Accounts', // ngettext('Account', 'Accounts', n)
+        'containerName' => 'Email Accounts', // ngettext('Email Account', 'Email Accounts', n)
+        'containersName' => 'Email Accounts',
         'hasRelations' => false,
         'copyRelations' => false,
         'hasCustomFields' => false,
@@ -431,6 +433,16 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             ],
             'sieve_notification_email' => [
                 self::TYPE => self::TYPE_BOOLEAN,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false,
+                ],
+            ],
+            'all_folders_fetched' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                // client only
+                self::IS_VIRTUAL => true,
                 self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,

@@ -544,6 +544,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']));
         $this->assertEquals(array('csv', 'ods'), $registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']);
         $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['import']));
+
+        $this->assertTrue(isset($registryData['Felamimail']['models']['Account']), 'account model missing from registry');
     }
 
     /**

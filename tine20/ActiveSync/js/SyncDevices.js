@@ -11,7 +11,7 @@
 Ext.ns('Tine.ActiveSync.syncdevices');
 
 /**
- * Containers 'mainScreen'
+ * SyncDevices 'mainScreen'
  * 
  * @static
  */
