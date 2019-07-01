@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb4d89756fa290e8e237c1648eadcb36",
+    "content-hash": "1d3c5b205a7a06b75dab8d0c0feb355c",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1225,7 +1225,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1257,7 +1257,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1533,16 +1533,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "dev-master",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "033ed16db59a590905fdf9e7adec8ccf9bfa11de"
+                "reference": "84e09df79855ed3da84e2eab6850eb7741d8cbda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/033ed16db59a590905fdf9e7adec8ccf9bfa11de",
-                "reference": "033ed16db59a590905fdf9e7adec8ccf9bfa11de",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/84e09df79855ed3da84e2eab6850eb7741d8cbda",
+                "reference": "84e09df79855ed3da84e2eab6850eb7741d8cbda",
                 "shasum": ""
             },
             "require": {
@@ -1623,7 +1623,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2019-02-18T21:56:32+00:00"
+            "time": "2019-05-26T02:50:36+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -2831,7 +2831,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -5081,9 +5081,7 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "phpoffice/phpspreadsheet": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
