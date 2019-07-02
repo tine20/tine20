@@ -117,7 +117,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @cfg
      */
     border: false,
-    recordClass: Tine.Felamimail.Model.Account,
     filterMode: 'filterToolbar',
     
     /**
@@ -130,6 +129,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @private
      */
     initComponent: function() {
+
+        this.recordClass = Tine.Felamimail.Model.Account;
+
         // get folder store
         this.folderStore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
         

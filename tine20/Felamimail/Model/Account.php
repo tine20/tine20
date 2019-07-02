@@ -449,7 +449,17 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::DEFAULT_VALUE => false,
                 ],
             ],
-        ],
+            'imap_status' => [
+                self::TYPE => self::TYPE_STRING,
+                // client only
+                self::IS_VIRTUAL => true,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'success', // TODO an inArray validation with success|failure
+                ],
+            ],
+        ]
     ];
 
     /**
