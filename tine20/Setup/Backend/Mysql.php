@@ -153,8 +153,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $stmt = $select->query();
         while ($row = $stmt->fetch()) {
             $foreignKeyNames[$row['CONSTRAINT_NAME']] = array(
-                'table_name'      => preg_replace('/' . SQL_TABLE_PREFIX . '/', '', $row['TABLE_NAME']),
-                'constraint_name' => preg_replace('/' . SQL_TABLE_PREFIX. '/', '', $row['CONSTRAINT_NAME']));
+                'table_name'      => substr($row['TABLE_NAME'], strlen(SQL_TABLE_PREFIX)),
+                'constraint_name' => substr($row['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)));
         }
         
         return $foreignKeyNames;
