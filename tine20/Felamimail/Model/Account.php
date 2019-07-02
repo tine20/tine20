@@ -89,6 +89,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
                     ['InArray', [self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED]]
                 ],
+                self::QUERY_FILTER              => true,
             ],
             'name' => [
                 self::TYPE => self::TYPE_STRING,
@@ -96,6 +97,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::LABEL => 'Name', // _('Name')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'host' => [
                 self::TYPE => self::TYPE_STRING,
@@ -103,6 +105,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::LABEL => 'IMAP Host', // _('IMAP Host')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'port' => [
                 self::TYPE => self::TYPE_INTEGER,
@@ -293,6 +296,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::LABEL => 'From', // _('From')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'organization' => [
                 self::TYPE => self::TYPE_STRING,
@@ -300,6 +304,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::LABEL => 'Organization', // _('Organization')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'signature' => [
                 self::TYPE => self::TYPE_TEXT,
@@ -324,6 +329,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::LABEL => 'SMTP Host', // _('SMTP Host')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             'smtp_port' => [
                 self::TYPE => self::TYPE_INTEGER,
@@ -477,6 +483,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      * - decrypt pwd/user with user password
      *
      * @return array
+     * @throws Felamimail_Exception
+     * @throws Exception
      */
     public function getImapConfig()
     {
@@ -582,6 +590,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      * @param boolean $_throwException
      * @param boolean $_smtp
      * @return boolean
+     * @throws Felamimail_Exception
+     * @throws Exception
      */
     public function resolveCredentials($_onlyUsername = TRUE, $_throwException = FALSE, $_smtp = FALSE)
     {

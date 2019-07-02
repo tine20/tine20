@@ -741,7 +741,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (! fieldName && field.data && field.data.condition) {
             return this.ownRecordFilterModel;
         }
-        
+        if (! this.filterModelMap[fieldName]) {
+            Tine.log.err('"' + fieldName + '" filter not defined in filter map');
+        }
+
         return this.filterModelMap[fieldName];
     },
     
