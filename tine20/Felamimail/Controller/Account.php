@@ -67,9 +67,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     private function __construct()
     {
         $this->_modelName = 'Felamimail_Model_Account';
-        $this->_doContainerACLChecks = FALSE;
-        $this->_doRightChecks = TRUE;
-        $this->_purgeRecords = FALSE;
+        $this->_doContainerACLChecks = true;
+        $this->_doRightChecks = true;
+        $this->_purgeRecords = false;
         
         $this->_backend = new Felamimail_Backend_Account();
         
@@ -99,6 +99,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
 
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
+    }
+
     public function setImapConfig()
     {
         $this->_imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
@@ -122,9 +127,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_addedDefaultAccount = false;
         
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-        
+
+        $idFilter = $_filter->getFilter('id');
+
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
-        if ($this->_useSystemAccount && ! $_onlyIds) {
+        if (! $idFilter && $this->_useSystemAccount && ! $_onlyIds) {
             $systemAccountFound = FALSE;
             // check if resultset contains system account and add config values
             foreach ($result as $account) {
@@ -201,9 +208,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        if (! $this->doContainerACLChecks()) {
+            return;
+        }
+
         $userFilter = $_filter->getFilter('user_id');
 
         // fix me!
@@ -1012,6 +1024,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 $folderName = $_account->{$systemFolderField};
                 $this->_createSystemFolder($_account, $folderName);
             }
+        } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
         } catch (Exception $e) {
             // skip creation at this point
             Tinebase_Exception::log($e);
@@ -1026,7 +1040,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _getAccountEmail(Tinebase_Model_FullUser $_user)
     {
-        $email = ((! $_user->accountEmailAddress || empty($_user->accountEmailAddress)) && (isset($this->_imapConfig['user']) || array_key_exists('user', $this->_imapConfig))) 
+        $email = ((! $_user->accountEmailAddress || empty($_user->accountEmailAddress))
+            && (isset($this->_imapConfig['user']) || array_key_exists('user', $this->_imapConfig))
+        )
             ? $this->_imapConfig['user']
             : $_user->accountEmailAddress;
             

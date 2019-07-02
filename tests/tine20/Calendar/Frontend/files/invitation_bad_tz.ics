@@ -1,0 +1,31 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+DTSTART;TZID=BRT:20190205T150000
+DTEND:20190205T160000Z
+DTSTAMP:20190204T160307Z
+ORGANIZER;CN=xxxxx@gmail.com:mailto:xxxxx@gmail.com
+UID:3evgs2i0jdkofmibc9u5cah0a9@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=unittest@tine20.org;X-NUM-GUESTS=0:mailto:unittest@tine20.org
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=TRUE
+ ;CN=xxxxx@gmail.com;X-NUM-GUESTS=0:mailto:xxxxx@gmail.com
+CREATED:20190204T160233Z
+DESCRIPTION:-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~::~:~::-\nDiesen Abschnitt der Beschreibung nicht bearbeite
+ n.\n\nZeigen Sie Ihren Termin unter https://www.google.com/calendar/event?a
+ ction=VIEW&eid=M2V2Z3MyaTBqZGtvZm1pYmM5dTVjYWgwYTkgcC5tZWhyZXJAbWV0YXdheXMu
+ ZGU&tok=MjEjbWV0YXdheXM1MjBAZ21haWwuY29tZWE0NzFhOThjNjg0ZmNmZGRmOTMwMjIxMGU
+ 2NzU5NGMzZjM1NWRlZA&ctz=Europe%2FBerlin&hl=de&es=1 an.\n-::~:~::~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-
+LAST-MODIFIED:20190204T160306Z
+LOCATION:
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:test
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR

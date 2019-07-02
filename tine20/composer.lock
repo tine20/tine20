@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a1d1467db1ccc31ac80e4e3e6c7b9ee",
+    "content-hash": "a4be7de0d33feb162e696eac0ee6e05e",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -808,8 +808,7 @@
                 {
                     "name": "Edward Z. Yang",
                     "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com",
-                    "role": "Developer"
+                    "homepage": "http://ezyang.com"
                 }
             ],
             "description": "Standards compliant HTML filter written in PHP",
@@ -1061,12 +1060,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "249ef9c74f33cf508eca20ae06266f2bb2f73875"
+                "reference": "8af5437678fa606f6ea285fa8ac8a7b451420fd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/249ef9c74f33cf508eca20ae06266f2bb2f73875",
-                "reference": "249ef9c74f33cf508eca20ae06266f2bb2f73875",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/8af5437678fa606f6ea285fa8ac8a7b451420fd6",
+                "reference": "8af5437678fa606f6ea285fa8ac8a7b451420fd6",
                 "shasum": ""
             },
             "require": {
@@ -1086,7 +1085,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2019-03-13T13:00:19+00:00"
+            "time": "2019-06-26T12:50:55+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1567,16 +1566,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "dev-master",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "033ed16db59a590905fdf9e7adec8ccf9bfa11de"
+                "reference": "84e09df79855ed3da84e2eab6850eb7741d8cbda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/033ed16db59a590905fdf9e7adec8ccf9bfa11de",
-                "reference": "033ed16db59a590905fdf9e7adec8ccf9bfa11de",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/84e09df79855ed3da84e2eab6850eb7741d8cbda",
+                "reference": "84e09df79855ed3da84e2eab6850eb7741d8cbda",
                 "shasum": ""
             },
             "require": {
@@ -1657,7 +1656,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2019-02-18T21:56:32+00:00"
+            "time": "2019-05-26T02:50:36+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -5208,8 +5207,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "jumbojett/openid-connect-php": 20,
-        "phpoffice/phpspreadsheet": 20
+        "jumbojett/openid-connect-php": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

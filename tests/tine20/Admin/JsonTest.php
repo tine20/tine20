@@ -68,12 +68,12 @@ class Admin_JsonTest extends TestCase
             'description'           => 'phpunit test role',
         ));
 
-        $this->_objects['addedUsers'] = [];
+        $this->objects['addedUsers'] = [];
     }
     
     protected function tearDown()
     {
-        foreach ($this->_objects['addedUsers'] as $user) {
+        foreach ($this->objects['addedUsers'] as $user) {
             try {
                 Tinebase_User::getInstance()->deleteUser($user['accountId']);
             } catch (Tinebase_Exception_NotFound $tenf) {
@@ -166,7 +166,7 @@ class Admin_JsonTest extends TestCase
         }
         $this->_usernamesToDelete[] = $data['accountLoginName'];
         $user = $this->_json->saveUser($data);
-        $this->_objects['addedUsers'][] = $user;
+        $this->objects['addedUsers'][] = $user;
 
         return $user;
     }
@@ -212,17 +212,14 @@ class Admin_JsonTest extends TestCase
      */
     public function testGetNonExistentAccountByLoginName()
     {
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
         $loginName = 'something';
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $user = Tinebase_User::getInstance()->getUserByLoginName($loginName);
+        Tinebase_User::getInstance()->getUserByLoginName($loginName);
     }
     
     /**
      * try to create an account with existing login name 
-     * 
-     * @return array
      * 
      * @see 0006770: check if username already exists when creating new user / changing username
      */
@@ -536,7 +533,7 @@ class Admin_JsonTest extends TestCase
         $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
         
         // get group by name
-        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
+        Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
     }
     
     /**
@@ -777,9 +774,8 @@ class Admin_JsonTest extends TestCase
         
         // try to get it, shouldn't be found
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
-        
-    }    
+        Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
+    }
 
     /**
      * try to get all role rights
@@ -1031,7 +1027,7 @@ class Admin_JsonTest extends TestCase
         
         $container['application_id'] = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
         $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
-        $containerUpdated = $this->_json->saveContainer($container);
+        $this->_json->saveContainer($container);
     }
     
     /**
@@ -1046,8 +1042,9 @@ class Admin_JsonTest extends TestCase
         }
         $mailer = Tinebase_Smtp::getDefaultTransport();
         // make sure all messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(100);
+        $queueConfig = Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE};
+        if ($queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
+            Tinebase_ActionQueue::getInstance()->processQueue();
         }
         $mailer->flush();
         
@@ -1056,10 +1053,10 @@ class Admin_JsonTest extends TestCase
         $container['type'] = Tinebase_Model_Container::TYPE_PERSONAL;
         $container['note'] = 'changed to personal';
         $container['account_grants'] = $this->_getContainerGrants();
-        $containerUpdated = $this->_json->saveContainer($container);
+        $this->_json->saveContainer($container);
         
         // make sure messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+        if ($queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
             Tinebase_ActionQueue::getInstance()->processQueue();
         }
 
@@ -1594,5 +1591,16 @@ class Admin_JsonTest extends TestCase
         $diff = $newAcl->diff($oldAcl);
 
         static::assertTrue($diff->isEmpty(), 'acl changed where they shouldn\'t: ' . print_r($diff->toArray(), true));
+    }
+
+    public function testEmailAccountApi()
+    {
+        $this->_uit = $this->_json;
+        $account = $this->_testSimpleRecordApi(
+            'EmailAccount', // use non-existant model to make simple api test work
+            'name',
+            'email'
+        );
+        self::assertEquals('Templates', $account['templates_folder']);
     }
 }

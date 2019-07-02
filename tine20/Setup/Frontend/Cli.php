@@ -681,7 +681,7 @@ class Setup_Frontend_Cli
 
     /**
      * create/update email users with current account
-     *  USAGE: php tine20.php --method=Tinebase.updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
+     *  USAGE: php setup.php --updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
      *
      * @param Zend_Console_Getopt $_opts
      * @return int

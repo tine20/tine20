@@ -145,9 +145,19 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
         }
     }
+
+    /**
+     * @param string $_uid
+     * @param Tinebase_Controller_Record_Interface $_controller
+     * @return array
+     * @throws Tinebase_Exception_NotFound
+     */
     protected function _get($_uid, Tinebase_Controller_Record_Interface $_controller)
     {
         $record = $_controller->get($_uid);
+        if (! $record) {
+            throw new Tinebase_Exception_NotFound('record not found');
+        }
         return $this->_recordToJson($record);
     }
 

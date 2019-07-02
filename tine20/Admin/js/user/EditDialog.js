@@ -85,7 +85,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.getForm().loadRecord(this.samRecord);
         this.record.set('sambaSAM', this.samRecord.data);
 
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             if (this.emailRecord.get('emailAliases')) {
                 this.aliasesGrid.setStoreFromArray(this.emailRecord.get('emailAliases'));
             }
@@ -93,7 +93,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
             }
         }
-        if (Tine.Admin.registry.get('manageImapEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageImapEmailUser')) {
             if (!this.emailRecord.get('emailMailQuota')) this.getForm().findField('emailMailQuota').setValue(null);
         }
 
@@ -136,7 +136,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         form.updateRecord(this.emailRecord);
         // get aliases / forwards
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             // forcing blur of quickadd grids
             this.aliasesGrid.doBlur();
             this.forwardsGrid.doBlur();
@@ -198,7 +198,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return false;
         }
         
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             var emailValue = this.getForm().findField('accountEmailAddress').getValue();
             if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
                 result = false;
@@ -508,7 +508,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Array} - array of IMAP tab items
      */
     initImap: function () {
-        if (Tine.Admin.registry.get('manageImapEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageImapEmailUser')) {
             return [{
                 xtype: 'fieldset',
                 title: this.app.i18n.gettext('IMAP Quota'),
@@ -609,7 +609,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO     add ctx menu
      */
     initSmtp: function () {
-        if (! Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (! Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             return [];
         }
         
@@ -1070,7 +1070,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: this.initFilesystem()
             }, {
                 title: this.app.i18n.gettext('IMAP'),
-                disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
+                disabled: ! Tine.Tinebase.registry.get('manageImapEmailUser'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -1079,7 +1079,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, {
                 xtype: 'columnform',
                 title: this.app.i18n.gettext('SMTP'),
-                disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
+                disabled: ! Tine.Tinebase.registry.get('manageSmtpEmailUser'),
                 border: false,
                 frame: true,
                 labelAlign: 'top',

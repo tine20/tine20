@@ -35,16 +35,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_manageSAM = false;
     
     /**
-     * @var bool
-     */
-    protected $_manageImapEmailUser = FALSE;
-    
-    /**
-     * @var bool
-     */
-    protected $_manageSmtpEmailUser = FALSE;
-    
-    /**
      * constructs Admin_Frontend_Json
      */
     public function __construct()
@@ -52,14 +42,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // manage samba sam?
         if (isset(Tinebase_Core::getConfig()->samba)) {
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
-        }
-
-        // manage email user settings
-        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
-            $this->_manageImapEmailUser = TRUE;
-        }
-        if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
-            $this->_manageSmtpEmailUser = TRUE;
         }
     }
     
@@ -75,8 +57,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,
-            'manageImapEmailUser'           => $this->_manageImapEmailUser,
-            'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => (
                     isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])
@@ -1137,7 +1117,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * deletes existing records
      *
      * @param  array  $ids 
-     * @return string
+     * @return array
      */
     public function deleteContainers($ids)
     {
@@ -1197,71 +1177,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, $controller);
     }
 
-    /****************************** Config ******************************/
-//
-//    /**
-//     * gets all config which is available via admin module
-//     *
-//     * @param string $appname
-//     * @return array
-//     */
-//    public function getConfig($appname)
-//    {
-//        if (! Tinebase_Core::getUser()->hasRight($appname, 'admin')) {
-//            throw new Tinebase_Exception_AccessDenied("You do not have admin rights for $appname");
-//        }
-//
-//        $config = Tinebase_Config::getAppConfig($appname);
-//        $properties = $config->getProperties();
-//
-//        $result = array();
-//
-//        foreach ($properties as $name => $definition) {
-//            if (array_key_exists('setByAdminModule', $definition) && $definition['setByAdminModule']) {
-//                $value = $config::getInstance()->get($name);
-//                if (is_object($value) && method_exists($value, 'toArray')) {
-//                    $value = $value->toArray();
-//                }
-//                if (is_object($value) && method_exists($value, 'toString')) {
-//                    $value = $value->toString();
-//                }
-//
-//                $result[$name] = $value;
-//            }
-//        }
-//
-//        return $result;
-//    }
-//
-//    /**
-//     * sets given config.
-//     *
-//     * NOTE: configs which got overwritten per config file have no effect here
-//     *
-//     * @param   string $appname
-//     * @param   string $key
-//     * @param   string $value
-//     * @return  array
-//     */
-//    public function setConfig($appname, $key, $value)
-//    {
-//        if (! Tinebase_Core::getUser()->hasRight($appname, 'admin')) {
-//            throw new Tinebase_Exception_AccessDenied("You do not have admin rights for $appname");
-//        }
-//
-//        $config = Tinebase_Config::getAppConfig($appname);
-//        $definition = $config->getDefinition($key);
-//
-//        if (! $definition) {
-//            throw new Tinebase_Exception_InvalidArgument('no such config setting');
-//        }
-//
-//        if (! array_key_exists('setByAdminModule', $definition) || $definition['setByAdminModule'] !== TRUE) {
-//            throw new Tinebase_Exception_InvalidArgument("setting of $key via admin module is not allowed");
-//        }
-//
-//        $config->set($key, $value);
-//    }
+    /****************************** Config *********************************/
 
     /**
      * Search for records matching given arguments
@@ -1308,6 +1224,55 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteConfigs($ids)
     {
         return $this->_delete($ids, Admin_Controller_Config::getInstance());
+    }
+
+    /****************************** EmailAccount ******************************/
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param array $filter
+     * @param array $paging
+     * @return array
+     */
+    public function searchEmailAccounts($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Admin_Controller_EmailAccount::getInstance(), 'Felamimail_Model_AccountFilter');
+
+        return $result;
+    }
+
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getEmailAccount($id)
+    {
+        return $this->_get($id, Admin_Controller_EmailAccount::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveEmailAccount($recordData)
+    {
+        return $this->_save($recordData, Admin_Controller_EmailAccount::getInstance(), 'Felamimail_Model_Account');
+    }
+
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids
+     * @return string
+     */
+    public function deleteEmailAccounts($ids)
+    {
+        return $this->_delete($ids, Admin_Controller_EmailAccount::getInstance());
     }
 
 

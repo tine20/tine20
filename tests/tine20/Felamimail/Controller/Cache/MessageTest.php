@@ -399,7 +399,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array($this->_getFolder()->getId()))
         ));
         $status = $this->_controller->getFolderStatus($filter);
-        
+
         $this->assertEquals(0, count($status), 'no folders should be found for update');
     }
 

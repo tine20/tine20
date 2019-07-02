@@ -1716,6 +1716,14 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     }
 
     /**
+     * @return string
+     */
+    public function getNotesTranslatedText()
+    {
+        return $this->getTitle();
+    }
+
+    /**
      * @return bool
      */
     public static function generatesPaths()

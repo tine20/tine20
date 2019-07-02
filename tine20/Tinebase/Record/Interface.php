@@ -362,6 +362,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function setValidators(array $_validators);
 
     /**
+     * @return string
+     */
+    public function getNotesTranslatedText();
+
+    /**
      * @return bool
      */
     public static function generatesPaths();

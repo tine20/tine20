@@ -55,6 +55,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         return $persistentEvent;
     }
+
+    /**
+     * testCreateEvent
+     *
+     * @return Calendar_Model_Event
+     */
+    public function testCreateEventWithBadTZ()
+    {
+        $event = $this->_getEvent();
+        $event->originator_tz = 'BRT';
+        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        $this->_controller->create($event);
+    }
     
     /**
      * testCreateAlldayEventWithoutDtend
