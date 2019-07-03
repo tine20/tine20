@@ -151,7 +151,7 @@ Tine.Admin.init = function () {
             viewRight: 'serverinfo'
         }];
         
-        // TODO use hooking mechanism bellow - why is manage_devices a Tinebase right and not a ActiveSync right???
+        // TODO use hooking mechanism below
         if (Tine.Tinebase.appMgr.get('ActiveSync') && Tine.Tinebase.common.hasRight('manage_devices', 'ActiveSync')) {
             tree.push({
                 text: translation.gettext('ActiveSync Devices'),
@@ -165,6 +165,23 @@ Tine.Admin.init = function () {
                 leaf: null,
                 expanded: true,
                 dataPanelType: "devices"
+            });
+        }
+
+        // TODO use hooking mechanism
+        if (Tine.Tinebase.appMgr.get('Felamimail') && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')) {
+            tree.push({
+                text: translation.gettext('E-Mail Accounts'),
+                //pos: 850,
+                cls: "treemain",
+                iconCls: 'FelamimailIconCls',
+                allowDrag: false,
+                allowDrop: true,
+                id: "emailaccounts",
+                children: [],
+                leaf: null,
+                expanded: true,
+                dataPanelType: "emailaccounts"
             });
         }
 
@@ -332,6 +349,9 @@ Tine.Admin.init = function () {
             // TODO find a generic hooking mechanism
             case 'devices':
                 Tine.ActiveSync.syncdevices.show();
+                break;
+            case 'emailaccounts':
+                Tine.Felamimail.Admin.emailaccounts.show();
                 break;
 
             default:

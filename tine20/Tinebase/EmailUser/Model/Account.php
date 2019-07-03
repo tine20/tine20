@@ -6,7 +6,7 @@
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,7 +15,7 @@
  * @package   Tinebase
  * @subpackage    EmailUser
  */
-abstract class Tinebase_EmailUser_Model_Account extends Tinebase_Record_Abstract
+abstract class Tinebase_EmailUser_Model_Account extends Tinebase_Record_NewAbstract
 {
     /**
      * secure connection setting for no secure connection

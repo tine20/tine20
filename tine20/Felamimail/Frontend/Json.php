@@ -19,7 +19,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_applicationName = 'Felamimail';
-    
+
+    // TODO is this still needed?
+    protected $_configuredModels = ['Account'];
+
     /***************************** folder funcs *******************************/
     
     /**

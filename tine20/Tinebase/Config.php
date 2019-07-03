@@ -111,6 +111,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const IMAP = 'imap';
 
+    const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
+
     /**
      * trusted proxy config
      *

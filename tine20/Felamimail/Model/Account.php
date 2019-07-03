@@ -6,10 +6,10 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        update account credentials if user password changed
- * @todo        use generic (JSON encoded) field for 'other' settings like folder names
+ * @todo        use generic (JSON encoded) field / xprops for 'other' settings like folder names
+ * @todo        convert to MCV2
  */
 
 /**
@@ -34,173 +34,457 @@
 class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 {
     /**
-     * key in $_validators/$_properties array for the field which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_application = 'Felamimail';
-    
+    protected static $_configurationObject = NULL;
+
     /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'user_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // account type (system/user defined)
-        'type'        => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
-            array('InArray', array(self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED)),
-        ),
-    // imap server config
-        'host'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'port'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 143),
-        'ssl'                   => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
-            array('InArray', array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)),
-        ),
-        'credentials_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'user'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'password'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // other settings (@todo add single JSON encoded field or keyfield for that?)
-        'sent_folder'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Sent'),
-        'trash_folder'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Trash'),
-        'drafts_folder'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Drafts'),
-        'templates_folder'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Templates'),
-        'has_children_support'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '/'),
-        'display_format'        => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
-            array('InArray', array(self::DISPLAY_HTML, self::DISPLAY_PLAIN, self::DISPLAY_CONTENT_TYPE)),
-        ),
-        'compose_format'        => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true,
-            Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
-            array('InArray', array(self::DISPLAY_HTML, self::DISPLAY_PLAIN)),
-        ),
-        'preserve_format'        => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true,
-            Zend_Filter_Input::DEFAULT_VALUE => 1,
-            array('InArray', array(0,1)),
-        ),
-        'reply_to'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // namespaces
-        'ns_personal'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'ns_other'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'ns_shared'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // user data
-        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
-        'organization'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
-        'signature'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'signature_position'    => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::SIGNATURE_BELOW_QUOTE,
-            array('InArray', array(self::SIGNATURE_ABOVE_QUOTE, self::SIGNATURE_BELOW_QUOTE)),
-        ),
-        // smtp config
-        'smtp_port'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 25),
-        'smtp_hostname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'smtp_auth'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'login'),
-        'smtp_ssl'              => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
-            array('InArray', array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)),
-        ),
-        'smtp_credentials_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'smtp_user'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'smtp_password'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // sieve config
-        'sieve_port'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 2000),
-        'sieve_hostname'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'sieve_ssl'=> array(
-            Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
-            array('InArray', array(self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS)),
-        ),
-        'sieve_vacation_active' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'sieve_notification_email' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        //'sieve_credentials_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        //'sieve_user'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        //'sieve_password'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
-    
+    protected static $_modelConfiguration = [
+        # TODO switch to mcv2
+        # self::VERSION => 25,
+        'recordName' => 'Account',
+        'recordsName' => 'Accounts', // ngettext('Account', 'Accounts', n)
+        'containerName' => 'Email Accounts', // ngettext('Email Account', 'Email Accounts', n)
+        'containersName' => 'Email Accounts',
+        'hasRelations' => false,
+        'copyRelations' => false,
+        'hasCustomFields' => false,
+        'hasSystemCustomFields' => false,
+        'hasNotes' => false,
+        'hasTags' => false,
+        'modlogActive' => true,
+        'hasAttachments' => false,
+        'createModule' => false,
+        'exposeHttpApi' => false,
+        'exposeJsonApi' => true,
+        'multipleEdit' => false,
+
+        'titleProperty' => 'name',
+        'appName' => 'Felamimail',
+        'modelName' => 'Account',
+
+        self::FIELDS => [
+            'user_id' => [
+                self::TYPE => self::TYPE_STRING, // self::TYPE_USER....
+                // self::IS_VIRTUAL                => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => null
+                ],
+                self::LENGTH => 40,
+            ],
+            'type' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 20,
+                self::LABEL => 'Type', // _('Type')
+                // self::SYSTEM                    => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
+                    ['InArray', [self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED]]
+                ],
+                self::QUERY_FILTER              => true,
+            ],
+            'name' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'Name', // _('Name')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
+            ],
+            'host' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'IMAP Host', // _('IMAP Host')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
+            ],
+            'port' => [
+                self::TYPE => self::TYPE_INTEGER,
+                self::NULLABLE => true,
+                self::LABEL => 'IMAP Port', // _('IMAP Port')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 143
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => null,
+                ],
+            ],
+            'ssl' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 32,
+                self::LABEL => 'IMAP SSL', // _('IMAP SSL')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
+                    ['InArray', [self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS]]
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => self::SECURE_TLS,
+                    Zend_Filter_StringTrim::class,
+                    Zend_Filter_StringToLower::class
+                ],
+            ],
+            'credentials_id' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 40,
+                # self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => null,
+                ],
+                self::OMIT_MOD_LOG => true,
+                self::NULLABLE                  => true,
+            ],
+            // imap username
+            'user' => [
+                self::TYPE => self::TYPE_STRING,
+                self::SYSTEM => true, // ?
+                self::IS_VIRTUAL => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ],
+            // imap pw
+            'password' => [
+                self::TYPE => self::TYPE_STRING,
+                self::SYSTEM => true, // ?
+                self::IS_VIRTUAL => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ],
+            'sent_folder' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'Sent Folder', // _('Sent Folder')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'Sent'
+                ],
+            ],
+            'trash_folder' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'Trash Folder', // _('Trash Folder')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'Trash'
+                ],
+            ],
+            'drafts_folder' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'Drafts Folder', // _('Drafts Folder')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'Drafts'
+                ],
+            ],
+            'templates_folder' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'Templates Folder', // _('Templates Folder')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'Templates'
+                ],
+            ],
+            'has_children_support' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::SYSTEM => true,
+                self::NULLABLE => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => true
+                ],
+            ],
+            'delimiter' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 1,
+                self::SYSTEM => true,
+                self::NULLABLE => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => '/'
+                ],
+            ],
+            'display_format' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 64,
+                self::LABEL => 'Display Format', // _('Display Format')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
+                    ['InArray', [self::DISPLAY_HTML, self::DISPLAY_PLAIN, self::DISPLAY_CONTENT_TYPE]]
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => self::DISPLAY_HTML,
+                    Zend_Filter_StringTrim::class,
+                    Zend_Filter_StringToLower::class
+                ],
+                self::NULLABLE                  => true,
+            ],
+            'compose_format' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 64,
+                self::LABEL => 'Compose Format', // _('Compose Format')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
+                    ['InArray', [self::DISPLAY_HTML, self::DISPLAY_PLAIN]]
+                ],
+                self::NULLABLE                  => true,
+            ],
+            'preserve_format' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::LABEL => 'Preserve Format', // _('Preserve Format')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false,
+                ],
+            ],
+            'reply_to' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'Reply-To', // _('Reply-To')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'ns_personal' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'ns_other' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'ns_shared' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'email' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'E-Mail', // _('E-Mail')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            // sql: from_email + from_name
+            'from' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 512,
+                self::NULLABLE => true,
+                self::LABEL => 'From', // _('From')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
+            ],
+            'organization' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'Organization', // _('Organization')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
+            ],
+            'signature' => [
+                self::TYPE => self::TYPE_TEXT,
+                self::LENGTH => 16777215,
+                self::NULLABLE => true,
+                self::LABEL => 'Signature', // _('Signature')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'signature_position' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 64,
+                self::LABEL => 'Signature Position', // _('Signature Position')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::SIGNATURE_BELOW_QUOTE,
+                    ['InArray', [self::SIGNATURE_ABOVE_QUOTE, self::SIGNATURE_BELOW_QUOTE]]
+                ],
+            ],
+            'smtp_hostname' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'SMTP Host', // _('SMTP Host')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
+            ],
+            'smtp_port' => [
+                self::TYPE => self::TYPE_INTEGER,
+                self::NULLABLE => true,
+                self::LABEL => 'SMTP Port', // _('SMTP Port')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 25
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => null,
+                ],
+            ],
+            'smtp_ssl' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 32,
+                self::LABEL => 'SMTP SSL', // _('SMTP SSL')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
+                    ['InArray', [self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS]]
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => self::SECURE_TLS,
+                    Zend_Filter_StringTrim::class,
+                    Zend_Filter_StringToLower::class
+                ],
+            ],
+            'smtp_auth' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 32,
+                self::LABEL => 'SMTP Authentication', // _('SMTP Authentication')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'login',
+                    ['InArray', ['none', 'plain', 'login']]
+                ],
+                self::NULLABLE                  => true,
+            ],
+            'smtp_credentials_id' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 40,
+                # self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => null,
+                ],
+                self::OMIT_MOD_LOG => true,
+            ],
+            'smtp_user' => [
+                self::TYPE => self::TYPE_STRING,
+                self::SYSTEM => true, // ?
+                self::IS_VIRTUAL => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ],
+            'smtp_password' => [
+                self::TYPE => self::TYPE_STRING,
+                self::SYSTEM => true, // ?
+                self::IS_VIRTUAL => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ],
+            'sieve_hostname' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::LABEL => 'Sieve Host', // _('Sieve Host')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'sieve_port' => [
+                self::TYPE => self::TYPE_INTEGER,
+                self::NULLABLE => true,
+                self::LABEL => 'Sieve Port', // _('Sieve Port')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 2000
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => null,
+                ],
+            ],
+            'sieve_ssl' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 32,
+                self::LABEL => 'Sieve SSL', // _('Sieve SSL')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
+                    ['InArray', [self::SECURE_NONE, self::SECURE_SSL, self::SECURE_TLS]]
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => self::SECURE_TLS,
+                    Zend_Filter_StringTrim::class,
+                    Zend_Filter_StringToLower::class
+                ],
+            ],
+            'sieve_vacation_active' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false,
+                ],
+            ],
+            'sieve_notification_email' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false,
+                ],
+            ],
+            'all_folders_fetched' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                // client only
+                self::IS_VIRTUAL => true,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false,
+                ],
+            ],
+            'imap_status' => [
+                self::TYPE => self::TYPE_STRING,
+                // client only
+                self::IS_VIRTUAL => true,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'success', // TODO an inArray validation with success|failure
+                ],
+            ],
+        ]
+    ];
+
     /**
-     * name of fields containing datetime or an array of datetime information
+     * get title
      *
-     * @var array list of datetime fields
-     */    
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time'
-    );
-    
-    /**
-     * name of fields that should be omited from modlog
-     *
-     * @var array list of modlog omit fields
+     * @return string
      */
-    protected $_modlogOmitFields = array(
-        'user',
-        'password',
-        'smtp_user',
-        'smtp_password',
-        'credentials_id',
-        'smtp_credentials_id'
-    );
-    
-    /**
-     * overwrite constructor to add more filters
-     *
-     * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param mixed $_convertDates
-     * @return void
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    public function getTitle()
     {
-        // set some fields to default if not set
-        $this->_filters['ssl']              = array(new Zend_Filter_Empty(self::SECURE_TLS),   'StringTrim', 'StringToLower');
-        $this->_filters['smtp_ssl']         = array(new Zend_Filter_Empty(self::SECURE_TLS),   'StringTrim', 'StringToLower');
-        $this->_filters['sieve_ssl']        = array(new Zend_Filter_Empty(self::SECURE_TLS),   'StringTrim', 'StringToLower');
-        $this->_filters['display_format']   = array(new Zend_Filter_Empty(self::DISPLAY_HTML), 'StringTrim', 'StringToLower');
-        $this->_filters['port']             = new Zend_Filter_Empty(NULL);
-        $this->_filters['smtp_port']        = new Zend_Filter_Empty(NULL);
-        $this->_filters['sieve_port']       = new Zend_Filter_Empty(NULL);
-        
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+        return $this->name;
     }
-    
+
     /**
      * get imap config array
      * - decrypt pwd/user with user password
      *
      * @return array
+     * @throws Felamimail_Exception
+     * @throws Exception
      */
     public function getImapConfig()
     {
@@ -214,8 +498,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         if ($this->ssl && $this->ssl !== Felamimail_Model_Account::SECURE_NONE) {
             $result['ssl'] = strtoupper($this->ssl);
         }
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
     }
@@ -259,8 +541,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         if ((isset($result['ssl']) || array_key_exists('ssl', $result)) && $result['ssl'] == 'none') {
             unset($result['ssl']);
         }
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
     }
@@ -310,6 +590,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      * @param boolean $_throwException
      * @param boolean $_smtp
      * @return boolean
+     * @throws Felamimail_Exception
+     * @throws Exception
      */
     public function resolveCredentials($_onlyUsername = TRUE, $_throwException = FALSE, $_smtp = FALSE)
     {

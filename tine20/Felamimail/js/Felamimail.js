@@ -107,14 +107,23 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         this.defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         Tine.log.debug('default account is "' + this.defaultAccount);
-        
+
+        // we need to do this deferred as the account model is created in the app starter and might not be available yet
+        // TODO can we use promises here?
+        this.initDeferred.defer(500, this);
+    },
+
+    initDeferred: function()
+    {
+        this.initAccountModel();
+
         if (window.isMainWindow) {
             if (Tine.Tinebase.appMgr.getActive() != this && this.updateInterval) {
                 var delayTime = this.updateInterval/20;
                 Tine.log.debug('start preloading mails in "' + delayTime/1000 + '" seconds');
                 this.checkMailsDelayedTask.delay(delayTime);
             }
-            
+
             this.showActiveVacation();
             this.initGridPanelHooks();
             this.registerProtocolHandler();
@@ -134,7 +143,69 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             );
         }, this);
     },
-    
+
+    /**
+     * TODO can this be done in a more elegant way?
+     */
+    initAccountModel: function()
+    {
+        /**
+         * @type Object
+         */
+        Tine.Felamimail.Model.Account.prototype.lastIMAPException = null;
+
+
+        /**
+         * get the last IMAP exception
+         *
+         * @return {Object}
+         */
+        Tine.Felamimail.Model.Account.prototype.getLastIMAPException = function() {
+            return this.lastIMAPException;
+        };
+
+        /**
+         * returns sendfolder id
+         * -> needed as trash is saved as globname :(
+         */
+        Tine.Felamimail.Model.Account.prototype.getSendFolderId = function() {
+            var app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
+                sendName = this.get('sent_folder'),
+                accountId = this.id,
+                send = sendName ? app.getFolderStore().queryBy(function(record) {
+                    return record.get('account_id') === accountId && record.get('globalname') === sendName;
+                }, this).first() : null;
+
+            return send ? send.id : null;
+        };
+
+        /**
+         * returns trashfolder id
+         * -> needed as trash is saved as globname :(
+         */
+        Tine.Felamimail.Model.Account.prototype.getTrashFolderId = function() {
+            var app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
+                trashName = this.get('trash_folder'),
+                accountId = this.id,
+                trash = trashName ? app.getFolderStore().queryBy(function(record) {
+                    return record.get('account_id') === accountId && record.get('globalname') === trashName;
+                }, this).first() : null;
+
+            return trash ? trash.id : null;
+        };
+
+        /**
+         * set or clear IMAP exception and update imap_state
+         *
+         * @param {Object} exception
+         */
+        Tine.Felamimail.Model.Account.prototype.setLastIMAPException = function(exception) {
+            this.lastIMAPException = exception;
+            this.set('imap_status', exception ? 'failure' : 'success');
+            this.commit();
+        };
+    },
+
     /**
      * initialize grid panel hooks
      */
@@ -1019,4 +1090,33 @@ Tine.Felamimail.handleRequestException = function(exception) {
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
             break;
     }
+};
+
+Ext.ns('Tine.Felamimail.Admin.emailaccounts');
+/**
+ * emailaccounts 'mainScreen' (Admin grid panel)
+ *
+ * @static
+ *
+ * TODO move to a separate file
+ */
+Tine.Felamimail.Admin.emailaccounts.show = function () {
+    var app = Tine.Tinebase.appMgr.get('Felamimail');
+    if (! Tine.Felamimail.Admin.emailAccountsGridPanel) {
+        Tine.Felamimail.Admin.emailaccountsBackend = new Tine.Tinebase.data.RecordProxy({
+            appName: 'Admin',
+            modelName: 'EmailAccount',
+            recordClass: Tine.Felamimail.Model.Account,
+            idProperty: 'id'
+        });
+        Tine.Felamimail.Admin.emailAccountsGridPanel = new Tine.Felamimail.AccountGridPanel({
+            recordProxy: Tine.Felamimail.Admin.emailaccountsBackend,
+            asAdminModule: true
+        });
+    } else {
+        Tine.Felamimail.Admin.emailAccountsGridPanel.loadGridData.defer(100, Tine.Felamimail.Admin.emailAccountsGridPanel, []);
+    }
+
+    Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Felamimail.Admin.emailAccountsGridPanel, true);
+    Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Felamimail.Admin.emailAccountsGridPanel.actionToolbar, true);
 };

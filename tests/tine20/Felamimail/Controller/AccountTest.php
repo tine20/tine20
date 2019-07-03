@@ -53,7 +53,9 @@ class Felamimail_Controller_AccountTest extends TestCase
         parent::setUp();
         
         $this->_controller = Felamimail_Controller_Account::getInstance();
-        $this->_account = $this->_controller->search()->getFirstRecord();
+        if (null === ($this->_account = $this->_controller->search()->getFirstRecord())) {
+            $this->_account = $this->_controller->addSystemAccount(Tinebase_Core::getUser());
+        }
     }
 
     /**
@@ -285,7 +287,7 @@ class Felamimail_Controller_AccountTest extends TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapConfig);
 
         Felamimail_Controller_Account::getInstance()->delete(array($this->_account->getId()));
-        $this->_account = $this->_controller->search()->getFirstRecord();
+        $this->_account = $this->_controller->addSystemAccount(Tinebase_Core::getUser());
         // make sure the user is resolved again
         unset($this->_account->user);
         $this->_account->resolveCredentials();
