@@ -261,4 +261,46 @@ class Addressbook_CliTest extends TestCase
         self::assertTrue(isset($updatedContact->adr_one_lon), 'no geodata in contact: ' . print_r($updatedContact->toArray(), true));
         self::assertEquals('Updated 1 Record(s)', $out);
     }
+
+    public function testSearchDuplicatesContactByUser()
+    {
+        $region = Tinebase_Record_Abstract::generateUID();
+        Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_fileas'          => 'duplicate, test',
+            'container_id'      => $this->_container->id,
+            'adr_one_street'    => 'Pickhuben 2',
+            'adr_one_region'    => $region,
+        )));
+
+        Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_fileas'          => 'duplicate, test',
+            'container_id'      => $this->_container->id,
+            'adr_one_street'    => 'Pickhuben 2',
+            'adr_one_region'    => $region,
+        )));
+
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'n_fileas', 'operator' => 'equals', 'value' => 'duplicate, test')
+        ));
+        $result = Addressbook_Controller_Contact::getInstance()->search($filter);
+
+        self::assertEquals(2, count($result));
+
+        $opts = new Zend_Console_Getopt('abp:');
+
+        $user = Tinebase_Core::getUser();
+
+        $opts->setArguments(array(
+            'created_by=' . $user['accountLoginName'],
+            'fields=' . 'n_fileas,adr_one_region',
+        ));
+
+        ob_start();
+        $this->_cli->searchDuplicatesContactByUser($opts);
+        ob_get_clean();
+
+        $result = Addressbook_Controller_Contact::getInstance()->search($filter);
+
+        self::assertEquals(1, count($result));
+    }
 }

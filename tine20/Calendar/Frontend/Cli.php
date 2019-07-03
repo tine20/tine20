@@ -177,7 +177,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $filter = new Calendar_Model_EventFilter($filterData);
         
         $result = $be->deleteDuplicateEvents($filter, $opts->d);
-        exit($result > 0 ? 1 : 0);
+        return 0;
     }
     
     /**
@@ -199,7 +199,6 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import calendars from a CalDav source
      * 
      * param Zend_Console_Getopt $_opts
-     */
     public function importCalDavCalendars(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
