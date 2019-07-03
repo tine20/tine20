@@ -8,7 +8,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -77,12 +77,29 @@ class Felamimail_Controller extends Tinebase_Controller_Event
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()
+            ->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
         switch (get_class($_eventObject)) {
-            case 'Tinebase_Event_User_ChangeCredentialCache':
-                Felamimail_Controller_Account::getInstance()->updateCredentialsOfAllUserAccounts($_eventObject->oldCredentialCache);
+            case Tinebase_Event_User_ChangeCredentialCache::class:
+                /** @var Tinebase_Event_User_ChangeCredentialCache $_eventObject */
+                Felamimail_Controller_Account::getInstance()
+                    ->updateCredentialsOfAllUserAccounts($_eventObject->oldCredentialCache);
                 break;
+            case Tinebase_Event_User_CreatedAccount::class:
+                /** @var Tinebase_Event_User_CreatedAccount $_eventObject */
+                if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
+                        ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
+                    Felamimail_Controller_Account::getInstance()->addSystemAccount($_eventObject->account);
+                }
+                break;
+        }
+    }
+
+    public function handleAccountLogin(Tinebase_Model_FullUser $_account)
+    {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
+            Felamimail_Controller_Account::getInstance()->addSystemAccount($_account);
         }
     }
 }

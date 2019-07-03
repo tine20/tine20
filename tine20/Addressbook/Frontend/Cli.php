@@ -314,4 +314,50 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
     }
+
+    /**
+     * delete duplicate contacts
+     *  - allowed params:
+     *      created_by=USER (equals)
+     *      fields=FIELDS (equals)
+     *      -d (dry run)
+     *     *     e.g. php tine20.php --method=Addressbook.searchDuplicatesContactByUser -d created_by=test fields=n_fileas,adr_one_region
+     *      * @param Zend_Console_Getopt $opts
+     **/
+    public function searchDuplicatesContactByUser($opts)
+    {
+
+        $be = new Addressbook_Backend_Sql;
+
+        // @ToDo
+        //$this->_addOutputLogWriter(6);
+
+        $args = $this->_parseArgs($opts);
+        if (isset($args['created_by'])) {
+            $user = Tinebase_User::getInstance()->getUserByLoginName($args['created_by']);
+        }else {
+            return 1;
+        }
+        $filterData = array(array(
+            'field' => 'created_by',
+            'operator' => 'equals',
+            'value' => $user->getId(),
+        ));
+        if (isset($args['container_id']))
+        {
+            $filterData[] = [
+                'field' => 'container_id',
+                'operator' => 'equals',
+                'value' => $args['container_id'],
+            ];
+        }
+
+        isset($args['fields']) ? $duplicateFields = $args['fields'] : $duplicateFields = array('n_fileas');
+
+        $filter = new Addressbook_Model_ContactFilter($filterData);
+
+        $be->deleteDuplicateRecords($filter, $duplicateFields, $opts->d);
+
+        return 0;
+    }
 }

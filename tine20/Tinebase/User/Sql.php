@@ -1061,7 +1061,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $this->_writeModLog($_user, null);
 
-        return $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
+        $createdUser = $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
+
+        Tinebase_Event::fireEvent(new Tinebase_Event_User_CreatedAccount(['account' => $createdUser]));
+
+        return $createdUser;
     }
     
     /**
