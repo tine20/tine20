@@ -56,25 +56,28 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function() {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordLoad.call(this);
-        
+
+        // TODO allow to change some system account values from admin panel
+
         // if account type == system disable most of the input fields
-        if (this.record.get('type') == 'system') {
-            this.getForm().items.each(function(item) {
-                // only enable some fields
-                switch(item.name) {
-                    case 'signature':
-                    case 'signature_position':
-                    case 'display_format':
-                    case 'compose_format':
-                    case 'preserve_format':
-                    case 'sieve_notification_email':
-                    case 'reply_to':
-                        break;
-                    default:
-                        item.setDisabled(true);
-                }
-            }, this);
-        }
+        this.getForm().items.each(function(item) {
+            // only enable some fields
+            switch(item.name) {
+                case 'signature':
+                case 'signature_position':
+                case 'display_format':
+                case 'compose_format':
+                case 'preserve_format':
+                case 'sieve_notification_email':
+                case 'reply_to':
+                    break;
+                case 'type':
+                    item.setDisabled(this.record.id);
+                    break;
+                default:
+                    item.setDisabled(this.record.get('type') == 'system');
+            }
+        }, this);
         if (! this.copyRecord && ! this.record.id && this.window) {
             this.window.setTitle(this.app.i18n._('Add New Account'));
         }
@@ -129,6 +132,22 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
                             allowBlank: false
+                        }, {
+                            fieldLabel: this.app.i18n._('Account Type'),
+                            name: 'type',
+                            typeAhead: false,
+                            triggerAction: 'all',
+                            lazyRender: true,
+                            editable: false,
+                            mode: 'local',
+                            forceSelection: true,
+                            value: 'user',
+                            xtype: 'combo',
+                            store: [
+                                ['user', this.app.i18n._('User')],
+                                ['system', this.app.i18n._('System')]
+                                // TODO add more types?
+                            ]
                         }, {
                             fieldLabel: this.app.i18n._('User Email'),
                             name: 'email',
@@ -186,6 +205,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'port',
                     allowBlank: false,
                     maxLength: 5,
+                    value: 143,
                     xtype: 'numberfield'
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
@@ -228,6 +248,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'smtp_port',
                     maxLength: 5,
                     xtype:'numberfield',
+                    value: 25,
                     allowBlank: false
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
@@ -283,6 +304,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Port (Default: 2000)'),
                     name: 'sieve_port',
                     maxLength: 5,
+                    value: 2000,
                     xtype:'numberfield'
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
