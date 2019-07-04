@@ -40,6 +40,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     tbarItems: [],
     evalGrants: false,
+    asAdminModule: false,
 
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -57,8 +58,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordLoad: function() {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordLoad.call(this);
 
-        // TODO allow to change some system account values from admin panel
+        this.disableFormFields();
 
+        if (! this.copyRecord && ! this.record.id && this.window) {
+            this.window.setTitle(this.app.i18n._('Add New Account'));
+        }
+    },
+
+    disableFormFields: function() {
         // if account type == system disable most of the input fields
         this.getForm().items.each(function(item) {
             // only enable some fields
@@ -74,14 +81,28 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'type':
                     item.setDisabled(this.record.id);
                     break;
-                default:
+                case 'host':
+                case 'port':
+                case 'ssl':
+                case 'user':
+                case 'password':
+                case 'smtp_hostname':
+                case 'smtp_port':
+                case 'smtp_ssl':
+                case 'smtp_auth':
+                case 'smtp_user':
+                case 'smtp_password':
+                case 'sieve_hostname':
+                case 'sieve_port':
+                case 'sieve_ssl':
+                    // always disabled for system accounts
                     item.setDisabled(this.record.get('type') == 'system');
+                    break;
+                default:
+                    item.setDisabled(! this.asAdminModule && this.record.get('type') == 'system');
             }
         }, this);
-        if (! this.copyRecord && ! this.record.id && this.window) {
-            this.window.setTitle(this.app.i18n._('Add New Account'));
-        }
-    },    
+    },
     
     /**
      * returns dialog
@@ -144,7 +165,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             value: 'user',
                             xtype: 'combo',
                             store: [
-                                ['user', this.app.i18n._('User')],
+                                ['user', this.app.i18n._('External')],
                                 ['system', this.app.i18n._('System')]
                                 // TODO add more types?
                             ]
