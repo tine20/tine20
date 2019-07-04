@@ -65,10 +65,24 @@ class Crm_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'start' => $project->creation_time,
                 'leadtype_id' => 1, // Customer
                 'leadsource_id' => 4, // Website
-
-                // TODO clarify this (use Project status mapping)
-                'leadstate_id' => 1,
+                'leadstate_id' => 1, // open
             ]);
+
+            // TODO might need to be adjusted
+            switch ($project->status) {
+                case 'NEEDS-ACTION':
+                    $lead->leadstate_id = 3;
+                    break;
+                case 'COMPLETED':
+                    $lead->leadstate_id = 2;
+                    break;
+                case 'CANCELLED':
+                    $lead->leadstate_id = 4;
+                    break;
+                case 'IN-PROCESS':
+                    $lead->leadstate_id = 1;
+                    break;
+            }
 
             $lead->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
             // convert project members to lead contacts (relations)
@@ -93,6 +107,13 @@ class Crm_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 ], true);
                 $lead->attachments->addRecord($leadAttachment);
             }
+
+            // tags
+            $leadTags = [];
+            foreach ($project->tags as $tag) {
+                $leadTags[] = $tag['id'];
+            }
+            $lead->tags = $leadTags;
 
             if ($verbose) {
                 echo "Create lead: " . print_r($lead->toArray(), true);
