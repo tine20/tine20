@@ -69,7 +69,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // if account type == system disable most of the input fields
         this.getForm().items.each(function(item) {
             // only enable some fields
-            switch(item.name) {
+            switch (item.name) {
+                case 'user_id':
+                    item.setDisabled(! this.asAdminModule);
+                    if (! this.asAdminModule) {
+                        item.hide();
+                    }
+                    break;
                 case 'signature':
                 case 'signature_position':
                 case 'display_format':
@@ -153,7 +159,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
                             allowBlank: false
-                        }, {
+                        }, Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                            userOnly: true,
+                            fieldLabel: this.app.i18n._('User'),
+                            useAccountRecord: true,
+                            name: 'user_id',
+                            allowEmpty: true
+                            // TODO user selection for system accounts should fill in the values!
+                        }), {
                             fieldLabel: this.app.i18n._('Account Type'),
                             name: 'type',
                             typeAhead: false,
@@ -247,7 +260,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },{
                     fieldLabel: this.app.i18n._('Username'),
                     name: 'user',
-                    allowBlank: false
+                    // TODO check if this can be empty - maybe we should resolve the username on the server?
+                    allowBlank: this.asAdminModule
                 }, {
                     fieldLabel: this.app.i18n._('Password'),
                     name: 'password',

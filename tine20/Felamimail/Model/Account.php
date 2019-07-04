@@ -71,8 +71,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 
         self::FIELDS => [
             'user_id' => [
-                self::TYPE => self::TYPE_STRING, // self::TYPE_USER....
-                // self::IS_VIRTUAL                => true,
+                self::TYPE => self::TYPE_USER,
+                self::LABEL => 'User', // _('User')
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null
@@ -83,7 +83,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 20,
                 self::LABEL => 'Type', // _('Type')
-                // self::SYSTEM                    => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
@@ -442,7 +441,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => false,
+                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
             ],
             'all_folders_fetched' => [
