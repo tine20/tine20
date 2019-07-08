@@ -102,12 +102,16 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'sieve_port':
                 case 'sieve_ssl':
                     // always disabled for system accounts
-                    item.setDisabled(this.record.get('type') == 'system');
+                    item.setDisabled(this.isSystemAccount());
                     break;
                 default:
-                    item.setDisabled(! this.asAdminModule && this.record.get('type') == 'system');
+                    item.setDisabled(! this.asAdminModule && this.isSystemAccount());
             }
         }, this);
+    },
+
+    isSystemAccount: function() {
+        return this.record.get('type') == 'system' || this.record.get('type') == 'shared';
     },
     
     /**
@@ -179,8 +183,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             xtype: 'combo',
                             store: [
                                 ['user', this.app.i18n._('External E-Mail Account')],
-                                ['system', this.app.i18n._('Personal Systemaccount')]
-                                // TODO add more types?
+                                ['shared', this.app.i18n._('Shared System Account')],
+                                ['system', this.app.i18n._('Personal System Account')],
                             ]
                         }, {
                             fieldLabel: this.app.i18n._('User Email'),

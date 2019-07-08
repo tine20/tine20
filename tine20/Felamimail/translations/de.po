@@ -1563,3 +1563,6 @@ msgstr "Externes E-Mail-Konto"
 
 msgid "Personal System Account"
 msgstr "Persönliches Systemkonto"
+
+msgid "Shared System Account"
+msgstr "Persönliches Systemkonto"
