@@ -1126,7 +1126,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . ' Record to update: ' . print_r($_record->toArray(), TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Update ' . $this->_modelName);
