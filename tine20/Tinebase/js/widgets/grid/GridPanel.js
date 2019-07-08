@@ -54,6 +54,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     app: null,
     /**
+     * @cfg {Boolean} asAdminModule is the panel in an admin context? this is passed to the edit dialog, too
+     */
+    asAdminModule: false,
+    /**
      * @cfg {Object} gridConfig
      * Config object for the Ext.grid.GridPanel
      */
@@ -2159,11 +2163,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 recordId: record.getId(),
                 copyRecord: (button.actionType == 'copy'),
+                asAdminModule: this.asAdminModule,
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'record,recordId,listeners,fixedFields,copyRecord,plugins,additionalConfig')
+            }, 'record,recordId,listeners,fixedFields,copyRecord,plugins,additionalConfig,asAdminModule')
         );
         return true;
     },

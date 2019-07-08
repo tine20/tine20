@@ -1602,5 +1602,14 @@ class Admin_JsonTest extends TestCase
             'email'
         );
         self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
+
+        // search by some invalid string should not return any accounts
+        $filter = [[
+           'field' => 'query',
+           'operator' => 'contains',
+           'value' => Tinebase_Record_Abstract::generateUID()
+        ]];
+        $result = $this->_uit->searchEmailAccounts($filter, []);
+        self::assertEquals(0, $result['totalcount'], 'a new (system?) account has been added');
     }
 }

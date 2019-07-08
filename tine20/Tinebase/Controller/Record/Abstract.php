@@ -1292,7 +1292,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
         }
         if ($record->has('notes') && $this->_setNotes !== false) {
-            if (isset($record->notes) && is_array($record->notes)) {
+            if (isset($record->notes) && (is_array($record->notes) || $record->notes instanceof Tinebase_Record_RecordSet)) {
                 $updatedRecord->notes = $record->notes;
                 Tinebase_Notes::getInstance()->setNotesOfRecord($updatedRecord);
             }

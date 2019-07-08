@@ -40,6 +40,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     tbarItems: [],
     evalGrants: false,
+    asAdminModule: false,
 
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -56,29 +57,52 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function() {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordLoad.call(this);
-        
-        // if account type == system disable most of the input fields
-        if (this.record.get('type') == 'system') {
-            this.getForm().items.each(function(item) {
-                // only enable some fields
-                switch(item.name) {
-                    case 'signature':
-                    case 'signature_position':
-                    case 'display_format':
-                    case 'compose_format':
-                    case 'preserve_format':
-                    case 'sieve_notification_email':
-                    case 'reply_to':
-                        break;
-                    default:
-                        item.setDisabled(true);
-                }
-            }, this);
-        }
+
+        this.disableFormFields();
+
         if (! this.copyRecord && ! this.record.id && this.window) {
             this.window.setTitle(this.app.i18n._('Add New Account'));
         }
-    },    
+    },
+
+    disableFormFields: function() {
+        // if account type == system disable most of the input fields
+        this.getForm().items.each(function(item) {
+            // only enable some fields
+            switch(item.name) {
+                case 'signature':
+                case 'signature_position':
+                case 'display_format':
+                case 'compose_format':
+                case 'preserve_format':
+                case 'sieve_notification_email':
+                case 'reply_to':
+                    break;
+                case 'type':
+                    item.setDisabled(this.record.id);
+                    break;
+                case 'host':
+                case 'port':
+                case 'ssl':
+                case 'user':
+                case 'password':
+                case 'smtp_hostname':
+                case 'smtp_port':
+                case 'smtp_ssl':
+                case 'smtp_auth':
+                case 'smtp_user':
+                case 'smtp_password':
+                case 'sieve_hostname':
+                case 'sieve_port':
+                case 'sieve_ssl':
+                    // always disabled for system accounts
+                    item.setDisabled(this.record.get('type') == 'system');
+                    break;
+                default:
+                    item.setDisabled(! this.asAdminModule && this.record.get('type') == 'system');
+            }
+        }, this);
+    },
     
     /**
      * returns dialog
@@ -129,6 +153,22 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
                             allowBlank: false
+                        }, {
+                            fieldLabel: this.app.i18n._('Account Type'),
+                            name: 'type',
+                            typeAhead: false,
+                            triggerAction: 'all',
+                            lazyRender: true,
+                            editable: false,
+                            mode: 'local',
+                            forceSelection: true,
+                            value: 'user',
+                            xtype: 'combo',
+                            store: [
+                                ['user', this.app.i18n._('External')],
+                                ['system', this.app.i18n._('System')]
+                                // TODO add more types?
+                            ]
                         }, {
                             fieldLabel: this.app.i18n._('User Email'),
                             name: 'email',
@@ -186,6 +226,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'port',
                     allowBlank: false,
                     maxLength: 5,
+                    value: 143,
                     xtype: 'numberfield'
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
@@ -228,6 +269,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'smtp_port',
                     maxLength: 5,
                     xtype:'numberfield',
+                    value: 25,
                     allowBlank: false
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
@@ -283,6 +325,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Port (Default: 2000)'),
                     name: 'sieve_port',
                     maxLength: 5,
+                    value: 2000,
                     xtype:'numberfield'
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),

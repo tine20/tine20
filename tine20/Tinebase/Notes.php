@@ -359,10 +359,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $_record->$_notesProperty = $notesToSet;
         }
         
-        //$toAttach = array_diff($notesToSet->getArrayOfIds(), $currentNotesIds);
         $toDetach = array_diff($currentNotes->getArrayOfIds(), $notesToSet->getArrayOfIds());
         $toDelete = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
-        foreach($toDetach as $detachee) {
+        foreach ($toDetach as $detachee) {
             $toDelete->addRecord($currentNotes->getById($detachee));
         }
 
@@ -385,15 +384,18 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * add new note
      *
      * @param Tinebase_Model_Note $_note
+     * @param boolean $skipModlog
      */
-    public function addNote(Tinebase_Model_Note $_note)
+    public function addNote(Tinebase_Model_Note $_note, $skipModlog = false)
     {
         if (!$_note->getId()) {
             $id = $_note->generateUID();
             $_note->setId($id);
         }
 
-        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($_note, 'create');
+        if (! $skipModlog) {
+            Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($_note, 'create');
+        }
         
         $data = $_note->toArray(FALSE, FALSE);
 

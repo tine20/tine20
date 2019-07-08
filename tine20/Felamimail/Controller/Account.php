@@ -927,10 +927,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         } elseif ($_accountId instanceof Tinebase_Model_User) {
             $_accountId = $_accountId->getId();
         }
-        return $this->search(new Felamimail_Model_AccountFilter([
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $_accountId],
             ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM],
-        ]))->getFirstRecord();
+        ]);
+        return $this->search($filter)->getFirstRecord();
     }
 
     /**

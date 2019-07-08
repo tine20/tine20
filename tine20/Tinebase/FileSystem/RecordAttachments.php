@@ -236,7 +236,7 @@ class Tinebase_FileSystem_RecordAttachments
                     $attachment = $this->_fsController->stat($tmpPath, null, true);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                            __LINE__ . ' could not find attachement record with id: ' . $attachment->id);
+                            __LINE__ . ' could not find attachment record with id: ' . $attachment->id);
                 }
             } else {
                 // this comes from \Calendar_Frontend_CalDAV_PluginManagedAttachments::httpPOSTHandler
