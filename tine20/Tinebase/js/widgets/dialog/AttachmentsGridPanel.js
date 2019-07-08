@@ -171,7 +171,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         var selectedRows = this.getSelectionModel().getSelections(),
             rowRecord = selectedRows[0];
 
-        if (e.getKey() == e.SPACE && rowRecord.data.type == 'file' && !this.readOnly) {
+        if (e.getKey() == e.SPACE && rowRecord.data.type == 'file') {
             this.action_preview.execute();
         }
     },
