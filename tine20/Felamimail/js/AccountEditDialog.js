@@ -178,8 +178,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             value: 'user',
                             xtype: 'combo',
                             store: [
-                                ['user', this.app.i18n._('External')],
-                                ['system', this.app.i18n._('System')]
+                                ['user', this.app.i18n._('External E-Mail Account')],
+                                ['system', this.app.i18n._('Personal Systemaccount')]
                                 // TODO add more types?
                             ]
                         }, {

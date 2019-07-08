@@ -437,7 +437,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 ],
             ],
             'sieve_notification_email' => [
-                self::TYPE => self::TYPE_BOOLEAN,
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
                 self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
