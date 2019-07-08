@@ -158,7 +158,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [[{
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
-                            allowBlank: false
+                            allowBlank: this.asAdminModule
                         }, Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
                             fieldLabel: this.app.i18n._('User'),
@@ -185,7 +185,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }, {
                             fieldLabel: this.app.i18n._('User Email'),
                             name: 'email',
-                            allowBlank: false,
+                            allowBlank: this.asAdminModule,
                             vtype: 'email'
                         }, {
                             fieldLabel: this.app.i18n._('User Name (From)'),
@@ -233,11 +233,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: [[{
                     fieldLabel: this.app.i18n._('Host'),
                     name: 'host',
-                    allowBlank: false
+                    allowBlank: this.asAdminModule
                 }, {
                     fieldLabel: this.app.i18n._('Port (Default: 143 / SSL: 993)'),
                     name: 'port',
-                    allowBlank: false,
+                    allowBlank: this.asAdminModule,
                     maxLength: 5,
                     value: 143,
                     xtype: 'numberfield'
@@ -260,7 +260,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },{
                     fieldLabel: this.app.i18n._('Username'),
                     name: 'user',
-                    // TODO check if this can be empty - maybe we should resolve the username on the server?
                     allowBlank: this.asAdminModule
                 }, {
                     fieldLabel: this.app.i18n._('Password'),
@@ -284,7 +283,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     maxLength: 5,
                     xtype:'numberfield',
                     value: 25,
-                    allowBlank: false
+                    allowBlank: this.asAdminModule
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'smtp_ssl',
