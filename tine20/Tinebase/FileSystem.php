@@ -2668,7 +2668,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * check acl of path
      *
      * @param Tinebase_Model_Tree_Node_Path $_path
-     * @param string $_action
+     * @param string $_action get|add
      * @param boolean $_topLevelAllowed
      * @throws Tinebase_Exception_AccessDenied
      * @return boolean
@@ -2719,6 +2719,20 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 break;
             case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
                 $hasPermission = ($_action === 'get');
+                break;
+            case self::FOLDER_TYPE_RECORDS:
+                if ($_action !== 'get') {
+                    throw new Tinebase_Exception_InvalidArgument('only "get" action supported here');
+                }
+                $model = $_path->getRecordModel();
+                try {
+                    $controller = Tinebase_Core::getApplicationInstance($_path->application, $model);
+                    $recordId = $_path->getRecordId();
+                    $controller->get($recordId);
+                    $hasPermission = true;
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    $hasPermission = false;
+                }
                 break;
             default:
                 $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);

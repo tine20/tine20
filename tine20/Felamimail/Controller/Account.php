@@ -223,9 +223,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         // add user id
-        if ($_record->type !== Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST &&
+        if (empty($_record->user_id) && $_record->type !== Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST &&
                 $_record->type !== Tinebase_EmailUser_Model_Account::TYPE_SHARED) {
             $_record->user_id = Tinebase_Core::getUser()->getId();
+        } else if (is_array($_record->user_id)) {
+            // TODO move to converter
+            $_record->user_id = $_record->user_id['accountId'];
         }
         
         // use the imap host as smtp host if empty
@@ -314,6 +317,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         if ($_record->type !== $_oldRecord->type) {
             throw new Tinebase_Exception_UnexpectedValue('type can not change');
+        }
+
+        // TODO move to converter
+        if (is_array($_record->user_id)) {
+            $_record->user_id = $_record->user_id['accountId'];
         }
 
         if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {

@@ -1557,3 +1557,12 @@ msgstr "Node ID"
 
 msgid "Type"
 msgstr "Typ"
+
+msgid "External E-Mail Account"
+msgstr "Externes E-Mail-Konto"
+
+msgid "Personal System Account"
+msgstr "Persönliches Systemkonto"
+
+msgid "Shared System Account"
+msgstr "Persönliches Systemkonto"
