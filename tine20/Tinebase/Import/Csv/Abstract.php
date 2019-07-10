@@ -181,7 +181,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     protected function _getDay($data,$dates)
     {
         foreach ($dates as $date) {
-            if($data[$date] != '' && $data[$date] != 'today') {
+            if(!empty($data[$date]) && $data[$date] != 'today') {
                 $data[$date] = $this->{'_' . $data[$date]};
             }else
             {
@@ -189,6 +189,20 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             }
         }
         return $data;
+    }
+
+    /**
+     * do conversions
+     *
+     * @param array $_data
+     * @return array
+     */
+    protected function _doConversions($_data)
+    {
+        if ($this->_options['demoData'] && isset($this->_additionalOptions['dates'])) $_data = $this->_getDay($_data,
+            $this->_additionalOptions['dates']);
+        $result = parent::_doConversions($_data);
+        return $result;
     }
 
     /**
@@ -281,7 +295,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                     $this->_headline = array_merge($this->_headline, $arrayWithUnknownValues);
                 }
             }
-
             $_data_indexed = array_combine($this->_headline, $_data);
         }
 
