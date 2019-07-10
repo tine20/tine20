@@ -49,8 +49,6 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
             }
         }
 
-        if($this->_options['demoData']) $result = $this->_getDay($result, $this->_additionalOptions['dates']);
-
         $result = $this->_setUser($result);
 
         return $result;

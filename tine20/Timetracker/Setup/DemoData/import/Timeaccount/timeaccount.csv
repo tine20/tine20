@@ -1,5 +1,5 @@
 title,number,description,budget,price,is_open,is_billable,billed_in,status,cleared_at
 Hofstab,HF-225,Stunden des Hofstabes am Schönbrunnener Schloss,100,80,1,1,,not yet billed,
-Proben,EO-231,Abrechnug fürs Üben,500,13,1,1,,billed,2018-08-08
-Proben,EO-232,Abrechnug fürs Üben,500,13,1,1,2018-08-08,to bill,
+Proben,EO-231,Abrechnug fürs Üben,500,13,1,1,,billed,friday2week
+Proben,EO-232,Abrechnug fürs Üben,500,13,1,1,lastMonday,to bill,
 Kartenverkauf,KV-02,Kartenverkauf der Elbphilharmonie,100,40,1,2,,not yet billed,
