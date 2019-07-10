@@ -1184,7 +1184,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if ($e instanceof Tinebase_Exception_Duplicate) {
             $exception = $this->_handleDuplicateExceptions($e, $recordIndex, $record, $allowToResolveDuplicates);
         } else {
-            Tinebase_Exception::log($e);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Import exception: ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . $e->getTraceAsString());
 
             $this->_importResult['failcount']++;
             $exception = array(
