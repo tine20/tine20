@@ -384,8 +384,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * get user select
      *
      * @return Zend_Db_Select
-     *
-     * TODO get available fields from schema
      */
     protected function _getUserSelectObject()
     {
@@ -405,7 +403,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 . ' THEN ' . $this->_db->quote('expired')
             . ' ELSE ' . $this->_db->quote('disabled') . ' END';
 
-        $fields =  array(
+        $fields = array(
             'accountId'             => $this->rowNameMapping['accountId'],
             'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
             'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
@@ -443,10 +441,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ));
         }
 
-        // TODO remove
         // remove this in 2018.11 as an upgrade to 2017.11 creates the field
         if ($this->_userHasXpropsField()) {
             $fields[] = 'xprops';
+        }
+
+        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
+        foreach ($fields as $index => $field) {
+            // status contains $statusSQL
+            if (! isset($schema[$field]) && $index !== 'accountStatus') {
+                unset($fields[$index]);
+            }
         }
 
         $select = $this->_db->select()
