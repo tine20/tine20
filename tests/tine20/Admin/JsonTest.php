@@ -1612,4 +1612,21 @@ class Admin_JsonTest extends TestCase
         $result = $this->_uit->searchEmailAccounts($filter, []);
         self::assertEquals(0, $result['totalcount'], 'a new (system?) account has been added');
     }
+
+    public function testEmailAccountApiSystemAccount()
+    {
+        $this->_uit = $this->_json;
+        $accountdata = [
+            'user_id' => Tinebase_Core::getUser()->toArray(),
+            'type' => Felamimail_Model_Account::TYPE_SYSTEM,
+        ];
+        $account = $this->_json->saveEmailAccount($accountdata);
+        self::assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $account['email']);
+        $account['display_format'] = Felamimail_Model_Account::DISPLAY_PLAIN;
+        // client sends empty pws - should not be changed!
+        $account['password'] = '';
+        $account['smtp_password'] = '';
+        $updatedAccount = $this->_json->saveEmailAccount($account);
+        self::assertEquals(Felamimail_Model_Account::DISPLAY_PLAIN, $updatedAccount['display_format']);
+    }
 }

@@ -35,6 +35,7 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
      */
     protected $_additionalOptions = array(
         'container_id' => '',
+        'dates'        => ['date'],
     );
 
     /**
@@ -118,7 +119,7 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
     protected function _setDate($result)
     {
         $time = explode(':', $result['time']);
-        $date = new Tinebase_DateTime($result['date']);
+        $date = $result['date'];
         $date->setTime(
             (integer)$time['0'],
             isset($time['1']) ? (integer)$time['1'] : 0,

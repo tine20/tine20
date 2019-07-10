@@ -33,7 +33,7 @@ class Sales_Import_Product_Csv extends Tinebase_Import_Csv_Generic
     {
         $result = parent::_doConversions($_data);
 
-        if($this->_options['demoData']) $result = $this->_getDay($result, $this->_additionalOptions['dates']);
+
 
         return $result;
     }

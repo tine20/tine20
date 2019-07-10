@@ -33,11 +33,12 @@ class Timetracker_Import_TimesheetTest extends TestCase
 
         $importer_timesheet = new Tinebase_Setup_DemoData_Import('Timetracker_Model_Timesheet', [
             'definition' => 'time_import_timesheet_csv',
+            'file' => 'timesheet.csv',
         ]);
 
         $importer_timesheet->importDemodata();
 
-        $filter_timesheet = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Timetracker_Model_TimeSheet', [
+        $filter_timesheet = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Timetracker_Model_Timesheet', [
             ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
         ]);
         $result_timesheet = Timetracker_Controller_TimeSheet::getInstance()->search($filter_timesheet);

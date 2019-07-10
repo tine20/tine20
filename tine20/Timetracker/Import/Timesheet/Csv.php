@@ -16,7 +16,7 @@
  * @subpackage  Import
  *
  */
-class Timetracker_Import_Csv extends Tinebase_Import_Csv_Generic
+class Timetracker_Import_Timesheet_Csv extends Tinebase_Import_Csv_Generic
 {
     /**
      * additional config options
@@ -25,6 +25,7 @@ class Timetracker_Import_Csv extends Tinebase_Import_Csv_Generic
      */
     protected $_additionalOptions = array(
         'container_id'      => '',
+        'dates'             => array('billed_in','start_date')
     );
     
     /**
@@ -58,7 +59,6 @@ class Timetracker_Import_Csv extends Tinebase_Import_Csv_Generic
         $user_LoginName = Tinebase_Core::getUser();
         $user = Tinebase_User::getInstance()->getUserByLoginName($user_LoginName);
         $result['account_id'] = $user->getId();
-
 
 
         return $result;

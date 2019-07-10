@@ -2,7 +2,7 @@
 <config>
     <name>time_import_timeaccount_csv</name>
     <model>Timetracker_Model_Timeaccount</model>
-    <plugin>Tinebase_Import_Csv_Generic</plugin>
+    <plugin>Timetracker_Import_Timeaccount_Csv</plugin>
     <type>import</type>
     <headline>1</headline>
     <dryrun>0</dryrun>
