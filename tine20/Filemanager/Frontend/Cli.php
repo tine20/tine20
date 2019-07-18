@@ -22,4 +22,55 @@ class Filemanager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @var string
      */
     protected $_applicationName = 'Filemanager';
+
+    protected $_defaultDemoDataDefinition = [
+        'Filemanager_Model_Node' => 'filemanager_struktur_import_csv'
+    ];
+
+    public function csvExportFolder($opt)
+    {
+        $data = $this->csvExportFolderHelper($opt);
+        print_r($data);
+
+        return 0;
+
+    }
+
+    /**
+     * give all folder from the root directory(default /shared)
+     *
+     * @param $opts
+     * @param string $parentNodels
+     * @param array $paths
+     * @return array
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function csvExportFolderHelper($opts, $parentNode = '/shared', $paths = array())
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Filemanager_Model_NodeFilter', [
+            ['field' => 'path', 'operator' => 'equals', 'value' => $parentNode],
+            ['field' => 'type', 'operator' => 'equals', 'value' => 'folder']
+        ]);
+
+        $filter->isRecursiveFilter(true);
+        $nodes = Filemanager_Controller_Node::getInstance()->search($filter);
+
+        foreach ($nodes as $node) {
+            $nodePath = Tinebase_FileSystem::getInstance()->getPathOfNode($node, true);
+            $nodePath = array_pop(explode('/shared/', $nodePath));
+            $paths[] = $nodePath;
+
+            $childNodes = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($node['id']);
+
+            foreach ($childNodes as $childNode) {
+                $childPath = Tinebase_FileSystem::getInstance()->getPathOfNode($childNode, true);
+                $childPath = array_pop(explode('/shared/', $childPath));
+                $paths[] = $childPath;
+
+                $paths = array_merge($paths, $this->csvExportFolder($opts, '/shared/' . $childPath));
+            }
+        }
+
+        return $paths;
+    }
 }

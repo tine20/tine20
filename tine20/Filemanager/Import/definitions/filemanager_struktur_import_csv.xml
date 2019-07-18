@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Filemanager_Model_Node</model>
+    <plugin>Filemanager_Import_Csv</plugin>
+    <name>filemanager_struktur_import_csv</name>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>name</source>
+            <destination>name</destination>
+        </field>
+        <field>
+            <source>folder</source>
+            <destination>folder</destination>
+        </field>
+        <field>
+            <source>type</source>
+            <destination>type</destination>
+        </field>
+        <field>
+            <source>container</source>
+            <destination>container</destination>
+        </field>
+
+    </mapping>
+</config>
