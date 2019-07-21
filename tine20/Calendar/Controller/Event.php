@@ -2637,7 +2637,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $attender->displaycontainer_id = $calendar->getId();
             } else if ($attender->displaycontainer_id && $userAccountId == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 // allow user to set his own displ. cal
-                $attender->displaycontainer_id = $attender->displaycontainer_id;
             } else {
                 $displayCalId = self::getDefaultDisplayContainerId($userAccountId);
                 $attender->displaycontainer_id = $displayCalId;
@@ -2759,7 +2758,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $attender->displaycontainer_id = $calendar->getId();
             } else if ($userAccountId == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 // allow user to set his own displ. cal
-                $attender->displaycontainer_id = $attender->displaycontainer_id;
             } else {
                 $attender->displaycontainer_id = $currentAttender->displaycontainer_id;
             }
