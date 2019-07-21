@@ -154,7 +154,6 @@ Ext.namespace('Tine.Tasks');
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             activeTab: 0,
             border: false,

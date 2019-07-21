@@ -172,7 +172,6 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
         
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
