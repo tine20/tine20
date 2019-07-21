@@ -320,7 +320,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             disabled: false,
             handler: this.onImport,
             minWidth: 60,
-            requiredGrant: 'readGrant',
             iconCls: 'action_import',
             scope: this,
             allowMultiple: true

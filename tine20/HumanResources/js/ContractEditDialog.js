@@ -198,7 +198,6 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'

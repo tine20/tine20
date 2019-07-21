@@ -81,7 +81,6 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
         var cfDefaults = {xtype: 'textfield', readOnly: true, columnWidth: .5, anchor: '100%'};
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'

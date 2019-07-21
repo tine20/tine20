@@ -71,7 +71,6 @@ Tine.Sales.OfferEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             activeTab: 0,
             border: false,
