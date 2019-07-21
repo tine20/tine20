@@ -235,9 +235,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message->body        = $body;
             $message->headers     = $headers;
             $message->attachments = $attachments;
-            // make sure the structure is present
-            $message->structure   = $message->structure;
-            
         } else {
             // create new object for rfc822 message
             $structure = $_message->getPartStructure($_partId, FALSE);
