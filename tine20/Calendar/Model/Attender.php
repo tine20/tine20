@@ -258,7 +258,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $translation = Tinebase_Translation::getTranslation('Calendar');
                 $name = $resolvedUser->name ?: $resolvedUser->n_fileas;
                 if ($this->user_type == self::USERTYPE_GROUP) {
-                    $name . ' (' . $translation->_('Group') . ')';
+                    $name = $name . ' (' . $translation->_('Group') . ')';
                 }
                 return $name;
                 break;
