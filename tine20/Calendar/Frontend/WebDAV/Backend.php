@@ -79,34 +79,6 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
     function createCalendar($principalUri,$calendarUri,array $properties)
     {
         throw new Sabre\DAV\Exception\MethodNotAllowed('createCalendar');
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $principalUri: ' . $principalUri . ' $calendarUri: ' . $calendarUri . ' $properties' . print_r($properties, TRUE));
-        
-        
-        // NOTE: at the moment we only support a predefined set of colors
-//        if ((isset($properties['{http://apple.com/ns/ical/}calendar-color']) || array_key_exists('{http://apple.com/ns/ical/}calendar-color', $properties))) {
-//            $color = substr($properties['{http://apple.com/ns/ical/}calendar-color'], 0, 7);
-//            $container->color = $color;
-//        }
-        
-        $principalParts = explode('/', $principalUri);
-        
-        if (count($principalParts) == 2) {
-            $container = new Tinebase_Model_Container(array(
-                'name'              => $properties['{DAV:}displayname'],
-                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-                'owner_id'          => Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $principalParts[1]),
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'backend'           => 'Sql',
-                'model'             => 'Calendar_Model_Event'
-            ));
-            
-            $container = Tinebase_Container::getInstance()->addContainer($container);
-        } else {
-            throw new Sabre\DAV\Exception\PreconditionFailed('unsupported pricipalUri');
-        }
-        
-        return $container->getId();
     }
 
     /**
@@ -148,27 +120,6 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
     public function updateCalendar($calendarId, array $properties)
     {
         throw new Sabre\DAV\Exception\MethodNotAllowed('updateCalendar');
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId . ' $properties' . print_r($properties, TRUE));
-        
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            if ((isset($properties['{DAV:}displayname']) || array_key_exists('{DAV:}displayname', $properties))) {
-                Tinebase_Container::getInstance()->setContainerName($calendarId, $properties['{DAV:}displayname']);
-            }
-            
-            // NOTE: at the moment we only support a predefined set of colors
-//            if ((isset($properties['{http://apple.com/ns/ical/}calendar-color']) || array_key_exists('{http://apple.com/ns/ical/}calendar-color', $properties))) {
-//                $color = substr($properties['{http://apple.com/ns/ical/}calendar-color'], 0, 7);
-//                Tinebase_Container::getInstance()->setContainerColor($calendarId, $color);
-//            }
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        } catch (Exception $e) {
-            return false;
-        }
-        
-        return true;
     }
 
     /**
@@ -180,9 +131,6 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
     function deleteCalendar($calendarId)
     {
         throw new Sabre\DAV\Exception\MethodNotAllowed('deleteCalendar');
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId);
-        Tinebase_Container::getInstance()->deleteContainer($calendarId);
     }
 
     /**
