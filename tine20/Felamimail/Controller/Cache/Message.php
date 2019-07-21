@@ -1071,7 +1071,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' There are still messages missing in the cache: setting status to INCOMPLETE');
             
-            $_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
+            $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
         }
     }
     
