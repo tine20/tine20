@@ -53,8 +53,6 @@ Tine.Admin.Roles.Main = {
                         roleIds.push(selectedRows[i].id);
                     }
                     
-                    roleIds = roleIds;
-                    
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
