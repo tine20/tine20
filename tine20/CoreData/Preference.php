@@ -64,13 +64,10 @@ class CoreData_Preference extends Tinebase_Preference_Abstract
      */
     public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
-        $preference = $this->_getDefaultBasePreference($_preferenceName);
-        
-        switch($_preferenceName) {
-            default:
-                throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
+        if($_preferenceName) {
+            throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }
-        
+        $preference = $this->_getDefaultBasePreference($_preferenceName);
         return $preference;
     }
 }
