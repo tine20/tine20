@@ -648,14 +648,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return (result) ? result : record.get('name');
             }
         }
-            
+
         result += '/';
         if (folder) {
             result += folder.get('globalname');
-        } else {
-            result += folderId;
         }
-            
+
         return result;
     },
     
