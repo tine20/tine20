@@ -30,7 +30,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     context: { 'skipClosedCheck': false },
 
     windowWidth: 800,
-    windowHeight: 500,
+    windowHeight: 530,
+    
+    factor: '0',
+    factorChanged: false,
 
     
     /**
@@ -61,6 +64,17 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         if (timeaccount) {
             this.onTimeaccountUpdate(null, new Tine.Timetracker.Model.Timeaccount(timeaccount));
         }
+    },
+    
+    onTimeaccountSelect: function(field, timeaccount) {
+        this.onTimeaccountUpdate(field, timeaccount);
+        //set factor from timeaccount except it was manually changed before
+        if (!this.factorChanged) {
+            this.factor = timeaccount.data.accounting_time_factor;
+        }
+        this.getForm().findField('accounting_time_factor').setValue(this.factor);
+        
+        this.calculateAccountingTime();
     },
 
     /**
@@ -117,8 +131,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }
 
         this.getForm().findField('is_billable').setDisabled(notBillable);
+        this.disableBillableFields(notBillable)
         this.getForm().findField('is_cleared').setDisabled(notClearable);
-        
+        this.disableClearedFields(notClearable);
+
+
         if (this.record.id == 0 && timeaccount) {
             // set is_billable for new records according to the timeaccount setting
             this.getForm().findField('is_billable').setValue(timeaccount.data.is_billable);
@@ -134,7 +151,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         if (this.record.id == 0 && this.record.get('timeaccount_id') && this.record.get('timeaccount_id').is_billable) {
             this.getForm().findField('is_billable').setValue(this.record.get('timeaccount_id').is_billable);
         }
-
+        this.factor = this.getForm().findField('accounting_time_factor').getValue()
         var focusFieldName = this.record.get('timeaccount_id') ? 'duration' : 'timeaccount_id',
             focusField = this.getForm().findField(focusFieldName);
 
@@ -152,6 +169,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     onClearedUpdate: function(field, checked) {
         if (!this.useMultiple) {
             this.getForm().findField('billed_in').setDisabled(! checked);
+            if (this.useInvoice) {
+                this.getForm().findField('invoice_id').setDisabled(! checked);
+            }
         }
     },
 
@@ -181,54 +201,62 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         return valid;
     },
 
+    calculateAccountingTime: function() {
+        var factor = this.getForm().findField('accounting_time_factor').getValue(),
+            duration = this.getForm().findField('duration').getValue(),
+            accountingTime = Math.round(factor * duration);
+        if (factor != this.factor) {
+            this.factor = factor;
+            this.factorChanged = true;
+        }
+        this.getForm().findField('accounting_time').setValue(accountingTime);
+    },
+    
+    onCheckBillable: function(field, checked) {
+        if (!this.useMultiple) {
+            if (!checked) {
+                this.getForm().findField('accounting_time_factor').setValue(0);
+                this.getForm().findField('accounting_time').setValue(0);
+                this.disableBillableFields(true);
+                this.disableClearedFields(true);
+                this.getForm().findField('is_cleared').setDisabled(true);
+
+            } else {
+                this.getForm().findField('accounting_time_factor').setValue(this.factor);
+                this.calculateAccountingTime();
+                this.disableBillableFields(false);
+                this.disableClearedFields(false);
+                this.getForm().findField('is_cleared').setDisabled(false);
+            }
+        }
+    },
+    
+    disableBillableFields: function(disable) {
+        this.getForm().findField('accounting_time_factor').setDisabled(disable);
+        this.getForm().findField('accounting_time').setDisabled(disable);
+    },
+
+    disableClearedFields: function(disable) {
+        this.getForm().findField('billed_in').setDisabled(disable);
+        if (this.useInvoice) {
+            this.getForm().findField('invoice_id').setDisabled(disable);
+        }
+    },
+
     /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initialization is done.
      */
     getFormItems: function() {
-        var lastRow = [new Tine.Addressbook.SearchCombo({
-            allowBlank: false,
-            forceSelection: true,
-            columnWidth: 1,
-            disabled: true,
-            useAccountRecord: true,
-            userOnly: true,
-            nameField: 'n_fileas',
-            fieldLabel: this.app.i18n._('Account'),
-            name: 'account_id'
-        }), {
-            columnWidth: .25,
-            disabled: (this.useMultiple) ? false : true,
-            boxLabel: this.app.i18n._('Billable'),
-            name: 'is_billable',
-            xtype: 'checkbox'
-        }, {
-            columnWidth: .25,
-            disabled: (this.useMultiple) ? false : true,
-            boxLabel: this.app.i18n._('Cleared'),
-            name: 'is_cleared',
-            xtype: 'checkbox',
-            listeners: {
-                scope: this,
-                check: this.onClearedUpdate
-            }
-        }, {
-                columnWidth: .5,
-                disabled: true,
-                fieldLabel: this.app.i18n._('Cleared In'),
-                name: 'billed_in'
-            },];
-        
-        if (this.useInvoice) {
-            lastRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
-                columnWidth: .5,
-                disabled: true,
-                fieldLabel: this.app.i18n._('Invoice'),
-                name: 'invoice_id'
-            }));
-        }
-        
+        var _ = window.lodash,
+            fieldManager = _.bind(
+                Tine.widgets.form.FieldManager.get, 
+                Tine.widgets.form.FieldManager, 
+                this.appName, 
+                this.modelName, 
+                _, 
+                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
         
         return {
             xtype: 'tabpanel',
@@ -241,8 +269,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             defaults: {
                 hideMode: 'offsets'
             },
-            items:[
-                {
+            items:[{
                 title: this.app.i18n.ngettext('Timesheet', 'Timesheets', 1),
                 autoScroll: true,
                 border: false,
@@ -250,97 +277,131 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 layout: 'border',
                 items: [{
                     region: 'center',
-                    xtype: 'columnform',
-                    labelAlign: 'top',
-                    formDefaults: {
-                        xtype:'textfield',
-                        anchor: '100%',
-                        labelSeparator: '',
-                        columnWidth: .333
-                    },
-                    items: [[Tine.widgets.form.RecordPickerManager.get('Timetracker', 'Timeaccount', {
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n.ngettext('Time Account', 'Time Accounts', 1),
-                        emptyText: this.app.i18n._('Select Time Account...'),
-                        allowBlank: false,
-                        forceSelection: true,
-                        name: 'timeaccount_id',
-                        listeners: {
-                            scope: this,
-                            select: this.onTimeaccountUpdate
+                    layout: 'hfit',
+                    border: false,
+                    items: [{
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype: 'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: .25
                         },
-                        lazyInit: false
-                    })], [{
-                        fieldLabel: this.app.i18n._('Duration'),
-                        allowNegative: false,
-                        columnWidth: 0.25,
-                        name: 'duration',
-                        selectOnFocus: true,
-                        allowBlank: false,
-                        xtype: 'durationspinner'
-                        }, {
-                        fieldLabel: this.app.i18n._('Date'),
-                        columnWidth: 0.25,
-                        name: 'start_date',
-                        allowBlank: false,
-                        xtype: 'datefield'
-                        }, {
-                        fieldLabel: this.app.i18n._('Start'),
-                        columnWidth: 0.25,
-                        emptyText: this.app.i18n._('not set'),
-                        name: 'start_time',
-                        xtype: 'timefield'
-                        }, {
-                        fieldLabel: this.app.i18n._('End'),
-                        columnWidth: 0.25,
-                        emptyText: this.app.i18n._('not set'),
-                        name: 'end_time',
-                        xtype: 'timefield'
-                    }], [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Description'),
-                        emptyText: this.app.i18n._('Enter description...'),
-                        name: 'description',
-                        allowBlank: false,
-                        xtype: 'textarea',
-                        height: 150
-                    }], lastRow,
-                    [
-                        Tine.widgets.form.FieldManager.get(
-                            this.appName,
-                            this.modelName,
-                            'type',
-                            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
-                            {
-                                columnWidth: .5,
-                            }
-                        ),
-                        {
-                            columnWidth: .5,
-                            boxLabel: this.app.i18n._('Need for Clarification'),
-                            name: 'need_for_clarification',
-                            xtype: 'checkbox'
-                        }
-                    ]]
-                }, {
-                    // activities and tags
-                    layout: 'ux.multiaccordion',
-                    animate: true,
-                    region: 'east',
-                    width: 210,
-                    split: true,
-                    collapsible: true,
-                    collapseMode: 'mini',
-                    header: false,
-                    margins: '0 5 0 5',
-                    border: true,
-                    items: [
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Timetracker',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        })
-                    ]
+                        items: [[
+                            fieldManager('timeaccount_id', {
+                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                columnWidth: 1,
+                                listeners: {
+                                    scope: this,
+                                    select: this.onTimeaccountSelect
+                                },
+                                lazyInit: false
+                            })
+                        ], [
+                            fieldManager('duration', {
+                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                selectOnFocus: true,
+                                allowBlank: false,
+                                allowNegative: false,
+                                enableKeyEvents: true,
+                                listeners: {
+                                    scope: this,
+                                    keyup: this.calculateAccountingTime,
+                                    spin: this.calculateAccountingTime,
+                                }
+                            }),
+                            fieldManager('start_date', {disabled: this.record.get('workingtime_is_cleared') ? true : false}), 
+                            fieldManager('start_time', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
+                            fieldManager('end_time', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
+                        ], [
+                            fieldManager('description', {
+                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                columnWidth: 1,
+                                allowBlank: false,
+                                height: 150}),
+                            ]
+                        ]
+                    }, {
+                        layout: 'hbox',
+                        height: 160,
+                        layoutConfig: {
+                            align: 'stretch',
+                            pack: 'start'
+                        },
+                        items: [{
+                            flex: 1,
+                            xtype: 'fieldset',
+                            layout: 'hfit',
+                            margins: '0 5 10 5',
+                            title: this.app.i18n._('Accounting'),
+                            items: [{
+                                xtype: 'columnform',
+                                labelAlign: 'top',
+                                formDefaults: {
+                                    xtype: 'textfield',
+                                    anchor: '100%',
+                                    labelSeparator: '',
+                                    columnWidth: .25
+                                },
+                                items: [[
+                                    fieldManager('is_billable', {disabled: (this.useMultiple) ? false : true,
+                                        listeners: {
+                                            scope: this,
+                                            check: this.onCheckBillable
+                                        }}),
+                                    fieldManager('accounting_time_factor', {listeners: {
+                                        scope: this,
+                                        change: this.calculateAccountingTime
+                                    }}),
+                                    fieldManager('accounting_time'),
+                                    fieldManager('need_for_clarification'),
+                                ], [
+                                    fieldManager('is_cleared', {listeners: {
+                                        scope: this,
+                                        check: this.onClearedUpdate
+                                    }}),
+                                    fieldManager('billed_in', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
+                                    this.useInvoice ? fieldManager('invoice_id') : {},
+                                ], [
+                                    fieldManager('workingtime_is_cleared', {disabled: true}),
+                                    fieldManager('workingtime_cleared_in', {disabled: true, columnWidth: .5}),
+                                ]]
+                            }]
+                        }]
+                    }, {
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype: 'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: 1
+                        },
+                        items: [[
+                            fieldManager('account_id')
+                        ]]
+                    },
+                    {
+                        // activities and tags
+                        layout: 'ux.multiaccordion',
+                        animate: true,
+                        region: 'east',
+                        width: 210,
+                        split: true,
+                        collapsible: true,
+                        collapseMode: 'mini',
+                        header: false,
+                        margins: '0 5 0 5',
+                        border: true,
+                        items: [
+                            new Tine.widgets.tags.TagPanel({
+                                app: 'Timetracker',
+                                border: false,
+                                bodyStyle: 'border:1px solid #B5B8C8;'
+                            })
+                        ]
+                    }]
                 }]
             }, {
                     title: this.app.i18n._('Timeaccount'),

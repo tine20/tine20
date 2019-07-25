@@ -97,6 +97,7 @@ Tine.widgets.form.FieldManager = function() {
                     }
                     break;
                 case 'date':
+                case 'datetime_separated_date':
                     field.xtype = 'datefield';
                     if (fieldDefinition.dateFormat) {
                         field.dateFormat = fieldDefinition.dateFormat;
@@ -112,6 +113,8 @@ Tine.widgets.form.FieldManager = function() {
                 case 'boolean':
                     if (category === 'editDialog') {
                         field.xtype = 'checkbox';
+                        field.boxLabel = field.fieldLabel;
+                        field.hideLabel = true;
                     } else {
                         field.xtype = 'booleancombo';
                     }
@@ -129,6 +132,11 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'durationSec') {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'seconds';
+                    }
+                    
+                    if (fieldDefinition.specialType && fieldDefinition.specialType === 'minutes') {
+                        field.xtype = 'durationspinner';
+                        field.baseUnit = 'minutes';
                     }
 
                     if (fieldDefinition.max) {
@@ -208,6 +216,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.keyFieldName = fieldDefinition.name;
                     break;
                 case 'text':
+                case 'fulltext':
                     field.xtype = 'textarea';
                     field.height = 70; // 5 lines
                     break;

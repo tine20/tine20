@@ -30,7 +30,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 7,
+        'version'           => 8,
         'recordName'        => 'Timesheet',
         'recordsName'       => 'Timesheets', // ngettext('Timesheet', 'Timesheets', n)
         'hasRelations'      => true,
@@ -117,16 +117,18 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ),
             ),
             'is_billable'           => array(
+                'label'                 => 'Billable', // _('Billable')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
                 'type'                  => 'boolean',
                 'default'               => 1,
-                'shy'                   => true
+                'shy'                   => true,
             ),
+            // ts + ta fields combined
             'is_billable_combined'  => array(
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'type'                  => 'virtual',
                 'config'                => [
-                    'label'                 => 'Billable', // _('Billable')
+                    'label'                 => 'Billable (combined)', // _('Billable (combined)')
                     'type'                  => 'boolean',
                 ],
                 'filterDefinition'      => [
@@ -162,18 +164,20 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'copyOmit'              => true,
             ),
             'is_cleared'            => array(
+                'label'                 => 'Cleared', // _('Cleared')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'                  => 'boolean',
                 'default'               => 0,
                 'shy'                   => true,
                 'copyOmit'              => true,
             ),
+            // ts + ta fields combined
             'is_cleared_combined'   => array(
                 'type'                  => 'virtual',
                 'config'                => [
-                    'label'                 => 'Cleared', // _('Cleared')
+                    'label'                 => 'Cleared (combined)', // _('Cleared (combined)')
                     'type'                  => 'boolean',
-                ],
+                ], 
                 'filterDefinition'      => array(
                     'filter'                => 'Tinebase_Model_Filter_Bool',
                     'options'               => array(
@@ -239,26 +243,37 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'queryFilter'           => true
             ),
             'need_for_clarification'    => array(
-                'label'                 => 'Need for Clarification',
+                'label'                 => 'Need for Clarification', // _('Need for Clarification')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'                  => 'boolean',
                 'default'               => 0
             ),
-            'type' => [
-                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'nullable' => true,
-                'label' => 'Type', // _('Type')
-                'type' => 'keyfield',
-                'name' => 'type'
-            ],
-            // TODO ?????
-            /*
-            'timeaccount_closed' => array(
-                'label' => 'Time Account closed', // _('Time Account closed')
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'type' => 'boolean',
-
-            ),*/
+            'accounting_time_factor'    => array(
+                'label'                 => 'Accounting time factor', // _('Accounting time factor')
+                'inputFilters' => array('Zend_Filter_Empty' => 1),
+                'type'                  => 'float',
+                'default'               => 1
+            ),
+            'accounting_time'  => array(
+                'label'                 => 'Accounting time', // _('Accounting time')
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'type'                  => 'integer',
+                'specialType'           => 'minutes',
+                'default'               => '30'
+            ),
+            'workingtime_is_cleared'    => array(
+                'label'                 => 'Workingtime is cleared', // _('Workingtime is cleared')
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+                'type'                  => 'boolean',
+                'default'               => 0
+            ),
+            'workingtime_cleared_in'             => array(
+                'label'                 => 'Workingtime cleared in', // _('Workingtime cleared in')
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'shy'                   => true,
+                'nullable'              => true,
+                'copyOmit'              => true,
+            ),
         )
     );
     

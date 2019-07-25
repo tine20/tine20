@@ -39,12 +39,6 @@ class Timetracker_Config extends Tinebase_Config_Abstract
      */
     const STATUS ='status';
     
-    /**
-     * Type
-     *
-     * @var string
-     */
-    const TYPE = 'type';
 
     /**
      * @var array
@@ -70,22 +64,6 @@ class Timetracker_Config extends Tinebase_Config_Abstract
                 ],
             ],
             self::DEFAULT_STR => [],
-        ],
-        self::TYPE => [
-            //_('Type')
-            'label' => 'Type',
-            //_('Type')
-            'description' => 'Possible types',
-            'type' => 'keyFieldConfig',
-            'clientRegistryInclude' => true,
-            'setByAdminModule' => true,
-            'setBySetupModule' => false,
-            'default' => [
-                'records' => [
-                    ['id' => Timetracker_Model_Timesheet::TYPE_WORKINGTIME, 'value' => 'Working time', 'system' => true], //_('Working time')
-                    ['id' => Timetracker_Model_Timesheet::TYPE_PROJECTTIME, 'value' => 'Project time', 'system' => true], //_('Project time')
-                ]
-            ]
         ],
         self::DEADLINE => array(
             'label' => 'Booking deadline',
