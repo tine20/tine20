@@ -928,13 +928,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _addSystemAccount(Tinebase_Record_RecordSet $_accounts)
     {
-        $email = $this->_getAccountEmail(Tinebase_Core::getUser());
+        $fullUser = Tinebase_Core::getUser();
+        $email = $this->_getAccountEmail($fullUser);
         
         // only create account if email address is set
         if ($email) {
             $systemAccount = new Felamimail_Model_Account(array(
                 'type'    => Felamimail_Model_Account::TYPE_SYSTEM,
-                'user_id' => Tinebase_Core::getUser()->getId()
+                'user_id' => $fullUser->getId()
             ), TRUE);
             
             $this->_addSystemAccountConfigValues($systemAccount);
