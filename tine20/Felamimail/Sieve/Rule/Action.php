@@ -89,9 +89,8 @@ class Felamimail_Sieve_Rule_Action
                         $argument = $this->_quoteString($this->_argument['emails']);
                         return "    $this->_type $argument;";
                     }
-
-                    break;
                 }
+                break;
 
             default:
                 $argument = $this->_quoteString($this->_argument);
