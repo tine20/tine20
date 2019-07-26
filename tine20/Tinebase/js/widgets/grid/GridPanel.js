@@ -2157,7 +2157,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                plugins: plugins ? Ext.encode(plugins) : null,
+                plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
