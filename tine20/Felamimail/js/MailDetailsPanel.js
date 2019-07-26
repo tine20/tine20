@@ -193,7 +193,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     } else {
                         return '';
                     }
-                    return value;
                 },
 
                 showDate: function (sent, recordData) {
