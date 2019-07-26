@@ -194,7 +194,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             }
         }));
 
-        this.tabPanelPosition = this.tabPanelPosition++;
+        this.tabPanelPosition++;
     }
 };
 
