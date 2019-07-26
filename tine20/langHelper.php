@@ -438,7 +438,6 @@ function contributorsMerge($_verbose, $_language, $_archive)
         if (! is_file($tinePoFile)) {
             echo "Error: could not find langfile $_language.po in Tine 2.0's $appName \n";
             continue;
-            exit;
         }
         if (! is_file($contributedPoFile)) {
             //check leggacy
