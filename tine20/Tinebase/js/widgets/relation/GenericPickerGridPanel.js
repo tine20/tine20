@@ -692,7 +692,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             var relatedRecord = this.getRelatedRecord(record),
                 ownTitle = this.record.getTitle(),
                 relatedTitle = relatedRecord ? relatedRecord.getTitle() : '',
-                path = value == 'parent' ? (relatedTitle + '/' + ownTitle) : (relatedTitle + '/' + ownTitle);
+                path = relatedTitle + '/' + ownTitle;
 
             qtip = Tine.widgets.path.pathRenderer(path);
             // TODO make css work
