@@ -451,16 +451,6 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     },
     
     /**
-     * is request still loading?
-     * 
-     * @param  {Number} Ext.Ajax transaction id
-     * @return {Bool}
-     */
-    isLoading: function(tid) {
-        return Ext.Ajax.isLoading(tid);
-    },
-    
-    /**
      * performs an Ajax request
      */
     doXHTTPRequest: function(options) {
