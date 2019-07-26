@@ -117,7 +117,6 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
             border: false,
             plain:true,
             activeTab: 0,
-            border: false,
             items:[{
                 title: i18n._('Properties'),
                 border: false,
