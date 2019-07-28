@@ -180,7 +180,6 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
                 hideMode: 'offsets'
             },
             activeTab: 0,
-            border: false,
             items: [{
             title: this.app.i18n._('Working time Model'),
             autoScroll: true,
