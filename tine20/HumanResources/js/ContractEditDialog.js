@@ -206,7 +206,6 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 hideMode: 'offsets'
             },
             activeTab: 0,
-            border: false,
             items: [{
             title: this.app.i18n._('Contract'),
             autoScroll: true,
