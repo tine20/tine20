@@ -308,6 +308,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
                         return text;
                     }
+                    return "";
                 }
             });
     },
