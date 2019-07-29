@@ -469,6 +469,8 @@ class Tinebase_FileSystem implements
     public function copy($sourcePath, $destinationPath)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->acquireWriteLock();
+
         try {
             $destinationNode = $this->stat($sourcePath);
             $sourcePathParts = $this->_splitPath($sourcePath);
