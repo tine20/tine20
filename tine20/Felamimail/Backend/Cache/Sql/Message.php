@@ -169,41 +169,53 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     public function setFlags($_messages, $_flags, $_folderId = NULL)
     {
-        if ($_messages instanceof Tinebase_Record_RecordSet) {
-            $messages = $_messages;
-        } elseif ($_messages instanceof Felamimail_Model_Message) {
-            $messages = new Tinebase_Record_RecordSet('Felamimail_Model_Message', array($_messages));
-        } elseif (is_array($_messages) && $_folderId !== NULL) {
-            // array of ids
-            $messages = $_messages;
-        } else {
-            throw new Tinebase_Exception_UnexpectedValue('$_messages must be instance of Felamimail_Model_Message');
-        }
-        
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' IN (?)', ($messages instanceof Tinebase_Record_RecordSet) ? $messages->getArrayOfIds() : $messages)
-        );
-        $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
-        
-        $flags = (array) $_flags;
-        $touchedMessages = array();
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        foreach ($flags as $flag) {
-            foreach ($messages as $message) {
-                $id = $touchedMessages[] = ($message instanceof Felamimail_Model_Message) ? $message->getId() : $message;
-                $folderId = ($message instanceof Felamimail_Model_Message) ? $message->folder_id : $_folderId;
-                
-                $data = array(
-                    'flag'          => $flag,
-                    'message_id'    => $id,
-                    'folder_id'     => $folderId,
-                );
-                $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags']['table'], $data);
+        try {
+            if ($_messages instanceof Tinebase_Record_RecordSet) {
+                $messages = $_messages;
+            } elseif ($_messages instanceof Felamimail_Model_Message) {
+                $messages = new Tinebase_Record_RecordSet('Felamimail_Model_Message', array($_messages));
+            } elseif (is_array($_messages) && $_folderId !== null) {
+                // array of ids
+                $messages = $_messages;
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue('$_messages must be instance of Felamimail_Model_Message');
+            }
+
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' IN (?)',
+                    ($messages instanceof Tinebase_Record_RecordSet) ? $messages->getArrayOfIds() : $messages)
+            );
+            $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
+
+            $flags = (array)$_flags;
+            $touchedMessages = array();
+
+            foreach ($flags as $flag) {
+                foreach ($messages as $message) {
+                    $id = $touchedMessages[] = ($message instanceof Felamimail_Model_Message) ? $message->getId() : $message;
+                    $folderId = ($message instanceof Felamimail_Model_Message) ? $message->folder_id : $_folderId;
+
+                    $data = array(
+                        'flag' => $flag,
+                        'message_id' => $id,
+                        'folder_id' => $folderId,
+                    );
+                    $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags']['table'], $data);
+                }
+            }
+
+            // touch messages so sync can find the updates
+            $this->updateMultiple($touchedMessages, array('timestamp' => Tinebase_DateTime::now()));
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
-        
-        // touch messages so sync can find the updates
-        $this->updateMultiple($touchedMessages, array('timestamp' => Tinebase_DateTime::now()));
     }
     
     /**
