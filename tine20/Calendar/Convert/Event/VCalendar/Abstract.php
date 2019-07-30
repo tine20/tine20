@@ -316,17 +316,18 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             if ($mozSnooze instanceof DateTime) {
                 $vevent->add('X-MOZ-SNOOZE-TIME', $mozSnooze->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
             }
+        }
 
-            if (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
-                $sabrePropertyParser = new Calendar_Convert_Event_VCalendar_SabrePropertyParser($vcalendar);
-                foreach ($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] as $prop) {
-                    try {
-                        $vevent->add($sabrePropertyParser->parseProperty($prop));
-                    } catch (\Sabre\VObject\ParseException $svope) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
-                            '::' . __LINE__ . ' failed adding events imip x-property: ' . $prop . ' -> ' .
-                            $svope->getMessage());
-                    }
+        if (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
+            $sabrePropertyParser = new Calendar_Convert_Event_VCalendar_SabrePropertyParser($vcalendar);
+            foreach ($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] as $prop) {
+                try {
+                    $propObj = $sabrePropertyParser->parseProperty($prop);
+                    $vevent->__set($propObj->name, $propObj);
+                } catch (\Sabre\VObject\ParseException $svope) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
+                        '::' . __LINE__ . ' failed adding events imip x-property: ' . $prop . ' -> ' .
+                        $svope->getMessage());
                 }
             }
         }
@@ -759,9 +760,14 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             switch ($property->name) {
                 case 'DTSTAMP':
                     $imipProps['DTSTAMP'] = trim($property->serialize());
-                case 'CREATED':
                     if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
-                        $event->{$property->name == 'CREATED' ? 'creation_time' : 'last_modified_time'} = $this->_convertToTinebaseDateTime($property);
+                        $event->last_modified_time = $this->_convertToTinebaseDateTime($property);
+                    }
+                    break;
+                case 'CREATED':
+                    $imipProps['CREATED'] = trim($property->serialize());
+                    if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
+                        $event->creation_time = $this->_convertToTinebaseDateTime($property);
                     }
                     break;
                     
@@ -1065,7 +1071,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'X-MOZ-SNOOZE-TIME':
                     $snoozeTime = $this->_convertToTinebaseDateTime($property);
                     break;
-                    
+
+                case 'EXDATE':
+                    // ignore this, we dont want it to land in default -> imipProps!
+                    break;
+
                 default:
                     // thunderbird saves snooze time for recurring event occurrences in properties with names like this -
                     // we just assume that the event/recur series has only one snooze time 
@@ -1078,6 +1088,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     }
                     break;
             }
+        }
+        if (!empty($imipProps) && !$event->hasExternalOrganizer()) {
+            unset($imipProps['DTSTAMP']);
+            unset($imipProps['CREATED']);
+            unset($imipProps['LAST-MODIFIED']);
         }
         if (!empty($imipProps)) {
             if (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {

@@ -270,8 +270,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         //static::assertSame($targetContainer->name, $container->name, 'event not in invitation calendar');
         static::assertTrue(!! $ownAttendee, 'own attendee missing');
         static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status);
-        static::assertEquals('2', $updated->seq, 'tine20 seq starts with 1');
-        static::assertEquals('3', $updated->external_seq, 'external seq: 1');
+        static::assertEquals('2', $updated->seq, 'tine20 seq should be 2');
+        static::assertEquals('3', $updated->external_seq, 'external seq: 3');
         static::assertSame('1500', $record->dtstart->setTimezone($record->originator_tz)->format('Hi'));
         static::assertCount(3, $resolvedAttendees, '3 attendees expected');
         foreach ($resolvedAttendees as $attendee) {
@@ -367,7 +367,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
-        $this->_checkExdate($event);
+        $this->_checkExdate($event, ['2011-10-05 08:00:00', '2011-10-06 08:00:00', '2011-10-07 08:00:00',
+            '2011-10-08 08:00:00']);
         
         // check rrule_until normalisation
         $record = $event->getRecord();
@@ -382,7 +383,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      * 
      * @param Calendar_Frontend_WebDAV_Event $event
      */
-    protected function _checkExdate(Calendar_Frontend_WebDAV_Event $event)
+    protected function _checkExdate(Calendar_Frontend_WebDAV_Event $event, $dates = null)
     {
         $record = $event->getRecord();
         $exdate = $record->exdate[0];
@@ -402,6 +403,14 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         foreach ($exdate->attendee as $attender) {
             $this->assertTrue(! empty($attender->displaycontainer_id),
                 'displaycontainer_id not set for attender: ' . print_r($attender->toArray(), TRUE));
+        }
+        if (is_array($dates)) {
+            foreach ($dates as $date) {
+                static::assertNotNull($record->exdate->find(function($evt) use ($date) {
+                    return $date === substr($evt->recurid, -19);
+                }, null), 'did not find exdate: ' . $date);
+            }
+            static::assertCount(count($dates), $record->exdate, 'number of exdates does not match');
         }
     }
     
@@ -634,6 +643,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         #var_dump($vcalendar);
         $this->assertContains('SUMMARY:New Event', $vcalendar);
         $this->assertContains('EXDATE:20111005T080000Z', $vcalendar);
+        $this->assertContains('EXDATE:20111006T080000Z', $vcalendar);
+        $this->assertContains('EXDATE:20111007T080000Z', $vcalendar);
         $this->assertContains('RECURRENCE-ID;TZID=Europe/Berlin:20111008T100000', $vcalendar);
         $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H30M', $vcalendar); // base alarm
         $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H15M', $vcalendar); // exception alarm
