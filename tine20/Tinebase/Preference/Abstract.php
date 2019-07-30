@@ -870,7 +870,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $result = array();
         $appName = ($_appName !== NULL) ? $_appName : $this->_application;
-        $model = Tinebase_Core::getApplicationInstance($appName)->getDefaultModel();
+        $model = strpos($appName, '_Model_') === false ?
+            Tinebase_Core::getApplicationInstance($appName)->getDefaultModel() : $appName;
         
         $myContainers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
         $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, [Tinebase_Model_Grants::GRANT_ADD, Tinebase_Model_Grants::GRANT_READ], false, true);
@@ -895,7 +896,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     protected function _getDefaultContainerPreferenceDefaults(Tinebase_Model_Preference $_preference, $_accountId, $_appName = NULL, $_optionName = self::DEFAULTCONTAINER_OPTIONS)
     {
         $appName = ($_appName !== NULL) ? $_appName : $this->_application;
-        $model = Tinebase_Core::getApplicationInstance($appName)->getDefaultModel();
+        $model = strpos($appName, '_Model_') === false ?
+            Tinebase_Core::getApplicationInstance($appName)->getDefaultModel() : $appName;
         
         $accountId = ($_accountId) ? $_accountId : Tinebase_Core::getUser()->getId();
         $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $model, $accountId, 0, true);
