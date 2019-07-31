@@ -292,13 +292,25 @@
     left: 3px;
     top: 0px;
     background-color: transparent;
-    background-image:url(../../library/ExtJS/resources/images/default/dd/drop-no.gif);
+    background-image:url(../../images/icon-set/icon_stop_3.svg);
 }
 
 .cal-daysviewpanel-event-drop-ok .x-dd-drop-icon {
     left: 3px;
     top: 0px;
-    background-image:url(../../library/ExtJS/resources/images/default/dd/drop-yes.gif);
+    background-image:url(../../images/icon-set/icon_ok_3.svg);
+}
+
+.cal-daysviewpanel-event-drop-nodrop-WHITE .x-dd-drop-icon{
+    left: 3px;
+    top: 0px;
+    background-image:url(../../images/icon-set/icon_stop_white.svg) !important;
+}
+
+.cal-daysviewpanel-event-drop-ok-WHITE .x-dd-drop-icon{
+    left: 3px;
+    top: 0px;
+    background-image:url(../../images/icon-set/icon_ok_white.svg) !important;
 }
 
 .cal-daysviewpanel-event-header {
@@ -379,7 +391,9 @@
 }
 
 .cal-daysviewpanel-event-drop-ok .cal-daysviewpanel-event-header-inner,
-.cal-daysviewpanel-event-drop-nodrop .cal-daysviewpanel-event-header-inner {
+.cal-daysviewpanel-event-drop-nodrop .cal-daysviewpanel-event-header-inner,
+.cal-daysviewpanel-event-drop-ok-WHITE .cal-daysviewpanel-event-header-inner,
+.cal-daysviewpanel-event-drop-nodrop-WHITE .cal-daysviewpanel-event-header-inner {
     left: 17px;
 }
 

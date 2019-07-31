@@ -253,6 +253,18 @@ html, body {
     background-size: 16px 16px;
 }
 
+.x-dd-drop-nodrop .x-dd-drop-icon{
+    background-image: url(../../images/icon-set/icon_stop_3.svg);
+}
+
+.x-dd-drop-ok .x-dd-drop-icon{
+    background-image: url(../../images/icon-set/icon_ok_2.svg);
+}
+
+.x-dd-drop-ok-add .x-dd-drop-icon {
+    background-image: url(../../images/icon-set/icon_action_plus.svg);
+}
+
 /* ----- tree classes --------------------------------------------------------*/
 .tinebase-tree-drop-move  .x-dd-drop-icon {
     background-image:url(../../images/icon-set/icon_system_link.svg) !important;
