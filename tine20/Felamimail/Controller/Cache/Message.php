@@ -266,6 +266,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
         
         $this->_availableUpdateTime = $_time;
+        $this->_timeStart = microtime(true);
+        $this->_timeElapsed = 0;
        
         try {
             $this->_expungeCacheFolder($folder, $imap);
@@ -538,7 +540,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             
             $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
             
-            if ($this->_timeElapsed < $this->_availableUpdateTime) {
+            if ($this->_timeLeft()) {
             
                 $begin = $_folder->cache_job_startuid > 0 ? $_folder->cache_job_startuid : $_folder->cache_totalcount;
                 
@@ -1153,6 +1155,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if ($this->_availableUpdateTime == 0) {
             $this->_availableUpdateTime = $_time;
             $this->_timeStart = microtime(true);
+            $this->_timeElapsed = 0;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
@@ -1274,7 +1277,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _setFlagsOnCache($flags, $folder, $messages, $checkDiff = true)
     {
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
         
         $updateCount = 0;
@@ -1301,8 +1303,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' messages.');
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
     }
     
     /**
