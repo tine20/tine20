@@ -63,6 +63,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const FEATURE_CALCULATE_DAILY_REPORTS = 'calculateDailyRepots';
 
     /**
+     * enable working time tracking
+     *
+     * @string
+     */
+    const FEATURE_WORKING_TIME_ACCOUNTING = 'workingTimeAccounting';
+
+    /**
      * id of (filsystem) container for vacation templates
      *
      * @var string
@@ -157,6 +164,15 @@ class HumanResources_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],
+                self::FEATURE_WORKING_TIME_ACCOUNTING => [
+                    self::LABEL                 => 'Enable Working Time Tracking',
+                    //_('Enable Working Time Tracking')
+                    self::DESCRIPTION           => 'Activate to enable working time tracking and reporting',
+                    //_('Activate to enable working time tracking and reporting')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
+
             ],
             self::DEFAULT_STR => [],
         ],

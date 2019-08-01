@@ -97,19 +97,23 @@ class HumanResources_Controller extends Tinebase_Controller_Event
 
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
 
-        $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => 'hr_wagetype',
-            'application_id' => $application,
-            'model' => HumanResources_Model_WageType::class,
-            'label' => 'Wage types' // _('Wage types')
-        )));
+        if (HumanResources_Config::getInstance()->featureEnabled(
+            HumanResources_Config::FEATURE_WORKING_TIME_ACCOUNTING)
+        ) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'hr_wagetype',
+                'application_id' => $application,
+                'model' => HumanResources_Model_WageType::class,
+                'label' => 'Wage types' // _('Wage types')
+            )));
 
-        $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => 'hr_freetimetype',
-            'application_id' => $application,
-            'model' => HumanResources_Model_FreeTimeType::class,
-            'label' => 'Free time types' // _('Free time types')
-        )));
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'hr_freetimetype',
+                'application_id' => $application,
+                'model' => HumanResources_Model_FreeTimeType::class,
+                'label' => 'Free time types' // _('Free time types')
+            )));
+        }
 
         $result->addRecord(new CoreData_Model_CoreData(array(
             'id' => 'hr_wts',

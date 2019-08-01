@@ -54,7 +54,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         static::assertCount(1, $reportResult, 'expect reports being generated for one employee');
         $reportResult = current($reportResult);
         static::assertSame(0, $reportResult['updated']);
-        static::assertSame(0, $reportResult['errors']);
+        static::assertSame(0, $reportResult['errors'], print_r($reportResult, true));
         static::assertSame($days, $reportResult['created']);
     }
 
@@ -249,6 +249,9 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
     {
         // use TS importer (also creates TAs)
         $importer = new Timetracker_Import_TimesheetTest();
-        $this->_ts = $importer->testImportDemoData();
+        $this->_ts = $importer->testImportDemoData([
+            Tinebase_Setup_DemoData_Import::IMPORT_DIR => __DIR__,
+            'demoData' => false,
+        ]);
     }
 }

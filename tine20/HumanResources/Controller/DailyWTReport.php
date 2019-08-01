@@ -106,10 +106,12 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     public function calculateAllReports()
     {
         if (! HumanResources_Config::getInstance()->featureEnabled(
-            HumanResources_Config::FEATURE_CALCULATE_DAILY_REPORTS)
+            HumanResources_Config::FEATURE_CALCULATE_DAILY_REPORTS) ||
+            HumanResources_Config::getInstance()->featureEnabled(
+                HumanResources_Config::FEATURE_WORKING_TIME_ACCOUNTING)
         ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . ' FEATURE_CALCULATE_DAILY_REPORTS disabled - Skipping.'
+                __METHOD__ . '::' . __LINE__ . ' FEATURE_WORKING_TIME_ACCOUNTING/FEATURE_CALCULATE_DAILY_REPORTS disabled - Skipping.'
             );
             return true;
         }

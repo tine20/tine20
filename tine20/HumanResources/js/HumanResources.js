@@ -13,10 +13,22 @@ Ext.namespace('Tine.HumanResources');
 require('./DailyWTReportGridPanel');
 require('./MonthlyWTReportGridPanel');
 require('./MonthlyWTReportEditDialog');
+require('./FreeTimePlanningPanel');
 
 Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 
     hasMainScreen: true,
+
+    init: function() {
+        if (this.featureEnabled(('workingTimeAccounting'))) {
+            Tine.widgets.MainScreen.registerContentType('HumanResources', {
+                contentType: 'FreeTimePlanning',
+                text: 'Free Time Planning', // _('Free Time Planning')
+                xtype: 'humanresources.freetimeplanning'
+            });
+
+        }
+    },
 
     /**
      * Get translated application title of the HumanResources App

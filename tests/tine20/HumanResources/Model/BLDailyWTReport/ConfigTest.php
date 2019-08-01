@@ -20,6 +20,10 @@ class HumanResources_Model_BLDailyWTReport_ConfigTest extends TestCase
 {
     public function testClientModelConfiguration()
     {
+        $features = HumanResources_Config::getInstance()->get(HumanResources_Config::ENABLED_FEATURES);
+        $features[HumanResources_Config::FEATURE_WORKING_TIME_ACCOUNTING] = true;
+        HumanResources_Config::getInstance()->set(HumanResources_Config::ENABLED_FEATURES, $features);
+
         $tbJFE = new Tinebase_Frontend_Json();
         $registryData = $tbJFE->getAllRegistryData();
         static::assertSame(HumanResources_Config::APP_NAME, $registryData[HumanResources_Config::APP_NAME]['models']
