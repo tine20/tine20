@@ -641,11 +641,13 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 $status = [];
                 foreach ($alternative_dates as $date) {
                     $date_attendee = Calendar_Model_Attender::getAttendee($date->attendee, $attendee);
-                    $status[] = array_merge(array_intersect_key($date_attendee->toArray(), array_flip([
-                        'id', 'cal_event_id', 'status', 'user_type', 'user_id', 'status_authkey'
-                    ])), [
-                        'info_url'  => $anonymousAccess? '' : ("/#/Calendar/pollFBView/{$attendee['user_type']}/{$attendee['user_id']}/" . $date->dtstart->format('Y-m-d')),
-                    ]);
+                    if ($date_attendee) {
+                        $status[] = array_merge(array_intersect_key($date_attendee->toArray(), array_flip([
+                            'id', 'cal_event_id', 'status', 'user_type', 'user_id', 'status_authkey'
+                        ])), [
+                            'info_url' => $anonymousAccess ? '' : ("/#/Calendar/pollFBView/{$attendee['user_type']}/{$attendee['user_id']}/" . $date->dtstart->format('Y-m-d')),
+                        ]);
+                    }
                 }
                 $attendee_status[] = [
                     'key'       => $attendee['user_type'] . '-' . $attendee['user_id'],
