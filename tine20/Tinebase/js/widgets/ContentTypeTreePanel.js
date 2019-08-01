@@ -116,7 +116,10 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         this.recordClass = Tine[this.app.appName].Model[this.contentType];
         
         this.on('click', this.saveClickedNodeState, this);
-        
+
+        var registeredContentTypes = _.get(Tine.widgets.ContentTypeTreePanel.registerContentType, 'registry.' + this.app.appName, []);
+        this.contentTypes = (this.contentTypes || []).concat(registeredContentTypes);
+
         Ext.each (this.contentTypes, function(ct) {
             var modelName = ct.hasOwnProperty('meta') 
                 ? ct.meta.modelName 
@@ -334,3 +337,23 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         }).defer(50, this);
     }
 });
+
+/**
+ * content type registry
+ *
+ * @param {String} appName
+ * @param {String} contentType
+ * @param {String} text
+ * @param {String} group optional group
+ */
+Tine.widgets.ContentTypeTreePanel.registerContentType = function(appName, contentType, text, group) {
+    var registeredContentTypes = _.get(Tine.widgets.ContentTypeTreePanel.registerContentType, 'registry.' + appName, []);
+    var def = {
+        contentType: contentType,
+        text: text ? text : contentType,
+        group: group
+    };
+    registeredContentTypes.push(def);
+
+    _.set(Tine.widgets.ContentTypeTreePanel.registerContentType, 'registry.' + appName, registeredContentTypes);
+};
