@@ -144,7 +144,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
             if (! options.suppressBusEvents) {
-                this.postMessage('update', response.responseText);
+                _.defer(_.bind(this.postMessage, this), 'update', response.responseText);
             }
             return [this.recordReader(response)];
         };
@@ -220,7 +220,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options.beforeSuccess = function(response) {
             if (! options.suppressBusEvents) {
                 // do we need to distingush create/update?
-                this.postMessage('update', response.responseText);
+                _.defer(_.bind(this.postMessage, this), 'update', response.responseText);
             }
             return [this.recordReader(response)];
         };

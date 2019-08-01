@@ -2225,28 +2225,39 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.log.debug(record, mode);
 
         if (record && Ext.isFunction(record.copy)) {
-            var idx = this.getStore().indexOfId(record.id);
+            var idx = this.getStore().indexOfId(record.id),
+                isSelected = this.getGrid().getSelectionModel().isSelected(idx),
+                store = this.getStore();
+
             if (idx >= 0) {
                 // only run do this in local mode as we reload the store in remote mode
                 // NOTE: this would otherwise delete the record if a record proxy exists!
                 if (mode == 'local') {
-                    var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
-                    this.getStore().removeAt(idx);
-                    this.getStore().insert(idx, [record]);
-                    if (isSelected) {
-                        this.getGrid().getSelectionModel().selectRow(idx, true);
-                    }
+                    store.removeAt(idx);
+                    store.insert(idx, [record]);
                 }
             } else {
                 this.getStore().add([record]);
             }
+
+            // sort new/edited record
+            store.remoteSort = false;
+            store.sort(store.sortInfo.field, store.sortInfo.direction)
+            store.remoteSort = this.storeRemoteSort;
+
+            if (isSelected) {
+                this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
+            }
+
             this.addToEditBuffer(record);
         }
 
         if (mode == 'local') {
             this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
         } else {
-            this.bufferedLoadGridData();
+            this.bufferedLoadGridData({
+                removeStrategy: 'keepBuffered',
+            });
         }
     },
 
