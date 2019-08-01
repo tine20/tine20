@@ -736,17 +736,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             try {
                 $countryname = $_record->{$_address . 'countryname'};
                 if (! empty($countryname)) {
-                    try {
-                        $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
-                        $nominatim->setCountry($country);
-                    } catch (Zend_Locale_Exception $zle) {
-                        // country not found
-                    }
+                    $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
+                    $nominatim->setCountry($country);
                 }
             } catch (Zend_Locale_Exception $zle) {
-                Tinebase_Exception::log($zle, true);
+                // country not found
             }
         }
         
