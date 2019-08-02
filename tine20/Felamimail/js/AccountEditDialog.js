@@ -159,6 +159,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         region: 'north',
                         xtype: 'columnform',
                         formDefaults: commonFormDefaults,
+                        height: 200,
                         items: [[{
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
@@ -217,6 +218,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         region: 'center',
                         // TODO use vbox layout? onResize? height adjusts only to a certain value ...
                         xtype: 'columnform',
+                        autoScroll: true,
                         labelAlign: 'top',
                         formDefaults: {
                             xtype:'textfield',
@@ -470,7 +472,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  Tine.Felamimail.AccountEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 580,
-        height: 500,
+        height: 550,
         name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.AccountEditDialog',
         contentPanelConstructorConfig: config
