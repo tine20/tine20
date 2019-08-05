@@ -100,7 +100,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onAfterRecordLoad: function() {
         Tine.HumanResources.EmployeeEditDialog.superclass.onAfterRecordLoad.call(this);
         this.disableFreetimes();
-        if (this.record.get('id') && (! Ext.isObject(this.record.get('account_id')))) {
+        if (this.record.get('id') && this.record.get('account_id') && (! Ext.isObject(this.record.get('account_id')))) {
             var f = this.getForm().findField('account_id');
             f.disable();
             f.setRawValue(this.app.i18n._('Account is disabled or deleted!'));
