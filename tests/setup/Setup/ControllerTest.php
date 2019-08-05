@@ -141,6 +141,28 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         static::assertTrue($result, 'applyReplicationModLogs failed');
         static::assertTrue($this->_uit->isInstalled('ActiveSync'));
     }
+
+    public function testReplicationUninstall()
+    {
+        // get instance sequence and uninstall
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $this->_uit->uninstallApplications(['ActiveSync']);
+        static::assertFalse($this->_uit->isInstalled('ActiveSync'));
+
+        // get modification logs
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $applicationModifications = $modifications->filter('record_type', Tinebase_Model_Application::class);
+        static::assertEquals(1, $applicationModifications->count(), 'should have 1 mod logs to process');
+
+        // install again
+        $this->_uit->installApplications(['ActiveSync']);
+        static::assertTrue($this->_uit->isInstalled('ActiveSync'));
+
+        // apply modification log => application should be uninstalled
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs($applicationModifications);
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        static::assertFalse($this->_uit->isInstalled('ActiveSync'));
+    }
     
     /**
      * testInstallAdminAccountOptions
