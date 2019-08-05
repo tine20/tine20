@@ -169,21 +169,22 @@ Tine.Admin.init = function () {
         }
 
         // TODO use hooking mechanism
-        if (Tine.Tinebase.appMgr.get('Felamimail') && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')) {
-            tree.push({
-                text: translation.gettext('E-Mail Accounts'),
-                //pos: 850,
-                cls: "treemain",
-                iconCls: 'FelamimailIconCls',
-                allowDrag: false,
-                allowDrop: true,
-                id: "emailaccounts",
-                children: [],
-                leaf: null,
-                expanded: true,
-                dataPanelType: "emailaccounts"
-            });
-        }
+        // TODO activate again
+        // if (Tine.Tinebase.appMgr.get('Felamimail') && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')) {
+        //     tree.push({
+        //         text: translation.gettext('E-Mail Accounts'),
+        //         //pos: 850,
+        //         cls: "treemain",
+        //         iconCls: 'FelamimailIconCls',
+        //         allowDrag: false,
+        //         allowDrop: true,
+        //         id: "emailaccounts",
+        //         children: [],
+        //         leaf: null,
+        //         expanded: true,
+        //         dataPanelType: "emailaccounts"
+        //     });
+        // }
 
         _.each(tree, function(item, idx) {
             item.pos = item.pos || (100 + 100 * idx);
