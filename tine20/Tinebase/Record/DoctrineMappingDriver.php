@@ -211,7 +211,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         $result = [];
 
         /** @var Tinebase_Record_Interface $model */
-        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications() as $model) {
+        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications(true) as $model) {
             if ($this->isTransient($model)) {
                 $result[] = $model;
             }

@@ -712,17 +712,21 @@ class Tinebase_Application
     }
 
     /**
-     * returns the Models of all installed applications
+     * returns the Models of all enabled (or all installed) applications
      * uses Tinebase_Application::getApplicationsByState
      * and Tinebase_Controller_Abstract::getModels
      *
      * @return array
      */
-    public function getModelsOfAllApplications()
+    public function getModelsOfAllApplications($allApps = false)
     {
         $models = array();
 
-        $apps = $this->getApplicationsByState(Tinebase_Application::ENABLED);
+        if ($allApps) {
+            $apps = $this->getApplications();
+        } else {
+            $apps = $this->getApplicationsByState(Tinebase_Application::ENABLED);
+        }
 
         /** @var Tinebase_Model_Application $app */
         foreach($apps as $app) {
