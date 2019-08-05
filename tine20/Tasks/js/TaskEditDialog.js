@@ -197,7 +197,6 @@ Ext.namespace('Tine.Tasks');
                             name: 'priority',
                             app: 'Tasks',
                             keyFieldName: 'taskPriority',
-                            value: 'NORMAL'
                         }),
                         Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
