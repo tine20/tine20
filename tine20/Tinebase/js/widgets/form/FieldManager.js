@@ -160,6 +160,9 @@ Tine.widgets.form.FieldManager = function() {
                         field.app = fieldDefinition.config.appName;
                         field.relationType = fieldDefinition.config.type;
                         field.modelUnique = true;
+                        if (fieldDefinition.config.additionalFilterSpec) {
+                            field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
+                        }
                         // TODO pass degree and other options in config?
                         field.relationDegree = 'sibling';
                     }
