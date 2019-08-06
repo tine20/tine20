@@ -4326,3 +4326,6 @@ msgstr "Replication"
 #: Acl/Rights.php:189
 msgid "The right to access the replication data of all applications."
 msgstr "The right to access the replication data of all applications."
+
+msgid "The new password must be different from the old one."
+msgstr "The new password must be different from the old one."

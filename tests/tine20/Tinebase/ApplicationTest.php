@@ -34,9 +34,8 @@ class Tinebase_ApplicationTest extends TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        
-        // delete an non existing application to trigger file system cache cleanup
-        Tinebase_Application::getInstance()->deleteApplication('1234567890123456789012345678901234567890');
+
+        Tinebase_Application::getInstance()->resetClassCache();
     }
     
     /**
