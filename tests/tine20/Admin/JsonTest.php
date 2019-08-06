@@ -144,12 +144,13 @@ class Admin_JsonTest extends TestCase
         return $account;
     }
 
-    protected function _getUserArrayWithPw()
+    protected function _getUserArrayWithPw($pwdMustChange = false)
     {
         $accountData = $this->objects['user']->toArray();
         $pw = 'test7652BA';
         $accountData['accountPassword'] = $pw;
         $accountData['accountPassword2'] = $pw;
+        $accountData['password_must_change'] = $pwdMustChange ? 1 : 0;
         return $accountData;
     }
     
@@ -169,6 +170,20 @@ class Admin_JsonTest extends TestCase
         $this->objects['addedUsers'][] = $user;
 
         return $user;
+    }
+
+    public function testPwdMustChange()
+    {
+        $accountData = $this->_getUserArrayWithPw(true);
+        $account = $this->_createUser($accountData);
+        self::assertTrue(isset($account['password_must_change']), 'property not set in account');
+        self::assertEquals(1, $account['password_must_change']);
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $this->_json->resetPassword($account, $credentials['password'], 0);
+        $account =$this->_json->getUser($account['accountId']);
+        self::assertEquals(0, $account['password_must_change']);
+
+
     }
     
     /**
