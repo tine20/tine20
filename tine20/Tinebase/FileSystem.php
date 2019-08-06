@@ -3704,7 +3704,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         $hashes = $this->_fileObjectBackend->getHashes($this->_fileObjectBackend->search(
             new Tinebase_Model_Tree_FileObjectFilter([
                 ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
-                ['field' => 'is_deleted', 'operator' => 'not', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET]
+                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET]
             ]), null, true));
 
         foreach ($hashes as $hash) {
