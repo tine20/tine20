@@ -204,42 +204,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     {
         return $this->_db;
     }
-    
-    /**
-     * generate salt for password scheme
-     * 
-     * @param $_scheme
-     * @return string
-     */
-    protected function _salt($_scheme)
-    {
-        // create a salt that ensures crypt creates an sha2 hash
-        $base64_alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            .'abcdefghijklmnopqrstuvwxyz0123456789+/';
 
-        $salt = '';
-        for($i=0; $i<16; $i++){
-            $salt .= $base64_alphabet[rand(0,63)];
-        }
-        
-        switch ($_scheme) {
-            case 'SSHA256':
-                $salt = '$5$' . $salt . '$';
-                break;
-                
-            case 'SSHA512':
-                $salt = '$6$' . $salt . '$';
-                break;
-                
-            case 'MD5-CRYPT':
-            default:
-                $salt = crypt($_scheme);
-                break;
-        }
-
-        return $salt;
-    }
-    
     /**
      * updates email properties for an existing user
      * 
