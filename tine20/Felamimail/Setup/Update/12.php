@@ -36,83 +36,87 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update002()
     {
-        $tableDefinition = new Setup_Backend_Schema_Table_Xml('<table>
-            <name>felamimail_account_acl</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>record_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>account_type</name>
-                    <type>text</type>
-                    <length>32</length>
-                    <default>user</default>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>account_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>account_grant</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <primary>true</primary>
+        if (! $this->_backend->tableExists('felamimail_account_acl')) {
+            $tableDefinition = new Setup_Backend_Schema_Table_Xml('<table>
+                <name>felamimail_account_acl</name>
+                <version>1</version>
+                <declaration>
                     <field>
                         <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
                     </field>
-                </index>
-                <index>
-                    <name>record_id-account-type-account_id-account_grant</name>
-                    <unique>true</unique>
                     <field>
                         <name>record_id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
                     </field>
                     <field>
                         <name>account_type</name>
+                        <type>text</type>
+                        <length>32</length>
+                        <default>user</default>
+                        <notnull>true</notnull>
                     </field>
                     <field>
                         <name>account_id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
                     </field>
                     <field>
                         <name>account_grant</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
                     </field>
-                </index>
-                <index>
-                    <name>felamimail_account_acl::record_id--felamimail_account::id</name>
-                    <field>
-                        <name>record_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>felamimail_account</table>
-                        <field>id</field>
-                        <ondelete>cascade</ondelete>
-                        <onupdate>cascade</onupdate>
-                    </reference>
-                </index>
-            </declaration>
-        </table>');
+                    <index>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>record_id-account-type-account_id-account_grant</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>record_id</name>
+                        </field>
+                        <field>
+                            <name>account_type</name>
+                        </field>
+                        <field>
+                            <name>account_id</name>
+                        </field>
+                        <field>
+                            <name>account_grant</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>felamimail_account_acl::record_id--felamimail_account::id</name>
+                        <field>
+                            <name>record_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>felamimail_account</table>
+                            <field>id</field>
+                            <ondelete>cascade</ondelete>
+                            <onupdate>cascade</onupdate>
+                        </reference>
+                    </index>
+                </declaration>
+            </table>');
 
-        if (! $this->_backend->tableExists('felamimail_account_acl')) {
             $this->_backend->createTable($tableDefinition, 'Felamimail', 'felamimail_account_acl');
         }
 
+        $accountCtrl = Felamimail_Controller_Account::getInstance();
+        foreach ($accountCtrl->getAll() as $account) {
+            $accountCtrl->setDefaultGrants($account);
+        }
         $this->addApplicationUpdate('Felamimail', '12.5', self::RELEASE012_UPDATE002);
     }
 }

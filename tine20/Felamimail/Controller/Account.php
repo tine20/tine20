@@ -288,6 +288,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $this->_checkSignature($_record);
     }
 
+    public function setDefaultGrants(Felamimail_Model_Account $account)
+    {
+        $this->_setDefaultGrants($account);
+    }
+
     /**
      * add default grants
      *
