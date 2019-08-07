@@ -205,36 +205,6 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $user->imapUser = new Tinebase_Model_EmailUser(['emailPassword' => $pwd]);
                 $user->smtpUser = new Tinebase_Model_EmailUser(['emailPassword' => $pwd]);
                 $user = Admin_Controller_User::getInstance()->create($user, $pwd, $pwd);
-                /*
-                if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                    $internalAddressbook = Tinebase_Container::getInstance()->getContainerById(
-                        Admin_Controller_User::getDefaultInternalAddressbook()
-                    );
-
-                    $user->container_id = $internalAddressbook->getId();
-
-                    $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($user);
-                    
-                    $user->contact_id = $contact->getId();
-                }
-                
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
-                $user = Tinebase_User::getInstance()->addUser($user);
-
-                // fire event to make sure all user data is created in the apps
-                $event = new Admin_Event_AddAccount(array(
-                    'account' => $user
-                ));
-                Tinebase_Event::fireEvent($event);
-
-                Tinebase_Group::getInstance()->addGroupMember($groupId, $user);
-                
-                if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && $group->list_id) {
-                    $listBackend = new Addressbook_Backend_List();
-                    $listBackend->addListMember($group->list_id, $user->contact_id);
-                }
-
-                $this->_setUserPassword($user);*/
             }
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {

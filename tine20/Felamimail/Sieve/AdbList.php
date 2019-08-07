@@ -106,4 +106,35 @@ class Felamimail_Sieve_AdbList
 
         return $sieveRule;
     }
+
+    static public function setScriptForList(Addressbook_Model_List $list)
+    {
+        $oldValue = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function() use ($oldValue) {
+            Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldValue);});
+
+        $account = Felamimail_Controller_Account::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
+            ]))->getFirstRecord();
+
+        if (null === $account) {
+            $e = new Tinebase_Exception('no felamimail account found for list ' . $list->getId());
+            Tinebase_Exception::log($e);
+            return false;
+        }
+
+        $sieveRule = static::createFromList($list)->__toString();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+            __LINE__ . ' add sieve script: ' . $sieveRule);
+
+        Felamimail_Controller_Sieve::getInstance()->setAdbListScript($account,
+            Felamimail_Model_Sieve_ScriptPart::createFromString(
+                Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $list->getId(), $sieveRule));
+
+        // for unused variable check only
+        unset($raii);
+    }
 }

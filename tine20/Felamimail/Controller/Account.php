@@ -232,14 +232,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * inspect creation of one record
      * - add credentials and user id here
      * 
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Felamimail_Model_Account $_record
      * @return  void
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         // add user id
-        if (empty($_record->user_id) && $_record->type !== Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST &&
-                $_record->type !== Tinebase_EmailUser_Model_Account::TYPE_SHARED) {
+        if (empty($_record->user_id) && ($_record->type === Felamimail_Model_Account::TYPE_USER ||
+                $_record->type === Felamimail_Model_Account::TYPE_SYSTEM)) {
             $_record->user_id = Tinebase_Core::getUser()->getId();
         } else if (is_array($_record->user_id)) {
             // TODO move to converter
@@ -252,9 +252,41 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' system account, no credential cache needed');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' system account, no credential cache needed');
             return;
+
+        } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
+                Felamimail_Model_Account::TYPE_ADB_LIST) {
+            if (! $_record->password) {
+                throw new Tinebase_Exception_UnexpectedValue('shared / adb_list accounts need to have a password set');
+            }
+            if (! $_record->email) {
+                throw new Tinebase_Exception_UnexpectedValue('shared / adb_list accounts need to have an email set');
+            }
+            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $userId = $_record->user_id ?: ($_record->user_id = Tinebase_Record_Abstract::generateUID());
+            $_record->user = $emailUserBackend->getLoginName($userId, $_record->email, $_record->email);
+
+            Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record);
+
+            $user = new Tinebase_Model_FullUser([
+                    'accountLoginName'      => $_record->email,
+                    'accountEmailAddress'   => $_record->email,
+                ], true);
+            $user->imapUser = new Tinebase_Model_EmailUser(['emailPassword' => $_record->password]);
+            $user->smtpUser = new Tinebase_Model_EmailUser(['emailPassword' => $_record->password]);
+            $user->setId($userId);
+
+            if ($emailUserBackend->userExists($user)) {
+                throw new Tinebase_Exception_SystemGeneric('email account already exists');
+            }
+
+            $emailUserBackend->inspectAddUser($user, $user);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectAddUser($user, $user);
         }
+
+        // write test für Adb::List / Admin_Controller_EmailAccount [dafür gibts schon einfache tests]
 
         if (! $_record->user || ! $_record->password) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
@@ -262,8 +294,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
         
         // add imap & smtp credentials
-        if ($_record->type === Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST ||
-                $_record->type === Tinebase_EmailUser_Model_Account::TYPE_SHARED) {
+        if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST ||
+                $_record->type === Felamimail_Model_Account::TYPE_SHARED) {
             $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
             if ($_record->smtp_user && $_record->smtp_password) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -286,6 +318,25 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
         
         $this->_checkSignature($_record);
+    }
+
+    /**
+     * delete linked objects (notes, relations, attachments, alarms) of record
+     *
+     * @param Felamimail_Model_Account $_record
+     */
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {
+        parent::_deleteLinkedObjects($_record);
+
+        if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST || $_record->type ===
+                Felamimail_Model_Account::TYPE_SHARED) {
+            $_record->resolveCredentials(false);
+            $user = new Tinebase_Model_FullUser([], true);
+            $user->setId($_record->user_id);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectDeleteUser($user);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectDeleteUser($user);
+        }
     }
 
     public function setDefaultGrants(Felamimail_Model_Account $account)
@@ -336,8 +387,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * inspect creation of one record (after create)
      * 
-     * @param   Tinebase_Record_Interface $_createdRecord
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Felamimail_Model_Account $_createdRecord
+     * @param   Felamimail_Model_Account $_record
      * @return  void
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
@@ -351,6 +402,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 }
                 Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
             }
+        } else if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($listId, $account) {
+                $sieveRule = Felamimail_Sieve_AdbList::createFromList(
+                    Addressbook_Controller_List::getInstance()->get($listId))->__toString();
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' add sieve script: ' . $sieveRule);
+
+                Felamimail_Controller_Sieve::getInstance()->setAdbListScript($account,
+                    Felamimail_Model_Sieve_ScriptPart::createFromString(
+                        Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $listId, $sieveRule));
+            }, [$_record->user_id, $_createdRecord]);
+
         }
     }
     
@@ -1264,7 +1328,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             }
         }
 
-        if (false !== $_user) {
+        if ($_account->type === Felamimail_Model_Account::TYPE_USER || $_account->type ===
+                Felamimail_Model_Account::TYPE_SYSTEM) {
             if (null === $_user || $_user->getId() !== $_account->user_id) {
                 if (Tinebase_Core::getUser()->getId() === $_account->user_id) {
                     $_user = Tinebase_Core::getUser();

@@ -217,6 +217,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 }
             }
 
+            if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+                    $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) {
+                Felamimail_Sieve_AdbList::setScriptForList($list);
+            }
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
         } finally {
@@ -284,6 +289,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_removeMembers) as $userId) {
                     Admin_Controller_Group::getInstance()->removeGroupMember($list->group_id, $userId, false);
                 }
+            }
+
+            if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+                $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) {
+                Felamimail_Sieve_AdbList::setScriptForList($list);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -372,7 +382,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
     }
 
-    protected function _createMailAccount($_list)
+    protected function _createMailAccount(Addressbook_Model_List $_list)
     {
         $mailAccount = new Felamimail_Model_Account([
             'user_id'       => $_list->getId(),
@@ -380,19 +390,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             'name'          => $_list->email,
             'from'          => $_list->email,
             'type'          => Felamimail_Model_Account::TYPE_ADB_LIST,
+            'password'      => Tinebase_Record_Abstract::generateUID(),
         ]);
 
-        // TODO FIX ME, how?
-        $imapConfig = Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->toArray();
-        if (isset($imapConfig['useEmailAsUsername']) && $imapConfig['useEmailAsUsername']) {
-            $mailAccount->user = $_list->email;
-        } else {
-            $mailAccount->user =
-                Felamimail_Model_Account::_appendDomainOrInstance($_list->email, $imapConfig);
-        }
-        $mailAccount->smtp_user = $mailAccount->user;
-
-        Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($mailAccount, false);
         Felamimail_Controller_Account::getInstance()->create($mailAccount);
     }
 
@@ -477,6 +477,12 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $event = new Addressbook_Event_DeleteList();
             $event->list = $list;
             Tinebase_Event::fireEvent($event);
+
+            if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+                    $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
+                    preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $list->email)) {
+                Felamimail_Controller_Account::getInstance()->delete($this->_getMailAccount($list)->getId());
+            }
         }
 
         return $_ids;

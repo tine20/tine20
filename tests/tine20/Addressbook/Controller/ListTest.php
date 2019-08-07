@@ -163,11 +163,15 @@ class Addressbook_Controller_ListTest extends TestCase
 
     public function testListAsMailinglist()
     {
-        Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
+        if (empty(Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
+        }
+        $domain = Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->domain;
+        if (empty($domain)) $domain = 'foo.bar';
         $accountCtrl = Felamimail_Controller_Account::getInstance();
         
         $this->objects['initialList']->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
-        $this->objects['initialList']->email = 'test@foo.bar';
+        $this->objects['initialList']->email = 'test@' . $domain;
 
         $list = $this->testAddList();
         $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(

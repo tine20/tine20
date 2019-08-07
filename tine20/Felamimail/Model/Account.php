@@ -626,8 +626,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 }
                 $credentialCachePwd = substr($credentials->password, 0, 24);
             } elseif ($this->type === self::TYPE_SHARED || $this->type === self::TYPE_ADB_LIST) {
-                // TODO FIX ME
-                $credentialCachePwd = Felamimail_Config::getInstance()->{Felamimail_Config::CRE};
+                $credentialCachePwd = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
             } else {
                 throw new Tinebase_Exception_UnexpectedValue('type ' . $this->type . ' unknown');
             }

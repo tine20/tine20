@@ -454,10 +454,19 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     protected function _userExists(Tinebase_Model_FullUser $_user)
     {
+        $data = $this->_recordToRawData($_user, $_user);
+
         $select = $this->_getSelect();
         
-        $select
-          ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?',   $_user->getId());
+        $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) .
+            ' = ?',   $data[$this->_propertyMapping['emailUserId']] . ' AND ' . $this->_appendClientIdOrDomain());
+        $select->orwhere($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']) .
+            ' = ?',   $data[$this->_propertyMapping['emailUsername']]);
+
+        if ($this->_propertyMapping['emailUsername'] !== 'loginname' && isset($data['loginname'])) {
+            $select->orwhere($this->_db->quoteIdentifier($this->_userTable . '.loginname') .
+                ' = ?',   $data['loginname']);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         

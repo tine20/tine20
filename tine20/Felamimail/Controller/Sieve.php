@@ -525,7 +525,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                     }
                 }
                 if (false === $success) {
-                    throw new Felamimail_Exception_Sieve('redirects only to the following domains allowed: ' . join(',', $whiteList));
+                    throw new Felamimail_Exception_Sieve('redirects only to the following domains allowed: ' . join(',', $allowedDomain));
                 }
             }
         }
@@ -743,5 +743,43 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         }
 
         $this->_putScript($_accountId, $script);
+    }
+
+
+    /**
+     * set adb list script for account
+     *
+     * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Sieve_ScriptPart $_scriptPart
+     */
+    public function setAdbListScript(Felamimail_Model_Account $_account, Felamimail_Model_Sieve_ScriptPart $_scriptPart)
+    {
+        if ($_scriptPart->type !== Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST) {
+            throw new Tinebase_Exception_UnexpectedValue('script part need to be of type '
+                . Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST);
+        }
+        $_scriptPart->account_id = $_account->getId();
+
+        $script = $this->_getSieveScript($_account);
+
+        if (null === $script) {
+            $script = $this->_createNewSieveScript($_account);
+        }
+
+        try {
+            $script->readScriptData();
+        } catch(Tinebase_Exception_NotFound $tenf) {}
+
+        $oldScripParts = $script->getScriptParts();
+        $oldScripParts->removeRecords($oldScripParts->filter('type',
+            Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST));
+        $oldScripParts->addRecord($_scriptPart);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated rules SIEVE script ' .
+                $this->_scriptName);
+        }
+
+        $this->_putScript($_account, $script);
     }
 }
