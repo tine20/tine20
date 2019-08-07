@@ -264,6 +264,18 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * Search for lists member roles matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchListMemberRoles($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Addressbook_Controller_ListMemberRole::getInstance(), 'Addressbook_Model_ListMemberRoleFilter');
+    }
+
+    /**
      * delete multiple list roles
      *
      * @param array $ids list of listId's to delete
