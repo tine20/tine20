@@ -423,6 +423,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     },
     
     get: function(appName, modelName) {
+        if (! appName) return;
         if (Ext.isFunction(appName.getMeta)) {
             return appName;
         }
@@ -432,7 +433,18 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
         if (appName.appName) {
             appName = appName.appName;
         }
-            
+
+        if (_.isString(appName) && !modelName) {
+            appName = appName.replace(/^Tine[._]/, '')
+                .replace(/[._]Model[._]/, '.');
+
+            let appPart = appName.match(/^.+\./);
+            if (appPart) {
+                modelName = appName.replace(appPart[0], '')
+                appName = appPart[0].replace(/\.$/, '');
+            }
+        }
+
         if (! Ext.isString(appName)) {
             throw new Ext.Error('appName must be a string');
         }
