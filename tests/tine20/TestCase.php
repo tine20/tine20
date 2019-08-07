@@ -935,7 +935,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
         ) {
-            self::markTestSkipped('FIXME: Does not work with LDAP/AD backend');
+            self::markTestSkipped('Does not work with LDAP/AD backend');
         }
     }
 
