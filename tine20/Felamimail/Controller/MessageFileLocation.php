@@ -114,11 +114,16 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
             }
         }
 
+        if (! $message->folder_id) {
+            // skip message without folder
+            return $result;
+        }
+
         try {
             $messageId = $this->_getMessageId($message);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Message might be removed from cache. Error:' . $e->getMessage());
+                . ' Message might be removed from cache. Error: ' . $e->getMessage());
             return $result;
         }
         $locations = Felamimail_Controller_MessageFileLocation::getInstance()->getLocationsByReference(

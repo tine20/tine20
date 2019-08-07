@@ -174,6 +174,8 @@ class Admin_JsonTest extends TestCase
 
     public function testPwdMustChange()
     {
+        $this->_skipIfLDAPBackend();
+
         $accountData = $this->_getUserArrayWithPw(true);
         $account = $this->_createUser($accountData);
         self::assertTrue(isset($account['password_must_change']), 'property not set in account');
@@ -182,8 +184,6 @@ class Admin_JsonTest extends TestCase
         $this->_json->resetPassword($account, $credentials['password'], 0);
         $account =$this->_json->getUser($account['accountId']);
         self::assertEquals(0, $account['password_must_change']);
-
-
     }
     
     /**

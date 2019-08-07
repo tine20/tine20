@@ -280,7 +280,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * 
      * @todo use backend search() + Tinebase_Model_ModificationLogFilter
      */
-    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', Tinebase_DateTime $_from = NULL, Tinebase_DateTime $_until = NULL, $_modifierId = NULL, $_fromInstanceId = NULL)
+    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', Tinebase_DateTime $_from = NULL, Tinebase_DateTime $_until = NULL, $_modifierId = NULL, $_fromInstanceId = NULL, $_changeType = NULL)
     {
         $id = ($_id instanceof Tinebase_Record_Interface) ? $_id->getId() : $_id;
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
@@ -319,6 +319,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         if ($_fromInstanceId) {
             $select->where($db->quoteInto($db->quoteIdentifier('instance_seq') . ' >= ?', $_fromInstanceId));
+        }
+
+        if ($_changeType) {
+            $select->where($db->quoteInto($db->quoteIdentifier('change_type') . ' = ?', $_changeType));
         }
 
         $stmt = $db->query($select);
