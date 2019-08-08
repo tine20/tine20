@@ -241,15 +241,16 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     public function testSearchTimesheetsByStartTime()
     {
         $now = Tinebase_DateTime::now();
-        $nowString = $now->format('H:i:s');
+        $startTime = $now->setHour(10);
+        $startTimeString = $startTime->format('H:i:s');
         $timesheet = $this->_getTimesheet([
-            'start_time' => $nowString
+            'start_time' => $startTimeString
         ]);
         $savedTimesheet = $this->_json->saveTimesheet($timesheet->toArray());
-        $date = clone($now)->subHour(1);
+        $date = clone($startTime)->subHour(1);
 
         // skip check because this does not work at midnight
-        if (substr($nowString, 0, 2) !== '00') {
+        if (substr($startTimeString, 0, 2) !== '00') {
             $filter = array(
                 array('field' => 'start_time', 'operator' => 'after', 'value' => $date->format('H:i:s')),
             );
@@ -272,7 +273,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         );
 
         $filter = array(
-            array('field' => 'start_time', 'operator' => 'equals', 'value' => $nowString),
+            array('field' => 'start_time', 'operator' => 'equals', 'value' => $startTimeString),
         );
         $searchResult = $this->_json->searchTimesheets($filter, array());
         $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
