@@ -35,6 +35,13 @@ Tine.widgets.grid.GridPanel = function(config) {
         limit: 50
     };
 
+    // allow to initialize with string
+    this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+
+    if (! this.app && this.recordClass) {
+        this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+    }
+
     // autogenerate stateId
     if (this.stateful !== false && ! this.stateId) {
         this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
@@ -1451,9 +1458,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.gridConfig.quickaddMandatory) {
             Grid = Ext.ux.grid.QuickaddGridPanel;
             this.gridConfig.validate = true;
-
-            // TODO allow to configure this?
-            this.gridConfig.resetAllOnNew = true;
         } else {
             Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
         }

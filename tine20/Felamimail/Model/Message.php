@@ -220,16 +220,26 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             }
         }
 
-        // what if message has only plain/text?
-        $data['content_type'] = $message->getContentType();
-        if ($data['content_type'] == Zend_Mime::TYPE_TEXT) {
-            $data['body'] = $message->getContent();
-            $data['body_content_type'] = Zend_Mime::TYPE_TEXT;
-        } else {
-            $data['body'] = $message->getHtmlContent();
-            $data['body_content_type'] = Zend_Mime::TYPE_HTML;
-            // TODO why do we need this?
-            $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+        $contentPart = $message->getPartByMimeType(Zend_Mime::TYPE_HTML);
+        if (! $contentPart) {
+            $contentPart = $message->getPartByMimeType(Zend_Mime::TYPE_TEXT);
+        }
+
+        if ($contentPart) {
+            if ($contentPart->getContentType() == Zend_Mime::TYPE_TEXT) {
+                $data['body'] = $contentPart->getContent();
+                $data['body_content_type'] = Zend_Mime::TYPE_TEXT;
+            } else {
+                if (method_exists($contentPart, 'getHtmlContent')) {
+                    $data['body'] = $contentPart->getHtmlContent();
+                    // TODO why do we need this?
+                    $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+                } else {
+                    $data['body'] = $contentPart->getContent();
+                }
+
+                $data['body_content_type'] = Zend_Mime::TYPE_HTML;
+            }
         }
 
         $data['attachments'] = [];
@@ -254,6 +264,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         }
 
         return new Felamimail_Model_Message($data);
+    }
+
+    protected function _getBodyContent($messagePart, &$data)
+    {
     }
 
     /**

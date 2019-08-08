@@ -43,7 +43,7 @@ module.exports = merge(prod, {
             {
                 test: /\.js$/,
                 use: ['webpack-conditional-loader']
-            },
+            }
         ]
     },
     resolve: {

@@ -23,9 +23,8 @@ Ext.ux.Printer.BaseRenderer.prototype.stylesheetPath = 'Tinebase/js/ux/Printer/p
 
 /**
  * @class Tine
- * @singleton
  */
-Ext.namespace('Tine', 'Tine.Tinebase', 'Tine.Calendar');
+Ext.namespace('Tine');
 
 /**
  * version of Tine 2.0 javascript client version, gets set a build / release time <br>
@@ -47,6 +46,29 @@ Tine.clientVersion.buildRevision    = 'none';
 Tine.clientVersion.codeName         = 'none';
 Tine.clientVersion.packageString    = 'none';
 Tine.clientVersion.releaseTime      = 'none';
+
+Tine.__appLoader = require('./app-loader!app-loader.js');
+Tine.__onAllAppsLoaded = new Promise( (resolve) => {
+    Tine.__onAllAppsLoadedResolve = resolve;
+});
+
+/**
+ * returns promise that resolves when app code of given app is loaded
+ *
+ * @param appName
+ * @return {*|Promise<never>}
+ */
+Tine.onAppLoaded = (appName) => {
+    return _.get(Tine.__appLoader.appLoadedPromises, appName) || Promise.reject();
+};
+
+/**
+ * returns promise that resolves when code of all user apps is loaded
+ * @return {Promise<any>}
+ */
+Tine.onAllAppsLoaded = () => {
+    return Tine.__onAllAppsLoaded;
+};
 
 /**
  * quiet logging in release mode
@@ -746,9 +768,9 @@ Tine.Tinebase.tineInit = {
 
         // load initial js of user enabled apps
         // @TODO: move directly after login (login should return requested parts of registry)
-        var appLoader = require('./app-loader!app-loader.js');
-        return appLoader(Tine.Tinebase.registry.get('userApplications')).then(function() {
-            return Tine.Tinebase.tineInit.initCustomJS();
+        return Tine.__appLoader.loadAllApps(Tine.Tinebase.registry.get('userApplications')).then(function() {
+            Tine.Tinebase.tineInit.initCustomJS();
+            Tine.__onAllAppsLoadedResolve();
         });
     },
 

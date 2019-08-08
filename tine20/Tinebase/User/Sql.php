@@ -45,6 +45,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountLastLogin'          => 'last_login',
         'accountLastLoginfrom'      => 'last_login_from',
         'accountLastPasswordChange' => 'last_password_change',
+        'password_must_change'      => 'password_must_change',
         'accountStatus'             => 'status',
         'accountExpires'            => 'expires_at',
         'accountPrimaryGroup'       => 'primary_group_id',
@@ -384,8 +385,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * get user select
      *
      * @return Zend_Db_Select
-     *
-     * TODO get available fields from schema
      */
     protected function _getUserSelectObject()
     {
@@ -405,12 +404,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 . ' THEN ' . $this->_db->quote('expired')
             . ' ELSE ' . $this->_db->quote('disabled') . ' END';
 
-        $fields =  array(
+        $fields = array(
             'accountId'             => $this->rowNameMapping['accountId'],
             'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
             'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
             'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
             'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
+            'password_must_change'      => $this->rowNameMapping['password_must_change'],
             'accountStatus'         => $statusSQL,
             'accountExpires'        => $this->rowNameMapping['accountExpires'],
             'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
@@ -443,10 +443,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ));
         }
 
-        // TODO remove
         // remove this in 2018.11 as an upgrade to 2017.11 creates the field
         if ($this->_userHasXpropsField()) {
             $fields[] = 'xprops';
+        }
+
+        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
+        foreach ($fields as $index => $field) {
+            // status contains $statusSQL
+            if (! isset($schema[$field]) && $index !== 'accountStatus') {
+                unset($fields[$index]);
+            }
         }
 
         $select = $this->_db->select()
@@ -508,6 +515,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY});
             }
             $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+            $accountData['password_must_change'] = 0;
         }
 
         $where = array(
@@ -1091,6 +1099,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
             $this->rowNameMapping['accountLastName']     => $_user->accountLastName,
             $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
+            $this->rowNameMapping['password_must_change'] => $_user->password_must_change,
             'created_by'            => $_user->created_by,
             'creation_time'         => $_user->creation_time,
             'last_modified_by'      => $_user->last_modified_by,

@@ -16,6 +16,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -32,6 +33,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE012_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE        => [
@@ -120,5 +125,20 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '12.23', self::RELEASE012_UPDATE005);
+    }
+
+    public function update006()
+    {
+        if ($this->getTableVersion('accounts') < 16) {
+            $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>password_must_change</name>
+                    <type>boolean</type>                 
+                    <default>false</default>
+                </field>'));
+            $this->setTableVersion('accounts', 16);
+        }
+
+        $this->addApplicationUpdate('Tinebase', '12.24', self::RELEASE012_UPDATE006);
     }
 }

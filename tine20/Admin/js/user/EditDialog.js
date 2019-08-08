@@ -1013,7 +1013,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             },
                             scope: this
                         }
-                    }]] 
+                    },
+                     {
+                            hideLabel: true,
+                            xtype: 'checkbox',
+                            boxLabel: this.app.i18n.gettext('Password Must Change'),
+                            hidden: this.ldapBackend,
+                            name: 'password_must_change'
+                    }]]
                 }, {
                     xtype: 'fieldset',
                     title: this.app.i18n.gettext('Information'),
