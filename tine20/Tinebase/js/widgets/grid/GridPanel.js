@@ -38,7 +38,7 @@ Tine.widgets.grid.GridPanel = function(config) {
     // allow to initialize with string
     this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
 
-    if (! this.app) {
+    if (! this.app && this.recordClass) {
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
     }
 
