@@ -47,15 +47,18 @@ abstract class Tinebase_EmailUser_Model_Account extends Tinebase_Record_NewAbstr
 
     /**
      * system account
-     *
      */
     const TYPE_SYSTEM = 'system';
     
     /**
      * user defined account
-     *
      */
     const TYPE_USER = 'user';
+
+    /**
+     * user defined account on internal mail system
+     */
+    const TYPE_USER_INTERNAL = 'userInternal';
 
     /**
      * display format: plain

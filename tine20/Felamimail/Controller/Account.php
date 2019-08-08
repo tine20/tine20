@@ -241,7 +241,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (empty($_record->user_id) && ($_record->type === Felamimail_Model_Account::TYPE_USER ||
                 $_record->type === Felamimail_Model_Account::TYPE_SYSTEM)) {
             $_record->user_id = Tinebase_Core::getUser()->getId();
-        } else if (is_array($_record->user_id)) {
+        } elseif (is_array($_record->user_id)) {
             // TODO move to converter
             $_record->user_id = $_record->user_id['accountId'];
         }
@@ -251,12 +251,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $_record->smtp_hostname = $_record->host;
         }
 
-        if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
+        if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                 __LINE__ . ' system account, no credential cache needed');
             return;
 
-        } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
+        } elseif ($_record->type === Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
                 Felamimail_Model_Account::TYPE_ADB_LIST) {
             if (! $_record->password) {
                 throw new Tinebase_Exception_UnexpectedValue('shared / adb_list accounts need to have a password set');
@@ -284,6 +284,26 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
             $emailUserBackend->inspectAddUser($user, $user);
             Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectAddUser($user, $user);
+        } elseif ($_record->type === Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+            if (! $_record->email) {
+                throw new Tinebase_Exception_UnexpectedValue('userInternal accounts need to have an email set');
+            }
+            if (! $_record->user_id) {
+                throw new Tinebase_Exception_UnexpectedValue('userInternal accounts need to have an user_id set');
+            }
+            $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+            $user->accountEmailAddress = $_record->email;
+            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $userId = $_record->user_id . Tinebase_Record_Abstract::generateUID();
+            $user->accountLoginName = $emailUserBackend->getLoginName($userId, $user->accountLoginName, $_record->email);
+
+            Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record, $user);
+
+            $emailUserBackend->copyUser($user, $userId);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->copyUser($user, $userId);
+            
+            // we dont need a credential cache here neither
+            return;
         }
 
         // write test für Adb::List / Admin_Controller_EmailAccount [dafür gibts schon einfache tests]
@@ -330,7 +350,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         parent::_deleteLinkedObjects($_record);
 
         if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST || $_record->type ===
-                Felamimail_Model_Account::TYPE_SHARED) {
+                Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
+                Felamimail_Model_Account::TYPE_USER_INTERNAL) {
             $_record->resolveCredentials(false);
             $user = new Tinebase_Model_FullUser([], true);
             $user->setId($_record->user_id);
@@ -491,10 +512,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _beforeUpdateStandardAccount($_record, $_oldRecord)
     {
-        if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
-            $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
-        } else {
-            $this->_beforeUpdateSharedAccountCredentials($_record, $_oldRecord);
+        if ($_record->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+            if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
+                $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
+            } else {
+                $this->_beforeUpdateSharedAccountCredentials($_record, $_oldRecord);
+            }
         }
         
         $diff = $_record->diff($_oldRecord)->diff;
@@ -1329,7 +1352,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         if ($_account->type === Felamimail_Model_Account::TYPE_USER || $_account->type ===
-                Felamimail_Model_Account::TYPE_SYSTEM) {
+                Felamimail_Model_Account::TYPE_SYSTEM || $_account->type ===
+                Felamimail_Model_Account::TYPE_USER_INTERNAL) {
             if (null === $_user || $_user->getId() !== $_account->user_id) {
                 if (Tinebase_Core::getUser()->getId() === $_account->user_id) {
                     $_user = Tinebase_Core::getUser();

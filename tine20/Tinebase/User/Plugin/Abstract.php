@@ -104,6 +104,11 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         // do nothing
     }
 
+    public function copyUser(Tinebase_Model_FullUser $_user, $newId)
+    {
+        throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
+    }
+    
     /**
      * adds email properties for a new user
      * 
