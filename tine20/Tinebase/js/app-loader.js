@@ -96,7 +96,7 @@ module.exports = function() {
     runtime += "  appLoadedPromises: appLoadedPromises\n";
     runtime += "}\n";
 
-    console.log(runtime);
+    //console.log(runtime);
 
     return runtime;
 };
