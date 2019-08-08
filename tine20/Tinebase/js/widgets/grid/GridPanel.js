@@ -35,6 +35,13 @@ Tine.widgets.grid.GridPanel = function(config) {
         limit: 50
     };
 
+    // allow to initialize with string
+    this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+
+    if (! this.app) {
+        this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+    }
+
     // autogenerate stateId
     if (this.stateful !== false && ! this.stateId) {
         this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';

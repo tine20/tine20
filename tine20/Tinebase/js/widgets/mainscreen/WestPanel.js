@@ -91,6 +91,10 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * inits this west panel
      */
     initComponent: function() {
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+        if (! this.app && this.recordClass) {
+            this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+        }
         this.stateId = this.app.appName + this.getContentType() + '-mainscreen-westpanel';
         this.canonicalName = this.canonicalName ? this.canonicalName : this.getContentType();
         var fpcn = this.getContentType() + this.favoritesPanelClassName;
