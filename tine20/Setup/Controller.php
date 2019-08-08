@@ -2318,11 +2318,11 @@ class Setup_Controller
                 DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'definitions';
     
             if (file_exists($path)) {
-                $lambda = function($path, $applicaiton) {
+                $lambda = function($path, $application) {
                     if (preg_match("/\.xml/", $path)) {
                         try {
                             Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($path,
-                                $applicaiton);
+                                $application);
                         } catch (Exception $e) {
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                                 . ' Not installing import/export definion from file: ' . $path
