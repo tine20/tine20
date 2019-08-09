@@ -64,6 +64,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
 
         $this->_objects['addedUsers'] = array();
         $this->_objects['fullUsers'] = array();
+        $this->_objects['emailUserIds'] = array();
     }
 
     /**
@@ -81,6 +82,11 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
 
         foreach ($this->_objects['fullUsers'] as $user) {
             Tinebase_User::getInstance()->deleteUser($user);
+        }
+
+        // also remove remaining stuff from dovecot table - mail accounts no longer linked to a tine user account
+        foreach ($this->_objects['emailUserIds'] as $userId) {
+            $this->_backend->deleteUserById($userId);
         }
     }
 
@@ -149,6 +155,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
     {
         $user = $this->_addUser();
         $userId = $user->getId();
+        $this->_objects['emailUserIds'][] = $userId;
 
         // delete user in tine accounts table
         $userBackend = new Tinebase_User_Sql();
