@@ -18,7 +18,28 @@ html, body {
     background-image:url(../../images/icon-set/icon_debug.svg);
 }
 
-/* ----- actions -------------------------------------------------------------*/
+/* ----- ext fixes -------------------------------------------------------------*/
+
+/* auto column sizing */
+.x-grid3-hd-row td {
+    box-sizing: border-box;
+}
+
+.x-grid3-row td, .x-grid3-summary-row td {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+/* active table heads when header is multi line */
+td.x-grid3-hd-over, td.sort-asc, td.sort-desc {
+    background-image: linear-gradient(to bottom, #ebf3fd, #c3daf9 80%, #ebf3fd);
+}
+
+td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-over .x-grid3-hd-inner {
+    background-image: none;
+    background-color: transparent;
+}
+    /* ----- actions -------------------------------------------------------------*/
 .action_add {
     background-image:url(../../images/icon-set/Icon_add.svg) !important;
 }
