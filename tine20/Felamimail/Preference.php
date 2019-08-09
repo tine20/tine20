@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        make UPDATEINTERVAL a free form preference
  */
@@ -27,6 +27,11 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      *
      */
     const DEFAULTACCOUNT = 'defaultEmailAccount';
+
+    /**
+     * mark email as read behavior
+     */
+    const MARKEMAILREAD = 'markEmailRead';
 
     /**
      * email folder update interval
@@ -89,6 +94,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = array(
             self::DEFAULTACCOUNT,
+            self::MARKEMAILREAD,
             self::UPDATEINTERVAL,
             self::USEINADB,
             self::AUTOATTACHNOTE,
@@ -112,6 +118,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTACCOUNT  => array(
                 'label'         => $translate->_('Default Email Account'),
                 'description'   => $translate->_('The default email account to use when sending mails.'),
+            ),
+            self::MARKEMAILREAD  => array(
+                'label'         => $translate->_('Mark Email Automatically As Read'),
+                'description'   => $translate->_('Is email marked as read automatically or by user action'),
             ),
             self::UPDATEINTERVAL  => array(
                 'label'         => $translate->_('Email Update Interval'),
@@ -159,6 +169,13 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             case self::DEFAULTACCOUNT:
                 $preference->personal_only  = TRUE;
                 $preference->value          = '';
+                break;
+            case self::MARKEMAILREAD:
+                $preference->value      = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
                 break;
             case self::UPDATEINTERVAL:
                 $preference->value      = 5;

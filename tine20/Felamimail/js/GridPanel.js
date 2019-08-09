@@ -1088,11 +1088,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (sm.getCount() == 1 && sm.isIdSelected(record.id) && !record.hasFlag('\\Seen')) {
             Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Selected unread message');
             Tine.log.debug(record);
-            
-            record.addFlag('\\Seen');
-            record.mtime = new Date().getTime();
-            Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
-            this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+
+            if (Tine.Felamimail.registry.get('preferences').get('markEmailRead') === 1) {
+                record.addFlag('\\Seen');
+                record.mtime = new Date().getTime();
+                Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
+                this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+            }
             
             if (record.get('headers')['disposition-notification-to']) {
                 Ext.Msg.confirm(
