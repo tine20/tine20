@@ -414,7 +414,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql imp
      * 
      * @param string $id
      */
-    protected function _deleteUserById($id)
+    public function deleteUserById($id)
     {
         $where = array(
             $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?' => $id,

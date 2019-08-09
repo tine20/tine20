@@ -138,7 +138,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Delete ' . $this->_configKey . ' email settings for user ' . $_user->accountLoginName);
         
-        $this->_deleteUserById($_user->getId());
+        $this->deleteUserById($_user->getId());
     }
     
     /**
@@ -146,7 +146,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * 
      * @param string $id
      */
-    protected function _deleteUserById($id)
+    public function deleteUserById($id)
     {
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $id)
@@ -422,7 +422,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             throw new Tinebase_Exception_SystemGeneric('Could not overwrite existing email user.');
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete obsolete email user ' .$userId);
-            $this->_deleteUserById($userId);
+            $this->deleteUserById($userId);
         }
     }
     
