@@ -118,7 +118,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
 
-        if ($_record->type !== Felamimail_Model_Account::TYPE_SHARED ||
+        if ($_record->type !== Felamimail_Model_Account::TYPE_SHARED &&
                 $_record->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
             // check \Felamimail_Controller_Account::_inspectAfterCreate, if you are not sure to rule out all side
             // effects, dont create anythign else than shared accounts here
