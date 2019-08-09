@@ -40,7 +40,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
     startDate: null,
 
     /**
-     * @cfg {Bool} periodIncludesUntil
+     * @cfg {Boolean} periodIncludesUntil
      * the period includes until timestamp
      */
     periodIncludesUntil: false,
@@ -247,10 +247,12 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                     weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._hidden('WK'),
                     inspectMonthPickerClick: function(btn, e) {
                         if (e.getTarget('button')) {
-                            me.getRangeCombo().setValue('month');
-                            me.range = 'month';
-                            me.setStartDate(this.activeDate);
-                            this.destroy();
+                            if (me.availableRanges.match('month')) {
+                                me.getRangeCombo().setValue('month');
+                                me.range = 'month';
+                                me.setStartDate(this.activeDate);
+                                this.destroy();
+                            }
                             return false;
                         }
                     }
@@ -258,9 +260,12 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 listeners: {
                     scope: this,
                     select: function(picker, value, weekNumber) {
-                        this.getRangeCombo().setValue(weekNumber ? 'week' : 'day');
-                        this.range = weekNumber ? 'week' : 'day';
-                        this.setStartDate(value);
+                        var range = weekNumber ? 'week' : 'day';
+                        if (me.availableRanges.match(range)) {
+                            this.getRangeCombo().setValue(range);
+                            this.range = range;
+                            this.setStartDate(value);
+                        }
                     }
                 }
             });
