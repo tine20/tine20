@@ -167,7 +167,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             var c = {
                 id : 'treenode-' + contentType,
                 contentType: contentType,
-                iconCls: ct.iconCls ? ct.iconCls : modelApp.appName + modelName,
+                iconCls: ct.iconCls ? ct.iconCls : (modelName ? modelApp.appName + modelName : contentType),
                 text: ct.text ? ct.text : recordClass.getModuleName(),
                 leaf : true
             };
