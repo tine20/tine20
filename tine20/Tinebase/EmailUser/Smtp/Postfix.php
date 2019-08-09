@@ -249,7 +249,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                         . __LINE__ . ' Removing old email data of userid ' . $queryResult['userid']);
                 }
-                $this->_deleteUserById($queryResult['userid']);
+                $this->deleteUserById($queryResult['userid']);
                 $this->_removeDestinations($queryResult['userid']);
             }
         }

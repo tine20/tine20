@@ -115,7 +115,7 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql imp
      * 
      * @param string $id
      */
-    protected function _deleteUserById($id)
+    public function deleteUserById($id)
     {
         $where = array(
             $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?' => $id,
