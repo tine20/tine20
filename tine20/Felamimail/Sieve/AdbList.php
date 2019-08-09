@@ -25,7 +25,7 @@ class Felamimail_Sieve_AdbList
 
     public function __toString()
     {
-        $result = 'require ["envelope"];' . PHP_EOL;
+        $result = 'require ["envelope", "copy"];' . PHP_EOL;
 
         if ($this->_allowExternal) {
             $this->_addRecieverList($result);
@@ -65,7 +65,7 @@ class Felamimail_Sieve_AdbList
     protected function _addRecieverList(&$result)
     {
         foreach ($this->_receiverList as $email) {
-            $result .= 'redirect :copy ' . $email . ';' . PHP_EOL;
+            $result .= 'redirect :copy "' . $email . '";' . PHP_EOL;
         }
     }
 
@@ -113,17 +113,7 @@ class Felamimail_Sieve_AdbList
         $raii = new Tinebase_RAII(function() use ($oldValue) {
             Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldValue);});
 
-        $account = Felamimail_Controller_Account::getInstance()->search(
-            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-                ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
-                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
-            ]))->getFirstRecord();
-
-        if (null === $account) {
-            $e = new Tinebase_Exception('no felamimail account found for list ' . $list->getId());
-            Tinebase_Exception::log($e);
-            return false;
-        }
+        $account = Felamimail_Controller_Account::getInstance()->getAccountForList($list);
 
         $sieveRule = static::createFromList($list)->__toString();
 
@@ -136,5 +126,17 @@ class Felamimail_Sieve_AdbList
 
         // for unused variable check only
         unset($raii);
+
+        return true;
+    }
+
+    static public function getSieveScriptForAdbList(Addressbook_Model_List $list)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->getAccountForList($list);
+        if ($account) {
+            return Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+        } else {
+            return null;
+        }
     }
 }

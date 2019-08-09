@@ -1480,4 +1480,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // TODO fix me! system account resolving is mssing, add it here?!
         throw new Tinebase_Exception_NotImplemented('do not use this function');
     }
+
+    public function getAccountForList(Addressbook_Model_List $list)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
+            ]))->getFirstRecord();
+
+        if (null === $account) {
+            $e = new Tinebase_Exception('no felamimail account found for list ' . $list->getId());
+            Tinebase_Exception::log($e);
+            return false;
+        }
+
+        return $account;
+    }
 }

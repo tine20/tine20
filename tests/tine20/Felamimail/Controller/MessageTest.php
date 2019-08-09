@@ -85,6 +85,11 @@ class Felamimail_Controller_MessageTest extends TestCase
         }
     }
 
+    public function getAccount()
+    {
+        return $this->_account;
+    }
+
     protected function _getController()
     {
         if (!$this->_controller) {
@@ -1560,7 +1565,8 @@ class Felamimail_Controller_MessageTest extends TestCase
         };
         
         if ($_assert) {
-            $this->assertGreaterThan(0, count($result), 'No messages with HEADER ' . $testHeader . ': ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');
+            $this->assertGreaterThan(0, count($result), 'No messages with HEADER "'
+                . $testHeader . '": "' . $_testHeaderValue . '" in folder ' . $_folder->globalname . ' found.');
         }
         $message = (! empty($result)) ? $imap->getSummary($result[0]) : NULL;
         

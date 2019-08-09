@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -42,14 +42,15 @@ class Felamimail_AllTests
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         
         if (! empty($imapConfig) && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) && $imapConfig['useSystemAccount']) {
-            $suite->addTestSuite('Felamimail_Controller_Cache_MessageTest');
-            $suite->addTestSuite('Felamimail_Frontend_ActiveSyncTest');
-            $suite->addTestSuite('Felamimail_Frontend_JsonTest');
-            $suite->addTestSuite('Felamimail_Controller_FolderTest');
-            $suite->addTestSuite('Felamimail_Controller_MessageTest');
-            $suite->addTestSuite('Felamimail_Controller_AccountTest');
-            $suite->addTestSuite('Felamimail_Model_MessageTest');
-            $suite->addTestSuite('Felamimail_Model_AccountTest');
+            $suite->addTestSuite(Felamimail_Controller_Cache_MessageTest::class);
+            $suite->addTestSuite(Felamimail_Frontend_ActiveSyncTest::class);
+            $suite->addTestSuite(Felamimail_Frontend_JsonTest::class);
+            $suite->addTestSuite(Felamimail_Controller_FolderTest::class);
+            $suite->addTestSuite(Felamimail_Controller_MessageTest::class);
+            $suite->addTestSuite(Felamimail_Controller_AccountTest::class);
+            $suite->addTestSuite(Felamimail_Controller_SieveTest::class);
+            $suite->addTestSuite(Felamimail_Model_MessageTest::class);
+            $suite->addTestSuite(Felamimail_Model_AccountTest::class);
         }
         
         $suite->addTestSuite('Felamimail_Frontend_WebDAVTest');
