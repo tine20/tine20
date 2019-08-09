@@ -1478,7 +1478,7 @@ class Admin_JsonTest extends TestCase
                 'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId() .
                     '/Emails/' . $dovecotResult['results'][0]['name']
             )));
-            static::assertGreaterThanOrEqual(2, $dovecotResult['totalcount']);
+            static::assertGreaterThanOrEqual(1, $dovecotResult['totalcount']);
 
         } else {
             static::assertEquals(1, $filterAppResult['totalcount']);
