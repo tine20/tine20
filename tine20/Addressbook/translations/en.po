@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,31 +13,1134 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:129
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s's personal addressbook"
+#: Import/definitions/adb_google_import_csv.xml:11
+msgid "Import CSV formated contacts from Google address book"
+msgstr "Import CSV formated contacts from Google address book"
 
-#: Controller.php:184 js/ListGridDetailsPanel.js:57
-#: js/ListGridDetailsPanel.js:83 js/Model.js:252
-msgid "Lists"
-msgstr "Lists"
+#: Import/definitions/adb_google_import_csv.xml:13
+msgid "Contact import from Google address book"
+msgstr "Contact import from Google address book"
 
-#: Controller.php:193 js/ListRoleGridPanel.js:50 js/Model.js:350
+#: Import/definitions/adb_lxoffice_import_csv.xml:11
+msgid "LX-Office CSV Contact import"
+msgstr "LX-Office CSV Contact import"
+
+#: Import/definitions/adb_lxoffice_import_csv.xml:13
+msgid "Import CSV formated contacts from LX-Office"
+msgstr "Import CSV formated contacts from LX-Office"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Tine 2.0 contact CSV import"
+msgstr "Tine 2.0 contact CSV import"
+
+#: Import/definitions/adb_tine_import_csv.xml:13
+msgid "Import CSV formated contacts from Tine 2.0 address book"
+msgstr "Import CSV formated contacts from Tine 2.0 address book"
+
+#: Import/definitions/adb_tine_import_csv.xml:19
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Import list (###CURRENTDATE###)"
+
+#: Import/definitions/adb_tine_import_csv.xml:21
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+
+#: Import/definitions/adb_import_vcard.xml:9
+msgid "Import vCard formated contacts"
+msgstr "Import vCard formated contacts"
+
+#: Import/definitions/adb_import_vcard.xml:15
+msgid "Contact VCARD import"
+msgstr "Contact VCARD import"
+
+#: Import/definitions/adb_outlook_import_csv.xml:10
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr "Import CSV formated contacts from Exchange / Outlook address book"
+
+#: Import/definitions/adb_outlook_import_csv.xml:14
+msgid "Contact CSV import from Outlook address book"
+msgstr "Contact CSV import from Outlook address book"
+
+#: Import/definitions/adb_mac_import_csv.xml:17
+msgid "Contact CSV import from mac address book"
+msgstr "Contact CSV import from mac address book"
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:10
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr "Import CSV formated contacts from Outlook 2007 German address book"
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:15
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 German"
+
+#: Controller/Contact.php:653
+#, python-brace-format
+msgid "This Short Name already exists. How about {0}?"
+msgstr "This Short Name already exists. How about {0}?"
+
+#: Export/definitions/adb_xls_overview.xml:5
+#: Export/definitions/adb_list_overview_xls.xml:5
+msgid "Excel overview"
+msgstr "Excel overview"
+
+#: Export/definitions/adb_doc.xml:5 Export/definitions/adb_list_doc.xml:5
+msgid "Word details"
+msgstr "Word details"
+
+#: Export/definitions/adb_list_xls.xml:5 Export/definitions/adb_xls.xml:5
+msgid "Excel all data"
+msgstr "Excel all data"
+
+#: Export/definitions/adb_csv.xml:5
+msgid "CSV all data"
+msgstr "CSV all data"
+
+#: Export/definitions/adb_default_ods.xml:7
+msgid "OpenDocument all data"
+msgstr "OpenDocument all data"
+
+#: Export/definitions/adb_list_doc.xml:21
+msgid "Relations"
+msgstr "Relations"
+
+#: Export/definitions/adb_pdf.xml:5
+msgid "PDF details"
+msgstr "PDF details"
+
+#: Export/definitions/adb_doc_letter.xml:6
+msgid "Word letter"
+msgstr "Word letter"
+
+#: Export/definitions/adb_by_company_xls.xml:7
+msgid "Excel phone list"
+msgstr "Excel phone list"
+
+#: Export/definitions/adb_by_company_xls.xml:9
+msgid "Excel phone list grouped by company"
+msgstr "Excel phone list grouped by company"
+
+#: Export/Pdf.php:37
+msgid "Business Contact Data"
+msgstr "Business Contact Data"
+
+#: Export/Pdf.php:39
+msgid "Organisation / Unit"
+msgstr "Organisation / Unit"
+
+#: Export/Pdf.php:44
+msgid "Business Address"
+msgstr "Business Address"
+
+#: Export/Pdf.php:52 Model/Contact.php:250 Model/Contact.php:409
+#: js/ContactGrid.js:234
+msgid "Email"
+msgstr "Email"
+
+#: Export/Pdf.php:55
+msgid "Telephone Work"
+msgstr "Telephone Work"
+
+#: Export/Pdf.php:58
+msgid "Telephone Cellphone"
+msgstr "Telephone Cellphone"
+
+#: Export/Pdf.php:61
+msgid "Telephone Car"
+msgstr "Telephone Car"
+
+#: Export/Pdf.php:64
+msgid "Telephone Fax"
+msgstr "Telephone Fax"
+
+#: Export/Pdf.php:67
+msgid "Telephone Page"
+msgstr "Telephone Page"
+
+#: Export/Pdf.php:70
+msgid "URL"
+msgstr "URL"
+
+#: Export/Pdf.php:73
+msgid "Role"
+msgstr "Role"
+
+#: Export/Pdf.php:76 Model/Contact.php:587 js/ContactGrid.js:222 js/Model.js:34
+msgid "Room"
+msgstr "Room"
+
+#: Export/Pdf.php:79
+msgid "Assistant"
+msgstr "Assistant"
+
+#: Export/Pdf.php:82
+msgid "Assistant Telephone"
+msgstr "Assistant Telephone"
+
+#: Export/Pdf.php:86
+msgid "Private Contact Data"
+msgstr "Private Contact Data"
+
+#: Export/Pdf.php:88 js/ContactEditDialog.js:355 js/Printer/ContactRecord.js:80
+#: js/Model.js:44 js/Model.js:182 js/Model.js:183 js/Model.js:184
+#: js/Model.js:185 js/Model.js:186
+msgid "Private Address"
+msgstr "Private Address"
+
+#: Export/Pdf.php:96
+msgid "Email Home"
+msgstr "Email Home"
+
+#: Export/Pdf.php:99
+msgid "Telephone Home"
+msgstr "Telephone Home"
+
+#: Export/Pdf.php:102
+msgid "Telephone Cellphone Private"
+msgstr "Telephone Cellphone Private"
+
+#: Export/Pdf.php:105
+msgid "Telephone Fax Home"
+msgstr "Telephone Fax Home"
+
+#: Export/Pdf.php:108
+msgid "URL Home"
+msgstr "URL Home"
+
+#: Export/Pdf.php:112
+msgid "Other Data"
+msgstr "Other Data"
+
+#: Export/Pdf.php:114 Model/Contact.php:395 js/ContactEditDialog.js:210
+#: js/ContactGrid.js:249 js/Model.js:27 js/Model.js:176
+msgid "Birthday"
+msgstr "Birthday"
+
+#: Export/Pdf.php:117 Model/Contact.php:764 js/ContactEditDialog.js:204
+#: js/ContactGrid.js:220 js/Model.js:31 js/Model.js:171
+msgid "Job Title"
+msgstr "Job Title"
+
+#: Config.php:124
+msgid "Enabled Features"
+msgstr "Enabled Features"
+
+#: Config.php:126
+msgid "Enabled Features in Addressbook Application."
+msgstr "Enabled Features in Addressbook Application."
+
+#: Config.php:134
+msgid "Addressbook Contact Event List"
+msgstr "Addressbook Contact Event List"
+
+#: Config.php:136
+msgid "Shows contact events in edit dialog tab panel"
+msgstr "Shows contact events in edit dialog tab panel"
+
+#: Config.php:142
+msgid "Addressbook List View"
+msgstr "Addressbook List View"
+
+#: Config.php:144
+msgid "Shows an additional view for lists inside the addressbook"
+msgstr "Shows an additional view for lists inside the addressbook"
+
+#: Config.php:150
+msgid "Addressbook Industries"
+msgstr "Addressbook Industries"
+
+#: Config.php:152
+msgid "Add Industry field to Adressbook"
+msgstr "Add Industry field to Adressbook"
+
+#: Config.php:158
+msgid "Addressbook Short Names"
+msgstr "Addressbook Short Names"
+
+#: Config.php:160
+msgid "Add Short Name field to Adressbook"
+msgstr "Add Short Name field to Adressbook"
+
+#: Config.php:166
+msgid "Manage resources in Addressbook"
+msgstr "Manage resources in Addressbook"
+
+#: Config.php:168
+msgid "Show the resources grid also inside the Addressbook"
+msgstr "Show the resources grid also inside the Addressbook"
+
+#: Config.php:174
+msgid "Show Structure Panel in Addressbook"
+msgstr "Show Structure Panel in Addressbook"
+
+#: Config.php:176
+msgid "Visualize relations of records"
+msgstr "Visualize relations of records"
+
+#: Config.php:184
+msgid "Contact duplicate check fields"
+msgstr "Contact duplicate check fields"
+
+#: Config.php:186
+msgid ""
+"These fields are checked when a new contact is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
+msgstr ""
+"These fields are checked when a new contact is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
+
+#: Config.php:203
+msgid "Contact Hidden Criteria"
+msgstr "Contact Hidden Criteria"
+
+#: Config.php:205
+msgid "The contact is hidden if it is ... (one of: disabled, expired or never)"
+msgstr ""
+"The contact is hidden if it is ... (one of: disabled, expired or never)"
+
+#: Config.php:212
+msgid "Contact salutations available"
+msgstr "Contact salutations available"
+
+#: Config.php:214
+msgid ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
+msgstr ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
+
+#: Config.php:222 Setup/Update/Release5.php:194
+msgid "Mr"
+msgstr "Mr"
+
+#: Config.php:223 Setup/Update/Release5.php:195
+msgid "Ms"
+msgstr "Ms"
+
+#: Config.php:224 Model/Contact.php:535 Setup/Update/Release5.php:196
+#: js/ContactEditDialog.js:165 js/ContactGrid.js:218 js/Model.js:28
+#: js/Model.js:168
+msgid "Company"
+msgstr "Company"
+
+#: Config.php:230
+msgid "Parsing rules for addresses"
+msgstr "Parsing rules for addresses"
+
+#: Config.php:232
+msgid "Path to a XML file with address parsing rules."
+msgstr "Path to a XML file with address parsing rules."
+
+#: Config.php:240
+msgid "List types available"
+msgstr "List types available"
+
+#: Config.php:242
+msgid "List types available."
+msgstr "List types available."
+
+#: Config.php:249
+msgid "Department"
+msgstr "Department"
+
+#: Config.php:250
+msgid "Mailing list"
+msgstr "Mailing list"
+
+#: Config.php:255
+msgid "Use Nominatim during contact import"
+msgstr "Use Nominatim during contact import"
+
+#: Config.php:265
+msgid "Site Filter"
+msgstr "Site Filter"
+
+#: Config.php:267
+msgid ""
+"Filter configuration for site record pickers. Sites can be a special type of "
+"contacts/groups for example defined by this filter."
+msgstr ""
+"Filter configuration for site record pickers. Sites can be a special type of "
+"contacts/groups for example defined by this filter."
+
+#: Config.php:274 Config.php:276
+msgid "Sync Backends"
+msgstr "Sync Backends"
+
+#: Config.php:284 Config.php:286
+msgid "Default telephone country code"
+msgstr "Default telephone country code"
+
+#: Model/Contact.php:113 js/Addressbook.js:34 js/Model.js:105 js/Model.js:259
+#: js/Model.js:310
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Addressbook"
+msgstr[1] "Addressbooks"
+
+#: Model/Contact.php:115 js/ContactFilterModel.js:35 js/ContactGrid.js:162
+#: js/Model.js:101 js/Model.js:156
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Contact"
+msgstr[1] "Contacts"
+
+#: Model/Contact.php:184
+msgid "Show Disabled"
+msgstr "Show Disabled"
+
+#: Model/Contact.php:192
+msgid "Path"
+msgstr "Path"
+
+#: Model/Contact.php:198
+msgid "List Member"
+msgstr "List Member"
+
+#: Model/Contact.php:204
+msgid "List Role Member"
+msgstr "List Role Member"
+
+#: Model/Contact.php:210
+msgid "Telephone"
+msgstr "Telephone"
+
+#: Model/Contact.php:230
+msgid "Telephone Normalized"
+msgstr "Telephone Normalized"
+
+#: Model/Contact.php:274 js/ContactEditDialog.js:350
+#: js/ContactEditDialog.js:385 js/ContactGrid.js:227 js/Model.js:181
+#: js/Model.js:186
+msgid "Country"
+msgstr "Country"
+
+#: Model/Contact.php:282 js/ContactEditDialog.js:343
+#: js/ContactEditDialog.js:378 js/ContactGrid.js:224 js/Model.js:180
+#: js/Model.js:185
+msgid "City"
+msgstr "City"
+
+#: Model/Contact.php:290 js/ContactGrid.js:226
+msgid "Postalcode"
+msgstr "Postalcode"
+
+#: Model/Contact.php:297 js/ContactEditDialog.js:333
+#: js/ContactEditDialog.js:368 js/ContactGrid.js:225 js/Model.js:178
+#: js/Model.js:183
+msgid "Region"
+msgstr "Region"
+
+#: Model/Contact.php:304 js/ContactEditDialog.js:323
+#: js/ContactEditDialog.js:358 js/ContactGrid.js:223 js/Model.js:177
+#: js/Model.js:182
+msgid "Street"
+msgstr "Street"
+
+#: Model/Contact.php:311 js/ContactEditDialog.js:329
+#: js/ContactEditDialog.js:364
+msgid "Street 2"
+msgstr "Street 2"
+
+#: Model/Contact.php:317
+msgid "Longitude"
+msgstr "Longitude"
+
+#: Model/Contact.php:324
+msgid "Latitude"
+msgstr "Latitude"
+
+#: Model/Contact.php:332 js/ContactGrid.js:232
+msgid "Country (private)"
+msgstr "Country (private)"
+
+#: Model/Contact.php:340 js/ContactGrid.js:229
+msgid "City (private)"
+msgstr "City (private)"
+
+#: Model/Contact.php:347 js/ContactGrid.js:231
+msgid "Postalcode (private)"
+msgstr "Postalcode (private)"
+
+#: Model/Contact.php:354 js/ContactGrid.js:230
+msgid "Region (private)"
+msgstr "Region (private)"
+
+#: Model/Contact.php:361 js/ContactGrid.js:228
+msgid "Street (private)"
+msgstr "Street (private)"
+
+#: Model/Contact.php:368
+msgid "Street 2 (private)"
+msgstr "Street 2 (private)"
+
+#: Model/Contact.php:374
+msgid "Longitude (private)"
+msgstr "Longitude (private)"
+
+#: Model/Contact.php:381
+msgid "Latitude (private)"
+msgstr "Latitude (private)"
+
+#: Model/Contact.php:389
+msgid "Assistent"
+msgstr "Assistent"
+
+#: Model/Contact.php:402
+msgid "Calendar URI"
+msgstr "Calendar URI"
+
+#: Model/Contact.php:418 js/ContactGrid.js:243
+msgid "Email (private)"
+msgstr "Email (private)"
+
+#: Model/Contact.php:427
+msgid "Free/Busy URI"
+msgstr "Free/Busy URI"
+
+#: Model/Contact.php:434 js/ContactGrid.js:248
+msgid "Geo"
+msgstr "Geo"
+
+#: Model/Contact.php:439 js/ContactEditDialog.js:429 js/Model.js:84
+msgid "Groups"
+msgstr "Groups"
+
+#: Model/Contact.php:447 js/ContactEditDialog.js:198 js/ContactGrid.js:254
+#: js/Model.js:384
+msgid "Industry"
+msgid_plural "Industries"
+msgstr[0] "Industry"
+msgstr[1] "Industries"
+
+#: Model/Contact.php:469 js/ContactGrid.js:246
+msgid "Note"
+msgstr "Note"
+
+#: Model/Contact.php:477 js/ContactEditDialog.js:158 js/ContactGrid.js:214
+#: js/Model.js:19 js/Model.js:165
+msgid "Last Name"
+msgstr "Last Name"
+
+#: Model/Contact.php:485 js/ContactEditDialog.js:192 js/ContactGrid.js:217
+#: js/Model.js:25
+msgid "Display Name"
+msgstr "Display Name"
+
+#: Model/Contact.php:492 js/ContactGrid.js:216
+msgid "Full Name"
+msgstr "Full Name"
+
+#: Model/Contact.php:499 js/ContactEditDialog.js:148 js/ContactGrid.js:215
+#: js/Model.js:20 js/Model.js:164
+msgid "First Name"
+msgstr "First Name"
+
+#: Model/Contact.php:507 js/ContactEditDialog.js:153 js/ContactGrid.js:213
+#: js/Model.js:21 js/Model.js:166
+msgid "Middle Name"
+msgstr "Middle Name"
+
+#: Model/Contact.php:514 js/ContactEditDialog.js:136 js/ContactGrid.js:212
+#: js/Model.js:22 js/Model.js:163
+msgid "Title"
+msgstr "Title"
+
+#: Model/Contact.php:521 js/Model.js:23
+msgid "Suffix"
+msgstr "Suffix"
+
+#: Model/Contact.php:528 js/ContactEditDialog.js:142 js/ContactGrid.js:257
+#: js/Model.js:24 js/Model.js:167
+msgid "Short Name"
+msgstr "Short Name"
+
+#: Model/Contact.php:543 js/ContactEditDialog.js:170 js/ContactGrid.js:219
+#: js/Model.js:29 js/Model.js:169
+msgid "Unit"
+msgstr "Unit"
+
+#: Model/Contact.php:556
+msgid "Paths"
+msgstr "Paths"
+
+#: Model/Contact.php:562 js/ContactEditDialog.js:64 js/ContactEditDialog.js:79
+#: js/ContactGrid.js:233 js/Model.js:52
+msgid "Preferred Address"
+msgstr "Preferred Address"
+
+#: Model/Contact.php:580 js/ContactGrid.js:221 js/Model.js:32 js/Model.js:175
+msgid "Job Role"
+msgstr "Job Role"
+
+#: Model/Contact.php:593 js/ContactEditDialog.js:120 js/ContactGrid.js:204
+#: js/Model.js:30 js/Model.js:193
+msgid "Salutation"
+msgstr "Salutation"
+
+#: Model/Contact.php:601
+msgid "syncBackendIds"
+msgstr "syncBackendIds"
+
+#: Model/Contact.php:617 js/ContactGrid.js:238
+msgid "Car phone"
+msgstr "Car phone"
+
+#: Model/Contact.php:624 js/ContactEditDialog.js:234
+#: js/ContactGridDetailsPanel.js:121 js/ContactGridDetailsPanel.js:198
+#: js/ContactGrid.js:236 js/Model.js:54
+msgid "Mobile"
+msgstr "Mobile"
+
+#: Model/Contact.php:631 js/ContactEditDialog.js:249 js/ContactGrid.js:242
+#: js/Model.js:61
+msgid "Mobile (private)"
+msgstr "Mobile (private)"
+
+#: Model/Contact.php:638 js/ContactEditDialog.js:239
+#: js/ContactGridDetailsPanel.js:125 js/ContactGridDetailsPanel.js:202
+#: js/ContactGrid.js:237 js/Model.js:55
+msgid "Fax"
+msgstr "Fax"
+
+#: Model/Contact.php:645 js/ContactEditDialog.js:254 js/ContactGrid.js:241
+#: js/Model.js:60
+msgid "Fax (private)"
+msgstr "Fax (private)"
+
+#: Model/Contact.php:652 js/ContactEditDialog.js:244 js/ContactGrid.js:240
+#: js/Model.js:59
+msgid "Phone (private)"
+msgstr "Phone (private)"
+
+#: Model/Contact.php:659 js/ContactGrid.js:239
+msgid "Pager"
+msgstr "Pager"
+
+#: Model/Contact.php:666 js/ContactEditDialog.js:229
+#: js/ContactGridDetailsPanel.js:117 js/ContactGridDetailsPanel.js:194
+#: js/ContactGrid.js:235 js/Model.js:53 js/Model.js:170
+msgid "Phone"
+msgstr "Phone"
+
+#: Model/Contact.php:770 Model/List.php:139 js/ListGrid.js:100
+#: js/contactListsGridPanel.js:56 js/ContactGrid.js:200 js/Model.js:187
+msgid "Type"
+msgstr "Type"
+
+#: Model/Contact.php:784 js/ContactGrid.js:247
+msgid "Timezone"
+msgstr "Timezone"
+
+#: Model/Contact.php:791 js/ContactEditDialog.js:273
+#: js/ContactGridDetailsPanel.js:135 js/ContactGrid.js:244 js/Model.js:66
+msgid "Web"
+msgstr "Web"
+
+#: Model/Contact.php:799 js/ContactGrid.js:245
+msgid "URL (private)"
+msgstr "URL (private)"
+
+#: Model/Contact.php:810
+msgid "Label"
+msgstr "Label"
+
+#: Model/List.php:71 js/ListGridDetailsPanel.js:86 js/Model.js:255
+#: js/Model.js:269
+msgid "List"
+msgid_plural "Lists"
+msgstr[0] "List"
+msgstr[1] "Lists"
+
+#: Model/List.php:115
+msgid "Percent"
+msgstr "Percent"
+
+#: Model/List.php:121 js/ContactEditDialog.js:411 js/Addressbook.js:83
+#: js/Addressbook.js:118 js/Printer/ContactRecord.js:45 js/Model.js:70
+#: js/Model.js:172 js/Model.js:276 js/ListEditDialog.js:137
+msgid "Description"
+msgstr "Description"
+
+#: Model/List.php:127 js/ListMemberRoleGridPanel.js:37
+#: js/ListRoleGridPanel.js:71
+msgid "Members"
+msgstr "Members"
+
+#: Model/List.php:133 js/ListGrid.js:103 js/ContactEditDialog.js:259
+#: js/ContactGridDetailsPanel.js:129 js/ContactGridDetailsPanel.js:206
+#: js/Model.js:64 js/Model.js:173 js/ListEditDialog.js:101
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: Model/List.php:148 js/ListGrid.js:104 js/ListEditDialog.js:108
+msgid "List type"
+msgstr "List type"
+
+#: Setup/Initialize.php:126 Setup/Update/Release3.php:37
+msgid "All contacts I have read grants for"
+msgstr "All contacts I have read grants for"
+
+#: Setup/Initialize.php:131
+msgid "My company"
+msgstr "My company"
+
+#: Setup/Initialize.php:132
+msgid "All coworkers in my company"
+msgstr "All coworkers in my company"
+
+#: Setup/Initialize.php:145
+msgid "My contacts"
+msgstr "My contacts"
+
+#: Setup/Initialize.php:146
+msgid "All contacts in my Addressbooks"
+msgstr "All contacts in my Addressbooks"
+
+#: Setup/Initialize.php:158
+msgid "Last modified by me"
+msgstr "Last modified by me"
+
+#: Setup/Initialize.php:159
+msgid "All contacts that I have last modified"
+msgstr "All contacts that I have last modified"
+
+#: Setup/setup.xml:431
+msgid "Internal Contacts"
+msgstr "Internal Contacts"
+
+#: Acl/Rights.php:130
+msgid "manage shared addressbooks"
+msgstr "manage shared addressbooks"
+
+#: Acl/Rights.php:131
+msgid "Create new shared addressbook folders"
+msgstr "Create new shared addressbook folders"
+
+#: Acl/Rights.php:134
+msgid "manage shared addressbook favorites"
+msgstr "manage shared addressbook favorites"
+
+#: Acl/Rights.php:135
+msgid "Create or update shared addressbook favorites"
+msgstr "Create or update shared addressbook favorites"
+
+#: Acl/Rights.php:138
+msgid "Manage lists in CoreData"
+msgstr "Manage lists in CoreData"
+
+#: Acl/Rights.php:139
+msgid "View, create, delete or update lists in CoreData application"
+msgstr "View, create, delete or update lists in CoreData application"
+
+#: Acl/Rights.php:142
+msgid "Manage list functions in CoreData"
+msgstr "Manage list functions in CoreData"
+
+#: Acl/Rights.php:143
+msgid "View, create, delete or update list functions in CoreData application"
+msgstr "View, create, delete or update list functions in CoreData application"
+
+#: Acl/Rights.php:146
+msgid "Manage list email options"
+msgstr "Manage list email options"
+
+#: Acl/Rights.php:147
+msgid "Manage list email options like mailing lists"
+msgstr "Manage list email options like mailing lists"
+
+#: tempExtract/bea6af9fd1abaa2b2ce12766a1eb6db3/word/document.xml:2
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Relation"
+msgstr[1] "Relations"
+
+#: js/ContactSearchCombo.js:73
+msgid "Search for users ..."
+msgstr "Search for users ..."
+
+#: js/ContactSearchCombo.js:74
+msgid "Search for Contacts ..."
+msgstr "Search for Contacts ..."
+
+#: js/ListGrid.js:101 js/ContactGrid.js:203
+msgid "Tags"
+msgstr "Tags"
+
+#: js/ListGrid.js:102 js/contactListsGridPanel.js:57 js/Addressbook.js:77
+#: js/Addressbook.js:112 js/ListRoleGridPanel.js:65 js/Model.js:19
+#: js/Model.js:275 js/ListEditDialog.js:95 js/ListEditDialog.js:186
+msgid "Name"
+msgstr "Name"
+
+#: js/ListGrid.js:106
+msgid "Member E-Mails"
+msgstr "Member E-Mails"
+
+#: js/ListGrid.js:148
+msgid "System Group"
+msgstr "System Group"
+
+#: js/ListGrid.js:148
+msgid "Group"
+msgstr "Group"
+
+#: js/MailinglistPanel.js:38
+msgid "Mailing List"
+msgstr "Mailing List"
+
+#: js/MailinglistPanel.js:45
+msgid "This group is a mailing list"
+msgstr "This group is a mailing list"
+
+#: js/MailinglistPanel.js:51
+msgid ""
+"Grants of a folder also apply recursively for all of its sub folders as long "
+"they don't have own grants itself."
+msgstr ""
+"Grants of a folder also apply recursively for all of its sub folders as long "
+"they don't have own grants itself."
+
+#: js/MailinglistPanel.js:55
+msgid "Keep copy of group mails"
+msgstr "Keep copy of group mails"
+
+#: js/MailinglistPanel.js:56
+msgid "Forward external mails"
+msgstr "Forward external mails"
+
+#: js/MailinglistPanel.js:57
+msgid "Only forward member mails"
+msgstr "Only forward member mails"
+
+#: js/StructurePanel.js:57
+msgid "Select record to see its details"
+msgstr "Select record to see its details"
+
+#: js/StructurePanel.js:67
+msgid ""
+"This module visualises hierarchically depended relations between records of "
+"different types."
+msgstr ""
+"This module visualises hierarchically depended relations between records of "
+"different types."
+
+#: js/StructurePanel.js:68
+msgid ""
+"Hierarchically depended relations are created automatically for some data "
+"types like users and groups, but can also be created manually via the "
+"corresponding relation types."
+msgstr ""
+"Hierarchically depended relations are created automatically for some data "
+"types like users and groups, but can also be created manually via the "
+"corresponding relation types."
+
+#: js/StructurePanel.js:489
+msgid "Loading Structure data..."
+msgstr "Loading Structure data..."
+
+#: js/ListMemberRoleGridPanel.js:207 js/ContactGrid.js:250
+msgid "List Roles"
+msgstr "List Roles"
+
+#: js/ListMemberRoleGridPanel.js:229
+msgid "Remove Member"
+msgstr "Remove Member"
+
+#: js/ListSearchCombo.js:27
+msgid "Search for system groups ..."
+msgstr "Search for system groups ..."
+
+#: js/ListSearchCombo.js:28
+msgid "Search for groups ..."
+msgstr "Search for groups ..."
+
+#: js/ContactEditDialog.js:46 js/ContactEditDialog.js:55 js/MapPanel.js:40
+msgid "Map"
+msgstr "Map"
+
+#: js/ContactEditDialog.js:104
+msgid "Personal Information"
+msgstr "Personal Information"
+
+#: js/ContactEditDialog.js:220 js/Printer/ContactRecord.js:50
+msgid "Contact Information"
+msgstr "Contact Information"
+
+#: js/ContactEditDialog.js:266 js/Model.js:65
+msgid "E-Mail (private)"
+msgstr "E-Mail (private)"
+
+#: js/ContactEditDialog.js:320 js/Printer/ContactRecord.js:75 js/Model.js:35
+#: js/Model.js:177 js/Model.js:178 js/Model.js:179 js/Model.js:180
+#: js/Model.js:181
+msgid "Company Address"
+msgstr "Company Address"
+
+#: js/ContactEditDialog.js:339 js/ContactEditDialog.js:374 js/Model.js:179
+#: js/Model.js:184
+msgid "Postal Code"
+msgstr "Postal Code"
+
+#: js/ContactEditDialog.js:425 js/ListEditDialog.js:151
+msgid "Enter description"
+msgstr "Enter description"
+
+#: js/ContactEditDialog.js:510 js/ContactEditDialog.js:552
+msgid "Parse address"
+msgstr "Parse address"
+
+#: js/ContactEditDialog.js:518
+msgid "Print contact"
+msgstr "Print contact"
+
+#: js/ContactEditDialog.js:544
+msgid "Paste address"
+msgstr "Paste address"
+
+#: js/ContactEditDialog.js:544
+msgid "Please paste an address or a URI to a vcard that should be parsed:"
+msgstr "Please paste an address or a URI to a vcard that should be parsed:"
+
+#: js/ContactEditDialog.js:570
+msgid "Failed to parse address!"
+msgstr "Failed to parse address!"
+
+#: js/ContactEditDialog.js:570
+msgid "The address could not be read."
+msgstr "The address could not be read."
+
+#: js/ContactEditDialog.js:587
+msgid "End token mode"
+msgstr "End token mode"
+
+#: js/Addressbook.js:24
+msgid "New Contact"
+msgstr "New Contact"
+
+#: js/Addressbook.js:70 js/Addressbook.js:105 js/ListRoleGridPanel.js:58
+msgid "ID"
+msgstr "ID"
+
+#: js/Addressbook.js:155 js/Model.js:413
+msgid "Structure"
+msgid_plural "Structures"
+msgstr[0] "Structure"
+msgstr[1] "Structures"
+
+#: js/Addressbook.js:170
+msgid "Resources"
+msgstr "Resources"
+
+#: js/ContactGridDetailsPanel.js:79 js/ContactGrid.js:187
+msgid "Business"
+msgstr "Business"
+
+#: js/ContactGridDetailsPanel.js:160 js/ContactGrid.js:189
+msgid "Private"
+msgstr "Private"
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr "Member of List"
+
+#: js/Printer/ContactRecord.js:87 js/Printer/ListRecord.js:66
+msgid "Related to"
+msgstr "Related to"
+
+#: js/Printer/ListRecord.js:55
+msgid "Customfields"
+msgstr "Customfields"
+
+#: js/ListRoleGridPanel.js:50 js/Model.js:353 Controller.php:195
 msgid "List Functions"
 msgstr "List Functions"
 
-#: Controller.php:202 js/Model.js:381
+#: js/ListGridDetailsPanel.js:57 js/ListGridDetailsPanel.js:83 js/Model.js:255
+#: Controller.php:186
+msgid "Lists"
+msgstr "Lists"
+
+#: js/ListGridDetailsPanel.js:60
+msgid "Select list"
+msgstr "Select list"
+
+#: js/ContactGrid.js:110
+msgid "Import contacts"
+msgstr "Import contacts"
+
+#: js/ContactGrid.js:162
+msgid "Contact of a user account"
+msgstr "Contact of a user account"
+
+#: js/ContactGrid.js:169
+msgid "No name"
+msgstr "No name"
+
+#: js/ContactGrid.js:191
+msgid "Not set"
+msgstr "Not set"
+
+#: js/ContactGrid.js:201
+msgid "Contact Image"
+msgstr "Contact Image"
+
+#: js/ContactGrid.js:202
+msgid "Attachments"
+msgstr "Attachments"
+
+#: js/Model.js:35
+msgid "Street (Company Address)"
+msgstr "Street (Company Address)"
+
+#: js/Model.js:36
+msgid "Street 2 (Company Address)"
+msgstr "Street 2 (Company Address)"
+
+#: js/Model.js:37
+msgid "City (Company Address)"
+msgstr "City (Company Address)"
+
+#: js/Model.js:38
+msgid "Region (Company Address)"
+msgstr "Region (Company Address)"
+
+#: js/Model.js:39
+msgid "Postal Code (Company Address)"
+msgstr "Postal Code (Company Address)"
+
+#: js/Model.js:40
+msgid "Country (Company Address)"
+msgstr "Country (Company Address)"
+
+#: js/Model.js:41
+msgid "Longitude (Company Address)"
+msgstr "Longitude (Company Address)"
+
+#: js/Model.js:42
+msgid "Latitude (Company Address)"
+msgstr "Latitude (Company Address)"
+
+#: js/Model.js:44
+msgid "Street (Private Address)"
+msgstr "Street (Private Address)"
+
+#: js/Model.js:45
+msgid "Street 2 (Private Address)"
+msgstr "Street 2 (Private Address)"
+
+#: js/Model.js:46
+msgid "City (Private Address)"
+msgstr "City (Private Address)"
+
+#: js/Model.js:47
+msgid "Region (Private Address)"
+msgstr "Region (Private Address)"
+
+#: js/Model.js:48
+msgid "Postal Code (Private Address)"
+msgstr "Postal Code (Private Address)"
+
+#: js/Model.js:49
+msgid "Country (Private Address)"
+msgstr "Country (Private Address)"
+
+#: js/Model.js:53
+msgid "Company Communication"
+msgstr "Company Communication"
+
+#: js/Model.js:59
+msgid "Private Communication"
+msgstr "Private Communication"
+
+#: js/Model.js:67
+msgid "Web (private)"
+msgstr "Web (private)"
+
+#: js/Model.js:101
+msgid "Contacts"
+msgstr "Contacts"
+
+#: js/Model.js:105 js/Model.js:259 js/Model.js:310
+msgid "Addressbooks"
+msgstr "Addressbooks"
+
+#: js/Model.js:156 js/Model.js:269
+msgid "User Account"
+msgstr "User Account"
+
+#: js/Model.js:159 js/Model.js:272
+msgid "Quick Search"
+msgstr "Quick Search"
+
+#: js/Model.js:188 js/Model.js:277
+msgid "Last Modified Time"
+msgstr "Last Modified Time"
+
+#: js/Model.js:189 js/Model.js:278
+msgid "Last Modified By"
+msgstr "Last Modified By"
+
+#: js/Model.js:190 js/Model.js:279
+msgid "Creation Time"
+msgstr "Creation Time"
+
+#: js/Model.js:191 js/Model.js:280
+msgid "Created By"
+msgstr "Created By"
+
+#: js/Model.js:306
+msgid "Email Address"
+msgid_plural "Email Addresses"
+msgstr[0] "Email Address"
+msgstr[1] "Email Addresses"
+
+#: js/Model.js:306
+msgid "Email Addresses"
+msgstr "Email Addresses"
+
+#: js/Model.js:337 js/Model.js:367 js/Model.js:398
+msgid "Quick search"
+msgstr "Quick search"
+
+#: js/Model.js:353 js/ListRoleMemberFilterModel.js:37
+msgid "List Function"
+msgid_plural "List Functions"
+msgstr[0] "List Function"
+msgstr[1] "List Functions"
+
+#: js/Model.js:384 Controller.php:204
 msgid "Industries"
 msgstr "Industries"
 
-#: Frontend/CardDAV/AllContacts.php:41
-msgid "All Contacts"
-msgstr "All Contacts"
+#: js/Model.js:413
+msgid "Structures"
+msgstr "Structures"
 
-#: Frontend/Cli.php:216
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "This contact has been automatically added by the system as an event attender"
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr "CardDAV URL"
+
+#: js/ListEditDialog.js:83
+msgid "List Information"
+msgstr "List Information"
+
+#: js/ListEditDialog.js:186
+#, python-brace-format
+msgid "{0} must be given"
+msgstr "{0} must be given"
+
+#: js/MapPanel.js:58
+msgid "Company address"
+msgstr "Company address"
+
+#: js/MapPanel.js:65
+msgid "Private address"
+msgstr "Private address"
 
 #: Preference.php:28
 msgid "All contacts"
@@ -80,936 +1182,17 @@ msgstr "Use this configuration for the contact XLS export."
 msgid "default"
 msgstr "default"
 
-#: js/ContactFilterModel.js:35 js/ContactGrid.js:162 js/Model.js:100
-#: js/Model.js:155
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Contact"
-msgstr[1] "Contacts"
-
-#: js/ListRoleMemberFilterModel.js:37 js/Model.js:350
-msgid "List Function"
-msgid_plural "List Functions"
-msgstr[0] "List Function"
-msgstr[1] "List Functions"
-
-#: js/ListEditDialog.js:55
-#, python-brace-format
-msgid "Print {0}"
-msgstr "Print {0}"
-
-#: js/ListEditDialog.js:86
-msgid "List Information"
-msgstr "List Information"
-
-#: js/ListEditDialog.js:98 js/ListEditDialog.js:181 js/Addressbook.js:77
-#: js/Addressbook.js:112 js/ListRoleGridPanel.js:65 js/ListGrid.js:102
-#: js/contactListsGridPanel.js:57 js/Model.js:19 js/Model.js:272
-msgid "Name"
-msgstr "Name"
-
-#: js/ListEditDialog.js:104 js/ListGrid.js:103
-msgid "List type"
-msgstr "List type"
-
-#: js/ListEditDialog.js:133 js/Printer/ContactRecord.js:45 js/Addressbook.js:83
-#: js/Addressbook.js:118 js/ContactEditDialog.js:405 js/Model.js:69
-#: js/Model.js:170 js/Model.js:273 Model/List.php:112
-msgid "Description"
-msgstr "Description"
-
-#: js/ListEditDialog.js:147 js/ContactEditDialog.js:419
-msgid "Enter description"
-msgstr "Enter description"
-
-#: js/ListEditDialog.js:181
-#, python-brace-format
-msgid "{0} must be given"
-msgstr "{0} must be given"
-
-#: js/ListSearchCombo.js:27
-msgid "Search for system groups ..."
-msgstr "Search for system groups ..."
-
-#: js/ListSearchCombo.js:28
-msgid "Search for groups ..."
-msgstr "Search for groups ..."
-
-#: js/Printer/ContactRecord.js:50 js/ContactEditDialog.js:230
-msgid "Contact Information"
-msgstr "Contact Information"
-
-#: js/Printer/ContactRecord.js:75 js/ContactEditDialog.js:327 js/Model.js:34
-#: js/Model.js:175 js/Model.js:176 js/Model.js:177 js/Model.js:178
-#: js/Model.js:179
-msgid "Company Address"
-msgstr "Company Address"
-
-#: js/Printer/ContactRecord.js:80 js/ContactEditDialog.js:356 js/Model.js:43
-#: js/Model.js:180 js/Model.js:181 js/Model.js:182 js/Model.js:183
-#: js/Model.js:184 Export/Pdf.php:88
-msgid "Private Address"
-msgstr "Private Address"
-
-#: js/Printer/ContactRecord.js:87 js/Printer/ListRecord.js:67
-msgid "Related to"
-msgstr "Related to"
-
-#: js/Printer/ListRecord.js:40 js/ListRoleGridPanel.js:71
-#: js/ListMemberRoleGridPanel.js:37 Model/List.php:118
-msgid "Members"
-msgstr "Members"
-
-#: js/Printer/ListRecord.js:56
-msgid "Customfields"
-msgstr "Customfields"
-
-#: js/Addressbook.js:24
-msgid "New Contact"
-msgstr "New Contact"
-
-#: js/Addressbook.js:34 js/Model.js:104 js/Model.js:256 js/Model.js:307
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Addressbook"
-msgstr[1] "Addressbooks"
-
-#: js/Addressbook.js:70 js/Addressbook.js:105 js/ListRoleGridPanel.js:58
-msgid "ID"
-msgstr "ID"
-
-#: js/Addressbook.js:155 js/Model.js:410
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] "Structure"
-msgstr[1] "Structures"
-
-#: js/Addressbook.js:170
-msgid "Resources"
-msgstr "Resources"
-
-#: js/ContactEditDialog.js:46 js/ContactEditDialog.js:55 js/MapPanel.js:40
-msgid "Map"
-msgstr "Map"
-
-#: js/ContactEditDialog.js:65 js/ContactEditDialog.js:80 js/ContactGrid.js:231
-#: js/Model.js:51
-msgid "Preferred Address"
-msgstr "Preferred Address"
-
-#: js/ContactEditDialog.js:115
-msgid "Personal Information"
-msgstr "Personal Information"
-
-#: js/ContactEditDialog.js:131 js/ContactGrid.js:202 js/Model.js:29
-#: js/Model.js:191
-msgid "Salutation"
-msgstr "Salutation"
-
-#: js/ContactEditDialog.js:147 js/ContactGrid.js:210 js/Model.js:22
-#: js/Model.js:162
-msgid "Title"
-msgstr "Title"
-
-#: js/ContactEditDialog.js:152 js/ContactGrid.js:213 js/Model.js:20
-#: js/Model.js:163
-msgid "First Name"
-msgstr "First Name"
-
-#: js/ContactEditDialog.js:157 js/ContactGrid.js:211 js/Model.js:21
-#: js/Model.js:165
-msgid "Middle Name"
-msgstr "Middle Name"
-
-#: js/ContactEditDialog.js:162 js/ContactGrid.js:212 js/Model.js:19
-#: js/Model.js:164
-msgid "Last Name"
-msgstr "Last Name"
-
-#: js/ContactEditDialog.js:168 js/ContactGrid.js:216 js/Model.js:27
-#: js/Model.js:166 Setup/Update/Release5.php:196 Config.php:177
-msgid "Company"
-msgstr "Company"
-
-#: js/ContactEditDialog.js:173 js/ContactGrid.js:217 js/Model.js:28
-#: js/Model.js:167
-msgid "Unit"
-msgstr "Unit"
-
-#: js/ContactEditDialog.js:179 js/Model.js:23
-msgid "Suffix"
-msgstr "Suffix"
-
-#: js/ContactEditDialog.js:183 js/ContactGrid.js:219 js/Model.js:31
-#: js/Model.js:173
-msgid "Job Role"
-msgstr "Job Role"
-
-#: js/ContactEditDialog.js:187 js/ContactGrid.js:220 js/Model.js:33
-#: Export/Pdf.php:76
-msgid "Room"
-msgstr "Room"
-
-#: js/ContactEditDialog.js:204 js/ContactGrid.js:215 js/Model.js:24
-msgid "Display Name"
-msgstr "Display Name"
-
-#: js/ContactEditDialog.js:210 js/ContactGrid.js:251 js/Model.js:381
-msgid "Industry"
-msgid_plural "Industries"
-msgstr[0] "Industry"
-msgstr[1] "Industries"
-
-#: js/ContactEditDialog.js:216 js/ContactGrid.js:218 js/Model.js:30
-#: js/Model.js:169 Export/Pdf.php:117
-msgid "Job Title"
-msgstr "Job Title"
-
-#: js/ContactEditDialog.js:222 js/ContactGrid.js:247 js/Model.js:26
-#: js/Model.js:174 Export/Pdf.php:114
-msgid "Birthday"
-msgstr "Birthday"
-
-#: js/ContactEditDialog.js:239 js/ContactGrid.js:233
-#: js/ContactGridDetailsPanel.js:117 js/Model.js:52 js/Model.js:168
-msgid "Phone"
-msgstr "Phone"
-
-#: js/ContactEditDialog.js:244 js/ContactGrid.js:234
-#: js/ContactGridDetailsPanel.js:121 js/Model.js:53
-msgid "Mobile"
-msgstr "Mobile"
-
-#: js/ContactEditDialog.js:249 js/ContactGrid.js:235
-#: js/ContactGridDetailsPanel.js:125 js/Model.js:54
-msgid "Fax"
-msgstr "Fax"
-
-#: js/ContactEditDialog.js:254 js/ContactGrid.js:238 js/Model.js:58
-msgid "Phone (private)"
-msgstr "Phone (private)"
-
-#: js/ContactEditDialog.js:259 js/ContactGrid.js:240 js/Model.js:60
-msgid "Mobile (private)"
-msgstr "Mobile (private)"
-
-#: js/ContactEditDialog.js:264 js/ContactGrid.js:239 js/Model.js:59
-msgid "Fax (private)"
-msgstr "Fax (private)"
-
-#: js/ContactEditDialog.js:269 js/ContactGridDetailsPanel.js:129 js/Model.js:63
-#: js/Model.js:171
-msgid "E-Mail"
-msgstr "E-Mail"
-
-#: js/ContactEditDialog.js:275 js/Model.js:64
-msgid "E-Mail (private)"
-msgstr "E-Mail (private)"
-
-#: js/ContactEditDialog.js:282 js/ContactGrid.js:242
-#: js/ContactGridDetailsPanel.js:135 js/Model.js:65
-msgid "Web"
-msgstr "Web"
-
-#: js/ContactEditDialog.js:330 js/ContactEditDialog.js:359
-#: js/ContactGrid.js:221 js/Model.js:175 js/Model.js:180
-msgid "Street"
-msgstr "Street"
-
-#: js/ContactEditDialog.js:334 js/ContactEditDialog.js:363
-msgid "Street 2"
-msgstr "Street 2"
-
-#: js/ContactEditDialog.js:338 js/ContactEditDialog.js:367
-#: js/ContactGrid.js:223 js/Model.js:176 js/Model.js:181
-msgid "Region"
-msgstr "Region"
-
-#: js/ContactEditDialog.js:342 js/ContactEditDialog.js:371 js/Model.js:177
-#: js/Model.js:182
-msgid "Postal Code"
-msgstr "Postal Code"
-
-#: js/ContactEditDialog.js:346 js/ContactEditDialog.js:375
-#: js/ContactGrid.js:222 js/Model.js:178 js/Model.js:183
-msgid "City"
-msgstr "City"
-
-#: js/ContactEditDialog.js:351 js/ContactEditDialog.js:380
-#: js/ContactGrid.js:225 js/Model.js:179 js/Model.js:184
-msgid "Country"
-msgstr "Country"
-
-#: js/ContactEditDialog.js:423 js/Model.js:83
-msgid "Groups"
-msgstr "Groups"
-
-#: js/ContactEditDialog.js:467 js/ContactEditDialog.js:509
-msgid "Parse address"
-msgstr "Parse address"
-
-#: js/ContactEditDialog.js:475
-msgid "Print contact"
-msgstr "Print contact"
-
-#: js/ContactEditDialog.js:501
-msgid "Paste address"
-msgstr "Paste address"
-
-#: js/ContactEditDialog.js:501
-msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr "Please paste an address or a URI to a vcard that should be parsed:"
-
-#: js/ContactEditDialog.js:527
-msgid "Failed to parse address!"
-msgstr "Failed to parse address!"
-
-#: js/ContactEditDialog.js:527
-msgid "The address could not be read."
-msgstr "The address could not be read."
-
-#: js/ContactEditDialog.js:544
-msgid "End token mode"
-msgstr "End token mode"
-
-#: js/ContactGrid.js:110
-msgid "Import contacts"
-msgstr "Import contacts"
-
-#: js/ContactGrid.js:162
-msgid "Contact of a user account"
-msgstr "Contact of a user account"
-
-#: js/ContactGrid.js:169
-msgid "No name"
-msgstr "No name"
-
-#: js/ContactGrid.js:187 js/ContactGridDetailsPanel.js:79
-msgid "Business"
-msgstr "Business"
-
-#: js/ContactGrid.js:189 js/ContactGridDetailsPanel.js:148
-msgid "Private"
-msgstr "Private"
-
-#: js/ContactGrid.js:191
-msgid "Not set"
-msgstr "Not set"
-
-#: js/ContactGrid.js:200 js/ListGrid.js:100 js/contactListsGridPanel.js:56
-#: js/Model.js:185 Model/List.php:130
-msgid "Type"
-msgstr "Type"
-
-#: js/ContactGrid.js:201 js/ListGrid.js:101
-msgid "Tags"
-msgstr "Tags"
-
-#: js/ContactGrid.js:214
-msgid "Full Name"
-msgstr "Full Name"
-
-#: js/ContactGrid.js:224
-msgid "Postalcode"
-msgstr "Postalcode"
-
-#: js/ContactGrid.js:226
-msgid "Street (private)"
-msgstr "Street (private)"
-
-#: js/ContactGrid.js:227
-msgid "City (private)"
-msgstr "City (private)"
-
-#: js/ContactGrid.js:228
-msgid "Region (private)"
-msgstr "Region (private)"
-
-#: js/ContactGrid.js:229
-msgid "Postalcode (private)"
-msgstr "Postalcode (private)"
-
-#: js/ContactGrid.js:230
-msgid "Country (private)"
-msgstr "Country (private)"
-
-#: js/ContactGrid.js:232 Model/List.php:124 Export/Pdf.php:52
-msgid "Email"
-msgstr "Email"
-
-#: js/ContactGrid.js:236
-msgid "Car phone"
-msgstr "Car phone"
-
-#: js/ContactGrid.js:237
-msgid "Pager"
-msgstr "Pager"
-
-#: js/ContactGrid.js:241
-msgid "Email (private)"
-msgstr "Email (private)"
-
-#: js/ContactGrid.js:243
-msgid "URL (private)"
-msgstr "URL (private)"
-
-#: js/ContactGrid.js:244
-msgid "Note"
-msgstr "Note"
-
-#: js/ContactGrid.js:245
-msgid "Timezone"
-msgstr "Timezone"
-
-#: js/ContactGrid.js:246
-msgid "Geo"
-msgstr "Geo"
-
-#: js/StructurePanel.js:57
-msgid "Select record to see its details"
-msgstr "Select record to see its details"
-
-#: js/StructurePanel.js:67
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr "This module visualises hierarchically depended relations between records of different types."
-
-#: js/StructurePanel.js:68
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-
-#: js/StructurePanel.js:488
-msgid "Loading Structure data..."
-msgstr "Loading Structure data..."
-
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
-msgstr "Member of List"
-
-#: js/MapPanel.js:58
-msgid "Company address"
-msgstr "Company address"
-
-#: js/MapPanel.js:65
-msgid "Private address"
-msgstr "Private address"
-
-#: js/CardDAVContainerPropertiesHookField.js:35
-msgid "CardDAV URL"
-msgstr "CardDAV URL"
-
-#: js/ListGrid.js:104
-msgid "Emails"
-msgstr "Emails"
-
-#: js/ListGrid.js:146
-msgid "System Group"
-msgstr "System Group"
-
-#: js/ListGrid.js:146
-msgid "Group"
-msgstr "Group"
-
-#: js/ListMemberRoleGridPanel.js:201
-msgid "List Roles"
-msgstr "List Roles"
-
-#: js/ListMemberRoleGridPanel.js:223
-msgid "Remove Member"
-msgstr "Remove Member"
-
-#: js/ListGridDetailsPanel.js:60
-msgid "Select list"
-msgstr "Select list"
-
-#: js/ListGridDetailsPanel.js:86 js/Model.js:252 js/Model.js:266
-#: Model/List.php:67
-msgid "List"
-msgid_plural "Lists"
-msgstr[0] "List"
-msgstr[1] "Lists"
-
-#: js/Model.js:34
-msgid "Street (Company Address)"
-msgstr "Street (Company Address)"
-
-#: js/Model.js:35
-msgid "Street 2 (Company Address)"
-msgstr "Street 2 (Company Address)"
-
-#: js/Model.js:36
-msgid "City (Company Address)"
-msgstr "City (Company Address)"
-
-#: js/Model.js:37
-msgid "Region (Company Address)"
-msgstr "Region (Company Address)"
-
-#: js/Model.js:38
-msgid "Postal Code (Company Address)"
-msgstr "Postal Code (Company Address)"
-
-#: js/Model.js:39
-msgid "Country (Company Address)"
-msgstr "Country (Company Address)"
-
-#: js/Model.js:40
-msgid "Longitude (Company Address)"
-msgstr "Longitude (Company Address)"
-
-#: js/Model.js:41
-msgid "Latitude (Company Address)"
-msgstr "Latitude (Company Address)"
-
-#: js/Model.js:43
-msgid "Street (Private Address)"
-msgstr "Street (Private Address)"
-
-#: js/Model.js:44
-msgid "Street 2 (Private Address)"
-msgstr "Street 2 (Private Address)"
-
-#: js/Model.js:45
-msgid "City (Private Address)"
-msgstr "City (Private Address)"
-
-#: js/Model.js:46
-msgid "Region (Private Address)"
-msgstr "Region (Private Address)"
-
-#: js/Model.js:47
-msgid "Postal Code (Private Address)"
-msgstr "Postal Code (Private Address)"
-
-#: js/Model.js:48
-msgid "Country (Private Address)"
-msgstr "Country (Private Address)"
-
-#: js/Model.js:52
-msgid "Company Communication"
-msgstr "Company Communication"
-
-#: js/Model.js:58
-msgid "Private Communication"
-msgstr "Private Communication"
-
-#: js/Model.js:66
-msgid "Web (private)"
-msgstr "Web (private)"
-
-#: js/Model.js:100
-msgid "Contacts"
-msgstr "Contacts"
-
-#: js/Model.js:104 js/Model.js:256 js/Model.js:307
-msgid "Addressbooks"
-msgstr "Addressbooks"
-
-#: js/Model.js:155 js/Model.js:266
-msgid "User Account"
-msgstr "User Account"
-
-#: js/Model.js:158 js/Model.js:269
-msgid "Quick Search"
-msgstr "Quick Search"
-
-#: js/Model.js:186 js/Model.js:274
-msgid "Last Modified Time"
-msgstr "Last Modified Time"
-
-#: js/Model.js:187 js/Model.js:275
-msgid "Last Modified By"
-msgstr "Last Modified By"
-
-#: js/Model.js:188 js/Model.js:276
-msgid "Creation Time"
-msgstr "Creation Time"
-
-#: js/Model.js:189 js/Model.js:277
-msgid "Created By"
-msgstr "Created By"
-
-#: js/Model.js:303
-msgid "Email Address"
-msgid_plural "Email Addresses"
-msgstr[0] "Email Address"
-msgstr[1] "Email Addresses"
-
-#: js/Model.js:303
-msgid "Email Addresses"
-msgstr "Email Addresses"
-
-#: js/Model.js:334 js/Model.js:364 js/Model.js:395
-msgid "Quick search"
-msgstr "Quick search"
-
-#: js/Model.js:410
-msgid "Structures"
-msgstr "Structures"
-
-#: js/ContactSearchCombo.js:68
-msgid "Search for users ..."
-msgstr "Search for users ..."
-
-#: js/ContactSearchCombo.js:69
-msgid "Search for Contacts ..."
-msgstr "Search for Contacts ..."
-
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:125
-msgid "All contacts I have read grants for"
-msgstr "All contacts I have read grants for"
-
-#: Setup/Update/Release5.php:194 Config.php:175
-msgid "Mr"
-msgstr "Mr"
-
-#: Setup/Update/Release5.php:195 Config.php:176
-msgid "Ms"
-msgstr "Ms"
-
-#: Setup/setup.xml:964
-msgid "Internal Contacts"
-msgstr "Internal Contacts"
-
-#: Setup/Initialize.php:130
-msgid "My company"
-msgstr "My company"
-
-#: Setup/Initialize.php:131
-msgid "All coworkers in my company"
-msgstr "All coworkers in my company"
-
-#: Setup/Initialize.php:144
-msgid "My contacts"
-msgstr "My contacts"
-
-#: Setup/Initialize.php:145
-msgid "All contacts in my Addressbooks"
-msgstr "All contacts in my Addressbooks"
-
-#: Setup/Initialize.php:157
-msgid "Last modified by me"
-msgstr "Last modified by me"
-
-#: Setup/Initialize.php:158
-msgid "All contacts that I have last modified"
-msgstr "All contacts that I have last modified"
-
-#: Config.php:102
-msgid "Enabled Features"
-msgstr "Enabled Features"
-
-#: Config.php:104
-msgid "Enabled Features in Calendar Application."
-msgstr "Enabled Features in Calendar Application."
-
-#: Config.php:112
-msgid "Addressbook List View"
-msgstr "Addressbook List View"
-
-#: Config.php:114
-msgid "Shows an additional view for lists inside the addressbook"
-msgstr "Shows an additional view for lists inside the addressbook"
-
-#: Config.php:117
-msgid "Addressbook Industries"
-msgstr "Addressbook Industries"
-
-#: Config.php:118
-msgid "Add Industry field to Adressbook"
-msgstr "Add Industry field to Adressbook"
-
-#: Config.php:121
-msgid "Manage resources in Addressbook"
-msgstr "Manage resources in Addressbook"
-
-#: Config.php:122
-msgid "Show the resources grid also inside the Addressbook"
-msgstr "Show the resources grid also inside the Addressbook"
-
-#: Config.php:125
-msgid "Show Structure Panel in Addressbook"
-msgstr "Show Structure Panel in Addressbook"
-
-#: Config.php:126
-msgid "Visualize relations of records"
-msgstr "Visualize relations of records"
-
-#: Config.php:137
-msgid "Contact duplicate check fields"
-msgstr "Contact duplicate check fields"
-
-#: Config.php:139
-msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
-msgstr "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
-
-#: Config.php:156
-msgid "Contact Hidden Criteria"
-msgstr "Contact Hidden Criteria"
-
-#: Config.php:158
-msgid "The contact is hidden if it is ... (one of: disabled, expired or never)"
-msgstr "The contact is hidden if it is ... (one of: disabled, expired or never)"
-
-#: Config.php:165
-msgid "Contact salutations available"
-msgstr "Contact salutations available"
-
-#: Config.php:167
-msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
-msgstr "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
-
-#: Config.php:183
-msgid "Parsing rules for addresses"
-msgstr "Parsing rules for addresses"
-
-#: Config.php:185
-msgid "Path to a XML file with address parsing rules."
-msgstr "Path to a XML file with address parsing rules."
-
-#: Config.php:193
-msgid "List types available"
-msgstr "List types available"
-
-#: Config.php:195
-msgid "List types available."
-msgstr "List types available."
-
-#: Config.php:202
-msgid "Department"
-msgstr "Department"
-
-#: Config.php:203
-msgid "Mailing list"
-msgstr "Mailing list"
-
-#: Config.php:208
-msgid "Use Nominatim during contact import"
-msgstr "Use Nominatim during contact import"
-
-#: Config.php:218 Config.php:220
-msgid "Sync Backends"
-msgstr "Sync Backends"
-
-#: Controller/Contact.php:596
-msgid "Uploaded new contact image."
-msgstr "Uploaded new contact image."
-
-#: Controller/Contact.php:599
-msgid "Deleted contact image."
-msgstr "Deleted contact image."
-
-#: Model/List.php:106
-msgid "Percent"
-msgstr "Percent"
-
-#: Export/Pdf.php:37
-msgid "Business Contact Data"
-msgstr "Business Contact Data"
-
-#: Export/Pdf.php:39
-msgid "Organisation / Unit"
-msgstr "Organisation / Unit"
-
-#: Export/Pdf.php:44
-msgid "Business Address"
-msgstr "Business Address"
-
-#: Export/Pdf.php:55
-msgid "Telephone Work"
-msgstr "Telephone Work"
-
-#: Export/Pdf.php:58
-msgid "Telephone Cellphone"
-msgstr "Telephone Cellphone"
-
-#: Export/Pdf.php:61
-msgid "Telephone Car"
-msgstr "Telephone Car"
-
-#: Export/Pdf.php:64
-msgid "Telephone Fax"
-msgstr "Telephone Fax"
-
-#: Export/Pdf.php:67
-msgid "Telephone Page"
-msgstr "Telephone Page"
-
-#: Export/Pdf.php:70
-msgid "URL"
-msgstr "URL"
-
-#: Export/Pdf.php:73
-msgid "Role"
-msgstr "Role"
-
-#: Export/Pdf.php:79
-msgid "Assistant"
-msgstr "Assistant"
-
-#: Export/Pdf.php:82
-msgid "Assistant Telephone"
-msgstr "Assistant Telephone"
-
-#: Export/Pdf.php:86
-msgid "Private Contact Data"
-msgstr "Private Contact Data"
-
-#: Export/Pdf.php:96
-msgid "Email Home"
-msgstr "Email Home"
-
-#: Export/Pdf.php:99
-msgid "Telephone Home"
-msgstr "Telephone Home"
-
-#: Export/Pdf.php:102
-msgid "Telephone Cellphone Private"
-msgstr "Telephone Cellphone Private"
-
-#: Export/Pdf.php:105
-msgid "Telephone Fax Home"
-msgstr "Telephone Fax Home"
-
-#: Export/Pdf.php:108
-msgid "URL Home"
-msgstr "URL Home"
-
-#: Export/Pdf.php:112
-msgid "Other Data"
-msgstr "Other Data"
-
-#: Export/definitions/adb_list_overview_xls.xml:5
-#: Export/definitions/adb_xls_overview.xml:5
-msgid "Excel overview"
-msgstr "Excel overview"
-
-#: Export/definitions/adb_list_doc.xml:5 Export/definitions/adb_doc.xml:5
-msgid "Word details"
-msgstr "Word details"
-
-#: Export/definitions/adb_list_doc.xml:21
-msgid "Relations"
-msgstr "Relations"
-
-#: Export/definitions/adb_csv.xml:5
-msgid "CSV all data"
-msgstr "CSV all data"
-
-#: Export/definitions/adb_pdf.xml:5
-msgid "PDF details"
-msgstr "PDF details"
-
-#: Export/definitions/adb_xls.xml:5 Export/definitions/adb_list_xls.xml:5
-msgid "Excel all data"
-msgstr "Excel all data"
-
-#: Export/definitions/adb_doc_letter.xml:6
-msgid "Word letter"
-msgstr "Word letter"
-
-#: Export/definitions/adb_default_ods.xml:7
-msgid "OpenDocument all data"
-msgstr "OpenDocument all data"
-
-#: Export/definitions/adb_by_company_xls.xml:7
-msgid "Excel phone list"
-msgstr "Excel phone list"
-
-#: Export/definitions/adb_by_company_xls.xml:9
-msgid "Excel phone list grouped by company"
-msgstr "Excel phone list grouped by company"
-
-#: Import/definitions/adb_outlook_import_csv.xml:10
-msgid "Import CSV formated contacts from Exchange / Outlook address book"
-msgstr "Import CSV formated contacts from Exchange / Outlook address book"
-
-#: Import/definitions/adb_outlook_import_csv.xml:14
-msgid "Contact CSV import from Outlook address book"
-msgstr "Contact CSV import from Outlook address book"
-
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:10
-msgid "Import CSV formated contacts from Outlook 2007 German address book"
-msgstr "Import CSV formated contacts from Outlook 2007 German address book"
-
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:15
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 German"
-
-#: Import/definitions/adb_google_import_csv.xml:11
-msgid "Import CSV formated contacts from Google address book"
-msgstr "Import CSV formated contacts from Google address book"
-
-#: Import/definitions/adb_google_import_csv.xml:13
-msgid "Contact import from Google address book"
-msgstr "Contact import from Google address book"
-
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Tine 2.0 contact CSV import"
-msgstr "Tine 2.0 contact CSV import"
-
-#: Import/definitions/adb_tine_import_csv.xml:13
-msgid "Import CSV formated contacts from Tine 2.0 address book"
-msgstr "Import CSV formated contacts from Tine 2.0 address book"
-
-#: Import/definitions/adb_tine_import_csv.xml:19
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Import list (###CURRENTDATE###)"
-
-#: Import/definitions/adb_tine_import_csv.xml:21
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-
-#: Import/definitions/adb_lxoffice_import_csv.xml:11
-msgid "LX-Office CSV Contact import"
-msgstr "LX-Office CSV Contact import"
-
-#: Import/definitions/adb_lxoffice_import_csv.xml:13
-msgid "Import CSV formated contacts from LX-Office"
-msgstr "Import CSV formated contacts from LX-Office"
-
-#: Import/definitions/adb_import_vcard.xml:9
-msgid "Import vCard formated contacts"
-msgstr "Import vCard formated contacts"
-
-#: Import/definitions/adb_import_vcard.xml:15
-msgid "Contact VCARD import"
-msgstr "Contact VCARD import"
-
-#: Import/definitions/adb_mac_import_csv.xml:17
-msgid "Contact CSV import from mac address book"
-msgstr "Contact CSV import from mac address book"
-
-#: Acl/Rights.php:122
-msgid "manage shared addressbooks"
-msgstr "manage shared addressbooks"
-
-#: Acl/Rights.php:123
-msgid "Create new shared addressbook folders"
-msgstr "Create new shared addressbook folders"
-
-#: Acl/Rights.php:126
-msgid "manage shared addressbook favorites"
-msgstr "manage shared addressbook favorites"
-
-#: Acl/Rights.php:127
-msgid "Create or update shared addressbook favorites"
-msgstr "Create or update shared addressbook favorites"
-
-#: Acl/Rights.php:130
-msgid "Manage lists in CoreData"
-msgstr "Manage lists in CoreData"
-
-#: Acl/Rights.php:131
-msgid "View, create, delete or update lists in CoreData application"
-msgstr "View, create, delete or update lists in CoreData application"
-
-#: Acl/Rights.php:134
-msgid "Manage list functions in CoreData"
-msgstr "Manage list functions in CoreData"
-
-#: Acl/Rights.php:135
-msgid "View, create, delete or update list functions in CoreData application"
-msgstr "View, create, delete or update list functions in CoreData application"
-
-msgid "This Short Name already exists. How about {0}?"
-msgstr "This Short Name already exists. How about {0}?"
+#: Controller.php:131
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s's personal addressbook"
+
+#: Frontend/Cli.php:235
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+"This contact has been automatically added by the system as an event attender"
+
+#: Frontend/CardDAV/AllContacts.php:41
+msgid "All Contacts"
+msgstr "All Contacts"

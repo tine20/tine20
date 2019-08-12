@@ -217,6 +217,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     hasQuickSearchFilterToolbarPlugin: true,
 
     /**
+     * display selections helper on paging tb
+     * @cfg {Boolean} displaySelectionHelper
+     */
+    displaySelectionHelper: true,
+
+    /**
      * disable 'select all pages' in paging toolbar
      * @cfg {Boolean} disableSelectAllPages
      */
@@ -1421,10 +1427,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nEmptyText = i18n.gettext('No data to display');
         
         // init sel model
-        this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
-            store: this.store,
-            gridPanel: this
-        });
+        if (! this.selectionModel) {
+            this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
+                store: this.store,
+                gridPanel: this
+            });
+        }
+
         this.selectionModel.on('selectionchange', function(sm) {
             this.actionUpdater.updateActions(sm);
 
@@ -1441,7 +1450,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 displayInfo: true,
                 displayMsg: i18n._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
                 emptyMsg: String.format(i18n._("No {0} to display"), this.i18nRecordsName),
-                displaySelectionHelper: true,
+                displaySelectionHelper: this.displaySelectionHelper,
                 sm: this.selectionModel,
                 disableSelectAllPages: this.disableSelectAllPages,
                 nested: this.editDialog ? true : false
