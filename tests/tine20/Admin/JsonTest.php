@@ -1610,16 +1610,13 @@ class Admin_JsonTest extends TestCase
 
     public function testEmailAccountApi()
     {
-        $domain = Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->domain;
-        if (empty($domain)) $domain = 'foo.bar';
-
         $this->_uit = $this->_json;
         $account = $this->_testSimpleRecordApi(
             'EmailAccount', // use non-existant model to make simple api test work
             'name',
             'email',
             true,
-            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . $domain]
+            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . $this->_getMailDomain()]
         );
         self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
 
@@ -1675,5 +1672,19 @@ class Admin_JsonTest extends TestCase
         } finally {
             $this->_json->deleteEmailAccounts($account->getId());
         }
+    }
+
+    public function testUpdateSystemAccount()
+    {
+        $systemaccount = $this->_getTestUserFelamimailAccount();
+        $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
+        $systemaccountArray['reply_to'] = 'someotheraddress@' . $this->_getMailDomain();
+
+        // js fe sends credentials_id fields as empty string ...
+        $systemaccountArray['credentials_id'] = '';
+        $systemaccountArray['smtp_credentials_id'] = '';
+
+        $updatedAccount = $this->_json->saveEmailAccount($systemaccountArray);
+        self::assertEquals($systemaccountArray['reply_to'], $updatedAccount['reply_to']);
     }
 }

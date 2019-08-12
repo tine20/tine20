@@ -72,7 +72,7 @@ class Felamimail_Controller_MessageTest extends TestCase
      */
     protected function setUp()
     {
-        $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        $this->_account    = $this->_getTestUserFelamimailAccount();
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         
         $this->_folder     = $this->getFolder($this->_testFolderName);

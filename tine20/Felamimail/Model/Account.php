@@ -141,6 +141,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => null,
+                ],
                 self::OMIT_MOD_LOG => true,
                 self::NULLABLE                  => true,
             ],
@@ -377,6 +380,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::OMIT_MOD_LOG => true,
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => null,
+                ],
             ],
             'smtp_user' => [
                 self::TYPE => self::TYPE_STRING,

@@ -1313,7 +1313,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $identifier = $_record->getIdProperty();
         
         if (!$_record instanceof $this->_modelName) {
-            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
+            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "'
+                . get_class($_record) . '". but should be instance of ' . $this->_modelName);
         }
 
         /** @var Tinebase_Record_Interface $_record */
@@ -1329,7 +1330,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id),
         );
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($recordArray, true));
+
         $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
 
         // update custom fields
