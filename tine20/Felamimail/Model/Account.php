@@ -86,7 +86,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
-                    ['InArray', [self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED]]
+                    ['InArray', [self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED, self::TYPE_USER_INTERNAL]]
                 ],
                 self::QUERY_FILTER              => true,
             ],

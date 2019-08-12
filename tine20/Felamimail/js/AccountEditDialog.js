@@ -87,11 +87,16 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'type':
                     item.setDisabled(this.record.id);
                     break;
+                case 'password':
+                    // TODO make it work consistently
+                    item.setDisabled(! (this.record.get('type') == 'shared' || this.record.get('type') == 'user'));
+                    break;
+                case 'user':
+                    item.setDisabled(! (this.record.get('type') == 'userInternal' || this.record.get('type') == 'user'));
+                    break;
                 case 'host':
                 case 'port':
                 case 'ssl':
-                case 'user':
-                case 'password':
                 case 'smtp_hostname':
                 case 'smtp_port':
                 case 'smtp_ssl':
@@ -111,7 +116,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     isSystemAccount: function() {
-        return this.record.get('type') == 'system' || this.record.get('type') == 'shared';
+        return this.record.get('type') == 'system' || this.record.get('type') == 'shared' || this.record.get('type') == 'userInternal';
     },
     
     /**
@@ -184,9 +189,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             xtype: 'combo',
                             store: [
                                 ['user', this.app.i18n._('External E-Mail Account')],
+                                ['userInternal', this.app.i18n._('User Defined Personal System Account')],
                                 ['shared', this.app.i18n._('Shared System Account')],
-                                ['system', this.app.i18n._('Personal System Account')],
-                            ]
+                                ['system', this.app.i18n._('Personal System Account')], // can't be selected for new accounts
+                            ],
+                            listeners: {
+                                scope: this,
+                                select: function(combo, record) {
+                                    if (record.get('field1') === 'system') {
+                                        combo.markInvalid(this.app.i18n._('It is not possible to create new personal system accounts'));
+                                    }
+                                },
+                                blur: function() {
+                                    this.disableFormFields();
+                                }
+                            }
                         }, {
                             fieldLabel: this.app.i18n._('User Email'),
                             name: 'email',
@@ -271,6 +288,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Password'),
                     name: 'password',
                     emptyText: 'password',
+                    xtype: 'tw-passwordTriggerField',
                     inputType: 'password'
                 }]]
             }, {
@@ -327,6 +345,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Password (optional)'),
                     name: 'smtp_password',
                     emptyText: 'password',
+                    xtype: 'tw-passwordTriggerField',
                     inputType: 'password'
                 }]]
             }, {
