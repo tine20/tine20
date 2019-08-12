@@ -54,11 +54,115 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     getFormItems: function () {
-        var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
-            app: this.app,
-            editDialog: this,
-            disabled: ! (Tine.Tinebase.registry.get('manageImapEmailUser') && Tine.Tinebase.registry.get('manageSmtpEmailUser'))
-        });
+        var tabpanelItems = [{
+            title: this.app.i18n.n_('List', 'Lists', 1),
+            border: false,
+            frame: true,
+            layout: 'border',
+            items: [{
+                region: 'center',
+                layout: 'border',
+                items: [{
+                    xtype: 'fieldset',
+                    region: 'north',
+                    autoHeight: true,
+                    title: this.app.i18n._('List Information'),
+                    items: [{
+                        xtype: 'panel',
+                        layout: 'hbox',
+                        align: 'stretch',
+                        items: [{
+                            flex: 1,
+                            xtype: 'columnform',
+                            autoHeight: true,
+                            style:'padding-right: 5px;',
+                            items: [[{
+                                columnWidth: 1,
+                                fieldLabel: this.app.i18n._('Name'),
+                                name: 'name',
+                                maxLength: 64
+                            }], [{
+                                columnWidth: 1,
+                                xtype: 'textfield',
+                                fieldLabel: this.app.i18n._('E-Mail'),
+                                name: 'email',
+                                vtype: 'email',
+                                maxLength: 255,
+                                allowBlank: true
+                            }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                columnWidth: 1,
+                                fieldLabel: this.app.i18n._('List type'),
+                                name: 'list_type',
+                                app: 'Addressbook',
+                                keyFieldName: 'listType',
+                                value: ''
+                            })
+                            ]]
+                        }]
+                    }]
+                },
+                    // TODO allow user to switch between those two grid panels (card layout?)
+                    this.memberGridPanel,
+                    this.memberRolesPanel
+                ]
+            }, {
+                // activities and tags
+                region: 'east',
+                layout: 'ux.multiaccordion',
+                animate: true,
+                width: 210,
+                split: true,
+                collapsible: true,
+                collapseMode: 'mini',
+                header: false,
+                margins: '0 5 0 5',
+                border: true,
+                items: [
+                    new Ext.Panel({
+                        // @todo generalise!
+                        title: this.app.i18n._('Description'),
+                        iconCls: 'descriptionIcon',
+                        layout: 'form',
+                        labelAlign: 'top',
+                        border: false,
+                        items: [{
+                            style: 'margin-top: -4px; border 0px;',
+                            labelSeparator: '',
+                            xtype: 'textarea',
+                            name: 'description',
+                            hideLabel: true,
+                            grow: false,
+                            preventScrollbars: false,
+                            anchor: '100% 100%',
+                            emptyText: this.app.i18n._('Enter description'),
+                            requiredGrant: 'editGrant'
+                        }]
+                    }),
+                    new Tine.widgets.tags.TagPanel({
+                        app: 'Addressbook',
+                        border: false,
+                        bodyStyle: 'border:1px solid #B5B8C8;'
+                    })
+                ]
+            }]
+        },
+            new Tine.widgets.activities.ActivitiesTabPanel({
+                app: this.appName,
+                record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
+                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+            })
+        ];
+
+        if (Tine.Tinebase.registry.get('manageImapEmailUser') &&
+            Tine.Tinebase.registry.get('manageSmtpEmailUser') &&
+            this.app.featureEnabled('featureMailinglist'))
+        {
+            var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
+                app: this.app,
+                editDialog: this,
+            });
+            tabpanelItems.push(mailingListPanel);
+        }
 
         return {
             xtype: 'tabpanel',
@@ -68,105 +172,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],
-            items: [{
-                title: this.app.i18n.n_('List', 'Lists', 1),
-                border: false,
-                frame: true,
-                layout: 'border',
-                items: [{
-                    region: 'center',
-                    layout: 'border',
-                    items: [{
-                        xtype: 'fieldset',
-                        region: 'north',
-                        autoHeight: true,
-                        title: this.app.i18n._('List Information'),
-                        items: [{
-                            xtype: 'panel',
-                            layout: 'hbox',
-                            align: 'stretch',
-                            items: [{
-                                flex: 1,
-                                xtype: 'columnform',
-                                autoHeight: true,
-                                style:'padding-right: 5px;',
-                                items: [[{
-                                    columnWidth: 1,
-                                    fieldLabel: this.app.i18n._('Name'),
-                                    name: 'name',
-                                    maxLength: 64
-                                }], [{
-                                    columnWidth: 1,
-                                    xtype: 'textfield',
-                                    fieldLabel: this.app.i18n._('E-Mail'),
-                                    name: 'email',
-                                    vtype: 'email',
-                                    maxLength: 255,
-                                    allowBlank: true
-                                }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
-                                        columnWidth: 1,
-                                        fieldLabel: this.app.i18n._('List type'),
-                                        name: 'list_type',
-                                        app: 'Addressbook',
-                                        keyFieldName: 'listType',
-                                        value: ''
-                                    })
-                                ]]
-                            }]
-                        }]
-                    },
-                        // TODO allow user to switch between those two grid panels (card layout?)
-                        this.memberGridPanel,
-                        this.memberRolesPanel
-                    ]
-                }, {
-                    // activities and tags
-                    region: 'east',
-                    layout: 'ux.multiaccordion',
-                    animate: true,
-                    width: 210,
-                    split: true,
-                    collapsible: true,
-                    collapseMode: 'mini',
-                    header: false,
-                    margins: '0 5 0 5',
-                    border: true,
-                    items: [
-                        new Ext.Panel({
-                            // @todo generalise!
-                            title: this.app.i18n._('Description'),
-                            iconCls: 'descriptionIcon',
-                            layout: 'form',
-                            labelAlign: 'top',
-                            border: false,
-                            items: [{
-                                style: 'margin-top: -4px; border 0px;',
-                                labelSeparator: '',
-                                xtype: 'textarea',
-                                name: 'description',
-                                hideLabel: true,
-                                grow: false,
-                                preventScrollbars: false,
-                                anchor: '100% 100%',
-                                emptyText: this.app.i18n._('Enter description'),
-                                requiredGrant: 'editGrant'
-                            }]
-                        }),
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Addressbook',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        })
-                    ]
-                }]
-            },
-            new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            }),
-            mailingListPanel
-            ]
+            items: tabpanelItems
         };
     },
     
