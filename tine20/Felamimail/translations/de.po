@@ -1572,3 +1572,6 @@ msgstr "Gemeinsames Systemkonto"
 
 msgid "It is not possible to create new personal system accounts"
 msgstr "Es ist nicht möglich, neue persönliche Systemkonten zu erstellen"
+
+msgid "Use"
+msgstr "Benutzen"

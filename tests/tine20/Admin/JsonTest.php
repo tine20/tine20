@@ -1637,9 +1637,22 @@ class Admin_JsonTest extends TestCase
             'email' => 'shooo@' . $this->_getMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
+            'grants' => [
+                [
+                    'readGrant' => true,
+                    'editGrant' => true,
+                    'account_type' => 'user',
+                    'account_id' => Tinebase_Core::getUser()->getId(),
+                ]
+            ]
         ];
         $account = $this->_json->saveEmailAccount($accountdata);
         self::assertEquals($accountdata['email'], $account['email']);
+        self::assertTrue(isset($account['grants']), 'grants missing');
+        self::assertEquals(1, count($account['grants']));
+        self::assertTrue(isset($account['grants'][0]['account_name']), 'account_id missing: '. print_r($account['grants'], true));
+        self::assertTrue(is_array($account['grants'][0]['account_name']), 'account_id needs to be resolved: '
+            . print_r($account['grants'], true));
         $account['display_format'] = Felamimail_Model_Account::DISPLAY_PLAIN;
         // client sends empty pws - should not be changed!
         $account['password'] = '';

@@ -130,7 +130,15 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         
         return false;
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getGrantsModel()
+    {
+        return $this->_grantsModel;
+    }
+
     /**
      * set relations / tags / alarms / grants
      * 

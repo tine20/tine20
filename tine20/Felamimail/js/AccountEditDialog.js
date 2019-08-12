@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -62,7 +62,18 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         if (! this.copyRecord && ! this.record.id && this.window) {
             this.window.setTitle(this.app.i18n._('Add New Account'));
+        } else {
+            this.grantsGrid.setValue(this.record.get('grants'));
         }
+    },
+
+    /**
+     * executed when record gets updated from form
+     */
+    onRecordUpdate: function(callback, scope) {
+        Tine.Felamimail.AccountEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+
+        this.record.set('grants', this.grantsGrid.getValue());
     },
 
     disableFormFields: function() {
@@ -71,9 +82,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             // only enable some fields
             switch (item.name) {
                 case 'user_id':
-                    item.setDisabled(! this.asAdminModule);
                     if (! this.asAdminModule) {
                         item.hide();
+                    } else {
+                        item.setDisabled(this.record.get('type') != 'userInternal');
                     }
                     break;
                 case 'signature':
@@ -113,6 +125,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(! this.asAdminModule && this.isSystemAccount());
             }
         }, this);
+
+        this.grantsGrid.setDisabled(! (this.record.get('type') == 'shared' && this.asAdminModule));
     },
 
     isSystemAccount: function() {
@@ -138,6 +152,18 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             plugins: [
                 new Ext.ux.form.HtmlEditor.RemoveFormat()
             ]
+        });
+
+        this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
+            selectType: 'both',
+            title:  i18n._('Permissions'),
+            store: this.getGrantsStore(),
+            hasAccountPrefix: true,
+            configColumns: this.getGrantsColumns(),
+            selectTypeDefault: 'group',
+            height : 250,
+            disabled: ! this.asAdminModule,
+            recordClass: Tine.Tinebase.Model.Grant
         });
         
         var commonFormDefaults = {
@@ -198,6 +224,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 select: function(combo, record) {
                                     if (record.get('field1') === 'system') {
                                         combo.markInvalid(this.app.i18n._('It is not possible to create new personal system accounts'));
+                                    } else {
+                                        // apply to record for disableFormFields()
+                                        this.record.set('type', record.get('field1'));
                                     }
                                 },
                                 blur: function() {
@@ -466,7 +495,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'reply_to',
                     vtype: 'email'
                 }]]
-            }]
+            },
+            this.grantsGrid
+            ]
         };
     },
     
@@ -479,7 +510,42 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.saving = false;
         Tine.Felamimail.handleRequestException(exception);
         this.loadMask.hide();
-    }    
+    },
+
+    getGrantsColumns: function() {
+        return [
+            new Ext.ux.grid.CheckColumn({
+                header: i18n._('Use'),
+                dataIndex: 'readGrant',
+                tooltip: i18n._('The grant use the shared email account'),
+                width: 55
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: i18n._('Edit'),
+                tooltip: i18n._('The grant edit the shared email account'),
+                dataIndex: 'editGrant',
+                width: 55
+            }),
+        ];
+    },
+
+    /**
+     * get grants store
+     *
+     * @return Ext.data.JsonStore
+     */
+    getGrantsStore: function() {
+        if (! this.grantsStore) {
+            this.grantsStore = new Ext.data.JsonStore({
+                root: 'results',
+                totalProperty: 'totalcount',
+                // use account_id here because that simplifies the adding of new records with the search comboboxes
+                id: 'account_id',
+                fields: Tine.Tinebase.Model.Grant
+            });
+        }
+        return this.grantsStore;
+    }
 });
 
 /**
