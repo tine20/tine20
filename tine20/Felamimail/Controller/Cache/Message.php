@@ -760,35 +760,20 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _addMessagesToCacheAndIncreaseCounters($_messages, $_folder)
     {
-        $incrementMessagesCounter = 0;
-        $incrementUnreadCounter   = 0;
-        
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
         foreach ($_messages as $uid => $message) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 .  " Add message $uid to cache");
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 .  ' ' . print_r($message, TRUE));
-            $addedMessage = $this->addMessage($message, $_folder, false);
-            
-            if ($addedMessage) {
+
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            if ($this->addMessage($message, $_folder)) {
                 $_folder->cache_job_actions_done++;
-                $incrementMessagesCounter++;
-                if (! $addedMessage->hasSeenFlag()) {
-                    $incrementUnreadCounter++;
-                }
             }
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Added $incrementMessagesCounter ($incrementUnreadCounter) new (unread) messages to cache.");
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        
-        $_folder = Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
-            'cache_totalcount'  => "+$incrementMessagesCounter",
-            'cache_unreadcount' => "+$incrementUnreadCounter",
-        ));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Added some new (unread) messages to cache.");
     }
     
     /**
