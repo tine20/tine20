@@ -282,7 +282,7 @@ class Tinebase_FileSystem_Previews
 
         try {
 
-            $fileSystem->acquireWriteLock();
+            $this->_fsController->acquireWriteLock();
 
             $files = array();
             $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
