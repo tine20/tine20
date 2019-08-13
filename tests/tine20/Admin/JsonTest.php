@@ -1722,4 +1722,21 @@ class Admin_JsonTest extends TestCase
             self::assertEquals('email account already exists', $ted->getMessage());
         }
     }
+
+    public function testUpdateSystemAccountChangeUsername()
+    {
+        $this->_uit = $this->_json;
+        $accountdata = [
+            'email' => 'shooo@' . $this->_getMailDomain(),
+            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'password' => '123',
+        ];
+        $account = $this->_json->saveEmailAccount($accountdata);
+        $account['user'] = 'someusername';
+
+        $updatedAccount = $this->_json->saveEmailAccount($account);
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($updatedAccount['id']);
+        $imapConfig = $fmailaccount->getImapConfig();
+        self::assertNotEquals($account['user'], $imapConfig['user']);
+    }
 }
