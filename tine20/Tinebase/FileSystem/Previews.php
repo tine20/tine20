@@ -197,8 +197,7 @@ class Tinebase_FileSystem_Previews
             return true;
         }
 
-        $fileSystem = Tinebase_FileSystem::getInstance();
-        $path = $fileSystem->getRealPathForHash($node->hash);
+        $path = $this->_fsController->getRealPathForHash($node->hash);
         $tempPath = Tinebase_TempFile::getTempPath() . '.' . pathinfo($node->name, PATHINFO_EXTENSION);
         if (!is_file($path)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -232,29 +231,22 @@ class Tinebase_FileSystem_Previews
             }
         }
 
-        // reduce deadlock risk. We (remove and) create the base folder outside the transaction. This will fill
-        // the stat cache and the update on the directory tree hashes will happen without prio read locks
-        $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
-        if (!$fileSystem->isDir($basePath)) {
-            $fileSystem->mkdir($basePath);
-        } else {
-            if ($fileSystem->fileExists($basePath)) {
-                $fileSystem->rmdir($basePath, true);
-            }
-            $fileSystem->mkdir($basePath);
-        }
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         try {
+            $this->_fsController->acquireWriteLock();
 
-            $fileSystem->acquireWriteLock();
-
-            $files = array();
             $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
-            if (!$fileSystem->isDir($basePath)) {
-                $fileSystem->mkdir($basePath);
+            if (!$this->_fsController->isDir($basePath)) {
+                $this->_fsController->mkdir($basePath);
+            } else {
+                if ($this->_fsController->fileExists($basePath)) {
+                    $this->_fsController->rmdir($basePath, true);
+                }
+                $this->_fsController->mkdir($basePath);
             }
 
+            $files = [];
             $maxCount = 0;
             foreach ($config as $key => $cnf) {
                 $i = 0;
@@ -265,11 +257,10 @@ class Tinebase_FileSystem_Previews
                     $maxCount = $i;
                 }
             }
-
             unset($result);
 
             if ((int)$node->preview_count !== $maxCount) {
-                $fileSystem->updatePreviewCount($node->hash, $maxCount);
+                $this->_fsController->updatePreviewCount($node->hash, $maxCount);
             }
 
             foreach ($files as $name => &$blob) {
@@ -284,9 +275,9 @@ class Tinebase_FileSystem_Previews
                     }
 
                     // this means we create a file node of type preview
-                    $fileSystem->setStreamOptionForNextOperation(Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW,
-                        true);
-                    $fileSystem->copyTempfile($fh, $name);
+                    $this->_fsController->setStreamOptionForNextOperation(
+                        Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW, true);
+                    $this->_fsController->copyTempfile($fh, $name);
                     fclose($fh);
                 } finally {
                     unlink($tempFile);
