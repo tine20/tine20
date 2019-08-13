@@ -218,6 +218,9 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 default:
                     field.xtype = 'textfield';
+                    if (fieldDefinition.length) {
+                        field.maxLength = fieldDefinition.length;
+                    }
                     break;
             }
 
