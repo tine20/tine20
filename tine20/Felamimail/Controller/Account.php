@@ -285,7 +285,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
             $user->accountEmailAddress = $_record->email;
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-            $userId = $_record->user_id . Tinebase_Record_Abstract::generateUID();
+            $_record->setId(Tinebase_Record_Abstract::generateUID());
+            $userId = $_record->user_id . '#~#' . substr($_record->getId(), 0, 37);
             $user->accountLoginName = $emailUserBackend->getLoginName($userId, $user->accountLoginName, $_record->email);
 
             Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record, $user);
