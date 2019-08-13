@@ -1634,7 +1634,7 @@ class Admin_JsonTest extends TestCase
     {
         $this->_uit = $this->_json;
         $accountdata = [
-            'email' => 'shooo@' . Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->domain,
+            'email' => 'shooo@' . $this->_getMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
         ];
@@ -1686,5 +1686,40 @@ class Admin_JsonTest extends TestCase
 
         $updatedAccount = $this->_json->saveEmailAccount($systemaccountArray);
         self::assertEquals($systemaccountArray['reply_to'], $updatedAccount['reply_to']);
+    }
+
+    public function testCreateSystemAccountWithDuplicateEmailAddress()
+    {
+        $this->_uit = $this->_json;
+        $accountdata = [
+            'email' => Tinebase_Core::getUser()->accountEmailAddress,
+            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'password' => '123',
+        ];
+        try {
+            $this->_json->saveEmailAccount($accountdata);
+            self::fail('it should not be possible to create accounts with duplicate email addresses');
+        } catch (Tinebase_Exception_SystemGeneric $ted) {
+            self::assertEquals('email account already exists', $ted->getMessage());
+        }
+    }
+
+    public function testUpdateSystemAccountWithDuplicateEmailAddress()
+    {
+        $this->_uit = $this->_json;
+        $accountdata = [
+            'email' => 'shooo@' . $this->_getMailDomain(),
+            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'password' => '123',
+        ];
+        $account = $this->_json->saveEmailAccount($accountdata);
+        $account['email'] = Tinebase_Core::getUser()->accountEmailAddress;
+
+        try {
+            $this->_json->saveEmailAccount($account);
+            self::fail('it should not be possible to update accounts with duplicate email addresses');
+        } catch (Tinebase_Exception_SystemGeneric $ted) {
+            self::assertEquals('email account already exists', $ted->getMessage());
+        }
     }
 }

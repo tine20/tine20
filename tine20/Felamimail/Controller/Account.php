@@ -270,17 +270,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
             Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record);
 
-            $user = new Tinebase_Model_FullUser([
-                    'accountLoginName'      => $_record->email,
-                    'accountEmailAddress'   => $_record->email,
-                ], true);
-            $user->imapUser = new Tinebase_Model_EmailUser(['emailPassword' => $_record->password]);
-            $user->smtpUser = new Tinebase_Model_EmailUser(['emailPassword' => $_record->password]);
-            $user->setId($userId);
-
-            if ($emailUserBackend->userExists($user)) {
-                throw new Tinebase_Exception_SystemGeneric('email account already exists');
-            }
+            $user = $this->_getEmailUserFromAccount($_record);
+            $this->_checkIfEmailUserExists($user, $emailUserBackend);
 
             $emailUserBackend->inspectAddUser($user, $user);
             Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectAddUser($user, $user);
@@ -438,6 +429,29 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         }
     }
+
+    protected function _getEmailUserFromAccount($account, $setUserId = true)
+    {
+        $user = new Tinebase_Model_FullUser([
+            'accountLoginName' => $account->email,
+            'accountEmailAddress' => $account->email,
+        ], true);
+        $emailData = $account->password ? ['emailPassword' => $account->password] : [];
+        $user->imapUser = new Tinebase_Model_EmailUser($emailData);
+        $user->smtpUser = new Tinebase_Model_EmailUser($emailData);
+        if ($setUserId) {
+            $user->setId($account->user_id);
+        }
+        return $user;
+    }
+
+    protected function _checkIfEmailUserExists($user, $emailUserBackend = null)
+    {
+        $emailUserBackend = $emailUserBackend ? $emailUserBackend : Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        if ($emailUserBackend->userExists($user)) {
+            throw new Tinebase_Exception_SystemGeneric('email account already exists');
+        }
+    }
     
     /**
      * inspect update of one record
@@ -459,6 +473,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->_beforeUpdateSystemAccount($_record, $_oldRecord);
+        } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED
+            || $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+            if ($_oldRecord->email !== $_record->email) {
+                $user = $this->_getEmailUserFromAccount($_record, false);
+                $this->_checkIfEmailUserExists($user);
+            }
+
         } else {
             $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
         }

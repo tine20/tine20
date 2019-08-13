@@ -136,8 +136,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @param   array $_additionalArguments
      * @return  Tinebase_Record_Interface
-     *
-     * @todo use CONTEXT instead of $_additionalArguments
      */
     public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
     {
