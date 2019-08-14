@@ -216,9 +216,14 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         foreach ($this->getChildren() as $child) {
             $child->delete();
         }
-        
-        if (!Tinebase_FileSystem::getInstance()->rmdir($this->_path)) {
-            throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
+
+        try {
+            if (!Tinebase_FileSystem::getInstance()->rmdir($this->_path)) {
+                throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
+            }
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            // directory not empty ...
+            throw new Sabre\DAV\Exception\Forbidden($teia->getMessage());
         }
     }
     

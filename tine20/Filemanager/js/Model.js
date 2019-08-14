@@ -502,7 +502,11 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
         if (change === 'uploadstart') {
             Tine.Tinebase.uploadManager.onUploadStart();
         } else if (change === 'uploadfailure') {
-            grid.onUploadFail();
+            if (Ext.isFunction(grid.onUploadFail)) {
+                grid.onUploadFail();
+            } else {
+                // TODO do something on failure?
+            }
         }
 
         if (rowsToUpdate.get(0)) {

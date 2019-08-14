@@ -890,6 +890,15 @@ Tine.Tinebase.common = {
         Tine.log.debug(allowedDomains);
 
         return (allowedDomains.indexOf(emailDomain) !== -1);
+    },
+
+    getMimeIconCls: function(mimeType) {
+        return 'mime-content-type-' + mimeType.replace(/\/.*$/, '') +
+            ' mime-suffix-' + (mimeType.match(/\+/) ? mimeType.replace(/^.*\+/, '') : 'none') +
+            ' mime-type-' + mimeType
+                .replace(/\//g, '-slash-')
+                .replace(/\./g, '-dot-')
+                .replace(/\+/g, '-plus-');
     }
 };
 

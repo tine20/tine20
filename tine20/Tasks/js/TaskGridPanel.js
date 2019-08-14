@@ -131,7 +131,6 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                 app: 'Tasks',
                 keyFieldName: 'taskPriority',
-                value: 'NORMAL'
             })
         }, {
             id: 'percent',
