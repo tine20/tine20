@@ -56,11 +56,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'filters'           => array(),
         ))));
     }
-    
-    /**
-     * init example workingtime models
-     */
-    protected function _initializeWorkingTimeModels()
+
+    public static function createWorkingTimeModels()
     {
         $rs = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_Config::class, [
             [
@@ -116,7 +113,20 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         HumanResources_Controller_WorkingTimeScheme::getInstance()->create($_record);
     }
 
+    /**
+     * init example workingtime models
+     */
+    protected function _initializeWorkingTimeModels()
+    {
+        static::createWorkingTimeModels();
+    }
+
     protected function _initializeWageTypes()
+    {
+        static::createtWageTypes();
+    }
+
+    public static function createtWageTypes($throw = true)
     {
         $translate = Tinebase_Translation::getTranslation('HumanResources');
         $wageTypes = [
@@ -139,11 +149,20 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
         $wtCntrl = HumanResources_Controller_WageType::getInstance();
         foreach ($wageTypes as $wt) {
-            $wtCntrl->create(new HumanResources_Model_WageType($wt));
+            try {
+                $wtCntrl->create(new HumanResources_Model_WageType($wt));
+            } catch (Exception $e) {
+                if ($throw) throw $e;
+            }
         }
     }
 
     protected function _initializeFreeTimeTypes()
+    {
+        static::createFreeTimeTypes();
+    }
+
+    public static function createFreeTimeTypes($throw = true)
     {
         $translate = Tinebase_Translation::getTranslation('HumanResources');
         $freeTimeTypes = [
@@ -160,7 +179,11 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $fttCntrl = HumanResources_Controller_FreeTimeType::getInstance();
         foreach ($freeTimeTypes as $ftt) {
             $ftt['abbreviation'] = preg_replace(['/.*\[/', '/\].*/'], '', $ftt['name']);
-            $fttCntrl->create(new HumanResources_Model_FreeTimeType($ftt));
+            try {
+                $fttCntrl->create(new HumanResources_Model_FreeTimeType($ftt));
+            } catch (Exception $e) {
+                if ($throw) throw $e;
+            }
         }
     }
     
@@ -216,16 +239,15 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
      */
     public static function createReportTemplatesFolder()
     {
-        try {
-            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
-                'HumanResources',
-                Tinebase_FileSystem::FOLDER_TYPE_SHARED
-            );
+        $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+            'HumanResources',
+            Tinebase_FileSystem::FOLDER_TYPE_SHARED
+        );
+        if (Tinebase_FileSystem::getInstance()->isDir($basepath . '/Report Templates')) {
+            $node = Tinebase_FileSystem::getInstance()->stat($basepath . '/Report Templates');
+        } else {
             $node = Tinebase_FileSystem::getInstance()->createAclNode($basepath . '/Report Templates');
-            HumanResources_Config::getInstance()->set(HumanResources_Config::REPORT_TEMPLATES_CONTAINER_ID, $node->getId());
-        } catch (Tinebase_Exception_Backend $teb) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not create report template folder: ' . $teb);
         }
+        HumanResources_Config::getInstance()->set(HumanResources_Config::REPORT_TEMPLATES_CONTAINER_ID, $node->getId());
     }
 }

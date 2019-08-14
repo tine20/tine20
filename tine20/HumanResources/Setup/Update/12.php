@@ -50,8 +50,18 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update002()
     {
+        // force closed transaction
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $rows = Tinebase_Core::getDb()->query('SELECT id, workingtime_json, employee_id, start_date FROM ' . SQL_TABLE_PREFIX .
+            'humanresources_contract')->fetchAll();
+        Tinebase_Core::getLogger()->warn('found these deprecated HR contract data:' . print_r($rows, true));
+
+        $this->_backend->dropTable('humanresources_workingtime', 'HumanResources');
         $this->_backend->dropTable('humanresources_breaks', 'HumanResources');
+
         Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Contract::class,
             HumanResources_Model_WorkingTimeScheme::class,
             HumanResources_Model_DailyWTReport::class,
             HumanResources_Model_FreeTimeType::class,
@@ -59,6 +69,51 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         ]);
 
         HumanResources_Setup_Initialize::addCORSystemCustomField();
+
+        $workingTimeSchemeCtrl = HumanResources_Controller_WorkingTimeScheme::getInstance();
+        foreach ($rows as $row) {
+            if (!is_array($wtData = json_decode($row['workingtime_json'], true)) || !isset($wtData['days']) ||
+                    count($wtData['days']) !== 7) {
+                Tinebase_Core::getLogger()->warn('bad row: ' . print_r($row, true));
+                continue;
+            }
+
+            /*************** !!!
+             * we take the old data here, update003 will update the data itself
+             */
+            /*foreach ($wtData['days'] as &$val) {
+                $val = (int)($val * 3600);
+            } unset($val);*/
+
+            try {
+                $employee = HumanResources_Controller_Employee::getInstance()->get($row['employee_id']);
+                $title = $employee['number'] . ' ' . $employee['n_fn'] . ' ';
+                try {
+                    $date = new Tinebase_DateTime($row['start_date']);
+                    $title .= $date->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d ');
+                } catch (Exception $e) {}
+                $title .= $row['id'];
+                $title = mb_substr($title, 0, 255);
+            } catch (Exception $e) {
+                $title = 'contract ' . $row['id'];
+            }
+
+            $wts = new HumanResources_Model_WorkingTimeScheme([
+                HumanResources_Model_WorkingTimeScheme::FLDS_TITLE => $title,
+                HumanResources_Model_WorkingTimeScheme::FLDS_TYPE =>
+                    HumanResources_Model_WorkingTimeScheme::TYPES_INDIVIDUAL,
+                HumanResources_Model_WorkingTimeScheme::FLDS_JSON => $wtData,
+            ]);
+            try {
+                $wts = $workingTimeSchemeCtrl->create($wts);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                continue;
+            }
+            Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'humanresources_contract SET ' .
+                'working_time_scheme = "' . $wts->getId() . '" WHERE id = "' . $row['id'] . '"');
+
+        }
 
         $this->addApplicationUpdate('HumanResources', '12.7', self::RELEASE012_UPDATE002);
     }
@@ -69,22 +124,24 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         /** @var HumanResources_Model_WorkingTimeScheme $workingTimeScheme */
         foreach ($workingTimeSchemeCtrl->getAll() as $workingTimeScheme) {
             if (is_array($data = $workingTimeScheme->jsonData('json')) && isset($data['days']) &&
-                count($data['days']) === 7) {
+                    count($data['days']) === 7) {
                 foreach ($data['days'] as &$val) {
                     $val = (int)($val * 3600);
-                } unset($val);
-                $workingTimeScheme->json = $data['days'];
-            } elseif (!is_array($workingTimeScheme->jsonData('json')) ||
-                count($workingTimeScheme->jsonData('json')) !== 7) {
-                $workingTimeScheme->json = [0, 0, 0, 0, 0, 0, 0];
+                }
+                unset($val);
+                $workingTimeScheme->json = $data;
+            } else {
+                $workingTimeScheme->json = ['days' => [0, 0, 0, 0, 0, 0, 0]];
             }
             if ($workingTimeScheme->isDirty()) {
                 $workingTimeSchemeCtrl->update($workingTimeScheme);
             }
         }
 
-        // TODO ! update workingtime_json (in 2 tables at least) and convert hour floats to second ints
-        throw new Tinebase_Exception_NotImplemented('TODO fix me');
+        HumanResources_Setup_Initialize::createReportTemplatesFolder();
+        HumanResources_Setup_Initialize::createtWageTypes(false);
+        HumanResources_Setup_Initialize::createFreeTimeTypes(false);
+        HumanResources_Setup_Initialize::createWorkingTimeModels();
 
         $this->addApplicationUpdate('HumanResources', '12.8', self::RELEASE012_UPDATE003);
     }
