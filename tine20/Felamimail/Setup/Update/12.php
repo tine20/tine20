@@ -95,7 +95,7 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
                         </field>
                     </index>
                     <index>
-                        <name>felamimail_account_acl::record_id--felamimail_account::id</name>
+                        <name>fmail_account_acl::record_id--fmail_account::id</name>
                         <field>
                             <name>record_id</name>
                         </field>
