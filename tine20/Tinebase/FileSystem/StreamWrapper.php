@@ -188,6 +188,10 @@ class Tinebase_FileSystem_StreamWrapper
     {
         $quiet    = !(bool)($_options & STREAM_REPORT_ERRORS);
 
+        if (!is_resource($this->context)) {
+            throw new Tinebase_Exception_NotFound('stream context not found or no valid resource');
+        }
+
         $context = stream_context_get_options($this->context);
         if (isset($context[__CLASS__]) && isset($context[__CLASS__]['revision'])) {
             $revision = $context[__CLASS__]['revision'];
