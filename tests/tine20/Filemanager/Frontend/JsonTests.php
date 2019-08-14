@@ -485,6 +485,48 @@ class Filemanager_Frontend_JsonTests extends TestCase
         return $createdNode;
     }
 
+    public function testAclNodeUnset()
+    {
+        $node = $this->testCreateContainerNodeInPersonalFolder();
+        $node['acl_node'] = null;
+        $node = $this->_getUit()->saveNode($node);
+        static::assertSame($node['id'], $node['acl_node'], 'must not be possible to null acl_node');
+    }
+
+    public function testAclNodeChangeInheritedToDeleted()
+    {
+        $this->testCreateContainerNodeInPersonalFolder();
+
+        $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/testcontainer/test';
+        $node = $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false)[0];
+
+        $testPath .= '/toBeDeleted';
+        $toBeDeleted = $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false)[0];
+        $this->_getUit()->deleteNodes($testPath);
+
+        $node['acl_node'] = $node['id'];
+        $node = $this->_getUit()->saveNode($node);
+        static::assertSame($node['id'], $node['acl_node'], 'acl_node update did not work');
+
+        static::assertSame(Tinebase_Core::getDb()->query(
+            'SELECT acl_node FROM ' . SQL_TABLE_PREFIX . 'tree_nodes WHERE id = "' . $toBeDeleted['id'] . '"')
+            ->fetchColumn(), $node['id'], 'deleted node has not been updated');
+
+        static::assertSame(Tinebase_Core::getDb()->query(
+            'SELECT is_deleted FROM ' . SQL_TABLE_PREFIX . 'tree_nodes WHERE id = "' . $toBeDeleted['id'] . '"')
+            ->fetchColumn(), '1', 'deleted node has not been deleted');
+    }
+
+    public function testAclAdminLost()
+    {
+        $node = $this->testCreateContainerNodeInPersonalFolder();
+        $node['grants'] = [];
+
+        static::setExpectedException(Tinebase_Exception_SystemGeneric::class, 'you can\'t remove your own admin grant');
+        $this->_getUit()->saveNode($node);
+    }
+
     /**
      * create container with bad name
      * 

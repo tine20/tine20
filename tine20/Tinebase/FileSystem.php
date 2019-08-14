@@ -1290,7 +1290,7 @@ class Tinebase_FileSystem implements
                                     $node->acl_node = $node->getId();
                             }
                         }
-                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
+                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node, true, true);
                     }
                 }
                 if ($node->pin_protected_node === $oldParent->pin_protected_node
@@ -1393,9 +1393,10 @@ class Tinebase_FileSystem implements
             try {
                 $node = $this->stat('/' . implode('/', $currentPath));
             } catch (Tinebase_Exception_NotFound $tenf) {
-if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Creating directory ' . $pathPart);                $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' Creating directory ' . $pathPart);
 
+                $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
                 $this->_addStatCache($currentPath, $node);
             }
 
@@ -2157,7 +2158,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             if ($currentNodeObject->acl_node !== $_node->acl_node) {
                 // update acl_node of subtree if changed
-                $this->_recursiveInheritPropertyUpdate($_node, 'acl_node', $_node->acl_node, $currentNodeObject->acl_node);
+                $this->_recursiveInheritPropertyUpdate($_node, 'acl_node', $_node->acl_node, $currentNodeObject->acl_node, true, true);
             }
             if ($currentNodeObject->pin_protected_node !== $_node->pin_protected_node) {
                 // update pin_protected_node of subtree if changed
@@ -2206,14 +2207,15 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * @param string $_newValue
      * @param string $_oldValue
      * @param bool   $_ignoreACL
+     * @param bool   $_updateDeleted
      */
-    protected function _recursiveInheritPropertyUpdate(Tinebase_Model_Tree_Node $_node, $_property, $_newValue, $_oldValue, $_ignoreACL = true)
+    protected function _recursiveInheritPropertyUpdate(Tinebase_Model_Tree_Node $_node, $_property, $_newValue, $_oldValue, $_ignoreACL = true, $_updateDeleted = false)
     {
-        $childIds = $this->getAllChildIds(array($_node->getId()), array(array(
-            'field'     => $_property,
-            'operator'  => 'equals',
-            'value'     => $_oldValue
-        )), $_ignoreACL);
+        $childIds = $this->getAllChildIds(array($_node->getId()), [
+                ['field' => $_property,   'operator'  => 'equals', 'value' => $_oldValue],
+                ['field' => 'is_deleted', 'operator'  => 'equals', 'value' => $_updateDeleted ?
+                    Tinebase_Model_Filter_Bool::VALUE_NOTSET : false]
+            ], $_ignoreACL);
         if (count($childIds) > 0) {
             $this->_getTreeNodeBackend()->updateMultiple($childIds, array($_property => $_newValue));
         }
@@ -2259,13 +2261,9 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     public function getAllChildIds(array $_ids, array $_additionalFilters = array(), $_ignoreAcl = true, $_requiredGrants = null)
     {
         $result = array();
-        $filter = array(
-            array(
-                'field'     => 'parent_id',
-                'operator'  => 'in',
-                'value'     => $_ids
-            )
-        );
+        $filter = [
+            ['field' => 'parent_id',  'operator'  => 'in',     'value' => $_ids],
+        ];
         foreach($_additionalFilters as $aF) {
             $filter[] = $aF;
         }
@@ -2560,12 +2558,14 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         return $node;
     }
 
-    public function setAclFromParent($path)
+    public function setAclFromParent($path, $ifNotNull = false)
     {
         $node = $this->stat($path);
         $parent = $this->get($node->parent_id);
-        $node->acl_node = $parent->acl_node;
-        $this->update($node);
+        if (!$ifNotNull || !empty($parent->acl_node)) {
+            $node->acl_node = $parent->acl_node;
+            $this->update($node);
+        }
 
         return $node;
     }

@@ -17,6 +17,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -25,6 +26,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
                 self::FUNCTION_CONST                => 'update002',
             ],
         ],
+
         self::PRIO_TINEBASE_STRUCTURE => [
             self::RELEASE012_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
@@ -39,6 +41,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
                 self::FUNCTION_CONST                => 'update006',
             ],
         ],
+
         self::PRIO_TINEBASE_UPDATE        => [
             self::RELEASE012_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
@@ -48,6 +51,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
             ],
+            self::RELEASE012_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
+            ]
         ],
     ];
 
@@ -140,5 +147,28 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '12.24', self::RELEASE012_UPDATE006);
+    }
+
+    public function update007()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        foreach (Tinebase_Core::getDb()->query('SELECT tnchild.id, tnparent.acl_node FROM ' .
+                SQL_TABLE_PREFIX . 'tree_nodes as tnchild JOIN ' . SQL_TABLE_PREFIX .
+                'tree_nodes as tnparent ON tnchild.parent_id = tnparent.id WHERE tnchild.is_deleted = 1 AND ' .
+                'tnparent.is_deleted = 0 AND (tnparent.acl_node <> tnchild.acl_node OR (tnparent.acl_node IS NOT NULL '
+                . 'AND tnchild.acl_node IS NULL))')->fetchAll() as $row) {
+
+            if (empty($row['acl_node'])) continue;
+
+            $node = $fs->get($row['id'], true);
+
+            $r = new ReflectionMethod(Tinebase_FileSystem::class, '_recursiveInheritPropertyUpdate');
+            $r->setAccessible(true);
+            $r->invoke($fs, $node, 'acl_node', $row['acl_node'], $node->acl_node, true, true);
+            $node->acl_node = $row['acl_node'];
+            $fs->_getTreeNodeBackend()->update($node);
+        }
+
+        $this->addApplicationUpdate('Tinebase', '12.25', self::RELEASE012_UPDATE007);
     }
 }
