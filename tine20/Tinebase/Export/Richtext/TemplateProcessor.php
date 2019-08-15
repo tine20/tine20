@@ -140,9 +140,23 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     protected function _replaceTine20ImagePaths(&$xmlData, $relData)
     {
         $replacements = [];
-        if (preg_match_all('#<w:drawing[^>]*>.*?<wp:docPr[^>]+"(\w+://[^"]+)".*?r:embed="([^"]+)".*?</w:drawing>#is', $xmlData, $matches, PREG_SET_ORDER)) {
-            foreach($matches as $match) {
+        $offset = 0;
 
+        do {
+            if (false === ($offset = strpos($xmlData, 'descr="tine20://', $offset))) {
+                break;
+            }
+            if (false === ($drawOffset = strrpos($xmlData, '<w:drawing', 0 - (strlen($xmlData) - $offset)))) {
+                break;
+            }
+            if (false === ($drawEndOffset = strpos($xmlData, '</w:drawing>', $offset))) {
+                break;
+            }
+
+            $drawingStr = substr($xmlData, $drawOffset, $drawEndOffset - $drawOffset + 12);
+            if (preg_match(
+                    '#<w:drawing[^>]*>.*<wp:docPr[^>]+descr="(\w+://[^"]+)".+r:embed="([^"]+)".+</w:drawing>#is',
+                    $drawingStr, $match)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found url: ' . $match[1]);
 
@@ -167,7 +181,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                             $width = $imageSize[0] * 914400 / 96;
                             $height = $imageSize[1] * 914400 / 96;
                             if (preg_match_all('#<a:ext[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
-                                    $submatches, PREG_SET_ORDER)) {
+                                $submatches, PREG_SET_ORDER)) {
                                 if (count($submatches) > 1) {
                                     Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
                                         . count($submatches) . ' <a:ext cx= cy= ' . $match[1]);
@@ -214,7 +228,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                             . ' could not find relation matching found url: ' . $match[1]);
                 }
             }
-        }
+        } while (++$offset);
 
         foreach ($replacements as $rep) {
             $xmlData = str_replace($rep[0], $rep[1], $xmlData);
