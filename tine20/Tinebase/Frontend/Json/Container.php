@@ -196,8 +196,12 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      */
     public static function resolveAccounts($_grants)
     {
-        foreach($_grants as &$value) {
-            switch($value['account_type']) {
+        if (! is_array($_grants)) {
+            return [];
+        }
+
+        foreach ($_grants as &$value) {
+            switch ($value['account_type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
                         $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $value['account_id']);
