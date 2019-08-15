@@ -89,12 +89,16 @@ class Tinebase_Fulltext_TextExtract
             . escapeshellarg($blobFileName) . ' > ' . escapeshellarg($tempFileName), $output, $result);
 
         if ($result !== 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' tika did not return status 0: ' . print_r($output, true) . ' ' . print_r($result, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' tika did not return status 0. maybe the java runtime is missing? output:'
+                . print_r($output, true) . ' ' . print_r($result, true));
             if (file_exists($tempFileName)) {
                 unlink($tempFileName);
             }
             return false;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' tika success!');
         }
 
         return $tempFileName;
