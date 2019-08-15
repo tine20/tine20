@@ -178,7 +178,9 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             return $part->filename;
         }
         
-        if ($contentType != Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && preg_match('@[a-z]+/([a-z]+)@', $contentType, $extensionMatch)) {
+        if ($contentType != Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+            && preg_match('@[a-z]+/([a-z]+)@', $contentType, $extensionMatch))
+        {
             $extension = '.' . $extensionMatch[1];
         } else {
             $extension = '.eml';
@@ -200,9 +202,12 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Requesting resource <' . $cid . '> for message ' . $messageId);
-        
-        $resPart = Felamimail_Controller_Message::getInstance()->getResourcePartStructure($cid, $messageId);
-        
-        $this->_outputMessagePart($messageId, $resPart['partId'], 'inline', TRUE);
+
+        try {
+            $resPart = Felamimail_Controller_Message::getInstance()->getResourcePartStructure($cid, $messageId);
+            $this->_outputMessagePart($messageId, $resPart['partId'], 'inline', TRUE);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+        }
     }
 }
