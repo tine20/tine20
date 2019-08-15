@@ -51,11 +51,10 @@ class Felamimail_Controller_AccountTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
+        Felamimail_Controller_Account::destroyInstance();
         $this->_controller = Felamimail_Controller_Account::getInstance();
-        if (null === ($this->_account = $this->_controller->search()->getFirstRecord())) {
-            $this->_account = $this->_controller->addSystemAccount(Tinebase_Core::getUser());
-        }
+        $this->_account = $this->_controller->search()->getFirstRecord();
     }
 
     /**
@@ -126,7 +125,6 @@ class Felamimail_Controller_AccountTest extends TestCase
         // deleting original account and check if user account is new default account
         $this->_controller->delete($this->_account->getId());
         $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, 'other account is not default account');
-        $this->assertNotEmpty($userAccount->host, 'host not set from defaults');
     }
     
     /**
@@ -268,7 +266,10 @@ class Felamimail_Controller_AccountTest extends TestCase
 
         $savedAccount->resolveCredentials();
         $this->assertEquals('abcde@tine20.org', $savedAccount->user);
-        $this->assertEquals('abcde', $savedAccount->password);
+        $this->assertEmpty($savedAccount->password);
+
+        $savedAccount->resolveCredentials(false);
+        static::assertSame('abcde', $savedAccount->password);
     }
 
     /**
@@ -278,20 +279,36 @@ class Felamimail_Controller_AccountTest extends TestCase
      */
     public function testUseEmailAsLoginName()
     {
+        $raii = new Tinebase_RAII(function() {
+            Tinebase_EmailUser::clearCaches();
+        });
+
         // change config to standard imap backend
-        $this->_oldConfig = $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
-        $imapConfig->backend = Tinebase_EmailUser::IMAP_STANDARD;
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $this->_oldConfig = clone $imapConfig;
+        $imapConfig->backend = 'Standard'; //Tinebase_EmailUser::IMAP_STANDARD;
         $imapConfig->domain = '';
         $imapConfig->instanceName = '';
         $imapConfig->useEmailAsUsername = true;
         Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapConfig);
+        Tinebase_EmailUser::clearCaches();
 
         Felamimail_Controller_Account::getInstance()->delete(array($this->_account->getId()));
-        $this->_account = $this->_controller->addSystemAccount(Tinebase_Core::getUser());
+
+        $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
+
+        $credentials = Tinebase_Core::getUserCredentialCache();
+        $credentialsBackend->getCachedCredentials($credentials);
+        // $credentialCachePwd = substr($credentials->password, 0, 24); ?!?
+
+        $this->_account = $this->_controller->addSystemAccount(Tinebase_Core::getUser(), $credentials->password);
         // make sure the user is resolved again
         unset($this->_account->user);
         $this->_account->resolveCredentials();
         $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $this->_account->user);
+
+        // for unused variable check only
+        unset($raii);
     }
 
     /**

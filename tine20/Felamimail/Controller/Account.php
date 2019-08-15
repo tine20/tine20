@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,7 +15,7 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
+class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 {
     /**
      * application name (is needed in checkRight())
@@ -69,6 +69,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->setImapConfig();
         $this->_useSystemAccount = isset($this->_imapConfig[Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT])
             && $this->_imapConfig[Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT];
+
+        $this->_grantsModel = Felamimail_Model_AccountGrants::class;
+        $this->_grantsBackend = new Tinebase_Backend_Sql_Grants([
+            'modelName' => $this->_grantsModel,
+            'tableName' => 'felamimail_account_acl',
+            'recordTable' => $this->_backend->getTableName(),
+        ]);
     }
     
     /**
@@ -126,7 +133,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             // check if resultset contains system account and add config values
             foreach ($result as $account) {
                 if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM) {
-                    $this->_addSystemAccountConfigValues($account);
+                    $this->addSystemAccountConfigValues($account);
                 }
             }
         }
@@ -158,9 +165,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         /** @var Felamimail_Model_Account $record */
         $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
-
+        
         if ($record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
-            $this->_addSystemAccountConfigValues($record);
+            $this->addSystemAccountConfigValues($record);
         }
         
         return $record;
@@ -194,14 +201,22 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+
         if (! $this->doContainerACLChecks()) {
             return;
         }
 
-        $userFilter = $_filter->getFilter('user_id');
+        $typeFilter = $_filter->getFilter('type');
+        if (null !== $typeFilter && $typeFilter->getOperator() === 'equals' && ($typeFilter->getValue() ===
+                Felamimail_Model_Account::TYPE_ADB_LIST || $typeFilter->getValue() ===
+                Felamimail_Model_Account::TYPE_SHARED)) {
 
-        // fix me!
-        // TODO fix this for shared / adb list accounts!!!
+            // TODO fix me! check acl filter?
+
+            return;
+        }
+
+        $userFilter = $_filter->getFilter('user_id');
 
         // force a $userFilter filter (ACL)
         if ($userFilter === NULL || $userFilter->getOperator() !== 'equals' || $userFilter->getValue() !== Tinebase_Core::getUser()->getId()) {
@@ -217,16 +232,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * inspect creation of one record
      * - add credentials and user id here
      * 
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Felamimail_Model_Account $_record
      * @return  void
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         // add user id
-        if (empty($_record->user_id) && $_record->type !== Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST &&
-                $_record->type !== Tinebase_EmailUser_Model_Account::TYPE_SHARED) {
+        if (empty($_record->user_id) && ($_record->type === Felamimail_Model_Account::TYPE_USER ||
+                $_record->type === Felamimail_Model_Account::TYPE_SYSTEM)) {
             $_record->user_id = Tinebase_Core::getUser()->getId();
-        } else if (is_array($_record->user_id)) {
+        } elseif (is_array($_record->user_id)) {
             // TODO move to converter
             $_record->user_id = $_record->user_id['accountId'];
         }
@@ -235,15 +250,64 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if (! $_record->smtp_hostname) {
             $_record->smtp_hostname = $_record->host;
         }
-        
+
+        if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' system account, no credential cache needed');
+            return;
+
+        } elseif ($_record->type === Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
+                Felamimail_Model_Account::TYPE_ADB_LIST) {
+            if (! $_record->password) {
+                throw new Tinebase_Exception_UnexpectedValue('shared / adb_list accounts need to have a password set');
+            }
+            if (! $_record->email) {
+                throw new Tinebase_Exception_UnexpectedValue('shared / adb_list accounts need to have an email set');
+            }
+            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $userId = $_record->user_id ?: ($_record->user_id = Tinebase_Record_Abstract::generateUID());
+            $_record->user = $emailUserBackend->getLoginName($userId, $_record->email, $_record->email);
+
+            Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record);
+
+            $user = $this->_getEmailUserFromAccount($_record);
+            $this->_checkIfEmailUserExists($user, $emailUserBackend);
+
+            $emailUserBackend->inspectAddUser($user, $user);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectAddUser($user, $user);
+        } elseif ($_record->type === Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+            if (! $_record->email) {
+                throw new Tinebase_Exception_UnexpectedValue('userInternal accounts need to have an email set');
+            }
+            if (! $_record->user_id) {
+                throw new Tinebase_Exception_UnexpectedValue('userInternal accounts need to have an user_id set');
+            }
+            $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+            $user->accountEmailAddress = $_record->email;
+            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $_record->setId(Tinebase_Record_Abstract::generateUID());
+            $userId = $_record->user_id . '#~#' . substr($_record->getId(), 0, 37);
+            $user->accountLoginName = $emailUserBackend->getLoginName($userId, $user->accountLoginName, $_record->email);
+
+            Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record, $user);
+
+            $emailUserBackend->copyUser($user, $userId);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->copyUser($user, $userId);
+            
+            // we dont need a credential cache here neither
+            return;
+        }
+
+        // write test für Adb::List / Admin_Controller_EmailAccount [dafür gibts schon einfache tests]
+
         if (! $_record->user || ! $_record->password) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
             return;
         }
         
         // add imap & smtp credentials
-        if ($_record->type === Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST ||
-                $_record->type === Tinebase_EmailUser_Model_Account::TYPE_SHARED) {
+        if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST ||
+                $_record->type === Felamimail_Model_Account::TYPE_SHARED) {
             $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
             if ($_record->smtp_user && $_record->smtp_password) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -267,6 +331,54 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $this->_checkSignature($_record);
     }
+
+    /**
+     * delete linked objects (notes, relations, attachments, alarms) of record
+     *
+     * @param Felamimail_Model_Account $_record
+     */
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {
+        parent::_deleteLinkedObjects($_record);
+
+        if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST || $_record->type ===
+                Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
+                Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+            $_record->resolveCredentials(false);
+            $user = new Tinebase_Model_FullUser([], true);
+            $user->setId($_record->user_id);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectDeleteUser($user);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectDeleteUser($user);
+        }
+    }
+
+    public function setDefaultGrants(Felamimail_Model_Account $account)
+    {
+        $this->_setDefaultGrants($account);
+    }
+
+    /**
+     * add default grants
+     *
+     * @param   Tinebase_Record_Interface $record
+     * @param   boolean $addDuringSetup -> let admin group have all rights instead of user
+     */
+    protected function _setDefaultGrants(Tinebase_Record_Interface $record, $addDuringSetup = false)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Setting default grants ...');
+
+        $record->grants = new Tinebase_Record_RecordSet($this->_grantsModel);
+        /** @var Tinebase_Model_Grants $grant */
+        $grant = new $this->_grantsModel([
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'   => ($record->type === Felamimail_Model_Account::TYPE_SYSTEM || $record->type ===
+                Felamimail_Model_Account::TYPE_USER) ? $record->user_id : Tinebase_Core::getUser()->getId(),
+            'record_id'    => $record->getId(),
+        ]);
+        $grant->sanitizeAccountIdAndFillWithAllGrants();
+        $record->grants->addRecord($grant);
+    }
     
     /**
      * convert signature to text to remove all html tags and spaces/linebreaks, if the remains are empty -> set empty signature
@@ -288,8 +400,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     /**
      * inspect creation of one record (after create)
      * 
-     * @param   Tinebase_Record_Interface $_createdRecord
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Felamimail_Model_Account $_createdRecord
+     * @param   Felamimail_Model_Account $_record
      * @return  void
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
@@ -303,6 +415,42 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 }
                 Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
             }
+        } else if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($listId, $account) {
+                $sieveRule = Felamimail_Sieve_AdbList::createFromList(
+                    Addressbook_Controller_List::getInstance()->get($listId))->__toString();
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' add sieve script: ' . $sieveRule);
+
+                Felamimail_Controller_Sieve::getInstance()->setAdbListScript($account,
+                    Felamimail_Model_Sieve_ScriptPart::createFromString(
+                        Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $listId, $sieveRule));
+            }, [$_record->user_id, $_createdRecord]);
+
+        }
+    }
+
+    protected function _getEmailUserFromAccount($account, $setUserId = true)
+    {
+        $user = new Tinebase_Model_FullUser([
+            'accountLoginName' => $account->email,
+            'accountEmailAddress' => $account->email,
+        ], true);
+        $emailData = $account->password ? ['emailPassword' => $account->password] : [];
+        $user->imapUser = new Tinebase_Model_EmailUser($emailData);
+        $user->smtpUser = new Tinebase_Model_EmailUser($emailData);
+        if ($setUserId) {
+            $user->setId($account->user_id);
+        }
+        return $user;
+    }
+
+    protected function _checkIfEmailUserExists($user, $emailUserBackend = null)
+    {
+        $emailUserBackend = $emailUserBackend ? $emailUserBackend : Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        if ($emailUserBackend->userExists($user)) {
+            throw new Tinebase_Exception_SystemGeneric('email account already exists');
         }
     }
     
@@ -326,6 +474,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
 
         if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->_beforeUpdateSystemAccount($_record, $_oldRecord);
+        } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED
+            || $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+            if ($_oldRecord->email !== $_record->email) {
+                $user = $this->_getEmailUserFromAccount($_record, false);
+                $this->_checkIfEmailUserExists($user);
+            }
+
         } else {
             $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
         }
@@ -379,10 +534,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _beforeUpdateStandardAccount($_record, $_oldRecord)
     {
-        if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
-            $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
-        } else {
-            $this->_beforeUpdateSharedAccountCredentials($_record, $_oldRecord);
+        if ($_record->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+            if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
+                $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
+            } else {
+                $this->_beforeUpdateSharedAccountCredentials($_record, $_oldRecord);
+            }
         }
         
         $diff = $_record->diff($_oldRecord)->diff;
@@ -579,6 +736,39 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
 
         parent::_checkRight($_action);
+    }
+
+    /**
+     * check grant for action (CRUD)
+     *
+     * @param Tinebase_Record_Interface $record
+     * @param string $action
+     * @param boolean $throw
+     * @param string $errorMessage
+     * @param Tinebase_Record_Interface $oldRecord
+     * @return boolean
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkGrant($record, $action, $throw = true, $errorMessage = 'No Permission.', $oldRecord = null)
+    {
+        if (!$this->_doContainerACLChecks) {
+            return true;
+        }
+
+        switch ($action) {
+            // no breaks here
+            case 'get':
+                if (Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::ADD_ACCOUNTS)) {
+                    return true;
+                }
+            case 'update':
+            case 'delete':
+                if (Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
+                    return true;
+                }
+        }
+
+        return parent::_checkGrant($record, $action, $throw, $errorMessage, $oldRecord);
     }
     
     /**
@@ -943,12 +1133,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * add system account with tine user credentials (from config.inc.php or config db) 
+     * add system account with tine user credentials
      *
-     * @param Tinebase_Model_User
+     * @param Tinebase_Model_FullUser
      * @return Felamimail_Model_Account
      */
-    public function addSystemAccount(Tinebase_Model_User $_account)
+    public function addSystemAccount(Tinebase_Model_FullUser $_account, $pwd)
     {
         $email = $this->_getAccountEmail($_account);
         
@@ -957,14 +1147,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if (null !== ($systemAccount = $this->getSystemAccount($_account->getId()))) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' system account "' . $systemAccount->name . '" already exists.');
-                return;
+                return $systemAccount;
             }
+
             $systemAccount = new Felamimail_Model_Account([
                 'type'      => Felamimail_Model_Account::TYPE_SYSTEM,
                 'user_id'   => $_account->getId(),
             ], true);
 
-            $this->_addSystemAccountConfigValues($systemAccount, $_account);
+            $this->addSystemAccountConfigValues($systemAccount, $_account);
 
             $this->_addFolderDefaults($systemAccount, true);
 
@@ -976,10 +1167,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
 
             /** @var Felamimail_Model_Account $systemAccount */
-            $systemAccount = $this->_backend->create($systemAccount);
+            $systemAccount = $this->create($systemAccount);
 
             if (Felamimail_Config::getInstance()
                     ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
+                $emailUser = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+                $systemAccount->user = $emailUser->_getEmailUserName($_account);
+                $systemAccount->password = $pwd;
                 $this->_autoCreateSystemAccountFolders($systemAccount);
             }
             
@@ -1153,7 +1347,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_User $_user
      * @return void
      */
-    protected function _addSystemAccountConfigValues(Felamimail_Model_Account $_account, Tinebase_Model_User $_user = null)
+    public function addSystemAccountConfigValues(Felamimail_Model_Account $_account, $_user = null)
     {
         $configs = array(
             Tinebase_Config::IMAP     => array(
@@ -1179,15 +1373,27 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        if (null === $_user || $_user->getId() !== $_account->user_id) {
-            if (Tinebase_Core::getUser()->getId() === $_account->user_id) {
-                $_user = Tinebase_Core::getUser();
-            } else {
-                $_user = Tinebase_User::getInstance()->getUserById($_account->user_id);
+        if ($_account->type === Felamimail_Model_Account::TYPE_USER || $_account->type ===
+                Felamimail_Model_Account::TYPE_SYSTEM || $_account->type ===
+                Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+            if (null === $_user || $_user->getId() !== $_account->user_id) {
+                if (Tinebase_Core::getUser()->getId() === $_account->user_id) {
+                    $_user = Tinebase_Core::getUser();
+                } else {
+                    try {
+                        $_user = Tinebase_User::getInstance()->getUserById($_account->user_id);
+                    } catch (Tinebase_Exception_NotFound $e) {
+                        $_user = null;
+                    }
+                }
+            }
+
+            if (null !== $_user) {
+                $this->_addUserValues($_account, $_user);
             }
         }
         
-        $this->_addUserValues($_account, $_user);
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE));
     }
     
     /**
@@ -1200,48 +1406,37 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _addConfigValuesToAccount(Felamimail_Model_Account $_account, $_configKey, $_keysOverwrite = array(), $_defaults = array())
     {
-        try {
-            $fullUser = Tinebase_User::getInstance()->getFullUserById($_account->user_id);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Felamimail_Exception('User not found: ' . $_account->user_id, null, $tenf);
-        }
-        
         switch ($_configKey) {
             case Tinebase_Config::IMAP:
-                $imapUser = $fullUser->imapUser;
-                
-                if (!$imapUser) {
-                    throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
-                }
-                foreach (array(
-                    'emailUsername' => 'user',
-                    'emailHost'     => 'host',
-                    'emailPort'     => 'port',
-                    'emailSecure'   => 'ssl'
-                ) as $key => $value) {
-                    if ($imapUser->$key) {
-                        $_account->$value = $imapUser->$key;
+                /** @var Tinebase_EmailUser_Sql $emailUserBackend */
+                $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+                $systemDefaults = $emailUserBackend->_getConfiguredSystemDefaults();
+
+                foreach ([
+                            'emailHost'     => 'host',
+                            'emailPort'     => 'port',
+                            'emailSecure'   => 'ssl',
+                        ] as $key => $value) {
+                    if (isset($systemDefaults[$key])) {
+                        $_account->$value = $systemDefaults[$key];
                     }
                 }
                 
                 break;
                 
             case Tinebase_Config::SMTP:
-                $smtpUser = $fullUser->smtpUser;
+                /** @var Tinebase_EmailUser_Sql $emailUserBackend */
+                $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+                $systemDefaults = $emailUserBackend->_getConfiguredSystemDefaults();
                 
-                if (!$smtpUser) {
-                    throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
-                }
-                
-                foreach (array(
-                    'emailUsername' => 'smtp_user',
-                    'emailHost'     => 'smtp_hostname',
-                    'emailPort'     => 'smtp_port',
-                    'emailSecure'   => 'smtp_ssl',
-                    'emailAuth'     => 'smtp_auth'
-                ) as $key => $value) {
-                    if ($smtpUser->$key) {
-                        $_account->$value = $smtpUser->$key;
+                foreach ([
+                            'emailHost'     => 'smtp_hostname',
+                            'emailPort'     => 'smtp_port',
+                            'emailSecure'   => 'smtp_ssl',
+                            'emailAuth'     => 'smtp_auth',
+                        ] as $key => $value) {
+                    if (isset($systemDefaults[$key])) {
+                        $_account->$value = $systemDefaults[$key];
                     }
                 }
                 
@@ -1306,5 +1501,22 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         // TODO fix me! system account resolving is mssing, add it here?!
         throw new Tinebase_Exception_NotImplemented('do not use this function');
+    }
+
+    public function getAccountForList(Addressbook_Model_List $list)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
+            ]))->getFirstRecord();
+
+        if (null === $account) {
+            $e = new Tinebase_Exception('no felamimail account found for list ' . $list->getId());
+            Tinebase_Exception::log($e);
+            return false;
+        }
+
+        return $account;
     }
 }

@@ -206,45 +206,6 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-    * set all lists an user is member of
-    *
-    * @param  string  $contactId
-    * @param  mixed  $listIds
-    * @return array
-    */
-    public function setMemberships($contactId, $listIds)
-    {
-        $contactId = Tinebase_Record_Abstract::convertId($contactId, 'Addressbook_Model_Contact');
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Set ' . count($listIds) . ' list memberships for contact ' . $contactId);
-        
-        if ($listIds instanceof Tinebase_Record_RecordSet) {
-            $listIds = $listIds->getArrayOfIds();
-        }
-    
-        $listMemberships = $this->getMemberships($contactId);
-    
-        $removeListMemberships = array_diff($listMemberships, $listIds);
-        $addListMemberships    = array_diff($listIds, $listMemberships);
-    
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' current memberships: ' . print_r($listMemberships, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' new memberships: ' . print_r($listIds, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' added memberships: ' . print_r($addListMemberships, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' removed memberships: ' . print_r($removeListMemberships, true));
-    
-        foreach ($addListMemberships as $listId) {
-            $this->addListMember($listId, $contactId);
-        }
-    
-        foreach ($removeListMemberships as $listId) {
-            $this->removeListMember($listId, $contactId);
-        }
-    
-        return $this->getMemberships($contactId);
-    }
-    
-    /**
      * get group memberships of contact id
      * 
      * @param mixed $contactId

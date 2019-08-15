@@ -1564,5 +1564,14 @@ msgstr "Externes E-Mail-Konto"
 msgid "Personal System Account"
 msgstr "Persönliches Systemkonto"
 
+msgid "User Defined Personal System Account"
+msgstr "Benutzerdefiniertes Persönliches Systemkonto"
+
 msgid "Shared System Account"
-msgstr "Persönliches Systemkonto"
+msgstr "Gemeinsames Systemkonto"
+
+msgid "It is not possible to create new personal system accounts"
+msgstr "Es ist nicht möglich, neue persönliche Systemkonten zu erstellen"
+
+msgid "Use"
+msgstr "Benutzen"

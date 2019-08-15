@@ -86,20 +86,21 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 Felamimail_Controller_Account::getInstance()
                     ->updateCredentialsOfAllUserAccounts($_eventObject->oldCredentialCache);
                 break;
-            case Tinebase_Event_User_CreatedAccount::class:
+            case Admin_Event_AddAccount::class:
                 /** @var Tinebase_Event_User_CreatedAccount $_eventObject */
                 if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
                         ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
-                    Felamimail_Controller_Account::getInstance()->addSystemAccount($_eventObject->account);
+                    Felamimail_Controller_Account::getInstance()->addSystemAccount($_eventObject->account,
+                        $_eventObject->pwd);
                 }
                 break;
         }
     }
 
-    public function handleAccountLogin(Tinebase_Model_FullUser $_account)
+    public function handleAccountLogin(Tinebase_Model_FullUser $_account, $pwd)
     {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
-            Felamimail_Controller_Account::getInstance()->addSystemAccount($_account);
+            Felamimail_Controller_Account::getInstance()->addSystemAccount($_account, $pwd);
         }
     }
 }

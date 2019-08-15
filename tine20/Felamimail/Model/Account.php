@@ -86,7 +86,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
-                    ['InArray', [self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED]]
+                    ['InArray', [self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED, self::TYPE_USER_INTERNAL]]
                 ],
                 self::QUERY_FILTER              => true,
             ],
@@ -140,6 +140,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => null,
                 ],
                 self::OMIT_MOD_LOG => true,
                 self::NULLABLE                  => true,
@@ -377,6 +380,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::OMIT_MOD_LOG => true,
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => null,
+                ],
             ],
             'smtp_user' => [
                 self::TYPE => self::TYPE_STRING,
@@ -464,6 +470,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 'success', // TODO an inArray validation with success|failure
                 ],
+            ],
+            'grants'    => [
+                self::TYPE => self::TYPE_VIRTUAL,
             ],
         ]
     ];
@@ -604,37 +613,36 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             $userField          = 'user';
             $credentialsField   = 'credentials_id';
         }
-        
-        if (! $this->{$userField} || ! ($this->{$passwordField} && ! $_onlyUsername)) {
-            
+
+        if (! $this->{$userField} || (! $this->{$passwordField} && ! $_onlyUsername)) {
+
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-            $userCredentialCache = Tinebase_Core::getUserCredentialCache();
-            
-            if ($userCredentialCache !== NULL) {
+
+            if ($this->type === self::TYPE_SYSTEM || $this->type === self::TYPE_USER) {
+                $credentials = Tinebase_Core::getUserCredentialCache();
                 try {
-                    $credentialsBackend->getCachedCredentials($userCredentialCache);
+                    $credentialsBackend->getCachedCredentials($credentials);
                 } catch (Exception $e) {
-                    return FALSE;
-                }
-            } else {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
-                    . ' Something went wrong with the CredentialsCache');
-                return FALSE;
-            }
-            
-            if ($this->type == self::TYPE_USER) {
-                if (! $this->{$credentialsField}) {
+                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                        . ' Something went wrong with the CredentialsCache');
                     if ($_throwException) {
-                        throw new Felamimail_Exception('Could not get credentials, no ' . $credentialsField . ' given.');
-                    } else {
-                        return FALSE;
+                        throw $e;
                     }
+                    return false;
                 }
-                
+                $credentialCachePwd = substr($credentials->password, 0, 24);
+            } elseif ($this->type === self::TYPE_SHARED || $this->type === self::TYPE_ADB_LIST) {
+                $credentialCachePwd = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue('type ' . $this->type . ' unknown');
+            }
+
+            // TYPE_SYSTEM never has its own credential cache, it uses the users one
+            if ($this->type !== self::TYPE_SYSTEM) {
                 try {
                     // NOTE: cache cleanup process might have removed the cache
                     $credentials = $credentialsBackend->get($this->{$credentialsField});
-                    $credentials->key = substr($userCredentialCache->password, 0, 24);
+                    $credentials->key = $credentialCachePwd;
                     $credentialsBackend->getCachedCredentials($credentials);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     // try to use imap credentials & reset smtp credentials if different
@@ -649,55 +657,60 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 
                     if ($_throwException) {
                         throw $tenf;
-                    } else {
-                        return FALSE;
                     }
+                    return false;
                 } catch (Exception $e) {
                     if ($_throwException) {
                         throw $e;
-                    } else {
-                        return FALSE;
                     }
+                    return false;
                 }
             } else {
+
                 // just use tine user credentials to connect to mailserver / or use credentials from config if set
-                $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-                
-                $credentials = $userCredentialCache;
-                
+                $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP,
+                    new Tinebase_Config_Struct())->toArray();
+
                 // allow to set credentials in config
-                if ((isset($imapConfig['user']) || array_key_exists('user', $imapConfig)) && (isset($imapConfig['password']) || array_key_exists('password', $imapConfig)) && ! empty($imapConfig['user'])) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        ' Using credentials from config for system account.');
+                if (isset($imapConfig['user']) && isset($imapConfig['password']) && !empty($imapConfig['user'])) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                            ' Using credentials from config for system account.');
+                    }
                     $credentials->username = $imapConfig['user'];
                     $credentials->password = $imapConfig['password'];
                 }
-                
+
                 // allow to set pw suffix in config
-                if ((isset($imapConfig['pwsuffix']) || array_key_exists('pwsuffix', $imapConfig)) && ! preg_match('/' . preg_quote($imapConfig['pwsuffix']) . '$/', $credentials->password)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        ' Appending configured pwsuffix to system account password.');
+                if (isset($imapConfig['pwsuffix']) && !preg_match('/' . preg_quote($imapConfig['pwsuffix']) . '$/',
+                        $credentials->password)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                            ' Appending configured pwsuffix to system account password.');
+                    }
                     $credentials->password .= $imapConfig['pwsuffix'];
                 }
 
-                if (isset($imapConfig['useEmailAsUsername']) && $imapConfig['useEmailAsUsername']) {
-                    $credentials->username = $this->email;
-                } else {
-                    $credentials->username = $this->_appendDomainOrInstance($credentials->username, $imapConfig);
+                if (!isset($imapConfig['user']) || empty($imapConfig['user'])) {
+                    $emailUser = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+                    $credentials->username = $emailUser->getLoginName($this->user_id, $credentials->username,
+                        $this->email);
                 }
             }
 
-            if (! $this->{$userField}) {
+            if (!$this->{$userField}) {
                 $this->{$userField} = $credentials->username;
             }
 
-            $this->{$passwordField} = $credentials->password;
+            if (!$this->{$passwordField} && !$_onlyUsername) {
+                $this->{$passwordField} = $credentials->password;
+            }
+
         }
-        
-        return TRUE;
+        return true;
     }
 
-    protected function _appendDomainOrInstance($username, $config)
+    public static function _appendDomainOrInstance($username, $config)
     {
         if (! empty($config['instanceName']) && strpos($username, $config['instanceName']) === false) {
             $user = Tinebase_Core::getUser();

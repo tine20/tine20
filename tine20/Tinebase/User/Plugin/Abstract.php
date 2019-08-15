@@ -104,6 +104,11 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         // do nothing
     }
 
+    public function copyUser(Tinebase_Model_FullUser $_user, $newId)
+    {
+        throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
+    }
+    
     /**
      * adds email properties for a new user
      * 
@@ -177,19 +182,25 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * @param $alternativeLoginName
      * @return string
      */
-    protected function _getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null)
+    public function _getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null)
+    {
+        return $this->getLoginName($user->getId(), $user->accountLoginName, $user->accountEmailAddress,
+            $alternativeLoginName);
+    }
+
+    public function getLoginName($accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName = null)
     {
         $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';
         if (isset($this->_config['useEmailAsUsername']) && $this->_config['useEmailAsUsername']) {
-            $emailUsername = $user->accountEmailAddress;
+            $emailUsername = $accountEmailAddress;
         } else if (isset($this->_config['instanceName']) && ! empty($this->_config['instanceName'])) {
-            $emailUsername = $user->getId() . '@' . $this->_config['instanceName'];
+            $emailUsername = $accountId . '@' . $this->_config['instanceName'];
         } else if (isset($this->_config[$domainConfigKey]) && $this->_config[$domainConfigKey] !== null) {
-            $emailUsername = $this->_appendDomain($user->accountLoginName);
+            $emailUsername = $this->_appendDomain($accountLoginName);
         } else if ($alternativeLoginName !== null) {
-            $emailUsername = $emailAddress;
+            $emailUsername = $alternativeLoginName;
         } else {
-            $emailUsername = $user->accountLoginName;
+            $emailUsername = $accountLoginName;
         }
 
         return $emailUsername;
@@ -212,11 +223,48 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * @param  Tinebase_Model_FullUser  $_newUserProperties
      */
     abstract protected function _updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties);
-    
+
+    /**
+     * check if user exists already in plugin user table
+     *
+     * @param Tinebase_Model_FullUser $_user
+     */
+    public function userExists(Tinebase_Model_FullUser $_user)
+    {
+        return $this->_userExists($_user);
+    }
+
     /**
      * check if user exists already in plugin user table
      * 
      * @param Tinebase_Model_FullUser $_user
      */
     abstract protected function _userExists(Tinebase_Model_FullUser $_user);
+
+
+    // hack, should go into Tinebase_EmailUser_Sql but not all EmailUser Backends actually use that SQL one
+    // well not every backend is using sql, its just a bit messy around here
+    public function _getConfiguredSystemDefaults()
+    {
+        $systemDefaults = array();
+
+        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
+        if (!empty($this->_config[$hostAttribute])) {
+            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
+        }
+
+        if (!empty($this->_config['port'])) {
+            $systemDefaults['emailPort'] = $this->_config['port'];
+        }
+
+        if (!empty($this->_config['ssl'])) {
+            $systemDefaults['emailSecure'] = $this->_config['ssl'];
+        }
+
+        if (!empty($this->_config['auth'])) {
+            $systemDefaults['emailAuth'] = $this->_config['auth'];
+        }
+
+        return $systemDefaults;
+    }
 }

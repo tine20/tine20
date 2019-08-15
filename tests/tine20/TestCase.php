@@ -972,4 +972,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         self::assertEquals(1, count($result));
         return $result;
     }
+
+    /**
+     * @return NULL|Felamimail_Model_Account
+     */
+    protected function _getTestUserFelamimailAccount()
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+           ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM]
+        ]);
+        return Felamimail_Controller_Account::getInstance()->search($filter)->getFirstRecord();
+    }
 }
