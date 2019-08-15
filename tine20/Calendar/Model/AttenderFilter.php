@@ -100,6 +100,12 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         $sign = $isExcept ? '<>' : '=';
         
         foreach ($this->_value as $attenderValue) {
+            if (! isset($attenderValue['user_id']) || empty($attenderValue['user_id'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Skipping invalid attender: ' . print_r($attenderValue, true));
+                continue;
+            }
+
             if (in_array($attenderValue['user_type'], array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
                 
                 // @todo user_id might contain filter in the future -> get userids from addressbook controller with contact filter
