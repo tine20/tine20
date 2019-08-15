@@ -14,6 +14,7 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         // ATTENTION !!! PRIO TB !!! NOT NORMAL APP !!!
@@ -35,6 +36,10 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE012_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -71,5 +76,11 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
         $this->addApplicationUpdate('Addressbook', '12.7', self::RELEASE012_UPDATE003);
 
         Tinebase_Group_Sql::doJoinXProps();
+    }
+
+    public function update004()
+    {
+        Tinebase_Container::getInstance()->deleteDuplicateContainer('Addressbook');
+        $this->addApplicationUpdate('Addressbook', '12.8', self::RELEASE012_UPDATE004);
     }
 }
