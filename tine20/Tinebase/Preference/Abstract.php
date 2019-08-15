@@ -748,6 +748,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if ($result->type !== Tinebase_Model_Preference::TYPE_DEFAULT && is_object(Tinebase_Core::getUser())) {
             $defaultPref = $this->_getDefaultPreference($result->name, $_preferences);
             $result->options = $defaultPref->options;
+            if ($result->value === Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $result->value = $defaultPref->value;
+            }
         }
 
         return $result;
