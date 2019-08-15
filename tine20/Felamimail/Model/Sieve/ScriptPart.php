@@ -29,6 +29,9 @@ class Felamimail_Model_Sieve_ScriptPart extends Tinebase_Record_Abstract
     /** @var string */
     const TYPE_NOTIFICATION = 'notification';
 
+    /** @var string  */
+    const TYPE_ADB_LIST = 'adblist';
+
     /**
      * key in $_validators/$_properties array for the field which
      * represents the identifier

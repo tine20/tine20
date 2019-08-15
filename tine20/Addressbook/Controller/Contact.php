@@ -310,6 +310,21 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
+        if (($updatedRecord->email !== $currentRecord->email || (empty($currentRecord->email) &&
+                $updatedRecord->email_home != $currentRecord->email_home)) &&
+                count($listIds = Addressbook_Controller_List::getInstance()->getMemberships($updatedRecord)) > 0) {
+
+            $lists = Addressbook_Controller_List::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $listIds],
+                    ['field' => 'xprops', 'operator' => 'contains', 'value' => Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST],
+                ]));
+            foreach ($lists->filter(function($list) {
+                    return $list->xprops[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST];}) as $list) {
+                Felamimail_Sieve_AdbList::setScriptForList($list);
+            }
+        }
+
         if (isset($record->account_id) && !isset($updatedRecord->account_id)) {
             $updatedRecord->account_id = $record->account_id;
         }

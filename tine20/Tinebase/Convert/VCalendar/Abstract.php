@@ -219,6 +219,10 @@ abstract class Tinebase_Convert_VCalendar_Abstract
                     $alarmTime->setTimezone('UTC');
                     
                     preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->getValue(), $matches);
+                    // PRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN issue: "TRIGGER:P"
+                    if ('P' === $matches['spec']) {
+                        $matches['spec'] = 'PT15M';
+                    }
                     $duration = new DateInterval($matches['spec']);
                     $duration->invert = !!($matches['invert'] === '-');
                     

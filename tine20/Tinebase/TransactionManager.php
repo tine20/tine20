@@ -260,10 +260,10 @@ class Tinebase_TransactionManager
     /**
      * register a callable to call just after the real commit happens
      *
-     * @param array $callable
+     * @param array|callable $callable
      * @param array $param
      */
-    public function registerAfterCommitCallback(array $callable, array $param = array())
+    public function registerAfterCommitCallback($callable, array $param = array())
     {
         $this->_afterCommitCallbacks[] = array($callable, $param);
     }

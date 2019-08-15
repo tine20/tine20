@@ -25,7 +25,7 @@ class Felamimail_Sieve_AdbList
 
     public function __toString()
     {
-        $result = 'require ["envelope"];' . PHP_EOL;
+        $result = 'require ["envelope", "copy"];' . PHP_EOL;
 
         if ($this->_allowExternal) {
             $this->_addRecieverList($result);
@@ -39,7 +39,10 @@ class Felamimail_Sieve_AdbList
             } else {
                 // only internal email addresses are allowed to mail!
                 // TODO FIX ME, get list of allowed domains!
-                $result .= 'if address :is :domain "from" ["tine20.org"] {' . PHP_EOL;
+                if (empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
+                    throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
+                }
+                $result .= 'if address :is :domain "from" ["' . join('","', $internalDomains) . '"] {' . PHP_EOL;
             }
 
             $this->_addRecieverList($result);
@@ -62,7 +65,7 @@ class Felamimail_Sieve_AdbList
     protected function _addRecieverList(&$result)
     {
         foreach ($this->_receiverList as $email) {
-            $result .= 'redirect :copy ' . $email . ';' . PHP_EOL;
+            $result .= 'redirect :copy "' . $email . '";' . PHP_EOL;
         }
     }
 
@@ -102,5 +105,38 @@ class Felamimail_Sieve_AdbList
         }
 
         return $sieveRule;
+    }
+
+    static public function setScriptForList(Addressbook_Model_List $list)
+    {
+        $oldValue = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function() use ($oldValue) {
+            Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldValue);});
+
+        $account = Felamimail_Controller_Account::getInstance()->getAccountForList($list);
+
+        $sieveRule = static::createFromList($list)->__toString();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+            __LINE__ . ' add sieve script: ' . $sieveRule);
+
+        Felamimail_Controller_Sieve::getInstance()->setAdbListScript($account,
+            Felamimail_Model_Sieve_ScriptPart::createFromString(
+                Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $list->getId(), $sieveRule));
+
+        // for unused variable check only
+        unset($raii);
+
+        return true;
+    }
+
+    static public function getSieveScriptForAdbList(Addressbook_Model_List $list)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->getAccountForList($list);
+        if ($account) {
+            return Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+        } else {
+            return null;
+        }
     }
 }

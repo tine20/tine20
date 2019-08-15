@@ -215,7 +215,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      */
     public function create($_accountId, $_folderName, $_parentFolder = '')
     {
-        $account = ($_accountId instanceof Felamimail_Controller_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
         $foldername = $this->_prepareFolderName($_folderName);

@@ -1614,7 +1614,9 @@ class Admin_JsonTest extends TestCase
         $account = $this->_testSimpleRecordApi(
             'EmailAccount', // use non-existant model to make simple api test work
             'name',
-            'email'
+            'email',
+            true,
+            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . $this->_getMailDomain()]
         );
         self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
 
@@ -1628,20 +1630,126 @@ class Admin_JsonTest extends TestCase
         self::assertEquals(0, $result['totalcount'], 'a new (system?) account has been added');
     }
 
-    public function testEmailAccountApiSystemAccount()
+    public function testEmailAccountApiSharedAccount($delete = true)
     {
         $this->_uit = $this->_json;
         $accountdata = [
-            'user_id' => Tinebase_Core::getUser()->toArray(),
-            'type' => Felamimail_Model_Account::TYPE_SYSTEM,
+            'email' => 'shooo@' . $this->_getMailDomain(),
+            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'password' => '123',
+            'grants' => [
+                [
+                    'readGrant' => true,
+                    'editGrant' => true,
+                    'account_type' => 'user',
+                    'account_id' => Tinebase_Core::getUser()->getId(),
+                ]
+            ]
         ];
         $account = $this->_json->saveEmailAccount($accountdata);
-        self::assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $account['email']);
+        self::assertEquals($accountdata['email'], $account['email']);
+        self::assertTrue(isset($account['grants']), 'grants missing');
+        self::assertEquals(1, count($account['grants']));
+        self::assertTrue(isset($account['grants'][0]['account_name']), 'account_id missing: '. print_r($account['grants'], true));
+        self::assertTrue(is_array($account['grants'][0]['account_name']), 'account_id needs to be resolved: '
+            . print_r($account['grants'], true));
         $account['display_format'] = Felamimail_Model_Account::DISPLAY_PLAIN;
         // client sends empty pws - should not be changed!
         $account['password'] = '';
         $account['smtp_password'] = '';
         $updatedAccount = $this->_json->saveEmailAccount($account);
         self::assertEquals(Felamimail_Model_Account::DISPLAY_PLAIN, $updatedAccount['display_format']);
+
+        // we need to commit so imap user is in imap db
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+
+        $account = new Felamimail_Model_Account(array_filter($updatedAccount, function ($val) { return !is_array($val);}));
+        $account->resolveCredentials(false);
+        // this will actually log in into imap, which only works if the user is commited to imap db
+        Felamimail_Backend_ImapFactory::factory($account);
+
+        if ($delete) {
+            $this->_uit->deleteEmailAccounts($account->getId());
+        }
+
+        return $account;
+    }
+
+    public function testEmailAccountApiSharedDoublicateAccount()
+    {
+        $account = $this->testEmailAccountApiSharedAccount(false);
+
+        try {
+            static::setExpectedException(Tinebase_Exception_SystemGeneric::class, 'email account already exists');
+            $this->testEmailAccountApiSharedAccount();
+        } finally {
+            $this->_json->deleteEmailAccounts($account->getId());
+        }
+    }
+
+    public function testUpdateSystemAccount()
+    {
+        $systemaccount = $this->_getTestUserFelamimailAccount();
+        $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
+        $systemaccountArray['reply_to'] = 'someotheraddress@' . $this->_getMailDomain();
+
+        // js fe sends credentials_id fields as empty string ...
+        $systemaccountArray['credentials_id'] = '';
+        $systemaccountArray['smtp_credentials_id'] = '';
+
+        $updatedAccount = $this->_json->saveEmailAccount($systemaccountArray);
+        self::assertEquals($systemaccountArray['reply_to'], $updatedAccount['reply_to']);
+    }
+
+    public function testCreateSystemAccountWithDuplicateEmailAddress()
+    {
+        $this->_uit = $this->_json;
+        $accountdata = [
+            'email' => Tinebase_Core::getUser()->accountEmailAddress,
+            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'password' => '123',
+        ];
+        try {
+            $this->_json->saveEmailAccount($accountdata);
+            self::fail('it should not be possible to create accounts with duplicate email addresses');
+        } catch (Tinebase_Exception_SystemGeneric $ted) {
+            self::assertEquals('email account already exists', $ted->getMessage());
+        }
+    }
+
+    public function testUpdateSystemAccountWithDuplicateEmailAddress()
+    {
+        $this->_uit = $this->_json;
+        $accountdata = [
+            'email' => 'shooo@' . $this->_getMailDomain(),
+            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'password' => '123',
+        ];
+        $account = $this->_json->saveEmailAccount($accountdata);
+        $account['email'] = Tinebase_Core::getUser()->accountEmailAddress;
+
+        try {
+            $this->_json->saveEmailAccount($account);
+            self::fail('it should not be possible to update accounts with duplicate email addresses');
+        } catch (Tinebase_Exception_SystemGeneric $ted) {
+            self::assertEquals('email account already exists', $ted->getMessage());
+        }
+    }
+
+    public function testUpdateSystemAccountChangeUsername()
+    {
+        $this->_uit = $this->_json;
+        $accountdata = [
+            'email' => 'shooo@' . $this->_getMailDomain(),
+            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'password' => '123',
+        ];
+        $account = $this->_json->saveEmailAccount($accountdata);
+        $account['user'] = 'someusername';
+
+        $updatedAccount = $this->_json->saveEmailAccount($account);
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($updatedAccount['id']);
+        $imapConfig = $fmailaccount->getImapConfig();
+        self::assertNotEquals($account['user'], $imapConfig['user']);
     }
 }

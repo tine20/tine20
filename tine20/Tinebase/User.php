@@ -1031,7 +1031,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'accountDisplayName'    => $adminLastName . ', ' . $adminFirstName,
             'accountFirstName'      => $adminFirstName,
             'accountExpires'        => (isset($_options['expires'])) ? $_options['expires'] : NULL,
-            'accountEmailAddress'   => $adminEmailAddress
+            'accountEmailAddress'   => $adminEmailAddress,
+            'groups'                => $adminGroup->getId(),
         ));
         
         if ($adminEmailAddress !== NULL) {
@@ -1052,21 +1053,18 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $user = $userBackend->updateUserInSqlBackend($user);
             // Addressbook is registered as plugin and will take care of the update
             $userBackend->updatePluginUser($user, $user);
+            // set the password for the account
+            // empty password triggers password change dialogue during first login
+            if (!empty($adminPassword)) {
+                Tinebase_User::getInstance()->setPassword($user, $adminPassword);
+            }
+            // add the admin account to all groups
+            Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
+            Tinebase_Group::getInstance()->addGroupMember($userGroup, $user);
         } catch (Tinebase_Exception_NotFound $ten) {
-            // call addUser here to make sure, sql user plugins (email, ...) are triggered
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
-            $user = $userBackend->addUser($user);
+            Admin_Controller_User::getInstance()->create($user, $adminPassword, $adminPassword, true);
         }
         
-        // set the password for the account
-        // empty password triggers password change dialogue during first login
-        if (!empty($adminPassword)) {
-            Tinebase_User::getInstance()->setPassword($user, $adminPassword);
-        }
-
-        // add the admin account to all groups
-        Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
-        Tinebase_Group::getInstance()->addGroupMember($userGroup, $user);
 
         $addressBookController->doContainerACLChecks($oldAcl);
         $addressBookController->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);

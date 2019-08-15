@@ -45,10 +45,102 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function () {
-        var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
-            editDialog: this,
-            disabled: ! (Tine.Tinebase.registry.get('manageImapEmailUser') && Tine.Tinebase.registry.get('manageSmtpEmailUser'))
-        });
+        var tabpanelItems = [{
+            title: this.app.i18n._(this.recordClass.getMeta('recordName')),
+            autoScroll: true,
+            border: false,
+            frame: true,
+            layout: 'border',
+            items: [{
+                region: 'north',
+                xtype: 'columnform',
+                border: false,
+                autoHeight: true,
+                items: [[{
+                    columnWidth: 1,
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Group Name'),
+                    name: 'name',
+                    anchor: '100%',
+                    allowBlank: false
+                }], [{
+                    columnWidth: 1,
+                    xtype: 'textarea',
+                    name: 'description',
+                    fieldLabel: this.app.i18n._('Description'),
+                    grow: false,
+                    preventScrollbars: false,
+                    anchor: '100%',
+                    height: 60
+                }], [{
+                    columnWidth: 0.5,
+                    xtype: 'combo',
+                    fieldLabel: this.app.i18n._('Visibility'),
+                    name: 'visibility',
+                    mode: 'local',
+                    triggerAction: 'all',
+                    allowBlank: false,
+                    editable: false,
+                    store: [['displayed', this.app.i18n._('Display in addressbook')], ['hidden', this.app.i18n._('Hide from addressbook')]],
+                    listeners: {
+                        scope: this,
+                        select: function (combo, record) {
+                            // disable container_id combo if hidden
+                            this.getForm().findField('container_id').setDisabled(record.data.field1 === 'hidden');
+                            if (record.data.field1 === 'hidden') {
+                                this.getForm().findField('container_id').clearInvalid();
+                            } else {
+                                this.getForm().findField('container_id').isValid();
+                            }
+                        }
+                    }
+                }, {
+                    columnWidth: 0.5,
+                    xtype: 'tinerecordpickercombobox',
+                    fieldLabel: this.app.i18n._('Saved in Addressbook'),
+                    name: 'container_id',
+                    blurOnSelect: true,
+                    allowBlank: false,
+                    listWidth: 250,
+                    recordClass: Tine.Tinebase.Model.Container,
+                    recordProxy: Tine.Admin.sharedAddressbookBackend,
+                    disabled: this.record.get('visibility') === 'hidden'
+                }], [{
+                    columnWidth: 1,
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('E-Mail'),
+                    name: 'email',
+                    anchor: '100%',
+                    vtype: 'email',
+                    maxLength: 255,
+                    allowBlank: true
+                }]]
+            }, {
+                xtype: 'tinerecordpickergrid',
+                title: this.app.i18n._('Group Members'),
+                store: this.membersStore,
+                region: 'center',
+                anchor: '100% 100%',
+                showHidden: true
+            }]
+
+        }, new Tine.widgets.activities.ActivitiesTabPanel({
+            app: this.appName,
+            record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
+            record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+        })];
+
+        var adb = Tine.Tinebase.appMgr.get('Addressbook');
+        if (
+            Tine.Tinebase.registry.get('manageImapEmailUser') &&
+            Tine.Tinebase.registry.get('manageSmtpEmailUser') &&
+            adb.featureEnabled('featureMailinglist')
+        ) {
+            var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
+                editDialog: this
+            });
+            tabpanelItems.push(mailingListPanel);
+        }
 
         return {
             xtype: 'tabpanel',
@@ -61,92 +153,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             defaults: {
                 hideMode: 'offsets'
             },
-            items: [{
-                title: this.app.i18n._(this.recordClass.getMeta('recordName')),
-                autoScroll: true,
-                border: false,
-                frame: true,
-                layout: 'border',
-                items: [{
-                    region: 'north',
-                    xtype: 'columnform',
-                    border: false,
-                    autoHeight: true,
-                    items: [[{
-                        columnWidth: 1,
-                        xtype: 'textfield',
-                        fieldLabel: this.app.i18n._('Group Name'),
-                        name: 'name',
-                        anchor: '100%',
-                        allowBlank: false
-                    }], [{
-                        columnWidth: 1,
-                        xtype: 'textarea',
-                        name: 'description',
-                        fieldLabel: this.app.i18n._('Description'),
-                        grow: false,
-                        preventScrollbars: false,
-                        anchor: '100%',
-                        height: 60
-                    }], [{
-                        columnWidth: 0.5,
-                        xtype: 'combo',
-                        fieldLabel: this.app.i18n._('Visibility'),
-                        name: 'visibility',
-                        mode: 'local',
-                        triggerAction: 'all',
-                        allowBlank: false,
-                        editable: false,
-                        store: [['displayed', this.app.i18n._('Display in addressbook')], ['hidden', this.app.i18n._('Hide from addressbook')]],
-                        listeners: {
-                            scope: this,
-                            select: function (combo, record) {
-                                // disable container_id combo if hidden
-                                this.getForm().findField('container_id').setDisabled(record.data.field1 === 'hidden');
-                                if (record.data.field1 === 'hidden') {
-                                    this.getForm().findField('container_id').clearInvalid();
-                                } else {
-                                    this.getForm().findField('container_id').isValid();
-                                }
-                            }
-                        }
-                    }, {
-                        columnWidth: 0.5,
-                        xtype: 'tinerecordpickercombobox',
-                        fieldLabel: this.app.i18n._('Saved in Addressbook'),
-                        name: 'container_id',
-                        blurOnSelect: true,
-                        allowBlank: false,
-                        listWidth: 250,
-                        recordClass: Tine.Tinebase.Model.Container,
-                        recordProxy: Tine.Admin.sharedAddressbookBackend,
-                        disabled: this.record.get('visibility') === 'hidden'
-                    }], [{
-                        columnWidth: 1,
-                        xtype: 'textfield',
-                        fieldLabel: this.app.i18n._('E-Mail'),
-                        name: 'email',
-                        anchor: '100%',
-                        vtype: 'email',
-                        maxLength: 255,
-                        allowBlank: true
-                    }]]
-                }, {
-                    xtype: 'tinerecordpickergrid',
-                    title: this.app.i18n._('Group Members'),
-                    store: this.membersStore,
-                    region: 'center',
-                    anchor: '100% 100%',
-                    showHidden: true
-                }]
-
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            }),
-            mailingListPanel
-            ]
+            items: tabpanelItems
         };
     },
 

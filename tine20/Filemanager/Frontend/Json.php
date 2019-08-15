@@ -70,7 +70,8 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
         
         foreach ($_result['filter'] as $idx => &$filter) {
-            if ($filter['field'] === 'path') {
+            if (isset($filter['field']) && $filter['field'] === 'path') {
+                // TODO what about subfilters?
                 if (is_array($filter['value'])) {
                     $filter['value']['path'] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($filter['value']['path'], $app);
                 } else {

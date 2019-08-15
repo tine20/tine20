@@ -66,12 +66,19 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const FEATURE_CONTACT_EVENT_LIST = 'featureContactEventList';
 
     /**
+     * FEATURE_MAILINGLIST
+     *
+     * @var string
+     */
+    const FEATURE_MAILINGLIST = 'featureMailinglist';
+
+    /**
      * FEATURE_LIST_VIEW
      *
      * @var string
      */
     const FEATURE_LIST_VIEW = 'featureListView';
-    
+
     /**
      * FEATURE_INDUSTRY
      *
@@ -150,6 +157,14 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                     //_('Addressbook Industries')
                     self::DESCRIPTION               => 'Add Industry field to Adressbook',
                     //_('Add Industry field to Adressbook')
+                    self::TYPE                      => self::TYPE_BOOL,
+                    self::DEFAULT_STR               => true,
+                ],
+                self::FEATURE_MAILINGLIST           => [
+                    self::LABEL                     => 'Mailinglists',
+                    //_('Mailinglists')
+                    self::DESCRIPTION               => 'Make group and lists to mailinglists',
+                    //_('Make group and lists to mailinglists')
                     self::TYPE                      => self::TYPE_BOOL,
                     self::DEFAULT_STR               => true,
                 ],

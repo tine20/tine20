@@ -87,6 +87,7 @@ class Tinebase_ModelConfiguration_Const {
     const TABLE = 'table';
     const TITLE_PROPERTY = 'titleProperty';
     const TYPE = 'type';
+    const TYPE_ATTACHMENTS = 'attachments';
     const TYPE_BIGINT = 'bigint';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_CONTAINER = 'container';
@@ -100,12 +101,15 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_KEY_FIELD = 'keyfield';
     const TYPE_MODEL = 'model';
     const TYPE_MONEY = 'money';
+    const TYPE_NOTE = 'note';
     const TYPE_NUMBERABLE_INT = 'numberableInt';
     const TYPE_NUMBERABLE_STRING = 'numberableStr';
     const TYPE_RECORD = 'record';
     const TYPE_RECORDS = 'records';
+    const TYPE_RELATION = 'relation';
     const TYPE_STRING = 'string';
     const TYPE_STRING_AUTOCOMPLETE = 'stringAutocomplete';
+    const TYPE_TAG = 'tag';
     const TYPE_TEXT = 'text';
     const TYPE_TIME = 'time';
     const TYPE_USER = 'user';

@@ -50,15 +50,20 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
     /**
      * get foreign filter group
      * 
-     * @return Tinebase_Model_Filter_FilterGroup
+     * @return Tinebase_Model_Filter_FilterGroup|null
      */
     protected function _setFilterGroup()
     {
         if ($this->_valueIsNull) {
-            return;
+            return null;
         }
         $filters = $this->_getRelationFilters();
-        $this->_filterGroup = new $this->_options['filtergroup']($filters, $this->_operator);
+        $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            $this->_options['filtergroup'],
+            $filters,
+            $this->_operator
+        );
+        return $this->_filterGroup;
     }
     
     /**

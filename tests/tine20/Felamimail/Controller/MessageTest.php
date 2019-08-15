@@ -72,7 +72,7 @@ class Felamimail_Controller_MessageTest extends TestCase
      */
     protected function setUp()
     {
-        $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        $this->_account    = $this->_getTestUserFelamimailAccount();
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         
         $this->_folder     = $this->getFolder($this->_testFolderName);
@@ -83,6 +83,11 @@ class Felamimail_Controller_MessageTest extends TestCase
         if (Zend_Registry::isRegistered('personas')) {
             $this->_personas = Zend_Registry::get('personas');
         }
+    }
+
+    public function getAccount()
+    {
+        return $this->_account;
     }
 
     protected function _getController()
@@ -1560,7 +1565,8 @@ class Felamimail_Controller_MessageTest extends TestCase
         };
         
         if ($_assert) {
-            $this->assertGreaterThan(0, count($result), 'No messages with HEADER ' . $testHeader . ': ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');
+            $this->assertGreaterThan(0, count($result), 'No messages with HEADER "'
+                . $testHeader . '": "' . $_testHeaderValue . '" in folder ' . $_folder->globalname . ' found.');
         }
         $message = (! empty($result)) ? $imap->getSummary($result[0]) : NULL;
         

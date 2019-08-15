@@ -120,7 +120,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         if (Tinebase_Application::getInstance()->isInstalled('Felamimail', true)) {
-            Felamimail_Controller::getInstance()->handleAccountLogin($user);
+            Felamimail_Controller::getInstance()->handleAccountLogin($user, $password);
         }
 
         return true;
