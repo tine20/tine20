@@ -1702,6 +1702,9 @@ class Admin_JsonTest extends TestCase
         }
 
         $systemaccount = $this->_getTestUserFelamimailAccount();
+        if (! $systemaccount) {
+            self::markTestSkipped('no systemaccount configured');
+        }
         $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
         $systemaccountArray['reply_to'] = 'someotheraddress@' . $this->_getMailDomain();
 
