@@ -39,9 +39,7 @@ class Felamimail_AllTests
         $suite = new PHPUnit_Framework_TestSuite('All Felamimail tests');
         
         // only call Felamimail tests if imap is configured in config.inc.php
-        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        
-        if (! empty($imapConfig) && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) && $imapConfig['useSystemAccount']) {
+        if (TestServer::isEmailSystemAccountConfigured()) {
             $suite->addTestSuite(Felamimail_Controller_Cache_MessageTest::class);
             $suite->addTestSuite(Felamimail_Frontend_ActiveSyncTest::class);
             $suite->addTestSuite(Felamimail_Frontend_JsonTest::class);
