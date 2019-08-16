@@ -1610,6 +1610,10 @@ class Admin_JsonTest extends TestCase
 
     public function testEmailAccountApi()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         $this->_uit = $this->_json;
         $account = $this->_testSimpleRecordApi(
             'EmailAccount', // use non-existant model to make simple api test work
@@ -1632,6 +1636,10 @@ class Admin_JsonTest extends TestCase
 
     public function testEmailAccountApiSharedAccount($delete = true)
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => 'shooo@' . $this->_getMailDomain(),
@@ -1689,7 +1697,14 @@ class Admin_JsonTest extends TestCase
 
     public function testUpdateSystemAccount()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         $systemaccount = $this->_getTestUserFelamimailAccount();
+        if (! $systemaccount) {
+            self::markTestSkipped('no systemaccount configured');
+        }
         $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
         $systemaccountArray['reply_to'] = 'someotheraddress@' . $this->_getMailDomain();
 
@@ -1703,6 +1718,10 @@ class Admin_JsonTest extends TestCase
 
     public function testCreateSystemAccountWithDuplicateEmailAddress()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => Tinebase_Core::getUser()->accountEmailAddress,
@@ -1719,6 +1738,10 @@ class Admin_JsonTest extends TestCase
 
     public function testUpdateSystemAccountWithDuplicateEmailAddress()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => 'shooo@' . $this->_getMailDomain(),
@@ -1738,6 +1761,10 @@ class Admin_JsonTest extends TestCase
 
     public function testUpdateSystemAccountChangeUsername()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => 'shooo@' . $this->_getMailDomain(),

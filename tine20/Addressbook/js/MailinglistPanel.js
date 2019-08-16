@@ -122,7 +122,7 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         var xprops = record.get('xprops'),
             isMailingList = this.isMailinglistCheckbox.getValue();
 
-        if (! xprops) {
+        if (! xprops || Ext.isArray(xprops)) {
             xprops = {};
         }
         xprops.useAsMailinglist = isMailingList;
