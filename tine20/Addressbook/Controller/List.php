@@ -326,6 +326,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             // check if group is there, if not => not found exception
             Admin_Controller_Group::getInstance()->get($_record->group_id);
         }
+
+        if (! empty($_record->email)) {
+            $this->_checkEmailAddress($_record->email);
+        }
     }
 
     /**
@@ -357,6 +361,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if (! empty($_record->email) && $_record->email !== $_oldRecord->email) {
+            $this->_checkEmailAddress($_record->email);
+        }
+
         if (! empty($_record->group_id)) {
 
             // first check if something changed that requires special rights
@@ -380,6 +388,39 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 $groupController->update($group, false);
             }
         }
+    }
+
+    protected function _checkEmailAddress($email)
+    {
+        // TODO check email accounts db for duplicates?
+        // TODO check system accounts + groups?
+
+        // already used (check contacts & lists)
+        $backendAndFilter = [
+            'contact' => [
+                'backend' => new Addressbook_Backend_Sql(),
+                'filter' => Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Addressbook_Model_Contact::class, [
+                    ['field' => 'email_query', 'operator' => 'equals', 'value' => $email],
+                ])
+            ],
+            'list' => [
+                'backend' => new Addressbook_Backend_List(),
+                'filter' => Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Addressbook_Model_List::class, [
+                    ['field' => 'email', 'operator' => 'equals', 'value' => $email],
+                ])
+            ],
+        ];
+        foreach ($backendAndFilter as $toCheck) {
+            $result = $toCheck['backend']->search($toCheck['filter'], null, true);
+            if (count($result) > 0) {
+                $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                throw new Tinebase_Exception_SystemGeneric($translation->_('E-Mail address is already given. Please choose another one.'));
+            }
+        }
+
+        Tinebase_EmailUser::checkDomain($email);
     }
 
     protected function _createMailAccount(Addressbook_Model_List $_list)
@@ -534,6 +575,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($upList, 'update', $upList);
 
+            if (! empty($upList->email) && $list->email !== $upList->email) {
+                $this->_checkEmailAddress($upList->email);
+            }
+
             $upList = $this->_backend->update($upList);
             $this->_inspectAfterUpdate($upList, $upList, $list);
             $list = $this->get($upList->getId());
@@ -566,6 +611,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             'members' => (isset($group->members)) ? $this->_getContactIds($group->members) : array(),
             'xprops' => $group->xprops,
         ));
+
+        if (! empty($list->email)) {
+            $this->_checkEmailAddress($list->email);
+        }
 
         // add modlog info
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'create');

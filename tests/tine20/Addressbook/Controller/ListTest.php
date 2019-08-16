@@ -206,6 +206,20 @@ class Addressbook_Controller_ListTest extends TestCase
 
         return $list;
     }
+
+
+    public function testChangeListEmailToAlreadyUsed()
+    {
+        $list = $this->testListAsMailinglist();
+        // try to use already used email address
+        $list->email = Tinebase_Core::getUser()->accountEmailAddress;
+        try {
+            $this->_instance->update($list);
+            self::fail('exception expected for already used email address');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            self::assertEquals('E-Mail address is already given. Please choose another one.', $tesg->getMessage());
+        }
+    }
     
     /**
      * try to get a list
