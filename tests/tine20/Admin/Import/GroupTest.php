@@ -20,6 +20,10 @@ class Admin_Import_GroupTest extends TestCase
      */
     protected $_importContainer = null;
 
+    /**
+     * @group longrunning
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public function testImportDemoData()
     {
         $this->_importContainer = $this->_getTestContainer('Admin', 'Tinebase_Model_Group');

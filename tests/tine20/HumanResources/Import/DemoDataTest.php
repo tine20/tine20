@@ -17,8 +17,11 @@ class HumanResources_Import_DemoDataTest extends TestCase
      * @var Tinebase_Model_Container
      */
     protected $_importContainer = null;
-    
 
+    /**
+     * @group longrunning
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public function testImportDemoData()
     {
         $this->_skipIfLDAPBackend();

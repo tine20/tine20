@@ -226,6 +226,8 @@ class Courses_JsonTest extends TestCase
        
     /**
      * test for import of members (1)
+     *
+     * @group longrunning
      */
     public function testImportMembersIntoCourse1()
     {
@@ -273,6 +275,8 @@ class Courses_JsonTest extends TestCase
     
     /**
      * test for import of members (3) / json import
+     *
+     * @group longrunning
      */
     public function testImportMembersIntoCourse3()
     {
@@ -306,6 +310,8 @@ class Courses_JsonTest extends TestCase
      * test for import of members (5) / json import
      * 
      * @see 0006942: group memberships and login shell missing for new users
+     *
+     * @group longrunning
      */
     public function testImportMembersIntoCourse5()
     {
@@ -350,6 +356,8 @@ class Courses_JsonTest extends TestCase
      * testImportWithMissingList
      * 
      * @see 0007460: check existence of group/list before user import
+     *
+     * @group longrunning
      */
     public function testImportWithMissingList()
     {
@@ -394,6 +402,8 @@ class Courses_JsonTest extends TestCase
      * 
      * @see 0006372: add new course member with a button
      * @see 0006878: set primary group for manually added users
+     *
+     * @group longrunning
      */
     public function testAddNewMember()
     {
@@ -474,6 +484,8 @@ class Courses_JsonTest extends TestCase
     
     /**
      * Test students loginname with schema 3
+     *
+     * @group longrunning
      */
     public function testStudentNameSchema3()
     {
@@ -505,6 +517,8 @@ class Courses_JsonTest extends TestCase
     
     /**
      * Test students loginname with schema 3 with SpecialChars
+     *
+     * @group longrunning
      */
     public function testStudentNameSchemaSpecialChars()
     {
@@ -544,6 +558,8 @@ class Courses_JsonTest extends TestCase
     
     /**
      * Test students loginname with schema set max length
+     *
+     * @group longrunning
      */
     public function testStudentNameSchemaMaxLength()
     {
@@ -804,8 +820,7 @@ class Courses_JsonTest extends TestCase
             </config>')
             ));
         }
-        
-        
+
         return $definition;
     }
 }
