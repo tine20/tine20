@@ -288,7 +288,7 @@ class Tinebase_AccountTest extends TestCase
                 'accountPrimaryGroup' => Tinebase_Core::getUser()->accountPrimaryGroup,
                 'accountLastName'     => 'Tine 2.0 noid',
                 'accountFirstName'    => 'PHPUnit noid',
-                'accountEmailAddress' => 'phpunit@tine20.org'
+                'accountEmailAddress' => 'phpunit@' . $this->_getMailDomain(),
             )
         );
         

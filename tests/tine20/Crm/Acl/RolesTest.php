@@ -39,7 +39,7 @@ class Crm_Acl_RolesTest extends TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'crmPHPUnit',
-            'accountEmailAddress'   => 'crmphpunit@metaways.de'
+            'accountEmailAddress'   => 'crmphpunit@' . $this->_getMailDomain(),
         ));
         $this->objects['role'] = new Tinebase_Model_Role(array(
             'id'                    => '10',
