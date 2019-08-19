@@ -166,7 +166,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION               => 'Make group and lists to mailinglists',
                     //_('Make group and lists to mailinglists')
                     self::TYPE                      => self::TYPE_BOOL,
-                    self::DEFAULT_STR               => true,
+                    self::DEFAULT_STR               => false,
                 ],
                 self::FEATURE_SHORT_NAME           => [
                     self::LABEL                     => 'Addressbook Short Names',

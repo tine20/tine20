@@ -213,12 +213,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             forceSelection: true,
                             value: 'user',
                             xtype: 'combo',
-                            store: [
-                                ['user', this.app.i18n._('External E-Mail Account')],
-                                ['userInternal', this.app.i18n._('User Defined Personal System Account')],
-                                ['shared', this.app.i18n._('Shared System Account')],
-                                ['system', this.app.i18n._('Personal System Account')], // can't be selected for new accounts
-                            ],
+                            store: this.getTypeStore(),
                             listeners: {
                                 scope: this,
                                 select: function(combo, record) {
@@ -499,6 +494,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.grantsGrid
             ]
         };
+    },
+
+    getTypeStore: function() {
+        var availableTypes = [
+            ['user', this.app.i18n._('External E-Mail Account')],
+            ['userInternal', this.app.i18n._('User Defined Personal System Account')],
+            ['shared', this.app.i18n._('Shared System Account')],
+        ];
+
+        if (this.record.id) {
+            // new records can't be personal system accounts
+            availableTypes.push(['system', this.app.i18n._('Personal System Account')]);
+        }
+
+        return availableTypes;
     },
     
     /**

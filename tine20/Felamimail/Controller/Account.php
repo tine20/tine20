@@ -201,7 +201,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
-
         if (! $this->doContainerACLChecks()) {
             return;
         }

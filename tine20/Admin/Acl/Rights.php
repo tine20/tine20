@@ -269,7 +269,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('view accounts'),
                 'description'   => $translate->_('view accounts list and details'),
             ),
-            self::MANAGE_EMAILACCOUNTS   => array(
+            self::VIEW_EMAILACCOUNTS   => array(
                 'text'          => $translate->_('view email accounts'),
                 'description'   => $translate->_('view shared and personal email accounts'),
             ),

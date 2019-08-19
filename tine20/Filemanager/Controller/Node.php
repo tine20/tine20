@@ -235,7 +235,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             return $aclNode;
         }
 
-        if (! Tinebase_Core::getUser()->hasGrant(
+        $currentUser = Tinebase_Core::getUser();
+        if (! $currentUser->hasGrant(
             $record,
             Tinebase_Model_Grants::GRANT_ADMIN,
             'Tinebase_Model_Tree_Node')
@@ -254,7 +255,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         if (empty($record->acl_node) && !$nodePath->isToplevelPath()) {
             // acl_node empty -> remove acl
-            $node = $this->_backend->setAclFromParent($nodePath->statpath);
+            $node = $this->_backend->setAclFromParent($nodePath->statpath, true);
             $aclNode = $node->acl_node;
 
         } elseif ($record->acl_node === $record->getId() && isset($record->grants)) {
@@ -263,7 +264,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $record->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $record->grants);
             }
             $diff = $record->grants->diff($oldGrants);
-            if (!$diff->isEmpty() || $aclNode !== $record->acl_node) {
+            if (!$diff->isEmpty() || $oldRecord->acl_node !== $record->acl_node) {
+                $stillAdmin = false;
+                /** @var Tinebase_Model_Grants $grant */
+                foreach ($record->grants as $grant) {
+                    if ($grant->userHasGrant(Tinebase_Model_Grants::GRANT_ADMIN, $currentUser)) {
+                        $stillAdmin = true;
+                        break;
+                    }
+                }
+                if (!$stillAdmin) {
+                    throw new Tinebase_Exception_SystemGeneric('you can\'t remove your own admin grant'); // _("you can't remove your own admin grant")
+                }
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Setting new node grants.');
                 $this->_backend->setGrantsForNode($record, $record->grants);

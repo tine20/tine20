@@ -25,7 +25,6 @@ class Admin_CliTest extends TestCase
      */
     protected $objects = array();
 
-
     /**
      * config groups
      * 
@@ -272,6 +271,7 @@ class Admin_CliTest extends TestCase
     /**
      * test to import admin users
      *
+     * @group longrunning
      */
     public function testImportUsers()
     {
@@ -346,6 +346,8 @@ class Admin_CliTest extends TestCase
 
     /**
      * test to import admin users
+     *
+     * @group longrunning
      */
     public function testImportUsersWithHeadline()
     {
@@ -357,6 +359,8 @@ class Admin_CliTest extends TestCase
      * testImportUsersWithEmailAndSemicolon
      * 
      * @see 0008300: Import User via CLI don't import all fields
+     *
+     * @group longrunning
      */
     public function testImportUsersWithEmailAndSemicolon()
     {
@@ -366,6 +370,8 @@ class Admin_CliTest extends TestCase
     
     /**
      * testImportUsersWithEmailUser
+     *
+     * @group longrunning
      */
     public function testImportUsersWithEmailUser()
     {
@@ -401,6 +407,8 @@ class Admin_CliTest extends TestCase
     
     /**
      * testImportUsersAdvanced
+     *
+     * @group longrunning
      */
     public function testImportUsersAdvanced()
     {

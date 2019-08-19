@@ -101,9 +101,21 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('get');
 
-        $accounts = $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        return $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+    }
 
-        return $accounts;
+    /**
+     * Gets total count of search with $_filter
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action for right/acl check
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    {
+        $this->_checkRight('get');
+
+        return $this->_backend->searchCount($_filter, $_action);
     }
 
     /**

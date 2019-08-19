@@ -1240,3 +1240,9 @@ msgstr ""
 
 msgid "Default"
 msgstr "Standard"
+
+msgid "view email accounts"
+msgstr "E-Mail-Konten ansehen"
+
+msgid "manage email accounts"
+msgstr "E-Mail-Konten verwalten"

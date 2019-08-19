@@ -163,6 +163,10 @@ class Addressbook_Controller_ListTest extends TestCase
 
     public function testListAsMailinglist()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         if (empty(Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
             Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
         }
@@ -205,6 +209,20 @@ class Addressbook_Controller_ListTest extends TestCase
         static::assertNull($account, 'account was not deleted');
 
         return $list;
+    }
+
+
+    public function testChangeListEmailToAlreadyUsed()
+    {
+        $list = $this->testListAsMailinglist();
+        // try to use already used email address
+        $list->email = Tinebase_Core::getUser()->accountEmailAddress;
+        try {
+            $this->_instance->update($list);
+            self::fail('exception expected for already used email address');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            self::assertEquals('E-Mail address is already given. Please choose another one.', $tesg->getMessage());
+        }
     }
     
     /**

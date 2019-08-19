@@ -169,7 +169,9 @@ Tine.Admin.init = function () {
         }
 
         // TODO use hooking mechanism
-        if (Tine.Tinebase.appMgr.get('Felamimail') && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')) {
+        if (Tine.Tinebase.appMgr.get('Felamimail')
+            && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')
+        ) {
             tree.push({
                 text: translation.gettext('E-Mail Accounts'),
                 //pos: 850,
@@ -351,7 +353,12 @@ Tine.Admin.init = function () {
                 Tine.ActiveSync.syncdevices.show();
                 break;
             case 'emailaccounts':
-                Tine.Felamimail.Admin.emailaccounts.show();
+                // TODO should be hidden if feature is disabled
+                if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featureEmailAccounts')) {
+                    Tine.Felamimail.Admin.emailaccounts.show();
+                } else {
+                    Ext.MessageBox.alert(translation.gettext('Disabled'), translation.gettext('Feature is disabled by configuration.'));
+                }
                 break;
 
             default:

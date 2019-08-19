@@ -260,10 +260,11 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      * test uninstall application
      *
      */
-    public function testUninstallTinebaseShouldThrowDependencyException()
+    public function testUninstallTinebase()
     {
-        $result = $this->_uit->uninstallApplications(array('Tinebase'));
+        $this->_uit->uninstallApplications(array('Tinebase'));
         $this->assertTrue($this->_uit->setupRequired());
+        Tinebase_Core::unsetUser();
     }
     
     /**

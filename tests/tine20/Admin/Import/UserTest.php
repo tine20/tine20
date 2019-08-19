@@ -25,6 +25,11 @@ class Admin_Import_UserTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
+     * @group longrunning
+     */
     public function testImportDemoData()
     {
         // skip test if domain != 'example.org'
