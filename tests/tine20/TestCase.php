@@ -115,6 +115,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $refProp = new ReflectionProperty(Felamimail_Controller_Account::class, '_instance');
+        $refProp->setAccessible(true);
+        $refProp->setValue(Felamimail_Controller_AccountMock::getInstance());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
 
@@ -168,6 +172,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         Tinebase_Lock_UnitTestFix::clearLocks();
+
+        Felamimail_Controller_AccountMock::getInstance()->cleanUp();
     }
 
     /**
