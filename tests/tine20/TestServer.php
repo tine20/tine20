@@ -340,4 +340,10 @@ class TestServer
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         return (! empty($imapConfig) && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) && $imapConfig['useSystemAccount']);
     }
+
+    public static function isMultiinstanceBackend()
+    {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        return (! empty($smtpConfig) && isset($smtpConfig['backend']) && ('Smtp' . ucfirst($smtpConfig['backend'])) == Tinebase_EmailUser::SMTP_POSTFIXMULTIINSTANCE);
+    }
 }
