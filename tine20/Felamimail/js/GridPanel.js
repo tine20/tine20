@@ -1403,8 +1403,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Event} event
      */
     onAddAccount: function(button, event) {
+        // it is only allowed to create user (external) accounts here
+        var newAccount = new Tine.Felamimail.Model.Account({
+            type: 'user'
+        });
+        // this is a little bit clunky but seems to be required to prevent record loading in AccountEditDialog
+        newAccount.id = null;
         var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
-            record: null,
+            record: newAccount,
             listeners: {
                 scope: this,
                 'update': function(record) {
