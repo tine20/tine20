@@ -232,6 +232,10 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testDuplicateUserId()
     {
+        if (TestServer::isMultiinstanceBackend()) {
+            $this->markTestSkipped('FIXME not working with multiinstance backend - cleanup all email user data!');
+        }
+
         $emailDomain = TestServer::getPrimaryMailDomain();
         $user = $this->_addUser('testuser@' . $emailDomain);
 
@@ -255,6 +259,10 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testInstanceName()
     {
+        if (TestServer::isMultiinstanceBackend()) {
+            $this->markTestSkipped('FIXME not working with multiinstance backend - cleanup all email user data!');
+        }
+
         // check if is instanceName in config
         if (empty($this->_config['instanceName'])) {
             self::markTestSkipped('no instanceName set in config');
