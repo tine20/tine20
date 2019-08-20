@@ -1575,3 +1575,6 @@ msgstr "Es ist nicht möglich, neue persönliche Systemkonten zu erstellen"
 
 msgid "Use"
 msgstr "Benutzen"
+
+msgid "Account Type"
+msgstr "Kontotyp"
