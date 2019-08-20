@@ -1075,7 +1075,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _createSystemFolder(Felamimail_Model_Account $_account, $_systemFolder)
     {
-        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $_systemFolder . '. Trying to add it.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $_systemFolder . '. Trying to add it.');
         
         $splitFolderName = Felamimail_Model_Folder::extractLocalnameAndParent($_systemFolder, $_account->delimiter);
         
