@@ -317,7 +317,7 @@ class Felamimail_Controller_AccountTest extends TestCase
     public function testChangeSystemAccountEmailAddress()
     {
         $user = Admin_Controller_User::getInstance()->get(Tinebase_Core::getUser()->getId());
-        $user->accountEmailAddress = 'someaddress@' . TestServer::getPrimaryMailDomain();
+        $user->accountEmailAddress = 'someaddress@' . $this->_getMailDomain();
         // TODO find out why we lose the right sometimes ...
         try {
             Admin_Controller_User::getInstance()->update($user);

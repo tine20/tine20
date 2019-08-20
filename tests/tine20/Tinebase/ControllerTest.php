@@ -172,7 +172,7 @@ class Tinebase_ControllerTest extends TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain()
+            'accountEmailAddress'   => 'phpunit@' . $this->_getMailDomain(),
         ));
         $account = Admin_Controller_User::getInstance()->create($account, $pw, $pw);
         $filter = new Tinebase_Model_PersistentFilter(

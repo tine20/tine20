@@ -941,6 +941,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw new Tinebase_Exception_Record_Validation('Invalid user object. ' . print_r($_user->getValidationErrors(), TRUE));
         }
 
+        Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true);
+
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
         $oldUser = $this->getFullUserById($accountId);
@@ -1044,6 +1046,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function addUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {
+        Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true);
+
         $_user->isValid(TRUE);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));

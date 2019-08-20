@@ -1111,7 +1111,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'accountLastName'       => 'User',
             'accountFirstName'      => 'Test',
             'accountFullName'       => 'Test User',
-            'accountEmailAddress'   => 'unittestx8@tine20.org',
+            'accountEmailAddress'   => 'unittestx8@' . $this->_getMailDomain(),
         ));
         
         $user = Admin_Controller_User::getInstance()->create($user, 'pw', 'pw');
@@ -1369,7 +1369,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'accountLastName'       => 'User',
             'accountFirstName'      => 'Test',
             'accountFullName'       => 'Test User',
-            'accountEmailAddress'   => 'unittestx8@tine20.org',
+            'accountEmailAddress'   => 'unittestx8@' . $this->_getMailDomain(),
         ));
         
         $user = Admin_Controller_User::getInstance()->create($user, 'pw', 'pw');
