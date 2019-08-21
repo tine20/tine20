@@ -59,7 +59,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
         self::VERSION                   => 1,
         self::RECORD_NAME               => 'Absence reason',
         self::RECORDS_NAME              => 'Absence reasons', // ngettext('Absence reason', 'Absence reasons', n)
-        self::TITLE_PROPERTY            => 'id',
+        self::TITLE_PROPERTY            => 'name',
         self::HAS_CUSTOM_FIELDS         => true,
         self::HAS_NOTES                 => true,
         self::HAS_TAGS                  => true,
