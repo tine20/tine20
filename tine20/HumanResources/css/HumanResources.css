@@ -49,3 +49,21 @@
 .hr-date-feast {
     background-color: #ffac71!important;
 }
+
+.FreeTimePlanning {
+    background-image:url(../../images/icon-set/icon_calendar_strahl.svg) !important;
+}
+
+.hr-freetimeplanning-daycell {
+    box-sizing: border-box;
+    text-align: center;
+    padding-top: 1px;
+    margin: -3px;
+    height: 17px;
+    border: 1px solid lightgrey;
+}
+
+.x-grid3-cell-selected .hr-freetimeplanning-daycell {
+    border: 2px solid #b8cfee;
+    border-right: 3px solid #b8cfee;
+}

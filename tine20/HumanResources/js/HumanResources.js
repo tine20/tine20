@@ -23,7 +23,7 @@ Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
         if (this.featureEnabled(('workingTimeAccounting'))) {
             Tine.widgets.MainScreen.registerContentType('HumanResources', {
                 contentType: 'FreeTimePlanning',
-                text: 'Free Time Planning', // _('Free Time Planning')
+                text: 'Free Time Planning', // _('Free Time Planning'),
                 xtype: 'humanresources.freetimeplanning'
             });
 

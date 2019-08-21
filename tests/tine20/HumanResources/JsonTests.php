@@ -636,8 +636,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $res = $result['results'];
         $this->assertEquals(27, $res['remainingVacation']);
         $this->assertEquals(5, $res['extraFreeTimes']['remaining']);
-        $this->assertEquals(6, count($res['vacationDays']));
-        $this->assertEquals(0, count($res['sicknessDays']));
+//        $this->assertEquals(6, count($res['vacationDays'])); // not used in client
+//        $this->assertEquals(0, count($res['sicknessDays'])); // not used in client
         $this->assertEquals(104, count($res['excludeDates']));
         $this->assertEquals(NULL, $res['ownFreeDays']);
         $this->assertEquals(11, count($res['feastDays']));
@@ -668,7 +668,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-        $this->assertEquals(9, count($res['vacationDays']));
+//        $this->assertEquals(9, count($res['vacationDays'])); // not used in client
         $this->assertEquals(24, $res['remainingVacation']);
         
         // overwrite last 2 days of previous vacation with sickness
@@ -693,8 +693,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-        $this->assertEquals(7, count($res['vacationDays']));
-        $this->assertEquals(2, count($res['sicknessDays']));
+//        $this->assertEquals(7, count($res['vacationDays'])); // not used in client
+//        $this->assertEquals(2, count($res['sicknessDays'])); // not used in client
         $this->assertEquals(26, $res['remainingVacation']);
     }
     
@@ -851,8 +851,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $res = $result['results'];
             $this->assertEquals(2, $res['remainingVacation']);
             $this->assertEquals(0, $res['extraFreeTimes']['remaining']);
-            $this->assertEquals(0, count($res['vacationDays']));
-            $this->assertEquals(0, count($res['sicknessDays']));
+//            $this->assertEquals(0, count($res['vacationDays'])); // not used in client
+//            $this->assertEquals(0, count($res['sicknessDays'])); // not used in client
             $this->assertEquals(8, count($res['excludeDates']));
             $this->assertEquals(NULL, $res['ownFreeDays']);
             

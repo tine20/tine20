@@ -625,12 +625,12 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $acceptedVacationTimes = $vacationTimes->filter('status', 'ACCEPTED');
         
-        // search all sickness times for the interval
-        $sicknessTimesFilter = clone $freeTimeFilter;
-        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'type', 'operator' => 'equals', 'value' => 'sickness')));
-        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $fddMin)));
-        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $fddMax)));
-        $sicknessTimes = $ftController->search($sicknessTimesFilter);
+//        // search all sickness times for the interval
+//        $sicknessTimesFilter = clone $freeTimeFilter;
+//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'type', 'operator' => 'equals', 'value' => 'sickness')));
+//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $fddMin)));
+//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $fddMax)));
+//        $sicknessTimes = $ftController->search($sicknessTimesFilter);
         
         // search free days belonging the found free times
         
@@ -645,11 +645,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $remainingVacation = $remainingVacation - $fdController->search($accountFreeDayFilter)->count();
         }
         
-        // find all vacation days of the period
-        $vacationDayFilter = clone $freeDayFilter;
-        $vacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)));
-        
-        $vacationDays = $fdController->search($vacationDayFilter);
+//        // find all vacation days of the period
+//        $vacationDayFilter = clone $freeDayFilter;
+//        $vacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)));
+//
+//        $vacationDays = $fdController->search($vacationDayFilter);
         
         // find out accepted vacation days. Vacation days will be substracted from remainingVacation only if they are accepted,
         // but they will be shown in the freetime edit dialog
@@ -670,13 +670,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $extraFreeTimes = NULL;
         }
         
-        // find all sickness days of the period
-        $sicknessDayFilter = clone $freeDayFilter;
-        $sicknessDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $sicknessTimes->id)));
-        $sicknessDays = $fdController->search($sicknessDayFilter);
+//        // find all sickness days of the period
+//        $sicknessDayFilter = clone $freeDayFilter;
+//        $sicknessDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $sicknessTimes->id)));
+//        $sicknessDays = $fdController->search($sicknessDayFilter);
         
         $ownFreeDays = NULL;
-        
+
+        // "own" means the freeDays of the currently loaded freeTime!
         if ($_freeTimeId) {
             $ownFreeDaysFilter = clone $freeDayFilter;
             $ownFreeDaysFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => array($_freeTimeId))));
@@ -684,17 +685,26 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $remainingVacation = $remainingVacation - $ownFreeDays->count();
             $ownFreeDays = $ownFreeDays->toArray();
         }
-        
+
+        $allFreeTimes = $ftController->search($freeTimeFilter);
+        $allFreeDayFilter = clone $freeDayFilter;
+        $allFreeDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $allFreeTimes->id)));
+        $allFreeDays = $fdController->search($allFreeDayFilter);
+        $freeTimeTypes = HumanResources_Controller_FreeTimeType::getInstance()->getAll();
+
         // TODO: remove results property, just return results array itself
         return array(
             'results' => array(
                 'remainingVacation' => floor($remainingVacation),
                 'extraFreeTimes'    => $extraFreeTimes,
-                'vacationDays'      => $vacationDays->toArray(),
-                'sicknessDays'      => $sicknessDays->toArray(),
+//                'vacationDays'      => $vacationDays->toArray(),
+//                'sicknessDays'      => $sicknessDays->toArray(),
                 'excludeDates'      => $excludeDates,
                 'ownFreeDays'       => $ownFreeDays,
                 'allVacation'       => $allVacation,
+                'freeTimeTypes'     => $freeTimeTypes->toArray(),
+                'allFreeTimes'      => $allFreeTimes->toArray(),
+                'allFreeDays'       => $allFreeDays->toArray(),
                 'feastDays'         => $feastDays,
                 'contracts'         => $contracts->toArray(),
                 'employee'          => $employee->toArray(),
