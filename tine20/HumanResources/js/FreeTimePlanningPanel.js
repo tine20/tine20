@@ -126,8 +126,6 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
     renderFreeDay: function(value, metaData, record, rowIndex, colIndex, store, day) {
         let me = this;
-        let feastAndFreeDays  = _.get(record, 'feastAndFreeDays.' + day.format('Y'));
-
         let bgColor = '#FFFFFF';
         let char = '';
 
@@ -306,12 +304,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
                 _.each(feastAndFreeDays,  (feastAndFreeDaysFor) => {
                     // sort freedays into freetime
-                    let allFreeDays = _.get(feastAndFreeDaysFor, 'allFreeDays', []);
-                    let freeTimeTypes =  _.get(feastAndFreeDaysFor, 'freeTimeTypes', []);
-                    _.each(_.get(feastAndFreeDaysFor, 'allFreeTimes', []), (freeTime) => {
-                        _.set(freeTime, 'freedays', _.filter(allFreeDays, {freetime_id: freeTime.id}), []);
-                        _.set(freeTime, 'type', _.find(freeTimeTypes, {id: freeTime.type}));
-                    });
+                    Tine.HumanResources.Model.FreeTime.prepareFeastAndFreeDays(feastAndFreeDaysFor);
 
                     // reference feastAndFreeDays in corresponding employee record
                     let employee = _.find(me.store.data.items, {id: _.get(feastAndFreeDaysFor, 'employee.id')});
@@ -407,16 +400,9 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
      * @param {Date} day
      */
     isExcludeDay(employee, day) {
-        let feastAndFreeDays  = _.get(employee, 'feastAndFreeDays.' + day.format('Y'));
-        let isExcludeDay = false;
+        const feastAndFreeDaysCache  = _.get(employee, 'feastAndFreeDays', {});
 
-        if (feastAndFreeDays) {
-            if (_.find(_.get(feastAndFreeDays, 'excludeDates', []), {date: day.format('Y-m-d 00:00:00.000000')})) {
-                isExcludeDay = true;
-            }
-        }
-
-        return isExcludeDay;
+        return Tine.HumanResources.Model.FreeTime.isExcludeDay(feastAndFreeDaysCache, day);
     },
 
     /**
@@ -425,11 +411,9 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
      * @param {Date|Date[]}day
      */
     getFreeTimes(employee, day) {
-        return _.uniq(_.reduce(_.isArray(day) ? day : [day], (freeTimes, day) => {
-            let feastAndFreeDays  = _.get(employee, 'feastAndFreeDays.' + day.format('Y'), []);
-            let freeDayIds = _.map(_.filter(_.get(feastAndFreeDays, 'allFreeDays', []), {date: day.format('Y-m-d 00:00:00')}), 'freetime_id');
-            return freeTimes.concat(_.filter(_.get(feastAndFreeDays, 'allFreeTimes', []), (freeTime) => {return _.indexOf(freeDayIds, freeTime.id) >= 0}));
-        }, []));
+        const feastAndFreeDaysCache  = _.get(employee, 'feastAndFreeDays', {});
+        
+        return Tine.HumanResources.Model.FreeTime.getFreeTimes(feastAndFreeDaysCache, day);
     },
 });
 

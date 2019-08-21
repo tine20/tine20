@@ -31,7 +31,7 @@
 }
 
 .HumanResources .x-date-picker {
-    border-color: #B5B8C8!important;
+    border: 0;
 }
 
 .hr-date-sickness a, .hr-date-vacation a, .hr-date-feast a {

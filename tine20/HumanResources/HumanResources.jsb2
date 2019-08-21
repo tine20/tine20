@@ -36,23 +36,11 @@
           "path": "js/"
         },
         {
-          "text": "DatePicker.js",
-          "path": "js/"
-        },
-        {
           "text": "FreeDayGridPanel.js",
           "path": "js/"
         },
         {
           "text": "FreeTimeEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "VacationEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "SicknessEditDialog.js",
           "path": "js/"
         },
         {
