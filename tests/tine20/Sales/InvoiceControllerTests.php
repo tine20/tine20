@@ -783,7 +783,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'accountLastName'       => 'User',
             'accountFirstName'      => 'Test',
             'accountFullName'       => 'Test User',
-            'accountEmailAddress'   => 'unittestx8@' . $this->_getMailDomain(),
+            'accountEmailAddress'   => 'unittestx8@' . TestServer::getPrimaryMailDomain(),
         ));
         
         $user = Admin_Controller_User::getInstance()->create($user, 'pw5823H132', 'pw5823H132');

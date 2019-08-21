@@ -50,7 +50,7 @@ class Admin_ControllerTest extends TestCase
 //            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
 //            'accountLastName'       => 'Tine 2.0',
 //            'accountFirstName'      => 'PHPUnit',
-//            'accountEmailAddress'   => 'phpunit@metaways.de' // use $this->_getMailDomain()
+//            'accountEmailAddress'   => 'phpunit@metaways.de' // use TestServer::getPrimaryMailDomain()
 //        ));
 //
 //        $this->objects['updatedAccount'] = new Tinebase_Model_FullUser(array(
@@ -60,7 +60,7 @@ class Admin_ControllerTest extends TestCase
 //            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
 //            'accountLastName'       => 'Tine 2.0 Updated',
 //            'accountFirstName'      => 'PHPUnit Updated',
-//            'accountEmailAddress'   => 'phpunit@tine20.org' /7 use $this->_getMailDomain()
+//            'accountEmailAddress'   => 'phpunit@tine20.org' /7 use TestServer::getPrimaryMailDomain()
 //        ));
 //
 //            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {

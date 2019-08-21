@@ -2228,12 +2228,12 @@ Steuernummer 33/111/32212";
     public function testUpdateListEmail()
     {
         $list = $this->testCreateListWithMemberAndRole();
-        $list['email'] = 'somelistemail@' . $this->_getMailDomain();
+        $list['email'] = 'somelistemail@' . TestServer::getPrimaryMailDomain();
         // client sends empty memberroles like that ...
         $list['memberroles'] = '';
         $updatedList = $this->_uit->saveList($list);
         self::assertEquals($list['email'], $updatedList['email']);
-        $updatedList['email'] = 'somelistemailupdated@' . $this->_getMailDomain();
+        $updatedList['email'] = 'somelistemailupdated@' . TestServer::getPrimaryMailDomain();
         $updatedListAgain = $this->_uit->saveList($updatedList);
         self::assertEquals($updatedList['email'], $updatedListAgain['email']);
     }
@@ -2257,7 +2257,7 @@ Steuernummer 33/111/32212";
         // try to overwrite it with jsmith
         $jsmith = Tinebase_User::getInstance()->getFullUserByLoginName('jsmith');
         Tinebase_Core::setUser($jsmith);
-        $list['email'] = Tinebase_Record_Abstract::generateUID(10) . '@' . $this->_getMailDomain();
+        $list['email'] = Tinebase_Record_Abstract::generateUID(10) . '@' . TestServer::getPrimaryMailDomain();
         try {
             $this->_uit->saveList($list);
             self::fail('jsmith should not be able to update the record');

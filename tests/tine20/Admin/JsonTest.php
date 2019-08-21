@@ -50,7 +50,7 @@ class Admin_JsonTest extends TestCase
 
         $this->objects['user'] = TestCase::getTestUser([
             'accountLoginName'      => 'phpunitadminjson',
-            'accountEmailAddress'   => 'phpunitadminjson@' . $this->_getMailDomain(),
+            'accountEmailAddress'   => 'phpunitadminjson@' . TestServer::getPrimaryMailDomain(),
         ]);
 
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -1620,7 +1620,7 @@ class Admin_JsonTest extends TestCase
             'name',
             'email',
             true,
-            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . $this->_getMailDomain()]
+            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . TestServer::getPrimaryMailDomain()]
         );
         self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
 
@@ -1642,7 +1642,7 @@ class Admin_JsonTest extends TestCase
 
         $this->_uit = $this->_json;
         $accountdata = [
-            'email' => 'shooo@' . $this->_getMailDomain(),
+            'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
             'grants' => [
@@ -1706,7 +1706,7 @@ class Admin_JsonTest extends TestCase
             self::markTestSkipped('no systemaccount configured');
         }
         $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
-        $systemaccountArray['reply_to'] = 'someotheraddress@' . $this->_getMailDomain();
+        $systemaccountArray['reply_to'] = 'someotheraddress@' . TestServer::getPrimaryMailDomain();
 
         // js fe sends credentials_id fields as empty string ...
         $systemaccountArray['credentials_id'] = '';
@@ -1744,7 +1744,7 @@ class Admin_JsonTest extends TestCase
 
         $this->_uit = $this->_json;
         $accountdata = [
-            'email' => 'shooo@' . $this->_getMailDomain(),
+            'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
         ];
@@ -1767,7 +1767,7 @@ class Admin_JsonTest extends TestCase
 
         $this->_uit = $this->_json;
         $accountdata = [
-            'email' => 'shooo@' . $this->_getMailDomain(),
+            'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
         ];

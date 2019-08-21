@@ -30,7 +30,7 @@ class Tinebase_AccountTest extends TestCase
                 'accountPrimaryGroup' => Tinebase_Core::getUser()->accountPrimaryGroup,
                 'accountLastName'     => 'Tine 2.0',
                 'accountFirstName'    => 'PHPUnit',
-                'accountEmailAddress' => 'phpunit@' . $this->_getMailDomain()
+                'accountEmailAddress' => 'phpunit@' . TestServer::getPrimaryMailDomain()
             )
         ));
         
@@ -288,7 +288,7 @@ class Tinebase_AccountTest extends TestCase
                 'accountPrimaryGroup' => Tinebase_Core::getUser()->accountPrimaryGroup,
                 'accountLastName'     => 'Tine 2.0 noid',
                 'accountFirstName'    => 'PHPUnit noid',
-                'accountEmailAddress' => 'phpunit@' . $this->_getMailDomain(),
+                'accountEmailAddress' => 'phpunit@' . TestServer::getPrimaryMailDomain(),
             )
         );
         

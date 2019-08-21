@@ -80,7 +80,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
             'accountPrimaryGroup'   => 'must be set to valid groupid',
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@' . $this->_getMailDomain(),
+            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain(),
         ));
 
         $this->objects['groups'] = new Tinebase_Record_RecordSet('Tinebase_Model_Group');

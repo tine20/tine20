@@ -375,16 +375,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * get test mail domain
-     * 
-     * @return string
-     */
-    protected function _getMailDomain()
-    {
-        return TestServer::getPrimaryMailDomain();
-    }
-    
-    /**
      * get test user email address
      * 
      * @return string test user email address
