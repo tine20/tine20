@@ -26,7 +26,10 @@ class Felamimail_Sieve_AdbList
 
     public function __toString()
     {
-        $result = 'require ["envelope", "copy"];' . PHP_EOL;
+        $result = 'require ["envelope", "copy", "reject"];' . PHP_EOL;
+        $rejectMsg = Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_MAILINGLIST_REJECT_REASON};
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $rejectMsg = $translation->_($rejectMsg);
 
         if ($this->_allowExternal) {
             $this->_addRecieverList($result);
@@ -35,11 +38,10 @@ class Felamimail_Sieve_AdbList
             }
 
         } else {
-            if ($this->_allowOnlyGroupMembers) {
+            if ($this->_allowOnlyGroupMembers && empty($this->_receiverList)) {
                 $result .= 'if address :is :all "from" ["' . join('","', $this->_receiverList) . '"] {' . PHP_EOL;
             } else {
                 // only internal email addresses are allowed to mail!
-                // TODO FIX ME, get list of allowed domains!
                 if (empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
                     throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
                 }
@@ -50,15 +52,13 @@ class Felamimail_Sieve_AdbList
 
             if (!$this->_keepCopy) {
                 // we don't keep a copy, so discard everything
-                $result .= '}' . PHP_EOL . 'discard;' . PHP_EOL;
+                $result .= '}' . PHP_EOL . 'reject "' . $rejectMsg . '";' . PHP_EOL;
             } else {
                 // we keep msg by default, only if the condition was not met we discard?
                 // always discard non-allowed msgs?!?
-                $result .= '} else { discard; }' . PHP_EOL;
+                $result .= '} else { reject "' . $rejectMsg . '"; }' . PHP_EOL;
             }
         }
-
-
 
         return $result;
     }
@@ -94,14 +94,10 @@ class Felamimail_Sieve_AdbList
     {
         $sieveRule = new self();
 
-        if (empty($_list->members) || empty($_list->email)) {
-            return $sieveRule;
-        }
-
-        $sieveRule->_receiverList = array_keys(Addressbook_Controller_Contact::getInstance()->search(
+        $sieveRule->_receiverList = array_filter(array_keys(Addressbook_Controller_Contact::getInstance()->search(
             new Addressbook_Model_ContactFilter([
                 ['field' => 'id', 'operator' => 'in', 'value' => $_list->members]
-            ]), null, false, ['email']));
+            ]), null, false, ['email'])));
 
         if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY]) && $_list
                 ->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY]) {

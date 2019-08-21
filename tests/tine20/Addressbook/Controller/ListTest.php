@@ -144,7 +144,19 @@ class Addressbook_Controller_ListTest extends TestCase
             'members'      => array($this->objects['contact1'], $this->objects['contact2']),
         ));
     }
-    
+
+    protected function tearDown()
+    {
+        foreach ([$this->objects['contact1'], $this->objects['contact2']] as $contact) {
+            try {
+                Addressbook_Controller_Contact::getInstance()->delete([$contact->getId()]);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
+        }
+
+        parent::tearDown();
+    }
+
     /**
      * try to add a list
      * 
@@ -166,6 +178,8 @@ class Addressbook_Controller_ListTest extends TestCase
         if (! TestServer::isEmailSystemAccountConfigured()) {
             self::markTestSkipped('imap systemaccount config required');
         }
+
+        $this->_testNeedsTransaction();
 
         if (empty(Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
             Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
@@ -208,9 +222,10 @@ class Addressbook_Controller_ListTest extends TestCase
         ]))->getFirstRecord();
         static::assertNull($account, 'account was not deleted');
 
+        $this->_listsToDelete[] = $list;
+
         return $list;
     }
-
 
     public function testChangeListEmailToAlreadyUsed()
     {

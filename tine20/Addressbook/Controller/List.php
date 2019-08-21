@@ -502,6 +502,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 $this->_createMailAccount($updatedRecord);
             }
 
+            Felamimail_Sieve_AdbList::setScriptForList($updatedRecord);
+
         } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
                 preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
