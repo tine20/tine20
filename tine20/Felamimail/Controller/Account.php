@@ -57,7 +57,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_modelName = Felamimail_Model_Account::class;
         $this->_doContainerACLChecks = true;
@@ -1143,7 +1143,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $email = $this->_getAccountEmail($_account);
         
         // only create account if email address is set
-        if ($email) {
+        if ($email && $_account->imapUser instanceof Tinebase_Model_EmailUser) {
             if (null !== ($systemAccount = $this->getSystemAccount($_account->getId()))) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' system account "' . $systemAccount->name . '" already exists.');

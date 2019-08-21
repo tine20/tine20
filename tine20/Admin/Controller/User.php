@@ -381,6 +381,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'create');
             
             $user = $this->_userBackend->addUser($_user);
+            $user->imapUser = $_user->imapUser;
             
             // make sure primary groups is in the list of groupmemberships
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));

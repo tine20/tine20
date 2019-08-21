@@ -296,4 +296,11 @@ class Tinebase_TransactionManager
     {
         $this->_unitTestForceSkipRollBack = $bool;
     }
+
+    public function unitTestRemoveTransactionable($_transactionable)
+    {
+        if (false !== ($pos = array_search($_transactionable, $this->_openTransactionables, true))) {
+            unset($this->_openTransactionables[$pos]);
+        }
+    }
 }
