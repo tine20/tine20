@@ -1254,6 +1254,8 @@ class Tinebase_FileSystem implements
         $transactionId = $transactionManager->startTransaction(Tinebase_Core::getDb());
 
         try {
+            $this->acquireWriteLock();
+
             try {
                 $node = $this->stat($oldPath);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
@@ -1331,6 +1333,13 @@ class Tinebase_FileSystem implements
             } catch (Tinebase_Exception_NotFound $tenf) {}
 
             $node = $this->_getTreeNodeBackend()->update($node, true);
+            $nodeObject = $this->_fileObjectBackend->get($node->object_id);
+            $updatedNodeObject = clone $nodeObject;
+            $updatedNodeObject->hash = Tinebase_Record_Abstract::generateUID();
+            Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($updatedNodeObject, 'update',
+                $nodeObject);
+            $this->_fileObjectBackend->update($updatedNodeObject);
+            $this->_updateDirectoryNodesHash($newPath);
 
             $transactionManager->commitTransaction($transactionId);
             $transactionId = null;
