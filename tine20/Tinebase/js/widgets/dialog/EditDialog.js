@@ -988,9 +988,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.record.commit();
         }).defer(100, this);
         
-        if (this.loadMask && !this.saving) {
-            this.loadMask.hide();
-        }
+        this.hideLoadMask();
     },
     
     /**
@@ -1034,10 +1032,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         ]);
         
-        if (this.loadMask !== false && this.i18nRecordName) {
-            this.loadMask = new Ext.LoadMask(ct, {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
-            this.loadMask.show();
-        }
+        this.showLoadMask();
 
         // init change event
         var form = this.getForm().items.each(function(item) {
@@ -1116,7 +1111,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         this.saving = true;
 
-        this.loadMask.show();
+        this.showLoadMask();
 
         var ticketFn = this.doApplyChanges.deferByTickets(this, [closeWindow]),
             wrapTicket = ticketFn();
@@ -1210,7 +1205,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.purgeListeners();
             this.window.close();
         } else {
-            this.loadMask.hide();
+            this.hideLoadMask();
         }
     },
     
@@ -1325,7 +1320,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
 
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     /**
@@ -1362,6 +1357,23 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.attachmentsPanel = new Tine.widgets.dialog.AttachmentsGridPanel({ anchor: '100% 100%', editDialog: this }); 
             this.items.items.push(this.attachmentsPanel);
         }
+    },
+
+    showLoadMask: function() {
+        return this.afterIsRendered().then(() => {
+            if (! this.loadMask) {
+                this.loadMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
+            }
+            _.defer(_.bind(this.loadMask.show, this.loadMask));
+        });
+    },
+
+    hideLoadMask: function() {
+        return this.afterIsRendered().then(() => {
+            if (this.loadMask) {
+                _.defer(_.bind(this.loadMask.hide, this.loadMask));
+            }
+        });
     }
 });
 
