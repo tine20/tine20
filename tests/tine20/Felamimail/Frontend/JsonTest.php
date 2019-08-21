@@ -1274,19 +1274,20 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
     protected function _assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer)
     {
-        $this->assertTrue(isset($result['totalcount']));
-        $this->assertEquals(2, $result['totalcount'], 'message should be filed in Filemanager: ' . print_r($result, true));
+        self::assertTrue(isset($result['totalcount']));
+        self::assertEquals(2, $result['totalcount'], 'message should be filed in Filemanager: ' . print_r($result, true));
 
         // check if message exists in Filemanager
-        $this->assertTrue($emlNode !== null, 'could not find eml file node');
-        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $emlNode->type);
-        $this->assertEquals('message/rfc822', $emlNode->contenttype);
-        $this->assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
+        self::assertTrue($emlNode !== null, 'could not find eml file node');
+        self::assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $emlNode->type);
+        self::assertEquals('message/rfc822', $emlNode->contenttype);
+        self::assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
+        self::assertContains(Tinebase_Core::getUser()->accountEmailAddress, $emlNode->name);
 
         $nodeWithDescription = Filemanager_Controller_Node::getInstance()->get($emlNode['id']);
-        $this->assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
-        $this->assertContains($message['received'], $nodeWithDescription->description);
-        $this->assertContains('aaaaaä', $nodeWithDescription->description);
+        self::assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
+        self::assertContains($message['received'], $nodeWithDescription->description);
+        self::assertContains('aaaaaä', $nodeWithDescription->description);
 
         // assert MessageFileLocation
         $completeMessage = $this->_json->getMessage($message['id']);
