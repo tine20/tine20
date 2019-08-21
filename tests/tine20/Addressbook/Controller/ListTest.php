@@ -170,7 +170,7 @@ class Addressbook_Controller_ListTest extends TestCase
         if (empty(Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
             Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
         }
-        $domain = $this->_getMailDomain();
+        $domain = TestServer::getPrimaryMailDomain();
         $accountCtrl = Felamimail_Controller_Account::getInstance();
         
         $this->objects['initialList']->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;

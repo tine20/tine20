@@ -1127,7 +1127,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@' . $this->_getMailDomain(),
+            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain(),
         )), $pw, $pw);
         return $newUser;
     }

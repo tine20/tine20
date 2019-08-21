@@ -76,7 +76,7 @@ class Felamimail_Controller_SieveTest extends TestCase
         // create list with unittest user as member
         $list = new Addressbook_Model_List([
             'name' => 'testsievelist',
-            'email' => 'testsievelist@' . $this->_getMailDomain(),
+            'email' => 'testsievelist@' . TestServer::getPrimaryMailDomain(),
             'container_id' => $this->_getTestContainer('Addressbook', 'Addressbook_Model_List'),
             'members'      => [Tinebase_Core::getUser()->contact_id],
         ]);
@@ -108,7 +108,7 @@ class Felamimail_Controller_SieveTest extends TestCase
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
 
         self::assertContains('require ["envelope","copy"];', $script->getSieve());
-        self::assertContains('if address :is :domain "from" ["' . $this->_getMailDomain() . '"] {
+        self::assertContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"] {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 }
 discard;', $script->getSieve());
@@ -143,7 +143,7 @@ discard;', $script->getSieve());
 
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
-        self::assertContains('if address :is :domain "from" ["' . $this->_getMailDomain() . '"] {
+        self::assertContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"] {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 } else { discard; }', $script->getSieve());
     }
@@ -158,7 +158,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
-        self::assertNotContains('if address :is :domain "from" ["' . $this->_getMailDomain() . '"]', $script->getSieve());
+        self::assertNotContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"]', $script->getSieve());
     }
 
     public function testAdbMailinglistSieveRuleForwardOnlyMembers()
@@ -171,7 +171,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
-        self::assertNotContains('if address :is :domain "from" ["' . $this->_getMailDomain() . '"]', $script->getSieve());
+        self::assertNotContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"]', $script->getSieve());
         self::assertContains('if address :is :all "from" ["' . Tinebase_Core::getUser()->accountEmailAddress . '"] {', $script->getSieve());
     }
 }
