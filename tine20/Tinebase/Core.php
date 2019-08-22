@@ -2062,7 +2062,8 @@ class Tinebase_Core
     public static function inMaintenanceMode()
     {
         $config = self::getConfig();
-        return !empty($config->{Tinebase_Config::MAINTENANCE_MODE});
+        $mode = $config->{Tinebase_Config::MAINTENANCE_MODE};
+        return !( empty($mode) || $mode === 'off');
     }
 
     /**

@@ -1834,8 +1834,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::MAINTENANCE_MODE => array(
             //_('Maintenance mode enabled')
             'label'                 => 'Maintenance mode enabled',
-            //_('Set Tine 2.0 maintenance mode. Possible values: "off", "normal" (only users having the maintenance right can login) and "all"')
-            'description'           => 'Set Tine 2.0 maintenance mode. Possible values: "off", "normal" (only users having the maintenance right can login) and "all"',
+            //_('Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"')
+            'description'           => 'Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"',
             'type'                  => 'string',
             'default'               => '',
             'clientRegistryInclude' => FALSE,
