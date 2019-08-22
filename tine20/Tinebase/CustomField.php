@@ -660,6 +660,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                         }
                     }
 
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Could not resolve custom field. Message: ' . $tead);
                 } catch (Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                         . ' Error resolving custom field record: ' . $e->getMessage());
