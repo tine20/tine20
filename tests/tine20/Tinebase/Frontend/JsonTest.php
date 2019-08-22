@@ -546,6 +546,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['import']));
 
         $this->assertTrue(isset($registryData['Felamimail']['models']['Account']), 'account model missing from registry');
+
+        self::assertLessThan(2000000, strlen(json_encode($registryData)), 'registry size got too big');
     }
 
     /**
