@@ -2250,6 +2250,72 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
     }
 
+    /**
+     * Delete duplicate container without contents.
+     *
+     * @param $application
+     * @param null $dryrun
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_SystemContainer
+     */
+    public function deleteDuplicateContainer($application, $dryrun = null)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationByName($application);
+
+
+        $filter = new Tinebase_Model_ContainerFilter([
+            ['field' => 'type', 'operator' => 'equals', 'value' => 'personal'],
+            ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()]
+        ]);
+
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
+
+        $containers = Tinebase_Container::getInstance()->search($filter);
+
+        Tinebase_Container::getInstance()->doSearchAclFilter(true);
+
+
+        foreach ($containers as $container) {
+            $duplicate = $containers->filter('name', $container['name']);
+            $duplicate->sort('creation_time', 'ASC');
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Container: . ' . $duplicate->getFirstRecord()['id'] . ' is the default Container');
+
+            $duplicate->removeFirst();
+            if ($duplicate->count() > 0) {
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Duplicates found. ' . $duplicate);
+
+                foreach ($duplicate as $dupContainer) {
+                    if ($dupContainer['content_seq'] == 0) {
+                        if ($dryrun) {
+
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                . ' Dry run: Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' will remove.');
+
+                        } else {
+                            Tinebase_Container::getInstance()->deleteContainer($dupContainer['id'], true);
+
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' remove.');
+
+                        }
+                    } else {
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' don´t remove, because in container exist records');
+
+                    }
+                }
+            }
+            $containers->removeRecords($duplicate);
+        }
+    }
+
     public function getModel()
     {
         return Tinebase_Model_Container::class;
