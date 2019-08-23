@@ -571,6 +571,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         var files = fileSelector.getFileList(),
             filePathsArray = [],
+            fileTypesArray = [],
             uploadKeyArray = [],
             addToGridStore = false;
 
@@ -592,6 +593,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
 
             filePathsArray.push(filePath);
+            fileTypesArray.push('vnd.adobe.partial-upload; final_type=' + file.type);
             uploadKeyArray.push(uploadKey);
 
             addToGridStore = grid.currentFolderNode.id === targetNodeId;

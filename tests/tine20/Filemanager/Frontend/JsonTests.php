@@ -465,6 +465,23 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->searchNodes(array(), array());
         $this->_assertRootNodes($result);
     }
+
+    public function testCreateEmptyNodeWithContentType()
+    {
+        $containerName = 'testcontainer';
+        $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $containerName . '/someEmptyTestFile';
+
+        $folderNode = $this->testCreateContainerNodeInPersonalFolder($containerName);
+
+        $result = $this->_getUit()->createNodes($testPath, 'myContentType', array(), false);
+        $createdNode = $result[0];
+
+        static::assertTrue(isset($createdNode['name']));
+        static::assertEquals('someEmptyTestFile', $createdNode['name']);
+        static::assertEquals(strtolower('myContentType'), $createdNode['contenttype']);
+        static::assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
+    }
     
     /**
      * create container in personal folder
