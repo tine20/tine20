@@ -354,7 +354,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $conflictFilter = clone $conflictCriteria;
         $conflictFilter->addFilterGroup($periodCandidates);
+
+        // NOTE: we need attendee in conflictingPeriods
+        $doContainerAclChecks = $this->doContainerACLChecks(false);
         $conflictCandidates = $this->search($conflictFilter);
+        $this->doContainerACLChecks($doContainerAclChecks);
 
         $from = $until = false;
         foreach ($periodCandidates as $periodFilter) {
@@ -531,12 +535,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         'dtend'     => clone $event->dtend,
                         'type'      => $type,
                     ), true);
-                    
+
                     if ($event->{Tinebase_Model_Grants::GRANT_READ}) {
                         $fbInfo->event = clone $event;
+                        $fbInfo->event->doFreeBusyCleanup();
                         unset($fbInfo->event->attendee);
                     }
-                    
+
                     //$typeMap[$attender->user_type][$attender->user_id][] = $fbInfo;
                     $fbInfoSet->addRecord($fbInfo);
                 }
