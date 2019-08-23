@@ -894,7 +894,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 for (var index = 0; index < r.length; index++) {
                     Ext.each(properties,
                         function(prop) {
-                            r[index][prop] = null;
+                            r[index][prop] = prop == 'id' ?  Tine.Tinebase.data.Record.generateUID() : null;
                         }
                     );
                 }
