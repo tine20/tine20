@@ -18,7 +18,7 @@
 class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
 {
     /**
-     * Formats data into a single line to be written by the writer.
+     * Formats data into a single json_encoded line to be written by the writer.
      *
      * @param array $event event data
      * @return string formatted line to write to the log
