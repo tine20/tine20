@@ -1136,7 +1136,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * add system account with tine user credentials
      *
      * @param Tinebase_Model_FullUser
-     * @return Felamimail_Model_Account
+     * @return Felamimail_Model_Account|null
      */
     public function addSystemAccount(Tinebase_Model_FullUser $_account, $pwd)
     {
@@ -1166,8 +1166,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     __METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), true));
             }
 
-            /** @var Felamimail_Model_Account $systemAccount */
-            $systemAccount = $this->create($systemAccount);
+            try {
+                /** @var Felamimail_Model_Account $systemAccount */
+                $systemAccount = $this->create($systemAccount);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                return null;
+            }
 
             if (Felamimail_Config::getInstance()
                     ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
