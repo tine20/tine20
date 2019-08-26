@@ -779,6 +779,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }
         
         $result = new Tinebase_Model_Group($queryResult, TRUE);
+        $result->runConvertToRecord();
         
         return $result;
     }
