@@ -21,6 +21,7 @@ class Felamimail_Sieve_AdbList
     protected $_allowExternal = false;
     protected $_allowOnlyGroupMembers = false;
     protected $_keepCopy = false;
+    protected $_forwardOnlySystem = false;
     protected $_receiverList = [];
 
     public function __toString()
@@ -64,7 +65,23 @@ class Felamimail_Sieve_AdbList
 
     protected function _addRecieverList(&$result)
     {
+        if ($this->_forwardOnlySystem && empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
+            throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
+        }
+
         foreach ($this->_receiverList as $email) {
+            if ($this->_forwardOnlySystem) {
+                $match = false;
+                foreach ($internalDomains as $domain) {
+                    if (preg_match('/@' . preg_quote($domain, '/') . '$/', $email)) {
+                        $match = true;
+                        break;
+                    }
+                }
+                if (!$match) {
+                    continue;
+                }
+            }
             $result .= 'redirect :copy "' . $email . '";' . PHP_EOL;
         }
     }
@@ -102,6 +119,11 @@ class Felamimail_Sieve_AdbList
                 throw new Tinebase_Exception_UnexpectedValue('can not combine allowExternal and allowOnlyMembers');
             }
             $sieveRule->_allowOnlyGroupMembers = true;
+        }
+
+        if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_FORWARD_ONLY_SYSTEM]) && $_list
+                ->xprops()[Addressbook_Model_List::XPROP_SIEVE_FORWARD_ONLY_SYSTEM]) {
+            $sieveRule->_forwardOnlySystem = true;
         }
 
         return $sieveRule;
