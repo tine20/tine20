@@ -199,7 +199,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('User'),
                             useAccountRecord: true,
                             name: 'user_id',
-                            allowEmpty: true
+                            allowBlank: true
                             // TODO user selection for system accounts should fill in the values!
                         }), {
                             fieldLabel: this.app.i18n._('Account Type'),
