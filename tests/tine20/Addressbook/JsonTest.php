@@ -2119,7 +2119,8 @@ Steuernummer 33/111/32212";
             'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
         ));
 
-        $this->assertEquals(array($contact['id']), $list['members'], 'members are not saved/returned in list: ' . print_r($list, true));
+        static::assertCount(1, $list['members'], 'expect one member');
+        $this->assertEquals($contact['id'], $list['members'][0]['id'], 'members are not saved/returned in list: ' . print_r($list, true));
         $this->assertTrue(isset($list['memberroles']), 'memberroles missing from list');
         $this->assertEquals(1, count($list['memberroles']), 'member roles are not saved/returned in list: ' . print_r($list, true));
         $this->assertTrue(isset($list['memberroles'][0]['list_role_id']['id']), 'list roles should be resolved');
