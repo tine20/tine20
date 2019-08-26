@@ -519,7 +519,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRequestFailed: function(exception) {
         this.saving = false;
         Tine.Felamimail.handleRequestException(exception);
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
 
     getGrantsColumns: function() {

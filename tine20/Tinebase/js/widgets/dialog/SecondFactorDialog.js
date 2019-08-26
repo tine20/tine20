@@ -37,7 +37,7 @@ Tine.Tinebase.widgets.dialog.SecondFactorDialog = Ext.extend(Tine.Tinebase.widge
                     password: password,
                 },
                 success: function (_result, _request) {
-                    this.loadMask.hide();
+                    this.hideLoadMask();
                     var response = Ext.util.JSON.decode(_result.responseText);
                     // TODO add data to messagebus events?
 
@@ -85,7 +85,7 @@ Tine.Tinebase.widgets.dialog.SecondFactorDialog = Ext.extend(Tine.Tinebase.widge
                 },
                 failure: function() {
                     // TODO do some more?
-                    this.loadMask.hide();
+                    this.hideLoadMask();
                 },
                 scope: this
             });

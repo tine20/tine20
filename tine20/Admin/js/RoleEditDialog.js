@@ -376,7 +376,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.getForm().loadRecord(this.role);
         
-        this.loadMask.hide();
+        this.hideLoadMask();
     }
     
 });

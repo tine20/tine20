@@ -110,7 +110,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
         this.conditionsPanel.conjunctionOperator = this.record.get('conjunction') == 'anyof' ? 'or' : 'and';
         
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     /**
