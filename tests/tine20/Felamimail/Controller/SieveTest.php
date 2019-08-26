@@ -17,31 +17,12 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Felamimail_Controller_Sieve
  */
-class Felamimail_Controller_SieveTest extends TestCase
+class Felamimail_Controller_SieveTest extends Felamimail_TestCase
 {
-    /**
-     * @var Felamimail_Controller_MessageTest
-     */
-    protected $_emailTestClass;
-
     /**
      * @var array lists to delete in tearDown
      */
     protected $_listsToDelete = [];
-
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->_emailTestClass = new Felamimail_Controller_MessageTest();
-        $this->_emailTestClass->setup();
-    }
 
     /**
      * Tears down the fixture
@@ -51,10 +32,6 @@ class Felamimail_Controller_SieveTest extends TestCase
      */
     protected function tearDown()
     {
-        if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
-            $this->_emailTestClass->tearDown();
-        }
-
         foreach ($this->_listsToDelete as $list) {
             Addressbook_Controller_List::getInstance()->delete($list->getId());
         }
@@ -74,9 +51,10 @@ class Felamimail_Controller_SieveTest extends TestCase
     protected function _createMailinglist($xpropsToSet = [])
     {
         // create list with unittest user as member
+        $name = 'testsievelist' . Tinebase_Record_Abstract::generateUID(5);
         $list = new Addressbook_Model_List([
-            'name' => 'testsievelist',
-            'email' => 'testsievelist@' . TestServer::getPrimaryMailDomain(),
+            'name' => $name,
+            'email' => $name . '@' . TestServer::getPrimaryMailDomain(),
             'container_id' => $this->_getTestContainer('Addressbook', 'Addressbook_Model_List'),
             'members'      => [Tinebase_Core::getUser()->contact_id],
         ]);
@@ -113,24 +91,26 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 }
 discard;', $script->getSieve());
 
-        // TODO write mail to list & check if user receives mail
-//        $subject = 'sieve list forward test message ' . Tinebase_Record_Abstract::generateUID(10);
-//        $message = new Felamimail_Model_Message(array(
-//            'account_id'    => $this->_emailTestClass->getAccount()->getId(),
-//            'subject'       => 'test list forward',
-//            'to'            => array($mailinglist->email),
-//            'body'          => 'aaaaaä <br>',
-//        ));
-//
-//        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
-//
-//        $forwardedMessage = $this->_emailTestClass->searchAndCacheMessage(
-//            $subject,
-//            $this->_emailTestClass->getFolder('INBOX'),
-//            true,
-//            'subject'
-//        );
-//        // print_r($forwardedMessage->toArray());
+        // TODO make it work (maybe our sieve testsetup is not ready for this)
+        return true;
+
+        // write mail to list & check if user receives mail
+        $subject = 'sieve list forward test message ' . Tinebase_Record_Abstract::generateUID(10);
+        $message = new Felamimail_Model_Message(array(
+            'account_id'    => $this->_account->getId(),
+            'subject'       => $subject,
+            'to'            => array($mailinglist->email),
+            // for testing if sieve is not working
+            //'to'            => array(Tinebase_Core::getUser()->accountEmailAddress),
+            'body'          => 'aaaaaä <br>',
+        ));
+
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+
+        $result = $this->_getMessages('INBOX', [
+            ['field' => 'subject', 'operator' => 'equals', 'value' => $subject]
+        ]);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
     }
 
     public function testAdbMailinglistSieveRuleCopy()
