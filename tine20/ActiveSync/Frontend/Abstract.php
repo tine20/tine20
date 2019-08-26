@@ -472,7 +472,10 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
             $containerIds = array($_containerId);
         }
 
-        $_filter->addFilter($_filter->createFilter('container_id', 'in', $containerIds));
+        if (!empty($containerIds)) {
+            $_filter->removeFilter('container_id');
+            $_filter->addFilter($_filter->createFilter('container_id', 'in', $containerIds));
+        }
     }
     
     /**

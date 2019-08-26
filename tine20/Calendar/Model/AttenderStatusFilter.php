@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,6 +26,10 @@ class Calendar_Model_AttenderStatusFilter extends Tinebase_Model_Filter_Text
         2 => 'in',
         3 => 'notin',
     );
+
+    protected $_dnames = [];
+
+    protected $_currentDname = 'attendee';
     
     /**
      * returns quoted column name for sql backend
@@ -37,7 +41,31 @@ class Calendar_Model_AttenderStatusFilter extends Tinebase_Model_Filter_Text
      */
     protected function _getQuotedFieldName($_backend) {
         return $_backend->getAdapter()->quoteIdentifier(
-            'attendee.status'
+            $this->_currentDname . '.status'
         );
+    }
+
+    public function addAttendeeJoinName($dname)
+    {
+        $this->_dnames[$dname] = $dname;
+    }
+
+    /**
+     * appends sql to given select statement
+     *
+     * @param  Zend_Db_Select                $_select
+     * @param  Tinebase_Backend_Sql_Abstract $_backend
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function appendFilterSql($_select, $_backend)
+    {
+        if (empty($this->_dnames)) {
+            parent::appendFilterSql($_select, $_backend);
+        } else {
+            foreach ($this->_dnames as $dname) {
+                $this->_currentDname = $dname;
+                parent::appendFilterSql($_select, $_backend);
+            }
+        }
     }
 }
