@@ -1483,6 +1483,18 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals('dir1', $result[0]['name'], print_r($result[0], true));
     }
 
+    public function testMoveFolderToRenameIt()
+    {
+        $orgFolder = $this->testCreateContainerNodeInPersonalFolder();
+
+        sleep(1);
+        $result = $this->_getUit()->moveNodes($orgFolder['path'], [$orgFolder['path'] . 'foo'], false);
+
+        static::assertNotSame($orgFolder['hash'], $result[0]['hash'], 'hash did not change');
+        static::assertNotSame($orgFolder['last_modified_time'], $result[0]['last_modified_time'],
+            'last_modified_date did not change');
+    }
+
     /**
      * Test if notes are correctly decorated with path field
      */
