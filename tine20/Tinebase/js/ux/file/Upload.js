@@ -459,7 +459,14 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                         tempFilesData: this.tempFiles
                     },
                     success: this.finishUploadRecord.createDelegate(this), 
-                    failure: this.finishUploadRecord.createDelegate(this)
+                    failure: _.bind(function(response, request) {
+                        let msg = formatMessage('Error while uploading "{fileName}". Please try again later.',
+                            {fileName: this.fileRecord.get('name') });
+
+                        Ext.MessageBox.alert(formatMessage('Upload Failed'), msg)
+                            .setIcon(Ext.MessageBox.ERROR);
+
+                    }, this)
                     });
                 }).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
 
