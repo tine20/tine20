@@ -82,7 +82,7 @@ Ext.namespace('Tine.Felamimail.sieve');
         Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::onRecordLoad() -> record:');
         Tine.log.debug(this.record);
         
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
         
     /**
@@ -324,7 +324,7 @@ Ext.namespace('Tine.Felamimail.sieve');
     onGetVacationMessage: function(response) {
         Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::onGetMessage()');
         Tine.log.debug(response);
-        this.loadMask.hide();
+        this.hideLoadMask();
         
         if (response.message) {
             this.reasonEditor.setValue(response.message);
@@ -339,7 +339,7 @@ Ext.namespace('Tine.Felamimail.sieve');
     onRequestFailed: function(exception) {
         this.saving = false;
         Tine.Felamimail.handleRequestException(exception);
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     /**

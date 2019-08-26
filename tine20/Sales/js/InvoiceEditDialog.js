@@ -116,9 +116,9 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             me.record = JSON.stringify(res);
             me.initRecord();
         }).then(function () {
-            me.loadMask.hide();
+            me.hideLoadMask();
         }).catch(function () {
-            me.loadMask.hide();
+            me.hideLoadMask();
         });
     },
     

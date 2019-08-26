@@ -118,7 +118,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (members.results.length > 0) {
             this.membersStore.loadData({results: members.results});
         }
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     /**
@@ -303,7 +303,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         },
                         scope: this,
                         success: function() {
-                            this.loadMask.hide();
+                            this.hideLoadMask();
                         }
                     });
                 },
