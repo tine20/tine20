@@ -133,7 +133,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
-        // TODO discuss this behaviour - do we still need it when we have the group mailing sieve rules?
         $oldFeatureValue = null;
         $adbConfig = Addressbook_Config::getInstance();
         try {
@@ -152,7 +151,11 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'Addressbook_Model_ListFilter');
             if (!$dont_add) {
                 foreach ($lists["results"] as $list) {
-                    if (! empty($list["emails"])) {
+                    if (isset($list['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
+                        && $list['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] == 1
+                    ) {
+                        array_push($results, array("n_fileas" => $list["name"], "emails" => [$list['email']]));
+                    } else if (! empty($list["emails"])) {
                         array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
                     }
                 }

@@ -19,54 +19,6 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  */
 class Felamimail_Controller_SieveTest extends Felamimail_TestCase
 {
-    /**
-     * @var array lists to delete in tearDown
-     */
-    protected $_listsToDelete = [];
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        foreach ($this->_listsToDelete as $list) {
-            Addressbook_Controller_List::getInstance()->delete($list->getId());
-        }
-
-        parent::tearDown();
-    }
-
-    /********************************* test funcs *************************************/
-
-    /**
-     * @param array $xpropsToSet
-     * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_Validation
-     */
-    protected function _createMailinglist($xpropsToSet = [])
-    {
-        // create list with unittest user as member
-        $name = 'testsievelist' . Tinebase_Record_Abstract::generateUID(5);
-        $list = new Addressbook_Model_List([
-            'name' => $name,
-            'email' => $name . '@' . TestServer::getPrimaryMailDomain(),
-            'container_id' => $this->_getTestContainer('Addressbook', 'Addressbook_Model_List'),
-            'members'      => [Tinebase_Core::getUser()->contact_id],
-        ]);
-        $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
-        foreach ($xpropsToSet as $xprop) {
-            $list->xprops()[$xprop] = 1;
-        }
-        $mailinglist = Addressbook_Controller_List::getInstance()->create($list);
-        $this->_listsToDelete[] = $mailinglist;
-        return $mailinglist;
-    }
-
     public function testAdbMailinglistPutSieveRule()
     {
         $this->_testNeedsTransaction();
