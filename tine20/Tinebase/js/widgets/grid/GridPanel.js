@@ -1889,27 +1889,36 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
             result = [];
         Ext.each(cfConfigs, function(cfConfig) {
-            var cfDefinition = cfConfig.get('definition');
-            switch (cfDefinition.type) {
-                case 'record':
-                    result.push({
-                        filtertype: 'foreignrecord',
-                        label: cfDefinition.label,
-                        app: this.app,
-                        ownRecordClass: this.recordClass,
-                        foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
-                        linkType: 'foreignId',
-                        ownField: 'customfield:' + cfConfig.id
-                    });
-                    break;
-                case 'keyfield':
-                    // @TODO implement me
-                    break;
-                default:
-                    result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
-                    break;
+            try {
+                var cfDefinition = cfConfig.get('definition');
+                switch (cfDefinition.type) {
+                    case 'record':
+                        if (_.get(window, cfDefinition.recordConfig.value.records)) {
+                            result.push({
+                                filtertype: 'foreignrecord',
+                                label: cfDefinition.label,
+                                app: this.app,
+                                ownRecordClass: this.recordClass,
+                                foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
+                                linkType: 'foreignId',
+                                ownField: 'customfield:' + cfConfig.id
+                            });
+                        }
+                        break;
+                    case 'keyfield':
+                        // @TODO implement me
+                        break;
+                    default:
+                        result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+                        break;
+                }
+
+            } catch (e) {
+                Tine.log.warn('CustomfieldFilters ' + cfDefinition.label + ' doesnt create');
+
             }
         }, this);
+
 
         return result;
     },
