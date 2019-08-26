@@ -1179,7 +1179,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         }, function (message) {
             me.saving = false;
-            me.loadMask.hide();
+            me.hideLoadMask();
             Ext.MessageBox.alert(i18n._('Errors'), message);
         });
     },
