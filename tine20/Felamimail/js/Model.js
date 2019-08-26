@@ -269,6 +269,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
             params: {mimeType: mimeType},
             timeout: 120000, // 2 minutes
             scope: this,
+            suppressBusEvents: true, // skip events to prevent gird reloads on message fetch
             success: function(response, options) {
                 var msg = this.recordReader({responseText: Ext.util.JSON.encode(response.data)});
                 // NOTE: Flags from the server might be outdated, so we skip them

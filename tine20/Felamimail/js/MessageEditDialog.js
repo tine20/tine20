@@ -311,7 +311,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRender: function (ct, position) {
         Tine.Felamimail.MessageEditDialog.superclass.onRender.call(this, ct, position);
-        this.loadMask.show();
+        this.showLoadMask();
     },
 
     isRendered: function () {
