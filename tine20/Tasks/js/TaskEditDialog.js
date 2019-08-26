@@ -203,7 +203,7 @@ Ext.namespace('Tine.Tasks');
                             emptyText: i18n._('Add Responsible ...'),
                             useAccountRecord: true,
                             name: 'organizer',
-                            allowEmpty: true
+                            allowBlank: true
                         })
                     ], [{
                         columnWidth: 1,

@@ -216,7 +216,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 triggerAction: 'all',
                 mode: 'local',
                 forceSelection: true,
-                allowEmpty: false,
+                allowBlank: false,
                 editable: false,
                 store: fieldDef,
                 isInnerFTBCmp: true,
