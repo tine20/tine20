@@ -205,6 +205,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             return;
         }
 
+        while (count($filters = $_filter->getFilterObjects()) === 1 && $filters[0] instanceof
+                Tinebase_Model_Filter_FilterGroup) $_filter = $filters[0];
+
         $typeFilter = $_filter->getFilter('type');
         if (null !== $typeFilter && $typeFilter->getOperator() === 'equals' && ($typeFilter->getValue() ===
                 Felamimail_Model_Account::TYPE_ADB_LIST || $typeFilter->getValue() ===
