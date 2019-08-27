@@ -253,7 +253,7 @@ class Tinebase_Core
             $transactionId = $request->getHeaders()->get('X-TINE20-TRANSACTIONID')->getFieldValue();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Client transaction $transactionId");
-            Tinebase_Log_Formatter::setPrefix(substr($transactionId, 0, 5));
+            Tinebase_Log_Formatter::setTransactionId(substr($transactionId, 0, 5));
         }
         
         $server = self::getDispatchServer($request);

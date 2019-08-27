@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Log
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -25,9 +25,14 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
      */
     public function format($event)
     {
+        $logruntime = $this->_getLogRunTime();
+        $logdifftime = $this->_getLogDiffTime();
         $event = array_merge([
-            'log_id' => self::getPrefix(),
             'user' => self::getUsername(),
+            'transaction_id' => self::$_transactionId,
+            'request_id' => self::$_requestId,
+            'logdifftime' => $logdifftime,
+            'logdifftime' => $logruntime,
         ], $event);
 
         if (isset($event['message'])) {

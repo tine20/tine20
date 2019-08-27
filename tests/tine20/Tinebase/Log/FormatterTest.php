@@ -43,7 +43,7 @@ class Tinebase_Log_FormatterTest extends Tinebase_Log_Formatter_AbstractTest
         if ($config->logger->logruntime || $config->logger->logdifftime) {
             $this->assertTrue(preg_match('/' . $username . ' \d/', $loggerFile) === 1);
         } else {
-            $this->assertContains($username . ' - ', $loggerFile);
+            $this->assertContains($username, $loggerFile);
         }
     }
 
