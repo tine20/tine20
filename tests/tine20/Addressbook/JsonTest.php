@@ -2442,6 +2442,10 @@ Steuernummer 33/111/32212";
      */
     public function testSearchEmailAddresssWithMailinglist()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         $list = $this->_createMailinglist();
         $result = $this->_uit->searchEmailAddresss([
             ["condition" => "AND", "filters" => [["condition" => "AND", "filters" => [
