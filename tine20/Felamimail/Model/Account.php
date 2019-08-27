@@ -110,6 +110,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_INTEGER,
                 self::NULLABLE => true,
                 self::LABEL => 'IMAP Port', // _('IMAP Port')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 143
@@ -122,6 +123,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 32,
                 self::LABEL => 'IMAP SSL', // _('IMAP SSL')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
@@ -170,6 +172,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 255,
                 self::NULLABLE => true,
                 self::LABEL => 'Sent Folder', // _('Sent Folder')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 'Sent'
@@ -180,6 +183,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 255,
                 self::NULLABLE => true,
                 self::LABEL => 'Trash Folder', // _('Trash Folder')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 'Trash'
@@ -190,6 +194,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 255,
                 self::NULLABLE => true,
                 self::LABEL => 'Drafts Folder', // _('Drafts Folder')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 'Drafts'
@@ -200,6 +205,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 255,
                 self::NULLABLE => true,
                 self::LABEL => 'Templates Folder', // _('Templates Folder')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 'Templates'
@@ -228,6 +234,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 64,
                 self::LABEL => 'Display Format', // _('Display Format')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
@@ -244,6 +251,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 64,
                 self::LABEL => 'Compose Format', // _('Compose Format')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
@@ -254,6 +262,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             'preserve_format' => [
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::LABEL => 'Preserve Format', // _('Preserve Format')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => false,
@@ -264,6 +273,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 255,
                 self::NULLABLE => true,
                 self::LABEL => 'Reply-To', // _('Reply-To')
+                self::SHY => true,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'ns_personal' => [
@@ -313,12 +323,14 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 16777215,
                 self::NULLABLE => true,
                 self::LABEL => 'Signature', // _('Signature')
+                self::SHY => true,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'signature_position' => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 64,
                 self::LABEL => 'Signature Position', // _('Signature Position')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::SIGNATURE_BELOW_QUOTE,
@@ -330,6 +342,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 255,
                 self::NULLABLE => true,
                 self::LABEL => 'SMTP Host', // _('SMTP Host')
+                self::SHY => true,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER              => true,
             ],
@@ -337,6 +350,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_INTEGER,
                 self::NULLABLE => true,
                 self::LABEL => 'SMTP Port', // _('SMTP Port')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 25
@@ -349,6 +363,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 32,
                 self::LABEL => 'SMTP SSL', // _('SMTP SSL')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
@@ -364,6 +379,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 32,
                 self::LABEL => 'SMTP Authentication', // _('SMTP Authentication')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 'login',
@@ -405,12 +421,14 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 255,
                 self::NULLABLE => true,
                 self::LABEL => 'Sieve Host', // _('Sieve Host')
+                self::SHY => true,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'sieve_port' => [
                 self::TYPE => self::TYPE_INTEGER,
                 self::NULLABLE => true,
                 self::LABEL => 'Sieve Port', // _('Sieve Port')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 2000
@@ -423,6 +441,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 32,
                 self::LABEL => 'Sieve SSL', // _('Sieve SSL')
+                self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::SECURE_TLS,
