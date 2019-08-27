@@ -1583,9 +1583,14 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * and containing the children neighbours in the key 'children'
      *
      * @return array
+     * @throws Tinebase_Exception_Record_StopPathBuild
      */
     public function getPathNeighbours()
     {
+        if (! $this->has('relations')) {
+            throw Tinebase_Exception_Record_StopPathBuild('record has no relations');
+        }
+
         $oldRelations = $this->relations;
         $this->relations = null;
 
