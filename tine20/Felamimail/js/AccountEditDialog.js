@@ -85,7 +85,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     if (! this.asAdminModule) {
                         item.hide();
                     } else {
-                        item.setDisabled(this.record.get('type') != 'userInternal');
+                        item.setDisabled(this.record.get('type') == 'shared');
                     }
                     break;
                 case 'signature':
@@ -100,10 +100,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(this.record.id);
                     break;
                 case 'password':
-                    item.setDisabled(! (this.record.get('type') == 'shared' || this.record.get('type') == 'user'));
+                    item.setDisabled(! (
+                        !this.record.get('type') || this.record.get('type') == 'shared' || this.record.get('type') == 'user')
+                    );
                     break;
                 case 'user':
-                    item.setDisabled(! (this.record.get('type') == 'userInternal' || this.record.get('type') == 'user'));
+                    item.setDisabled(! (
+                        !this.record.get('type') || this.record.get('type') == 'userInternal' || this.record.get('type') == 'user')
+                    );
                     break;
                 case 'host':
                 case 'port':
