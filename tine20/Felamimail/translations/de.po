@@ -1578,3 +1578,6 @@ msgstr "Benutzen"
 
 msgid "Account Type"
 msgstr "Kontotyp"
+
+msgid "Can not combine \"allow external\" and \"allow only members\""
+msgstr "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern weiterleiten\" können nicht kombiniert werden"

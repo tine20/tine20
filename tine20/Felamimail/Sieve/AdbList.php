@@ -116,7 +116,8 @@ class Felamimail_Sieve_AdbList
         if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS]) && $_list
                 ->xprops()[Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS]) {
             if ($sieveRule->_allowExternal) {
-                throw new Tinebase_Exception_UnexpectedValue('can not combine allowExternal and allowOnlyMembers');
+                $translation = Tinebase_Translation::getTranslation('Felamimail');
+                throw new Tinebase_Exception_SystemGeneric($translation->_('Can not combine "allow external" and "allow only members"'));
             }
             $sieveRule->_allowOnlyGroupMembers = true;
         }
