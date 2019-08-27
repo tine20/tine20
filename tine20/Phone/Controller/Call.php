@@ -77,6 +77,9 @@ class Phone_Controller_Call extends Tinebase_Controller_Record_Abstract
         $telNumber = Addressbook_Model_Contact::normalizeTelephoneNum(
             $this->resolveInternalNumber($call->destination));
         if (null !== $telNumber && ! empty($telNumber)) {
+
+            $call->resolved_destination = $telNumber;
+
             $filter = new Addressbook_Model_ContactFilter(array(
                 array('field' => 'telephone_normalized', 'operator' => 'equals', 'value' => $telNumber),
             ));
