@@ -1968,6 +1968,7 @@ class Tinebase_FileSystem implements
      * @param  resource $contents
      * @return array [hash, hashFilePath, Tinebase_FileSystem_AVScan_Result]
      * @throws Tinebase_Exception_NotImplemented
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function createFileBlob($contents)
     {
@@ -1985,7 +1986,7 @@ class Tinebase_FileSystem implements
         $hashDirectory = $this->_basePath . '/' . substr($hash, 0, 3);
         if (!file_exists($hashDirectory)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
-            if(mkdir($hashDirectory, 0700) === false) {
+            if (mkdir($hashDirectory, 0700) === false) {
                 throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
             }
         }
@@ -1994,8 +1995,11 @@ class Tinebase_FileSystem implements
         $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
         if (!file_exists($hashFile)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
-            rewind($handle);
             $hashHandle = fopen($hashFile, 'x');
+            if (! $hashHandle) {
+                throw new Tinebase_Exception_UnexpectedValue('failed to create hash file');
+            }
+            rewind($handle);
             stream_copy_to_stream($handle, $hashHandle);
             fclose($hashHandle);
 
