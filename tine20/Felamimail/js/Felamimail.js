@@ -994,7 +994,7 @@ Tine.Felamimail.handleRequestException = function(exception) {
     
     var app = Tine.Tinebase.appMgr.get('Felamimail');
     
-    switch(exception.code) {
+    switch (exception.code) {
         case 910: // Felamimail_Exception_IMAP
         case 911: // Felamimail_Exception_IMAPServiceUnavailable
             Ext.Msg.show({

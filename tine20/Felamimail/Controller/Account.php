@@ -233,6 +233,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * 
      * @param   Felamimail_Model_Account $_record
      * @return  void
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_PasswordPolicyViolation
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
@@ -250,6 +252,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $_record->smtp_hostname = $_record->host;
         }
 
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+
         if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                 __LINE__ . ' system account, no credential cache needed');
@@ -258,10 +262,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         } elseif ($_record->type === Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
                 Felamimail_Model_Account::TYPE_ADB_LIST) {
             if (! $_record->password) {
-                throw new Tinebase_Exception_UnexpectedValue('shared / adb_list accounts need to have a password set');
+                // TODO invent a new exception for this?
+                throw new Tinebase_Exception_PasswordPolicyViolation($translation->_('shared / adb_list accounts need to have a password set'));
             }
             if (! $_record->email) {
-                throw new Tinebase_Exception_UnexpectedValue('shared / adb_list accounts need to have an email set');
+                throw new Tinebase_Exception_UnexpectedValue($translation->_('shared / adb_list accounts need to have an email set'));
             }
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $userId = $_record->user_id ?: ($_record->user_id = Tinebase_Record_Abstract::generateUID());
@@ -276,10 +281,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectAddUser($user, $user);
         } elseif ($_record->type === Felamimail_Model_Account::TYPE_USER_INTERNAL) {
             if (! $_record->email) {
-                throw new Tinebase_Exception_UnexpectedValue('userInternal accounts need to have an email set');
+                throw new Tinebase_Exception_UnexpectedValue($translation->_('userInternal accounts need to have an email set'));
             }
             if (! $_record->user_id) {
-                throw new Tinebase_Exception_UnexpectedValue('userInternal accounts need to have an user_id set');
+                throw new Tinebase_Exception_UnexpectedValue($translation->_('userInternal accounts need to have an user_id set'));
             }
             $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
             $user->accountEmailAddress = $_record->email;
@@ -296,8 +301,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             // we dont need a credential cache here neither
             return;
         }
-
-        // write test für Adb::List / Admin_Controller_EmailAccount [dafür gibts schon einfache tests]
 
         if (! $_record->user || ! $_record->password) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
