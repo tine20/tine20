@@ -111,7 +111,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _removeHiddenListMembers($lists)
     {
-        if (count($lists) === 0) {
+        if (count($lists) === 0 || Addressbook_Config::getInstance()
+                ->featureEnabled(Addressbook_Config::FEATURE_MAILINGLIST)) {
             return;
         }
 
@@ -307,6 +308,17 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         return $this->get($list->getId());
     }
 
+    protected function _flattenMembers(Addressbook_Model_List $list)
+    {
+        if (empty($list->members)) return;
+        $members = $list->members;
+        foreach ($members as &$member) {
+            if (is_array($member)) {
+                $member = $member['id'];
+            }
+        }
+        $list->members = $members;
+    }
     /**
      * inspect creation of one record
      *
@@ -315,6 +327,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_flattenMembers($_record);
+
         if (isset($_record->type) && $_record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
             if (empty($_record->group_id)) {
                 throw new Tinebase_Exception_UnexpectedValue('group_id is empty, must not happen for list type group');
@@ -361,6 +375,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $this->_flattenMembers($_record);
+
         if (! empty($_record->email) && $_record->email !== $_oldRecord->email) {
             $this->_checkEmailAddress($_record->email);
         }
