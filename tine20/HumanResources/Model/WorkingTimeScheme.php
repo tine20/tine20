@@ -65,6 +65,7 @@ class HumanResources_Model_WorkingTimeScheme extends Tinebase_Record_NewAbstract
             self::FLDS_TITLE            => [
                 self::TYPE                  => self::TYPE_STRING,
                 self::LABEL                 => 'Title', // _('Title')
+                self::QUERY_FILTER          => true,
                 self::LENGTH                => 255,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
