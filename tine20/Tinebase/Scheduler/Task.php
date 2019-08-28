@@ -711,4 +711,26 @@ class Tinebase_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Tinebase_FilterSyncToken::cleanUp in scheduler.');
     }
+
+    /**
+     * add log entry cleanup task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addLogEntryCleanUpTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_LogEntry::cleanUp')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_LogEntry::cleanUp', self::TASK_TYPE_WEEKLY, [[
+            self::CONTROLLER    => 'Tinebase_Controller_LogEntry',
+            self::METHOD_NAME   => 'cleanUp',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_LogEntry::cleanUp in scheduler.');
+    }
 }

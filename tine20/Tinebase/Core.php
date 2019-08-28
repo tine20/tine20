@@ -495,8 +495,21 @@ class Tinebase_Core
         }
 
         Tinebase_Core::setupContainer();
+        Tinebase_Core::setupDbLogger();
     }
 
+    protected static function setupDbLogger()
+    {
+        $config = self::getConfig();
+        
+        if ($config->dblogger) {
+            $logger = Tinebase_Core::getLogger();
+            $writer = $logger->getWriter($config->dblogger);
+            $writer->setFormatter($logger->getFormatter($config->dblogger));
+            $logger->addWriter($writer);
+        }
+    }
+    
     /**
      * setup DI container
      */

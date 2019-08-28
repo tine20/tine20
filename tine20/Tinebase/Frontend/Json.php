@@ -42,7 +42,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_configuredModels = [
         'BLConfig',
-        'ImportExportDefinition'
+        'ImportExportDefinition',
+        'LogEntry',
     ];
 
     /**

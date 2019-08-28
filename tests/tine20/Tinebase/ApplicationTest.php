@@ -446,6 +446,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_Import::class,
                 Tinebase_Model_ImportException::class,
                 Tinebase_Model_ImportExportDefinition::class,
+                Tinebase_Model_LogEntry::class,
                 Tinebase_Model_ModificationLog::class,
                 Tinebase_Model_Note::class,
                 Tinebase_Model_NoteType::class,

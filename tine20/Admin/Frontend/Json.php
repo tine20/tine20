@@ -1334,6 +1334,55 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, Admin_Controller_EmailAccount::getInstance());
     }
 
+    /****************************** LogEntry ******************************/
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param array $filter
+     * @param array $paging
+     * @return array
+     */
+    public function searchLogEntrys($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Admin_Controller_LogEntry::getInstance(), 'Tinebase_Model_LogEntryFilter');
+
+        return $result;
+    }
+
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getLogEntry($id)
+    {
+        return $this->_get($id, Admin_Controller_LogEntry::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveLogEntry($recordData)
+    {
+        return $this->_save($recordData, Admin_Controller_LogEntry::getInstance(), 'Tinebase_Model_LogEntry');
+    }
+
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids
+     * @return string
+     */
+    public function deleteLogEntrys($ids)
+    {
+        return $this->_delete($ids, Admin_Controller_LogEntry::getInstance());
+    }
+
 
     /****************************** other *******************************/
     

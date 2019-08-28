@@ -12,6 +12,8 @@
 
 Ext.ns('Tine.Admin');
 
+require('./LogEntries');
+
 Tine.Admin.init = function () {
     var registeredItems = [];
     var panels = [];
@@ -138,6 +140,18 @@ Tine.Admin.init = function () {
             dataPanelType: "accesslog",
             viewRight: 'access_log'
         }, {
+            text: translation.gettext('Log'),
+            cls: "treemain",
+            iconCls: 'admin-node-accesslog',
+            allowDrag: false,
+            allowDrop: true,
+            id: "logentries",
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "logentries",
+        },{
             text: translation.gettext('Server Information'),
             cls: "treemain",
             iconCls: 'admin-node-server-info',
@@ -314,6 +328,9 @@ Tine.Admin.init = function () {
             switch (dataPanelType) {
             case 'accesslog':
                 Tine.Admin.accessLog.show();
+                break;
+            case 'logentries':
+                Tine.Admin.LogEntries.show();
                 break;
             case 'accounts':
                 Tine.Admin.user.show();

@@ -12,21 +12,26 @@
 
 /**
  * Class Tinebase_Log_Formatter_Json
+ *
+ * @todo support timelog
  */
-class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
+class Tinebase_Log_Formatter_Db extends Tinebase_Log_Formatter
 {
     /**
-     * Formats data into a single json_encoded line to be written by the writer.
+     * Formats data into a array compatible to database
      *
      * @param array $event event data
-     * @return string formatted line to write to the log
+     * @return array
      */
     public function format($event)
     {
         $data = $this->getLogData($event);
+        $data['id'] = Tinebase_Record_Abstract::generateUID();
+        $data['user'] = Tinebase_Core::getUser()->getId();
 
-        return @json_encode($data,
-            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)
-            . PHP_EOL;
+        $timestamp = new Tinebase_DateTime($data['timestamp']);
+        $data['timestamp'] = $timestamp->toString();
+        
+        return $data;
     }
 }

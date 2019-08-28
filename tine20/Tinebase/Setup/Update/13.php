@@ -13,12 +13,17 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
             self::RELEASE013_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE013_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -65,5 +70,14 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
 
         $this->addApplicationUpdate('Tinebase', '13.2', self::RELEASE013_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_LogEntry::class,
+        ]);
+        Tinebase_Scheduler_Task::addLogEntryCleanUpTask(Tinebase_Core::getScheduler());
+        $this->addApplicationUpdate('Tinebase', '13.3', self::RELEASE013_UPDATE004);
     }
 }
