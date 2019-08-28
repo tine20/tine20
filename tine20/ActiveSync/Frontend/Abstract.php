@@ -580,6 +580,8 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     protected function _deviceSupportsMultipleFolders()
     {
+        // NOTE: android is quite a devicetype zoo. we tired to enable all devices having 'android' in the
+        //       OS string. But it didn't work - e.g. samsungsma310f (Samsung A3 (6)) has no folder support
         return in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders());
     }
     
