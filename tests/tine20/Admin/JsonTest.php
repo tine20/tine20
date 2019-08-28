@@ -69,6 +69,7 @@ class Admin_JsonTest extends TestCase
         ));
 
         $this->objects['addedUsers'] = [];
+        $this->objects['emailAccounts'] = [];
     }
     
     protected function tearDown()
@@ -76,6 +77,14 @@ class Admin_JsonTest extends TestCase
         foreach ($this->objects['addedUsers'] as $user) {
             try {
                 Tinebase_User::getInstance()->deleteUser($user['accountId']);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // already removed
+            }
+        }
+
+        foreach ($this->objects['emailAccounts'] as $account) {
+            try {
+                $this->_json->deleteEmailAccounts([$account->getId()]);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // already removed
             }
@@ -1642,6 +1651,7 @@ class Admin_JsonTest extends TestCase
 
         $this->_uit = $this->_json;
         $accountdata = [
+            'name' => 'unittest shared account',
             'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
@@ -1678,6 +1688,8 @@ class Admin_JsonTest extends TestCase
 
         if ($delete) {
             $this->_uit->deleteEmailAccounts($account->getId());
+        } else {
+            $this->objects['emailAccounts'][] = $account;
         }
 
         return $account;
@@ -1693,6 +1705,20 @@ class Admin_JsonTest extends TestCase
         } finally {
             $this->_json->deleteEmailAccounts($account->getId());
         }
+    }
+
+    public function testSearchSharedAccountsInFelamimailJsonRegistryData()
+    {
+        $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
+        $fmailJson = new Felamimail_Frontend_Json();
+        $result = $fmailJson->getRegistryData();
+        self::assertGreaterThan(1, $result['accounts']['totalcount']);
+
+        $sharedAccounts = array_filter($result['accounts']['results'], function($account) use ($sharedAccount) {
+            return $account['email'] === $sharedAccount->email;
+        });
+        self::assertEquals(1, count($sharedAccounts), 'shared account could not be found: '
+            . print_r($result['accounts'], true));
     }
 
     public function testUpdateSystemAccount()
