@@ -221,7 +221,7 @@ Ext.extend(Tine.Addressbook.ListFilterPanel, Tine.widgets.persistentfilter.Picke
 });
 
 // register Contact related renderers -> needed e.g. for duplicate resolve dlg as Contact is no mcv2 app yet
-Tine.Tinebase.tineInit.onRegistryLoad().then(() => {
+Tine.Tinebase.appMgr.isInitialised('Addressbook').then(() => {
     _.each(Tine.Addressbook.ContactGridPanel.getBaseColumns(Tine.Tinebase.appMgr.get('Addressbook').i18n), (col) => {
         if (col.renderer) {
             Tine.widgets.grid.RendererManager.register('Addressbook', 'Contact', col.dataIndex, col.renderer);
