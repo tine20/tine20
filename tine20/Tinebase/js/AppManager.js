@@ -25,6 +25,8 @@ Tine.Tinebase.AppManager = function() {
      */
     this.apps = new Ext.util.MixedCollection({});
 
+    this.initialisedPromises = [];
+
     // fill this.apps with registry data 
     // do it the other way round because add() always adds records at the beginning of the MixedCollection
     var enabledApps = Tine.Tinebase.registry.get('userApplications'),
@@ -74,6 +76,7 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
             appObj.isInitialised = true;
             Ext.applyIf(appObj, app);
             this.apps.replace(appName, appObj);
+            this.getInitialisedRecord(appName).resolver();
         }
 
         return this.apps.get(appName);
@@ -244,5 +247,22 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
         });
         
         return appObj;
+    },
+
+    getInitialisedRecord: function(appName) {
+        let record = _.find(this.initialisedPromises, {appName: appName});
+        if (! record) {
+            record = {appName: appName};
+            record.promise = new Promise( (resolve) => {
+                record.resolver = resolve;
+            });
+            this.initialisedPromises.push(record);
+        }
+
+        return record;
+    },
+
+    isInitialised: function(appName) {
+        return this.getInitialisedRecord(appName).promise;
     }
 });
