@@ -305,8 +305,8 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         } else {
             this.window.setTitle(String.format(this.translation._('Edit Tag "{0}"'), this.tag.get('name')));
         }
-        
-        this.hideLoadMask();
+
+        this.loadMask.hide();
     }     
 });
 
