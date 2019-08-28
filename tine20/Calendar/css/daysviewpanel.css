@@ -213,10 +213,10 @@
 .cal-daysviewpanel-event {
     min-height: 16px;
     margin-left: 3px;
-    background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
-    border-radius: 8px;
+    /*background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;*/
+    /*border-radius: 8px;*/
     position: absolute;
-    border: 1px solid #808080;
+    border: 2px solid #808080;
     overflow: hidden;
 
     text-align: left;
@@ -229,64 +229,67 @@
     font-weight:normal;
     line-height:normal;
     white-space:nowrap;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
 }
 
-.ext-gecko .cal-daysviewpanel-event {
-    -moz-border-radius: 8px;
-}
+/*.ext-gecko .cal-daysviewpanel-event {*/
+/*    -moz-border-radius: 8px;*/
+/*}*/
 
-.ext-safari .cal-daysviewpanel-event {
-    -webkit-border-radius: 8px;
-}
+/*.ext-safari .cal-daysviewpanel-event {*/
+/*    -webkit-border-radius: 8px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-daysviewpanel-event {
-    -khtml-border-radius: 8px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-daysviewpanel-event {*/
+/*    -khtml-border-radius: 8px;*/
+/*}*/
 
 .cal-daysviewpanel-event-croptop {
     border-top-style: none;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
+    /*border-top-left-radius: 0px;*/
+    /*border-top-right-radius: 0px;*/
 }
 
-.ext-gecko .cal-daysviewpanel-event-croptop {
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-topright: 0px;
-}
+/*.ext-gecko .cal-daysviewpanel-event-croptop {*/
+/*    -moz-border-radius-topleft: 0px;*/
+/*    -moz-border-radius-topright: 0px;*/
+/*}*/
 
-.ext-safari .cal-daysviewpanel-event-croptop {
-    -webkit-border-top-left-radius: 0px;
-    -webkit-border-top-right-radius: 0px;
-}
+/*.ext-safari .cal-daysviewpanel-event-croptop {*/
+/*    -webkit-border-top-left-radius: 0px;*/
+/*    -webkit-border-top-right-radius: 0px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-daysviewpanel-event-croptop {
-    -khtml-border-top-left-radius: 0px;
-    -khtml-border-top-right-radius: 0px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-daysviewpanel-event-croptop {*/
+/*    -khtml-border-top-left-radius: 0px;*/
+/*    -khtml-border-top-right-radius: 0px;*/
+/*}*/
 
 .cal-daysviewpanel-event-cropbottom {
     border-bottom-style: none;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    /*border-bottom-left-radius: 0px;*/
+    /*border-bottom-right-radius: 0px;*/
 }
 
-.ext-gecko .cal-daysviewpanel-event-cropbottom {
-    -moz-border-radius-bottomleft: 0px;
-    -moz-border-radius-bottomright: 0px;
-}
+/*.ext-gecko .cal-daysviewpanel-event-cropbottom {*/
+/*    -moz-border-radius-bottomleft: 0px;*/
+/*    -moz-border-radius-bottomright: 0px;*/
+/*}*/
 
-.ext-safari .cal-daysviewpanel-event-cropbottom {
-    -webkit-border-bottom-left-radius: 0px;
-    -webkit-border-bottom-right-radius: 0px;
-}
+/*.ext-safari .cal-daysviewpanel-event-cropbottom {*/
+/*    -webkit-border-bottom-left-radius: 0px;*/
+/*    -webkit-border-bottom-right-radius: 0px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-daysviewpanel-event-cropbottom {
-    -khtml-border-bottom-left-radius: 0px;
-    -khtml-border-bottom-right-radius: 0px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-daysviewpanel-event-cropbottom {*/
+/*    -khtml-border-bottom-left-radius: 0px;*/
+/*    -khtml-border-bottom-right-radius: 0px;*/
+/*}*/
 
 .cal-daysviewpanel-event-drop-nodrop .x-dd-drop-icon {
     left: 3px;
@@ -307,8 +310,8 @@
     top: -1px;
     height: 14px;
     background-color: #808080;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    /*border-top-left-radius: 8px;*/
+    /*border-top-right-radius: 8px;*/
     overflow: hidden;
 }
 
@@ -316,44 +319,44 @@
     cursor: move;
 }
 
-.ext-gecko .cal-daysviewpanel-event-header {
-    -moz-border-radius-topleft: 8px;
-    -moz-border-radius-topright: 8px;
-}
+/*.ext-gecko .cal-daysviewpanel-event-header {*/
+/*    -moz-border-radius-topleft: 8px;*/
+/*    -moz-border-radius-topright: 8px;*/
+/*}*/
 
-.ext-safari .cal-daysviewpanel-event-header {
-    -webkit-border-top-left-radius: 8px;
-    -webkit-border-top-right-radius: 8px;
-}
+/*.ext-safari .cal-daysviewpanel-event-header {*/
+/*    -webkit-border-top-left-radius: 8px;*/
+/*    -webkit-border-top-right-radius: 8px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-daysviewpanel-event-header {
-    -khtml-border-top-left-radius: 8px;
-    -khtml-border-top-right-radius: 8px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-daysviewpanel-event-header {*/
+/*    -khtml-border-top-left-radius: 8px;*/
+/*    -khtml-border-top-right-radius: 8px;*/
+/*}*/
 
 .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
     display: none;
     border-top-style: none;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
+    /*border-top-left-radius: 0px;*/
+    /*border-top-right-radius: 0px;*/
 }
 
-.ext-gecko .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-topright: 0px;
-}
+/*.ext-gecko .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {*/
+/*    -moz-border-radius-topleft: 0px;*/
+/*    -moz-border-radius-topright: 0px;*/
+/*}*/
 
-.ext-safari .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
-    -webkit-border-top-left-radius: 0px;
-    -webkit-border-top-right-radius: 0px;
-}
+/*.ext-safari .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {*/
+/*    -webkit-border-top-left-radius: 0px;*/
+/*    -webkit-border-top-right-radius: 0px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
-    -khtml-border-top-left-radius: 0px;
-    -khtml-border-top-right-radius: 0px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {*/
+/*    -khtml-border-top-left-radius: 0px;*/
+/*    -khtml-border-top-right-radius: 0px;*/
+/*}*/
 
 .cal-daysviewpanel-event-header-inner {
     color: white;
@@ -369,7 +372,7 @@
 }
 
 .cal-daysviewpanel-wholedayheader .cal-daysviewpanel-event-header-icons {
-    background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
+    /*background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;*/
     padding-left: 2px;
     top: 3px;
 }
@@ -396,10 +399,10 @@
     bottom: 4px;
 }
 
-.cal-event-active,
-.cal-daysviewpanel-event-active {
-    border-width: 2px;
-}
+/*.cal-event-active,*/
+/*.cal-daysviewpanel-event-active {*/
+/*    border-width: 2px;*/
+/*}*/
 
 .cal-daysviewpanel-event-onedit {
     border-style: dashed;
@@ -450,50 +453,50 @@
     border-bottom-left-radius: 0px;
 }
 
-.ext-gecko .cal-daysviewpanel-event-cropleft {
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-bottomleft: 0px;
-}
+/*.ext-gecko .cal-daysviewpanel-event-cropleft {*/
+/*    -moz-border-radius-topleft: 0px;*/
+/*    -moz-border-radius-bottomleft: 0px;*/
+/*}*/
 
-.ext-safari .cal-daysviewpanel-event-cropleft {
-    -webkit-border-top-left-radius: 0px;
-    -webkit-border-bottom-left-radius: 0px;
-}
+/*.ext-safari .cal-daysviewpanel-event-cropleft {*/
+/*    -webkit-border-top-left-radius: 0px;*/
+/*    -webkit-border-bottom-left-radius: 0px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-daysviewpanel-event-cropleft {
-    -khtml-border-top-left-radius: 0px;
-    -khtml-border-bottom-left-radius: 0px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-daysviewpanel-event-cropleft {*/
+/*    -khtml-border-top-left-radius: 0px;*/
+/*    -khtml-border-bottom-left-radius: 0px;*/
+/*}*/
 
 .cal-daysviewpanel-event-cropright {
     background-image: none;
     border-right-style: hidden;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
+    /*border-top-right-radius: 0px;*/
+    /*border-bottom-right-radius: 0px;*/
 }
 
-.ext-gecko .cal-daysviewpanel-event-cropright {
-    -moz-border-radius-topright: 0px;
-    -moz-border-radius-bottomright: 0px;
-}
+/*.ext-gecko .cal-daysviewpanel-event-cropright {*/
+/*    -moz-border-radius-topright: 0px;*/
+/*    -moz-border-radius-bottomright: 0px;*/
+/*}*/
 
-.ext-safari .cal-daysviewpanel-event-cropright {
-    -webkit-border-top-right-radius: 0px;
-    -webkit-border-bottom-right-radius: 0px;
-}
+/*.ext-safari .cal-daysviewpanel-event-cropright {*/
+/*    -webkit-border-top-right-radius: 0px;*/
+/*    -webkit-border-bottom-right-radius: 0px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-daysviewpanel-event-cropright {
-    -khtml-border-top-right-radius: 0px;
-    -khtml-border-bottom-right-radius: 0px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-daysviewpanel-event-cropright {*/
+/*    -khtml-border-top-right-radius: 0px;*/
+/*    -khtml-border-bottom-right-radius: 0px;*/
+/*}*/
 
 .cal-daysviewpanel-wholedayevent-body .x-form-text {
     position: absolute;
     top: 0px;
-    padding-top: 0px;
-    padding-left: 0px;
+    /*padding-top: 0px;*/
+    /*padding-left: 0px;*/
 }
 .cal-daysviewpanel-wholedayevent-body .x-form-field {
     height: 11px;
