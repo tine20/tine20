@@ -311,7 +311,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
                 var sourceEl = Ext.fly(data.sourceEl),
                     sourceView = data.scope;
 
-                sourceEl.setStyle({'border-style': 'dashed'});
+                sourceEl.setStyle({'border-left-style': 'dashed'});
                 sourceEl.setOpacity(0.5);
 
                 data.denyDrop = true;
@@ -464,7 +464,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             },
             
             getRepairXY: function(e, dd) {
-                Ext.fly(this.dragData.sourceEl).setStyle({'border-style': 'solid'});
+                Ext.fly(this.dragData.sourceEl).setStyle({'border-left-style': 'solid'});
                 Ext.fly(this.dragData.sourceEl).setOpacity(1, 1);
                 
                 return Ext.fly(this.dragData.sourceEl).getXY();
@@ -654,7 +654,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         this.onLayout();
         
         //var eventEls = event.ui.getEls();
-        //eventEls[0].setStyle({'border-style': 'dashed'});
+        //eventEls[0].setStyle({'border-left-style': 'dashed'});
         //eventEls[0].setOpacity(0.5);
         
         // start sizing for range adds
@@ -1543,8 +1543,8 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         
         ts.event = new Ext.XTemplate(
             '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">',
-                '<div class="cal-daysviewpanel-event-header" style="background-color: {color};">',
-                    '<div class="cal-daysviewpanel-event-header-inner" style="color: {textColor}; background-color: {color}; z-index: {zIndex};">{startTime}</div>',
+                '<div class="cal-daysviewpanel-event-header" style="background-color: {bgColor};">',
+                    '<div class="cal-daysviewpanel-event-header-inner" style="color: {textColor}; background-color: {bgColor}; z-index: {zIndex};">{startTime}</div>',
                     '<div class="cal-daysviewpanel-event-header-icons">',
                         '<tpl for="statusIcons">',
                             '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-status-icon {status}-{[parent.textColor == \'#FFFFFF\' ? \'white\' : \'black\']}" ext:qtip="{[this.encode(values.text)]}" />',

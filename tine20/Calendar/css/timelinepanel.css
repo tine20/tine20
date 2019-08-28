@@ -145,7 +145,7 @@
 }
 
 .cal-timeline-view .cal-daysviewpanel-event-header-icons {
-    background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
+    /*background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;*/
     padding-left: 2px;
     top: 3px;
 }

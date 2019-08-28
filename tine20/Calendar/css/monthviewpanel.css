@@ -107,7 +107,7 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-alldayevent {
-    border-radius: 8px;
+    /*border-radius: 8px;*/
     margin: 0px 0px 1px 0px;
     background-color: red;
     height: 17px;
@@ -115,65 +115,65 @@ cal-monthview-wkcell-header {
     /*overflow: visible;*/
 }
 
-.ext-gecko .cal-monthview-alldayevent {
-    -moz-border-radius: 8px;
-}
+/*.ext-gecko .cal-monthview-alldayevent {*/
+/*    -moz-border-radius: 8px;*/
+/*}*/
 
-.ext-safari .cal-monthview-alldayevent {
-    -webkit-border-radius: 8px;
-}
+/*.ext-safari .cal-monthview-alldayevent {*/
+/*    -webkit-border-radius: 8px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-monthview-alldayevent {
-    -khtml-border-radius: 8px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-monthview-alldayevent {*/
+/*    -khtml-border-radius: 8px;*/
+/*}*/
 
 .cal-monthview-alldayevent-cropleft {
     margin-left: 0px;
     border-left-style: none;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
+    /*border-top-left-radius: 0px;*/
+    /*border-bottom-left-radius: 0px;*/
 }
 
-.ext-gecko .cal-monthview-alldayevent-cropleft {
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-bottomleft: 0px;
-}
+/*.ext-gecko .cal-monthview-alldayevent-cropleft {*/
+/*    -moz-border-radius-topleft: 0px;*/
+/*    -moz-border-radius-bottomleft: 0px;*/
+/*}*/
 
-.ext-safari .cal-monthview-alldayevent-cropleft {
-    -webkit-border-top-left-radius: 0px;
-    -webkit-border-bottom-left-radius: 0px;
-}
+/*.ext-safari .cal-monthview-alldayevent-cropleft {*/
+/*    -webkit-border-top-left-radius: 0px;*/
+/*    -webkit-border-bottom-left-radius: 0px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-monthview-alldayevent-cropleft {
-    -khtml-border-top-left-radius: 0px;
-    -khtml-border-bottom-left-radius: 0px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-monthview-alldayevent-cropleft {*/
+/*    -khtml-border-top-left-radius: 0px;*/
+/*    -khtml-border-bottom-left-radius: 0px;*/
+/*}*/
 
 .cal-monthview-alldayevent-cropright {
     margin-right: 0px;
     background-image: none;
     border-right-style: hidden;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
+    /*border-top-right-radius: 0px;*/
+    /*border-bottom-right-radius: 0px;*/
 }
 
-.ext-gecko .cal-monthview-alldayevent-cropright {
-    -moz-border-radius-topright: 0px;
-    -moz-border-radius-bottomright: 0px;
-}
+/*.ext-gecko .cal-monthview-alldayevent-cropright {*/
+/*    -moz-border-radius-topright: 0px;*/
+/*    -moz-border-radius-bottomright: 0px;*/
+/*}*/
 
-.ext-safari .cal-monthview-alldayevent-cropright {
-    -webkit-border-top-right-radius: 0px;
-    -webkit-border-bottom-right-radius: 0px;
-}
+/*.ext-safari .cal-monthview-alldayevent-cropright {*/
+/*    -webkit-border-top-right-radius: 0px;*/
+/*    -webkit-border-bottom-right-radius: 0px;*/
+/*}*/
 
-/** todo: add khtml switch **/
-.cal-monthview-alldayevent-cropright {
-    -khtml-border-top-right-radius: 0px;
-    -khtml-border-bottom-right-radius: 0px;
-}
+/*!** todo: add khtml switch **!*/
+/*.cal-monthview-alldayevent-cropright {*/
+/*    -khtml-border-top-right-radius: 0px;*/
+/*    -khtml-border-bottom-right-radius: 0px;*/
+/*}*/
 
 .cal-monthview-alldayevent-summary {
     white-space: nowrap;

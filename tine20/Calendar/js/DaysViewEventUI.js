@@ -14,7 +14,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         Tine.Calendar.DaysViewEventUI.superclass.clearDirty.call(this);
 
         Ext.each(this.getEls(), function(el) {
-            el.setStyle({'border-style': 'solid'});
+            el.setStyle({'border-left-style': 'solid'});
         });
     },
     /**
@@ -59,7 +59,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         Tine.Calendar.DaysViewEventUI.superclass.markDirty.call(this);
 
         Ext.each(this.getEls(), function(el) {
-            el.setStyle({'border-style': 'dashed'});
+            el.setStyle({'border-left-style': 'dashed'});
         });
     },
 
@@ -142,7 +142,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         }, true);
 
         if (this.event.dirty) {
-            eventEl.setStyle({'border-style': 'dashed'});
+            eventEl.setStyle({'border-left-style': 'dashed'});
             eventEl.setOpacity(0.5);
         }
 
@@ -201,7 +201,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 extraCls: extraCls,
                 color: this.colorSet.color,
                 bgColor: this.colorSet.light,
-                textColor: this.colorSet.text,
+                textColor: '#000000',//this.colorSet.text,
                 zIndex: 100,
                 height: height + '%',
                 left: Math.round(pos * 90 * 1/parallels) + '%',
@@ -211,7 +211,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             }, true);
 
             if (this.event.dirty) {
-                eventEl.setStyle({'border-style': 'dashed'});
+                eventEl.setStyle({'border-left-style': 'dashed'});
                 eventEl.setOpacity(0.5);
             }
 
@@ -230,5 +230,21 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 });
             }
         }
+    },
+
+    onSelectedChange: function(state){
+        Tine.Calendar.MonthViewEventUI.superclass.onSelectedChange.call(this, state);
+        var style = {
+            'background-color': state ? this.colorSet.color : this.colorSet.light,
+            'color':            state ? this.colorSet.text: '#000000'
+        };
+
+        Ext.each(this.getEls(), function(el) {
+            el.setStyle(style);
+            el.select('div[class^=cal-daysviewpanel-event-header]').setStyle(style);
+            el.select('.cal-status-icon')
+                .removeClass(['ACCEPTED-black', 'ACCEPTED-white'])
+                .addClass('ACCEPTED-' + (style.color === '#FFFFFF' ? 'white' : 'black'));
+        }, this);
     }
 });
