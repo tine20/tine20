@@ -113,11 +113,22 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FLAG_ICON_OTHER_DOMAIN = 'flagIconOtherDomain';
     const FLAG_ICON_OTHER_DOMAIN_REGEX = 'flagIconOtherDomainRegex';
 
+    const SIEVE_MAILINGLIST_REJECT_REASON = 'sieveMailingListRejectReason';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::SIEVE_MAILINGLIST_REJECT_REASON => [
+            self::LABEL                 => 'Mailinglist Reject Reason', // _('Mailinglist Reject Reason')
+            self::DESCRIPTION           => 'Mailinglist Reject Reason',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => 'Your email has been rejected', // _('Your email has been rejected')
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::VACATION_TEMPLATES_CONTAINER_ID => array(
         //_('Vacation Templates Node ID')
             'label'                 => 'Vacation Templates Node ID',
