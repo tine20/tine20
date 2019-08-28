@@ -11,6 +11,8 @@
 
 Ext.namespace('Tine.Voipmanager');
 
+require('../CallForwardPanel');
+
 /**
  * Line Picker GridPanel
  * 

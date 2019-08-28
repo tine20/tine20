@@ -12,6 +12,9 @@
  
 Ext.namespace('Tine.Voipmanager');
 
+require('../CallForwardPanel');
+require('./LineGridPanel');
+
 /**
  * Snom Phone Edit Dialog
  */
