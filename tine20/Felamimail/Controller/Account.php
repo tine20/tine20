@@ -760,17 +760,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             return true;
         }
 
-        switch ($action) {
-            // no breaks here
-            case 'get':
-                if (Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::ADD_ACCOUNTS)) {
-                    return true;
-                }
-            case 'update':
-            case 'delete':
-                if (Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
-                    return true;
-                }
+        if (Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
+            return true;
         }
 
         return parent::_checkGrant($record, $action, $throw, $errorMessage, $oldRecord);
