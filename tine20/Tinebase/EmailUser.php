@@ -413,7 +413,13 @@ class Tinebase_EmailUser
 
         if (! empty($_email) && ! empty($allowedDomains)) {
 
-            list($user, $domain) = explode('@', $_email, 2);
+            if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' No valid email address: ' . $_email);
+                $domain = null;
+            } else {
+                list($user, $domain) = explode('@', $_email, 2);
+            }
 
             if (! in_array($domain, $allowedDomains)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
