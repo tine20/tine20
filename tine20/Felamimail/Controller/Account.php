@@ -1150,6 +1150,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         
         // only create account if email address is set
         if ($email && $_account->imapUser instanceof Tinebase_Model_EmailUser) {
+            if (null !== ($systemAccount = $this->getSystemAccount($_account->getId()))) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' system account "' . $systemAccount->name . '" already exists.');
+                return $systemAccount;
+            }
 
             $oldACLValue = $this->doContainerACLChecks(false);
             $oldRightValue = $this->doRightChecks(false);
@@ -1157,12 +1162,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldACLValue);
                 Felamimail_Controller_Account::getInstance()->doRightChecks($oldRightValue);
             });
-
-            if (null !== ($systemAccount = $this->getSystemAccount($_account->getId()))) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' system account "' . $systemAccount->name . '" already exists.');
-                return $systemAccount;
-            }
 
             $systemAccount = new Felamimail_Model_Account([
                 'type'      => Felamimail_Model_Account::TYPE_SYSTEM,
