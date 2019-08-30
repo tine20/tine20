@@ -729,21 +729,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         return true;
     }
 
-    public static function _appendDomainOrInstance($username, $config)
-    {
-        if (! empty($config['instanceName']) && strpos($username, $config['instanceName']) === false) {
-            $user = Tinebase_Core::getUser();
-            if ($username !== $user->getId()) {
-                $username = $user->getId();
-            }
-            $username .= '@' . $config['instanceName'];
-        } else if (! empty($config['domain']) && strpos($username, $config['domain']) === false) {
-            $username .= '@' . $config['domain'];
-        }
-
-        return $username;
-    }
-
     /**
      * returns TRUE if account has capability (i.e. QUOTA, CONDSTORE, ...)
      * 
@@ -754,6 +739,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
     {
         $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($this);
         
-        return (in_array($_capability, $capabilities['capabilities']));
+        return ($capabilities && in_array($_capability, $capabilities['capabilities']));
     }
 }
