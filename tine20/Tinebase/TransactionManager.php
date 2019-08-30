@@ -271,10 +271,10 @@ class Tinebase_TransactionManager
     /**
      * register a callable to call just before the rollback happens
      *
-     * @param array $callable
+     * @param array|callable $callable
      * @param array $param
      */
-    public function registerOnRollbackCallback(array $callable, array $param = array())
+    public function registerOnRollbackCallback($callable, array $param = array())
     {
         $this->_onRollbackCallbacks[] = array($callable, $param);
     }

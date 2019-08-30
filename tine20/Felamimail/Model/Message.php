@@ -14,6 +14,7 @@
  * 
  * @package     Felamimail
  * @subpackage  Model
+ * @property    string  $account_id         the account id
  * @property    string  $folder_id          the folder id
  * @property    string  $original_id        cache id of original message if replying / forwarding
  * @property    string  $subject            the subject of the email
@@ -1002,5 +1003,14 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         }
         
         return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLockKey()
+    {
+        return 'FelamimailFolderLock#~#' . $this->getIdFromProperty('account_id') . '#~#' .
+            $this->getIdFromProperty('folder_id');
     }
 }
