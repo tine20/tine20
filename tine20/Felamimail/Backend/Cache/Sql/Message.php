@@ -66,6 +66,41 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     );
 
     /**
+     * converts record into raw data for adapter
+     *
+     * @param  Felamimail_Model_Message $_record
+     * @return array
+     */
+    protected function _recordToRawData(Tinebase_Record_Interface $_record)
+    {
+        $transactionMgr = Tinebase_TransactionManager::getInstance();
+        if ($transactionMgr->hasOpenTransactions()) {
+            $lockKey = $_record->getLockKey();
+            if (null !== ($lock = Tinebase_Core::getMultiServerLock($lockKey))) {
+                if (!$lock->isLocked() && $lock->tryAcquire()) {
+                    $transactionMgr->registerAfterCommitCallback(
+                        function ($lockKey) {
+                            Tinebase_Core::releaseMultiServerLock($lockKey);
+                        },
+                        [$lockKey]
+                    );
+                    $transactionMgr->registerOnRollbackCallback(
+                        function ($lockKey) {
+                            Tinebase_Core::releaseMultiServerLock($lockKey);
+                        },
+                        [$lockKey]
+                    );
+                } elseif (!$lock->isLocked()) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not lock lock');
+                }
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not get lock');
+            }
+        }
+        return parent::_recordToRawData($_record);
+    }
+
+    /**
      * Search for records matching given filter
      *
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
