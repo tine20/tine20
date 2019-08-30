@@ -157,17 +157,6 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
     }
     
     /**
-    * interceptor before add
-    *
-    * @param array $emailUserData
-    */
-    protected function _beforeAddOrUpdate(&$emailUserData)
-    {
-        unset($emailUserData[$this->_propertyMapping['emailForwards']]);
-        unset($emailUserData[$this->_propertyMapping['emailAliases']]);
-    }
-
-    /**
      * set email aliases and forwards
      * 
      * removes all aliases for user
