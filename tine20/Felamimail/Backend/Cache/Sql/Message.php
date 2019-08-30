@@ -73,30 +73,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     protected function _recordToRawData(Tinebase_Record_Interface $_record)
     {
-        $transactionMgr = Tinebase_TransactionManager::getInstance();
-        if ($transactionMgr->hasOpenTransactions()) {
-            $lockKey = $_record->getLockKey();
-            if (null !== ($lock = Tinebase_Core::getMultiServerLock($lockKey))) {
-                if (!$lock->isLocked() && $lock->tryAcquire()) {
-                    $transactionMgr->registerAfterCommitCallback(
-                        function ($lockKey) {
-                            Tinebase_Core::releaseMultiServerLock($lockKey);
-                        },
-                        [$lockKey]
-                    );
-                    $transactionMgr->registerOnRollbackCallback(
-                        function ($lockKey) {
-                            Tinebase_Core::releaseMultiServerLock($lockKey);
-                        },
-                        [$lockKey]
-                    );
-                } elseif (!$lock->isLocked()) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not lock lock');
-                }
-            } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not get lock');
-            }
-        }
+        Felamimail_Backend_Folder::lockFolderInTransaction($_record->folder_id);
+
         return parent::_recordToRawData($_record);
     }
 
