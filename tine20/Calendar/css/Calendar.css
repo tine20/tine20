@@ -13,6 +13,10 @@
     background-image:url(../../images/icon-set/icon_calender_today_action.svg) !important;
 }
 
+.cal-split-view {
+    background-image:url(../../images/icon-set/icon_column.svg) !important;
+}
+
 .cal-sheet-view-type {
     background-image:url(../../images/icon-set/icon_calendar_week.svg) !important;
 }
