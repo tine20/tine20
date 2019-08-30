@@ -1004,13 +1004,4 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         
         return $result;
     }
-
-    /**
-     * @return string
-     */
-    public function getLockKey()
-    {
-        return 'FelamimailFolderLock#~#' . $this->getIdFromProperty('account_id') . '#~#' .
-            $this->getIdFromProperty('folder_id');
-    }
 }
