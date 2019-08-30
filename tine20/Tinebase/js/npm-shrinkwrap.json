@@ -8765,6 +8765,12 @@
         "semver": "^5.3.0"
       }
     },
+    "node-waves": {
+      "version": "0.7.6",
+      "resolved": "https://registry.npmjs.org/node-waves/-/node-waves-0.7.6.tgz",
+      "integrity": "sha1-8EiQlhkl6Nqrh12ql9FUc053Nf8=",
+      "dev": true
+    },
     "noop-logger": {
       "version": "0.1.1",
       "resolved": "https://registry.npmjs.org/noop-logger/-/noop-logger-0.1.1.tgz",

@@ -21,6 +21,10 @@ require('postal.request-response');
 // include traditional stuff as defined in jsb2
 require('./../../Tinebase/Tinebase.jsb2');
 
+require('node-waves');
+require('node-waves/src/less/waves.less');
+
+require('../css/flat.less');
 require('./ux/util/screenshot');
 
 module.exports = {

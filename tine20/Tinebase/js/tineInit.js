@@ -209,6 +209,17 @@ Tine.Tinebase.tineInit = {
                     }
                 }
             }
+
+            else {
+                let wavesEl = e.getTarget('.x-btn', 10, true)
+                    || e.getTarget('.x-tree-node-el', 10, true);
+
+                if (wavesEl) {
+                    wavesEl.addClass('waves-effect');
+                    Waves.ripple(wavesEl.dom);
+                    wavesEl.removeClass.defer(1500, wavesEl, ['waves-effect']);
+                }
+            }
         }, this);
 
         Tine.clientVersion.assetHash = window.assetHash;
