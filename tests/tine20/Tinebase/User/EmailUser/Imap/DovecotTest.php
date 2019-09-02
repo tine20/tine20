@@ -167,10 +167,12 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $userBackend = new Tinebase_User_Sql();
         $userBackend->deleteUserInSqlBackend($userId);
 
-        // create user again
-        static::setExpectedException(Zend_Db_Statement_Exception::class);
+        // create user again - should not throw an exception as old email user data gets deleted
         unset($user->accountId);
-        Tinebase_User::getInstance()->addUser($user);
+        $newUser = Tinebase_User::getInstance()->addUser($user);
+        $this->_objects['fullUsers'] = array($newUser);
+        $this->assertNotEquals($userId, $newUser->getId());
+        $this->assertTrue(isset($newUser->imapUser), 'imapUser data not found: ' . print_r($newUser->toArray(), true));
     }
 
     /**
