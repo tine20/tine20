@@ -780,6 +780,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function getGroupById($_groupId)
     {
+        if (! $_groupId) {
+            throw new Tinebase_Exception_InvalidArgument('$_groupId required');
+        }
+
         $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $result = $this->getGroupByPropertyFromSqlBackend('id', $groupdId);
