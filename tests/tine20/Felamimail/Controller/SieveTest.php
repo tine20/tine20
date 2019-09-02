@@ -40,10 +40,9 @@ class Felamimail_Controller_SieveTest extends Felamimail_TestCase
         self::assertContains('require ["envelope","copy","reject"];', $script->getSieve());
         self::assertContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"] {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
-}
-reject "', $script->getSieve());
+} else { reject', $script->getSieve());
 
-        // TODO make it work (maybe our sieve testsetup is not ready for this)
+        // TODO make it work (our sieve testsetup is not ready for this)
         return true;
 
         // write mail to list & check if user receives mail
@@ -52,8 +51,6 @@ reject "', $script->getSieve());
             'account_id'    => $this->_account->getId(),
             'subject'       => $subject,
             'to'            => array($mailinglist->email),
-            // for testing if sieve is not working
-            //'to'            => array(Tinebase_Core::getUser()->accountEmailAddress),
             'body'          => 'aaaaaä <br>',
         ));
 
@@ -78,6 +75,8 @@ reject "', $script->getSieve());
         self::assertContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"] {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 } else { reject "', $script->getSieve());
+
+        // TODO check sieve script functionality
     }
 
     public function testAdbMailinglistSieveRuleForwardExternal()
@@ -91,6 +90,8 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         self::assertNotContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"]', $script->getSieve());
+
+        // TODO check sieve script functionality
     }
 
     public function testAdbMailinglistSieveRuleForwardOnlyMembers()
@@ -105,5 +106,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         self::assertContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"]', $script->getSieve());
         self::assertContains('reject "Your email has been rejected"', $script->getSieve());
+
+        // TODO check sieve script functionality
     }
 }

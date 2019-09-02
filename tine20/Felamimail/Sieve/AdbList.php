@@ -50,14 +50,9 @@ class Felamimail_Sieve_AdbList
 
             $this->_addRecieverList($result);
 
-            if (!$this->_keepCopy) {
-                // we don't keep a copy, so discard everything
-                $result .= '}' . PHP_EOL . 'reject "' . $rejectMsg . '";' . PHP_EOL;
-            } else {
-                // we keep msg by default, only if the condition was not met we discard?
-                // always discard non-allowed msgs?!?
-                $result .= '} else { reject "' . $rejectMsg . '"; }' . PHP_EOL;
-            }
+            // we keep msg by default, only if the condition was not met we discard?
+            // always discard non-allowed msgs?!?
+            $result .= '} else { reject "' . $rejectMsg . '"; }' . PHP_EOL;
         }
 
         return $result;
