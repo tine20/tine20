@@ -353,10 +353,13 @@ class Tinebase_Translation
                 $jsTranslations .= "/************************** generic translations **************************/ \n";
                 
                 $jsTranslations .= file_get_contents($genericTranslationFile);
-                
+
                 $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
                 if (file_exists($extjsTranslationFile)) {
-                    $jsTranslations  .= file_get_contents($extjsTranslationFile);
+                    $jsTranslations .= "Tine.__applyExtTranslations = function() {";
+                    $jsTranslations .= file_get_contents($extjsTranslationFile);
+                    $jsTranslations .= "};";
+
                 } else {
                     $jsTranslations  .= "console.error('Translation Error: extjs changed their lang file name again ;-(');";
                 }

@@ -100,7 +100,7 @@ module.exports = {
             },
 
             // use script loader for old library classes as some of them the need to be included in window context
-            {test: /\.js$/, include: [baseDir + '/library'], enforce: "pre", use: [{loader: "script-loader"}]},
+            {test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'],  enforce: "pre", use: [{loader: "script-loader"}]},
             {test: /\.jsb2$/, use: [{loader: "./jsb2-loader"}]},
             {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
             {test: /\.less$/, use: [{loader: "style-loader"}, {loader: "css-loader"}, {loader: "less-loader", options: {noIeCompat: true,}}]},

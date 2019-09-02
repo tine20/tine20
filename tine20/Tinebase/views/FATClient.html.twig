@@ -7,14 +7,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="Tinebase/css/extjs-theme-tine20-flat.css" /> -->
 {% endblock head %}
 
 {% block jsIncludes -%}
-    <!-- EXT JS -->
-    <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base{% if constant('TINE20_BUILDTYPE') != 'RELEASE' %}-debug{% endif %}.js"></script>
-    <script type="text/javascript" src="library/ExtJS/ext-all{% if constant('TINE20_BUILDTYPE') != 'RELEASE' %}-debug{% endif %}.js"></script>
-
     {{ parent() }}
 {% endblock jsIncludes %}

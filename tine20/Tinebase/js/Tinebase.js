@@ -18,6 +18,9 @@ require('script-loader!store2/src/store.bind.js');
 require('postal.xwindow');
 require('postal.request-response');
 
+// custom ext build
+require('../../library/ExtJS/ext-custom');
+
 // include traditional stuff as defined in jsb2
 require('./../../Tinebase/Tinebase.jsb2');
 
@@ -25,6 +28,7 @@ require('node-waves');
 require('node-waves/src/less/waves.less');
 
 require('../css/flat.less');
+
 require('./ux/util/screenshot');
 
 module.exports = {
