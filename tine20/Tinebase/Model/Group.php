@@ -64,6 +64,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             ['InArray', [self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED]],
             Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED
         ),
+        'account_only'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'xprops'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'created_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
