@@ -29,6 +29,7 @@ class Admin_ControllerTest extends TestCase
         $backend->deleteUserInSqlBackend($user);
 
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        $this->_usernamesToDelete[] = $user->accountLoginName;
         self::assertEquals($user->accountEmailAddress, $userToCreate->accountEmailAddress);
     }
 
