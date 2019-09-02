@@ -15,6 +15,7 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -33,6 +34,10 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE012_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -76,5 +81,11 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Calendar', '12.10', self::RELEASE012_UPDATE004);
+    }
+
+    public function update005()
+    {
+        Tinebase_Container::getInstance()->deleteDuplicateContainer('Calendar');
+        $this->addApplicationUpdate('Calendar', '12.11', self::RELEASE012_UPDATE005);
     }
 }
