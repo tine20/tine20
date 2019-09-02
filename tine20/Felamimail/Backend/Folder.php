@@ -33,32 +33,51 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Felamimail_Model_Folder';
 
 
-    public static function lockFolderInTransaction($id)
+    public static function releaseFolderLock($id)
+    {
+        $lockKey = 'FelamimailFolderLock#~#' . $id;
+        if (null !== ($lock = Tinebase_Core::getMultiServerLock($lockKey))) {
+            if ($lock->isLocked()) {
+                $lock->release();
+            }
+        }
+    }
+
+    public static function lockFolderInTransaction($id, $onlyTrans = true)
     {
         $transactionMgr = Tinebase_TransactionManager::getInstance();
-        if ($transactionMgr->hasOpenTransactions()) {
+        if (!$onlyTrans || $transactionMgr->hasOpenTransactions()) {
             $lockKey = 'FelamimailFolderLock#~#' . $id;
             if (null !== ($lock = Tinebase_Core::getMultiServerLock($lockKey))) {
                 if (!$lock->isLocked() && $lock->tryAcquire()) {
-                    $transactionMgr->registerAfterCommitCallback(
-                        function ($lockKey) {
-                            Tinebase_Core::releaseMultiServerLock($lockKey);
-                        },
-                        [$lockKey]
-                    );
-                    $transactionMgr->registerOnRollbackCallback(
-                        function ($lockKey) {
-                            Tinebase_Core::releaseMultiServerLock($lockKey);
-                        },
-                        [$lockKey]
-                    );
+                    if ($onlyTrans) {
+                        $transactionMgr->registerAfterCommitCallback(
+                            function ($lockKey) {
+                                Tinebase_Core::releaseMultiServerLock($lockKey);
+                            },
+                            [$lockKey]
+                        );
+
+                        $transactionMgr->registerOnRollbackCallback(
+                            function ($lockKey) {
+                                Tinebase_Core::releaseMultiServerLock($lockKey);
+                            },
+                            [$lockKey]
+                        );
+                    }
+                    return true;
                 } elseif (!$lock->isLocked()) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not lock lock');
+                    return false;
+                } else {
+                    return true;
                 }
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not get lock');
             }
         }
+        // this true is for installations that dont support proper locking!
+        return true;
     }
 
     /**
