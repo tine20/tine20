@@ -258,7 +258,18 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         // always read folder from database
         $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
-        
+        $folderId = $folder->getId();
+
+        if (!Felamimail_Backend_Folder::lockFolderInTransaction($folderId, false)) {
+            return $folder;
+        }
+        $raii = new Tinebase_RAII(function() use($folderId) {
+            // to avoid test fails. if we'd have a transaction open, stuff would get locked by it anyway, so this is fine
+            if (!Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                Felamimail_Backend_Folder::releaseFolderLock($folderId);
+            }
+        });
+
         if ($this->_doNotUpdateCache($folder)) {
             return $folder;
         }
@@ -290,6 +301,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Folder status of ' . $folder->globalname . ' after updateCache(): ' . $folder->cache_status);
+        
+        // just for unused variable check
+        unset($raii);
         
         return $folder;
     }
