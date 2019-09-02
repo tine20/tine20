@@ -380,7 +380,7 @@
             $messageBody = $view->render('eventNotification.php');
             
             $calendarPart = null;
-            $attachments = $this->_getAttachments($method, $_event, $_action, $_updater, $calendarPart);
+            $attachments = $this->_getAttachments($method, $_event, $_action, $_updater, $calendarPart, $_attender);
             
             $sender = $_action == 'alarm' ? $prefUser : $_updater;
             if (!empty($recipients)) {
@@ -645,15 +645,16 @@
      * @param string $_action
      * @param Tinebase_Model_FullUser $updater
      * @param Zend_Mime_Part $calendarPart
+     * @param Calendar_Model_Attender $attendee
      * @return array
      */
-    protected function _getAttachments($method, $event, $_action, $updater, &$calendarPart)
+    protected function _getAttachments($method, $event, $_action, $updater, &$calendarPart, $attendee)
     {
         if ($method === NULL) {
             return array();
         }
         
-        $vcalendar = $this->_createVCalendar($event, $method, $updater);
+        $vcalendar = $this->_createVCalendar($event, $method, $updater, $attendee);
         
         $calendarPart           = new Zend_Mime_Part($vcalendar->serialize());
         $calendarPart->charset  = 'UTF-8';
@@ -683,12 +684,15 @@
      * @param Calendar_Model_Event $event
      * @param string $method
      * @param Tinebase_Model_FullAccount $updater
+     * @param Calendar_Model_Attender $attendee
      * @return Sabre\VObject\Component
      */
-    protected function _createVCalendar($event, $method, $updater)
+    protected function _createVCalendar($event, $method, $updater, $attendee)
     {
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $converter->setMethod($method);
+        $converter->setCalendarUser($attendee);
+
         $vcalendar = $converter->fromTine20Model($event);
         
         foreach ($vcalendar->children() as $component) {

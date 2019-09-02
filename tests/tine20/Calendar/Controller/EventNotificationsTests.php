@@ -143,7 +143,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testInvitationWithAttachment()
     {
         $event = $this->_getEvent(TRUE);
-        $event->attendee = $this->_getPersonaAttendee('pwulf');
+        $event->attendee = $this->_getPersonaAttendee('pwulf, sclever');
         
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(__FILE__))) . '/Filemanager/files/test.txt');
@@ -154,17 +154,16 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $messages = self::getMessages();
         
-        $this->assertEquals(1, count($messages));
+        $this->assertEquals(2, count($messages));
         $parts = $messages[0]->getParts();
         $this->assertEquals(2, count($parts));
         $fileAttachment = $parts[1];
         $this->assertEquals('text/plain; name="=?utf-8?Q?tempfile.tmp?="', $fileAttachment->type);
         
-        // check VEVENT ORGANIZER mailto
-        $vcalendarPart = $parts[0];
-        $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
-        $this->assertContains('SENT-BY="mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '":mailto:', str_replace("\r\n ", '', $vcalendar), 'sent-by mailto not quoted');
-        
+        $this->_assertMail('pwulf', 'SENT-BY="mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '":mailto:', 'ics');
+        $this->_assertMail('pwulf', 'RSVP=TRUE;EMAIL=pwulf@example.org', 'ics');
+        $this->_assertMail('pwulf', 'RSVP=FALSE;EMAIL=sclever@example.org', 'ics');
+
         // @todo assert attachment content (this seems to not work with array mailer, maybe we need a "real" email test here)
 //         $content = $fileAttachment->getDecodedContent();
 //         $this->assertEquals('test file content', $content);
@@ -1274,7 +1273,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                         
                         $this->assertContains($_assertString, $bodyText);
                         break;
-                        
+
+                    case 'ics':
+                        $parts = $mailsForPersona[0]->getParts();
+                        $vcalendarPart = $parts[0];
+                        $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
+
+                        $this->assertContains($_assertString, str_replace("\r\n ", '', $vcalendar), $_assertString . ' not found for ' . $personaName . " in:\n" . $vcalendar);
+
+                        break;
                     default:
                         throw new Exception('no such location '. $_location);
                         break;
