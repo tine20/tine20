@@ -828,7 +828,9 @@ class Tinebase_Application
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 Setup_Core::set(Setup_Core::CHECKDB, true);
                 Setup_Controller::destroyInstance();
-                Setup_Controller::getInstance()->uninstallApplications([$record->name]);
+                Setup_Controller::getInstance()->uninstallApplications([$record->name], [
+                    Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true
+                ]);
                 break;
 
             default:
