@@ -1881,8 +1881,6 @@ class Addressbook_JsonTest extends TestCase
 
         $this->assertTrue($allContactsWithoutTheTag['totalcount'] > 0);
         $this->assertEquals($allContacts['totalcount']-1, $allContactsWithoutTheTag['totalcount']);
-
-        $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
     }
     
     /**
@@ -2207,6 +2205,26 @@ Steuernummer 33/111/32212";
                 }
             }
             static::assertTrue($found, 'did not find strings: ' . join(', ', $expectedStrings) . ' in notes: ' . print_r($notes, true));
+        }
+    }
+
+    public function testAddNonAccountContactToList()
+    {
+        $contact = $this->_getContactData();
+        $newContact = $this->_uit->saveContact($contact);
+
+        // get admin list, try to add non-account-contact, expect exception
+        $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
+        $list = $this->_uit->getList($adminListId);
+        $list['members'][] = $newContact['id'];
+        try {
+            $updatedlist = $this->_uit->saveList($list);
+            self::fail('should throw exception - it is not allowed to add non-account contact to admin list! '
+                . print_r($updatedlist, true));
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            $translate = Tinebase_Translation::getTranslation('Addressbook');
+           self::assertEquals($translate->_('It is not allowed to add non-account contacts to this list'),
+               $teia->getMessage());
         }
     }
 

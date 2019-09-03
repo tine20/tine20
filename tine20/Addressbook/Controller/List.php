@@ -328,6 +328,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         return $this->get($list->getId());
     }
 
+    /**
+     * flatten members array to contact ids
+     *
+     * @param Addressbook_Model_List $list
+     */
     protected function _flattenMembers(Addressbook_Model_List $list)
     {
         if (empty($list->members)) return;
@@ -392,6 +397,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record the update record
      * @param   Tinebase_Record_Interface $_oldRecord the current persistent record
      * @return  void
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -402,8 +408,26 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
 
         if (! empty($_record->group_id)) {
+            // get group and check account_only
+            $group = Tinebase_Group::getInstance()->getGroupById($_record->group_id);
+            if ($group->account_only) {
+                $contacts = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Addressbook_Model_Contact::class, [
+                        ['field' => 'id', 'operator' => 'in', 'value' => $_record->members]
+                    ]
+                ));
+                $nonUserContacts = $contacts->filter('type', Addressbook_Model_Contact::CONTACTTYPE_CONTACT);
+                if (count($nonUserContacts) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Found non-account members: '
+                        . print_r($nonUserContacts->toArray(), true));
+                    $translate = Tinebase_Translation::getTranslation('Addressbook');
+                    throw new Tinebase_Exception_InvalidArgument($translate->_(
+                        'It is not allowed to add non-account contacts to this list'));
+                }
+            }
 
-            // first check if something changed that requires special rights
+            // check if something changed that requires special rights
             $changeGroup = false;
             foreach (Addressbook_Model_List::getManageAccountFields() as $field) {
                 if ($_record->{$field} != $_oldRecord->{$field}) {
