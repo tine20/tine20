@@ -15,6 +15,8 @@ class Admin_ControllerTest extends TestCase
 {
     public function testAddUserWithAlreadyExistingEmailData()
     {
+        $this->_skipIfLDAPBackend();
+
         $userToCreate = TestCase::getTestUser([
             'accountLoginName'      => 'phpunitadminjson',
             'accountEmailAddress'   => 'phpunitadminjson@' . TestServer::getPrimaryMailDomain(),
