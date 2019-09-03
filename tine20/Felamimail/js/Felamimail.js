@@ -750,11 +750,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             account = treePanel.getActiveAccount();
         }
         
-        if (account === null) {
+        if (!account) {
             account = this.getAccountStore().getById(Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'));
         }
         
-        if (account === null) {
+        if (!account) {
             // try to get first account in store
             account = this.getAccountStore().getAt(0);
         }
@@ -797,7 +797,24 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     
         return this.accountStore;
     },
-    
+
+    /**
+     * gets default signature of given account
+     *
+     * @param {Tine.Felamimail.Model.Account} account
+     * @return {Tine.Felamimail.Model.Signature}
+     */
+    getDefaultSignature: function(account) {
+        account = _.isString(account) ? this.getAccountStore().getById(account) : account;
+
+        let signatures = _.get(account, 'data.signatures', []);
+        let signature =_.find(signatures, (s) => {return !!+_.get(s, 'is_default')}) || signatures[0];
+
+        return signature ?
+            Tine.Tinebase.data.Record.setFromJson(signature, Tine.Felamimail.Model.Signature) :
+            null;
+    },
+
     /**
      * show felamimail credentials dialog
      * 
@@ -931,33 +948,29 @@ Tine.Felamimail.loadFlagsStore = function(reload) {
 };
 
 /**
- * add signature (get it from default account settings)
- * 
- * @param {String} id
+ * gets default signature text of given account
+ *
+ * @param {String|Tine.Felamimail.Model.Account} account
  * @return {String}
  */
-Tine.Felamimail.getSignature = function(id) {
-    
-    var result = '',
-        app = Tine.Tinebase.appMgr.get('Felamimail'),
-        activeAccount = app.getMainScreen().getTreePanel().getActiveAccount();
-        
-    id = id || (activeAccount ? activeAccount.id : 'default');
-    
-    if (id === 'default') {
-        id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+Tine.Felamimail.getSignature = function(account, signature) {
+    let app = Tine.Tinebase.appMgr.get('Felamimail');
+    let signatureText = '';
+
+    account = _.isString(account) ? app.getAccountStore().getById(account) : account;
+    account = account || Tine.Felamimail.getActiveAccount();
+
+    if (account) {
+        Tine.log.info('Tine.Felamimail.getSignature() - Fetch signature of account ' + account.id + ' (' + account.name + ')');
+        signature = signature || app.getDefaultSignature(account);
+
+        if (signature && signature.id !== 'none') {
+            // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
+            signatureText = '<br><br><span class="felamimail-body-signature">-- <br>' + _.get(signature, 'data.signature', '') + '</span>';
+        }
     }
-    
-    Tine.log.info('Tine.Felamimail.getSignature() - Fetch signature of account ' + id);
-    
-    var defaultAccount = app.getAccountStore().getById(id);
-    var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
-    if (signature && signature != '') {
-        // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
-        result = '<br><br><span class="felamimail-body-signature">-- <br>' + signature + '</span>';
-    }
-    
-    return result;
+
+    return signatureText;
 };
 
 /**

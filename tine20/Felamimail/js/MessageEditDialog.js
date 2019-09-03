@@ -232,7 +232,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.tbar = new Ext.Toolbar({
-            defaults: {height: 55},
+            defaults: {height: 43},
             items: [{
                 xtype: 'buttongroup',
                 columns: 6,
@@ -379,7 +379,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initContent: function () {
         if (!this.record.get('body')) {
             var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
-                format = account && account.get('compose_format') != '' ? 'text/' + account.get('compose_format') : 'text/html';
+                format = account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 'text/html';
 
             if (!this.msgBody) {
                 var message = this.getMessageFromConfig();
@@ -388,7 +388,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         // format of the received message. this is the format to perserve
                         format = message.get('body_content_type');
                     }
-                    if (!message.bodyIsFetched() || format != message.getBodyType()) {
+                    if (!message.bodyIsFetched() || format !== message.getBodyType()) {
                         // self callback when body needs to be (re) fetched
                         return this.recordProxy.fetchBody(message, format, this.initContent.createDelegate(this));
                     }
@@ -491,40 +491,44 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Tine.Felamimail.Model.Account} account
      * @param {String} format
      */
-    addSignature: function (account, format) {
-        if (this.draftOrTemplate) {
+    addSignature: function (account, format, signatureText, msgBody) {
+        if (this.draftOrTemplate && !_.isString(arguments[3])) {
             return;
         }
 
-        var accountId = account ? this.record.get('account_id') : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'),
-            account = account ? account : this.app.getAccountStore().getById(accountId),
-            signaturePosition = (account && account.get('signature_position')) ? account.get('signature_position') : 'below',
-            signature = this.getSignature(account, format);
+        msgBody = _.isString(arguments[3]) ? arguments[3] : this.msgBody;
 
-        if (signaturePosition == 'below') {
-            this.msgBody += signature;
+        let signaturePosition = _.get(account, 'data.signature_position', 'below');
+        signatureText = _.isString(arguments[2]) ? arguments[2] : this.getSignature(account, format);
+
+        if (signaturePosition === 'below') {
+            msgBody += signatureText;
         } else {
-            this.msgBody = signature + '<br/><br/>' + this.msgBody;
+            msgBody = signatureText + '<br/><br/>' + msgBody;
         }
+
+        if (! arguments[3]) {
+            this.msgBody = msgBody;
+        }
+
+        return msgBody;
     },
 
+
     /**
-     * get account signature
+     * get account signature text
      *
      * @param {Tine.Felamimail.Model.Account} account
      * @param {String} format
      */
-    getSignature: function (account, format) {
-        var accountId = account ? this.record.get('account_id') : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'),
-            account = account ? account : this.app.getAccountStore().getById(accountId),
-            signaturePosition = (account && account.get('signature_position')) ? account.get('signature_position') : 'below',
-            signature = Tine.Felamimail.getSignature(accountId);
+    getSignature: function (account, format, signature) {
+        let signatureText = Tine.Felamimail.getSignature(account, signature);
 
-        if (format == 'text/plain') {
-            signature = Tine.Tinebase.common.html2text(signature);
+        if (format === 'text/plain') {
+            signatureText = Tine.Tinebase.common.html2text(signatureText);
         }
 
-        return signature;
+        return signatureText;
     },
 
     /**
@@ -902,6 +906,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.southPanel.collapse();
             this.southPanel.setVisible(false);
             this.btnAddAttachemnt.setDisabled(true);
+            this.signatureCombo.setDisabled(true);
         } else {
             this.mailvelopeEditor = null;
             delete this.mailvelopeEditor;
@@ -909,6 +914,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             this.southPanel.setVisible(true);
             this.btnAddAttachemnt.setDisabled(false);
+            this.signatureCombo.setDisabled(false);
         }
     },
 
@@ -918,12 +924,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onToggleFormat: function () {
         var source = this.bodyCards.layout.activeItem,
             format = source.mimeType,
-            target = format == 'text/plain' ? this.htmlEditor : this.textEditor,
-            convert = format == 'text/plain' ?
+            target = format === 'text/plain' ? this.htmlEditor : this.textEditor,
+            convert = format === 'text/plain' ?
                 Ext.util.Format.nl2br :
                 Tine.Tinebase.common.html2text;
 
         if (format.match(/^text/)) {
+            this.record.set('content_type', format);
             this.bodyCards.layout.setActiveItem(target);
             target.setValue(convert(source.getValue()));
         } else {
@@ -1161,23 +1168,77 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
 
+    initSignatureCombo: function() {
+        let me = this;
+        let signature = this.app.getDefaultSignature(this.record.get('account_id'));
+
+        this.signatureCombo = new Ext.form.ComboBox({
+            displayField: 'name',
+            value: _.get(signature, 'data.name', this.app.i18n._('None')),
+            editable: false,
+            triggerAction: 'all',
+            store: new Ext.data.JsonStore({
+                fields: Tine.Felamimail.Model.Signature,
+                listeners: {
+                    scope: this,
+                    beforeload: (store, options) => {
+                        let account = this.app.getAccountStore().getById(this.record.get('account_id'));
+                        let signatures = _.concat(
+                            {name: this.app.i18n._('None'), id: 'none'},
+                            _.get(account, 'data.signatures', [])
+                        );
+                        store.loadData(signatures);
+                        me.signatureCombo.lastQuery = Tine.Tinebase.data.Record.generateUID();
+                        return false;
+                    }
+                }
+            }),
+            listeners: {
+                scope: this,
+                beforeselect: (combo, signature, index) => {
+                    this.updateSignature(signature);
+                }
+            }
+        });
+    },
+
+    /**
+     * updates signature in mail body
+     *
+     * @param Tine.Felamimail.Model.Signature signature
+     */
+    updateSignature: function(signature) {
+        let account = this.app.getAccountStore().getById(this.record.get('account_id'));
+        let format = this.record.get('content_type');
+
+        let oldSignature = this.getSignature(account, format, _.find(this.signatureCombo.store.data.items, (r) => {return _.get(r, 'data.name') === this.signatureCombo.getValue()}));
+        let newSignature = this.getSignature(account, format, signature);
+
+        let bodyContent = this.bodyCards.layout.activeItem.getValue();
+        bodyContent = oldSignature ?
+            bodyContent.replace(oldSignature, newSignature) :
+            this.addSignature(account, format, newSignature, bodyContent);
+
+        this.bodyCards.layout.activeItem.setValue(bodyContent);
+    },
+
     /**
      * if 'account_id' is changed we need to update the signature
      *
      * @param {} combo
-     * @param {} newValue
-     * @param {} oldValue
+     * @param {} record
+     * @param {} index
      */
     onFromSelect: function (combo, record, index) {
 
-        // get new signature
-        var accountId = record.get('original_id');
-        var newSignature = Tine.Felamimail.getSignature(accountId);
-        var signatureRegexp = new RegExp('<br><br><span id="felamimail\-body\-signature">\-\-<br>.*</span>');
+        var newAccountId = record.get('original_id');
 
-        // update signature
-        var bodyContent = this.htmlEditor.getValue();
-        bodyContent = bodyContent.replace(signatureRegexp, newSignature);
+        var newSignature = this.app.getDefaultSignature(newAccountId);
+        this.updateSignature(newSignature);
+
+        this.signatureCombo.setValue(_.get(newSignature, 'data.name', this.app.i18n._('None')));
+
+        this.record.set('account_id', newAccountId);
 
         // update reply-to
         var replyTo = record.get('reply_to');
@@ -1185,7 +1246,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.replyToField.setValue(replyTo);
         }
 
-        this.htmlEditor.setValue(bodyContent);
+        this.record.set('account_id', newAccountId);
     },
 
     /**
@@ -1200,6 +1261,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.initAttachmentGrid();
         this.initAccountCombo();
+        this.initSignatureCombo();
 
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
             record: this.record,
@@ -1247,6 +1309,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.htmlEditor = new Tine.Felamimail.ComposeEditor({
+            border: false,
             fieldLabel: this.app.i18n._('Body'),
             name: 'body_html',
             mimeType: 'text/html',
@@ -1330,7 +1393,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     this.subjectField.focus(true, 100);
                                 }
                             }
-                        }, {
+                        }, new Ext.Toolbar({
+                            items: ['->', {xtype: 'tbtext', text: this.app.i18n._('Signature') + ':'}, this.signatureCombo]
+                        }), {
                             layout: 'card',
                             ref: '../../bodyCards',
                             activeItem: 0,

@@ -224,12 +224,42 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     /**
      * test change / delete of account
      */
-    public function testChangeDeleteAccount()
+    public function testChangeSearchDeleteAccount()
     {
         $system = $this->_getSystemAccount();
         unset($system['id']);
         $system['type'] = Felamimail_Model_Account::TYPE_USER;
-        $account = $this->_json->saveAccount($system);
+
+        $account = $this->_addSignature($system);
+
+        // update signature
+        $updatedSignature = 'my updated signature';
+        $account['signatures'][0]['signature'] = $updatedSignature;
+        $account = $this->_json->saveAccount($account);
+        self::assertEquals($updatedSignature, $account['signature'], 'signature not updated: ' . print_r($account, true));
+
+        // check if it is also resolved in registry data
+        $registryData = $this->_json->getRegistryData();
+        foreach ($registryData['accounts']['results'] as $registryAccount) {
+            if ($registryAccount['id'] === $account['id']) {
+                self::assertTrue(array_key_exists('signatures', $registryAccount), 'no signatures found in account: ' . print_r($registryAccount, true));
+                self::assertEquals(1, count($registryAccount['signatures']), print_r($registryAccount, true));
+                self::assertTrue(isset($registryAccount['signature']), 'no signature found in account: ' . print_r($registryAccount, true));
+                self::assertEquals($updatedSignature, $registryAccount['signature']);
+            }
+        }
+
+        // add new signature
+        $account['signatures'][] = [
+            'signature' => '', // empty sig should be possible
+            'is_default' => 0,
+            'name' => 'my other sig',
+            'id' => Tinebase_Record_Abstract::generateUID(), // client also sends some random uuid
+            'notes' => [],
+            'account_id' => $account['id'],
+        ];
+        $account = $this->_json->saveAccount($account);
+        self::assertEquals(2, count($account['signatures']));
 
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
@@ -245,6 +275,34 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertEquals('neuespasswort', $accountRecord->password);
 
         $this->_json->deleteAccounts($account['id']);
+    }
+
+    protected function _addSignature($account, $signature = 'my new cool signature')
+    {
+        $account['signatures'] = [
+            [
+                'signature' => $signature,
+                'is_default' => 1,
+                'name' => 'my sig',
+                'id' => Tinebase_Record_Abstract::generateUID(), // client also sends some random uuid
+                'notes' => [],
+            ]
+        ];
+        $account = $this->_json->saveAccount($account);
+        self::assertTrue(isset($account['signatures']), 'no signatures found in account: ' . print_r($account, true));
+        self::assertEquals(1, count($account['signatures']));
+        self::assertTrue(isset($account['signature']), 'no signature found in account: ' . print_r($account, true));
+        self::assertEquals($signature, $account['signature']);
+        return $account;
+    }
+
+    /**
+     * test add user account with signature
+     */
+    public function testSignatureInUserAccount()
+    {
+        $system = $this->_getSystemAccount();
+        $this->_addSignature($system);
     }
 
     /*********************** message tests ****************************/
@@ -1907,7 +1965,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     public function testAttachmentMethodFilemanagerSystemLink()
     {
         // make sure, we have a signature in the account
-        $this->_account->signature = 'my signature';
+        $this->_account->signatures = [[
+            'name' => 'signature',
+            'signature' => 'my signature',
+            'is_default' => 1,
+        ]];
         Felamimail_Controller_Account::getInstance()->update($this->_account);
 
         $message = $this->_testAttachmentType('systemlink_fm', true);
@@ -1982,7 +2044,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $body = 'foobar';
         if ($withSignature) {
             $body .= '<br><br><span class="felamimail-body-signature">-- <br>'
-                . $this->_account->signature . '</span>';
+                . $this->_account->signatures[0]['signature'] . '</span>';
         }
 
         $messageToSend = [

@@ -10,6 +10,8 @@
  
 Ext.namespace('Tine.Felamimail');
 
+require('./SignatureGridPanel');
+
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.AccountEditDialog
@@ -88,7 +90,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         item.setDisabled(this.record.get('type') == 'shared');
                     }
                     break;
-                case 'signature':
+                case 'signatures':
                 case 'signature_position':
                 case 'display_format':
                 case 'compose_format':
@@ -143,20 +145,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
-
-        this.signatureEditor = new Ext.form.HtmlEditor({
-            fieldLabel: this.app.i18n._('Signature'),
-            name: 'signature',
-            getDocMarkup: function(){
-                var markup = '<span id="felamimail\-body\-signature">'
-                    + '</span>';
-                return markup;
-            },
-            plugins: [
-                new Ext.ux.form.HtmlEditor.RemoveFormat()
-            ]
-        });
-
         this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
             selectType: 'both',
             title:  i18n._('Permissions'),
@@ -259,20 +247,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 ['below', this.app.i18n._('Below the quote')]
                             ]
                         }]]
-                    }, {
+                    }, new Tine.Felamimail.SignatureGridPanel({
                         region: 'center',
-                        // TODO use vbox layout? onResize? height adjusts only to a certain value ...
-                        xtype: 'columnform',
-                        autoScroll: true,
-                        labelAlign: 'top',
-                        formDefaults: {
-                            xtype:'textfield',
-                            anchor: '100%',
-                            labelSeparator: '',
-                            columnWidth: 1
-                        },
-                        items: [[this.signatureEditor]]
-                    }
+                        editDialog: this
+                    })
                 ]
             }, {
                 title: this.app.i18n._('IMAP'),

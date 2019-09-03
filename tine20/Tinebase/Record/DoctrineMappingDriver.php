@@ -135,6 +135,11 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
                 if (!isset($config['columnName'])) {
                     $config['columnName'] = $config['fieldName'];
                 }
+                if ($config['columnName'] === 'default') {
+                    // TODO what about quoting?
+                    throw new Tinebase_Exception_InvalidArgument('it is not allowed to name a column "default" as it is a keyword');
+                }
+
                 if (isset($mappedFields[$config['fieldName']])) {
                     throw new Tinebase_Exception_Record_DefinitionFailure('field ' . $config['fieldName'] .
                         ' already mapped');

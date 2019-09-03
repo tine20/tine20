@@ -20,8 +20,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_applicationName = 'Felamimail';
 
-    // TODO is this still needed?
-    protected $_configuredModels = ['Account'];
+    protected $_configuredModels = [
+        'Account',
+        'Signature',
+    ];
 
     /***************************** folder funcs *******************************/
     
@@ -591,6 +593,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $filter = Felamimail_Controller_Account::getVisibleAccountsFilterForUser();
             $accounts = $this->searchAccounts($filter);
+            // add signatures
+            foreach ($accounts['results'] as $idx => $account) {
+                $accounts['results'][$idx] = $this->getAccount($account['id']);
+            }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());

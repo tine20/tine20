@@ -31,7 +31,7 @@ class Felamimail_Model_Signature extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-         self::VERSION => 1,
+         self::VERSION => 2,
         'recordName' => 'Signature',
         'recordsName' => 'Signatures', // ngettext('Signature', 'Signatures', n)
         'hasRelations' => false,
@@ -68,19 +68,20 @@ class Felamimail_Model_Signature extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::DEFAULT_VALUE => null
                 ],
                 self::LENGTH => 40,
+                self::SHY => true,
             ],
             'name' => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
                 self::LABEL => 'Name', // _('Name')
-                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => false],
                 self::QUERY_FILTER => true,
             ],
-            'default' => [
+            'is_default' => [
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::NULLABLE => true,
-                self::LABEL => 'Default', // _('Default')
+                self::LABEL => 'Is default', // _('Is default')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'signature' => [

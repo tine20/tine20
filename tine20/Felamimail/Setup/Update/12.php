@@ -15,6 +15,7 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -33,6 +34,10 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE012_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -147,5 +152,35 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
     {
         $this->updateSchema('Felamimail', array(Felamimail_Model_Signature::class));
         $this->addApplicationUpdate('Felamimail', '12.7', self::RELEASE012_UPDATE004);
+    }
+
+    /**
+     * move account signature to new signatures table
+     */
+    public function update005()
+    {
+        $this->updateSchema('Felamimail', array(Felamimail_Model_Signature::class));
+
+        // fetch current signature
+        $accountBackend = new Felamimail_Backend_Account();
+        foreach ($accountBackend->search(null, null, true) as $accountId) {
+            $account = $accountBackend->get($accountId);
+            if (! empty($account->signature)) {
+                $signature = new Felamimail_Model_Signature([
+                    'account_id' => $accountId,
+                    'name' => $account->name, // TODO leave it empty?
+                    'is_default' => true,
+                    'signature' => $account->signature,
+                ]);
+                Felamimail_Controller_Signature::getInstance()->create($signature);
+            }
+        }
+
+        // drop old signature column
+        if ($this->_backend->columnExists('signature', 'felamimail_account')) {
+            $this->_backend->dropCol('felamimail_account', 'signature');
+        }
+
+        $this->addApplicationUpdate('Felamimail', '12.8', self::RELEASE012_UPDATE005);
     }
 }

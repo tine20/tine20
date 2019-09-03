@@ -318,13 +318,28 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER              => true,
             ],
+            // only used as "transport" field for currently selected/default signature
             'signature' => [
-                self::TYPE => self::TYPE_TEXT,
-                self::LENGTH => 16777215,
+                self::TYPE => self::TYPE_VIRTUAL,
                 self::NULLABLE => true,
                 self::LABEL => 'Signature', // _('Signature')
                 self::SHY => true,
-                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'signatures' => [
+                self::VALIDATORS => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                self::LABEL => 'Signatures', // _('Signatures')
+                self::TYPE => self::TYPE_RECORDS,
+                self::NULLABLE => true,
+                self::DEFAULT_VAL => null,
+                self::CONFIG => array(
+                    self::APP_NAME  => 'Felamimail',
+                    'modelName'        => 'Signature',
+                    'refIdField'       => 'account_id',
+                    'recordClassName' => Felamimail_Model_Signature::class,
+                    'controllerClassName' => Felamimail_Controller_Signature::class,
+                    'dependentRecords' => true
+                ),
+                'recursiveResolving' => true,
             ],
             'signature_position' => [
                 self::TYPE => self::TYPE_STRING,
