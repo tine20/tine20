@@ -240,6 +240,7 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     {name: 'type'},
     {name: 'list_type'},
     {name: 'group_id'},
+    {name: 'account_only', type: 'boolean'},
     {name: 'emails'},
     {name: 'notes', omitDuplicateResolving: true},
     {name: 'paths', omitDuplicateResolving: true},

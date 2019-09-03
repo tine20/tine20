@@ -230,6 +230,14 @@ class Addressbook_JsonTest extends TestCase
         }
         $this->assertTrue($found);
     }
+
+    public function testGetListWithAccountOnlyField()
+    {
+        $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
+        $list = $this->_uit->getList($adminListId);
+        self::assertTrue(isset($list['account_only']), 'account_only field missing from list ' . print_r($list, true));
+        self::assertEquals('1', $list['account_only']);
+    }
     
     /**
      * testSearchContactsByListValueNull

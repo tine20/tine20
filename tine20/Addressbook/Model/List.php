@@ -158,6 +158,12 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
+            'account_only'          => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'boolean',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'virtual'           => true,
+            ),
             'emails'            => array(
                 'label'             => null, // TODO fill this?
                 'type'              => 'string',
