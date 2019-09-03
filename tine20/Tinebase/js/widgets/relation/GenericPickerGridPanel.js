@@ -708,16 +708,18 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {String} value
      * @return {String}
      */
-    relatedModelRenderer: function(value) {
-        if(!value) {
+    relatedModelRenderer: function (value, meta) {
+        if (!value) {
             return '';
         }
         var split = value.split('_Model_');
-        if (Tine[split[0]].Model) {
+        if (Tine[split[0]] && Tine[split[0]].Model) {
             var model = Tine[split[0]].Model[split[1]];
-            return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
+            return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName')
+                + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
         } else {
-            return String.format(i18n._("No access to {0}"), split[0]);
+            meta.css = 'x-form-empty-field';
+            return String.format(i18n._("No access to {0}"), split[0])
         }
     },
 
