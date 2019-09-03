@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>12.25</version>
+    <version>12.26</version>
     <minimumRequiredVersion>9.8</minimumRequiredVersion>
     <tables>
         <table>
@@ -123,7 +123,7 @@
 
         <table>
             <name>groups</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -153,6 +153,11 @@
                     <name>email</name>
                     <type>text</type>
                     <length>255</length>
+                </field>
+                <field>
+                    <name>account_only</name>
+                    <type>boolean</type>
+                    <default>true</default>
                 </field>
                 <field>
                     <name>list_id</name>

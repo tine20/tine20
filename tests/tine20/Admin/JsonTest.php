@@ -1462,17 +1462,21 @@ class Admin_JsonTest extends TestCase
         $userArray = $this->testSaveAccount();
 
         Admin_Controller_User::getInstance()->setAccountStatus($userArray['accountId'], Tinebase_Model_User::ACCOUNT_STATUS_DISABLED);
+        $savedGroup = $this->_saveGroup($userArray);
 
-        // save group
+        // check group memberships
+        $this->assertEquals(1, $savedGroup['members']['totalcount']);
+    }
+
+    protected function _saveGroup($userArray, $additionalData = [])
+    {
         $group = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup');
         $groupArray = $this->_json->getGroup($group->getId());
         $this->assertEquals(1, $groupArray['members']['totalcount']);
         $groupArray['container_id'] = $groupArray['container_id']['id'];
         $groupArray['members'] = array($userArray['accountId']);
-        $savedGroup = $this->_json->saveGroup($groupArray);
-
-        // check group memberships
-        $this->assertEquals(1, $savedGroup['members']['totalcount']);
+        $groupArray = array_merge($groupArray, $additionalData);
+        return $this->_json->saveGroup($groupArray);
     }
 
     /**
@@ -1485,17 +1489,17 @@ class Admin_JsonTest extends TestCase
         $userArray['lastLoginFailure'] = Tinebase_DateTime::now()->toString();
         $userArray['loginFailures'] = 10;
 
-        // save group
-        // TODO generalize
-        $group = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup');
-        $groupArray = $this->_json->getGroup($group->getId());
-        $this->assertEquals(1, $groupArray['members']['totalcount']);
-        $groupArray['container_id'] = $groupArray['container_id']['id'];
-        $groupArray['members'] = array($userArray['accountId']);
-        $savedGroup = $this->_json->saveGroup($groupArray);
+        $savedGroup = $this->_saveGroup($userArray);
 
         // check group memberships
         $this->assertEquals(1, $savedGroup['members']['totalcount']);
+    }
+
+    public function testAccountOnlyGroup()
+    {
+        $userArray = $this->testSaveAccount();
+        $savedGroup = $this->_saveGroup($userArray, ['account_only' => 0]);
+        self::assertEquals('0', $savedGroup['account_only']);
     }
 
     /**

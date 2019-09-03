@@ -106,7 +106,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     recordProxy: Tine.Admin.sharedAddressbookBackend,
                     disabled: this.record.get('visibility') === 'hidden'
                 }], [{
-                    columnWidth: 1,
+                    columnWidth: 0.5,
                     xtype: 'textfield',
                     fieldLabel: this.app.i18n._('E-Mail'),
                     name: 'email',
@@ -114,6 +114,13 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     vtype: 'email',
                     maxLength: 255,
                     allowBlank: true
+                }, {
+                    columnWidth: 0.5,
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('System accounts only'),
+                    name: 'account_only',
+                    anchor: '100%',
+                    value: true
                 }]]
             }, {
                 xtype: 'tinerecordpickergrid',

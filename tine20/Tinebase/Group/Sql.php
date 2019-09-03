@@ -577,6 +577,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             'visibility'    => $_group->visibility,
             'email'         => $_group->email,
             'list_id'       => $_group->list_id,
+            'account_only'  => $_group->account_only,
             'created_by'            => $_group->created_by,
             'creation_time'         => $_group->creation_time,
             'last_modified_by'      => $_group->last_modified_by,
@@ -685,21 +686,6 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 
         foreach($groups as $group) {
             $this->_writeModLog(null, $group);
-        }
-    }
-    
-    /**
-     * Delete all groups returned by {@see getGroups()} using {@see deleteGroups()}
-     * @return void
-     */
-    public function deleteAllGroups()
-    {
-        $groups = $this->getGroups();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' groups');
-        
-        if(count($groups) > 0) {
-            $this->deleteGroups($groups);
         }
     }
     
