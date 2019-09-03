@@ -737,7 +737,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER})) {
                 $contactFilter = [['condition' => 'AND', 'filters' => [
-                    $contactFilter[0],
+                    ['condition' => 'AND', 'filters' => $contactFilter],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER}
                 ]]];
             }
@@ -758,7 +758,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $groupFilter[] = array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP);
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP})) {
                 $groupFilter = [['condition' => 'AND', 'filters' => [
-                    $groupFilter[0],
+                    ['condition' => 'AND', 'filters' => $groupFilter],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP}
                 ]]];
             }
@@ -784,7 +784,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE})) {
                 $resourceFilter = [['condition' => 'AND', 'filters' => [
-                    $resourceFilter[0],
+                    ['condition' => 'AND', 'filters' => $resourceFilter],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE}
                 ]]];
             }
