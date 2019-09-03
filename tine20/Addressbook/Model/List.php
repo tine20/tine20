@@ -255,12 +255,16 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     {
         $result = parent::getPathNeighbours();
 
+        $members = [];
         if (!empty($this->members)) {
-            foreach(Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true) as $member) {
+            if ($this->members instanceof Tinebase_Record_RecordSet) {
+                $tmp = $this->members;
+            } else {
+                $tmp = Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true);
+            }
+            foreach($tmp as $member) {
                 $members[$member->getId()] = $member;
             }
-        } else {
-            $members = array();
         }
 
         if (!is_object($this->memberroles)) {

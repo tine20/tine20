@@ -343,8 +343,15 @@ class Addressbook_Controller_ListTest extends TestCase
         $listGetMultiple = $this->_instance->getMultiple(array($list->getId()))->getFirstRecord();
         foreach (array('get' => $listGet, 'search' => $listSearch, 'getMultiple' => $listGetMultiple) as $fn => $listRecord) {
             $this->assertTrue($listRecord instanceof Addressbook_Model_List, $fn . ' did not return a list: ' . var_export($listRecord, TRUE));
-            $this->assertEquals(0, count($listRecord->members), 'Hidden sclever should not appear in list members returned by ' . $fn
-                . '(): ' . print_r($listRecord->toArray(), TRUE));
+            if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_MAILINGLIST)) {
+                $this->assertEquals(1, count($listRecord->members),
+                    'Hidden sclever should appear in list members returned by ' . $fn. '(): ' .
+                    print_r($listRecord->toArray(), true));
+            } else {
+                $this->assertEquals(0, count($listRecord->members),
+                    'Hidden sclever should not appear in list members returned by ' . $fn. '(): ' .
+                    print_r($listRecord->toArray(), true));
+            }
         }
     }
 
