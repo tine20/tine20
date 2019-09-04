@@ -2613,8 +2613,8 @@ msgid "Title"
 msgstr "Bezeichnung"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
-msgid "Shared Favorite (visible by all users)"
-msgstr "Gemeinsame Favoriten (sichtbar für alle Benutzer)"
+msgid "Shared Favorite (visible by other users)"
+msgstr "Gemeinsame Favoriten (sichtbar für andere Benutzer)"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:258
 msgid "The grant to see and use this filter"

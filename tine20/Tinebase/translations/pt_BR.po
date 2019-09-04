@@ -1446,7 +1446,7 @@ msgid "Title"
 msgstr "Título"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
-msgid "Shared Favorite (visible by all users)"
+msgid "Shared Favorite (visible by other users)"
 msgstr "Compartilhar Favorito (visível por todos os usuários)"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:258

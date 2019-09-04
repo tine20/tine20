@@ -1452,7 +1452,7 @@ msgid "Title"
 msgstr "Tiêu đề"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
-msgid "Shared Favorite (visible by all users)"
+msgid "Shared Favorite (visible by other users)"
 msgstr "Lối tắt chia sẻ (mọi người có thể nhìn thấy)"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:258
