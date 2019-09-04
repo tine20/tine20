@@ -214,8 +214,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         // update from relationsPanel if any
         if (this.isValid()) {
             if (record.data.hasOwnProperty('relations')) {
-                record.data.relations = null;
-                delete record.data.relations;
+                Tine.Tinebase.common.assertComparable(record.data.relations);
             }
             var relations = [];
             
@@ -223,7 +222,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 relations = relations.concat(this.getData(panel.store));
             }, this);
             
-            relations = relations.concat(this.getData());
+            relations = Tine.Tinebase.common.assertComparable(relations.concat(this.getData()));
             
             record.set('relations', relations);
         } else {

@@ -143,6 +143,16 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         //. register window ( in fact register complete PopupWindow )
         this.windowManager.register(this);
 
+        // closing properly or prevent close otherwise
+        this.popup.addEventListener('beforeunload', (e) => {
+            this.popup.console.warn('prevent start');
+            if(!this.forceClose && this.fireEvent("beforeclose", this) === false){
+                this.popup.console.warn('prevent');
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
         // does not work on reload!
         //this.popup.PopupWindow = this;
 
@@ -267,14 +277,16 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             this.popup.document.title = Ext.util.Format.stripTags(title);
         }
     },
-    
+
     /**
      * Closes the window, removes it from the DOM and destroys the window object. 
      * The beforeclose event is fired before the close happens and will cancel 
      * the close action if it returns false.
      */
-    close: function() {
-        if(this.fireEvent("beforeclose", this) !== false){
+    close: function(force) {
+        if(force || this.fireEvent("beforeclose", this) !== false){
+            this.forceClose = true;
+
             this.fireEvent('close', this);
 
             var popup = this.popup;
@@ -286,6 +298,10 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             } else {
                 Ext.ux.PopupWindow.close(popup);
             }
+
+            return true;
+        } else {
+            this.confirmLeavSite(this);
         }
     },
     
