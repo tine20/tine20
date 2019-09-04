@@ -452,7 +452,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! $_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
             
-            if ($this->_doContainerACLChecks) {
+            if ($this->_doContainerACLChecks && $record->has('container_id')) {
                 if ($_containerId === NULL) {
                     $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
                     $record->container_id = $containers[0]->getId();
