@@ -1010,13 +1010,19 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             panel = this.getCalendarPanel(this.activeView),
             store = this.getStore(),
             view = panel.getView(),
+            isSelected = panel.getSelectionModel().isSelected(event),
             me = this,
             promise = Promise.resolve();
 
         if (updatedEvent.ui) {
             updatedEvent.ui.markDirty();
         }
+
         store.replaceRecord(event, updatedEvent);
+
+        if (isSelected) {
+            panel.getSelectionModel().select(updatedEvent);
+        }
 
         if (! event.inPeriod(view.getPeriod())) {
             view.updatePeriod({from: event.get('dtstart')});
