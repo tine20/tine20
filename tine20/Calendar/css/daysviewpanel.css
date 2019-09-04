@@ -234,6 +234,13 @@
     border-right: none;
 }
 
+.cal-daysviewpanel-scroller .cal-daysviewpanel-event {
+    box-sizing: border-box;
+    border-top: 1px solid white !important;
+}
+.cal-daysviewpanel-scroller .cal-daysviewpanel-body-daycolumn-today .cal-daysviewpanel-event {
+    border-top: 1px solid #EBF3FD !important;
+}
 /*.ext-gecko .cal-daysviewpanel-event {*/
 /*    -moz-border-radius: 8px;*/
 /*}*/
