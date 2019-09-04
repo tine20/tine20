@@ -28,6 +28,10 @@ class Calendar_Setup_DemoDataTests extends TestCase
             Calendar_Model_Event::class, 'Business', Tinebase_Model_Container::TYPE_PERSONAL, $pwulf->getId());
         $sharedCalendar = Tinebase_Container::getInstance()->getContainerByName(
             Calendar_Model_Event::class, 'Shared Calendar', Tinebase_Model_Container::TYPE_SHARED);
+
+        static::assertSame(Calendar_Setup_DemoData::getInstance()->getSharedCalendar()->getId(),
+            $sharedCalendar->getId());
+
         $cce = Calendar_Controller_Event::getInstance();
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $businessCalendar->getId())

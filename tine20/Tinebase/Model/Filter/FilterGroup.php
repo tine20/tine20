@@ -1085,6 +1085,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 
         return $filter;
     }
+
+    public function filterWalk(callable $func) {
+        foreach ($this->_filterObjects as $filter) {
+            $func($filter);
+        }
+    }
     
     ###### iterator interface ###########
     public function rewind() {
