@@ -242,9 +242,11 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         Ext.each(this.getEls(), function(el) {
             el.setStyle(style);
             el.select('div[class^=cal-daysviewpanel-event-header]').setStyle(style);
-            el.select('.cal-status-icon')
-                .removeClass(['ACCEPTED-black', 'ACCEPTED-white'])
-                .addClass('ACCEPTED-' + (style.color === '#FFFFFF' ? 'white' : 'black'));
+            el.select('.cal-status-icon').each((img) => {
+                let status = img.dom.className.match(/([a-zA-Z]+)-(?:black|white)/)[1];
+                img.removeClass([status + '-black', status + '-white']);
+                img.addClass(status + (style.color === '#FFFFFF' ? '-white' : '-black'));
+            });
         }, this);
     }
 });
