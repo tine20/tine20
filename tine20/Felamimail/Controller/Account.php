@@ -705,7 +705,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        if ($updatedRecord->sieve_notification_email !== $currentRecord->sieve_notification_email) {
+        if ($updatedRecord->sieve_notification_email != $currentRecord->sieve_notification_email) {
             Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($updatedRecord->getId(),
                 $updatedRecord->sieve_notification_email);
         }
