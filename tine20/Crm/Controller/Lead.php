@@ -310,7 +310,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         }
 
         $result = array();
-        foreach ($lead->diff($oldLead, array('seq', 'notes', 'tags', 'relations', 'last_modified_time', 'last_modified_by'))->diff
+        foreach ($lead->diff($oldLead, array('seq', 'notes', 'tags', 'relations', 'attachments', 'last_modified_time', 'last_modified_by'))->diff
              as $key => $value)
         {
             // only allow scalars atm
