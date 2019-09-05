@@ -540,9 +540,10 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     background-size: 16px 16px;
 }
 
+.x-btn-image.tine-favicon,
 span .x-tab-strip-text.tine-favicon {
     background-position-y: 2px !important;
-    background-size: 15px 15px;
+    background-size: 15px 15px !important;
 }
 
 .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {
@@ -1016,6 +1017,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     width: 16px;
     height: 16px;
     background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .x-btn-medium.x-btn-icon-medium-top .x-btn-arrow .x-btn-image {

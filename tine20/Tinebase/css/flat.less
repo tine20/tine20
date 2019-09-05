@@ -62,6 +62,10 @@ ul.x-tab-strip-top {
   background-image: none;
 }
 
+.x-tab-strip .x-tab-with-icon span.x-tab-strip-text {
+  padding-left: 18px;
+}
+
 .x-tab-strip span.x-tab-strip-text {
   font-size: 10px;
   color: #3d2716;
@@ -74,15 +78,20 @@ ul.x-tab-strip-top {
   font-weight: normal;
 }
 
-.x-tab-strip .x-tab-strip-closable a.x-tab-strip-close {
-  background-image: url('../../images/icon-set/icon_clear.svg');
-  background-size: 8px;
-  background-position: 1px 1px;
-
-  &:hover {
+.x-tab-strip .x-tab-strip-closable {
+  .x-tab-left {
+    padding-right: 15px;
+  }
+  a.x-tab-strip-close {
     background-image: url('../../images/icon-set/icon_clear.svg');
-    background-size: 10px;
-    background-position: 0px;
+    background-size: 8px;
+    background-position: 1px 1px;
+
+    &:hover {
+      background-image: url('../../images/icon-set/icon_clear.svg');
+      background-size: 10px;
+      background-position: 0px;
+    }
   }
 }
 
