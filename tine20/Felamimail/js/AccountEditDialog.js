@@ -424,25 +424,29 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'sent_folder',
                     xtype: 'felamimailfolderselect',
                     account: this.record,
-                    maxLength: 64
+                    maxLength: 64,
+                    value: 'Sent'
                 }, {
                     fieldLabel: this.app.i18n._('Trash Folder Name'),
                     name: 'trash_folder',
                     xtype: 'felamimailfolderselect',
                     account: this.record,
-                    maxLength: 64
+                    maxLength: 64,
+                    value: 'Trash'
                 }, {
                     fieldLabel: this.app.i18n._('Drafts Folder Name'),
                     name: 'drafts_folder',
                     xtype: 'felamimailfolderselect',
                     account: this.record,
-                    maxLength: 64
+                    maxLength: 64,
+                    value: 'Drafts'
                 }, {
                     fieldLabel: this.app.i18n._('Templates Folder Name'),
                     name: 'templates_folder',
                     xtype: 'felamimailfolderselect',
                     account: this.record,
-                    maxLength: 64
+                    maxLength: 64,
+                    value: 'Templates'
                 }, {
                     fieldLabel: this.app.i18n._('Display Format'),
                     name: 'display_format',
