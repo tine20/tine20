@@ -30,7 +30,14 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             $this->_body = $this->_getBody($body);
 
             try {
-                list($loginName, $password) = $this->_getAuthData($this->_request);
+                $authData = $this->_getAuthData($this->_request);
+                if (count($authData) === 2) {
+                    list($loginName, $password) = $authData;
+                } else {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' auth data: '
+                        . print_r($authData, true));
+                    throw new Tinebase_Exception_NotFound('loginname or password not set');
+                }
 
             } catch (Tinebase_Exception_NotFound $tenf) {
                 header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
