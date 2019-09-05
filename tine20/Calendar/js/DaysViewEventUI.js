@@ -243,7 +243,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             el.setStyle(style);
             el.select('div[class^=cal-daysviewpanel-event-header]').setStyle(style);
             el.select('.cal-status-icon').each((img) => {
-                let status = img.dom.className.match(/([a-zA-Z]+)-(?:black|white)/)[1];
+                let status = img.dom.className.match(/([-a-zA-Z]+)-(?:black|white)/)[1];
                 img.removeClass([status + '-black', status + '-white']);
                 img.addClass(status + (style.color === '#FFFFFF' ? '-white' : '-black'));
             });

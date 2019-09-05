@@ -368,8 +368,8 @@
 .cal-daysviewpanel-event-header-inner {
     color: white;
     position: absolute;
-    top: 1px;
-    left: 4px;
+    top: 2px;
+    left: 2px;
 }
 
 .cal-daysviewpanel-event-header-icons {
@@ -396,7 +396,7 @@
 .cal-daysviewpanel-event-body {
     position: absolute;
     top: 13px;
-    padding: 0px 2px 0px 2px;
+    padding: 2px 2px 0px 2px;
     white-space: normal;
 }
 
@@ -406,10 +406,10 @@
     bottom: 4px;
 }
 
-/*.cal-event-active,*/
-/*.cal-daysviewpanel-event-active {*/
-/*    border-width: 2px;*/
-/*}*/
+.cal-event-active,
+.cal-daysviewpanel-event-active {
+    font-weight: bold;
+}
 
 .cal-daysviewpanel-event-onedit {
     border-style: dashed;
