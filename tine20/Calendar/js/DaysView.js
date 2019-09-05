@@ -951,8 +951,11 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
      * @private
      */
     onBeforeEventResize: function(rz, e) {
+        var me = this;
         var parts = rz.el.id.split(':');
         var event = this.store.getById(parts[1]);
+
+        this.getSelectionModel().select(event);
 
         // @TODO compute max minutes also
         var maxHeight = 10000;
@@ -970,7 +973,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         rz.originalWidth  = rz.el.getWidth();
 
         // NOTE: ext dosn't support move events via api
-        rz.onMouseMove = rz.onMouseMove.createSequence(function() {
+        rz.onMouseMove = rz.onMouseMove.createSequence(function(e) {
             var event = this.event;
             if (! event) {
                 //event already gone -> late event / busy brower?
@@ -979,8 +982,14 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             var ui = event.ui;
             var rzInfo = ui.getRzInfo(this);
 
-            if (this.durationEl) {
-                this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
+            if (e.type === 'mousemove') {
+                // getRzInfo calcs wrong values???
+                let shouldHeight = me.getTimeOffset(rzInfo.dtend) - me.getTimeOffset(event.get('dtstart'));
+                this.el.setHeight(shouldHeight);
+
+                if (this.durationEl) {
+                    this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
+                }
             }
         }, rz);
 
@@ -999,12 +1008,6 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             });
         }
         rz.durationEl.update(event.get('dtend').format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
-        
-        if (event) {
-            this.getSelectionModel().select(event);
-        } else {
-            this.getSelectionModel().clearSelections();
-        }
     },
     
     /**
@@ -1039,7 +1042,10 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         if (rzInfo.diff != 0 && event != this.editing && ! event.isRangeAdd) {
             this.fireEvent('updateEvent', event);
         } else {
-            event.ui.clearDirty();
+            // NOTE: we need to redraw event as resizer is broken after one attempt
+            this.removeEvent(event);
+            this.insertEvent(event);
+            this.getSelectionModel().select(event);
         }
     },
 
