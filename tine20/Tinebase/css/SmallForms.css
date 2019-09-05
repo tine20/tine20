@@ -79,13 +79,13 @@
     padding-bottom: 0px;
 }
 
-.x-tab-strip-top .x-tab-strip-active .x-tab-right span.x-tab-strip-text {
-    padding-bottom: 3px;
-}
+/*.x-tab-strip-top .x-tab-strip-active .x-tab-right span.x-tab-strip-text {*/
+/*    padding-bottom: 3px;*/
+/*}*/
 
-.x-tab-strip span.x-tab-strip-text {
-    padding:3px 0pt;
-}
+/*.x-tab-strip span.x-tab-strip-text {*/
+/*    padding:3px 0pt;*/
+/*}*/
 
 .ext-ie .x-form-twin-triggers {
     padding-top: 6px;

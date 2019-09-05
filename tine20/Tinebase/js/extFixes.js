@@ -481,6 +481,25 @@ Ext.ButtonToggleMgr = function(){
    };
 }();
 
+Ext.override(Ext.Button, {
+    setIconClass : function(cls){
+        this.iconCls = cls;
+        if(this.el){
+            var iconEl = this.btnEl.next('.x-btn-image') || this.btnEl;
+            this.btnEl.dom.className = '';
+            if (iconEl === this.btnEl) {
+                this.btnEl.addClass(['x-btn-text', cls || '']);
+            } else {
+                this.btnEl.addClass(['x-btn-text']);
+                iconEl.dom.className = '';
+                iconEl.addClass(['x-btn-image', cls || '']);
+            }
+            this.setButtonClass();
+        }
+        return this;
+    },
+});
+
 /**
  * add beforeloadrecords event
  */
