@@ -46,7 +46,8 @@ Tine.widgets.customfields.Renderer = function(){
                         return Tine.Tinebase.widgets.keyfield.Renderer.render(app, keyFieldName, customfields[cfName]);
                     };
                     
-                } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1) {
+                } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1 &&
+                    _.get(window, cfDefinition.recordConfig.value.records)) {
                     renderers[key] = function(customfields) {
                         var recordClass = eval(cfDefinition.recordConfig.value.records);
                         customfields = customfields || {}

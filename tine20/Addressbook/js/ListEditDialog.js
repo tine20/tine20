@@ -39,6 +39,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.on('load', this.resolveMemberData, this);
         this.printer = Tine.Addressbook.Printer.ListRenderer;
 
+        // TODO only find user contacts if account_only list
         this.memberGridPanel = new Tine.Addressbook.ListMemberRoleGridPanel({
             region: "center",
             frame: true,
@@ -91,13 +92,20 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 allowBlank: true,
                                 disabled: this.record.get('type') == 'group'
                             }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
-                                columnWidth: 1,
+                                columnWidth: 0.75,
                                 fieldLabel: this.app.i18n._('List type'),
                                 name: 'list_type',
                                 app: 'Addressbook',
                                 keyFieldName: 'listType',
                                 value: ''
-                            })
+                            }), {
+                                columnWidth: 0.25,
+                                xtype: 'checkbox',
+                                fieldLabel: this.app.i18n._('System accounts only'),
+                                name: 'account_only',
+                                anchor: '100%',
+                                disabled: true
+                            }
                             ]]
                         }]
                     }]

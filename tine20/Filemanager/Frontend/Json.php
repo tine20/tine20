@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -85,13 +85,14 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * create node
      * 
      * @param array $filename
-     * @param string $type directory or file
+     * @param string $type mimetype
      * @param string $tempFileId
      * @param boolean $forceOverwrite
      * @return array
      */
     public function createNode($filename, $type, $tempFileId = array(), $forceOverwrite = false)
     {
+        // do not convert $type to array!
         $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filename, $type, (array)$tempFileId, $forceOverwrite);
         $result = (count($nodes) === 0) ? array() : $this->_recordToJson($nodes->getFirstRecord());
         
@@ -102,15 +103,16 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * create nodes
      * 
      * @param string|array $filenames
-     * @param string $type directory or file
+     * @param string|array $type directory or mime type in case of a file
      * @param string|array $tempFileIds
      * @param boolean $forceOverwrite
      * @return array
      */
-    public function createNodes($filenames, $type, $tempFileIds = array(), $forceOverwrite = false)
+    public function createNodes($filenames, $types, $tempFileIds = array(), $forceOverwrite = false)
     {
-        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $type, (array)$tempFileIds, $forceOverwrite);
-        
+        // do not convert $type to array!
+        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $types, (array)$tempFileIds, $forceOverwrite);
+
         return $this->_multipleRecordsToJson($nodes);
     }
     

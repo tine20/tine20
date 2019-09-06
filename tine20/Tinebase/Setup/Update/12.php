@@ -18,6 +18,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE012_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -39,6 +40,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE012_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
 
@@ -170,5 +175,20 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '12.25', self::RELEASE012_UPDATE007);
+    }
+
+    public function update008()
+    {
+        if ($this->getTableVersion('groups') < 9) {
+            $this->_backend->addCol('groups', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>account_only</name>
+                    <type>boolean</type>                 
+                    <default>true</default>
+                </field>'));
+            $this->setTableVersion('groups', 9);
+        }
+
+        $this->addApplicationUpdate('Tinebase', '12.26', self::RELEASE012_UPDATE008);
     }
 }

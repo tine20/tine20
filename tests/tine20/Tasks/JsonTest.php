@@ -380,7 +380,7 @@ class Tasks_JsonTest extends TestCase
                 'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
                 'accountLastName'       => 'Tine 2.0',
                 'accountFirstName'      => 'Creator',
-                'accountEmailAddress'   => 'phpunit@metaways.de'
+                'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain(),
             ));
             $user = Tinebase_User::getInstance()->addUser($user);
         }

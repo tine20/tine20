@@ -89,7 +89,7 @@ class Admin_Config extends Tinebase_Config_Abstract
             ),
             'default' => array(
                 self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => false,
-                self::FEATURE_EMAIL_ACCOUNTS => false,
+                self::FEATURE_EMAIL_ACCOUNTS => true,
                 self::FEATURE_FORCE_REYPE_PASSWORD => false,
             ),
         ),

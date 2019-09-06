@@ -189,23 +189,60 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         // remove grantsfilter here as we do grants computation in PHP
-        $grantsFilter = $_filter->getFilter('grants');
-        if ($grantsFilter) {
-            $_filter->removeFilter('grants');
-        }
+        $grantsFilter = null;
+        // make sure $func is not yet set at this point
+        $func = function($filter) use (/*yes & !*/&$func, &$grantsFilter) {
+            if ($filter instanceof Calendar_Model_EventFilter) {
+                $filter->filterWalk($func);
+            } elseif ($filter instanceof Calendar_Model_GrantFilter) {
+                if ($grantsFilter !== null) {
+                    throw new Tinebase_Exception_UnexpectedValue('you can\'t have more than one grants filter');
+                }
+                $grantsFilter = $filter;
+                $filter->getParent()->removeFilter($filter);
+            }
+        };
+        $_filter->filterWalk($func);
+
         
         // clone the filter, as the filter is also used in the json frontend
         // and the calendar filter is used in the UI to
         $clonedFilters = clone $_filter;
         
         $calendarFilter = null;
-        foreach ($clonedFilters as $filter) {
-            if ($filter instanceof Calendar_Model_CalendarFilter) {
+        unset($func); // !!! very important, don't separate this and the next line
+        $func = function($filter) use (/*yes & !*/&$func, &$calendarFilter) {
+            if ($filter instanceof Calendar_Model_EventFilter) {
+                $filter->filterWalk($func);
+            } elseif ($filter instanceof Calendar_Model_CalendarFilter) {
+                if ($calendarFilter !== null) {
+                    throw new Tinebase_Exception_UnexpectedValue('you can\'t have more than one calendar filter');
+                }
                 $calendarFilter = $filter;
-                $clonedFilters->removeFilter($filter);
-                break;
+                $filter->getParent()->removeFilter($filter);
             }
+        };
+        $clonedFilters->filterWalk($func);
+
+
+        // sort filters, roleFilter und statusFilter need to be processed after attenderFilter
+        unset($func); // !!! very important, don't separate this and the next line
+        $tempFilters = [];
+        $func = function($filter) use (/*yes & !*/&$func, &$tempFilters) {
+            if ($filter instanceof Calendar_Model_EventFilter) {
+                $filter->filterWalk($func);
+            } elseif ($filter instanceof Calendar_Model_AttenderRoleFilter || $filter instanceof
+                    Calendar_Model_AttenderStatusFilter) {
+                $tempFilters[] = $filter;
+            }
+        };
+        $clonedFilters->filterWalk($func);
+        foreach ($tempFilters as $tempFilter) {
+            $parent = $tempFilter->getParent();
+            $parent->removeFilter($tempFilter);
+            $parent->addFilter($tempFilter);
         }
+
         
         $this->_addFilter($select, $clonedFilters);
         

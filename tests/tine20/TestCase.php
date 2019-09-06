@@ -106,6 +106,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected $_originalGrants = [];
 
     /**
+     * @var array lists to delete in tearDown
+     */
+    protected $_listsToDelete = [];
+
+    /**
      * set up tests
      */
     protected function setUp()
@@ -115,6 +120,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $refProp = new ReflectionProperty(Felamimail_Controller_Account::class, '_instance');
+        $refProp->setAccessible(true);
+        $refProp->setValue(Felamimail_Controller_AccountMock::getInstance());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
 
@@ -167,7 +176,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Container::getInstance()->setGrants($container, $grants, true);
         }
 
+        foreach ($this->_listsToDelete as $list) {
+            Addressbook_Controller_List::getInstance()->delete($list->getId());
+        }
+
         Tinebase_Lock_UnitTestFix::clearLocks();
+
+        Felamimail_Controller_AccountMock::getInstance()->cleanUp();
     }
 
     /**
@@ -372,16 +387,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId(),
             'model'          => $model,
         ), true));
-    }
-    
-    /**
-     * get test mail domain
-     * 
-     * @return string
-     */
-    protected function _getMailDomain()
-    {
-        return TestServer::getPrimaryMailDomain();
     }
     
     /**
@@ -982,5 +987,31 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM]
         ]);
         return Felamimail_Controller_Account::getInstance()->search($filter)->getFirstRecord();
+    }
+
+    /**
+     * @param array $xpropsToSet
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _createMailinglist($xpropsToSet = [])
+    {
+        // create list with unittest user as member
+        $name = 'testsievelist' . Tinebase_Record_Abstract::generateUID(5);
+        $list = new Addressbook_Model_List([
+            'name' => $name,
+            'email' => $name . '@' . TestServer::getPrimaryMailDomain(),
+            'container_id' => $this->_getTestContainer('Addressbook', 'Addressbook_Model_List'),
+            'members'      => [Tinebase_Core::getUser()->contact_id],
+        ]);
+        $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
+        foreach ($xpropsToSet as $xprop) {
+            $list->xprops()[$xprop] = 1;
+        }
+        $mailinglist = Addressbook_Controller_List::getInstance()->create($list);
+        $this->_listsToDelete[] = $mailinglist;
+        return $mailinglist;
     }
 }

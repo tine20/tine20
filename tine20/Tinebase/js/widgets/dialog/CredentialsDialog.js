@@ -86,7 +86,7 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
         
         this.getForm().loadRecord(this.record);
         
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     /**
@@ -111,7 +111,7 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                     params: params,
                     scope: this,
                     success: function(_result, _request){
-                        this.loadMask.hide();
+                        this.hideLoadMask();
                         this.fireEvent('update', _result);
                         this.purgeListeners();
                         this.window.close();

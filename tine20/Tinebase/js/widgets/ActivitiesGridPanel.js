@@ -349,7 +349,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             displayField: 'name',
             fieldLabel: i18n._('Type'),
             forceSelection: true,
-            allowEmpty: false,
+            allowBlank: false,
             editable: false,
             anchor: '100% 100%'
         });

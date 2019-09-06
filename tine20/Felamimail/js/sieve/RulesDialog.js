@@ -94,7 +94,7 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             title = String.format(this.app.i18n._('Sieve Filter Rules for {0}'), accountName);
         this.window.setTitle(title);
         
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
         
     /**
@@ -133,7 +133,7 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             },
             failure: Tine.Felamimail.handleRequestException.createSequence(function() {
-                this.loadMask.hide();
+                this.hideLoadMask();
             }, this),
             timeout: 150000 // 3 minutes
         });

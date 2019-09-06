@@ -41,6 +41,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     useModuleTreePanel: null,
 
     layout: 'border',
+    border: false,
 
     initComponent: function() {
         var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + this.app.appName, []);
@@ -58,6 +59,11 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         
 
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
+
+        // layout hack for flat design - till we re arranged left area
+        this.on('afterlayout', function() {
+            this.layout.west.split.el.setTop(85);
+        }, this);
     },
 
     initMessageBus: function() {

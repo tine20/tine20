@@ -40,10 +40,12 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     const LISTTYPE_GROUP = 'group';
 
 
-    const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
     const XPROP_SIEVE_ALLOW_EXTERNAL = 'sieveAllowExternal';
     const XPROP_SIEVE_ALLOW_ONLY_MEMBERS = 'sieveAllowOnlyMembers';
+    const XPROP_SIEVE_FORWARD_ONLY_SYSTEM = 'sieveForwardOnlySystem';
+    const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
     const XPROP_USE_AS_MAILINGLIST = 'useAsMailinglist';
+
 
     /**
      * name of fields which require manage accounts to be updated
@@ -156,6 +158,12 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
+            'account_only'          => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'boolean',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'virtual'           => true,
+            ),
             'emails'            => array(
                 'label'             => null, // TODO fill this?
                 'type'              => 'string',
@@ -253,12 +261,16 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     {
         $result = parent::getPathNeighbours();
 
+        $members = [];
         if (!empty($this->members)) {
-            foreach(Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true) as $member) {
+            if ($this->members instanceof Tinebase_Record_RecordSet) {
+                $tmp = $this->members;
+            } else {
+                $tmp = Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true);
+            }
+            foreach($tmp as $member) {
                 $members[$member->getId()] = $member;
             }
-        } else {
-            $members = array();
         }
 
         if (!is_object($this->memberroles)) {

@@ -52,12 +52,19 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     protected static $_colorize = false;
 
     /**
-     * session id
+     * session/request id
      * 
      * @var string
      */
-    protected static $_prefix;
-    
+    protected static $_requestId;
+
+    /**
+     * transaction id
+     *
+     * @var string
+     */
+    protected static $_transactionId;
+
     /**
      * application start time
      *
@@ -99,8 +106,8 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     {
         parent::__construct($format);
         
-        if (!self::$_prefix) {
-            self::$_prefix = Tinebase_Record_Abstract::generateUID(5);
+        if (!self::$_requestId) {
+            self::$_requestId = Tinebase_Record_Abstract::generateUID(5);
         }
         
         if (self::$_starttime === NULL) {
@@ -152,21 +159,37 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     {
         $output = parent::format($event);
         $output = str_replace($this->_search, $this->_replace, $output);
-        
-        $timelog = '';
-        if (self::$_logdifftime || self::$_logruntime)
-        {
-            $currenttime = microtime(true);
-            if (self::$_logruntime) {
-                $timelog = Tinebase_Helper::formatMicrotimeDiff($currenttime - self::$_starttime) . ' ';
-            }
-            if (self::$_logdifftime) {
-                $timelog .= Tinebase_Helper::formatMicrotimeDiff($currenttime - (self::$_lastlogtime ? self::$_lastlogtime : $currenttime)) . ' ';
-                self::$_lastlogtime = $currenttime;
-            }
+
+        $logruntime = $this->_getLogRunTime();
+        $logdifftime = $this->_getLogDiffTime();
+        $timelog = trim(implode(' ', [$logruntime, $logdifftime]));
+        if (! empty($timelog)) {
+            $timelog .= ' ';
         }
-        
-        return self::getPrefix() . ' ' . self::getUsername() . ' ' . $timelog . '- ' . $this->_getFormattedOutput($output, $event);
+
+        return self::$_transactionId . ' ' . self::getUsername() . ' ' . $timelog . '- '
+            . $this->_getFormattedOutput($output, $event);
+    }
+
+    protected function _getLogRunTime()
+    {
+        $result = '';
+        if (self::$_logruntime) {
+            $currenttime = microtime(true);
+            $result = Tinebase_Helper::formatMicrotimeDiff($currenttime - self::$_starttime);
+        }
+        return $result;
+    }
+
+    protected function _getLogDiffTime()
+    {
+        $result = '';
+        if (self::$_logdifftime) {
+            $currenttime = microtime(true);
+            $result = Tinebase_Helper::formatMicrotimeDiff($currenttime - (self::$_lastlogtime ? self::$_lastlogtime : $currenttime));
+            self::$_lastlogtime = $currenttime;
+        }
+        return $result;
     }
 
     /**
@@ -219,16 +242,6 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     }
 
     /**
-     * get current prefix
-     * 
-     * @return string
-     */
-    public static function getPrefix()
-    {
-        return self::$_prefix;
-    }
-    
-    /**
      * get current username
      * 
      * @return string
@@ -275,19 +288,19 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         self::$_colorize = false;
     }
 
-    /**
-     * set/append prefix
-     * 
-     * @param string $prefix
-     * @param bool $append
-     */
-    public static function setPrefix($prefix, $append = TRUE)
+    public static function setTransactionId($transactionId)
     {
-        if ($append) {
-            $prefix = self::getPrefix() . " $prefix";
-        }
-        
-        self::$_prefix = $prefix;
+        self::$_transactionId = $transactionId;
+    }
+
+    public static function getTransactionId()
+    {
+        return self::$_transactionId;
+    }
+
+    public static function getRequestId()
+    {
+        return self::$_requestId;
     }
 
     /**

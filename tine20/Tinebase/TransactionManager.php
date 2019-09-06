@@ -271,10 +271,10 @@ class Tinebase_TransactionManager
     /**
      * register a callable to call just before the rollback happens
      *
-     * @param array $callable
+     * @param array|callable $callable
      * @param array $param
      */
-    public function registerOnRollbackCallback(array $callable, array $param = array())
+    public function registerOnRollbackCallback($callable, array $param = array())
     {
         $this->_onRollbackCallbacks[] = array($callable, $param);
     }
@@ -295,5 +295,12 @@ class Tinebase_TransactionManager
     public function unitTestForceSkipRollBack($bool)
     {
         $this->_unitTestForceSkipRollBack = $bool;
+    }
+
+    public function unitTestRemoveTransactionable($_transactionable)
+    {
+        if (false !== ($pos = array_search($_transactionable, $this->_openTransactionables, true))) {
+            unset($this->_openTransactionables[$pos]);
+        }
     }
 }

@@ -100,6 +100,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $result = new Tinebase_Record_RecordSet('Addressbook_Model_List',
             array(parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted)));
         $this->_removeHiddenListMembers($result);
+        $this->_setAccountOnly($result);
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $result->getFirstRecord();
     }
@@ -111,7 +112,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _removeHiddenListMembers($lists)
     {
-        if (count($lists) === 0) {
+        if (count($lists) === 0 || Addressbook_Config::getInstance()
+                ->featureEnabled(Addressbook_Config::FEATURE_MAILINGLIST)) {
             return;
         }
 
@@ -145,6 +147,25 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         foreach ($lists as $list) {
             // use array_values to make sure we have numeric index starting with 0 again
             $list->members = array_values(array_diff($list->members, $hiddenMemberids));
+        }
+    }
+
+    /**
+     * set account_only property of list
+     *
+     * @param Tinebase_Record_RecordSet $lists
+     *
+     * TODO maybe we should fetch this via sql join
+     */
+    protected function _setAccountOnly($lists)
+    {
+        foreach ($lists as $list) {
+            if ($list->type === Addressbook_Model_List::LISTTYPE_GROUP && $list->group_id) {
+                $group = Tinebase_Group::getInstance()->getGroupById($list->group_id);
+                $list->account_only = $group->account_only;
+            } else {
+                $list->account_only = false;
+            }
         }
     }
 
@@ -308,6 +329,22 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * flatten members array to contact ids
+     *
+     * @param Addressbook_Model_List $list
+     */
+    protected function _flattenMembers(Addressbook_Model_List $list)
+    {
+        if (empty($list->members)) return;
+        $members = $list->members;
+        foreach ($members as &$member) {
+            if (is_array($member)) {
+                $member = $member['id'];
+            }
+        }
+        $list->members = $members;
+    }
+    /**
      * inspect creation of one record
      *
      * @param  Tinebase_Record_Interface $_record
@@ -315,6 +352,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_flattenMembers($_record);
+
         if (isset($_record->type) && $_record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
             if (empty($_record->group_id)) {
                 throw new Tinebase_Exception_UnexpectedValue('group_id is empty, must not happen for list type group');
@@ -358,16 +397,37 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record the update record
      * @param   Tinebase_Record_Interface $_oldRecord the current persistent record
      * @return  void
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $this->_flattenMembers($_record);
+
         if (! empty($_record->email) && $_record->email !== $_oldRecord->email) {
             $this->_checkEmailAddress($_record->email);
         }
 
         if (! empty($_record->group_id)) {
+            // get group and check account_only
+            $group = Tinebase_Group::getInstance()->getGroupById($_record->group_id);
+            if ($group->account_only) {
+                $contacts = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Addressbook_Model_Contact::class, [
+                        ['field' => 'id', 'operator' => 'in', 'value' => $_record->members]
+                    ]
+                ));
+                $nonUserContacts = $contacts->filter('type', Addressbook_Model_Contact::CONTACTTYPE_CONTACT);
+                if (count($nonUserContacts) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Found non-account members: '
+                        . print_r($nonUserContacts->toArray(), true));
+                    $translate = Tinebase_Translation::getTranslation('Addressbook');
+                    throw new Tinebase_Exception_InvalidArgument($translate->_(
+                        'It is not allowed to add non-account contacts to this list'));
+                }
+            }
 
-            // first check if something changed that requires special rights
+            // check if something changed that requires special rights
             $changeGroup = false;
             foreach (Addressbook_Model_List::getManageAccountFields() as $field) {
                 if ($_record->{$field} != $_oldRecord->{$field}) {
@@ -485,6 +545,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             } else {
                 $this->_createMailAccount($updatedRecord);
             }
+
+            Felamimail_Sieve_AdbList::setScriptForList($updatedRecord);
 
         } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&

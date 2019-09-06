@@ -21,11 +21,15 @@ class Felamimail_Sieve_AdbList
     protected $_allowExternal = false;
     protected $_allowOnlyGroupMembers = false;
     protected $_keepCopy = false;
+    protected $_forwardOnlySystem = false;
     protected $_receiverList = [];
 
     public function __toString()
     {
-        $result = 'require ["envelope", "copy"];' . PHP_EOL;
+        $result = 'require ["envelope", "copy", "reject"];' . PHP_EOL;
+        $rejectMsg = Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_MAILINGLIST_REJECT_REASON};
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $rejectMsg = $translation->_($rejectMsg);
 
         if ($this->_allowExternal) {
             $this->_addRecieverList($result);
@@ -34,11 +38,10 @@ class Felamimail_Sieve_AdbList
             }
 
         } else {
-            if ($this->_allowOnlyGroupMembers) {
+            if ($this->_allowOnlyGroupMembers && empty($this->_receiverList)) {
                 $result .= 'if address :is :all "from" ["' . join('","', $this->_receiverList) . '"] {' . PHP_EOL;
             } else {
                 // only internal email addresses are allowed to mail!
-                // TODO FIX ME, get list of allowed domains!
                 if (empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
                     throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
                 }
@@ -47,24 +50,33 @@ class Felamimail_Sieve_AdbList
 
             $this->_addRecieverList($result);
 
-            if (!$this->_keepCopy) {
-                // we don't keep a copy, so discard everything
-                $result .= '}' . PHP_EOL . 'discard;' . PHP_EOL;
-            } else {
-                // we keep msg by default, only if the condition was not met we discard?
-                // always discard non-allowed msgs?!?
-                $result .= '} else { discard; }' . PHP_EOL;
-            }
+            // we keep msg by default, only if the condition was not met we discard?
+            // always discard non-allowed msgs?!?
+            $result .= '} else { reject "' . $rejectMsg . '"; }' . PHP_EOL;
         }
-
-
 
         return $result;
     }
 
     protected function _addRecieverList(&$result)
     {
+        if ($this->_forwardOnlySystem && empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
+            throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
+        }
+
         foreach ($this->_receiverList as $email) {
+            if ($this->_forwardOnlySystem) {
+                $match = false;
+                foreach ($internalDomains as $domain) {
+                    if (preg_match('/@' . preg_quote($domain, '/') . '$/', $email)) {
+                        $match = true;
+                        break;
+                    }
+                }
+                if (!$match) {
+                    continue;
+                }
+            }
             $result .= 'redirect :copy "' . $email . '";' . PHP_EOL;
         }
     }
@@ -77,14 +89,10 @@ class Felamimail_Sieve_AdbList
     {
         $sieveRule = new self();
 
-        if (empty($_list->members) || empty($_list->email)) {
-            return $sieveRule;
-        }
-
-        $sieveRule->_receiverList = array_keys(Addressbook_Controller_Contact::getInstance()->search(
+        $sieveRule->_receiverList = array_filter(array_keys(Addressbook_Controller_Contact::getInstance()->search(
             new Addressbook_Model_ContactFilter([
                 ['field' => 'id', 'operator' => 'in', 'value' => $_list->members]
-            ]), null, false, ['email']));
+            ]), null, false, ['email'])));
 
         if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY]) && $_list
                 ->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY]) {
@@ -99,9 +107,15 @@ class Felamimail_Sieve_AdbList
         if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS]) && $_list
                 ->xprops()[Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS]) {
             if ($sieveRule->_allowExternal) {
-                throw new Tinebase_Exception_UnexpectedValue('can not combine allowExternal and allowOnlyMembers');
+                $translation = Tinebase_Translation::getTranslation('Felamimail');
+                throw new Tinebase_Exception_SystemGeneric($translation->_('Can not combine "allow external" and "allow only members"'));
             }
             $sieveRule->_allowOnlyGroupMembers = true;
+        }
+
+        if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_FORWARD_ONLY_SYSTEM]) && $_list
+                ->xprops()[Addressbook_Model_List::XPROP_SIEVE_FORWARD_ONLY_SYSTEM]) {
+            $sieveRule->_forwardOnlySystem = true;
         }
 
         return $sieveRule;

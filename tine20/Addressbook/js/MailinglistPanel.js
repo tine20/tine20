@@ -54,7 +54,8 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         var checkboxLabels = {
             'sieveKeepCopy': this.app.i18n._('Keep copy of group mails'),
             'sieveAllowExternal': this.app.i18n._('Forward external mails'),
-            'sieveAllowOnlyMembers': this.app.i18n._('Only forward member mails')
+            'sieveAllowOnlyMembers': this.app.i18n._('Only forward member mails'),
+            'sieveForwardOnlySystem': this.app.i18n._('Only forward to system email accounts')
         }, checkboxItems = [this.isMailinglistCheckbox];
         _.forOwn(checkboxLabels, function(label, key) {
             panel.checkboxes[key] = new Ext.form.Checkbox({

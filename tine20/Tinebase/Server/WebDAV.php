@@ -143,6 +143,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     list($loginName, $password) = $this->_getAuthData($this->_request);
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
+                } catch (Zend_Session_Validator_Exception $zsve) {
+                    // maintenance mode / other session problem
+                    header('HTTP/1.1 503 Service Unavailable');
+                    return;
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
                     header('HTTP/1.1 401 Unauthorized');

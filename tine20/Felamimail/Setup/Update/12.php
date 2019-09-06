@@ -13,6 +13,8 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
 {
     const RELEASE012_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -23,6 +25,14 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE012_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE012_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -35,6 +45,12 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
     }
 
     public function update002()
+    {
+        // moved to update003
+        $this->addApplicationUpdate('Felamimail', '12.5', self::RELEASE012_UPDATE002);
+    }
+
+    public function update003()
     {
         if (! $this->_backend->tableExists('felamimail_account_acl')) {
             $tableDefinition = new Setup_Backend_Schema_Table_Xml('<table>
@@ -114,9 +130,22 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $accountCtrl = Felamimail_Controller_Account::getInstance();
+        $oldValue = $accountCtrl->doContainerACLChecks(false);
         foreach ($accountCtrl->getAll() as $account) {
-            $accountCtrl->setDefaultGrants($account);
+            $accountCtrl->getGrantsForRecord($account);
+            $accountCtrl->setGrants($account);
         }
-        $this->addApplicationUpdate('Felamimail', '12.5', self::RELEASE012_UPDATE002);
+        $accountCtrl->doContainerACLChecks($oldValue);
+
+        $this->addApplicationUpdate('Felamimail', '12.6', self::RELEASE012_UPDATE003);
+    }
+
+    /**
+     * add signature table
+     */
+    public function update004()
+    {
+        $this->updateSchema('Felamimail', array(Felamimail_Model_Signature::class));
+        $this->addApplicationUpdate('Felamimail', '12.7', self::RELEASE012_UPDATE004);
     }
 }

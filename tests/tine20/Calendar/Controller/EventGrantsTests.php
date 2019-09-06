@@ -743,7 +743,44 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         ))), true);
     }
-    
+
+    public function testCreateEventWithConflictToPrivateEvent()
+    {
+        $this->_testNeedsTransaction();
+
+        $event = $this->_getEvent();
+        $event->class = Calendar_Model_Event::CLASS_PRIVATE;
+
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('rwright')->getId()),
+        ));
+        $event->organizer = $this->_getPersonasContacts('rwright')->getId();
+        $this->_uit->doContainerACLChecks(false);
+        $this->_uit->create($event);
+        $this->_uit->doContainerACLChecks(true);
+
+        $conflictEvent = $this->_getEvent();
+        $conflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('rwright')->getId()),
+        ));
+
+        try {
+            $exectionRaised = FALSE;
+            $this->_uit->create($conflictEvent, TRUE);
+        } catch (Calendar_Exception_AttendeeBusy $busyException) {
+            $fbData = $busyException->toArray();
+            $this->assertGreaterThanOrEqual(1, count($fbData['freebusyinfo']));
+            $this->assertArrayNotHasKey("description", $fbData['freebusyinfo'][0]['event'], 'testuser must not have access to event details');
+            $exectionRaised = TRUE;
+        }
+        if (! $exectionRaised) {
+            $this->fail('An expected exception has not been raised.');
+        }
+        $persitentConflictEvent = $this->_uit->create($conflictEvent, FALSE);
+
+        return $persitentConflictEvent;
+    }
+
     /**
      * resets all grants of personas calendars and deletes events from it
      */

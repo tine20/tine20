@@ -1258,6 +1258,8 @@ class Tinebase_FileSystem implements
         $transactionId = $transactionManager->startTransaction(Tinebase_Core::getDb());
 
         try {
+            $this->acquireWriteLock();
+
             try {
                 $node = $this->stat($oldPath);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
@@ -1335,6 +1337,13 @@ class Tinebase_FileSystem implements
             } catch (Tinebase_Exception_NotFound $tenf) {}
 
             $node = $this->_getTreeNodeBackend()->update($node, true);
+            $nodeObject = $this->_fileObjectBackend->get($node->object_id);
+            $updatedNodeObject = clone $nodeObject;
+            $updatedNodeObject->hash = Tinebase_Record_Abstract::generateUID();
+            Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($updatedNodeObject, 'update',
+                $nodeObject);
+            $this->_fileObjectBackend->update($updatedNodeObject);
+            $this->_updateDirectoryNodesHash($newPath);
 
             $transactionManager->commitTransaction($transactionId);
             $transactionId = null;
@@ -1867,10 +1876,12 @@ class Tinebase_FileSystem implements
      * @param  string|Tinebase_Model_Tree_Node  $_parentId
      * @param  string                           $_name
      * @param  string                           $_fileType
+     * @param  string                           $_mimeType
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Model_Tree_Node
      */
-    public function createFileTreeNode($_parentId, $_name, $_fileType = Tinebase_Model_Tree_FileObject::TYPE_FILE)
+    public function createFileTreeNode($_parentId, $_name, $_fileType = Tinebase_Model_Tree_FileObject::TYPE_FILE,
+        $_mimeType = null)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
@@ -1894,6 +1905,7 @@ class Tinebase_FileSystem implements
                 $object->is_deleted = 0;
                 $object->type = $_fileType;
                 $object->preview_count = 0;
+                $object->contenttype = $_mimeType;
                 $this->_fileObjectBackend->update($object);
                 //we can use _treeNodeBackend as we called get further up
                 $treeNode = $this->_treeNodeBackend->update($deletedNode);
@@ -1901,10 +1913,12 @@ class Tinebase_FileSystem implements
 
                 $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId : $this->get($parentId);
 
-                $fileObject = new Tinebase_Model_Tree_FileObject(array(
+                $fileObject = new Tinebase_Model_Tree_FileObject([
                     'type' => $_fileType,
-                    'contentytype' => null,
-                ));
+                ]);
+                if (null !== $_mimeType) {
+                    $fileObject->contenttype = $_mimeType;
+                }
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'create');
 
                 // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
@@ -1954,6 +1968,7 @@ class Tinebase_FileSystem implements
      * @param  resource $contents
      * @return array [hash, hashFilePath, Tinebase_FileSystem_AVScan_Result]
      * @throws Tinebase_Exception_NotImplemented
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function createFileBlob($contents)
     {
@@ -1971,7 +1986,7 @@ class Tinebase_FileSystem implements
         $hashDirectory = $this->_basePath . '/' . substr($hash, 0, 3);
         if (!file_exists($hashDirectory)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
-            if(mkdir($hashDirectory, 0700) === false) {
+            if (mkdir($hashDirectory, 0700) === false) {
                 throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
             }
         }
@@ -1980,8 +1995,11 @@ class Tinebase_FileSystem implements
         $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
         if (!file_exists($hashFile)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
-            rewind($handle);
             $hashHandle = fopen($hashFile, 'x');
+            if (! $hashHandle) {
+                throw new Tinebase_Exception_UnexpectedValue('failed to create hash file');
+            }
+            rewind($handle);
             stream_copy_to_stream($handle, $hashHandle);
             fclose($hashHandle);
 

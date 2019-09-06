@@ -157,17 +157,6 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
     }
     
     /**
-    * interceptor before add
-    *
-    * @param array $emailUserData
-    */
-    protected function _beforeAddOrUpdate(&$emailUserData)
-    {
-        unset($emailUserData[$this->_propertyMapping['emailForwards']]);
-        unset($emailUserData[$this->_propertyMapping['emailAliases']]);
-    }
-
-    /**
      * set email aliases and forwards
      * 
      * removes all aliases for user
@@ -185,6 +174,11 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
 
         if (!isset($_smtpSettings['id'])) {
             $_smtpSettings['id'] = $this->_db->lastInsertId();
+            if (!$_smtpSettings['id']) {
+                $row = $this->_getSelect()->where('userid = ?', $_smtpSettings['userid'])->query()
+                    ->fetch(Zend_Db::FETCH_ASSOC);
+                $_smtpSettings['id'] = $row['id'];
+            }
         }
 
         $this->_removeDestinations($_smtpSettings['id']);

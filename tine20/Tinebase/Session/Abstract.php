@@ -255,6 +255,12 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                 } else {
                     $sessionSavepath = $defaultSessionSavePath;
                 }
+
+                if (!ini_set('session.save_handler', 'files'))
+                {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " ini set didn´t work. session.save_handler = " . ini_get('session.save_handler'));
+                }
+
                 
                 $lastSessionCleanup = Tinebase_Config::getInstance()->get(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN);
                 if ($lastSessionCleanup instanceof DateTime && $lastSessionCleanup > Tinebase_DateTime::now()->subHour(2)) {

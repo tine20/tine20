@@ -230,6 +230,14 @@ class Addressbook_JsonTest extends TestCase
         }
         $this->assertTrue($found);
     }
+
+    public function testGetListWithAccountOnlyField()
+    {
+        $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
+        $list = $this->_uit->getList($adminListId);
+        self::assertTrue(isset($list['account_only']), 'account_only field missing from list ' . print_r($list, true));
+        self::assertEquals('1', $list['account_only']);
+    }
     
     /**
      * testSearchContactsByListValueNull
@@ -1873,8 +1881,6 @@ class Addressbook_JsonTest extends TestCase
 
         $this->assertTrue($allContactsWithoutTheTag['totalcount'] > 0);
         $this->assertEquals($allContacts['totalcount']-1, $allContactsWithoutTheTag['totalcount']);
-
-        $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
     }
     
     /**
@@ -2119,7 +2125,8 @@ Steuernummer 33/111/32212";
             'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
         ));
 
-        $this->assertEquals(array($contact['id']), $list['members'], 'members are not saved/returned in list: ' . print_r($list, true));
+        static::assertCount(1, $list['members'], 'expect one member');
+        $this->assertEquals($contact['id'], $list['members'][0]['id'], 'members are not saved/returned in list: ' . print_r($list, true));
         $this->assertTrue(isset($list['memberroles']), 'memberroles missing from list');
         $this->assertEquals(1, count($list['memberroles']), 'member roles are not saved/returned in list: ' . print_r($list, true));
         $this->assertTrue(isset($list['memberroles'][0]['list_role_id']['id']), 'list roles should be resolved');
@@ -2201,6 +2208,26 @@ Steuernummer 33/111/32212";
         }
     }
 
+    public function testAddNonAccountContactToList()
+    {
+        $contact = $this->_getContactData();
+        $newContact = $this->_uit->saveContact($contact);
+
+        // get admin list, try to add non-account-contact, expect exception
+        $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
+        $list = $this->_uit->getList($adminListId);
+        $list['members'][] = $newContact['id'];
+        try {
+            $updatedlist = $this->_uit->saveList($list);
+            self::fail('should throw exception - it is not allowed to add non-account contact to admin list! '
+                . print_r($updatedlist, true));
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            $translate = Tinebase_Translation::getTranslation('Addressbook');
+           self::assertEquals($translate->_('It is not allowed to add non-account contacts to this list'),
+               $teia->getMessage());
+        }
+    }
+
     public function testUpdateListWithRelation()
     {
         $list = $this->testCreateListWithMemberAndRole();
@@ -2228,12 +2255,12 @@ Steuernummer 33/111/32212";
     public function testUpdateListEmail()
     {
         $list = $this->testCreateListWithMemberAndRole();
-        $list['email'] = 'somelistemail@' . $this->_getMailDomain();
+        $list['email'] = 'somelistemail@' . TestServer::getPrimaryMailDomain();
         // client sends empty memberroles like that ...
         $list['memberroles'] = '';
         $updatedList = $this->_uit->saveList($list);
         self::assertEquals($list['email'], $updatedList['email']);
-        $updatedList['email'] = 'somelistemailupdated@' . $this->_getMailDomain();
+        $updatedList['email'] = 'somelistemailupdated@' . TestServer::getPrimaryMailDomain();
         $updatedListAgain = $this->_uit->saveList($updatedList);
         self::assertEquals($updatedList['email'], $updatedListAgain['email']);
     }
@@ -2257,7 +2284,7 @@ Steuernummer 33/111/32212";
         // try to overwrite it with jsmith
         $jsmith = Tinebase_User::getInstance()->getFullUserByLoginName('jsmith');
         Tinebase_Core::setUser($jsmith);
-        $list['email'] = Tinebase_Record_Abstract::generateUID(10) . '@' . $this->_getMailDomain();
+        $list['email'] = Tinebase_Record_Abstract::generateUID(10) . '@' . TestServer::getPrimaryMailDomain();
         try {
             $this->_uit->saveList($list);
             self::fail('jsmith should not be able to update the record');
@@ -2435,6 +2462,26 @@ Steuernummer 33/111/32212";
                 self::fail('empty lists should not be returned - list: ' . print_r($entry, true));
             }
         }
+    }
+
+    /**
+     * test with maillinglist
+     */
+    public function testSearchEmailAddresssWithMailinglist()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        $list = $this->_createMailinglist();
+        $result = $this->_uit->searchEmailAddresss([
+            ["condition" => "AND", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "email", "operator" => "equals", "value" => $list['email']]
+            ]]]
+            ]], []);
+
+        static::assertEquals(1, $result['totalcount'], 'no results found');
+        static::assertEquals($list['email'], $result['results'][0]['emails'][0]);
     }
 
     /**

@@ -32,6 +32,54 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
      */
     protected $_modelName = 'Felamimail_Model_Folder';
 
+
+    public static function releaseFolderLock($id)
+    {
+        $lockKey = 'FelamimailFolderLock#~#' . $id;
+        if (null !== ($lock = Tinebase_Core::getMultiServerLock($lockKey))) {
+            if ($lock->isLocked()) {
+                $lock->release();
+            }
+        }
+    }
+
+    public static function lockFolderInTransaction($id, $onlyTrans = true)
+    {
+        $transactionMgr = Tinebase_TransactionManager::getInstance();
+        if (!$onlyTrans || $transactionMgr->hasOpenTransactions()) {
+            $lockKey = 'FelamimailFolderLock#~#' . $id;
+            if (null !== ($lock = Tinebase_Core::getMultiServerLock($lockKey))) {
+                if (!$lock->isLocked() && $lock->tryAcquire()) {
+                    if ($onlyTrans) {
+                        $transactionMgr->registerAfterCommitCallback(
+                            function ($lockKey) {
+                                Tinebase_Core::releaseMultiServerLock($lockKey);
+                            },
+                            [$lockKey]
+                        );
+
+                        $transactionMgr->registerOnRollbackCallback(
+                            function ($lockKey) {
+                                Tinebase_Core::releaseMultiServerLock($lockKey);
+                            },
+                            [$lockKey]
+                        );
+                    }
+                    return true;
+                } elseif (!$lock->isLocked()) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not lock lock');
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not get lock');
+            }
+        }
+        // this true is for installations that dont support proper locking!
+        return true;
+    }
+
     /**
      * get folder cache counter like total and unseen
      *  
@@ -41,6 +89,8 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     public function getFolderCounter($_folderId)
     {
         $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+
+        static::lockFolderInTransaction($folderId);
         
         // fetch total count
         $select = $this->_db->select()
@@ -77,27 +127,27 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
             'cache_unreadcount' => $totalCount - $seenCount
         );
     }
-    
+
     /**
      * try to lock a folder
-     * 
+     *
      * @param  Felamimail_Model_Folder  $_folder  the folder to lock
      * @return bool  true if locking was successful, false if locking was not possible
      */
     public function lockFolder(Felamimail_Model_Folder $_folder)
     {
         $folderData = $_folder->toArray();
-        
+
         $data = array(
             'cache_timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'cache_status'    => Felamimail_Model_Folder::CACHE_STATUS_UPDATING
         );
-        
+
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $folderData['id']),
             $this->_db->quoteInto($this->_db->quoteIdentifier('cache_status') . ' = ?', $folderData['cache_status']),
         );
-        
+
         if (!empty($folderData['cache_timestamp'])) {
             $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('cache_timestamp') . ' = ?', $folderData['cache_timestamp']);
         }
@@ -107,22 +157,24 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         } catch (PDOException $pdoe) {
             return false;
         }
-        
+
         if ($affectedRows !== 1) {
             return false;
         }
-        
+
         return true;
     }
     
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Interface $_record
+     * @param  Felamimail_Model_Folder $_record
      * @return array
      */
     protected function _recordToRawData(Tinebase_Record_Interface $_record)
     {
+        static::lockFolderInTransaction($_record->getId());
+
         $result = parent::_recordToRawData($_record);
 
         // don't write this value as it requires a schema update
@@ -155,7 +207,9 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         if (empty($_counters)) {
             return $folder; // nothing todo
         }
-        
+
+        static::lockFolderInTransaction($folder->getId());
+
         $data = array();
         foreach ($_counters as $counter => $value) {
             if ($value{0} == '+' || $value{0} == '-') {

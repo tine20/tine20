@@ -247,15 +247,21 @@ class Tinebase_Core
         // NOTE: we put the request in the registry here - should be kept in mind when we implement more
         //       middleware pattern / expressive functionality as each handler might create a new request / request is modified
         $request = self::getRequest();
+
+        // we need to initialize sentry at the very beginning to catch ALL errors
+        $ravenClient = self::setupSentry();
         
         // check transaction header
         if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
             $transactionId = $request->getHeaders()->get('X-TINE20-TRANSACTIONID')->getFieldValue();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Client transaction $transactionId");
-            Tinebase_Log_Formatter::setPrefix(substr($transactionId, 0, 5));
+            Tinebase_Log_Formatter::setTransactionId(substr($transactionId, 0, 5));
+            if ($ravenClient) {
+                $ravenClient->tags['transaction_id'] = $transactionId;
+            }
         }
-        
+
         $server = self::getDispatchServer($request);
         
         $server->handle($request);
@@ -2062,7 +2068,8 @@ class Tinebase_Core
     public static function inMaintenanceMode()
     {
         $config = self::getConfig();
-        return !empty($config->{Tinebase_Config::MAINTENANCE_MODE});
+        $mode = $config->{Tinebase_Config::MAINTENANCE_MODE};
+        return !( empty($mode) || $mode === 'off');
     }
 
     /**
@@ -2246,12 +2253,18 @@ class Tinebase_Core
 
     /**
      * setup sentry Raven_Client
+     *
+     * @return Raven_Client
      */
     public static function setupSentry()
     {
+        if (self::isRegistered('SENTRY')) {
+            return self::getSentry();
+        }
+
         $sentryServerUri = Tinebase_Config::getInstance()->get(Tinebase_Config::SENTRY_URI);
         if (! $sentryServerUri) {
-            return;
+            return null;
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
@@ -2276,6 +2289,8 @@ class Tinebase_Core
         $error_handler->registerShutdownFunction();
 
         self::set('SENTRY', $client);
+
+        return $client;
     }
 
     /**

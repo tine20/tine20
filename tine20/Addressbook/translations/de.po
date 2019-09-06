@@ -807,6 +807,9 @@ msgstr "Externe E-Mails weiterleiten"
 msgid "Only forward member mails"
 msgstr "Nur E-Mails von Gruppenmitgliedern weiterleiten"
 
+msgid "Only forward to system email accounts"
+msgstr "E-Mails nur an Nutzer mit Systemkonto verteilen"
+
 #: js/StructurePanel.js:57
 msgid "Select record to see its details"
 msgstr "Eintrag auswählen um Details zu sehen"

@@ -464,4 +464,12 @@ abstract class Tinebase_Model_Filter_Abstract
     {
         $this->_parent = $_parent;
     }
+
+    /**
+     * @return Tinebase_Model_Filter_FilterGroup $_parent
+     */
+    public function getParent()
+    {
+        return $this->_parent;
+    }
 }

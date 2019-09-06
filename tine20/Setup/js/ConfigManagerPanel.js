@@ -136,7 +136,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             listWidth: 300,
             mode: 'local',
             forceSelection: true,
-            allowEmpty: false,
+            allowBlank: false,
             triggerAction: 'all',
             editable: false,
             tabIndex: this.getTabIndex

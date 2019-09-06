@@ -85,7 +85,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     if (! this.asAdminModule) {
                         item.hide();
                     } else {
-                        item.setDisabled(this.record.get('type') != 'userInternal');
+                        item.setDisabled(this.record.get('type') == 'shared');
                     }
                     break;
                 case 'signature':
@@ -100,11 +100,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(this.record.id);
                     break;
                 case 'password':
-                    // TODO make it work consistently
-                    item.setDisabled(! (this.record.get('type') == 'shared' || this.record.get('type') == 'user'));
+                    item.setDisabled(! (
+                        !this.record.get('type') || this.record.get('type') == 'shared' || this.record.get('type') == 'user')
+                    );
                     break;
                 case 'user':
-                    item.setDisabled(! (this.record.get('type') == 'userInternal' || this.record.get('type') == 'user'));
+                    item.setDisabled(! (
+                        !this.record.get('type') || this.record.get('type') == 'userInternal' || this.record.get('type') == 'user')
+                    );
                     break;
                 case 'host':
                 case 'port':
@@ -200,11 +203,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('User'),
                             useAccountRecord: true,
                             name: 'user_id',
-                            allowEmpty: true
+                            allowBlank: true
                             // TODO user selection for system accounts should fill in the values!
                         }), {
                             fieldLabel: this.app.i18n._('Account Type'),
                             name: 'type',
+                            hidden: ! this.asAdminModule,
                             typeAhead: false,
                             triggerAction: 'all',
                             lazyRender: true,
@@ -420,25 +424,29 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'sent_folder',
                     xtype: 'felamimailfolderselect',
                     account: this.record,
-                    maxLength: 64
+                    maxLength: 64,
+                    value: 'Sent'
                 }, {
                     fieldLabel: this.app.i18n._('Trash Folder Name'),
                     name: 'trash_folder',
                     xtype: 'felamimailfolderselect',
                     account: this.record,
-                    maxLength: 64
+                    maxLength: 64,
+                    value: 'Trash'
                 }, {
                     fieldLabel: this.app.i18n._('Drafts Folder Name'),
                     name: 'drafts_folder',
                     xtype: 'felamimailfolderselect',
                     account: this.record,
-                    maxLength: 64
+                    maxLength: 64,
+                    value: 'Drafts'
                 }, {
                     fieldLabel: this.app.i18n._('Templates Folder Name'),
                     name: 'templates_folder',
                     xtype: 'felamimailfolderselect',
                     account: this.record,
-                    maxLength: 64
+                    maxLength: 64,
+                    value: 'Templates'
                 }, {
                     fieldLabel: this.app.i18n._('Display Format'),
                     name: 'display_format',
@@ -518,8 +526,24 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRequestFailed: function(exception) {
         this.saving = false;
-        Tine.Felamimail.handleRequestException(exception);
-        this.loadMask.hide();
+        this.hideLoadMask();
+
+        // TODO if code == 600 -> open new Tine.Tinebase.widgets.dialog.PasswordDialog to set imap password field
+        if (exception.code === 600) {
+            var me = this,
+                dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
+                windowTitle: this.app.i18n._('E-Mail account needs a password')
+            });
+            dialog.openWindow();
+
+            // password entered
+            dialog.on('apply', function (password) {
+                me.getForm().findField('password').setValue(password);
+                me.onApplyChanges(true);
+            });
+        } else {
+            Tine.Felamimail.handleRequestException(exception);
+        }
     },
 
     getGrantsColumns: function() {

@@ -24,14 +24,6 @@
           "path": "js/"
         },
         {
-          "text": "CallForwardPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "LineGridPanel.js",
-          "path": "js/Snom/"
-        },
-        {
           "text": "SoftwareGridPanel.js",
           "path": "js/Snom/"
         },

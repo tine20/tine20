@@ -1826,4 +1826,24 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Tinebase_Notification::getInstance()->send(null, array($recipient), $messageSubject, $messageBody);
         return 0;
     }
+
+    /**
+     * Delete duplicate personal container without content.
+     *
+     * e.g. php tine20.php --method=Tinebase.duplicatePersonalContainerCheck app=Addressbook.
+     *
+     * @param $opts
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_SystemContainer
+     */
+    public function duplicatePersonalContainerCheck($opts)
+    {
+
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($opts, array('app'));
+
+        Tinebase_Container::getInstance()->deleteDuplicateContainer($args['app'], $opts->d);
+    }
 }

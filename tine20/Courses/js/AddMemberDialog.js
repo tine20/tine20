@@ -88,7 +88,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.getForm().loadRecord(this.record);
         
-        this.loadMask.hide();
+        this.hideLoadMask();
         
         this.getForm().findField('accountFirstName').focus(true, 100);
     },
@@ -107,7 +107,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 Tine.log.debug('Tine.Courses.CourseEditDialog::onMembersImport');
                 Tine.log.debug(arguments);
                 
-                this.loadMask.hide();
+                this.hideLoadMask();
                 
                 if (response) {
                     this.fireEvent('update', response);

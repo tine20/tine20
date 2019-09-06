@@ -906,19 +906,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             } catch (Addressbook_Exception_NotFound $aenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) /** @noinspection PhpUndefinedMethodInspection */
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' User not found in Addressbook: ' . $user->accountDisplayName);
+                        . ' User not found in Addressbook: ' . $user->accountDisplayName);
             }
         }
-        
+
         try {
             $persistentFilters = Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters();
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " Failed to fetch persistent filters. Exception: \n". $tenf);
+                . " Failed to fetch persistent filters. Exception: \n" . $tenf);
             $persistentFilters = array();
-        }  catch (Exception $e) {
+        } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " Failed to fetch persistent filters. Exception: \n". $e);
+                . " Failed to fetch persistent filters. Exception: \n" . $e);
             $persistentFilters = array();
         }
 
@@ -926,7 +926,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
         $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
         $smtpConfig = $manageSmtpEmailUser ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
-        
+
         $userRegistryData = array(
             'accountBackend' => Tinebase_User::getConfiguredBackend(),
             'areaLocks' => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
@@ -948,10 +948,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'primarydomain' => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains' => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
         );
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' User registry: ' . print_r($userRegistryData, TRUE));
-        
+
         return $userRegistryData;
     }
 
@@ -986,13 +986,35 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             foreach ($userApplications as $application) {
                 $appRegistry = $this->_getAppRegistry($application, $clientConfig, $allImportDefinitions);
+
+                $this->_logRegistrySize($appRegistry, $application->name);
+
                 $registryData[$application->name] = $appRegistry;
             }
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Total registry size: ' . strlen(json_encode($registryData)));
         
         return $registryData;
+    }
+
+    protected function _logRegistrySize($appRegistry, $appName)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            $total = 0;
+            foreach ($appRegistry as $key => $value) {
+                $size = strlen(json_encode($value));
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Size of registry key ' . $key . ': ' . $size);
+                $total += $size;
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' App ' . $appName . ' total size: ' . $total);
+        }
+
     }
 
     /**

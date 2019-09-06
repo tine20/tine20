@@ -66,6 +66,19 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     );
 
     /**
+     * converts record into raw data for adapter
+     *
+     * @param  Felamimail_Model_Message $_record
+     * @return array
+     */
+    protected function _recordToRawData(Tinebase_Record_Interface $_record)
+    {
+        Felamimail_Backend_Folder::lockFolderInTransaction($_record->folder_id);
+
+        return parent::_recordToRawData($_record);
+    }
+
+    /**
      * Search for records matching given filter
      *
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter

@@ -465,6 +465,23 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->searchNodes(array(), array());
         $this->_assertRootNodes($result);
     }
+
+    public function testCreateEmptyNodeWithContentType()
+    {
+        $containerName = 'testcontainer';
+        $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $containerName . '/someEmptyTestFile';
+
+        $folderNode = $this->testCreateContainerNodeInPersonalFolder($containerName);
+
+        $result = $this->_getUit()->createNodes($testPath, 'myContentType', array(), false);
+        $createdNode = $result[0];
+
+        static::assertTrue(isset($createdNode['name']));
+        static::assertEquals('someEmptyTestFile', $createdNode['name']);
+        static::assertEquals(strtolower('myContentType'), $createdNode['contenttype']);
+        static::assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
+    }
     
     /**
      * create container in personal folder
@@ -1464,6 +1481,18 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->moveNodes($children[0], $target, false);
         $this->assertEquals(1, count($result));
         $this->assertEquals('dir1', $result[0]['name'], print_r($result[0], true));
+    }
+
+    public function testMoveFolderToRenameIt()
+    {
+        $orgFolder = $this->testCreateContainerNodeInPersonalFolder();
+
+        sleep(1);
+        $result = $this->_getUit()->moveNodes($orgFolder['path'], [$orgFolder['path'] . 'foo'], false);
+
+        static::assertNotSame($orgFolder['hash'], $result[0]['hash'], 'hash did not change');
+        static::assertNotSame($orgFolder['last_modified_time'], $result[0]['last_modified_time'],
+            'last_modified_date did not change');
     }
 
     /**

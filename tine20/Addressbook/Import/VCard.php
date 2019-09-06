@@ -8,7 +8,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Yann Le Moigne <segfaultmaker@gmail.com>
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 require_once 'vcardphp/vcard.php';
@@ -35,7 +35,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         'updateMethod'      => 'update',
         'createMethod'      => 'create',
         'model'             => '',
-        'urlIsHome'            => 0,
+        'urlIsHome'         => 0,
         'mapNicknameToField'=> '',
         'useStreamFilter'   => FALSE,
         'shared_tags'       => 'create', //'onlyexisting',
@@ -217,25 +217,30 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                     }
                 }
                 $data[$key] = $property->value;
-                
-                //$data['tel_assistent'] = ''; //RFC has *a lot* of type, but not this one ^^
             }
         }
         
         if ($card->getProperty('EMAIL')) {
             $properties = $card->getProperties('EMAIL');
-            foreach($properties as $property){
+            foreach ($properties as $property){
                 // types available from RFC (custom allowed): "internet", "x400", "pref"
                 // home and work are commons, so we manage them
                 $types = $property->params['TYPE'];
                 
                 $key = 'email';
-                if($types){
-                    if(Tinebase_Helper::in_array_case($types, 'home')){
+                if ($types){
+                    if (Tinebase_Helper::in_array_case($types, 'home')){
                         $key = 'email_home';    
                     }
                 }
                 $data[$key] = $property->value;
+            }
+            // NOTE we put the email address in the main email field if only email_home is set
+            // some addressbook providers (like roundcube) always export the mail email to email_home
+            // TODO we should add an import option for this behavior
+            if (! isset($data['email'])) {
+                $data['email'] = $data['email_home'];
+                $data['email_home'] = null;
             }
         }
         

@@ -50,7 +50,7 @@ class Admin_JsonTest extends TestCase
 
         $this->objects['user'] = TestCase::getTestUser([
             'accountLoginName'      => 'phpunitadminjson',
-            'accountEmailAddress'   => 'phpunitadminjson@' . $this->_getMailDomain(),
+            'accountEmailAddress'   => 'phpunitadminjson@' . TestServer::getPrimaryMailDomain(),
         ]);
 
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -69,6 +69,7 @@ class Admin_JsonTest extends TestCase
         ));
 
         $this->objects['addedUsers'] = [];
+        $this->objects['emailAccounts'] = [];
     }
     
     protected function tearDown()
@@ -76,6 +77,14 @@ class Admin_JsonTest extends TestCase
         foreach ($this->objects['addedUsers'] as $user) {
             try {
                 Tinebase_User::getInstance()->deleteUser($user['accountId']);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // already removed
+            }
+        }
+
+        foreach ($this->objects['emailAccounts'] as $account) {
+            try {
+                $this->_json->deleteEmailAccounts([$account->getId()]);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // already removed
             }
@@ -1453,17 +1462,21 @@ class Admin_JsonTest extends TestCase
         $userArray = $this->testSaveAccount();
 
         Admin_Controller_User::getInstance()->setAccountStatus($userArray['accountId'], Tinebase_Model_User::ACCOUNT_STATUS_DISABLED);
+        $savedGroup = $this->_saveGroup($userArray);
 
-        // save group
+        // check group memberships
+        $this->assertEquals(1, $savedGroup['members']['totalcount']);
+    }
+
+    protected function _saveGroup($userArray, $additionalData = [])
+    {
         $group = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup');
         $groupArray = $this->_json->getGroup($group->getId());
         $this->assertEquals(1, $groupArray['members']['totalcount']);
         $groupArray['container_id'] = $groupArray['container_id']['id'];
         $groupArray['members'] = array($userArray['accountId']);
-        $savedGroup = $this->_json->saveGroup($groupArray);
-
-        // check group memberships
-        $this->assertEquals(1, $savedGroup['members']['totalcount']);
+        $groupArray = array_merge($groupArray, $additionalData);
+        return $this->_json->saveGroup($groupArray);
     }
 
     /**
@@ -1476,17 +1489,17 @@ class Admin_JsonTest extends TestCase
         $userArray['lastLoginFailure'] = Tinebase_DateTime::now()->toString();
         $userArray['loginFailures'] = 10;
 
-        // save group
-        // TODO generalize
-        $group = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup');
-        $groupArray = $this->_json->getGroup($group->getId());
-        $this->assertEquals(1, $groupArray['members']['totalcount']);
-        $groupArray['container_id'] = $groupArray['container_id']['id'];
-        $groupArray['members'] = array($userArray['accountId']);
-        $savedGroup = $this->_json->saveGroup($groupArray);
+        $savedGroup = $this->_saveGroup($userArray);
 
         // check group memberships
         $this->assertEquals(1, $savedGroup['members']['totalcount']);
+    }
+
+    public function testAccountOnlyGroup()
+    {
+        $userArray = $this->testSaveAccount();
+        $savedGroup = $this->_saveGroup($userArray, ['account_only' => 0]);
+        self::assertEquals('0', $savedGroup['account_only']);
     }
 
     /**
@@ -1620,7 +1633,7 @@ class Admin_JsonTest extends TestCase
             'name',
             'email',
             true,
-            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . $this->_getMailDomain()]
+            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . TestServer::getPrimaryMailDomain()]
         );
         self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
 
@@ -1642,7 +1655,8 @@ class Admin_JsonTest extends TestCase
 
         $this->_uit = $this->_json;
         $accountdata = [
-            'email' => 'shooo@' . $this->_getMailDomain(),
+            'name' => 'unittest shared account',
+            'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
             'grants' => [
@@ -1678,6 +1692,8 @@ class Admin_JsonTest extends TestCase
 
         if ($delete) {
             $this->_uit->deleteEmailAccounts($account->getId());
+        } else {
+            $this->objects['emailAccounts'][] = $account;
         }
 
         return $account;
@@ -1695,6 +1711,20 @@ class Admin_JsonTest extends TestCase
         }
     }
 
+    public function testSearchSharedAccountsInFelamimailJsonRegistryData()
+    {
+        $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
+        $fmailJson = new Felamimail_Frontend_Json();
+        $result = $fmailJson->getRegistryData();
+        self::assertGreaterThan(1, $result['accounts']['totalcount']);
+
+        $sharedAccounts = array_filter($result['accounts']['results'], function($account) use ($sharedAccount) {
+            return $account['email'] === $sharedAccount->email;
+        });
+        self::assertEquals(1, count($sharedAccounts), 'shared account could not be found: '
+            . print_r($result['accounts'], true));
+    }
+
     public function testUpdateSystemAccount()
     {
         if (! TestServer::isEmailSystemAccountConfigured()) {
@@ -1706,7 +1736,7 @@ class Admin_JsonTest extends TestCase
             self::markTestSkipped('no systemaccount configured');
         }
         $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
-        $systemaccountArray['reply_to'] = 'someotheraddress@' . $this->_getMailDomain();
+        $systemaccountArray['reply_to'] = 'someotheraddress@' . TestServer::getPrimaryMailDomain();
 
         // js fe sends credentials_id fields as empty string ...
         $systemaccountArray['credentials_id'] = '';
@@ -1744,7 +1774,7 @@ class Admin_JsonTest extends TestCase
 
         $this->_uit = $this->_json;
         $accountdata = [
-            'email' => 'shooo@' . $this->_getMailDomain(),
+            'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
         ];
@@ -1767,7 +1797,7 @@ class Admin_JsonTest extends TestCase
 
         $this->_uit = $this->_json;
         $accountdata = [
-            'email' => 'shooo@' . $this->_getMailDomain(),
+            'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
             'password' => '123',
         ];

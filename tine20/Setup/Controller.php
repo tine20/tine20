@@ -2082,9 +2082,10 @@ class Setup_Controller
      * delete list of applications
      *
      * @param array $_applications list of application names
+     * @param array $_options
      * @throws Tinebase_Exception
      */
-    public function uninstallApplications($_applications)
+    public function uninstallApplications($_applications, $_options = [])
     {
         try {
             $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
@@ -2143,7 +2144,8 @@ class Setup_Controller
 
         foreach ($applications as $name => $xml) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($name);
-            $this->_uninstallApplication($app);
+            $this->_uninstallApplication($app, false, isset($_options[self::INSTALL_NO_REPLICATION_SLAVE_CHECK]) ?
+                $_options[self::INSTALL_NO_REPLICATION_SLAVE_CHECK] : false);
         }
 
         if (true === $deactivatedForeignKeyCheck) {
@@ -2422,12 +2424,12 @@ class Setup_Controller
      * @param Tinebase_Model_Application $_application
      * @throws Setup_Exception
      */
-    protected function _uninstallApplication(Tinebase_Model_Application $_application, $uninstallAll = false)
+    protected function _uninstallApplication(Tinebase_Model_Application $_application, $uninstallAll = false, $noSlaveCheck = false)
     {
         if ($this->_backend === null) {
             throw new Setup_Exception('No setup backend available');
         }
-        if (Setup_Core::isReplicationSlave()) {
+        if (!$noSlaveCheck && Setup_Core::isReplicationSlave()) {
             throw new Setup_Exception('Replication slaves can not uninstall an app');
         }
         

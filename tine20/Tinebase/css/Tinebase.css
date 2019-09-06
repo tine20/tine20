@@ -540,9 +540,10 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     background-size: 16px 16px;
 }
 
+.x-btn-image.tine-favicon,
 span .x-tab-strip-text.tine-favicon {
     background-position-y: 2px !important;
-    background-size: 15px 15px;
+    background-size: 15px 15px !important;
 }
 
 .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top {
@@ -562,26 +563,41 @@ span .x-tab-strip-text.tine-favicon {
 }
 */
 
-.tine-mainscreen-apptabspanel-menu-tabel .x-tab-left {
-    background-image: url(../../images/tabs_sprite_slope_right.gif);
-    padding-right: 24px;
-}
+/*.tine-mainscreen-apptabspanel-menu-tabel .x-tab-left {*/
+/*    background-image: url(../../images/tabs_sprite_slope_right.gif);*/
+/*    padding-right: 24px;*/
+/*}*/
 
-.tine-mainscreen-apptabspanel-menu-tabel {
-    margin-right: -10px;
-}
+/*.tine-mainscreen-apptabspanel-menu-tabel {*/
+/*    margin-right: -10px;*/
+/*}*/
 
-.x-tab-strip .tine-mainscreen-apptabspanel-menu-tabel span.x-tab-strip-text {
-    padding-right: 10px;
-}
+/*.x-tab-strip .tine-mainscreen-apptabspanel-menu-tabel span.x-tab-strip-text {*/
+/*    padding-right: 10px;*/
+/*}*/
 
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close,
 .x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel a.x-tab-strip-close:hover {
     background-image:url("../../images/icon-set/icon_arrow_full_down.svg");
     background-size: 11px 11px;
     top: 5px;
-    right: 19px;
+    /*right: 19px;*/
 }
+
+.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel span.x-tab-strip-text:hover,
+.x-tab-strip-active li.tine-mainscreen-apptabspanel-menu-tabel span.x-tab-strip-text {
+    color: #000000;
+    font-weight: normal;
+}
+
+ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel {
+    background-color: #D9DFD7;
+}
+
+ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
+    background-color: #C3CED8;
+}
+
 
 /* ----- appchooser panel-----------------------------------------------------*/
 .app-panel-title {
@@ -967,18 +983,22 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 
 .x-btn.x-btn-icon .x-tbar-page-first {
     background: url(../../images/icon-set/icon_arrow_back_last.svg) !important;
+    background-size: cover !important;
 }
 
 .x-btn.x-btn-icon .x-tbar-page-prev {
     background: url(../../images/icon-set/icon_arrow_left.svg) !important;
+    background-size: cover !important;
 }
 
 .x-btn.x-btn-icon .x-tbar-page-last {
     background: url(../../images/icon-set/icon_arrow_action_last.svg) !important;
+    background-size: cover !important;
 }
 
 .x-btn.x-btn-icon .x-tbar-page-next  {
     background: url(../../images/icon-set/icon_arrow_right.svg) !important;
+    background-size: cover !important;
 }
 
 .x-cols-icon {
@@ -996,6 +1016,27 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     position: absolute;
     width: 16px;
     height: 16px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.x-btn-medium.x-btn-icon-medium-top .x-btn-arrow .x-btn-image {
+    margin-left: -5px;
+}
+
+.x-btn-medium.x-btn-icon-medium-top .x-btn-split .x-btn-image {
+    margin-left: -7px;
+}
+
+.x-btn-medium.x-btn-icon-medium-top .x-btn-image {
+    background-repeat: no-repeat;
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: 29px 29px;
+    background-position-x: center;
 }
 
 /* loading animations */
@@ -1012,6 +1053,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .x-tree-node-loading .x-tree-node-icon,
 .x-mask-wait,
 .x-btn-wait + div,
+div.x-btn-wait,
 .x-item-disabled .x-tbar-loading + div,
 .x-item-disabled .x-tbar-loading {
     animation-name: loading-animation;
@@ -1036,6 +1078,8 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 
 .x-tree-node-loading .x-tree-node-icon,
 .x-item-disabled .x-tbar-loading + div,
+.x-item-disabled div.x-tbar-loading,
+div.x-btn-wait,
 .x-btn-wait + div {
     width: 12px;
     height: 12px;
@@ -1047,6 +1091,8 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .tine-viewport-waitcycle,
 .x-mask-wait,
 .x-item-disabled .x-tbar-loading + div,
+.x-item-disabled div.x-tbar-loading,
+div.x-btn-wait,
 .x-btn-wait + div {
     box-sizing: border-box;
     border: 2px solid #ccc !important;

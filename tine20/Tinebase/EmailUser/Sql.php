@@ -111,23 +111,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
     }
-    
-    /**
-     * get new email user
-     * 
-     * @param  Tinebase_Model_FullUser   $_user
-     * @return Tinebase_Model_EmailUser
-     */
-    public function getNewUser(Tinebase_Model_FullUser $_user)
-    {
-        $result = new Tinebase_Model_EmailUser(array(
-            'emailUserId'     => $_user->getId(),
-            'emailUsername' => $this->_appendDomain($_user->accountLoginName)
-        ));
-        
-        return $result;
-    }
-    
+
     /**
     * delete user by id
     *
@@ -347,6 +331,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         } catch (Zend_Db_Statement_Exception $zdse) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while creating email user: ' . $zdse);
+            throw $zdse;
         }
     }
     
@@ -444,7 +429,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         } catch (Zend_Db_Statement_Exception $zdse) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user');
-            Tinebase_Exception::log($zdse);
+            throw $zdse;
         }
     }
     

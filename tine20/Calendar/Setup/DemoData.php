@@ -139,7 +139,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 true);
         }
     }
-    
+
+    public function getSharedCalendar()
+    {
+        return $this->sharedCalendar;
+    }
+
     /**
      * creates a shared calendar
      */

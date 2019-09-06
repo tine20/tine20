@@ -29,9 +29,9 @@ class Tinebase_Log_Formatter_JsonTest extends Tinebase_Log_Formatter_AbstractTes
         self::assertEquals('test logging', $logData['message'], print_r($logData, true));
         self::assertEquals(5, $logData['priority'], print_r($logData, true));
         self::assertTrue(isset($logData['user']));
-        self::assertTrue(isset($logData['log_id']));
+        self::assertTrue(isset($logData['request_id']));
         self::assertEquals(Tinebase_Core::getUser()->accountLoginName, $logData['user'], print_r($logData, true));
-        self::assertEquals($formatter::getPrefix(), $logData['log_id']);
+        self::assertEquals($formatter::getRequestId(), $logData['request_id']);
 
         $this->_logger->notice("test logging");
         $loggerLines = file_get_contents($this->_logfile);

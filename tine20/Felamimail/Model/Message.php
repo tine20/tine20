@@ -14,6 +14,7 @@
  * 
  * @package     Felamimail
  * @subpackage  Model
+ * @property    string  $account_id         the account id
  * @property    string  $folder_id          the folder id
  * @property    string  $original_id        cache id of original message if replying / forwarding
  * @property    string  $subject            the subject of the email

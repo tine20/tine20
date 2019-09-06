@@ -311,7 +311,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRender: function (ct, position) {
         Tine.Felamimail.MessageEditDialog.superclass.onRender.call(this, ct, position);
-        this.loadMask.show();
+        this.showLoadMask();
     },
 
     isRendered: function () {
@@ -819,7 +819,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.window.close();
                 },
                 failure: Tine.Felamimail.handleRequestException.createInterceptor(function () {
-                        this.loadMask.hide();
+                        this.hideLoadMask();
                     }, this
                 ),
                 timeout: 150000 // 3 minutes
@@ -1020,7 +1020,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onAfterRecordLoad: function () {
         if (this.loadMask) {
-            this.loadMask.hide();
+            this.hideLoadMask();
         }
     },
 
@@ -1459,7 +1459,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     if (button == 'yes') {
                         me.onApplyChanges(closeWindow, emptySubject, passwordSet, false);
                     } else {
-                        this.loadMask.hide();
+                        this.hideLoadMask();
                     }
                 },
                 this
@@ -1488,7 +1488,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
                 // user presses cancel in dialog => allow to submit again or edit mail and so on!
                 dialog.on('cancel', function () {
-                    this.loadMask.hide();
+                    this.hideLoadMask();
                 }, this);
                 return;
             }
@@ -1504,7 +1504,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     if (button == 'yes') {
                         this.onApplyChanges(closeWindow, true, true, nonSystemAccountRecipients);
                     } else {
-                        this.loadMask.hide();
+                        this.hideLoadMask();
                     }
                 },
                 this

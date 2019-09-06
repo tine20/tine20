@@ -489,4 +489,34 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
 
         $ct->tearDown();
     }
+
+    public function testSearchAttenderInResourceContainer()
+    {
+        // create event with resource
+        $resource = $this->testCreateResource();
+        $ct = new Calendar_Controller_EventTests();
+        $ct->setUp();
+        $event = $ct->_getEvent(true);
+        $event->location = $resource->name;
+        $scleverContactId = $this->_personas['sclever']->contact_id;
+        $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'   => $resource->getId()
+            ], [
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => $scleverContactId
+            ]]);
+        $createdEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+
+        $result = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'in', 'value' => ['path' => '/shared/' . $resource->container_id]],
+            ['field' => 'attender',     'operator' => 'in', 'value' => [['user_type' => 'user', 'user_id' => $scleverContactId]]]
+        ]));
+
+        $this->assertEquals(1, $result->count(), 'expect to find one event');
+        $this->assertSame($createdEvent->getId(), $result->getFirstRecord()->getId());
+
+        $ct->tearDown();
+    }
 }

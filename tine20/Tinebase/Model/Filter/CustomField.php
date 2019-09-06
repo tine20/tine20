@@ -282,15 +282,21 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                         foreach ($result['value']['value'] as $key => $subfilter) {
                             if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value']) &&
                                 is_string($subfilter['value'])) {
-                                $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                                try {
+                                    $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                                } catch (Tinebase_Exception_NotFound $tenf) {
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                        __METHOD__ . '::' . __LINE__ . ' Record not found: ' . $tenf->getMessage());
+                                    unset($result['value']['value'][$key]);
+                                }
                             }
                         }
-
                     } else {
                         // TODO do we need to do something in this case?
                     }
                 } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                        __METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
                     Tinebase_Exception::log($e);
                 }
             } else if (is_array($result['value']['value'])) {

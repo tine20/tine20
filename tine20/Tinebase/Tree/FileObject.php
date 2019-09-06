@@ -322,6 +322,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             }
 
         } else {
+
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ? AND ' .
                     $this->_db->quoteIdentifier('revision') . ' = ' . (int)$data['revision'], $_record->getId()),

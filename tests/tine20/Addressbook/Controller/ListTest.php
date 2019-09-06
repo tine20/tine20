@@ -144,7 +144,19 @@ class Addressbook_Controller_ListTest extends TestCase
             'members'      => array($this->objects['contact1'], $this->objects['contact2']),
         ));
     }
-    
+
+    protected function tearDown()
+    {
+        foreach ([$this->objects['contact1'], $this->objects['contact2']] as $contact) {
+            try {
+                Addressbook_Controller_Contact::getInstance()->delete([$contact->getId()]);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
+        }
+
+        parent::tearDown();
+    }
+
     /**
      * try to add a list
      * 
@@ -167,10 +179,12 @@ class Addressbook_Controller_ListTest extends TestCase
             self::markTestSkipped('imap systemaccount config required');
         }
 
+        $this->_testNeedsTransaction();
+
         if (empty(Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
             Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
         }
-        $domain = $this->_getMailDomain();
+        $domain = TestServer::getPrimaryMailDomain();
         $accountCtrl = Felamimail_Controller_Account::getInstance();
         
         $this->objects['initialList']->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
@@ -208,9 +222,10 @@ class Addressbook_Controller_ListTest extends TestCase
         ]))->getFirstRecord();
         static::assertNull($account, 'account was not deleted');
 
+        $this->_listsToDelete[] = $list;
+
         return $list;
     }
-
 
     public function testChangeListEmailToAlreadyUsed()
     {
@@ -328,8 +343,15 @@ class Addressbook_Controller_ListTest extends TestCase
         $listGetMultiple = $this->_instance->getMultiple(array($list->getId()))->getFirstRecord();
         foreach (array('get' => $listGet, 'search' => $listSearch, 'getMultiple' => $listGetMultiple) as $fn => $listRecord) {
             $this->assertTrue($listRecord instanceof Addressbook_Model_List, $fn . ' did not return a list: ' . var_export($listRecord, TRUE));
-            $this->assertEquals(0, count($listRecord->members), 'Hidden sclever should not appear in list members returned by ' . $fn
-                . '(): ' . print_r($listRecord->toArray(), TRUE));
+            if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_MAILINGLIST)) {
+                $this->assertEquals(1, count($listRecord->members),
+                    'Hidden sclever should appear in list members returned by ' . $fn. '(): ' .
+                    print_r($listRecord->toArray(), true));
+            } else {
+                $this->assertEquals(0, count($listRecord->members),
+                    'Hidden sclever should not appear in list members returned by ' . $fn. '(): ' .
+                    print_r($listRecord->toArray(), true));
+            }
         }
     }
 
