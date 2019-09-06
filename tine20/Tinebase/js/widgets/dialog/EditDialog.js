@@ -1215,7 +1215,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {String}
      */
     getValidationErrorMessage: function() {
-        return i18n._('Please fix the errors noted.');
+        return i18n._('Please review the fields marked red. They contain invalid values.');
     },
     
     /**
