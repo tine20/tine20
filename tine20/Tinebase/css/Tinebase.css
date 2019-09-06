@@ -952,6 +952,12 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     background-image: url(../../images/icon-set/icon_folder.svg);
 }
 
+textarea.x-form-invalid,
+.x-form-invalid {
+    background-color: #fee;
+    border-bottom: 1px solid #ff7870 !important;
+}
+
 /*.x-form-field-wrap .x-form-search-trigger {*/
     /*background-image: url(../../images/icon-set/icon_search.svg);*/
 /*}*/
