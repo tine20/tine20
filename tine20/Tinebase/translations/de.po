@@ -4634,3 +4634,9 @@ msgstr "Nächste Ausführung"
 
 msgid "The new password must be different from the old one."
 msgstr "Das neue Passwort muss sich vom alten unterscheiden."
+
+msgid "Outdated Browser"
+msgstr "Veralteter Browser"
+
+msgid "You need a current Browser to use this program."
+msgstr "Sie benötigen einen akutellen Browser um dieses Programm zu nutzen."
