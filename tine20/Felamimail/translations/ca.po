@@ -16,55 +16,63 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:65
+#: Preference.php:70
 msgid "All inboxes"
 msgstr ""
 
-#: Preference.php:113
+#: Preference.php:119
 msgid "Default Email Account"
 msgstr "Compte de correu electrònic per defecte"
 
-#: Preference.php:114
+#: Preference.php:120
 msgid "The default email account to use when sending mails."
 msgstr "Compte de correu electrònic a utilitzar per defecte per a l'enviament de correus."
 
-#: Preference.php:117
+#: Preference.php:123
+msgid "Mark Email Automatically As Read"
+msgstr ""
+
+#: Preference.php:124
+msgid "Is email marked as read automatically or by user action"
+msgstr ""
+
+#: Preference.php:127
 msgid "Email Update Interval"
 msgstr "Interval d'actualització de correu electrònic"
 
-#: Preference.php:118
+#: Preference.php:128
 msgid "How often should Felamimail check for new Emails (in minutes)."
 msgstr ""
 
-#: Preference.php:121
+#: Preference.php:131
 msgid "Use for mailto links"
 msgstr ""
 
-#: Preference.php:122
+#: Preference.php:132
 msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
 msgstr ""
 
-#: Preference.php:125
+#: Preference.php:135
 msgid "Use for NOTES"
 msgstr "Utilitzeu per a NOTES"
 
-#: Preference.php:126
+#: Preference.php:136
 msgid "Save Note default Value."
 msgstr "Desa el valor per defecte Nota."
 
-#: Preference.php:129
+#: Preference.php:139
 msgid "Confirm Delete"
 msgstr "Confirma l'eliminació"
 
-#: Preference.php:130
+#: Preference.php:140
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Mostra un diàleg de confirmació quan s'eliminin correus electrònics."
 
-#: Preference.php:133
+#: Preference.php:143
 msgid ".eml file Attachment in forwarded mails"
 msgstr ""
 
-#: Preference.php:134
+#: Preference.php:144
 msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr ""
 
@@ -108,179 +116,224 @@ msgstr ""
 msgid "Add New Account"
 msgstr ""
 
-#: js/AccountEditDialog.js:92
-msgid "Signature"
-msgstr "Signatura"
+#: js/AccountEditDialog.js:173
+msgid "Permissions"
+msgstr ""
 
-#: js/AccountEditDialog.js:118 js/Model.js:452
+#: js/AccountEditDialog.js:197 Model/Account.php:52
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Compte"
 msgstr[1] "Comptes"
 
-#: js/AccountEditDialog.js:129
+#: js/AccountEditDialog.js:209
 msgid "Account Name"
 msgstr "Nom de compte"
 
-#: js/AccountEditDialog.js:133
+#: js/AccountEditDialog.js:213
+msgid "Account Type"
+msgstr ""
+
+#: js/AccountEditDialog.js:238 Model/Account.php:75
+msgid "User"
+msgstr ""
+
+#: js/AccountEditDialog.js:244
 msgid "User Email"
 msgstr "Correu electrònic de l'usuari"
 
-#: js/AccountEditDialog.js:138
+#: js/AccountEditDialog.js:249
 msgid "User Name (From)"
 msgstr "Nom de l'usuari (des de)"
 
-#: js/AccountEditDialog.js:141
+#: js/AccountEditDialog.js:252 Model/Account.php:317
 msgid "Organization"
 msgstr "Organització"
 
-#: js/AccountEditDialog.js:144
+#: js/AccountEditDialog.js:255
 msgid "Signature position"
 msgstr ""
 
-#: js/AccountEditDialog.js:155
+#: js/AccountEditDialog.js:266
 msgid "Above the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:156
+#: js/AccountEditDialog.js:267
 msgid "Below the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:174
+#: js/AccountEditDialog.js:276
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/AccountEditDialog.js:181 js/AccountEditDialog.js:224
-#: js/AccountEditDialog.js:279
+#: js/AccountEditDialog.js:283 js/AccountEditDialog.js:328
+#: js/AccountEditDialog.js:385
 msgid "Host"
 msgstr "Amfitrió"
 
-#: js/AccountEditDialog.js:185
+#: js/AccountEditDialog.js:287
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Port (per defecte: 143 / SSL: 993)"
 
-#: js/AccountEditDialog.js:191 js/AccountEditDialog.js:233
-#: js/AccountEditDialog.js:288
+#: js/AccountEditDialog.js:294 js/AccountEditDialog.js:338
+#: js/AccountEditDialog.js:395
 msgid "Secure Connection"
 msgstr "Connexió segura"
 
-#: js/AccountEditDialog.js:202 js/AccountEditDialog.js:243
-#: js/AccountEditDialog.js:258 js/AccountEditDialog.js:298
-#: js/ContactGrid.js:118
+#: js/AccountEditDialog.js:305 js/AccountEditDialog.js:348
+#: js/AccountEditDialog.js:363 js/AccountEditDialog.js:405
+#: js/ContactGrid.js:118 js/MessageEditDialog.js:1307
+#: js/MessageEditDialog.js:1317 js/MessageEditDialog.js:1369
 msgid "None"
 msgstr "Cap"
 
-#: js/AccountEditDialog.js:203 js/AccountEditDialog.js:244
-#: js/AccountEditDialog.js:299
+#: js/AccountEditDialog.js:306 js/AccountEditDialog.js:349
+#: js/AccountEditDialog.js:406
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AccountEditDialog.js:204 js/AccountEditDialog.js:245
+#: js/AccountEditDialog.js:307 js/AccountEditDialog.js:350
 msgid "SSL"
 msgstr "SSL"
 
-#: js/AccountEditDialog.js:207
+#: js/AccountEditDialog.js:310
 msgid "Username"
 msgstr "Nom d'usuari"
 
-#: js/AccountEditDialog.js:211
+#: js/AccountEditDialog.js:314
 msgid "Password"
 msgstr "Contrasenya"
 
-#: js/AccountEditDialog.js:217
+#: js/AccountEditDialog.js:321
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/AccountEditDialog.js:227
+#: js/AccountEditDialog.js:331
 msgid "Port (Default: 25)"
 msgstr "Port (per defecte: 25)"
 
-#: js/AccountEditDialog.js:248
+#: js/AccountEditDialog.js:353
 msgid "Authentication"
 msgstr "Autenticació"
 
-#: js/AccountEditDialog.js:259
+#: js/AccountEditDialog.js:364
 msgid "Login"
 msgstr "Inici de sessió"
 
-#: js/AccountEditDialog.js:260
+#: js/AccountEditDialog.js:365
 msgid "Plain"
 msgstr "Pla"
 
-#: js/AccountEditDialog.js:263
+#: js/AccountEditDialog.js:368
 msgid "Username (optional)"
 msgstr "Nom d'usuari (opcional)"
 
-#: js/AccountEditDialog.js:266
+#: js/AccountEditDialog.js:371
 msgid "Password (optional)"
 msgstr "Contrasenya (opcional)"
 
-#: js/AccountEditDialog.js:272
+#: js/AccountEditDialog.js:378
 msgid "Sieve"
 msgstr ""
 
-#: js/AccountEditDialog.js:283
+#: js/AccountEditDialog.js:389
 msgid "Port (Default: 2000)"
 msgstr ""
 
-#: js/AccountEditDialog.js:302 js/sieve/NotificationDialog.js:85
+#: js/AccountEditDialog.js:409 js/sieve/NotificationDialog.js:89
 msgid "Notification Email"
 msgstr ""
 
-#: js/AccountEditDialog.js:307
+#: js/AccountEditDialog.js:414
 msgid "Other Settings"
 msgstr "Altres paràmetres"
 
-#: js/AccountEditDialog.js:314
+#: js/AccountEditDialog.js:421
 msgid "Sent Folder Name"
 msgstr "Nom de la carpeta Enviats"
 
-#: js/AccountEditDialog.js:320
+#: js/AccountEditDialog.js:428
 msgid "Trash Folder Name"
 msgstr "Nom de la carpeta Paperera"
 
-#: js/AccountEditDialog.js:326
+#: js/AccountEditDialog.js:435
 msgid "Drafts Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:332
+#: js/AccountEditDialog.js:442
 msgid "Templates Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:338
+#: js/AccountEditDialog.js:449 Model/Account.php:236
 msgid "Display Format"
 msgstr "Format de visualització"
 
-#: js/AccountEditDialog.js:349 js/AccountEditDialog.js:365
+#: js/AccountEditDialog.js:460 js/AccountEditDialog.js:476
 msgid "HTML"
 msgstr "HTML"
 
-#: js/AccountEditDialog.js:350 js/AccountEditDialog.js:366
+#: js/AccountEditDialog.js:461 js/AccountEditDialog.js:477
 msgid "Plain Text"
 msgstr "Text pla"
 
-#: js/AccountEditDialog.js:351
+#: js/AccountEditDialog.js:462
 msgid "Depending on content type (experimental)"
 msgstr ""
 
-#: js/AccountEditDialog.js:354
+#: js/AccountEditDialog.js:465 Model/Account.php:253
 msgid "Compose Format"
 msgstr ""
 
-#: js/AccountEditDialog.js:369
+#: js/AccountEditDialog.js:480 Model/Account.php:264
 msgid "Preserve Format"
 msgstr ""
 
-#: js/AccountEditDialog.js:380
+#: js/AccountEditDialog.js:491
 msgid "No"
 msgstr ""
 
-#: js/AccountEditDialog.js:381
+#: js/AccountEditDialog.js:492
 msgid "Yes"
 msgstr ""
 
-#: js/AccountEditDialog.js:384 js/MessageEditDialog.js:1298
+#: js/AccountEditDialog.js:495 js/MessageEditDialog.js:1496
 msgid "Reply-To Email"
+msgstr ""
+
+#: js/AccountEditDialog.js:507
+msgid "Shared System Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:508
+msgid "Additional Personal System Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:509
+msgid "Additional Personal External Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:514
+msgid "Default Personal System Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:534
+msgid "E-Mail account needs a password"
+msgstr ""
+
+#: js/AccountEditDialog.js:551
+msgid "Use"
+msgstr ""
+
+#: js/AccountEditDialog.js:553
+msgid "The grant use the shared email account"
+msgstr ""
+
+#: js/AccountEditDialog.js:557
+msgid "Edit"
+msgstr ""
+
+#: js/AccountEditDialog.js:558
+msgid "The grant edit the shared email account"
 msgstr ""
 
 #: js/RecipientGrid.js:235
@@ -319,8 +372,32 @@ msgstr ""
 msgid "BCC"
 msgstr ""
 
-#: js/GridPanelHook.js:88 js/MessageEditDialog.js:223
+#: js/GridPanelHook.js:88 js/MessageEditDialog.js:252
 msgid "Mass Mailing"
+msgstr ""
+
+#: js/SignatureGridPanel.js:25 Model/Account.php:330
+msgid "Signatures"
+msgstr ""
+
+#: js/SignatureGridPanel.js:38 Model/Account.php:97 Model/Signature.php:77
+msgid "Name"
+msgstr ""
+
+#: js/SignatureGridPanel.js:41
+msgid "Is Default"
+msgstr ""
+
+#: js/SignatureGridPanel.js:52
+msgid "Add Signature"
+msgstr ""
+
+#: js/SignatureGridPanel.js:57
+msgid "Edit Signature"
+msgstr ""
+
+#: js/SignatureGridPanel.js:63
+msgid "Delete Signature"
 msgstr ""
 
 #: js/TreeContextMenu.js:23
@@ -337,7 +414,7 @@ msgid "New {0}"
 msgstr "Nou {0}"
 
 #: js/TreeContextMenu.js:64 js/TreeContextMenu.js:67 js/TreeContextMenu.js:70
-#: js/FolderFilterModel.js:30 js/Model.js:60 js/Model.js:592
+#: js/FolderFilterModel.js:30 js/Model.js:60 js/Model.js:441
 #: js/GridPanel.js:557
 msgid "Folder"
 msgid_plural "Folders"
@@ -372,23 +449,23 @@ msgstr "Es crea el {0}..."
 msgid "Edit Account"
 msgstr "Edita compte"
 
-#: js/TreeContextMenu.js:128
+#: js/TreeContextMenu.js:131
 msgid "Edit Vacation Message"
 msgstr ""
 
-#: js/TreeContextMenu.js:144
+#: js/TreeContextMenu.js:147
 msgid "Edit Filter Rules"
 msgstr ""
 
-#: js/TreeContextMenu.js:158 js/sieve/NotificationDialog.js:72
+#: js/TreeContextMenu.js:161 js/sieve/NotificationDialog.js:76
 msgid "Notifications"
 msgstr ""
 
-#: js/TreeContextMenu.js:174
+#: js/TreeContextMenu.js:177
 msgid "Mark Folder as read"
 msgstr ""
 
-#: js/TreeContextMenu.js:211
+#: js/TreeContextMenu.js:214
 msgid "Update Folder List"
 msgstr ""
 
@@ -408,7 +485,7 @@ msgstr ""
 msgid "Remove from recipients"
 msgstr ""
 
-#: js/ContactGrid.js:360 js/MessageEditDialog.js:696
+#: js/ContactGrid.js:360 js/MessageEditDialog.js:809
 msgid "Loading Mail Addresses"
 msgstr ""
 
@@ -417,11 +494,12 @@ msgid "Open in Felamimail"
 msgstr ""
 
 #: js/MailDetailsPanel.js:171 js/sieve/RuleConditionsPanel.js:74
-#: js/MessageEditDialog.js:1309 js/Model.js:192 js/GridPanel.js:510
+#: js/MessageEditDialog.js:1507 js/Model.js:192 js/GridPanel.js:510
 msgid "Subject"
 msgstr "Assumpte"
 
-#: js/MailDetailsPanel.js:172 js/MessageEditDialog.js:1145
+#: js/MailDetailsPanel.js:172 js/MessageEditDialog.js:1287
+#: Model/Account.php:309
 msgid "From"
 msgstr "Des de"
 
@@ -437,11 +515,11 @@ msgstr "Afegeix un contacte a la llibreta d'adreces"
 msgid "Date"
 msgstr "Data"
 
-#: js/MailDetailsPanel.js:177 js/MailDetailsPanel.js:445
+#: js/MailDetailsPanel.js:177 js/MailDetailsPanel.js:447
 msgid "Show or hide header information"
 msgstr "Mostra o amaga la informació de capçalera"
 
-#: js/MailDetailsPanel.js:288 js/MessageEditDialog.js:1076 js/GridPanel.js:495
+#: js/MailDetailsPanel.js:288 js/MessageEditDialog.js:1218 js/GridPanel.js:495
 msgid "Attachments"
 msgstr "Adjunts"
 
@@ -462,28 +540,28 @@ msgstr ""
 msgid "\"{0}\" recipients"
 msgstr ""
 
-#: js/TreePanel.js:691
+#: js/TreePanel.js:701
 msgid "Total Messages:"
 msgstr ""
 
-#: js/TreePanel.js:695
+#: js/TreePanel.js:705
 msgid "Unread Messages:"
 msgstr ""
 
-#: js/TreePanel.js:699
+#: js/TreePanel.js:709
 msgid "Name on Server:"
 msgstr ""
 
-#: js/TreePanel.js:703
+#: js/TreePanel.js:713
 msgid "Last update:"
 msgstr ""
 
-#: js/TreePanel.js:723
+#: js/TreePanel.js:733
 #, python-brace-format
 msgid "Fetching messages... ({0} done)"
 msgstr ""
 
-#: js/TreePanel.js:739
+#: js/TreePanel.js:749
 #, python-brace-format
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
@@ -533,12 +611,12 @@ msgstr "Reenvia"
 msgid "Print Message"
 msgstr "Imprimeix el missatge"
 
-#: js/MessageDisplayDialog.js:91 js/GridPanel.js:320 js/GridPanel.js:1487
-#: js/GridPanel.js:1503
+#: js/MessageDisplayDialog.js:91 js/GridPanel.js:320 js/GridPanel.js:1482
+#: js/GridPanel.js:1498
 msgid "Print Preview"
 msgstr "Previsualitza la impressió"
 
-#: js/sieve/NotificationDialog.js:49
+#: js/sieve/NotificationDialog.js:53
 #, python-brace-format
 msgid "Notification for {0}"
 msgstr ""
@@ -567,23 +645,27 @@ msgstr ""
 msgid "Keep a copy"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:432
+#: js/sieve/RuleEditDialog.js:442
 msgid "Move mail to folder"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:433
+#: js/sieve/RuleEditDialog.js:443
 msgid "Redirect mail to address"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:434
+#: js/sieve/RuleEditDialog.js:444
 msgid "Reject mail with this text"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:435
+#: js/sieve/RuleEditDialog.js:445
 msgid "Discard mail"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:436
+#: js/sieve/RuleEditDialog.js:446
+msgid "Auto-Reply mail with this text"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:447
 msgid "Keep mail"
 msgstr ""
 
@@ -791,130 +873,146 @@ msgstr ""
 msgid "This file is already attached to this record."
 msgstr ""
 
-#: js/MessageEditDialog.js:156
+#: js/MessageEditDialog.js:185
 msgid "Send"
 msgstr "Envia"
 
-#: js/MessageEditDialog.js:164
+#: js/MessageEditDialog.js:193
 msgid "Search Recipients"
 msgstr ""
 
-#: js/MessageEditDialog.js:172
+#: js/MessageEditDialog.js:201
 msgid "Save As Draft"
 msgstr ""
 
-#: js/MessageEditDialog.js:180
+#: js/MessageEditDialog.js:209
 msgid "Save As Template"
 msgstr ""
 
-#: js/MessageEditDialog.js:197
+#: js/MessageEditDialog.js:226
 msgid "Reading Confirmation"
 msgstr ""
 
-#: js/MessageEditDialog.js:205
+#: js/MessageEditDialog.js:234
 msgid "Activate this toggle button to receive a reading confirmation."
 msgstr ""
 
-#: js/MessageEditDialog.js:209
+#: js/MessageEditDialog.js:238
 msgid "Encrypt Email"
 msgstr ""
 
-#: js/MessageEditDialog.js:219
+#: js/MessageEditDialog.js:248
 msgid "Encrypt email using Mailvelope"
 msgstr ""
 
-#: js/MessageEditDialog.js:231
+#: js/MessageEditDialog.js:260
 msgid "Activate this toggle button to send the mail as separate mail to each recipient."
 msgstr ""
 
-#: js/MessageEditDialog.js:249
+#: js/MessageEditDialog.js:283
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr ""
 
-#: js/MessageEditDialog.js:459
+#: js/MessageEditDialog.js:506
 msgid "Encrypted Content"
 msgstr ""
 
-#: js/MessageEditDialog.js:747
+#: js/MessageEditDialog.js:703
+msgid "Discard this Draft?"
+msgstr ""
+
+#: js/MessageEditDialog.js:704
+msgid "Do you want to discard the current draft?"
+msgstr ""
+
+#: js/MessageEditDialog.js:860
 msgid "Fwd:"
 msgstr ""
 
-#: js/MessageEditDialog.js:750
+#: js/MessageEditDialog.js:863
 #, python-brace-format
 msgid "{0} Message"
 msgstr ""
 
-#: js/MessageEditDialog.js:804 js/MessageEditDialog.js:809
+#: js/MessageEditDialog.js:919 js/MessageEditDialog.js:924
 msgid "Failed"
 msgstr "Ha fallat"
 
-#: js/MessageEditDialog.js:805
+#: js/MessageEditDialog.js:920
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr ""
 
-#: js/MessageEditDialog.js:810 js/MessageEditDialog.js:1353
+#: js/MessageEditDialog.js:925 js/MessageEditDialog.js:1553
 msgid "Files are still uploading."
 msgstr ""
 
-#: js/MessageEditDialog.js:851
+#: js/MessageEditDialog.js:971
 msgid "{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}"
 msgstr ""
 
-#: js/MessageEditDialog.js:946
+#: js/MessageEditDialog.js:1069
 #, python-brace-format
 msgid "On {0}, {1} wrote"
 msgstr ""
 
-#: js/MessageEditDialog.js:951
+#: js/MessageEditDialog.js:1074
 msgid "Original message"
 msgstr "missatge original"
 
-#: js/MessageEditDialog.js:989 js/MessageEditDialog.js:1319
+#: js/MessageEditDialog.js:1112 js/MessageEditDialog.js:1517
 msgid "Compose email:"
 msgstr "Redacta correu electrònic:"
 
-#: js/MessageEditDialog.js:1232
+#: js/MessageEditDialog.js:1429
 msgid "Convert to formated text"
 msgstr ""
 
-#: js/MessageEditDialog.js:1238 js/MessageEditDialog.js:1245
+#: js/MessageEditDialog.js:1435 js/MessageEditDialog.js:1443
 msgid "Body"
 msgstr "Cos"
 
-#: js/MessageEditDialog.js:1278
+#: js/MessageEditDialog.js:1476
 msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
 msgstr ""
 
-#: js/MessageEditDialog.js:1302
+#: js/MessageEditDialog.js:1500
 msgid "Add email address here for reply-to"
 msgstr ""
 
-#: js/MessageEditDialog.js:1456
+#: js/MessageEditDialog.js:1527 Model/Account.php:325 Model/Signature.php:36
+#: Model/Signature.php:91
+#, fuzzy
+msgid "Signature"
+msgid_plural "Signatures"
+msgstr[0] "Signatura"
+msgstr[1] "Signatura"
+
+#: js/MessageEditDialog.js:1657
 msgid "Warning"
 msgstr ""
 
-#: js/MessageEditDialog.js:1457
+#: js/MessageEditDialog.js:1658
 msgid "Some attachments are of type \"systemlinks\" whereas some of the recipients (marked yellow), couldn't be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments."
 msgstr ""
 
-#: js/MessageEditDialog.js:1457
+#: js/MessageEditDialog.js:1658
 msgid "Do you really want to send?"
 msgstr ""
 
-#: js/MessageEditDialog.js:1500
+#: js/MessageEditDialog.js:1701
 msgid "Empty subject"
 msgstr ""
 
-#: js/MessageEditDialog.js:1501
+#: js/MessageEditDialog.js:1702
 msgid "Do you really want to send a message with an empty subject?"
 msgstr ""
 
-#: js/MessageEditDialog.js:1534
+#: js/MessageEditDialog.js:1735
 msgid "No recipients set."
 msgstr ""
 
-#: js/MessageEditDialog.js:1556
+#: js/MessageEditDialog.js:1757
 #, python-brace-format
 msgid "Cannot encrypt message. Public keys for the following recipients are missing: {0}"
 msgstr ""
@@ -949,61 +1047,55 @@ msgstr ""
 msgid "Received"
 msgstr "Rebut"
 
-#: js/Model.js:455
-msgid "Email Accounts"
-msgid_plural "Email Accounts"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:586
+#: js/Model.js:435
 msgid "INBOX"
 msgstr ""
 
-#: js/Model.js:586
+#: js/Model.js:435
 msgid "Drafts"
 msgstr ""
 
-#: js/Model.js:586 js/GridPanel.js:542
+#: js/Model.js:435 js/GridPanel.js:542
 msgid "Sent"
 msgstr "Enviat"
 
-#: js/Model.js:586
+#: js/Model.js:435
 msgid "Templates"
 msgstr ""
 
-#: js/Model.js:586
+#: js/Model.js:435
 msgid "Junk"
 msgstr ""
 
-#: js/Model.js:586
+#: js/Model.js:435
 msgid "Trash"
 msgstr ""
 
-#: js/Model.js:595 js/Model.js:715 js/Model.js:781
+#: js/Model.js:444 js/Model.js:564 js/Model.js:630
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "llista de registres"
 msgstr[1] "llistes de registres"
 
-#: js/Model.js:712
+#: js/Model.js:561
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:778
+#: js/Model.js:627
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:905
+#: js/Model.js:754
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:908
+#: js/Model.js:757
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] ""
@@ -1073,11 +1165,11 @@ msgstr ""
 msgid "Could not file message."
 msgstr ""
 
-#: js/GridPanel.js:1099
+#: js/GridPanel.js:1101
 msgid "Send Reading Confirmation"
 msgstr ""
 
-#: js/GridPanel.js:1100
+#: js/GridPanel.js:1102
 msgid "Do you want to send a reading confirmation message?"
 msgstr ""
 
@@ -1089,84 +1181,84 @@ msgstr ""
 msgid "Email"
 msgstr "Correu electrònic"
 
-#: js/Felamimail.js:132
+#: js/Felamimail.js:139
 msgid "Active Vacation Message"
 msgstr ""
 
-#: js/Felamimail.js:133
+#: js/Felamimail.js:140
 #, python-brace-format
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr ""
 
-#: js/Felamimail.js:170
+#: js/Felamimail.js:239
 #, python-brace-format
 msgid "Poll URL: {0}"
 msgstr ""
 
-#: js/Felamimail.js:191
+#: js/Felamimail.js:260
 #, python-brace-format
 msgid "{0} as default mailer"
 msgstr ""
 
-#: js/Felamimail.js:617
+#: js/Felamimail.js:687
 msgid "New mails"
 msgstr "Nous correus"
 
-#: js/Felamimail.js:618
+#: js/Felamimail.js:688
 #, python-brace-format
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr ""
 
-#: js/Felamimail.js:738
+#: js/Felamimail.js:851
 #, python-brace-format
 msgid "IMAP Credentials for {0}"
 msgstr "Credencials IMAP per a {0}"
 
-#: js/Felamimail.js:741
+#: js/Felamimail.js:854
 msgid "Credentials"
 msgstr "Credencials"
 
-#: js/Felamimail.js:930 js/Felamimail.js:963
+#: js/Felamimail.js:1040 js/Felamimail.js:1074
 msgid "IMAP Error"
 msgstr ""
 
-#: js/Felamimail.js:931
+#: js/Felamimail.js:1041
 msgid "No connection to IMAP server."
 msgstr "Sense connexió amb el servidor IMAP."
 
-#: js/Felamimail.js:947
+#: js/Felamimail.js:1058
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:948
+#: js/Felamimail.js:1059
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:964
+#: js/Felamimail.js:1075
 msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr ""
 
-#: js/Felamimail.js:993
+#: js/Felamimail.js:1104
 msgid "SMTP Error"
 msgstr ""
 
-#: js/Felamimail.js:994
+#: js/Felamimail.js:1105
 msgid "No connection to SMTP server."
 msgstr ""
 
-#: js/Felamimail.js:1002
+#: js/Felamimail.js:1113
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:1003
+#: js/Felamimail.js:1114
 msgid "No connection to Sieve server."
 msgstr ""
 
-#: js/Felamimail.js:1011
+#: js/Felamimail.js:1122
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:1012
+#: js/Felamimail.js:1123
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -1215,108 +1307,140 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-#: Config.php:115
-msgid "Vacation Templates Node ID"
+#: Config.php:124
+msgid "Mailinglist Reject Reason"
 msgstr ""
 
-#: Config.php:124
-msgid "Email Notification Templates Node ID"
+#: Config.php:127
+msgid "Your email has been rejected"
 msgstr ""
 
 #: Config.php:133
+msgid "Vacation Templates Node ID"
+msgstr ""
+
+#: Config.php:142
+msgid "Email Notification Templates Node ID"
+msgstr ""
+
+#: Config.php:151
 msgid "Custom Vacation Message"
 msgstr ""
 
-#: Config.php:135
+#: Config.php:153
 msgid "User is allowed to set custom vacation message for system account"
 msgstr ""
 
-#: Config.php:144
+#: Config.php:162
 msgid "Cache email body"
 msgstr ""
 
-#: Config.php:146
+#: Config.php:164
 msgid "Should the email body be cached (recommended for slow IMAP server connections)"
 msgstr ""
 
-#: Config.php:155
+#: Config.php:173
 msgid "Delete Archived Mail"
 msgstr ""
 
-#: Config.php:165
+#: Config.php:183
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:167
+#: Config.php:185
 msgid "Enabled Features in Felamimail Application."
 msgstr ""
 
-#: Config.php:175
+#: Config.php:193
 msgid "Tine 2.0 Flag"
 msgstr ""
 
-#: Config.php:177
+#: Config.php:195
 msgid "Add a Tine 2.0 flag to sent messages"
 msgstr ""
 
-#: Config.php:183
+#: Config.php:201
 msgid "Show Reply-To"
 msgstr ""
 
-#: Config.php:185
+#: Config.php:203
 msgid "Show Reply-To field in message compose dialog"
 msgstr ""
 
-#: Config.php:193
+#: Config.php:209
+msgid "Auto-Create Folders"
+msgstr ""
+
+#: Config.php:211
+msgid "Create template, trash, sent, draft and junks folders for system accounts"
+msgstr ""
+
+#: Config.php:219
 msgid "Filter E-Mail URIs"
 msgstr ""
 
-#: Config.php:195
+#: Config.php:221
 msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
 msgstr ""
 
-#: Config.php:212
+#: Config.php:238
 msgid "System Account Folder Defaults"
 msgstr ""
 
-#: Config.php:214
+#: Config.php:240
 msgid "Paths of the special folders (like Sent, Trash, ...)"
 msgstr ""
 
-#: Config.php:223
+#: Config.php:249
 msgid "Allow self signed TLS cert for IMAP connection"
 msgstr ""
 
-#: Config.php:233
+#: Config.php:259
 msgid "Sieve Redirect Only Internal"
 msgstr ""
 
-#: Config.php:235
+#: Config.php:261
 msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
 msgstr ""
 
-#: Config.php:244 Config.php:246
+#: Config.php:270 Config.php:272
 msgid "Sieve Notification Bounces Reporting Email"
 msgstr ""
 
-#: Config.php:255
+#: Config.php:281
 msgid "URL icon path for own domain"
 msgstr ""
 
-#: Config.php:257
+#: Config.php:283
 msgid "Used to mark messages from configured primary and secondary domains"
 msgstr ""
 
-#: Config.php:266
+#: Config.php:292
 msgid "URL icon path for other domains"
 msgstr ""
 
-#: Config.php:268
+#: Config.php:294
 msgid "Used to mark messages from all other domains"
 msgstr ""
 
-#: Config.php:277 Config.php:279
+#: Config.php:303 Config.php:305
 msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
+msgstr ""
+
+#: Controller/Account.php:254 Exception/PasswordMissing.php:22
+msgid "shared / adb_list accounts need to have a password set"
+msgstr ""
+
+#: Controller/Account.php:257
+msgid "shared / adb_list accounts need to have an email set"
+msgstr ""
+
+#: Controller/Account.php:272
+msgid "userInternal accounts need to have an email set"
+msgstr ""
+
+#: Controller/Account.php:275
+msgid "userInternal accounts need to have an user_id set"
 msgstr ""
 
 #: Controller/Message/Flags.php:26
@@ -1343,29 +1467,33 @@ msgstr ""
 msgid "Recipient address rejected"
 msgstr ""
 
-#: Controller/Message/Send.php:579
+#: Controller/Message/Send.php:563
 msgid "Invalid address format"
 msgstr ""
 
-#: Controller/Message/Send.php:590
+#: Controller/Message/Send.php:574
 #, python-format
 msgid "Error: %s"
 msgstr ""
 
-#: Controller/Message/Send.php:592
+#: Controller/Message/Send.php:576
 msgid "Could not send message"
 msgstr ""
 
-#: Controller/Message/Send.php:859
+#: Controller/Message/Send.php:843
 msgid "My Mail Download Links"
 msgstr ""
 
-#: Controller/Sieve.php:338
+#: Controller/Sieve.php:359
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
-#: Controller/Sieve.php:677
+#: Controller/Sieve.php:703
 msgid "You have new mail from "
+msgstr ""
+
+#: Sieve/AdbList.php:120
+msgid "Can not combine \"allow external\" and \"allow only members\""
 msgstr ""
 
 #: Model/MessageFileSuggestion.php:49
@@ -1412,28 +1540,106 @@ msgstr ""
 msgid "Node ID"
 msgstr ""
 
-#: Model/MessageFileLocation.php:133
+#: Model/MessageFileLocation.php:133 Model/Account.php:85
 msgid "Type"
 msgstr ""
 
-#: Model/Message.php:374
+#: Model/Account.php:53
+msgid "Email Account"
+msgid_plural "Email Accounts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Account.php:105
+msgid "IMAP Host"
+msgstr ""
+
+#: Model/Account.php:112
+msgid "IMAP Port"
+msgstr ""
+
+#: Model/Account.php:125
+msgid "IMAP SSL"
+msgstr ""
+
+#: Model/Account.php:174
+msgid "Sent Folder"
+msgstr ""
+
+#: Model/Account.php:185
+msgid "Trash Folder"
+msgstr ""
+
+#: Model/Account.php:196
+msgid "Drafts Folder"
+msgstr ""
+
+#: Model/Account.php:207
+msgid "Templates Folder"
+msgstr ""
+
+#: Model/Account.php:275
+msgid "Reply-To"
+msgstr ""
+
+#: Model/Account.php:301
+msgid "E-Mail"
+msgstr ""
+
+#: Model/Account.php:347
+msgid "Signature Position"
+msgstr ""
+
+#: Model/Account.php:359
+msgid "SMTP Host"
+msgstr ""
+
+#: Model/Account.php:367
+msgid "SMTP Port"
+msgstr ""
+
+#: Model/Account.php:380
+msgid "SMTP SSL"
+msgstr ""
+
+#: Model/Account.php:396
+msgid "SMTP Authentication"
+msgstr ""
+
+#: Model/Account.php:438
+msgid "Sieve Host"
+msgstr ""
+
+#: Model/Account.php:445
+msgid "Sieve Port"
+msgstr ""
+
+#: Model/Account.php:458
+msgid "Sieve SSL"
+msgstr ""
+
+#: Model/Message.php:389
 msgid "Reading Confirmation:"
 msgstr ""
 
-#: Model/Message.php:375
+#: Model/Message.php:390
 msgid "Your message:"
 msgstr ""
 
-#: Model/Message.php:376
+#: Model/Message.php:391
 msgid "Received on"
 msgstr ""
 
-#: Model/Message.php:377
+#: Model/Message.php:392
 msgid "Was read by:"
 msgstr ""
 
-#: Model/Message.php:378
+#: Model/Message.php:393
 msgid "on"
+msgstr ""
+
+#: Model/Signature.php:84
+msgid "Is default"
 msgstr ""
 
 #: Acl/Rights.php:106

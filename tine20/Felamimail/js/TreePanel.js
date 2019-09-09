@@ -801,6 +801,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.suspendEvents();
         this.root.appendChild(node);
         this.resumeEvents();
+
+        _.defer(() => {
+            this.app.getMainScreen().getCenterPanel().action_write.setDisabled(! this.app.getActiveAccount());
+        });
     },
 
     deleteAccount: function(store, account) {

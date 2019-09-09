@@ -29,6 +29,12 @@ Ext.namespace('Tine.Felamimail');
  */
 Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
+     * @cfg {Boolean} autoSave
+     * enable autosave as draft
+     */
+    autoSave: true,
+
+    /**
      * @cfg {Array/String} bcc
      * initial config for bcc
      */
@@ -114,6 +120,26 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     quotedPGPMessage: null,
 
     /**
+     * @type {Boolean}
+     */
+    isDraft: false,
+
+    /**
+     * @type {Boolean}
+     */
+    isTemplate: false,
+
+    /**
+     * @type {String}
+     */
+    draftId: null,
+
+    /**
+     * @type {String}
+     */
+    templateId: null,
+
+    /**
      * @private
      */
     windowNamePrefix: 'MessageEditWindow_',
@@ -135,6 +161,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     //private
     initComponent: function () {
         var me = this;
+
+        me.trottledsaveAsDraft = _.throttle(_.bind(me.saveAsDraft, me), 5000, {leading: false});
+        me.on('beforecancel', me.onBeforeCancle, this);
 
         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
 
@@ -235,9 +264,14 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             defaults: {height: 43},
             items: [{
                 xtype: 'buttongroup',
-                columns: 6,
+                columns: 7,
                 items: [
                     Ext.apply(new Ext.Button(this.action_send), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }),
+                    Ext.apply(new Ext.Button(this.action_cancel), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
@@ -397,6 +431,19 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
                     if (this.isForwardedMessage() || this.draftOrTemplate) {
                         this.handleAttachmentsOfExistingMessage(message);
+                    }
+
+                    let folder = this.app.getFolderStore().getById(message.get('folder_id'));
+                    this.isDraft = folder.get('globalname') === account.get('drafts_folder');
+                    this.isTemplate = folder.get('globalname') === account.get('templates_folder');
+
+                    if (this.isDraft) {
+                        this.record.setId(message.get('id'));
+                        this.draftId = message.get('id');
+                    }
+
+                    if (this.isTemplate) {
+                        this.templateId = message.get('id');
                     }
                 }
             }
@@ -566,12 +613,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onKeyPress(e);
         }, this);
 
-        this.htmlEditor.on('keydown', function (e) {
-            if (e.getKey() == e.ENTER && e.ctrlKey) {
-                this.onSaveAndClose();
-            } else if (e.getKey() == e.TAB && e.shiftKey) {
-                this.subjectField.focus.defer(50, this.subjectField);
-            }
+        this.htmlEditor.on('keydown', function (ed, e) {
+            this.onKeyPress(e);
         }, this);
 
         this.htmlEditor.on('toggleFormat', this.onToggleFormat, this);
@@ -608,6 +651,74 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             } else if (e.getTarget('input[type=text]')) {
                 this.subjectField.focus.defer(50, this.subjectField);
             }
+        }
+        if (e.getTarget('body')) {
+            if (e.getKey() == e.ENTER && e.ctrlKey) {
+                this.onSaveAndClose();
+            } else if (e.getKey() == e.TAB && e.shiftKey) {
+                this.subjectField.focus.defer(50, this.subjectField);
+            }
+        }
+
+        this.checkStates();
+    },
+
+    checkStates: function() {
+        Tine.Felamimail.MessageEditDialog.superclass.checkStates.apply(this, arguments);
+        if (this.autoSave && _.keys(this.record.getChanges()).length) {
+            this.trottledsaveAsDraft();
+        }
+    },
+
+    saveAsDraft: function() {
+        let me = this;
+
+        me.record.setId(me.draftId);
+        me.record.commit();
+
+        me.action_saveAsDraft.setIconClass('x-btn-wait');
+
+        return Tine.Felamimail.saveDraft(me.record.data)
+            .then((savedDraft) => {
+                me.draftId = savedDraft.id;
+            })
+            .finally(() => {
+                me.action_saveAsDraft.setIconClass('action_saveAsDraft');
+            });
+    },
+
+    deleteDraft: function(draftId) {
+        return new Promise((fulfill, reject) => {
+            Tine.Felamimail.messageBackend.addFlags(draftId, '\\Deleted', {
+                success: fulfill,
+                failure: reject
+            });
+        });
+
+    },
+
+    onBeforeCancle: function() {
+        this.trottledsaveAsDraft.cancel();
+
+        if (this.draftId) {
+            Ext.MessageBox.show({
+                title: this.app.i18n._('Discard this Draft?'),
+                msg: this.app.i18n._('Do you want to discard the current draft?'),
+                buttons: Ext.MessageBox.YESNO,
+                fn: (btn) => {
+                    this.showLoadMask()
+                        .then(() => {
+                            return btn === 'yes' ?
+                                this.deleteDraft(this.draftId) :
+                                this.saveAsDraft();
+                        })
+                        .then(_.bind(this.window.close, this.window, true))
+
+                },
+                icon: Ext.MessageBox.QUESTION
+            });
+
+            return false;
         }
     },
 
@@ -795,6 +906,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {String} folderField
      */
     onSaveInFolder: function (folderField) {
+        this.trottledsaveAsDraft.cancel();
+        
         this.onRecordUpdate();
 
         var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
@@ -819,8 +932,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 success: function (record) {
                     this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
-                    this.purgeListeners();
-                    this.window.close();
+                    Promise.resolve()
+                        .then(() => {
+                            if (this.draftId) {
+                                return this.deleteDraft(this.draftId)
+                            }
+                        })
+                        .then(_.bind(this.window.close, this.window, this));
                 },
                 failure: Tine.Felamimail.handleRequestException.createInterceptor(function () {
                         this.hideLoadMask();
@@ -1027,8 +1145,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onAfterRecordLoad: function () {
         (function() {
+            var autoSave = this.autoSave;
+            this.autoSave = false;
+
             this.checkStates();
             this.record.commit();
+
+            this.autoSave = autoSave;
         }).defer(100, this);
 
         if (this.loadMask) {
@@ -1079,6 +1202,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.recipientGrid.syncRecipientsToRecord();
     },
 
+    onAfterApplyChanges: function(closeWindow) {
+        Promise.resolve()
+            .then(() => {
+                if (this.draftId) {
+                    // autodelete draft when message is send
+                    return this.deleteDraft(this.draftId)
+                }
+            })
+            .then(Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges.apply(this, arguments));
+    },
+
     /**
      * init attachment grid + add button to toolbar
      */
@@ -1103,7 +1237,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
 
             this.btnAddAttachemnt = new Ext.Button(this.action_addAttachment);
-            this.tbar.get(0).insert(1, Ext.apply(this.btnAddAttachemnt, {
+            this.tbar.get(0).insert(2, Ext.apply(this.btnAddAttachemnt, {
                 scale: 'medium',
                 rowspan: 2,
                 iconAlign: 'top'
@@ -1497,6 +1631,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges()');
 
         this.loadMask.show();
+        this.trottledsaveAsDraft.cancel();
 
         if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && undefined === nonSystemAccountRecipients) {
             this.validateSystemlinkRecipients().then(function (mails) {
@@ -1663,7 +1798,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 700,
+        width: 750,
         height: 700,
         name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',

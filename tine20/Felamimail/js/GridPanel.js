@@ -976,7 +976,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Ext.each(affectedMsgs, function(msg) {
                 if (['reply', 'forward'].indexOf(action) !== -1) {
                     msg.addFlag(action === 'reply' ? '\\Answered' : 'Passed');
-                } else if (action == 'senddraft') {
+                } else if (action === 'senddraft') {
                     this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(msg.id, '\\Deleted', {
                         callback: this.onAfterDelete.createDelegate(this, [[msg.id]])
                     });
