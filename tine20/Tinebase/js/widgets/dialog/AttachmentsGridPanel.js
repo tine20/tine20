@@ -207,9 +207,9 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      */
     onRecordUpdate: function(dialog, record) {
         if (record.data.hasOwnProperty('attachments')) {
-            delete record.data.attachments;
+            Tine.Tinebase.common.assertComparable(record.data.attachments);
         }
-        var attachments = this.getData();
+        var attachments = Tine.Tinebase.common.assertComparable(this.getData());
         record.set('attachments', attachments);
     },
     
