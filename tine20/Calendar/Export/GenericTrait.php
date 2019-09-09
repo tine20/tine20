@@ -173,8 +173,24 @@ trait Calendar_Export_GenericTrait
             return;
         }
 
-        if ($_records->attendee) {
-            Calendar_Model_Attender::resolveAttendee($_records->attendee, false, $_records);
+        if ($attendees = $_records->attendee) {
+            if (Addressbook_Model_Contact::$doResolveAttenderCleanUp) {
+                // make sure they are not yet resolved!
+                foreach ($attendees as $attendee) {
+                    if ($attendee->user_id instanceof Tinebase_Record_Interface) {
+                        $attendee->user_id = $attendee->user_id->getId();
+                    }
+                }
+
+                Addressbook_Model_Contact::$doResolveAttenderCleanUp = false;
+                $raii = new Tinebase_RAII(function() {
+                    Addressbook_Model_Contact::$doResolveAttenderCleanUp = true;
+                });
+            }
+            Calendar_Model_Attender::resolveAttendee($attendees, false, $_records);
+
+            // only for unused variable check
+            unset($raii);
         }
 
         /**
