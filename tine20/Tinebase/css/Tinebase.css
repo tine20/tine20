@@ -1106,6 +1106,12 @@ div.x-btn-wait,
     border-radius: 100%;
 }
 
+.x-btn-medium.x-btn-icon-medium-top div.x-btn-wait {
+    width: 28px;
+    height: 28px;
+    left: 14px;
+}
+
 .x-tree-node-loading .x-tree-node-icon {
     margin-top: 3px;
 }
