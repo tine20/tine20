@@ -1483,6 +1483,19 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals('dir1', $result[0]['name'], print_r($result[0], true));
     }
 
+    public function testMoveFileToRenameIt()
+    {
+        $filepaths = $this->testCreateFileNodes(true);
+
+        $result = $this->_getUit()->moveNodes($filepaths[0], [$filepaths[0] . 'foo'], false);
+
+        $node = Tinebase_FileSystem::getInstance()->get($this->_createdNodesJson[0]['id']);
+        static::assertSame($node->hash, $result[0]['hash'], 'hash did change');
+        $path = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
+        static::assertTrue(is_file($path), 'hash does not exist in FS');
+        static::assertSame('someData', file_get_contents($path));
+    }
+
     public function testMoveFolderToRenameIt()
     {
         $orgFolder = $this->testCreateContainerNodeInPersonalFolder();
