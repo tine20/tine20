@@ -102,6 +102,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      */
     protected static $_configurationObject = NULL;
 
+    public static $doResolveAttenderCleanUp = true;
+
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -1187,6 +1189,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
     public function resolveAttenderCleanUp()
     {
+        if (!static::$doResolveAttenderCleanUp) {
+            return;
+        }
+
         $this->_data = array_intersect_key($this->_data, [
             'id'          => true,
             'note'        => true,
