@@ -104,7 +104,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
-        self::assertContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"]', $script->getSieve());
+        self::assertContains('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $script->getSieve());
         self::assertContains('reject "Your email has been rejected"', $script->getSieve());
 
         // TODO check sieve script functionality
