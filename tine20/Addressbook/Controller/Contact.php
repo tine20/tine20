@@ -321,7 +321,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 ]));
             foreach ($lists->filter(function($list) {
                     return $list->xprops[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST];}) as $list) {
-                Felamimail_Sieve_AdbList::setScriptForList($list);
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
+                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                }, [$list]);
             }
         }
 

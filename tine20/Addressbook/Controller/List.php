@@ -240,7 +240,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
             if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                     $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) {
-                Felamimail_Sieve_AdbList::setScriptForList($list);
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
+                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                }, [$list]);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -314,7 +316,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
             if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) {
-                Felamimail_Sieve_AdbList::setScriptForList($list);
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
+                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                }, [$list]);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -546,7 +550,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 $this->_createMailAccount($updatedRecord);
             }
 
-            Felamimail_Sieve_AdbList::setScriptForList($updatedRecord);
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
+                Felamimail_Sieve_AdbList::setScriptForList($list);
+            }, [$updatedRecord]);
 
         } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
