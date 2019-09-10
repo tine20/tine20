@@ -4640,3 +4640,24 @@ msgstr "Veralteter Browser"
 
 msgid "You need a current Browser to use this program."
 msgstr "Sie benötigen einen akutellen Browser um dieses Programm zu nutzen."
+
+msgid "A: select all visible rows"
+msgstr "A: Alle sichtbaren Zeilen selektieren"
+
+msgid "C: copy record"
+msgstr "C: Datensatz kopieren"
+
+msgid "E: edit record"
+msgstr "E: Datensatz editieren"
+
+msgid "N: new record"
+msgstr "N: neuen Datensatz hinzufügen"
+
+msgid "F: find"
+msgstr "F: Suche"
+
+msgid "ESC: focus grid"
+msgstr "ESC: Liste fokussieren"
+
+msgid "R: reload grid"
+msgstr "R: Liste neu laden"

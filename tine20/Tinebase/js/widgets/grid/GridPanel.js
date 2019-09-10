@@ -2025,14 +2025,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     }
                 }
                 if (e.browserEvent.key === '?') {
-                    // TODo translate key bindings
                     // TODO only show keys of actions that are available
-                    var helpText = 'A: select all visible rows<br/>' +
-                        'C: copy record<br/>' +
-                        'E: edit record<br/>' +
-                        'N: new record<br/>' +
-                        'F: find<br/>' +
-                        'R: reload grid<br/>';
+                    var helpText = i18n._('A: select all visible rows') + '<br/>' +
+                        i18n._('C: copy record') + '<br/>' +
+                        i18n._('E: edit record') + '<br/>' +
+                        i18n._('N: new record') + '<br/>' +
+                        i18n._('F: find') + '<br/>' +
+                        i18n._('ESC: focus grid') + '<br/>' +
+                        i18n._('R: reload grid') + '<br/>';
                     Ext.MessageBox.show({
                         title: i18n._('Grid Panel Key Bindings'),
                         msg: helpText,
