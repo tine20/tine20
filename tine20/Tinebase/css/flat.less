@@ -219,12 +219,28 @@ ul.x-tab-strip-top {
   #button(darken(#F0F0F0, 10%));
 }
 
+.x-btn-group {
+  padding: 0px;
+}
+
+.x-btn-group-tl,
+.x-btn-group-bl,
+.x-btn-group-br {
+  height: 0;
+
+}
+
+.x-btn-group-mc {
+  padding: 0;
+}
+
 /* MAIN NORTH TOOLBAR */
 .tine-mainscreen-centerpanel-north {
   #button(@northTbColor);
 
   .x-toolbar {
     background-color: @northTbColor;
+    padding: 0;
   }
 
   .x-panel-body {
@@ -278,6 +294,7 @@ ul.x-tab-strip-top {
 
 /* FILTER TOOLBAR */
 .tw-ftb-filterpanel .ux-arrowcollapse .x-tool-toggle,
+.tw-ftb-filterpanel .x-layout-split,
 .tw-ftb-filterstructure-treepanel .x-panel-tbar-noborder .x-toolbar,
 .tw-ftb-filterstructure-treepanel .x-panel-body,
 .tw-ftb-filterpanel .x-panel-body,
