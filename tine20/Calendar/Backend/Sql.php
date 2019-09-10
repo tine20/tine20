@@ -156,6 +156,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  Tinebase_Model_Pagination            $_pagination
      * @param  boolean                              $_onlyIds
      * @return Tinebase_Record_RecordSet|array
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
@@ -189,6 +190,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         // remove grantsfilter here as we do grants computation in PHP
+        $translate = Tinebase_Translation::getTranslation('Calendar');
         $grantsFilter = null;
         // make sure $func is not yet set at this point
         $func = function($filter) use (/*yes & !*/&$func, &$grantsFilter) {
@@ -196,7 +198,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 $filter->filterWalk($func);
             } elseif ($filter instanceof Calendar_Model_GrantFilter) {
                 if ($grantsFilter !== null) {
-                    throw new Tinebase_Exception_UnexpectedValue('you can\'t have more than one grants filter');
+                    throw new Tinebase_Exception_SystemGeneric($translate->_('You can not have more than one grants filter'));
                 }
                 $grantsFilter = $filter;
                 $filter->getParent()->removeFilter($filter);
@@ -216,7 +218,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 $filter->filterWalk($func);
             } elseif ($filter instanceof Calendar_Model_CalendarFilter) {
                 if ($calendarFilter !== null) {
-                    throw new Tinebase_Exception_UnexpectedValue('you can\'t have more than one calendar filter');
+                    throw new Tinebase_Exception_SystemGeneric($translate->_('You can not have more than one calendar filter'));
                 }
                 $calendarFilter = $filter;
                 $filter->getParent()->removeFilter($filter);
