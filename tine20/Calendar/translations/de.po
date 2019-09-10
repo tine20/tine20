@@ -2535,3 +2535,9 @@ msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu exportieren"
 
 msgid "By using this service you agree to our"
 msgstr "Mit der Nutzung dieses Services "
+
+msgid "You can not have more than one grants filter"
+msgstr "Es kann nicht mehr als einen Rechtefilter geben"
+
+msgid "You can not have more than one calendar filter"
+msgstr "Es kann nicht mehr als einen Kalenderfilter geben"
