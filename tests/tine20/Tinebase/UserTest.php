@@ -173,8 +173,8 @@ class Tinebase_UserTest extends TestCase
         );
         $this->_setPwPolicies($policies);
         
-        $this->_assertPolicy('nOve!ry1leverPw2ä', 'Only ASCII | Minimum length | Minimum uppercase chars | Minimum special chars | Minimum numbers');
-        $this->_assertPolicy('', 'Minimum length');
+        $this->_assertPolicy('nOve!ry1leverPw2ä', 'Only ASCII | Minimum password length | Minimum uppercase chars | Minimum special chars | Minimum numbers');
+        $this->_assertPolicy('', 'Minimum password length');
     }
     
     /**
@@ -209,7 +209,10 @@ class Tinebase_UserTest extends TestCase
             if ($pwIsValid) {
                 $this->fail('pw is valid, got message: ' . $tppv->getMessage());
             } else {
-                $this->assertContains('Password failed to match the following policy requirements: ' . $expectedMessage, $tppv->getMessage());
+                $this->assertContains('Password failed to match the following policy requirements:', $tppv->getMessage());
+                foreach(explode('|', $expectedMessage) as $part) {
+                    $this->assertContains(trim($part), $tppv->getMessage());
+                }
             }
         }
     }

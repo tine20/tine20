@@ -1556,7 +1556,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     //_('Minimum length')
                     'label'                 => 'Minimum length',
                     //_('Minimum password length')
-                    'description'           => 'Minimum password length.',
+                    'description'           => 'Minimum password length',
                     'type'                  => 'int',
                     'clientRegistryInclude' => TRUE,
                     'setByAdminModule'      => FALSE,
