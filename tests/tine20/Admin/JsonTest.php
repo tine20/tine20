@@ -1647,13 +1647,8 @@ class Admin_JsonTest extends TestCase
         self::assertEquals(0, $result['totalcount'], 'a new (system?) account has been added');
     }
 
-    public function testEmailAccountApiSharedAccount($delete = true)
+    public static function getSharedAccountData()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
-        $this->_uit = $this->_json;
         $accountdata = [
             'name' => 'unittest shared account',
             'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
@@ -1668,6 +1663,17 @@ class Admin_JsonTest extends TestCase
                 ]
             ]
         ];
+        return $accountdata;
+    }
+
+    public function testEmailAccountApiSharedAccount($delete = true)
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        $this->_uit = $this->_json;
+        $accountdata = self::getSharedAccountData();
         $account = $this->_json->saveEmailAccount($accountdata);
         self::assertEquals($accountdata['email'], $account['email']);
         self::assertTrue(isset($account['grants']), 'grants missing');

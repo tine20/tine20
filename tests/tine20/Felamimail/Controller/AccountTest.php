@@ -12,24 +12,12 @@
 /**
  * Test class for Felamimail_Controller_Account
  */
-class Felamimail_Controller_AccountTest extends TestCase
+class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 {
     /**
      * @var Felamimail_Controller_Account
      */
-    protected $_controller = array();
-    
-    /**
-     * @var Felamimail_Model_Account
-     */
-    protected $_account = NULL;
-    
-    /**
-     * folders to delete in tearDown
-     * 
-     * @var array
-     */
-    protected $_foldersToDelete = array();
+    protected $_controller = null;
     
     /**
      * was the pw changed during tests? if yes, revert.
@@ -52,9 +40,7 @@ class Felamimail_Controller_AccountTest extends TestCase
     {
         parent::setUp();
 
-        Felamimail_Controller_Account::destroyInstance();
         $this->_controller = Felamimail_Controller_Account::getInstance();
-        $this->_account = $this->_controller->search()->getFirstRecord();
     }
 
     /**
@@ -65,14 +51,6 @@ class Felamimail_Controller_AccountTest extends TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->_foldersToDelete as $foldername) {
-            try {
-                Felamimail_Controller_Folder::getInstance()->delete($this->_account->getId(), $foldername);
-            } catch (Felamimail_Exception_IMAP $fei) {
-                // do nothing
-            }
-        }
-        
         parent::tearDown();
         
         if ($this->_pwChanged) {
@@ -331,5 +309,12 @@ class Felamimail_Controller_AccountTest extends TestCase
             'name mismatch: ' . print_r($account->toArray(), true));
         self::assertEquals($user->accountEmailAddress, $account->email,
             'email mismatch: ' . print_r($account->toArray(), true));
+    }
+
+    public function testSearchMailsInSharedAccount()
+    {
+        $account = $this->_createSharedAccount();
+        // write mail to shared account
+        $this->_sendAndAssertMail([$account->email], $account);
     }
 }

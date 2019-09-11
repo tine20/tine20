@@ -57,6 +57,13 @@ abstract class Felamimail_TestCase extends TestCase
     protected $_foldersToClear = array();
 
     /**
+     * are there accounts to delete?
+     *
+     * @var array
+     */
+    protected $_accountsToClear = array();
+
+    /**
      * active sieve script name to be restored
      *
      * @var string
@@ -112,6 +119,8 @@ abstract class Felamimail_TestCase extends TestCase
     protected function setUp()
     {
         parent::setUp();
+
+        Felamimail_Controller_Account::destroyInstance();
 
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
@@ -206,7 +215,14 @@ abstract class Felamimail_TestCase extends TestCase
             }
         }
 
-        parent::tearDown();
+        foreach ($this->_accountsToClear as $account) {
+            try {
+                Felamimail_Controller_Account::getInstance()->delete([$account->getId()]);
+            } catch (Exception $e) {
+            }
+        }
+
+            parent::tearDown();
 
         // needed to clear cache of containers
         Tinebase_Container::getInstance()->resetClassCache();
@@ -218,12 +234,10 @@ abstract class Felamimail_TestCase extends TestCase
      * @param string $_folderName
      * @param array $_additionalFilters
      * @return array json fe result with totalcount + results
-     *
-     * @todo move to felamimail test helper
      */
-    protected function _getMessages($_folderName = 'INBOX', $_additionalFilters = [])
+    protected function _getMessages($_folderName = 'INBOX', $_additionalFilters = [], $account = null)
     {
-        $folder = $this->_getFolder($_folderName);
+        $folder = $this->_getFolder($_folderName, true, $account);
         $filter = $this->_getMessageFilter($folder->getId(), $_additionalFilters);
         // update cache
         $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10, 1);
@@ -297,15 +311,17 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @param string $name
      * @param boolean $createFolder
+     * @param Felamimail_Model_Account $account
      * @return Felamimail_Model_Folder|NULL
      */
-    protected function _getFolder($name, $createFolder = TRUE)
+    protected function _getFolder($name, $createFolder = TRUE, $account = null)
     {
-        Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
+        $account = $account ? $account : $this->_account;
+        Felamimail_Controller_Cache_Folder::getInstance()->update($account->getId());
         try {
-            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $name);
+            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($this->_account, $name) : NULL;
+            $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($account, $name) : NULL;
         }
 
         return $folder;
@@ -427,5 +443,45 @@ abstract class Felamimail_TestCase extends TestCase
         }
 
         return $resultSet;
+    }
+
+    protected function _createSharedAccount()
+    {
+        $sharedAccountData = Admin_JsonTest::getSharedAccountData();
+        $sharedAccount = Admin_Controller_EmailAccount::getInstance()->create(new Felamimail_Model_Account($sharedAccountData));
+        // we need to commit so imap user is in imap db
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_accountsToClear[] = $sharedAccount;
+        return $sharedAccount;
+    }
+
+    /**
+     * @param $to
+     * @param Felamimail_Model_Account $account message is send & asserted in this account
+     * @return mixed
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _sendAndAssertMail($to, $account = null)
+    {
+        $account = $account ? $account : $this->_account;
+        $subject = 'test message ' . Tinebase_Record_Abstract::generateUID(10);
+        $message = new Felamimail_Model_Message(array(
+            'account_id'    => $account->getId(),
+            'subject'       => $subject,
+            'to'            => $to,
+            'body'          => 'aaaaaä <br>',
+        ));
+
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+
+        $filter = [
+            ['field' => 'subject', 'operator' => 'equals', 'value' => $subject],
+            ['field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId()]
+        ];
+        $result = $this->_getMessages('INBOX', $filter, $account);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        return $result['results'][0];
     }
 }

@@ -589,13 +589,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         try {
-            $filter = new Tinebase_Model_Filter_FilterGroup();
-            $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                Felamimail_Model_Account::class, [
-                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED],
-                ['field' => 'user_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
-            ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR));
-
+            $filter = Felamimail_Controller_Account::getVisibleAccountsFilterForUser();
             $accounts = $this->searchAccounts($filter);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
