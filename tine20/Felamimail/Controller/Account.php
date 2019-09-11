@@ -1531,4 +1531,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         return $account;
     }
+
+    public static function getVisibleAccountsFilterForUser($user = null)
+    {
+        if (null === $user) {
+            $user = Tinebase_Core::getUser();
+        }
+        $filter = new Tinebase_Model_Filter_FilterGroup();
+        $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED],
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $user->getId()],
+        ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR));
+
+        return $filter;
+    }
 }

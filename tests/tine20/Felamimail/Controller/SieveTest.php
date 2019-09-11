@@ -44,22 +44,8 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
         // TODO make it work (our sieve testsetup is not ready for this)
         return true;
-
         // write mail to list & check if user receives mail
-        $subject = 'sieve list forward test message ' . Tinebase_Record_Abstract::generateUID(10);
-        $message = new Felamimail_Model_Message(array(
-            'account_id'    => $this->_account->getId(),
-            'subject'       => $subject,
-            'to'            => array($mailinglist->email),
-            'body'          => 'aaaaaä <br>',
-        ));
-
-        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
-
-        $result = $this->_getMessages('INBOX', [
-            ['field' => 'subject', 'operator' => 'equals', 'value' => $subject]
-        ]);
-        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        $this->_sendAndAssertMail(array($mailinglist->email));
     }
 
     public function testAdbMailinglistSieveRuleCopy()
