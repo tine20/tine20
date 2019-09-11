@@ -86,6 +86,7 @@ Ext.ux.WindowFactory.prototype = {
      */
     getExtWindow: function (c) {
         var win = Ext.WindowMgr.get(c.name);
+        var winConstructor = c.modal ? Ext.Window : this.windowClass;
 
         if (! win) {
             c.id = c.name;
@@ -114,7 +115,7 @@ Ext.ux.WindowFactory.prototype = {
             // NOTE: is this still true ?? -> we can only handle one window yet
             c.modal = true;
 
-            win = new this.windowClass(c);
+            win = new winConstructor(c);
             c.items.items[0].window = win;
         }
         
