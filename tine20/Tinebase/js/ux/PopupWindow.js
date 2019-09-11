@@ -144,14 +144,12 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         this.windowManager.register(this);
 
         // closing properly or prevent close otherwise
-        this.popup.addEventListener('beforeunload', (e) => {
-            this.popup.console.warn('prevent start');
+        this.popup.addEventListener('beforeunload', _.bind((e) => {
             if(!this.forceClose && this.fireEvent("beforeclose", this) === false){
-                this.popup.console.warn('prevent');
                 e.preventDefault();
                 e.returnValue = '';
             }
-        });
+        }, this));
 
         // does not work on reload!
         //this.popup.PopupWindow = this;
