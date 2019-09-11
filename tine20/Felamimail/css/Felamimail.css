@@ -261,13 +261,13 @@
     display:none;
 }
 
-.felamimail-recipient-grid .x-grid3 {
-    background-color: #DFE8F6;
-}
+/*.felamimail-recipient-grid .x-grid3 {*/
+/*    background-color: #DFE8F6;*/
+/*}*/
 
-.felamimail-recipient-grid tr {
-    border-color: #DFE8F6;  
-}
+/*.felamimail-recipient-grid tr {*/
+/*    border-color: #DFE8F6;  */
+/*}*/
 
 .felamimail-body-blockquote {
     margin: 5px 10px 0 3px;
@@ -281,14 +281,14 @@
     padding-left: 19px;
 }
 
-.felamimail-recipient-grid .x-grid3-td-type {
-    background-color: #DFE8F6;
-}
+/*.felamimail-recipient-grid .x-grid3-td-type {*/
+/*    background-color: #DFE8F6;*/
+/*}*/
 
-.felamimail-recipient-grid .x-grid3-td-address {
-    background-color: white;
-    border: 1px solid #B5B8C8;
-}
+/*.felamimail-recipient-grid .x-grid3-td-address {*/
+/*    background-color: white;*/
+/*    border: 1px solid #B5B8C8;*/
+/*}*/
 
 .felamimail-recipient-grid .x-grid3-td-address-editing {
     background-color: transparent;
@@ -299,10 +299,10 @@
     color: #999999;
 }
 
-.felamimail-recipient-grid {
-    background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);
-    background-repeat: no-repeat;
-}
+/*.felamimail-recipient-grid {*/
+/*    background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);*/
+/*    background-repeat: no-repeat;*/
+/*}*/
 
 /***** sieve rules ******/
 

@@ -179,11 +179,10 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     onRecordUpdate: function(dialog, record) {
         if (record.data.hasOwnProperty('notes')) {
-            record.data.notes = null;
-            delete record.data.notes;
+            Tine.Tinebase.common.assertComparable(record.data.notes);
         }
 
-        record.set('notes', this.getData());
+        record.set('notes', Tine.Tinebase.common.assertComparable(this.getData()));
     },
 
     /**

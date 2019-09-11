@@ -62,7 +62,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
 
         // layout hack for flat design - till we re arranged left area
         this.on('afterlayout', function() {
-            this.layout.west.split.el.setTop(85);
+            this.layout.west.split.el.setTop(70);
         }, this);
     },
 
@@ -115,7 +115,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             region: 'north',
             layout: 'card',
             activeItem: 0,
-            height: 59,
+            height: 44,
             border: false,
             items: []
         }, {

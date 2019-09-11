@@ -156,6 +156,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  Tinebase_Model_Pagination            $_pagination
      * @param  boolean                              $_onlyIds
      * @return Tinebase_Record_RecordSet|array
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
@@ -189,14 +190,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         // remove grantsfilter here as we do grants computation in PHP
+        $translate = Tinebase_Translation::getTranslation('Calendar');
         $grantsFilter = null;
         // make sure $func is not yet set at this point
-        $func = function($filter) use (/*yes & !*/&$func, &$grantsFilter) {
+        $func = function($filter) use (/*yes & !*/&$func, &$grantsFilter, $translate) {
             if ($filter instanceof Calendar_Model_EventFilter) {
                 $filter->filterWalk($func);
             } elseif ($filter instanceof Calendar_Model_GrantFilter) {
                 if ($grantsFilter !== null) {
-                    throw new Tinebase_Exception_UnexpectedValue('you can\'t have more than one grants filter');
+                    throw new Tinebase_Exception_SystemGeneric($translate->_('You can not have more than one grants filter'));
                 }
                 $grantsFilter = $filter;
                 $filter->getParent()->removeFilter($filter);
@@ -211,12 +213,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $calendarFilter = null;
         unset($func); // !!! very important, don't separate this and the next line
-        $func = function($filter) use (/*yes & !*/&$func, &$calendarFilter) {
+        $func = function($filter) use (/*yes & !*/&$func, &$calendarFilter, $translate) {
             if ($filter instanceof Calendar_Model_EventFilter) {
                 $filter->filterWalk($func);
-            } elseif ($filter instanceof Calendar_Model_CalendarFilter) {
+            } elseif ($filter instanceof Calendar_Model_CalendarFilter && strpos($filter->getOperator(), 'not') !== 0) {
                 if ($calendarFilter !== null) {
-                    throw new Tinebase_Exception_UnexpectedValue('you can\'t have more than one calendar filter');
+                    throw new Tinebase_Exception_SystemGeneric($translate->_('You can not have more than one calendar filter'));
                 }
                 $calendarFilter = $filter;
                 $filter->getParent()->removeFilter($filter);
@@ -252,10 +254,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         if ($calendarFilter) {
             $select1 = clone $select;
             $select2 = clone $select;
-            
+
             $calendarFilter->appendFilterSql1($select1, $this);
             $calendarFilter->appendFilterSql2($select2, $this);
-            
+
             $select = $this->getAdapter()->select()->union(array(
                 $select1,
                 $select2

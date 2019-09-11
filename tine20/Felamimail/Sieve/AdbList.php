@@ -38,7 +38,7 @@ class Felamimail_Sieve_AdbList
             }
 
         } else {
-            if ($this->_allowOnlyGroupMembers && empty($this->_receiverList)) {
+            if ($this->_allowOnlyGroupMembers && !empty($this->_receiverList)) {
                 $result .= 'if address :is :all "from" ["' . join('","', $this->_receiverList) . '"] {' . PHP_EOL;
             } else {
                 // only internal email addresses are allowed to mail!

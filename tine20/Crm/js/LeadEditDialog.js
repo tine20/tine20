@@ -46,7 +46,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @property tasksGrid
      */
     tasksGrid: null,
-    
+
+    // problems with relations here
+    checkUnsavedChanges: false,
     /**
      * @private
      */
@@ -166,7 +168,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.record.data.relations = relations;
     },
-    
+
     /**
      * split the relations array in contacts and tasks and switch related_record and relation objects
      * 
@@ -185,7 +187,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (newLinkObject) {
                 relations[i]['related_record']['relation'] = null;
                 delete relations[i]['related_record']['relation'];
-                newLinkObject.relation = relations[i];
+                // this creates a circular structure which could not be converted to json!
+                // newLinkObject.relation = relations[i];
                 newLinkObject.relation_type = relations[i]['type'].toLowerCase();
 
                 if ((newLinkObject.relation_type === 'responsible'

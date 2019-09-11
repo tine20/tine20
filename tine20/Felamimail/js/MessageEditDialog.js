@@ -1019,6 +1019,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * overwrite, just hide the loadMask
      */
     onAfterRecordLoad: function () {
+        (function() {
+            this.checkStates();
+            this.record.commit();
+        }).defer(100, this);
+
         if (this.loadMask) {
             this.hideLoadMask();
         }

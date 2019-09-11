@@ -1268,10 +1268,19 @@ class Tinebase_FileSystem implements
                 return false;
             }
 
-            if (dirname($oldPath) != dirname($newPath)) {
+            $oldParentPath = dirname($oldPath);
+            $newParentPath = dirname($newPath);
+            try {
+                $newParent = $this->stat($newParentPath);
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                return false;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                return false;
+            }
+
+            if ($oldParentPath !== $newParentPath) {
                 try {
-                    $newParent = $this->stat(dirname($newPath));
-                    $oldParent = $this->stat(dirname($oldPath));
+                    $oldParent = $this->stat($oldParentPath);
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
                     return false;
                 } catch (Tinebase_Exception_NotFound $tenf) {
@@ -1337,13 +1346,14 @@ class Tinebase_FileSystem implements
             } catch (Tinebase_Exception_NotFound $tenf) {}
 
             $node = $this->_getTreeNodeBackend()->update($node, true);
-            $nodeObject = $this->_fileObjectBackend->get($node->object_id);
-            $updatedNodeObject = clone $nodeObject;
-            $updatedNodeObject->hash = Tinebase_Record_Abstract::generateUID();
-            Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($updatedNodeObject, 'update',
-                $nodeObject);
-            $this->_fileObjectBackend->update($updatedNodeObject);
-            $this->_updateDirectoryNodesHash($newPath);
+
+            $fObj = $this->_fileObjectBackend->get($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER ?
+                $newParent->object_id : $node->object_id);
+            Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($fObj, 'update', $fObj);
+            $this->_fileObjectBackend->update($fObj);
+
+            $this->_updateDirectoryNodesHash($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER ?
+               $newParentPath : $newPath);
 
             $transactionManager->commitTransaction($transactionId);
             $transactionId = null;

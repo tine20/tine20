@@ -219,12 +219,28 @@ ul.x-tab-strip-top {
   #button(darken(#F0F0F0, 10%));
 }
 
+.x-btn-group {
+  padding: 0px;
+}
+
+.x-btn-group-tl,
+.x-btn-group-bl,
+.x-btn-group-br {
+  height: 0;
+
+}
+
+.x-btn-group-mc {
+  padding: 0;
+}
+
 /* MAIN NORTH TOOLBAR */
 .tine-mainscreen-centerpanel-north {
   #button(@northTbColor);
 
   .x-toolbar {
     background-color: @northTbColor;
+    padding: 0;
   }
 
   .x-panel-body {
@@ -278,6 +294,7 @@ ul.x-tab-strip-top {
 
 /* FILTER TOOLBAR */
 .tw-ftb-filterpanel .ux-arrowcollapse .x-tool-toggle,
+.tw-ftb-filterpanel .x-layout-split,
 .tw-ftb-filterstructure-treepanel .x-panel-tbar-noborder .x-toolbar,
 .tw-ftb-filterstructure-treepanel .x-panel-body,
 .tw-ftb-filterpanel .x-panel-body,
@@ -336,6 +353,7 @@ ul.x-tab-strip-top {
   background-color: @tbColor;
 }
 
+.x-layout-collapsed,
 .x-layout-split {
   background-color: white;
 }
@@ -357,9 +375,9 @@ ul.x-tab-strip-top {
 
 /* FORM */
 .x-form-text, textarea.x-form-field {
-  border-left: none;
-  border-right: none;
-  border-top: none;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
 }
 
 .x-form-field-wrap .x-form-trigger {
@@ -461,6 +479,17 @@ span.x-form-twin-triggers img.x-form-unlocked-trigger {
 span.x-form-twin-triggers img.x-form-locked-trigger {
   background-image: url('../../images/icon-set/icon_lock_open.svg') !important;
   .x-form-trigger-flat();
+}
+
+span.x-form-twin-triggers img.x-form-clear-trigger {
+  background-image: url('../../images/icon-set/icon_clear.svg') !important;
+  .x-form-trigger-flat();
+  background-size: 11px;
+  background-position-y: 2px !important;
+  &:hover {
+    background-size: 13px;
+    background-position-y: 1px !important;
+  }
 }
 
 /* GRID */

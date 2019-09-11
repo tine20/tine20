@@ -87,22 +87,22 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     setMembers: function(cb, scope) {
         var options = {
             loadCb: cb || Ext.emptyFn,
-            scope: scope,
-            add: true
+            scope: scope
         };
 
         this.memberroles = this.record.get("memberroles");
 
-        // add members with limited acl
-        var recordsWithLimitedAcl = [];
-        Ext.each(this.record.get("members"), function(member) {
-            if (member.n_fn) {
-                recordsWithLimitedAcl.push(new Tine.Addressbook.Model.Contact(member))
-            }
+        // NOTE: load with option add can't cope with duplicates
+        options.loadCb = options.loadCb.createInterceptor(function() {
+            // add members with limited acl
+            Ext.each(this.record.get("members"), function(member) {
+                if (member.n_fn) {
+                    if (! this.store.getById(member.id)) {
+                        this.store.add([new Tine.Addressbook.Model.Contact(member)]);
+                    }
+                }
+            }, this);
         }, this);
-        if (recordsWithLimitedAcl.length > 0) {
-            this.store.add(recordsWithLimitedAcl);
-        }
 
         this.store.load(options);
     },

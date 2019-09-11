@@ -2452,4 +2452,10 @@ class Calendar_JsonTests extends Calendar_TestCase
                 ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = $oldValue;
         }
     }
+
+    public function testSearchWithFalseFilter()
+    {
+        $searchResultData = $this->_uit->searchEvents(false, array());
+        self::assertGreaterThanOrEqual(0, $searchResultData['totalcount']);
+    }
 }
