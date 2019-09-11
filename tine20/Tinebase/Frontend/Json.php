@@ -206,7 +206,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } catch (Tinebase_Exception $e) {
             $response = array(
                 'success'      => FALSE,
-                'errorMessage' => "New password could not be set! Error: " . $e->getMessage()
+                'errorMessage' => $e->getMessage()
             );
         }
 
