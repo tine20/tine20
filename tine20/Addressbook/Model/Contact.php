@@ -175,14 +175,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
         'filterModel'       => [
             'id'                => [
-                'filter'            => 'Addressbook_Model_ContactIdFilter',
+                'filter'            => Addressbook_Model_ContactIdFilter::class,
                 'options'           => [
                     'idProperty'        => 'id',
                     'modelName'         => 'Addressbook_Model_Contact'
                 ]
             ],
             'showDisabled'      => [
-                'filter'            => 'Addressbook_Model_ContactHiddenFilter',
+                'filter'            => Addressbook_Model_ContactHiddenFilter::class,
                 'title'             => 'Show Disabled', // _('Show Disabled') // TODO is this right?
                 'options'           => [
                     'requiredCols'      => ['account_id' => 'accounts.id'],
@@ -190,25 +190,25 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'jsConfig'          => ['filtertype' => 'addressbook.contactshowDisabled'] // TODO later with FE fix it
             ],
             'path'              => [
-                'filter'            => 'Tinebase_Model_Filter_Path',
+                'filter'            => Tinebase_Model_Filter_Path::class,
                 'title'             => 'Path', // _('Path') // TODO is this right?
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactpath'] // TODO later with FE fix it
             ],
             'list'              => [
-                'filter'            => 'Addressbook_Model_ListMemberFilter',
+                'filter'            => Addressbook_Model_ListMemberFilter::class,
                 'title'             => 'List Member', // _('List Member') // TODO is this right?
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactlist'] // TODO later with FE fix it
             ],
             'list_role_id'      => [
-                'filter'            => 'Addressbook_Model_ListRoleMemberFilter',
+                'filter'            => Addressbook_Model_ListRoleMemberFilter::class,
                 'title'             => 'List Role Member', // _('List Role Member') // TODO is this right?
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactlistroleid'] // TODO later with FE fix it
             ],
             'telephone'         => [
-                'filter'            => 'Tinebase_Model_Filter_Query',
+                'filter'            => Tinebase_Model_Filter_Query::class,
                 'title'             => 'Telephone', // _('Telephone') // TODO is this right?
                 'options'           => [
                     'fields'            => [
@@ -228,7 +228,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'jsConfig'          => ['filtertype' => 'addressbook.contacttelephone'] // TODO later with FE fix it
             ],
             'telephone_normalized' => [
-                'filter'            => 'Tinebase_Model_Filter_Query',
+                'filter'            => Tinebase_Model_Filter_Query::class,
                 'title'             => 'Telephone Normalized', // _('Telephone Normalized') // TODO is this right?
                 'options'           => [
                     'fields'            => [
@@ -248,7 +248,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'jsConfig'          => ['filtertype' => 'addressbook.contacttelephoneNormalized'] // TODO later with FE fix it
             ],
             'email_query'       => [
-                'filter'            => 'Tinebase_Model_Filter_Query',
+                'filter'            => Tinebase_Model_Filter_Query::class,
                 'title'             => 'Email', // _('Email') // TODO is this right?
                 'options'           => [
                     'fields'            => [
