@@ -186,6 +186,7 @@ trait Calendar_Export_GenericTrait
                 $raii = new Tinebase_RAII(function() {
                     Addressbook_Model_Contact::$doResolveAttenderCleanUp = true;
                 });
+                Calendar_Model_Attender::clearCache();
             }
             Calendar_Model_Attender::resolveAttendee($attendees, false, $_records);
 
