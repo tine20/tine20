@@ -240,4 +240,25 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      * @param  array                    $_ldapEntry  the data currently stored in ldap 
      */
     abstract protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array());
+
+    // follow-up to "hack" from @2f083b0 which took away the function from Ldap-Plugins
+    // (reintroducing this function into Abstract.php for SQL-Plugins only)
+    public function _getConfiguredSystemDefaults()
+    {
+        $systemDefaults = array();
+        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
+        if (!empty($this->_config[$hostAttribute])) {
+            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
+        }
+        if (!empty($this->_config['port'])) {
+            $systemDefaults['emailPort'] = $this->_config['port'];
+        }
+        if (!empty($this->_config['ssl'])) {
+            $systemDefaults['emailSecure'] = $this->_config['ssl'];
+        }
+        if (!empty($this->_config['auth'])) {
+            $systemDefaults['emailAuth'] = $this->_config['auth'];
+        }
+        return $systemDefaults;
+    }
 }
