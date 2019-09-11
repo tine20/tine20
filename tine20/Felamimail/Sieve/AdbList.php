@@ -89,10 +89,19 @@ class Felamimail_Sieve_AdbList
     {
         $sieveRule = new self();
 
+        $oldAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function() use($oldAcl) {
+            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldAcl);
+        });
+
         $sieveRule->_receiverList = array_filter(array_keys(Addressbook_Controller_Contact::getInstance()->search(
             new Addressbook_Model_ContactFilter([
-                ['field' => 'id', 'operator' => 'in', 'value' => $_list->members]
+                ['field' => 'id', 'operator' => 'in', 'value' => $_list->members],
+                ['field' => 'showDisabled', 'operator' => 'equals', 'value' => false],
             ]), null, false, ['email'])));
+
+        // for unused variable check
+        unset($raii);
 
         if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY]) && $_list
                 ->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY]) {

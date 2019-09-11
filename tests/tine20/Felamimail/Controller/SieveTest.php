@@ -102,11 +102,24 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
             Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS
         ]);
 
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $raii = new Tinebase_RAII(function() use($sclever) {
+            $sclever->visibility = Tinebase_Model_User::VISIBILITY_DISPLAYED;
+            Tinebase_User::getInstance()->updateUser($sclever);
+        });
+        $sclever->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
+        Tinebase_User::getInstance()->updateUser($sclever);
+
+        Addressbook_Controller_List::getInstance()->addListMember($mailinglist, [$sclever->contact_id]);
+
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         self::assertContains('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $script->getSieve());
         self::assertContains('reject "Your email has been rejected"', $script->getSieve());
 
         // TODO check sieve script functionality
+
+        // for unused variable check
+        unset($raii);
     }
 }

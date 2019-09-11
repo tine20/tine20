@@ -991,7 +991,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     /**
      * @param array $xpropsToSet
-     * @return Tinebase_Record_Interface
+     * @return Addressbook_Model_List
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
