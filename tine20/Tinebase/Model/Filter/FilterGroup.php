@@ -244,6 +244,19 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
 
     /**
+     * @param bool|null $bool
+     * @return bool
+     */
+    public function doIgnoreAcl($bool = null)
+    {
+        $oldValue = $this->_ignoreAcl;
+        if (null !== $bool) {
+            $this->_ignoreAcl = (bool)$bool;
+        }
+        return $oldValue;
+    }
+
+    /**
      * @param Tinebase_Model_Filter_FilterGroup $_parent
      */
     public function setParent($_parent)

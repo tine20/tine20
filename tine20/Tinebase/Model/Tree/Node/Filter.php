@@ -137,15 +137,20 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     }
 
     /**
-     * append grants acl filter
+     * appends custom filters to a given select object
      *
-     * @param Zend_Db_Select $select
-     * @param Tinebase_Backend_Sql_Abstract $backend
-     * @param Tinebase_Model_User $user
+     * @param  Zend_Db_Select                    $select
+     * @param  Tinebase_Backend_Sql_Abstract     $backend
+     * @return void
      */
-    protected function _appendGrantsFilter($select, $backend, $user = null)
+    public function appendFilterSql($select, $backend)
     {
-        parent::_appendGrantsFilter($select, $backend, $user);
+        if ($this->_ignoreAcl) {
+            //??? yes or no? its a change in a refactor... but still I think its right to return here
+            return;
+        }
+
+        parent::appendFilterSql($select, $backend);
 
         if (! $this->_ignorePinProtection
             && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
