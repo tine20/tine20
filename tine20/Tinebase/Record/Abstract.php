@@ -935,7 +935,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             }
             $id = $_id->getId();
         } elseif (is_array($_id)) {
-            throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
+            if (isset($_id['id'])) {
+                $id = $_id['id'];
+            } else {
+                throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
+            }
         } else {
             $id = $_id;
         }
