@@ -30,6 +30,7 @@ Ext.ux.WindowFactory = function (config) {
 
         case 'Ext' :
             this.windowClass = Ext.extend(Ext.Window, {
+                confirmLeavSite: me.confirmLeavSite,
 
                 // closing interception analog to browser windows
                 close : function(force){
@@ -40,7 +41,7 @@ Ext.ux.WindowFactory = function (config) {
                             this.hide(null, this.doClose, this);
                         }
                     } else {
-                        me.confirmLeavSite(this);
+                        this.confirmLeavSite(this);
                     }
                 },
             });
@@ -227,7 +228,8 @@ Ext.ux.WindowFactory.prototype = {
     },
 
     confirmLeavSite: function(scope) {
-        Ext.MessageBox.show({
+        let win = scope.popup ? scope.popup : window;
+        win.Ext.MessageBox.show({
             title: i18n._('Leave site?'),
             msg: i18n._('Changes you made may not be saved.'),
             buttons: Ext.MessageBox.OKCANCEL,
