@@ -96,6 +96,9 @@ class Setup_Core extends Tinebase_Core
         self::set(self::REQUEST, $request);
         
         $server = NULL;
+
+        // we need to initialize sentry at the very beginning to catch ALL errors
+        self::setupSentry();
         
         /**************************** JSON API *****************************/
         if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
