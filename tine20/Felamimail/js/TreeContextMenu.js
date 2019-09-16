@@ -106,9 +106,9 @@ Tine.Felamimail.setTreeContextMenus = function() {
             var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
                 record: record,
                 listeners: {
-                    scope: this,
-                    'update': function(record) {
-                        var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
+                    'update': _.bind(function(record) {
+                        var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record)),
+                            selectedNode = this.getSelectionModel().getSelectedNode();
                         
                         // update tree node + store
                         this.ctxNode.setText(account.get('name'));
@@ -116,9 +116,13 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         
                         // reload tree node + remove all folders of this account from store ?
                         this.folderStore.resetQueryAndRemoveRecords('parent_path', '/' + this.ctxNode.attributes.account_id);
-                        this.ctxNode.reload(function(callback) {
-                        });
-                    }
+                        this.ctxNode.reload(_.bind(function(callback) {
+                            let nodeToSelct = this.getNodeById(_.get(selectedNode, 'id'), '');
+                            if (nodeToSelct) {
+                                this.getSelectionModel().select(nodeToSelct);
+                            }
+                        }, this));
+                    }, this)
                 }
             });
         }

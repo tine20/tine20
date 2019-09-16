@@ -436,7 +436,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchAccounts($filter)
     {
-        return $results = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
+        $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
+        // add signatures
+        foreach ($accounts['results'] as $idx => $account) {
+            $accounts['results'][$idx] = $this->getAccount($account['id']);
+        }
+
+        return $accounts;
     }
     
     /**
@@ -593,10 +599,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $filter = Felamimail_Controller_Account::getVisibleAccountsFilterForUser();
             $accounts = $this->searchAccounts($filter);
-            // add signatures
-            foreach ($accounts['results'] as $idx => $account) {
-                $accounts['results'][$idx] = $this->getAccount($account['id']);
-            }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
