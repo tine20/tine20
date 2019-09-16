@@ -38,7 +38,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * 
      * @var boolean
      */
-    protected $_logImapRequestsAndResponses = false;
+    protected $_logImapRequestsAndResponses = true;
     
     /**
      * create instance with parameters
@@ -51,9 +51,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      *   - folder select this folder [optional, default = 'INBOX']
      *
      * @param  object $params mail reader specific parameters
+     * @param Felamimail_Model_Account $account
      */
     /** @noinspection MagicMethodsValidityInspection */
-    public function __construct($params)
+    public function __construct($params, $account)
     {
         /** @noinspection OffsetOperationsInspection */
         $this->_has['flags'] = true;
@@ -77,10 +78,14 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
         
         $this->connectAndLogin($params);
-        
+        $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($account, $this);
+
+
         $folderToSelect = isset($params->folder) ? $params->folder : 'INBOX';
+        $selectParams = in_array('CONDSTORE', $capabilities['capabilities']) ? ['(CONDSTORE)'] : [];
+
         try {
-            $this->selectFolder($folderToSelect);
+            $this->selectFolder($folderToSelect, $selectParams);
         } catch (Zend_Mail_Storage_Exception $zmse) {
             throw new Felamimail_Exception_IMAPFolderNotFound('Could not select ' . $folderToSelect . '(' . $zmse->getMessage() . ')');
         }
@@ -144,10 +149,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @throws Zend_Mail_Storage_Exception
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function selectFolder($globalName)
+    public function selectFolder($globalName, $params=[])
     {
         $this->_currentFolder = $globalName;
-        if (!$result = $this->_protocol->select($this->_currentFolder)) {
+        if (!$result = $this->_protocol->select($this->_currentFolder, $params)) {
             $this->_currentFolder = null;
             /**
              * @see Zend_Mail_Storage_Exception

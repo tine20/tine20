@@ -29,9 +29,9 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
      * @return bool|array false if error, array with returned information
      *                    otherwise (flags, exists, recent, uidvalidity)
      */
-    public function examineOrSelect($command = 'EXAMINE', $box = 'INBOX')
+    public function examineOrSelect($command = 'EXAMINE', $box = 'INBOX', $params=[])
     {
-        $this->sendRequest($command, array($this->escapeString($box)), $tag);
+        $this->sendRequest($command, array_merge(array($this->escapeString($box)), $params), $tag);
 
         $result = array();
         while (!$this->readLine($tokens, $tag)) {
@@ -67,6 +67,19 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         }
         
         return $result;
+    }
+
+    /**
+     * change folder
+     *
+     * @param string $box change to this folder
+     * @param array $params
+     * @return bool|array see examineOrselect()
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function select($box = 'INBOX', $params = [])
+    {
+        return $this->examineOrSelect('SELECT', $box, $params);
     }
 
     /**

@@ -16,6 +16,7 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -40,6 +41,12 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
                 self::FUNCTION_CONST                => 'update005',
             ],
         ],
+        self::PRIO_NORMAL_APP_UPDATE => [
+            self::RELEASE012_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
+            ],
+        ]
     ];
 
     public function update001()
@@ -182,5 +189,19 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Felamimail', '12.8', self::RELEASE012_UPDATE005);
+    }
+
+    /**
+     * reset folder "support_condstore"
+     */
+    public function update006()
+    {
+        $folderBackend = new Felamimail_Backend_Folder();
+        $data = [
+            'supports_condstore' => null
+        ];
+        Tinebase_Core::getDb()->update($folderBackend->getTablePrefix() . $folderBackend->getTableName(), $data);
+
+        $this->addApplicationUpdate('Felamimail', '12.9', self::RELEASE012_UPDATE006);
     }
 }

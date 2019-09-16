@@ -39,15 +39,13 @@ class Felamimail_Backend_ImapFactory
             $imapConfig = $account->getImapConfig();
 
             // we need to instantiate a new imap backend
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Connecting to server ' . $imapConfig['host'] . ':' . $imapConfig['port'] 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Connecting to server ' . $imapConfig['host'] . ':' . $imapConfig['port']
                 . ' (' . (((isset($imapConfig['ssl']) || array_key_exists('ssl', $imapConfig))) ? $imapConfig['ssl'] : 'none') . ')'
                 . ' with username ' . $imapConfig['user']);
-            
+
             try {
-                self::$_backends[$accountId] = new Felamimail_Backend_ImapProxy($imapConfig);
-                Felamimail_Controller_Account::getInstance()->updateCapabilities($account, self::$_backends[$accountId]);
-                
+                self::$_backends[$accountId] = new Felamimail_Backend_ImapProxy($imapConfig, $account);
             } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
                 // add account and username to Felamimail_Exception_IMAPInvalidCredentials
                 $feiic->setAccount($account)
