@@ -169,10 +169,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if ($record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->addSystemAccountConfigValues($record);
         }
-        
+
         return $record;
     }
-    
+
     /**
      * Deletes a set of records.
      * 
@@ -506,7 +506,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // only allow to update some values for system accounts
         $allowedFields = array(
             'name',
-            'signature',
+            'signatures',
             'signature_position',
             'display_format',
             'compose_format',
@@ -524,7 +524,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
             if (! in_array($key, $allowedFields)) {
-                // setting old value
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Setting old value in system account for key ' . $key);
                 $_record->$key = $_oldRecord->$key;
             }
         } 

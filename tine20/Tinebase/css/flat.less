@@ -338,8 +338,10 @@ ul.x-tab-strip-top {
 
 .x-form {
   .x-panel-tl, .x-panel-tc, .x-panel-tr {
-    border-top: 1px solid @tbColor;
-    border-bottom: none;
+    //border-top: 1px solid @tbColor;
+    //border-top: none;
+    //border-bottom: none;
+    border: none;
     background-color: @tbColor;
   }
 }
@@ -369,6 +371,13 @@ ul.x-tab-strip-top {
   }
   .x-grid-panel .x-panel-body {
     border: none;
+  }
+
+  .x-panel-header {
+    background: none;
+    color: black;
+    font-weight: normal;
+    font-style: normal;
   }
 }
 
@@ -491,8 +500,11 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
     background-position-y: 1px !important;
   }
 }
+.x-html-editor-wrap {
+  border: none;
+}
 
-/* GRID */
+  /* GRID */
 //.cal-daysviewpanel-header-inner,
 //.cal-timelinepanel-header-label {
 //  background: @tbColor none repeat-x scroll 0 top;

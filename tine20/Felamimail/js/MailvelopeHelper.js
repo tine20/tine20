@@ -12,11 +12,10 @@ Tine.Felamimail.mailvelopeHelper = function() {
             }), new Promise(function (fullfill, reject) {
                 (function () {
                     reject();
-                }).defer(5000);
+                }).defer(3000);
             })]
-        )['catch'](function() {
-            Tine.log.info('mailvelope not available');
-        }),
+            // no catch here!!! callers need to catch themselves
+        ),
 
         getKeyring: function() {
             return this.mailvelopeLoaded.then(function() {
