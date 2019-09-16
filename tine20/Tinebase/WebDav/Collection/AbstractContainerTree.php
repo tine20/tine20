@@ -1087,6 +1087,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     /**
      * @param $_id
      * @return Tinebase_Model_FullUser
+     * @throws \Sabre\DAV\Forbidden
      */
     protected function _getUser($_id)
     {
@@ -1097,7 +1098,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         }
 
         if ($this->_useIdAsName) {
-            $contact = Addressbook_Controller_Contact::getInstance()->get($_id);
+            try {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($_id);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                throw new \Sabre\DAV\Forbidden('No permission to get user / contact');
+            }
             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $contact->account_id, 'Tinebase_Model_FullUser');
         } else {
             if ($this->_useLoginAsFolderName()) {
