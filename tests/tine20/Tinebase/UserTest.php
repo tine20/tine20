@@ -163,6 +163,8 @@ class Tinebase_UserTest extends TestCase
      */
     public function testPasswordPolicy()
     {
+        Tinebase_Core::setLocale('en');
+
         $policies = array(
             Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => TRUE,
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => 20,
@@ -252,6 +254,8 @@ class Tinebase_UserTest extends TestCase
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
             $this->markTestSkipped('skipped for ad backends - see testPasswordPolicyUsername()');
         }
+
+        Tinebase_Core::setLocale('en');
 
         $this->_setPwPolicies(array(
             Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME => false
