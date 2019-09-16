@@ -11,10 +11,10 @@ Tine.Felamimail.mailvelopeHelper = function() {
                 }
             }), new Promise(function (fullfill, reject) {
                 (function () {
-                    reject();
+                    reject(new Error("mailvelope not available. (don't panic this is not a problem you just can't work with crypted emails using mailvelope)"));
                 }).defer(3000);
             })]
-            // no catch here!!! callers need to catch themselves
+            // no catch here!!! otherwise the promise is fulfilled all the time!
         ),
 
         getKeyring: function() {
