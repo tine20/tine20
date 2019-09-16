@@ -382,7 +382,8 @@ class Tinebase_Group
             : self::DEFAULT_ADMIN_GROUP;
         $adminGroup = new Tinebase_Model_Group(array(
             'name'          => $defaultAdminGroupName,
-            'description'   => 'Group of administrative accounts'
+            'description'   => 'Group of administrative accounts',
+            'account_only'  => true,
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($adminGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($adminGroup);
@@ -392,7 +393,8 @@ class Tinebase_Group
             : self::DEFAULT_USER_GROUP;
         $userGroup = new Tinebase_Model_Group(array(
             'name'          => $defaultUserGroupName,
-            'description'   => 'Group of user accounts'
+            'description'   => 'Group of user accounts',
+            'account_only'  => true,
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($userGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($userGroup);
@@ -404,7 +406,8 @@ class Tinebase_Group
         $anonymousGroup = new Tinebase_Model_Group(array(
             'name'          => $defaultAnonymousGroupName,
             'description'   => 'Group of anonymous user accounts',
-            'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN
+            'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN,
+            'account_only'  => true,
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($anonymousGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($anonymousGroup);

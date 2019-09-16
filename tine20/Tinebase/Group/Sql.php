@@ -523,6 +523,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         unset($data['container_id']);
         unset($data['xprops']);
 
+        // TODO should be done in the model
+        $data['account_only'] = ! isset($data['account_only']) || empty($data['account_only']) ? 0 : (int) $data['account_only'];
+
         $this->groupsTable->insert($data);
 
         $newGroup = clone $_group;
@@ -570,14 +573,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $_group->visibility = Tinebase_Model_Group::VISIBILITY_HIDDEN;
             $_group->list_id    = null;
         }
-        
+
         $data = array(
             'name'          => $_group->name,
             'description'   => $_group->description,
             'visibility'    => $_group->visibility,
             'email'         => $_group->email,
             'list_id'       => $_group->list_id,
-            'account_only'  => $_group->account_only,
+            'account_only'  => empty($_group->account_only) ? 0 : (int) $_group->account_only,
             'created_by'            => $_group->created_by,
             'creation_time'         => $_group->creation_time,
             'last_modified_by'      => $_group->last_modified_by,
