@@ -355,23 +355,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             return;
         }
 
-        // update cache to fetch new message
-        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($_sentFolder, 10, 1);
-        $i = 0;
-        while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
-            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
-            $i++;
-        }
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
-            ['field' => 'subject', 'operator' => 'equals', 'value' => $_message->subject],
-            ['field' => 'received', 'operator' => 'within', 'value' => Tinebase_Model_Filter_Date::DAY_THIS],
-        ]);
-        $result = Felamimail_Controller_Message::getInstance()->search($filter, new Tinebase_Model_Pagination([
-            'sort' => 'received',
-            'dir' => 'DESC',
-            'limit' => 1,
-        ]));
-        $sentMessage = $result->getFirstRecord();
+        $sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder($_sentFolder, $_message);
 
         if ($sentMessage) {
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [

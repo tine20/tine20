@@ -2335,4 +2335,33 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals(1, count($message['fileLocations']), 'did not get message file location: '
             . print_r($message, true));
     }
+
+    public function testSaveDraft()
+    {
+        $messageToSave = $this->_getMessageData();
+        $messageToSave['bcc'] = array('bccaddress@email.org', 'bccaddress2@email.org');
+        $draft = $this->_json->saveDraft($messageToSave);
+        $this->_foldersToClear = array($this->_account->drafts_folder);
+        self::assertNotEmpty($draft['id'], 'id of draft message missing: ' . print_r($draft, true));
+
+        // check if message is in drafts folder and recipients are present
+        $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
+        self::assertEquals($messageToSave['subject'], $message['subject']);
+        self::assertEquals($messageToSave['to'][0], $message['to'][0], 'recipient not found');
+        self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
+        self::assertContains('bccaddress', $message['bcc'][0], 'bcc recipient not found');
+
+        // update draft message - old draft should be deleted
+        $updatedDraft = $draft;
+        $updatedDraft['subject'] = 'my updated draft';
+        $updatedDraft = $this->_json->saveDraft($updatedDraft);
+        $message = $this->_searchForMessageBySubject($updatedDraft['subject'], $this->_account->drafts_folder);
+        self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
+        try {
+            $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
+            self::fail('old draft should be deleted: ' . print_r($draft, true));
+        } catch (Exception $e) {
+            self::assertContains('Message not found', $e->getMessage());
+        }
+    }
 }

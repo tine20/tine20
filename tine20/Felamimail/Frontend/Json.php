@@ -263,9 +263,25 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $message->setFromJsonInUsersTimezone($recordData);
         
         $result = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($folderName, $message);
-        $result = $this->_recordToJson($result);
-        
-        return $result;
+        return $this->_recordToJson($result);
+    }
+
+    /**
+     * @param $recordData
+     * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function saveDraft($recordData)
+    {
+        $message = new Felamimail_Model_Message();
+        $message->setFromJsonInUsersTimezone($recordData);
+        $result = Felamimail_Controller_Message::getInstance()->saveDraft($message);
+        if ($result) {
+            return $this->_recordToJson($result);
+        } else {
+            throw new Felamimail_Exception_IMAPMessageNotFound('Could not save draft');
+        }
     }
 
     /**

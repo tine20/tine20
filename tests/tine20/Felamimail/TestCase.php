@@ -234,6 +234,8 @@ abstract class Felamimail_TestCase extends TestCase
      * @param string $_folderName
      * @param array $_additionalFilters
      * @return array json fe result with totalcount + results
+     *
+     * TODO use \Felamimail_Controller_Message::fetchRecentMessageFromFolder
      */
     protected function _getMessages($_folderName = 'INBOX', $_additionalFilters = [], $account = null)
     {
