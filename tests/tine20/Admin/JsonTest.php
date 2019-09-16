@@ -1500,6 +1500,10 @@ class Admin_JsonTest extends TestCase
         $userArray = $this->testSaveAccount();
         $savedGroup = $this->_saveGroup($userArray, ['account_only' => 0]);
         self::assertEquals('0', $savedGroup['account_only']);
+        $savedGroup =$this->_saveGroup($userArray, ['account_only' => '']);
+        self::assertEquals('0', $savedGroup['account_only']);
+        $savedGroup =$this->_saveGroup($userArray, ['account_only' => false]);
+        self::assertEquals('0', $savedGroup['account_only']);
     }
 
     /**
