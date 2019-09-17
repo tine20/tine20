@@ -1997,16 +1997,21 @@ class Tinebase_FileSystem implements
         if (!file_exists($hashDirectory)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
             if (mkdir($hashDirectory, 0700) === false) {
-                throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
+                if (!is_dir($hashDirectory)) {
+                    throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
+                }
             }
         }
         
         $hashFile      = $hashDirectory . '/' . substr($hash, 3);
         $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
-        if (!file_exists($hashFile)) {
+        while (!file_exists($hashFile)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
             $hashHandle = fopen($hashFile, 'x');
             if (! $hashHandle) {
+                if (file_exists($hashFile)) {
+                    break;
+                }
                 throw new Tinebase_Exception_UnexpectedValue('failed to create hash file');
             }
             rewind($handle);
@@ -2018,6 +2023,7 @@ class Tinebase_FileSystem implements
                     ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
                 $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($handle);
             }
+            break;
         }
         
         return array($hash, $hashFile, $avResult);
