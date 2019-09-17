@@ -91,7 +91,14 @@ class Tinebase_FileSystemTest extends TestCase
         $basePathNode = $this->_controller->stat($this->_basePath);
         
         $testPath = $this->_basePath . '/PHPUNIT';
+        if ($this->_controller->isDir($testPath)) {
+            return $testPath;
+        }
+
         $node = $this->_controller->mkdir($testPath);
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_controller->processRefLogs();
+        $this->_controller->clearStatCache();
         
         $this->assertInstanceOf('Tinebase_Model_Tree_Node', $node);
         $this->assertTrue($this->_controller->fileExists($testPath), 'path created by mkdir not found');
@@ -134,6 +141,9 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertNotEmpty($basePathNode->hash);
         
         $testNode = $this->_controller->mkdir($testPath . '/phpunit');
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_controller->processRefLogs();
+        $this->_controller->clearStatCache();
         
         $this->assertEquals(1, $testNode->revision);
         $this->assertNotEmpty($testNode->hash);
@@ -308,6 +318,9 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertEquals(7, $written);
         
         $this->_controller->fclose($handle);
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_controller->processRefLogs();
+        $this->_controller->clearStatCache();
 
         $children = $this->_controller->scanDir($testDir)->name;
 
@@ -831,6 +844,8 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertEquals(3, $dirObject->size, 'direcotry size update did not work');
 
         $this->_controller->unlink($testFile);
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_controller->processRefLogs();
 
         $dirObject = $fileObjectController->get($dirNode->object_id);
         static::assertEquals(0, $dirObject->size, 'direcotry size should not become negative, it should be set to 0 instead');

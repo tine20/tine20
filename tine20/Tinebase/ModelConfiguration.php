@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -972,20 +972,22 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         $this->_identifier = $this->_idProperty;
 
         $this->_filters = array();
-        $this->_fields[$this->_idProperty] = array(
-            'id' => true,
-            'label' => 'ID',
-            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            'length' => 40,
-            'shy' => true,
-            'filterDefinition'  => [
-                'filter'    => 'Tinebase_Model_Filter_Id',
-                'options'   => [
-                    'idProperty'    => $this->_idProperty,
-                    'modelName'     => $this->_appName . '_Model_' . $this->_modelName
+        if (!isset($this->_fields[$this->_idProperty])) {
+            $this->_fields[$this->_idProperty] = array(
+                'id' => true,
+                'label' => 'ID',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'length' => 40,
+                'shy' => true,
+                'filterDefinition' => [
+                    'filter' => 'Tinebase_Model_Filter_Id',
+                    'options' => [
+                        'idProperty' => $this->_idProperty,
+                        'modelName' => $this->_appName . '_Model_' . $this->_modelName
+                    ]
                 ]
-            ]
-        );
+            );
+        }
 
         $hooks = [];
         if ($this->_hasSystemCustomFields) {
