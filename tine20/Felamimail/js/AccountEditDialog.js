@@ -44,6 +44,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     asAdminModule: false,
 
+    initComponent: function() {
+
+        // quickfix for admin mode
+        if (this.asAdminModule) {
+            this.recordProxy = new Tine.Tinebase.data.RecordProxy({
+                appName: 'Admin',
+                modelName: 'EmailAccount',
+                recordClass: Tine.Felamimail.Model.Account,
+                idProperty: 'id'
+            });
+        }
+
+        Tine.Felamimail.AccountEditDialog.superclass.initComponent.call(this);
+    },
+
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private
@@ -60,13 +75,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordLoad: function() {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordLoad.call(this);
 
-        this.disableFormFields();
-
         if (! this.copyRecord && ! this.record.id && this.window) {
             this.window.setTitle(this.app.i18n._('Add New Account'));
+            if (this.asAdminModule) {
+                this.record.set('type', 'shared');
+                this.typePicker.setValue('shared');
+            }
         } else {
             this.grantsGrid.setValue(this.record.get('grants'));
         }
+
+        this.disableFormFields();
     },
 
     /**
@@ -81,13 +100,18 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     disableFormFields: function() {
         // if account type == system disable most of the input fields
         this.getForm().items.each(function(item) {
+            var disabled = false;
             // only enable some fields
             switch (item.name) {
                 case 'user_id':
                     if (! this.asAdminModule) {
                         item.hide();
                     } else {
-                        item.setDisabled(this.record.get('type') == 'shared');
+                        disabled = this.record.get('type') === 'shared';
+                        item.setDisabled(disabled);
+                        if (disabled) {
+                            item.setValue('');
+                        }
                     }
                     break;
                 case 'signatures':
@@ -103,13 +127,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     break;
                 case 'password':
                     item.setDisabled(! (
-                        !this.record.get('type') || this.record.get('type') == 'shared' || this.record.get('type') == 'user')
+                        !this.record.get('type') || this.record.get('type') === 'shared' || this.record.get('type') === 'user')
                     );
                     break;
                 case 'user':
-                    item.setDisabled(! (
-                        !this.record.get('type') || this.record.get('type') == 'userInternal' || this.record.get('type') == 'user')
-                    );
+                    disabled = !(!this.record.get('type') || this.record.get('type') === 'userInternal' || this.record.get('type') === 'user');
+                    item.setDisabled(disabled);
                     break;
                 case 'host':
                 case 'port':
@@ -131,11 +154,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }, this);
 
-        this.grantsGrid.setDisabled(! (this.record.get('type') == 'shared' && this.asAdminModule));
+        this.grantsGrid.setDisabled(! (this.record.get('type') === 'shared' && this.asAdminModule));
     },
 
     isSystemAccount: function() {
-        return this.record.get('type') == 'system' || this.record.get('type') == 'shared' || this.record.get('type') == 'userInternal';
+        return this.record.get('type') === 'system' || this.record.get('type') === 'shared' || this.record.get('type') === 'userInternal';
     },
     
     /**
@@ -186,14 +209,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
                             allowBlank: this.asAdminModule
-                        }, Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                            userOnly: true,
-                            fieldLabel: this.app.i18n._('User'),
-                            useAccountRecord: true,
-                            name: 'user_id',
-                            allowBlank: true
-                            // TODO user selection for system accounts should fill in the values!
-                        }), {
+                        }, this.typePicker = new Ext.form.ComboBox({
                             fieldLabel: this.app.i18n._('Account Type'),
                             name: 'type',
                             hidden: ! this.asAdminModule,
@@ -203,24 +219,28 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             editable: false,
                             mode: 'local',
                             forceSelection: true,
-                            value: 'user',
+                            // value: 'shared',
                             xtype: 'combo',
                             store: this.getTypeStore(),
                             listeners: {
                                 scope: this,
                                 select: function(combo, record) {
-                                    if (record.get('field1') === 'system') {
-                                        combo.markInvalid(this.app.i18n._('It is not possible to create new personal system accounts'));
-                                    } else {
-                                        // apply to record for disableFormFields()
-                                        this.record.set('type', record.get('field1'));
-                                    }
+                                    // apply to record for disableFormFields()
+                                    this.record.set('type', combo.getValue());
+                                    this.disableFormFields();
                                 },
                                 blur: function() {
                                     this.disableFormFields();
                                 }
                             }
-                        }, {
+                        }), this.userAccountPicker = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                            userOnly: true,
+                            fieldLabel: this.app.i18n._('User'),
+                            useAccountRecord: true,
+                            name: 'user_id',
+                            allowBlank: true
+                            // TODO user selection for system accounts should fill in the values!
+                        }), {
                             fieldLabel: this.app.i18n._('User Email'),
                             name: 'email',
                             allowBlank: this.asAdminModule,
@@ -484,14 +504,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     getTypeStore: function() {
         var availableTypes = [
-            ['user', this.app.i18n._('External E-Mail Account')],
-            ['userInternal', this.app.i18n._('User Defined Personal System Account')],
             ['shared', this.app.i18n._('Shared System Account')],
+            ['userInternal', this.app.i18n._('Additional Personal System Account')],
+            ['user', this.app.i18n._('Additional Personal External Account')],
         ];
 
         if (this.record.id) {
             // new records can't be personal system accounts
-            availableTypes.push(['system', this.app.i18n._('Personal System Account')]);
+            availableTypes.push(['system', this.app.i18n._('Default Personal System Account')]);
         }
 
         return availableTypes;

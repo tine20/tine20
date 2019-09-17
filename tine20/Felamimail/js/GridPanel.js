@@ -1409,25 +1409,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         // this is a little bit clunky but seems to be required to prevent record loading in AccountEditDialog
         newAccount.id = null;
+
+        // make sure accountStore is initialised
+        this.app.getAccountStore();
+
         var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
             record: newAccount,
             listeners: {
                 scope: this,
                 'update': function(record) {
+                    // add to tree
                     var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
-                    
-                    // add to registry
-                    Tine.Felamimail.registry.get('preferences').replace('defaultEmailAccount', account.id);
-                    // need to do this because store could be unitialized yet
-                    var registryAccounts = Tine.Felamimail.registry.get('accounts');
-                    registryAccounts.results.push(account.data);
-                    registryAccounts.totalcount++;
-                    Tine.Felamimail.registry.replace('accounts', registryAccounts);
-                    
-                    // add to tree / store
                     var treePanel = this.app.getMainScreen().getTreePanel();
                     treePanel.addAccount(account);
-                    treePanel.accountStore.add([account]);
                 }
             }
         });

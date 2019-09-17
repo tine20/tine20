@@ -219,8 +219,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
             if (! options.suppressBusEvents) {
-                // do we need to distingush create/update?
-                _.defer(_.bind(this.postMessage, this), 'update', response.responseText);
+                let recordData = JSON.parse(response.responseText);
+                let action = (!_.get(record, 'data.id') && _.get(recordData, 'id')) ||
+                    (!_.get(record, 'data.creation_time') && _.get(recordData, 'creation_time')) ?
+                    'create' : 'update';
+
+                _.defer(_.bind(this.postMessage, this), action, recordData);
             }
             return [this.recordReader(response)];
         };

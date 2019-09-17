@@ -1183,20 +1183,20 @@ msgid "Yes"
 msgstr "Yes"
 
 #: js/AccountEditDialog.js:505
-msgid "External E-Mail Account"
-msgstr "External E-Mail Account"
+msgid "Additional Personal External Account"
+msgstr "Additional Personal External Account"
 
 #: js/AccountEditDialog.js:506
-msgid "User Defined Personal System Account"
-msgstr "User Defined Personal System Account"
+msgid "Additional Personal System Account"
+msgstr "Additional Personal System Account"
 
 #: js/AccountEditDialog.js:507
 msgid "Shared System Account"
 msgstr "Shared System Account"
 
 #: js/AccountEditDialog.js:512
-msgid "Personal System Account"
-msgstr "Personal System Account"
+msgid "Default Personal System Account"
+msgstr "Default Personal System Account"
 
 #: js/AccountEditDialog.js:532
 msgid "Use"
