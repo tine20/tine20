@@ -239,6 +239,24 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         }
         
         return (this.constructor.hasField('last_modified_time')) ? record.get('last_modified_time') > this.get('last_modified_time') : false;
+    },
+
+    /**
+     * update complete record with data from given record
+     *
+     * @param record
+     */
+    update: function(record) {
+        record = _.get(record, 'data', false) ? record :
+            Tine.Tinebase.data.Record.setFromJson(record, this.constructor);
+
+        this.beginEdit();
+        this.fields.each((field) => {
+            let newValue = Tine.Tinebase.common.assertComparable(record.get(field.name));
+            Tine.Tinebase.common.assertComparable(_.get(this, 'data.' + field.name));
+            this.set(field.name, newValue);
+        }, this);
+        this.endEdit();
     }
 });
 
