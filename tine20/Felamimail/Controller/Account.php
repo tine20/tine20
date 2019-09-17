@@ -251,8 +251,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         } elseif ($_record->type === Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
                 Felamimail_Model_Account::TYPE_ADB_LIST) {
             if (! $_record->password) {
-                // TODO invent a new exception for this?
-                throw new Tinebase_Exception_PasswordPolicyViolation($translation->_('shared / adb_list accounts need to have a password set'));
+                throw new Felamimail_Exception_PasswordMissing($translation->_('shared / adb_list accounts need to have a password set'));
             }
             if (! $_record->email) {
                 throw new Tinebase_Exception_UnexpectedValue($translation->_('shared / adb_list accounts need to have an email set'));
