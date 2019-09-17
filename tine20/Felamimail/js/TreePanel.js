@@ -206,6 +206,12 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     initAccounts: function() {
         this.accountStore = this.app.getAccountStore();
         this.accountStore.each(this.addAccount, this);
+
+        this.accountStore.on('load', function(store, records) {
+            this.root.removeAll();
+            _.map(records, _.bind(this.addAccount, this));
+            this.selectInbox();
+        }, this);
         this.accountStore.on('add', function(store, records) {_.map(records, _.bind(this.addAccount, this)); }, this);
         this.accountStore.on('update', this.onAccountUpdate, this);
         this.accountStore.on('remove', this.deleteAccount, this);
