@@ -317,4 +317,17 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         // write mail to shared account
         $this->_sendAndAssertMail([$account->email], $account);
     }
+
+    public function testSharedAccountAcl()
+    {
+        $account = $this->_createSharedAccount();
+
+        // switch user and check if user sees the shared account
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+
+        $filter = Felamimail_Controller_Account::getInstance()->getVisibleAccountsFilterForUser();
+        $scleverAccounts = Felamimail_Controller_Account::getInstance()->search($filter);
+        self::assertFalse($scleverAccounts->getById($account->getId()), 'sclever should not see the shared account!');
+    }
 }
