@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -768,5 +768,37 @@ class Addressbook_ControllerTest extends TestCase
 
         echo PHP_EOL . 'time: ' . (($timeEnd - $timeStarted) * 1000) . 'ms, memory: ' . ($memoryEnd - $memory) .
             PHP_EOL;
+    }
+
+    public function testAccountEmailUpdate2ContactUpdate2EmailListSieveUpdate()
+    {
+        if (empty(Tinebase_Config::getInstance()->{Tinebase_Config::IMAP})) {
+            self::markTestSkipped('no imap config found');
+        }
+
+        $pwd = Tinebase_Record_Abstract::generateUID();
+
+        $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser([
+            'accountLoginName'      => Tinebase_Record_Abstract::generateUID(),
+            'accountDisplayName'    => Tinebase_Record_Abstract::generateUID(),
+            'accountLastName'       => Tinebase_Record_Abstract::generateUID(),
+            'accountFullName'       => Tinebase_Record_Abstract::generateUID(),
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+        ]), $pwd, $pwd, true);
+
+        $newContact = $this->_instance->get($newUser->contact_id);
+
+        $list = $this->_createMailinglist();
+        Addressbook_Controller_List::getInstance()->addListMember($list->getId(), [$newContact->getId()]);
+
+        $newUser->accountEmailAddress = $newUser->accountLoginName . '@' . TestServer::getPrimaryMailDomain();
+        $newUser = Admin_Controller_User::getInstance()->update($newUser);
+
+        $updatedContact = $this->_instance->get($newUser->contact_id);
+        static::assertSame($newUser->accountLoginName . '@' . TestServer::getPrimaryMailDomain(),
+            $newUser->accountEmailAddress);
+        static::assertSame($newUser->accountEmailAddress, $updatedContact->email);
+
+        /** TODO add sieve asserts! */
     }
 }
