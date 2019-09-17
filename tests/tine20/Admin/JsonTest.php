@@ -1670,6 +1670,58 @@ class Admin_JsonTest extends TestCase
         return $accountdata;
     }
 
+    public function testSearchUserEmailAccounts()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        // we should already have some "SYSTEM" accounts for the persona users
+        $filter = [[
+            'field' => 'type',
+            'operator' => 'equals',
+            'value' => Felamimail_Model_Account::TYPE_SYSTEM,
+        ]];
+        $result = $this->_json->searchEmailAccounts($filter, []);
+        self::assertGreaterThan(1, $result['totalcount'], 'system accounts of other users not found');
+
+        // client sends some strange filters ...
+        $filter = array (
+            0 =>
+                array (
+                    'condition' => 'OR',
+                    'filters' =>
+                        array (
+                            0 =>
+                                array (
+                                    'condition' => 'AND',
+                                    'filters' =>
+                                        array (
+                                            0 =>
+                                                array (
+                                                    'field' => 'query',
+                                                    'operator' => 'contains',
+                                                    'value' => '',
+                                                    'id' => 'ext-record-23',
+                                                ),
+                                        ),
+                                    'id' => 'ext-comp-1189',
+                                    'label' => 'Konten',
+                                ),
+                        ),
+                    'id' => 'FilterPanel',
+                ),
+            1 =>
+                array (
+                    'field' => 'query',
+                    'operator' => 'contains',
+                    'value' => '',
+                    'id' => 'quickFilter',
+                ));
+        $result = $this->_json->searchEmailAccounts($filter, []);
+        self::assertGreaterThan(1, $result['totalcount'], 'system accounts of other users not found');
+    }
+
     public function testEmailAccountApiSharedAccount($delete = true)
     {
         if (! TestServer::isEmailSystemAccountConfigured()) {

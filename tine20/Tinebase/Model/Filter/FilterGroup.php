@@ -251,6 +251,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     {
         $oldValue = $this->_ignoreAcl;
         if (null !== $bool) {
+            foreach ($this->_filterObjects as $filter) {
+                if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
+                    $filter->doIgnoreAcl($bool);
+                }
+            }
             $this->_ignoreAcl = (bool)$bool;
         }
         return $oldValue;
