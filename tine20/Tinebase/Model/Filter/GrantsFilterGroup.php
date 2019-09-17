@@ -61,7 +61,7 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
     /**
      * appends custom filters to a given select object
      *
-     * @param  Zend_Db_Select                    $select
+     * @param  Zend_Db_Select||Tinebase_Backend_Sql_Filter_GroupSelect $select
      * @param  Tinebase_Backend_Sql_Abstract     $backend
      * @return void
      */
