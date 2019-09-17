@@ -84,7 +84,7 @@ class Admin_JsonTest extends TestCase
 
         foreach ($this->objects['emailAccounts'] as $account) {
             try {
-                $this->_json->deleteEmailAccounts([$account->getId()]);
+                $this->_json->deleteEmailAccounts([is_array($account) ? $account['id'] : $account->getId()]);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // already removed
             }
@@ -1649,6 +1649,38 @@ class Admin_JsonTest extends TestCase
         ]];
         $result = $this->_uit->searchEmailAccounts($filter, []);
         self::assertEquals(0, $result['totalcount'], 'a new (system?) account has been added');
+    }
+
+    public function testCreatePersonalSystemAccount()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        // create "user" account for sclever
+        $email = 'sclever2@' . TestServer::getPrimaryMailDomain();
+        $accountData = [
+            'name' => 'sclever 2 account',
+            'email' => $email,
+            'type' => Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            'user_id' => $this->_personas['sclever']->getId(),
+        ];
+        $account = $this->_json->saveEmailAccount($accountData);
+        $this->objects['emailAccounts'][] = $account;
+
+        $filter = [[
+            'field' => 'type',
+            'operator' => 'equals',
+            'value' => Felamimail_Model_Account::TYPE_USER_INTERNAL,
+        ], [
+            'field' => 'name',
+            'operator' => 'equals',
+            'value' => 'sclever 2 account',
+        ]];
+        $result = $this->_json->searchEmailAccounts($filter, []);
+        self::assertEquals(1, $result['totalcount'], 'no USER_INTERNAL accounts found');
+        $account = $result['results'][0];
+        self::assertEquals($email, $account['email'], print_r($account, true));
     }
 
     public static function getSharedAccountData()

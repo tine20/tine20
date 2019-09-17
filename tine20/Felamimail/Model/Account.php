@@ -652,7 +652,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
 
-            if ($this->type === self::TYPE_SYSTEM || $this->type === self::TYPE_USER) {
+            if ($this->type === self::TYPE_SYSTEM || $this->type === self::TYPE_USER || $this->type === self::TYPE_USER_INTERNAL) {
                 $credentials = Tinebase_Core::getUserCredentialCache();
                 try {
                     $credentialsBackend->getCachedCredentials($credentials);

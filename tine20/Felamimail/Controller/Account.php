@@ -278,7 +278,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $user->accountEmailAddress = $_record->email;
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $_record->setId(Tinebase_Record_Abstract::generateUID());
-            $userId = $_record->user_id . '#~#' . substr($_record->getId(), 0, 37);
+            $userId = substr($_record->user_id, 0,32) . '#~#' . substr($_record->getId(), 0, 5);
             $user->accountLoginName = $emailUserBackend->getLoginName($userId, $user->accountLoginName, $_record->email);
 
             Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record, $user);
@@ -1474,8 +1474,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         
         // add user data
         $_account->email  = $_email;
-        $_account->name   = $_email;
-        $_account->from   = $_user->accountFullName;
+        if ($_account->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+            $_account->name = $_email;
+        }
+        $_account->from = $_user->accountFullName;
         
         // add contact data (if available)
         try {
