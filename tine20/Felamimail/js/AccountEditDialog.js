@@ -506,8 +506,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.saving = false;
         this.hideLoadMask();
 
-        // TODO if code == 600 -> open new Tine.Tinebase.widgets.dialog.PasswordDialog to set imap password field
-        if (exception.code === 600) {
+        // if code == 925 (Felamimail_Exception_PasswordMissing)
+        // -> open new Tine.Tinebase.widgets.dialog.PasswordDialog to set imap password field
+        if (exception.code === 925) {
             var me = this,
                 dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
                 windowTitle: this.app.i18n._('E-Mail account needs a password')
