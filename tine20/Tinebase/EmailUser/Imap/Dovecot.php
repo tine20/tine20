@@ -212,6 +212,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     protected $_propertyMapping = array(
         'emailUserId'       => 'userid',
         'emailUsername'     => 'username',
+        'emailLoginname'    => 'loginname',
         'emailPassword'     => 'password',
         'emailUID'          => 'uid', 
         'emailGID'          => 'gid', 

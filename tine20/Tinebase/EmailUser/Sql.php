@@ -133,7 +133,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     public function deleteUserById($id)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $id)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $id) . ' OR ' .
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' LIKE ?',
+                substr($id, 0,32) . '#~#%')
         );
         $this->_appendClientIdOrDomain($where);
         
@@ -265,7 +267,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             '(' . $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?',
             $_userId) . ' OR ' .
             $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' LIKE ?',
-                $_userId . '#~#%') . ')'
+                substr($_userId, 0,32) . '#~#%') . ')'
         );
         $this->_appendClientIdOrDomain($where);
         
@@ -612,20 +614,29 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             . ' email records from instance' . $fromInstance);
     }
 
+    /**
+     * copy email user
+     *
+     * @param Tinebase_Model_FullUser $_user
+     * @param string $newId
+     * @throws Tinebase_Exception
+     * @throws Zend_Db_Statement_Exception
+     */
     public function copyUser(Tinebase_Model_FullUser $_user, $newId)
     {
         $columns = $this->_db->query('show columns from ' . $this->_db->quoteIdentifier($this->_userTable))
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
-        if (false === ($offset = array_search($this->_propertyMapping['emailUserId'], $columns))) {
-            throw new Tinebase_Exception('did not find ' . $this->_propertyMapping['emailUserId'] . ' in ' .
-                join(', ', $columns));
+
+        foreach (['emailUserId', 'emailUsername', 'emailAddress', 'emailLoginname'] as $colToRemove) {
+            if (isset($this->_propertyMapping[$colToRemove])) {
+                if (false === ($offset = array_search($this->_propertyMapping[$colToRemove], $columns))) {
+                    throw new Tinebase_Exception('did not find ' . $this->_propertyMapping[$colToRemove] . ' in ' .
+                        join(', ', $columns));
+                }
+                unset($columns[$offset]);
+            }
         }
-        unset($columns[$offset]);
-        if (false === ($offset = array_search($this->_propertyMapping['emailUsername'], $columns))) {
-            throw new Tinebase_Exception('did not find ' . $this->_propertyMapping['emailUsername'] . ' in ' .
-                join(', ', $columns));
-        }
-        unset($columns[$offset]);
+
         $escapedColumns = $columns;
         array_walk($escapedColumns, function(&$val) { $val = $this->_db->quoteIdentifier($val); });
 
@@ -636,13 +647,30 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
                     $this->_config['instanceName']);
         }
 
-        $this->_db->query('INSERT INTO ' . $this->_db->quoteIdentifier($this->_userTable) . ' (' .
+        $query = 'INSERT INTO ' . $this->_db->quoteIdentifier($this->_userTable) . ' (' .
             $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ', ' .
-            $this->_db->quoteIdentifier($this->_propertyMapping['emailUsername']) . ', ' .
-            join(', ', $escapedColumns) . ') SELECT ' . $this->_db->quote($newId) . ', ' .
-            $this->_db->quote($_user->accountLoginName) . ', ' . join(', ', $escapedColumns) .
+            $this->_db->quoteIdentifier($this->_propertyMapping['emailUsername']) . ', ';
+
+        foreach (['emailAddress', 'emailLoginname'] as $column) {
+            if (isset($this->_propertyMapping[$column])) {
+                $query .= $this->_db->quoteIdentifier($this->_propertyMapping[$column]) . ', ';
+            }
+        }
+
+        $query .= join(', ', $escapedColumns) . ') SELECT ' . $this->_db->quote($newId) . ', ' .
+            $this->_db->quote($_user->accountLoginName) . ', ';
+
+        foreach (['emailAddress', 'emailLoginname'] as $column) {
+            if (isset($this->_propertyMapping[$column])) {
+                $query .= $this->_db->quote($_user->accountEmailAddress) . ', ';
+            }
+        }
+
+        $query .= join(', ', $escapedColumns) .
             ' FROM ' . $this->_db->quoteIdentifier($this->_userTable) . ' WHERE ' .
             $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . $this->_db->quoteInto(' = ?',
-                $_user->getId()) . $where);
+                $_user->getId()) . $where;
+
+        $this->_db->query($query);
     }
 }
