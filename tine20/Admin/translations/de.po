@@ -1246,3 +1246,6 @@ msgstr "E-Mail-Konten ansehen"
 
 msgid "manage email accounts"
 msgstr "E-Mail-Konten verwalten"
+
+msgid "System accounts only"
+msgstr "Nur Systembenutzer erlauben"

@@ -108,29 +108,27 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         this.defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         Tine.log.debug('default account is "' + this.defaultAccount);
 
-        // we need to do this deferred as the account model is created in the app starter and might not be available yet
-        // TODO can we use promises here?
-        this.initDeferred.defer(500, this);
+        Tine.Tinebase.appMgr.isInitialised('Felamimail')
+            .then(_.bind(async function() {
+                this.initAccountModel();
+
+                await this.initAccountStore();
+
+                if (window.isMainWindow) {
+                    if (Tine.Tinebase.appMgr.getActive() != this && this.updateInterval) {
+                        var delayTime = this.updateInterval/20;
+                        Tine.log.debug('start preloading mails in "' + delayTime/1000 + '" seconds');
+                        this.checkMailsDelayedTask.delay(delayTime);
+                    }
+
+                    this.showActiveVacation();
+                    this.initGridPanelHooks();
+                    this.registerProtocolHandler();
+                    this.registerQuickLookPanel();
+                }
+            }, this));
     },
 
-    initDeferred: function()
-    {
-        this.initAccountModel();
-
-        if (window.isMainWindow) {
-            if (Tine.Tinebase.appMgr.getActive() != this && this.updateInterval) {
-                var delayTime = this.updateInterval/20;
-                Tine.log.debug('start preloading mails in "' + delayTime/1000 + '" seconds');
-                this.checkMailsDelayedTask.delay(delayTime);
-            }
-
-            this.showActiveVacation();
-            this.initGridPanelHooks();
-            this.registerProtocolHandler();
-            this.registerQuickLookPanel();
-        }
-    },
-    
     /**
      * show notification with active vacation information
      */
@@ -405,6 +403,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     if (! found) {
                         Tine.log.debug('all folders of account ' + account.get('name') + ' have been fetched ...');
                         account.set('all_folders_fetched', true);
+                        account.commit();
                         return false;
                     }
                 } else {
@@ -750,11 +749,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             account = treePanel.getActiveAccount();
         }
         
-        if (account === null) {
+        if (!account) {
             account = this.getAccountStore().getById(Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'));
         }
         
-        if (account === null) {
+        if (!account) {
             // try to get first account in store
             account = this.getAccountStore().getAt(0);
         }
@@ -762,19 +761,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         return account;
     },
     
-    /**
-     * get account store
-     * 
-     * @return {Ext.data.JsonStore}
-     */
-    getAccountStore: function() {
-        if (! this.accountStore) {
+
+    initAccountStore: async function() {
+        return new Promise(_.bind((fulfill, reject) => {
             Tine.log.debug('creating account store');
-            
-            // create store (get from initial data)
+
             this.accountStore = new Ext.data.JsonStore({
                 fields: Tine.Felamimail.Model.Account,
-                data: Tine.Felamimail.registry.get('accounts'),
                 autoLoad: true,
                 id: 'id',
                 root: 'results',
@@ -782,22 +775,71 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 proxy: Tine.Felamimail.accountBackend,
                 reader: Tine.Felamimail.accountBackend.getReader(),
                 listeners: {
-                    scope: this,
-                    'add': function (store, records) {
-                        Tine.log.info('Account added: ' + records[0].get(Tine.Felamimail.Model.Account.getMeta('titleProperty')));
-                        this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
-                    },
-                    'remove': function (store, record) {
-                        Tine.log.info('Account removed: ' + record.get(Tine.Felamimail.Model.Account.getMeta('titleProperty')));
-                        this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
-                    }
+                    load: _.bind(() => {
+                        fulfill(this.accountStore)
+                    }, this)
                 }
             });
-        } 
-    
+
+            postal.subscribe({
+                channel: "recordchange",
+                topic: "Felamimail.Account.*",
+                callback: _.bind(this.onAccountRecordChange, this)
+            });
+
+            postal.subscribe({
+                channel: "recordchange",
+                topic: "Admin.EmailAccount.*",
+                callback: _.bind(this.onAccountRecordChange, this)
+            });
+        }, this));
+    },
+
+    /**
+     * get account store
+     *
+     * @return {Ext.data.JsonStore}
+     */
+    getAccountStore: function() {
         return this.accountStore;
     },
-    
+
+    onAccountRecordChange: function(account, e) {
+        // filter out other user accounts / edit from admin module
+        if (_.get(account, 'user_id.accountId') === Tine.Tinebase.registry.get('currentAccount').accountId) {
+            let accountRecord = Tine.Tinebase.data.Record.setFromJson(account, Tine.Felamimail.Model.Account);
+            let existingAccount = this.accountStore.getById(account.id);
+
+            if (e.topic.match(/\.create/)) {
+                this.accountStore.add([accountRecord]);
+            } else if (e.topic.match(/\.update/) && existingAccount) {
+                existingAccount.update(accountRecord);
+                existingAccount.commit();
+            } else if (e.topic.match(/\.delete/) && existingAccount) {
+                this.accountStore.remove(existingAccount);
+            }
+
+            this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
+        }
+    },
+
+    /**
+     * gets default signature of given account
+     *
+     * @param {Tine.Felamimail.Model.Account} account
+     * @return {Tine.Felamimail.Model.Signature}
+     */
+    getDefaultSignature: function(account) {
+        account = _.isString(account) ? this.getAccountStore().getById(account) : account;
+
+        let signatures = _.get(account, 'data.signatures', []);
+        let signature =_.find(signatures, (s) => {return !!+_.get(s, 'is_default')}) || signatures[0];
+
+        return signature ?
+            Tine.Tinebase.data.Record.setFromJson(signature, Tine.Felamimail.Model.Signature) :
+            null;
+    },
+
     /**
      * show felamimail credentials dialog
      * 
@@ -827,6 +869,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                             
                         folderStore.resetQueryAndRemoveRecords('parent_path', '/' + accountId);
                         account.set('all_folders_fetched', true);
+                        account.commit();
                         
                         accountNode.loading = false;
                         accountNode.reload(function(callback) {
@@ -931,33 +974,29 @@ Tine.Felamimail.loadFlagsStore = function(reload) {
 };
 
 /**
- * add signature (get it from default account settings)
- * 
- * @param {String} id
+ * gets default signature text of given account
+ *
+ * @param {String|Tine.Felamimail.Model.Account} account
  * @return {String}
  */
-Tine.Felamimail.getSignature = function(id) {
-    
-    var result = '',
-        app = Tine.Tinebase.appMgr.get('Felamimail'),
-        activeAccount = app.getMainScreen().getTreePanel().getActiveAccount();
-        
-    id = id || (activeAccount ? activeAccount.id : 'default');
-    
-    if (id === 'default') {
-        id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+Tine.Felamimail.getSignature = function(account, signature) {
+    let app = Tine.Tinebase.appMgr.get('Felamimail');
+    let signatureText = '';
+
+    account = _.isString(account) ? app.getAccountStore().getById(account) : account;
+    account = account || Tine.Felamimail.getActiveAccount();
+
+    if (account) {
+        Tine.log.info('Tine.Felamimail.getSignature() - Fetch signature of account ' + account.id + ' (' + account.name + ')');
+        signature = signature || app.getDefaultSignature(account);
+
+        if (signature && signature.id !== 'none') {
+            // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
+            signatureText = '<br><br><span class="felamimail-body-signature">-- <br>' + _.get(signature, 'data.signature', '') + '</span>';
+        }
     }
-    
-    Tine.log.info('Tine.Felamimail.getSignature() - Fetch signature of account ' + id);
-    
-    var defaultAccount = app.getAccountStore().getById(id);
-    var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
-    if (signature && signature != '') {
-        // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
-        result = '<br><br><span class="felamimail-body-signature">-- <br>' + signature + '</span>';
-    }
-    
-    return result;
+
+    return signatureText;
 };
 
 /**
@@ -1012,6 +1051,7 @@ Tine.Felamimail.handleRequestException = function(exception) {
                 
             if (account) {
                 account.set('all_folders_fetched', true);
+                account.commit();
                 if (account.get('type') == 'system') {
                     // just show message box for system accounts
                     Ext.Msg.show({

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -34,18 +34,9 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
     /**
      * @var array one of these grants must be met
      */
-    protected $_requiredGrants = array(
-        Tinebase_Model_PersistentFilterGrant::GRANT_READ
-    );
-
-    /**
-     * is acl filter resolved?
-     *
-     * TODO needed here?
-     *
-     * @var boolean
-     */
-    protected $_isResolved = FALSE;
+    protected $_requiredGrants = [
+        Tinebase_Model_Grants::GRANT_READ
+    ];
 
     /**
      * sets the grants this filter needs to assure
@@ -55,52 +46,32 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
     public function setRequiredGrants(array $_grants)
     {
         $this->_requiredGrants = $_grants;
-        $this->_isResolved = FALSE;
+    }
+
+    /**
+     * gets aclFilter of this group
+     *
+     * @return array
+     */
+    public function getAclFilters()
+    {
+        return [$this];
     }
 
     /**
      * appends custom filters to a given select object
      *
-     * @param  Zend_Db_Select                    $select
+     * @param  Zend_Db_Select||Tinebase_Backend_Sql_Filter_GroupSelect $select
      * @param  Tinebase_Backend_Sql_Abstract     $backend
      * @return void
      */
     public function appendFilterSql($select, $backend)
     {
-        $this->_appendAclSqlFilter($select, $backend);
-    }
-
-    /**
-     * add account id to filter
-     *
-     * @param Zend_Db_Select $select
-     * @param Tinebase_Backend_Sql_Abstract $backend
-     */
-    protected function _appendAclSqlFilter($select, $backend)
-    {
-        if (! $this->_isResolved) {
-            $this->_appendGrantsFilter($select, $backend);
-
-            $this->_isResolved = TRUE;
-        }
-    }
-
-    /**
-     * append grants acl filter
-     * 
-     * @param Zend_Db_Select $select
-     * @param Tinebase_Backend_Sql_Abstract $backend
-     * @param Tinebase_Model_User $user
-     */
-    protected function _appendGrantsFilter($select, $backend, $user = null)
-    {
         if ($this->_ignoreAcl) {
             return;
         }
 
-        if (! $user) {
-            $user = isset($this->_options['user']) ? $this->_options['user'] : Tinebase_Core::getUser();
-        }
+        $user = isset($this->_options['user']) ? $this->_options['user'] : Tinebase_Core::getUser();
 
         $this->_joinedTableAlias = uniqid($this->_aclTableName);
         $db = $backend->getAdapter();

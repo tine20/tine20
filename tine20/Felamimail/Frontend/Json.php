@@ -20,8 +20,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_applicationName = 'Felamimail';
 
-    // TODO is this still needed?
-    protected $_configuredModels = ['Account'];
+    protected $_configuredModels = [
+        'Account',
+        'Signature',
+    ];
 
     /***************************** folder funcs *******************************/
     
@@ -261,9 +263,25 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $message->setFromJsonInUsersTimezone($recordData);
         
         $result = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($folderName, $message);
-        $result = $this->_recordToJson($result);
-        
-        return $result;
+        return $this->_recordToJson($result);
+    }
+
+    /**
+     * @param $recordData
+     * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function saveDraft($recordData)
+    {
+        $message = new Felamimail_Model_Message();
+        $message->setFromJsonInUsersTimezone($recordData);
+        $result = Felamimail_Controller_Message::getInstance()->saveDraft($message);
+        if ($result) {
+            return $this->_recordToJson($result);
+        } else {
+            throw new Felamimail_Exception_IMAPMessageNotFound('Could not save draft');
+        }
     }
 
     /**
@@ -434,7 +452,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchAccounts($filter)
     {
-        return $results = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
+        $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
+        // add signatures
+        foreach ($accounts['results'] as $idx => $account) {
+            $accounts['results'][$idx] = $this->getAccount($account['id']);
+        }
+
+        return $accounts;
     }
     
     /**
@@ -589,13 +613,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         try {
-            $filter = new Tinebase_Model_Filter_FilterGroup();
-            $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                Felamimail_Model_Account::class, [
-                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED],
-                ['field' => 'user_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
-            ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR));
-
+            $filter = Felamimail_Controller_Account::getVisibleAccountsFilterForUser();
             $accounts = $this->searchAccounts($filter);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());

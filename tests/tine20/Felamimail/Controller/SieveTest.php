@@ -44,22 +44,8 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
         // TODO make it work (our sieve testsetup is not ready for this)
         return true;
-
         // write mail to list & check if user receives mail
-        $subject = 'sieve list forward test message ' . Tinebase_Record_Abstract::generateUID(10);
-        $message = new Felamimail_Model_Message(array(
-            'account_id'    => $this->_account->getId(),
-            'subject'       => $subject,
-            'to'            => array($mailinglist->email),
-            'body'          => 'aaaaaä <br>',
-        ));
-
-        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
-
-        $result = $this->_getMessages('INBOX', [
-            ['field' => 'subject', 'operator' => 'equals', 'value' => $subject]
-        ]);
-        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        $this->_sendAndAssertMail(array($mailinglist->email));
     }
 
     public function testAdbMailinglistSieveRuleCopy()
@@ -102,11 +88,24 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
             Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS
         ]);
 
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $raii = new Tinebase_RAII(function() use($sclever) {
+            $sclever->visibility = Tinebase_Model_User::VISIBILITY_DISPLAYED;
+            Tinebase_User::getInstance()->updateUser($sclever);
+        });
+        $sclever->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
+        Tinebase_User::getInstance()->updateUser($sclever);
+
+        Addressbook_Controller_List::getInstance()->addListMember($mailinglist, [$sclever->contact_id]);
+
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         self::assertContains('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $script->getSieve());
         self::assertContains('reject "Your email has been rejected"', $script->getSieve());
 
         // TODO check sieve script functionality
+
+        // for unused variable check
+        unset($raii);
     }
 }

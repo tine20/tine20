@@ -1638,16 +1638,16 @@ msgid "Type"
 msgstr "Typ"
 
 #: js/AccountEditDialog.js:505
-msgid "External E-Mail Account"
+msgid "Additional Personal External Account"
 msgstr "Externes E-Mail-Konto"
 
 #: js/AccountEditDialog.js:512
-msgid "Personal System Account"
-msgstr "Persönliches Systemkonto"
+msgid "Default Personal System Account"
+msgstr "Persönliches Standard-Systemkonto"
 
 #: js/AccountEditDialog.js:506
-msgid "User Defined Personal System Account"
-msgstr "Benutzerdefiniertes Persönliches Systemkonto"
+msgid "Additional Personal System Account"
+msgstr "Weiteres Persönliches Systemkonto"
 
 #: js/AccountEditDialog.js:507
 msgid "Shared System Account"
@@ -1802,3 +1802,6 @@ msgid "Can not combine \"allow external\" and \"allow only members\""
 msgstr ""
 "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern "
 "weiterleiten\" können nicht kombiniert werden"
+
+msgid "E-Mail account needs a password"
+msgstr "Das E-Mail-Konto benötigt ein Passwort"

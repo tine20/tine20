@@ -236,7 +236,14 @@ class Addressbook_JsonTest extends TestCase
         $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
         $list = $this->_uit->getList($adminListId);
         self::assertTrue(isset($list['account_only']), 'account_only field missing from list ' . print_r($list, true));
-        self::assertEquals('1', $list['account_only']);
+
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
+        ) {
+            self::assertEquals('0', $list['account_only']);
+        } else {
+            self::assertEquals('1', $list['account_only']);
+        }
     }
     
     /**
@@ -2210,6 +2217,8 @@ Steuernummer 33/111/32212";
 
     public function testAddNonAccountContactToList()
     {
+        $this->_skipIfLDAPBackend();
+
         $contact = $this->_getContactData();
         $newContact = $this->_uit->saveContact($contact);
 

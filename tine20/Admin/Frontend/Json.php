@@ -1545,4 +1545,90 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return parent::_multipleRecordsToJson($_records, $_filter, $_pagination);
     }
+
+    /***************************** sieve funcs *******************************/
+
+    protected function _prepareAccountForAdminAccess($_accountId)
+    {
+        $oldAccountAcl = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
+        $oldSieveAcl = Felamimail_Controller_Sieve::getInstance()->doAclCheck(false);
+
+        $raii = new Tinebase_RAII(function() use($oldAccountAcl, $oldSieveAcl) {
+            Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldAccountAcl);
+            Felamimail_Controller_Sieve::getInstance()->doAclCheck($oldSieveAcl);
+        });
+
+        Felamimail_Backend_SieveFactory::factory($_accountId);
+
+        return $raii;
+    }
+
+    /**
+     * get sieve vacation for account
+     *
+     * @param  string $id account id
+     * @return array
+     */
+    public function getSieveVacation($id)
+    {
+        $raii = $this->_prepareAccountForAdminAccess($id);
+
+        $result = (new Felamimail_Frontend_Json())->getVacation($id);
+
+        //for unused variable check
+        unset($raii);
+        return $result;
+    }
+
+    /**
+     * set sieve vacation for account
+     *
+     * @param  array $recordData
+     * @return array
+     */
+    public function saveSieveVacation($recordData)
+    {
+        $raii = $this->_prepareAccountForAdminAccess($recordData['account_id']);
+
+        $result = (new Felamimail_Frontend_Json())->saveVacation($recordData);
+
+        //for unused variable check
+        unset($raii);
+        return $result;
+    }
+
+    /**
+     * get sieve rules for account
+     *
+     * @param  string $accountId
+     * @return array
+     */
+    public function getSieveRules($accountId)
+    {
+        $raii = $this->_prepareAccountForAdminAccess($accountId);
+
+        $result = (new Felamimail_Frontend_Json())->getRules($accountId);
+
+        //for unused variable check
+        unset($raii);
+        return $result;
+    }
+
+    /**
+     * set sieve rules for account
+     *
+     * @param   array $accountId
+     * @param   array $rulesData
+     * @return  array
+     */
+    public function saveSieveRules($accountId, $rulesData)
+    {
+        $raii = $this->_prepareAccountForAdminAccess($accountId);
+
+        $result = (new Felamimail_Frontend_Json())->saveRules($accountId, $rulesData);
+
+        //for unused variable check
+        unset($raii);
+        return $result;
+    }
 }

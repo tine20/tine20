@@ -163,6 +163,8 @@ class Tinebase_UserTest extends TestCase
      */
     public function testPasswordPolicy()
     {
+        Tinebase_Core::setLocale('en');
+
         $policies = array(
             Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => TRUE,
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => 20,
@@ -173,8 +175,8 @@ class Tinebase_UserTest extends TestCase
         );
         $this->_setPwPolicies($policies);
         
-        $this->_assertPolicy('nOve!ry1leverPw2ä', 'Only ASCII | Minimum length | Minimum uppercase chars | Minimum special chars | Minimum numbers');
-        $this->_assertPolicy('', 'Minimum length');
+        $this->_assertPolicy('nOve!ry1leverPw2ä', 'Only ASCII | Minimum password length | Minimum uppercase chars | Minimum special chars | Minimum numbers');
+        $this->_assertPolicy('', 'Minimum password length');
     }
     
     /**
@@ -209,9 +211,13 @@ class Tinebase_UserTest extends TestCase
             if ($pwIsValid) {
                 $this->fail('pw is valid, got message: ' . $tppv->getMessage());
             } else {
-                $this->assertContains('Password failed to match the following policy requirements: ' . $expectedMessage, $tppv->getMessage());
+                $this->assertContains('Password failed to match the following policy requirements:', $tppv->getMessage());
+                foreach(explode('|', $expectedMessage) as $part) {
+                    $this->assertContains(trim($part), $tppv->getMessage());
+                }
             }
         }
+
     }
 
     /**
@@ -248,6 +254,8 @@ class Tinebase_UserTest extends TestCase
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
             $this->markTestSkipped('skipped for ad backends - see testPasswordPolicyUsername()');
         }
+
+        Tinebase_Core::setLocale('en');
 
         $this->_setPwPolicies(array(
             Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME => false

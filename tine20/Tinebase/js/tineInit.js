@@ -366,16 +366,19 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.ApplicationStarter.init();
         Tine.Tinebase.appMgr.getAll();
 
-        if (winConfig) {
-            var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
-                card = Tine.WindowFactory.getCenterPanel(winConfig);
+        // dispatch _after_ init resolvers/awaits
+        _.defer(() => {
+            if (winConfig) {
+                var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
+                    card = Tine.WindowFactory.getCenterPanel(winConfig);
 
-            mainCardPanel.add(card);
-            mainCardPanel.layout.setActiveItem(card.id);
-            card.doLayout();
-        } else {
-            Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
-        }
+                mainCardPanel.add(card);
+                mainCardPanel.layout.setActiveItem(card.id);
+                card.doLayout();
+            } else {
+                Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
+            }
+        });
     },
 
     initAjax: function () {

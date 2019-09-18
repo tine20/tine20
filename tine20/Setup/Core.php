@@ -32,7 +32,10 @@ class Setup_Core extends Tinebase_Core
     public static function initFramework()
     {
         Setup_Core::setupConfig();
-        
+
+        // we need to initialize sentry directly after setupConfig to catch early errors
+        self::setupSentry();
+
         Setup_Core::setupTempDir();
         
         //Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX"
@@ -96,7 +99,7 @@ class Setup_Core extends Tinebase_Core
         self::set(self::REQUEST, $request);
         
         $server = NULL;
-        
+
         /**************************** JSON API *****************************/
         if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')

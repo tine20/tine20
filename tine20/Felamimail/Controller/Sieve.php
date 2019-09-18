@@ -46,7 +46,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @var Felamimail_Backend_Sieve
      */
     protected $_backend = NULL;
-    
+
+    protected $_doAclCheck = true;
+
     /**
      * Sieve script data backend
      *
@@ -94,7 +96,15 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         return self::$_instance;
     }
-    
+
+    public function doAclCheck($_value = null)
+    {
+        $oldValue = $this->_doAclCheck;
+        if (null !== $_value) {
+            $this->_doAclCheck = (bool)$_value;
+        }
+        return $oldValue;
+    }
     /**
      * get vacation for account
      * 
@@ -208,7 +218,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_vacation->getId());
-        if ($account->user_id !== Tinebase_Core::getUser()->getId()) {
+        if ($this->_doAclCheck && $account->user_id !== Tinebase_Core::getUser()->getId()) {
             throw new Tinebase_Exception_AccessDenied('It is not allowed to set the vacation message of another user.');
         }
         
@@ -267,9 +277,13 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     protected function _getSystemAccountVacationAddresses(Felamimail_Model_Account $account)
     {
         $addresses = array();
-        $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        try {
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+        } catch (Tinebase_Exception_NotFound $e) {
+            $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        }
         
-        $addresses[] = (! empty(Tinebase_Core::getUser()->accountEmailAddress)) ? Tinebase_Core::getUser()->accountEmailAddress : $account->email;
+        $addresses[] = (! empty($fullUser->accountEmailAddress)) ? $fullUser->accountEmailAddress : $account->email;
         if ($fullUser->smtpUser && ! empty($fullUser->smtpUser->emailAliases)) {
             $addresses = array_merge($addresses, $fullUser->smtpUser->emailAliases);
         }
@@ -334,8 +348,15 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         if ($this->_isDbmailSieve()) {
             // dbmail seems to have problems with different subjects and sends vacation responses to the same recipients again and again
+            $account = $_vacation->account_id instanceof Felamimail_Model_Account ? $_vacation->account_id :
+                Felamimail_Controller_Account::getInstance()->get($_vacation->account_id);
+            try {
+                $fullUser = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+            } catch (Tinebase_Exception_NotFound $e) {
+                $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+            }
             $translate = Tinebase_Translation::getTranslation('Felamimail');
-            $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName);
+            $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), $fullUser->accountFullName);
         }
     }
     
@@ -563,6 +584,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($vacation->toArray(), TRUE));
 
+        if (empty($vacation->account_id)) {
+            $vacation->account_id = Felamimail_Controller_Account::getInstance()->getSystemAccount();
+        }
         $message = $this->_getMessageFromTemplateFile($vacation->template_id);
         $message = $this->_doMessageSubstitutions($vacation, $message);
         
@@ -605,7 +629,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             }
         }
         try {
-            $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+            $account = $vacation->account_id instanceof Felamimail_Model_Account ? $vacation->account_id :
+                Felamimail_Controller_Account::getInstance()->get($vacation->account_id);
+            $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->user_id);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             $ownContact = NULL;

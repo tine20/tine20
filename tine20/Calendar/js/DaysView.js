@@ -1041,6 +1041,8 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         // don't fire update events on rangeAdd
         if (rzInfo.diff != 0 && event != this.editing && ! event.isRangeAdd) {
             this.fireEvent('updateEvent', event);
+        } else if (event.isRangeAdd) {
+            event.ui.clearDirty();
         } else {
             // NOTE: we need to redraw event as resizer is broken after one attempt
             this.removeEvent(event);

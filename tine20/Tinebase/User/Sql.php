@@ -587,8 +587,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             return;
         }
         
-        $failedTests = array();
-        
         $policy = array(
             Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => '/[^\x00-\x7F]/',
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => null,
@@ -599,22 +597,25 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME        => $user->accountLoginName,
         );
 
-        $configDefinition = Tinebase_Config::getInstance()->getDefinition(Tinebase_Config::USER_PASSWORD_POLICY);
+        $failedTests = array();
         foreach ($policy as $key => $regex) {
-            $test = $this->_testPolicy($password, $key, $regex);
-            $config = $configDefinition['content'][$key];
-            if ($test !== true) {
-                $failedTests[$config['label']] = $test;
+            $result = $this->_testPolicy($password, $key, $regex);
+            if ($result !== true) {
+                $failedTests[$key] = $result;
             }
         }
         
         if (! empty($failedTests)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' ' . print_r($failedTests, true));
-            
-            $policyException = new Tinebase_Exception_PasswordPolicyViolation('Password failed to match the following policy requirements: ' 
-                . implode(' | ', array_keys($failedTests)));
-            throw $policyException;
+
+            $translation = Tinebase_Translation::getTranslation();
+            $msg = $translation->_('Password failed to match the following policy requirements: ');
+            foreach($failedTests as $key => $result) {
+                $msg .= "\n- " . $result;
+            }
+
+            throw new Tinebase_Exception_PasswordPolicyViolation($msg);
         }
     }
     
@@ -631,6 +632,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $result = true;
 
         $configValue = Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)->{$configKey};
+
+        $translation = Tinebase_Translation::getTranslation();
+        $configDefinition = Tinebase_Config::getInstance()->getDefinition(Tinebase_Config::USER_PASSWORD_POLICY);
+        $description = $translation->translate($configDefinition['content'][$configKey]['description']);
+        $description = preg_replace("/\.$/", "", $description);
+
         switch ($configKey) {
             case Tinebase_Config::PASSWORD_POLICY_ONLYASCII:
                 if ($configValue && $regex !== null) {
@@ -639,7 +646,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                         __METHOD__ . '::' . __LINE__ . ' ' . print_r($matches, true));
                     
-                    $result = ($nonAsciiFound) ? array('expected' => 0, 'got' => count($matches)) : true;
+                    $result = ($nonAsciiFound) ? $description : true;
                 }
                 
                 break;
@@ -650,7 +657,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                         __METHOD__ . '::' . __LINE__ . ' Testing if password is part of username "' . $regex . '"');
                     
                     if (! empty($password)) {
-                        $result = ! preg_match('/' . preg_quote($password) . '/i', $regex);
+                        $result = preg_match('/' . preg_quote($password) . '/i', $regex) ?
+                            $description :
+                            true;
                     }
                 }
                 
@@ -666,7 +675,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                         . ' Found ' . $charCount . '/' . $minLength . ' chars for ' . $configKey /*. ': ' . $reduced */);
                     
                     if ($charCount < $minLength) {
-                        $result = array('expected' => $minLength, 'got' => $charCount);
+                        $result = $description . ': ' . $minLength;
                     }
                 }
                 

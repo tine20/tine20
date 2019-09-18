@@ -227,12 +227,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
-            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                $_user->contact_id = $oldUser->contact_id;
-                $contact = $this->createOrUpdateContact($_user);
-                $_user->contact_id = $contact->getId();
-            }
-            
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
 
             $deactivated = $this->_checkAccountStatus($_user, $oldUser);
@@ -361,23 +355,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
 
         try {
-            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Addressbook_Model_Contact', [
-                        ['field' => 'n_fileas', 'operator' => 'equals', 'value' => $_user['accountDisplayName']]]);
-
-                    $userContact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-                  
-                    if($userContact === null)
-                    {
-                        $userContact = $this->createOrUpdateContact($_user);
-                        $_user->contact_id = $userContact->getId();
-                    } else{
-                        $_user->contact_id = $userContact->getId();
-                        $this->createOrUpdateContact($_user);
-                    }
-                }
-
-                      
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'create');
             
             $user = $this->_userBackend->addUser($_user);
@@ -532,68 +509,5 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $internalAdbId = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
         }
         return $internalAdbId;
-    }
-    
-    /**
-     * create or update contact in addressbook backend
-     * 
-     * @param Tinebase_Model_FullUser $_user
-     * @param boolean $_setModlog
-     * @return Addressbook_Model_Contact
-     */
-    public function createOrUpdateContact(Tinebase_Model_FullUser $_user, $_setModlog = true)
-    {
-        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        $contactsBackend->setGetDisabledContacts(true);
-        
-        if (empty($_user->container_id)) {
-            $_user->container_id = $this->getDefaultInternalAddressbook();
-        }
-        
-        try {
-            if (empty($_user->contact_id)) { // jump to catch block
-                throw new Tinebase_Exception_NotFound('contact_id is empty');
-            }
-
-            /** @var Addressbook_Model_Contact $contact */
-            $contact = $contactsBackend->get($_user->contact_id);
-            
-            // update exisiting contact
-            $contact->n_family   = $_user->accountLastName;
-            $contact->n_given    = $_user->accountFirstName;
-            $contact->n_fn       = $_user->accountFullName;
-            $contact->n_fileas   = $_user->accountDisplayName;
-            $contact->email      = $_user->accountEmailAddress;
-            $contact->type       = Addressbook_Model_Contact::CONTACTTYPE_USER;
-            $contact->container_id = $_user->container_id;
-
-            unset($contact->jpegphoto);
-
-            if ($_setModlog) {
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
-            }
-            
-            $contact = $contactsBackend->update($contact);
-            
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // add new contact
-            $contact = new Addressbook_Model_Contact(array(
-                'n_family'      => $_user->accountLastName,
-                'n_given'       => $_user->accountFirstName,
-                'n_fn'          => $_user->accountFullName,
-                'n_fileas'      => $_user->accountDisplayName,
-                'email'         => $_user->accountEmailAddress,
-                'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
-                'container_id'  => $_user->container_id
-            ));
-
-            if ($_setModlog) {
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
-            }
-    
-            $contact = $contactsBackend->create($contact);
-        }
-        
-        return $contact;
     }
 }

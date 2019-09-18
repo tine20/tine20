@@ -1091,7 +1091,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
         // disable modlog stuff
         $oldGroupValue = Tinebase_Group::getInstance()->modlogActive(false);
         $oldUserValue = Tinebase_User::getInstance()->modlogActive(false);
-        $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
+        if (Tinebase_User::SYSTEM_USER_SETUP === $accountLoginName) {
+            $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
+        } else {
+            $plugin = null;
+        }
 
         if (null === $defaultGroup) {
             $defaultGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
@@ -1109,13 +1113,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Creating new system user ' . print_r($systemUser->toArray(), true));
 
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($systemUser, /* setModlog */ false);
-            $systemUser->contact_id = $contact->getId();
-        }
-
         try {
             $systemUser = Tinebase_User::getInstance()->addUser($systemUser);
+            if (Tinebase_User::SYSTEM_USER_SETUP === $accountLoginName) {
+                $contact = Addressbook_Controller_Contact::getInstance()->getBackend()
+                    ->create(self::user2Contact($systemUser));
+                $systemUser->contact_id = $contact->getId();
+                Tinebase_User::getInstance()->updateUserInSqlBackend($systemUser);
+            }
             Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
         } catch(Zend_Ldap_Exception $zle) {
             Tinebase_Exception::log($zle);

@@ -169,10 +169,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if ($record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->addSystemAccountConfigValues($record);
         }
-        
+
         return $record;
     }
-    
+
     /**
      * Deletes a set of records.
      * 
@@ -195,39 +195,25 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * Removes accounts where current user has no access to
      * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Felamimail_Model_AccountFilter $_filter
      * @param string $_action get|update
      * @throws Tinebase_Exception_AccessDenied
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        if (! $_filter instanceof Felamimail_Model_AccountFilter) {
+            throw new Tinebase_Exception_UnexpectedValue('expected filter of class ' .
+                Felamimail_Model_AccountFilter::class);
+        }
+        
         if (! $this->doContainerACLChecks()) {
+            $_filter->doIgnoreAcl(true);
             return;
         }
 
-        while (count($filters = $_filter->getFilterObjects()) === 1 && $filters[0] instanceof
-                Tinebase_Model_Filter_FilterGroup) $_filter = $filters[0];
+        $_filter->doIgnoreAcl(false);
 
-        $typeFilter = $_filter->getFilter('type');
-        if (null !== $typeFilter && $typeFilter->getOperator() === 'equals' && ($typeFilter->getValue() ===
-                Felamimail_Model_Account::TYPE_ADB_LIST || $typeFilter->getValue() ===
-                Felamimail_Model_Account::TYPE_SHARED)) {
-
-            // TODO fix me! check acl filter?
-
-            return;
-        }
-
-        $userFilter = $_filter->getFilter('user_id');
-
-        // force a $userFilter filter (ACL)
-        if ($userFilter === NULL || $userFilter->getOperator() !== 'equals' || $userFilter->getValue() !== Tinebase_Core::getUser()->getId()) {
-            if (! is_object(Tinebase_Core::getUser())) {
-                throw new Tinebase_Exception_AccessDenied('user object not found');
-            }
-            $userFilter = $_filter->createFilter('user_id', 'equals', Tinebase_Core::getUser()->getId());
-            $_filter->addFilter($userFilter);
-        }
+        parent::checkFilterACL($_filter, $_action);
     }
 
     /**
@@ -265,8 +251,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         } elseif ($_record->type === Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
                 Felamimail_Model_Account::TYPE_ADB_LIST) {
             if (! $_record->password) {
-                // TODO invent a new exception for this?
-                throw new Tinebase_Exception_PasswordPolicyViolation($translation->_('shared / adb_list accounts need to have a password set'));
+                throw new Felamimail_Exception_PasswordMissing($translation->_('shared / adb_list accounts need to have a password set'));
             }
             if (! $_record->email) {
                 throw new Tinebase_Exception_UnexpectedValue($translation->_('shared / adb_list accounts need to have an email set'));
@@ -293,7 +278,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $user->accountEmailAddress = $_record->email;
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $_record->setId(Tinebase_Record_Abstract::generateUID());
-            $userId = $_record->user_id . '#~#' . substr($_record->getId(), 0, 37);
+            $userId = substr($_record->user_id, 0,32) . '#~#' . substr($_record->getId(), 0, 5);
             $user->accountLoginName = $emailUserBackend->getLoginName($userId, $user->accountLoginName, $_record->email);
 
             Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record, $user);
@@ -506,7 +491,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // only allow to update some values for system accounts
         $allowedFields = array(
             'name',
-            'signature',
+            'signatures',
             'signature_position',
             'display_format',
             'compose_format',
@@ -524,7 +509,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
             if (! in_array($key, $allowedFields)) {
-                // setting old value
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Setting old value in system account for key ' . $key);
                 $_record->$key = $_oldRecord->$key;
             }
         } 
@@ -1488,8 +1474,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         
         // add user data
         $_account->email  = $_email;
-        $_account->name   = $_email;
-        $_account->from   = $_user->accountFullName;
+        if ($_account->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+            $_account->name = $_email;
+        }
+        $_account->from = $_user->accountFullName;
         
         // add contact data (if available)
         try {
@@ -1530,5 +1518,20 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         return $account;
+    }
+
+    public static function getVisibleAccountsFilterForUser($user = null)
+    {
+        if (null === $user) {
+            $user = Tinebase_Core::getUser();
+        }
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class);
+        $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED],
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $user->getId()],
+        ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR));
+
+        return $filter;
     }
 }

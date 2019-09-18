@@ -310,9 +310,14 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        if (($updatedRecord->email !== $currentRecord->email || (empty($currentRecord->email) &&
-                $updatedRecord->email_home != $currentRecord->email_home)) &&
+        if (($updatedRecord->email !== $currentRecord->email || (empty($updatedRecord->email) &&
+                $updatedRecord->email_home !== $currentRecord->email_home)) &&
                 count($listIds = Addressbook_Controller_List::getInstance()->getMemberships($updatedRecord)) > 0) {
+
+            $oldListAclCheck = Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
+            $raii = new Tinebase_RAII(function() use($oldListAclCheck) {
+                Addressbook_Controller_List::getInstance()->doContainerACLChecks($oldListAclCheck);
+            });
 
             $lists = Addressbook_Controller_List::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
@@ -325,6 +330,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                     Felamimail_Sieve_AdbList::setScriptForList($list);
                 }, [$list]);
             }
+
+            //for unused variable check
+            unset($raii);
         }
 
         if (isset($record->account_id) && !isset($updatedRecord->account_id)) {
@@ -1130,6 +1138,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             . " Added contact " . $contact->n_given);
 
         $_addedUser->contact_id = $contact->getId();
+        $_addedUser->container_id = $contact->container_id;
         $userController->updateUserInSqlBackend($_addedUser);
 
         $this->doContainerACLChecks($oldACL);

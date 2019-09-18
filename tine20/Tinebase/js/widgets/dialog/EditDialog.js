@@ -1092,7 +1092,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     onBeforeClose: function() {
-        if (this.checkUnsavedChanges) {
+        if (this.checkUnsavedChanges && this.window.confirmLeavSite && this.record) {
             this.checkStates();
             if (_.keys(this.record.getChanges()).length) {
                 console.warn('this changes would be lost:');

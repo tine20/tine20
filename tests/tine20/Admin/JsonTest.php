@@ -84,7 +84,7 @@ class Admin_JsonTest extends TestCase
 
         foreach ($this->objects['emailAccounts'] as $account) {
             try {
-                $this->_json->deleteEmailAccounts([$account->getId()]);
+                $this->_json->deleteEmailAccounts([is_array($account) ? $account['id'] : $account->getId()]);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // already removed
             }
@@ -1500,6 +1500,10 @@ class Admin_JsonTest extends TestCase
         $userArray = $this->testSaveAccount();
         $savedGroup = $this->_saveGroup($userArray, ['account_only' => 0]);
         self::assertEquals('0', $savedGroup['account_only']);
+        $savedGroup =$this->_saveGroup($userArray, ['account_only' => '']);
+        self::assertEquals('0', $savedGroup['account_only']);
+        $savedGroup =$this->_saveGroup($userArray, ['account_only' => false]);
+        self::assertEquals('0', $savedGroup['account_only']);
     }
 
     /**
@@ -1647,13 +1651,40 @@ class Admin_JsonTest extends TestCase
         self::assertEquals(0, $result['totalcount'], 'a new (system?) account has been added');
     }
 
-    public function testEmailAccountApiSharedAccount($delete = true)
+    public function testCreatePersonalSystemAccount()
     {
         if (! TestServer::isEmailSystemAccountConfigured()) {
             self::markTestSkipped('imap systemaccount config required');
         }
 
-        $this->_uit = $this->_json;
+        // create "user" account for sclever
+        $email = 'sclever2@' . TestServer::getPrimaryMailDomain();
+        $accountData = [
+            'name' => 'sclever 2 account',
+            'email' => $email,
+            'type' => Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            'user_id' => $this->_personas['sclever']->getId(),
+        ];
+        $account = $this->_json->saveEmailAccount($accountData);
+        $this->objects['emailAccounts'][] = $account;
+
+        $filter = [[
+            'field' => 'type',
+            'operator' => 'equals',
+            'value' => Felamimail_Model_Account::TYPE_USER_INTERNAL,
+        ], [
+            'field' => 'name',
+            'operator' => 'equals',
+            'value' => 'sclever 2 account',
+        ]];
+        $result = $this->_json->searchEmailAccounts($filter, []);
+        self::assertEquals(1, $result['totalcount'], 'no USER_INTERNAL accounts found');
+        $account = $result['results'][0];
+        self::assertEquals($email, $account['email'], print_r($account, true));
+    }
+
+    public static function getSharedAccountData()
+    {
         $accountdata = [
             'name' => 'unittest shared account',
             'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
@@ -1668,6 +1699,69 @@ class Admin_JsonTest extends TestCase
                 ]
             ]
         ];
+        return $accountdata;
+    }
+
+    public function testSearchUserEmailAccounts()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        // we should already have some "SYSTEM" accounts for the persona users
+        $filter = [[
+            'field' => 'type',
+            'operator' => 'equals',
+            'value' => Felamimail_Model_Account::TYPE_SYSTEM,
+        ]];
+        $result = $this->_json->searchEmailAccounts($filter, []);
+        self::assertGreaterThan(1, $result['totalcount'], 'system accounts of other users not found');
+
+        // client sends some strange filters ...
+        $filter = array (
+            0 =>
+                array (
+                    'condition' => 'OR',
+                    'filters' =>
+                        array (
+                            0 =>
+                                array (
+                                    'condition' => 'AND',
+                                    'filters' =>
+                                        array (
+                                            0 =>
+                                                array (
+                                                    'field' => 'query',
+                                                    'operator' => 'contains',
+                                                    'value' => '',
+                                                    'id' => 'ext-record-23',
+                                                ),
+                                        ),
+                                    'id' => 'ext-comp-1189',
+                                    'label' => 'Konten',
+                                ),
+                        ),
+                    'id' => 'FilterPanel',
+                ),
+            1 =>
+                array (
+                    'field' => 'query',
+                    'operator' => 'contains',
+                    'value' => '',
+                    'id' => 'quickFilter',
+                ));
+        $result = $this->_json->searchEmailAccounts($filter, []);
+        self::assertGreaterThan(1, $result['totalcount'], 'system accounts of other users not found');
+    }
+
+    public function testEmailAccountApiSharedAccount($delete = true)
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        $this->_uit = $this->_json;
+        $accountdata = self::getSharedAccountData();
         $account = $this->_json->saveEmailAccount($accountdata);
         self::assertEquals($accountdata['email'], $account['email']);
         self::assertTrue(isset($account['grants']), 'grants missing');

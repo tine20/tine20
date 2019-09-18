@@ -211,22 +211,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         // and the calendar filter is used in the UI to
         $clonedFilters = clone $_filter;
         
-        $calendarFilter = null;
-        unset($func); // !!! very important, don't separate this and the next line
-        $func = function($filter) use (/*yes & !*/&$func, &$calendarFilter, $translate) {
-            if ($filter instanceof Calendar_Model_EventFilter) {
-                $filter->filterWalk($func);
-            } elseif ($filter instanceof Calendar_Model_CalendarFilter && strpos($filter->getOperator(), 'not') !== 0) {
-                if ($calendarFilter !== null) {
-                    throw new Tinebase_Exception_SystemGeneric($translate->_('You can not have more than one calendar filter'));
-                }
-                $calendarFilter = $filter;
-                $filter->getParent()->removeFilter($filter);
-            }
-        };
-        $clonedFilters->filterWalk($func);
-
-
         // sort filters, roleFilter und statusFilter need to be processed after attenderFilter
         unset($func); // !!! very important, don't separate this and the next line
         $tempFilters = [];
@@ -250,19 +234,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $select->group($this->_tableName . '.' . 'id');
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
-        if ($calendarFilter) {
-            $select1 = clone $select;
-            $select2 = clone $select;
-
-            $calendarFilter->appendFilterSql1($select1, $this);
-            $calendarFilter->appendFilterSql2($select2, $this);
-
-            $select = $this->getAdapter()->select()->union(array(
-                $select1,
-                $select2
-            ));
-        }
         
         $_pagination->appendPaginationSql($select);
         

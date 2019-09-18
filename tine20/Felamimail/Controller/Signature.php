@@ -39,8 +39,9 @@ class Felamimail_Controller_Signature extends Tinebase_Controller_Record_Abstrac
     protected function __construct()
     {
         $this->_modelName = Felamimail_Model_Signature::class;
-        $this->_doRightChecks = true;
+        $this->_doRightChecks = false;
         $this->_purgeRecords = false;
+        $this->_doContainerACLChecks = false;
 
         $this->_backend = new Tinebase_Backend_Sql([
             'modelName'     => $this->_modelName,

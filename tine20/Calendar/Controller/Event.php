@@ -312,6 +312,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (! empty($event->rrule) && ! $event->recurid) {
             try {
                 $eventSet->merge($this->getRecurExceptions($event, true));
+            } catch (Tinebase_Exception_AccessDenied $e) {
+                // it's ok, if we dont see the (base)event, we dont see the exceptions as well
             } catch (Tinebase_Exception_NotFound $e) {
                 // it's ok, event is not exising yet so we don't have exceptions as well
             }

@@ -260,11 +260,7 @@ class Tinebase_GroupTest extends TestCase
             'accountFullName' => Tinebase_Record_Abstract::generateUID(),
             'visibility' => Tinebase_Model_User::VISIBILITY_DISPLAYED
         ));
-        $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($testUser);
-        $testUser->contact_id = $contact->getId();
         $testUser = Tinebase_User::getInstance()->addUser($testUser);
-
-        Tinebase_User::getInstance()->updateUserInSqlBackend($testUser);
         
         $this->testSetGroupMembers($testGroup, array($testUser->accountId));
         Tinebase_Group::syncListsOfUserContact(array($testGroup->getId()), $testUser->contact_id);

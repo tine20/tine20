@@ -194,7 +194,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.on('containerdelete', this.onFolderDelete, this);
         this.selModel.on('selectionchange', this.onSelectionChange, this);
         this.folderStore.on('update', this.onUpdateFolderStore, this);
-        
+
         // call parent::initComponent
         Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
     },
@@ -206,7 +206,15 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     initAccounts: function() {
         this.accountStore = this.app.getAccountStore();
         this.accountStore.each(this.addAccount, this);
+
+        this.accountStore.on('load', function(store, records) {
+            this.root.removeAll();
+            _.map(records, _.bind(this.addAccount, this));
+            this.selectInbox();
+        }, this);
+        this.accountStore.on('add', function(store, records) {_.map(records, _.bind(this.addAccount, this)); }, this);
         this.accountStore.on('update', this.onAccountUpdate, this);
+        this.accountStore.on('remove', this.deleteAccount, this);
     },
     
     /**
@@ -794,7 +802,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.root.appendChild(node);
         this.resumeEvents();
     },
-    
+
+    deleteAccount: function(store, account) {
+        let accountNode = this.root.findChild('path', '/' + account.data.id);
+        if (accountNode) {
+            removeChild(accountNode);
+        }
+    },
     /**
      * get active account by checking selected node
      * @return Tine.Felamimail.Model.Account

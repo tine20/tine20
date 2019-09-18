@@ -30,6 +30,35 @@ class Felamimail_Convert_Account_Json extends Tinebase_Convert_Json
             $result['grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($result['grants']);
         }
 
+        $this->_addDefaultSignature($result);
+
         return $result;
+    }
+
+    /**
+     * add default signature
+     *
+     * @param array $record
+     * 
+     * TODO add to fromTine20RecordSet, too?
+     */
+    protected function _addDefaultSignature(&$record)
+    {
+        if (! isset($record['signatures']) || ! is_array($record['signatures']) || count($record['signatures']) === 0) {
+            $record['signatures'] = [];
+            return;
+        }
+
+        $default = array_filter($record['signatures'], function ($signature) {
+            if ($signature['is_default']) {
+                return true;
+            }
+        });
+        if (count($default) > 0) {
+            $defaultSignature = array_pop($default);
+            $record['signature'] = $defaultSignature['signature'];
+        } else {
+            $record['signature'] = $record['signatures'][0]['signature'];
+        }
     }
 }
