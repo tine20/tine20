@@ -1586,16 +1586,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $path = $fileObject->getFilesystemPath();
 
         if (is_file($path)) {
-            if (false === ($data = file_get_contents($path))) {
+            if (!($fh = fopen($path, 'r'))) {
                 throw new Tinebase_Exception_Backend('could not open blob file: ' . $hash);
             }
+            if (!stream_filter_append($fh, 'convert.base64-encode', STREAM_FILTER_READ)) {
+                throw new Tinebase_Exception_Backend('could not append stream filter');
+            }
+            $data = stream_get_contents($fh);
+            fclose($fh);
         } else {
             throw new Tinebase_Exception_NotFound('could not find blob: ' . $hash);
         }
 
         return array(
             'success' => true,
-            'data'    => base64_encode($data)
+            'data'    => $data
         );
     }
 
