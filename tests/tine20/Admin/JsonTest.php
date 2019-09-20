@@ -1805,20 +1805,6 @@ class Admin_JsonTest extends TestCase
         }
     }
 
-    public function testSearchSharedAccountsInFelamimailJsonRegistryData()
-    {
-        $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
-        $fmailJson = new Felamimail_Frontend_Json();
-        $result = $fmailJson->getRegistryData();
-        self::assertGreaterThan(1, $result['accounts']['totalcount']);
-
-        $sharedAccounts = array_filter($result['accounts']['results'], function($account) use ($sharedAccount) {
-            return $account['email'] === $sharedAccount->email;
-        });
-        self::assertEquals(1, count($sharedAccounts), 'shared account could not be found: '
-            . print_r($result['accounts'], true));
-    }
-
     public function testUpdateSystemAccount()
     {
         if (! TestServer::isEmailSystemAccountConfigured()) {

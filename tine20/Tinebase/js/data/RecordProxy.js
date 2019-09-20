@@ -301,6 +301,26 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         return this.doXHTTPRequest(options);
     },
 
+    promiseDeleteRecords: function(record, options, additionalArguments) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.deleteRecords(record, Ext.apply(options || {}, {
+                    success: function (r) {
+                        fulfill(r);
+                    },
+                    failure: function (error) {
+                        reject(new Error(error));
+                    }
+                }), additionalArguments);
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
+    },
+
     /**
      * deletes multiple records identified by a filter
      * 

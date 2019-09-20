@@ -1105,9 +1105,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
      * @private
      */
-    onCancel : function(){
-        this.fireEvent('cancel');
-        this.window.close();
+    onCancel : function(force){
+        if(force===true || this.fireEvent('beforecancel', this) !== false) {
+            this.fireEvent('cancel', this);
+            this.window.close(force);
+        }
     },
     
     /**

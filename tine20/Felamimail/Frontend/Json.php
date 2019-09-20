@@ -607,27 +607,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
-     * 
-     * @todo get default account data (host, port, ...) from preferences?
      */
     public function getRegistryData()
     {
-        try {
-            $filter = Felamimail_Controller_Account::getVisibleAccountsFilterForUser();
-            $accounts = $this->searchAccounts($filter);
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            $accounts = array(
-                'results'       => array(),
-                'totalcount'    => 0,
-            );
-        }
-        
         $supportedFlags = Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags();
         
         $result = array(
-            'accounts'              => $accounts,
             'supportedFlags'        => array(
                 'results'       => $supportedFlags,
                 'totalcount'    => count($supportedFlags),

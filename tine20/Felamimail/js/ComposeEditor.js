@@ -299,8 +299,6 @@ Ext.ux.form.HtmlEditor.SpecialKeys = Ext.extend(Ext.util.Observable , {
      * TODO try to prevent TAB key event from inserting a TAB in the editor 
      */
     onKeydown: function(e) {
-        if (e.getKey() == e.TAB && e.shiftKey || e.getKey() == e.ENTER && e.ctrlKey) {
-            this.cmp.fireEvent('keydown', e);
-        }
+        this.cmp.fireEvent('keydown', this.cmp, e);
     }
 });
