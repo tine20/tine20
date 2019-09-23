@@ -746,7 +746,7 @@ class Tinebase_FileSystem implements
         }
 
         $sizeDiff = ((int)$newFileObject->size) - ((int)$currentFileObject->size);
-        $revisionSizeDiff = ((int)$currentFileObject->revision) - ((int)$newFileObject->revision);
+        $revisionSizeDiff = ((int)$newFileObject->revision_size) - ((int)$currentFileObject->revision_size);
 
         if ($sizeDiff !== 0 || $revisionSizeDiff !== 0 || $currentFileObject->hash !== $newFileObject->hash) {
             // update parents with new sizes if anything changed
