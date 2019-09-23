@@ -1973,6 +1973,25 @@ class Tinebase_FileSystem implements
     }
 
     /**
+     * @param string $hash
+     * @return bool
+     */
+    public function checkHashFile(string $hash)
+    {
+        $file = $this->_basePath . '/' . substr($hash, 0, 3) . substr($hash, 3);
+        if (!($fh = fopen($file, 'r'))) {
+            throw new Tinebase_Exception_Backend('could not open file: ' . $file);
+        }
+        
+        $ctx = hash_init('sha1');
+        hash_update_stream($ctx, $fh);
+        $fileHash = hash_final($ctx);
+        fclose($fh);
+        
+        return $hash === $fileHash;
+    }
+
+    /**
      * places contents into a file blob
      * 
      * @param  resource $contents
