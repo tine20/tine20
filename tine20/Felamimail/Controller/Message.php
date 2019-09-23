@@ -179,7 +179,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * check if account of message is belonging to user
+     * check if account of message is belonging to user (or a shared account)
      *
      * @param Felamimail_Model_Message $message
      * @param Felamimail_Model_Account $account
@@ -190,7 +190,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _checkMessageAccount($message, $account = NULL)
     {
         $account = ($account) ? $account : Felamimail_Controller_Account::getInstance()->get($message->account_id);
-        if ($account->user_id !== Tinebase_Core::getUser()->getId()) {
+        if ($account->type !== Felamimail_Model_Account::TYPE_SHARED && $account->user_id !== Tinebase_Core::getUser()->getId()) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to access this message');
         }
     }
