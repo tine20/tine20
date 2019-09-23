@@ -1257,6 +1257,17 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             return true;
         }
 
+        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
+        $path = $fileObject->getFilesystemPath();
+        if (is_file($path)) {
+            if (Tinebase_FileSystem::getInstance()->checkHashFile($hash)) {
+                return true;
+            }
+            if (!unlink($path)) {
+                throw new Tinebase_Exception_Backend('could not unlink file: ' . $path);
+            }
+        }
+
         $tine20Service = new Zend_Service_Tine20($tine20Url, new Zend_Http_Client(null, [
             'timeout' => 25
         ]));
@@ -1274,17 +1285,27 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 !isset($response['data'])) {
             throw new Tinebase_Exception_Backend('could not fetch blob from master successfully: ' . $hash);
         }
-        if (false === ($data = base64_decode($response['data'], true))) {
-            throw new Tinebase_Exception_Backend('fetched blob from master was not proper base64: ' . $hash);
-        }
 
-        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
-        $path = $fileObject->getFilesystemPath();
+
         if (!is_dir(dirname($path))) {
             mkdir(dirname($path));
         }
-        if (false === file_put_contents($path, $data)) {
-            throw new Tinebase_Exception_Backend('fetched blob from master could not written to disk: ' . $hash);
+        if (!($fh = fopen($path, 'x'))) {
+            if (is_file($path) && Tinebase_FileSystem::getInstance()->checkHashFile($hash)) {
+                return true;
+            }
+            throw new Tinebase_Exception_Backend('could not create file: ' . $path);
+        }
+        try {
+            if (!stream_filter_append($fh, 'convert.base64-decode', STREAM_FILTER_WRITE)) {
+                throw new Tinebase_Exception_Backend('could not append stream filter');
+            }
+            if (false === fwrite($fh, $response['data'])) {
+                throw new Tinebase_Exception_Backend('fetched blob from master could not written to disk: ' . $hash);
+            }
+        } finally {
+            fclose($fh);
+            unlink($path);
         }
     }
 

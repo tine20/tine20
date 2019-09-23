@@ -51,6 +51,11 @@ ul.x-tab-strip li {
  }
 }
 
+li.x-item-disabled span.x-tab-strip-text,
+li.x-item-disabled span.x-tab-strip-text:hover{
+  color: black !important;
+}
+
 ul.x-tab-strip li.x-tab-strip-active {
   background-color: @northTbColor;
 }
@@ -74,8 +79,8 @@ ul.x-tab-strip-top {
 
 .x-tab-strip span.x-tab-strip-text:hover,
 .x-tab-strip-active span.x-tab-strip-text {
-  #transform.blacktowhite();
   font-weight: normal;
+  color: #fff
 }
 
 .x-tab-strip .x-tab-strip-closable {
@@ -241,6 +246,10 @@ ul.x-tab-strip-top {
   .x-toolbar {
     background-color: @northTbColor;
     padding: 0;
+
+    .x-item-disabled {
+      opacity: 0.5;
+    }
   }
 
   .x-panel-body {
@@ -423,6 +432,13 @@ ul.x-tab-strip-top {
   box-sizing: border-box;
 }
 
+.x-form-field-wrap .x-form-trigger, // twin triggers e.g. preferences admin dlg
+.x-form-trigger.x-form-arrow-trigger, // usual arrow triggers like combos
+.x-form-trigger {
+  background-image: url('../../images/icon-set/icon_arrow_down.svg');
+  .x-form-trigger-flat();
+}
+
 .x-form-trigger.x-form-search-trigger {
   background-image: url('../../images/icon-set/icon_search.svg');
   .x-form-trigger-flat();
@@ -430,13 +446,6 @@ ul.x-tab-strip-top {
 
 .x-form-trigger.x-form-clear-trigger {
   background-image: url('../../images/icon-set/icon_clear.svg');
-  .x-form-trigger-flat();
-}
-
-.x-form-trigger,
-span.x-form-twin-triggers img.x-form-trigger,
-.x-form-trigger.x-form-arrow-trigger {
-  background-image: url('../../images/icon-set/icon_arrow_down.svg');
   .x-form-trigger-flat();
 }
 

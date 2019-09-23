@@ -315,7 +315,11 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
     {
         $account = $this->_createSharedAccount();
         // write mail to shared account
-        $this->_sendAndAssertMail([$account->email], $account);
+        $message = $this->_sendAndAssertMail([$account->email], $account);
+
+        // try to access the message
+        $messageViaGet = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
+        self::assertContains('aaaaaä', $messageViaGet->body);
     }
 
     public function testSharedAccountAcl()

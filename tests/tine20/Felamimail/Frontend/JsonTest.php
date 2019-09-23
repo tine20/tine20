@@ -238,17 +238,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $account = $this->_json->saveAccount($account);
         self::assertEquals($updatedSignature, $account['signature'], 'signature not updated: ' . print_r($account, true));
 
-        // check if it is also resolved in registry data
-        $registryData = $this->_json->getRegistryData();
-        foreach ($registryData['accounts']['results'] as $registryAccount) {
-            if ($registryAccount['id'] === $account['id']) {
-                self::assertTrue(array_key_exists('signatures', $registryAccount), 'no signatures found in account: ' . print_r($registryAccount, true));
-                self::assertEquals(1, count($registryAccount['signatures']), print_r($registryAccount, true));
-                self::assertTrue(isset($registryAccount['signature']), 'no signature found in account: ' . print_r($registryAccount, true));
-                self::assertEquals($updatedSignature, $registryAccount['signature']);
-            }
-        }
-
         // add new signature
         $account['signatures'][] = [
             'signature' => '', // empty sig should be possible
@@ -1827,6 +1816,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $regData = $this->_json->getRegistryData();
 
         $this->assertFalse(isset($regData['defaults']));
+        $this->assertFalse(isset($regData['accounts']));
         $supportedFlags = Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)
             ? 6
             : 5;

@@ -44,10 +44,11 @@ class Felamimail_Backend_ImapProxy
      *   - folder select this folder [optional, default = 'INBOX']
      *
      * @param  array $params mail reader specific parameters
+     * @param Felamimail_Model_Account $account
      * @throws Felamimail_Exception_IMAPInvalidCredentials
      * @return void
      */
-    public function __construct($params)
+    public function __construct($params, $account)
     {
         if (is_array($params)) {
             $params = (object)$params;
@@ -63,7 +64,7 @@ class Felamimail_Backend_ImapProxy
         $params->ssl      = isset($params->ssl)      ? $params->ssl      : false;
 
         $this->_params = $params;
-        $this->_backend = new Felamimail_Backend_Imap($params);
+        $this->_backend = new Felamimail_Backend_Imap($params, $account);
     }
     
     /**

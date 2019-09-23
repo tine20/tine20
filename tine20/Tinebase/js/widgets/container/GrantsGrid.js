@@ -77,6 +77,13 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
             this.recordClass = Tine.Tinebase.container.getGrantsModel(this.grantContainer);
         }
 
+        /**
+         * only system groups are list in groupPicker
+         */
+        if (! this.groupRecordClass) {
+            this.groupRecordClass = Tine.Admin.Model.Group;
+        }
+
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         }

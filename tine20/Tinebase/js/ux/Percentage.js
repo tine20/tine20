@@ -43,7 +43,7 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
     lazyInit: false,
     forceSelection: true,
     itemSelector: 'div.search-item',
-    
+
     //private
     initComponent: function(){
         Ext.ux.PercentCombo.superclass.initComponent.call(this);
@@ -160,7 +160,8 @@ Ext.ux.PercentRenderer = function(percent) {
  */
 Ext.ux.PercentRendererWithName = function(value, metadata, record) {
   
-    var metaStyle = '';
+    var metaStyle = '',
+        dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock('Tinebase.datasafe');
 
     if(record.fileRecord) {
         record = record.fileRecord;
@@ -171,6 +172,9 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     if(record.get('type') == 'folder') {
 
         metadata.css += ' mime-icon-folder';
+        if (dataSafeEnabled && !!record.get('pin_protected_node')) {
+            metadata.css += ' x-type-data-safe'
+        }
 
     }else if(record.get('is_quarantined') == '1') {
 

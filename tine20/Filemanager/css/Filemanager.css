@@ -46,9 +46,8 @@
 }
 
 .x-type-data-safe .x-tree-node-icon,
-.x-type-data-safe .mime-icon-folder .x-grid3-cell-inner {
+.x-type-data-safe .mime-icon-folder {
     background-image:url(../../images/icon-set/icon_folder_red.svg) !important;
-
 }
 
 .x-type-data-safe.x-tree-node-expanded .x-tree-node-icon {
