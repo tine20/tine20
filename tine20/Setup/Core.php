@@ -33,14 +33,13 @@ class Setup_Core extends Tinebase_Core
     {
         Setup_Core::setupConfig();
 
-        // we need to initialize sentry directly after setupConfig to catch early errors
-        self::setupSentry();
-
         Setup_Core::setupTempDir();
         
         //Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX"
         Setup_Core::setupDatabaseConnection();
-        
+
+        self::setupSentry();
+
         Setup_Core::setupStreamWrapper();
         
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
