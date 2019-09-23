@@ -22,8 +22,8 @@
  * @property    Tinebase_DateTime           last_modified_time
  * @property    string                      object_id
  * @property    string                      parent_id
- * @property    string                      size
- * @property    string                      revision_size
+ * @property    int                         size
+ * @property    int                         revision_size
  * @property    string                      type
  * @property    string                      revision
  * @property    string                      available_revisions

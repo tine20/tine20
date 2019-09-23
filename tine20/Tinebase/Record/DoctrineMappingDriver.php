@@ -85,6 +85,9 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         }
 
         $metadata->setPrimaryTable($table);
+        if (isset($table[Tinebase_ModelConfiguration_Const::ID_GENERATOR_TYPE])) {
+            $metadata->setIdGeneratorType($table[Tinebase_ModelConfiguration_Const::ID_GENERATOR_TYPE]);
+        }
 
         $this->_mapAssociations($modelConfig, $metadata);
         $this->_mapFields($modelConfig, $metadata);

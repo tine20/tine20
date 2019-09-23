@@ -375,6 +375,9 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $filename = dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png';
         
         $etag = $parent->createFile('tine_logo.png', fopen($filename, 'r'));
+        Tinebase_FileSystem::flushRefLogs();
+        Tinebase_FileSystem::getInstance()->processRefLogs();
+        Tinebase_FileSystem::getInstance()->clearStatCache();
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
 
