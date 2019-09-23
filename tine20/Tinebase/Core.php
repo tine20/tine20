@@ -2262,7 +2262,10 @@ class Tinebase_Core
             return self::getSentry();
         }
 
-        $sentryServerUri = Tinebase_Config::getInstance()->get(Tinebase_Config::SENTRY_URI);
+        $tinebaseConfig = Setup_Controller::getInstance()->isInstalled('Tinebase')
+            ? Tinebase_Config::getInstance()
+            : self::getConfig();
+        $sentryServerUri = $tinebaseConfig->{Tinebase_Config::SENTRY_URI};
         if (! $sentryServerUri) {
             return null;
         }
