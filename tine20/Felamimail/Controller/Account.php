@@ -820,7 +820,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @param Felamimail_Model_Account $_account
      * @return array capabilities
      */
-    public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
+    public function updateCapabilities(Felamimail_Model_Account $_account, $_imapBackend = NULL)
     {
         $cacheId = Tinebase_Helper::convertCacheId(self::ACCOUNT_CAPABILITIES_CACHEID . '_' . $_account->getId());
         $cache = Tinebase_Core::getCache();
