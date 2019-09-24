@@ -19,6 +19,8 @@
  */
 class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 {
+    protected $_masterUser = null;
+
     /**
      * the constructor
      *
@@ -189,5 +191,56 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         }
 
         parent::_checkRight($_action);
+    }
+
+    /**
+     * @param string $_accountId
+     * @param string $_rightToCheck
+     * @return Tinebase_RAII
+     */
+    public function prepareAccountForSieveAdminAccess($_accountId, $_rightToCheck = Admin_Acl_Rights::VIEW_EMAILACCOUNTS)
+    {
+        Admin_Controller_EmailAccount::getInstance()->checkRight($_rightToCheck);
+
+        $oldAccountAcl = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
+        $oldSieveAcl = Felamimail_Controller_Sieve::getInstance()->doAclCheck(false);
+
+        $raii = new Tinebase_RAII(function() use($oldAccountAcl, $oldSieveAcl) {
+            Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldAccountAcl);
+            Felamimail_Controller_Sieve::getInstance()->doAclCheck($oldSieveAcl);
+        });
+
+        $account = $this->get($_accountId);
+
+        // create sieve master user account here
+        try {
+            $this->_setSieveMasterPassword($account);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' ' . $tenf->getMessage());
+        }
+
+        // sieve login
+        Felamimail_Backend_SieveFactory::factory($account);
+
+        return $raii;
+    }
+
+    protected function _setSieveMasterPassword(Felamimail_Model_Account $account)
+    {
+        $this->_masterUser = $account->user = Tinebase_Record_Abstract::generateUID(8);
+        $account->password = Tinebase_Record_Abstract::generateUID(20);
+        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        if (method_exists($imapEmailBackend, 'setMasterPassword')) {
+            $imapEmailBackend->setMasterPassword($account->user, $account->password);
+        }
+    }
+
+    public function removeSieveAdminAccess()
+    {
+        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        if (method_exists($imapEmailBackend, 'removeMasterPassword')) {
+            $imapEmailBackend->removeMasterPassword($this->_masterUser);
+        }
     }
 }

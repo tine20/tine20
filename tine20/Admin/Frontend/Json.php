@@ -1548,21 +1548,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /***************************** sieve funcs *******************************/
 
-    protected function _prepareAccountForAdminAccess($_accountId)
-    {
-        $oldAccountAcl = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
-        $oldSieveAcl = Felamimail_Controller_Sieve::getInstance()->doAclCheck(false);
-
-        $raii = new Tinebase_RAII(function() use($oldAccountAcl, $oldSieveAcl) {
-            Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldAccountAcl);
-            Felamimail_Controller_Sieve::getInstance()->doAclCheck($oldSieveAcl);
-        });
-
-        Felamimail_Backend_SieveFactory::factory($_accountId);
-
-        return $raii;
-    }
-
     /**
      * get sieve vacation for account
      *
@@ -1571,9 +1556,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getSieveVacation($id)
     {
-        $raii = $this->_prepareAccountForAdminAccess($id);
+        $raii = Admin_Controller_EmailAccount::getInstance()->prepareAccountForSieveAdminAccess($id);
 
         $result = (new Felamimail_Frontend_Json())->getVacation($id);
+
+        Admin_Controller_EmailAccount::getInstance()->removeSieveAdminAccess();
 
         //for unused variable check
         unset($raii);
@@ -1588,9 +1575,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveSieveVacation($recordData)
     {
-        $raii = $this->_prepareAccountForAdminAccess($recordData['account_id']);
+        $raii = Admin_Controller_EmailAccount::getInstance()->prepareAccountForSieveAdminAccess(
+            $recordData['id'], Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
 
         $result = (new Felamimail_Frontend_Json())->saveVacation($recordData);
+
+        Admin_Controller_EmailAccount::getInstance()->removeSieveAdminAccess();
 
         //for unused variable check
         unset($raii);
@@ -1605,9 +1595,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getSieveRules($accountId)
     {
-        $raii = $this->_prepareAccountForAdminAccess($accountId);
+        $raii = Admin_Controller_EmailAccount::getInstance()->prepareAccountForSieveAdminAccess($accountId);
 
         $result = (new Felamimail_Frontend_Json())->getRules($accountId);
+
+        Admin_Controller_EmailAccount::getInstance()->removeSieveAdminAccess();
 
         //for unused variable check
         unset($raii);
@@ -1623,9 +1615,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveSieveRules($accountId, $rulesData)
     {
-        $raii = $this->_prepareAccountForAdminAccess($accountId);
+        $raii = Admin_Controller_EmailAccount::getInstance()->prepareAccountForSieveAdminAccess(
+            $accountId, Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
 
         $result = (new Felamimail_Frontend_Json())->saveRules($accountId, $rulesData);
+
+        Admin_Controller_EmailAccount::getInstance()->removeSieveAdminAccess();
 
         //for unused variable check
         unset($raii);
