@@ -25,6 +25,8 @@ class Admin_JsonTest extends TestCase
      */
     protected $objects = array();
 
+    protected $_scleverPwChanged = false;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -88,6 +90,13 @@ class Admin_JsonTest extends TestCase
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // already removed
             }
+        }
+
+        // re-set sclevers pw if changed
+        if ($this->_scleverPwChanged) {
+            $sclever = $this->_personas['sclever'];
+            $creds = TestServer::getInstance()->getTestCredentials();
+            Admin_Controller_User::getInstance()->setAccountPassword($sclever, $creds['password'], $creds['password']);
         }
 
         parent::tearDown();
@@ -1702,6 +1711,11 @@ class Admin_JsonTest extends TestCase
         return $accountdata;
     }
 
+    /**
+     * testSearchUserEmailAccounts - returns all TYPE_SYSTEM user accounts
+     *
+     * @return array
+     */
     public function testSearchUserEmailAccounts()
     {
         if (! TestServer::isEmailSystemAccountConfigured()) {
@@ -1752,6 +1766,7 @@ class Admin_JsonTest extends TestCase
                 ));
         $result = $this->_json->searchEmailAccounts($filter, []);
         self::assertGreaterThan(1, $result['totalcount'], 'system accounts of other users not found');
+        return $result['results'];
     }
 
     public function testEmailAccountApiSharedAccount($delete = true)
@@ -1888,5 +1903,82 @@ class Admin_JsonTest extends TestCase
         $fmailaccount = Felamimail_Controller_Account::getInstance()->get($updatedAccount['id']);
         $imapConfig = $fmailaccount->getImapConfig();
         self::assertNotEquals($account['user'], $imapConfig['user']);
+    }
+
+    public function testSetSieveVacation()
+    {
+        $this->_checkMasterUserTable();
+        $account = $this->testEmailAccountApiSharedAccount(false);
+
+        // set vacation for account via admin fe
+        $vacation = Felamimail_Frontend_JsonTest::getVacationData($account);
+        $result = $this->_json->saveSieveVacation($vacation);
+        self::assertEquals($vacation['subject'], $result['subject']);
+    }
+
+    public function testSetSieveRules()
+    {
+        $this->_checkMasterUserTable();
+        $account = $this->testEmailAccountApiSharedAccount(false);
+
+        // set rules for account via admin fe
+        $rules = $this->_getSieveRuleData();
+        $result = $this->_json->saveSieveRules($account['id'], $rules);
+        self::assertEquals(1, count($result));
+    }
+
+    protected function _getSieveRuleData()
+    {
+        return array(array(
+            'id' => 1,
+            'action_type' => Felamimail_Sieve_Rule_Action::FILEINTO,
+            'action_argument' => 'Junk',
+            'conjunction' => 'allof',
+            'conditions' => array(array(
+                'test' => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
+                'comperator' => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
+                'header' => 'From',
+                'key' => '"abcd" <info@example.org>',
+            )),
+            'enabled' => 1,
+        ));
+    }
+
+    public function testGetSetSieveRuleForSclever()
+    {
+        $this->_checkMasterUserTable();
+        $systemAccounts = $this->testSearchUserEmailAccounts();
+
+        $this->_testNeedsTransaction();
+
+        $sclever = $this->_personas['sclever'];
+        $newPw = Tinebase_Record_Abstract::generateUID(10);
+        // set new pw to prevent access with the unittest users pw
+        Admin_Controller_User::getInstance()->setAccountPassword($sclever, $newPw, $newPw);
+        $this->_scleverPwChanged = true;
+        $scleverAccount = array_filter($systemAccounts, function($account) use ($sclever) {
+            return ($account['user_id']['accountLoginName'] === $sclever->accountLoginName);
+        });
+        $scleverAccount = array_pop($scleverAccount);
+        $result = $this->_json->getSieveRules($scleverAccount['id']);
+        self::assertEquals(0, $result['totalcount']);
+
+        $rules = $this->_getSieveRuleData();
+        $result = $this->_json->saveSieveRules($scleverAccount['id'], $rules);
+        self::assertEquals(1, count($result));
+    }
+
+    protected function _checkMasterUserTable()
+    {
+        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
+            try {
+                $imapEmailBackend->checkMasterUserTable();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                self::markTestSkipped('could not find master user table');
+            }
+        } else {
+            self::markTestSkipped('could not find checkMasterUserTable');
+        }
     }
 }

@@ -1399,7 +1399,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testGetSetVacation()
     {
-        $vacationData = $this->_getVacationData();
+        $vacationData = self::getVacationData($this->_account);
         $this->_sieveTestHelper($vacationData);
 
         // check if script was activated
@@ -1427,12 +1427,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      *
      * @return array
      */
-    protected function _getVacationData()
+    public static function getVacationData($_account)
     {
         return array(
-            'id' => $this->_account->getId(),
+            'id' => $_account->getId(),
             'subject' => 'unittest vacation subject',
-            'from' => $this->_account->from . ' <' . $this->_account->email . '>',
+            'from' => $_account->from . ' <' . $_account->email . '>',
             'days' => 3,
             'enabled' => TRUE,
             'reason' => 'unittest vacation message<br /><br />signature',
@@ -1445,7 +1445,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testMimeVacation()
     {
-        $vacationData = $this->_getVacationData();
+        $vacationData = self::getVacationData($this->_account);
         $vacationData['reason'] = "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>";
 
         $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
@@ -1717,7 +1717,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testSetVacationWithStartAndEndDate()
     {
-        $vacationData = $this->_getVacationData();
+        $vacationData = self::getVacationData($this->_account);
         $vacationData['start_date'] = '2012-04-18';
         $vacationData['end_date'] = '2012-04-20';
         $result = $this->_sieveTestHelper($vacationData);
@@ -1743,7 +1743,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $ruleData = $this->_getRuleData();
         $ruleData[0]['id'] = $ruleData[2]['id'];
         $ruleData[2]['id'] = 11;
-        $resultSet = $this->_json->saveRules($this->_account->getId(), $ruleData);
+        $this->_json->saveRules($this->_account->getId(), $ruleData);
         $sieveScriptRules = $sieveBackend->getScript($this->_testSieveScriptName);
 
         $this->_setDisabledVacation();
@@ -1786,9 +1786,9 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     protected function _setDisabledVacation()
     {
-        $vacationData = $this->_getVacationData();
+        $vacationData = self::getVacationData($this->_account);
         $vacationData['enabled'] = FALSE;
-        $resultSet = $this->_json->saveVacation($vacationData);
+        $this->_json->saveVacation($vacationData);
     }
 
     /**
