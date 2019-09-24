@@ -54,11 +54,14 @@ class Setup_Frontend_Cli
         // always set real setup user if Tinebase is installed
         if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             try {
+                // TODO remove this if no update occure from < 12.7
+                Tinebase_Group_Sql::doJoinXProps(false);
                 $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
                 $setupUser = Tinebase_User::SYSTEM_USER_SETUP;
             }
+            Tinebase_Group_Sql::doJoinXProps(true);
             if ($setupUser && ! Setup_Core::getUser() instanceof Tinebase_Model_User) {
                 Setup_Core::set(Tinebase_Core::USER, $setupUser);
             }

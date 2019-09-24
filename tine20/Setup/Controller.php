@@ -616,6 +616,9 @@ class Setup_Controller
 
         $this->_enforceCollation();
 
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Tree_RefLog::class,
+        ]);
         $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
         $release11->fsAVupdates();
 
