@@ -69,120 +69,141 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             logo = Tine.installLogo;
 
         if (! this.loginPanel) {
-            this.loginPanel = new Ext.FormPanel({
-                width: 460,
-                height: 290,
-                frame: true,
-                labelWidth: 90,
-                cls: 'tb-login-panel',
-                items: [{
-                    xtype: 'container',
-                    cls: 'tb-login-lobobox',
-                    border: false,
-                    html: '<div class="tb-login-headsup-box">'+ this.headsUpText + '</div><a target="_blank" href="' + Tine.websiteUrl + '" border="0"><img src="' + logo + '" /></a>'
-                }, {
-                    xtype: 'label',
-                    cls: 'tb-login-big-label',
-                    text: i18n._('Login')
-                }, {
-                    xtype: 'tinelangchooser',
-                    name: 'locale',
-                    width: 170,
-                    tabindex: 1
-                }, {
-                    xtype: 'textfield',
-                    tabindex: 2,
-                    width: 170,
-                    fieldLabel: i18n._('Username'),
-                    name: 'username',
+            this.loginPanel = new Ext.Container({
+                getForm: function() {return this.items.get(0).getForm();},
+                layout: 'vbox',
+                width: 320,
+                height: 300,
+                layoutConfig: {
+                    align: 'stretch'
+                },
+                items: [
+                    new Ext.FormPanel({
+                        height: 210,
+                        frame: true,
+                        labelWidth: 90,
+                        cls: 'tb-login-panel',
+                        items: [/*{
+                        xtype: 'container',
+                        cls: 'tb-login-lobobox',
+                        border: false,
+                        html: '<div class="tb-login-headsup-box">'+ this.headsUpText + '</div><a target="_blank" href="' + Tine.websiteUrl + '" border="0"><img src="' + logo + '" /></a>'
+                    },*/ {
+                            xtype: 'label',
+                            cls: 'tb-login-big-label',
+                            text: i18n._('Login')
+                        }, {
+                            xtype: 'tinelangchooser',
+                            name: 'locale',
+                            width: 170,
+                            tabindex: 1
+                        }, {
+                            xtype: 'textfield',
+                            tabindex: 2,
+                            width: 170,
+                            fieldLabel: i18n._('Username'),
+                            name: 'username',
 
-                    allowBlank: modSsl ? false : true,
-                    validateOnBlur: false,
-                    selectOnFocus: true,
-                    value: this.defaultUsername ? this.defaultUsername : undefined,
-                    disabled: modSsl ? true : false,
-                    listeners: {
-                        scope: this,
-                        render: function (field) {
-                            field.el.dom.setAttribute('autocapitalize', 'none');
-                            field.el.dom.setAttribute('autocorrect', 'off');
-                            if (Ext.supportsUserFocus) {
-                                field.focus(false, 250);
+                            allowBlank: modSsl ? false : true,
+                            validateOnBlur: false,
+                            selectOnFocus: true,
+                            value: this.defaultUsername ? this.defaultUsername : undefined,
+                            disabled: modSsl ? true : false,
+                            listeners: {
+                                scope: this,
+                                render: function (field) {
+                                    field.el.dom.setAttribute('autocapitalize', 'none');
+                                    field.el.dom.setAttribute('autocorrect', 'off');
+                                    if (Ext.supportsUserFocus) {
+                                        field.focus(false, 250);
+                                    }
+                                },
+                                focus: function(field) {
+                                    if (Ext.isTouchDevice) {
+                                        Ext.getBody().dom.scrollTop = this.loginPanel.getBox()['y'] - 10;
+                                    }
+                                }
                             }
-                        },
-                        focus: function(field) {
-                            if (Ext.isTouchDevice) {
-                                Ext.getBody().dom.scrollTop = this.loginPanel.getBox()['y'] - 10;
+                        }, {
+                            xtype: 'textfield',
+                            tabindex: 3,
+                            width: 170,
+                            inputType: 'password',
+                            fieldLabel: i18n._('Password'),
+                            name: 'password',
+                            selectOnFocus: true,
+                            value: this.defaultPassword,
+                            disabled: modSsl ? true : false,
+                            listeners: {
+                                render: this.setLastLoginUser.createDelegate(this)
                             }
-                        }
-                    }
-                }, {
-                    xtype: 'textfield',
-                    tabindex: 3,
-                    width: 170,
-                    inputType: 'password',
-                    fieldLabel: i18n._('Password'),
-                    name: 'password',
-                    selectOnFocus: true,
-                    value: this.defaultPassword,
-                    disabled: modSsl ? true : false,
-                    listeners: {
-                        render: this.setLastLoginUser.createDelegate(this) 
-                    }
-                }, {
-                    xtype: 'textfield',
-                    tabindex: 4,
-                    width: 170,
-                    inputType: 'password',
-                    hidden: secondFactor ? false : true,
-                    fieldLabel: i18n._('Two-Factor Authentication Code'),
-                    id: 'otp',
-                    name: 'otp',
-                    selectOnFocus: true
-                }, {
-                    xtype: 'displayfield',
-                    style: {
-                        align: 'center',
-                        marginTop: '10px'
-                    },
-                    value: i18n._('Certificate detected. Please, press Login button to proceed.'),
-                    hidden: modSsl ? false : true
-                }, {
-                    xtype: 'container',
-                    id:'contImgCaptcha',
-                    layout: 'form',
-                    style: { visibility:'hidden' },
-                    items:[{
-                       xtype: 'textfield',
-                       width: 170,
-                       labelSeparator: '',
-                       id: 'security_code',
-                       value: null,
-                       name: 'securitycode'
+                        }, {
+                            xtype: 'textfield',
+                            tabindex: 4,
+                            width: 170,
+                            inputType: 'password',
+                            hidden: secondFactor ? false : true,
+                            fieldLabel: i18n._('Two-Factor Authentication Code'),
+                            id: 'otp',
+                            name: 'otp',
+                            selectOnFocus: true
+                        }, {
+                            xtype: 'displayfield',
+                            style: {
+                                align: 'center',
+                                marginTop: '10px'
+                            },
+                            value: i18n._('Certificate detected. Please, press Login button to proceed.'),
+                            hidden: modSsl ? false : true
+                        }, {
+                            xtype: 'container',
+                            id:'contImgCaptcha',
+                            layout: 'form',
+                            style: { visibility:'hidden' },
+                            items:[{
+                                xtype: 'textfield',
+                                width: 170,
+                                labelSeparator: '',
+                                id: 'security_code',
+                                value: null,
+                                name: 'securitycode'
+                            }, {
+                                fieldLabel:(' '),
+                                labelSeparator: '',
+                                items:[
+                                    new Ext.Component({
+                                        autoEl: {
+                                            tag: 'img',
+                                            id: 'imgCaptcha'
+                                        }
+                                    })]
+                            }]
+                        }, {
+                            xtype: 'container',
+                            layout: 'hbox',
+                            items: [{
+                                width: 95
+                            }, {
+                                xtype: 'button',
+                                width: 170,
+                                text: i18n._('Login'),
+                                scope: this,
+                                handler: this.onLoginPress
+                            }]
+                        }]
+                    }), {
+                        xtype: 'container',
+                        style: 'height: 5px;'
                     }, {
-                       fieldLabel:(' '),
-                       labelSeparator: '',
-                       items:[
-                           new Ext.Component({
-                               autoEl: { 
-                                   tag: 'img',
-                                   id: 'imgCaptcha'
-                               }
-                           })]
-                    }]
-                  }
-                ],
-                buttonAlign: 'right',
-                buttons: [{
-                    xtype: 'button',
-                    width: 120,
-                    text: i18n._('Login'),
-                    scope: this,
-                    handler: this.onLoginPress
-                }]
+                        xtype: 'container',
+                        cls: 'tb-login-lobobox',
+                        border: false,
+                        html: '<div class="tb-login-headsup-box">'+ this.headsUpText + '</div><a target="_blank" href="' + Tine.websiteUrl + '" border="0"><img src="' + logo + '" /></a>'
+                    }
+                ]
             });
         }
-        
+
         return this.loginPanel;
     },
 

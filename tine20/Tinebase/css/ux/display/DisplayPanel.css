@@ -1,6 +1,9 @@
 .x-ux-display .x-panel-body {
     background-color: #F3F6F7;
 }
+.x-ux-display .x-panel-bwrap {
+    background: none;
+}
 
 .x-ux-display .x-form-item {
     overflow: hidden;

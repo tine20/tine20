@@ -212,3 +212,6 @@ Ext.Button.buttonTemplate = new Ext.Template(
     '<tr><td class="x-btn-bl"><i>&#160;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&#160;</i></td></tr>',
     '</tbody></table>');
 Ext.Button.buttonTemplate.compile();
+
+Ext.Window.prototype.shadow = false;
+// Ext.Window.prototype.shadowOffset = 20;

@@ -1,19 +1,31 @@
-@tbColor: #D7E0E7;
+@focusColor: #0062a7;
+@selectionColor: #66ccff;
+@tbColor: #d8e0e7;
 
-@northTbColor: #1D89E4;
+@datePickerHd: #2196f3;
+@filterTbColor: #f4f5f7;
+@gridHd: #c0ced8;
+@gridHdActive: darken(@gridHd, 10);
+
+
+@northTbColor: @focusColor;
 @altRowColor: @northTbColor;
 
-@filterTbColor: #F0F2F4;
 
-@dialogBg: #F5F6F7;
 
-@gridHd: #C0CED7;
+@panelBGColor: @gridHd;
+//@dialogBg: #F5F6F7;
+@dialogBg: #eaeef1;
+
+
 
 @sidebarBg: @tbColor;
 
-@selectionColor: #66CBFF;
+
 
 @tabColor: #64C0FF;
+
+
 
 .x-btn.waves-effect {
   display: table;
@@ -46,9 +58,11 @@
 
 ul.x-tab-strip li {
   background-color: @tabColor;
- &:first-child {
-   margin-left: 0px;
- }
+  margin-left: 0px;
+
+ //&:first-child {
+ //  margin-left: 0px;
+ //}
 }
 
 li.x-item-disabled span.x-tab-strip-text,
@@ -252,6 +266,10 @@ ul.x-tab-strip-top {
     }
   }
 
+  .x-panel-bwrap {
+    background-color: @northTbColor;
+  }
+
   .x-panel-body {
     color: #FFFFFF;
   }
@@ -318,6 +336,29 @@ ul.x-tab-strip-top {
 }
 
 /* PANEL */
+.x-panel-tr,
+.x-panel-tc,
+.x-panel-tl,
+.x-panel-mr,
+.x-panel-mc,
+.x-panel-ml,
+.x-panel-br,
+.x-panel-bc,
+.x-panel-bl,
+.x-panel-bwrap,
+.x-panel-ghost,
+.x-panel-ghost ul {
+  background-image: none;
+  background-color: @panelBGColor;
+  border: none
+}
+
+// grr - we need different colors for windows and panels...
+//.x-panel-body {
+//  border-color: @tbColor;
+//}
+
+/* FORM PANEL */
 .x-form {
   .x-panel-tr,
   .x-panel-tc,
@@ -532,7 +573,7 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
 
 td.x-grid3-hd-over, td.sort-asc, td.sort-desc {
   background-image: none;
-  background-color: #AFC1CB;
+  background-color: @gridHdActive;
 }
 
 .sort-asc .x-grid3-sort-icon {
@@ -569,7 +610,7 @@ td.x-grid3-hd-over, td.sort-asc, td.sort-desc {
 
 .x-date-inner th {
   height: 30px;
-  background-color: @northTbColor;
+  background-color: @datePickerHd;
   background-image: none;
   border: none;
   color: #FFF;
@@ -607,3 +648,81 @@ td.x-date-mp-sel a,
   background-color: darken(@tbColor, 10%);
   border: none;
 }
+
+/* WINDOW */
+
+.x-window-tl,
+.x-window-tc,
+.x-window-tr,
+.x-window-ml,
+.x-window-mc,
+.x-window-mr,
+.x-window-bl,
+.x-window-bc,
+.x-window-br,
+.x-window-body,
+.x-window-plain .x-window-body {
+  background-image: none !important;
+  background-color: @panelBGColor !important;
+  border: none !important;
+}
+
+.x-progress-wrap {
+  border: none;
+}
+.x-progress-bar {
+  background-image: none;
+  background-color: @focusColor;
+  border: none;
+}
+
+.x-progress-inner {
+  background-color: #fff;
+  background-image: none;
+  height: 20px;
+}
+
+.x-window {
+  box-shadow: 10px 10px 15px silver;
+  .x-tool {
+    background-size: 13px 13px;
+    background-position: 1px 1px !important;
+
+    &:hover {
+      background-size: 15px 15px;
+      background-position: 0 0 !important;
+    }
+  }
+
+  .x-tool-close {
+    background-image: url('../../images/icon-set/icon_clear.svg') !important;
+  }
+}
+
+.x-window-tl .x-window-header {
+  color: black;
+}
+
+///* TOOLS */
+// problems with trees yet
+//.x-tool {
+//  background-size: 13px 13px;
+//  background-position: 1px 1px !important;
+//
+//  &:hover {
+//    background-size: 15px 15px;
+//    background-position: 0 0 !important;
+//  }
+//}
+//
+//.x-tool-close {
+//  background-image: url('../../images/icon-set/icon_clear.svg') !important;
+//}
+//
+//.x-tool-toggle {
+//  background-image: url('../../images/icon-set/icon_arrow_full_up.svg');
+//}
+//
+//.x-panel-collapsed .x-tool-toggle {
+//  background-image: url('../../images/icon-set/icon_arrow_full_down.svg');
+//}
