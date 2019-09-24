@@ -104,13 +104,23 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $this->objects['users']['testUser'] = $testUser;
         
         $this->assertTrue($testUser instanceof Tinebase_Model_FullUser);
-        $this->assertTrue(isset($testUser->smtpUser), 'no smtpUser data found in ' . print_r($testUser->toArray(), TRUE));
-        $this->assertTrue(in_array('unittest@' . $this->_mailDomain, $testUser->smtpUser->emailForwards), 'forwards not found');
-        $this->assertTrue(in_array('test@' . $this->_mailDomain, $testUser->smtpUser->emailForwards), 'forwards not found');
-        $this->assertTrue(in_array('bla@' . $this->_mailDomain, $testUser->smtpUser->emailAliases), 'aliases not found');
-        $this->assertTrue(in_array('blubb@' . $this->_mailDomain, $testUser->smtpUser->emailAliases), 'aliases not found');
-        $this->assertEquals(true,                                            $testUser->smtpUser->emailForwardOnly);
-        $this->assertEquals($user->accountEmailAddress,                      $testUser->smtpUser->emailAddress);
+        $this->assertTrue(isset($testUser->smtpUser), 'no smtpUser data found in ' . print_r($testUser->toArray(),
+                TRUE));
+        $this->assertTrue(in_array('unittest@' . $this->_mailDomain, $testUser->smtpUser->emailForwards),
+            'forwards not found');
+        $this->assertTrue(in_array('test@' . $this->_mailDomain, $testUser->smtpUser->emailForwards),
+            'forwards not found');
+
+        $expectedAliases = ['bla@' . $this->_mailDomain, 'blubb@' . $this->_mailDomain];
+        $foundAliases = array_filter($testUser->smtpUser->emailAliases, function($alias) use ($expectedAliases) {
+            return (in_array($alias['email'], $expectedAliases));
+        });
+        $this->assertEquals(2, count($foundAliases),
+            'aliases not found: ' . print_r($expectedAliases, true) . ' in '
+            . print_r($testUser->smtpUser->emailAliases, true));
+
+        $this->assertEquals(true, $testUser->smtpUser->emailForwardOnly);
+        $this->assertEquals($user->accountEmailAddress, $testUser->smtpUser->emailAddress);
         
         return $testUser;
     }
@@ -142,7 +152,9 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $testUser = $this->_backend->updateUser($user);
         
         $this->assertEquals(array(),                            $testUser->smtpUser->emailForwards, 'forwards mismatch');
-        $this->assertEquals(array('bla@' . $this->_mailDomain), $testUser->smtpUser->emailAliases,  'aliases mismatch');
+        $this->assertEquals([
+            ['email' => 'bla@' . $this->_mailDomain, 'dispatch_address' => 1]
+        ], $testUser->smtpUser->emailAliases,  'aliases mismatch');
         $this->assertEquals(false,                              $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals('j.smith@' . $this->_mailDomain,    $testUser->smtpUser->emailAddress);
         $this->assertEquals($testUser->smtpUser->emailAliases,  $testUser->emailUser->emailAliases,
@@ -269,7 +281,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     {
         $user = $this->testAddUser();
         $aliases = $user->emailUser->emailAliases;
-        $aliases[] = $user->accountEmailAddress;
+        $aliases[] = [
+            'email' => $user->accountEmailAddress,
+            'dispatch_address' => 1,
+        ];
         $user->smtpUser->emailAliases = $aliases;
         try {
             $updatedUser = $this->_backend->updateUser($user);
@@ -277,11 +292,27 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
         }
 
-        $user->accountEmailAddress = $user->emailUser->emailAliases[0];
+        $user->accountEmailAddress = $user->emailUser->emailAliases[0]['email'];
         try {
             $updatedUser = $this->_backend->updateUser($user);
             self::fail('alias should not be allowed to equal email address' . print_r($updatedUser->toArray(), true));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
+        }
+    }
+
+    public function testAliasesDispatchAddressFlag()
+    {
+        $user = $this->testAddUser();
+        $aliases = $user->emailUser->emailAliases;
+        foreach ([0, '0', false] as $inputvalue) {
+            foreach ($aliases as &$alias) {
+                $alias['dispatch_address'] = $inputvalue;
+            }
+            $user->smtpUser->emailAliases = $aliases;
+            $updatedUser = $this->_backend->updateUser($user);
+            foreach ($updatedUser->emailUser->emailAliases as $alias) {
+                self::assertEquals(0, $alias['dispatch_address']);
+            }
         }
     }
 }
