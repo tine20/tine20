@@ -1669,55 +1669,5 @@ msgstr "Konten hinzufügen"
 msgid "Create new email accounts"
 msgstr "Neue Konten hinzufügen"
 
-#~ msgid "Save"
-#~ msgstr "Speichern"
-
-#~ msgid "Save Email Note"
-#~ msgstr "E-Mailnotiz anlegen"
-
-#~ msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
-#~ msgstr "Diesen Knopf aktivieren um die E-Mail als Notiz bei dem Empfänger anzuhängen."
-
-#~ msgid "Email Accounts"
-#~ msgid_plural "Email Accounts"
-#~ msgstr[0] "E-Mail-Konto"
-#~ msgstr[1] "E-Mail-Konten"
-
-#~ msgid "Recent"
-#~ msgstr "Neueste"
-
-#~ msgid "File Messages To Folder"
-#~ msgstr "Nachricht in einem Ordner ablegen"
-
-#~ msgid "Enabled features in Felamimail application."
-#~ msgstr "Feature in der Felamimail Applikation aktivieren."
-
-#~ msgid "Quota usage"
-#~ msgstr "Kontingentnutzung"
-
-#~ msgid "{0} %"
-#~ msgstr "{0} %"
-
-#~ msgid "Your quota"
-#~ msgstr "Ihr Kontingent"
-
-#~ msgid "{0} available (total: {1})"
-#~ msgstr "{0} verfügbar (insgesamt: {1})"
-
-#~ msgid "Filemanager (inline)"
-#~ msgstr "Dateimanager (Inline)"
-
-#~ msgid "Filemanager (inline, password)"
-#~ msgstr "Dateimanager (Inline, Passwort)"
-
-#~ msgid "Add Note"
-#~ msgstr "Notiz hinzufügen"
-
-#~ msgid "Edit Email Note Text:"
-#~ msgstr "E-Mailnotiz bearbeiten:"
-
-#~ msgid "Vacation Templates Container ID"
-#~ msgstr "Container ID für Abwesenheitsnotizvorlagen"
-
-#~ msgid "It is not possible to create new personal system accounts"
-#~ msgstr "Es ist nicht möglich, neue persönliche Systemkonten zu erstellen"
+msgid "Use"
+msgstr "Benutzen"
