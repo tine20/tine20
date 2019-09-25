@@ -94,6 +94,19 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                         $_eventObject->pwd);
                 }
                 break;
+            case Admin_Event_UpdateAccount::class:
+                /** @var Tinebase_Event_User_CreatedAccount $_eventObject */
+                if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
+                    ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
+                    if ($_eventObject->account->accountFullName !== $_eventObject->oldAccount->accountFullName) {
+                        $systemaccount = Felamimail_Controller_Account::getInstance()->getSystemAccount($_eventObject->account);
+                        $systemaccount->from = $_eventObject->account->accountFullName;
+                        $checks = Felamimail_Controller_Account::getInstance()->_doContainerACLChecks(false);
+                        Felamimail_Controller_Account::getInstance()->update($systemaccount);
+                        Felamimail_Controller_Account::getInstance()->_doContainerACLChecks($checks);
+                    }
+                }
+                break;
         }
     }
 

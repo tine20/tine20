@@ -51,6 +51,11 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      */
     protected function tearDown()
     {
+        if ($this->_userChanged) {
+            $originalUser = Admin_Controller_User::getInstance()->update($this->_originalTestUser);
+            Tinebase_Core::setUser($originalUser);
+        }
+
         parent::tearDown();
         
         if ($this->_pwChanged) {
@@ -60,10 +65,6 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         if ($this->_oldConfig) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_oldConfig);
-        }
-
-        if ($this->_userChanged) {
-            Admin_Controller_User::getInstance()->update($this->_originalTestUser);
         }
     }
     
@@ -320,6 +321,19 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         // try to access the message
         $messageViaGet = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
         self::assertContains('aaaaaä', $messageViaGet->body);
+    }
+
+    public function testChangeAccountName()
+    {
+        // change name of user
+        $user = Tinebase_Core::getUser();
+        $user->accountLastName = 'lala';
+        $updatedUser = Admin_Controller_User::getInstance()->update($user);
+        $this->_userChanged = true;
+
+        // from of system account should change
+        $account = Felamimail_Controller_Account::getInstance()->get($this->_account->getId());
+        self::assertEquals($updatedUser->accountFullName, $account->from);
     }
 
     public function testSharedAccountAcl()
