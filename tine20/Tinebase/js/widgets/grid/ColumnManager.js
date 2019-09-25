@@ -100,6 +100,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.width = 90;
             }
 
+            if(fieldDefinition.type == 'money') {
+                config.align = 'right';
+            }
+
             // If no label exists, don't use in grid
             if (! fieldDefinition.label) {
                 return null;
