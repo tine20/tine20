@@ -177,6 +177,8 @@ class Admin_JsonTest extends TestCase
      * 
      * @param array $data
      * @return array
+     *
+     * TODO replace with TestCase::_createUser
      */
     protected function _createUser($data = null)
     {
