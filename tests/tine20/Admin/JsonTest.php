@@ -1923,7 +1923,7 @@ class Admin_JsonTest extends TestCase
 
         // set rules for account via admin fe
         $rules = $this->_getSieveRuleData();
-        $result = $this->_json->saveSieveRules($account['id'], $rules);
+        $result = $this->_json->saveRules($account['id'], $rules);
         self::assertEquals(1, count($result));
     }
 
@@ -1960,14 +1960,14 @@ class Admin_JsonTest extends TestCase
             return ($account['user_id']['accountLoginName'] === $sclever->accountLoginName);
         });
         $scleverAccount = array_pop($scleverAccount);
-        $result = $this->_json->saveSieveRules($scleverAccount['id'], []);
+        $result = $this->_json->saveRules($scleverAccount['id'], []);
         self::assertEquals(0, count($result));
 
         $result = $this->_json->getSieveRules($scleverAccount['id']);
         self::assertEquals(0, $result['totalcount']);
 
         $rules = $this->_getSieveRuleData();
-        $result = $this->_json->saveSieveRules($scleverAccount['id'], $rules);
+        $result = $this->_json->saveRules($scleverAccount['id'], $rules);
         self::assertEquals(1, count($result));
     }
 

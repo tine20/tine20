@@ -46,6 +46,15 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     //private
     initComponent: function(){
+
+        if (this.asAdminModule) {
+            this.recordProxy = new Tine.Felamimail.RulesBackend({
+                appName: 'Admin',
+                modelName: 'SieveRule'
+            });
+        }
+
+
         Tine.Felamimail.sieve.RulesDialog.superclass.initComponent.call(this);
         
         this.i18nRecordName = this.app.i18n._('Sieve Filter Rules');
@@ -108,7 +117,8 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         this.rulesGrid = new Tine.Felamimail.sieve.RulesGridPanel({
-            account: this.account
+            account: this.account,
+            recordProxy: this.recordProxy
         });
         
         return [this.rulesGrid];
@@ -124,7 +134,7 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         this.loadMask.show();
-        Tine.Felamimail.rulesBackend.saveRules(this.account.id, rules, {
+        this.recordProxy.saveRules(this.account.id, rules, {
             scope: this,
             success: function(record) {
                 if (closeWindow) {

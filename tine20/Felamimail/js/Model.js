@@ -10,6 +10,31 @@
  */
 Ext.ns('Tine.Felamimail.Model');
 
+// for Tine.Felamimail.Model.Account see hack in Felamimail.initAccountModel
+
+/**
+ * return available account types
+ *
+ * @param withSystem
+ * @return {*[]}
+ */
+Tine.Felamimail.Model.getAvailableAccountTypes = function(withSystem) {
+    let app = Tine.Tinebase.appMgr.get('Felamimail');
+
+    let availableTypes = [
+        {id: 'shared', value: app.i18n._('Shared System Account')},
+        {id: 'userInternal', value: app.i18n._('Additional Personal System Account')},
+        {id: 'user', value: app.i18n._('Additional Personal External Account')}
+    ];
+
+    if (withSystem) {
+        // new records can't be personal system accounts
+        availableTypes.push({id: 'system', value: app.i18n._('Default Personal System Account')});
+    }
+
+    return availableTypes;
+};
+
 /**
  * @namespace Tine.Felamimail.Model
  * @class Tine.Felamimail.Model.Message
@@ -659,7 +684,7 @@ Tine.Felamimail.Model.Rule.getDefaultData = function() {
  * 
  * Rule Backend
  */ 
-Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
+Tine.Felamimail.RulesBackend = Ext.extend(Tine.Tinebase.data.RecordProxy,{
     appName: 'Felamimail',
     modelName: 'Rule',
     recordClass: Tine.Felamimail.Model.Rule,
@@ -735,6 +760,8 @@ Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
         Tine.Felamimail.handleRequestException(exception);
     }
 });
+
+Tine.Felamimail.rulesBackend = new Tine.Felamimail.RulesBackend({});
 
 /**
  * @namespace Tine.Felamimail.Model
