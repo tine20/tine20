@@ -137,8 +137,15 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             if ($validateImage) {
                 $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_imgdata');
                 $tmpFile = fopen($tmpPath, 'w');
-                stream_copy_to_stream($stream, $tmpFile);
-                fclose($tmpFile);
+                try {
+                    stream_copy_to_stream($stream, $tmpFile);
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Could not copy stream: ' . $e->getMessage());
+                } finally {
+                    fclose($tmpFile);
+                }
                 // @todo check given mimetype or all images types?
                 if (! Tinebase_ImageHelper::isImageFile($tmpPath)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
