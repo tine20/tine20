@@ -305,7 +305,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
                 newRecordDefaults: this.recordDefaults,
                 recordPrefix: this.recordPrefix,
                 emptyText: i18n._('Search for groups ...'),
-                onSelect: this.onAddRecordFromCombo
+                onSelect: this.onAddRecordFromCombo,
+                additionalFilters: [{field: 'type', operator: 'equals', value: 'group'}]
             });
         }
 

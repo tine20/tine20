@@ -1960,6 +1960,9 @@ class Admin_JsonTest extends TestCase
             return ($account['user_id']['accountLoginName'] === $sclever->accountLoginName);
         });
         $scleverAccount = array_pop($scleverAccount);
+        $result = $this->_json->saveSieveRules($scleverAccount['id'], []);
+        self::assertEquals(0, count($result));
+
         $result = $this->_json->getSieveRules($scleverAccount['id']);
         self::assertEquals(0, $result['totalcount']);
 
