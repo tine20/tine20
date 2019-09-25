@@ -228,12 +228,20 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
     protected function _setSieveMasterPassword(Felamimail_Model_Account $account)
     {
-        $this->_masterUser = $account->user = Tinebase_Record_Abstract::generateUID(8);
+        $this->_masterUser = Tinebase_Record_Abstract::generateUID(8);
+        $account->user = $this->_getAccountUsername($account);
         $account->password = Tinebase_Record_Abstract::generateUID(20);
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         if (method_exists($imapEmailBackend, 'setMasterPassword')) {
-            $imapEmailBackend->setMasterPassword($account->user, $account->password);
+            $imapEmailBackend->setMasterPassword($this->_masterUser, $account->password);
         }
+    }
+
+    protected function _getAccountUsername($account)
+    {
+        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $imapLoginname = $imapEmailBackend->getLoginName($account->user_id, null, $account->email);
+        return $imapLoginname . '*' . $this->_masterUser;
     }
 
     public function removeSieveAdminAccess()
