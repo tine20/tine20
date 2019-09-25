@@ -1970,6 +1970,10 @@ class Admin_JsonTest extends TestCase
 
     protected function _checkMasterUserTable()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
             try {
