@@ -1,11 +1,15 @@
 @focusColor: #0062a7;
-@selectionColor: #66ccff;
+@selectionColor: #dbecf4;
 @tbColor: #d8e0e7;
 
 @datePickerHd: #2196f3;
+@datePickerActive: #66ccff;
 @filterTbColor: #f4f5f7;
 @gridHd: #c0ced8;
 @gridHdActive: darken(@gridHd, 10);
+
+@tipColor: #163047;
+
 
 
 @northTbColor: @focusColor;
@@ -25,7 +29,9 @@
 
 @tabColor: #64C0FF;
 
-
+//.x-shadow {
+//  display: none !important;
+//}
 
 .x-btn.waves-effect {
   display: table;
@@ -39,6 +45,10 @@
   .blacktowhite {
     filter: invert(89%) sepia(81%) saturate(2%) hue-rotate(17deg) brightness(115%) contrast(101%);
   }
+}
+
+#shadow() {
+  box-shadow: 10px 10px 15px silver;
 }
 
 /* TABPANEL */
@@ -94,7 +104,7 @@ ul.x-tab-strip-top {
 .x-tab-strip span.x-tab-strip-text:hover,
 .x-tab-strip-active span.x-tab-strip-text {
   font-weight: normal;
-  color: #fff
+  #transform.blacktowhite();
 }
 
 .x-tab-strip .x-tab-strip-closable {
@@ -431,8 +441,6 @@ ul.x-tab-strip-top {
   }
 }
 
-
-/* FORM */
 .x-form-text, textarea.x-form-field {
   border-left: none !important;
   border-right: none !important;
@@ -554,6 +562,14 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
   border: none;
 }
 
+.x-combo-list {
+  border: none;
+
+  .x-combo-selected {
+    background-color: @selectionColor;
+    border-color: @selectionColor !important;
+  }
+}
   /* GRID */
 //.cal-daysviewpanel-header-inner,
 //.cal-timelinepanel-header-label {
@@ -586,6 +602,11 @@ td.x-grid3-hd-over, td.sort-asc, td.sort-desc {
   background-image: url('../../images/icon-set/icon_arrow_up.svg');
   background-size: 12px;
   background-position-y: center;
+}
+
+.x-grid3-row-selected {
+  background-color: @selectionColor !important;
+  border-color: @selectionColor;
 }
 
 /* DATEPICKER */
@@ -634,7 +655,7 @@ td.x-grid3-hd-over, td.sort-asc, td.sort-desc {
 td.x-date-mp-sel a,
 .x-date-inner .x-date-selected a {
   background-image: none;
-  background-color: @selectionColor;
+  background-color: @datePickerActive;
 }
 
 .x-date-mp-btns,
@@ -683,7 +704,7 @@ td.x-date-mp-sel a,
 }
 
 .x-window {
-  box-shadow: 10px 10px 15px silver;
+  #shadow();
   .x-tool {
     background-size: 13px 13px;
     background-position: 1px 1px !important;
@@ -726,3 +747,81 @@ td.x-date-mp-sel a,
 //.x-panel-collapsed .x-tool-toggle {
 //  background-image: url('../../images/icon-set/icon_arrow_full_down.svg');
 //}
+
+/* TIPS */
+
+.x-tip {
+  #shadow();
+
+  .x-tip-tc,
+  .x-tip-tl,
+  .x-tip-tr,
+  .x-tip-bc,
+  .x-tip-bl,
+  .x-tip-br,
+  .x-tip-ml,
+  .x-tip-mr {
+    background-image: none;
+    background-color: @tipColor;
+  }
+
+  .x-tip-body {
+    color: #fff;
+    font-weight: bold;
+
+    b {
+      text-decoration: underline;
+      font-style: italic;
+    }
+  }
+
+  .x-tip-bl.x-panel-nofooter {
+    height: 5px;
+  }
+}
+
+/* MENU */
+
+.x-menu-list {
+  padding: 0;
+}
+
+.x-menu-floating {
+  border: none;
+  //#shadow();
+}
+
+.x-menu-item-active {
+  background-image: none;
+  background-color: @selectionColor;
+  border-color: @selectionColor;
+  border-style: none;
+  border-left: 2px solid @northTbColor;
+  margin: 0;
+  padding: 1px;
+
+}
+
+/* TREE */
+
+.x-tree-node .x-tree-selected {
+  background-color: @selectionColor;
+}
+
+/* ACCORDION */
+.x-panel-collapsed .x-accordion-hd .x-tool-toggle {
+  background-image: url('../../images/icon-set/icon_action_plus.svg');
+  background-position: 1px 1px;
+  background-size: 14px;
+}
+
+.x-accordion-hd .x-tool-toggle {
+  background-image: url('../../images/icon-set/icon_action_minus.svg');
+  background-position: 1px 1px;
+  background-size: 14px;
+}
+
+.x-accordion-hd .x-tool-toggle-over {
+  background-position: 0 1px !important;
+  background-size: 16px !important;
+}
