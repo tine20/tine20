@@ -4275,19 +4275,11 @@ class Tinebase_FileSystem implements
             Tinebase_Exception::log(new Exception('found ' . count($ids) .
                 ' treenodes are not deleted but parent is: ' . print_r($ids, true)));
 
-            foreach ($ids as $id) {
-                try {
-                    $node = $this->get($id);
-                    if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-                        $this->rmdir($this->getPathOfNode($node, true));
-                    } else {
-                        $this->deleteFileNode($node);
-                    }
-                } catch (Tinebase_Exception_NotFound $e) {
-                } catch (Exception $e) {
-                    Tinebase_Exception::log($e);
-                }
-            }
+            $db->query('update ' . SQL_TABLE_PREFIX . 'tree_fileobjects as F join ' . SQL_TABLE_PREFIX .
+                'tree_nodes as N ON F.id = N.object_id set F.deleted_time = NOW(), N.deleted_time = NOW(), F.is_deleted = 1, N.is_deleted = 1 WHERE '
+                . $db->quoteInto('N.id IN (?)', $ids));
         }
+
+        return true;
     }
 }
