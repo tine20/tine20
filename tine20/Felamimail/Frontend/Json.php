@@ -280,7 +280,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($result) {
             return $this->_recordToJson($result);
         } else {
-            throw new Felamimail_Exception_IMAPMessageNotFound('Could not save draft');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Draft could not be saved ... returning original message'
+            );
+
+            return $recordData;
         }
     }
 
