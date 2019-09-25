@@ -336,7 +336,7 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
 .tb-login-big-label {
     font-size: 16px;
     font-weight: bold;
-    color: gray;
+    /*color: gray;*/
     line-height: 35px;
 }
 
@@ -363,9 +363,9 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     color: #1E78AD;
 }
 
-.tb-login-infosection .tb-login-surveypanel {
-    padding-top: 20px;
-}
+/*.tb-login-infosection .tb-login-surveypanel {*/
+/*    padding-top: 20px;*/
+/*}*/
 
 /* ----- about dialog --------------------------------------------------------*/
 .tb-about-dlg {
