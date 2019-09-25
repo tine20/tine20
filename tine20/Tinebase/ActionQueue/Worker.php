@@ -38,6 +38,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             'maxRetry'        => 10,
             'maxChildren'     => 10,
             'shutDownWait'    => 60,
+            'longRunning'     => false,
         )
     );
     
@@ -80,7 +81,11 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         // setup proper logging
         Tinebase_Core::set(Tinebase_Core::LOGGER, $this->_getLogger());
 
-        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if ($this->_getConfig()->tine20->longRunning) {
+            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+        } else {
+            $actionQueue = Tinebase_ActionQueue::getInstance();
+        }
         if ($actionQueue->getBackendType() !== 'Tinebase_ActionQueue_Backend_Redis') {
             $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__
                 . ' not Tinebase_ActionQueue_Backend_Redis used. There is nothing to do for the worker!'
