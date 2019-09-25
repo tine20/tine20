@@ -1613,7 +1613,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param   array $rulesData
      * @return  array
      */
-    public function saveSieveRules($accountId, $rulesData)
+    public function saveRules($accountId, $rulesData)
     {
         $raii = Admin_Controller_EmailAccount::getInstance()->prepareAccountForSieveAdminAccess(
             $accountId, Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);

@@ -16,6 +16,9 @@ require('Tinebase/js/Application');
 require('Tinebase/js/ux/ItemRegistry');
 require('Tinebase/js/widgets/MainScreen');
 
+require('./AccountGridPanel');
+require('./admin/AccountGridPanel');
+
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.Application
@@ -145,8 +148,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
      * TODO can this be done in a more elegant way?
      */
-    initAccountModel: function()
-    {
+    initAccountModel: function() {
         /**
          * @type Object
          */
@@ -1130,33 +1132,4 @@ Tine.Felamimail.handleRequestException = function(exception) {
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
             break;
     }
-};
-
-Ext.ns('Tine.Felamimail.Admin.emailaccounts');
-/**
- * emailaccounts 'mainScreen' (Admin grid panel)
- *
- * @static
- *
- * TODO move to a separate file
- */
-Tine.Felamimail.Admin.emailaccounts.show = function () {
-    var app = Tine.Tinebase.appMgr.get('Felamimail');
-    if (! Tine.Felamimail.Admin.emailAccountsGridPanel) {
-        Tine.Felamimail.Admin.emailaccountsBackend = new Tine.Tinebase.data.RecordProxy({
-            appName: 'Admin',
-            modelName: 'EmailAccount',
-            recordClass: Tine.Felamimail.Model.Account,
-            idProperty: 'id'
-        });
-        Tine.Felamimail.Admin.emailAccountsGridPanel = new Tine.Felamimail.AccountGridPanel({
-            recordProxy: Tine.Felamimail.Admin.emailaccountsBackend,
-            asAdminModule: true
-        });
-    } else {
-        Tine.Felamimail.Admin.emailAccountsGridPanel.loadGridData.defer(100, Tine.Felamimail.Admin.emailAccountsGridPanel, []);
-    }
-
-    Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Felamimail.Admin.emailAccountsGridPanel, true);
-    Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Felamimail.Admin.emailAccountsGridPanel.actionToolbar, true);
 };

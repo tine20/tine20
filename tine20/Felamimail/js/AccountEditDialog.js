@@ -46,7 +46,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     initComponent: function() {
 
-        // quickfix for admin mode
         if (this.asAdminModule) {
             this.recordProxy = new Tine.Tinebase.data.RecordProxy({
                 appName: 'Admin',
@@ -219,9 +218,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             editable: false,
                             mode: 'local',
                             forceSelection: true,
-                            // value: 'shared',
                             xtype: 'combo',
-                            store: this.getTypeStore(),
+                            store: new Ext.data.JsonStore({
+                                data: Tine.Felamimail.Model.getAvailableAccountTypes(),
+                                fields: Tine.Tinebase.Model.KeyFieldRecord
+                            }),
+                            valueField: 'id',
+                            displayField: 'value',
                             listeners: {
                                 scope: this,
                                 select: function(combo, record) {
@@ -500,21 +503,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.grantsGrid
             ]
         };
-    },
-
-    getTypeStore: function() {
-        var availableTypes = [
-            ['shared', this.app.i18n._('Shared System Account')],
-            ['userInternal', this.app.i18n._('Additional Personal System Account')],
-            ['user', this.app.i18n._('Additional Personal External Account')],
-        ];
-
-        if (this.record.id) {
-            // new records can't be personal system accounts
-            availableTypes.push(['system', this.app.i18n._('Default Personal System Account')]);
-        }
-
-        return availableTypes;
     },
     
     /**
