@@ -545,6 +545,23 @@ class Tinebase_Scheduler_Task
             . ' Saved task Tinebase_FileSystem::notifyQuota in scheduler.');
     }
 
+    public static function addFileSystemRepairDeleteTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileSystem::repairTreeIsDeletedState')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_FileSystem::repairTreeIsDeletedState', self::TASK_TYPE_DAILY, [[
+            self::CONTROLLER    => 'Tinebase_FileSystem',
+            self::METHOD_NAME   => 'repairTreeIsDeletedState',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::repairTreeIsDeletedState in scheduler.');
+    }
+
     /**
      * add file system av scan task to scheduler
      *

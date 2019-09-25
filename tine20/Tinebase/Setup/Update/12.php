@@ -20,6 +20,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE012_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE012_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE012_UPDATE010 = __CLASS__ . '::update010';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -64,7 +65,11 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
-            ]
+            ],
+            self::RELEASE012_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
+            ],
         ],
     ];
 
@@ -205,5 +210,11 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             Tinebase_Model_Tree_RefLog::class,
         ]);
         $this->addApplicationUpdate('Tinebase', '12.27', self::RELEASE012_UPDATE009);
+    }
+
+    public function update010()
+    {
+        Tinebase_Scheduler_Task::addFileSystemAVScanTask(Tinebase_Core::getScheduler());
+        $this->addApplicationUpdate('Tinebase', '12.28', self::RELEASE012_UPDATE010);
     }
 }
