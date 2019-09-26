@@ -18,10 +18,10 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      * @var Felamimail_Controller_Account
      */
     protected $_controller = null;
-    
+
     /**
      * was the pw changed during tests? if yes, revert.
-     * 
+     *
      * @var boolean
      */
     protected $_pwChanged = false;
@@ -57,7 +57,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         }
 
         parent::tearDown();
-        
+
         if ($this->_pwChanged) {
             $testCredentials = TestServer::getInstance()->getTestCredentials();
             $this->_setCredentials($testCredentials['username'], $testCredentials['password']);
@@ -67,10 +67,10 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_oldConfig);
         }
     }
-    
+
     /**
      * set new password & credentials
-     * 
+     *
      * @param string $_username
      * @param string $_password
      */
@@ -79,13 +79,13 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         Tinebase_User::getInstance()->setPassword(Tinebase_Core::getUser(), $_password, true, false);
 
         $oldCredentialCache = Tinebase_Core::getUserCredentialCache();
-        
+
         // update credential cache
         $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_username, $_password);
         Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
         $event = new Tinebase_Event_User_ChangeCredentialCache($oldCredentialCache);
         Tinebase_Event::fireEvent($event);
-        
+
         $this->_pwChanged = true;
     }
 
@@ -105,7 +105,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $this->_controller->delete($this->_account->getId());
         $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, 'other account is not default account');
     }
-    
+
     /**
      * test account capabilities
      */
@@ -114,10 +114,10 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $capabilities = $this->_controller->updateCapabilities($this->_account);
         $account = $this->_controller->get($this->_account);
         $accountToString = print_r($this->_account->toArray(), TRUE);
-        
+
         $this->assertEquals('', $account->ns_personal, $accountToString);
         $this->assertEquals(1, preg_match('@/|\.@', $account->delimiter), $accountToString);
-        
+
         $this->assertTrue(in_array('IMAP4', $capabilities['capabilities'])
             || in_array('IMAP4rev1', $capabilities['capabilities']),
             'no IMAP4(rev1) capability found in ' . print_r($capabilities['capabilities'], TRUE));
@@ -125,7 +125,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']), 'no QUOTA capability found in '
             . print_r($capabilities['capabilities'], TRUE));
         $cacheId = Tinebase_Helper::convertCacheId(
-            Felamimail_Controller_Account::ACCOUNT_CAPABILITIES_CACHEID. '_' . $account->getId());
+            Felamimail_Controller_Account::ACCOUNT_CAPABILITIES_CACHEID . '_' . $account->getId());
         $this->assertTrue(Tinebase_Core::getCache()->test($cacheId) == true);
     }
 
@@ -143,10 +143,10 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $this->_controller->update($account);
 
         $cacheId = Tinebase_Helper::convertCacheId(
-            Felamimail_Controller_Account::ACCOUNT_CAPABILITIES_CACHEID. '_' . $account->getId());
+            Felamimail_Controller_Account::ACCOUNT_CAPABILITIES_CACHEID . '_' . $account->getId());
         $this->assertFalse(Tinebase_Core::getCache()->test($cacheId));
     }
-    
+
     /**
      * test create trash on the fly
      */
@@ -154,7 +154,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
     {
         // make sure that the delimiter is correct / fetched from server
         $capabilities = $this->_controller->updateCapabilities($this->_account);
-        
+
         // set another trash folder
         $this->_account->trash_folder = 'newtrash';
         $this->_foldersToDelete[] = 'newtrash';
@@ -176,14 +176,14 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $account->type = Felamimail_Model_Account::TYPE_USER;
         $account->user = $testCredentials['username'];
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
+        if (isset($imapConfig['domain']) && !empty($imapConfig['domain'])) {
             $account->user .= '@' . $imapConfig['domain'];
         }
         $account->password = $testCredentials['password'];
         $account = $this->_controller->create($account);
-        
+
         $testPw = 'testpwd';
-        
+
         // change pw & update credential cache
         $this->_setCredentials($testCredentials['username'], $testPw);
         $account = $this->_controller->get($account->getId());
@@ -193,24 +193,24 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($account);
         } catch (Felamimail_Exception_IMAPInvalidCredentials $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' config: ' . print_r($imapAccountConfig, true) . ' / exception:' . $e);
             $loginSuccessful = FALSE;
         }
-        
+
         $this->assertTrue($loginSuccessful, 'wrong credentials');
     }
-    
+
     /**
      * testEmptySignature
-     * 
+     *
      * @see 0006666: Signature delimeter not removed if no Signature is used
      */
     public function testEmptySignature()
     {
         $this->_account->signature = '<html><body><div><br /></div><p>   </p>&nbsp;<br /></body></html>';
         $account = $this->_controller->update($this->_account);
-        
+
         $this->assertEquals('', $account->signature, 'did not save empty signature');
     }
 
@@ -258,7 +258,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      */
     public function testUseEmailAsLoginName()
     {
-        $raii = new Tinebase_RAII(function() {
+        $raii = new Tinebase_RAII(function () {
             Tinebase_EmailUser::clearCaches();
         });
 
@@ -347,5 +347,24 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $filter = Felamimail_Controller_Account::getInstance()->getVisibleAccountsFilterForUser();
         $scleverAccounts = Felamimail_Controller_Account::getInstance()->search($filter);
         self::assertFalse($scleverAccounts->getById($account->getId()), 'sclever should not see the shared account!');
+    }
+
+    public function testSharedAccountSendGrant()
+    {
+        $account = $this->_createSharedAccount(false);
+
+        $message = new Felamimail_Model_Message(array(
+            'account_id'    => $account->getId(),
+            'subject'       => 'xxx',
+            'to'            => Tinebase_Core::getUser()->accountEmailAddress,
+            'body'          => 'aaaaaä <br>',
+        ));
+
+        try {
+            Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+            self::fail('it should not be possible to send a mail without addGrant');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            self::assertEquals('User is not allowed to send a message with this account', $tead->getMessage());
+        }
     }
 }

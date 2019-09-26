@@ -1668,3 +1668,9 @@ msgstr "Konten hinzufügen"
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
 msgstr "Neue Konten hinzufügen"
+
+msgid "Send Mails"
+msgstr "E-Mails senden"
+
+msgid "The grant to send mails via the email account"
+msgstr "Das Recht um mit dem E-Mail-Konto E-Mails zu versenden"

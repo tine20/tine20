@@ -447,9 +447,9 @@ abstract class Felamimail_TestCase extends TestCase
         return $resultSet;
     }
 
-    protected function _createSharedAccount()
+    protected function _createSharedAccount($sendgrant = true)
     {
-        $sharedAccountData = Admin_JsonTest::getSharedAccountData();
+        $sharedAccountData = Admin_JsonTest::getSharedAccountData($sendgrant);
         $sharedAccount = Admin_Controller_EmailAccount::getInstance()->create(new Felamimail_Model_Account($sharedAccountData));
         // we need to commit so imap user is in imap db
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);

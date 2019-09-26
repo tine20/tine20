@@ -1692,7 +1692,7 @@ class Admin_JsonTest extends TestCase
         self::assertEquals($email, $account['email'], print_r($account, true));
     }
 
-    public static function getSharedAccountData()
+    public static function getSharedAccountData($sendgrant = true)
     {
         $accountdata = [
             'name' => 'unittest shared account',
@@ -1703,6 +1703,7 @@ class Admin_JsonTest extends TestCase
                 [
                     'readGrant' => true,
                     'editGrant' => true,
+                    'addGrant' => $sendgrant,
                     'account_type' => 'user',
                     'account_id' => Tinebase_Core::getUser()->getId(),
                 ]
@@ -1784,6 +1785,9 @@ class Admin_JsonTest extends TestCase
         self::assertTrue(isset($account['grants'][0]['account_name']), 'account_id missing: '. print_r($account['grants'], true));
         self::assertTrue(is_array($account['grants'][0]['account_name']), 'account_id needs to be resolved: '
             . print_r($account['grants'], true));
+        self::assertEquals(1, $account['grants'][0]['addGrant'], 'add grant should be set: '
+            . print_r($account['grants'], true));
+
         $account['display_format'] = Felamimail_Model_Account::DISPLAY_PLAIN;
         // client sends empty pws - should not be changed!
         $account['password'] = '';
