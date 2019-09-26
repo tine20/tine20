@@ -163,6 +163,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var me = this;
 
         me.trottledsaveAsDraft = _.throttle(_.bind(me.saveAsDraft, me), 5000, {leading: false});
+        me.saveAsDraftPromise = Promise.resolve();
+
         me.on('beforecancel', me.onBeforeCancle, this);
 
         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
@@ -684,7 +686,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         me.action_saveAsDraft.setIconClass('x-btn-wait');
 
-        return Tine.Felamimail.saveDraft(me.record.data)
+        return me.saveAsDraftPromise = Tine.Felamimail.saveDraft(me.record.data)
             .then((savedDraft) => {
                 me.draftId = savedDraft.id;
             })
@@ -705,7 +707,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     onBeforeCancle: function() {
         this.trottledsaveAsDraft.cancel();
-
         if (this.draftId) {
             Ext.MessageBox.show({
                 title: this.app.i18n._('Discard this Draft?'),
@@ -934,6 +935,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             );
         } else {
             this.loadMask.show();
+            this.trottledsaveAsDraft.cancle();
             this.recordProxy.saveInFolder(this.record, folderName, {
                 scope: this,
                 success: function (record) {
@@ -1212,14 +1214,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onAfterApplyChanges: function(closeWindow) {
-        Promise.resolve()
+        // grr. onRecordLoad hides loadMask
+        this.showLoadMask.defer(10, this);
+
+        this.saveAsDraftPromise
             .then(() => {
                 if (this.draftId) {
                     // autodelete draft when message is send
                     return this.deleteDraft(this.draftId)
                 }
             })
-            .then(Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges.apply(this, arguments));
+            .then(_.bind(Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges, this, closeWindow));
     },
 
     /**
