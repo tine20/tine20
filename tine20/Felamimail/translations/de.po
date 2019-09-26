@@ -1668,6 +1668,3 @@ msgstr "Konten hinzufügen"
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
 msgstr "Neue Konten hinzufügen"
-
-msgid "Use"
-msgstr "Benutzen"
