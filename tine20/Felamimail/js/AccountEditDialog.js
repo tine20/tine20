@@ -536,16 +536,22 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getGrantsColumns: function() {
         return [
             new Ext.ux.grid.CheckColumn({
-                header: i18n._('Use'),
+                header: this.app.i18n._('Use'),
                 dataIndex: 'readGrant',
-                tooltip: i18n._('The grant use the shared email account'),
-                width: 55
+                tooltip: this.app.i18n._('The grant use the shared email account'),
+                width: 60
             }),
             new Ext.ux.grid.CheckColumn({
-                header: i18n._('Edit'),
-                tooltip: i18n._('The grant edit the shared email account'),
+                header: this.app.i18n._('Edit'),
+                tooltip: this.app.i18n._('The grant edit the shared email account'),
                 dataIndex: 'editGrant',
-                width: 55
+                width: 60
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: this.app.i18n._('Send Mails'),
+                tooltip: this.app.i18n._('The grant to send mails via the email account'),
+                dataIndex: 'addGrant',
+                width: 60
             }),
         ];
     },

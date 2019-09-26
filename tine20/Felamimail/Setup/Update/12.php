@@ -17,6 +17,7 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -45,6 +46,10 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE012_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ]
     ];
@@ -203,5 +208,26 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
         Tinebase_Core::getDb()->update($folderBackend->getTablePrefix() . $folderBackend->getTableName(), $data);
 
         $this->addApplicationUpdate('Felamimail', '12.9', self::RELEASE012_UPDATE006);
+    }
+
+    /**
+     * add addGrant (send message) to accounts
+     */
+    public function update007()
+    {
+        $accountCtrl = Felamimail_Controller_Account::getInstance();
+        $oldValue = $accountCtrl->doContainerACLChecks(false);
+        foreach ($accountCtrl->getAll() as $account) {
+            $accountCtrl->getGrantsForRecord($account);
+            foreach ($account->grants as $grant) {
+                if ($grant->readGrant) {
+                    // use grant provides send grant
+                    $grant->addGrant = true;
+                }
+            }
+            $accountCtrl->setGrants($account);
+        }
+        $accountCtrl->doContainerACLChecks($oldValue);
+        $this->addApplicationUpdate('Felamimail', '12.10', self::RELEASE012_UPDATE007);
     }
 }
