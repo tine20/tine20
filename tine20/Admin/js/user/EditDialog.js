@@ -618,7 +618,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             quickaddMandatory: 'email',
             frame: false,
             useBBar: true,
-            dataField: 'email',
             height: 200,
             columnWidth: 0.5,
             recordClass: Ext.data.Record.create([
@@ -645,6 +644,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                     var domain = split[1];
                     if (domains.indexOf(domain) > -1) {
+                        value.dispatch_address = 1;
                         Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.call(this, value);
                     } else {
                         Ext.MessageBox.show({
@@ -662,7 +662,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     id: 'email', 
                     header: this.app.i18n.gettext('Email Alias'),
                     dataIndex: 'email', 
-                    width: 300, 
+                    width: 260,
                     hideable: false, 
                     sortable: true,
                     quickaddField: new Ext.form.TextField({
@@ -670,7 +670,16 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         vtype: 'email'
                     }),
                     editor: new Ext.form.TextField({allowBlank: false})
-                }])
+                }, this.aliasesDispatchCheckColumn = new Ext.grid.CheckColumn({
+                    id: 'dispatch_address',
+                    header: '...',
+                    tooltip: this.app.i18n.gettext('This alias can be used for sending e-mails.'),
+                    dataIndex: 'dispatch_address',
+                    width: 40,
+                    hideable: false,
+                    sortable: true
+                })]),
+                plugins: [this.aliasesDispatchCheckColumn]
             }, commonConfig)
         );
         this.aliasesGrid.render(document.body);
@@ -705,7 +714,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }),
                     editor: new Ext.form.TextField({allowBlank: false}) 
                 }])
-            }, commonConfig)
+            }, Ext.apply({dataField: 'email',}, commonConfig))
         );
         this.forwardsGrid.render(document.body);
         

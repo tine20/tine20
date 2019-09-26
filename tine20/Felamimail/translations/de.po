@@ -46,7 +46,9 @@ msgstr "E-Mails automatisch als gelesen markieren"
 
 #: Preference.php:124
 msgid "Is email marked as read automatically or by user action"
-msgstr "Wird die E-Mail automatisch als gelesen markiert oder ist eine Benutzeraktion nötig"
+msgstr ""
+"Wird die E-Mail automatisch als gelesen markiert oder ist eine "
+"Benutzeraktion nötig"
 
 #: Preference.php:127
 msgid "Email Update Interval"
@@ -61,8 +63,11 @@ msgid "Use for mailto links"
 msgstr "Für mailto: Verweise verwenden"
 
 #: Preference.php:132
-msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
-msgstr "Felamimail für mailto: Verweise verwenden oder externes E-Mailprogramm verwenden."
+msgid ""
+"Use Felamimail in mailto links, otherwise use the default desktop client."
+msgstr ""
+"Felamimail für mailto: Verweise verwenden oder externes E-Mailprogramm "
+"verwenden."
 
 #: Preference.php:135
 msgid "Use for NOTES"
@@ -70,7 +75,9 @@ msgstr "E-Mail-Notiz erzeugen"
 
 #: Preference.php:136
 msgid "Save Note default Value."
-msgstr "Es wird standardmäßig eine E-Mail-Notiz beim Versenden einer Nachricht erzeugt."
+msgstr ""
+"Es wird standardmäßig eine E-Mail-Notiz beim Versenden einer Nachricht "
+"erzeugt."
 
 #: Preference.php:139
 msgid "Confirm Delete"
@@ -85,8 +92,11 @@ msgid ".eml file Attachment in forwarded mails"
 msgstr ".eml Dateianhang in weitergeleiteten Mails"
 
 #: Preference.php:144
-msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
-msgstr "Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge seperat"
+msgid ""
+"Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
+msgstr ""
+"Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge "
+"seperat"
 
 #: js/GridDetailsPanel.js:117 js/MailDetailsPanel.js:152
 msgid "Message not available."
@@ -109,8 +119,12 @@ msgid "Download"
 msgstr "Herunterladen"
 
 #: js/MessageFileButton.js:344
-msgid "{messageCount, plural, one {Message was filed} other {# messages where filed}}"
-msgstr "{messageCount, plural, one {Nachricht wurde abgelegt} other {# Nachrichten wurden abgelegt}}"
+msgid ""
+"{messageCount, plural, one {Message was filed} other {# messages where "
+"filed}}"
+msgstr ""
+"{messageCount, plural, one {Nachricht wurde abgelegt} other {# Nachrichten "
+"wurden abgelegt}}"
 
 #: js/MessageFileButton.js:346
 msgid "Success"
@@ -536,8 +550,13 @@ msgid "Attachments"
 msgstr "Anhänge"
 
 #: js/MailDetailsPanel.js:304
-msgid "{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}"
-msgstr "{locationCount, plural, one {Diese Nachricht ist an folgendem Ort abgelegt} other {Diese Nachricht ist an folgenden Orten abgelegt}}: {locationsHtml}"
+msgid ""
+"{locationCount, plural, one {This message is filed at the following "
+"location} other {This message is filed at the following locations}}: "
+"{locationsHtml}"
+msgstr ""
+"{locationCount, plural, one {Diese Nachricht ist an folgendem Ort abgelegt} "
+"other {Diese Nachricht ist an folgenden Orten abgelegt}}: {locationsHtml}"
 
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
@@ -597,7 +616,9 @@ msgstr "Mailvelope Entschlüsselungs-Fehler [{0}]"
 #: js/PGPDetailsPanel.js:33
 #, python-brace-format
 msgid "To decrypt this message please install {0} with API support enabled"
-msgstr "Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese Nachricht zu entschlüsseln"
+msgstr ""
+"Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese "
+"Nachricht zu entschlüsseln"
 
 #: js/PGPDetailsPanel.js:36
 msgid "PGP encrypted Message"
@@ -918,12 +939,18 @@ msgid "Encrypt email using Mailvelope"
 msgstr "Nachricht mit Mailvelope verschlüsseln"
 
 #: js/MessageEditDialog.js:260
-msgid "Activate this toggle button to send the mail as separate mail to each recipient."
-msgstr "Wenn der Knopf gedrückt ist, bekommt jeder Empfänger seine eigene einzelne Kopie der Nachricht."
+msgid ""
+"Activate this toggle button to send the mail as separate mail to each "
+"recipient."
+msgstr ""
+"Wenn der Knopf gedrückt ist, bekommt jeder Empfänger seine eigene einzelne "
+"Kopie der Nachricht."
 
 #: js/MessageEditDialog.js:283
 msgid "Click to search for and add recipients from the Addressbook."
-msgstr "Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste hinzuzufügen."
+msgstr ""
+"Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste "
+"hinzuzufügen."
 
 #: js/MessageEditDialog.js:506
 msgid "Encrypted Content"
@@ -960,8 +987,13 @@ msgid "Files are still uploading."
 msgstr "Es werden gerade Dateien hochgeladen."
 
 #: js/MessageEditDialog.js:971
-msgid "{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}"
-msgstr "{locationCount, plural, one {Diese Nachricht wird an folgendem Ort abgelegt} other {Diese Nachricht wird an folgenden Orten abgelegt}}: {locationsHtml}"
+msgid ""
+"{locationCount, plural, one {This message will be filed at the following "
+"location} other {This message will be filed at the following locations}}: "
+"{locationsHtml}"
+msgstr ""
+"{locationCount, plural, one {Diese Nachricht wird an folgendem Ort abgelegt} "
+"other {Diese Nachricht wird an folgenden Orten abgelegt}}: {locationsHtml}"
 
 #: js/MessageEditDialog.js:1069
 #, python-brace-format
@@ -985,8 +1017,12 @@ msgid "Body"
 msgstr "Nachricht"
 
 #: js/MessageEditDialog.js:1476
-msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
-msgstr "Beachte: Diese Nachricht wird als Massen-Mail verschickt. So bekommt z.b. jeder Empfänger seine eigene einzelne Kopie."
+msgid ""
+"NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get "
+"his or her own copy."
+msgstr ""
+"Beachte: Diese Nachricht wird als Massen-Mail verschickt. So bekommt z.b. "
+"jeder Empfänger seine eigene einzelne Kopie."
 
 #: js/MessageEditDialog.js:1500
 msgid "Add email address here for reply-to"
@@ -1004,8 +1040,15 @@ msgid "Warning"
 msgstr "Warnung"
 
 #: js/MessageEditDialog.js:1658
-msgid "Some attachments are of type \"systemlinks\" whereas some of the recipients (marked yellow), couldn't be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments."
-msgstr "Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger (gelb markiert) sind keine Benutzer dieser Instanz. Nur Empfänger mit einem aktiven Benutzerkonto können diese Links öffnen."
+msgid ""
+"Some attachments are of type \"systemlinks\" whereas some of the recipients "
+"(marked yellow), couldn't be validated to be accounts on this installation. "
+"Only recipients with an active account will be able to open those "
+"attachments."
+msgstr ""
+"Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger (gelb markiert) "
+"sind keine Benutzer dieser Instanz. Nur Empfänger mit einem aktiven "
+"Benutzerkonto können diese Links öffnen."
 
 #: js/MessageEditDialog.js:1658
 msgid "Do you really want to send?"
@@ -1025,8 +1068,12 @@ msgstr "Empfänger fehlen."
 
 #: js/MessageEditDialog.js:1757
 #, python-brace-format
-msgid "Cannot encrypt message. Public keys for the following recipients are missing: {0}"
-msgstr "Die Nachricht kann nicht verschlüsseltet werden. Die öffentliche Schlüssel für die folgenden Empfänger fehlen: {0}"
+msgid ""
+"Cannot encrypt message. Public keys for the following recipients are "
+"missing: {0}"
+msgstr ""
+"Die Nachricht kann nicht verschlüsseltet werden. Die öffentliche Schlüssel "
+"für die folgenden Empfänger fehlen: {0}"
 
 #: js/Model.js:56
 msgid "Message"
@@ -1243,11 +1290,17 @@ msgstr "Zugangsdaten für Empfangsserver (IMAP) falsch"
 
 #: js/Felamimail.js:1059
 msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator"
+msgstr ""
+"Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren "
+"Administrator"
 
 #: js/Felamimail.js:1075
-msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
-msgstr "Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  Bitte aktualisieren Sie die Ordnerliste."
+msgid ""
+"One of your folders was deleted or renamed by another client. Please update "
+"the folder list of this account."
+msgstr ""
+"Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  "
+"Bitte aktualisieren Sie die Ordnerliste."
 
 #: js/Felamimail.js:1104
 msgid "SMTP Error"
@@ -1340,15 +1393,21 @@ msgstr "Benutzerdefnierte Abwesenheitsnotiz"
 
 #: Config.php:153
 msgid "User is allowed to set custom vacation message for system account"
-msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
+msgstr ""
+"Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das "
+"Systemkonto einstellen"
 
 #: Config.php:162
 msgid "Cache email body"
 msgstr "E-Mail zwischenspeichern"
 
 #: Config.php:164
-msgid "Should the email body be cached (recommended for slow IMAP server connections)"
-msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP Verbindungen)"
+msgid ""
+"Should the email body be cached (recommended for slow IMAP server "
+"connections)"
+msgstr ""
+"Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP "
+"Verbindungen)"
 
 #: Config.php:173
 msgid "Delete Archived Mail"
@@ -1383,16 +1442,23 @@ msgid "Auto-Create Folders"
 msgstr "Automatisches Erstellen von Ordnern"
 
 #: Config.php:211
-msgid "Create template, trash, sent, draft and junks folders for system accounts"
-msgstr "Erstellen von Vorlagen-, Papierkorb-, gesendeten, Entwurfs- und Junk-Ordnern für Systemkonten"
+msgid ""
+"Create template, trash, sent, draft and junks folders for system accounts"
+msgstr ""
+"Erstellen von Vorlagen-, Papierkorb-, gesendeten, Entwurfs- und Junk-Ordnern "
+"für Systemkonten"
 
 #: Config.php:219
 msgid "Filter E-Mail URIs"
 msgstr "E-Mail URIs filtern"
 
 #: Config.php:221
-msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
-msgstr "Sollen links in E-Mail Text gefiltert werden. Nur interne Verweise sind erlaubt wenn dies eingeschaltet wird"
+msgid ""
+"Should the email body uris be filtered. Only anchors with URIs are allowed "
+"if this is turned on"
+msgstr ""
+"Sollen links in E-Mail Text gefiltert werden. Nur interne Verweise sind "
+"erlaubt wenn dies eingeschaltet wird"
 
 #: Config.php:238
 msgid "System Account Folder Defaults"
@@ -1411,8 +1477,12 @@ msgid "Sieve Redirect Only Internal"
 msgstr "Nur interne Sieve Weiterleitungen erlauben"
 
 #: Config.php:261
-msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
-msgstr "Erlaube SIEVE Weiterleitungen nur an interne (primäre oder sekundäre E-Mail Domain) E-Mail Adressen"
+msgid ""
+"Allow only sieve redirect rules to internal (primary/secondary) email "
+"addresses"
+msgstr ""
+"Erlaube SIEVE Weiterleitungen nur an interne (primäre oder sekundäre E-Mail "
+"Domain) E-Mail Adressen"
 
 #: Config.php:270 Config.php:272
 msgid "Sieve Notification Bounces Reporting Email"
@@ -1424,7 +1494,9 @@ msgstr "URL des icon Pfades für die eigene Domain"
 
 #: Config.php:283
 msgid "Used to mark messages from configured primary and secondary domains"
-msgstr "Wird genutzt um Nachrichten zu markieren die von der konfigurierten primären oder sekundären Domain stammen"
+msgstr ""
+"Wird genutzt um Nachrichten zu markieren die von der konfigurierten primären "
+"oder sekundären Domain stammen"
 
 #: Config.php:292
 msgid "URL icon path for other domains"
@@ -1432,7 +1504,8 @@ msgstr "URL des icon Pfades für andere Domains"
 
 #: Config.php:294
 msgid "Used to mark messages from all other domains"
-msgstr "Wird genutzt um Nachrichten zu markieren die von anderen Domains stammen"
+msgstr ""
+"Wird genutzt um Nachrichten zu markieren die von anderen Domains stammen"
 
 #: Config.php:303 Config.php:305
 msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
@@ -1505,7 +1578,9 @@ msgstr "Sie haben eine neue Nachricht von "
 
 #: Sieve/AdbList.php:120
 msgid "Can not combine \"allow external\" and \"allow only members\""
-msgstr "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern weiterleiten\" können nicht kombiniert werden"
+msgstr ""
+"\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern "
+"weiterleiten\" können nicht kombiniert werden"
 
 #: Model/MessageFileSuggestion.php:49
 msgid "Message File Suggestion"
@@ -1668,6 +1743,9 @@ msgstr "Konten hinzufügen"
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
 msgstr "Neue Konten hinzufügen"
+
+msgid "This alias can be used for sending e-mails."
+msgstr "Dieser Alias kann zum versenden von E-Mails genutzt werden."
 
 msgid "Send Mails"
 msgstr "E-Mails senden"
