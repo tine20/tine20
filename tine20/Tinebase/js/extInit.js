@@ -214,4 +214,5 @@ Ext.Button.buttonTemplate = new Ext.Template(
 Ext.Button.buttonTemplate.compile();
 
 Ext.Window.prototype.shadow = false;
-// Ext.Window.prototype.shadowOffset = 20;
+Ext.Tip.prototype.shadow = false;
+Ext.QuickTip.prototype.shadow = false;
