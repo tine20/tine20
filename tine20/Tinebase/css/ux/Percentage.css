@@ -41,7 +41,7 @@
 
 .PercentBar-over {
     border-right: none;
-    background-color: #9cbfee;
+    background-color: #fff5b8;
     background-image: none;
     /*background-color:#9cbfee;*/
     /*background-image:url(../../../images/progress/progress-bgYellow.gif) !important;*/
@@ -52,7 +52,7 @@
 
 .PercentBar-limit {
     border-right: none;
-    background-color: #9cbfee;
+    background-color: #f7bfbf;
     background-image: none;
     /*background-color:#9cbfee;*/
     /*background-image:url(../../../images/progress/progress-bgRed.gif) !important;*/
