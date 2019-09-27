@@ -313,6 +313,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!this.record) {
             this.record = new Tine.Felamimail.Model.Message(this.recordDefaults, 0);
         }
+        this.initAccountCombo();
         this.initFrom();
         this.initRecipients();
         this.initSubject();
@@ -585,6 +586,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!this.record.get('account_id')) {
             if (!this.accountId) {
                 var message = this.getMessageFromConfig(),
+                    availableAccounts = this.accountCombo.store,
+                    fromEmail = message.get('from_email'),
+                    fromAccountIdx = availableAccounts.find('email', fromEmail),
+                    fromAccount = availableAccounts.getAt(fromAccountIdx),
                     folderId = message ? message.get('folder_id') : null,
                     folder = folderId ? Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(folderId) : null,
                     accountId = folder ? folder.get('account_id') : null;
@@ -594,9 +599,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     accountId = (activeAccount) ? activeAccount.id : null;
                 }
 
+                this.from = fromAccount;
                 this.accountId = accountId;
             }
-
+            
             this.record.set('account_id', this.accountId);
         }
         delete this.accountId;
@@ -1132,6 +1138,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.getForm().loadRecord(this.record);
         this.attachmentGrid.loadRecord(this.record);
+        if (this.from) {
+            this.accountCombo.setValue(this.from.id);
+        }
 
         if (this.record.get('massMailingFlag')) {
             this.massMailingInfoText.show();
@@ -1263,12 +1272,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         accountStore.each(function (account) {
             aliases = [account.get('email')];
 
-            if (account.get('type') == 'system') {
+            if (account.get('type') === 'system') {
                 // add identities / aliases to store (for systemaccounts)
                 var user = Tine.Tinebase.registry.get('currentAccount');
-                if (user.emailUser && user.emailUser.emailAliases && user.emailUser.emailAliases.length > 0) {
-                    aliases = aliases.concat(user.emailUser.emailAliases);
-                }
+                var systemAliases = _.get(user, 'emailUser.emailAliases', []);
+                var systemAliasAdresses = _.reduce(systemAliases, (aliases, alias) => {
+                    if (!!+alias.dispatch_address) {
+                        aliases.push(alias.email);
+                    }
+                    return aliases;
+                }, []);
+
+                aliases = aliases.concat(systemAliasAdresses);
             }
 
             for (var i = 0; i < aliases.length; i++) {
@@ -1394,7 +1409,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function () {
 
         this.initAttachmentGrid();
-        this.initAccountCombo();
         this.initSignatureCombo();
 
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
