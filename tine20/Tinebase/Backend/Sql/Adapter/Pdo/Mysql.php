@@ -77,8 +77,9 @@ class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
         if ((false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn(0) &&
                 ($str = $db->query('SHOW CREATE TABLE ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1)) &&
                 strpos($str, 'utf8mb4') === false
-            ) || $db->query("SHOW VARIABLES LIKE 'innodb_large_prefix'")->fetchColumn(1) !== 'ON'
-        ) {
+            ) || ($db->query("SHOW VARIABLES LIKE 'innodb_large_prefix'")->fetchColumn(1) !== 'ON' &&
+                    Setup_Backend_Mysql::mariaDBFuckedUsSupports($db, 'mariadb < 10.3 | mysql > 5.5')
+                )) {
             Tinebase_Core::getCache()->save(0, $cacheId);
             return false;
         } else {

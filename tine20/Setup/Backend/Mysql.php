@@ -537,16 +537,22 @@ EOT;
      */
     public function supports($requirement)
     {
+        return static::mariaDBFuckedUsSupports($this->_db, $requirement);
+    }
+
+
+    public static function mariaDBFuckedUsSupports($db, $requirement)
+    {
         if (preg_match('/mysql ([<>=]+) ([\d\.]+)/', $requirement, $m))
         {
-            $version = $this->_db->getServerVersion();
-            if (version_compare($m[2], '10', '<') === true && version_compare($version, $m[2], $m[1]) === true) {
+            $version = $db->getServerVersion();
+            if (version_compare($version, '10', '<') === true && version_compare($version, $m[2], $m[1]) === true) {
                 return true;
             }
         }
         if (preg_match('/mariadb ([<>=]+) ([\d\.]+)/', $requirement, $m))
         {
-            $version = $this->_db->getServerVersion();
+            $version = $db->getServerVersion();
             if (version_compare($m[2], '10', '>=') === true && version_compare($version, $m[2], $m[1]) === true) {
                 return true;
             }
