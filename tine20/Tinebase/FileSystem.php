@@ -1146,12 +1146,16 @@ class Tinebase_FileSystem implements
         try {
 
             try {
+                $this->_fileObjectBackend->addSelectHook(function(Zend_Db_Select $select) {$select->forUpdate(true);});
                 $fileObject = $this->_fileObjectBackend->get($_objectId);
             } catch(Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Could not find file object ' . $_objectId);
                 return true;
+            } finally {
+                $this->_fileObjectBackend->resetSelectHooks();
             }
+            
             if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileObject->type) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' file object ' . $_objectId . ' is not a file: ' . $fileObject->type);
