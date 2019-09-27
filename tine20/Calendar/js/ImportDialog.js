@@ -299,7 +299,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         
         var def = this.selectedDefinition,
             description = def ? def.get('description') : '',
-            options = def ? def.get('plugin_options') : null,
+            options = def ? def.get('plugin_options_json') : null,
             example = options && options.example ? options.example : '';
     
         return {
@@ -358,7 +358,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
     getPanel: function() {
         var def = this.selectedDefinition,
             description = def ? def.get('description') : '',
-            options = def ? def.get('plugin_options') : null,
+            options = def ? def.get('plugin_options_json') : null,
             example = options && options.example ? options.example : '';
         
         var types = [

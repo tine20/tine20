@@ -8,6 +8,7 @@
 Ext.ns('Tine.widgets.form');
 
 import 'widgets/form/JsonField';
+import 'widgets/form/XmlField';
 
 /**
  * central form field manager
@@ -222,6 +223,10 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'json':
                     field.xtype = 'tw-jsonfield';
+                    field.height = 150; // 12 lines
+                    break;
+                case 'xml':
+                    field.xtype = 'tw-xmlfield';
                     field.height = 150; // 12 lines
                     break;
                 default:

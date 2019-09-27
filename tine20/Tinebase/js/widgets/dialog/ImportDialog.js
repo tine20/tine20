@@ -102,7 +102,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
 
         if (Tine[this.appName].registry.get('importDefinitions')) {
             Ext.each(Tine.widgets.importAction.getImports(this.recordClass), function(defData) {
-                var options = defData.plugin_options,
+                var options = defData.plugin_options_json,
                     extension = options ? options.extension : null;
                 
                 defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
@@ -245,7 +245,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         
         var def = this.selectedDefinition,
             description = def ? this.app.i18n._hidden(def.get('description')) : '',
-            options = def ? def.get('plugin_options') : null,
+            options = def ? def.get('plugin_options_json') : null,
             example = options && options.example ? options.example : '';
             
         return {
@@ -336,7 +336,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      */
     onDefinitionSelect: function(combo, record, index) {
         var description = record.get('description'),
-            options = record.get('plugin_options'),
+            options = record.get('plugin_options_json'),
             example = options && options.example ? options.example : '';
         
         this.selectedDefinition = record;
@@ -351,7 +351,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * get options of the plugin from the currently selected definition
      */
     getImportPluginOptions: function() {
-        var options = this.selectedDefinition ? this.selectedDefinition.get('plugin_options') : null;
+        var options = this.selectedDefinition ? this.selectedDefinition.get('plugin_options_json') : null;
             
         return options || {};
     },

@@ -1226,6 +1226,56 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, Admin_Controller_Config::getInstance());
     }
 
+    /****************************** ImportExportDefinition ******************************/
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param array $filter
+     * @param array $paging
+     * @return array
+     */
+    public function searchImportExportDefinitions($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Admin_Controller_ImportExportDefinition::getInstance(), 'Tinebase_Model_ImportExportDefinitionFilter');
+
+        return $result;
+    }
+
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getImportExportDefinition($id)
+    {
+        return $this->_get($id, Admin_Controller_ImportExportDefinition::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveImportExportDefinition($recordData)
+    {
+        return $this->_save($recordData, Admin_Controller_ImportExportDefinition::getInstance(), 'Tinebase_Model_ImportExportDefinition');
+    }
+
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids
+     * @return string
+     */
+    public function deleteImportExportDefinitions($ids)
+    {
+        return $this->_delete($ids, Admin_Controller_ImportExportDefinition::getInstance());
+    }
+
+
     /****************************** EmailAccount ******************************/
 
     /**
@@ -1532,6 +1582,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 break;
             case 'Tinebase_Model_Container':
+            case 'Tinebase_Model_ImportExportDefinition':
             case 'Tinebase_Model_CustomField_Config':
                 $applications = Tinebase_Application::getInstance()->getApplications();
                 foreach ($_records as $record) {

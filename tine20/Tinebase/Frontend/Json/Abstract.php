@@ -590,6 +590,12 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             Tinebase_Exception::log($e);
             $definitionsArray = array();
         }
+        
+        //Save space in Registry
+        unset($defaultDefinitionArray['plugin_options']);
+        foreach ($definitionsArray as &$definition) {
+            unset($definition['plugin_options']);
+        }
 
         $definitionData = array(
             'defaultImportDefinition'   => $defaultDefinitionArray,
@@ -626,7 +632,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 'value' => $application->getId()
             ];
         }
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter($filterData);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, $filterData);
 
         return Tinebase_ImportExportDefinition::getInstance()->search($filter);
     }

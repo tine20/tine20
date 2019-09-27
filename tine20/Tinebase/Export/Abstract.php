@@ -534,7 +534,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
 
             // get export definition by name / model
-            $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
                 array('field' => 'model', 'operator' => 'equals', 'value' => $this->_modelName),
                 array('field' => 'name',  'operator' => 'equals', 'value' => $exportName),
             ));

@@ -21,6 +21,13 @@ use Jumbojett\OpenIDConnectClient;
 class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     const REQUEST_TYPE = 'JSON-RPC';
+
+    /**
+     * the application name
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Tinebase';
     
     /**
      *
@@ -34,7 +41,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
-        'Tinebase_Model_BLConfig',
+        'BLConfig',
+        'ImportExportDefinition'
     ];
 
     /**

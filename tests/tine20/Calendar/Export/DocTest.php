@@ -73,7 +73,7 @@ class Calendar_Export_DocTest extends Calendar_TestCase
         $export = new Calendar_Export_Resource_Doc($filter, null,
             [
                 'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
-                    new Tinebase_Model_ImportExportDefinitionFilter([
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                         'model' => Calendar_Model_Resource::class,
                         'name' => 'cal_resource_doc'
                     ]))->getFirstRecord()->getId()
@@ -109,7 +109,7 @@ class Calendar_Export_DocTest extends Calendar_TestCase
         $export = new Calendar_Export_Resource_Doc($filter, null,
             [
                 'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
-                    new Tinebase_Model_ImportExportDefinitionFilter([
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => Calendar_Model_Resource::class,
                     'name' => 'cal_resource_doc'
                 ]))->getFirstRecord()->getId()
@@ -145,7 +145,7 @@ class Calendar_Export_DocTest extends Calendar_TestCase
         $export = new Calendar_Export_Doc(new Calendar_Model_EventFilter(), null,
             [
                 'definitionId'  => Tinebase_ImportExportDefinition::getInstance()->search(
-                    new Tinebase_Model_ImportExportDefinitionFilter([
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                         'model' => 'Calendar_Model_Event',
                         'name' => 'cal_default_doc_single'
                     ]))->getFirstRecord()->getId(),
@@ -169,7 +169,7 @@ class Calendar_Export_DocTest extends Calendar_TestCase
     {
         /** @var Tinebase_Model_ImportExportDefinition $definition */
         $definition = Tinebase_ImportExportDefinition::getInstance()->search(
-            new Tinebase_Model_ImportExportDefinitionFilter([
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                 'model' => 'Calendar_Model_Event',
                 'name' => 'cal_default_doc_single'
             ]))->getFirstRecord();
