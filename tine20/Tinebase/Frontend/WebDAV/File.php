@@ -35,7 +35,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
 
         if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r'))) {
             // if we have a file without content / revision yet
-            if (empty($node->hash)) {
+            if (empty($node->hash) || $node->size == 0) {
                 return fopen('php://memory', 'r');
             }
             // possible race condition
