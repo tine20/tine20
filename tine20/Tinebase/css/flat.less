@@ -688,19 +688,24 @@ td.x-date-mp-sel a,
   border: none !important;
 }
 
-.x-progress-wrap {
+.ext-mb-content + .x-progress-wrap {
   border: none;
-}
-.x-progress-bar {
-  background-image: none;
-  background-color: @focusColor;
-  border: none;
+
+  .x-progress-bar {
+    background-image: none;
+    background-color: @focusColor;
+    border: none;
+  }
+
+  .x-progress-inner {
+    background-color: #fff;
+    background-image: none;
+    height: 20px;
+  }
 }
 
 .x-progress-inner {
-  background-color: #fff;
   background-image: none;
-  height: 20px;
 }
 
 .x-window {
@@ -764,7 +769,12 @@ td.x-date-mp-sel a,
     background-image: none;
     background-color: @tipColor;
   }
-
+  .x-tip-header-text {
+    text-decoration: underline;
+    font-style: italic;
+    color: #fff;
+    font-weight: bold;
+  }
   .x-tip-body {
     color: #fff;
     font-weight: bold;
