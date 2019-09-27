@@ -600,11 +600,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName).then(function(isLocked) {
             // if state change -> reload
             if (isLocked == me.action_dataSafe.items[0].pressed) {
-                me.loadGridData({
-                    preserveCursor:     false,
-                    preserveSelection:  false,
-                    preserveScroller:   false
-                });
+                _.defer(() => {
+                    me.loadGridData({
+                        preserveCursor:     false,
+                        preserveSelection:  false,
+                        preserveScroller:   false
+                    }
+                )});
             }
 
             var cls = isLocked ? 'removeClass' : 'addClass';
