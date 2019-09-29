@@ -230,7 +230,12 @@ class Tinebase_Auth
                 array($zaae->getMessage())
             );
         }
-        
+        if (!mb_detect_encoding($_password, "UTF-8", true)) {
+            $passwordEncoding = mb_detect_encoding($_password, "ISO-8859-1,ISO-8859-15", true);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .' Non UTF-8 password corrected, found ' . $passwordEncoding);
+            $_password = mb_convert_encoding($_password, "UTF-8", $passwordEncoding);
+        }
         $this->_backend->setCredential($_password);
 
         try {
