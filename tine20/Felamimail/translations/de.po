@@ -1375,6 +1375,9 @@ msgstr "Alle Nachrichten mit dem Entwurfs-Flag"
 msgid "Mailinglist Reject Reason"
 msgstr "Mailingliste Ablehnungsgrund"
 
+msgid "Mailinglist"
+msgstr "Mailingliste"
+
 #: Config.php:127
 msgid "Your email has been rejected"
 msgstr "Ihre E-Mail wurde abgelehnt"
