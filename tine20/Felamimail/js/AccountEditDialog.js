@@ -106,7 +106,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     if (! this.asAdminModule) {
                         item.hide();
                     } else {
-                        disabled = this.record.get('type') === 'shared';
+                        disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
                         item.setDisabled(disabled);
                         if (disabled) {
                             item.setValue('');
@@ -157,7 +157,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     isSystemAccount: function() {
-        return this.record.get('type') === 'system' || this.record.get('type') === 'shared' || this.record.get('type') === 'userInternal';
+        return this.record.get('type') === 'system' || this.record.get('type') === 'shared' || this.record.get('type') === 'userInternal' || this.record.get('type') === 'adblist';
     },
     
     /**
