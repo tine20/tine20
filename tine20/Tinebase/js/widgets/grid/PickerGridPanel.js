@@ -177,6 +177,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (_.get(this, 'actionRemove.setDisabled')) {
             this.actionRemove.setDisabled(readOnly);
         }
+        // pickerCombos doesn´t show
+        this.doLayout();
     },
 
     /**
