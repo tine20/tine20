@@ -47,13 +47,10 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     //private
     initComponent: function(){
 
-        if (this.asAdminModule) {
-            this.recordProxy = new Tine.Felamimail.RulesBackend({
-                appName: 'Admin',
-                modelName: 'SieveRule'
-            });
-        }
-
+        this.recordProxy = this.asAdminModule ? new Tine.Felamimail.RulesBackend({
+            appName: 'Admin',
+            modelName: 'SieveRule'
+        }) : Tine.Felamimail.rulesBackend;
 
         Tine.Felamimail.sieve.RulesDialog.superclass.initComponent.call(this);
         
