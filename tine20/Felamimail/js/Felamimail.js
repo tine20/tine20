@@ -341,7 +341,10 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 callback: callback,
                 failure: this.onBackgroundRequestFail,
                 success: function(folder) {
-                    this.getAccountStore().getById(folder.get('account_id')).setLastIMAPException(null);
+                    var account = this.getAccountStore().getById(folder.get('account_id'));
+                    if (account) {
+                        account.setLastIMAPException(null);
+                    }
                     this.getFolderStore().updateFolder(folder);
                     
                     if (folder.get('cache_status') === 'updating') {
