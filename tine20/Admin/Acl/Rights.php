@@ -93,6 +93,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const VIEW_ACCOUNTS = 'view_accounts';
 
     /**
+     * the right to view shared tags
+     * @staticvar string
+     */
+    const VIEW_SHARED_TAGS = 'viewshared_tags';
+
+    /**
      * the right to view email accounts
      * @staticvar string
      */
@@ -203,6 +209,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::VIEW_ACCOUNTS,
             self::VIEW_EMAILACCOUNTS,
             self::VIEW_APPS,
+            self::VIEW_SHARED_TAGS,
             self::VIEW_ROLES,
             self::VIEW_COMPUTERS,
             self::VIEW_CONTAINERS,
@@ -281,6 +288,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('view roles'),
                 'description'   => $translate->_('view roles list and details'),
             ),
+            self::VIEW_SHARED_TAGS    => array(
+                'text'          => $translate->_('view shared tags'),
+                'description'   => $translate->_('view shared tags list and details'),
+            ),
             self::VIEW_COMPUTERS  => array(
                 'text'          => $translate->_('view computers'),
                 'description'   => $translate->_('view computers list and details'),
@@ -304,6 +315,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
+        unset($rightDescriptions[self::USE_PERSONAL_TAGS]);
+        
         return $rightDescriptions;
     }
 }
