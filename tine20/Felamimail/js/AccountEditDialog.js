@@ -126,12 +126,23 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     break;
                 case 'password':
                     item.setDisabled(! (
-                        !this.record.get('type') || this.record.get('type') === 'shared' || this.record.get('type') === 'user')
+                        !this.record.get('type') || this.record.get('type') === 'shared')
                     );
+                    if (this.record.get('type') === 'user') {
+                        if (this.asAdminModule) {
+                            item.onTrigger1Click();
+                            item.setRawValue(this.app.i18n._('User needs to enter credentials after login'));
+                        } else {
+                            item.setDisabled(false);
+                        }
+                    }
                     break;
                 case 'user':
                     disabled = !(!this.record.get('type') || this.record.get('type') === 'userInternal' || this.record.get('type') === 'user');
                     item.setDisabled(disabled);
+                    break;
+                case 'smtp_password':
+                    item.setDisabled(this.isSystemAccount() || (this.asAdminModule && this.record.get('type') === 'user'));
                     break;
                 case 'host':
                 case 'port':
@@ -141,7 +152,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'smtp_ssl':
                 case 'smtp_auth':
                 case 'smtp_user':
-                case 'smtp_password':
                 case 'sieve_hostname':
                 case 'sieve_port':
                 case 'sieve_ssl':

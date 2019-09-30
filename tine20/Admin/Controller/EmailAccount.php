@@ -132,6 +132,11 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
 
+        if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
+            // remove password for "user" accounts
+            unset($_record->password);
+        }
+
         $account = $this->_backend->create($_record);
 
         return $account;
@@ -147,6 +152,11 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
     {
         $this->_checkRight('update');
+
+        if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
+            // remove password for "user" accounts
+            unset($_record->password);
+        }
 
         $account = $this->_backend->update($_record);
         

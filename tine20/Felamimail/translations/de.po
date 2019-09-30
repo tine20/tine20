@@ -1755,3 +1755,6 @@ msgstr "E-Mails senden"
 
 msgid "The grant to send mails via the email account"
 msgstr "Das Recht um mit dem E-Mail-Konto E-Mails zu versenden"
+
+msgid "User needs to enter credentials after login"
+msgstr "Der Benutzer muss sein Passwort nach dem Login setzen"
