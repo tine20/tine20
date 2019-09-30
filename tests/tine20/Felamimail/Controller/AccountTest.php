@@ -323,7 +323,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         self::assertContains('aaaaaä', $messageViaGet->body);
     }
 
-    public function testChangeAccountName()
+    public function testChangeAccountFromByUserUpdate()
     {
         // change name of user
         $user = Tinebase_Core::getUser();
@@ -334,6 +334,29 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         // from of system account should change
         $account = Felamimail_Controller_Account::getInstance()->get($this->_account->getId());
         self::assertEquals($updatedUser->accountFullName, $account->from);
+    }
+
+    public function testChangeAccountNameByUserUpdate()
+    {
+        // change name of user
+        $user = $this->_createUserWithEmailAccount();
+        $oldMail = $user->accountEmailAddress;
+        $user->accountEmailAddress = 'shaaclewver@' . TestServer::getPrimaryMailDomain();
+        $updatedUser = Admin_Controller_User::getInstance()->update($user);
+
+        // name of system account should change
+        Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
+        $account = Felamimail_Controller_Account::getInstance()->getSystemAccount($user);
+        self::assertEquals($updatedUser->accountEmailAddress, $account->name);
+
+        // change account name (via admin controller) - email change should not change name
+        $account->name = 'my custom name';
+        $updatedAccount = Admin_Controller_EmailAccount::getInstance()->update($account);
+        $updatedUser->accountEmailAddress = $oldMail;
+        Admin_Controller_User::getInstance()->update($updatedUser);
+        $account = Felamimail_Controller_Account::getInstance()->get($account->getId());
+        self::assertEquals($updatedAccount->name, $account->name);
+        Felamimail_Controller_Account::getInstance()->doContainerACLChecks(true);
     }
 
     public function testSharedAccountAcl()
