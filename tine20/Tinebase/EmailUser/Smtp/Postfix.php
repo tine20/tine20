@@ -353,6 +353,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      * set aliases
      * 
      * @param array $_smtpSettings
+     * @param string $userIdField
      * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _createAliasDestinations($_smtpSettings, $userIdField = 'userid')
