@@ -114,9 +114,9 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             columns: [
                 {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
                 {header: this.app.i18n._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
-                {header: this.app.i18n._('Responsible'), id: 'lead_responsible', dataIndex: 'relations', width: 175, sortable: false, hidden: true, renderer: this.responsibleRenderer},
-                {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'relations', width: 175, sortable: false, renderer: this.partnerRenderer},
-                {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'relations', width: 175, sortable: false, renderer: this.customerRenderer},
+                {header: this.app.i18n._('Responsible'), id: 'lead_responsible', dataIndex: 'lead_responsible', width: 175, sortable: false, hidden: true, renderer: this.responsibleRenderer},
+                {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: this.partnerRenderer},
+                {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'lead_customer', width: 175, sortable: false, renderer: this.customerRenderer},
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadstates')},
                 {header: this.app.i18n._('Leadsource'), id: 'leadsource_id', dataIndex: 'leadsource_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadsources')},
                 {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.ux.PercentRenderer },
@@ -138,8 +138,8 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * TODO use another renderer (with email, phone, ...) here?
      */
-    responsibleRenderer: function(value) {
-        return Tine.Crm.LeadGridPanel.shortContactRenderer(value, 'RESPONSIBLE');
+    responsibleRenderer: function(value, metaData, record) {
+        return Tine.Crm.LeadGridPanel.shortContactRenderer(record.get('relations'), 'RESPONSIBLE');
     },
     
     /**
@@ -148,8 +148,8 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Array} value
      * @return {String}
      */
-    partnerRenderer: function(value) {
-        return Tine.Crm.LeadGridPanel.shortContactRenderer(value, 'PARTNER');
+    partnerRenderer: function(value, metaData, record) {
+        return Tine.Crm.LeadGridPanel.shortContactRenderer(record.get('relations'), 'PARTNER');
     },
     
     /**
@@ -158,8 +158,8 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Array} value
      * @return {String}
      */
-    customerRenderer: function(value) {
-        return Tine.Crm.LeadGridPanel.shortContactRenderer(value, 'CUSTOMER');
+    customerRenderer: function(value, metaData, record) {
+        return Tine.Crm.LeadGridPanel.shortContactRenderer(record.get('relations'), 'CUSTOMER');
     },
 
     /**
