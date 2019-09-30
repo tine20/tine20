@@ -458,6 +458,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
         // add signatures and remove ADB list type from result set
+        // TODO move this to a better place (default filter?)
         foreach ($accounts['results'] as $idx => $account) {
             if (in_array($account['type'], [
                 Felamimail_Model_Account::TYPE_SHARED,
@@ -468,8 +469,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $accounts['results'][$idx] = $this->getAccount($account['id']);
             } else {
                 unset($accounts['results'][$idx]);
+                $accounts['totalcount']--;
             }
         }
+        // Reorder the array (client does not like missing indices
+        $accounts['results'] = array_values($accounts['results']);
 
         return $accounts;
     }
