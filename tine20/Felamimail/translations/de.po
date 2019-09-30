@@ -332,11 +332,11 @@ msgstr "Gemeinsames Systemkonto"
 
 #: js/AccountEditDialog.js:508
 msgid "Additional Personal System Account"
-msgstr "Weiteres Persönliches Systemkonto"
+msgstr "Persönliches Extra-Systemkonto"
 
 #: js/AccountEditDialog.js:509
 msgid "Additional Personal External Account"
-msgstr "Externes E-Mail-Konto"
+msgstr "Persönliches externes E-Mail-Konto"
 
 #: js/AccountEditDialog.js:514
 msgid "Default Personal System Account"
