@@ -1678,8 +1678,8 @@ msgid "Sync Events"
 msgstr "Termine synchronisieren"
 
 #: js/Model/ResourceGrants.js:99
-msgid "The grant to synchronise events from this resource calendar"
-msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu synchronisieren"
+msgid "The grant to synchronise events from this resource calendar. Needs the grant read events"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu synchronisieren. Benötigt das Recht Termine lesen"
 
 #: js/Model/ResourceGrants.js:100
 msgid "Events Free Busy"
