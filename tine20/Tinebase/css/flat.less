@@ -27,7 +27,7 @@
 
 
 
-@tabColor: #64C0FF;
+@tabColor: #8cb8d7;
 
 //.x-shadow {
 //  display: none !important;
@@ -102,7 +102,8 @@ ul.x-tab-strip-top {
 }
 
 .x-tab-strip span.x-tab-strip-text:hover,
-.x-tab-strip-active span.x-tab-strip-text {
+.x-tab-strip-active span.x-tab-strip-text,
+.x-tab-strip-active .x-tab-strip-close {
   font-weight: normal;
   #transform.blacktowhite();
 }
@@ -718,8 +719,7 @@ td.x-date-mp-sel a,
 }
 
 .x-window-dlg .ext-mb-question {
-  // @TODO use question once we have it
-  background-image: url('../../images/icon-set/icon_dialog_info.svg');
+  background-image: url('../../images/icon-set/icon_dialog_question.svg');
   background-size: 35px;
 }
 
@@ -851,13 +851,13 @@ td.x-date-mp-sel a,
 
 /* ACCORDION */
 .x-panel-collapsed .x-accordion-hd .x-tool-toggle {
-  background-image: url('../../images/icon-set/icon_action_plus.svg');
+  background-image: url('../../images/icon-set/icon_expand.svg');
   background-position: 1px 1px;
   background-size: 14px;
 }
 
 .x-accordion-hd .x-tool-toggle {
-  background-image: url('../../images/icon-set/icon_action_minus.svg');
+  background-image: url('../../images/icon-set/icon_collapse.svg');
   background-position: 1px 1px;
   background-size: 14px;
 }
