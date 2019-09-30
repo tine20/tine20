@@ -266,7 +266,9 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      * @var string
      */
     protected $_subconfigKey = 'dovecot';
-    
+
+    protected $_masterUserTable = 'dovecot_master_users';
+
     /**
      * the constructor
      */
@@ -484,5 +486,41 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
 
         $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
         return $result;
+    }
+
+    public function setMasterPassword($username, $password, $type = 'sieve')
+    {
+        $this->checkMasterUserTable();
+        $data = [
+            'username' => $username,
+            'password' => Hash_Password::generate($this->_config['emailScheme'], $password),
+            'service' => $type,
+        ];
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+            . __LINE__ . ' Add new ' . $type . ' master user: ' . $username);
+
+        $this->_db->insert($this->_masterUserTable, $data);
+    }
+
+    public function removeMasterPassword($username)
+    {
+        $this->checkMasterUserTable();
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('username') . ' = ?', $username)
+        );
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+            . __LINE__ . ' Remove master user: ' . $username);
+
+        $this->_db->delete($this->_masterUserTable, $where);
+    }
+
+    public function checkMasterUserTable()
+    {
+        $tables = $this->_db->listTables();
+        if (! in_array($this->_masterUserTable, $tables)) {
+            throw new Tinebase_Exception_NotFound('Dovecot master user table not found');
+        }
     }
 }

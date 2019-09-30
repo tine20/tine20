@@ -274,7 +274,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             return;
         }
 
-        Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
+        Tinebase_ActionQueueLongRun::getInstance()->queueAction('Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
     }
 
     /**

@@ -830,6 +830,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         try {
             $filePaths = $this->testCreateFileNodes(true);
             $secondFolderNode = $this->testCreateContainerNodeInPersonalFolder('fooContainer');
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
 
             $file0Path = Filemanager_Controller_Node::getInstance()->addBasePath($filePaths[0]);
             $targetPath = Filemanager_Controller_Node::getInstance()->addBasePath($secondFolderNode['path']);
@@ -852,6 +855,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 'effectiveAndLocalQuota is not right: ' . print_r($parentFolderJson, true));
 
             $this->_getUit()->moveNodes($file0Path, $targetPath, false);
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
 
             $parentFolder = $this->_fsController->get($parentFolder->getId());
             static::assertEquals(8, $parentFolder->size, 'one file with 8 bytes expected');
@@ -889,6 +895,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 false;
             $this->_fsController = Tinebase_FileSystem::getInstance();
             $this->_fsController->resetBackends();
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
 
             $this->_getUit()->createNode([$targetFile], Tinebase_Model_Tree_FileObject::TYPE_FILE);
             $tempPath = Tinebase_TempFile::getTempPath();
@@ -1502,6 +1511,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         sleep(1);
         $result = $this->_getUit()->moveNodes($orgFolder['path'], [$orgFolder['path'] . 'foo'], false);
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_fsController->processRefLogs();
+        $this->_fsController->clearStatCache();
+        $result[0] = $this->_getUit()->getNode($result[0]['id']);
 
         static::assertNotSame($orgFolder['hash'], $result[0]['hash'], 'hash did not change');
         static::assertNotSame($orgFolder['last_modified_time'], $result[0]['last_modified_time'],
@@ -1543,6 +1556,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $filepaths = $this->testCreateFileNodes($_addData);
 
         if (true === $_addData) {
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
             $parentFolder = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath(dirname($filepaths[0])));
             static::assertEquals(16, $parentFolder->size, 'two files with 8 bytes each created, excpected 16 bytes folder size');
         }
@@ -1550,6 +1566,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->deleteNodes($filepaths);
 
         if (true === $_addData) {
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
             $parentFolder = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath(dirname($filepaths[0])));
             static::assertEquals(0, $parentFolder->size, 'after deletion expected 0 byte folder size');
         }

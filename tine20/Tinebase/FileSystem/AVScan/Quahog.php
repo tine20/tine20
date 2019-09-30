@@ -22,6 +22,10 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
      */
     protected $_quahog = null;
 
+    /**
+     * @throws \Xenolope\Quahog\Exception\ConnectionException
+     * @throws \Socket\Raw\Exception
+     */
     protected function _connect()
     {
         if (null === $this->_socket) {
@@ -46,6 +50,7 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
      */
     public function scan($handle)
     {
+        $e = null;
         try {
             $this->_connect();
 
@@ -58,6 +63,9 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
             }
 
         } catch (\Socket\Raw\Exception $e) {
+        } catch (\Xenolope\Quahog\Exception\ConnectionException $e) {}
+
+        if (null !== $e) {
             Tinebase_Exception::log($e);
 
             $result = [
@@ -74,11 +82,16 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
      */
     public function update()
     {
+        $e = null;
+
         try {
             $this->_connect();
 
             $result = $this->_quahog->reload();
         } catch (\Socket\Raw\Exception $e) {
+        } catch (\Xenolope\Quahog\Exception\ConnectionException $e) {}
+
+        if (null !== $e) {
             Tinebase_Exception::log($e);
 
             return false;

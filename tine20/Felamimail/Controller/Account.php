@@ -342,11 +342,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
     }
 
-    public function setDefaultGrants(Felamimail_Model_Account $account)
-    {
-        $this->_setDefaultGrants($account);
-    }
-
     /**
      * add default grants
      *

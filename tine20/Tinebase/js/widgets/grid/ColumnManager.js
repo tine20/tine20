@@ -100,6 +100,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.width = 90;
             }
 
+            if(fieldDefinition.type == 'money') {
+                config.align = 'right';
+            }
+
             // If no label exists, don't use in grid
             if (! fieldDefinition.label) {
                 return null;
@@ -117,7 +121,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 column.summaryType = fieldDefinition.summaryType;
             }
 
-            var renderer = Tine.widgets.grid.RendererManager.get(appName, modelName, fieldName, category);
+            var renderer = Tine.widgets.grid.RendererManager.get(appName, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
             if (renderer) {
                 column.renderer = renderer;
             }

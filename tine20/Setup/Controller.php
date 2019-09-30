@@ -616,9 +616,6 @@ class Setup_Controller
 
         $this->_enforceCollation();
 
-        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
-        $release11->fsAVupdates();
-
         // we need to clone here because we would taint the app cache otherwise
         // update tinebase first (to biggest major version)
         $tinebase = clone (Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
@@ -632,6 +629,11 @@ class Setup_Controller
         // TODO remove this in release 13
         $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
         $release11->addIsSystemToCustomFieldConfig();
+        $release11->fsAVupdates();
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Tree_RefLog::class,
+        ]);
+
         $adbRelease11 = new Addressbook_Setup_Update_Release11(Setup_Backend_Factory::factory());
         $adbRelease11->fixContactData();
 

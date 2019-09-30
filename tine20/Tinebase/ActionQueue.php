@@ -70,9 +70,10 @@
      * @param string|null $_forceBackend
      * @return Tinebase_ActionQueue
      */
-    public static function getInstance($_forceBackend = null)
+    public static function getInstance()
     {
-        if (self::$_instance === NULL || null !== $_forceBackend) {
+        $_forceBackend = null;
+        if (self::$_instance === NULL || (func_num_args() > 0 && null !== ($_forceBackend = func_get_arg(0)))) {
             self::$_instance = new Tinebase_ActionQueue($_forceBackend);
         }
         
@@ -103,7 +104,7 @@
         if ($queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
             $queueStatus['active'] = true;
             try {
-                $queueStatus['size'] = Tinebase_ActionQueue::getInstance()->getQueueSize();
+                $queueStatus['size'] = static::getInstance()->getQueueSize();
             } catch (Exception $e) {
                 $queueStatus['problems'][] = $e->getMessage();
             }
@@ -117,7 +118,7 @@
      *
      * @param string|null $_forceBackend
      */
-    private function __construct($_forceBackend = null)
+    protected function __construct($_forceBackend = null)
     {
         $options = null;
         $backend = null === $_forceBackend ? self::BACKEND_DIRECT : $_forceBackend;
@@ -142,11 +143,19 @@
             $className = Tinebase_ActionQueue_Backend_Direct::class;
         }
     
-        $this->_queue = new $className($options); 
+        $this->_queue = $this->_createQueueBackendInstance($className, $options);
 
         if (! $this->_queue instanceof Tinebase_ActionQueue_Backend_Interface) {
             throw new Tinebase_Exception_UnexpectedValue('backend does not implement Tinebase_ActionQueue_Backend_Interface');
         }
+    }
+
+    /**
+     * to allow overwrite
+     */
+    protected function _createQueueBackendInstance($className, $options)
+    {
+        return new $className($options);
     }
 
      /**

@@ -38,7 +38,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * 
      * @var boolean
      */
-    protected $_logImapRequestsAndResponses = true;
+    protected $_logImapRequestsAndResponses = false;
     
     /**
      * create instance with parameters

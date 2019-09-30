@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
@@ -137,6 +137,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected $_additionalColumns = array();
 
+    protected $_selectHooks = [];
+
     /**
      * the constructor
      * 
@@ -172,7 +174,17 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             throw new Tinebase_Exception_Backend_Database('Database adapter must be configured or given.');
         }
     }
-    
+
+    public function addSelectHook(callable $callable)
+    {
+        $this->_selectHooks[] = $callable;
+    }
+
+    public function resetSelectHooks()
+    {
+        $this->_selectHooks = [];
+    }
+
     /*************************** getters and setters *********************************/
     
     /**
@@ -864,6 +876,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         $this->_addForeignTableJoins($select, $cols);
+
+        foreach ($this->_selectHooks as $hook) {
+            $hook($select);
+        }
         
         return $select;
     }
@@ -1065,7 +1081,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * returns true if id is a hash value and false if integer
      *
      * @return  boolean
-     * @todo    remove that when all tables use hash ids 
+     * @todo    remove that when all tables use hash ids ... NO, do not remove this, tree_ref_log has auto_increment
      */
     protected function _hasHashId()
     {

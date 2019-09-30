@@ -109,7 +109,7 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match("/Description/",  $xmlBody), 'no description');
         $this->assertEquals(1, preg_match('/open/',         $xmlBody), 'no leadstate');
         $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountDisplayName) . '/',      $xmlBody), 'no creator');
-        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountLastName) . '/',         $xmlBody), 'no container name');
+        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountFirstName) . '/',         $xmlBody), 'no container name');
     }
 
     /**

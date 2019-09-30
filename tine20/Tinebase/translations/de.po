@@ -4194,7 +4194,7 @@ msgid "Token"
 msgstr "Token"
 
 msgid "Cleartext/Hidden"
-msgstr "Klartext/Verteckt"
+msgstr "Klartext/Versteckt"
 
 msgid "Copy to Clipboard"
 msgstr "In die Zwischenablage kopieren"

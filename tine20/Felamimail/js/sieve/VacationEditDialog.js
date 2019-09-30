@@ -45,7 +45,21 @@ Ext.namespace('Tine.Felamimail.sieve');
     tbarItems: [],
     evalGrants: false,
     readonlyReason: false,
-    
+
+     initComponent: function () {
+
+         if (this.asAdminModule) {
+             this.recordProxy = new Tine.Tinebase.data.RecordProxy({
+                 appName: 'Admin',
+                 modelName: 'SieveVacation',
+                 recordClass: Tine.Felamimail.Model.Vacation,
+                 idProperty: 'id'
+             });
+         }
+
+         Tine.Felamimail.sieve.VacationEditDialog.superclass.initComponent.call(this);
+     },
+
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * 

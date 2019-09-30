@@ -51,6 +51,8 @@ class Tinebase_ModelConfiguration_Const {
     const HAS_TAGS = 'hasTags';
     const HAS_XPROPS = 'hasXProps';
 
+    const ID = 'id';
+    const ID_GENERATOR_TYPE = 'idGeneratorType';
     const INDEXES = 'indexes';
     const INPUT_FILTERS = 'inputFilters';
     const IS_DEPENDENT = 'isDependent';

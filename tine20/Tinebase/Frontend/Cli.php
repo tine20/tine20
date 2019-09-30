@@ -401,7 +401,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             throw new Tinebase_Exception_InvalidArgument('mandatory parameter "jobId" is missing');
         }
 
-        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if (isset($args[1]) && $args[1] === 'longRunning=true') {
+            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+        } else {
+            $actionQueue = Tinebase_ActionQueue::getInstance();
+        }
         $job = $actionQueue->receive($jobId);
 
         if (isset($job['account_id'])) {
@@ -1840,10 +1844,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function duplicatePersonalContainerCheck($opts)
     {
-
         $this->_checkAdminRight();
         $args = $this->_parseArgs($opts, array('app'));
 
         Tinebase_Container::getInstance()->deleteDuplicateContainer($args['app'], $opts->d);
+    }
+
+    public function repairTreeIsDeletedState($opts)
+    {
+        $this->_checkAdminRight();
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
     }
 }

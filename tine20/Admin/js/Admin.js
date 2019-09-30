@@ -355,7 +355,7 @@ Tine.Admin.init = function () {
             case 'emailaccounts':
                 // TODO should be hidden if feature is disabled
                 if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featureEmailAccounts')) {
-                    Tine.Felamimail.Admin.emailaccounts.show();
+                    Tine.Felamimail.admin.showAccountGridPanel();
                 } else {
                     Ext.MessageBox.alert(translation.gettext('Disabled'), translation.gettext('Feature is disabled by configuration.'));
                 }

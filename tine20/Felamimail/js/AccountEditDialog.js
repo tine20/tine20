@@ -46,7 +46,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     initComponent: function() {
 
-        // quickfix for admin mode
         if (this.asAdminModule) {
             this.recordProxy = new Tine.Tinebase.data.RecordProxy({
                 appName: 'Admin',
@@ -219,9 +218,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             editable: false,
                             mode: 'local',
                             forceSelection: true,
-                            // value: 'shared',
                             xtype: 'combo',
-                            store: this.getTypeStore(),
+                            store: new Ext.data.JsonStore({
+                                data: Tine.Felamimail.Model.getAvailableAccountTypes(),
+                                fields: Tine.Tinebase.Model.KeyFieldRecord
+                            }),
+                            valueField: 'id',
+                            displayField: 'value',
                             listeners: {
                                 scope: this,
                                 select: function(combo, record) {
@@ -501,21 +504,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ]
         };
     },
-
-    getTypeStore: function() {
-        var availableTypes = [
-            ['shared', this.app.i18n._('Shared System Account')],
-            ['userInternal', this.app.i18n._('Additional Personal System Account')],
-            ['user', this.app.i18n._('Additional Personal External Account')],
-        ];
-
-        if (this.record.id) {
-            // new records can't be personal system accounts
-            availableTypes.push(['system', this.app.i18n._('Default Personal System Account')]);
-        }
-
-        return availableTypes;
-    },
     
     /**
      * generic request exception handler
@@ -548,16 +536,22 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getGrantsColumns: function() {
         return [
             new Ext.ux.grid.CheckColumn({
-                header: i18n._('Use'),
+                header: this.app.i18n._('Use'),
                 dataIndex: 'readGrant',
-                tooltip: i18n._('The grant use the shared email account'),
-                width: 55
+                tooltip: this.app.i18n._('The grant use the shared email account'),
+                width: 60
             }),
             new Ext.ux.grid.CheckColumn({
-                header: i18n._('Edit'),
-                tooltip: i18n._('The grant edit the shared email account'),
+                header: this.app.i18n._('Edit'),
+                tooltip: this.app.i18n._('The grant edit the shared email account'),
                 dataIndex: 'editGrant',
-                width: 55
+                width: 60
+            }),
+            new Ext.ux.grid.CheckColumn({
+                header: this.app.i18n._('Send Mails'),
+                tooltip: this.app.i18n._('The grant to send mails via the email account'),
+                dataIndex: 'addGrant',
+                width: 60
             }),
         ];
     },

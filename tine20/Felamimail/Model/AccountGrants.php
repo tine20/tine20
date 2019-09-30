@@ -30,8 +30,9 @@ class Felamimail_Model_AccountGrants extends Tinebase_Model_Grants
     public static function getAllGrants()
     {
         $allGrants = array(
-            self::GRANT_READ,
-            self::GRANT_EDIT,
+            self::GRANT_READ, // 'use' - allow to use account
+            self::GRANT_ADD, // 'send' - allow to send messages via account
+            self::GRANT_EDIT, // 'edit' - allow to edit account
             self::GRANT_DELETE,
             self::GRANT_ADMIN,
         );
