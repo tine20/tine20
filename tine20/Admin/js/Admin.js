@@ -183,7 +183,8 @@ Tine.Admin.init = function () {
                 children: [],
                 leaf: null,
                 expanded: true,
-                dataPanelType: "emailaccounts"
+                dataPanelType: "emailaccounts",
+                viewRight: 'emailaccounts'
             });
         }
 
@@ -265,9 +266,8 @@ Tine.Admin.init = function () {
         var initialTree = getInitialTree(translation);
 
         for (var i = 0, rightSuffix; i < initialTree.length; i += 1) {
-            // check right
             rightSuffix = String(initialTree[i].viewRight).replace(/^view_/, '');
-            if (!(Tine.Tinebase.common.hasRight('view_' + rightSuffix, 'Admin')
+            if (rightSuffix !== 'undefined' && !(Tine.Tinebase.common.hasRight('view_' + rightSuffix, 'Admin')
                 || Tine.Tinebase.common.hasRight('manage_' + rightSuffix, 'Admin')
             )) {
                 initialTree[i].hidden = true;
