@@ -1411,7 +1411,12 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         if (null !== ($mc = $_record::getConfiguration())) {
             foreach ($mc->{Tinebase_ModelConfiguration_Const::CONTROLLER_HOOK_BEFORE_UPDATE} as $hook) {
-                call_user_func($hook, $_record, $_oldRecord);
+                if (is_callable($hook)) {
+                    call_user_func($hook, $_record, $_oldRecord);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' hook is not callable: ' . print_r($hook, true));
+                }
             }
         }
     }
