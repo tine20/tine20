@@ -125,22 +125,27 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(this.record.id);
                     break;
                 case 'password':
-                    item.setDisabled(! (
-                        !this.record.get('type') || this.record.get('type') === 'shared')
-                    );
-                    if (this.record.get('type') === 'user') {
+                    if (this.record.get('type') && this.record.get('type') === 'user') {
                         if (this.asAdminModule) {
-                            item.onTrigger1Click();
+                            // TODO make this work - we want to see the text!
+                            // item.onTrigger1Click();
                             item.setRawValue(this.app.i18n._('User needs to enter credentials after login'));
+                            item.setDisabled(true);
                         } else {
                             item.setDisabled(false);
                         }
+                    } else {
+                        item.setDisabled(! (
+                            !this.record.get('type') || this.record.get('type') === 'shared')
+                        );
                     }
                     break;
                 case 'user':
-                    disabled = !(!this.record.get('type') || this.record.get('type') === 'userInternal' || this.record.get('type') === 'user');
+                    // TODO show message 'User needs to enter credentials after login' here?
+                    disabled = !(!this.record.get('type') || this.record.get('type') === 'userInternal' || (! this.asAdminModule && this.record.get('type') === 'user'));
                     item.setDisabled(disabled);
                     break;
+                case 'smtp_user':
                 case 'smtp_password':
                     item.setDisabled(this.isSystemAccount() || (this.asAdminModule && this.record.get('type') === 'user'));
                     break;
@@ -151,7 +156,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'smtp_port':
                 case 'smtp_ssl':
                 case 'smtp_auth':
-                case 'smtp_user':
                 case 'sieve_hostname':
                 case 'sieve_port':
                 case 'sieve_ssl':
