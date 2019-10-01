@@ -180,10 +180,48 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 if ($costCenter) {
                     $contract['products'][$i]['product_id'] = $costCenter->toArray();
                 }
+                if (Tinebase_Application::getInstance()->isInstalled('WebAccounting')) {
+                    if (isset($contract['products'][$i]['json_attributes']['assignedAccountables'])) {
+                        $contract['products'][$i]['json_attributes']['assignedAccountables'] =
+                            $this->_resolveAssignedAccountables(
+                                $contract['products'][$i]['json_attributes']['assignedAccountables']);
+                    }
+                }
             }
         }
         
         return $contract;
+    }
+
+    /**
+     * @param array $assignedAccountables
+     * @return array
+     *
+     * TODO support other models + make this generic
+     */
+    protected function _resolveAssignedAccountables(&$assignedAccountables)
+    {
+        $model = 'WebAccounting_Model_ProxmoxVM';
+        $assignedAccountableIds = [];
+        foreach ($assignedAccountables as $accountable) {
+            $assignedAccountableIds[] = $accountable['id'];
+        }
+        if (count($assignedAccountableIds) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' resolving accountables: '
+                . print_r($assignedAccountableIds, true));
+            $accountables = WebAccounting_Controller_ProxmoxVM::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $assignedAccountableIds]
+                ]));
+            foreach ($assignedAccountables as $key => $accountableArray) {
+                $accountable = $accountables->getById($accountableArray['id']);
+                if ($accountable) {
+                    $assignedAccountables[$key]['id'] = $accountable->toArray();
+                }
+            }
+        }
+        return $assignedAccountables;
     }
 
     /**
