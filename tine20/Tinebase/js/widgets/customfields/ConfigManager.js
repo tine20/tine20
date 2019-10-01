@@ -91,6 +91,8 @@ Tine.widgets.customfields.ConfigManager = function() {
         getConfig: function (app, model, name, asField) {
             var cfStore = getStore(app),
                 cfConfig = null;
+
+            model = model.match(/_Model_/) ? model : (app.appName ? app.appName : app) + '_Model_' + model;
             
             cfStore.clearFilter(true);
             cfStore.filter('model', model);
