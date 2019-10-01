@@ -161,9 +161,9 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
             
             fclose($stream);
-            
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to get message part: ' . $e->getMessage());
+
+        } catch (Throwable $t) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to get message part: ' . $t->getMessage());
         }
         
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
