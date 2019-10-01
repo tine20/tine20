@@ -80,10 +80,7 @@ Tine.widgets.grid.RendererManager = function() {
          * @return {Function}
          */
         getByDataType: function (appName, modelName, fieldName, cf = false) {
-            if(cf){
-                var cfConfig = Tine.widgets.customfields.ConfigManager.getConfig(appName, modelName, fieldName.replace(/^#/,''));
-                return Tine.widgets.customfields.Renderer.get(appName, cfConfig);
-            } else {
+            if(!cf){
                 var renderer = null,
                     recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                     field = recordClass ? recordClass.getField(fieldName) : null,
@@ -91,15 +88,114 @@ Tine.widgets.grid.RendererManager = function() {
                     fieldType = fieldDefinition ? fieldDefinition.type : 'auto';
             }
             switch (fieldType) {
+                case 'record':
+                    if (Tine.Tinebase.common.hasRight('view', fieldDefinition.config.appName, fieldDefinition.config.modelName.toLowerCase())) {
+                        if (fieldDefinition.config.appName == appName && fieldDefinition.config.modelName == modelName) {
+                            // pointing to same model
+                            renderer = function (value, row, record) {
+                                var title = value && fieldDefinition.config.titleProperty ? value[fieldDefinition.config.titleProperty] : '';
+                                return Ext.util.Format.htmlEncode(title);
+                            };
+                        } else {
+                            renderer = function (value, row, record) {
+                                var foreignRecordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
+                                if (foreignRecordClass) {
+                                    const titleProperty = foreignRecordClass.getMeta('titleProperty');
+                                    let value = record ? record.get(field) : '';
+                                    value = _.isFunction(_.get(value, 'getTitle')) ? value.getTitle() : _.get(value, titleProperty, '');
+                                    return Ext.util.Format.htmlEncode(value);
+                                } else {
+                                    return value;
+                                }
+                            };
+                        }
+                    } else {
+                        renderer = null;
+                    }
+                    break;
+                case 'integer':
+                case 'float':
+                    if (fieldDefinition.hasOwnProperty('specialType')) {
+                        switch (fieldDefinition.specialType) {
+                            case 'bytes1000':
+                                renderer = function (value, cell, record) {
+                                    return Tine.Tinebase.common.byteRenderer(value, cell, record, 2, true);
+                                };
+                                break;
+                            case 'bytes':
+                                renderer = function (value, cell, record) {
+                                    return Tine.Tinebase.common.byteRenderer(value, cell, record, 2, false);
+                                };
+                                break;
+                            case 'minutes':
+                                renderer = Tine.Tinebase.common.minutesRenderer;
+                                break;
+                            case 'seconds':
+                                renderer = Tine.Tinebase.common.secondsRenderer;
+                                break;
+                            case 'percent':
+                                renderer = function (value, cell, record) {
+                                    return Tine.Tinebase.common.percentRenderer(value, fieldDefinition.type);
+                                };
+                                break;
+                            case 'durationSec':
+                                renderer = function (value, cell, record) {
+                                    return Ext.ux.form.DurationSpinner.durationRenderer(value, {
+                                        baseUnit: 'seconds'
+                                    });
+                                };
+                                break;
+                            default:
+                                renderer = Ext.util.Format.htmlEncode;
+                        }
+
+                        renderer = renderer.createSequence(function (value, metadata, record) {
+                            if (metadata) {
+                                metadata.css = 'tine-gird-cell-number';
+                            }
+                        });
+
+                    }
+                    break;
+                case 'user':
+                    renderer = Tine.Tinebase.common.usernameRenderer;
+                    break;
+                case 'keyField':
+                    renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, fieldDefinition.keyFieldConfigName);
+                    break;
+                case 'datetime_separated_date':
                 case 'date':
                     renderer = Tine.Tinebase.common.dateRenderer;
+                    break;
+                case 'datetime':
+                    renderer = Tine.Tinebase.common.dateTimeRenderer;
+                    break;
+                case 'time':
+                    renderer = Tine.Tinebase.common.timeRenderer;
+                    break;
+                case 'tag':
+                    renderer = Tine.Tinebase.common.tagsRenderer;
+                    break;
+                case 'container':
+                    renderer = Tine.Tinebase.common.containerRenderer;
                     break;
                 case 'boolean':
                     renderer = Tine.Tinebase.common.booleanRenderer;
                     break;
-                case 'keyField':
-                    var keyFieldName = fieldDefinition.keyFieldConfigName;
-                    renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, keyFieldName);
+                case 'money':
+                    if (fieldDefinition.hasOwnProperty('specialType')) {
+                        if (fieldDefinition.specialType == 'zeroMoney') {
+                            // if this option is set, zero values are hidden in the grid
+                            renderer = function (value) {
+                                return Ext.util.Format.money(value, {zeroMoney: true});
+                            }
+                            break;
+                        }
+                    }
+                    renderer = Ext.util.Format.money;
+                    break;
+                case 'attachments':
+                    renderer = Tine.widgets.grid.attachmentRenderer;
                     break;
                 case 'image':
                     renderer = Tine.widgets.grid.imageRenderer;
@@ -156,6 +252,14 @@ Tine.widgets.grid.RendererManager = function() {
             if (! renderer) {
                 renderer = this.getByDataType(appName, modelName, fieldName, String(fieldName).match(/^#.+/));
             }
+
+            if (!renderer && String(fieldName).match(/^#.+/)) {
+                var cfConfig = Tine.widgets.customfields.ConfigManager.getConfig(appName, modelName, fieldName.replace(/^#/,''));
+                renderer = Tine.widgets.customfields.Renderer.get(appName, cfConfig);
+            }
+
+
+
 
             return renderer ? renderer : this.defaultRenderer;
         },
