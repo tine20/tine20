@@ -1978,6 +1978,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // no keys for quickadds etc.
         if (e.getTarget('input') || e.getTarget('textarea')) return;
 
+        // do not catch modified keys (CTRL, ALT)
+        if (e.ctrlKey || e.altKey) return;
+
         switch (e.getKey()) {
             case e.A:
                 // select only current page
