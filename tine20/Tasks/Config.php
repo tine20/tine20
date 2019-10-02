@@ -42,6 +42,7 @@ class Tasks_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Status'),
             'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
                     array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1,  'icon' => 'images/icon-set/icon_invite.svg', 'system' => true), //_('No response')
