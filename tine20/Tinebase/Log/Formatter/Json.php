@@ -25,14 +25,16 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
      */
     public function format($event)
     {
-        $logruntime = $this->_getLogRunTime();
-        $logdifftime = $this->_getLogDiffTime();
+        $logruntime = $this->_getLogRunTime(false);
+        $logdifftime = $this->_getLogDiffTime(false);
         $event = array_merge([
             'user' => self::getUsername(),
             'transaction_id' => self::$_transactionId,
             'request_id' => self::$_requestId,
             'logdifftime' => $logdifftime,
-            'logdifftime' => $logruntime,
+            'logruntime' => $logruntime,
+            // TODO add method
+            // 'method' => self::$_method
         ], $event);
 
         if (isset($event['message'])) {
