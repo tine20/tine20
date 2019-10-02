@@ -293,8 +293,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (
             is_array($classes)
             && Tinebase_Core::getCache()
-            && defined('TINE20_BUILDTYPE')
-            && TINE20_BUILDTYPE !== 'DEVELOPMENT'
         ) {
             $masterFiles = array();
             
@@ -330,6 +328,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     . " Failed to create cache. Exception: \n". $zce);
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' setting up json server ...');
         
         $server = new Zend_Json_Server();
         $server->setAutoEmitResponse(false);
@@ -352,7 +353,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         }
         
         if (isset($cache)) {
-            $cache->save($server, $cacheId, array(), null);
+            $lifetime = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE !== 'DEVELOPMENT' ? 30 : 3600;
+            $cache->save($server, $cacheId, array(), $lifetime);
         }
 
         return $server;
@@ -389,6 +391,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
             $classes = self::_getServerClasses();
             $server = self::_getServer($classes);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .' handle request ...');
 
             $response = $server->handle($request);
             if ($response->isError()) {
@@ -484,6 +489,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
 
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .' fetching app json classes');
+
             foreach ($userApplications as $application) {
                 $jsonAppName = $application->name . '_Frontend_Json';
                 if (class_exists($jsonAppName)) {

@@ -175,6 +175,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         if (empty($roleMemberships)) {
             return new Tinebase_Record_RecordSet('Tinebase_Model_Application');
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ .' fetch applications from db');
         
         $select = $this->_getDb()->select()
             ->distinct()
@@ -472,6 +475,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
             return $this->_classCache[__FUNCTION__][$classCacheId];
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ .' fetch role memberships from db');
         
         $select = $this->_getDb()->select()
             ->distinct()
