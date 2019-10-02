@@ -32,7 +32,7 @@ class Crm_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     ];
 
     /**
-     * usage: tine20-cli --method=Crm.migrateProjectsToLeads [-d] [-v] -- container_id=abcde124345
+     * usage: tine20-cli --method=Crm.migrateProjectsToLeads [-d] [-v] -- container_id=abcde124345 [source_container=12345abcd]
      *
      * @param Zend_Console_Getopt $opts
      * @return integer
@@ -47,8 +47,18 @@ class Crm_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "Dry run activated\n";
         }
 
-        // fetch all projects
-        $projects = Projects_Controller_Project::getInstance()->search();
+        if (isset($args['source_container'])) {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Projects_Model_Project::class,
+                [
+                    ['field' => 'container_id', 'operator' => 'equals', 'value' => $args['source_container']]
+                ]
+            );
+        } else {
+            // fetch all projects if no source container is given
+            $filter = null;
+        }
+        $projects = Projects_Controller_Project::getInstance()->search($filter);
         echo "Got " . count($projects) . " projects to migrate.\n";
 
         foreach ($projects as $project) {
