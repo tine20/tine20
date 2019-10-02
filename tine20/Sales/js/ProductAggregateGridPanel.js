@@ -3,9 +3,11 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Sales');
+
+require('./ProductAggregateLayerCombo');
 
 /**
  * @namespace   Tine.Sales
@@ -382,7 +384,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 dataIndex: 'id',
                 hideable: false,
                 sortable: false,
-                editor: this.attributeEditor,
+                editor: false,
                 quickaddField: this.attributesQuickadd
             }, {
                 id: 'value',
@@ -393,7 +395,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 editor: new Ext.form.TextField({}),
                 quickaddField: new Ext.form.TextField({
                     emptyText: i18n._('Add a New Value...')
-                })
+                }),
+                renderer: this.valueRenderer
             }
         ];
 
@@ -401,6 +404,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             hasDefaultCheck: false,
             cols: cols
         });
+        this.attributesGrid.on('beforeedit', this.onBeforeValueEdit, this);
         this.loadAttributesFromRecord(selectedRecord, attributeKeys);
 
         this.attributesWindow = Tine.WindowFactory.getWindow({
@@ -424,6 +428,37 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 iconCls: 'action_applyChanges'
             }]
         });
+    },
+
+    onBeforeValueEdit: function(o) {
+        if (o.field != 'value') {
+            o.cancel = true;
+        }
+
+        else {
+            var colModel = o.grid.getColumnModel(),
+                type = o.record.get('id');
+
+            if (type === 'assignedAccountables') {
+                colModel.config[o.column].setEditor(new Tine.Sales.ProductAggregateAccountableLayerCombo({
+                    recordClass: Tine.WebAccounting.Model.ProxmoxVM
+                }));
+            } else {
+                colModel.config[o.column].setEditor(new Ext.form.TextField({}));
+            }
+        }
+    },
+
+    valueRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
+        if (record.get('id') === 'assignedAccountables') {
+            var labels = [];
+            _.each(value, function(item) {
+                labels.push(item.vm_name);
+            });
+            return labels.join(', ');
+        } else {
+            return value;
+        }
     },
 
     initAttributesCombos: function(attributeKeys) {
