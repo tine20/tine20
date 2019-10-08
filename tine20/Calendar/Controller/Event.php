@@ -2178,12 +2178,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
                 $exceptions = $this->getRecurExceptions($event);
+                // if we have grants to delete base event -> force grants on all recur exceptions too
+                $exceptions->class = Calendar_Model_Event::CLASS_PUBLIC;
+                $exceptions->{Tinebase_Model_Grants::GRANT_DELETE} = true;
                 $events->merge($exceptions);
 
                 $exceptionIds = $exceptions->getId();
                 $_ids = array_merge($_ids, $exceptionIds);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
+                    . ' Implicitly deleting ' . $exceptions->count() . ' persistent exception(s) for recurring series with uid' . $event->uid);
             }
 
             // TODO make this undoable!
@@ -2249,7 +2252,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if (    ! $this->_doContainerACLChecks 
             // admin grant includes all others (only if class is PUBLIC)
-            ||  (! empty($this->class) && $this->class === Calendar_Model_Event::CLASS_PUBLIC 
+            ||  (($_record->class === Calendar_Model_Event::CLASS_PUBLIC || $_action === self::ACTION_DELETE)
                 && $_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))
             // external invitations are in a spechial invitaion calendar. only attendee can see it via displaycal
             ||  $_record->hasExternalOrganizer()
@@ -3318,6 +3321,32 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         } finally {
             $this->_doContainerACLChecks = $oldDoContainerAcl;
             $this->_sendNotifications = $oldSendNotifications;
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_Container $_container
+     * @param bool $_ignoreAcl
+     * @param null $_filter
+     */
+    public function deleteContainerContents(Tinebase_Model_Container $_container, $_ignoreAcl = false, $_filter = null)
+    {
+        if (null === $_filter) {
+            // do not use container_id here! it would use a Calendar_Model_CalendarFilter, we do NOT want that
+            $_filter = new Calendar_Model_EventFilter([
+                ['field' => 'base_event_id', 'operator' => 'isnull', 'value' => true]
+            ]);
+            $_filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $_container->id));
+
+            // we first delete all base events, then in a second go, we delete again everything that has not yet been deleted
+            parent::deleteContainerContents($_container, $_ignoreAcl, $_filter);
+
+            // do not use container_id here! it would use a Calendar_Model_CalendarFilter, we do NOT want that
+            $_filter = new Calendar_Model_EventFilter();
+            $_filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $_container->id));
+            parent::deleteContainerContents($_container, $_ignoreAcl, $_filter);
+        } else {
+            parent::deleteContainerContents($_container, $_ignoreAcl, $_filter);
         }
     }
 }

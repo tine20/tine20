@@ -1196,6 +1196,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
         } catch (Exception $e) {
             $tm->rollBack();
+            // otherwise it would not be logged by the server code
+            if ($e instanceof Tinebase_Exception_ProgramFlow) {
+                Tinebase_Exception::log($e);
+            }
             throw $e;
         }
         
