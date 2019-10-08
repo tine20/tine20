@@ -847,6 +847,23 @@ class Tinebase_FileSystem implements
 
     public function processRefLogs()
     {
+        $lock = Tinebase_Core::getMultiServerLock(__METHOD__);
+        $lock->tryAcquire(30); // if acquire fails, lets run anyway to avoid unprocessed data in an edge case
+        $lockRaii = new Tinebase_RAII(function() /*use($lock)*/ {
+            // a bit bad ... for unittests...
+            //if ($lock->isLocked()) $lock->release();
+            Tinebase_Lock::clearLocks();
+        });
+
+        $refLogBackend = static::$_refLogBackend;
+        $refLogIds = $refLogBackend->search(null, new Tinebase_Model_Pagination([
+            'limit'     => 1000,
+            'sort'      => 'id'
+        ]), Tinebase_Backend_Sql_Abstract::IDCOL);
+        if (empty($refLogIds)) {
+            return;
+        }
+
         $db = Tinebase_Core::getDb();
         $transMgr = Tinebase_TransactionManager::getInstance();
         $transId = $transMgr->startTransaction($db);
@@ -859,17 +876,13 @@ class Tinebase_FileSystem implements
             $rootRevisionSize = (int)$applicationController->getApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, true);
 
-            $refLogBackend = static::$_refLogBackend;
             $refLogBackend->addSelectHook(function(Zend_Db_Select $select) {
                 $select->forUpdate(true);
             });
             $raii = new Tinebase_RAII(function() use($refLogBackend) {
                 $refLogBackend->resetSelectHooks();
             });
-            $refLogs = $refLogBackend->search(null, new Tinebase_Model_Pagination([
-                'limit'     => 1000,
-                'sort'      => 'id'
-            ]));
+            $refLogs = $refLogBackend->getMultiple($refLogIds);
             if (!$refLogs->count()) {
                 $transMgr->commitTransaction($transId);
                 $transId = null;
@@ -948,6 +961,9 @@ class Tinebase_FileSystem implements
                 $transMgr->rollBack();
             }
         }
+
+        // only for unused variable check
+        unset($lockRaii);
     }
 
     public static function insertRefLogActionQueue()

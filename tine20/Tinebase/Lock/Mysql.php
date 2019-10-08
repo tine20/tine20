@@ -29,9 +29,10 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
     }
 
     /**
+     * @param int $timeout
      * @return bool
      */
-    public function tryAcquire()
+    public function tryAcquire(int $timeout = 0)
     {
         if ($this->_isLocked) {
             throw new Tinebase_Exception_Backend('trying to acquire a lock on a locked lock');
@@ -43,7 +44,7 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
             return null;
         }
         $db = Tinebase_Core::getDb();
-        if (($stmt = $db->query('SELECT GET_LOCK("' . $this->_lockId . '", 0)')) &&
+        if (($stmt = $db->query('SELECT GET_LOCK("' . $this->_lockId . '", ' . $timeout . ')')) &&
                 $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                 ($row = $stmt->fetch()) &&
                 $row[0] == 1) {
