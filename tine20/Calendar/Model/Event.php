@@ -480,8 +480,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function hasGrant($_grant)
     {
         $hasGrant = isset($this->_properties[$_grant]) && (bool)$this->{$_grant};
-        
-        if ($hasGrant && $this->class !== Calendar_Model_Event::CLASS_PUBLIC) {
+
+        // extra check for privat events. deleting is always possible though (to be able to delete the calendar itself)
+        if ($hasGrant && $this->class !== Calendar_Model_Event::CLASS_PUBLIC &&
+                $_grant !== Tinebase_Model_Grants::GRANT_DELETE) {
             $hasGrant =
                 // private grant
                 $this->{Calendar_Model_EventPersonalGrants::GRANT_PRIVATE} ||
