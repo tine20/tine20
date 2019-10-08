@@ -144,7 +144,36 @@ class Tinebase_FileSystem_StreamWrapper
     {
         return Tinebase_FileSystem::getInstance()->rmdir(substr($_path, 9), true);
     }
-    
+
+    public function stream_truncate(int $new_size)
+    {
+        if (!is_resource($this->_stream)) {
+            return false;
+        }
+
+        $options = stream_context_get_options($this->_stream);
+
+        if (!in_array($options['tine20']['mode'], array('w', 'wb', 'x', 'xb', 'a+'))) {
+            // readonly
+            return false;
+        }
+
+        return ftruncate($this->_stream, $new_size);
+    }
+
+    // well this needs improvment!
+    // https://www.php.net/manual/en/streamwrapper.stream-lock.php
+    public function stream_lock(int $operation)
+    {
+        if (!is_resource($this->_stream)) {
+            return false;
+        }
+
+        Tinebase_FileSystem::getInstance()->acquireWriteLock();
+
+        return true;
+    }
+
     /**
      * stream_close
      * 
@@ -305,7 +334,7 @@ class Tinebase_FileSystem_StreamWrapper
         
         $options = stream_context_get_options($this->_stream);
         
-        if (!in_array($options['tine20']['mode'], array('w', 'wb', 'x', 'xb'))) {
+        if (!in_array($options['tine20']['mode'], array('w', 'wb', 'x', 'xb', 'a+'))) {
             // readonly
             return false;
         }
