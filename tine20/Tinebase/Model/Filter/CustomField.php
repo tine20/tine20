@@ -294,7 +294,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     Tinebase_Exception::log($e);
                 }
             } else if (is_array($result['value']['value'])) {
-                // return hydrated value
+                // return dehydrated value
                 foreach ($result['value']['value'] as $key => $subfilter) {
                     if (isset($subfilter['field'])
                         && $subfilter['field'] === ':id'
@@ -304,8 +304,18 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                         if (isset($subfilter['value']['id'])) {
                             $result['value']['value'][$key]['value'] = $subfilter['value']['id'];
                         } else {
-                            // set empty id value
-                            $result['value']['value'][$key]['value'] = '';
+                            $tmpArr = current($subfilter['value']);
+                            if (is_array($tmpArr) && isset($tmpArr['id'])) {
+                                $result['value']['value'][$key]['value'] = [];
+                                foreach ($subfilter['value'] as $tmpArr) {
+                                    if (isset($tmpArr['id'])) {
+                                        $result['value']['value'][$key]['value'][] = $tmpArr['id'];
+                                    }
+                                }
+                            } else {
+                                // set empty id value
+                                $result['value']['value'][$key]['value'] = '';
+                            }
                         }
                     }
                 }
