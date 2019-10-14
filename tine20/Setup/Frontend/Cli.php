@@ -864,14 +864,15 @@ class Setup_Frontend_Cli
             $config = Tinebase_Config_Abstract::factory($applicationName);
         }
 
-        if (empty($options['configkey'])) {
+        if (! isset($options['configkey']) || empty($options['configkey'])) {
             $errors[] = 'Missing argument: configkey';
             if ($config) {
                 $errors[] = 'Available config settings:';
                 $errors[] = print_r($config::getProperties(), true);
             }
+        } else {
+            $configKey = (string)$options['configkey'];
         }
-        $configKey = (string)$options['configkey'];
         
         if (empty($errors)) {
             $value = $config->get($configKey);
