@@ -309,7 +309,8 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
 
             notifyOver : function(dd, e, data) {
                 var sourceEl = Ext.fly(data.sourceEl),
-                    sourceView = data.scope;
+                    sourceView = data.scope,
+                    colorIcon = _.get(data,'event.colorSet.text') === '#FFFFFF' ? '-WHITE' : '';
 
                 sourceEl.setStyle({'border-left-style': 'dashed'});
                 sourceEl.setOpacity(0.5);
@@ -333,12 +334,13 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
                                 data.denyDrop = true;
                             }
 
-                            return  data.denyDrop ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                            var eventDrop =  data.denyDrop ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                            return eventDrop + colorIcon;
                         }
                     }
                 }
                 
-                return 'cal-daysviewpanel-event-drop-nodrop';
+                return 'cal-daysviewpanel-event-drop-nodrop' + colorIcon;
             },
             
             notifyOut : function() {

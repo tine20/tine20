@@ -180,13 +180,13 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
         }
     },
 
-    onStoreAdd: function(store, records, index) {
+    onStoreAdd: function (store, records, index) {
         this.suspendCloneStoreEvents = true;
 
-        Ext.each(records, function(record) {
-            Ext.each(this.getGroupNames(record), function(groupName) {
+        Ext.each(records, function (record) {
+            Ext.each(this.getGroupNames(record), function (groupName) {
                 var store = this.get(groupName),
-                    existingRecord = store.getById(record.id);
+                    existingRecord = record.id != 0 ? store.getById(record.id) : null;
 
                 // NOTE: record might be existing as it was added to a cloneStore
                 if (existingRecord) {
