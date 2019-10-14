@@ -291,6 +291,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         // append all valid domains if nessesary
         $systemAccountConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         foreach ($addresses as $idx => $address) {
+            if (is_array($address)) {
+                // might be an array with dispatch_address + email keys
+                $address = $address['email'];
+            }
             if (! strpos($address, '@')) {
                 $addresses[$idx] = $address . '@' . $systemAccountConfig['primarydomain'];
                 if ($systemAccountConfig['secondarydomains']) {
