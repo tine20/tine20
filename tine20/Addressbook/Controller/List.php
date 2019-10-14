@@ -401,7 +401,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record the update record
      * @param   Tinebase_Record_Interface $_oldRecord the current persistent record
      * @return  void
-     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -426,7 +426,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                         __METHOD__ . '::' . __LINE__ . ' Found non-account members: '
                         . print_r($nonUserContacts->toArray(), true));
                     $translate = Tinebase_Translation::getTranslation('Addressbook');
-                    throw new Tinebase_Exception_InvalidArgument($translate->_(
+                    throw new Tinebase_Exception_SystemGeneric($translate->_(
                         'It is not allowed to add non-account contacts to this list'));
                 }
             }
