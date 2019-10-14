@@ -346,7 +346,7 @@ msgstr "Abteilung"
 
 #: Config.php:250
 msgid "Mailing list"
-msgstr "Mailingliste"
+msgstr "E-Mail-Verteiler"
 
 #: Config.php:255
 msgid "Use Nominatim during contact import"

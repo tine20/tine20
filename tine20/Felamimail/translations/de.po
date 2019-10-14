@@ -1373,10 +1373,10 @@ msgstr "Alle Nachrichten mit dem Entwurfs-Flag"
 
 #: Config.php:124
 msgid "Mailinglist Reject Reason"
-msgstr "Mailingliste Ablehnungsgrund"
+msgstr "E-Mail-Verteiler Ablehnungsgrund"
 
 msgid "Mailinglist"
-msgstr "Mailingliste"
+msgstr "E-Mail-Verteiler"
 
 #: Config.php:127
 msgid "Your email has been rejected"
