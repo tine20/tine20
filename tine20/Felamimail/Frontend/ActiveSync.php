@@ -249,8 +249,13 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " fileReference " . $fileReference);
-        
-        list($messageId, $partId) = explode(ActiveSync_Frontend_Abstract::LONGID_DELIMITER, $fileReference, 2);
+
+        if (strpos($fileReference, ActiveSync_Frontend_Abstract::LONGID_DELIMITER) !== false) {
+            list($messageId, $partId) = explode(ActiveSync_Frontend_Abstract::LONGID_DELIMITER, $fileReference, 2);
+        } else {
+            $messageId = $fileReference;
+            $partId = null;
+        }
         
         $part = $this->_contentController->getMessagePart($messageId, $partId);
         
