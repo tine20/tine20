@@ -90,5 +90,4 @@ class Tinebase_Exception_SystemGeneric extends Tinebase_Exception_ProgramFlow
             );
         }
     }
-    
 }
