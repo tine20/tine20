@@ -603,6 +603,7 @@ class Tinebase_FileSystem implements
         $this->_streamOptionsForNextOperation = array();
 
         switch ($options['tine20']['mode']) {
+            case 'a+':
             case 'w':
             case 'wb':
             case 'x':
@@ -1239,6 +1240,28 @@ class Tinebase_FileSystem implements
                 // If the file already exists, the fopen() call will fail by returning false and generating
                 // an error of level E_WARNING. If the file does not exist, attempt to create it. This is
                 // equivalent to specifying O_EXCL|O_CREAT flags for the underlying open(2) system call.
+
+
+                // this would need some StreamWrapper tweaking for fseek
+                // StremWrapper needs optimization anyway, it should store the mode itself not ask the context...
+                case 'a+':
+                    if (!$this->isDir($dirName)) {
+                        $rollBack = false;
+                        return false;
+                    }
+                    $handle = fopen('php://temp', 'a+');
+
+                    if (!$this->fileExists($_path)) {
+                        $parent = $this->stat($dirName);
+                        $node = $this->createFileTreeNode($parent, $fileName, $fileType);
+                    } else {
+                        $node = $this->stat($_path);
+                        $hashFile = $this->getRealPathForHash($node->hash);
+                        stream_copy_to_stream(($tmpFh = fopen($hashFile, 'r')), $handle);
+                        fclose($tmpFh);
+                    }
+                    break;
+
                 case 'x':
                 case 'xb':
                     if (!$this->isDir($dirName) || $this->fileExists($_path)) {

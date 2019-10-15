@@ -241,6 +241,138 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/shared');
     }
+
+    /**
+     * test (UN)LOCK functionality of WebDAV
+     * @group ServerTests
+     */
+    public function testUNandLOCKQueries()
+    {
+        $credentials = TestServer::getInstance()->getTestCredentials();
+
+        Tinebase_FileSystem::getInstance()->createAclNode('Filemanager/folders/shared/unittestdirectory');
+        static::assertSame(14, file_put_contents('tine20://Filemanager/folders/shared/unittestdirectory/aTestFile',
+            'unittest stuff'), 'could file_put_contents test file into tine VFS');
+
+        $request = Tinebase_Http_Request::fromString(<<<EOS
+LOCK /webdav/Filemanager/shared/unittestdirectory/aTestFile HTTP/1.1\r
+Host: localhost\r
+Depth: 1\r
+Content-Type: application/xml; charset="utf-8"\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+\r
+<?xml version="1.0" encoding="utf-8" ?>
+   <D:lockinfo xmlns:D='DAV:'>
+     <D:lockscope><D:exclusive/></D:lockscope>
+     <D:locktype><D:write/></D:locktype>
+     <D:owner>
+       <D:href>http://example.org/~ejw/contact.html</D:href>
+     </D:owner>
+   </D:lockinfo>
+EOS
+        );
+
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
+
+        ob_start();
+        $server = new Tinebase_Server_WebDAV();
+        $server->handle($request);
+        $result = ob_get_contents();
+        ob_end_clean();
+
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($result);
+        $xpath = new DomXPath($responseDoc);
+        $nodes = $xpath->query('//d:prop/d:lockdiscovery/d:activelock/d:locktoken/d:href');
+        static::assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $lockToken = $nodes->item(0)->textContent;
+
+
+        $request = Tinebase_Http_Request::fromString(<<<EOS
+DELETE /webdav/Filemanager/shared/unittestdirectory/aTestFile HTTP/1.1\r
+Host: localhost\r
+Depth: 1\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+
+EOS
+        );
+
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
+
+        ob_start();
+        $server = new Tinebase_Server_WebDAV();
+        $server->handle($request);
+        $result = ob_get_contents();
+        ob_end_clean();
+        static::assertContains('<s:exception>Sabre\DAV\Exception\Locked</s:exception>', $result);
+
+        $request = Tinebase_Http_Request::fromString(<<<EOS
+UNLOCK /webdav/Filemanager/shared/unittestdirectory/aTestFile HTTP/1.1\r
+Host: localhost\r
+Depth: 1\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+
+EOS
+        );
+
+        $_SERVER['REQUEST_METHOD']  = $request->getMethod();
+        $_SERVER['REQUEST_URI']     = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']      = '0';
+        $_SERVER['HTTP_LOCK_TOKEN'] = $lockToken;
+
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
+        $request->getServer()->set('HTTP_LOCK_TOKEN',   $lockToken);
+
+        ob_start();
+        $server = new Tinebase_Server_WebDAV();
+        $server->handle($request);
+        $result = ob_get_contents();
+        ob_end_clean();
+
+        static::assertEmpty($result);
+
+
+        $request = Tinebase_Http_Request::fromString(<<<EOS
+DELETE /webdav/Filemanager/shared/unittestdirectory/aTestFile HTTP/1.1\r
+Host: localhost\r
+Depth: 1\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+
+EOS
+        );
+
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
+
+        ob_start();
+        $server = new Tinebase_Server_WebDAV();
+        $server->handle($request);
+        $result = ob_get_contents();
+        ob_end_clean();
+
+        static::assertEmpty($result);
+        static::assertFalse(Tinebase_FileSystem::getInstance()
+            ->isFile('Filemanager/folders/shared/unittestdirectory/aTestFile'), 'file was not deleted');
+    }
     
     /**
      * testgetNodeForPath_webdav_filemanager_shared_unittestdirectory
