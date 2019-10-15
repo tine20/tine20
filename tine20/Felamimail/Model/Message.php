@@ -121,7 +121,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'original_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'original_part_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
-        'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'message_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'from_email'            => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'from_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
@@ -427,7 +428,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         
         $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
         
-        foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
+        foreach (array('to', 'cc', 'bcc', 'from', 'sender', 'message-id') as $field) {
             if (isset($_headers[$field])) {
                 if (is_array($_headers[$field])) {
                     $value = array();
@@ -435,6 +436,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         $value = array_merge($value, Felamimail_Message::convertAddresses($headerValue, $punycodeConverter));
                     }
                     $this->$field = $value;
+                } else if ($field === 'message-id') {
+                    $this->message_id = $_headers[$field];
                 } else {
                     $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
                     switch ($field) {

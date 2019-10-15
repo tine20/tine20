@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>12.10</version>
+    <version>12.11</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -468,7 +468,7 @@
         </table>
         <table>
             <name>felamimail_cache_message</name>
-            <version>10</version>
+            <version>11</version>
             <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
@@ -502,6 +502,10 @@
                     <name>content_type</name>
                     <type>text</type>
                     <length>255</length>
+                </field>
+                <field>
+                    <name>message_id</name>
+                    <type>text</type>
                 </field>
                 <field>
                     <name>body_content_type</name>

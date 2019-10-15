@@ -113,4 +113,29 @@ class Felamimail_Controller extends Tinebase_Controller_Event
             Felamimail_Controller_Account::getInstance()->addSystemAccount($_account, $pwd);
         }
     }
+
+    public function truncateEmailCache()
+    {
+        $db = Tinebase_Core::getDb();
+
+        // disable fk checks
+        $db->query("SET FOREIGN_KEY_CHECKS=0");
+
+        $cacheTables = array(
+            'felamimail_cache_message',
+            'felamimail_cache_msg_flag',
+            'felamimail_cache_message_to',
+            'felamimail_cache_message_cc',
+            'felamimail_cache_message_bcc'
+        );
+
+        // truncate tables
+        foreach ($cacheTables as $table) {
+            $db->query("TRUNCATE TABLE " . $db->table_prefix . $table);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()
+                ->info(__METHOD__ . ' (' . __LINE__ . ') Truncated ' . $table . ' table');
+        }
+
+        $db->query("SET FOREIGN_KEY_CHECKS=1");
+    }
 }
