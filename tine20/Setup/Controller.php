@@ -2957,7 +2957,8 @@ class Setup_Controller
             throw new Exception("you need to specify the otherdb");
         }
 
-        return Setup_SchemaTool::compareSchema($options['otherdb']);
+        return Setup_SchemaTool::compareSchema($options['otherdb'], isset($options['otheruser']) ?
+            $options['otheruser'] : null, isset($options['otherpassword']) ? $options['otherpassword'] : null);
     }
 
     /**
