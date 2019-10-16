@@ -705,7 +705,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     ));
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                       . ' Exdate needs to be an object:' . var_export($exdate, TRUE));
+                       . ' Exdate needs to be an object: type ' . gettype($exdate) . ' found');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' ' . var_export($exdate, TRUE));
                 }
             }
         }
