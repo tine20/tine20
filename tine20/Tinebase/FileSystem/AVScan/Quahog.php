@@ -32,15 +32,18 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
             $avUrl = Tinebase_Config::getInstance()
                 ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_URL};
             $this->_socket = (new \Socket\Raw\Factory())->createClient($avUrl);
+            $this->_quahog = new \Xenolope\Quahog\Client($this->_socket, 30, PHP_NORMAL_READ);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                     ' Socket client created for url ' . $avUrl);
             }
-        }
-        if (null === $this->_quahog) {
-            $this->_quahog = new \Xenolope\Quahog\Client($this->_socket->assertAlive(), 30, PHP_NORMAL_READ);
         } else {
-            $this->_socket->assertAlive();
+            try {
+                $this->_socket->assertAlive();
+            } catch (\Socket\Raw\Exception $sre) {
+                $this->_socket = null;
+                $this->_connect();
+            }
         }
     }
 
