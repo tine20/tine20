@@ -18,6 +18,7 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE012_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -40,6 +41,10 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE012_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -229,5 +234,24 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
         }
         $accountCtrl->doContainerACLChecks($oldValue);
         $this->addApplicationUpdate('Felamimail', '12.10', self::RELEASE012_UPDATE007);
+    }
+
+    public function update008()
+    {
+        // truncate email cache to make this go faster
+        Felamimail_Controller::getInstance()->truncateEmailCache();
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>message_id</name>
+                <type>text</type>
+            </field>
+        ');
+
+        $this->_backend->addCol('felamimail_cache_message', $declaration);
+
+        $this->setTableVersion('felamimail_cache_message', 11);
+
+        $this->addApplicationUpdate('Felamimail', '12.11', self::RELEASE012_UPDATE008);
     }
 }
