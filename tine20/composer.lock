@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "414e3559213fc8c886b31b4448d8d036",
+    "content-hash": "0da6dd2550362aa38cd0b4598475463b",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -434,11 +434,11 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.13pl5",
+            "version": "v2.5.13pl6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/dbal.git",
-                "reference": "7af18f64c9c75a48bda237707ee0d6e512b4eaa8"
+                "reference": "b7c88ab6c38407ed9c99dace55f43bc8a1833c56"
             },
             "archive": {
                 "exclude": [
@@ -505,7 +505,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2019-10-16T09:35:06+00:00"
+            "time": "2019-10-16T15:24:25+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -5052,7 +5052,7 @@
         {
             "alias": "v2.5.13",
             "alias_normalized": "2.5.13.0",
-            "version": "2.5.13.0-patch5",
+            "version": "2.5.13.0-patch6",
             "package": "doctrine/dbal"
         },
         {
