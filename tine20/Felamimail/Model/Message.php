@@ -426,9 +426,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
+        if (isset($_headers['message-id']) && is_scalar($_headers['message-id'])) {
+            $this->message_id = $_headers['message-id'];
+        }
+
         $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
-        
-        foreach (array('to', 'cc', 'bcc', 'from', 'sender', 'message-id') as $field) {
+        foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
             if (isset($_headers[$field])) {
                 if (is_array($_headers[$field])) {
                     $value = array();
@@ -436,8 +439,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         $value = array_merge($value, Felamimail_Message::convertAddresses($headerValue, $punycodeConverter));
                     }
                     $this->$field = $value;
-                } else if ($field === 'message-id') {
-                    $this->message_id = $_headers[$field];
                 } else {
                     $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
                     switch ($field) {
