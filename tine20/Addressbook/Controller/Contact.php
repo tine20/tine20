@@ -1182,7 +1182,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if ($userController instanceof Tinebase_User_Interface_SyncAble && Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_CONTACT_DATA} &&
             (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA]) || !$this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA])) {
             // let the syncbackend e.g. Tinebase_User_Ldap etc. decide what to add to our $contact
-            $userController->updateContactFromSyncBackend($_updatedUser, $contact);
+            try {
+                $userController->updateContactFromSyncBackend($_updatedUser, $contact);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' do not update contact - user is not found in sync backend: '
+                    . $tenf->getMessage());
+            }
         }
 
         if (is_array($this->_requestContext) && isset($this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO]) &&
