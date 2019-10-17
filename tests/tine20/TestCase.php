@@ -1026,7 +1026,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($data === null) {
             $data = $this->_getUserData(true);
         }
-        return $this->_createUser($data);
+        return $this->_createTestUser($data);
     }
 
     protected function _getUserData($withEmail = false)
@@ -1044,7 +1044,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         return $data;
     }
 
-    protected function _createUser($data = null)
+    protected function _createTestUser($data = null)
     {
         if ($data === null) {
             $data = $this->_getUserData();

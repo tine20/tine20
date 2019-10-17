@@ -314,6 +314,8 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
     public function testSearchMailsInSharedAccount()
     {
+        $this->_testNeedsTransaction();
+
         $account = $this->_createSharedAccount();
         // write mail to shared account
         $message = $this->_sendAndAssertMail([$account->email], $account);

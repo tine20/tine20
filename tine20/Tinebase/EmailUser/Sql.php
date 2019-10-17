@@ -249,6 +249,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (!isset($this->_propertyMapping['emailPassword'])) {
             return;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Setting email user password (encrypt: ' . (int) $_encrypt . ') for user id ' . $_userId);
         
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         if ((isset($imapConfig['pwsuffix']) || array_key_exists('pwsuffix', $imapConfig))) {
