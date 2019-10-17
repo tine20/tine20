@@ -148,12 +148,13 @@ Tine.Sales.BillingDateDialog = Ext.extend(Ext.FormPanel, {
  * @return {Ext.ux.Window}
  */
 Tine.Sales.BillingDateDialog.openWindow = function(config) {
-    var window = Tine.WindowFactory.getExtWindow({
+    var window = Tine.WindowFactory.getWindow({
         title: config.winTitle,
-        width : 350,
-        height : 150,
-        contentPanelConstructor : 'Tine.Sales.BillingDateDialog',
-        contentPanelConstructorConfig : config
+        modal: true,
+        width: 350,
+        height: 150,
+        contentPanelConstructor: 'Tine.Sales.BillingDateDialog',
+        contentPanelConstructorConfig: config
     });
     
     window.addEvents('submit');

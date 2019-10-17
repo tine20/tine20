@@ -79,7 +79,8 @@ class Tinebase_Group
         if (self::$_instance === NULL) {
             $backendType = Tinebase_User::getConfiguredBackend();
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' groups backend: ' . $backendType);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .' groups backend: ' . $backendType);
 
             self::$_instance = self::factory($backendType);
         }

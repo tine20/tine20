@@ -171,23 +171,41 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
             . $this->_getFormattedOutput($output, $event);
     }
 
-    protected function _getLogRunTime()
+    /**
+     * @param bool $format
+     * @return float|mixed|string
+     *
+     * TODO move calculation to Tinebase_Log
+     */
+    protected function _getLogRunTime($format = true)
     {
         $result = '';
         if (self::$_logruntime) {
             $currenttime = microtime(true);
-            $result = Tinebase_Helper::formatMicrotimeDiff($currenttime - self::$_starttime);
+            $result = $currenttime - self::$_starttime;
+            if ($format) {
+                $result = Tinebase_Helper::formatMicrotimeDiff($result);
+            }
         }
         return $result;
     }
 
-    protected function _getLogDiffTime()
+    /**
+     * @param bool $format
+     * @return bool|mixed|string
+     *
+     * TODO move calculation to Tinebase_Log
+     */
+    protected function _getLogDiffTime($format = true)
     {
         $result = '';
         if (self::$_logdifftime) {
             $currenttime = microtime(true);
-            $result = Tinebase_Helper::formatMicrotimeDiff($currenttime - (self::$_lastlogtime ? self::$_lastlogtime : $currenttime));
+            $result = $currenttime - (self::$_lastlogtime ? self::$_lastlogtime : $currenttime);
             self::$_lastlogtime = $currenttime;
+            if ($format) {
+                $result = Tinebase_Helper::formatMicrotimeDiff($result);
+            }
         }
         return $result;
     }

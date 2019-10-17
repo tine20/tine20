@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a4be7de0d33feb162e696eac0ee6e05e",
+    "content-hash": "a5b63d67296c5a28548edc97bf04eb27",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -434,11 +434,11 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.13pl4",
+            "version": "v2.5.13pl6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/dbal.git",
-                "reference": "b48699c07ab877f4dc8f11a5030d2c7490a191fa"
+                "reference": "b7c88ab6c38407ed9c99dace55f43bc8a1833c56"
             },
             "archive": {
                 "exclude": [
@@ -505,7 +505,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2018-08-20T13:46:28+00:00"
+            "time": "2019-10-16T15:24:25+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1060,12 +1060,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "8af5437678fa606f6ea285fa8ac8a7b451420fd6"
+                "reference": "4a93a98993c27f9b0186193cce78b1cb90d63ab6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/8af5437678fa606f6ea285fa8ac8a7b451420fd6",
-                "reference": "8af5437678fa606f6ea285fa8ac8a7b451420fd6",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4a93a98993c27f9b0186193cce78b1cb90d63ab6",
+                "reference": "4a93a98993c27f9b0186193cce78b1cb90d63ab6",
                 "shasum": ""
             },
             "require": {
@@ -1073,6 +1073,10 @@
                 "ext-json": "*",
                 "php": ">=5.4",
                 "phpseclib/phpseclib": "~2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "roave/security-advisories": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -1085,7 +1089,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2019-06-26T12:50:55+00:00"
+            "time": "2019-09-16T23:35:31+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1258,7 +1262,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1290,7 +1294,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2956,7 +2960,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -5177,7 +5181,7 @@
         {
             "alias": "v2.5.13",
             "alias_normalized": "2.5.13.0",
-            "version": "2.5.13.0-patch4",
+            "version": "2.5.13.0-patch6",
             "package": "doctrine/dbal"
         },
         {

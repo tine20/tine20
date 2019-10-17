@@ -238,9 +238,10 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      * set aliases
      *
      * @param array $_smtpSettings
+     * @param string $userIdField
      * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _createAliasDestinations($_smtpSettings)
+    protected function _createAliasDestinations($_smtpSettings, $userIdField = 'userid')
     {
         parent::_createAliasDestinations($_smtpSettings, 'users_id');
     }
@@ -262,8 +263,9 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      * @param string $users_id
      * @param string $source
      * @param array $forwards
+     * @param string $userIdField
      */
-    protected function _addForwards($users_id, $source, $forwards)
+    protected function _addForwards($users_id, $source, $forwards, $userIdField = 'userid')
     {
         parent::_addForwards($users_id, $source, $forwards, 'users_id');
     }
@@ -332,7 +334,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
 
                         if (! empty($data[$keyMapping]) && $keyMapping === 'emailAliases') {
                             // get dispatch_address
-                            $data[$keyMapping] = $this->_getDispatchAddress($_rawdata['userid'], $data[$keyMapping], 'users_id');
+                            $data[$keyMapping] = $this->_getDispatchAddress($_rawdata['id'], $data[$keyMapping], 'users_id');
                         }
                         break;
                         

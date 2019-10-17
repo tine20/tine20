@@ -115,6 +115,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $memberships = Tinebase_Core::getCache()->load($cacheId);
         
         if (! $memberships) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .' fetch group memberships from db');
+
             $select = $this->_db->select()
                 ->distinct()
                 ->from(array('group_members' => SQL_TABLE_PREFIX . 'group_members'), array('group_id'))

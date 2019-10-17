@@ -2230,10 +2230,10 @@ Steuernummer 33/111/32212";
             $updatedlist = $this->_uit->saveList($list);
             self::fail('should throw exception - it is not allowed to add non-account contact to admin list! '
                 . print_r($updatedlist, true));
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
             $translate = Tinebase_Translation::getTranslation('Addressbook');
-           self::assertEquals($translate->_('It is not allowed to add non-account contacts to this list'),
-               $teia->getMessage());
+            self::assertEquals($translate->_('It is not allowed to add non-account contacts to this list'),
+               $tesg->getMessage());
         }
     }
 

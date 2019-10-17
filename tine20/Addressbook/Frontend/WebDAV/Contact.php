@@ -87,7 +87,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         try {
             $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            Tinebase_Exception::log($tead);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
             throw new DAV\Exception\Forbidden('Access denied');
         }
         
@@ -117,7 +118,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
                 Addressbook_Controller_Contact::getInstance()->delete($contact);
             }
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            Tinebase_Exception::log($tead);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
             throw new DAV\Exception\Forbidden('Access denied');
         }
     }
@@ -258,7 +260,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     {
         if (get_class($this->_converter) == 'Addressbook_Convert_Contact_VCard_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Addressbook_Convert_Contact_VCard_Factory for supported clients.");
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . " update by generic client not allowed. See Addressbook_Convert_Contact_VCard_Factory for supported clients.");
             throw new DAV\Exception\Forbidden('Update denied for unknow client');
         }
         
@@ -269,7 +272,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         try {
             $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact, false);
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            Tinebase_Exception::log($tead);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
             throw new DAV\Exception\Forbidden('Access denied');
         }
         $this->_vcard   = null;
@@ -305,7 +309,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
             try {
                 $this->_contact = Addressbook_Controller_Contact::getInstance()->get($id);
             } catch (Tinebase_Exception_AccessDenied $tead) {
-                Tinebase_Exception::log($tead);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
                 throw new DAV\Exception\Forbidden('Access denied');
             }
         }

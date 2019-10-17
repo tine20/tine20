@@ -1543,8 +1543,8 @@ msgid "Last Conflict"
 msgstr "letzter Konflikt"
 
 #: js/widgets/dialog/ImportDialog.js:501
-msgid "Conflict is resolved"
-msgstr "Konflikt ist aufgelöst"
+msgid "Resolve this conflict"
+msgstr "Diesen Konflikt auflösen"
 
 #: js/widgets/dialog/ImportDialog.js:506
 msgid "Resolve all conflicts"

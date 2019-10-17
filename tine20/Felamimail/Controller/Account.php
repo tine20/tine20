@@ -1181,7 +1181,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Could not create system account for user ' . $_account->accountLoginName
-                . '. No email address given.');
+                . '. No email address or imapUser given.');
         }
 
         return null;
@@ -1469,7 +1469,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         
         // add user data
         $_account->email  = $_email;
-        if ($_account->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+        if (empty($_account->name) && $_account->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
             $_account->name = $_email;
         }
         $_account->from = $_user->accountFullName;
@@ -1528,5 +1528,33 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR));
 
         return $filter;
+    }
+
+    public function updateSystemAccount(Tinebase_Model_FullUser $user, Tinebase_Model_FullUser $oldUser)
+    {
+        $checks = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
+        $systemaccount = null;
+        $updateSystemAccount = false;
+        if ($user->accountFullName !== $oldUser->accountFullName) {
+            $systemaccount = Felamimail_Controller_Account::getInstance()->getSystemAccount($user);
+            if ($systemaccount) {
+                $systemaccount->from = $user->accountFullName;
+                $updateSystemAccount = true;
+            }
+        }
+        if ($user->accountEmailAddress !== $oldUser->accountEmailAddress) {
+            if (! $systemaccount) {
+                $systemaccount = Felamimail_Controller_Account::getInstance()->getSystemAccount($user);
+            }
+            if ($systemaccount && $systemaccount->name === $oldUser->accountEmailAddress) {
+                $systemaccount->name = $user->accountEmailAddress;
+                $updateSystemAccount = true;
+            }
+        }
+
+        if ($updateSystemAccount) {
+            Felamimail_Controller_Account::getInstance()->update($systemaccount);
+        }
+        Felamimail_Controller_Account::getInstance()->doContainerACLChecks($checks);
     }
 }

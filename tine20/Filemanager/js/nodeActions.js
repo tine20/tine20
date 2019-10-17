@@ -332,6 +332,7 @@ Tine.Filemanager.nodeActions.Preview = {
 Tine.Filemanager.nodeActions.Publish = {
     app: 'Filemanager',
     allowMultiple: false,
+    requiredGrant: 'publishGrant',
     text: 'Publish', // _('Publish')
     disabled: true,
     iconCls: 'action_publish',
@@ -375,11 +376,7 @@ Tine.Filemanager.nodeActions.Publish = {
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
 
-        var enabled = !isFilterSelect
-            && records && records.length == 1
-            && window.lodash.get(records, '[0].data.account_grants.publishGrant', false);
-
-        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect, enabled);
+        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect);
     }
 };
 

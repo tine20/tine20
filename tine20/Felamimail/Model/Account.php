@@ -654,6 +654,13 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 
             if ($this->type === self::TYPE_SYSTEM || $this->type === self::TYPE_USER || $this->type === self::TYPE_USER_INTERNAL) {
                 $credentials = Tinebase_Core::getUserCredentialCache();
+                if (! $credentials) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                            ' No user credential cache found');
+                    }
+                    return false;
+                }
                 try {
                     $credentialsBackend->getCachedCredentials($credentials);
                 } catch (Exception $e) {

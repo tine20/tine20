@@ -183,14 +183,15 @@ Tine.Admin.init = function () {
                 children: [],
                 leaf: null,
                 expanded: true,
-                dataPanelType: "emailaccounts"
+                dataPanelType: "emailaccounts",
+                viewRight: 'emailaccounts'
             });
         }
 
         _.each(tree, function(item, idx) {
             item.pos = item.pos || (100 + 100 * idx);
         });
-        _.each(registeredItems, function(item) {
+            _.each(registeredItems, function(item) {
             // NOTE: too early for appMgr :-(
             var app = item.appName ? Tine.Tinebase.appMgr.get(item.appName) : null,
                 i18n = app ? app.i18n : translation;
@@ -263,10 +264,12 @@ Tine.Admin.init = function () {
         treePanel.setRootNode(treeRoot);
         
         var initialTree = getInitialTree(translation);
-        
-        for (var i = 0; i < initialTree.length; i += 1) {
-            // check view right
-            if (initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view_' + initialTree[i].viewRight, 'Admin')) {
+
+        for (var i = 0, rightSuffix; i < initialTree.length; i += 1) {
+            rightSuffix = String(initialTree[i].viewRight).replace(/^view_/, '');
+            if (rightSuffix !== 'undefined' && !(Tine.Tinebase.common.hasRight('view_' + rightSuffix, 'Admin')
+                || Tine.Tinebase.common.hasRight('manage_' + rightSuffix, 'Admin')
+            )) {
                 initialTree[i].hidden = true;
             }
             var node = new Ext.tree.AsyncTreeNode(initialTree[i]);

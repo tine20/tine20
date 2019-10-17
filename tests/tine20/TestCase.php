@@ -1014,4 +1014,28 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $this->_listsToDelete[] = $mailinglist;
         return $mailinglist;
     }
+
+    /**
+     * create user account
+     *
+     * @param array $data
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _createUserWithEmailAccount($data = null)
+    {
+        if ($data === null) {
+            $data = [
+                'accountLoginName'      => 'phpunitgeneric',
+                'accountEmailAddress'   => 'phpunitgeneric@' . TestServer::getPrimaryMailDomain(),
+                'imapUser' => new Tinebase_Model_EmailUser([
+                    'emailAddress' => 'phpunitgeneric@' . TestServer::getPrimaryMailDomain()
+                ])
+            ];
+        }
+        $pw = Tinebase_Record_Abstract::generateUID(16);
+        $account = Admin_Controller_User::getInstance()->create(self::getTestUser($data), $pw, $pw);
+        $this->_usernamesToDelete[] = $account->accountLoginName;
+
+        return $account;
+    }
 }

@@ -118,5 +118,4 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
         
         parent::setFromArray($_data);
     }
-    
 } 

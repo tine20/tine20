@@ -222,10 +222,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             // compute base uri
             self::$_server->setBaseUri($this->_request->getBaseUrl() . '/');
 
-            $tempDir = Tinebase_Core::getTempDir();
-            if (!empty($tempDir)) {
+            if (Tinebase_Core::isFilesystemAvailable()) {
                 self::$_server->addPlugin(
-                    new \Sabre\DAV\Locks\Plugin(new \Sabre\DAV\Locks\Backend\File($tempDir . '/webdav.lock'))
+                    new \Sabre\DAV\Locks\Plugin(
+                        new \Sabre\DAV\Locks\Backend\File('tine20://Tinebase/folders/shared/webdav.lock'))
                 );
             }
 

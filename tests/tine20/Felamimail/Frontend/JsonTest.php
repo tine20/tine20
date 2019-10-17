@@ -2315,6 +2315,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $result = $this->_json->searchMessages($filter, []);
         self::assertEquals(1, $result['totalcount']);
         $message = $result['results'][0];
+        self::assertNotEmpty($message['message_id'], 'message id missing from cached message ' . print_r($message, true));
         self::assertTrue(isset($message['fileLocations']));
         self::assertEquals(1, count($message['fileLocations']), 'did not get message file location: '
             . print_r($message, true));

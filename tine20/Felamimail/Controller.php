@@ -95,16 +95,11 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 }
                 break;
             case Admin_Event_UpdateAccount::class:
-                /** @var Tinebase_Event_User_CreatedAccount $_eventObject */
+                /** @var Admin_Event_UpdateAccount $_eventObject */
                 if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
                     ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
-                    if ($_eventObject->account->accountFullName !== $_eventObject->oldAccount->accountFullName) {
-                        $systemaccount = Felamimail_Controller_Account::getInstance()->getSystemAccount($_eventObject->account);
-                        $systemaccount->from = $_eventObject->account->accountFullName;
-                        $checks = Felamimail_Controller_Account::getInstance()->_doContainerACLChecks(false);
-                        Felamimail_Controller_Account::getInstance()->update($systemaccount);
-                        Felamimail_Controller_Account::getInstance()->_doContainerACLChecks($checks);
-                    }
+                    Felamimail_Controller_Account::getInstance()->updateSystemAccount(
+                        $_eventObject->account, $_eventObject->oldAccount);
                 }
                 break;
         }
@@ -117,5 +112,30 @@ class Felamimail_Controller extends Tinebase_Controller_Event
             $_account->imapUser = new Tinebase_Model_EmailUser(null, true);
             Felamimail_Controller_Account::getInstance()->addSystemAccount($_account, $pwd);
         }
+    }
+
+    public function truncateEmailCache()
+    {
+        $db = Tinebase_Core::getDb();
+
+        // disable fk checks
+        $db->query("SET FOREIGN_KEY_CHECKS=0");
+
+        $cacheTables = array(
+            'felamimail_cache_message',
+            'felamimail_cache_msg_flag',
+            'felamimail_cache_message_to',
+            'felamimail_cache_message_cc',
+            'felamimail_cache_message_bcc'
+        );
+
+        // truncate tables
+        foreach ($cacheTables as $table) {
+            $db->query("TRUNCATE TABLE " . $db->table_prefix . $table);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()
+                ->info(__METHOD__ . ' (' . __LINE__ . ') Truncated ' . $table . ' table');
+        }
+
+        $db->query("SET FOREIGN_KEY_CHECKS=1");
     }
 }

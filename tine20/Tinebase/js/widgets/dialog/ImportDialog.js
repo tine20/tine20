@@ -503,7 +503,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 onLoad: Ext.emptyFn,
                 listeners: {afterrender: function(t){t.refresh.hide();}},
                 items: [this.conflictIndexText = new Ext.Toolbar.TextItem({}), '->', {
-                    text: i18n._('Conflict is resolved'),
+                    text: i18n._('Resolve this conflict'),
                     xtype: 'splitbutton',
                     scope: this,
                     handler: this.onResolveConflict,

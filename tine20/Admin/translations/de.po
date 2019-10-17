@@ -1125,9 +1125,17 @@ msgstr ""
 msgid "manage shared tags"
 msgstr "Gemeinsame Tags verwalten"
 
+#: Acl/Rights.php:291
+msgid "view shared tags"
+msgstr "Gemeinsame Tags ansehen"
+
 #: Acl/Rights.php:232
 msgid "add, delete and edit shared tags"
 msgstr "Gemeinsame Tags anlegen, bearbeiten und löschen"
+
+#: Acl/Rights.php:232
+msgid "view shared tags list and details"
+msgstr "Gemeinsame Tags ansehen (Liste und Details)"
 
 #: Acl/Rights.php:235
 msgid "manage computers"
