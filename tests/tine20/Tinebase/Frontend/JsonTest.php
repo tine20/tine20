@@ -173,13 +173,13 @@ class Tinebase_Frontend_JsonTest extends TestCase
     {
         // de_LU -> de
         $this->_instance->setLocale('de_LU', FALSE, FALSE);
-        $this->assertEquals('de', (string)Zend_Registry::get('locale'), 'Fallback to generic german did not succseed');
+        $this->assertEquals('de', (string)Zend_Registry::get('locale'), 'Fallback to generic german did not succeed');
         
         $this->_instance->setLocale('zh', FALSE, FALSE);
-        $this->assertEquals('zh_CN', (string)Zend_Registry::get('locale'), 'Fallback to simplified chinese did not succseed');
+        $this->assertEquals('zh_CN', (string)Zend_Registry::get('locale'), 'Fallback to simplified chinese did not succeed');
         
         $this->_instance->setLocale('foo_bar', FALSE, FALSE);
-        $this->assertEquals('en', (string)Zend_Registry::get('locale'), 'Exception fallback to english did not succseed');
+        $this->assertEquals('en', (string)Zend_Registry::get('locale'), 'Exception fallback to english did not succeed');
     }
     
     /**

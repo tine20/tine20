@@ -524,7 +524,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($authResult->isValid()) {
             $response = array(
                 'status'    => 'success',
-                'msg'       => 'authentication succseed',
+                'msg'       => 'authentication succeed',
                 //'loginUrl'  => 'someurl',
             );
         } else {
