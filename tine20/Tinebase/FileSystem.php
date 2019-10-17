@@ -3948,6 +3948,10 @@ class Tinebase_FileSystem implements
             return true;
         }
 
+        if (!Tinebase_Core::acquireMultiServerLock(__METHOD__)) {
+            return true;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' updating... ');
 
