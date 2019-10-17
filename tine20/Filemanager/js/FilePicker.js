@@ -260,7 +260,20 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             return true;
         }
 
-        return node.get('type') == this.constraint;
+        if (_.isString(this.constraint)) {
+            if (this.constraint.match(/file|folder/)) {
+                return node.get('type') === this.constraint;
+            }
+
+            var ext = node.get('path').split('.').pop(),
+                allowedExts = this.constraint.split('|');
+
+            return _.indexOf(allowedExts, ext) >= 0;
+        }
+
+        if (_.isRegExp(this.constraint)) {
+            return node.get('path').match(this.constraint);
+        }
     },
 
     /**
