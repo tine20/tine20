@@ -33,17 +33,27 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      */
     protected $_recursiveResolvingProtection = [];
 
+    protected $_recordClass = null;
+
+    public function __construct($recordClass = null)
+    {
+        if ($recordClass) {
+            $this->_recordClass = $recordClass;
+        }
+    }
+
     /**
      * converts external format to Tinebase_Record_Interface
      *
      * @param  mixed $_blob the input data to parse
      * @param  Tinebase_Record_Interface $_record update existing record
      * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_NotImplemented
      */
     public function toTine20Model($_blob, Tinebase_Record_Interface $_record = NULL)
     {
-        throw new Tinebase_Exception_NotImplemented('From json to record is not implemented yet');
+        $record = new $this->_recordClass([], true);
+        $record->setFromJsonInUsersTimezone($_blob);
+        return $record;
     }
     
     /**

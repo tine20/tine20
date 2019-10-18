@@ -241,9 +241,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveMessage($recordData)
     {
-        $message = new Felamimail_Model_Message();
-        $message->setFromJsonInUsersTimezone($recordData);
-        
+        $message = $this->_jsonToRecord($recordData, Felamimail_Model_Message::class);
         $result = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
         $result = $this->_recordToJson($result);
         
@@ -259,9 +257,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveMessageInFolder($folderName, $recordData)
     {
-        $message = new Felamimail_Model_Message();
-        $message->setFromJsonInUsersTimezone($recordData);
-        
+        $message = $this->_jsonToRecord($recordData, Felamimail_Model_Message::class);
         $result = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($folderName, $message);
         return $this->_recordToJson($result);
     }
@@ -274,18 +270,21 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveDraft($recordData)
     {
-        $message = new Felamimail_Model_Message();
-        $message->setFromJsonInUsersTimezone($recordData);
+        $message = $this->_jsonToRecord($recordData, Felamimail_Model_Message::class);
         $result = Felamimail_Controller_Message::getInstance()->saveDraft($message);
-        if ($result) {
-            return $this->_recordToJson($result);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Draft could not be saved ... returning original message'
-            );
+        return $this->_recordToJson($result);
+    }
 
-            return $recordData;
-        }
+    /**
+     * @param integer $uid
+     * @param string $accountid
+     * @return array
+     */
+    public function deleteDraft($uid, $accountid)
+    {
+        return [
+            'success' => Felamimail_Controller_Message::getInstance()->deleteDraft($uid, $accountid)
+        ];
     }
 
     /**

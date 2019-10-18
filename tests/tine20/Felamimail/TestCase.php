@@ -260,7 +260,7 @@ abstract class Felamimail_TestCase extends TestCase
      * @param string $_folderName
      * @return string message data
      */
-    protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX')
+    protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX', $_doAssertions = true)
     {
         // give server some time to send and receive messages
         sleep(1);
@@ -273,8 +273,10 @@ abstract class Felamimail_TestCase extends TestCase
                 $message = $mail;
             }
         }
-        $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
-        $this->assertTrue(!empty($message), 'Message not found');
+        if ($_doAssertions) {
+            $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
+            $this->assertTrue(!empty($message), 'Message not found');
+        }
         return $message;
     }
 
