@@ -1434,7 +1434,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $data['deleted_time'] = new Zend_Db_Expr('NOW()');
         }
         if (isset($schema['deleted_by'])) {
-            $data['deleted_by'] = Tinebase_Core::getUser()->getId();
+            $data['deleted_by'] = is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : Tinebase_Core::getUser();
         }
 
         return $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
