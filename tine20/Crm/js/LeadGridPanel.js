@@ -118,6 +118,7 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: this.partnerRenderer},
                 {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'lead_customer', width: 175, sortable: false, renderer: this.customerRenderer},
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadstates')},
+                {header: this.app.i18n._('Leadtype'), id: 'leadtype_id', dataIndex: 'leadtype_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadtypes')},
                 {header: this.app.i18n._('Leadsource'), id: 'leadsource_id', dataIndex: 'leadsource_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadsources')},
                 {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.ux.PercentRenderer },
                 {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.money },
