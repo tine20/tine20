@@ -589,7 +589,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (!this.accountId) {
                 var message = this.getMessageFromConfig(),
                     availableAccounts = this.accountCombo.store,
-                    fromEmail = message.get('from_email'),
+                    fromEmail = message ? message.get('from_email') : null,
                     fromAccountIdx = availableAccounts.find('email', fromEmail),
                     fromAccount = availableAccounts.getAt(fromAccountIdx),
                     folderId = message ? message.get('folder_id') : null,
