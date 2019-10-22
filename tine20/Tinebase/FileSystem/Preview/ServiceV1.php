@@ -48,7 +48,6 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost('config', json_encode($_config));
         $httpClient->setFileUpload($_filePath, 'file');
-
         return $this->_requestPreviews($httpClient, $synchronRequest);
     }
 
@@ -131,6 +130,9 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Got empty/non-json response');
                             }
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Last request: ' . $httpClient->getLastRequest());
+                            }
                         }
                         return false;
                     case 400:
@@ -138,6 +140,9 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                             Tinebase_Core::getLogger()->WARN(
                                 __METHOD__ . '::' . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getBody()
                             );
+                        }
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Last request: ' . $httpClient->getLastRequest());
                         }
                         throw new Tinebase_FileSystem_Preview_BadRequestException(
                             "Preview creation failed. Status Code: " . $response->getStatus(),
@@ -151,6 +156,9 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                                 __METHOD__ . '::' . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getBody()
                             );
                         }
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Last request: ' . $httpClient->getLastRequest());
+                        }
                         throw new Tinebase_FileSystem_Preview_BadRequestException(
                             "Preview creation failed. Status Code: " . $response->getStatus(),
                             $response->getStatus()
@@ -160,6 +168,9 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                             Tinebase_Core::getLogger()->notice(
                                 __METHOD__ . '::' . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getBody()
                             );
+                        }
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Last request: ' . $httpClient->getLastRequest());
                         }
                         if ($synchronRequest) {
                             return false;
