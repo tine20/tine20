@@ -1286,7 +1286,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             throw new Tinebase_Exception_Backend('could not fetch blob from master successfully: ' . $hash);
         }
 
-
         if (!is_dir(dirname($path))) {
             mkdir(dirname($path));
         }
@@ -1296,6 +1295,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             }
             throw new Tinebase_Exception_Backend('could not create file: ' . $path);
         }
+        $success = false;
         try {
             if (!stream_filter_append($fh, 'convert.base64-decode', STREAM_FILTER_WRITE)) {
                 throw new Tinebase_Exception_Backend('could not append stream filter');
@@ -1303,9 +1303,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             if (false === fwrite($fh, $response['data'])) {
                 throw new Tinebase_Exception_Backend('fetched blob from master could not written to disk: ' . $hash);
             }
+            $success = true;
         } finally {
             fclose($fh);
-            unlink($path);
+            if (!$success) {
+                unlink($path);
+            }
         }
     }
 
