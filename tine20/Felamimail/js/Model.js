@@ -45,6 +45,7 @@ Tine.Felamimail.Model.getAvailableAccountTypes = function(withSystem) {
  */ 
 Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'id' },
+      { name: 'messageuid' },
       { name: 'account_id' },
       { name: 'subject' },
       { name: 'from_email' },

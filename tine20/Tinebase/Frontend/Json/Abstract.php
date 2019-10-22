@@ -282,9 +282,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _save($_recordData, Tinebase_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id', $_additionalArguments = array())
     {
         $modelClass = (preg_match('/_Model_/', $_modelName)) ? $_modelName : $this->_applicationName . "_Model_" . $_modelName;
-        $record = new $modelClass(array(), TRUE);
-        $record->setFromJsonInUsersTimezone($_recordData);
-        
+        $record = $this->_jsonToRecord($_recordData, $modelClass);
+
         // if there are dependent records, set the timezone of them and add them to a recordSet
         $this->_dependentRecordsFromJson($record);
 
@@ -484,6 +483,21 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $converter = Tinebase_Convert_Factory::factory($_record);
         $result = $converter->fromTine20Model($_record);
+
+        return $result;
+    }
+
+    /**
+     * returns record from json data
+     *
+     * @param array $_recordData
+     * @param string $modelName
+     * @return Tinebase_Record_Interface
+     */
+    protected function _jsonToRecord($_recordData, $modelName)
+    {
+        $converter = Tinebase_Convert_Factory::factory($modelName);
+        $result = $converter->toTine20Model($_recordData);
 
         return $result;
     }
