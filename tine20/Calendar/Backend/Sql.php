@@ -987,6 +987,46 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param array $eventIds
      * @return array
      */
+    public function resolveToBaseEventsEventually(array $eventIds, $containerId)
+    {
+        if (count($eventIds) === 0) {
+            return array();
+        }
+
+        $containerId = (string)$containerId;
+        array_walk($eventIds, function (&$val) { if (!is_string($val)) { $val = (string)$val; }});
+
+        // we might want to return is_deleted = true here! so no condition to filter deleted events!
+        // select e.id, e.base_event_id, be.container_id, at.display_container_id
+        // from tine20_cal_events as e left join tine20_cal_events as be on e.base_event_id = be.id
+        // left join tine20_cal_attende as at on be.id = at.calid and at.display_contain_id = ?
+        $events = $this->_db->query('SELECT e.id, e.base_event_id, be.container_id, at.displaycontainer_id FROM ' .
+            $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) . ' AS e LEFT JOIN ' .
+            $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) .
+            ' AS be ON e.base_event_id = be.id LEFT JOIN ' .
+            $this->_db->quoteIdentifier($this->_tablePrefix . Calendar_Backend_Sql_Attendee::TABLENAME) .
+            ' AS at ON be.id = at.cal_event_id and at.displaycontainer_id = "' . $this->_db->quote($containerId) . '" '
+            . $this->_db->quoteInto('WHERE e.id IN (?)', $eventIds))->fetchAll(Zend_Db::FETCH_NUM);
+
+        $result = [];
+        foreach ($events as $event) {
+            // be.container_id or at.displaycontainer_id
+            if ($event[2] === $containerId || $event[3] === $containerId) {
+                $result[$event[1]] = $event[1];
+            } else {
+                $result[$event[0]] = $event[0];
+            }
+        }
+
+        return array_values($result);
+    }
+
+    /**
+     * takes event ids, filters out recuring events and returns only the uids of the base events of those event ids.
+     *
+     * @param array $eventIds
+     * @return array
+     */
     public function getUidOfBaseEvents(array $eventIds)
     {
         if (count($eventIds) === 0) {
