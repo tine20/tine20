@@ -528,11 +528,11 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 continue;
             }
 
-            $uids = $backend->getUidOfBaseEvents(array_keys($value));
+            $ids = $backend->resolveToBaseEventsEventually(array_keys($value), $this->_container->getId());
 
             $newResult[$action] = array();
-            foreach($uids as $row) {
-                $newResult[$action][$row[0]] = $row[0] . $this->_suffix;
+            foreach($ids as $id) {
+                $newResult[$action][$id] = $id . $this->_suffix;
             }
         }
 
