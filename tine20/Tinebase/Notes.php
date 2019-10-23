@@ -198,12 +198,20 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         if (! is_string($recordModel)) {
             throw new Tinebase_Exception_AccessDenied('no explicit record model set in filter');
         }
-        
-        try {
-            $record = Tinebase_Core::getApplicationInstance($recordModel)->get($recordIdFilter->getValue());
-        } catch (Tinebase_Exception_AccessDenied $tead) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Do not fetch record notes because user has no read grant for container');
+
+        $recordId = $recordIdFilter->getValue();
+        if (empty($recordId)) {
             $recordIdFilter->setValue('');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' record ID is empty');
+        } else {
+            try {
+                Tinebase_Core::getApplicationInstance($recordModel)->get($recordId);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Do not fetch record notes because user has no read grant for container');
+                $recordIdFilter->setValue('');
+            }
         }
     }
     
