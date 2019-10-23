@@ -56,14 +56,14 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      * 
      * @var string
      */
-    protected static $_requestId;
+    protected static $_requestId = '-';
 
     /**
      * transaction id
      *
      * @var string
      */
-    protected static $_transactionId;
+    protected static $_transactionId = '-';
 
     /**
      * application start time
@@ -106,7 +106,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     {
         parent::__construct($format);
         
-        if (!self::$_requestId) {
+        if (!self::$_requestId || self::$_requestId === '-') {
             self::$_requestId = Tinebase_Record_Abstract::generateUID(5);
         }
         
@@ -167,7 +167,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
             $timelog .= ' ';
         }
 
-        return self::$_transactionId . ' ' . self::getUsername() . ' ' . $timelog . '- '
+        return self::$_requestId . ' ' . self::$_transactionId . ' ' . self::getUsername() . ' ' . $timelog . '- '
             . $this->_getFormattedOutput($output, $event);
     }
 
