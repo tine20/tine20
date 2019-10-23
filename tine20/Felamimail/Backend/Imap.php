@@ -32,7 +32,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     protected $_useUid;
     
     /**
-     * activate logging in IMAP protocal class?
+     * activate logging in IMAP protocol class?
      * 
      * NOTE: should be disabled by default as credentials might be logged 
      * 
@@ -80,9 +80,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $this->connectAndLogin($params);
         $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($account, $this);
 
-
         $folderToSelect = isset($params->folder) ? $params->folder : 'INBOX';
-        $selectParams = in_array('CONDSTORE', $capabilities['capabilities']) ? ['(CONDSTORE)'] : [];
+        $selectParams = $capabilities && in_array('CONDSTORE', $capabilities['capabilities']) ? ['(CONDSTORE)'] : [];
 
         try {
             $this->selectFolder($folderToSelect, $selectParams);
