@@ -344,9 +344,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function update(Tinebase_Record_Interface $_event, $_checkBusyConflicts = FALSE)
     {
-        if ($_event->recurid) {
-            throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
-        }
         if (! $_event->dtstart || ! $_event->dtend) {
             throw new Tinebase_Exception_Record_Validation('dtstart or dtend missing from event!');
         }
