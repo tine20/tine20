@@ -1256,7 +1256,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         /** @var \Zend\Diactoros\Request $request */
         $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
-        $body = (string)$request->getBody();
+        $body = Tinebase_Helper::mbConvertTo((string)$request->getBody());
         if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' request body: ' . $body);
         $reqXml = simplexml_load_string($body);
