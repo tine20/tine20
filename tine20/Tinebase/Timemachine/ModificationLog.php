@@ -1289,7 +1289,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         if (!is_dir(dirname($path))) {
             mkdir(dirname($path));
         }
-        if (!($fh = fopen($path, 'x'))) {
+        // no warning desired, we throw ourselves only if required below => @fopen
+        if (!($fh = @fopen($path, 'x'))) {
             if (is_file($path) && Tinebase_FileSystem::getInstance()->checkHashFile($hash)) {
                 return true;
             }
