@@ -167,17 +167,23 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             'CREATED'       => $_event->creation_time->getClone()->setTimezone('UTC'),
             'LAST-MODIFIED' => $lastModifiedDateTime->getClone()->setTimezone('UTC'),
             'DTSTAMP'       => Tinebase_DateTime::now(),
-            'UID'           => $event->uid,
+            'UID'           => (!$_mainEvent && $event->isRecurException()) ? $event->getId() : $event->uid,
         ));
         
         $vevent->add('SEQUENCE', $event->hasExternalOrganizer() ? $event->external_seq : $event->seq);
         
-        if ($event->isRecurException()) {
+        if (null !== $_mainEvent) {
+            if (! $event->isRecurException()) {
+                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('event ' . $event->getId() .
+                    'is not a recure exception though a mainEvent was passed along'));
+                return;
+            }
+
             $originalDtStart = $_event->getOriginalDtStart()->setTimezone($_event->originator_tz);
             
             $recurrenceId = $vevent->add('RECURRENCE-ID', $originalDtStart);
             
-            if ($_mainEvent && $_mainEvent->is_all_day_event == true) {
+            if ($_mainEvent->is_all_day_event == true) {
                 $recurrenceId['VALUE'] = 'DATE';
             }
         }
@@ -238,7 +244,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
         $class = $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL';
         $vevent->add('X-CALENDARSERVER-ACCESS', $class);
-        if (! $_event->isRecurException()) {
+        if (! $_mainEvent) {
             // add one time only
             $vcalendar->add('X-CALENDARSERVER-ACCESS', $class);
         }
