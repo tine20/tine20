@@ -492,11 +492,13 @@ Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations, glue
     return _.reduce(locations, function(text, location) {
         var model = _.isString(location.model) ? Tine.Tinebase.data.RecordMgr.get(location.model) : location.model,
             iconCls = model ? model.getIconCls() : '',
-            icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '';
+            icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '',
+            span = model ? '<span class="felamimail-location" ' +
+                'onclick="Tine.Felamimail.MessageFileButton.locationClickHandler(\'' + model.getPhpClassName() +
+                "','" + location.record_id + '\')">' + icon + '<span class="felamimail-location-text">'
+                + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>' : '';
 
-        return text.concat('<span class="felamimail-location" ' +
-            'onclick="Tine.Felamimail.MessageFileButton.locationClickHandler(\'' + model.getPhpClassName() + "','" + location.record_id + '\')">' + icon +
-            '<span class="felamimail-location-text">' + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>');
+        return text.concat(span);
     }, []).join(glue);
 };
 
