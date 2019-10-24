@@ -80,6 +80,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 40,
             ],
             'type' => [
+                // TODO make this a keyfield to get a better filter?
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 20,
                 self::LABEL => 'Type', // _('Type')
