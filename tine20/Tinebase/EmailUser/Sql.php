@@ -624,6 +624,10 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     public function copyUser(Tinebase_Model_FullUser $_user, $newId)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Copy email user for account ' . $_user->getId() . ' - new id: '
+            . $newId);
+
         $columns = $this->_db->query('show columns from ' . $this->_db->quoteIdentifier($this->_userTable))
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
@@ -637,14 +641,24 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             }
         }
 
+        // always unset id
+        if (false !== ($offset = array_search('id', $columns))) {
+            unset($columns[$offset]);
+        }
+
         $escapedColumns = $columns;
         array_walk($escapedColumns, function(&$val) { $val = $this->_db->quoteIdentifier($val); });
 
         $where = '';
         if (isset($this->_config['instanceName']) && $this->_config['instanceName'] &&
-                in_array('instanceName', $columns)) {
-            $where = ' AND ' . $this->_db->quoteIdentifier('instanceName') . $this->_db->quoteInto(' = ?',
+            in_array('instancename', $columns)) {
+            $where = ' AND ' . $this->_db->quoteIdentifier('instancename') . $this->_db->quoteInto(' = ?',
                     $this->_config['instanceName']);
+        } else {
+            if (in_array('client_idnr', $columns) && $this->_clientId) {
+                $where = ' AND ' . $this->_db->quoteIdentifier('client_idnr') . $this->_db->quoteInto(' = ?',
+                        $this->_clientId);
+            }
         }
 
         $query = 'INSERT INTO ' . $this->_db->quoteIdentifier($this->_userTable) . ' (' .
@@ -670,6 +684,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             ' FROM ' . $this->_db->quoteIdentifier($this->_userTable) . ' WHERE ' .
             $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . $this->_db->quoteInto(' = ?',
                 $_user->getId()) . $where;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . $query);
 
         $this->_db->query($query);
     }
