@@ -1293,14 +1293,14 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         var wholeDayAreaEl = Ext.get(this.wholeDayArea),
             wholeDayAreaHeight = this.computeAllDayAreaHeight(),
             wholeDayScrollerHeight = wholeDayAreaHeight,
-            maxAllowedHeight = Math.round(csize.height/3),
+            maxAllowedHeight = Math.round(csize.height/4),
             resizeEvent = {
                 wholeDayAreaHeight: wholeDayAreaHeight,
-                wholeDayScrollerHeight: wholeDayScrollerHeight,
+                wholeDayScrollerHeight: Math.min(wholeDayAreaHeight, maxAllowedHeight),
                 maxAllowedHeight: maxAllowedHeight
             };
 
-        wholeDayAreaEl.setHeight(Math.min(wholeDayAreaHeight, maxAllowedHeight));
+        wholeDayAreaEl.setHeight(wholeDayAreaHeight);
         this.fireEvent('onBeforeAllDayScrollerResize', this, resizeEvent);
 
         this.wholeDayScroller.setHeight(resizeEvent.wholeDayScrollerHeight);
