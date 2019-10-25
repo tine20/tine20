@@ -728,7 +728,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             renderTo: eventEls[0].down('div[class=' + bodyCls + ']'),
             width: event.ui.getEls()[0].getWidth() -12,
             height: Math.max(12, event.ui.getEls()[0].getHeight() -18),
-            style: 'background-color: transparent; background: 0: border: 0; position: absolute; top: 0px;',
+            style: 'background-color: transparent; background: 0: border: 0; position: absolute; top: 0px; font-weight: bold; color: ' + event.ui.colorSet.text + ';' ,
             value: this.newEventSummary,
             maxLength: 255,
             maxLengthText: this.app.i18n._('The summary must not be longer than 255 characters.'),
