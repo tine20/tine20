@@ -1834,7 +1834,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * Delete duplicate personal container without content.
      *
-     * e.g. php tine20.php --method=Tinebase.duplicatePersonalContainerCheck app=Addressbook.
+     * e.g. php tine20.php --method=Tinebase.duplicatePersonalContainerCheck app=Addressbook [-d]
      *
      * @param $opts
      * @throws Tinebase_Exception_AccessDenied
@@ -1847,7 +1847,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $this->_checkAdminRight();
         $args = $this->_parseArgs($opts, array('app'));
 
-        Tinebase_Container::getInstance()->deleteDuplicateContainer($args['app'], $opts->d);
+        $removeCount = Tinebase_Container::getInstance()->deleteDuplicateContainer($args['app'], $opts->d);
+        if ($opts->d) {
+            echo "Would remove " . $removeCount . " duplicates\n";
+        } else {
+            echo $removeCount . " duplicates removed\n";
+        }
     }
 
     public function repairTreeIsDeletedState($opts)

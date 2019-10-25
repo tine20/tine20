@@ -2271,11 +2271,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_SystemContainer
+     * @return integer
+     *
+     * TODO also check translated names
+     * TODO allow to move records into the older container
      */
     public function deleteDuplicateContainer($application, $dryrun = null)
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName($application);
-
 
         $filter = new Tinebase_Model_ContainerFilter([
             ['field' => 'type', 'operator' => 'equals', 'value' => 'personal'],
@@ -2288,7 +2291,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         Tinebase_Container::getInstance()->doSearchAclFilter(true);
 
-
+        $removeCount = 0;
         foreach ($containers as $container) {
             $duplicate = $containers->filter('name', $container['name']);
             $duplicate->sort('creation_time', 'ASC');
@@ -2316,8 +2319,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                                 . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' remove.');
 
                         }
+                        $removeCount++;
                     } else {
-
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                             . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' don´t remove, because in container exist records');
 
@@ -2326,6 +2329,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             }
             $containers->removeRecords($duplicate);
         }
+
+        return $removeCount;
     }
 
     public function getModel()
