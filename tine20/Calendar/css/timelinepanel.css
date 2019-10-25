@@ -1,11 +1,11 @@
 .cal-timelinepanel-header {
     height: 100%;
-    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    /*background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;*/
     overflow-y: scroll;
 }
 
 .cal-timelinepanel-header-label {
-    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    /*background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;*/
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;

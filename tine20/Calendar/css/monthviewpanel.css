@@ -45,10 +45,9 @@
     /*cursor: pointer; see ticket #1484*/
 }
 
-.cal-monthview-inner-header,
-cal-monthview-wkcell-header {
+.cal-monthview-inner-header {
     position: relative;
-    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    /*background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;*/
     height: 23px;
 }
 
