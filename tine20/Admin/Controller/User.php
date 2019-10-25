@@ -371,16 +371,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Exception::log($e);
             throw $e;
         }
-        
+
+        if (!empty($_password)) {
+            $this->setAccountPassword($user, $_password, $_passwordRepeat);
+        }
+
         $event = new Admin_Event_AddAccount(array(
             'account' => $user,
             'pwd'     => $_password,
         ));
         Tinebase_Event::fireEvent($event);
-
-        if (!empty($_password)) {
-            $this->setAccountPassword($user, $_password, $_passwordRepeat);
-        }
 
         return $user;
     }
