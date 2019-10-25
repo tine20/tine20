@@ -672,7 +672,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $this->addGrantsSql($select, $accountId, $grant);
         
         if ($meta['recordClass']) {
-            $select->where("{$this->_db->quoteIdentifier('container.model')} = ?", $meta['recordClass']);
+            // TODO needs fixing, you dont get container by application name, maybe by models (yet maybe we want to have
+            //      containers containing multiple models at some point? ... needs a proper uniqueness here!)
+            // TODO we also might fix (or remove) createPersonalFolder for Addressbook + Calendar as they always create Contact/Event containers
+            if (in_array($meta['recordClass'], ['Addressbook_Model_List', 'Calendar_Model_Poll'])) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' FIXME: Lists+Contacts and Events+Polls share the containers! Implement multi-model containers');
+            } else {
+                $select->where("{$this->_db->quoteIdentifier('container.model')} = ?", $meta['recordClass']);
+            }
         }
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);

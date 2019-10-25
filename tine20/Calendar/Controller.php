@@ -359,7 +359,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
+     * @param mixed[int|Tinebase_Model_User] $_account   the account object
      * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      * 
      * @todo use Tinebase_Container::getDefaultContainer

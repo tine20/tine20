@@ -1024,13 +1024,30 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _createUserWithEmailAccount($data = null)
     {
         if ($data === null) {
-            $data = [
-                'accountLoginName'      => 'phpunitgeneric',
-                'accountEmailAddress'   => 'phpunitgeneric@' . TestServer::getPrimaryMailDomain(),
-                'imapUser' => new Tinebase_Model_EmailUser([
-                    'emailAddress' => 'phpunitgeneric@' . TestServer::getPrimaryMailDomain()
-                ])
-            ];
+            $data = $this->_getUserData(true);
+        }
+        return $this->_createUser($data);
+    }
+
+    protected function _getUserData($withEmail = false)
+    {
+        $username = 'phpunit_' . Tinebase_Record_Abstract::generateUID(5);
+        $data = [
+            'accountLoginName'      => $username,
+            'accountEmailAddress'   => $username . '@' . TestServer::getPrimaryMailDomain(),
+        ];
+        if ($withEmail) {
+            $data['imapUser'] = new Tinebase_Model_EmailUser([
+                'emailAddress' => $username . '@' . TestServer::getPrimaryMailDomain()
+            ]);
+        }
+        return $data;
+    }
+
+    protected function _createUser($data = null)
+    {
+        if ($data === null) {
+            $data = $this->_getUserData();
         }
         $pw = Tinebase_Record_Abstract::generateUID(16);
         $account = Admin_Controller_User::getInstance()->create(self::getTestUser($data), $pw, $pw);
