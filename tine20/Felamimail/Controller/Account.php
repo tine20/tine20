@@ -1170,8 +1170,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             // set as default account preference
             Tinebase_Core::getPreference($this->_applicationName)->setValueForUser(
                 Felamimail_Preference::DEFAULTACCOUNT, $systemAccount->getId(), $_account->getId(), true);
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Created new system account "' . $systemAccount->name . '".');
 
             // just for unused variable check:
@@ -1179,7 +1179,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
             return $systemAccount;
         } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Could not create system account for user ' . $_account->accountLoginName
                 . '. No email address or imapUser given.');
         }

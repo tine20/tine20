@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
@@ -161,7 +156,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
 
-        $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
+        Tinebase_Container::getInstance()->getContainerById($container['id']);
     }
     
     /**
@@ -190,5 +185,28 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
         $this->assertEquals($container['name'], $result['results'][0]['name']);
         $this->assertTrue(isset($result['results'][0]['account_grants']['readGrant']), 'account_grants missing');
         $this->assertTrue(isset($result['results'][0]['ownerContact']['email']), 'ownerContact missing');
+    }
+
+    public function testDuplicateContainerOnGetContainer()
+    {
+        // create new user
+        $user = $this->_createUser();
+        Tinebase_Core::setUser($user);
+
+        $container1 = $this->_backend->getContainer(Addressbook_Model_Contact::class,
+            Tinebase_Model_Container::TYPE_PERSONAL,
+            $user->getId());
+
+        self::assertEquals(1, count($container1));
+        self::assertEquals(Addressbook_Model_Contact::class, $container1[0]['model']);
+
+        $container2 = $this->_backend->getContainer(Addressbook_Model_List::class,
+            Tinebase_Model_Container::TYPE_PERSONAL,
+            $user->getId());
+
+        self::assertTrue(is_array($container2));
+        self::assertEquals(1, count($container2), 'no new container should be created');
+        self::assertEquals($container1, $container2, 'no new container should be created: '
+            . print_r($container2, true));
     }
 }
