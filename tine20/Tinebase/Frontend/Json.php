@@ -537,7 +537,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function login($username, $password, $securitycode = null, $otp = null)
     {
-        Tinebase_Core::startCoreSession();
+        try {
+            Tinebase_Core::startCoreSession();
+        } catch (Zend_Session_Exception $zse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not start session: ' . $zse->getMessage());
+            }
+            return array(
+                'success'      => false,
+                'errorMessage' => "Could not start session!",
+            );
+        }
         
         if (is_array(($response = $this->_getCaptchaResponse($securitycode)))) {
             return $response;
