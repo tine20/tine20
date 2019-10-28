@@ -197,7 +197,7 @@ class TestServer
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Script name: ' . $_SERVER['SCRIPT_NAME']);
         
         $cmd = preg_replace(array(
-            '@' . preg_quote($_SERVER['SCRIPT_NAME']) . '@',
+            '@' . preg_quote($_SERVER['SCRIPT_NAME'], '@') . '@',
             '/--stderr /',
             '/--colors{0,1} /',
             '/--verbose /',
