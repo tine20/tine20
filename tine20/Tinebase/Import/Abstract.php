@@ -639,9 +639,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $unreplaced = $targetField = $field['targetFieldData'];
         $recordArray = $relation['related_record'];
         foreach ($recordArray as $key => $value) {
-            if (preg_match('/' . preg_quote($key) . '/', $targetField) && is_scalar($value)) {
-                $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
-                $unreplaced = preg_replace('/^[, ]*' . preg_quote($key) . '/', '', $unreplaced);
+            if (preg_match('/' . preg_quote($key, '/') . '/', $targetField) && is_scalar($value)) {
+                $targetField = preg_replace('/' . preg_quote($key, '/') . '/', $value, $targetField);
+                $unreplaced = preg_replace('/^[, ]*' . preg_quote($key, '/') . '/', '', $unreplaced);
             }
         }
 
@@ -734,7 +734,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
 
         // add more data for this relation if available
         foreach ($data as $key => $value) {
-            $regex = '/^' . preg_quote($relationType) . '_/';
+            $regex = '/^' . preg_quote($relationType, '/') . '_/';
             if (preg_match($regex, $key)) {
                 $relatedField = preg_replace($regex, '', $key);
                 $recordArray[$relatedField] = trim($value);

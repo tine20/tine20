@@ -670,7 +670,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $basePath = $this->_backend->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
         $basePath .= '/folders';
 
-        return preg_replace('@^' . preg_quote($basePath) . '@', '', $_path);
+        return preg_replace('@^' . preg_quote($basePath, '@') . '@', '', $_path);
     }
 
     /**
