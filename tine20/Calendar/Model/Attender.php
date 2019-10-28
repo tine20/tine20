@@ -488,7 +488,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 // does a list with this name exist?
                 if ( ! $attendeeId &&
                     isset($smtpConfig['primarydomain']) && 
-                    preg_match('/(?P<localName>.*)@' . preg_quote($smtpConfig['primarydomain']) . '$/', $newAttendee['email'], $matches)
+                    preg_match('/(?P<localName>.*)@' . preg_quote($smtpConfig['primarydomain'], '/') . '$/', $newAttendee['email'], $matches)
                 ) {
                     $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
                         array('field' => 'name',       'operator' => 'equals', 'value' => $matches['localName']),

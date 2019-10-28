@@ -475,7 +475,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $parent = Tinebase_FileSystem::getInstance()->stat($dir);
         $match = null;
         $matchVersion = null;
-        $fileNameRegex = '/^' . preg_quote($startsWith) . '(-v[\.\d]+)?' . preg_quote($endsWith) . '$/';
+        $fileNameRegex = '/^' . preg_quote($startsWith, '/') . '(-v[\.\d]+)?' . preg_quote($endsWith, '/') . '$/';
 
         /** @var Tinebase_Model_Tree_Node $node */
         foreach (Tinebase_FileSystem::getInstance()->getTreeNodeChildren($parent) as $node) {

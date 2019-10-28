@@ -512,7 +512,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         foreach ($candidates as $candidate) {
             try {
                 $exceptions = self::getExceptionsByCandidate($_events, $candidate);
-                
                 $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($candidate, $exceptions, $_from, $_until);
                 foreach ($recurSet as $event) {
                     $_events->addRecord($event);
@@ -534,7 +533,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 
     public static function getExceptionsByCandidate($_events, $_candidate)
     {
-        return $_events->filter('recurid', "/^".preg_quote($_candidate->uid)."-.*/", TRUE);
+        return $_events->filter('recurid', "/^".preg_quote($_candidate->uid, '/')."-.*/", TRUE);
     }
     
     /**
