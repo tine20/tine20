@@ -122,7 +122,7 @@ abstract class Felamimail_TestCase extends TestCase
 
         Felamimail_Controller_Account::destroyInstance();
 
-        // get (or create) test accout
+        // get (or create) test account
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         if ($this->_account === null) {
             $this->markTestSkipped('no account found');
@@ -449,6 +449,15 @@ abstract class Felamimail_TestCase extends TestCase
         return $resultSet;
     }
 
+    /**
+     * @param bool $sendgrant
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
     protected function _createSharedAccount($sendgrant = true)
     {
         $sharedAccountData = Admin_JsonTest::getSharedAccountData($sendgrant);
@@ -457,6 +466,30 @@ abstract class Felamimail_TestCase extends TestCase
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_accountsToClear[] = $sharedAccount;
         return $sharedAccount;
+    }
+
+    /**
+     * @param Tinebase_Model_FullUser $user
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _createUserInternalAccount(Tinebase_Model_FullUser $user)
+    {
+        $accountData = $accountdata = [
+            'name' => 'unittest user internal account',
+            'email' => 'myinternal@' . TestServer::getPrimaryMailDomain(),
+            'type' => Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            'user_id' => $user->getId(),
+        ];
+        $internalAccount = Admin_Controller_EmailAccount::getInstance()->create(new Felamimail_Model_Account($accountData));
+        // we need to commit so imap user is in imap db
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_accountsToClear[] = $internalAccount;
+        return $internalAccount;
     }
 
     /**

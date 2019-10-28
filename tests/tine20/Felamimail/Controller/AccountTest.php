@@ -390,4 +390,16 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             self::assertEquals('User is not allowed to send a message with this account', $tead->getMessage());
         }
     }
+
+    public function testCreateUserInternalAccount()
+    {
+        $scleverExtraAccount = $this->_createUserInternalAccount($this->_personas['sclever']);
+        $json = new Felamimail_Frontend_Json();
+        $result = $json->searchAccounts([]);
+        foreach ($result['results'] as $account) {
+            if ($scleverExtraAccount->getId() === $account['id']) {
+                self::fail('should not find sclevers account! ' . print_r($account, true));
+            }
+        }
+    }
 }
