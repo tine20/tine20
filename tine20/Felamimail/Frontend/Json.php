@@ -465,7 +465,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_SYSTEM,
             ])) {
-                $accounts['results'][$idx] = $this->getAccount($account['id']);
+                $fullAccount = $this->getAccount($account['id']);
+                $this->_reloadFolderCacheOnPrimaryAccount($fullAccount);
+                $accounts['results'][$idx] = $fullAccount;
             } else {
                 unset($accounts['results'][$idx]);
                 $accounts['totalcount']--;
@@ -475,6 +477,20 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $accounts['results'] = array_values($accounts['results']);
 
         return $accounts;
+    }
+
+    /**
+     * reload folder cache on primary account
+     *
+     * @param $account
+     */
+    protected function _reloadFolderCacheOnPrimaryAccount($account)
+    {
+        if (Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} !== $account['id']) {
+            return;
+        }
+
+        $this->updateFolderCache($account['id'], '');
     }
     
     /**

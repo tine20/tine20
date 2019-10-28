@@ -402,4 +402,22 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             }
         }
     }
+
+    public function testCreateNewUserAccountWithINBOX()
+    {
+        $this->_testNeedsTransaction();
+
+        $user = $this->_createUserWithEmailAccount();
+        Tinebase_Core::setUser($user);
+        $json = new Felamimail_Frontend_Json();
+        $result = $json->searchAccounts([]);
+        self::assertEquals(1, $result['totalcount']);
+        $account = $result['results'][0];
+        $folders = $json->searchFolders([
+            ['field' => 'account_id', 'operator' => 'equals', 'value' => $account['id']],
+            ['field' => 'globalname', 'operator' => 'equals', 'value' => ''],
+        ]);
+        self::assertEquals(5, $folders['totalcount'], 'should find 5 initial folders. got: '
+            . print_r($folders, true));
+    }
 }
