@@ -354,11 +354,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             . ' Setting default grants ...');
 
         $record->grants = new Tinebase_Record_RecordSet($this->_grantsModel);
+        $userId = (in_array($record->type , [
+            Felamimail_Model_Account::TYPE_SYSTEM,
+            Felamimail_Model_Account::TYPE_USER,
+            Felamimail_Model_Account::TYPE_USER_INTERNAL
+        ])) ? $record->user_id : Tinebase_Core::getUser()->getId();
         /** @var Tinebase_Model_Grants $grant */
         $grant = new $this->_grantsModel([
             'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            'account_id'   => ($record->type === Felamimail_Model_Account::TYPE_SYSTEM || $record->type ===
-                Felamimail_Model_Account::TYPE_USER) ? $record->user_id : Tinebase_Core::getUser()->getId(),
+            'account_id'   => $userId,
             'record_id'    => $record->getId(),
         ]);
         $grant->sanitizeAccountIdAndFillWithAllGrants();
