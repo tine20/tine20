@@ -657,7 +657,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                         __METHOD__ . '::' . __LINE__ . ' Testing if password is part of username "' . $regex . '"');
                     
                     if (! empty($password)) {
-                        $result = preg_match('/' . preg_quote($password) . '/i', $regex) ?
+                        $result = preg_match('/' . preg_quote($password, '/') . '/i', $regex) ?
                             $description :
                             true;
                     }
