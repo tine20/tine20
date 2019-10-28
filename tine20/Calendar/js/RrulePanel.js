@@ -218,7 +218,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             rendered = _.get(this, 'activeRuleCard.rendered', false),
             rrule = rendered ? this.activeRuleCard.getRule() : this.rrule;
         
-        if ((! this.rrule && rrule) || !this.record.data.creation_time) {
+        if (rrule && (! this.rrule || !this.record.data.creation_time)) {
             // mark as new rule to avoid series confirm dlg
             rrule.newrule = true;
         }
