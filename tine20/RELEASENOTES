@@ -2,8 +2,8 @@
 TINE 2.0 RELEASENOTES
 =====================
                     
-  Release:     TBA (2020.11)
-  Last change: 2019-04-26
+  Release:     Anton (2019.11)
+  Last change: 2019-10-28
 
 #SUPPORTED BROWSERS
 ---
@@ -36,3 +36,68 @@ This requires either MySQL 5.7.7+ or MariaDB 10.2.2+ with default settings. Earl
     innodb_file_per_table = 'ON'
 The conversion script will test these settings and abort if prerequisites are not met.
 the CLI method to convert to utf8mb4 is "setup.php --migrateUtf8mb4"
+
+### New Layout (Flat design)
+
+### "Prevent Data-Loss" check in edit dialog
+
+### Improved JSON-Logger (for Elastic Stack)
+
+### Improved Sentry-Integration
+
+### Improved key-bindings in grid panels
+
+#ADDRESSBOOK
+---
+
+### Support VCard "CardBook" client (Thunderbird Addon)
+
+#FELAMIMAIL
+---
+
+### New Preference "mark as read"
+
+### Auto-Save Drafts
+
+### Support of multiple Signatures for each account
+
+### "File as" (file locations) for emails (for example as record attachements or in fileamanger)
+
+#GDPR
+---
+
+### New GDPR Module
+
+#CALENDAR
+---
+
+### Support for "Fantastical" client
+
+#ADMIN
+---
+
+### E-Mail-Account Administration
+- Shared Accounts (with grants for groups/users/roles)
+- Mailinglists
+- multiple system account for each user
+- Sieve management for all accounts
+- and more
+
+### checkbox for PW change
+
+#HUMAN RESOURCES
+---
+
+### Workingtime reports
+
+TODO add more?
+
+#CRM / PROJECTS
+---
+
+### Add Projects to Leads migration script
+
+#FILEMANAGER
+---
+
+### Show previews of EML Files and allow to open them in Felamimail
