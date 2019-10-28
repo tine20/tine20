@@ -176,17 +176,17 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
 
         $stmt = $db->query('SELECT ev.id, ev.seq, ev.base_event_id FROM ' . SQL_TABLE_PREFIX . 'cal_events AS ev WHERE ev.is_deleted = 0 AND ' .
             /*ev.recurid IS NULL AND*/' (ev.container_id = ' . $db->quote($node->getId()) . ' OR ev.id IN (
-            SELECT cal_event_id FROM ' . SQL_TABLE_PREFIX . 'cal_attendee WHERE displaycontainer_id = ' . $db->quote($node->getId()) . ')) GROUP BY ev.id');
+            SELECT cal_event_id FROM ' . SQL_TABLE_PREFIX . 'cal_attendee WHERE displaycontainer_id = ' . $db->quote($node->getId()) . '))');
 
         $result = $stmt->fetchAll();
 
         $baseEvents = [];
-        array_walk($result, function($val) use($baseEvents) {
+        array_walk($result, function($val) use(&$baseEvents) {
             if (empty($val['base_event_id'])) {
                 $baseEvents[$val['id']] = $val;
             }
         });
-        array_walk($result, function($val) use($baseEvents) {
+        array_walk($result, function($val) use(&$baseEvents) {
             if (!empty($val['base_event_id']) && !isset($baseEvents[$val['base_event_id']])) {
                 $baseEvents[$val['id']] = $val;
             }
