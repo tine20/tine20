@@ -179,7 +179,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $defaults = array(
             // tine record fields
-            'priority'             => 'NORMAL',
+            'priority'             => Tasks_Model_Priority::NORMAL,
             'percent'              => 70,
             'due'                  => Tinebase_DateTime::now()->addMonth(1),
             'summary'              => 'demo task',
@@ -261,35 +261,35 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'due' => $this->_nextTuesday, 
             'summary' => 'Release Test',
             'organizer' => $organizer ,
-            'priority' => 'HIGH'
+            'priority' => Tasks_Model_Priority::HIGH
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 80 : (($state < 0) ? 100 : 0),
             'due' => $this->_nextFriday, 
             'summary' => 'Pre- Production Tests',
             'organizer' => $organizer,
-            'priority' => 'URGENT'
+            'priority' => Tasks_Model_Priority::URGENT
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 50 : (($state < 0) ? 100 : 0),
             'due' => $this->_nextFriday, 
             'summary' => 'Erstellung Schulungsunterlagen',
             'organizer' => $organizer,
-            'priority' => 'LOW'
+            'priority' => Tasks_Model_Priority::LOW
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 10 : (($state < 0) ? 100 : 0),
             'due' => $this->_nextWednesday, 
             'summary' => 'Newsletter',
             'organizer' => $organizer,
-            'priority' => 'HIGH'
+            'priority' => Tasks_Model_Priority::HIGH
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 20 : (($state < 0) ? 100 : 0),
             'due' => $this->_nextMonday, 
             'summary' => 'Projektierung',
             'organizer' => $organizer,
-            'priority' => 'LOW'
+            'priority' => Tasks_Model_Priority::LOW
         );
         
         for ($i = 0; $i < (count($tasks) - 1); $i++) {
