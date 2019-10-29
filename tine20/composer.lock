@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "clue/socket-raw",
-            "version": "v1.3.0",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/clue/php-socket-raw.git",
-                "reference": "1f9060a973e2bc50389a89d9d2bdb64750fcc8f1"
+                "reference": "00ab102d061f6cdb895e79dd4d69140c7bda31cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-socket-raw/zipball/1f9060a973e2bc50389a89d9d2bdb64750fcc8f1",
-                "reference": "1f9060a973e2bc50389a89d9d2bdb64750fcc8f1",
+                "url": "https://api.github.com/repos/clue/php-socket-raw/zipball/00ab102d061f6cdb895e79dd4d69140c7bda31cc",
+                "reference": "00ab102d061f6cdb895e79dd4d69140c7bda31cc",
                 "shasum": ""
             },
             "require": {
@@ -25,7 +25,7 @@
                 "php": ">=5.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8 || ^5.2"
+                "phpunit/phpunit": "^7.0 || ^6.0 || ^5.2 || ^4.8.35"
             },
             "type": "library",
             "autoload": {
@@ -40,10 +40,10 @@
             "authors": [
                 {
                     "name": "Christian Lück",
-                    "email": "christian@lueck.tv"
+                    "email": "christian@clue.engineering"
                 }
             ],
-            "description": "Simple and lightweight OOP wrapper for PHP's low level sockets extension (ext-sockets)",
+            "description": "Simple and lightweight OOP wrapper for PHP's low-level sockets extension (ext-sockets)",
             "homepage": "https://github.com/clue/php-socket-raw",
             "keywords": [
                 "Socket",
@@ -59,7 +59,7 @@
                 "udp",
                 "unix"
             ],
-            "time": "2018-06-10T19:13:19+00:00"
+            "time": "2019-10-28T12:32:07+00:00"
         },
         {
             "name": "composer/semver",
