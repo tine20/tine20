@@ -19,7 +19,7 @@ This means support for (at the time of the package release):
 * And the latest two Firefox versions additionally
 * And the latest Firefox ESR
 
-#GENERAL CHANGES
+#GENERAL CHANGES (Administrative)
 ---
 
 ### PHP extension intl is now mandatory
@@ -37,20 +37,26 @@ This requires either MySQL 5.7.7+ or MariaDB 10.2.2+ with default settings. Earl
 The conversion script will test these settings and abort if prerequisites are not met.
 the CLI method to convert to utf8mb4 is "setup.php --migrateUtf8mb4"
 
-### New Layout (Flat design)
-
-### "Prevent Data-Loss" check in edit dialog
-
 ### Improved JSON-Logger (for Elastic Stack)
 
 ### Improved Sentry-Integration
 
+### Antivirus-Scanning of files via ClamAV
+
+#GENERAL CHANGES (Webclient)
+---
+
+### New Layout (Flat design)
+
 ### Improved key-bindings in grid panels
+
+### "Prevent Data-Loss" check in edit dialog
 
 #ADDRESSBOOK
 ---
 
 ### Support VCard "CardBook" client (Thunderbird Addon)
+-> https://addons.thunderbird.net/de/thunderbird/addon/cardbook/
 
 #FELAMIMAIL
 ---
@@ -72,6 +78,7 @@ the CLI method to convert to utf8mb4 is "setup.php --migrateUtf8mb4"
 ---
 
 ### Support for "Fantastical" client
+-> https://flexibits.com/fantastical
 
 #ADMIN
 ---
@@ -82,15 +89,10 @@ the CLI method to convert to utf8mb4 is "setup.php --migrateUtf8mb4"
 - multiple system account for each user
 - Sieve management for all accounts
 - and more
+-> note: you need special configuration (dovecot + postfix) for shared accounts, system accounts and mailinglists
 
 ### checkbox for PW change
-
-#HUMAN RESOURCES
----
-
-### Workingtime reports
-
-TODO add more?
+- user needs to change his password on next login
 
 #CRM / PROJECTS
 ---
