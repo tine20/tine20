@@ -67,5 +67,8 @@ class Calendar_Model_AttenderStatusFilter extends Tinebase_Model_Filter_Text
                 parent::appendFilterSql($_select, $_backend);
             }
         }
+
+        $this->_currentDname = 'attendee';
+        $this->_dnames = [];
     }
 }
