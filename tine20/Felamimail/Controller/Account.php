@@ -452,7 +452,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if ($_record->type !== $_oldRecord->type) {
+        $convertToShared = ($_record->type === Felamimail_Model_Account::TYPE_SHARED &&
+            $_oldRecord->type === Felamimail_Model_Account::TYPE_SYSTEM);
+        if ($_record->type !== $_oldRecord->type && ! $convertToShared) {
             throw new Tinebase_Exception_UnexpectedValue('type can not change');
         }
 
@@ -465,6 +467,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $this->_beforeUpdateSystemAccount($_record, $_oldRecord);
         } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED
             || $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+            if ($convertToShared) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Convert account id ' . $_record->getId() . ' to ' . $_record->type
+                    . ' ... Set new shared credential cache and update email user password');
+
+                /** @var Tinebase_EmailUser_Sql $emailUserBackend */
+                $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+                $_record->user = $emailUserBackend->getLoginName($_record->user_id, $_record->email, $_record->email);
+                $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
+                $_record->smtp_credentials_id = $_record->credentials_id;
+                $emailUserBackend->inspectSetPassword($_record->user_id, $_record->password);
+            }
+
             if ($_oldRecord->email !== $_record->email) {
                 $user = $this->_getEmailUserFromAccount($_record, false);
                 $this->_checkIfEmailUserExists($user);

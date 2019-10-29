@@ -122,16 +122,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $result = parent::removePlugin($plugin);
 
-        if ($plugin instanceof Tinebase_User_Plugin_SqlInterface) {
-            $className = get_class($plugin);
-            if (isset($this->_sqlPlugins[$className])) {
+        $className = is_object($plugin) ? get_class($plugin) : $plugin;
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Removing " . $className . ' SQL plugin.');
+        if (isset($this->_sqlPlugins[$className]) && $this->_sqlPlugins[$className] instanceof Tinebase_User_Plugin_SqlInterface) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Removing " . $className . ' SQL plugin.');
 
-                $result = $this->_sqlPlugins[$className];
-                unset($this->_sqlPlugins[$className]);
-            }
+            $result = $this->_sqlPlugins[$className];
+            unset($this->_sqlPlugins[$className]);
         }
 
         return $result;
@@ -144,6 +142,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function getSqlPlugin($classname)
     {
         return $this->_sqlPlugins[$classname];
+    }
+
+    /**
+     * @return array
+     */
+    public function getSqlPluginNames()
+    {
+        return array_keys($this->_sqlPlugins);
     }
     
     /**

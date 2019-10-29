@@ -190,7 +190,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
     public function testDuplicateContainerOnGetContainer()
     {
         // create new user
-        $user = $this->_createUser();
+        $user = $this->_createTestUser();
         Tinebase_Core::setUser($user);
 
         $container1 = $this->_backend->getContainer(Addressbook_Model_Contact::class,
