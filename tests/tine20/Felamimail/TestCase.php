@@ -480,12 +480,7 @@ abstract class Felamimail_TestCase extends TestCase
      */
     protected function _createUserInternalAccount(Tinebase_Model_FullUser $user)
     {
-        $accountData = $accountdata = [
-            'name' => 'unittest user internal account',
-            'email' => 'myinternal@' . TestServer::getPrimaryMailDomain(),
-            'type' => Felamimail_Model_Account::TYPE_USER_INTERNAL,
-            'user_id' => $user->getId(),
-        ];
+        $accountData = Admin_JsonTest::getUserInternalAccountData($user);
         $internalAccount = Admin_Controller_EmailAccount::getInstance()->create(new Felamimail_Model_Account($accountData));
         // we need to commit so imap user is in imap db
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);

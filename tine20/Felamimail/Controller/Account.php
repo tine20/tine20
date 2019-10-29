@@ -453,7 +453,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $convertToShared = ($_record->type === Felamimail_Model_Account::TYPE_SHARED &&
-            $_oldRecord->type === Felamimail_Model_Account::TYPE_SYSTEM);
+            in_array($_oldRecord->type, [
+                Felamimail_Model_Account::TYPE_SYSTEM,
+                Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            ]));
         if ($_record->type !== $_oldRecord->type && ! $convertToShared) {
             throw new Tinebase_Exception_UnexpectedValue('type can not change');
         }
