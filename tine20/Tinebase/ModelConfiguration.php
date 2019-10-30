@@ -940,6 +940,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     protected $_recursiveResolvingFields = [];
 
+    protected $_hasDeletedTimeUnique = false;
+
     /**
      * the constructor (must be called by the singleton pattern)
      *
@@ -1129,6 +1131,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             // don't show deleted information
             $this->_fields['deleted_by']         = array('label' => NULL, 'system' => true, 'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
             $this->_fields['deleted_time']       = array('label' => NULL, 'system' => true, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'nullable' => true);
+            if ($this->_hasDeletedTimeUnique) {
+                $this->_fields['deleted_time'][self::NULLABLE] = false;
+                $this->_fields['deleted_time'][self::DEFAULT_VAL] = '1970-01-01 00:00:00';
+                $this->_fields['deleted_time'][self::CONVERTERS] = [Tinebase_Model_Converter_DateTimeFakeNull::class];
+            }
             $this->_fields['is_deleted']         = [
                 self::TYPE    => self::TYPE_BOOLEAN,
                 self::UNSIGNED => true,
