@@ -1758,3 +1758,15 @@ msgstr "Das Recht um mit dem E-Mail-Konto E-Mails zu versenden"
 
 msgid "User needs to enter credentials after login"
 msgstr "Der Benutzer muss sein Passwort nach dem Login setzen"
+
+msgid "Convert Account"
+msgstr "Konto umwandeln"
+
+msgid "Convert this account to a shared account. Please set a new password for the account:"
+msgstr "Dieses Konto in einen gemeinsamen Account umwandeln. Bitte setzen Sie ein neues Passwort:"
+
+msgid "New Password"
+msgstr "Neues Passwort"
+
+msgid "Converting Account ..."
+msgstr "Konto wird umgewandelt ..."
