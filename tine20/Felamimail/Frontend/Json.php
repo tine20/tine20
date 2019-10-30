@@ -713,9 +713,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getFileSuggestions($message)
     {
-        $suggestions = Felamimail_Controller_Message_File::getInstance()->getFileSuggestions(
-            new Felamimail_Model_Message($message), true
-        );
+        $record = $this->_jsonToRecord($message, Felamimail_Model_Message::class);
+        $suggestions = Felamimail_Controller_Message_File::getInstance()->getFileSuggestions($record);
         $result = [];
         foreach ($suggestions as $suggestion) {
             $result[] = [
