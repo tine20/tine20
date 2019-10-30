@@ -285,7 +285,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         $addresses[] = (! empty($fullUser->accountEmailAddress)) ? $fullUser->accountEmailAddress : $account->email;
         if ($fullUser->smtpUser && ! empty($fullUser->smtpUser->emailAliases)) {
-            $addresses = array_merge($addresses, $fullUser->smtpUser->emailAliases);
+            $addresses = array_merge($addresses, $fullUser->smtpUser->getAliasesAsEmails());
         }
         
         // append all valid domains if nessesary
