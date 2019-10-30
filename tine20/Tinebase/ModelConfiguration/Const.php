@@ -24,6 +24,7 @@ class Tinebase_ModelConfiguration_Const {
     const CONFIG = 'config';
     const CONTROLLER = 'controller';
     const CONTROLLER_HOOK_BEFORE_UPDATE = 'controllerHookBeforeUpdate';
+    const CONVERTERS = 'converters';
     const COLUMNS = 'columns';
     const COPY_OMIT = 'copyOmit';
     const CREATE_MODULE = 'createModule';
@@ -44,6 +45,7 @@ class Tinebase_ModelConfiguration_Const {
     const FLAGS = 'flags';
 
     const HAS_CUSTOM_FIELDS = 'hasCustomFields';
+    const HAS_DELETED_TIME_UNIQUE = 'hasDeletedTimeUnique';
     const HAS_NOTES = 'hasNotes';
     const HAS_PERSONAL_CONTAINER = 'hasPersonalContainer';
     const HAS_RELATIONS = 'hasRelations';
