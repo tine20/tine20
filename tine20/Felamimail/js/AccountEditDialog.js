@@ -513,7 +513,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'reply_to',
                     vtype: 'email'
                 }]]
-            },
+            }, new Tine.widgets.activities.ActivitiesTabPanel({
+                    app: this.appName,
+                    record_id: this.record.id,
+                    record_model: this.modelName
+            }),
             this.grantsGrid
             ]
         };
