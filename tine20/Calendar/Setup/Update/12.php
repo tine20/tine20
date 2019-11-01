@@ -16,6 +16,7 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -38,6 +39,10 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE012_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
     ];
@@ -87,5 +92,19 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
     {
         Tinebase_Container::getInstance()->deleteDuplicateContainer('Calendar');
         $this->addApplicationUpdate('Calendar', '12.11', self::RELEASE012_UPDATE005);
+    }
+
+    public function update006()
+    {
+        $attendeeKeyField = Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES};
+        if (null !== ($req = $attendeeKeyField->records->find('id', 'REQ'))) {
+            $req->order = 0;
+        }
+        if (null !== ($opt = $attendeeKeyField->records->find('id', 'OPT'))) {
+            $opt->order = 1;
+        }
+        Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES} = $attendeeKeyField;
+
+        $this->addApplicationUpdate('Calendar', '12.12', self::RELEASE012_UPDATE005);
     }
 }

@@ -47,7 +47,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
         if (!$requiredGrants) {
             $requiredGrants = Tinebase_Model_Grants::GRANT_READ;
         }
-        switch($containerType) {
+        switch ($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, $owner, $requiredGrants);
                 $containers->sort('name');

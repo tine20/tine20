@@ -118,4 +118,14 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
         
         parent::setFromArray($_data);
     }
+
+    public function getAliasesAsEmails()
+    {
+        $result = [];
+        foreach ($this->emailAliases as $alias) {
+            $result[] = is_array($alias) ? $alias['email'] : $alias;
+        }
+
+        return $result;
+    }
 } 

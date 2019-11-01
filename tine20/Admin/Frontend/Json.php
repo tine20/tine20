@@ -632,10 +632,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * get list of groupmembers
+     * get list of group members
      *
      * @param int $groupId
-     * @return array with results / totalcount
+     * @return array with results / total count
      * 
      * @todo use Account Model?
      */
@@ -1262,6 +1262,21 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveEmailAccount($recordData)
     {
         return $this->_save($recordData, Admin_Controller_EmailAccount::getInstance(), 'Felamimail_Model_Account');
+    }
+
+    /**
+     * convert a given account to another type (for example, personal account to shared account)
+     *
+     * @param  array $recordData account data
+     * @param string $to convert to this type
+     * @return array updated record
+     */
+    public function convertEmailAccount($recordData, $to = Felamimail_Model_Account::TYPE_SHARED)
+    {
+        $record = new Felamimail_Model_Account(array(), TRUE);
+        $record->setFromJsonInUsersTimezone($recordData);
+        $account = Admin_Controller_EmailAccount::getInstance()->convertEmailAccount($record, $to);
+        return $this->_recordToJson($account);
     }
 
     /**

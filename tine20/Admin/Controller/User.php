@@ -273,6 +273,28 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     }
 
     /**
+     * @param Tinebase_Model_FullUser $_user
+     * @return Tinebase_Model_FullUser
+     * @throws Tinebase_Exception_Backend_Database_LockTimeout
+     */
+    public function updateUserWithoutEmailPluginUpdate(Tinebase_Model_FullUser $_user)
+    {
+        // remove email user plugins (add again afterwards)
+        $userPlugins = Tinebase_User::getInstance()->getSqlPluginNames();
+        $emailPlugins = [];
+        foreach ($userPlugins as $pluginName) {
+            if (preg_match('/^Tinebase_EmailUser/', $pluginName)) {
+                $emailPlugins[] = Tinebase_User::getInstance()->removePlugin($pluginName);
+            }
+        }
+        $result = $this->update($_user);
+        foreach ($emailPlugins as $plugin) {
+            Tinebase_User::getInstance()->registerPlugin($plugin);
+        }
+        return $result;
+    }
+
+    /**
      * update account status if changed to enabled/disabled
      *
      * @param $_user
@@ -371,16 +393,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Exception::log($e);
             throw $e;
         }
-        
+
+        if (!empty($_password)) {
+            $this->setAccountPassword($user, $_password, $_passwordRepeat);
+        }
+
         $event = new Admin_Event_AddAccount(array(
             'account' => $user,
             'pwd'     => $_password,
         ));
         Tinebase_Event::fireEvent($event);
-
-        if (!empty($_password)) {
-            $this->setAccountPassword($user, $_password, $_passwordRepeat);
-        }
 
         return $user;
     }

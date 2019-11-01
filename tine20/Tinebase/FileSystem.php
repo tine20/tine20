@@ -2136,7 +2136,7 @@ class Tinebase_FileSystem implements
      */
     public function checkHashFile(string $hash)
     {
-        $file = $this->_basePath . '/' . substr($hash, 0, 3) . substr($hash, 3);
+        $file = $this->_basePath . DIRECTORY_SEPARATOR . substr($hash, 0, 3) . DIRECTORY_SEPARATOR . substr($hash, 3);
         if (!($fh = fopen($file, 'r'))) {
             throw new Tinebase_Exception_Backend('could not open file: ' . $file);
         }
@@ -3945,6 +3945,10 @@ class Tinebase_FileSystem implements
         if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF ===
                 Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
                     ->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            return true;
+        }
+
+        if (!Tinebase_Core::acquireMultiServerLock(__METHOD__)) {
             return true;
         }
 

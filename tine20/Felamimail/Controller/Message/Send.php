@@ -219,12 +219,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * 
      * @param string|Felamimail_Model_Folder $_folder globalname or folder record
      * @param Felamimail_Model_Message $_message
+     * @param array flags
      * @return Felamimail_Model_Message
      */
-    public function saveMessageInFolder($_folder, $_message)
+    public function saveMessageInFolder($_folder, $_message, $_flags = [])
     {
         $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        
+
         if (is_string($_folder) && ($_folder === $sourceAccount->templates_folder || $_folder === $sourceAccount->drafts_folder)) {
             // make sure that system folder exists
             $systemFolder = $_folder === $sourceAccount->templates_folder ? Felamimail_Model_Folder::FOLDER_TEMPLATES : Felamimail_Model_Folder::FOLDER_DRAFTS;
@@ -241,19 +242,28 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         $transport = new Felamimail_Transport();
         $mailAsString = $transport->getRawMessage($mailToAppend, $this->_getAdditionalHeaders($_message));
-        $flags = ($folder->globalname === $targetAccount->drafts_folder) ? array(Zend_Mail_Storage::FLAG_DRAFT) : null;
-        
+        if ($folder->globalname === $targetAccount->drafts_folder) {
+            $flags = array_merge($_flags, [Zend_Mail_Storage::FLAG_DRAFT]);
+        } else {
+            $flags = $_flags;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Appending message ' . $_message->subject . ' to folder ' . $folder->globalname . ' in account ' . $targetAccount->name);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
             ' ' . $mailAsString);
-        
-        Felamimail_Backend_ImapFactory::factory($targetAccount)->appendMessage(
+
+        $imap = Felamimail_Backend_ImapFactory::factory($targetAccount);
+        $uid = $imap->appendMessage(
             $mailAsString,
             Felamimail_Model_Folder::encodeFolderName($folder->globalname),
             $flags
         );
-        
+
+        if ($uid) {
+            $_message->messageuid = $uid;
+        }
+
         return $_message;
     }
     

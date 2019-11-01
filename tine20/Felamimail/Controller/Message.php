@@ -1352,23 +1352,60 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * save message in draft folder
      *
      * @param Felamimail_Model_Message $_message
-     * @return Felamimail_Model_Message
+     * @return Felamimail_Model_Message|null
      */
     public function saveDraft($_message)
     {
-        // get account
+        // get account & folder
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        // remove old draft
-        if ($_message->getId()) {
-            try {
-                Felamimail_Controller_Message_Flags::getInstance()->addFlags([$_message], array(Zend_Mail_Storage::FLAG_DELETED));
-            } catch (Tinebase_Exception_NotFound $tenf) {
+        $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_DRAFTS);
+
+        // remove old draft if uid given
+        if ($_message->messageuid && $draftFolder) {
+            $this->_deleteDraftByUid($_message->messageuid, $account, $draftFolder);
+        }
+
+        // save draft in draft folder
+        $draft = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
+        return $draft;
+    }
+
+    /**
+     * @param $uid
+     * @param Felamimail_Model_Account $account
+     * @param Felamimail_Model_Folder $draftFolder
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
+     * @return boolean
+     */
+    protected function _deleteDraftByUid($uid, Felamimail_Model_Account $account, Felamimail_Model_Folder $draftFolder = null)
+    {
+        if (! $draftFolder) {
+            $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_DRAFTS);
+            if (! $draftFolder) {
+                return false;
             }
         }
-        // save draft in draft folder
-        $drafts = Felamimail_Controller_Account::getInstance()->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_DRAFTS);
-        $message = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($drafts, $_message);
-        return $this->fetchRecentMessageFromFolder($drafts, $message);
+
+        // TODO use uid expunge?
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Remove old draft with uid ' . $uid);
+        $imap = Felamimail_Backend_ImapFactory::factory($account);
+        $imap->selectFolder($draftFolder->globalname);
+        $imap->addFlags([$uid], [Zend_Mail_Storage::FLAG_DELETED]);
+
+        return true;
+    }
+
+    /**
+     * @param $uid
+     * @param $accountid
+     * @return bool
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
+     */
+    public function deleteDraft($uid, $accountid)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($accountid);
+        return $this->_deleteDraftByUid($uid, $account);
     }
 
     /**

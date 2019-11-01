@@ -177,4 +177,38 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         
         return $result;
      }
+
+    /**
+     * append a new message to given folder
+     *
+     * @param string $folder  name of target folder
+     * @param string $message full message content
+     * @param array  $flags   flags for new message
+     * @param string $date    date for new message
+     * @return int|bool returns UID of mail on success
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function append($folder, $message, $flags = null, $date = null)
+    {
+        $tokens = array();
+        $tokens[] = $this->escapeString($folder);
+        if ($flags !== null) {
+            $tokens[] = $this->escapeList($flags);
+        }
+        if ($date !== null) {
+            $tokens[] = $this->escapeString($date);
+        }
+        $tokens[] = $this->escapeString($message);
+
+        $result = $this->requestAndResponse('APPEND', $tokens);
+        if ($result) {
+            // TODO it would be better to parse APPENDUID from APPEND response - but we need to teach zend-mail the parsing
+            // (or use a different mail lib)
+            $select = $this->select($folder);
+            // return uidnext if given
+            return isset($select['uidnext']) ? $select['uidnext'] - 1 : false;
+        } else {
+            return false;
+        }
+    }
 }

@@ -80,6 +80,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 40,
             ],
             'type' => [
+                // TODO make this a keyfield to get a better filter?
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 20,
                 self::LABEL => 'Type', // _('Type')
@@ -723,7 +724,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 }
 
                 // allow to set pw suffix in config
-                if (isset($imapConfig['pwsuffix']) && !preg_match('/' . preg_quote($imapConfig['pwsuffix']) . '$/',
+                if (isset($imapConfig['pwsuffix']) && !preg_match('/' . preg_quote($imapConfig['pwsuffix'], '/') . '$/',
                         $credentials->password)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .

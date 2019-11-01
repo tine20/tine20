@@ -15,6 +15,7 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         // ATTENTION !!! PRIO TB !!! NOT NORMAL APP !!!
@@ -26,7 +27,6 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
                 self::FUNCTION_CONST                => 'update003',
             ],
         ],
-
 
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE012_UPDATE001          => [
@@ -40,6 +40,10 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE012_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -80,7 +84,20 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update004()
     {
-        Tinebase_Container::getInstance()->deleteDuplicateContainer('Addressbook');
         $this->addApplicationUpdate('Addressbook', '12.8', self::RELEASE012_UPDATE004);
+    }
+
+    /**
+     * remove container duplicates - we still had a bug here
+     *
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_SystemContainer
+     */
+    public function update005()
+    {
+        Tinebase_Container::getInstance()->deleteDuplicateContainer('Addressbook');
+        $this->addApplicationUpdate('Addressbook', '12.9', self::RELEASE012_UPDATE005);
     }
 }

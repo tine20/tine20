@@ -1901,7 +1901,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                                 ownRecordClass: this.recordClass,
                                 foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
                                 linkType: 'foreignId',
-                                ownField: 'customfield:' + cfConfig.id
+                                ownField: 'customfield:' + cfConfig.id,
+                                pickerConfig: cfDefinition.recordConfig.additionalFilterSpec ? {
+                                    additionalFilterSpec: cfDefinition.recordConfig.additionalFilterSpec
+                                } : null
                             });
                         }
                         break;

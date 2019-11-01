@@ -330,6 +330,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     selectInbox: function(account) {
         var accountId = (account) ? account.id : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+
+        // expand portal columns first
+        // TODO find a way to only expand "EMAIL ACCOUNTS" node
+        Ext.each(this.app.getMainScreen().getWestPanel().getPortalColumn().items.items, function (item) {
+            if (Ext.isFunction(item.expand)) {
+                item.expand();
+            }
+        });
         
         this.expandPath('/root/' + accountId + '/', null, function(success, parentNode) {
             Ext.each(parentNode.childNodes, function(node) {

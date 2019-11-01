@@ -69,22 +69,27 @@ Tine.widgets.grid.RendererManager = function() {
             
             return renderer;
         },
-        
+
         /**
          * get renderer by data type
-         * 
+         *
          * @param {String} appName
          * @param {Record/String} modelName
          * @param {String} fieldName
+         * @param {boolean} cf
          * @return {Function}
          */
-        getByDataType: function(appName, modelName, fieldName) {
-            var renderer = null,
-                recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
-                fieldDefinition = recordClass ? recordClass.getField(fieldName) : null,
-                fieldType = fieldDefinition ? fieldDefinition.type : 'auto';
-                
-            switch(fieldType) {
+        getByDataType: function (appName, modelName, fieldName, cf = false) {
+            if(cf){
+                var cfConfig = Tine.widgets.customfields.ConfigManager.getConfig(appName, modelName, fieldName.replace(/^#/,''));
+                return Tine.widgets.customfields.Renderer.get(appName, cfConfig);
+            } else {
+                var renderer = null,
+                    recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
+                    fieldDefinition = recordClass ? recordClass.getField(fieldName) : null,
+                    fieldType = fieldDefinition ? fieldDefinition.type : 'auto';
+            }
+            switch (fieldType) {
                 case 'date':
                     renderer = Tine.Tinebase.common.dateRenderer;
                     break;
@@ -101,14 +106,14 @@ Tine.widgets.grid.RendererManager = function() {
                 case 'json':
                     renderer = Tine.widgets.grid.jsonRenderer;
                     break;
-                default:
-                    renderer = this.defaultRenderer;
-                    break;
+                case 'records':
+                case 'recodList':
+                    //@Todo add records/list renderer!
             }
-            
+
             return renderer;
         },
-        
+
         /**
          * returns renderer for given field
          * 
@@ -131,12 +136,12 @@ Tine.widgets.grid.RendererManager = function() {
             if (! renderer) {
                 renderer = this.getByFieldname(fieldName);
             }
-            
+
             // check for known datatypes
             if (! renderer) {
-                renderer = this.getByDataType(appName, modelName, fieldName);
+                renderer = this.getByDataType(appName, modelName, fieldName, String(fieldName).match(/^#.+/));
             }
-            
+
             return renderer ? renderer : this.defaultRenderer;
         },
         

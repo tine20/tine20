@@ -354,11 +354,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             . ' Setting default grants ...');
 
         $record->grants = new Tinebase_Record_RecordSet($this->_grantsModel);
+        $userId = (in_array($record->type , [
+            Felamimail_Model_Account::TYPE_SYSTEM,
+            Felamimail_Model_Account::TYPE_USER,
+            Felamimail_Model_Account::TYPE_USER_INTERNAL
+        ])) ? $record->user_id : Tinebase_Core::getUser()->getId();
         /** @var Tinebase_Model_Grants $grant */
         $grant = new $this->_grantsModel([
             'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            'account_id'   => ($record->type === Felamimail_Model_Account::TYPE_SYSTEM || $record->type ===
-                Felamimail_Model_Account::TYPE_USER) ? $record->user_id : Tinebase_Core::getUser()->getId(),
+            'account_id'   => $userId,
             'record_id'    => $record->getId(),
         ]);
         $grant->sanitizeAccountIdAndFillWithAllGrants();
@@ -448,7 +452,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if ($_record->type !== $_oldRecord->type) {
+        $convertToShared = ($_record->type === Felamimail_Model_Account::TYPE_SHARED &&
+            in_array($_oldRecord->type, [
+                Felamimail_Model_Account::TYPE_SYSTEM,
+                Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            ]));
+        if ($_record->type !== $_oldRecord->type && ! $convertToShared) {
             throw new Tinebase_Exception_UnexpectedValue('type can not change');
         }
 
@@ -461,6 +470,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $this->_beforeUpdateSystemAccount($_record, $_oldRecord);
         } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED
             || $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+            if ($convertToShared) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Convert account id ' . $_record->getId() . ' to ' . $_record->type
+                    . ' ... Set new shared credential cache and update email user password');
+
+                /** @var Tinebase_EmailUser_Sql $emailUserBackend */
+                $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+                $_record->user = $emailUserBackend->getLoginName($_record->user_id, $_record->email, $_record->email);
+                $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
+                $_record->smtp_credentials_id = $_record->credentials_id;
+                $emailUserBackend->inspectSetPassword($_record->user_id, $_record->password);
+            }
+
             if ($_oldRecord->email !== $_record->email) {
                 $user = $this->_getEmailUserFromAccount($_record, false);
                 $this->_checkIfEmailUserExists($user);
@@ -1170,8 +1192,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             // set as default account preference
             Tinebase_Core::getPreference($this->_applicationName)->setValueForUser(
                 Felamimail_Preference::DEFAULTACCOUNT, $systemAccount->getId(), $_account->getId(), true);
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Created new system account "' . $systemAccount->name . '".');
 
             // just for unused variable check:
@@ -1179,7 +1201,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
             return $systemAccount;
         } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Could not create system account for user ' . $_account->accountLoginName
                 . '. No email address or imapUser given.');
         }

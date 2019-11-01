@@ -13,7 +13,7 @@
 class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_Interface
 {
     /**
-     * @var \Socket\Raw\Factory
+     * @var \Socket\Raw\Socket
      */
     protected $_socket = null;
 
@@ -41,6 +41,7 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
             try {
                 $this->_socket->assertAlive();
             } catch (\Socket\Raw\Exception $sre) {
+                $this->_socket->close();
                 $this->_socket = null;
                 $this->_connect();
             }
@@ -71,6 +72,9 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
         if (null !== $e) {
             Tinebase_Exception::log($e);
 
+            $this->_socket->close();
+            $this->_socket = null;
+
             $result = [
                 'status' => Tinebase_FileSystem_AVScan_Result::RESULT_ERROR,
                 'reason' => $e->getMessage()
@@ -96,6 +100,9 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
 
         if (null !== $e) {
             Tinebase_Exception::log($e);
+
+            $this->_socket->close();
+            $this->_socket = null;
 
             return false;
         }

@@ -49,7 +49,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         if (!$onlyTrans || $transactionMgr->hasOpenTransactions()) {
             $lockKey = 'FelamimailFolderLock#~#' . $id;
             if (null !== ($lock = Tinebase_Core::getMultiServerLock($lockKey))) {
-                if (!$lock->isLocked() && $lock->tryAcquire()) {
+                if (!$lock->isLocked() && $lock->tryAcquire(2)) {
                     if ($onlyTrans) {
                         $transactionMgr->registerAfterCommitCallback(
                             function ($lockKey) {
@@ -67,7 +67,6 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
                     }
                     return true;
                 } elseif (!$lock->isLocked()) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not lock lock');
                     return false;
                 } else {
                     return true;

@@ -261,4 +261,47 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $imapEmailBackend->removeMasterPassword($this->_masterUser);
         }
     }
+
+    /**
+     * @param Tinebase_Model_User|string|null $user
+     * @return Felamimail_Model_Account|null
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getSystemAccount($user)
+    {
+        return $this->_backend->getSystemAccount($user);
+    }
+
+    /**
+     * @param Felamimail_Model_Account $_account
+     * @param $_to
+     * @throws Tinebase_Exception_SystemGeneric
+     * @return Tinebase_Record_Interface
+     */
+    public function convertEmailAccount(Felamimail_Model_Account $_account, $_to = Felamimail_Model_Account::TYPE_SHARED)
+    {
+        if (! in_array($_account->type, [
+            Felamimail_Model_Account::TYPE_SYSTEM,
+            Felamimail_Model_Account::TYPE_USER_INTERNAL
+        ])) {
+            throw new Tinebase_Exception_SystemGeneric('It is only allowed to convert SYSTEM email accounts');
+        }
+
+        $userId = is_array($_account->user_id) ? $_account->user_id['accountId'] :  $_account->user_id;
+        $user = Admin_Controller_User::getInstance()->get($userId);
+
+        // convert account
+        $_account->type = $_to;
+        // keep old user grants
+        // $account->grants = [];
+
+        // make sure, shared credential cache is created - password is needed!
+        $account = $this->_backend->update($_account);
+
+        // update user (don't delete email account!)
+        $user->accountEmailAddress = '';
+        Admin_Controller_User::getInstance()->updateUserWithoutEmailPluginUpdate($user);
+
+        return $account;
+    }
 }

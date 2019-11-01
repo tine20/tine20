@@ -1,12 +1,6 @@
 Ext.ns('Tine.Felamimail');
 
 Tine.Felamimail.AccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-
-    initComponent: function() {
-        let app = Tine.Tinebase.appMgr.get('Felamimail');
-
-        Tine.Felamimail.AccountGridPanel.superclass.initComponent.call(this);
-    }
 });
 
 Tine.widgets.grid.RendererManager.register('Felamimail', 'Account', 'type', function(type) {

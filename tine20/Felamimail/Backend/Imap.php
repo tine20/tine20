@@ -32,7 +32,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     protected $_useUid;
     
     /**
-     * activate logging in IMAP protocal class?
+     * activate logging in IMAP protocol class?
      * 
      * NOTE: should be disabled by default as credentials might be logged 
      * 
@@ -80,9 +80,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $this->connectAndLogin($params);
         $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($account, $this);
 
-
         $folderToSelect = isset($params->folder) ? $params->folder : 'INBOX';
-        $selectParams = in_array('CONDSTORE', $capabilities['capabilities']) ? ['(CONDSTORE)'] : [];
+        $selectParams = $capabilities && in_array('CONDSTORE', $capabilities['capabilities']) ? ['(CONDSTORE)'] : [];
 
         try {
             $this->selectFolder($folderToSelect, $selectParams);
@@ -1119,5 +1118,36 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     public function getQuota($_mailbox)
     {
         return $this->_protocol->getQuotaRoot($_mailbox);
+    }
+
+    /**
+     * append a new message to mail storage
+     *
+     * @param  string                                     $message message as string or instance of message class
+     * @param  null|string|Zend_Mail_Storage_Folder       $folder  folder for new message, else current folder is taken
+     * @param  null|array                                 $flags   set flags for new message, else a default set is used
+     * @throws Zend_Mail_Storage_Exception
+     * @return integer UID of appended message
+     */
+    public function appendMessage($message, $folder = null, $flags = null)
+    {
+        if ($folder === null) {
+            $folder = $this->_currentFolder;
+        }
+
+        if ($flags === null) {
+            $flags = array(Zend_Mail_Storage::FLAG_SEEN);
+        }
+
+        $result = $this->_protocol->append($folder, $message, $flags);
+        if (! $result) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot create message, please check if the folder exists and your flags');
+        }
+
+        return $result;
     }
 }

@@ -1397,6 +1397,8 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 if (isset($this->_properties[$key])) {
                     /** @var Tinebase_Model_Converter_Interface $converter */
                     $this->_properties[$key] = $converter->convertToData($this, $key, $this->_properties[$key]);
+                } elseif ($converter instanceof Tinebase_Model_Converter_RunOnNullInterface) {
+                    $this->_properties[$key] = $converter->convertToData($this, $key, null);
                 }
             }
         }

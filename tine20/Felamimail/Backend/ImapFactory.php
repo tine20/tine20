@@ -56,4 +56,17 @@ class Felamimail_Backend_ImapFactory
         
         return self::$_backends[$accountId];
     }
+
+    /**
+     * reset the factory backends
+     *
+     * TODO needed?
+     */
+    static public function reset()
+    {
+        foreach (self::$_backends as $backend) {
+            unset($backend);
+        }
+        self::$_backends = [];
+    }
 }    

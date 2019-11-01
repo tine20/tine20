@@ -122,7 +122,7 @@ abstract class Felamimail_TestCase extends TestCase
 
         Felamimail_Controller_Account::destroyInstance();
 
-        // get (or create) test accout
+        // get (or create) test account
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         if ($this->_account === null) {
             $this->markTestSkipped('no account found');
@@ -260,7 +260,7 @@ abstract class Felamimail_TestCase extends TestCase
      * @param string $_folderName
      * @return string message data
      */
-    protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX')
+    protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX', $_doAssertions = true)
     {
         // give server some time to send and receive messages
         sleep(1);
@@ -273,8 +273,10 @@ abstract class Felamimail_TestCase extends TestCase
                 $message = $mail;
             }
         }
-        $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
-        $this->assertTrue(!empty($message), 'Message not found');
+        if ($_doAssertions) {
+            $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
+            $this->assertTrue(!empty($message), 'Message not found');
+        }
         return $message;
     }
 
@@ -447,14 +449,43 @@ abstract class Felamimail_TestCase extends TestCase
         return $resultSet;
     }
 
+    /**
+     * @param bool $sendgrant
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
     protected function _createSharedAccount($sendgrant = true)
     {
+        Tinebase_EmailUser::clearCaches();
         $sharedAccountData = Admin_JsonTest::getSharedAccountData($sendgrant);
         $sharedAccount = Admin_Controller_EmailAccount::getInstance()->create(new Felamimail_Model_Account($sharedAccountData));
         // we need to commit so imap user is in imap db
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_accountsToClear[] = $sharedAccount;
         return $sharedAccount;
+    }
+
+    /**
+     * @param Tinebase_Model_FullUser $user
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _createUserInternalAccount(Tinebase_Model_FullUser $user)
+    {
+        $accountData = Admin_JsonTest::getUserInternalAccountData($user);
+        $internalAccount = Admin_Controller_EmailAccount::getInstance()->create(new Felamimail_Model_Account($accountData));
+        // we need to commit so imap user is in imap db
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_accountsToClear[] = $internalAccount;
+        return $internalAccount;
     }
 
     /**

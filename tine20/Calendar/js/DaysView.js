@@ -728,7 +728,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             renderTo: eventEls[0].down('div[class=' + bodyCls + ']'),
             width: event.ui.getEls()[0].getWidth() -12,
             height: Math.max(12, event.ui.getEls()[0].getHeight() -18),
-            style: 'background-color: transparent; background: 0: border: 0; position: absolute; top: 0px;',
+            style: 'background-color: transparent; background: 0: border: 0; position: absolute; top: 0px; font-weight: bold; color: ' + event.ui.colorSet.text + ';' ,
             value: this.newEventSummary,
             maxLength: 255,
             maxLengthText: this.app.i18n._('The summary must not be longer than 255 characters.'),
@@ -1293,14 +1293,14 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         var wholeDayAreaEl = Ext.get(this.wholeDayArea),
             wholeDayAreaHeight = this.computeAllDayAreaHeight(),
             wholeDayScrollerHeight = wholeDayAreaHeight,
-            maxAllowedHeight = Math.round(csize.height/3),
+            maxAllowedHeight = Math.round(csize.height/4),
             resizeEvent = {
                 wholeDayAreaHeight: wholeDayAreaHeight,
-                wholeDayScrollerHeight: wholeDayScrollerHeight,
+                wholeDayScrollerHeight: Math.min(wholeDayAreaHeight, maxAllowedHeight),
                 maxAllowedHeight: maxAllowedHeight
             };
 
-        wholeDayAreaEl.setHeight(Math.min(wholeDayAreaHeight, maxAllowedHeight));
+        wholeDayAreaEl.setHeight(wholeDayAreaHeight);
         this.fireEvent('onBeforeAllDayScrollerResize', this, resizeEvent);
 
         this.wholeDayScroller.setHeight(resizeEvent.wholeDayScrollerHeight);

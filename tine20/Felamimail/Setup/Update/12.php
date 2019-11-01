@@ -238,19 +238,21 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update008()
     {
-        // truncate email cache to make this go faster
-        Felamimail_Controller::getInstance()->truncateEmailCache();
+        if ($this->getTableVersion('felamimail_cache_message') < 11) {
+            // truncate email cache to make this go faster
+            Felamimail_Controller::getInstance()->truncateEmailCache();
 
-        $declaration = new Setup_Backend_Schema_Field_Xml('
+            $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>message_id</name>
                 <type>text</type>
             </field>
         ');
 
-        $this->_backend->addCol('felamimail_cache_message', $declaration);
+            $this->_backend->addCol('felamimail_cache_message', $declaration);
 
-        $this->setTableVersion('felamimail_cache_message', 11);
+            $this->setTableVersion('felamimail_cache_message', 11);
+        }
 
         $this->addApplicationUpdate('Felamimail', '12.11', self::RELEASE012_UPDATE008);
     }

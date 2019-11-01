@@ -132,7 +132,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @type {String}
      */
-    draftId: null,
+    draftUid: null,
 
     /**
      * @type {String}
@@ -165,7 +165,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         me.trottledsaveAsDraft = _.throttle(_.bind(me.saveAsDraft, me), 5000, {leading: false});
         me.saveAsDraftPromise = Promise.resolve();
 
-        me.on('beforecancel', me.onBeforeCancle, this);
+        me.on('beforecancel', me.onBeforeCancel, this);
 
         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
 
@@ -441,8 +441,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.isTemplate = folder.get('globalname') === account.get('templates_folder');
 
                     if (this.isDraft) {
-                        this.record.setId(message.get('id'));
-                        this.draftId = message.get('id');
+                        this.record.set('messageuid', message.get('messageuid'));
+                        this.draftUid = message.get('messageuid');
                     }
 
                     if (this.isTemplate) {
@@ -589,7 +589,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (!this.accountId) {
                 var message = this.getMessageFromConfig(),
                     availableAccounts = this.accountCombo.store,
-                    fromEmail = message.get('from_email'),
+                    fromEmail = message ? message.get('from_email') : null,
                     fromAccountIdx = availableAccounts.find('email', fromEmail),
                     fromAccount = availableAccounts.getAt(fromAccountIdx),
                     folderId = message ? message.get('folder_id') : null,
@@ -681,33 +681,27 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     saveAsDraft: function() {
         let me = this;
 
-        me.record.setId(me.draftId);
+        me.record.set('messageuid', me.draftUid);
         me.record.commit();
 
         me.action_saveAsDraft.setIconClass('x-btn-wait');
 
         return me.saveAsDraftPromise = Tine.Felamimail.saveDraft(me.record.data)
             .then((savedDraft) => {
-                me.draftId = savedDraft.id;
+                me.draftUid = savedDraft.messageuid;
             })
             .finally(() => {
                 me.action_saveAsDraft.setIconClass('action_saveAsDraft');
             });
     },
 
-    deleteDraft: function(draftId) {
-        return new Promise((fulfill, reject) => {
-            Tine.Felamimail.messageBackend.addFlags(draftId, '\\Deleted', {
-                success: fulfill,
-                failure: reject
-            });
-        });
-
+    deleteDraft: function(draftUid) {
+        return Tine.Felamimail.deleteDraft(draftUid, this.record.get('account_id'));
     },
 
-    onBeforeCancle: function() {
+    onBeforeCancel: function() {
         this.trottledsaveAsDraft.cancel();
-        if (this.draftId) {
+        if (this.draftUid) {
             Ext.MessageBox.show({
                 title: this.app.i18n._('Discard this Draft?'),
                 msg: this.app.i18n._('Do you want to discard the current draft?'),
@@ -716,7 +710,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.showLoadMask()
                         .then(() => {
                             return btn === 'yes' ?
-                                this.deleteDraft(this.draftId) :
+                                this.deleteDraft(this.draftUid) :
                                 this.saveAsDraft();
                         })
                         .then(_.bind(this.window.close, this.window, true))
@@ -935,15 +929,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             );
         } else {
             this.loadMask.show();
-            this.trottledsaveAsDraft.cancle();
+            this.trottledsaveAsDraft.cancel();
             this.recordProxy.saveInFolder(this.record, folderName, {
                 scope: this,
                 success: function (record) {
                     this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
                     Promise.resolve()
                         .then(() => {
-                            if (this.draftId) {
-                                return this.deleteDraft(this.draftId)
+                            if (this.draftUid) {
+                                return this.deleteDraft(this.draftUid)
                             }
                         })
                         .then(_.bind(this.window.close, this.window, this));
@@ -1219,9 +1213,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.saveAsDraftPromise
             .then(() => {
-                if (this.draftId) {
+                if (this.draftUid) {
                     // autodelete draft when message is send
-                    return this.deleteDraft(this.draftId)
+                    return this.deleteDraft(this.draftUid)
                 }
             })
             .then(_.bind(Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges, this, closeWindow));
