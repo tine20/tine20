@@ -120,6 +120,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'preserve_format':
                 case 'sieve_notification_email':
                 case 'reply_to':
+                case 'sent_folder':
+                case 'trash_folder':
+                case 'drafts_folder':
+                case 'templates_folder':
+                    // fields can be edited in any mode
                     break;
                 case 'type':
                     item.setDisabled(this.record.id);
