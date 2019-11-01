@@ -105,6 +105,6 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
         }
         Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES} = $attendeeKeyField;
 
-        $this->addApplicationUpdate('Calendar', '12.12', self::RELEASE012_UPDATE005);
+        $this->addApplicationUpdate('Calendar', '12.12', self::RELEASE012_UPDATE006);
     }
 }
