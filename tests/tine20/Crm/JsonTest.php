@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -265,7 +265,8 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $savedLead['relations'] = array();
         $savedLead = $this->_getUit()->saveLead($savedLead);
-        $this->assertEquals(0, count($savedLead['relations']));
+        $this->assertEquals(0, count($savedLead['relations']), 'relations should be removed: '
+            . print_r($savedLead['relations'], true));
         
         $savedLead['relations'] = array(
             array('type'  => 'PARTNER', 'related_record' => $savedContact->toArray()),
@@ -454,7 +455,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     
     /**
      * try to add multiple related tasks with one save
-     *
+     * @return array
      */
     public function testLeadWithMultipleTasks()
     {
@@ -471,6 +472,35 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $savedLead = $this->_getUit()->saveLead($leadData);
         $this->assertEquals(2, count($savedLead['relations']), 'Relations missing');
+
+        return $savedLead;
+    }
+
+    /**
+     * tasks should not be deleted
+     */
+    public function testUpdateLeadWithoutPermissionToRelatedTasks()
+    {
+        $lead = $this->testLeadWithMultipleTasks();
+
+        // set permissions to lead container for sclever
+        $leadContainer = Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class);
+        $this->_setPersonaGrantsForTestContainer($leadContainer, 'sclever');
+
+        // switch to sclever
+        Tinebase_Core::setUser($this->_personas['sclever']);
+
+        // update lead
+        $lead['description'] = 'updated';
+        $updateLead = $this->_getUit()->saveLead($lead);
+        self::assertEquals(2, count($updateLead['relations']));
+
+        // switch back
+        Tinebase_Core::setUser($this->_originalTestUser);
+
+        // tasks should not get deleted
+        $myLead = $this->_getUit()->getLead($lead['id']);
+        $this->assertEquals(2, count($myLead['relations']), 'Relations missing');
     }
     
     /**
@@ -658,7 +688,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 case 'relations':
                     $diffSet = new Tinebase_Record_RecordSetDiff($diff->diff['relations']);
                     $this->assertEquals(1, count($diffSet->added));
-                    $this->assertEquals(2, count($diffSet->removed));
+                    $this->assertEquals(2, count($diffSet->removed), print_r($diffSet->toArray(), true));
                     $this->assertEquals(0, count($diffSet->modified), 'relations modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
                     $this->assertTrue(isset($diffSet->added[0]['type']));
                     $this->assertEquals('CUSTOMER', $diffSet->added[0]['type'], 'type diff is not correct: ' . print_r($diffSet->toArray(), TRUE));
