@@ -526,6 +526,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'trash_folder',
             'drafts_folder',
             'templates_folder',
+            'migration_approved',
         );
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
@@ -1582,5 +1583,26 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             Felamimail_Controller_Account::getInstance()->update($systemaccount);
         }
         Felamimail_Controller_Account::getInstance()->doContainerACLChecks($checks);
+    }
+
+    /**
+     * @param $accountId
+     * @return Felamimail_Model_Account
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function approveMigration($accountId)
+    {
+        $account = $this->get($accountId);
+        if (! in_array($account->type, [
+            Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            Felamimail_Model_Account::TYPE_SYSTEM
+        ]) && $account->user_id === Tinebase_Core::getUser()->getId()) {
+            throw new Tinebase_Exception_AccessDenied('you can only approve the migration of your own system accounts');
+        }
+
+        $account->migration_approved = 1;
+        $this->update($account);
+
+        return $account;
     }
 }
