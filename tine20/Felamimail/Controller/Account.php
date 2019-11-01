@@ -522,6 +522,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'last_modified_time',
             'last_modified_by',
             'sieve_notification_email',
+            'sent_folder',
+            'trash_folder',
+            'drafts_folder',
+            'templates_folder',
         );
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
