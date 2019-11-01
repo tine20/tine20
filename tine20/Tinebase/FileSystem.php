@@ -3968,6 +3968,7 @@ class Tinebase_FileSystem implements
         $hashes = $this->_fileObjectBackend->getHashes($this->_fileObjectBackend->search(
             new Tinebase_Model_Tree_FileObjectFilter([
                 ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
+                ['field' => 'size', 'operator' => 'greater', 'value' => 0],
                 ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET]
             ]), null, true));
 
