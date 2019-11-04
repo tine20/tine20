@@ -1042,11 +1042,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             // do not modify $newestInvoiceTime!!!! it does NOT get cloned!
             $newestInvoiceTime = null;
             $newestInvoice = null;
-            foreach($invoiceRelations as $invoiceRelation) {
-                $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
-                if ( null == $newestInvoiceTime || $invoiceRelation->related_record->creation_time->isLater($newestInvoiceTime) ) {
-                    $newestInvoiceTime = $invoiceRelation->related_record->creation_time;
-                    $newestInvoice = $invoiceRelation->related_record;
+            foreach ($invoiceRelations as $invoiceRelation) {
+                if ($invoiceRelation->related_record) {
+                    $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
+                    if (null == $newestInvoiceTime || $invoiceRelation->related_record->creation_time->isLater($newestInvoiceTime)) {
+                        $newestInvoiceTime = $invoiceRelation->related_record->creation_time;
+                        $newestInvoice = $invoiceRelation->related_record;
+                    }
                 }
             }
             
@@ -1055,7 +1057,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $this->_currentMonthToBill = clone $newestInvoice->end_date;
                 $this->_currentMonthToBill->addDay(4);
                 $this->_currentMonthToBill->subMonth(1);
-                //$this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
             }
         }
         
@@ -1468,10 +1469,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     
                     // get all invoices related to this contract. throw exception if a follwing invoice has been found
                     $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
-                    foreach($invoiceRelations as $invoiceRelation) {
-                        $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
-                        if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
-                            throw new Sales_Exception_DeletePreviousInvoice();
+                    foreach ($invoiceRelations as $invoiceRelation) {
+                        if ($invoiceRelation->related_record) {
+                            $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
+                            if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
+                                throw new Sales_Exception_DeletePreviousInvoice();
+                            }
                         }
                     }
                     $this->_currentBillingContract = $contract;
