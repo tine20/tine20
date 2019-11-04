@@ -201,7 +201,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION           => 'Shows context menu for system accounts to approve migration',
                     //_('Shows context menu for system accounts to approve migration')
                     self::TYPE                  => self::TYPE_BOOL,
-                    self::DEFAULT_STR           => true, // TODO switch back to false
+                    self::DEFAULT_STR           => false,
                 ],
                 self::FEATURE_TINE20_FLAG   => [
                     self::LABEL                 => 'Tine 2.0 Flag',
