@@ -471,6 +471,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED
             || $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
             if ($convertToShared) {
+                if (! $_record->migration_approved) {
+                    $translate = Tinebase_Translation::getTranslation('Felamimail');
+                    throw new Tinebase_Exception_SystemGeneric($translate->_('Migration of this account has not been approved!'));
+                }
+
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Convert account id ' . $_record->getId() . ' to ' . $_record->type
                     . ' ... Set new shared credential cache and update email user password');
@@ -480,6 +485,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $_record->user = $emailUserBackend->getLoginName($_record->user_id, $_record->email, $_record->email);
                 $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
                 $_record->smtp_credentials_id = $_record->credentials_id;
+                $_record->migration_approved = 0;
                 $emailUserBackend->inspectSetPassword($_record->user_id, $_record->password);
             }
 

@@ -27,6 +27,7 @@
  * @property  string    email
  * @property  string    user_id
  * @property  string    sieve_notification_email
+ * @property  string    migration_approved
  *
  * @package   Felamimail
  * @subpackage    Model
