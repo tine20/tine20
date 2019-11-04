@@ -40,7 +40,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_modelName = 'Tinebase_Model_Tree_FileObject';
+    protected $_modelName = Tinebase_Model_Tree_FileObject::class;
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
