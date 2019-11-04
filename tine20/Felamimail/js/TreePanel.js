@@ -453,9 +453,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                                this.accountStore.getById(node.id);
         
         if (! folder) {
-            // edit/remove account
             if (account.get('ns_personal') !== 'default') {
+                // disable some account actions if needed
                 this.contextMenuAccount.items.each(function(item) {
+                    // TODO don't rely on iconCls here!
                     // check account personal namespace -> disable 'add folder' if namespace is other than root 
                     if (item.iconCls == 'action_add') {
                         item.setDisabled(account.get('ns_personal') != '');
@@ -463,6 +464,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                     // disable filter rules/vacation if no sieve hostname is set
                     if (item.iconCls == 'action_email_replyAll' || item.iconCls == 'action_email_forward') {
                         item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
+                    }
+                    // disable account migration approval if already approved
+                    if (item.iconCls == 'action_approve_migration') {
+                        item.setDisabled(
+                               account.get('migration_approved') == 1
+                            || account.get('type') == 'user'
+                            || account.get('type') == 'shared'
+                        );
                     }
                 });
                 

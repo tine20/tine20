@@ -69,7 +69,8 @@ Tine.Felamimail.admin.showAccountGridPanel = function () {
                     actionUpdater: function(action, grants, records, isFilterSelect) {
                         var enabled = !isFilterSelect
                             && records && records.length === 1
-                            && _.indexOf(['system', 'userInternal'], records[0].get('type')) > -1;
+                            && _.indexOf(['system', 'userInternal'], records[0].get('type')) > -1
+                            && records[0].get('migration_approved') == 1;
 
                         action.setDisabled(!enabled);
                     },

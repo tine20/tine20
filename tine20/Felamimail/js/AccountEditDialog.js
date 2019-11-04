@@ -44,6 +44,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     asAdminModule: false,
 
+    /**
+     * needed to prevent events in form fields (i.e. migration_approved checkbox)
+     * @type boolean
+     */
+    preventCheckboxEvents: true,
+
     initComponent: function() {
 
         if (this.asAdminModule) {
@@ -87,6 +93,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.disableFormFields();
     },
 
+    // finally load the record into the form
+    onAfterRecordLoad: function() {
+        Tine.Felamimail.AccountEditDialog.superclass.onAfterRecordLoad.call(this);
+        this.preventCheckboxEvents = false;
+    },
+
     /**
      * executed when record gets updated from form
      */
@@ -112,6 +124,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             item.setValue('');
                         }
                     }
+                    break;
+                case 'migration_approved':
+                    disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
+                    item.setDisabled(disabled);
                     break;
                 case 'signatures':
                 case 'signature_position':
@@ -255,7 +271,31 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     this.disableFormFields();
                                 }
                             }
-                        }), this.userAccountPicker = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                        }), {
+                            fieldLabel: this.app.i18n._('Migration Approved'),
+                            name: 'migration_approved',
+                            hidden: ! this.asAdminModule,
+                            xtype: 'checkbox',
+                            listeners: {
+                                check: function(checkbox, checked) {
+                                    if (! this.preventCheckboxEvents && checked) {
+                                        checkbox.setValue(0);
+                                        Ext.MessageBox.show({
+                                            title: this.app.i18n._('Approve Migration'),
+                                            msg: this.app.i18n._('Do you want to approve the migration of this account?'),
+                                            buttons: Ext.MessageBox.YESNO,
+                                            fn: (btn) => {
+                                                this.preventCheckboxEvents = true;
+                                                checkbox.setValue(1);
+                                                this.preventCheckboxEvents = false;
+                                            },
+                                            icon: Ext.MessageBox.QUESTION
+                                        });
+                                    }
+                                },
+                                scope: this
+                            }
+                        }, this.userAccountPicker = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
                             fieldLabel: this.app.i18n._('User'),
                             useAccountRecord: true,

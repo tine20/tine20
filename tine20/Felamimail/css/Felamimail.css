@@ -30,6 +30,9 @@
     background-image:url(../../images/icon-set/icon_email_mark.svg) !important;
 }
 
+.action_approve_migration {
+    background-image:url(../../images/icon-set/icon_calendar_attendee_accepted.svg) !important;
+}
 
 .action_file {
     background-image:url(../../images/icon-set/icon_download.svg) !important;
