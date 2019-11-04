@@ -2198,7 +2198,17 @@ class Tinebase_FileSystem implements
             // AV scan
             if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
                     ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
-                $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($handle);
+                if (false === ($fileSize = filesize($hashFile))) {
+                    throw new Tinebase_Exception_UnexpectedValue('failed to get hash file size');
+                }
+                if ($fileSize <= Tinebase_Config::getInstance()
+                        ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE}) {
+                    if (!($hashHandle = fopen($hashFile, 'r'))) {
+                        throw new Tinebase_Exception_UnexpectedValue('failed to repoen hash file');
+                    }
+                    $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($hashHandle);
+                    fclose($hashHandle);
+                }
             }
             break;
         }
@@ -3948,9 +3958,13 @@ class Tinebase_FileSystem implements
             return true;
         }
 
-        if (!Tinebase_Core::acquireMultiServerLock(__METHOD__)) {
+        $lockId = __METHOD__;
+        if (!Tinebase_Core::acquireMultiServerLock($lockId)) {
             return true;
         }
+        $raii = new Tinebase_RAII(function() use($lockId) {
+            Tinebase_Core::releaseMultiServerLock($lockId);
+        });
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' updating... ');
@@ -3965,67 +3979,107 @@ class Tinebase_FileSystem implements
         $fh = null;
         $db = Tinebase_Core::getDb();
         $transManager = Tinebase_TransactionManager::getInstance();
-        $hashes = $this->_fileObjectBackend->getHashes($this->_fileObjectBackend->search(
-            new Tinebase_Model_Tree_FileObjectFilter([
-                ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
-                ['field' => 'size', 'operator' => 'greater', 'value' => 0],
-                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET]
-            ]), null, true));
 
-        foreach ($hashes as $hash) {
+        if (!($baseDir = opendir($this->_basePath))) {
+            Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open basedir'));
+            return false;
+        }
 
-            $transId = $transManager->startTransaction($db);
-            try {
-                $fileObjectRevisions = $this->_fileObjectBackend->getRevisionForHashes([$hash], true);
+        while (false !== ($hashDir = readdir($baseDir))) {
+            if (strlen($hashDir) !== 3 || !is_dir($this->_basePath . '/' . $hashDir)) continue;
+            if (!($fileDir = opendir($this->_basePath . '/' . $hashDir))) {
+                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open filedir: ' .
+                    $this->_basePath . '/' . $hashDir));
+                $result = false;
+                continue;
+            }
+            while (false !== ($file = readdir($fileDir))) {
+                $path = $this->_basePath . '/' . $hashDir . '/' . $file;
+                if (!is_file($path)) continue;
 
-                if (!is_file($this->getRealPathForHash($hash))) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
-                        __LINE__ . ' hash ' . $hash . ' is not a file, maybe race condition... skipping');
-                    continue;
-                }
-                if (false === ($fh = fopen($this->getRealPathForHash($hash), 'r'))) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                        __LINE__ . ' could not open file ' . $hash . ' for reading... skipping');
+                if (false === ($fileSize = filesize($path))) {
+                    Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('failed to get hash file size: ' .
+                        $path));
                     $result = false;
-                    $fh = null;
+                    continue;
+                }
+                if ($fileSize > Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE}) {
                     continue;
                 }
 
-                $scanResult = $avScanner->scan($fh);
-                fclose($fh);
                 $fh = null;
+                $scanResult = null;
+                $transId = $transManager->startTransaction($db);
+                try {
+                    $fileObjectRevisions = $this->_fileObjectBackend->getRevisionForHashes([$hashDir . $file], true);
 
-                if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
-                    $result = false;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                        __LINE__ . ' could not av scan file ' . $hash . ' because "' . $scanResult->message . '"');
-                } else {
+                    if (count($fileObjectRevisions) === 0) {
+                        $transManager->commitTransaction($transId);
+                        $transId = null;
+                        continue;
+                    }
+
                     foreach ($fileObjectRevisions as $fObjId => $revisions) {
                         foreach ($revisions as $revision) {
                             $this->_fileObjectBackend->setRevision($revision);
-                            /** @var Tinebase_Model_Tree_FileObject $fObj */
+                            /** @var \Tinebase_Model_Tree_FileObject $fObj */
                             $fObj = $this->_fileObjectBackend->get($fObjId, true);
+                            if ($fObj->lastavscan_time && Tinebase_DateTime::now()->subHour(12)
+                                    ->isEarlier(new Tinebase_DateTime($fObj->lastavscan_time))) {
+                                continue;
+                            }
+
+                            if ($fObj->hash !== ($hashDir . $file)) {
+                                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                                    'file objects hash not as expected: ' . $fObj->getId() . ' rev: ' . $fObj->revision
+                                    . ' hash: ' . $fObj->hash . ' expected hash: ' . $hashDir . $file));
+                                $result = false;
+                                continue;
+                            }
+                            if (null === $scanResult) {
+                                if (false === ($fh = fopen($path, 'r'))) {
+                                    Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                                        'could not open file ' . $path . ' for reading... skipping'));
+                                    $result = false;
+                                    $fh = null;
+                                    continue 3;
+                                }
+
+                                $scanResult = $avScanner->scan($fh);
+                                fclose($fh);
+                                $fh = null;
+                                if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
+                                    $result = false;
+                                }
+                            }
+
                             $fObj->lastavscan_time = Tinebase_DateTime::now();
                             $fObj->is_quarantined =
                                 Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result;
                             $this->_fileObjectBackend->update($fObj);
                         }
                     }
-                }
 
-                $transManager->commitTransaction($transId);
-                $transId = null;
-            } finally {
-                $this->_fileObjectBackend->setRevision(null);
-                if (null !== $transId) {
-                    $transManager->rollBack();
-                }
-                if (null !== $fh) {
-                    fclose($fh);
-                    $fh = null;
+                    $transManager->commitTransaction($transId);
+                    $transId = null;
+                } finally {
+                    $this->_fileObjectBackend->setRevision(null);
+                    if (null !== $transId) {
+                        $transManager->rollBack();
+                    }
+                    if (null !== $fh) {
+                        fclose($fh);
+                        $fh = null;
+                    }
                 }
             }
+            closedir($fileDir);
         }
+        closedir($baseDir);
+
+        // only for unused variable check
+        unset($raii);
 
         return $result;
     }

@@ -668,6 +668,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
     const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
+    const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
 
@@ -2172,6 +2173,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => FALSE,
                     'default'               => 5,
                 ),
+                self::FILESYSTEM_AVSCAN_MAXFSIZE => [
+                    //_('Antivirus Scan Max File Size')
+                    self::LABEL                 => 'Antivirus Scan Max File Size',
+                    //_('Antivirus Scan Max File Size')
+                    self::DESCRIPTION           => 'Antivirus Scan Max File Size',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                    self::DEFAULT_STR           => 25 * 1024 * 1024,
+                ],
                 self::FILESYSTEM_AVSCAN_MODE => [
                     //_('Antivirus Scan Mode')
                     self::LABEL                 => 'Antivirus Scan Mode',
