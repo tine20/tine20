@@ -19,6 +19,7 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE012_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE012_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -45,6 +46,10 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE012_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -255,5 +260,25 @@ class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Felamimail', '12.11', self::RELEASE012_UPDATE008);
+    }
+
+    public function update009()
+    {
+        if ($this->getTableVersion('felamimail_account') < 25) {
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>migration_approved</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>
+        ');
+
+            $this->_backend->addCol('felamimail_account', $declaration);
+
+            $this->setTableVersion('felamimail_account', 25);
+        }
+
+        $this->addApplicationUpdate('Felamimail', '12.12', self::RELEASE012_UPDATE009);
     }
 }

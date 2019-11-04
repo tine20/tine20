@@ -294,6 +294,14 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->_addSignature($system);
     }
 
+    public function testApproveAccountMigration()
+    {
+        $result = $this->_json->approveAccountMigration($this->_account->getId());
+        self::assertEquals('success', $result['status'], print_r($result, true));
+        $account = $this->_json->getAccount($this->_account->getId());
+        self::assertEquals(1, $account['migration_approved']);
+    }
+
     /*********************** message tests ****************************/
 
     /**

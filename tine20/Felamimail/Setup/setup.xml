@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>12.11</version>
+    <version>12.12</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>24</version>
+            <version>25</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -110,6 +110,11 @@
                 </field>
                 <field>
                     <name>preserve_format</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>migration_approved</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>

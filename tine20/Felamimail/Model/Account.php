@@ -99,6 +99,15 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER              => true,
             ],
+            'migration_approved' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::NULLABLE => true,
+                self::LABEL => 'Migration Approved', // _('Migration Approved')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false
+                ],
+            ],
             'host' => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
