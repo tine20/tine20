@@ -4044,4 +4044,65 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     {
         return $this->_getTreeNodeBackend()->has($_ids, $_getDeleted);
     }
+
+    public function repairTreeIsDeletedState()
+    {
+        $db = Tinebase_Core::getDb();
+        $ids = $db->query('SELECT id FROM ' . SQL_TABLE_PREFIX .
+            'tree_nodes WHERE is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"')
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        if (count($ids)) {
+            Tinebase_Exception::log(new Exception('found ' . count($ids) . ' treenodes with broken deltime: ' .
+                print_r($ids, true)));
+
+            $db->query('update ' . SQL_TABLE_PREFIX . 'tree_nodes set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
+        }
+
+        $ids = $db->query('SELECT id FROM ' . SQL_TABLE_PREFIX .
+            'tree_fileobjects WHERE is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"')
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        if (count($ids)) {
+            Tinebase_Exception::log(new Exception('found ' . count($ids) . ' fileobjects with broken deltime: ' .
+                print_r($ids, true)));
+
+            $db->query('update ' . SQL_TABLE_PREFIX . 'tree_fileobjects set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
+        }
+
+        $ids = $db->query('SELECT F.id FROM ' . SQL_TABLE_PREFIX . 'tree_fileobjects as F join ' . SQL_TABLE_PREFIX .
+            'tree_nodes as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted')
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        if (count($ids)) {
+            Tinebase_Exception::log(new Exception('found ' . count($ids) .
+                ' fileobjects is_deleted differ from treenodes: ' . print_r($ids, true)));
+
+            $db->query('update ' . SQL_TABLE_PREFIX . 'tree_fileobjects as F join ' . SQL_TABLE_PREFIX .
+                'tree_nodes as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted set F.deleted_time = N.deleted_time, F.is_deleted = N.is_deleted');
+        }
+
+        $ids = $db->query('SELECT N.id FROM ' . SQL_TABLE_PREFIX . 'tree_nodes as N join ' . SQL_TABLE_PREFIX .
+            'tree_nodes as P ON N.parent_id = P.id AND N.is_deleted = 0 AND P.is_deleted = 1')
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        if (count($ids)) {
+            Tinebase_Exception::log(new Exception('found ' . count($ids) .
+                ' treenodes are not deleted but parent is: ' . print_r($ids, true)));
+
+            foreach ($ids as $id) {
+                try {
+                    $node = $this->get($id);
+                    if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                        $this->rmdir($this->getPathOfNode($node, true));
+                    } else {
+                        $this->deleteFileNode($node);
+                    }
+                } catch (Tinebase_Exception_NotFound $e) {
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e);
+                }
+            }
+        }
+    }
 }

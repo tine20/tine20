@@ -753,7 +753,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected function _orderTables($tables)
     {
-        // tags should be deleted first
+        // tags + tree_nodes should be deleted first
         // containers should be deleted last
 
         $orderedTables = array();
@@ -763,7 +763,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 case 'container':
                     $lastTables[] = $table;
                     break;
-                case 'tags':
+                case 'tree_nodes': // delete them before tree_objects
                     array_unshift($orderedTables, $table);
                     break;
                 default:
@@ -794,9 +794,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 continue;
             }
 
+
             $deleteCount = 0;
             try {
-                $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                if ($table === 'tree_nodes') {
+                    $this->_purgeTreeNodes($where);
+                } else {
+                    $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                }
             } catch (Zend_Db_Statement_Exception $zdse) {
                 echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
             }
@@ -808,6 +813,24 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo "\nNothing to purge from $table";
             }
         }
+    }
+
+    protected function _purgeTreeNodes($where)
+    {
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
+
+        array_walk($where, function (&$item) {
+            $item = 'n.' . $item;
+        });
+        $table = SQL_TABLE_PREFIX . 'tree_nodes';
+        $idsQuery = 'SELECT n.id from ' . $table . ' as n LEFT JOIN ' . $table . ' as '
+            . 'child on n.id = child.parent_id WHERE child.id is NULL AND ' . implode(' AND ', $where);
+        $deleteQuery = 'DELETE FROM ' . $table . ' WHERE id IN (?)';
+
+        do {
+            $ids = Tinebase_Core::getDb()->query($idsQuery)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+        } while (!empty($ids) && Tinebase_Core::getDb()->query(Tinebase_Core::getDb()->quoteInto($deleteQuery, $ids))
+            ->rowCount() > 0);
     }
 
     /**

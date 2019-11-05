@@ -915,4 +915,64 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Tinebase', '11.46');
     }
+
+    /**
+     * update foreign key on delete cascade
+     */
+    public function update_46()
+    {
+        try {
+            $this->_backend->dropForeignKey('group_members', 'group_members::account_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('group_members', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>group_members::account_id--accounts::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                    </reference>
+                </index>'));
+
+        try {
+            $this->_backend->dropForeignKey('import', 'import::user_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('import', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>import::user_id--accounts::id</name>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                    </reference>
+                </index>'));
+
+        try {
+            $this->_backend->dropForeignKey('openid_sites', 'openid_sites::account_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('openid_sites', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>openid_sites::account_id--accounts::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <!-- add onupdate/ondelete? -->
+                    </reference>
+                </index>'));
+
+        $this->setApplicationVersion('Tinebase', '11.47');
+    }
 }

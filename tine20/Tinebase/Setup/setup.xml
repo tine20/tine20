@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>11.46</version>
+    <version>11.47</version>
     <minimumRequiredVersion>10.59</minimumRequiredVersion>
     <tables>
         <table>
@@ -553,6 +553,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>
                 <index>
@@ -3027,6 +3028,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>
             </declaration>
@@ -3165,6 +3167,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                         <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
