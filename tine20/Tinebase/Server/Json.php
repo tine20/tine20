@@ -367,7 +367,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      * @param $request
      * @return JSON
      */
-    protected function _handle($request)
+    protected function _handle($request, $retries = 0)
     {
         try {
             $method = $request->getMethod();
@@ -403,6 +403,13 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             return $response;
             
         } catch (Throwable $exception) {
+            if ($retries < 2 && $exception instanceof Zend_Db_Statement_Exception && strpos($exception->getMessage(),
+                    'Deadlock found') !== false) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                Tinebase_Exception::log($exception);
+                Tinebase_Exception::log(new Tinebase_Exception_Backend('Deadlock found, retrying: ' . $retries));
+                return $this->_handle($request, $retries + 1);
+            }
             return $this->_handleException($request, $exception);
         }
     }
