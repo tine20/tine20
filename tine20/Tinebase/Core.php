@@ -1782,26 +1782,15 @@ class Tinebase_Core
     
     /**
      * returns protocol + hostname
-     * 
+     *
+     * @deprecated use getUrl(GET_URL_NOPATH) instead
      * @return string
      */
     public static function getHostname()
     {
         $hostname = self::get('HOSTNAME');
         if (! $hostname) {
-            if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
-                $url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL);
-                if (empty($url)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
-                    $hostname = 'http://'; // backward compatibility. This is what used to happen if you ask zend
-                } else {
-                    $hostname = parse_url($url, PHP_URL_SCHEME) . '://' . parse_url($url, PHP_URL_HOST);
-                }
-            } else {
-                $request = new Zend_Controller_Request_Http();
-                $hostname = $request->getScheme() . '://' . $request->getHttpHost();
-            }
+            $hostname = self::getUrl(self::GET_URL_NOPATH);
 
             self::set('HOSTNAME', $hostname);
         }
@@ -1814,6 +1803,7 @@ class Tinebase_Core
     const GET_URL_PROTOCOL = 'protocol';
     const GET_URL_NO_PROTO = 'noProtocol';
     const GET_URL_FULL = 'full';
+    const GET_URL_NOPATH = 'noPath';
 
     /**
      * returns requested url part
@@ -1854,6 +1844,9 @@ class Tinebase_Core
                 break;
             case self::GET_URL_NO_PROTO:
                 $url = '//' . $hostname . $pathname;
+                break;
+            case self::GET_URL_NOPATH:
+                $url = $protocol . '://' . $hostname;
                 break;
             case self::GET_URL_FULL:
             default:
