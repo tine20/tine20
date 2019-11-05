@@ -161,7 +161,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     public function updateCustomField(Tinebase_Model_CustomField_Config $_record)
     {
         $this->_clearCache();
-        $result = $this->_backendConfig->update($_record);
+        $this->_backendConfig->setAllCFs();
+        try {
+            $result = $this->_backendConfig->update($_record);
+        } finally {
+            $this->_backendConfig->setNoSystemCFs();
+        }
         Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
         return $result;
     }
