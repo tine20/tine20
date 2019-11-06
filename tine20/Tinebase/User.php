@@ -206,7 +206,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         self::$_backendConfiguration = null;
         self::$_backendType = null;
     }
-        
+
     /**
      * return an instance of the current user backend
      *
