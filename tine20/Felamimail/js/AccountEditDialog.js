@@ -285,9 +285,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                             msg: this.app.i18n._('Do you want to approve the migration of this account?'),
                                             buttons: Ext.MessageBox.YESNO,
                                             fn: (btn) => {
-                                                this.preventCheckboxEvents = true;
-                                                checkbox.setValue(1);
-                                                this.preventCheckboxEvents = false;
+                                                if (btn === 'yes') {
+                                                    this.preventCheckboxEvents = true;
+                                                    checkbox.setValue(1);
+                                                    this.preventCheckboxEvents = false;
+                                                }
                                             },
                                             icon: Ext.MessageBox.QUESTION
                                         });
