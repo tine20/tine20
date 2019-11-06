@@ -51,8 +51,7 @@ class Tinebase_Mail extends Zend_Mail
     {
         if (empty($_signature)) {
            $content = $_zmm->getContent();
-        }
-        else {
+        } else {
            $content = self::_getZMMContentWithSignature($_zmm, $_signature);
         }
         $contentStream = fopen("php://temp", 'r+');

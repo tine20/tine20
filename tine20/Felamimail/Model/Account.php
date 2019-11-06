@@ -774,4 +774,14 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         
         return ($capabilities && in_array($_capability, $capabilities['capabilities']));
     }
+
+    public function setSignatureText()
+    {
+        if ($this->signature) {
+            return;
+        }
+        $converter = Tinebase_Convert_Factory::factory($this);
+        $json = $converter->fromTine20Model(clone $this);
+        $this->signature = isset($json['signature']) ? $json['signature'] : null;
+    }
 }
