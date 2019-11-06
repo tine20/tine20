@@ -331,10 +331,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     selectInbox: function(account) {
         var accountId = (account) ? account.id : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
 
-        // expand portal columns first
-        // TODO find a way to only expand "EMAIL ACCOUNTS" node
+        // expand portal column "Email Accounts" first
         Ext.each(this.app.getMainScreen().getWestPanel().getPortalColumn().items.items, function (item) {
-            if (Ext.isFunction(item.expand)) {
+            if (Ext.isFunction(item.expand) && item.recordClass) {
                 item.expand();
             }
         });
@@ -453,9 +452,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                                this.accountStore.getById(node.id);
         
         if (! folder) {
-            // edit/remove account
             if (account.get('ns_personal') !== 'default') {
+                // disable some account actions if needed
                 this.contextMenuAccount.items.each(function(item) {
+                    // TODO don't rely on iconCls here!
                     // check account personal namespace -> disable 'add folder' if namespace is other than root 
                     if (item.iconCls == 'action_add') {
                         item.setDisabled(account.get('ns_personal') != '');
@@ -463,6 +463,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                     // disable filter rules/vacation if no sieve hostname is set
                     if (item.iconCls == 'action_email_replyAll' || item.iconCls == 'action_email_forward') {
                         item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
+                    }
+                    // disable account migration approval if already approved
+                    if (item.iconCls == 'action_approve_migration') {
+                        item.setDisabled(
+                               account.get('migration_approved') == 1
+                            || account.get('type') == 'user'
+                            || account.get('type') == 'shared'
+                        );
                     }
                 });
                 

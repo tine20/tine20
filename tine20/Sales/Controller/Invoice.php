@@ -1042,11 +1042,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             // do not modify $newestInvoiceTime!!!! it does NOT get cloned!
             $newestInvoiceTime = null;
             $newestInvoice = null;
-            foreach($invoiceRelations as $invoiceRelation) {
-                $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
-                if ( null == $newestInvoiceTime || $invoiceRelation->related_record->creation_time->isLater($newestInvoiceTime) ) {
-                    $newestInvoiceTime = $invoiceRelation->related_record->creation_time;
-                    $newestInvoice = $invoiceRelation->related_record;
+            foreach ($invoiceRelations as $invoiceRelation) {
+                if ($invoiceRelation->related_record) {
+                    $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
+                    if (null == $newestInvoiceTime || $invoiceRelation->related_record->creation_time->isLater($newestInvoiceTime)) {
+                        $newestInvoiceTime = $invoiceRelation->related_record->creation_time;
+                        $newestInvoice = $invoiceRelation->related_record;
+                    }
                 }
             }
             
@@ -1055,7 +1057,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $this->_currentMonthToBill = clone $newestInvoice->end_date;
                 $this->_currentMonthToBill->addDay(4);
                 $this->_currentMonthToBill->subMonth(1);
-                //$this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
             }
         }
         
@@ -1468,10 +1469,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     
                     // get all invoices related to this contract. throw exception if a follwing invoice has been found
                     $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
-                    foreach($invoiceRelations as $invoiceRelation) {
-                        $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
-                        if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
-                            throw new Sales_Exception_DeletePreviousInvoice();
+                    foreach ($invoiceRelations as $invoiceRelation) {
+                        if ($invoiceRelation->related_record) {
+                            $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
+                            if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
+                                throw new Sales_Exception_DeletePreviousInvoice();
+                            }
                         }
                     }
                     $this->_currentBillingContract = $contract;
@@ -1490,13 +1493,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 
                 $allModels = array_unique($invoicePositions->model);
                 
-                foreach($allModels as $model) {
+                foreach ($allModels as $model) {
                     
                     if ($model == 'Sales_Model_ProductAggregate') {
                         continue;
                     }
-                    
-                    $filteredInvoicePositions = $invoicePositions->filter('model', $model);
                     
                     $billableControllerName = $model::getBillableControllerName();
                     $billableFilterName     = $model::getBillableFilterName();
@@ -1506,16 +1507,25 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $record->getId())
                     ));
                     
-                    $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
                     
-                    // set invoice ids of the timeaccounts
+                    // TODO move this to Timetracker (as on delete hook/fn)
                     if ($model == 'Timetracker_Model_Timeaccount') {
+                        // prevent throwing of Timetracker_Exception_ClosedTimeaccount for closed accounts (see \Timetracker_Controller_Timesheet::_checkGrant)
+                        $billableControllerName::getInstance()->setRequestContext([
+                            'skipClosedCheck' => true,
+                        ]);
+                        $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                        $billableControllerName::getInstance()->setRequestContext([]);
+                      
+                        // set invoice ids of the timeaccounts
                         $filterInstance = new Timetracker_Model_TimeaccountFilter(array());
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $record->getId())));
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'status', 'operator' => 'equals', 'value' => Timetracker_Model_Timeaccount::STATUS_BILLED)));
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'cleared_at', 'operator' => 'isnull', 'value' => '')));
                         
                         Timetracker_Controller_Timeaccount::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL, 'status' => Timetracker_Model_Timeaccount::STATUS_TO_BILL));
+                    } else {
+                        $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
                     }
                 }
                 

@@ -303,7 +303,7 @@ class Tinebase_Relation_RelationTest extends TestCase
     {
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], array());
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
-        $this->assertEquals(0, count($relations));
+        $this->assertEquals(1, count($relations), 'one relation has record_removed_reason');
     }
     
     public function testCleanUp()

@@ -471,6 +471,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED
             || $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
             if ($convertToShared) {
+                if (! $_record->migration_approved) {
+                    $translate = Tinebase_Translation::getTranslation('Felamimail');
+                    throw new Tinebase_Exception_SystemGeneric($translate->_('Migration of this account has not been approved!'));
+                }
+
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Convert account id ' . $_record->getId() . ' to ' . $_record->type
                     . ' ... Set new shared credential cache and update email user password');
@@ -480,6 +485,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $_record->user = $emailUserBackend->getLoginName($_record->user_id, $_record->email, $_record->email);
                 $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
                 $_record->smtp_credentials_id = $_record->credentials_id;
+                $_record->migration_approved = 0;
                 $emailUserBackend->inspectSetPassword($_record->user_id, $_record->password);
             }
 
@@ -522,6 +528,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'last_modified_time',
             'last_modified_by',
             'sieve_notification_email',
+            'sent_folder',
+            'trash_folder',
+            'drafts_folder',
+            'templates_folder',
+            'migration_approved',
         );
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
@@ -1578,5 +1589,26 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             Felamimail_Controller_Account::getInstance()->update($systemaccount);
         }
         Felamimail_Controller_Account::getInstance()->doContainerACLChecks($checks);
+    }
+
+    /**
+     * @param $accountId
+     * @return Felamimail_Model_Account
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function approveMigration($accountId)
+    {
+        $account = $this->get($accountId);
+        if (! in_array($account->type, [
+            Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            Felamimail_Model_Account::TYPE_SYSTEM
+        ]) && $account->user_id === Tinebase_Core::getUser()->getId()) {
+            throw new Tinebase_Exception_AccessDenied('you can only approve the migration of your own system accounts');
+        }
+
+        $account->migration_approved = 1;
+        $this->update($account);
+
+        return $account;
     }
 }

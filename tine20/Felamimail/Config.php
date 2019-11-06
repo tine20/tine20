@@ -30,6 +30,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const DELETE_ARCHIVED_MAIL = 'deleteArchivedMail';
 
     /**
+     * migrate system accounts
+     *
+     * @var string
+     */
+    const FEATURE_ACCOUNT_MIGRATION = 'accountMigration';
+
+    /**
      * Tine 2.0 flag feature
      *
      * @var string
@@ -188,6 +195,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => true,
             self::CONTENT               => [
+                self::FEATURE_ACCOUNT_MIGRATION => [
+                    self::LABEL                 => 'Account Migration',
+                    //_('Account Migration')
+                    self::DESCRIPTION           => 'Shows context menu for system accounts to approve migration',
+                    //_('Shows context menu for system accounts to approve migration')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
                 self::FEATURE_TINE20_FLAG   => [
                     self::LABEL                 => 'Tine 2.0 Flag',
                     //_('Tine 2.0 Flag')

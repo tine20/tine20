@@ -537,8 +537,22 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function changeCredentials($id, $username, $password)
     {
         $result = Felamimail_Controller_Account::getInstance()->changeCredentials($id, $username, $password);
-        
-        return array('status' => ($result) ? 'success' : 'failure');
+        return [
+            'status' => ($result) ? 'success' : 'failure'
+        ];
+    }
+
+    /**
+     * @param string $accountId
+     * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function approveAccountMigration($accountId)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->approveMigration($accountId);
+        return [
+            'status' => ($account->migration_approved === 1) ? 'success' : 'failure'
+        ];
     }
     
     /***************************** sieve funcs *******************************/

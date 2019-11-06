@@ -142,7 +142,7 @@ class Tinebase_Relations
         $relationsIds = $this->_getRelationIds($relations, $currentRelations);
         
         $toAdd = $relations->getIdLessIndexes();
-        $toDel = array_diff($currentIds, $relationsIds);
+        $toDel = $this->_getToDeleteIds($currentRelations, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
 
         // prevent two empty related_ids of the same relation type
@@ -211,13 +211,30 @@ class Tinebase_Relations
                 }
             }
             
-            if (! $current->isEqual($update, array('related_record'))) {
+            if (! $current->isEqual($update, array('related_record', 'record_removed_reason'))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Relation diff: ' . print_r($current->diff($update)->toArray(), true));
                 
                 $this->_updateRelation($update);
             }
         }
+    }
+
+    /**
+     * @param $currentRelations
+     * @param array $relationsIds
+     * @return array
+     */
+    protected function _getToDeleteIds($currentRelations, $relationsIds)
+    {
+        $deleteIds = [];
+        foreach ($currentRelations as $relation) {
+            if (! in_array($relation->getId(), $relationsIds) && empty($relation->record_removed_reason)) {
+                $deleteIds[] = $relation->getId();
+            }
+        }
+
+        return $deleteIds;
     }
 
     /**

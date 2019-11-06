@@ -1937,8 +1937,19 @@ class Admin_JsonTest extends TestCase
         $this->_convertAccount($emailAccount, $user);
     }
 
-    protected function _convertAccount($emailAccount, $user, $convertTo = Felamimail_Model_Account::TYPE_SHARED)
+    /**
+     * @param Felamimail_Model_Account $emailAccount
+     * @param $user
+     * @param string $convertTo
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _convertAccount(Felamimail_Model_Account $emailAccount, $user, $convertTo = Felamimail_Model_Account::TYPE_SHARED)
     {
+        $emailAccount->migration_approved = 1;
+        Admin_Controller_EmailAccount::getInstance()->update($emailAccount);
+
         // convert user to shared system account
         $emailAccountArray = $emailAccount->toArray();
         $emailAccountArray['password'] = Tinebase_Record_Abstract::generateUID(10);
