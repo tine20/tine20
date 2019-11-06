@@ -194,7 +194,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         self::$_backendConfiguration = null;
         self::$_backendType = null;
     }
-        
+
     /**
      * return an instance of the current user backend
      *
@@ -839,9 +839,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userToDelete, 'Tinebase_Model_FullUser');
 
                 if (in_array($user->accountLoginName, self::getSystemUsernames())) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Skipping system user ' . $user->accountLoginName);
                     Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                     $transactionId = null;
-                    return;
+                    continue;
                 }
 
                 // at first, we expire+deactivate the user
