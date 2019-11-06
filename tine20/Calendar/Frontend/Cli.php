@@ -351,6 +351,102 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
     }
 
+
+    /**
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     *
+     */
+    public function userCalendarReport(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($_opts, ['filename']);
+        if (!isset($args['status'])) $args['status'] = false;
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $count = Tinebase_FullUser::getInstance()->getUserCount();
+        $data = ['User', 'Number of Calendars', 'Required space in MB', 'Filemanager Quota'];
+        $i = 0;
+
+        while ($i < $count - 1) {
+            $users = Tinebase_FullUser::getInstance()->getFullUsers(NULL, NULL, $_dir = 'ASC', $i, $i += 100);
+
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' . $users->count() . ' Users!');
+
+            foreach ($users as $user) {
+                $disabled = ($args['status'] || $user['accountStatus'] != 'disabled');
+                if ($disabled) {
+                    $containerFilter = [
+                        ['field' => 'owner_id', 'operator' => 'equals', 'value' => $user->getId()],
+                        ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class],
+                        ['field' => 'application_id', 'operator' => 'equals',
+                            'value' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()],
+                    ];
+
+                    Tinebase_Container::getInstance()->doSearchAclFilter(false);
+                    $counContainers = Tinebase_Container::getInstance()->searchCount(
+                        new Tinebase_Model_ContainerFilter($containerFilter)
+                    );
+                    Tinebase_Container::getInstance()->doSearchAclFilter(true);
+
+
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' . $counContainers .
+                        ' Calendars for ' . $user['accountDisplayName']);
+
+                    $personalPath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                            'Filemanager',
+                            Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+                        ) . '/' . $user->getID();
+
+                    $personalPath = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        'Filemanager_Model_Node', [['field' => 'path',
+                        'operator' => 'equals', 'value' => '/personal/' . $user['accountDisplayName']]]);
+
+                    $quota = 0;
+                    $clUsage = 0;
+
+                    $personalNodes = Filemanager_Controller_Node::getInstance()->search($personalPath);
+
+                    foreach ($personalNodes as $node) {
+                        $quota += $node['size'];
+                    }
+
+                    $containers = Tinebase_Container::getInstance()->search(
+                        new Tinebase_Model_ContainerFilter($containerFilter)
+                    );
+
+                    foreach ($containers as $container) {
+
+                        $events = Calendar_Controller_Event::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel('Calendar_Model_Event',
+                            [['field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId()]]));
+
+                        $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($events);
+
+                        if ($attachments) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' .
+                            $attachments->count() . ' attachments for the Events of ' . $user['accountDisplayName']);
+
+                        foreach ($attachments as $attachment) {
+                            $clUsage += $attachment['size'];
+                        }
+
+                    }
+
+                    $clUsage = Tinebase_Helper::formatBytes($clUsage, 'MB');
+                    $fp = fopen($args['filename'], 'a');
+                    fputcsv($fp, $data);
+                    fclose($fp);
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Save the result in ' .
+                        $args['filename']);
+
+                }
+            }
+        }
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Report Success!');
+
+        return 1;
+    }
+
     /**
      * report of shared calendars
      *
