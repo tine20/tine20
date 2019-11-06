@@ -180,11 +180,27 @@ class Tinebase_Exception extends Exception
     }
 
     /**
+     * @param bool $bool
+     */
+    public function setLogToSentry($bool)
+    {
+        $this->_logToSentry = (bool)$bool;
+    }
+
+    /**
      * @return bool
      */
     public function logToSentry()
     {
         return $this->_logToSentry;
+    }
+
+    /**
+     * @param string $logLvl
+     */
+    public function setLogLevelMethod($logLvl)
+    {
+        $this->_logLevelMethod = $logLvl;
     }
 
     /**
