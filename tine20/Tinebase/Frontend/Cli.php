@@ -773,6 +773,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 case 'tags':
                     array_unshift($orderedTables, $table);
                     break;
+                case 'cal_attendee':
+                    array_unshift($orderedTables, $table);
+                    break;
                 default:
                     $orderedTables[] = $table;
             }
