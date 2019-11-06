@@ -48,7 +48,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
         this.quotaField = Ext.ComponentMgr.create({
             hidden: !showQuotaUi,
             fieldLabel: this.app.i18n.gettext('Quota'),
-            emptyText: this.app.i18n.gettext('no quota set'),
+            emptyText: this.app.i18n.gettext('No quota set (examples: 10 GB, 900 MB)'),
             name: 'quota',
             xtype: 'extuxbytesfield'
         });
