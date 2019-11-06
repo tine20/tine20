@@ -1827,7 +1827,7 @@ class Tinebase_Core
             if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
-                $protocol = 'http://'; // backward compatibility. This is what used to happen if you ask zend
+                $protocol = 'http'; // backward compatibility. This is what used to happen if you ask zend
                 $hostname = '';
                 $pathname = '';
             } else {
