@@ -21,6 +21,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE012_UPDATE009 = __CLASS__ . '::update009';
     const RELEASE012_UPDATE010 = __CLASS__ . '::update010';
+    const RELEASE012_UPDATE011 = __CLASS__ . '::update011';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -69,6 +70,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE010          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update010',
+            ],
+            self::RELEASE012_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
     ];
@@ -214,7 +219,20 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update010()
     {
-        Tinebase_Scheduler_Task::addFileSystemAVScanTask(Tinebase_Core::getScheduler());
         $this->addApplicationUpdate('Tinebase', '12.28', self::RELEASE012_UPDATE010);
+    }
+
+    public function update011()
+    {
+        $scheduler = new Tinebase_Backend_Scheduler();
+        try {
+            /** @var Tinebase_Model_SchedulerTask $task */
+            $task = $scheduler->getByProperty('Tinebase_FileSystem::avScan', 'name');
+            $task->config->setCron(Tinebase_Scheduler_Task::TASK_TYPE_WEEKLY);
+            $scheduler->update($task);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Scheduler_Task::addFileSystemAVScanTask($scheduler);
+        }
+        $this->addApplicationUpdate('Tinebase', '12.29', self::RELEASE012_UPDATE011);
     }
 }
