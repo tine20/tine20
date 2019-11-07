@@ -591,6 +591,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
                 this.showPasswordDialog();
 
+            // TODO make it work
+            // } else if (newValue === 'userInternal' && [
+            //     'shared'
+            // ].indexOf(currentValue) !== false
+            // ) {
+            //     // this is valid
+
             } else {
                 this.onTypeChangeError(combo, this.app.i18n._('It is not possible to convert the account to this type yet.'));
                 return false;
