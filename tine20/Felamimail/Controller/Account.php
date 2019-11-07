@@ -452,15 +452,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $convertToShared = ($_record->type === Felamimail_Model_Account::TYPE_SHARED &&
-            in_array($_oldRecord->type, [
-                Felamimail_Model_Account::TYPE_SYSTEM,
-                Felamimail_Model_Account::TYPE_USER_INTERNAL,
-            ]));
-        if ($_record->type !== $_oldRecord->type && ! $convertToShared) {
-            throw new Tinebase_Exception_UnexpectedValue('type can not change');
-        }
-
         // TODO move to converter
         if (is_array($_record->user_id)) {
             $_record->user_id = $_record->user_id['accountId'];
@@ -470,23 +461,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $this->_beforeUpdateSystemAccount($_record, $_oldRecord);
         } else if ($_record->type === Felamimail_Model_Account::TYPE_SHARED
             || $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
-            if ($convertToShared) {
-                if (! $_record->migration_approved) {
-                    $translate = Tinebase_Translation::getTranslation('Felamimail');
-                    throw new Tinebase_Exception_SystemGeneric($translate->_('Migration of this account has not been approved!'));
-                }
-
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Convert account id ' . $_record->getId() . ' to ' . $_record->type
-                    . ' ... Set new shared credential cache and update email user password');
-
-                /** @var Tinebase_EmailUser_Sql $emailUserBackend */
-                $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-                $_record->user = $emailUserBackend->getLoginName($_record->user_id, $_record->email, $_record->email);
-                $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
-                $_record->smtp_credentials_id = $_record->credentials_id;
-                $_record->migration_approved = 0;
-                $emailUserBackend->inspectSetPassword($_record->user_id, $_record->password);
+            if ($this->doConvertToShared($_record, $_oldRecord)) {
+                $this->_convertToShared($_record);
             }
 
             if ($_oldRecord->email !== $_record->email) {
@@ -499,6 +475,41 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         $this->_checkSignature($_record);
+    }
+
+    public function doConvertToShared($_record, $_oldRecord, $_throw = true)
+    {
+        $convertToShared = ($_record->type === Felamimail_Model_Account::TYPE_SHARED &&
+            in_array($_oldRecord->type, [
+                Felamimail_Model_Account::TYPE_SYSTEM,
+                Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            ]));
+
+        if ($_throw && $_record->type !== $_oldRecord->type && ! $convertToShared) {
+            throw new Tinebase_Exception_UnexpectedValue('type can not change');
+        }
+
+        return $convertToShared;
+    }
+
+    protected function _convertToShared($_record)
+    {
+        if (! $_record->migration_approved) {
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Migration of this account has not been approved!'));
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Convert account id ' . $_record->getId() . ' to ' . $_record->type
+            . ' ... Set new shared credential cache and update email user password');
+
+        /** @var Tinebase_EmailUser_Sql $emailUserBackend */
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $_record->user = $emailUserBackend->getLoginName($_record->user_id, $_record->email, $_record->email);
+        $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
+        $_record->smtp_credentials_id = $_record->credentials_id;
+        $_record->migration_approved = 0;
+        $emailUserBackend->inspectSetPassword($_record->user_id, $_record->password);
     }
     
     /**

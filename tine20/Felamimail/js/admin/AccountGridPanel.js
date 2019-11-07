@@ -1,7 +1,5 @@
 Ext.ns('Tine.Felamimail.admin');
 
-require('Felamimail/js/admin/ConvertAccountPanel');
-
 Tine.Felamimail.admin.showAccountGridPanel = function () {
     var app = Tine.Tinebase.appMgr.get('Felamimail');
     if (! Tine.Felamimail.admin.emailAccountsGridPanel) {
@@ -60,34 +58,11 @@ Tine.Felamimail.admin.showAccountGridPanel = function () {
                     }
                 });
 
-                this.action_convert = new Ext.Action({
-                    text: this.app.i18n._('Convert Account'),
-                    iconCls: 'action_update_cache',
-                    disabled: true,
-                    requiredGrant: 'editGrant',
-                    allowMultiple: false,
-                    actionUpdater: function(action, grants, records, isFilterSelect) {
-                        var enabled = !isFilterSelect
-                            && records && records.length === 1
-                            && _.indexOf(['system', 'userInternal'], records[0].get('type')) > -1
-                            && records[0].get('migration_approved') == 1;
-
-                        action.setDisabled(!enabled);
-                    },
-                    handler: () => {
-                        let account = this.grid.getSelectionModel().getSelections()[0];
-                        let popupWindow = Tine.Felamimail.admin.ConvertAccountPanel.openWindow({
-                            account: account
-                        });
-                    }
-                });
-
                 Tine.Felamimail.AccountGridPanel.prototype.initActions.call(this);
 
                 this.actionUpdater.addActions([
                     this.action_editVacation,
-                    this.action_editSieveRules,
-                    this.action_convert
+                    this.action_editSieveRules
                 ]);
             },
 
@@ -102,11 +77,6 @@ Tine.Felamimail.admin.showAccountGridPanel = function () {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }),
-                    Ext.apply(new Ext.Button(this.action_convert), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
                     })
                 ];
             },
@@ -115,8 +85,7 @@ Tine.Felamimail.admin.showAccountGridPanel = function () {
                 return [
                     '-',
                     this.action_editVacation,
-                    this.action_editSieveRules,
-                    this.action_convert
+                    this.action_editSieveRules
                 ];
             }
         });

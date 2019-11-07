@@ -1953,7 +1953,8 @@ class Admin_JsonTest extends TestCase
         // convert user to shared system account
         $emailAccountArray = $emailAccount->toArray();
         $emailAccountArray['password'] = Tinebase_Record_Abstract::generateUID(10);
-        $convertedAccount = $this->_json->convertEmailAccount($emailAccountArray, $convertTo);
+        $emailAccountArray['type'] = $convertTo;
+        $convertedAccount = $this->_json->saveEmailAccount($emailAccountArray);
 
         self::assertEquals($convertTo, $convertedAccount['type']);
 

@@ -24,12 +24,12 @@ Tine.Felamimail.Model.getAvailableAccountTypes = function(withSystem) {
     let availableTypes = [
         {id: 'shared', value: app.i18n._('Shared System Account')},
         {id: 'userInternal', value: app.i18n._('Additional Personal System Account')},
-        {id: 'user', value: app.i18n._('Additional Personal External Account')}
+        {id: 'user', value: app.i18n._('Additional Personal External Account')},
+        {id: 'system', value: app.i18n._('Default Personal System Account')}
     ];
 
     if (withSystem) {
-        // new records can't be personal system accounts or mailinglists
-        availableTypes.push({id: 'system', value: app.i18n._('Default Personal System Account')});
+        // new records can't be mailinglists
         availableTypes.push({id: 'adblist', value: app.i18n._('Mailinglist')});
     }
 

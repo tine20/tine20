@@ -37,7 +37,7 @@ msgstr ""
 msgid "userInternal accounts need to have an user_id set"
 msgstr ""
 
-#: Controller/Account.php:476
+#: Controller/Account.php:499
 msgid "Migration of this account has not been approved!"
 msgstr ""
 
@@ -225,14 +225,14 @@ msgstr ""
 msgid "Can not combine \"allow external\" and \"allow only members\""
 msgstr ""
 
-#: Model/Signature.php:36 Model/Signature.php:91 Model/Account.php:335
+#: Model/Signature.php:36 Model/Signature.php:91 Model/Account.php:336
 #: js/MessageEditDialog.js:1544
 msgid "Signature"
 msgid_plural "Signatures"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/Signature.php:77 Model/Account.php:98 js/SignatureGridPanel.js:38
+#: Model/Signature.php:77 Model/Account.php:99 js/SignatureGridPanel.js:38
 msgid "Name"
 msgstr ""
 
@@ -294,120 +294,120 @@ msgstr ""
 msgid "Node ID"
 msgstr ""
 
-#: Model/MessageFileLocation.php:133 Model/Account.php:86
+#: Model/MessageFileLocation.php:133 Model/Account.php:87
 msgid "Type"
 msgstr ""
 
-#: Model/Account.php:52 js/AccountEditDialog.js:231
+#: Model/Account.php:53 js/AccountEditDialog.js:239
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/Account.php:53
+#: Model/Account.php:54
 msgid "Email Account"
 msgid_plural "Email Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/Account.php:75 js/AccountEditDialog.js:300
+#: Model/Account.php:76 js/AccountEditDialog.js:307
 msgid "User"
 msgstr ""
 
-#: Model/Account.php:105 js/AccountEditDialog.js:275
+#: Model/Account.php:106 js/AccountEditDialog.js:279
 msgid "Migration Approved"
 msgstr ""
 
-#: Model/Account.php:115
+#: Model/Account.php:116
 msgid "IMAP Host"
 msgstr ""
 
-#: Model/Account.php:122
+#: Model/Account.php:123
 msgid "IMAP Port"
 msgstr ""
 
-#: Model/Account.php:135
+#: Model/Account.php:136
 msgid "IMAP SSL"
 msgstr ""
 
-#: Model/Account.php:184
+#: Model/Account.php:185
 msgid "Sent Folder"
 msgstr ""
 
-#: Model/Account.php:195
+#: Model/Account.php:196
 msgid "Trash Folder"
 msgstr ""
 
-#: Model/Account.php:206
+#: Model/Account.php:207
 msgid "Drafts Folder"
 msgstr ""
 
-#: Model/Account.php:217
+#: Model/Account.php:218
 msgid "Templates Folder"
 msgstr ""
 
-#: Model/Account.php:246 js/AccountEditDialog.js:511
+#: Model/Account.php:247 js/AccountEditDialog.js:518
 msgid "Display Format"
 msgstr ""
 
-#: Model/Account.php:263 js/AccountEditDialog.js:527
+#: Model/Account.php:264 js/AccountEditDialog.js:534
 msgid "Compose Format"
 msgstr ""
 
-#: Model/Account.php:274 js/AccountEditDialog.js:542
+#: Model/Account.php:275 js/AccountEditDialog.js:549
 msgid "Preserve Format"
 msgstr ""
 
-#: Model/Account.php:285
+#: Model/Account.php:286
 msgid "Reply-To"
 msgstr ""
 
-#: Model/Account.php:311
+#: Model/Account.php:312
 msgid "E-Mail"
 msgstr ""
 
-#: Model/Account.php:319 js/MessageEditDialog.js:1305
+#: Model/Account.php:320 js/MessageEditDialog.js:1305
 #: js/MailDetailsPanel.js:172
 msgid "From"
 msgstr ""
 
-#: Model/Account.php:327 js/AccountEditDialog.js:314
+#: Model/Account.php:328 js/AccountEditDialog.js:321
 msgid "Organization"
 msgstr ""
 
-#: Model/Account.php:340 js/SignatureGridPanel.js:25
+#: Model/Account.php:341 js/SignatureGridPanel.js:25
 msgid "Signatures"
 msgstr ""
 
-#: Model/Account.php:357
+#: Model/Account.php:358
 msgid "Signature Position"
 msgstr ""
 
-#: Model/Account.php:369
+#: Model/Account.php:370
 msgid "SMTP Host"
 msgstr ""
 
-#: Model/Account.php:377
+#: Model/Account.php:378
 msgid "SMTP Port"
 msgstr ""
 
-#: Model/Account.php:390
+#: Model/Account.php:391
 msgid "SMTP SSL"
 msgstr ""
 
-#: Model/Account.php:406
+#: Model/Account.php:407
 msgid "SMTP Authentication"
 msgstr ""
 
-#: Model/Account.php:448
+#: Model/Account.php:449
 msgid "Sieve Host"
 msgstr ""
 
-#: Model/Account.php:455
+#: Model/Account.php:456
 msgid "Sieve Port"
 msgstr ""
 
-#: Model/Account.php:468
+#: Model/Account.php:469
 msgid "Sieve SSL"
 msgstr ""
 
@@ -519,11 +519,11 @@ msgstr ""
 msgid "Select recipients for \"{0}\""
 msgstr ""
 
-#: js/FolderSelectPanel.js:75 js/admin/ConvertAccountPanel.js:63
+#: js/FolderSelectPanel.js:75
 msgid "Cancel"
 msgstr ""
 
-#: js/FolderSelectPanel.js:84 js/admin/ConvertAccountPanel.js:71
+#: js/FolderSelectPanel.js:84
 msgid "Ok"
 msgstr ""
 
@@ -572,7 +572,7 @@ msgstr ""
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/TreeContextMenu.js:70 js/admin/ConvertAccountPanel.js:140
+#: js/TreeContextMenu.js:70
 msgid "Please wait"
 msgstr ""
 
@@ -585,11 +585,11 @@ msgstr ""
 msgid "Edit Account"
 msgstr ""
 
-#: js/TreeContextMenu.js:131 js/admin/AccountGridPanel.js:30
+#: js/TreeContextMenu.js:131 js/admin/AccountGridPanel.js:28
 msgid "Edit Vacation Message"
 msgstr ""
 
-#: js/TreeContextMenu.js:147 js/admin/AccountGridPanel.js:48
+#: js/TreeContextMenu.js:147 js/admin/AccountGridPanel.js:46
 msgid "Edit Filter Rules"
 msgstr ""
 
@@ -605,7 +605,7 @@ msgstr ""
 msgid "Update Folder List"
 msgstr ""
 
-#: js/TreeContextMenu.js:252 js/AccountEditDialog.js:284
+#: js/TreeContextMenu.js:252 js/AccountEditDialog.js:288
 msgid "Approve Migration"
 msgstr ""
 
@@ -714,9 +714,9 @@ msgid "Attachments"
 msgstr ""
 
 #: js/MessageEditDialog.js:1325 js/MessageEditDialog.js:1335
-#: js/MessageEditDialog.js:1387 js/AccountEditDialog.js:367
-#: js/AccountEditDialog.js:410 js/AccountEditDialog.js:425
-#: js/AccountEditDialog.js:467 js/ContactGrid.js:118
+#: js/MessageEditDialog.js:1387 js/AccountEditDialog.js:374
+#: js/AccountEditDialog.js:417 js/AccountEditDialog.js:432
+#: js/AccountEditDialog.js:474 js/ContactGrid.js:118
 msgid "None"
 msgstr ""
 
@@ -734,7 +734,7 @@ msgid ""
 "his or her own copy."
 msgstr ""
 
-#: js/MessageEditDialog.js:1513 js/AccountEditDialog.js:557
+#: js/MessageEditDialog.js:1513 js/AccountEditDialog.js:564
 msgid "Reply-To Email"
 msgstr ""
 
@@ -843,7 +843,7 @@ msgstr ""
 msgid "Notification for {0}"
 msgstr ""
 
-#: js/sieve/NotificationDialog.js:89 js/AccountEditDialog.js:471
+#: js/sieve/NotificationDialog.js:89 js/AccountEditDialog.js:478
 msgid "Notification Email"
 msgstr ""
 
@@ -1043,24 +1043,6 @@ msgstr ""
 msgid "Delete Signature"
 msgstr ""
 
-#: js/admin/ConvertAccountPanel.js:45
-msgid ""
-"Convert this account to a shared account. Please set a new password for the "
-"account:"
-msgstr ""
-
-#: js/admin/ConvertAccountPanel.js:123
-msgid "New Password"
-msgstr ""
-
-#: js/admin/ConvertAccountPanel.js:140
-msgid "Converting Account ..."
-msgstr ""
-
-#: js/admin/AccountGridPanel.js:64
-msgid "Convert Account"
-msgstr ""
-
 #: js/MessageFileButton.js:35
 msgid "File Message"
 msgstr ""
@@ -1099,182 +1081,198 @@ msgstr ""
 msgid "Add New Account"
 msgstr ""
 
-#: js/AccountEditDialog.js:153
+#: js/AccountEditDialog.js:190
 msgid "User needs to enter credentials after login"
 msgstr ""
 
-#: js/AccountEditDialog.js:207
+#: js/AccountEditDialog.js:215
 msgid "Permissions"
 msgstr ""
 
-#: js/AccountEditDialog.js:243
+#: js/AccountEditDialog.js:251
 msgid "Account Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:247
+#: js/AccountEditDialog.js:255
 msgid "Account Type"
 msgstr ""
 
-#: js/AccountEditDialog.js:285
+#: js/AccountEditDialog.js:289
 msgid "Do you want to approve the migration of this account?"
 msgstr ""
 
-#: js/AccountEditDialog.js:306
+#: js/AccountEditDialog.js:313
 msgid "User Email"
 msgstr ""
 
-#: js/AccountEditDialog.js:311
+#: js/AccountEditDialog.js:318
 msgid "User Name (From)"
 msgstr ""
 
-#: js/AccountEditDialog.js:317
+#: js/AccountEditDialog.js:324
 msgid "Signature position"
 msgstr ""
 
-#: js/AccountEditDialog.js:328
+#: js/AccountEditDialog.js:335
 msgid "Above the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:329
+#: js/AccountEditDialog.js:336
 msgid "Below the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:338
+#: js/AccountEditDialog.js:345
 msgid "IMAP"
 msgstr ""
 
-#: js/AccountEditDialog.js:345 js/AccountEditDialog.js:390
-#: js/AccountEditDialog.js:447
+#: js/AccountEditDialog.js:352 js/AccountEditDialog.js:397
+#: js/AccountEditDialog.js:454
 msgid "Host"
 msgstr ""
 
-#: js/AccountEditDialog.js:349
+#: js/AccountEditDialog.js:356
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr ""
 
-#: js/AccountEditDialog.js:356 js/AccountEditDialog.js:400
-#: js/AccountEditDialog.js:457
+#: js/AccountEditDialog.js:363 js/AccountEditDialog.js:407
+#: js/AccountEditDialog.js:464
 msgid "Secure Connection"
 msgstr ""
 
-#: js/AccountEditDialog.js:368 js/AccountEditDialog.js:411
-#: js/AccountEditDialog.js:468
+#: js/AccountEditDialog.js:375 js/AccountEditDialog.js:418
+#: js/AccountEditDialog.js:475
 msgid "TLS"
 msgstr ""
 
-#: js/AccountEditDialog.js:369 js/AccountEditDialog.js:412
+#: js/AccountEditDialog.js:376 js/AccountEditDialog.js:419
 msgid "SSL"
 msgstr ""
 
-#: js/AccountEditDialog.js:372
+#: js/AccountEditDialog.js:379
 msgid "Username"
 msgstr ""
 
-#: js/AccountEditDialog.js:376
+#: js/AccountEditDialog.js:383
 msgid "Password"
 msgstr ""
 
-#: js/AccountEditDialog.js:383
+#: js/AccountEditDialog.js:390
 msgid "SMTP"
 msgstr ""
 
-#: js/AccountEditDialog.js:393
+#: js/AccountEditDialog.js:400
 msgid "Port (Default: 25)"
 msgstr ""
 
-#: js/AccountEditDialog.js:415
+#: js/AccountEditDialog.js:422
 msgid "Authentication"
 msgstr ""
 
-#: js/AccountEditDialog.js:426
+#: js/AccountEditDialog.js:433
 msgid "Login"
 msgstr ""
 
-#: js/AccountEditDialog.js:427
+#: js/AccountEditDialog.js:434
 msgid "Plain"
 msgstr ""
 
-#: js/AccountEditDialog.js:430
+#: js/AccountEditDialog.js:437
 msgid "Username (optional)"
 msgstr ""
 
-#: js/AccountEditDialog.js:433
+#: js/AccountEditDialog.js:440
 msgid "Password (optional)"
 msgstr ""
 
-#: js/AccountEditDialog.js:440
+#: js/AccountEditDialog.js:447
 msgid "Sieve"
 msgstr ""
 
-#: js/AccountEditDialog.js:451
+#: js/AccountEditDialog.js:458
 msgid "Port (Default: 2000)"
 msgstr ""
 
-#: js/AccountEditDialog.js:476
+#: js/AccountEditDialog.js:483
 msgid "Other Settings"
 msgstr ""
 
-#: js/AccountEditDialog.js:483
+#: js/AccountEditDialog.js:490
 msgid "Sent Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:490
+#: js/AccountEditDialog.js:497
 msgid "Trash Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:497
+#: js/AccountEditDialog.js:504
 msgid "Drafts Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:504
+#: js/AccountEditDialog.js:511
 msgid "Templates Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:522 js/AccountEditDialog.js:538
+#: js/AccountEditDialog.js:529 js/AccountEditDialog.js:545
 msgid "HTML"
 msgstr ""
 
-#: js/AccountEditDialog.js:523 js/AccountEditDialog.js:539
+#: js/AccountEditDialog.js:530 js/AccountEditDialog.js:546
 msgid "Plain Text"
 msgstr ""
 
-#: js/AccountEditDialog.js:524
+#: js/AccountEditDialog.js:531
 msgid "Depending on content type (experimental)"
 msgstr ""
 
-#: js/AccountEditDialog.js:553
+#: js/AccountEditDialog.js:560
 msgid "No"
 msgstr ""
 
-#: js/AccountEditDialog.js:554
+#: js/AccountEditDialog.js:561
 msgid "Yes"
 msgstr ""
 
-#: js/AccountEditDialog.js:585
+#: js/AccountEditDialog.js:589
+msgid "Migration has not been approved."
+msgstr ""
+
+#: js/AccountEditDialog.js:595
+msgid "It is not possible to convert the account to this type yet."
+msgstr ""
+
+#: js/AccountEditDialog.js:599
+msgid "System accounts cannot be created manually."
+msgstr ""
+
+#: js/AccountEditDialog.js:610
+msgid "Account type change not possible"
+msgstr ""
+
+#: js/AccountEditDialog.js:634
 msgid "E-Mail account needs a password"
 msgstr ""
 
-#: js/AccountEditDialog.js:602
+#: js/AccountEditDialog.js:650
 msgid "Use"
 msgstr ""
 
-#: js/AccountEditDialog.js:604
+#: js/AccountEditDialog.js:652
 msgid "The grant use the shared email account"
 msgstr ""
 
-#: js/AccountEditDialog.js:608
+#: js/AccountEditDialog.js:656
 msgid "Edit"
 msgstr ""
 
-#: js/AccountEditDialog.js:609
+#: js/AccountEditDialog.js:657
 msgid "The grant edit the shared email account"
 msgstr ""
 
-#: js/AccountEditDialog.js:614
+#: js/AccountEditDialog.js:662
 msgid "Send Mails"
 msgstr ""
 
-#: js/AccountEditDialog.js:615
+#: js/AccountEditDialog.js:663
 msgid "The grant to send mails via the email account"
 msgstr ""
 
@@ -1451,7 +1449,7 @@ msgstr ""
 msgid "Additional Personal External Account"
 msgstr ""
 
-#: js/Model.js:32
+#: js/Model.js:28
 msgid "Default Personal System Account"
 msgstr ""
 
@@ -1651,28 +1649,28 @@ msgstr ""
 msgid "Do you want to send a reading confirmation message?"
 msgstr ""
 
-#: js/TreePanel.js:718
+#: js/TreePanel.js:717
 msgid "Total Messages:"
 msgstr ""
 
-#: js/TreePanel.js:722
+#: js/TreePanel.js:721
 msgid "Unread Messages:"
 msgstr ""
 
-#: js/TreePanel.js:726
+#: js/TreePanel.js:725
 msgid "Name on Server:"
 msgstr ""
 
-#: js/TreePanel.js:730
+#: js/TreePanel.js:729
 msgid "Last update:"
 msgstr ""
 
-#: js/TreePanel.js:750
+#: js/TreePanel.js:749
 #, python-brace-format
 msgid "Fetching messages... ({0} done)"
 msgstr ""
 
-#: js/TreePanel.js:766
+#: js/TreePanel.js:765
 #, python-brace-format
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"

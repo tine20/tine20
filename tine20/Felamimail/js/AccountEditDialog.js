@@ -115,15 +115,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             // only enable some fields
             switch (item.name) {
                 case 'user_id':
-                    if (! this.asAdminModule) {
-                        item.hide();
-                    } else {
-                        disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
-                        item.setDisabled(disabled);
-                        if (disabled) {
-                            item.setValue('');
-                        }
-                    }
+                    this.disableUserCombo(item);
                     break;
                 case 'migration_approved':
                     disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
@@ -143,23 +135,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     // fields can be edited in any mode
                     break;
                 case 'type':
-                    item.setDisabled(this.record.id);
+                    item.setDisabled(! this.asAdminModule);
                     break;
                 case 'password':
-                    if (this.record.get('type') && this.record.get('type') === 'user') {
-                        if (this.asAdminModule) {
-                            // TODO make this work - we want to see the text!
-                            // item.onTrigger1Click();
-                            item.setRawValue(this.app.i18n._('User needs to enter credentials after login'));
-                            item.setDisabled(true);
-                        } else {
-                            item.setDisabled(false);
-                        }
-                    } else {
-                        item.setDisabled(! (
-                            !this.record.get('type') || this.record.get('type') === 'shared')
-                        );
-                    }
+                    this.disablePasswordField(item);
                     break;
                 case 'user':
                     // TODO show message 'User needs to enter credentials after login' here?
@@ -189,6 +168,35 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
 
         this.grantsGrid.setDisabled(! (this.record.get('type') === 'shared' && this.asAdminModule));
+    },
+
+    disableUserCombo: function(item) {
+        if (! this.asAdminModule) {
+            item.hide();
+        } else {
+            disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
+            item.setDisabled(disabled);
+            if (disabled) {
+                item.setValue('');
+            }
+        }
+    },
+
+    disablePasswordField: function(item) {
+        if (this.record.get('type') && this.record.get('type') === 'user') {
+            if (this.asAdminModule) {
+                // TODO make this work - we want to see the text!
+                // item.onTrigger1Click();
+                item.setRawValue(this.app.i18n._('User needs to enter credentials after login'));
+                item.setDisabled(true);
+            } else {
+                item.setDisabled(false);
+            }
+        } else {
+            item.setDisabled(! (
+                !this.record.get('type') || this.record.get('type') === 'shared')
+            );
+        }
     },
 
     isSystemAccount: function() {
@@ -262,11 +270,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             displayField: 'value',
                             listeners: {
                                 scope: this,
-                                select: function(combo, record) {
-                                    // apply to record for disableFormFields()
-                                    this.record.set('type', combo.getValue());
-                                    this.disableFormFields();
-                                },
+                                select: this.onSelectType,
                                 blur: function() {
                                     this.disableFormFields();
                                 }
@@ -287,6 +291,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                             fn: (btn) => {
                                                 if (btn === 'yes') {
                                                     this.preventCheckboxEvents = true;
+                                                    this.record.set('migration_approved', true);
                                                     checkbox.setValue(1);
                                                     this.preventCheckboxEvents = false;
                                                 }
@@ -569,6 +574,41 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ]
         };
     },
+
+    onSelectType: function(combo, record) {
+        let newValue = combo.getValue();
+        let currentValue = this.record.get('type');
+        if (this.record.id) {
+            if (newValue === 'shared' && [
+                'system',
+                'userInternal'
+            ].indexOf(currentValue) !== false
+            ) {
+                // check migration_approved
+                if (! this.record.get('migration_approved')) {
+                    this.onTypeChangeError(combo, this.app.i18n._('Migration has not been approved.'));
+                    return false;
+                }
+                this.showPasswordDialog();
+
+            } else {
+                this.onTypeChangeError(combo, this.app.i18n._('It is not possible to convert the account to this type yet.'));
+                return false;
+            }
+        } else if (newValue === 'system') {
+            this.onTypeChangeError(combo, this.app.i18n._('System accounts cannot be created manually.'));
+            return false;
+        }
+
+        // apply to record for disableFormFields()
+        this.record.set('type', newValue);
+        this.disableFormFields();
+    },
+
+    onTypeChangeError: function(combo, errorText) {
+        combo.setValue(this.record.get('type'));
+        Ext.MessageBox.alert(this.app.i18n._('Account type change not possible'), errorText);
+    },
     
     /**
      * generic request exception handler
@@ -582,20 +622,26 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // if code == 925 (Felamimail_Exception_PasswordMissing)
         // -> open new Tine.Tinebase.widgets.dialog.PasswordDialog to set imap password field
         if (exception.code === 925) {
-            var me = this,
-                dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
-                windowTitle: this.app.i18n._('E-Mail account needs a password')
-            });
-            dialog.openWindow();
-
-            // password entered
-            dialog.on('apply', function (password) {
-                me.getForm().findField('password').setValue(password);
-                me.onApplyChanges(true);
-            });
+            this.showPasswordDialog(true);
         } else {
             Tine.Felamimail.handleRequestException(exception);
         }
+    },
+
+    showPasswordDialog: function(apply) {
+        var me = this,
+            dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
+                windowTitle: this.app.i18n._('E-Mail account needs a password')
+            });
+        dialog.openWindow();
+
+        // password entered
+        dialog.on('apply', function (password) {
+            me.getForm().findField('password').setValue(password);
+            if (apply) {
+                me.onApplyChanges(true);
+            }
+        });
     },
 
     getGrantsColumns: function() {
