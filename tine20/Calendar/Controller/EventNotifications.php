@@ -179,9 +179,15 @@
 
         $organizerContact = $_event->resolveOrganizer();
         if (! $organizerContact) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Organizer missing - using creator as organizer for notification purposes.');
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_event->created_by);
+            try {
+                $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_event->created_by);
+            } catch (Addressbook_Exception_NotFound $aenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Creator contact not found: ' . $aenf->getMessage() . ' - skipping notifications');
+                return;
+            }
         }
 
         $organizerIsAttender = false;
