@@ -809,12 +809,18 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         return this.accountStore;
     },
 
+    /**
+     * update account store after account record change
+     *
+     * @param {} account
+     * @param {} e
+     */
     onAccountRecordChange: function(account, e) {
+        let accountRecord = Tine.Tinebase.data.Record.setFromJson(account, Tine.Felamimail.Model.Account);
+        let existingAccount = this.accountStore.getById(account.id);
+
         // filter out other user accounts / edit from admin module
         if (_.get(account, 'user_id.accountId') === Tine.Tinebase.registry.get('currentAccount').accountId) {
-            let accountRecord = Tine.Tinebase.data.Record.setFromJson(account, Tine.Felamimail.Model.Account);
-            let existingAccount = this.accountStore.getById(account.id);
-
             if (e.topic.match(/\.create/)) {
                 this.accountStore.add([accountRecord]);
             } else if (e.topic.match(/\.update/) && existingAccount) {
@@ -825,6 +831,10 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
 
             this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
+        } else if (e.topic.match(/\.update/) && existingAccount) {
+            // handle shared account updates in felamimail
+            existingAccount.update(accountRecord);
+            existingAccount.commit();
         }
     },
 
@@ -847,7 +857,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
 
     /**
      * show felamimail credentials dialog
-     * 
+     *
      * @param {Tine.Felamimail.Model.Account} account
      * @param {String} username [optional]
      */
@@ -871,11 +881,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                         var accountId = folderStore.queriesPending[0].substring(16, 56),
                             account = this.getAccountStore().getById(accountId),
                             accountNode = this.getMainScreen().getTreePanel().getNodeById(accountId);
-                            
+
                         folderStore.resetQueryAndRemoveRecords('parent_path', '/' + accountId);
                         account.set('all_folders_fetched', true);
                         account.commit();
-                        
+
                         accountNode.loading = false;
                         accountNode.reload(function(callback) {
                             Ext.each(accountNode.childNodes, function(node) {
