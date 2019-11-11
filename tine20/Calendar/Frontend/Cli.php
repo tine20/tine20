@@ -377,7 +377,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $i = 0;
 
         $users = Tinebase_User::getInstance()->getFullUsers(NULL, NULL, $_dir = 'ASC', $i, 100);
-        while ($users > 0) {
+        while ($users->count() > 0) {
             $i += 100;
             echo 'Count: ' . $i . "\n";
             //$users = Tinebase_User::getInstance()->getFullUsers('metaways');
@@ -408,16 +408,21 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
 
                     $personalPath = [
-                        ['field' => 'recursive', 'operator' => 'equals',   'value' => 1],
+                        ['field' => 'recursive', 'operator' => 'equals', 'value' => 1],
                     ];
 
                     $usage = 0;
                     $clUsage = 0;
 
-                    $personalNodes = Filemanager_Controller_Node::getInstance()->search(new Filemanager_Model_NodeFilter($personalPath));
+                    try {
+                        $personalNodes = Filemanager_Controller_Node::getInstance()->search(new Filemanager_Model_NodeFilter($personalPath));
 
-                    foreach ($personalNodes as $node) {
-                        if(preg_match('/^\/personal\/'. $user['accountLoginName'] . '.*/', $node['path'])) $usage += $node['size'];
+                        foreach ($personalNodes as $node) {
+                            if (preg_match('/^\/personal\/' . $user['accountLoginName'] . '.*/', $node['path'])) $usage += $node['size'];
+                        }
+                    } catch (Exception $e) {
+                        echo $user['accountLoginName'] . ' has no rights for Filemanager!' . "\n";
+                        $usage = 'no rights!';
                     }
 
                     $containers = Tinebase_Container::getInstance()->search(
