@@ -272,6 +272,10 @@ class Tinebase_FileSystem implements
                 $treeBackend->setRevision($_revision);
             }
             $node = $treeBackend->get($_id, $_getDeleted);
+            if (null !== $_revision && (int)$node->revision !== (int)$_revision) {
+                throw new Tinebase_Exception_NotFound(Tinebase_Model_Tree_Node::class . ' ' . $_id . ' revision: ' .
+                    $_revision . ' couldn\'t be found');
+            }
         } finally {
             if (null !== $_revision) {
                 $treeBackend->setRevision(null);
