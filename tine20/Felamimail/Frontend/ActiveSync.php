@@ -172,7 +172,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $replyBody = NULL;
         }
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody, $account->signature);
         if ($rfc822) {
             $mail->addAttachment($rfc822);
         }
@@ -324,7 +324,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $replyBody = null;
         }
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody, $account->signature);
         
         Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
     }
