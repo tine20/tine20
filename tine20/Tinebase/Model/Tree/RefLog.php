@@ -64,14 +64,14 @@ class Tinebase_Model_Tree_RefLog extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_SIZE_DELTA            => [
-                self::TYPE                      => self::TYPE_INTEGER,
+                self::TYPE                      => self::TYPE_BIGINT,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
             self::FLD_REVISION_SIZE_DELTA   => [
-                self::TYPE                      => self::TYPE_INTEGER,
+                self::TYPE                      => self::TYPE_BIGINT,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
