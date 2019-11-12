@@ -112,13 +112,13 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             ->joinLeft(
                 /* table  */ array('tree_fileobjects' => $this->_tablePrefix . 'tree_fileobjects'), 
                 /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.object_id') . ' = ' . $this->_db->quoteIdentifier('tree_fileobjects.id'),
-                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'revision', 'contenttype', 'revision_size', 'indexed_hash', 'description')
+                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'contenttype', 'revision_size', 'indexed_hash', 'description')
             )
             ->joinLeft(
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.id') . ' AND ' .
                 $this->_db->quoteIdentifier('tree_filerevisions.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier('tree_fileobjects.revision')),
-                /* select */ array('hash', 'size', 'preview_count', 'preview_status', 'preview_error_count', 'lastavscan_time', 'is_quarantined')
+                /* select */ array('hash', 'size', 'preview_count', 'preview_status', 'preview_error_count', 'lastavscan_time', 'is_quarantined', 'revision')
             )->joinLeft(
             /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
