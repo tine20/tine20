@@ -12,8 +12,6 @@
 
 /**
  * Class Tinebase_Log_Formatter_Json
- *
- * @todo support timelog
  */
 class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
 {
@@ -27,7 +25,10 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
     {
         $logruntime = $this->_getLogRunTime(false);
         $logdifftime = $this->_getLogDiffTime(false);
-        $event = array_merge([
+        $event = [
+            'message' => isset($event['message']) ? str_replace($this->_search, $this->_replace, $event['message']) : '',
+            'timestamp' => isset($event['timestamp']) ? $event['timestamp'] : '',
+            'priority' => isset($event['priority']) ? $event['priority'] : '',
             'user' => self::getUsername(),
             'transaction_id' => self::$_transactionId,
             'request_id' => self::$_requestId,
@@ -35,11 +36,7 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
             'logruntime' => $logruntime,
             // TODO add method
             // 'method' => self::$_method
-        ], $event);
-
-        if (isset($event['message'])) {
-            $event['message'] = str_replace($this->_search, $this->_replace, $event['message']);
-        }
+        ];
 
         return @json_encode($event,
             JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION)
