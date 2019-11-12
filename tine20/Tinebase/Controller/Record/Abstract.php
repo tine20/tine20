@@ -2086,6 +2086,15 @@ abstract class Tinebase_Controller_Record_Abstract
         }
     }
 
+    public function public_checkRight($_action)
+    {
+        $this->_checkRight($_action);
+    }
+
+    public function checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    {
+        return $this->_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
+    }
 
     /**
      * check grant for action (CRUD)
