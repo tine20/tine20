@@ -52,7 +52,7 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . ' FastRoute dispatching on method: ' . $request->getMethod() . ' and uri: '
-            . $uri);
+            . $uri . ' and headers ' . print_r($request->getHeaders(), true));
 
         $routeInfo = $dispatcher->dispatch($request->getMethod(), $uri);
         switch ($routeInfo[0]) {
