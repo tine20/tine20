@@ -176,7 +176,6 @@
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Notification action: " . $_action);
 
-
         $organizerContact = $_event->resolveOrganizer();
         if (! $organizerContact) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -281,15 +280,17 @@
                 break;
 
             case 'tentative':
-                
-                $prefUser = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE,
-                    $organizerContact->account_id);
+                $prefUser = ($organizerContact->account_id)
+                    ? Tinebase_Core::getPreference('Calendar')->getValueForUser(
+                        Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE,
+                        $organizerContact->account_id)
+                    : false;
                 $attendee = new Calendar_Model_Attender(array(
                     'cal_event_id'      => $_event->getId(),
                     'user_type'         => Calendar_Model_Attender::USERTYPE_USER,
                     'user_id'           => $_event->organizer,
                 ), true);
-                if($prefUser) {
+                if ($prefUser) {
                     $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
                 }
                 break;
