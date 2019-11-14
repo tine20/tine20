@@ -178,10 +178,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $importOptions
      * @param array $clientRecordData
      * @return array
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function importEvents($tempFileId, $definitionId, $importOptions, $clientRecordData = array())
     {
-        return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
+        try {
+            $result = $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
+        } catch (Calendar_Exception_IcalParser $ceip) {
+            throw new Tinebase_Exception_SystemGeneric('Import error: ' . $ceip->getMessage());
+        }
+        return $result;
     }
     
     /**

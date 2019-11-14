@@ -41,7 +41,8 @@ class Calendar_Import_Ical extends Calendar_Import_Abstract
         try {
             $events = $converter->toTine20RecordSet($_resource);
         } catch (Exception $e) {
-            Tinebase_Exception::log($e);
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
             $isce = new Calendar_Exception_IcalParser('Can not parse ics file: ' . $e->getMessage());
             $isce->setParseError($e);
             throw $isce;
