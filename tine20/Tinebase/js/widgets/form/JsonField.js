@@ -12,18 +12,17 @@ Tine.Tinebase.widgets.form.JsonField = Ext.extend(Ext.form.Field, {
     defaultAutoCreate: {tag: 'div'},
 
     afterRender: function() {
-        var me = this;
 
         Tine.Tinebase.widgets.form.JsonField.superclass.afterRender.apply(this, arguments);
 
-        import(/* webpackChunkName: "Tinebase/js/ace" */ 'widgets/ace').then(function() {
-            me.ed = ace.edit(me.el.id, {
+        import('widgets/ace').then(() => {
+            this.ed = ace.edit(this.el.id, {
                 mode: 'ace/mode/json',
                 fontFamily: 'monospace',
                 fontSize: 12
             });
 
-            me.setValue(me.getValue());
+            this.setValue(this.getValue() || '');
         });
     },
 
