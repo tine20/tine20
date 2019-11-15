@@ -457,7 +457,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
     */
     public function loadBillables(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate)
     {
-        $this->_referenceDate = $date;
+        $this->_referenceDate = clone $date;
         $this->_billables = array();
         
         if (intval($this->budget) > 0) {
