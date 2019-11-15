@@ -51,8 +51,9 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $uri = preg_replace('/^' . preg_quote($serverPath, '/') . '/', '', $uri);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' FastRoute dispatching on method: ' . $request->getMethod() . ' and uri: '
-            . $uri . ' and headers ' . print_r($request->getHeaders(), true));
+            . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), function($headers, $name) use ($request)  {
+                return $headers .= "\n$name: {$request->getHeaderLine($name)}";
+            }, ''));
 
         $routeInfo = $dispatcher->dispatch($request->getMethod(), $uri);
         switch ($routeInfo[0]) {
