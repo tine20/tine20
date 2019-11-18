@@ -34,7 +34,8 @@ class Inventory_Config extends Tinebase_Config_Abstract
             'description'           => 'Possible status.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Inventory_Model_Status'),
-            'clientRegistryInclude' => TRUE,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
             'default'               => array(
                 'records' => array(
                     array('id' => 'ORDERED',    'value' => 'ordered'                       ), //_('ordered')
