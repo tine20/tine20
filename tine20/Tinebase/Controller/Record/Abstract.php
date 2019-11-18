@@ -51,11 +51,18 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_doRightChecks = TRUE;
 
     /**
-     * only do second factor validation once
+     * only do area lock validation once
      *
      * @var boolean
      */
     protected $_areaLockValidated = false;
+
+    /**
+     * do area lock check
+     *
+     * @var boolean
+     */
+    protected $_doAreaLockCheck = true;
 
     /**
      * use notes - can be enabled/disabled by useNotes
@@ -400,7 +407,18 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         return $this->_setBooleanMemberVar('_doContainerACLChecks', $setTo);
     }
-    
+
+    /**
+     * set/get checking area lock
+     *
+     * @param  boolean $setTo
+     * @return boolean
+     */
+    public function doAreaLockCheck($setTo = NULL)
+    {
+        return $this->_setBooleanMemberVar('_doAreaLockCheck', $setTo);
+    }
+
     /**
      * set/get resolving of customfields
      *

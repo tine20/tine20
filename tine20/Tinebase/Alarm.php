@@ -114,7 +114,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             Tinebase_Lock::keepLocksAlive();
 
             if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
-
+                $areaLockCheck = method_exists($appController, 'doAreaLockCheck')
+                    ? $appController->doAreaLockCheck(false)
+                    : false;
                 $alarm->sent_time = Tinebase_DateTime::now();
 
                 try {
@@ -132,6 +134,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     . ' Updating alarm status: ' . $alarm->sent_status);
 
                 $this->update($alarm);
+                if ($areaLockCheck) {
+                    $appController->doAreaLockCheck($areaLockCheck);
+                }
             }
         }
 
