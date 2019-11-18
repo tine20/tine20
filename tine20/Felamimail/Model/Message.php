@@ -474,10 +474,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->_setStructure($_structure);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Parsing structure: ' . print_r($this->structure, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::'
+            . __LINE__ . ' Parsing structure: ' . print_r($this->structure, TRUE));
         
-        $this->content_type = (array_key_exists('contentType', $this->structure) && (!is_null($this->structure['contentType']))) ? $this->structure['contentType'] : Zend_Mime::TYPE_TEXT;
+        $this->content_type = isset($this->structure['contentType']) && !is_null($this->structure['contentType'])
+            ? $this->structure['contentType']
+            : Zend_Mime::TYPE_TEXT;
         $this->_setBodyContentType();
     }
     
