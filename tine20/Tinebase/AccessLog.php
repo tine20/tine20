@@ -221,8 +221,6 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
     /**
      * add logout entry to the access log
      *
-     * @param string $_sessionId the session id
-     * @param string $_ipAddress the ip address the user connects from
      * @return null|Tinebase_Model_AccessLog
      */
     public function setLogout()
@@ -244,7 +242,13 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         $loginRecord->lo = Tinebase_DateTime::now();
         
         // call update of backend direct to save overhead of $this->update()
-        return $this->_backend->update($loginRecord);
+        try {
+            return $this->_backend->update($loginRecord);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' ' . $tenf->getMessage());
+            return null;
+        }
     }
 
     /**
