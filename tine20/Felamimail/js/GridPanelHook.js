@@ -241,14 +241,15 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         
         if (!contact.get("members")) {
             var mailAddress = (contact.getPreferredEmail()) ? Tine.Felamimail.getEmailStringFromContact(contact) : null;
-            if (mailAddress)
+            if (mailAddress && Ext.form.VTypes.email(mailAddress))
                 mailAddresses.push(mailAddress);
         } else {
             var emails = contact.get("emails");
-
             if (emails) {
                 Ext.each(emails.split(","), function (mail) {
-                    mailAddresses.push(mail);
+                    if (Ext.form.VTypes.email(mail)) {
+                        mailAddresses.push(mail);
+                    }
                 });
             }
         }

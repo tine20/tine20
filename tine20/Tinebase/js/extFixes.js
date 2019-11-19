@@ -1000,6 +1000,9 @@ Ext.override(Ext.menu.Menu, {
     })
 });
 
+/**
+ * FIXME: we already overwrite the email regex above!! which one is better?
+ */
 Ext.apply(Ext.form.VTypes, {
     //@see https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
     emailRe: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
