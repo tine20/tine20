@@ -582,7 +582,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $this->_getLoginFailedResponse();
         }
     }
-    
+
     /**
      * Returns TRUE if there is a captcha
      * @return boolean
@@ -888,8 +888,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             try {
                 $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
             } catch (Addressbook_Exception_NotFound $aenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) /** @noinspection PhpUndefinedMethodInspection */
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) /** @noinspection PhpUndefinedMethodInspection */
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' User not found in Addressbook: ' . $user->accountDisplayName);
             }
         }
@@ -897,11 +897,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $persistentFilters = Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters();
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . " Failed to fetch persistent filters. Exception: \n" . $tenf);
             $persistentFilters = array();
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . " Failed to fetch persistent filters. Exception: \n" . $e);
             $persistentFilters = array();
         }
@@ -981,7 +981,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Total registry size: ' . strlen(json_encode($registryData)));
-        
+
         return $registryData;
     }
 
