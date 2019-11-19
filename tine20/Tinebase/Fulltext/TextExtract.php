@@ -86,7 +86,7 @@ class Tinebase_Fulltext_TextExtract
         $blobFileName = $_fileObject->getFilesystemPath();
 
         exec($this->_javaBin . ' -jar '. $this->_tikaJar . ' -t -eUTF8 '
-            . escapeshellarg($blobFileName) . ' > ' . escapeshellarg($tempFileName), $output, $result);
+            . escapeshellarg($blobFileName) . ' > ' . escapeshellarg($tempFileName) . ' 2> /dev/null', $output, $result);
 
         if ($result !== 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
