@@ -236,7 +236,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             $task->config->setCron(Tinebase_Scheduler_Task::TASK_TYPE_WEEKLY);
             $scheduler->update($task);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Scheduler_Task::addFileSystemAVScanTask($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemAVScanTask(Tinebase_Scheduler::getInstance());
         }
         $this->addApplicationUpdate('Tinebase', '12.29', self::RELEASE012_UPDATE011);
     }
