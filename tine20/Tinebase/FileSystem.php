@@ -3974,10 +3974,6 @@ class Tinebase_FileSystem implements
             . ' updating... ');
 
         $avScanner = Tinebase_FileSystem_AVScan_Factory::getScanner();
-        // attention, this will just reload the definitions, not download new ones!
-        if (!$avScanner->update()) {
-            return false;
-        }
 
         $result = true;
         $fh = null;

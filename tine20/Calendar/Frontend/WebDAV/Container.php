@@ -79,9 +79,17 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     )
                 ))
             ));
+            /** @var Calendar_Model_Event $object */
             $object = $this->_getController()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
             if ($object == null) {
+                throw new Sabre\DAV\Exception\NotFound('Object not found');
+            }
+
+            if (!empty($object->base_event_id) && $object->getId() !== $object->base_event_id &&
+                    null !== $this->_getController()->search(new $filterClass([
+                        ['field' => 'id', 'operator' => 'equals', 'value' => $object->base_event_id]
+                    ]), null, false, false, 'sync')->getFirstRecord()) {
                 throw new Sabre\DAV\Exception\NotFound('Object not found');
             }
         }
