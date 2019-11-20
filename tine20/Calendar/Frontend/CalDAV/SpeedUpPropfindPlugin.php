@@ -182,7 +182,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
 
         $baseEvents = [];
         array_walk($result, function($val) use(&$baseEvents) {
-            if (empty($val['base_event_id'])) {
+            if (empty($val['base_event_id']) || $val['base_event_id'] === $val['id']) {
                 $baseEvents[$val['id']] = $val;
             }
         });
