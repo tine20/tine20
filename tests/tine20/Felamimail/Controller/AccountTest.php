@@ -403,6 +403,10 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
                 self::fail('should not find sclevers account! ' . print_r($account, true));
             }
         }
+
+        // TODO check email home
+//        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+//        $data = $emailUserBackend->getById($userid);
     }
 
     public function testCreateNewUserAccountWithINBOX()
