@@ -249,17 +249,34 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * update geodata - only updates addresses without geodata for adr_one
      *
+     * opts tag update only Contact with tagging
+     *
      * @param Zend_Console_Getopt $opts
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function updateContactGeodata($opts)
     {
         $params = $this->_parseArgs($opts, array('containerId'));
 
+        $filter = [
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $params['containerId']],
+            ['field' => 'adr_one_lon', 'operator' => 'isnull', 'value' => null]
+        ];
+
+        if (isset($params['tag'])) {
+            $tag = Tinebase_Tags::getInstance()->searchTags(
+                new Tinebase_Model_TagFilter(array(
+                    'name' => $params['tag'],
+                    'application' => $this->_applicationName,
+                ))
+            );
+            $filter[] = ['field' => 'tag', 'operator' => 'equals', 'value' => $tag->getId()];
+        }
+
         // get all contacts in a container
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $params['containerId']),
-            array('field' => 'adr_one_lon', 'operator' => 'isnull', 'value' => null)
-        ));
+        $filter = new Addressbook_Model_ContactFilter($filter);
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
         $result = Addressbook_Controller_Contact::getInstance()->updateMultiple($filter, array());
 
