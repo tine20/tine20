@@ -967,7 +967,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         }
                     }
                 }
-
+                
                 parent::update($_record);
 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
@@ -1712,7 +1712,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $_alarm->setOption('minutes_before', $minutesBefore);
         $_alarm->alarm_time = $eventStart->subMinute($minutesBefore);
-        
+
+        if ($_alarm->sent_status === Tinebase_Model_Alarm::STATUS_SUCCESS && null !== $_alarm->sent_time &&
+                $_alarm->alarm_time > $_alarm->sent_time) {
+            $_alarm->sent_time = null;
+            $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
+        }
+
         if ($_record->rrule && $_alarm->sent_status == Tinebase_Model_Alarm::STATUS_PENDING && $_alarm->alarm_time < $_alarm->sent_time) {
             $this->adoptAlarmTime($_record, $_alarm, 'instance');
         }

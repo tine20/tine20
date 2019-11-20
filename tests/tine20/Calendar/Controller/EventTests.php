@@ -2019,6 +2019,36 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         } catch (Tinebase_Exception_NotFound $tenf) {}
     }
 
+    public function testAlarmReSendOnReSchedule()
+    {
+        $event = $this->_getEvent();
+        $event->alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class, [
+            new Tinebase_Model_Alarm([
+                'minutes_before' => 15,
+
+                // this is a shortcut, which may and should fail in future, thats why we assert it below
+                // change this test once it starts failing
+                'sent_status' => Tinebase_Model_Alarm::STATUS_SUCCESS,
+                'sent_time' => $event->dtstart->getClone()->subMinute(5)
+            ], TRUE)
+        ]);
+
+        $createdEvent = $this->_controller->create($event);
+        static::assertInstanceOf(Tinebase_Record_RecordSet::class, $createdEvent->alarms);
+        static::assertNotNull($alarm = $createdEvent->alarms->getFirstRecord());
+        static::assertSame(Tinebase_Model_Alarm::STATUS_SUCCESS, $alarm->sent_status);
+        static::assertSame((string)$event->dtstart->getClone()->subMinute(5), (string)$alarm->sent_time);
+
+        $createdEvent->dtstart->addMinute(12);
+        $createdEvent->dtend->addMinute(12);
+        $updatedEvent = $this->_controller->update($createdEvent);
+
+        static::assertInstanceOf(Tinebase_Record_RecordSet::class, $updatedEvent->alarms);
+        static::assertNotNull($alarm = $updatedEvent->alarms->getFirstRecord());
+        static::assertSame(Tinebase_Model_Alarm::STATUS_PENDING, $alarm->sent_status);
+        static::assertNull($alarm->sent_time);
+    }
+
     public function testModLogUndo()
     {
         // activate ModLog in FileSystem!
