@@ -140,6 +140,10 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                     me.resumeEvents();
                     me.fireEvent('selectionchange', me, selection);
                 }
+            }).catch(function(error) {
+                Tine.log.notice('No file suggestions available for this message');
+                Tine.log.notice(error);
+                me.addStaticMenuItems();
             })
         } else {
             me.addStaticMenuItems();
