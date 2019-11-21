@@ -54,6 +54,7 @@ class Setup_SchemaTool
                 }
             }
 
+            $dbParams['defaultTableOptions']['row_format'] = 'DYNAMIC';
 
             static::$_dbParams = $dbParams;
         }
