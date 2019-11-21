@@ -1,19 +1,21 @@
 @focusColor: #0062a7;
 @selectionColor: #dbecf4;
-@tbColor: #d8e0e7;
+@tbColor: darken(#ffffff, 5%);
 
 @datePickerHd: #2196f3;
 @datePickerActive: #66ccff;
-@filterTbColor: #f4f5f7;
+@filterTbColor: darken(@tbColor, 10%);
 @gridHd: #c0ced8;
-@gridHdActive: darken(@gridHd, 10);
+@gridHdActive: darken(@gridHd, 10%);
 
 @tipColor: #163047;
 
+@fontColor: #ffffff;
 
-
-@northTbColor: @focusColor;
+@northTbColor: lighten(@tbColor , 5%);
 @altRowColor: @northTbColor;
+
+@tabPanelColor: @tbColor;
 
 
 
@@ -45,6 +47,12 @@
   .blacktowhite {
     filter: invert(89%) sepia(81%) saturate(2%) hue-rotate(17deg) brightness(115%) contrast(101%);
   }
+  .invertBlack {
+    filter : invert(0%);
+  }
+  .invertWhite {
+    filter : invert(100%);
+  }
 }
 
 #shadow() {
@@ -62,8 +70,36 @@
 
 .x-tab-panel-header, .x-tab-panel-footer, .x-tab-panel-header, .x-tab-panel-footer,
 .x-tab-panel-header-plain .x-tab-strip-spacer, .x-tab-panel-footer-plain .x-tab-strip-spacer {
-  border-color: @northTbColor;
-  background-color: @northTbColor;
+  border-color: @focusColor;
+  background-color: @focusColor;
+}
+
+/* AppTabs */
+.tine-mainscreen-apptabs {
+  & .x-tab-strip-wrap ul.x-tab-strip-top {
+    background-color: @focusColor;
+    background-image: none;
+  }
+
+  & ul.x-tab-strip {
+    & li {
+      background-color: @focusColor;
+
+    }
+    & span.x-tab-strip-text,
+    & a.x-tab-strip-close{
+      color: black;
+      #transform.invertWhite();
+    }
+    & li.x-tab-strip-active,
+    & li:hover {
+      background-color: @northTbColor;
+      & span.x-tab-strip-text,
+      & a.x-tab-strip-close {
+          #transform.invertBlack();
+      }
+    }
+  }
 }
 
 ul.x-tab-strip li {
@@ -81,10 +117,11 @@ li.x-item-disabled span.x-tab-strip-text:hover{
 }
 
 ul.x-tab-strip li.x-tab-strip-active {
-  background-color: @northTbColor;
+  background-color: @focusColor;
 }
+
 ul.x-tab-strip-top {
-  border-color: @northTbColor;
+  border-color: @focusColor;
 }
 
 .x-tab-strip-top .x-tab-right, .x-tab-strip-top .x-tab-left, .x-tab-strip-top .x-tab-strip-inner {
@@ -219,6 +256,17 @@ ul.x-tab-strip-top {
   background-position-y: center;
 }
 
+.tine-mainscreen-mainmenu {
+  & .x-toolbar {
+    background-image: none;
+    background-color: @focusColor;
+  }
+  & .x-btn {
+    color: black;
+    #transform.blacktowhite();
+  }
+}
+
 
 /* TOOLBAR */
 .x-toolbar {
@@ -271,28 +319,35 @@ ul.x-tab-strip-top {
   .x-toolbar {
     background-color: @northTbColor;
     padding: 0;
+    border-bottom: 1px @filterTbColor solid !important;
+
 
     .x-item-disabled {
       opacity: 0.5;
     }
   }
-
+  .x-toolbar-left-row{
+  & .x-toolbar-left {
+      border-right: 1px @filterTbColor solid !important;
+    }
+}
   .x-panel-bwrap {
-    background-color: @northTbColor;
+    background-color: @tabPanelColor;
+    color: black;
   }
 
   .x-panel-body {
-    color: #FFFFFF;
+    color: black;
   }
   .x-btn .x-btn-text,
   .x-item-disabled .x-btn-text {
-    color: #FFFFFF !important;
+    color: #000000 !important;
   }
 
   .x-toolbar .x-btn-mc em.x-btn-arrow,
   .x-toolbar .x-btn-mc em.x-btn-split,
   .x-btn .x-btn-image{
-    #transform.blacktowhite();
+    //#transform.blacktowhite();
   }
 
   .x-toolbar .x-btn-mc em.x-btn-arrow .x-btn-image,
@@ -311,12 +366,12 @@ ul.x-tab-strip-top {
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: 1px solid white !important;
-    color: #FFFFFF;
+    border-bottom: 1px solid black !important;
+    color: #000000;
   }
 
   .x-form-trigger {
-    #transform.blacktowhite();
+    //#transform.blacktowhite();
     background-position: 0 !important;
     border-bottom: none;
     background-size: 14px;
@@ -344,6 +399,57 @@ ul.x-tab-strip-top {
 //.tw-ftb-filterpanel,
 .tw-filtertoolbar {
   #button(@filterTbColor);
+
+  .tw-ftb-frow-searchbutton {
+    .x-btn-over {
+      .x-btn-tl,
+      .x-btn-tc,
+      .x-btn-tr,
+      .x-btn-ml,
+      .x-btn-mc,
+      .x-btn-mr,
+      .x-btn-bl,
+      .x-btn-bc,
+      .x-btn-br {
+        background-color: @filterTbColor;
+      }
+      .x-btn-over {
+        .x-btn-tl,
+        .x-btn-tc,
+        .x-btn-tr,
+        .x-btn-ml,
+        .x-btn-mc,
+        .x-btn-mr,
+        .x-btn-bl,
+        .x-btn-bc,
+        .x-btn-br {
+          background-color: lighten(@filterTbColor, 10%);
+        }
+      }
+    }
+  }
+  .x-btn-over {
+    .x-btn-tl,
+    .x-btn-tc,
+    .x-btn-tr,
+    .x-btn-ml,
+    .x-btn-mc,
+    .x-btn-mr,
+    .x-btn-bl,
+    .x-btn-bc,
+    .x-btn-br {
+      background-color: lighten(@filterTbColor, 10%);
+    }
+  }
+}
+
+.tw-ftb-filterstructure-treepanel {
+  & span.ux-arrowcollapse-header-text {
+    color: #4c4c4c;
+  }
+  & div.x-tree-selected {
+    background-color: lighten(@filterTbColor, 10%);
+  }
 }
 
 /* PANEL */
@@ -459,7 +565,7 @@ ul.x-tab-strip-top {
 }
 
 .x-form-focus, textarea.x-form-focus {
-  border-color: @northTbColor;
+  border-color: @focusColor;
 }
 
 // till all triggers are updated...
@@ -478,7 +584,7 @@ ul.x-tab-strip-top {
 }
 
 .x-trigger-wrap-focus .x-form-trigger {
-  border-bottom: 1px solid @northTbColor !important;
+  border-bottom: 1px solid @focusColor !important;
   box-sizing: border-box;
 }
 
@@ -829,6 +935,7 @@ td.x-date-mp-sel a,
 
 .x-menu-list {
   padding: 0;
+  background-color: @tbColor;
 }
 
 .x-menu-floating {
@@ -838,14 +945,27 @@ td.x-date-mp-sel a,
 
 .x-menu-item-active {
   background-image: none;
-  background-color: @selectionColor;
-  border-color: @selectionColor;
+  background-color: @filterTbColor;
+  border-color: @filterTbColor;
   border-style: none;
-  border-left: 2px solid @northTbColor;
+  border-left: 2px solid darken(@filterTbColor, 20%);
   margin: 0;
   padding: 1px;
 
 }
+
+/* COMBOBOX */
+
+.x-combo-list {
+  background-color: @tbColor;
+  & .x-combo-selected {
+    background-color: @filterTbColor;
+  }
+  & .x-combo-list-inner {
+    border-color: black;
+  }
+}
+
 
 /* TREE */
 
