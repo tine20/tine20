@@ -553,8 +553,8 @@ msgid "Quota"
 msgstr "Kontingent"
 
 #: js/UsagePanel.js:51
-msgid "no quota set"
-msgstr "Kein Kontingent gesetzt"
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr "Kein Kontingent gesetzt (Bsp.: 10 GB, 900 MB)"
 
 #: js/UsagePanel.js:56
 msgid "Current Usage"

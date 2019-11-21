@@ -79,27 +79,4 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
 
         return new Tinebase_FileSystem_AVScan_Result($result['status'], $result['reason']);
     }
-
-    /**
-     * @return bool
-     */
-    public function update()
-    {
-        $e = null;
-
-        try {
-            $this->_connect();
-
-            $result = $this->_quahog->reload();
-        } catch (\Socket\Raw\Exception $e) {
-        } catch (\Xenolope\Quahog\Exception\ConnectionException $e) {}
-
-        if (null !== $e) {
-            Tinebase_Exception::log($e);
-            $this->_socket = null;
-            return false;
-        }
-
-        return $result === Tinebase_FileSystem_AVScan_Result::RESULT_RELOADING;
-    }
 }

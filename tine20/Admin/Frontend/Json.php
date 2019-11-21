@@ -1265,21 +1265,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * convert a given account to another type (for example, personal account to shared account)
-     *
-     * @param  array $recordData account data
-     * @param string $to convert to this type
-     * @return array updated record
-     */
-    public function convertEmailAccount($recordData, $to = Felamimail_Model_Account::TYPE_SHARED)
-    {
-        $record = new Felamimail_Model_Account(array(), TRUE);
-        $record->setFromJsonInUsersTimezone($recordData);
-        $account = Admin_Controller_EmailAccount::getInstance()->convertEmailAccount($record, $to);
-        return $this->_recordToJson($account);
-    }
-
-    /**
      * deletes existing records
      *
      * @param  array  $ids
@@ -1301,7 +1286,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getServerInfo()
     {
         if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::RUN)) {
-            return FALSE;
+            return [];
         }
         
         ob_start();

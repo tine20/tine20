@@ -764,6 +764,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  boolean $duplicateCheck
      *
      * @return array created/updated record
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function saveInvoice($recordData, $duplicateCheck = TRUE)
     {
@@ -809,7 +810,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         if (! $foundCustomer) {
-            throw new Tinebase_Exception_Data('You have to set a customer!');
+            $translation = Tinebase_Translation::getTranslation('Sales');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('You have to set a customer!'));
         }
         
         if (isset($recordData['address_id']) && is_array($recordData["address_id"])) {

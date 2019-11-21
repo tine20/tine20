@@ -157,7 +157,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     applyState: function(state) {
         var collection = this.getPortalColumn().items,
             c = new Array(collection.getCount()), k = collection.keys, items = collection.items;
-        
+
+        // sd not apply broken state
+        if (_.compact(state.order).length < items.length) {
+            return;
+        }
+
         Ext.each(state.order, function(position, idx) {
             c[idx] = {key: k[position], value: items[position], index: position};
         }, this);

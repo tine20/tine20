@@ -1102,7 +1102,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 if (isset($relations[$idx])) {
                     $record->relations = $relations[$idx];
                     $record->relations->sort(function(Tinebase_Model_Relation $a, Tinebase_Model_Relation $b) {
-                        return strcmp($a->related_record->getTitle(), $b->related_record->getTitle());
+                        if (! $a->related_record) {
+                            return true;
+                        } else if (! $b->related_record) {
+                            return false;
+                        } else {
+                            return strcmp($a->related_record->getTitle(), $b->related_record->getTitle());
+                        }
                     }, null, 'function');
                 }
             }

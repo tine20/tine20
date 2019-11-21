@@ -30,7 +30,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_applicationName       = 'Admin';
         $this->_modelName             = 'Felamimail_Model_Account';
-        $this->_doEmailAccountACLChecks = false;
         $this->_purgeRecords          = false;
 
         // we need to avoid that anybody else gets this instance ... as it has acl turned off!
@@ -158,9 +157,30 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             unset($_record->password);
         }
 
+        $currentAccount = $this->get($_record->getId());
         $account = $this->_backend->update($_record);
+        $this->_inspectAfterUpdate($account, $_record, $currentAccount);
         
         return $account;
+    }
+
+    /**
+     * inspect update of one record (after update)
+     *
+     * @param   Felamimail_Model_Account $updatedRecord   the just updated record
+     * @param   Felamimail_Model_Account $record          the update record
+     * @param   Felamimail_Model_Account $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        if ($this->_backend->doConvertToShared($updatedRecord, $currentRecord, false)) {
+            // update user (don't delete email account!)
+            $userId = is_array($currentRecord->user_id) ? $currentRecord->user_id['accountId'] :  $currentRecord->user_id;
+            $user = Admin_Controller_User::getInstance()->get($userId);
+            $user->accountEmailAddress = '';
+            Admin_Controller_User::getInstance()->updateUserWithoutEmailPluginUpdate($user);
+        }
     }
 
     /**
@@ -270,38 +290,5 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function getSystemAccount($user)
     {
         return $this->_backend->getSystemAccount($user);
-    }
-
-    /**
-     * @param Felamimail_Model_Account $_account
-     * @param $_to
-     * @throws Tinebase_Exception_SystemGeneric
-     * @return Tinebase_Record_Interface
-     */
-    public function convertEmailAccount(Felamimail_Model_Account $_account, $_to = Felamimail_Model_Account::TYPE_SHARED)
-    {
-        if (! in_array($_account->type, [
-            Felamimail_Model_Account::TYPE_SYSTEM,
-            Felamimail_Model_Account::TYPE_USER_INTERNAL
-        ])) {
-            throw new Tinebase_Exception_SystemGeneric('It is only allowed to convert SYSTEM email accounts');
-        }
-
-        $userId = is_array($_account->user_id) ? $_account->user_id['accountId'] :  $_account->user_id;
-        $user = Admin_Controller_User::getInstance()->get($userId);
-
-        // convert account
-        $_account->type = $_to;
-        // keep old user grants
-        // $account->grants = [];
-
-        // make sure, shared credential cache is created - password is needed!
-        $account = $this->_backend->update($_account);
-
-        // update user (don't delete email account!)
-        $user->accountEmailAddress = '';
-        Admin_Controller_User::getInstance()->updateUserWithoutEmailPluginUpdate($user);
-
-        return $account;
     }
 }

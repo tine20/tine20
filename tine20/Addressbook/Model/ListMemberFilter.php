@@ -76,7 +76,13 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
                     $this->_value = Addressbook_Controller_Contact::getInstance()->get($this->_value)->toArray();
                 }
             } catch (Tinebase_Exception_NotFound $tenf) {
-                Tinebase_Exception::log($tenf);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__
+                    . " Failed to expand filter. Exception: \n". $tenf);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__
+                    . " Failed to expand filter. Exception: \n". $tead);
             }
         }
         

@@ -877,7 +877,16 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function update(Tinebase_Record_Interface $_record)
     {
-        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+        $data = $_record->toArray(false);
+
+        if (!isset($data['id'])) throw new Tinebase_Exception_Backend('id not set');
+        if (mb_strlen($data['note']) > 65535) {
+            $data['note'] = mb_substr($data['note'], 0, 65535);
+        }
+
+        $this->_notesTable->update($data, $this->_db->quoteInto('id = ?', $data['id']));
+
+        return $_record;
     }
 
     /**

@@ -634,7 +634,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         $columns = $this->_db->query('show columns from ' . $this->_db->quoteIdentifier($this->_userTable))
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
-        foreach (['emailUserId', 'emailUsername', 'emailAddress', 'emailLoginname'] as $colToRemove) {
+        foreach (['emailUserId', 'emailUsername', 'emailAddress', 'emailLoginname', 'emailHome'] as $colToRemove) {
             if (isset($this->_propertyMapping[$colToRemove])) {
                 if (false === ($offset = array_search($this->_propertyMapping[$colToRemove], $columns))) {
                     throw new Tinebase_Exception('did not find ' . $this->_propertyMapping[$colToRemove] . ' in ' .
@@ -668,7 +668,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ', ' .
             $this->_db->quoteIdentifier($this->_propertyMapping['emailUsername']) . ', ';
 
-        foreach (['emailAddress', 'emailLoginname'] as $column) {
+        foreach (['emailAddress', 'emailLoginname', 'emailHome'] as $column) {
             if (isset($this->_propertyMapping[$column])) {
                 $query .= $this->_db->quoteIdentifier($this->_propertyMapping[$column]) . ', ';
             }
@@ -681,6 +681,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             if (isset($this->_propertyMapping[$column])) {
                 $query .= $this->_db->quote($_user->accountEmailAddress) . ', ';
             }
+        }
+
+        if (isset($this->_propertyMapping['emailHome'])) {
+            $rawData = $this->_recordToRawData( $_user, $_user);
+            $query .= $this->_db->quote($rawData[$this->_propertyMapping['emailHome']]) . ', ';
         }
 
         $query .= join(', ', $escapedColumns) .

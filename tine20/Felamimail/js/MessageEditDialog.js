@@ -413,21 +413,30 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * inits body and attachments from reply/forward/template
      */
-    initContent: function () {
+    initContent: function (format) {
         if (!this.record.get('body')) {
-            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
+            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+
+            if (format === undefined) {
                 format = account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 'text/html';
+            }
 
             if (!this.msgBody) {
                 var message = this.getMessageFromConfig();
                 if (message) {
                     if (message.bodyIsFetched() && account.get('preserve_format')) {
-                        // format of the received message. this is the format to perserve
+                        // format of the received message. this is the format to preserve
                         format = message.get('body_content_type');
                     }
                     if (!message.bodyIsFetched() || format !== message.getBodyType()) {
                         // self callback when body needs to be (re) fetched
-                        return this.recordProxy.fetchBody(message, format, this.initContent.createDelegate(this));
+                        return this.recordProxy.fetchBody(message, format, {
+                            success: this.initContent.createDelegate(this),
+                            // set format to message body format if fetch fails
+                            failure: message.bodyIsFetched()
+                                ? this.initContent.createDelegate(this, [message.getBodyType()])
+                                : null
+                        });
                     }
 
                     this.setMessageBody(message, account, format);
@@ -437,16 +446,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
 
                     let folder = this.app.getFolderStore().getById(message.get('folder_id'));
-                    this.isDraft = folder.get('globalname') === account.get('drafts_folder');
-                    this.isTemplate = folder.get('globalname') === account.get('templates_folder');
+                    if (folder) {
+                        this.isDraft = folder.get('globalname') === account.get('drafts_folder');
+                        this.isTemplate = folder.get('globalname') === account.get('templates_folder');
 
-                    if (this.isDraft) {
-                        this.record.set('messageuid', message.get('messageuid'));
-                        this.draftUid = message.get('messageuid');
-                    }
+                        if (this.isDraft) {
+                            this.record.set('messageuid', message.get('messageuid'));
+                            this.draftUid = message.get('messageuid');
+                        }
 
-                    if (this.isTemplate) {
-                        this.templateId = message.get('id');
+                        if (this.isTemplate) {
+                            this.templateId = message.get('id');
+                        }
                     }
                 }
             }

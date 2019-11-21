@@ -1172,7 +1172,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 try {
                     return $a1->getName() > $a2->getName();
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
-                    Tinebase_Exception::log($teia);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' ' . $teia->getMessage());
                     return true;
                 }
             });

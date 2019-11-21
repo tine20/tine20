@@ -646,6 +646,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      * @return boolean
      * @throws Felamimail_Exception
      * @throws Exception
+     *
+     * @refactor split this up
      */
     public function resolveCredentials($_onlyUsername = TRUE, $_throwException = FALSE, $_smtp = FALSE)
     {
@@ -689,8 +691,11 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 throw new Tinebase_Exception_UnexpectedValue('type ' . $this->type . ' unknown');
             }
 
-            // TYPE_SYSTEM never has its own credential cache, it uses the users one
-            if ($this->type !== self::TYPE_SYSTEM) {
+            // TYPE_SYSTEM + TYPE_USER_INTERNAL never has its own credential cache, it uses the users one
+            if (! in_array($this->type, [
+                self::TYPE_SYSTEM,
+                self::TYPE_USER_INTERNAL
+            ])) {
                 try {
                     // NOTE: cache cleanup process might have removed the cache
                     $credentials = $credentialsBackend->get($this->{$credentialsField});
@@ -718,7 +723,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     return false;
                 }
             } else {
-
                 // just use tine user credentials to connect to mailserver / or use credentials from config if set
                 $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP,
                     new Tinebase_Config_Struct())->toArray();

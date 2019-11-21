@@ -39,7 +39,6 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.on('load', this.resolveMemberData, this);
         this.printer = Tine.Addressbook.Printer.ListRenderer;
 
-        // TODO only find user contacts if account_only list
         this.memberGridPanel = new Tine.Addressbook.ListMemberRoleGridPanel({
             region: "center",
             frame: true,
@@ -81,7 +80,8 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 columnWidth: 1,
                                 fieldLabel: this.app.i18n._('Name'),
                                 name: 'name',
-                                maxLength: 64
+                                maxLength: 64,
+                                allowBlank: false
                             }], [{
                                 columnWidth: 1,
                                 xtype: 'textfield',
@@ -217,6 +217,9 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var ticket = ticketFn();
             this.memberGridPanel.setMembers(ticket);
             this.memberGridPanel.memberRolesPanel = this.memberRolesPanel;
+            if (this.record.get('account_only') === '1') {
+                this.memberGridPanel.searchCombo.userOnly = true;
+            }
         }
     },
 

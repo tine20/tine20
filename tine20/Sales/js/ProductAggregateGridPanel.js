@@ -211,7 +211,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             name: 'billing_point',
             fieldLabel: this.app.i18n._('Billing Point'),
             xtype: 'combo',
-            value: 'begin',
+            value: 'end',
             store: [
                 ['begin', this.app.i18n._('begin') ],
                 [  'end', this.app.i18n._('end') ]

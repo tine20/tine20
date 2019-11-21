@@ -244,7 +244,17 @@ class Tinebase_ApplicationTest extends TestCase
                 continue;
             }
 
-            $xml = Setup_Controller::getInstance()->getSetupXml($applicationName);
+            try {
+                $xml = Setup_Controller::getInstance()->getSetupXml($applicationName);
+            } catch (Throwable $t) {
+                if (preg_match('/failed to load external entity/', $t->getMessage())) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $t);
+                    self::markTestSkipped('simplexml_load_file problem');
+                } else {
+                    throw $t;
+                }
+            }
             if (isset($xml->tables)) {
                 foreach ($xml->tables[0] as $tableXML) {
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
@@ -532,7 +542,17 @@ class Tinebase_ApplicationTest extends TestCase
     {
         Setup_Core::set(Setup_Core::CHECKDB, true);
         Setup_Controller::destroyInstance();
-        Setup_Controller::getInstance()->uninstallApplications(['ExampleApplication']);
+        try {
+            Setup_Controller::getInstance()->uninstallApplications(['ExampleApplication']);
+        } catch (Throwable $t) {
+            if (preg_match('/failed to load external entity/', $t->getMessage())) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $t);
+                self::markTestSkipped('simplexml_load_file problem');
+            } else {
+                throw $t;
+            }
+        }
 
         $this->_testNeedsTransaction();
 

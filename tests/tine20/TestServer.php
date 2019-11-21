@@ -76,6 +76,8 @@ class TestServer
         Zend_Session::$_unitTestEnabled = TRUE;
 
         Tinebase_Core::set('frameworkInitialized', true);
+
+        Tinebase_Core::set(Tinebase_Core::CONTAINER, Tinebase_Core::getPreCompiledContainer());
     }
     
     /**
