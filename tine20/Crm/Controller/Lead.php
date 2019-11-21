@@ -24,6 +24,12 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @see Tinebase_Controller_Record_Abstract
      */
     protected $_inspectRelatedRecords = TRUE;
+
+    /**
+     * const for sendNotification
+     */
+    const NOTIFICATION_NOBODY = 'nobody';
+    const NOTIFICATION_WITHOUT = 'without';
     
     /**
      * the constructor
@@ -155,7 +161,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     public function doSendNotifications(Tinebase_Record_Interface $_lead, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldLead = NULL, array $_additionalData = array())
     {
         $sendOnOwnActions = Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS);
-        if (! $sendOnOwnActions) {
+        if ($sendOnOwnActions == self::NOTIFICATION_NOBODY) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending of Lead notifications disabled by user.');
             return;
         }
@@ -245,7 +251,14 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             $recipients->addRecord($updaterContact);
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
-        
+
+
+        if (self::NOTIFICATION_WITHOUT == Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS)) {
+            $currentUser = Tinebase_Core::getUser();
+            $ownRecord = $recipients->find('id', $currentUser->contact_id);
+            $recipients->removeRecord($ownRecord);
+        }
+
         try {
             Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, $subject, $plain, $html, array($attachment));
         } catch (Exception $e) {
@@ -264,10 +277,15 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      */
     protected function _getNotificationRecipients(Crm_Model_Lead $_lead) 
     {
+        $crmConfig = [];
         if (! $_lead->relations instanceof Tinebase_Record_RecordSet) {
             $_lead->relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', 'Sql', $_lead->getId(), true);
         }
-        $recipients = $_lead->getResponsibles();
+        if(Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_TO_RESPONSIBLE)) $crmConfig[] = 'RESPONSIBLE';
+        if(Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_TO_CUSTOMER)) $crmConfig[] = 'CUSTOMER';
+        if(Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_TO_PARTNER)) $crmConfig[] = 'PARTNER';
+
+        $recipients = $_lead->getRelations($crmConfig);
 
         // if no responsibles are defined, send message to all readers of container
         if (count($recipients) === 0) {

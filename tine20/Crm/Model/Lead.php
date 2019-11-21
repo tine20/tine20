@@ -310,17 +310,33 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     }
 
     /**
-     * get all responsible contacts of lead
+     * old function for Responsibles
      *
      * @return Tinebase_Record_RecordSet
      */
     public function getResponsibles()
     {
+        return $this->getRelations(['RESPONSIBLE']);
+    }
+
+
+    /**
+     * get all Relation for type.
+     *
+     * @param $relationTypes array
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    public function getRelations($relationTypes)
+    {
         $responsibles = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
 
-        foreach ($this->relations as $relation) {
-            if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == 'RESPONSIBLE') {
-                $responsibles->addRecord($relation->related_record);
+        foreach ($relationTypes as $relationType) {
+            foreach ($this->relations as $relation) {
+                if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == $relationType) {
+                    $responsibles->addRecord($relation->related_record);
+                }
             }
         }
 
