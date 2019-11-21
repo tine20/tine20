@@ -1862,4 +1862,22 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $this->_checkAdminRight();
         Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
     }
+
+    /**
+     * activate saving of email user id in xprops and converts existing accounts
+     */
+    public function emailUserIdInXprops()
+    {
+        $this->_checkAdminRight();
+
+        // convert fmail accounts
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            Felamimail_Controller_Account::getInstance()->convertAccountsToSaveUserIdInXprops();
+        }
+
+        // TODO convert users
+        // TODO convert lists
+
+        // TODO activate config
+    }
 }

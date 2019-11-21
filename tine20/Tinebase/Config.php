@@ -105,6 +105,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
     /**
+     * emailUserIdInXprops
+     */
+    const EMAIL_USER_ID_IN_XPROPS = 'emailUserIdInXprops';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -837,16 +842,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
-        self::TRUSTED_PROXIES => array(
-            //_('Trusted Proxies')
-            'label'                 => 'Trusted Proxies',
-            //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
-            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
-            'type'                  => 'array',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
         self::SMTP => array(
                                    //_('System SMTP')
             'label'                 => 'System SMTP',
@@ -865,6 +860,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'System SIEVE server configuration.',
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::EMAIL_USER_ID_IN_XPROPS => [
+            //_('Use record XPROPS to save email user id')
+            'label'                 => 'Use record XPROPS to save email user id',
+            //_('Use record XPROPS to save email user id')
+            'description'           => 'Use record XPROPS to save email user id',
+            'type'                  => 'bool',
+            // we need this to disable any convert actions in the GUI
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => false,
+        ],
+        self::TRUSTED_PROXIES => array(
+            //_('Trusted Proxies')
+            'label'                 => 'Trusted Proxies',
+            //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
+            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
+            'type'                  => 'array',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,

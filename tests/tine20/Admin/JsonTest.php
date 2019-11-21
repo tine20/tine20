@@ -1665,8 +1665,6 @@ class Admin_JsonTest extends TestCase
 
     public function testCreatePersonalSystemAccount()
     {
-        self::markTestSkipped('FIXME');
-
         if (! TestServer::isEmailSystemAccountConfigured()) {
             self::markTestSkipped('imap systemaccount config required');
         }
@@ -1940,16 +1938,22 @@ class Admin_JsonTest extends TestCase
 
     public function testConvertEmailAccount()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
+        $this->_skipIfXpropsUserIdDeactivated();
         $this->_testNeedsTransaction();
 
         $user = $this->_createUserWithEmailAccount();
 
         $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
         $this->_convertAccount($emailAccount, $user, Felamimail_Model_Account::TYPE_SHARED);
+    }
+
+    protected function _skipIfXpropsUserIdDeactivated()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()
+            || ! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS})
+        {
+            self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS config required');
+        }
     }
 
     /**
@@ -2042,11 +2046,7 @@ class Admin_JsonTest extends TestCase
      */
     public function testConvertUserInternalEmailAccount($user = null)
     {
-        self::markTestSkipped('FIXME');
-
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
+        $this->_skipIfXpropsUserIdDeactivated();
 
         $this->_testNeedsTransaction();
 
@@ -2063,7 +2063,7 @@ class Admin_JsonTest extends TestCase
 
     public function testConvertSharedToUserInternalEmailAccount()
     {
-        self::markTestSkipped('TODO make it work');
+        $this->_skipIfXpropsUserIdDeactivated();
 
         $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
         $this->_convertAccount($sharedAccount, Tinebase_Core::getUser(), Felamimail_Model_Account::TYPE_USER_INTERNAL);
@@ -2071,7 +2071,7 @@ class Admin_JsonTest extends TestCase
 
     public function testConvertInternalToSharedToUserInternalEmailAccount()
     {
-        self::markTestSkipped('TODO make it work');
+        $this->_skipIfXpropsUserIdDeactivated();
 
         if (! TestServer::isEmailSystemAccountConfigured()) {
             self::markTestSkipped('imap systemaccount config required');
@@ -2085,7 +2085,7 @@ class Admin_JsonTest extends TestCase
 
     public function testConvertSharedToUserInternalEmailAccountWithMails()
     {
-        self::markTestSkipped('TODO make it work');
+        $this->_skipIfXpropsUserIdDeactivated();
 
         // send mail to shared account
         $sharedAccount = $this->testEmailAccountApiSharedAccount(false);

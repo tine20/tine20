@@ -579,6 +579,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         let newValue = combo.getValue();
         let currentValue = this.record.get('type');
         if (this.record.id) {
+            if (! Tine.Tinebase.configManager.get('emailUserIdInXprops')) {
+                this.onTypeChangeError(combo,
+                    this.app.i18n._('It is not possible to convert accounts because the config option EMAIL_USER_ID_IN_XPROPS is disabled.'));
+            }
+
             if (newValue === 'shared' && [
                 'system',
                 'userInternal'
@@ -599,7 +604,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             //     // this is valid
 
             } else {
-                this.onTypeChangeError(combo, this.app.i18n._('It is not possible to convert the account to this type yet.'));
+                this.onTypeChangeError(combo, this.app.i18n._('It is not possible to convert the account to this type.'));
                 return false;
             }
         } else if (newValue === 'system') {

@@ -301,8 +301,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
     protected function _createUserInternalEmailUser($_record)
     {
-        throw new Tinebase_Exception_SystemGeneric('It is currently not possible to create TYPE_USER_INTERNAL accounts');
-
         $translation = Tinebase_Translation::getTranslation($this->_applicationName);
 
         if (! $_record->email) {
@@ -548,12 +546,29 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         );
     }
 
+    /**
+     * @param $_record
+     * @param $_oldRecord
+     * @param $_throw
+     * @param $_from
+     * @param $_to
+     * @return bool
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     protected function _doConvertTo($_record, $_oldRecord, $_throw, $_from, $_to)
     {
         $result = ($_record->type === $_to && in_array($_oldRecord->type, $_from));
 
         if ($_throw && $_record->type !== $_oldRecord->type && ! $result) {
             throw new Tinebase_Exception_UnexpectedValue('type can not change');
+        }
+
+        if ($result) {
+            if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+                $translate = Tinebase_Translation::getTranslation('Felamimail');
+                throw new Tinebase_Exception_SystemGeneric(
+                    $translate->_('Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops'));
+            }
         }
 
         return $result;
@@ -1711,5 +1726,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $this->update($account);
 
         return $account;
+    }
+
+    /**
+     *  add email userid xprops to shared email accounts
+     */
+    public function convertAccountsToSaveUserIdInXprops()
+    {
+        $this->doContainerACLChecks(false);
+        // get all shared email accounts
+        $sharedAccounts = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+            ['field' => 'type', 'operator' => 'equals', Felamimail_Model_Account::TYPE_SHARED]
+        ]));
+
+        $xpropsFacade = new Tinebase_EmailUser_XpropsFacade();
+        $xpropsFacade->convertExistingUsers($sharedAccounts, $this);
     }
 }
