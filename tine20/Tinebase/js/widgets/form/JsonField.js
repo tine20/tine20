@@ -32,6 +32,15 @@ Tine.Tinebase.widgets.form.JsonField = Ext.extend(Ext.form.Field, {
         if (this.ed) {
             this.ed.setValue(Ext.isString(value) ? value : JSON.stringify(value, undefined, 4), -1);
         }
+    },
+
+    getValue: function() {
+        let value = this.value;
+
+        if (this.ed) {
+            value = this.ed.getValue()
+        }
+        return value;
     }
 });
 

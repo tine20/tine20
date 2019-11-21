@@ -78,7 +78,7 @@ Tine.widgets.form.FieldManager = function() {
             }
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
-            field.name = fieldDefinition.fieldName;
+            field.name = (fieldDefinition.name ||fieldDefinition.fieldName);
             field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
             // make field available via recordForm.formfield_NAME
