@@ -731,6 +731,15 @@ class Setup_Controller
             $db->query('SET unique_checks = 0');
 
             foreach ($tables as $table) {
+
+                if (SQL_TABLE_PREFIX . 'tree_nodes' === $table) {
+                    $setupBackend = new Setup_Backend_Mysql();
+                    $db->query('SET foreign_key_checks = 1');
+                    $setupBackend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+                    $db->query('SET foreign_key_checks = 0');
+                    $setupBackend->dropIndex('tree_nodes', 'parent_id-name');
+                }
+
                 $db->query('ALTER TABLE `' . $table . '` convert to character set ' . $charset . ' collate ' .
                     $collation);
                 if (SQL_TABLE_PREFIX . 'tree_nodes' === $table) {
@@ -740,8 +749,34 @@ class Setup_Controller
                         <type>text</type>
                         <length>255</length>
                         <notnull>true</notnull>
-                        <collation>utf8mb4_bin</collation>
+                        <collation>' . ($dbConfig['charset'] === 'utf8' ? 'utf8_bin' : 'utf8mb4_bin') . '</collation>
                     </field>'));
+                    $setupBackend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                        <name>parent_id-name</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>parent_id</name>
+                        </field>
+                        <field>
+                            <name>name</name>
+                        </field>
+                        <field>
+                            <name>deleted_time</name>
+                        </field>
+                    </index>'));
+                    $setupBackend->addForeignKey('tree_nodes', new Setup_Backend_Schema_Index_Xml('<index>
+                        <name>tree_nodes::parent_id--tree_nodes::id</name>
+                        <field>
+                            <name>parent_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>tree_nodes</table>
+                            <field>id</field>
+                            <onupdate>cascade</onupdate>
+                            <!-- add ondelete? -->
+                        </reference>
+                    </index>'));
                 }
             }
 
