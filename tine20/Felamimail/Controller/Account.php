@@ -301,6 +301,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
     protected function _createUserInternalEmailUser($_record)
     {
+        throw new Tinebase_Exception_SystemGeneric('It is currently not possible to create TYPE_USER_INTERNAL accounts');
+
         $translation = Tinebase_Translation::getTranslation($this->_applicationName);
 
         if (! $_record->email) {

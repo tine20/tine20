@@ -395,6 +395,8 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
     public function testCreateUserInternalAccount()
     {
+        self::markTestSkipped('FIXME');
+
         $scleverExtraAccount = $this->_createUserInternalAccount($this->_personas['sclever']);
         $json = new Felamimail_Frontend_Json();
         $result = $json->searchAccounts([]);
