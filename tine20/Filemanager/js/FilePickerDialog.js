@@ -35,6 +35,24 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     singleSelect: true,
 
     /**
+     * allow creation of new files
+     * @cfg {Boolean} allowCreateNew
+     */
+    allowCreateNew: false,
+
+    /**
+     * initial fileName for new files
+     * @cfg {String} initialNewFileName
+     */
+    initialNewFileName: '',
+
+    /**
+     * initial path
+     * @cfg {String} initialPath
+     */
+    initialPath: null,
+
+    /**
      * A constraint allows to alter the selection behaviour of the picker, for example only allow to select files.
      *
      * By default, file and folder are allowed to be selected, the concrete implementation needs to define it's purpose
@@ -109,7 +127,10 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         var picker = new Tine.Filemanager.FilePicker({
             requiredGrants: this.requiredGrants,
             constraint: this.constraint,
-            singleSelect: this.singleSelect
+            singleSelect: this.singleSelect,
+            allowCreateNew: this.allowCreateNew,
+            initialNewFileName: this.initialNewFileName,
+            initialPath: this.initialPath
         });
 
         picker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
@@ -144,10 +165,9 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      *
      * @returns {null}
      */
-    openWindow: function () {
-        this.window = Tine.WindowFactory.getWindow({
+    openWindow: function (config) {
+        this.window = Tine.WindowFactory.getWindow(_.assign({
             title: this.windowTitle,
-            closeAction: 'close',
             modal: true,
             width: 550,
             height: 500,
@@ -156,7 +176,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             items: [
                 this
             ]
-        });
+        }, config));
 
         return this.window;
     }
