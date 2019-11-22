@@ -85,11 +85,11 @@ class Tinebase_Fulltext_TextExtract
         $tempFileName = Tinebase_TempFile::getTempPath();
         $blobFileName = $_fileObject->getFilesystemPath();
 
-        exec($this->_javaBin . ' -jar '. $this->_tikaJar . ' -t -eUTF8 '
+        @exec($this->_javaBin . ' -jar '. $this->_tikaJar . ' -t -eUTF8 '
             . escapeshellarg($blobFileName) . ' > ' . escapeshellarg($tempFileName) . ' 2> /dev/null', $output, $result);
 
         if ($result !== 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' tika did not return status 0. maybe the java runtime is missing? output:'
                 . print_r($output, true) . ' ' . print_r($result, true));
             if (file_exists($tempFileName)) {
