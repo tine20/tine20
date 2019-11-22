@@ -144,10 +144,9 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      *
      * @returns {null}
      */
-    openWindow: function () {
-        this.window = Tine.WindowFactory.getWindow({
+    openWindow: function (config) {
+        this.window = Tine.WindowFactory.getWindow(_.assign({
             title: this.windowTitle,
-            closeAction: 'close',
             modal: true,
             width: 550,
             height: 500,
@@ -156,7 +155,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             items: [
                 this
             ]
-        });
+        }, config));
 
         return this.window;
     }
