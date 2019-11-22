@@ -303,10 +303,7 @@ class Addressbook_ControllerTest extends TestCase
         $contact->adr_two_region = 'Nordrhein-Westfalen';
         
         $updatedContact = $this->_instance->update($contact);
-        
-        // Nominatim no longer returns multiple postcodes
-        // TODO verify if there are still places with multiple postcodes
-        $this->assertEquals(null, $updatedContact->adr_two_postalcode);
+        $this->assertEquals(48143, $updatedContact->adr_two_postalcode);
     }
     
     /**
