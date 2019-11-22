@@ -89,7 +89,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.gridConfig.cm = this.getColumnModel();
 
-        this.defaultFilters = [
+        this.defaultFilters = this.defaultFilters || [
             {field: 'query', operator: 'contains', value: ''},
             {field: 'path', operator: 'equals', value: Tine.Tinebase.container.getMyFileNodePath()}
         ];
@@ -986,6 +986,16 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         } else {
             this.quotaBar.hide();
         }
+    },
+
+    /**
+     * gets currently displayed node in case a path filter is set
+     * NOTE: this data is unreloved as it comes from filter and not through json convert!
+     *
+     * @return {Object}
+     */
+    getFilteredNode: function () {
+        return _.get(_.find(_.get(this, 'store.reader.jsonData.filter', {}), {field: 'path'}), 'value');
     },
 
     /**
