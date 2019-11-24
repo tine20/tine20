@@ -490,6 +490,7 @@ class Setup_Update_Abstract
                 $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId,
                     Tinebase_Model_FullUser::class);
                 static::assertAdminGroupMembership($setupUser);
+                static::assertContactId($setupUser);
                 return $setupUser;
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
@@ -503,11 +504,23 @@ class Setup_Update_Abstract
         $setupUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_SETUP);
         if ($setupUser) {
             static::assertAdminGroupMembership($setupUser);
+            static::assertContactId($setupUser);
             Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, null);
             Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
         }
 
         return $setupUser;
+    }
+
+    static public function assertContactId(Tinebase_Model_FullUser $_user)
+    {
+        if (!empty($_user->contact_id)) {
+            return;
+        }
+        $contact = Addressbook_Controller_Contact::getInstance()->getBackend()
+            ->create(Tinebase_User::user2Contact($_user));
+        $_user->contact_id = $contact->getId();
+        Tinebase_User::getInstance()->updateUserInSqlBackend($_user);
     }
 
     static public function assertAdminGroupMembership(Tinebase_Model_FullUser $_user)
