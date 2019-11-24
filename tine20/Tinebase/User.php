@@ -1173,6 +1173,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
         }
 
+        if (null !== $systemUser && Tinebase_User::SYSTEM_USER_SETUP === $accountLoginName &&
+                empty($systemUser->contact_id)) {
+            $contact = Addressbook_Controller_Contact::getInstance()->getBackend()
+                ->create(self::user2Contact($systemUser));
+            $systemUser->contact_id = $contact->getId();
+            Tinebase_User::getInstance()->updateUserInSqlBackend($systemUser);
+        }
+
         // re-enable modlog stuff
         Tinebase_Group::getInstance()->modlogActive($oldGroupValue);
         Tinebase_User::getInstance()->modlogActive($oldUserValue);
