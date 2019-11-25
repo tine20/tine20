@@ -412,45 +412,94 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
 
         if (! empty($_record->group_id)) {
-            // get group and check account_only
             $group = Tinebase_Group::getInstance()->getGroupById($_record->group_id);
+
             if ($group->account_only) {
-                $contacts = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                    Addressbook_Model_Contact::class, [
-                        ['field' => 'id', 'operator' => 'in', 'value' => $_record->members]
-                    ]
-                ));
-                $nonUserContacts = $contacts->filter('type', Addressbook_Model_Contact::CONTACTTYPE_CONTACT);
-                if (count($nonUserContacts) > 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__ . ' Found non-account members: '
-                        . print_r($nonUserContacts->toArray(), true));
-                    $translate = Tinebase_Translation::getTranslation('Addressbook');
-                    throw new Tinebase_Exception_SystemGeneric($translate->_(
-                        'It is not allowed to add non-account contacts to this list'));
-                }
+                $this->_checkNonAccountMembers($_record);
             }
+            $this->_updateGroup($group, $_record, $_oldRecord);
+            $this->_updateGroupMembers($group, $_record);
+        }
+    }
 
-            // check if something changed that requires special rights
-            $changeGroup = false;
+    /**
+     * add / remove system group members
+     *
+     * @param $group
+     * @param $list
+     */
+    protected function _updateGroupMembers($group, $list)
+    {
+        // get all system contacts
+        $checks = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        $systemcontacts = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+                ['field' => 'id', 'operator' => 'in', 'value' => $list->members],
+                ['field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_USER],
+            ]
+        ));
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($checks);
+
+        $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($group->getId());
+
+        $removeListMembers = [];
+        foreach ($systemcontacts as $contact) {
+            if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+                // no right to update group members - remove from list members
+                $removeMembers[] = $contact->getId();
+            } else if (! in_array($contact->account_id, $groupMembers)) {
+                Admin_Controller_Group::getInstance()->addGroupMember($group->getId(), $contact->account_id, false);
+            }
+        }
+
+        $list->members = array_diff($list->members, $removeListMembers);
+
+        if (Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+            $removeGroupMembers = array_diff($groupMembers, $systemcontacts->getArrayOfIds());
+            foreach ($removeGroupMembers as $account_id) {
+                Admin_Controller_Group::getInstance()->removeGroupMember($group->getId(), $contact->account_id, false);
+            }
+        }
+    }
+
+    protected function _checkNonAccountMembers($_record)
+    {
+        $contacts = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+                ['field' => 'id', 'operator' => 'in', 'value' => $_record->members]
+            ]
+        ));
+        $nonUserContacts = $contacts->filter('type', Addressbook_Model_Contact::CONTACTTYPE_CONTACT);
+        if (count($nonUserContacts) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Found non-account members: '
+                . print_r($nonUserContacts->toArray(), true));
+            $translate = Tinebase_Translation::getTranslation('Addressbook');
+            throw new Tinebase_Exception_SystemGeneric($translate->_(
+                'It is not allowed to add non-account contacts to this list'));
+        }
+    }
+
+    protected function _updateGroup($group, $_record, $_oldRecord)
+    {
+        // check if something changed that requires special rights
+        $changeGroup = false;
+        foreach (Addressbook_Model_List::getManageAccountFields() as $field) {
+            if ($_record->{$field} != $_oldRecord->{$field}) {
+                $changeGroup = true;
+                break;
+            }
+        }
+
+        // then do the update, the group controller will check manage accounts right
+        if ($changeGroup) {
+            $groupController = Admin_Controller_Group::getInstance();
+
             foreach (Addressbook_Model_List::getManageAccountFields() as $field) {
-                if ($_record->{$field} != $_oldRecord->{$field}) {
-                    $changeGroup = true;
-                    break;
-                }
+                $group->{$field} = $_record->{$field};
             }
 
-            // then do the update, the group controller will check manage accounts right
-            if ($changeGroup) {
-                $groupController = Admin_Controller_Group::getInstance();
-                $group = $groupController->get($_record->group_id);
-
-                foreach (Addressbook_Model_List::getManageAccountFields() as $field) {
-                    $group->{$field} = $_record->{$field};
-                }
-
-                $groupController->update($group, false);
-            }
+            $groupController->update($group, false);
         }
     }
 
@@ -637,7 +686,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $upList->type = Addressbook_Model_List::LISTTYPE_GROUP;
             $upList->container_id = (empty($group->container_id)) ?
                 Addressbook_Controller::getDefaultInternalAddressbook() : $group->container_id;
-            $upList->members = (isset($group->members)) ? $this->_getContactIds($group->members) : array();
+            $this->_updateListMembersFromGroup($group, $upList);
             $upList->xprops = $group->xprops;
 
             // add modlog info
@@ -647,6 +696,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 $this->_checkEmailAddress($upList->email);
             }
 
+            if (is_array($upList->container_id) && isset($upList->container_id['id'])) {
+                $upList->container_id = $upList->container_id['id'];
+            }
             $upList = $this->_backend->update($upList);
             $this->_inspectAfterUpdate($upList, $upList, $list);
             $list = $this->get($upList->getId());
@@ -659,6 +711,28 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
 
         return $list;
+    }
+
+    /**
+     * add / remove system group members
+     *
+     * @param $group
+     * @param $list
+     */
+    protected function _updateListMembersFromGroup($group, $list)
+    {
+        // get all non-system contacts
+        $checks = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        $nonsystemcontactIds = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+                ['field' => 'id', 'operator' => 'in', 'value' => $list->members],
+                ['field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_CONTACT],
+            ]
+        ))->getArrayOfIds();
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($checks);
+
+        $systemcontacts = (isset($group->members)) ? $this->_getContactIds($group->members) : array();
+        $list->members = array_merge($nonsystemcontactIds, $systemcontacts);
     }
 
     /**

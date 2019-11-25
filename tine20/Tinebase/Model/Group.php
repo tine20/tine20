@@ -22,6 +22,7 @@
  * @property    array   members
  * @property    string  visibility
  * @property    string  list_id
+ * @property    boolean account_only
  */
 class Tinebase_Model_Group extends Tinebase_Record_Abstract
 {
