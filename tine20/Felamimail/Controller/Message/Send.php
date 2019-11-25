@@ -714,7 +714,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $totalSize = 0;
 
         foreach ($_message->attachments as $attachment) {
-            $part = $this->_getAttachmentPartByType($attachment, $_message);
+            try {
+                $part = $this->_getAttachmentPartByType($attachment, $_message);
+            } catch (Felamimail_Exception_IMAPMessageNotFound $feimnf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Skipping attachment ' . $feimnf->getMessage());
+                continue;
+            }
 
             if (! $part || ! isset($attachment['type'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
