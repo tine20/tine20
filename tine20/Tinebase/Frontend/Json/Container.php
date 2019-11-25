@@ -41,6 +41,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * @param  string $owner
      * @param  array $requiredGrants
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function getContainer($model, $containerType, $owner, $requiredGrants = NULL)
     {
@@ -62,7 +63,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
                 break;
                 
             default:
-                throw new Exception('no such NodeType');
+                throw new Tinebase_Exception_InvalidArgument('no such NodeType');
         }
         
         $converter = new Tinebase_Convert_Container_Json();

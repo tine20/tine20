@@ -4334,51 +4334,51 @@ class Tinebase_FileSystem implements
 
     public function repairTreeIsDeletedState()
     {
+        $fileobjectsTableName = SQL_TABLE_PREFIX . 'tree_fileobjects';
+        $nodesTableName = SQL_TABLE_PREFIX . 'tree_nodes';
         $db = Tinebase_Core::getDb();
-        $ids = $db->query('SELECT id FROM ' . SQL_TABLE_PREFIX .
-            'tree_nodes WHERE is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"')
+        $ids = $db->query('SELECT id FROM ' . $nodesTableName . ' WHERE is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"')
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         if (count($ids)) {
             Tinebase_Exception::log(new Exception('found ' . count($ids) . ' treenodes with broken deltime: ' .
                 print_r($ids, true)));
 
-            $db->query('update ' . SQL_TABLE_PREFIX . 'tree_nodes set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
+            $db->query('update ' . $nodesTableName . ' set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
         }
 
-        $ids = $db->query('SELECT id FROM ' . SQL_TABLE_PREFIX .
-            'tree_fileobjects WHERE is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"')
+        $ids = $db->query('SELECT id FROM ' . $fileobjectsTableName . ' WHERE is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"')
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         if (count($ids)) {
             Tinebase_Exception::log(new Exception('found ' . count($ids) . ' fileobjects with broken deltime: ' .
                 print_r($ids, true)));
 
-            $db->query('update ' . SQL_TABLE_PREFIX . 'tree_fileobjects set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
+            $db->query('update ' . $fileobjectsTableName . ' set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
         }
 
-        $ids = $db->query('SELECT F.id FROM ' . SQL_TABLE_PREFIX . 'fileobjects as F join ' . SQL_TABLE_PREFIX .
-            'tree_nodes as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted')
+        $ids = $db->query('SELECT F.id FROM ' . $fileobjectsTableName . ' as F join ' . $nodesTableName
+            . ' as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted')
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         if (count($ids)) {
             Tinebase_Exception::log(new Exception('found ' . count($ids) .
                 ' fileobjects is_deleted differ from treenodes: ' . print_r($ids, true)));
 
-            $db->query('update ' . SQL_TABLE_PREFIX . 'tree_fileobjects as F join ' . SQL_TABLE_PREFIX .
-                'tree_nodes as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted set F.deleted_time = N.deleted_time, F.is_deleted = N.is_deleted');
+            $db->query('update ' . $fileobjectsTableName . ' as F join ' . $nodesTableName
+                . ' as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted set F.deleted_time = N.deleted_time, F.is_deleted = N.is_deleted');
         }
 
-        $ids = $db->query('SELECT N.id FROM ' . SQL_TABLE_PREFIX . 'tree_nodes as N join ' . SQL_TABLE_PREFIX .
-            'tree_nodes as P ON N.parent_id = P.id AND N.is_deleted = 0 AND P.is_deleted = 1')
+        $ids = $db->query('SELECT N.id FROM ' . $nodesTableName . ' as N join ' . $nodesTableName
+            . ' as P ON N.parent_id = P.id AND N.is_deleted = 0 AND P.is_deleted = 1')
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         if (count($ids)) {
             Tinebase_Exception::log(new Exception('found ' . count($ids) .
                 ' treenodes are not deleted but parent is: ' . print_r($ids, true)));
 
-            $db->query('update ' . SQL_TABLE_PREFIX . 'tree_fileobjects as F join ' . SQL_TABLE_PREFIX .
-                'tree_nodes as N ON F.id = N.object_id set F.deleted_time = NOW(), N.deleted_time = NOW(), F.is_deleted = 1, N.is_deleted = 1 WHERE '
+            $db->query('update ' . $fileobjectsTableName . ' as F join ' . $nodesTableName
+                . ' as N ON F.id = N.object_id set F.deleted_time = NOW(), N.deleted_time = NOW(), F.is_deleted = 1, N.is_deleted = 1 WHERE '
                 . $db->quoteInto('N.id IN (?)', $ids));
         }
 
