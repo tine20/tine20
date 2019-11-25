@@ -292,6 +292,11 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
 
             Tinebase_Controller::getInstance()->logout();
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+            }
+            @header('HTTP/1.1 403 Forbidden');
         } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
