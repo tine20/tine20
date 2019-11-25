@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -255,5 +255,67 @@ class Addressbook_ListControllerTest extends TestCase
         } catch (Tinebase_Exception_AccessDenied $tead) {
             $this->assertEquals('You are not allowed to MANAGE_ACCOUNTS in application Admin !', $tead->getMessage());
         }
+    }
+
+    public function testAddSystemUserToList()
+    {
+        $list = $this->_createSystemList();
+        $list->members = [Tinebase_Core::getUser()->contact_id];
+        $updatedList = Addressbook_Controller_List::getInstance()->update($list);
+        self::assertEquals(1, count($updatedList->members),
+            'list members missing: ' . print_r($updatedList->toArray(), true));
+
+        // should be added to system group, too
+        $groupMembers = Admin_Controller_Group::getInstance()->getGroupMembers($list->group_id);
+        self::assertEquals(1, count($groupMembers),
+            'user missing from group members: ' . print_r($groupMembers, true));
+
+        // set account_only in group -> user contact should still be list member
+        $adminJson = new Admin_Frontend_Json();
+        $groupJson = $adminJson->getGroup($list->group_id);
+        $groupJson['account_only'] = 1;
+        $groupJson['members'] = $groupMembers;
+        $groupJsonUpdated = $adminJson->saveGroup($groupJson);
+        self::assertEquals(1, $groupJsonUpdated['members']['totalcount'], print_r($groupJsonUpdated, true));
+    }
+
+    protected function _createSystemList()
+    {
+        // create system group
+        $group = Admin_Controller_Group::getInstance()->create(new Tinebase_Model_Group([
+            'name'          => 'tine20phpunitgroup' . Tinebase_Record_Abstract::generateUID(6),
+            'description'   => 'unittest group',
+            'members'       => [],
+        ]));
+
+        // add system user contact to list
+        $list = Addressbook_Controller_List::getInstance()->get($group->list_id);
+        $this->_listsToDelete[] = $list;
+        return $list;
+    }
+
+    public function testAddNonSystemContactAndUpdategroup()
+    {
+        // create system list
+        $list = $this->_createSystemList();
+
+        // add non-system contact
+        $list->members = [$this->objects['contact1']->getId()];
+        $updatedList = Addressbook_Controller_List::getInstance()->update($list);
+        self::assertEquals(1, count($updatedList->members),
+            'list members missing: ' . print_r($updatedList->toArray(), true));
+
+        // update group
+        $adminJson = new Admin_Frontend_Json();
+        $groupJson = $adminJson->getGroup($list->group_id);
+        self::assertEquals(0, $groupJson['members']['totalcount'], print_r($groupJson, true));
+        $groupJson['name'] = 'updated unittest group';
+        $groupJson['members'] = [];
+        $adminJson->saveGroup($groupJson);
+
+        // contact should still be in the list!
+        $updatedList = Addressbook_Controller_List::getInstance()->get($list->getId());
+        self::assertEquals(1, count($updatedList->members),
+            'list members missing: ' . print_r($updatedList->toArray(), true));
     }
 }
