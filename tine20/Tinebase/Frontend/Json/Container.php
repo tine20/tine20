@@ -41,13 +41,14 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * @param  string $owner
      * @param  array $requiredGrants
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function getContainer($application, $containerType, $owner, $requiredGrants = NULL)
     {
         if (!$requiredGrants) {
             $requiredGrants = Tinebase_Model_Grants::GRANT_READ;
         }
-        switch($containerType) {
+        switch ($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, $requiredGrants);
                 $containers->sort('name');
@@ -62,7 +63,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
                 break;
                 
             default:
-                throw new Exception('no such NodeType');
+                throw new Tinebase_Exception_InvalidArgument('no such NodeType');
         }
         
         $converter = new Tinebase_Convert_Container_Json();
