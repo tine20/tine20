@@ -5,7 +5,7 @@
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -14,7 +14,7 @@
  *
  * @package     ActiveSync
  */
-class ActiveSync_Controller extends Tinebase_Controller_Abstract
+class ActiveSync_Controller extends Tinebase_Controller_Event
 {
     /**
      * application name (is needed in checkRight())
@@ -110,6 +110,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
      * fetch devices for user
      * 
      * @param string $userId
+     * @return Tinebase_Record_RecordSet of ActiveSync_Model_Device
      */
     protected function _getDevicesForUser($userId)
     {
@@ -141,5 +142,22 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         Syncroton_Registry::set(Syncroton_Registry::SESSION_VALIDATOR,   function() {
             return ! Tinebase_Core::inMaintenanceMode();
         });
+    }
+
+    /**
+     * event handler function
+     *
+     * all events get routed through this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject the eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        switch (get_class($_eventObject)) {
+            case 'Tinebase_Event_User_DeleteAccount':
+                $devices = $this->_getDevicesForUser($_eventObject->account->getId());
+                ActiveSync_Controller_Device::getInstance()->delete($devices->getArrayOfIds());
+                break;
+        }
     }
 }
