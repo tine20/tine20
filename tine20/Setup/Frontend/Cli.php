@@ -448,31 +448,11 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        return $this->_updateApplications();
-    }
-    
-    /**
-     * update all applications
-     * 
-     * @return int
-     */
-    protected function _updateApplications()
-    {
-        // TODO remove this loop in Release 13
-        $ran = false;
-        $controller = Setup_Controller::getInstance();
+        $result = Setup_Controller::getInstance()->updateApplications();
+        echo "Updated " . $result['updated'] . " application(s).\n";
 
-        $maxLoops = 50;
-        do {
-            $result = $controller->updateApplications();
-
-            if (!$ran || $result['updated'] > 0) {
-                echo "Updated " . $result['updated'] . " application(s).\n";
-            }
-            $ran = true;
-        } while (isset($result['updated']) && $result['updated'] > 0 && --$maxLoops > 0);
-
-        return ($maxLoops > 0) ? 0 : 1;
+        // legacy? should we change that? always 0?
+        return $result['updated'] > 0 ? 0 : 1;
     }
 
     /**

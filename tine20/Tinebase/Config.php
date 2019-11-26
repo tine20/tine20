@@ -21,7 +21,14 @@
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
     const APP_NAME = 'Tinebase';
-    
+
+    /**
+     * the current Tinebase version
+     *
+     * @var int
+     */
+    const TINEBASE_VERSION = 13;
+
     /**
      * access log rotation in days
      *

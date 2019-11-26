@@ -8,6 +8,10 @@
  * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
+
+echo __FILE__ . ' must not be used or autoloaded or required etc.' . PHP_EOL;
+exit(1);
+
 class Tasks_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**

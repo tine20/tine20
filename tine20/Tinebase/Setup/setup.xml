@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>12.30</version>
-    <minimumRequiredVersion>11.46</minimumRequiredVersion>
+    <version>13.0</version>
+    <minimumRequiredVersion>12.30</minimumRequiredVersion>
     <tables>
         <table>
             <name>application_states</name>

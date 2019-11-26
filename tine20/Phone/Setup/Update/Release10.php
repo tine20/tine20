@@ -8,6 +8,11 @@
  * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
+
+echo __FILE__ . ' must not be used or autoloaded or required etc.' . PHP_EOL;
+exit(1);
+
+
 class Phone_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**

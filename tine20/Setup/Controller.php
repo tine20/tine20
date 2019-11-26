@@ -435,6 +435,7 @@ class Setup_Controller
         $applicationController = Tinebase_Application::getInstance();
 
         $updatesByPrio = [];
+        $maxMajorV = Tinebase_Config::TINEBASE_VERSION;
 
         /** @var Tinebase_Model_Application $application */
         foreach ($applicationController->getApplications() as $application) {
@@ -445,8 +446,7 @@ class Setup_Controller
             $stateUpdates = json_decode($applicationController->getApplicationState($application,
                 Tinebase_Application::STATE_UPDATES, true), true);
 
-            $appMajorV = (int)$application->getMajorVersion();
-            for ($majorV = 0; $majorV <= $appMajorV; ++$majorV) {
+            for ($majorV = 0; $majorV <= $maxMajorV; ++$majorV) {
                 /** @var Setup_Update_Abstract $class */
                 $class = $application->name . '_Setup_Update_' . $majorV;
                 if (class_exists($class)) {
@@ -488,178 +488,66 @@ class Setup_Controller
      * @return  array   messages
      * @throws Tinebase_Exception
      */
+
+    // TODO refactor signature ... we dont want that? do we? always all...
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
     {
         $this->clearCache();
 
-        // required for update path to Adb 12.7 ... can be removed once we drop updatability from < 12.7 to 12.7+
-        Tinebase_Group_Sql::doJoinXProps(false);
-        try {
+        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+            throw new Tinebase_Exception('could not create setup user');
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
 
-            if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
-                throw new Tinebase_Exception('could not create setup user');
-            }
-            Tinebase_Core::set(Tinebase_Core::USER, $user);
+        $result = ['updated' => 0];
+        $iterationCount = 0;
+        do {
+            $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
 
-            if ($_applications === null) {
-                $_applications = Tinebase_Application::getInstance()->getApplications();
-
-                /** @var Tinebase_Model_Application $tinebase */
-                $tinebase = $_applications->find('name', 'Tinebase');
-                $setupXml = $this->getSetupXml($tinebase->name);
-                list($majV,) = explode('.', $setupXml->version, 2);
-                if (abs((int)$majV - (int)$tinebase->getMajorVersion()) > 1) {
-                    throw new Setup_Exception_Dependency('Tinebase version ' . $tinebase->version .
-                        ' can not be updated to ' . $setupXml->version);
-                }
+            if (empty($updatesByPrio)) {
+                return $result;
             }
 
-            // TODO remove this in Version 13
-            //return array(
-            //            'messages' => $messages,
-            //            'updated'  => $this->_updatedApplications,
-            //        );
-            $result = $this->_legacyUpdateApplications($_applications);
-            $iterationCount = 0;
+            ksort($updatesByPrio);
+            $db = Setup_Core::getDb();
+            $classes = [];
 
-            do {
-                $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
+            try {
+                $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());
 
-                if (empty($updatesByPrio)) {
-                    return $result;
-                }
+                foreach ($updatesByPrio as $prio => $updates) {
+                    foreach ($updates as $update) {
+                        $className = $update[Setup_Update_Abstract::CLASS_CONST];
+                        $functionName = $update[Setup_Update_Abstract::FUNCTION_CONST];
+                        if (!isset($classes[$className])) {
+                            $classes[$className] = new $className($this->_backend);
+                        }
+                        $class = $classes[$className];
 
-                ksort($updatesByPrio);
-                $db = Setup_Core::getDb();
-                $classes = [];
+                        try {
+                            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
-                try {
-                    $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());
+                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                . ' Updating ' . $className . '::' . $functionName
+                            );
 
-                    foreach ($updatesByPrio as $prio => $updates) {
-                        foreach ($updates as $update) {
-                            $className = $update[Setup_Update_Abstract::CLASS_CONST];
-                            $functionName = $update[Setup_Update_Abstract::FUNCTION_CONST];
-                            if (!isset($classes[$className])) {
-                                $classes[$className] = new $className($this->_backend);
-                            }
-                            $class = $classes[$className];
+                            $class->$functionName();
 
-                            try {
-                                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
-                                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                                    . ' Updating ' . $className . '::' . $functionName
-                                );
-
-                                $class->$functionName();
-
-                                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-                            } catch (Exception $e) {
-                                Tinebase_TransactionManager::getInstance()->rollBack();
-                                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                                throw $e;
-                            }
+                        } catch (Exception $e) {
+                            Tinebase_TransactionManager::getInstance()->rollBack();
+                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                            throw $e;
                         }
                     }
-
-                } finally {
-                    $this->_cleanUpUpdate();
                 }
-            } while (++$iterationCount < 5);
 
-            throw new Tinebase_Exception('endless update loop');
-
-        // required for update path to Adb 12.7 ... can be removed once we drop updatability from < 12.7 to 12.7+
-        } finally {
-            Tinebase_Group_Sql::doJoinXProps();
-        }
-    }
-
-    protected function _legacyUpdateApplications(Tinebase_Record_RecordSet $_applications = null)
-    {
-        // we need to clone here because we would taint the app cache otherwise
-        $applications = clone($_applications);
-
-        $this->_updatedApplications = 0;
-        $smallestMajorVersion = NULL;
-        $biggestMajorVersion = NULL;
-        
-        //find smallest major version
-        foreach ($applications as $application) {
-            if (! $this->updateNeeded($application)) {
-                $applications->removeRecord($application);
-                continue;
+            } finally {
+                $this->_cleanUpUpdate();
             }
-            
-            if ($smallestMajorVersion === NULL || $application->getMajorVersion() < $smallestMajorVersion) {
-                $smallestMajorVersion = $application->getMajorVersion();
-            }
-            if ($biggestMajorVersion === NULL || $application->getMajorVersion() > $biggestMajorVersion) {
-                $biggestMajorVersion = $application->getMajorVersion();
-            }
-        }
-        
-        $messages = array();
-
-        // turn off create previews and index content temporarily
-        $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
-        if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
-                $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT})) {
-            $fsConfig->unsetParent();
-            $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = false;
-            $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = false;
-            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
-        }
-
-        // we need to clone here because we would taint the app cache otherwise
-        // update tinebase first (to biggest major version)
-        $tinebase = clone (Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
-        if ($idx = $applications->getIndexById($tinebase->getId())) {
-            unset($applications[$idx]);
-        }
-
-        list($major, $minor) = explode('.', $this->getSetupXml('Tinebase')->version[0]);
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
-
-        // TODO remove this in release 13
-        $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
-        $release11->addIsSystemToCustomFieldConfig();
-        $release11->fsAVupdates();
-        Setup_SchemaTool::updateSchema([
-            Tinebase_Model_Tree_RefLog::class,
-        ]);
-
-        $adbRelease11 = new Addressbook_Setup_Update_Release11(Setup_Backend_Factory::factory());
-        $adbRelease11->fixContactData();
-
-        // TODO remove this in release 13
-        $release12 = new Tinebase_Setup_Update_12(Setup_Backend_Factory::factory());
-        $release12->addPreviewStatusAndErrorCount();
-
-        for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
-            $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
-        }
-
-        // update the rest
-        for ($majorVersion = $smallestMajorVersion; $majorVersion <= $biggestMajorVersion; $majorVersion++) {
-            foreach ($applications as $application) {
-                if ($application->getMajorVersion() <= $majorVersion) {
-                    $messages = array_merge($messages, $this->updateApplication($application, $majorVersion));
-                }
-            }
-        }
-
-        $this->updateAllImportExportDefinitions();
-
-        $this->clearCache();
-        
-        return array(
-            'messages' => $messages,
-            'updated'  => $this->_updatedApplications,
-        );
+        } while (++$iterationCount < 5);
     }
 
     public function updateAllImportExportDefinitions()
@@ -895,16 +783,13 @@ class Setup_Controller
         // check action queue is empty and wait for it to finish
         $timeStart = time();
         while (Tinebase_ActionQueue::getInstance()->getQueueSize() > 0 && time() - $timeStart < 300) {
-            usleep(1000);
+            usleep(10000);
         }
         if (time() - $timeStart >= 300) {
             throw new Tinebase_Exception('waited for Action Queue to become empty for more than 300 sec');
         }
         // set action to direct
         Tinebase_ActionQueue::getInstance('Direct');
-
-        // TODO remove in Release 12
-        $this->_fixTinebase10_33();
 
         $roleController = Tinebase_Acl_Roles::getInstance();
         $applicationController = Tinebase_Application::getInstance();
