@@ -2,7 +2,7 @@
 <application>
     <name>Tinebase</name>
     <version>12.30</version>
-    <minimumRequiredVersion>9.8</minimumRequiredVersion>
+    <minimumRequiredVersion>11.46</minimumRequiredVersion>
     <tables>
         <table>
             <name>application_states</name>
