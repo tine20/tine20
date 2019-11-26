@@ -125,7 +125,16 @@ class Tinebase_State
                     'state_id' => $_name,
                     'data' => $_value
                 ));
-                $this->_backend->create($record);
+                try {
+                    $this->_backend->create($record);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                        throw $zdse;
+                    } else {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Ignore duplicates: '
+                            . $zdse->getMessage());
+                    }
+                }
             } else {
                 $record = $results->getFirstRecord();
                 $record->data = $_value;
