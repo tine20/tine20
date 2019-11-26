@@ -98,7 +98,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 throw new Tinebase_Exception_AccessDenied('User is not allowed to send a message with this account');
             }
         }
-        
+
         try {
             $this->_resolveOriginalMessage($_message);
             $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
@@ -723,6 +723,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         foreach ($_message->attachments as $attachment) {
             try {
                 $part = $this->_getAttachmentPartByType($attachment, $_message);
+            } catch (Felamimail_Exception_IMAPMessageNotFound $feimnf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Skipping attachment ' . $feimnf->getMessage());
+                continue;
             } catch (Tinebase_Exception_InvalidArgument $teia) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' ' . $teia->getMessage()
