@@ -238,16 +238,20 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         if (! Ext.isFunction(contact.beginEdit)) {
             contact = new Tine.Addressbook.Model.Contact(contact);
         }
+
+        // no exact matches are necessary - use the same regex as in \Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP
+        // TODO find a good generic place for this const
+        const emailRegEx = /([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i;
         
         if (!contact.get("members")) {
             var mailAddress = (contact.getPreferredEmail()) ? Tine.Felamimail.getEmailStringFromContact(contact) : null;
-            if (mailAddress && Ext.form.VTypes.email(mailAddress))
+            if (mailAddress && mailAddress.match(emailRegEx))
                 mailAddresses.push(mailAddress);
         } else {
             var emails = contact.get("emails");
             if (emails) {
                 Ext.each(emails.split(","), function (mail) {
-                    if (Ext.form.VTypes.email(mail)) {
+                    if (mail.match(emailRegEx)) {
                         mailAddresses.push(mail);
                     }
                 });
