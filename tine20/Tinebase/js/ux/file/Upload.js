@@ -747,7 +747,10 @@ Ext.ux.file.Upload.file = Ext.data.Record.create([
     {name: 'path', system: true},
     {name: 'tempFile', system: true}
 ]);
-
+Ext.ux.file.Upload.file.prototype.toString = function() {
+    const data = Ext.ux.file.Upload.file.getFileData(this);
+    return JSON.stringify(data);
+};
 Ext.ux.file.Upload.file.getFileData = function(file) {
     return Ext.copyTo({}, file.data, ['tempFile', 'name', 'path', 'size', 'type', 'id']);
 };
