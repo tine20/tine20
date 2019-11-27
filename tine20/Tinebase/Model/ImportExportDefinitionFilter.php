@@ -39,5 +39,6 @@ class Tinebase_Model_ImportExportDefinitionFilter extends Tinebase_Model_Filter_
         'type'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'label'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'format'            => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'scope'             => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }
