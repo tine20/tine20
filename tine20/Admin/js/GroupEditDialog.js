@@ -117,7 +117,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     columnWidth: 0.5,
                     xtype: 'checkbox',
-                    fieldLabel: this.app.i18n._('System accounts only'),
+                    fieldLabel: this.app.i18n._('Only system accounts can be added to Addressbook group'),
                     name: 'account_only',
                     anchor: '100%',
                     value: true
