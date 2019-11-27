@@ -47,6 +47,21 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
     protected $_application = 'Tinebase';
 
     /**
+     * hidden from frontend
+     */
+    const SCOPE_HIDDEN = 'hidden';
+
+    /**
+     * only (?) export multiple records
+     */
+    const SCOPE_MULTI = 'multi';
+
+    /**
+     * only (?) export single records
+     */
+    const SCOPE_SINGLE = 'single';
+
+    /**
      * list of zend validator
      * 
      * this validators get used when validating user generated content with Zend_Input_Filter

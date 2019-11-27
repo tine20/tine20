@@ -614,6 +614,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             'field' => 'type',
             'operator' => 'equals',
             'value' => 'import'
+        ], [
+            'field' => 'scope',
+            'operator' => 'not',
+            'value' => Tinebase_Model_ImportExportDefinition::SCOPE_HIDDEN
         ]];
         if ($application) {
             $filterData[] = [
