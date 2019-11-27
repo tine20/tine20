@@ -24,7 +24,6 @@ class Inventory_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update001()
     {
-        Tinebase_Container::getInstance()->deleteDuplicateContainer('Inventory');
         $this->addApplicationUpdate('Inventory', '12.1', self::RELEASE012_UPDATE001);
     }
 }

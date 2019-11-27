@@ -53,7 +53,6 @@ class Tasks_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update003()
     {
-        Tinebase_Container::getInstance()->deleteDuplicateContainer('Tasks');
         $this->addApplicationUpdate('Tasks', '12.4', self::RELEASE012_UPDATE003);
     }
 
