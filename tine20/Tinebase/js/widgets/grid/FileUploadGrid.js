@@ -144,7 +144,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             // @TODO add to store
         }
         // NOTE: grid doesn't update selections itself
-        this.actionUpdater.updateActions(this.selModel);
+        this.actionUpdater.updateActions(this.selModel, [this.record.data]);
     },
 
     setReadOnly: function (readOnly) {
@@ -304,6 +304,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.store.on('add', this.onStoreAdd, this);
 
         this.loadRecord(this.record);
+        this.actionUpdater.updateActions(this.selModel, [this.record.data]);
     },
 
     onStoreAdd: function (store, records, idx) {
@@ -480,7 +481,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.selModel.on('selectionchange', function (selModel) {
             var rowCount = selModel.getCount();
             this.action_remove.setDisabled(this.readOnly || rowCount === 0);
-            this.actionUpdater.updateActions(selModel);
+            this.actionUpdater.updateActions(selModel, [this.record.data]);
 
         }, this);
     },

@@ -124,7 +124,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             this.store.add([record]);
         }
         // NOTE: grid doesn't update selections itself
-        this.actionUpdater.updateActions(this.selModel);
+        this.actionUpdater.updateActions(this.selModel, [this.record.data]);
     },
 
     /**
@@ -300,6 +300,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         }
 
         this.setReadOnly(! hasRequiredGrant);
+        this.actionUpdater.updateActions(this.selModel, [record.data]);
     },
 
     /**

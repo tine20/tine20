@@ -69,7 +69,13 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
             $node->path = $this->_path->flatpath;
         }
 
-        $result['value'] = $node->toArray();
+        try {
+            Filemanager_Controller_Node::getInstance()->resolveGrants(new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [$node]));
+            $convert = new Tinebase_Convert_Tree_Node_Json(Tinebase_Model_Tree_Node::class);
+            $result['value'] = $convert->fromTine20Model($node);
+        } catch (Exception $e) {
+            $result['value'] = $node->toArray();
+        }
         
         return $result;
     }
