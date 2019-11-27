@@ -164,4 +164,34 @@ class Calendar_Export_DocTest extends Calendar_TestCase
         $relatedRecord = new Addressbook_Model_Contact($event->relations[0]['related_record'], true);
         static::assertContains($relatedRecord->getTitle(), $plain);
     }
+
+    public function testFileNameTemplate()
+    {
+        /** @var Tinebase_Model_ImportExportDefinition $definition */
+        $definition = Tinebase_ImportExportDefinition::getInstance()->search(
+            new Tinebase_Model_ImportExportDefinitionFilter([
+                'model' => 'Calendar_Model_Event',
+                'name' => 'cal_default_doc_single'
+            ]))->getFirstRecord();
+
+        $definition->plugin_options = substr($definition->plugin_options, 0, strlen($definition->plugin_options) - 10)
+            . '<exportFilename>testName_{{ export.timestamp|raw }}.docx</exportFilename></config>';
+
+        Tinebase_ImportExportDefinition::getInstance()->update($definition);
+
+        $export = new Calendar_Export_Doc(new Calendar_Model_EventFilter(), null,
+            [
+                'definitionId'  => $definition->getId(),
+                'recordData'    => $this->_getEvent(true)->toArray()
+            ]);
+        $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(
+            Tinebase_Record_Abstract::generateUID()));
+
+        $export->generate();
+        $filename = $export->getDownloadFilename('a', 'b');
+        $prop = new ReflectionProperty(Tinebase_Export_Abstract::class, '_exportTimeStamp');
+        $prop->setAccessible(true);
+
+        static::assertSame('testName_' . $prop->getValue($export) . '.docx', $filename);
+    }
 }

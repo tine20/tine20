@@ -599,6 +599,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     public function getDownloadFilename($_appName, $_format)
     {
+        if (isset($this->_config->exportFilename) && $this->_hasTwig()) {
+            $this->_twig->addLoader(new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]));
+            $twigTmpl = $this->_twig->load('fileNameTmpl');
+            return $twigTmpl->render($this->_getTwigContext([]));
+        }
+
         $model = '';
         if (null !== $this->_modelName) {
             /** @var Tinebase_Record_Interface $model */
