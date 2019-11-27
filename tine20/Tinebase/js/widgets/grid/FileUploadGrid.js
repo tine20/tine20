@@ -230,16 +230,24 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             actionUpdater: this.isResumeEnabled
         });
 
-        this.tbar = [
-            this.action_add
-        ];
-
-        this.tbar.push(this.action_remove);
+        this.tbar = new Ext.Toolbar({
+            items: [
+                this.action_add,
+                this.action_remove
+            ],
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tinebase-FileUploadGrid-Toolbar'
+            }],
+        });
 
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
                 key: 'Tinebase-MainContextMenu'
+            }, {
+                ptype: 'ux.itemregistry',
+                key: 'Tinebase-FileUploadGrid-ContextMenu'
             }],
             items: [
                 this.action_remove,
@@ -248,10 +256,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             ]
         });
 
-        this.actionUpdater.addActions([
-            this.action_pause,
-            this.action_resume
-        ]);
+        this.actionUpdater.addActions(this.tbar.items);
+        this.actionUpdater.addActions(this.contextMenu.items);
 
     },
 
