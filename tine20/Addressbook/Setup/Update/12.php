@@ -87,17 +87,8 @@ class Addressbook_Setup_Update_12 extends Setup_Update_Abstract
         $this->addApplicationUpdate('Addressbook', '12.8', self::RELEASE012_UPDATE004);
     }
 
-    /**
-     * remove container duplicates - we still had a bug here
-     *
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_Record_SystemContainer
-     */
     public function update005()
     {
-        Tinebase_Container::getInstance()->deleteDuplicateContainer('Addressbook');
         $this->addApplicationUpdate('Addressbook', '12.9', self::RELEASE012_UPDATE005);
     }
 }

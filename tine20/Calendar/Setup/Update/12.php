@@ -90,7 +90,6 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update005()
     {
-        Tinebase_Container::getInstance()->deleteDuplicateContainer('Calendar');
         $this->addApplicationUpdate('Calendar', '12.11', self::RELEASE012_UPDATE005);
     }
 
