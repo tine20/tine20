@@ -294,21 +294,24 @@ class Addressbook_ListControllerTest extends TestCase
         return $list;
     }
 
-    public function testAddNonSystemContactAndUpdategroup()
+    public function testAddNonSystemContactAndUpdategroupCheckModlog()
     {
         // create system list
         $list = $this->_createSystemList();
 
-        // add non-system contact
-        $list->members = [$this->objects['contact1']->getId()];
+        // contacts (non-system + system)
+        $list->members = [
+            $this->objects['contact1']->getId(),
+            Tinebase_Core::getUser()->contact_id,
+        ];
         $updatedList = Addressbook_Controller_List::getInstance()->update($list);
-        self::assertEquals(1, count($updatedList->members),
+        self::assertEquals(2, count($updatedList->members),
             'list members missing: ' . print_r($updatedList->toArray(), true));
 
         // update group
         $adminJson = new Admin_Frontend_Json();
         $groupJson = $adminJson->getGroup($list->group_id);
-        self::assertEquals(0, $groupJson['members']['totalcount'], print_r($groupJson, true));
+        self::assertEquals(1, $groupJson['members']['totalcount'], print_r($groupJson, true));
         $groupJson['name'] = 'updated unittest group';
         $groupJson['members'] = [];
         $adminJson->saveGroup($groupJson);
@@ -317,5 +320,19 @@ class Addressbook_ListControllerTest extends TestCase
         $updatedList = Addressbook_Controller_List::getInstance()->get($list->getId());
         self::assertEquals(1, count($updatedList->members),
             'list members missing: ' . print_r($updatedList->toArray(), true));
+
+        // check modlog
+        $modlogs = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications(
+            'Addressbook',
+            $list->getId(),
+            Addressbook_Model_List::class
+        );
+        self::assertEquals(3, count($modlogs), 'should have 2 update and 1 create modlogs:'
+            . print_r($modlogs->toArray(), true));
+        $modlogs->sort('seq');
+        self::assertEquals('created', $modlogs[0]->change_type);
+        $diffSecondUpdate = json_decode($modlogs[2]->new_value);
+        self::assertTrue(isset($diffSecondUpdate->diff->members));
+        self::assertEquals(1, count($diffSecondUpdate->diff->members));
     }
 }

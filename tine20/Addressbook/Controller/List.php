@@ -701,6 +701,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             }
             $upList = $this->_backend->update($upList);
             $this->_inspectAfterUpdate($upList, $upList, $list);
+            $this->_writeModLog($upList, $list);
             $list = $this->get($upList->getId());
 
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -708,6 +709,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             $group->list_id = $list->getId();
 
             $this->_inspectAfterCreate($list, $list);
+            $this->_writeModLog($list, null);
         }
 
         return $list;
