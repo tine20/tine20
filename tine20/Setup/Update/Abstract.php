@@ -532,6 +532,9 @@ class Setup_Update_Abstract
         }
         try {
             Tinebase_User::getInstance()->assertAdminGroupMembership($_user);
+        } catch (Zend_Ldap_Exception $zle) {
+            Tinebase_Group::getInstance()->addGroupMemberInSqlBackend(Tinebase_Group::getInstance()
+                ->getDefaultAdminGroup(), $_user);
         } finally {
             if ($unsetUser) {
                 Tinebase_Core::unsetUser();
