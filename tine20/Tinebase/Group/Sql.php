@@ -888,7 +888,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             case Tinebase_Timemachine_ModificationLog::UPDATED:
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                 if (isset($diff->diff['members']) && is_array($diff->diff['members'])) {
-                    $this->setGroupMembers($modification->record_id, $diff->diff['members']);
+                    $toAdd = array_diff($diff->diff['members'], $diff->oldData['members']);
+                    $toDelete = array_diff($diff->oldData['members'], $diff->diff['members']);
+                    $members = array_unique(array_merge($toAdd,
+                        array_diff($this->getGroupMembers($modification->record_id), $toDelete)));
+                    $this->setGroupMembers($modification->record_id, $members);
                     $record = $this->getGroupById($modification->record_id);
                     $record->members = $this->getGroupMembers($record->getId());
                     Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
