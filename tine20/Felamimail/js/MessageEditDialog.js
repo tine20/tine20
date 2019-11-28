@@ -412,14 +412,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
      * inits body and attachments from reply/forward/template
+     *
+     * @param {} message
      */
-    initContent: function (format) {
+    initContent: function (message) {
         if (!this.record.get('body')) {
-            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
-
-            if (format === undefined) {
-                format = account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 'text/html';
-            }
+            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
+                format = message === undefined
+                    ? account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 'text/html'
+                    : message.getBodyType();
 
             if (!this.msgBody) {
                 var message = this.getMessageFromConfig();
@@ -434,7 +435,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             success: this.initContent.createDelegate(this),
                             // set format to message body format if fetch fails
                             failure: message.bodyIsFetched()
-                                ? this.initContent.createDelegate(this, [message.getBodyType()])
+                                ? this.initContent.createDelegate(this, [message])
                                 : null
                         });
                     }
