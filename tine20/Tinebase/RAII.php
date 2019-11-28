@@ -18,6 +18,7 @@
 class Tinebase_RAII
 {
     protected $closure;
+    protected $releaseFunc;
 
     public function __construct(Closure $closure)
     {
@@ -27,5 +28,16 @@ class Tinebase_RAII
     public function __destruct()
     {
         ($this->closure)();
+    }
+
+    public function setReleaseFunc(Closure $closure)
+    {
+        $this->releaseFunc = $closure;
+        return $this;
+    }
+
+    public function release()
+    {
+        ($this->releaseFunc)();
     }
 }
