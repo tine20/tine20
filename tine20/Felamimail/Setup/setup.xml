@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>12.12</version>
+    <version>13.0</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>25</version>
+            <version>26</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -194,6 +194,11 @@
                     <type>text</type>
                     <length>32</length>
                     <default>none</default>
+                </field>
+                <field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
                 </field>
                 <field>
                     <name>created_by</name>

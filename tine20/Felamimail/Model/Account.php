@@ -42,13 +42,19 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
     protected static $_configurationObject = NULL;
 
     /**
+     * external email user ids (for example in dovecot/postfix sql)
+     */
+    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
+
+    /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
     protected static $_modelConfiguration = [
         # TODO switch to mcv2
-        # self::VERSION => 25,
+        # self::VERSION => 26,
         'recordName' => 'Account',
         'recordsName' => 'Accounts', // ngettext('Account', 'Accounts', n)
         'containerName' => 'Email Accounts', // ngettext('Email Account', 'Email Accounts', n)
@@ -65,6 +71,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         'exposeHttpApi' => false,
         'exposeJsonApi' => true,
         'multipleEdit' => false,
+        self::HAS_XPROPS    => true,
 
         'titleProperty' => 'name',
         'appName' => 'Felamimail',
