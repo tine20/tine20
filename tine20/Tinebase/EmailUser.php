@@ -429,12 +429,11 @@ class Tinebase_EmailUser
                     __METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($allowedDomains, TRUE));
 
                 if ($_throwException) {
-                    // _('User E-Mail-Address {0} not in allowed domains')
                     $translation = Tinebase_Translation::getTranslation('Tinebase');
                     throw new Tinebase_Exception_SystemGeneric(str_replace(
                         ['{0}', '{1}'],
                         [$_email, implode(',', Tinebase_EmailUser::getAllowedDomains())],
-                        $translation->_('E-Mail-Address {0} not in allowed domains [{1}]')
+                        $translation->_('Email address {0} not in allowed domains [{1}] or invalid')
                     ));
                 } else {
                     $result = false;
