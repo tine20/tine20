@@ -4409,11 +4409,8 @@ msgstr "Hierarchie/Name"
 msgid "Grid Panel Key Bindings"
 msgstr "Tastenkürzel Listenansicht"
 
-msgid "User E-Mail-Address {0} not in allowed domains"
-msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
-
-msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
-msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
+msgid "Email address {0} not in allowed domains [{1}] or invalid"
+msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}] oder ungütig"
 
 msgid "Accesslog rotation in days"
 msgstr "Zugriffslog-Rotation in Tagen"

@@ -19,6 +19,9 @@ class Tinebase_Mail extends Zend_Mail
 {
     /**
     * email address regexp
+     *
+     * NOTE: we currently do not support umlauts
+     * see  https://stackoverflow.com/questions/15121359/are-international-characters-e-g-umlaut-characters-valid-in-the-local-part-of
     */
     const EMAIL_ADDRESS_REGEXP = '/^([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})$/i';
 
