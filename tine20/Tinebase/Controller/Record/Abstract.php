@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -292,6 +292,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
+        $this->_addDefaultFilter($_filter);
         
         $count = $this->_backend->searchCount($_filter);
         
