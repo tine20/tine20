@@ -39,13 +39,20 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      */
     const LISTTYPE_GROUP = 'group';
 
-
+    /**
+     * mailinglist xprops
+     */
     const XPROP_SIEVE_ALLOW_EXTERNAL = 'sieveAllowExternal';
     const XPROP_SIEVE_ALLOW_ONLY_MEMBERS = 'sieveAllowOnlyMembers';
     const XPROP_SIEVE_FORWARD_ONLY_SYSTEM = 'sieveForwardOnlySystem';
     const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
     const XPROP_USE_AS_MAILINGLIST = 'useAsMailinglist';
 
+    /**
+     * external email user ids (for example in dovecot/postfix sql)
+     */
+    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     /**
      * name of fields which require manage accounts to be updated

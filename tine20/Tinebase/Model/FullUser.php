@@ -45,6 +45,12 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     const XPROP_PERSONAL_FS_QUOTA = 'personalFSQuota';
 
     /**
+     * external email user ids (for example in dovecot/postfix sql)
+     */
+    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
+
+    /**
      * holds the configuration object (must be declared in the concrete class)
      *
      * @var Tinebase_ModelConfiguration
