@@ -524,6 +524,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * cleanNotes: removes notes of records that have been deleted
+     *
+     * -- purge=1 param also removes redundant notes (empty updates + create notes)
+     * supports dry run (-d)
      */
     public function cleanNotes(Zend_Console_Getopt $_opts)
     {
@@ -538,6 +541,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $models = array();
         $deleteIds = array();
         $deletedCount = 0;
+        $purge = isset($args['purge']) ? $args['purge'] : false;
+        $purgeCountCreated = 0;
+        $purgeCountEmptyUpdate = 0;
 
         do {
             echo "\noffset $offset...";
@@ -607,6 +613,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     if ($result === 0) {
                         $deleteIds[] = $note->getId();
                     }
+
+                    if ($purge) {
+                        if ($note->note_type_id === 4) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountCreated++;
+                        } else if ($note->note_type_id === 5 && strpos('|', $note->note) === false) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountEmptyUpdate++;
+                        }
+                    }
                 } else {
                     try {
                         $controller->get($note->record_id, null, false, true);
@@ -617,19 +633,31 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
             if (count($deleteIds) > 0) {
                 $deletedCount += count($deleteIds);
-                $offset -= $notesController->purgeNotes($deleteIds);
-                if ($offset < 0) $offset = 0;
+                if ($_opts->d) {
+                    $offset -= count($deleteIds);
+                } else {
+                    $offset -= $notesController->purgeNotes($deleteIds);
+                }
+                if ($offset < 0) {
+                    $offset = 0;
+                }
                 $deleteIds = [];
             }
             echo ' done';
         } while ($notes->count() === $limit);
 
-
-
         foreach($controllers as $model => $controller) {
             $controller->doContainerACLChecks($models[$model][3]);
         }
 
+        if ($_opts->d) {
+            echo "\nDRY RUN!";
+        }
+
+        if ($purge) {
+            echo "\npurged " . $purgeCountEmptyUpdate . " system notes with empty updates";
+            echo "\npurged " . $purgeCountCreated . " create system notes";
+        }
         echo "\ndeleted " . $deletedCount . " notes\n";
     }
 
