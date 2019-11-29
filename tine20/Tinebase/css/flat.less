@@ -83,6 +83,8 @@
 
   & ul.x-tab-strip {
     & li {
+      // height of AppTabs
+      height: 30px;
       background-color: @focusColor;
 
     }
@@ -99,6 +101,11 @@
           #transform.invertBlack();
       }
     }
+  }
+  //move text & icon in the center.
+  .x-tab-strip-top,
+  .x-tab-right {
+    padding-top: 4px;
   }
 }
 
@@ -382,6 +389,11 @@ ul.x-tab-strip-top {
 
   .x-trigger-wrap-focus .x-form-trigger {
     border-bottom: 1px solid black !important;
+  }
+
+  // ebbh button size
+  .x-btn-medium.x-btn-icon-medium-top .x-btn-image {
+    background-size: 27px 29px;
   }
 }
 
