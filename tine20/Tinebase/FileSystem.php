@@ -3476,7 +3476,7 @@ class Tinebase_FileSystem implements
      */
     public function reportPreviewStatus()
     {
-        $status = ['missing' => 0, 'created' => 0];
+        $status = ['missing' => 0, 'created' => 0, 'missing_files' => []];
 
         if (false === $this->_previewActive) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
@@ -3485,6 +3485,7 @@ class Tinebase_FileSystem implements
 
         $created = &$status['created'];
         $missing = &$status['missing'];
+        $missingFilenames = &$status['missing_files'];
 
         $treeNodeBackend = $this->_getTreeNodeBackend();
         $previewController = Tinebase_FileSystem_Previews::getInstance();
@@ -3529,6 +3530,7 @@ class Tinebase_FileSystem implements
                     $created++;
                 } else {
                     $missing++;
+                    $missingFilenames[] = $actualNode->name;
                 }
             }
         }
