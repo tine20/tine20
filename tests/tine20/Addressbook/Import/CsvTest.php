@@ -409,11 +409,15 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
         $result = $this->_doImport(array('dryrun' => true), $definition);
 
-        $this->assertEquals(1, $result['totalcount'], print_r($result, true));
+        $this->assertTrue(1 === $result['totalcount'] || 1 === $result['updatecount'], print_r($result, true));
         $importedRecord = $result['results']->getFirstRecord();
 
         $this->assertEquals('21222', $importedRecord->adr_one_postalcode, print_r($importedRecord->toArray(), true));
-        $this->assertEquals('Käln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
+        if (1 === $result['updatecount']) {
+            $this->assertEquals('Köln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
+        } else {
+            $this->assertEquals('Käln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
+        }
     }
 
     /**
