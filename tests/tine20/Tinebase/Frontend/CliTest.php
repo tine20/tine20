@@ -359,8 +359,10 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * test cleanNotes
+     *
+     * @param bool $purge
      */
-    public function testCleanNotes()
+    public function testCleanNotes($purge = false)
     {
         // initial clean... tests don't clean up properly
         ob_start();
@@ -433,13 +435,19 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertEquals($notesCreated + $realDataNotes + $dbArtifacts, $allNotes->count(), 'notes created and notes in DB mismatch');
 
         ob_start();
-        $this->_cli->cleanNotes(new Zend_Console_Getopt([], []));
+        $arguments = ($purge) ? ['purge=1'] : [];
+        $this->_cli->cleanNotes(new Zend_Console_Getopt([], $arguments));
         $out = ob_get_clean();
 
         $this->assertTrue(preg_match('/deleted \d+ notes/', $out) == 1, 'CLI job produced output: ' . $out);
 
         $allNotes = $noteController->getAllNotes();
         $this->assertEquals($realDataNotes + $dbArtifacts, $allNotes->count(), 'notes not completely cleaned');
+    }
+
+    public function testPurgeNotes()
+    {
+        $this->testCleanNotes(true);
     }
 
     protected function _idPropertyIsVarChar($instance, $model)
