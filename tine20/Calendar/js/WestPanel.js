@@ -25,6 +25,8 @@ Tine.Calendar.WestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
     cls: 'cal-tree',
     canonicalName: 'Event',
 
+    defaultCollapseContainerTree: true,
+    
     getAdditionalItems: function() {
         return [
             Ext.apply(this.getAttendeeFilter(), this.defaults),
