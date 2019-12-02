@@ -506,6 +506,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>
                 <index>
@@ -2830,6 +2831,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>
             </declaration>
@@ -2968,6 +2970,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                         <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
