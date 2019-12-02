@@ -45,7 +45,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
 
         // make sure we have a setup user:
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User && $setupUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
