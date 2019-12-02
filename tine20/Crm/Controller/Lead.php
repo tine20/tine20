@@ -281,9 +281,9 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         if (! $_lead->relations instanceof Tinebase_Record_RecordSet) {
             $_lead->relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', 'Sql', $_lead->getId(), true);
         }
-        if(Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_TO_RESPONSIBLE)) $crmConfig[] = 'RESPONSIBLE';
-        if(Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_TO_CUSTOMER)) $crmConfig[] = 'CUSTOMER';
-        if(Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_TO_PARTNER)) $crmConfig[] = 'PARTNER';
+        if(Crm_Config::getInstance()->get(Crm_Config::SEND_NOTIFICATION_TO_RESPONSIBLE)) $crmConfig[] = 'RESPONSIBLE';
+        if(Crm_Config::getInstance()->get(Crm_Config::SEND_NOTIFICATION_TO_CUSTOMER)) $crmConfig[] = 'CUSTOMER';
+        if(Crm_Config::getInstance()->get(Crm_Config::SEND_NOTIFICATION_TO_PARTNER)) $crmConfig[] = 'PARTNER';
 
         $recipients = $_lead->getRelations($crmConfig);
 

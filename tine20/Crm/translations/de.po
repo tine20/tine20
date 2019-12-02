@@ -662,3 +662,12 @@ msgstr "Alle"
 
 msgid "Nobody"
 msgstr "Niemand"
+
+msgid "send notification to responsible"
+msgstr "Versendet Benachrichtungen zum Verantwortlichen"
+
+msgid "send notification to customer"
+msgstr "Versendet Benachrichtungen zum Kunden"
+
+msgid "send notification to partner"
+msgstr "Versendet Benachrichtungen zum Partner"

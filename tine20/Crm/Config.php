@@ -65,10 +65,43 @@ class Crm_Config extends Tinebase_Config_Abstract
     const LEAD_DUP_FIELDS = 'leadDupFields';
 
     /**
+     * send nofifications to responsible/customer/partner
+     */
+    const SEND_NOTIFICATION_TO_RESPONSIBLE = 'sendnotificationtoresponsible';
+    const SEND_NOTIFICATION_TO_CUSTOMER = 'sendnotificationtocustomer';
+    const SEND_NOTIFICATION_TO_PARTNER = 'sendnotificationtopartner';
+
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::SEND_NOTIFICATION_TO_RESPONSIBLE => array(
+            'label' => 'send notification to responsible', //_('send notification to responsible'')
+            'description' => 'send notification to responsible', //_('send notification to responsible')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => true,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::SEND_NOTIFICATION_TO_CUSTOMER => array(
+            'label' => 'send notification to customer', //_('send notification to customer')
+            'description' => 'send notification to customer', //_('send notification to customer')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => false,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::SEND_NOTIFICATION_TO_PARTNER => array(
+            'label' => 'send notification to partner', //_('send notification to partner')
+            'description' => 'send notification to partner', //_('send notification to partner')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => false,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+
         self::LEAD_STATES => array(
             //_('Lead States Available')
             'label'                 => 'Lead States Available',

@@ -44,13 +44,6 @@ class Crm_Preference extends Tinebase_Preference_Abstract
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
 
     /**
-     * send nofifications to responsible/customer/partner
-     */
-    const SEND_NOTIFICATION_TO_RESPONSIBLE = 'sendnotificationtoresponsible';
-    const SEND_NOTIFICATION_TO_CUSTOMER = 'sendnotificationtocustomer';
-    const SEND_NOTIFICATION_TO_PARTNER = 'sendnotificationtopartner';
-
-    /**
      * @var string application
      */
     protected $_application = 'Crm';
@@ -68,9 +61,6 @@ class Crm_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTLEADLIST,
             //self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
-            self::SEND_NOTIFICATION_TO_RESPONSIBLE,
-            self::SEND_NOTIFICATION_TO_CUSTOMER,
-            self::SEND_NOTIFICATION_TO_PARTNER,
             self::DEFAULTPERSISTENTFILTER,
 
         );
@@ -102,18 +92,6 @@ class Crm_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Send Notifications Emails for own actions'),
                 'description'   => $translate->_('Get notifications emails for actions you did yourself'),
             ),
-            self::SEND_NOTIFICATION_TO_RESPONSIBLE => [
-                'label'         => $translate->_('Send Notifications Emails to responsible'),
-                'description'   => $translate->_('Get notifications emails for action to responsible'),
-            ],
-            self::SEND_NOTIFICATION_TO_CUSTOMER => [
-                'label'         => $translate->_('Send Notifications Emails to customer'),
-                'description'   => $translate->_('Get notifications emails for action to customer'),
-            ],
-            self::SEND_NOTIFICATION_TO_PARTNER => [
-                'label'         => $translate->_('Send Notifications Emails to partner'),
-                'description'   => $translate->_('Get notifications emails for action to partner'),
-            ],
             self::DEFAULTPERSISTENTFILTER  => array(
                 'label'         => $translate->_('Default Favorite'),
                 'description'   => $translate->_('The default favorite which is loaded on crm startup'),
@@ -179,34 +157,13 @@ class Crm_Preference extends Tinebase_Preference_Abstract
                             <value>all</value>
                         </option>
                         <option>
-                            <label>' . $translate->_('All without me"') . '</label>
+                            <label>' . $translate->_('All without me') . '</label>
                             <value>without</value>
                         </option>
                         <option>
                             <label>' . $translate->_('Nobody') . '</label>
                             <value>nobody</value>
                         </option>
-                    </options>';
-                break;
-            case self::SEND_NOTIFICATION_TO_RESPONSIBLE:
-                $preference->value      = 1;
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
-                    </options>';
-                break;
-            case self::SEND_NOTIFICATION_TO_CUSTOMER:
-                $preference->value      = 1;
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
-                    </options>';
-                break;
-            case self::SEND_NOTIFICATION_TO_PARTNER:
-                $preference->value      = 1;
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
             case self::DEFAULTPERSISTENTFILTER:
