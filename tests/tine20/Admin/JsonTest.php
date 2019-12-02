@@ -1647,9 +1647,10 @@ class Admin_JsonTest extends TestCase
         $account = $this->_testSimpleRecordApi(
             'EmailAccount', // use non-existant model to make simple api test work
             'name',
-            'email',
+            null,
             true,
-            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . TestServer::getPrimaryMailDomain()]
+            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . TestServer::getPrimaryMailDomain()],
+            false
         );
         self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
 

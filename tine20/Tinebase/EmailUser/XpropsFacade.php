@@ -23,18 +23,62 @@ class Tinebase_EmailUser_XpropsFacade
     const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
     const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
-    /**
-     * @param $records
-     * @param $controller
-     *
-     * TODO finish implementation
-     */
-    public function convertExistingUsers($records, $controller)
+    public static function getEmailUserFromRecord($record, $propertyConfig = [], $setUserId = true)
     {
-        foreach ($records as $record) {
-            //-- get imap user
-            //-- get smtp user
-            //-- save in record
+        $emailUserProperties = [
+            'email' => null,
+            'password' => null,
+            'user_id' => null,
+        ];
+
+        foreach ($emailUserProperties as $property => &$value) {
+            if ($property === 'user_id' && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+                $value = $record->xprops()[self::XPROP_EMAIL_USERID_IMAP];
+            } else {
+                $value = isset($propertyConfig[$property])
+                    ? ($record->has($propertyConfig[$property]) ? $record->{$propertyConfig[$property]} : null)
+                    : ($record->has($property) ? $record->{$property} : null);
+            }
         }
+
+        $user = new Tinebase_Model_FullUser([
+            'accountLoginName' => $emailUserProperties['email'],
+            'accountEmailAddress' => $emailUserProperties['email'],
+        ], true);
+
+        $emailData = $emailUserProperties['password'] ? [
+            'emailPassword' => $emailUserProperties['password']
+        ] : [];
+        $user->imapUser = new Tinebase_Model_EmailUser($emailData);
+        $user->smtpUser = new Tinebase_Model_EmailUser($emailData);
+
+        if ($setUserId) {
+            $user->setId($emailUserProperties['user_id']);
+        }
+        return $user;
+    }
+
+    public static function setXprops($record, $userId = null)
+    {
+        if (! $userId) {
+            $userId = Tinebase_Record_Abstract::generateUID();
+        }
+
+        $record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP] = $userId;
+        $record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP] = $userId;
+    }
+
+    public static function deleteEmailUsers($record)
+    {
+        $user = self::getEmailUserFromRecord($record);
+        Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectDeleteUser($user);
+        Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectDeleteUser($user);
+    }
+
+    public static function updateEmailUsers($record)
+    {
+        $user = self::getEmailUserFromRecord($record);
+        Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectUpdateUser($user, $user);
+        Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectUpdateUser($user, $user);
     }
 }

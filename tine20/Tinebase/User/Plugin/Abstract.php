@@ -228,6 +228,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * check if user exists already in plugin user table
      *
      * @param Tinebase_Model_FullUser $_user
+     * @return boolean
      */
     public function userExists(Tinebase_Model_FullUser $_user)
     {
@@ -238,6 +239,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * check if user exists already in plugin user table
      * 
      * @param Tinebase_Model_FullUser $_user
+     * @return boolean
      */
     abstract protected function _userExists(Tinebase_Model_FullUser $_user);
 

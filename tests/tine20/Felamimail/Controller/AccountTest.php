@@ -94,7 +94,8 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      */
     public function testDefaultAccountPreference()
     {
-        $this->assertEquals($this->_account->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, 'current account is not the default account');
+        $this->assertEquals($this->_account->getId(), Tinebase_Core::getPreference(
+            'Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, 'current account is not the default account');
 
         $userAccount = clone($this->_account);
         unset($userAccount->id);
@@ -103,7 +104,8 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         // deleting original account and check if user account is new default account
         $this->_controller->delete($this->_account->getId());
-        $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, 'other account is not default account');
+        $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference(
+            'Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, 'other account is not default account');
     }
 
     /**
@@ -325,6 +327,31 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         self::assertContains('aaaaaä', $messageViaGet->body);
     }
 
+    public function testUpdateSharedAccount()
+    {
+        // change email address and check if email user is updated, too
+        $this->_testNeedsTransaction();
+        $account = $this->_createSharedAccount();
+        $account->email = 'shared' . Tinebase_Record_Abstract::generateUID(10) . '@' . TestServer::getPrimaryMailDomain();
+        Felamimail_Controller_Account::getInstance()->update($account);
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        $userInBackend = $emailUserBackend->getRawUserById($emailUser);
+        self::assertEquals($account->email, $userInBackend['email'], 'email was not updated');
+    }
+
+    public function testDeleteSharedAccount()
+    {
+        $this->_testNeedsTransaction();
+        $account = $this->_createSharedAccount();
+        Felamimail_Controller_Account::getInstance()->delete($account->getId());
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+        // make sure email user is deleted, too
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $userInBackend = $emailUserBackend->getRawUserById($emailUser);
+        self::assertFalse($userInBackend, 'user should be deleted from backend');
+    }
+
     public function testChangeAccountFromByUserUpdate()
     {
         // change name of user
@@ -425,5 +452,21 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         ]);
         self::assertEquals(5, $folders['totalcount'], 'should find 5 initial folders. got: '
             . print_r($folders, true));
+    }
+
+    public function testConvertAccountsToSaveUserIdInXprops()
+    {
+        // switch xprops in user off
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = false;
+
+        $account = $this->_createSharedAccount();
+
+        Felamimail_Controller_Account::getInstance()->convertAccountsToSaveUserIdInXprops();
+
+        $convertedAccount = Felamimail_Controller_Account::getInstance()->get($account->getId());
+        self::assertNotEmpty($convertedAccount->xprops[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP],
+            'XPROP_EMAIL_USERID_IMAP empty ' . print_r($convertedAccount->toArray(), true));
+        self::assertNotEmpty($convertedAccount->xprops[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP],
+            'XPROP_EMAIL_USERID_SMTP empty ' . print_r($convertedAccount->toArray(), true));
     }
 }

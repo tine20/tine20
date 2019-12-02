@@ -24,6 +24,7 @@ class Felamimail_Controller_SieveTest extends Felamimail_TestCase
         $this->_testNeedsTransaction();
 
         $mailinglist = $this->_createMailinglist();
+        self::assertInstanceOf(Addressbook_Model_List::class, $mailinglist);
         $result = Felamimail_Sieve_AdbList::setScriptForList($mailinglist);
         self::assertTrue($result);
     }

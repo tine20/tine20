@@ -276,17 +276,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (! $_record->email) {
             throw new Tinebase_Exception_UnexpectedValue($translation->_('shared / adb_list accounts need to have an email set'));
         }
-        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $userId = $_record->user_id ?: ($_record->user_id = Tinebase_Record_Abstract::generateUID());
-        $_record->user = $emailUserBackend->getLoginName($userId, $_record->email, $_record->email);
 
-        Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record);
-
-        $user = $this->_getEmailUserFromAccount($_record);
-        $this->_checkIfEmailUserExists($user, $emailUserBackend);
-
-        $emailUserBackend->inspectAddUser($user, $user);
-        Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectAddUser($user, $user);
+        $this->_createSharedEmailUser($_record);
 
         $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
         if ($_record->smtp_user && $_record->smtp_password) {
@@ -299,6 +290,36 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
     }
 
+    /**
+     * @param Felamimail_Model_Account $_record
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _createSharedEmailUser($_record)
+    {
+        $userId = $_record->user_id ? $_record->user_id : Tinebase_Record_Abstract::generateUID();
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            Tinebase_EmailUser_XpropsFacade::setXprops($_record, $userId);
+            $_record->user_id = null;
+        } else {
+            $_record->user_id = $userId;
+        }
+
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $_record->user = $emailUserBackend->getLoginName($userId, $_record->email, $_record->email);
+
+        Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record);
+
+        $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
+        $this->_checkIfEmailUserExists($user, $emailUserBackend);
+
+        $emailUserBackend->inspectAddUser($user, $user);
+        Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectAddUser($user, $user);
+    }
+
+    /**
+     * @param Felamimail_Model_Account $_record
+     * @throws Tinebase_Exception_NotImplemented
+     */
     protected function _createUserInternalEmailUser($_record)
     {
         $translation = Tinebase_Translation::getTranslation($this->_applicationName);
@@ -348,10 +369,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
                 Felamimail_Model_Account::TYPE_USER_INTERNAL) {
             $_record->resolveCredentials(false);
-            $user = new Tinebase_Model_FullUser([], true);
-            $user->setId($_record->user_id);
-            Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectDeleteUser($user);
-            Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectDeleteUser($user);
+            Tinebase_EmailUser_XpropsFacade::deleteEmailUsers($_record);
         }
     }
 
@@ -446,21 +464,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
     }
 
-    protected function _getEmailUserFromAccount($account, $setUserId = true)
-    {
-        $user = new Tinebase_Model_FullUser([
-            'accountLoginName' => $account->email,
-            'accountEmailAddress' => $account->email,
-        ], true);
-        $emailData = $account->password ? ['emailPassword' => $account->password] : [];
-        $user->imapUser = new Tinebase_Model_EmailUser($emailData);
-        $user->smtpUser = new Tinebase_Model_EmailUser($emailData);
-        if ($setUserId) {
-            $user->setId($account->user_id);
-        }
-        return $user;
-    }
-
     protected function _checkIfEmailUserExists($user, $emailUserBackend = null)
     {
         $emailUserBackend = $emailUserBackend ? $emailUserBackend : Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
@@ -507,8 +510,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         if ($_oldRecord->email !== $_record->email) {
-            $user = $this->_getEmailUserFromAccount($_record, false);
+            // check only with email address!
+            $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record, [], false);
             $this->_checkIfEmailUserExists($user);
+            Tinebase_EmailUser_XpropsFacade::updateEmailUsers($_record);
         }
     }
 
@@ -1733,14 +1738,28 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function convertAccountsToSaveUserIdInXprops()
     {
-        $this->doContainerACLChecks(false);
+        $checks = $this->doContainerACLChecks(false);
         // get all shared email accounts
         $sharedAccounts = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
-            ['field' => 'type', 'operator' => 'equals', Felamimail_Model_Account::TYPE_SHARED]
+            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED]
         ]));
+        $this->doContainerACLChecks($checks);
 
-        $xpropsFacade = new Tinebase_EmailUser_XpropsFacade();
-        $xpropsFacade->convertExistingUsers($sharedAccounts, $this);
+        // TODO needed?
+        // $xpropsFacade = new Tinebase_EmailUser_XpropsFacade();
+        // $xpropsFacade->convertExistingUsers($sharedAccounts, $this);
+
+        foreach ($sharedAccounts as $account) {
+//            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+//            $userId = $_record->user_id;
+//            $_record->user = $emailUserBackend->getLoginName($userId, $_record->email, $_record->email);
+
+            // save in record
+            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP] = $account->user_id;
+            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP] = $account->user_id;
+
+            $this->_backend->update($account);
+        }
     }
 }

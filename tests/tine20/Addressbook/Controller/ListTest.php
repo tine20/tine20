@@ -200,7 +200,7 @@ class Addressbook_Controller_ListTest extends TestCase
         static::assertSame($list->email, $account->name);
 
         // test change email
-        $list->email = 'shoo@foo.bar';
+        $list->email = 'shoo@' . $domain;
         $this->_instance->update($list);
 
         $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
