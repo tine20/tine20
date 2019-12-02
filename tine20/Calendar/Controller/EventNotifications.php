@@ -231,7 +231,11 @@
             case 'changed':
                 if (! $organizerIsExternal) {
                     if (! $_oldEvent) {
-                        throw new Tinebase_Exception_InvalidArgument('missing oldEvent ... can not get attendee migration');
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Missing oldEvent ... can not get attendee migration');
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' ' . print_r($_event->toArray(), true));
+                        return;
                     }
 
                     $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
