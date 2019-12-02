@@ -696,6 +696,21 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
     
     /**
+     * Delete all groups returned by {@see getGroups()} using {@see deleteGroups()}
+     * @return void
+     */
+    public function deleteAllGroups()
+    {
+        $groups = $this->getGroups();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' groups');
+
+        if(count($groups) > 0) {
+            $this->deleteGroups($groups);
+        }
+    }
+
+    /**
      * get list of groups
      *
      * @param string $_filter
