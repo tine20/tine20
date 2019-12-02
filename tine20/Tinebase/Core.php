@@ -1123,6 +1123,10 @@ class Tinebase_Core
                         $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
                     }
                 }
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . '  connection id: ' . $db->query('SELECT connection_id()')->fetchColumn());
+
                 break;
                 
             case self::PDO_OCI:
@@ -1155,9 +1159,6 @@ class Tinebase_Core
                 break;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . '  connection id: ' . $db->query('SELECT connection_id()')->fetchColumn());
-        
         return $db;
     }
 
