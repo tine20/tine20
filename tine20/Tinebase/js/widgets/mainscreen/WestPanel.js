@@ -72,7 +72,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * west panel has containerTreePanel (defaults to null -> autodetection)
      */
     hasContainerTreePanel: null,
-    
+
+    /**
+     * @cfg {Boolean} defaultCollapseContainerTree
+     */
+    defaultCollapseContainerTree: false,
+
     /**
      * @cfg {Bool} hasFavoritesPanel
      * west panel has favorites panel (defaults to null -> autodetection)
@@ -158,8 +163,8 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         var collection = this.getPortalColumn().items,
             c = new Array(collection.getCount()), k = collection.keys, items = collection.items;
 
-        // sd not apply broken state
-        if (_.compact(state.order).length < items.length) {
+        // do not apply broken state
+        if (_.remove(state.order, function(v) {return _.isNumber(v) && !_.isNaN(v)}).length < items.length) {
             return;
         }
 
@@ -339,7 +344,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 
                 items.push(Ext.apply(this.getContainerTreePanel(), {
                     title: isContainerTreePanel ? containersName : false,
-                    collapsed: isContainerTreePanel
+                    collapsed: isContainerTreePanel && this.defaultCollapseContainerTree
                 }, this.defaults));
                 
             }
