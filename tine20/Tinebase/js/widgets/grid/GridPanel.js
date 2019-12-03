@@ -473,7 +473,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (existingRecord && e.topic.match(/\.update/)) {
             // NOTE: local mode saves again (and again...)
             this.onUpdateRecord(JSON.stringify(data)/*, 'local'*/);
-        } if (existingRecord && e.topic.match(/\.delete/)) {
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
             this.store.remove(existingRecord);
         } else {
             // we can't evaluate the filters on client side to check compute if this affects us
