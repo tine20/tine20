@@ -22,6 +22,8 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
      */
     const DEFAULT_POLICY = 'defaultPolicy';
 
+    const USER_AGENT_DENY_LIST = 'userAgentDenyList';
+
     /**
      * DISABLE_ACCESS_LOG
      *
@@ -61,6 +63,19 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
             'default'               => null,
+        ),
+        self::USER_AGENT_DENY_LIST => array(
+            //_('User Agent Deny List')
+            'label'                 => 'User Agent Deny List',
+            //_('Array of regular expressions of User-Agent strings')
+            'description'           => 'Array of regular expressions of User-Agent strings',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => [
+                // '/^Android-Mail.*/', // example if you like to deny all Android-Mail* clients
+            ],
         ),
         self::DISABLE_ACCESS_LOG => array(
         //_('Disable Access Log')
