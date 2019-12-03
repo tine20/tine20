@@ -338,12 +338,13 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *      created_by=USER (equals)
      *      fields=FIELDS (equals)
      *      -d (dry run)
-     *     *     e.g. php tine20.php --method=Addressbook.searchDuplicatesContactByUser -d created_by=test fields=n_fileas,adr_one_region
-     *      * @param Zend_Console_Getopt $opts
+     *    e.g. php tine20.php --method=Addressbook.searchDuplicatesContactByUser -d created_by=test fields=n_fileas,adr_one_region
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return integer
      **/
     public function searchDuplicatesContactByUser($opts)
     {
-
         $be = new Addressbook_Backend_Sql;
 
         // @ToDo

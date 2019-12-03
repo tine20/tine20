@@ -271,7 +271,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * 
      * @param string $_application application of given identifier  
      * @param string $_id identifier to retrieve modification log for
-     * @param string $_type 
+     * @param string $_type record model
      * @param string $_backend 
      * @param Tinebase_DateTime $_from beginning point of timespan, excluding point itself
      * @param Tinebase_DateTime $_until end point of timespan, including point itself
