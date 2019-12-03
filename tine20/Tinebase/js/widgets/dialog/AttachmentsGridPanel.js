@@ -86,8 +86,47 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         Tine.widgets.dialog.AttachmentsGridPanel.superclass.initComponent.call(this);
         
         this.initActions();
+
+        postal.subscribe({
+            channel: "recordchange",
+            topic: 'Tinebase.Tree_Node.*',
+            callback: this.onAttachmentChanges.createDelegate(this)
+        });
+
     },
-    
+
+    /**
+     * bus notified about record changes
+     */
+    onAttachmentChanges: function(data, e) {
+        const record = Tine.Tinebase.data.Record.setFromJson(data, Tine.Tinebase.Model.Tree_Node);
+        const existingRecord = this.store.getById(data.id);
+
+        if (existingRecord && e.topic.match(/\.update/)) {
+            const idx = this.store.indexOf(existingRecord);
+            const isSelected = this.selModel.isSelected(idx);
+
+
+            if (idx >= 0) {
+                this.store.removeAt(idx);
+                this.store.insert(idx, [record]);
+            } else {
+                this.store.add([record]);
+            }
+
+            if (isSelected) {
+                this.selModel.selectRow(this.store.indexOfId(record.id), true);
+            }
+
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
+            this.store.remove(existingRecord);
+        } else {
+            this.store.add([record]);
+        }
+        // NOTE: grid doesn't update selections itself
+        this.actionUpdater.updateActions(this.selModel);
+    },
+
     /**
      * get columns
      * @return Array

@@ -114,6 +114,37 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.onDownload()
             }, this);
         }
+
+        postal.subscribe({
+            channel: "recordchange",
+            topic: 'Tinebase.TempFile.*',
+            callback: this.onTempFileChanges.createDelegate(this)
+        });
+
+    },
+
+    /**
+     * bus notified about record changes
+     */
+    onTempFileChanges: function(data, e) {
+        var existingRecord = _.find(this.store.data.items, (item) => {return _.get(item, 'data.id') === data.id});
+        if (existingRecord && e.topic.match(/\.update/)) {
+            existingRecord.beginEdit();
+            _.each(data, (v, k) => {
+                const p = _.find(existingRecord.fields.items, {name: k});
+                if (p) {
+                    existingRecord.set(k, v);
+                }
+            });
+            _.assign(_.get(existingRecord, 'data.tempFile', {}), data);
+            existingRecord.commit();
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
+            this.store.remove(existingRecord);
+        } else {
+            // @TODO add to store
+        }
+        // NOTE: grid doesn't update selections itself
+        this.actionUpdater.updateActions(this.selModel);
     },
 
     setReadOnly: function (readOnly) {
