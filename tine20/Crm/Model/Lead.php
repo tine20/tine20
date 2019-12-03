@@ -205,7 +205,13 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         // TODO should be removed as we already have generic relation handling
         if (isset($_data['relations'])) {
             foreach ((array)$_data['relations'] as $key => $relation) {
-                if (! isset($relation['type']) || empty($relation['type'])) {
+                if (empty($relation['related_model'])) {
+                    // related_model might be missing for contact relations
+                    $relation['related_model'] = Addressbook_Model_Contact::class;
+                }
+                if (! isset($relation['type']) || empty($relation['type']) && isset($relation['related_model'])
+                    && $relation['related_model'] === Addressbook_Model_Contact::class)
+                {
                     // relation type might be missing for contact relations
                     $relation['type'] = 'CUSTOMER';
                 }
@@ -239,13 +245,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     $relation['type'] = strtoupper($relation['type']);
                     switch ($relation['type']) {
                         case 'RESPONSIBLE':
-                            $data['related_model'] = 'Addressbook_Model_Contact';
-                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                            break;
                         case 'CUSTOMER':
-                            $data['related_model'] = 'Addressbook_Model_Contact';
-                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                            break;
                         case 'PARTNER':
                             $data['related_model'] = 'Addressbook_Model_Contact';
                             $data['related_backend'] = Addressbook_Backend_Factory::SQL;
