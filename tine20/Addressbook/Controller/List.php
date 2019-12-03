@@ -139,14 +139,16 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
         $hiddenMemberids = array_diff($allMemberIds, $allVisibleMemberIds);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Found ' . count($hiddenMemberids) . ' hidden members, removing them');
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . print_r($hiddenMemberids, TRUE));
+        if (count($hiddenMemberids) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Found ' . count($hiddenMemberids) . ' hidden members, removing them');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . print_r($hiddenMemberids, TRUE));
 
-        foreach ($lists as $list) {
-            // use array_values to make sure we have numeric index starting with 0 again
-            $list->members = array_values(array_diff($list->members, $hiddenMemberids));
+            foreach ($lists as $list) {
+                // use array_values to make sure we have numeric index starting with 0 again
+                $list->members = array_values(array_diff($list->members, $hiddenMemberids));
+            }
         }
     }
 
@@ -446,8 +448,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         foreach ($systemcontacts as $contact) {
             if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
                 // no right to update group members - remove from list members
-                $removeMembers[] = $contact->getId();
+                $removeListMembers[] = $contact->getId();
             } else if (! in_array($contact->account_id, $groupMembers)) {
+                $groupMembers[] = $contact->account_id;
                 Admin_Controller_Group::getInstance()->addGroupMember($group->getId(), $contact->account_id, false);
             }
         }
@@ -455,9 +458,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $list->members = array_diff($list->members, $removeListMembers);
 
         if (Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
-            $removeGroupMembers = array_diff($groupMembers, $systemcontacts->getArrayOfIds());
+            $removeGroupMembers = array_diff($groupMembers, $systemcontacts->account_id);
             foreach ($removeGroupMembers as $account_id) {
-                Admin_Controller_Group::getInstance()->removeGroupMember($group->getId(), $contact->account_id, false);
+                Admin_Controller_Group::getInstance()->removeGroupMember($group->getId(), $account_id, false);
             }
         }
     }

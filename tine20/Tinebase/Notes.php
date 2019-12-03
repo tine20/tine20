@@ -375,15 +375,17 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
         // delete detached/deleted notes
         $this->deleteNotes($toDelete);
-        
-        // add new notes
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($notesToSet) . ' note(s) to record.');
-        foreach ($notesToSet as $note) {
-            if (!$note->getId()) {
-                $note->record_model = $model;
-                $note->record_backend = $backend;
-                $note->record_id = $_record->getId();
-                $this->addNote($note);
+
+        if (count($notesToSet) > 0) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Adding ' . count($notesToSet) . ' new note(s) to record.');
+            foreach ($notesToSet as $note) {
+                if (!$note->getId()) {
+                    $note->record_model = $model;
+                    $note->record_backend = $backend;
+                    $note->record_id = $_record->getId();
+                    $this->addNote($note);
+                }
             }
         }
     }
