@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -289,103 +289,12 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function synchronizeGroupAndListMembers($opts)
     {
-        /*
-          iterate lists
-            get last modlog with members
-            compare with current members
-
-            -> dry run mit anzeige, wo es inkonsistenzen gibt
-            -> restore list members! (respect system only)
-            -> check group members (vergleich mit den listen)
-        */
-
         $this->_checkAdminRight();
 
-        // deactivate acl
-        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
-        Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
-
-        $groups = Admin_Controller_Group::getInstance()->search();
-        foreach ($groups as $group) {
-            // get matching list
-            $list = Addressbook_Controller_List::getInstance()->get($group->list_id);
-            $modlogs = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications(
-                'Addressbook',
-                $list->getId(),
-                Addressbook_Model_List::class,
-                'Sql',
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                'updated');
-            $modlogs->sort('modification_time', 'DESC');
-
-            $lastdiffMembers = null;
-            foreach ($modlogs as $modlog) {
-                // check if members have been changed
-                $diff = Tinebase_Helper::jsonDecode($modlog->new_value);
-                if (isset($diff['diff']['members'])) {
-                    $lastdiffMembers = $diff['diff']['members'];
-                    break;
-                }
-            }
-            if ($lastdiffMembers) {
-                echo "Member update found in list: " . $list->name . " ... ";
-                // check with current members
-                //print_r($list->members);
-                if ($list->members != $lastdiffMembers) {
-                    echo "  Found a mismatch - restoring list members ...\n";
-                    print_r($lastdiffMembers);
-                    if (! $opts->d) {
-                        Addressbook_Controller_List::getInstance()->addListMember($list, $lastdiffMembers);
-                    } else {
-                        echo "--DRY RUN--\n";
-                    }
-                } else {
-                    echo "members matching, nothing to do\n";
-                }
-            }
-
-            // now we check the system users in list + group
-            $systemcontacts = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                Addressbook_Model_Contact::class, [
-                    ['field' => 'id', 'operator' => 'in', 'value' => $list->members],
-                    ['field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_USER],
-                ]
-            ));
-            $listMembers = $systemcontacts->account_id;
-            $groupMembers = Admin_Controller_Group::getInstance()->getGroupMembers($group->getId());
-            // remove hidden users
-            foreach ($groupMembers as $index => $accountId) {
-                $user = Tinebase_User::getInstance()->getFullUserById($accountId);
-                if ($user->visibility === Tinebase_Model_User::VISIBILITY_HIDDEN) {
-                    // echo "remove hidden member ...\n";
-                    unset($groupMembers[$index]);
-                }
-            }
-            sort($listMembers);
-            sort($groupMembers);
-
-            if ($listMembers != $groupMembers) {
-                echo "Group/List members mismatch found in group " . $list->name . ": \n";
-                echo "  Group members: " . print_r($groupMembers, true);
-                echo "  List (system user) members: " . print_r($systemcontacts->account_id, true);
-                if ($listMembers > $groupMembers) {
-                    echo "  Adding missing list members to group: ";
-                    $addToGroup = array_diff($listMembers, $groupMembers);
-                    print_r($addToGroup);
-                    if (! $opts->d) {
-                        foreach ($addToGroup as $userId) {
-                            Admin_Controller_Group::getInstance()->addGroupMember($group->getId(), $userId, false);
-                        }
-                    } else {
-                        echo "--DRY RUN--\n";
-                    }
-                } else {
-                    // toDO ?
-                }
-            }
+        $groupUpdateCount = Admin_Controller_Group::getInstance()->synchronizeGroupAndListMembers($opts->d);
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
         }
+        echo "Repaired " . $groupUpdateCount . " groups and or lists\n";
     }
 }

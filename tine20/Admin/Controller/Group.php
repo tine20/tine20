@@ -121,11 +121,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $removeGroupMemberships = array_diff($groupMemberships, $_groupIds);
         $addGroupMemberships    = array_diff($_groupIds, $groupMemberships);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' current groupmemberships: ' . print_r($groupMemberships, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' new groupmemberships: ' . print_r($_groupIds, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' added groupmemberships: ' . print_r($addGroupMemberships, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' removed groupmemberships: ' . print_r($removeGroupMemberships, true));
-        
         foreach ($addGroupMemberships as $groupId) {
             $this->addGroupMember($groupId, $userId);
         }
@@ -455,5 +450,169 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function createOrUpdateList(Tinebase_Model_Group $group)
     {
         return Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
+    }
+
+    /**
+     * repair script for synchronizing groups
+     * - iterate lists
+     *  get last modlog with members
+     *  compare with current members
+     *
+     * -> restore list members! (respect system only)
+     * -> check group members (vergleich mit den listen)
+     * 
+     * @param boolean $dryRun
+     * @return integer number of repaired groups/lists
+     */
+    public function synchronizeGroupAndListMembers($dryRun = false)
+    {
+        Admin_Controller_Group::getInstance()->checkRight('MANAGE_ACCOUNTS');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . " Synchronizing group and list memberships");
+
+        // deactivate acl
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
+
+        $groupUpdateCount = 0;
+        $groups = Admin_Controller_Group::getInstance()->search();
+        foreach ($groups as $group) {
+            // get matching list
+            try {
+                $list = Addressbook_Controller_List::getInstance()->get($group->list_id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // skipping list
+                continue;
+            }
+            if (! $list->getId()) {
+                // skipping empty list
+                continue;
+            }
+            $groupOrListUpdate = false;
+            $modlogs = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications(
+                'Addressbook',
+                $list->getId(),
+                Addressbook_Model_List::class,
+                'Sql',
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                'updated');
+            $modlogs->sort('modification_time', 'DESC');
+
+            $lastdiffMembers = [];
+            foreach ($modlogs as $modlog) {
+                // check if members have been changed
+                $diff = Tinebase_Helper::jsonDecode($modlog->new_value);
+                if (isset($diff['diff']['members'])) {
+                    $lastdiffMembers = $diff['diff']['members'];
+                    break;
+                }
+            }
+
+            // contacts might have already been removed - check this
+            $lastdiffMembers = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Addressbook_Model_Contact::class, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $lastdiffMembers],
+                ]
+            ), null, false, true);
+            // remove empty members
+            $lastdiffMembers = array_filter($lastdiffMembers, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+
+            if (count($lastdiffMembers) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . " Member update found in list: " . $list->name . " ... ");
+                // check with current members
+                $missingMembers = array_diff($lastdiffMembers, $list->members);
+                if (count($missingMembers) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . " Found missing members - restoring list members ...");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . " missing members: " . print_r($missingMembers, true));
+                    if (! $dryRun) {
+                        Addressbook_Controller_List::getInstance()->addListMember($list, $missingMembers, false);
+                    }
+                    $groupOrListUpdate = true;
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . " members matching, nothing to do");
+                }
+            }
+
+            // now we check the system users in list + group
+            $systemcontacts = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Addressbook_Model_Contact::class, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $list->members],
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_USER],
+                ]
+            ));
+            $listMembers = $systemcontacts->account_id;
+            // remove empty members
+            $listMembers = array_filter($listMembers, function($value) {
+                return !is_null($value) && $value !== '';
+            });
+            $groupMembers = Admin_Controller_Group::getInstance()->getGroupMembers($group->getId());
+            // remove hidden and disabled users
+            foreach ($groupMembers as $index => $accountId) {
+                $user = Tinebase_User::getInstance()->getFullUserById($accountId);
+                if ($user->visibility === Tinebase_Model_User::VISIBILITY_HIDDEN || $user->accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_DISABLED) {
+                    unset($groupMembers[$index]);
+                }
+            }
+            sort($listMembers);
+            sort($groupMembers);
+
+            if ($listMembers != $groupMembers) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . " Group/List members mismatch found in group " . $list->name);
+                $addToGroup = array_diff($listMembers, $groupMembers);
+                if (count($addToGroup) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . " Adding missing list members to group");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . " add to group: " . print_r($addToGroup, true));
+                    if (!$dryRun) {
+                        foreach ($addToGroup as $userId) {
+                            Admin_Controller_Group::getInstance()->addGroupMember($group->getId(), $userId, false);
+                        }
+                    }
+                    $groupOrListUpdate = true;
+                }
+
+                $addToList = array_diff($groupMembers, $listMembers);
+                if (count($addToList) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . " Adding missing group members to list");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . " add to list: " . print_r($addToList, true));
+                    if (!$dryRun) {
+                        $missingMembers = [];
+                        foreach ($addToList as $userId) {
+                            try {
+                                $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($userId);
+                            } catch (Addressbook_Exception_NotFound $tenf) {
+                                // create user contact
+                                $user = Admin_Controller_User::getInstance()->get($userId);
+                                Admin_Controller_User::getInstance()->update($user);
+                                $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($userId);
+                            }
+                            $missingMembers[] = $contact->getId();
+                        }
+                        Addressbook_Controller_List::getInstance()->addListMember($list, $missingMembers, false);
+                    }
+                    $groupOrListUpdate = true;
+                }
+            }
+
+            if ($groupOrListUpdate) {
+                $groupUpdateCount++;
+            }
+        }
+
+        return $groupUpdateCount;
     }
 }
