@@ -91,7 +91,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             ]
         }];
 
-        this.on('apply', function() {
+        this.on('apply', async function() {
             this.fireEvent('selected', this.nodes);
         }, this);
 
@@ -115,6 +115,40 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         Tine.Filemanager.FilePickerDialog.superclass.initComponent.call(this);
     },
 
+    onButtonApply: async function() {
+        if (this.allowCreateNew && ! await this.assertCheckOverwrite(this.nodes[0])) {
+            return;
+        }
+
+        Tine.Filemanager.FilePickerDialog.superclass.onButtonApply.call(this);
+    },
+
+    assertCheckOverwrite: async function(node) {
+        return new Promise((resolve) => {
+            const loadMask = new Ext.LoadMask(this.getEl(), {
+                msg: this.app.i18n._('Checking ...'),
+                removeMask: true
+            });
+            loadMask.show();
+
+            Tine.Filemanager.searchNodes([
+                {field: 'path', operator: 'equals', value: node.path}
+            ]).then((results) => {
+                loadMask.hide();
+                if (results.totalcount) {
+                    const title = i18n._('Overwrite Existing File?');
+                    const msg = i18n._('Do you really want to overwrite the selected file?');
+                    Ext.MessageBox.confirm(title, msg, (btn) => {
+                        resolve(btn === 'yes');
+                    });
+                } else {
+                    resolve(true);
+                }
+                debugger
+            })
+        });
+    },
+
     getEventData: function () {
         return this.nodes;
     },
@@ -124,19 +158,21 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      * @returns {*}
      */
     getFilePicker: function () {
-        var picker = new Tine.Filemanager.FilePicker({
-            requiredGrants: this.requiredGrants,
-            constraint: this.constraint,
-            singleSelect: this.singleSelect,
-            allowCreateNew: this.allowCreateNew,
-            initialNewFileName: this.initialNewFileName,
-            initialPath: this.initialPath
-        });
+        if (! this.filePicker) {
+            this.filePicker = new Tine.Filemanager.FilePicker({
+                requiredGrants: this.requiredGrants,
+                constraint: this.constraint,
+                singleSelect: this.singleSelect,
+                allowCreateNew: this.allowCreateNew,
+                initialNewFileName: this.initialNewFileName,
+                initialPath: this.initialPath
+            });
 
-        picker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
-        picker.on('invalidNodeSelected', this.onInvalidNodesSelected.createDelegate(this));
+            this.filePicker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
+            this.filePicker.on('invalidNodeSelected', this.onInvalidNodesSelected.createDelegate(this));
+        }
 
-        return picker;
+        return this.filePicker;
     },
 
     /**
