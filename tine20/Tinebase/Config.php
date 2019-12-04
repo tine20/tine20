@@ -679,6 +679,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_SERVICE_VERSION = 'previewServiceVersion';
     const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
     const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
+    const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X = 'previewThumbnailSizeX';
+    const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y = 'previewThumbnailSizeY';
+    const FILESYSTEM_PREVIEW_PREVIEW_SIZE_X = 'previewPreviewSizeX';
+    const FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y = 'previewPreviewSizeY';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
     const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
@@ -2204,6 +2208,50 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setByAdminModule'      => FALSE,
                     'setBySetupModule'      => FALSE,
                     'default'               => 5,
+                ),
+                self::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X => array(
+                    //_('X size of thumbnail images.')
+                    'label'                 => 'X size of thumbnail images.',
+                    //_('X size of thumbnail images.')
+                    'description'           => 'X size of thumbnail images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 142,
+                ),
+                self::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y => array(
+                    //_('Y size of thumbnail images.')
+                    'label'                 => 'Y size of thumbnail images.',
+                    //_('Y size of thumbnail images.')
+                    'description'           => 'Y size of thumbnail images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 200,
+                ),
+                self::FILESYSTEM_PREVIEW_PREVIEW_SIZE_X => array(
+                    //_('X size of preview images.')
+                    'label'                 => 'X size of preview images.',
+                    //_('X size of preview images.')
+                    'description'           => 'X size of preview images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 1416,
+                ),
+                self::FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y => array(
+                    //_('Y size of preview images.')
+                    'label'                 => 'Y size of preview images.',
+                    //_('Y size of preview images.')
+                    'description'           => 'Y size of preview images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 2000,
                 ),
                 self::FILESYSTEM_AVSCAN_MAXFSIZE => [
                     //_('Antivirus Scan Max File Size')

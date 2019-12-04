@@ -131,15 +131,15 @@ class Tinebase_FileSystem_Previews
             'thumbnail' => array(
                 'firstPage' => true,
                 'filetype'  => 'jpg',
-                'x'         => 142,
-                'y'         => 200,
+                'x'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X},
+                'y'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y},
                 'color'     => 'white'
             ),
             'previews'  => array(
                 'firstPage' => false,
                 'filetype'  => 'jpg',
-                'x'         => 708,
-                'y'         => 1000,
+                'x'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_PREVIEW_SIZE_X},
+                'y'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y},
                 'color'     => 'white'
             )
         );
