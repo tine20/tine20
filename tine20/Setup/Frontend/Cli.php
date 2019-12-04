@@ -684,7 +684,7 @@ class Setup_Frontend_Cli
 
     /**
      * create/update email users with current account
-     *  USAGE: php setup.php --updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
+     *  USAGE: php setup.php --updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com createEmail=1
      *
      * @param Zend_Console_Getopt $_opts
      * @return int
@@ -704,6 +704,15 @@ class Setup_Frontend_Cli
         /** @var Tinebase_Model_FullUser $user */
         foreach ($userController->getFullUsers() as $user) {
             $emailUser->inspectGetUserByProperty($user);
+
+            if (empty($user->accountEmailAddress) && isset($data['createEmail']) && $data['createEmail']) {
+                $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+                // TODO allow to set other domains via args?
+                if (! empty($config['primarydomain'])) {
+                    $user->accountEmailAddress = $user->accountLoginName . '@' . $config['primarydomain'];
+                }
+            }
+
             if (! empty($user->accountEmailAddress)) {
                 list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
                 if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
