@@ -848,4 +848,23 @@ class Crm_JsonTest extends Crm_AbstractTest
 
         self::assertEquals(1, count($newLead['relations']), 'two relations expected');
     }
+
+    public function testAddEventRelationToLead()
+    {
+        $lead = $this->saveLead();
+        $event = Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event([
+            'dtstart'   => '2015-01-01 00:00:00',
+            'dtend'     => '2015-01-01 01:00:00',
+            'summary'   => 'test event',
+        ]));
+        $lead['relations'][] = [
+            'related_record' => $event->toArray(),
+            'related_model' => 'Calendar_Model_Event',
+            'type' => '',
+            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+        ];
+        $updatedLead = $this->_getUit()->saveLead($lead);
+        self::assertEquals(4, count($updatedLead['relations']), 'relation count mismatch: '
+            . print_r($updatedLead, true));
+    }
 }
