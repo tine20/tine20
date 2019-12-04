@@ -419,7 +419,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * get list of groupmembers
      *
      * @param int $_groupId
-     * @return array with Tinebase_Model_User arrays
+     * @return array with Tinebase_Model_User ids
      */
     public function getGroupMembers($_groupId)
     {
