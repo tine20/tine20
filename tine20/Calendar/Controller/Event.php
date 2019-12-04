@@ -105,11 +105,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_modelName       = 'Calendar_Model_Event';
         $this->_backend         = new Calendar_Backend_Sql();
 
-        // set default CU
-        $this->setCalendarUser(new Calendar_Model_Attender(array(
-            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => Calendar_Controller_MSEventFacade::getCurrentUserContactId()
-        )));
+        try {
+            // set default CU
+            $this->setCalendarUser(new Calendar_Model_Attender(array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id' => Calendar_Controller_MSEventFacade::getCurrentUserContactId()
+            )));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " User might not have a contact (visibility: hidden) - exception: " . $tenf->getMessage());
+        }
     }
 
     /**
