@@ -68,6 +68,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initComponent: function() {
         Ext.applyIf(this.defaultSortInfo, {field: 'name', direction: 'DESC'});
+        Ext.applyIf(this.defaultPaging, { start: 0, limit: 500 });
         Ext.applyIf(this.gridConfig, {
             autoExpandColumn: 'name',
             enableFileDialog: false,
