@@ -73,15 +73,8 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
                 return;
             }
 
-            // @TODO: have denyList in config?
-            $denyList = [
-                '/^Android-Mail.*/', //Android-Mail/2019.11.03.280318276.release updates all events in background and throws out own user
-            ];
-            foreach ($denyList as $deny) {
-                if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
-                    header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
-                    return;
-                }
+            if (!$this->_checkDenyList()) {
+                return;
             }
 
             if (!$this->_checkUserPermissions($loginName)) {
@@ -107,6 +100,20 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Exception::log($e);
             throw $e;
         }
+    }
+
+    protected function _checkDenyList()
+    {
+        $denyList = ActiveSync_Config::getInstance()->get(ActiveSync_Config::USER_AGENT_DENY_LIST);
+        foreach ($denyList as $deny) {
+            if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User agent blocked: ' . $_SERVER['HTTP_USER_AGENT']);
+                header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
+                return false;
+            }
+        }
+
+        return true;
     }
     
     /**

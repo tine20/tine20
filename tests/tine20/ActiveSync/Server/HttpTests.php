@@ -60,6 +60,10 @@ class ActiveSync_Server_HttpTests extends ServerTestCase
 
     public function testDeniedAgent()
     {
+        ActiveSync_Config::getInstance()->{ActiveSync_Config::USER_AGENT_DENY_LIST} = [
+            '/^Android-Mail.*/',
+        ];
+
         $request = Tinebase_Http_Request::fromString(
             "POST /Microsoft-Server-ActiveSync?User=abc1234&DeviceId=Appl7R743U8YWH9&DeviceType=iPhone&Cmd=FolderSync HTTP/1.1\r\n".
             "Host: localhost\r\n".
@@ -85,5 +89,4 @@ class ActiveSync_Server_HttpTests extends ServerTestCase
         $this->assertEquals('', $result);
         // @TODO how to test for header?
     }
-
 }
