@@ -10,6 +10,8 @@
 
 /**
  * Test class for Addressbook_Controller_List
+ *
+ * TODO move test cases to Addressbook_Controller_ListTest
  */
 class Addressbook_ListControllerTest extends TestCase
 {
@@ -270,13 +272,24 @@ class Addressbook_ListControllerTest extends TestCase
         self::assertEquals(1, count($groupMembers),
             'user missing from group members: ' . print_r($groupMembers, true));
 
-        // set account_only in group -> user contact should still be list member
+        // add another user and a non user contact to list
+        $sclever = $this->_personas['sclever'];
+        $updatedList->members = array_merge($updatedList->members, [$sclever->contact_id, $this->objects['contact1']->getId()]);
+        $updatedListWithSclever = Addressbook_Controller_List::getInstance()->update($updatedList);
+        self::assertEquals(3, count($updatedListWithSclever->members),
+            'list members missing: ' . print_r($updatedListWithSclever->toArray(), true));
+
+        $groupMembers = Admin_Controller_Group::getInstance()->getGroupMembers($list->group_id);
+        self::assertEquals(2, count($groupMembers),
+            'user missing from group members: ' . print_r($groupMembers, true));
+
+        // set account_only in group -> user contacts should still be list member
         $adminJson = new Admin_Frontend_Json();
         $groupJson = $adminJson->getGroup($list->group_id);
         $groupJson['account_only'] = 1;
         $groupJson['members'] = $groupMembers;
         $groupJsonUpdated = $adminJson->saveGroup($groupJson);
-        self::assertEquals(1, $groupJsonUpdated['members']['totalcount'], print_r($groupJsonUpdated, true));
+        self::assertEquals(2, $groupJsonUpdated['members']['totalcount'], print_r($groupJsonUpdated, true));
     }
 
     protected function _createSystemList()

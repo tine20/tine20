@@ -252,7 +252,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     }
     
     /**
-     * add a new groupmember to a group
+     * add a new group member to a group
      *
      * @param int $_groupId
      * @param int $_userId
@@ -262,6 +262,9 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function addGroupMember($_groupId, $_userId, $_addToList = true)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Adding user ' . $_userId . ' to group ' . $_groupId);
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
