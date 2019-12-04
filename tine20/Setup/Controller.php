@@ -487,9 +487,9 @@ class Setup_Controller
      * @param Tinebase_Record_RecordSet $_applications
      * @return  array   messages
      * @throws Tinebase_Exception
+     *
+     * TODO refactor signature ... we dont want that? do we? always all...
      */
-
-    // TODO refactor signature ... we dont want that? do we? always all...
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
     {
         $this->clearCache();
@@ -550,6 +550,8 @@ class Setup_Controller
                 $this->_cleanUpUpdate();
             }
         } while (++$iterationCount < 5);
+
+        return $result;
     }
 
     public function updateAllImportExportDefinitions()

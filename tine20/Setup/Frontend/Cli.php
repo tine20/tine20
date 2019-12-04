@@ -450,9 +450,7 @@ class Setup_Frontend_Cli
     {
         $result = Setup_Controller::getInstance()->updateApplications();
         echo "Updated " . $result['updated'] . " application(s).\n";
-
-        // legacy? should we change that? always 0?
-        return $result['updated'] > 0 ? 0 : 1;
+        return 0;
     }
 
     /**
