@@ -662,7 +662,7 @@ class Setup_Frontend_Cli
 
     /**
      * create/update email users with current account
-     *  USAGE: php setup.php --updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com createEmail=1
+     *  USAGE: php setup.php --updateAllAccountsWithAccountEmail -- [fromInstance=master.mytine20.com createEmail=1 domain=mydomain.org]
      *
      * @param Zend_Console_Getopt $_opts
      * @return int
@@ -687,19 +687,33 @@ class Setup_Frontend_Cli
                 $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
                 // TODO allow to set other domains via args?
                 if (! empty($config['primarydomain'])) {
-                    $user->accountEmailAddress = $user->accountLoginName . '@' . $config['primarydomain'];
+                    $mail = $user->accountLoginName . '@' . $config['primarydomain'];
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Setting new email address for user: ' . $mail);
+                    $user->accountEmailAddress = $mail;
                 }
             }
 
             if (! empty($user->accountEmailAddress)) {
                 list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
+                if (isset($data['domain']) && $domainPart !== $data['domain']) {
+                    // skip user because not in given domain
+                    continue;
+                }
+                // TODO allow to skip this?
                 if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
                     $newEmailAddress = $userPart . '@' . $allowedDomains[0];
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
                     $user->accountEmailAddress = $newEmailAddress;
                 }
-                $userController->updateUser($user);
+                try {
+                    $userController->updateUser($user);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' ' . $tenf);
+                }
+
             }
         }
 
