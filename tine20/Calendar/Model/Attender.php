@@ -103,7 +103,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         'quantity'             => array('allowEmpty' => true, 'Int'   ),
         'status'               => array('allowEmpty' => true          ),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
-        'displaycontainer_id'  => array('allowEmpty' => true, 'Alnum' ),
+        'displaycontainer_id'  => array('allowEmpty' => true ),
         'transp'               => array(
             'allowEmpty' => true,
             array('InArray', array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE))
