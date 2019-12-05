@@ -89,6 +89,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function login($loginName, $password, \Zend\Http\PhpEnvironment\Request $request, $clientIdString = NULL)
     {
+        // enforce utf8
+        $password = Tinebase_Helper::mbConvertTo($password);
+
         // make sure pw is always replaced in Logger
         Tinebase_Core::getLogger()->addReplacement($password);
 

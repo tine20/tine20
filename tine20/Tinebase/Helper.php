@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -264,9 +264,6 @@ class Tinebase_Helper
      */
     public static function mbConvertTo($string, $encodingTo = 'utf-8')
     {
-        if (! extension_loaded('mbstring')) {
-            return $string;
-        }
         // try to fix bad encodings
         $encoding = mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'windows-1252', 'iso-8859-15'));
         if ($encoding !== FALSE) {
