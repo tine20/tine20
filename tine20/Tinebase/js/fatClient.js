@@ -13,7 +13,7 @@
 //       to notify them at this early stage
 // NOTE: it would be better to use browserslist-useragent, but there is no cliet side support atm:
 //       https://github.com/browserslist/browserslist-useragent/issues/9
-if (!Promise) {
+if (!window.Promise) {
     // wait for translation to load
     window.setTimeout(function() {
         var msgs = Tine && Tine.__translationData ? Tine.__translationData.msgs['./LC_MESSAGES/Tinebase'] : {};
