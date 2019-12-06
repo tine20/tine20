@@ -599,7 +599,12 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
                 if ($size !== ((int)$record->size) || $revision_size !== ((int)$record->revision_size)) {
                     /** @var Tinebase_Model_Tree_FileObject $fileObject */
-                    $fileObject = $_fileObjectBackend->get($record->object_id);
+                    try {
+                        $fileObject = $_fileObjectBackend->get($record->object_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $transactionManager->commitTransaction($transactionId);
+                        continue;
+                    }
                     $fileObject->size = $size;
                     $fileObject->revision_size = $revision_size;
                     $_fileObjectBackend->update($fileObject);
