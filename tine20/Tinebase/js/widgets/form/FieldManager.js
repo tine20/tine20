@@ -62,10 +62,10 @@ Tine.widgets.form.FieldManager = function() {
                 app = Tine.Tinebase.appMgr.get(appName);
 
 
-            return this.getByFieldDefinition(fieldDefinition, category, app,modelName , config);
+            return this.getByFieldDefinition(fieldDefinition, category, app, modelName, config, fieldName);
         },
 
-        getByFieldDefinition: function(fieldDefinition, category, app, modelName, config) {
+        getByFieldDefinition: function(fieldDefinition, category, app, modelName, config, fieldName) {
 
             var field = {},
                 fieldType = fieldDefinition.type || 'textfield',
@@ -78,7 +78,7 @@ Tine.widgets.form.FieldManager = function() {
             }
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
-            field.name = (fieldDefinition.name ||fieldDefinition.fieldName);
+            field.name = (fieldName || fieldDefinition.name ||fieldDefinition.fieldName);
             field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
             // make field available via recordForm.formfield_NAME
