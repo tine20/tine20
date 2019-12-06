@@ -1050,6 +1050,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception_UnexpectedValue('image format not supported');
         }
 
+        if (! is_numeric($size)) {
+            throw new Tinebase_Exception_UnexpectedValue('size should be numeric');
+        }
+
         $cacheId = sha1(self::class . 'getFavicon' . $size . $mime);
         $imageBlob = Tinebase_Core::getCache()->load($cacheId);
 
