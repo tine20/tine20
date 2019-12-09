@@ -586,7 +586,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         /** @var Addressbook_Model_Contact $_record */
         $this->_setGeoData($_record);
 
-        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME)) {
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME) && $this->_duplicateCheck) {
             // Set Short Name if no Short Name is set or the Short Name Already exists
             if (!$_record->n_short) {
                 $this->_setShortName($_record);
@@ -625,7 +625,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_setGeoData($_record);
         }
 
-        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME)) {
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME) && $this->_duplicateCheck) {
             // Set Short Name if no Short Name is set or the Short Name Already exists
             if (!$_record->n_short) {
                 $this->_setShortName($_record);

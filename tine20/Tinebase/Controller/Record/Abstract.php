@@ -157,6 +157,8 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_duplicateCheckFields = NULL;
 
     protected $_duplicateCheckConfig = array();
+
+    protected $_duplicateCheck = true;
     
     /**
      * holds new relation on update multiple
@@ -670,6 +672,8 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight(self::ACTION_CREATE);
 
+        $this->_duplicateCheck = $_duplicateCheck;
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($_record->toArray(),true));
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1145,10 +1149,12 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
+        $this->_duplicateCheck = $_duplicateCheck;
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . ' Record to update: ' . print_r($_record->toArray(), TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Update ' . $this->_modelName);
+            . ' Update ' . $this->_modelName . ' (duplicate check: ' . (int) $_duplicateCheck . ')');
 
         $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
         if ($_record->has('attachments') && isset($_record->attachments) && Tinebase_Core::isFilesystemAvailable()) {
