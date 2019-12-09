@@ -650,7 +650,12 @@ class Tinebase_Core
         }
         $config = self::getConfig();
 
-        define('TINE20_BUILDTYPE', strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        // allow to overwrite buildtype via Tinebase/config.inc.php
+        $buildType = $config->get(Tinebase_Config::BUILD_TYPE);
+        if (! $buildType) {
+            $buildType = 'DEVELOPMENT';
+        }
+        define('TINE20_BUILDTYPE', strtoupper($buildType));
         define('TINE20_CODENAME', Tinebase_Helper::getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
         define('TINE20_RELEASETIME', 'none');
