@@ -721,9 +721,12 @@ class Setup_Controller
             $collation = 'utf8mb4_unicode_ci';
         }
 
-        $query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE "' .
+        $query = '(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE "' .
             SQL_TABLE_PREFIX . '%" AND TABLE_COLLATION <> "' . $collation . '"' .
-            ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '"';
+            ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '") UNION DISTINCT ('.
+            'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE "' .
+            SQL_TABLE_PREFIX . '%" AND COLLATION_NAME <> "' . $collation . '"' .
+            ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '")';
         $tables = $db->query($query)->fetchAll(Zend_DB::FETCH_COLUMN, 0);
 
         if (count($tables) > 0) {
