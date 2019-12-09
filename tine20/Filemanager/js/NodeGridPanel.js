@@ -426,10 +426,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 disable: true
             }],
             iconCls: 'action_add',
-            actionUpdater: function(action) {
-                var _ = window.lodash,
-                    allowAdd = _.get(this, 'currentFolderNode.attributes.account_grants.addGrant', false),
-                    isVirtual = false;
+            actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+                let allowAdd = _.get(filteredContainers, '[0].account_grants.addGrant', false);
+                let isVirtual = false;
 
                 try {
                     isVirtual = this.currentFolderNode.attributes.nodeRecord.isVirtual();
@@ -991,12 +990,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     /**
      * gets currently displayed node in case a path filter is set
-     * NOTE: this data is unreloved as it comes from filter and not through json convert!
+     * NOTE: this data is unresolved as it comes from filter and not through json convert!
      *
      * @return {Object}
      */
-    getFilteredNode: function () {
-        return _.get(_.find(_.get(this, 'store.reader.jsonData.filter', {}), {field: 'path'}), 'value');
+    getFilteredContainers: function () {
+        const pathFilter = _.get(_.find(_.get(this, 'store.reader.jsonData.filter', {}), {field: 'path'}), 'value');
+        return pathFilter ? [pathFilter] : null;
     },
 
     /**

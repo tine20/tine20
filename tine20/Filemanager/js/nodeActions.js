@@ -59,11 +59,15 @@ Tine.Filemanager.nodeActions.CreateFolder = {
             }
         }, this);
     },
-    actionUpdater: function(action, grants, records, isFilterSelect) {
+    actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
         var enabled = !isFilterSelect
             && records && records.length == 1
             && records[0].get('type') == 'folder'
             && window.lodash.get(records, '[0].data.account_grants.addGrant', false);
+
+        if (! _.get(records, 'length') && filteredContainers) {
+            enabled = _.get(filteredContainers, '[0].account_grants.addGrant', false);
+        }
 
         action.setDisabled(!enabled);
     }

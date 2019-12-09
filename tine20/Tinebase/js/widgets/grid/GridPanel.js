@@ -483,7 +483,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         }
         // NOTE: grid doesn't update selections itself
-        this.actionUpdater.updateActions(this.grid.getSelectionModel());
+        this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
     },
 
     /**
@@ -1252,6 +1252,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.grid.getSelectionModel().selectRow(row, true);
                 }
             }, this);
+        } else {
+            this.actionUpdater.updateActions([], this.getFilteredContainers())
         }
 
         // restore scroller
@@ -1263,6 +1265,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (window.isMainWindow && this.autoRefreshInterval) {
             this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
         }
+    },
+
+    /**
+     * gets currently displayed container in case a container filter is set
+     * NOTE: this data is unresolved as it comes from filter and not through json convert!
+     */
+    getFilteredContainers: function() {
+        const containerFilter = _.find(_.get(this, 'store.reader.jsonData.filter[0].filters[0].filters', {}), {field: this.recordClass.getMeta('containerProperty')});
+        const operator = _.get(containerFilter, 'operator', '');
+        const value = operator.match(/equals|in/) ? _.get(containerFilter, 'value', null) : null;
+
+        return value && _.isArray(value) ? [value] : value;
     },
 
     /**
@@ -1435,7 +1449,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         this.selectionModel.on('selectionchange', function(sm) {
-            this.actionUpdater.updateActions(sm);
+            this.actionUpdater.updateActions(sm, this.getFilteredContainers());
 
             this.ctxNode = this.selectionModel.getSelections();
             if (this.updateOnSelectionChange && this.detailsPanel) {
