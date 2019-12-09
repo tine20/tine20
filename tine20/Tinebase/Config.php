@@ -79,6 +79,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AVAILABLE_LANGUAGES = 'availableLanguages';
 
     /**
+     * build type
+     *
+     * @const string
+     */
+    const BUILD_TYPE = 'buildtype';
+
+    /**
      * CACHE
      *
      * @var string
@@ -788,6 +795,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::BUILD_TYPE => array(
+            //_('Build Type')
+            'label'                 => 'Build Type',
+            //_('One of: DEBUG, DEVELOPMENT, RELEASE')
+            'description'           => 'One of: DEBUG, DEVELOPMENT, RELEASE',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
         ),
         /**
          * for example: 'de'
