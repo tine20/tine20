@@ -1936,6 +1936,21 @@ class Admin_JsonTest extends TestCase
         self::assertNotEquals($account['user'], $imapConfig['user']);
     }
 
+    public function testUpdateSystemAccountChangeEmail()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        $user = $this->_createUserWithEmailAccount();
+        $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $emailAccount->email = 'somenewmail' . Tinebase_Record_Abstract::generateUID(6) . '@' . TestServer::getPrimaryMailDomain();
+        $updatedAccount = $this->_json->saveEmailAccount($emailAccount->toArray());
+        self::assertEquals($emailAccount->email, $updatedAccount['email']);
+        $updatedUser = Tinebase_User::getInstance()->getFullUserById($user->getId());
+        self::assertEquals($emailAccount->email, $updatedUser->accountEmailAddress);
+    }
+
     public function testConvertEmailAccount()
     {
         $this->_skipIfXpropsUserIdDeactivated();

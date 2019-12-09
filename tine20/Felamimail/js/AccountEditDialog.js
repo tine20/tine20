@@ -137,9 +137,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'type':
                     item.setDisabled(! this.asAdminModule);
                     break;
-                case 'email':
-                    item.setDisabled((this.asAdminModule && this.record.get('type') === 'system') || (! this.asAdminModule && this.isSystemAccount()));
-                    break;
                 case 'password':
                     this.disablePasswordField(item);
                     break;

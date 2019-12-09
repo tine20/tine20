@@ -152,16 +152,35 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('update');
 
+        $currentAccount = $this->get($_record->getId());
+
+        $this->_inspectBeforeUpdate($_record, $currentAccount);
+        $account = $this->_backend->update($_record);
+        $this->_inspectAfterUpdate($account, $_record, $currentAccount);
+        
+        return $account;
+    }
+
+    /**
+     * inspect update of one record
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
         if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
             // remove password for "user" accounts
             unset($_record->password);
         }
 
-        $currentAccount = $this->get($_record->getId());
-        $account = $this->_backend->update($_record);
-        $this->_inspectAfterUpdate($account, $_record, $currentAccount);
-        
-        return $account;
+        if ($_record->email !== $_oldRecord->email && $_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
+            // change user email address
+            $user = Admin_Controller_User::getInstance()->get($_record->user_id);
+            $user->accountEmailAddress = $_record->email;
+            Admin_Controller_User::getInstance()->update($user);
+        }
     }
 
     /**
