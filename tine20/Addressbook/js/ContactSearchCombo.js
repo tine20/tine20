@@ -55,7 +55,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
      * TODO remove this later
      */
     useAccountRecord: false,
-    allowBlank: false,
+    allowBlank: true,
     
     itemSelector: 'div.search-item',
     minListWidth: 350,
