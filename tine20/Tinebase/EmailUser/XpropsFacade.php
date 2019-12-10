@@ -33,7 +33,9 @@ class Tinebase_EmailUser_XpropsFacade
 
         foreach ($emailUserProperties as $property => &$value) {
             if ($property === 'user_id' && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
-                $value = $record->xprops()[self::XPROP_EMAIL_USERID_IMAP];
+                $value = isset($record->xprops()[self::XPROP_EMAIL_USERID_IMAP])
+                    ? $record->xprops()[self::XPROP_EMAIL_USERID_IMAP]
+                    : null;
             } else {
                 $value = isset($propertyConfig[$property])
                     ? ($record->has($propertyConfig[$property]) ? $record->{$propertyConfig[$property]} : null)

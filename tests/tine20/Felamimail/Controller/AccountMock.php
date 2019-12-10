@@ -63,14 +63,9 @@ class Felamimail_Controller_AccountMock extends Felamimail_Controller_Account
             return;
         }
 
-        $imap = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $smtp = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-
         /** @var Felamimail_Model_Account $account */
         foreach ($this->createdAccounts as $account) {
-            $imap->inspectDeleteUser($this->_getEmailUserFromAccount($account));
-            $smtp->inspectDeleteUser($this->_getEmailUserFromAccount($account));
+            Tinebase_EmailUser_XpropsFacade::deleteEmailUsers($account);
         }
-
     }
 }
