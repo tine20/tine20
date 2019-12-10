@@ -404,7 +404,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         }
 
         if (! $skipModlog) {
+            $seq = (int)$_note->seq;
             Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($_note, 'create');
+            $_note->seq = $seq;
         }
         
         $data = $_note->toArray(FALSE, FALSE);
@@ -436,7 +438,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             return FALSE;
         }
         
-        $id = ($_record instanceof Tinebase_Record_Interface) ? $_record->getId() : $_record;
+        $id = $_record instanceof Tinebase_Record_Interface ? $_record->getId() : $_record;
+        $seq = $_record instanceof Tinebase_Record_Interface && $_record->has('seq') ? $_record->seq : 0;
         $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : 'unknown');
         if (($_userId === NULL)) {
             $_userId = Tinebase_Core::getUser();
@@ -474,6 +477,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             'record_model'      => $modelName,
             'record_backend'    => ucfirst(strtolower($_backend)),
             'record_id'         => $id,
+            'seq'               => $seq,
         ));
         
         return $this->addNote($note);
