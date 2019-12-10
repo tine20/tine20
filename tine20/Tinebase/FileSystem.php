@@ -3839,10 +3839,10 @@ class Tinebase_FileSystem implements
                                 'model'         => 'Tinebase_FOOO_FileSystem',
                                 'minutes_before'=> 0,
                                 'alarm_time'    => Tinebase_DateTime::now()->addDay((int)$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_SUMMARY]),
-                                'options'       => array(
+                                'options'       => json_encode(array(
                                     'files'     => array($_fileNodeId => array($_crudAction => true)),
                                     'accountId' => $accountId
-                                ),
+                                )),
                             ));
                             $alarmController->create($alarm);
                         }
