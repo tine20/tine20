@@ -612,13 +612,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                     if ($result === 0) {
                         $deleteIds[] = $note->getId();
-                    }
-
-                    if ($purge) {
-                        if ($note->note_type_id === 4) {
+                    } else if ($purge) {
+                        if ($note->note_type_id == 4) {
                             $deleteIds[] = $note->getId();
                             $purgeCountCreated++;
-                        } else if ($note->note_type_id === 5 && strpos('|', $note->note) === false) {
+                        } else if ($note->note_type_id == 5 && strpos($note->note, '|') === false) {
                             $deleteIds[] = $note->getId();
                             $purgeCountEmptyUpdate++;
                         }
