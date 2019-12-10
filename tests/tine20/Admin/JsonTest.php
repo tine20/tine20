@@ -1322,8 +1322,6 @@ class Admin_JsonTest extends TestCase
 
     /**
      * testChangeContactEmailCheckPrimaryDomain
-     *
-     * @todo move to ADB json tests?
      */
     public function testChangeContactEmailCheckPrimaryDomain()
     {
@@ -1340,6 +1338,25 @@ class Admin_JsonTest extends TestCase
             self::fail('update should throw an exception - email should not be updateable: ' . print_r($contact->toArray(), true));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
         }
+    }
+
+    public function testAdditionalDomainInUserAccount()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        $addDomain = 'anotherdomain.com';
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $smtpConfig->additionaldomains = $addDomain;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
+
+        $user = $this->testSaveAccount();
+        $user['accountEmailAddress'] = 'somemail@' . $addDomain;
+        $updatedUser = $this->_json->saveUser($user);
+        self::assertEquals($user['accountEmailAddress'], $updatedUser['accountEmailAddress']);
+
+        // TODO email user should be removed afterwards
     }
 
     protected function createExampleAppRecord()

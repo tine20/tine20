@@ -853,6 +853,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        /**
+         * config keys:
+         *
+         * "backend":"postfix" (string)
+         * "hostname":"smtphost" (string)
+         * "port":"25" (integer)
+         * "ssl":"none" (string)
+         * "auth":"none" (string)
+         * "primarydomain":"mail.test" (string)
+         * "secondarydomains":"second.test,third.test" (string - comma separated)
+         * "additionaldomains":"another.test,onemore.test" (string - comma separated)
+         * "instanceName":"tine.test" (string)
+         */
         self::SMTP => array(
                                    //_('System SMTP')
             'label'                 => 'System SMTP',
