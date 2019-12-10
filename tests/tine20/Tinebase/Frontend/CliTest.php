@@ -442,7 +442,12 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertTrue(preg_match('/deleted \d+ notes/', $out) == 1, 'CLI job produced output: ' . $out);
 
         $allNotes = $noteController->getAllNotes();
-        $this->assertEquals($realDataNotes + $dbArtifacts, $allNotes->count(), 'notes not completely cleaned');
+        if ($purge) {
+            // purged notes are not in $realDataNotes + $dbArtifacts
+            $this->assertLessThan($realDataNotes + $dbArtifacts, $allNotes->count());
+        } else {
+            $this->assertEquals($realDataNotes + $dbArtifacts, $allNotes->count(), 'notes not completely cleaned');
+        }
     }
 
     public function testPurgeNotes()

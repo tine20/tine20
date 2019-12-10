@@ -4,7 +4,7 @@
  *
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -45,12 +45,6 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     public function testNotification()
     {
         self::flushMailer();
-
-        $oldNotificationValue = Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS);
-
-        // no Nofification for creator
-        Tinebase_Core::getPreference('Crm')->setValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, 'without');
-
         $lead = $this->_getLead();
         $lead->relations = array(new Tinebase_Model_Relation(array(
             'type' => 'CUSTOMER',
@@ -68,9 +62,6 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
         $this->assertContains(' Lars Kneschke (Metaways', $bodyText);
-
-        Tinebase_Core::getPreference('Crm')->setValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $oldNotificationValue);
-
         return $savedLead;
     }
 
@@ -106,30 +97,75 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     /**
      * testNoNotificationConfig
      */
-    public function testNoNotificationConfig()
+   public function testNoNotificationConfigResponsible()
+   {
+       $this->_notificationHelper(Crm_Config::SEND_NOTIFICATION_TO_RESPONSIBLE, 'RESPONSIBLE');
+   }
+
+    /**
+     * @param string $configToSet
+     * @param string $type
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+   protected function _notificationHelper($configToSet, $type)
+   {
+       Tinebase_Core::getPreference('Crm')->setValue(
+           Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS,
+           Crm_Controller_Lead::NOTIFICATION_WITHOUT);
+
+       self::flushMailer();
+
+       $lead = $this->_getLead();
+
+       $contact = $this->_getContact();
+       $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
+
+       $lead->relations = array(new Tinebase_Model_Relation(array(
+           'type' => $type,
+           'related_record' => $savedContact,
+           'own_model' => 'Crm_Model_Lead',
+           'own_backend' => 'Sql',
+           'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+           'related_model' => 'Addressbook_Model_Contact',
+           'related_backend' => Tasks_Backend_Factory::SQL,
+       ), TRUE));
+
+       $this->_leadController->create($lead);
+
+       $messages = self::getMessages();
+       $this->assertEquals($type === 'RESPONSIBLE' ? 1 : 0, count($messages));
+       self::flushMailer();
+       Crm_Config::getInstance()->set($configToSet, $type === 'RESPONSIBLE' ? false : true);
+
+       $lead['turnover'] = '100';
+
+       $this->_leadController->update($lead);
+       $messages = self::getMessages();
+       $this->assertEquals($type === 'RESPONSIBLE' ? 0 : 1, count($messages));
+
+       Crm_Config::getInstance()->set($configToSet, $type === 'RESPONSIBLE' ? true : false);
+       Tinebase_Core::getPreference('Crm')->setValue(
+           Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS,
+           'all');
+   }
+
+    /**
+     * testNoNotificationConfig
+     */
+    public function testNoNotificationConfigPartner()
     {
-        $oldNotificationValue = Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS);
+        $this->_notificationHelper(Crm_Config::SEND_NOTIFICATION_TO_PARTNER, 'PARTNER');
+    }
 
-        Tinebase_Core::getPreference('Crm')->setValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, 'nobody');
-        self::flushMailer();
-
-        $lead = $this->_getLead();
-
-        // give sclever access to lead container
-        $this->_setPersonaGrantsForTestContainer($lead['container_id'], 'sclever');
-
-        $this->_leadController->create($lead);
-
-        $messages = self::getMessages();
-        $this->assertEquals(0, count($messages));
-        Tinebase_Core::getPreference('Crm')->setValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, 'without');
-        $lead->description = 'test2';
-        $this->_leadController->update($lead);
-        $messages = self::getMessages();
-        $this->assertEquals(1, count($messages));
-
-        Tinebase_Core::getPreference('Crm')->setValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $oldNotificationValue);
-
+    /**
+     * testNoNotificationConfig
+     */
+    public function testNoNotificationConfigCustomer()
+    {
+        $this->_notificationHelper(Crm_Config::SEND_NOTIFICATION_TO_CUSTOMER, 'CUSTOMER');
     }
 
     /**
@@ -168,12 +204,6 @@ class Crm_NotificationsTests extends Crm_AbstractTest
      */
     public function testTagAndHistory()
     {
-
-        $oldNotificationValue = Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS);
-
-        // no Nofification for creator
-        Tinebase_Core::getPreference('Crm')->setValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, 'without');
-
         $lead = $this->testNotification();
 
         self::flushMailer();
@@ -197,7 +227,54 @@ class Crm_NotificationsTests extends Crm_AbstractTest
 
         $this->assertContains("testNotificationTag\n", $bodyText);
         $this->assertContains(sprintf($changeMessage, 'description', 'Description', 'updated description'), $bodyText);
-
-        Tinebase_Core::getPreference('Crm')->setValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $oldNotificationValue);
+    }
+    
+    /**
+     * get contact
+     *
+     * @return Addressbook_Model_Contact
+     */
+    protected function _getContact()
+    {
+        return new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'DE',
+            'adr_one_locality'      => 'Hamburg',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'DE',
+            'adr_two_locality'      => 'Hamburg',
+            'adr_two_postalcode'    => '24xxx',
+            'adr_two_region'        => 'Hamburg',
+            'adr_two_street'        => 'Pickhuben 4',
+            'adr_two_street2'       => 'no second street2',
+            'assistent'             => 'Cornelius Weiß',
+            'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
+            'email'                 => 'unittests@tine20.org',
+            'email_home'            => 'unittests@tine20.org',
+            'note'                  => 'Bla Bla Bla',
+            'role'                  => 'Role',
+            'title'                 => 'Title',
+            'url'                   => 'http://www.tine20.org',
+            'url_home'              => 'http://www.tine20.com',
+            'n_family'              => 'Kneschke',
+            'n_fileas'              => 'Kneschke, Lars',
+            'n_given'               => 'Lars',
+            'n_middle'              => 'no middle name',
+            'n_prefix'              => 'no prefix',
+            'n_suffix'              => 'no suffix',
+            'org_name'              => 'Metaways Infosystems GmbH',
+            'org_unit'              => 'Tine 2.0',
+            'tel_assistent'         => '+49TELASSISTENT',
+            'tel_car'               => '+49TELCAR',
+            'tel_cell'              => '+49TELCELL',
+            'tel_cell_private'      => '+49TELCELLPRIVATE',
+            'tel_fax'               => '+49TELFAX',
+            'tel_fax_home'          => '+49TELFAXHOME',
+            'tel_home'              => '+49TELHOME',
+            'tel_pager'             => '+49TELPAGER',
+            'tel_work'              => '+49TELWORK',
+        ));
     }
 }
