@@ -886,6 +886,10 @@ Tine.Tinebase.common = {
             allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('secondarydomains').split(','));
         }
 
+        if (Ext.isString(Tine.Tinebase.registry.get('additionaldomains'))) {
+            allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('additionaldomains').split(','));
+        }
+
         Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - allowedDomains:');
         Tine.log.debug(allowedDomains);
 

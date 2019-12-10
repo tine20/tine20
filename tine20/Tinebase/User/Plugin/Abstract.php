@@ -61,14 +61,21 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     public function inspectUpdateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
         if (! isset($_newUserProperties->imapUser) && ! isset($_newUserProperties->smtpUser)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No email properties found!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' No email properties found!');
             return;
         }
-        
-        if ($this->_userExists($_updatedUser) === true) {
-            $this->_updateUser($_updatedUser, $_newUserProperties);
-        } else {
-            $this->_addUser($_updatedUser, $_newUserProperties);
+
+        try {
+            if ($this->_userExists($_updatedUser) === true) {
+                $this->_updateUser($_updatedUser, $_newUserProperties);
+            } else {
+                $this->_addUser($_updatedUser, $_newUserProperties);
+            }
+        } catch (Tinebase_Exception_EmailInAdditionalDomains $teeiad) {
+            // TODO delete existing
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' ' . $teeiad->getMessage());
         }
     }
 
