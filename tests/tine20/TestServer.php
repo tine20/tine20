@@ -321,6 +321,7 @@ class TestServer
      * @return array
      * 
      * @todo DRY: should be moved to abstract TestCase and used in ServerTestCase
+     * @todo should return a Std object with user/pw properties
      */
     public function getTestCredentials()
     {
@@ -336,10 +337,11 @@ class TestServer
 
     /**
      * @return bool
+     *
+     * TODO replace usage with Tinebase_EmailUser::isEmailSystemAccountConfigured()
      */
     public static function isEmailSystemAccountConfigured()
     {
-        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        return (! empty($imapConfig) && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) && $imapConfig['useSystemAccount']);
+        return Tinebase_EmailUser::isEmailSystemAccountConfigured();
     }
 }

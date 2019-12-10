@@ -28,19 +28,12 @@ class Tinebase_EmailUser_XpropsFacade
         $emailUserProperties = [
             'email' => null,
             'password' => null,
-            'user_id' => null,
         ];
 
         foreach ($emailUserProperties as $property => &$value) {
-            if ($property === 'user_id' && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
-                $value = isset($record->xprops()[self::XPROP_EMAIL_USERID_IMAP])
-                    ? $record->xprops()[self::XPROP_EMAIL_USERID_IMAP]
-                    : null;
-            } else {
-                $value = isset($propertyConfig[$property])
-                    ? ($record->has($propertyConfig[$property]) ? $record->{$propertyConfig[$property]} : null)
-                    : ($record->has($property) ? $record->{$property} : null);
-            }
+            $value = isset($propertyConfig[$property])
+                ? ($record->has($propertyConfig[$property]) ? $record->{$propertyConfig[$property]} : null)
+                : ($record->has($property) ? $record->{$property} : null);
         }
 
         $user = new Tinebase_Model_FullUser([
@@ -55,9 +48,32 @@ class Tinebase_EmailUser_XpropsFacade
         $user->smtpUser = new Tinebase_Model_EmailUser($emailData);
 
         if ($setUserId) {
-            $user->setId($emailUserProperties['user_id']);
+            if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+                self::setIdFromXprops($record, $user);
+            } else {
+                $user_id = isset($propertyConfig['user_id'])
+                    ? ($record->has($propertyConfig['user_id']) ? $record->{$propertyConfig['user_id']} : null)
+                    : ($record->has('user_id') ? $record->user_id : null);
+                $user->setId($user_id);
+            }
         }
+
         return $user;
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Model_FullUser $user
+     * @param boolean $createIfEmpty
+     * @param string $xprop
+     */
+    public static function setIdFromXprops($record, $user, $createIfEmpty = false, $xprop = self::XPROP_EMAIL_USERID_IMAP)
+    {
+        $user_id = self::getEmailUserId($record, $xprop, false);
+        if ($user_id === null && $createIfEmpty) {
+            $user_id = self::setXprops($record);
+        }
+        $user->setId($user_id);
     }
 
     public static function setXprops($record, $userId = null)
@@ -66,8 +82,10 @@ class Tinebase_EmailUser_XpropsFacade
             $userId = Tinebase_Record_Abstract::generateUID();
         }
 
-        $record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP] = $userId;
-        $record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP] = $userId;
+        $record->xprops()[self::XPROP_EMAIL_USERID_IMAP] = $userId;
+        $record->xprops()[self::XPROP_EMAIL_USERID_SMTP] = $userId;
+
+        return $userId;
     }
 
     public static function deleteEmailUsers($record)
@@ -82,5 +100,25 @@ class Tinebase_EmailUser_XpropsFacade
         $user = self::getEmailUserFromRecord($record);
         Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectUpdateUser($user, $user);
         Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectUpdateUser($user, $user);
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $record
+     * @param string $xprop
+     * @param boolean $userIdAsFallback
+     * @return string
+     */
+    public static function getEmailUserId($record, $xprop = self::XPROP_EMAIL_USERID_IMAP, $userIdAsFallback = true)
+    {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            $result = isset($record->xprops()[$xprop])
+                ? $record->xprops()[$xprop]
+                : ($userIdAsFallback ? $record->getId() : null);
+        } else {
+            // TODO support other id properties?
+            $result = $record->getId();
+        }
+
+        return $result;
     }
 }

@@ -268,7 +268,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     throw new Tinebase_Exception_InvalidArgument('LDAP plugin ' . get_class($plugin)
                         . ' should not be registered as sql plugin');
                 }
-                $plugin->inspectGetUserByProperty($user);
+                $this->_inspectCRUD($plugin, $user, null, 'inspectGetUserByProperty');
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // do nothing
             } catch (Exception $e) {
@@ -312,7 +312,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param   string  $_value         the value to search for
      * @param   string  $_accountClass  type of model to return
      * 
-     * @return  Tinebase_Model_User the user object
+     * @return  Tinebase_Model_User|Tinebase_Model_FullUser the user object
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_Record_Validation
      * @throws  Tinebase_Exception_InvalidArgument
@@ -492,7 +492,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $this->checkPasswordPolicy($_password, $user);
 
         $accountData = $this->_updatePasswordProperty($userId, $_password, 'password', $_encrypt);
-        $this->_setPluginsPassword($userId, $_password, $_encrypt);
+        $this->_setPluginsPassword($user, $_password, $_encrypt);
 
         $accountData['id'] = $userId;
         $oldPassword = new Tinebase_Model_UserPassword(array('id' => $userId), true);
@@ -561,21 +561,34 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * set password in plugins
      * 
-     * @param string $userId
-     * @param string $password
+     * @param Tinebase_Model_FullUser $user
+     * @param Tinebase_Model_FullUser $password
      * @param bool   $encrypt encrypt password
      * @throws Tinebase_Exception_Backend
      */
-    protected function _setPluginsPassword($userId, $password, $encrypt = TRUE)
+    protected function _setPluginsPassword($user, $password, $encrypt = TRUE)
     {
         foreach ($this->_sqlPlugins as $plugin) {
             try {
+                $userId = $this->_getPluginUserId($plugin, $user);
                 $plugin->inspectSetPassword($userId, $password, $encrypt);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not change plugin password: ' . $e);
                 throw new Tinebase_Exception_Backend($e->getMessage());
             }
         }
+    }
+
+    /**
+     * @param object $plugin
+     * @param object $user
+     * @return string
+     */
+    protected function _getPluginUserId($plugin, $user)
+    {
+        return Tinebase_EmailUser::isEmailUserPlugin($plugin) && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}
+            ? $user->getEmailUserId()
+            : $user->getId();
     }
     
     /**
@@ -911,10 +924,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $visibility = $_user->visibility;
 
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->updateUserInSyncBackend($_user);
         }
-        
+
         $updatedUser = $this->updateUserInSqlBackend($_user);
         $this->updatePluginUser($updatedUser, $_user);
 
@@ -929,15 +942,59 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-    * update data in plugins
-    *
-    * @param Tinebase_Model_FullUser $updatedUser
-    * @param Tinebase_Model_FullUser $newUserProperties
-    */
-    public function updatePluginUser($updatedUser, $newUserProperties)
+     * update data in plugins
+     *
+     * @param Tinebase_Model_FullUser $updatedUser
+     * @param Tinebase_Model_FullUser $newUserProperties
+     * @param boolean $skipEmailPlugins
+     */
+    public function updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
     {
         foreach ($this->_sqlPlugins as $plugin) {
-            $plugin->inspectUpdateUser($updatedUser, $newUserProperties);
+            if (! $skipEmailPlugins || ! Tinebase_EmailUser::isEmailUserPlugin($plugin)) {
+                $this->_inspectCRUD($plugin, $updatedUser, $newUserProperties, 'update');
+            }
+        }
+    }
+
+    /**
+     * @param $plugin
+     * @param $user
+     * @param $newUserProperties
+     * @param $method
+     *
+     * TODO support different imap/smtp xprops
+     */
+    protected function _inspectCRUD($plugin, $user, $newUserProperties, $method)
+    {
+        if ($method !== 'inspectGetUserByProperty') {
+            $method = 'inspect' . ucfirst($method) . 'User';
+        }
+        
+        // add email user xprops here if configured
+        if (Tinebase_EmailUser::isEmailUserPlugin($plugin) && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            $pluginUser = clone($user);
+            Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $pluginUser, true);
+            if ($newUserProperties) {
+                $updatePluginUser = clone($newUserProperties);
+                Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $updatePluginUser);
+                $params = [$pluginUser, $updatePluginUser];
+            } else {
+                $params = [$pluginUser];
+            }
+            call_user_func_array([$plugin, $method], $params);
+
+            if ($method === 'add') {
+                // save new xprops in user
+                Tinebase_EmailUser_XpropsFacade::setXprops($user, $updatePluginUser->getId());
+            }
+        } else {
+            if ($newUserProperties) {
+                $params = [$user, $newUserProperties];
+            } else {
+                $params = [$user];
+            }
+            call_user_func_array([$plugin, $method], $params);
         }
     }
     
@@ -1032,7 +1089,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if (!empty($visibility) && !empty($contactId) && $visibility != $addedUser->visibility) {
             $addedUser->visibility = $visibility;
             $addedUser = $this->updateUserInSqlBackend($addedUser);
-            $this->updatePluginUser($addedUser, $_user);
+            $this->updatePluginUser($addedUser, $_user, true);
+        }
+
+        if ($addedUser->xprops() != $_user->xprops()) {
+            // update user xprops
+            $addedUser = $this->updateUserInSqlBackend($addedUser);
         }
 
         return $addedUser;
@@ -1047,7 +1109,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function addPluginUser($addedUser, $newUserProperties)
     {
         foreach ($this->_sqlPlugins as $plugin) {
-            $plugin->inspectAddUser($addedUser, $newUserProperties);
+            $this->_inspectCRUD($plugin, $addedUser, $newUserProperties, 'add');
         }
     }
     
@@ -1082,13 +1144,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         // persist status for new users!
         $accountData['status'] = $_user->accountStatus;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user to SQL backend: ' . $_user->accountLoginName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Adding user to SQL backend: ' . $_user->accountLoginName);
         
         $accountsTable->insert($accountData);
 
         $this->_writeModLog($_user, null);
 
-        $createdUser = $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
+        // we don't need the data from the plugins yet
+        $createdUser = $this->getUserByPropertyFromSqlBackend('accountId', $_user->getId(), 'Tinebase_Model_FullUser');
 
         Tinebase_Event::fireEvent(new Tinebase_Event_User_CreatedAccount(['account' => $createdUser]));
 
@@ -1161,7 +1225,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         // update data from plugins
         foreach ($this->_sqlPlugins as $plugin) {
-            $plugin->inspectDeleteUser($deletedUser);
+            $this->_inspectCRUD($plugin, $deletedUser, null, 'delete');
         }
         
     }

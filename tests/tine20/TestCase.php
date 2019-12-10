@@ -1021,17 +1021,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param array $data
      * @return Tinebase_Model_FullUser
      */
-    protected function _createUserWithEmailAccount($data = null)
+    protected function _createUserWithEmailAccount($data = [])
     {
-        if ($data === null) {
-            $data = $this->_getUserData(true);
-        }
+        $data = array_merge($data, $this->_getUserData(true));
         return $this->_createTestUser($data);
     }
 
     protected function _getUserData($withEmail = false)
     {
-        $username = 'phpunit_' . Tinebase_Record_Abstract::generateUID(5);
+        $username = 'phpunit_' . Tinebase_Record_Abstract::generateUID(6);
         $data = [
             'accountLoginName'      => $username,
             'accountEmailAddress'   => $username . '@' . TestServer::getPrimaryMailDomain(),
@@ -1049,7 +1047,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($data === null) {
             $data = $this->_getUserData();
         }
-        $pw = Tinebase_Record_Abstract::generateUID(16);
+        $pw = isset($data['password']) ? $data['password'] : Tinebase_Record_Abstract::generateUID(16);
         $account = Admin_Controller_User::getInstance()->create(self::getTestUser($data), $pw, $pw);
         $this->_usernamesToDelete[] = $account->accountLoginName;
 

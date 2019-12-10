@@ -477,4 +477,23 @@ class Tinebase_EmailUser
 
         return $result;
     }
+
+    /**
+     * @param mixed $plugin
+     * @return false|int
+     */
+    public static function isEmailUserPlugin($plugin)
+    {
+        $pluginName = is_object($plugin) ? get_class($plugin) : $plugin;
+        return preg_match('/^Tinebase_EmailUser/', $pluginName);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isEmailSystemAccountConfigured()
+    {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        return (! empty($imapConfig) && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) && $imapConfig['useSystemAccount']);
+    }
 }

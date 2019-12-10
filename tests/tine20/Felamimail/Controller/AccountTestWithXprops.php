@@ -15,6 +15,17 @@
 class Felamimail_Controller_AccountTestWithXprops extends Felamimail_Controller_AccountTest
 {
     /**
+     * This method is called before the first test of this test class is run.
+     *
+     * @since Method available since Release 3.4.0
+     */
+    public static function setUpBeforeClass()
+    {
+        // convert current accounts
+        Admin_Controller_User::getInstance()->convertAccountsToSaveUserIdInXprops();
+    }
+
+    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *

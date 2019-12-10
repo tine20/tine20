@@ -82,7 +82,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
                 $this->_addUser($_updatedUser, $_newUserProperties);
             }
         } catch (Tinebase_Exception_EmailInAdditionalDomains $teeiad) {
-            // TODO delete existing
+            // TODO delete existing?
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' ' . $teeiad->getMessage());
         }
@@ -193,17 +193,26 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     
     /**
      * get email user name depending on config
+     * NOTE: translates xprops to userid if necessary
      *
      * @param Tinebase_Model_FullUser $user
      * @param $alternativeLoginName
      * @return string
      */
-    public function _getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null)
+    public function getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null)
     {
-        return $this->getLoginName($user->getId(), $user->accountLoginName, $user->accountEmailAddress,
+        $userId = Tinebase_EmailUser_XpropsFacade::getEmailUserId($user);
+        return $this->getLoginName($userId, $user->accountLoginName, $user->accountEmailAddress,
             $alternativeLoginName);
     }
 
+    /**
+     * @param $accountId
+     * @param $accountLoginName
+     * @param $accountEmailAddress
+     * @param null $alternativeLoginName
+     * @return string|null
+     */
     public function getLoginName($accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName = null)
     {
         $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';

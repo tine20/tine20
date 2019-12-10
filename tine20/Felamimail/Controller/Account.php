@@ -1318,7 +1318,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             if (Felamimail_Config::getInstance()
                     ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
                 $emailUser = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-                $systemAccount->user = $emailUser->_getEmailUserName($_account);
+                $systemAccount->user = $emailUser->getEmailUserName($_account);
                 $systemAccount->password = $pwd;
                 $this->_autoCreateSystemAccountFolders($systemAccount);
             }
@@ -1746,15 +1746,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         ]));
         $this->doContainerACLChecks($checks);
 
-        // TODO needed?
-        // $xpropsFacade = new Tinebase_EmailUser_XpropsFacade();
-        // $xpropsFacade->convertExistingUsers($sharedAccounts, $this);
-
         foreach ($sharedAccounts as $account) {
-//            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-//            $userId = $_record->user_id;
-//            $_record->user = $emailUserBackend->getLoginName($userId, $_record->email, $_record->email);
-
             // save in record
             $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP] = $account->user_id;
             $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP] = $account->user_id;

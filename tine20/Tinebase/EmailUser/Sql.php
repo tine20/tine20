@@ -197,7 +197,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
         if (!$queryResult) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' ' . $this->_subconfigKey . ' config for user ' . $userId . ' not found!');
+                . ' ' . $this->_subconfigKey . ' config for user ' . $userId . ' not found');
         }
 
         return $queryResult;
@@ -225,7 +225,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         // modify/correct user name
         // set emailUsername to Tine 2.0 account login name and append domain for login purposes if set
         if (empty($emailUser->emailUsername)) {
-            $emailUser->emailUsername = $this->_getEmailUserName($_user);
+            $emailUser->emailUsername = $this->getEmailUserName($_user);
         }
         
         if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
@@ -250,7 +250,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             return;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
             ' Setting email user password (encrypt: ' . (int) $_encrypt . ') for user id ' . $_userId);
         
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
@@ -310,7 +310,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Adding new ' . $this->_configKey . ' email user ' . $emailUsername);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($emailUserData, TRUE));
         
         try {

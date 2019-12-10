@@ -465,4 +465,9 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
 
         parent::runConvertToData();
     }
+
+    public function getEmailUserId($type = self::XPROP_EMAIL_USERID_IMAP)
+    {
+        return Tinebase_EmailUser_XpropsFacade::getEmailUserId($this, $type);
+    }
 }

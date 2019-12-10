@@ -6,9 +6,8 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        catch error (and show alert) if postfix email already exists
  * @todo        extend Tinebase_Controller_Record_Abstract
  */
 
@@ -283,7 +282,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $userPlugins = Tinebase_User::getInstance()->getSqlPluginNames();
         $emailPlugins = [];
         foreach ($userPlugins as $pluginName) {
-            if (preg_match('/^Tinebase_EmailUser/', $pluginName)) {
+            if (Tinebase_EmailUser::isEmailUserPlugin($pluginName)) {
                 $emailPlugins[] = Tinebase_User::getInstance()->removePlugin($pluginName);
             }
         }
@@ -347,8 +346,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         // avoid forging accountId, gets created in backend
         unset($_user->accountId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
 
         if ($_password != $_passwordRepeat) {
             throw new Admin_Exception("Passwords don't match.");
@@ -531,5 +530,28 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $internalAdbId = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
         }
         return $internalAdbId;
+    }
+
+    /**
+     *  add email userid xprops to user accounts
+     */
+    public function convertAccountsToSaveUserIdInXprops()
+    {
+        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            return;
+        }
+
+        $this->checkRight('MANAGE_ACCOUNTS');
+
+        foreach (Tinebase_User::getInstance()->getFullUsers() as $user) {
+            if (empty($user->accountEmailAddress)) {
+                continue;
+            }
+
+            Tinebase_EmailUser_XpropsFacade::setXprops($user, $user->getId());
+            Tinebase_User::getInstance()->updateUserInSqlBackend($user);
+        }
+
+        // TODO convert userInternal accounts, too
     }
 }

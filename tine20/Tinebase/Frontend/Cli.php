@@ -1922,7 +1922,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             Felamimail_Controller_Account::getInstance()->convertAccountsToSaveUserIdInXprops();
         }
 
-        // TODO convert users
+        // convert users
+        Admin_Controller_User::getInstance()->convertAccountsToSaveUserIdInXprops();
+
         // TODO convert lists
 
         // activate config
