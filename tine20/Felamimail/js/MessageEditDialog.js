@@ -160,10 +160,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     //private
     initComponent: function () {
-        var me = this;
+        this.autoSave = Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('autoSaveDrafts');
+        let me = this;
 
-        me.trottledsaveAsDraft = _.throttle(_.bind(me.saveAsDraft, me), 5000, {leading: false});
-        me.saveAsDraftPromise = Promise.resolve();
+        if (me.autoSave) {
+            me.trottledsaveAsDraft = _.throttle(_.bind(me.saveAsDraft, me), 5000, {leading: false});
+            me.saveAsDraftPromise = Promise.resolve();
+        }
 
         me.on('beforecancel', me.onBeforeCancel, this);
 
@@ -175,7 +178,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Tine.log.info('mailvelope not available');
         });
     },
-
 
     /**
      * init buttons
@@ -712,7 +714,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onBeforeCancel: function() {
-        this.trottledsaveAsDraft.cancel();
+        if (this.autoSave) {
+            this.trottledsaveAsDraft.cancel();
+        }
         if (this.draftUid) {
             Ext.MessageBox.show({
                 title: this.app.i18n._('Discard this Draft?'),
@@ -919,7 +923,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {String} folderField
      */
     onSaveInFolder: function (folderField) {
-        this.trottledsaveAsDraft.cancel();
+        if (this.autoSave) {
+            this.trottledsaveAsDraft.cancel();
+        }
         
         this.onRecordUpdate();
 
@@ -941,7 +947,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             );
         } else {
             this.loadMask.show();
-            this.trottledsaveAsDraft.cancel();
+            if (this.autoSave) {
+                this.trottledsaveAsDraft.cancel();
+            }
             this.recordProxy.saveInFolder(this.record, folderName, {
                 scope: this,
                 success: function (record) {
@@ -1223,14 +1231,16 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // grr. onRecordLoad hides loadMask
         this.showLoadMask.defer(10, this);
 
-        this.saveAsDraftPromise
-            .then(() => {
-                if (this.draftUid) {
-                    // autodelete draft when message is send
-                    return this.deleteDraft(this.draftUid)
-                }
-            })
-            .then(_.bind(Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges, this, closeWindow));
+        if (this.autoSave) {
+            this.saveAsDraftPromise
+                .then(() => {
+                    if (this.draftUid) {
+                        // autodelete draft when message is send
+                        return this.deleteDraft(this.draftUid)
+                    }
+                })
+                .then(_.bind(Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges, this, closeWindow));
+        }
     },
 
     /**
@@ -1656,7 +1666,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges()');
 
         this.loadMask.show();
-        this.trottledsaveAsDraft.cancel();
+        if (this.autoSave) {
+            this.trottledsaveAsDraft.cancel();
+        }
 
         if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && undefined === nonSystemAccountRecipients) {
             this.validateSystemlinkRecipients().then(function (mails) {
