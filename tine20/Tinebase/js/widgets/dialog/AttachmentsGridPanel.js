@@ -85,14 +85,14 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
 
         Tine.widgets.dialog.AttachmentsGridPanel.superclass.initComponent.call(this);
         
-        this.initActions();
-
         postal.subscribe({
             channel: "recordchange",
             topic: 'Tinebase.Tree_Node.*',
             callback: this.onAttachmentChanges.createDelegate(this)
         });
 
+        this.on('rowdblclick', this.onRowDbClick, this);
+        this.on('keydown', this.onKeyDown, this);
     },
 
     /**
@@ -174,38 +174,6 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         });
     },
     
-    /**
-     * initActions
-     */
-    initActions: function () {
-        this.action_download = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: false,
-            actionType: 'download',
-            text: i18n._('Download'),
-            handler: this.onDownload,
-            iconCls: 'action_download',
-            scope: this,
-            disabled: true,
-            hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
-        });
-
-        // TODO: does user need rights for Filemanager?
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
-                initialApp: this.app,
-                sm: this.getSelectionModel()
-            });
-        }
-
-        this.actionUpdater.addActions([this.action_download, this.action_preview]);
-        this.getTopToolbar().addItem(this.action_download);
-        this.contextMenu.addItem(this.action_download);
-        
-        this.on('rowdblclick', this.onRowDbClick, this);
-        this.on('keydown', this.onKeyDown, this);
-    },
-
     onKeyDown: function(e) {
         var selectedRows = this.getSelectionModel().getSelections(),
             rowRecord = selectedRows[0];
