@@ -289,21 +289,22 @@ class Courses_JsonTest extends TestCase
      * test for import of members (4) / json import
      * 
      * @see 0006672: allow to import (csv) files with only CR linebreaks
-     * 
-     * @group longrunning
      */
     public function testImportMembersIntoCourse4()
     {
-        $result = $this->_importHelper(dirname(__FILE__) . '/files/testklasse.csv', $this->_getCourseImportDefinition2(), TRUE);
-        $this->assertEquals(25, count($result['members']), 'import failed');
+        $result = $this->_importHelper(dirname(__FILE__) . '/files/testklasse.csv',
+            $this->_getCourseImportDefinition2(), TRUE);
+        $this->assertEquals(8, count($result['members']), 'import failed');
         $found = FALSE;
         foreach($result['members'] as $member) {
-            if ($member['name'] === 'Kućuk, Orkide' && $member['data'] === 'kuukor') {
+            if ($member['name'] === 'Frantasia, Anastasia' && $member['data'] === 'frantasiaan') {
                 $found = TRUE;
             }
         }
-        $this->assertTrue($found, 'Member "Kućuk, Orkide" not found in result: ' . print_r($result['members'], TRUE));
-        $this->assertEquals(25, count(Tinebase_Group::getInstance()->getGroupMembers($this->_configGroups[Courses_Config::STUDENTS_GROUP])), 'imported users not added to students group');
+        $this->assertTrue($found, 'Member "Frantasia, Anastasia" not found in result: '
+            . print_r($result['members'], TRUE));
+        $this->assertEquals(8, count(Tinebase_Group::getInstance()->getGroupMembers($this->_configGroups[Courses_Config::STUDENTS_GROUP])),
+            'imported users not added to students group');
     }
 
     /**
