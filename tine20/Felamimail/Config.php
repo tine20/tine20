@@ -37,6 +37,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FEATURE_ACCOUNT_MIGRATION = 'accountMigration';
 
     /**
+     * auto save drafts
+     *
+     * @const string
+     */
+    const FEATURE_AUTOSAVE_DRAFTS = 'autoSaveDrafts';
+
+    /**
      * Tine 2.0 flag feature
      *
      * @var string
@@ -202,6 +209,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     //_('Shows context menu for system accounts to approve migration')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
+                ],
+                self::FEATURE_AUTOSAVE_DRAFTS   => [
+                    self::LABEL                 => 'Auto-Save Drafts',
+                    //_('Auto-Save Drafts')
+                    self::DESCRIPTION           => 'Save drafts automatically while editing an email',
+                    //_('Save drafts automatically while editing an email')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
                 ],
                 self::FEATURE_TINE20_FLAG   => [
                     self::LABEL                 => 'Tine 2.0 Flag',
