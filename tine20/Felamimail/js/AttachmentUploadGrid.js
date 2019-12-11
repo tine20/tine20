@@ -44,34 +44,16 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         Tine.Felamimail.AttachmentUploadGrid.superclass.initComponent.call(this);
 
         this.on('beforeedit', this.onBeforeEdit.createDelegate(this));
+        this.store.on('add', this.onStoreAddRecords, this);
 
-        this.initActions();
     },
 
-    /**
-     * initActions
-     */
-    initActions: function () {
-        this.action_download = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: false,
-            actionType: 'download',
-            text: i18n._('Download'),
-            handler: this.onDownload,
-            iconCls: 'action_download',
-            scope: this,
-            disabled:true
+    onStoreAddRecords: function(store, rs, idx) {
+        _.each(rs, (r) => {
+            _.set(r, 'data.attachment_type', 'attachment');
         });
-
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
-        }
-
-        this.actionUpdater.addActions([this.action_download, this.action_preview]);
-        this.getTopToolbar().addItem(this.action_download);
-        this.contextMenu.addItem(this.action_download);
     },
-    
+
     onBeforeEdit: function (e) {
         var record = e.record;
         this.currentRecord = record;

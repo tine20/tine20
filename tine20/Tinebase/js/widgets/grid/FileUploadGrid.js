@@ -82,6 +82,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initColumnModel();
         this.initSelectionModel();
 
+        this.actionUpdater.updateActions(this.selModel, [_.get(this, 'record.data')]);
 
         if (!this.plugins) {
             this.plugins = [];
@@ -141,10 +142,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         } else if (existingRecord && e.topic.match(/\.delete/)) {
             this.store.remove(existingRecord);
         } else {
-            // @TODO add to store
+            const record = new Ext.ux.file.Upload.file(JSON.parse(JSON.stringify(data)), data,id);
+            record.set('tempFile', JSON.parse(JSON.stringify(data)));
+            this.store.add(record);
         }
         // NOTE: grid doesn't update selections itself
-        this.actionUpdater.updateActions(this.selModel, [this.record.data]);
+        this.actionUpdater.updateActions(this.selModel, [_.get(this, 'record.data')]);
     },
 
     setReadOnly: function (readOnly) {
@@ -261,10 +264,41 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             actionUpdater: this.isResumeEnabled
         });
 
+        this.action_download = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: false,
+            actionType: 'download',
+            text: i18n._('Download'),
+            handler: this.onDownload,
+            iconCls: 'action_download',
+            scope: this,
+            disabled: true,
+            hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
+        });
+
+        this.action_rename = Tine.Filemanager.nodeActionsMgr.get('rename', {
+            initialApp: this.app,
+            sm: this.getSelectionModel(),
+            executor: function(record, text) {
+                if (_.isFunction(_.get(record, 'set'))) {
+                    record.set('name', text);
+                }
+            }
+        });
+
+        // TODO: does user need rights for Filemanager?
+        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
+                initialApp: this.app,
+                sm: this.getSelectionModel()
+            });
+        }
+
         this.tbar = new Ext.Toolbar({
             items: [
                 this.action_add,
-                this.action_remove
+                this.action_remove,
+                this.action_download
             ],
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -281,6 +315,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 key: 'Tinebase-FileUploadGrid-ContextMenu'
             }],
             items: [
+                this.action_preview,
+                this.action_rename,
+                this.action_download,
+                '-',
                 this.action_remove,
                 this.action_pause,
                 this.action_resume
@@ -289,7 +327,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.actionUpdater.addActions(this.tbar.items);
         this.actionUpdater.addActions(this.contextMenu.items);
-
     },
 
     /**
@@ -304,7 +341,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.store.on('add', this.onStoreAdd, this);
 
         this.loadRecord(this.record);
-        this.actionUpdater.updateActions(this.selModel, [this.record.data]);
     },
 
     onStoreAdd: function (store, records, idx) {
@@ -481,7 +517,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.selModel.on('selectionchange', function (selModel) {
             var rowCount = selModel.getCount();
             this.action_remove.setDisabled(this.readOnly || rowCount === 0);
-            this.actionUpdater.updateActions(selModel, [this.record.data]);
+            this.actionUpdater.updateActions(selModel, [_.get(this, 'record.data')]);
 
         }, this);
     },

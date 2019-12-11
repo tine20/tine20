@@ -134,16 +134,19 @@ Tine.Filemanager.nodeActions.Rename = {
                         return;
                     }
 
-                    // @TODO validate filename
-                    var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
-                    Tine.Filemanager.fileRecordBackend.copyNodes([record], targetPath, true);
-
+                    this.initialConfig.executor(record, text);
                 }
             },
             scope: this,
             prompt: true,
             icon: Ext.MessageBox.QUESTION
         });
+    },
+
+    executor: function(record, text) {
+        // @TODO validate filename
+        var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
+        Tine.Filemanager.fileRecordBackend.copyNodes([record], targetPath, true);
     }
 };
 
