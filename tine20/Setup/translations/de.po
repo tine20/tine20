@@ -41,8 +41,8 @@ msgid "Result"
 msgstr "Ergebnis"
 
 #: js/EnvCheckGridPanel.js:162
-msgid "Error"
-msgstr "Fehler"
+msgid "Message"
+msgstr "Informationen"
 
 #: js/EnvCheckGridPanel.js:180
 msgid "Run setup tests"
