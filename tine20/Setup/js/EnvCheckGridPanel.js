@@ -159,7 +159,7 @@ Ext.ns('Tine', 'Tine.Setup');
         return  [
             {id: 'key',   width: 150, sortable: true, dataIndex: 'key',   header: this.app.i18n._("Check")}, 
             {id: 'value', width: 50, sortable: true, dataIndex: 'value', header: this.app.i18n._("Result"), renderer: this.resultRenderer},
-            {id: 'message', width: 600, sortable: true, dataIndex: 'message', header: this.app.i18n._("Error"), renderer: this.messageRenderer}
+            {id: 'message', width: 600, sortable: true, dataIndex: 'message', header: this.app.i18n._("Message"), renderer: this.messageRenderer}
         ];
     },
 
