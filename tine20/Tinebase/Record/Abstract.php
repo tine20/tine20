@@ -1030,12 +1030,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                         $ownField = $ownField->getId();
                     }
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                            ' Doing subdiff for field ' . $fieldName);
-                    }
                     $subdiff = $ownField->diff($recordField);
-                    if (is_object($subdiff) && !$subdiff->isEmpty()) {
+                    if (($subdiff instanceof Tinebase_Record_Diff || $subdiff instanceof Tinebase_Record_RecordSetDiff)
+                        && !$subdiff->isEmpty()
+                    ) {
                         $diff[$fieldName] = $subdiff;
                         $oldData[$fieldName] = $ownField;
                     }
