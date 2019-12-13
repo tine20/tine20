@@ -154,7 +154,10 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             dataIndex: 'contenttype',
             width: 80,
             header: i18n._('Content Type'),
-            sortable: true
+            sortable: true,
+            renderer: function(value, meta, record) {
+                return _.get(record, 'data.contenttype', _.get(record, 'data.type'));
+            }
         },{ id: 'creation_time',      header: i18n._('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,     width: 80,
             sortable: true },
           { id: 'created_by',         header: i18n._('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer, width: 80,
