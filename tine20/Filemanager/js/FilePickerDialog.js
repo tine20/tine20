@@ -41,6 +41,12 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     allowCreateNew: false,
 
     /**
+     * check if file exists on file creation
+     * @cfg {Boolean} checkOverwrite
+     */
+    checkOverwrite: true,
+
+    /**
      * initial fileName for new files
      * @cfg {String} initialNewFileName
      */
@@ -116,7 +122,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     },
 
     onButtonApply: async function() {
-        if (this.allowCreateNew && ! await this.assertCheckOverwrite(this.nodes[0])) {
+        if (this.allowCreateNew && this.checkOverwrite && !await this.assertCheckOverwrite(this.nodes[0])) {
             return;
         }
 
@@ -132,19 +138,17 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             loadMask.show();
 
             Tine.Filemanager.searchNodes([
-                {field: 'path', operator: 'equals', value: node.path}
+                {field: 'path', operator: 'equals', value: node.get('path')}
             ]).then((results) => {
                 loadMask.hide();
-                if (results.totalcount) {
-                    const title = i18n._('Overwrite Existing File?');
-                    const msg = i18n._('Do you really want to overwrite the selected file?');
-                    Ext.MessageBox.confirm(title, msg, (btn) => {
-                        resolve(btn === 'yes');
-                    });
-                } else {
-                    resolve(true);
-                }
-                debugger
+                const title = i18n._('Overwrite Existing File?');
+                const msg = i18n._('Do you really want to overwrite the selected file?');
+                Ext.MessageBox.confirm(title, msg, (btn) => {
+                    resolve(btn === 'yes');
+                });
+            }).catch(() => {
+                // NOTE: path filter throws an error in not existent
+                resolve(true);
             })
         });
     },
