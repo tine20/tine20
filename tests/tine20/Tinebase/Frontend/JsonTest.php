@@ -494,30 +494,30 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $registryData = $this->_instance->getAllRegistryData();
         $currentUser = Tinebase_Core::getUser();
 
-        $this->assertTrue(isset($registryData['Tinebase']['currentAccount']), print_r($registryData['Tinebase'], true));
-        $this->assertEquals($currentUser->toArray(), $registryData['Tinebase']['currentAccount']);
-        $this->assertEquals(
+        self::assertTrue(isset($registryData['Tinebase']['currentAccount']), print_r($registryData['Tinebase'], true));
+        self::assertEquals($currentUser->toArray(), $registryData['Tinebase']['currentAccount']);
+        self::assertEquals(
             Addressbook_Controller_Contact::getInstance()->getContactByUserId($currentUser->getId())->toArray(),
             $registryData['Tinebase']['userContact']
         );
-        $this->assertEquals(TRUE, $registryData['Tinebase']['config']['changepw']['value'], 'changepw should be TRUE');
+        self::assertEquals(TRUE, $registryData['Tinebase']['config']['changepw']['value'], 'changepw should be TRUE');
         
         Tinebase_Config::getInstance()->set('changepw', 0);
         $registryData = $this->_instance->getAllRegistryData();
         $changepwValue = $registryData['Tinebase']['config']['changepw']['value'];
-        $this->assertEquals(FALSE, $changepwValue, 'changepw should be (bool) false');
-        $this->assertTrue(is_bool($changepwValue), 'changepw should be (bool) false: ' . var_export($changepwValue, TRUE));
+        self::assertEquals(FALSE, $changepwValue, 'changepw should be (bool) false');
+        self::assertTrue(is_bool($changepwValue), 'changepw should be (bool) false: ' . var_export($changepwValue, TRUE));
         
         $userApps = $registryData['Tinebase']['userApplications'];
-        $this->assertEquals('Admin', $userApps[0]['name'], 'first app should be Admin: ' . print_r($userApps, TRUE));
+        self::assertEquals('Admin', $userApps[0]['name'], 'first app should be Admin: ' . print_r($userApps, TRUE));
         
         $locale = Tinebase_Core::getLocale();
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
-        $this->assertEquals($symbols['decimal'], $registryData['Tinebase']['decimalSeparator']);
+        self::assertEquals($symbols['decimal'], $registryData['Tinebase']['decimalSeparator']);
 
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             $configuredSalesModels = array_keys($registryData['Sales']['models']);
-            $this->assertTrue(in_array('Invoice', $configuredSalesModels), 'Invoices is missing from configured models: '
+            self::assertTrue(in_array('Invoice', $configuredSalesModels), 'Invoices is missing from configured models: '
                 . print_r($configuredSalesModels, true));
             $copyOmitFields = array(
                 'billed_in',
@@ -535,17 +535,23 @@ class Tinebase_Frontend_JsonTest extends TestCase
             );
         }
 
-        $this->assertTrue(isset($registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']), 'Timeaccount copyOmitFields empty/missing');
-        $this->assertEquals($copyOmitFields, $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
-        $this->assertTrue(is_array(($registryData['Timetracker']['relatableModels'][0])), 'relatableModels needs to be an numbered array');
+        self::assertTrue(isset($registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']), 'Timeaccount copyOmitFields empty/missing');
+        self::assertEquals($copyOmitFields, $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
+        self::assertTrue(is_array(($registryData['Timetracker']['relatableModels'][0])), 'relatableModels needs to be an numbered array');
 
-        $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']), 'no InventoryItem export config found: '
+        self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']), 'no InventoryItem export config found: '
             . print_r($registryData['Inventory']['models']['InventoryItem'], true));
-        $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']));
-        $this->assertEquals(array('csv', 'ods'), $registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']);
-        $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['import']));
+        self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']));
+        self::assertEquals(array('csv', 'ods'), $registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']);
+        self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['import']));
 
-        $this->assertTrue(isset($registryData['Felamimail']['models']['Account']), 'account model missing from registry');
+        self::assertTrue(isset($registryData['Felamimail']['models']['Account']), 'account model missing from registry');
+
+        // check alias dispatch flag
+        $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        self::assertTrue(isset($registryData['Tinebase']['smtpAliasesDispatchFlag']), 'smtpAliasesDispatchFlag missing from registry');
+        self::assertEquals($plugin instanceof Tinebase_EmailUser_Smtp_Postfix || $plugin instanceof Tinebase_EmailUser_Smtp_PostfixMultiInstance,
+            $registryData['Tinebase']['smtpAliasesDispatchFlag'], 'smtpAliasesDispatchFlag is not correct' );
 
         self::assertLessThan(2000000, strlen(json_encode($registryData)), 'registry size got too big');
     }

@@ -35,6 +35,15 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     protected $_config = array();
 
     /**
+     * supportAliasesDispatchFlag
+     *
+     * @var boolean
+     *
+     * @todo remove DRY (see Tinebase_User_Plugin_LdapAbstract)
+     */
+    protected $_supportAliasesDispatchFlag = false;
+
+    /**
      * list of all db connections other than Tinebase_Core::getDb()
      *
      * @var array
@@ -248,7 +257,6 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      */
     abstract protected function _userExists(Tinebase_Model_FullUser $_user);
 
-
     // hack, should go into Tinebase_EmailUser_Sql but not all EmailUser Backends actually use that SQL one
     // well not every backend is using sql, its just a bit messy around here
     public function _getConfiguredSystemDefaults()
@@ -273,5 +281,16 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         }
 
         return $systemDefaults;
+    }
+
+    /**
+     * @return bool
+     *
+     * @todo remove DRY (see Tinebase_User_Plugin_LdapAbstract)
+     * @todo make this a generic "capabilities" feature
+     */
+    public function supportsAliasesDispatchFlag()
+    {
+        return $this->_supportAliasesDispatchFlag;
     }
 }

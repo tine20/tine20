@@ -304,10 +304,21 @@ class Tinebase_EmailUser
     public static function manages($_configType)
     {
         $config = self::getConfig($_configType);
+        return (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
+    }
 
-        $result = (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
-        
-        return $result;
+    /**
+     * return true if smtp backend supports AliasesDispatchFlag
+     *
+     * @return bool
+     */
+    public static function smtpAliasesDispatchFlag()
+    {
+        if (! self::manages(Tinebase_Config::SMTP)) {
+            return false;
+        }
+        $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        return $plugin->supportsAliasesDispatchFlag();
     }
     
     /**
