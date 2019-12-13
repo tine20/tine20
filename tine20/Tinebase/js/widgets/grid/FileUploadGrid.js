@@ -144,7 +144,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         } else {
             const record = new Ext.ux.file.Upload.file(JSON.parse(JSON.stringify(data)), data,id);
             record.set('tempFile', JSON.parse(JSON.stringify(data)));
-            this.store.add(record);
+            this.store.add([record]);
         }
         // NOTE: grid doesn't update selections itself
         this.actionUpdater.updateActions(this.selModel, [_.get(this, 'record.data')]);
