@@ -1021,7 +1021,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
         $part->encoding = ($tempFile->type == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
 
-        $attachment['name'] = $tempFile->name;
+        if (!isset($attachment['name']) || empty($attachment['name'])) {
+            $attachment['name'] = $tempFile->name;
+        }
         $attachment['type'] = $tempFile->type;
 
         if (! empty($tempFile->size)) {
