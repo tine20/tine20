@@ -1297,12 +1297,16 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 // add identities / aliases to store (for systemaccounts)
                 var user = Tine.Tinebase.registry.get('currentAccount');
                 var systemAliases = _.get(user, 'emailUser.emailAliases', []);
-                var systemAliasAdresses = _.reduce(systemAliases, (aliases, alias) => {
-                    if (!!+alias.dispatch_address) {
-                        aliases.push(alias.email);
-                    }
-                    return aliases;
-                }, []);
+                if (Tine.Tinebase.registry.get('smtpAliasesDispatchFlag')) {
+                    var systemAliasAdresses = _.reduce(systemAliases, (aliases, alias) => {
+                        if (!!+alias.dispatch_address) {
+                            aliases.push(alias.email);
+                        }
+                        return aliases;
+                    }, []);
+                } else {
+                    var systemAliasAdresses = systemAliases;
+                }
 
                 aliases = aliases.concat(systemAliasAdresses);
             }
