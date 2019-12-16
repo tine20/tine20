@@ -547,11 +547,15 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         self::assertTrue(isset($registryData['Felamimail']['models']['Account']), 'account model missing from registry');
 
-        // check alias dispatch flag
-        $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-        self::assertTrue(isset($registryData['Tinebase']['smtpAliasesDispatchFlag']), 'smtpAliasesDispatchFlag missing from registry');
-        self::assertEquals($plugin instanceof Tinebase_EmailUser_Smtp_Postfix || $plugin instanceof Tinebase_EmailUser_Smtp_PostfixMultiInstance,
-            $registryData['Tinebase']['smtpAliasesDispatchFlag'], 'smtpAliasesDispatchFlag is not correct' );
+        try {
+            // check alias dispatch flag
+            $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+            self::assertTrue(isset($registryData['Tinebase']['smtpAliasesDispatchFlag']), 'smtpAliasesDispatchFlag missing from registry');
+            self::assertEquals($plugin instanceof Tinebase_EmailUser_Smtp_Postfix || $plugin instanceof Tinebase_EmailUser_Smtp_PostfixMultiInstance,
+                $registryData['Tinebase']['smtpAliasesDispatchFlag'], 'smtpAliasesDispatchFlag is not correct');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // no smtp config found
+        }
 
         self::assertLessThan(2000000, strlen(json_encode($registryData)), 'registry size got too big');
     }
