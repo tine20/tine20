@@ -465,20 +465,22 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         exec($cmd);
         unlink($mycnf);
 
-        // validate all tables have been dumped
-        exec("bzcat $backupDir/tine20_mysql.sql.bz2 | grep 'CREATE TABLE `'", $output);
-        array_walk($output, function (&$val) {
-            if (preg_match('/`(.*)`/', $val, $m)) {
-                $val = $m[1];
-            } else {
-                $val = null;
+        if (! $option['novalidate']) {
+            // validate all tables have been dumped
+            exec("bzcat $backupDir/tine20_mysql.sql.bz2 | grep 'CREATE TABLE `'", $output);
+            array_walk($output, function (&$val) {
+                if (preg_match('/`(.*)`/', $val, $m)) {
+                    $val = $m[1];
+                } else {
+                    $val = null;
+                }
+            });
+            $output = array_filter($output);
+            $allTables = $this->_db->listTables();
+            $diff = array_diff($allTables, $output);
+            if (!empty($diff)) {
+                throw new Tinebase_Exception_Backend('dump did not work, table diff: ' . print_r($diff, true));
             }
-        });
-        $output = array_filter($output);
-        $allTables = $this->_db->listTables();
-        $diff = array_diff($allTables, $output);
-        if (!empty($diff)) {
-            throw new Tinebase_Exception_Backend('dump did not work, table diff: ' . print_r($diff, true));
         }
     }
 

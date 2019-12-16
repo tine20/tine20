@@ -2579,6 +2579,7 @@ class Setup_Controller
      *      'config'     => bool   // backup config
      *      'db'         => bool   // backup database
      *      'files'      => bool   // backup files
+     *      'novalidate' => bool   // do not validate sql backup
      *    )
      */
     public function backup($options)
@@ -2627,6 +2628,7 @@ class Setup_Controller
             $backupOptions = array(
                 'backupDir'         => $backupDir,
                 'structTables'      => $this->getBackupStructureOnlyTables(),
+                'novalidate'        => isset($options['novalidate']) && $options['novalidate'],
             );
 
             $this->_backend->backup($backupOptions);
