@@ -100,23 +100,25 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
     onBeforeQuery: function(qevent){
         Tine.Addressbook.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
 
-        var contactFilter = {condition: 'AND', filters: this.store.baseParams.filter};
+        const filter = this.store.baseParams.filter;
 
         if (this.addPathFilter) {
-            var pathFilter = {field: 'path', operator: 'contains', value: qevent.query};
 
-            this.store.baseParams.filter = [{
+            const queryFilter = _.find(filter, {field: 'query'});
+            const pathFilter = {field: 'path', operator: 'contains', value: queryFilter.value};
+
+            _.remove(filter, queryFilter);
+
+            filter.push({
                 condition: "OR", filters: [
-                    contactFilter,
+                    queryFilter,
                     pathFilter
                 ]
-            }];
-        } else {
-            this.store.baseParams.filter = [contactFilter];
+            });
         }
 
         if (this.userOnly) {
-            this.store.baseParams.filter.push({field: 'type', operator: 'equals', value: 'user'});
+            filter.push({field: 'type', operator: 'equals', value: 'user'});
         }
     },
     
