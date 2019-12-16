@@ -1026,7 +1026,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (isset($path)) {
-                $grantRecord = $this->_backend->createAclNode($path);
+                try {
+                    $grantRecord = $this->_backend->createAclNode($path);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // some strange race condition ...
+                    throw $tenf;
+                }
             } else {
                 throw $tenf;
             }
