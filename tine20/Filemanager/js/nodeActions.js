@@ -44,29 +44,33 @@ Tine.Filemanager.nodeActions.CreateFolder = {
     scope: this,
     handler: function() {
         var app = this.initialConfig.app,
-            currentFolderNode = this.initialConfig.selections[0],
+            currentFolderNode = this.initialConfig.selections[0] || this.initialConfig.filteredContainer,
+            currentPath = _.get(currentFolderNode, 'data.path'),
             nodeName = Tine.Filemanager.Model.Node.getContainerName();
 
+        if (! currentPath) return;
+
         Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), function(btn, text) {
-            if(currentFolderNode && btn == 'ok') {
+            if(currentFolderNode && btn === 'ok') {
                 if (! text) {
                     Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), String.format(app.i18n._('You have to supply a {0} name!'), nodeName));
                     return;
                 }
 
-                var filename = currentFolderNode.get('path') + '/' + text;
+                var filename = currentPath + '/' + text;
                 Tine.Filemanager.fileRecordBackend.createFolder(filename);
             }
         }, this);
     },
     actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
         var enabled = !isFilterSelect
-            && records && records.length == 1
-            && records[0].get('type') == 'folder'
+            && records && records.length === 1
+            && records[0].get('type') === 'folder'
             && window.lodash.get(records, '[0].data.account_grants.addGrant', false);
 
         if (! _.get(records, 'length') && filteredContainers) {
             enabled = _.get(filteredContainers, '[0].account_grants.addGrant', false);
+            action.initialConfig.filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
         }
 
         action.setDisabled(!enabled);
