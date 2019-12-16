@@ -1222,13 +1222,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.editBuffer = [];
         }
 
-//        options.preserveSelection = options.hasOwnProperty('preserveSelection') ? options.preserveSelection : true;
-//        options.preserveScroller = options.hasOwnProperty('preserveScroller') ? options.preserveScroller : true;
+        if (! options.preserveSelection) {
+            this.actionUpdater.updateActions([]);
+        }
 
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
-
-        this.actionUpdater.updateActions([]);
     },
 
     /**
@@ -1254,9 +1253,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.grid.getSelectionModel().selectRow(row, true);
                 }
             }, this);
-        } else {
-            this.actionUpdater.updateActions([], this.getFilteredContainers());
         }
+        this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
 
         // restore scroller
         if (Ext.isNumber(options.preserveScroller)) {
@@ -1571,7 +1569,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} options
      */
     loadGridData: function(options) {
-        var options = options || {};
+        options = options || {};
 
         Ext.applyIf(options, {
             callback:           Ext.emptyFn,

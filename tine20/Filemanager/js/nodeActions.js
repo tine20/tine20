@@ -16,6 +16,48 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
     actionConfigs: Tine.Filemanager.nodeActions
 }))();
 
+/**
+ * helper for disabled field
+ *
+ * @param action
+ * @param grants
+ * @param records
+ * @param isFilterSelect
+ * @param filteredContainers
+ * @returns {*}
+ */
+Tine.Filemanager.nodeActions.actionUpdater = function(action, grants, records, isFilterSelect, filteredContainers) {
+    // run default updater
+    Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, grants, records, isFilterSelect);
+
+    // check filtered node if nothing is selected
+    action.initialConfig.filteredContainer = null;
+    if (! _.get(records, 'length') && filteredContainers) {
+        const filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
+        const filteredContainerGrants = filteredContainers[0].account_grants;
+
+        records = [filteredContainer];
+        Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, filteredContainerGrants, records, false);
+
+        action.initialConfig.filteredContainer = filteredContainer;
+    }
+
+    let disabled = _.isFunction(action.isDisabled) ? action.isDisabled() : action.disabled;
+
+    // node specific checks (@TODO what about folders with quarantined contents?)
+    disabled = window.lodash.reduce(records, function(disabled, record) {
+        const isVirtual = _.isFunction(record.isVirtual) ? record.isVirtual() : false;
+        const isQuarantined = !!+record.get('is_quarantined');
+        const constraint = record.get('type') === action.initialConfig.constraint;
+        return disabled
+            || (!action.initialConfig.allowVirtual && isVirtual)
+            || (!action.initialConfig.allowQuarantined && isQuarantined)
+            || (action.initialConfig.constraint && !constraint);
+    }, disabled);
+
+    action.setDisabled(disabled);
+};
+
 // /**
 //  * reload
 //  */
@@ -97,13 +139,12 @@ Tine.Filemanager.nodeActions.Edit = {
     // actionType: 'edit',
     scope: this,
     handler: function () {
-        if(this.initialConfig.selections.length == 1) {
-            Tine.Filemanager.NodeEditDialog.openWindow({record: this.initialConfig.selections[0]});
+        const selectedNode = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer')
+        if(selectedNode) {
+            Tine.Filemanager.NodeEditDialog.openWindow({record: selectedNode});
         }
     },
-    actionUpdater: function(action, grants, records, isFilterSelect) {
-        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect);
-    }
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
@@ -161,6 +202,8 @@ Tine.Filemanager.nodeActions.SystemLink = {
     app: 'Filemanager',
     requiredGrant: 'readGrant',
     allowMultiple: false,
+    allowVirtual: true,
+    allowQuarantined: true,
     text: 'System Link', // _('System Link')
     iconCls: 'action_system_link',
     disabled: true,
@@ -169,7 +212,7 @@ Tine.Filemanager.nodeActions.SystemLink = {
     handler: function () {
         var _ = window.lodash,
             app = this.initialConfig.app,
-            record = this.initialConfig.selections[0];
+            record = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
 
         Ext.MessageBox.show({
             title: i18n._('System Link'),
@@ -183,9 +226,7 @@ Tine.Filemanager.nodeActions.SystemLink = {
             icon: Ext.MessageBox.INFO
         });
     },
-    actionUpdater: function(action, grants, records, isFilterSelect) {
-        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect);
-    }
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
@@ -202,7 +243,9 @@ Tine.Filemanager.nodeActions.Delete = {
     handler: function (button, event) {
         var app = this.initialConfig.app,
             nodeName = '',
-            nodes = this.initialConfig.selections;
+            nodes = _.get(this, 'initialConfig.selections', []).length ?
+                _.get(this, 'initialConfig.selections', []) :
+                _.compact([_.get(this, 'initialConfig.filteredContainer')]);
 
         if (nodes && nodes.length) {
             for (var i = 0; i < nodes.length; i++) {
@@ -240,7 +283,8 @@ Tine.Filemanager.nodeActions.Delete = {
                 }
             }
         });
-    }
+    },
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
@@ -319,11 +363,12 @@ Tine.Filemanager.nodeActions.Preview = {
     disabled: true,
     iconCls: 'action_preview',
     scope: this,
+    constraint: 'file',
     handler: function () {
-        var selections = this.initialConfig.selections;
-        if (selections.length > 0) {
-            var selection = selections[0];
-            if (selection && selection.get('type') === 'file') {
+        var selection = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
+
+        if (selection) {
+            if (selection.get('type') === 'file') {
                 Tine.Filemanager.QuickLookPanel.openWindow({
                     record: selection,
                     initialApp: this.initialConfig.initialApp || null,
@@ -332,9 +377,7 @@ Tine.Filemanager.nodeActions.Preview = {
             }
         }
     },
-    actionUpdater: function(action, grants, records, isFilterSelect) {
-        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect);
-    }
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
@@ -351,9 +394,9 @@ Tine.Filemanager.nodeActions.Publish = {
     handler: function() {
         var app = this.initialConfig.app,
             i18n = app.i18n,
-            selections = this.initialConfig.selections;
+            selected = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
 
-        if (selections.length != 1) {
+        if (! selected) {
             return;
         }
 
@@ -369,7 +412,7 @@ Tine.Filemanager.nodeActions.Publish = {
             date.setDate(date.getDate() + 30);
 
             var record = new Tine.Filemanager.Model.DownloadLink({
-                node_id: selections[0].id,
+                node_id: selected.id,
                 expiry_time: date,
                 password: password
             });
@@ -377,7 +420,7 @@ Tine.Filemanager.nodeActions.Publish = {
             Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {
                 success: function (record) {
                     Tine.Filemanager.FilePublishedDialog.openWindow({
-                        title: selections[0].data.type == 'folder' ? app.i18n._('Folder has been published successfully') : app.i18n._('File has been published successfully'),
+                        title: selected.data.type === 'folder' ? app.i18n._('Folder has been published successfully') : app.i18n._('File has been published successfully'),
                         record: record,
                         password: password
                     });
@@ -385,37 +428,7 @@ Tine.Filemanager.nodeActions.Publish = {
             });
         }, this);
     },
-    actionUpdater: function(action, grants, records, isFilterSelect) {
-
-        Tine.Filemanager.nodeActions.checkDisabled(action, grants, records, isFilterSelect);
-    }
-};
-
-/**
- *
- * helper for disabled field
- * @param action
- * @param grants
- * @param records
- * @param isFilterSelect
- * @returns {*}
- */
-Tine.Filemanager.nodeActions.checkDisabled = function(action, grants, records, isFilterSelect, enabled = true)
-{
-    // run default updater
-    Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, grants, records, isFilterSelect);
-
-    var _ = window.lodash,
-        disabled = _.isFunction(action.isDisabled) ? action.isDisabled() : action.disabled;
-
-    // if enabled check for not accessible node and disable
-    if (! disabled || !enabled) {
-
-        action.setDisabled(window.lodash.reduce(records, function(disabled, record) {
-            var isVirtual = _.isFunction(record.isVirtual) ? record.isVirtual() : false;
-            return disabled || isVirtual || record.get('is_quarantined') == '1';
-        }, false));
-    }
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
