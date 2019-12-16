@@ -1227,6 +1227,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
+
+        this.actionUpdater.updateActions([]);
     },
 
     /**
@@ -1253,7 +1255,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }, this);
         } else {
-            this.actionUpdater.updateActions([], this.getFilteredContainers())
+            this.actionUpdater.updateActions([], this.getFilteredContainers());
         }
 
         // restore scroller
