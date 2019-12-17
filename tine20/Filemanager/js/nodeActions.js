@@ -34,7 +34,7 @@ Tine.Filemanager.nodeActions.actionUpdater = function(action, grants, records, i
     action.initialConfig.filteredContainer = null;
     if (! _.get(records, 'length') && filteredContainers) {
         const filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
-        const filteredContainerGrants = filteredContainers[0].account_grants;
+        const filteredContainerGrants = _.get(filteredContainers,'[0].account_grants',{});
 
         records = [filteredContainer];
         Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, filteredContainerGrants, records, false);
