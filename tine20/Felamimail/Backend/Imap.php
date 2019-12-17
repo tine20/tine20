@@ -742,17 +742,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     protected function _parseStructureNonMultiPart($_structure, $_partId)
     {
-        if (is_array($_structure[0]) || is_array($_structure[1])) {
+        if (is_array($_structure[0]) || is_array($_structure[1]) || ! is_array($_structure) || count($_structure) < 7) {
             $structStr = print_r($_structure, true);
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $structStr);
-            throw new Felamimail_Exception_IMAP('Invalid structure. String expected, got array: ' . $structStr);
+            throw new Felamimail_Exception_IMAP('Invalid structure: ' . $structStr);
         }
-        if (count($_structure) < 7) {
-            $structStr = print_r($_structure, true);
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $structStr);
-            throw new Felamimail_Exception_IMAP('Invalid structure. count < 7: ' . $structStr);
-        }
-        
+
         $structure = $this->_getBasicNonMultipartStructure($_partId);
         
         /** basic fields begin **/
