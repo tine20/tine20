@@ -132,8 +132,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $timeEndLogin = microtime(true);
         $loginTime = $timeEndLogin - $timeEndConnect;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' CONNECT TIME: ' . $connectTime . ' seconds');
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' LOGIN TIME: ' . $loginTime . ' seconds');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' CONNECT TIME: ' . $connectTime . ' seconds');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' LOGIN TIME: ' . $loginTime . ' seconds');
     }
     
     /**
@@ -1139,7 +1141,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $flags = array(Zend_Mail_Storage::FLAG_SEEN);
         }
 
-        $result = $this->_protocol->append($folder, $message, $flags);
+        try {
+            $result = $this->_protocol->append($folder, $message, $flags);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // log message string for future examination
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage() . ' Broken message: ' . $message);
+        }
         if (! $result) {
             /**
              * @see Zend_Mail_Storage_Exception
