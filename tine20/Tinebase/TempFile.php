@@ -163,8 +163,12 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 throw new Tinebase_Exception_Backend('av scan found: ' . $avResult->message);
             }
         }
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $path);
+        finfo_close($finfo);
         
-        return $this->createTempFile($path, $name, $type, $size, $error);
+        return $this->createTempFile($path, $name, $mimeType ?: $type, $size, $error);
     }
     
     /**
