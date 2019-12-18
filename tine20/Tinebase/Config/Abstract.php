@@ -504,9 +504,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         while (false !== ($direntry = readdir($dh))) {
             if (strpos($direntry, '.inc.php') === (strlen($direntry) - 8)) {
-                // TODO do lint!?! php -l $confdFolder . DIRECTORY_SEPARATOR . $direntry
-                /** @noinspection PhpIncludeInspection */
-                $tmpArray = include($confdFolder . DIRECTORY_SEPARATOR . $direntry);
+                $tmpArray = $this->_getConfdFileData($confdFolder . DIRECTORY_SEPARATOR . $direntry);
                 if (false !== $tmpArray && is_array($tmpArray)) {
                     foreach ($tmpArray as $key => $value) {
                         self::$_configFileData[$key] = $value;
@@ -545,7 +543,6 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' can\'t create cached composed config file "' .$filename );
         } else {
-            
             fputs($fh, "<?php\n\nreturn ");
             fputs($fh, var_export(self::$_configFileData, true));
             fputs($fh, ';');
@@ -563,7 +560,39 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 . ' Renamed to file ' . $filename);
         }
     }
-    
+
+    /**
+     * returns conf.d file data
+     * - lint file
+     * - check PHP opening tag
+     *
+     * @param $filename
+     * @return array|boolean
+     */
+    protected function _getConfdFileData($filename)
+    {
+        $result = @shell_exec("php -l $filename");
+        if (preg_match('/parse error/i', $result)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' PHP syntax check failed for ' . $filename . ': ' . $result);
+            return false;
+        }
+
+        // check first chars to prevent leading spaces
+        $content = file_get_contents($filename, false, null, 0, 200);
+        if (strpos($content, '<?php') !== 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not find leading PHP open tag in ' . $filename);
+            return false;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Including config file ' . $filename);
+
+        /** @noinspection PhpIncludeInspection */
+        return include($filename);
+    }
+
     /**
      * returns data from application specific config.inc.php file
      *
