@@ -1,6 +1,6 @@
 const expandFilter = (filterSpec, filter) => {
+    filter = filter || [];
     if (filterSpec) {
-        filter = filter || [];
         if (filterSpec.config) {
             filter = filter.concat(Tine.Tinebase.configManager.get(
                 filterSpec.config.name, filterSpec.config.appName));
@@ -15,8 +15,8 @@ const expandFilter = (filterSpec, filter) => {
         if (filterSpec.favorite) {
             Tine.log.warn('Implement me');
         }
-        return filter;
     }
+    return filter;
 };
 
 export {
