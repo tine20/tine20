@@ -265,6 +265,8 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ['field' => 'adr_one_lon', 'operator' => 'isnull', 'value' => null]
         ];
 
+        $oldACL = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+
         if (isset($params['tag'])) {
             $tag = Tinebase_Tags::getInstance()->searchTags(
                 new Tinebase_Model_TagFilter(array(
@@ -277,10 +279,12 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         // get all contacts in a container
         $filter = new Addressbook_Model_ContactFilter($filter);
+        $records = Addressbook_Controller_Contact::getInstance()->search($filter);
+        echo 'Found records: ' . $records->count() . "\n";
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
         $result = Addressbook_Controller_Contact::getInstance()->updateMultiple($filter, array());
-
-        echo 'Updated ' . $result['totalcount'] . ' Record(s)';
+        echo 'Updated ' . $result['totalcount'] . ' Record(s)' . "\n";
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldACL);
     }
 
     const ROLE_ID = 'roleId';
