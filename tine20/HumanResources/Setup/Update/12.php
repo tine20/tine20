@@ -45,7 +45,7 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         if (!$scheduler->hasTask('HumanResources_Controller_DailyWTReport::CalculateDailyWorkingTimeReportsTask')) {
             HumanResources_Scheduler_Task::addCalculateDailyWorkingTimeReportsTask($scheduler);
         }
-        $this->addApplicationUpdate('HumanResources', '12.6', self::RELEASE012_UPDATE001);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.6', self::RELEASE012_UPDATE001);
     }
 
     public function update002()
@@ -57,8 +57,8 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
             'humanresources_contract')->fetchAll();
         Tinebase_Core::getLogger()->warn('found these deprecated HR contract data:' . print_r($rows, true));
 
-        $this->_backend->dropTable('humanresources_workingtime', 'HumanResources');
-        $this->_backend->dropTable('humanresources_breaks', 'HumanResources');
+        $this->_backend->dropTable('humanresources_wt_dailyreport', HumanResources_Config::APP_NAME);
+        $this->_backend->dropTable('humanresources_breaks', HumanResources_Config::APP_NAME);
 
         Setup_SchemaTool::updateSchema([
             HumanResources_Model_Contract::class,
@@ -115,7 +115,7 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
 
         }
 
-        $this->addApplicationUpdate('HumanResources', '12.7', self::RELEASE012_UPDATE002);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.7', self::RELEASE012_UPDATE002);
     }
 
     public function update003()
@@ -143,7 +143,7 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         HumanResources_Setup_Initialize::createFreeTimeTypes(false);
         HumanResources_Setup_Initialize::createWorkingTimeModels();
 
-        $this->addApplicationUpdate('HumanResources', '12.8', self::RELEASE012_UPDATE003);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.8', self::RELEASE012_UPDATE003);
     }
 
     public function update004()
@@ -155,6 +155,6 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
             'id' => 'vacation'
         ], 'id = "03"');
 
-        $this->addApplicationUpdate('HumanResources', '12.9', self::RELEASE012_UPDATE004);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.9', self::RELEASE012_UPDATE004);
     }
 }
