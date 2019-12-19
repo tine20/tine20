@@ -238,6 +238,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 dataIndex: 'name',
                 renderer: Ext.ux.PercentRendererWithName
             },{
+                id: 'hash',
+                header: this.app.i18n._("MD5 Hash"),
+                width: 40,
+                sortable: true,
+                dataIndex: 'hash',
+                hidden: true
+            },{
                 id: 'size',
                 header: this.app.i18n._("Size"),
                 width: 40,
