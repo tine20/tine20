@@ -120,6 +120,9 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update003()
     {
+        // force closed transaction
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        
         $workingTimeSchemeCtrl = HumanResources_Controller_WorkingTimeScheme::getInstance();
         /** @var HumanResources_Model_WorkingTimeScheme $workingTimeScheme */
         foreach ($workingTimeSchemeCtrl->getAll() as $workingTimeScheme) {
