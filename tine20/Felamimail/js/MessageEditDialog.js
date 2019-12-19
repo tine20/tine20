@@ -1227,20 +1227,21 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.recipientGrid.syncRecipientsToRecord();
     },
 
-    onAfterApplyChanges: function(closeWindow) {
+    onAfterApplyChanges: async function(closeWindow) {
         // grr. onRecordLoad hides loadMask
         this.showLoadMask.defer(10, this);
 
         if (this.autoSave) {
-            this.saveAsDraftPromise
+            await this.saveAsDraftPromise
                 .then(() => {
                     if (this.draftUid) {
                         // autodelete draft when message is send
                         return this.deleteDraft(this.draftUid)
                     }
                 })
-                .then(_.bind(Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges, this, closeWindow));
         }
+
+        Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges.call(this, closeWindow);
     },
 
     /**
