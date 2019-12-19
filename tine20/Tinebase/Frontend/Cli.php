@@ -433,7 +433,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
         $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
 
-        $db = Tinebase_Core::getDb();
         foreach ((array)$args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
