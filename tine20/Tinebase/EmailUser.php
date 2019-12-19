@@ -304,10 +304,21 @@ class Tinebase_EmailUser
     public static function manages($_configType)
     {
         $config = self::getConfig($_configType);
+        return (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
+    }
 
-        $result = (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
-        
-        return $result;
+    /**
+     * return true if smtp backend supports AliasesDispatchFlag
+     *
+     * @return bool
+     */
+    public static function smtpAliasesDispatchFlag()
+    {
+        if (! self::manages(Tinebase_Config::SMTP)) {
+            return false;
+        }
+        $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        return $plugin->supportsAliasesDispatchFlag();
     }
     
     /**
@@ -465,5 +476,24 @@ class Tinebase_EmailUser
         }
 
         return $result;
+    }
+
+    /**
+     * @param mixed $plugin
+     * @return false|int
+     */
+    public static function isEmailUserPlugin($plugin)
+    {
+        $pluginName = is_object($plugin) ? get_class($plugin) : $plugin;
+        return preg_match('/^Tinebase_EmailUser/', $pluginName);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isEmailSystemAccountConfigured()
+    {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        return (! empty($imapConfig) && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) && $imapConfig['useSystemAccount']);
     }
 }

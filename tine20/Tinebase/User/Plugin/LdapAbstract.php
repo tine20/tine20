@@ -46,6 +46,15 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     protected $_options = array();
 
     /**
+     * supportAliasesDispatchFlag
+     *
+     * @var boolean
+     *
+     * @todo remove DRY (see Tinebase_User_Plugin_Abstract)
+     */
+    protected $_supportAliasesDispatchFlag = false;
+
+    /**
      * the constructor
      * @param array $_options
      * @throws Tinebase_Exception
@@ -295,5 +304,16 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
         }
 
         return $emailUsername;
+    }
+
+    /**
+     * @return bool
+     *
+     * @todo remove DRY (see Tinebase_User_Plugin_Abstract)
+     * @todo make this a generic "capabilities" feature
+     */
+    public function supportsAliasesDispatchFlag()
+    {
+        return $this->_supportAliasesDispatchFlag;
     }
 }

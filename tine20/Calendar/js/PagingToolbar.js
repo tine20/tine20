@@ -317,7 +317,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         });
 
         this.yearField = new Ext.form.Label({
-            text: this.tb.dtStart.format('Y'),
+            text: this.tb.dtStart.format('o'),
             style: 'padding-left: 3px'
         });
 
@@ -375,7 +375,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
             var wkStart = dtStart.add(Date.DAY, dtStart.getDay() < 1 ? 1 : 0);
             
             this.wkField.setValue(parseInt(wkStart.getWeekOfYear(), 10));
-            this.yearField.setText(from.format('Y'));
+            this.yearField.setText(from.format('o'));
         }
     },
     render: function() {

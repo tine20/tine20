@@ -1726,7 +1726,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             ['field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()]
         );
 
-        $definition = Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+        $definition = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
             'model' => Sales_Model_Invoice::class,
             'name' => 'invoice_timesheet_xlsx'
         ]))->getFirstRecord()->getId();

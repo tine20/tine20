@@ -61,7 +61,7 @@ class Tinebase_EmailUser_Imap_Standard extends Tinebase_User_Plugin_Abstract imp
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
         
-        $emailUser->emailUsername = $this->_getEmailUserName($_user);
+        $emailUser->emailUsername = $this->getEmailUserName($_user);
         
         if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
             $_user->smtpUser  = $emailUser;

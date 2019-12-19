@@ -21,6 +21,13 @@ use Jumbojett\OpenIDConnectClient;
 class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     const REQUEST_TYPE = 'JSON-RPC';
+
+    /**
+     * the application name
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Tinebase';
     
     /**
      *
@@ -34,7 +41,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
-        'Tinebase_Model_BLConfig',
+        'BLConfig',
+        'ImportExportDefinition'
     ];
 
     /**
@@ -932,9 +940,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $persistentFilters = array();
         }
 
-        // manage email user settings
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
-        $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
         $smtpConfig = $manageSmtpEmailUser ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
 
         $userRegistryData = array(
@@ -946,7 +952,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'jsonKey' => Tinebase_Core::get('jsonKey'),
             'userApplications' => $user->getApplications()->toArray(),
             'NoteTypes' => $this->getNoteTypes(),
-            'manageImapEmailUser' => $manageImapEmailUser,
+            'manageImapEmailUser' => Tinebase_EmailUser::manages(Tinebase_Config::IMAP),
             'manageSmtpEmailUser' => $manageSmtpEmailUser,
             'stateInfo' => Tinebase_State::getInstance()->loadStateInfo(),
             'mustchangepw' => $user->mustChangePassword(),
@@ -958,6 +964,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'primarydomain' => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains' => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
             'additionaldomains' => isset($smtpConfig['additionaldomains']) ? $smtpConfig['additionaldomains'] : '',
+            'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
         );
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

@@ -431,7 +431,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 let isVirtual = false;
 
                 try {
-                    isVirtual = this.currentFolderNode.attributes.nodeRecord.isVirtual();
+                    const filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
+                    isVirtual = filteredContainer.isVirtual();
                 } catch(e) {}
 
                 action.setDisabled(!allowAdd || isVirtual);

@@ -1851,7 +1851,7 @@ class Addressbook_JsonTest extends TestCase
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
         $this->assertTrue(is_array($registryData['importDefinitions']['results']));
 
-        $options = $registryData['defaultImportDefinition']['plugin_options'];
+        $options = $registryData['defaultImportDefinition']['plugin_options_json'];
         $this->assertTrue(is_array($options));
         $this->assertEquals('Addressbook_Model_Contact', $options['model']);
         $this->assertTrue(is_array($options['autotags']));

@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -155,7 +155,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
     public function testCreateTrashOnTheFly()
     {
         // make sure that the delimiter is correct / fetched from server
-        $capabilities = $this->_controller->updateCapabilities($this->_account);
+        $this->_controller->updateCapabilities($this->_account);
 
         // set another trash folder
         $this->_account->trash_folder = 'newtrash';
@@ -163,6 +163,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $accountBackend = new Felamimail_Backend_Account();
         $account = $accountBackend->update($this->_account);
         $newtrash = $this->_controller->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_TRASH);
+        self::assertNotNull($newtrash);
     }
 
     /**
@@ -297,16 +298,11 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      */
     public function testChangeSystemAccountEmailAddress()
     {
-        $user = Admin_Controller_User::getInstance()->get(Tinebase_Core::getUser()->getId());
+        $user = $this->_createUserWithEmailAccount();
         $user->accountEmailAddress = 'someaddress@' . TestServer::getPrimaryMailDomain();
-        // TODO find out why we lose the right sometimes ...
-        try {
-            Admin_Controller_User::getInstance()->update($user);
-        } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::markTestSkipped('FIXME: somehow we lost the view/manage accounts right ...');
-        }
-        $this->_userChanged = true;
-        $account = $this->_controller->search()->getFirstRecord();
+
+        Admin_Controller_User::getInstance()->update($user);
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
 
         self::assertEquals($user->accountEmailAddress, $account->name,
             'name mismatch: ' . print_r($account->toArray(), true));
@@ -354,14 +350,14 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
     public function testChangeAccountFromByUserUpdate()
     {
+        $user = $this->_createUserWithEmailAccount();
+
         // change name of user
-        $user = Tinebase_Core::getUser();
         $user->accountLastName = 'lala';
         $updatedUser = Admin_Controller_User::getInstance()->update($user);
-        $this->_userChanged = true;
 
         // from of system account should change
-        $account = Felamimail_Controller_Account::getInstance()->get($this->_account->getId());
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
         self::assertEquals($updatedUser->accountFullName, $account->from);
     }
 
@@ -440,7 +436,10 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
     {
         $this->_testNeedsTransaction();
 
-        $user = $this->_createUserWithEmailAccount();
+        $creds = TestServer::getInstance()->getTestCredentials();
+        $user = $this->_createUserWithEmailAccount([
+            'password' => $creds['password']
+        ]);
         Tinebase_Core::setUser($user);
         $json = new Felamimail_Frontend_Json();
         $result = $json->searchAccounts([]);

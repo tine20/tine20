@@ -593,6 +593,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         // decline exception -> no implicit fallout as exception is still in initialContainer via displaycal
         $exception = $event->getRecord()->exdate->filter('is_deleted', 0)->getFirstRecord();
+        self::assertGreaterThan(0, count($exception->attendee));
         $exception->attendee[0]->status = Calendar_Model_Attender::STATUS_DECLINED;
         $updatedException = Calendar_Controller_Event::getInstance()->update($exception);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());

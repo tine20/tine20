@@ -859,6 +859,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'container'             => Tinebase_Model_Filter_Container::class,
         'tag'                   => Tinebase_Model_Filter_Tag::class,
         'user'                  => Tinebase_Model_Filter_User::class,
+        'application'           => Tinebase_Model_Filter_Text::class,
         'numberableStr'         => Tinebase_Model_Filter_Text::class,
         'numberableInt'         => Tinebase_Model_Filter_Int::class,
     );

@@ -84,7 +84,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      */
     public function getExportDefinitionsForApplication(Tinebase_Model_Application $_application)
     {
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
             array('field' => 'application_id',  'operator' => 'equals',  'value' => $_application->getId()),
             array('field' => 'type',            'operator' => 'equals',  'value' => 'export'),
         ));

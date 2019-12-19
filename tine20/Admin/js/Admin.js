@@ -188,6 +188,24 @@ Tine.Admin.init = function () {
             });
         }
 
+        // TODO use hooking mechanism
+        if (Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_importexportdefinitions')
+        ) {
+            tree.push({
+                text: translation.gettext('Import Export Definitions'),
+                cls: "treemain",
+                iconCls: 'admin-node-customfields',
+                allowDrag: false,
+                allowDrop: true,
+                id: "importexportdefinitions",
+                icon: false,
+                children: [],
+                leaf: null,
+                expanded: true,
+                dataPanelType: "importexportdefinitions",
+            });
+        }
+        
         _.each(tree, function(item, idx) {
             item.pos = item.pos || (100 + 100 * idx);
         });
@@ -320,6 +338,9 @@ Tine.Admin.init = function () {
                 break;
             case 'customfields':
                 Tine.Admin.customfield.show();
+                break;
+            case 'importexportdefinitions':
+                Tine.Admin.importexportdefinitions.show();
                 break;
             case 'serverinfo':
                 Tine.Admin.getServerInfo(function(response) {

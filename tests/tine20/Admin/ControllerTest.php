@@ -13,28 +13,6 @@
  */
 class Admin_ControllerTest extends TestCase
 {
-    public function testAddUserWithAlreadyExistingEmailData()
-    {
-        $this->_skipIfLDAPBackend();
-
-        $userToCreate = TestCase::getTestUser([
-            'accountLoginName'      => 'phpunitadminjson',
-            'accountEmailAddress'   => 'phpunitadminjson@' . TestServer::getPrimaryMailDomain(),
-        ]);
-        $userToCreate->smtpUser = new Tinebase_Model_EmailUser(array(
-            'emailAddress'     => $userToCreate->accountEmailAddress,
-        ));
-        $pw = Tinebase_Record_Abstract::generateUID(12);
-        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
-        // remove user from tine20 table and add again
-        $backend = new Tinebase_User_Sql();
-        $backend->deleteUserInSqlBackend($user);
-
-        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
-        $this->_usernamesToDelete[] = $user->accountLoginName;
-        self::assertEquals($user->accountEmailAddress, $userToCreate->accountEmailAddress);
-    }
-
     /**
      * testCustomFieldCreate
      *

@@ -104,7 +104,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      * @var string
      */
     protected $_subconfigKey = 'postfix';
-    
+
     /**
      * postfix config
      * 
@@ -155,6 +155,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         $this->_clientId = Tinebase_Core::getTinebaseId();
         
         $this->_destinationTable = $this->_config['prefix'] . $this->_config['destinationTable'];
+
+        $this->_supportAliasesDispatchFlag = true;
     }
     
     /**
@@ -657,7 +659,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         
         $rawData[$this->_propertyMapping['emailAddress']]  = $_user->accountEmailAddress;
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
-        $rawData[$this->_propertyMapping['emailUsername']] = $this->_getEmailUserName($_user);
+        $rawData[$this->_propertyMapping['emailUsername']] = $this->getEmailUserName($_user);
         
         if (empty($rawData[$this->_propertyMapping['emailAddress']])) {
             $rawData[$this->_propertyMapping['emailAliases']]  = null;

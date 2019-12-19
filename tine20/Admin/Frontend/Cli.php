@@ -155,49 +155,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * repair groups
-     * 
-     * * add missing lists
-     * * checks if list container has been deleted (and hides groups if that's the case)
-     * 
-     * @see 0010401: add repair script for groups without list_ids
-     */
-    public function repairGroups()
-    {
-        echo 'use Tinebase.sanitizeGroupListSync instead';
-        /*
-        $count = 0;
-        $be = new Tinebase_Group_Sql();
-        $listBackend = new Addressbook_Backend_List();
-        
-        $groups = $be->getGroups();
-        
-        foreach ($groups as $group) {
-            if ($group->list_id == null) {
-                $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
-                $group->list_id = $list->getId();
-                $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Add missing list for group ' . $group->name);
-                $be->updateGroupInSqlBackend($group);
-                $count++;
-            } else if ($group->visibility === Tinebase_Model_Group::VISIBILITY_DISPLAYED) {
-                try {
-                    $list = $listBackend->get($group->list_id);
-                    $listContainer = Tinebase_Container::getInstance()->get($list->container_id);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                            . ' Hide group '  . $group->name . ' without list / list container.');
-                    $group->visibility = Tinebase_Model_Group::VISIBILITY_HIDDEN;
-                    $be->updateGroupInSqlBackend($group);
-                    $count++;
-                }
-            }
-        }
-        echo $count . " groups repaired!\n";*/
-    }
-    
-    /**
      * overwrite Samba options for users
      *
      */
