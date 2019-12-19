@@ -2748,18 +2748,19 @@ class Tinebase_FileSystem implements
     /**
      * copy tempfile data to file path
      * 
-     * @param  mixed   $tempFile
+     * @param mixed $tempFile
          Tinebase_Model_Tree_Node     with property hash, tempfile or stream
          Tinebase_Model_Tempfile      tempfile
          string                       with tempFile id
          array                        with [id] => tempFile id (this is odd IMHO)
          stream                       stream ressource
          null                         create empty file
-     * @param  string  $path
+     * @param string $path
+     * @param boolean $deleteTempFileAfterCopy
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function copyTempfile($tempFile, $path)
+    public function copyTempfile($tempFile, $path, $deleteTempFileAfterCopy = false)
     {
         if ($tempFile === null) {
             $tempStream = fopen('php://memory', 'r');
@@ -2788,6 +2789,10 @@ class Tinebase_FileSystem implements
         // TODO revision properties need to be inherited
 
         $node = $this->setAclFromParent($path);
+
+        if ($tempFile instanceof Tinebase_Model_TempFile && $deleteTempFileAfterCopy) {
+            Tinebase_TempFile::getInstance()->deleteTempFile($tempFile);
+        }
 
         return $node;
     }

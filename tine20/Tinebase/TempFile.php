@@ -361,4 +361,20 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         file_put_contents($path, $content);
         return $this->createTempFile($path);
     }
+
+    /**
+     * @param $id
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function deleteTempFile($id)
+    {
+        $tempfile = $id instanceof Tinebase_Model_TempFile ? $id : $this->get($id);
+        if (file_exists($tempfile->path)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Deleting temp file ' . $tempfile->path);
+            unlink($tempfile->path);
+        }
+        return $this->delete($id);
+    }
 }
