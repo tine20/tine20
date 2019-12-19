@@ -298,7 +298,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             if (file_exists($file->path)) {
                 unlink($file->path);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' File no longer found: ' . $file->path);
             }
 
@@ -311,7 +311,11 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
 
         $result = 0;
         foreach (new DirectoryIterator(Tinebase_Core::getTempDir()) as $directoryIterator) {
-            if ($directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime()))) {
+            $filename = $directoryIterator->getFilename();
+            // preserve directories and dot-files
+            if (strpos($filename, '.') !== 0 && $directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime()))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Deleting file ' . $filename);
                 unlink($directoryIterator->getPathname());
                 ++$result;
             }
@@ -356,5 +360,21 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $path = self::getTempPath();
         file_put_contents($path, $content);
         return $this->createTempFile($path);
+    }
+
+    /**
+     * @param $id
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function deleteTempFile($id)
+    {
+        $tempfile = $id instanceof Tinebase_Model_TempFile ? $id : $this->get($id);
+        if (file_exists($tempfile->path)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Deleting temp file ' . $tempfile->path);
+            unlink($tempfile->path);
+        }
+        return $this->delete($id);
     }
 }

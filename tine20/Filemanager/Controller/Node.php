@@ -900,7 +900,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                         basename($_statpath), Tinebase_Model_Tree_FileObject::TYPE_FILE, $_type);
                 } else {
                     try {
-                        $this->_backend->copyTempfile($_tempFileId, $_statpath);
+                        $this->_backend->copyTempfile($_tempFileId, $_statpath, true);
                     } catch (Tinebase_Exception_Record_NotAllowed $e) {
                         if ('quota exceeded' === $e->getMessage()) {
                             $this->_backend->unlink($_statpath);
