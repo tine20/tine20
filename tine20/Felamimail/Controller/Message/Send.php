@@ -810,14 +810,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getAttachmentType($attachment, $_message)
     {
-        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment') {
-            if (isset($attachment['tempFile']) && $attachment['tempFile']) {
-                return 'tempfile';
-            } else {
-                return 'filenode';
-            }
-        }
-
         if (isset($attachment['attachment_type'])) {
             return $attachment['attachment_type'];
         } elseif (isset($attachment['type'])
