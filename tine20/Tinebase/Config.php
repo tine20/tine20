@@ -796,15 +796,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
         ),
+        /**
+         * TODO add AUTODETECT (check for webpack-asset.json -> RELEASE)
+         */
         self::BUILD_TYPE => array(
             //_('Build Type')
-            'label'                 => 'Build Type',
+            'label' => 'Build Type',
             //_('One of: DEBUG, DEVELOPMENT, RELEASE')
-            'description'           => 'One of: DEBUG, DEVELOPMENT, RELEASE',
-            'type'                  => 'string',
+            'description' => 'One of: DEBUG, DEVELOPMENT, RELEASE',
+            'type' => 'string',
             'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => false,
+            'setByAdminModule' => false,
+            'setBySetupModule' => false,
+            'default' => 'DEVELOPMENT',
         ),
         /**
          * for example: 'de'
