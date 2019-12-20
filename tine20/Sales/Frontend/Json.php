@@ -748,7 +748,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
-        if (count($invoice['positions']) > 500) {
+        if (is_array($invoice['positions']) && count($invoice['positions']) > 500) {
             // limit invoice positions to 500 to make sure browser storage quota is not exceeded
             // TODO add paging
             $invoice['positions'] = array_slice($invoice['positions'], 0, 499);
