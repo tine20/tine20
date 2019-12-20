@@ -75,6 +75,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
 
         $cfCfg = $this->_createCustomField('YomiName', Calendar_Model_Event::class, 'record');
 
+        $contact = Addressbook_Controller_Contact::getInstance()->getAll()->getFirstRecord();
+
         $filter = [
             'name' => 'PHPUnit testFilter',
             'description' => 'a test filter created by PHPUnit',
@@ -89,7 +91,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                     'value' => [[
                         'field' => ':id',
                         'operator' => 'in',
-                        'value' => [['id' => 'one'], ['id' => 'two']]
+                        'value' => [['id' => $contact->getId()]]
                     ]]
                 ]
             ]]
@@ -103,12 +105,11 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         );
 
         $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
-
         $this->assertEquals(1, $searchResult['totalcount']);
         $this->assertTrue(isset($searchResult['results'][0]), 'filter not found in results: ' . print_r($searchResult['results'], true));
 
-        $filter['filters'][0]['value']['value'][0]['value'][0] = $filter['filters'][0]['value']['value'][0]['value'][0]['id'];
-        $filter['filters'][0]['value']['value'][0]['value'][1] = $filter['filters'][0]['value']['value'][0]['value'][1]['id'];
+        $filter['filters'][0]['value']['value'][0]['value'][0] = $contact->toArray();
+
         $this->_assertSavedFilterData($filter, $searchResult['results'][0]);
     }
     
@@ -367,7 +368,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                     $this->assertEquals($requestFilter['value'], $responseFilter['value'], 'wrong due date');
                     break;
                 case 'customfield':
-                    $this->assertEquals($requestFilter['value'], $responseFilter['value'], 'wrong due date');
+                    $this->assertEquals($requestFilter['value']['value'][0]['value'][0]['n_fileas'], $responseFilter['value']['value'][0]['value'][0]['n_fileas'], 'wrong contact');
                 default:
                     // do nothting
                     break;
