@@ -539,6 +539,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
      * @return array
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _setMailRecipients(Zend_Mail $_mail, Felamimail_Model_Message $_message)
     {
@@ -580,8 +581,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (count($invalidEmailAddresses) > 0) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
             $messageText = '<' . implode(',', $invalidEmailAddresses) . '>: ' . $translation->_('Invalid address format');
-            $fe = new Felamimail_Exception($messageText);
-            throw $fe;
+            throw new Tinebase_Exception_SystemGeneric($messageText);
         }
         
         return $nonPrivateRecipients;
@@ -810,14 +810,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getAttachmentType($attachment, $_message)
     {
-        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment') {
-            if (isset($attachment['tempFile']) && $attachment['tempFile']) {
-                return 'tempfile';
-            } else {
-                return 'filenode';
-            }
-        }
-
         if (isset($attachment['attachment_type'])) {
             return $attachment['attachment_type'];
         } elseif (isset($attachment['type'])
