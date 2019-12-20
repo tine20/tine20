@@ -77,10 +77,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             evalGrants: false
         });
 
+        this.initSelectionModel();
         this.initToolbarAndContextMenu();
         this.initStore();
         this.initColumnModel();
-        this.initSelectionModel();
 
         this.actionUpdater.updateActions(this.selModel, [_.get(this, 'record.data')]);
 
