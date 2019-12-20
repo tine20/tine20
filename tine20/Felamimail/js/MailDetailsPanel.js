@@ -85,6 +85,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
        this.tbar = new Ext.Toolbar({
            items: [
+               '->',
                this.action_openInFmail
            ]
        });
