@@ -794,7 +794,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $part = $this->_getFileNodeAttachment($attachment);
                 break;
             case 'tempfile':
-            case 'attachment':
                 $part = $this->_getTempFileAttachment($attachment);
                 break;
             default:
@@ -812,7 +811,15 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _getAttachmentType($attachment, $_message)
     {
         if (isset($attachment['attachment_type'])) {
-            return $attachment['attachment_type'];
+            if ($attachment['attachment_type'] === 'attachment') {
+                if (isset($attachment['tempFile'])) {
+                    return 'tempfile';
+                } else {
+                    return 'filenode';
+                }
+            } else {
+                return $attachment['attachment_type'];
+            }
         } elseif (isset($attachment['type'])
             && $attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
             && $_message->original_id instanceof Felamimail_Model_Message
