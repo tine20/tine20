@@ -502,7 +502,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
                     $return .= ' ' . $translate->_($attribute) . ' (' . $tmpDiff->getTranslatedDiffText() . ')';
                 } else {
-                    $oldData = $diff->oldData[$attribute];
+                    $oldData = $diff->oldData ? $diff->oldData[$attribute] : null;
                     if(is_array($oldData)) {
                         $oldDataString = '';
                         foreach($oldData as $key => $val) {
