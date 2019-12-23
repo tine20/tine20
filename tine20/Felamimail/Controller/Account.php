@@ -278,15 +278,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         $this->_createSharedEmailUser($_record);
+        $this->_createOrUpdateSharedCredentials($_record);
+    }
 
-        $_record->credentials_id = $this->_createSharedCredentials($_record->user, $_record->password);
-        if ($_record->smtp_user && $_record->smtp_password) {
+    protected function _createOrUpdateSharedCredentials($account)
+    {
+        $account->credentials_id = $this->_createSharedCredentials($account->user, $account->password);
+        if ($account->smtp_user && $account->smtp_password) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
             }
-            $_record->smtp_credentials_id = $this->_createSharedCredentials($_record->smtp_user, $_record->smtp_password);
+            $account->smtp_credentials_id = $this->_createSharedCredentials($account->smtp_user, $account->smtp_password);
         } else {
-            $_record->smtp_credentials_id = $_record->credentials_id;
+            $account->smtp_credentials_id = $account->credentials_id;
         }
     }
 
@@ -514,6 +518,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record, [], false);
             $this->_checkIfEmailUserExists($user);
             Tinebase_EmailUser_XpropsFacade::updateEmailUsers($_record);
+        }
+
+        if (! empty($_record->password)) {
+            $this->_createOrUpdateSharedCredentials($_record);
+            $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectSetPassword($user->getId(), $_record->password);
         }
     }
 
@@ -1429,8 +1439,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * create a shared credential cache and return new credentials id
      *
-     * @param Felamimail_Model_Account $_account
-     * @param string $_key
+     * @param string $_username
+     * @param string $_password
      * @return string
      */
     protected function _createSharedCredentials($_username, $_password)
