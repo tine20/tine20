@@ -158,11 +158,11 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         
         $data = array();
         foreach ($_counters as $counter => $value) {
-            if ($value{0} == '+' || $value{0} == '-') {
+            if ($value[0] == '+' || $value[0] == '-') {
                 // increment or decrement values
                 $intValue = (int) substr($value, 1);
                 $quotedIdentifier = $this->_db->quoteIdentifier($counter);
-                if ($value{0} == '-') {
+                if ($value[0] == '-') {
                     $data[$counter] = $this->_dbCommand->getIfElse($quotedIdentifier . ' >= ' . $intValue, $quotedIdentifier . ' - ' . $intValue, '0');
                     $folder->{$counter} = ($folder->{$counter} >= $intValue) ? $folder->{$counter} - $intValue : 0;
                 } else {
