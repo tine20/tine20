@@ -782,6 +782,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $part = $this->_getFileNodeAttachment($attachment);
                 break;
             case 'tempfile':
+            case 'attachment':
                 $part = $this->_getTempFileAttachment($attachment);
                 break;
             default:
