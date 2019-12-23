@@ -513,7 +513,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
                     $return .= ' ' . $translate->_($attribute) . ' (' . $tmpDiff->getTranslatedDiffText() . ')';
                 } else {
-                    $oldData = $diff->oldData[$attribute];
+                    $oldData = $diff->oldData ? $diff->oldData[$attribute] : null;
 
                     if (isset($recordProperties[$attribute]) && ($oldData || $value) &&
                             isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
