@@ -49,12 +49,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      *   - port port for IMAP server [optional, default = 110]
      *   - ssl 'SSL' or 'TLS' for secure sockets
      *   - folder select this folder [optional, default = 'INBOX']
+     *   - account
      *
      * @param  object $params mail reader specific parameters
-     * @param Felamimail_Model_Account $account
      */
     /** @noinspection MagicMethodsValidityInspection */
-    public function __construct($params, $account)
+    public function __construct($params)
     {
         /** @noinspection OffsetOperationsInspection */
         $this->_has['flags'] = true;
@@ -78,7 +78,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
         
         $this->connectAndLogin($params);
-        $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($account, $this);
+
+        if ($params->account) {
+            $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($params->account, $this);
+        } else {
+            $capabilities['capabilities'] = [];
+        }
 
         $folderToSelect = isset($params->folder) ? $params->folder : 'INBOX';
         $selectParams = $capabilities && in_array('CONDSTORE', $capabilities['capabilities']) ? ['(CONDSTORE)'] : [];

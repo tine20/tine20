@@ -62,9 +62,10 @@ class Felamimail_Backend_ImapProxy
         $params->password = isset($params->password) ? $params->password : '';
         $params->port     = isset($params->port)     ? $params->port     : null;
         $params->ssl      = isset($params->ssl)      ? $params->ssl      : false;
+        $params->account  = $account;
 
         $this->_params = $params;
-        $this->_backend = new Felamimail_Backend_Imap($params, $account);
+        $this->_backend = new Felamimail_Backend_Imap($params);
     }
     
     /**
