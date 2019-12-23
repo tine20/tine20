@@ -37,7 +37,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
     /**
      * Layout
      */
-    layout: 'hfit',
+    layout: 'fit',
 
     initComponent: function () {
         this.addEvents(
@@ -51,6 +51,28 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
 
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
+        }
+
+        this.tbar = new Ext.Toolbar({
+            items: [{
+                xtype: 'tbfill',
+                order: 50
+            }],
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tine-Filemanager-DocumentPreview'
+            }],
+        });
+
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            evalGrants: true
+        });
+
+        this.actionUpdater.addActions(this.tbar.items);
+        this.actionUpdater.updateActions([this.record]);
+
+        if (this.tbar.items.getCount() < 2) {
+            this.tbar.hide();
         }
 
         Tine.Filemanager.DocumentPreview.superclass.initComponent.apply(this, arguments);
@@ -74,12 +96,12 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             _.each(this.record.get('attachments'), function(attachmentData) {
                 records.push(new Tine.Tinebase.Model.Tree_Node(attachmentData));
             });
-        } else if (this.record.get('preview_count')) {
+        } else if (+this.record.get('preview_count')) {
             records.push(this.record);
         }
 
         records = _.filter(records, function(record) {
-            return !!record.get('preview_count');
+            return !!+record.get('preview_count');
         });
 
         if (! records.length) {
@@ -129,19 +151,38 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             var text = '';
 
             if (!Tine.Tinebase.configManager.get('filesystem').createPreviews) {
-                text = '<br/><br/>' + me.app.i18n._('Sorry, Tine 2.0 would like to show you the contents of the file displayed.') + ' ' +
+                text = '<b>' + me.app.i18n._('Sorry, Tine 2.0 would like to show you the contents of the file displayed.') + '</b><br/><br/>' +
                     me.app.i18n._('This is possible for .doc, .jpg, .pdf and even more file formats.') + '<br/>' +
                     '<a href="https://www.tine20.com/kontakt/" target="_blank">' +
                     me.app.i18n._('Interested? Then let us know!') + '</a><br/>' +
                     me.app.i18n._('We are happy make you a non-binding offer.');
+            } else {
+                text = '<b>' + me.app.i18n._('No preview available yet - Please try again in a few minutes.') + '</b>';
             }
 
+            const contenttype =  me.record.get('contenttype');
+            const iconCls = me.record.get('type') === 'folder' ? 'mime-icon-folder' :
+                contenttype ? Tine.Tinebase.common.getMimeIconCls(contenttype) : 'mime-icon-file';
+
             me.add({
-                html: '<b>' + me.app.i18n._('No preview available yet - Please try again in a few minutes.') + '</b>' + text,
-                xtype: 'panel',
-                frame: true,
-                border: true
+                border: false,
+                layout: 'vbox',
+                layoutConfig: {
+                    align: 'stretch'
+                },
+                items: [{
+                    html: text,
+                    frame: true,
+                    border: true
+                }, {
+                    border: false,
+                    flex: 1,
+                    xtype: 'container',
+                    cls: iconCls,
+                    style: 'background-repeat: no-repeat; background-position: center; background-size: contain;'
+                }]
             });
+
             me.doLayout();
         });
     }

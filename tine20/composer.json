@@ -103,11 +103,11 @@
     "zendframework/zend-diactoros": "^1.6",
     "zendframework/zend-http": "2.5.*",
     "zendframework/zend-stratigility": "^2.1",
-    "zendframework/zendframework1": "1.12.20pl35 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl36 as 1.12.20"
   },
   "require-dev": {
     "phing/phing": "2.16.*",
-    "phpunit/phpunit": "4.6.*",
+    "phpunit/phpunit": "5.2.*",
     "tedivm/jshrink": "~1.0",
     "zendframework/zend-psr7bridge": "^0.2"
   },

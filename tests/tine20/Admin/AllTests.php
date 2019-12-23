@@ -27,10 +27,10 @@ class Admin_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin All Tests');
         $suite->addTestSuite(Admin_ControllerTest::class);
         $suite->addTestSuite(Admin_Controller_UserTest::class);
-        $suite->addTestSuite(Admin_JsonTest::class);
         $suite->addTestSuite(Admin_CliTest::class);
         $suite->addTestSuite(Admin_Acl_RightsTest::class);
         $suite->addTestSuite(Admin_Import_AllTests::class);
+        $suite->addTestSuite(Admin_Frontend_AllTests::class);
         return $suite;
     }
 }
