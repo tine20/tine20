@@ -796,6 +796,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             case 'tempfile':
                 $part = $this->_getTempFileAttachment($attachment);
                 break;
+            case 'messagepart':
             default:
                 $part = $this->_getMessagePartAttachment($attachment);
         }
@@ -814,6 +815,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             if ($attachment['attachment_type'] === 'attachment') {
                 if (isset($attachment['tempFile'])) {
                     return 'tempfile';
+                } else if ($this->_isMessagePartAttachment($attachment)) {
+                    return 'messagepart';
                 } else {
                     return 'filenode';
                 }
@@ -1056,7 +1059,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getMessagePartAttachment(&$attachment)
     {
-        if (! isset($attachment['id']) || strpos($attachment['id'], '_') === false) {
+        if (! $this->_isMessagePartAttachment($attachment)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No valid message id/part id');
             return null;
         }
@@ -1067,6 +1070,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $part->decodeContent();
 
         return $part;
+    }
+
+    protected function _isMessagePartAttachment($attachment)
+    {
+        return isset($attachment['id']) && strpos($attachment['id'], '_') !== false;
     }
     
     /**
