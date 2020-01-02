@@ -811,7 +811,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getAttachmentType($attachment, $_message)
     {
-        if (isset($attachment['attachment_type'])) {
+        if (isset($attachment['type'])
+            && $attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+            && $_message->original_id instanceof Felamimail_Model_Message
+        ) {
+            return 'rfc822';
+        } elseif (isset($attachment['attachment_type'])) {
             if ($attachment['attachment_type'] === 'attachment') {
                 if (isset($attachment['tempFile'])) {
                     return 'tempfile';
@@ -823,12 +828,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             } else {
                 return $attachment['attachment_type'];
             }
-        } elseif (isset($attachment['type'])
-            && $attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
-            && $_message->original_id instanceof Felamimail_Model_Message
-        ) {
-            return 'rfc822';
         } elseif ($attachment instanceof Tinebase_Model_TempFile || isset($attachment['tempFile'])) {
+            // tempfile last because we other attachment_types also have a tempfile
             return 'tempfile';
         }
 
