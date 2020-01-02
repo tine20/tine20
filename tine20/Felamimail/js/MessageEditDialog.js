@@ -377,7 +377,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         var attachments = [];
         if ((Tine[this.app.appName].registry.get('preferences').get('emlForward')
-                && Tine[this.app.appName].registry.get('preferences').get('emlForward') == 0)
+                && (! Tine[this.app.appName].registry.get('preferences').get('emlForward') ||
+                    Tine[this.app.appName].registry.get('preferences').get('emlForward') === '0'
+                )
+            )
             || this.draftOrTemplate
         ) {
 
