@@ -1937,9 +1937,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'link has no anchor tag: ' . $message['body']);
 
         // download link id is at the end of message body
-        $downloadLinkId = trim(substr($message['body'], -56, 40));
-        $dl = Filemanager_Controller_DownloadLink::getInstance()->get($downloadLinkId);
-        self::assertTrue(Filemanager_Controller_DownloadLink::getInstance()->validatePassword($dl, 'test'));
+        if (preg_match('@download/show/([a-z0-9]+)"@', $message['body'], $matches)) {
+            $dl = Filemanager_Controller_DownloadLink::getInstance()->get($matches[1]);
+            self::assertTrue(Filemanager_Controller_DownloadLink::getInstance()->validatePassword($dl, 'test'));
+        } else {
+            self::fail('no download link found in message: ' . print_r($message, true));
+        }
     }
 
     /**
