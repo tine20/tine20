@@ -943,7 +943,7 @@ class Setup_Frontend_Cli
                 'adminLoginName' => $username,
                 'adminPassword'  => $password,
                 'expires'        => $tomorrow,
-            ));
+            ), true);
             echo "Created new admin user '$username' that expires tomorrow.\n";
         }
     }
