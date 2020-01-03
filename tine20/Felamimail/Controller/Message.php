@@ -1015,7 +1015,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $expanded = array();
 
                 // if a winmail.dat exists, try to expand it
-                if (preg_match('/^winmail[.]*\.dat/i', $filename) && Tinebase_Core::systemCommandExists('tnef')) {
+                if (preg_match('/^winmail[.]*\.dat/i', $filename) && (
+                    Tinebase_Core::systemCommandExists('tnef') || Tinebase_Core::systemCommandExists('ytnef')
+                )) {
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Got winmail.dat attachment (contentType=' . $part['contentType'] . '). Trying to extract files ...');
@@ -1061,6 +1063,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string $messageId
      * @param string $partId
+     * @return array
      */
     protected function _expandWinMailDat($messageId, $partId)
     {
@@ -1103,46 +1106,32 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // create path for this message id
-        if (!is_dir($path . $messageId)) {
-            if (file_exists($path . $messageId)) {
-                unlink($path . $messageId);
+        $pathWithMessageId = $path . $messageId;
+        if (!is_dir($pathWithMessageId)) {
+            if (file_exists($pathWithMessageId)) {
+                unlink($pathWithMessageId);
             }
 
-            mkdir($path . $messageId);
+            mkdir($pathWithMessageId);
 
             $part = $this->getMessagePart($messageId, $partId);
 
-            $path = $path . $messageId . '/';
-            $datFile = $path . 'winmail.dat';
+            $datFile = $pathWithMessageId . '/winmail.dat';
 
             $stream = $part->getDecodedStream();
             $tmpFile = fopen($datFile, 'w');
             stream_copy_to_stream($stream, $tmpFile);
             fclose($tmpFile);
 
-            // find out filenames
-            $files = array();
-            $fileString = explode(chr(10), Tinebase_Core::callSystemCommand('tnef -t ' . $datFile));
+            $this->_extractWinMailDatToDir($datFile, $pathWithMessageId);
+        }
 
-            foreach ($fileString as $line) {
-                $split = explode('|', $line);
-                $clean = trim($split[0]);
-                if (!empty($clean)) {
-                    $files[] = $clean;
-                }
-            }
+        $dir = new DirectoryIterator($pathWithMessageId);
+        $files = array();
 
-            // extract files
-            Tinebase_Core::callSystemCommand('tnef -C ' . $path . ' ' . $datFile);
-
-        } else { // temp files still existing
-            $dir = new DirectoryIterator($path . $messageId);
-            $files = array();
-
-            foreach ($dir as $file) {
-                if ($file->isFile() && $file->getFilename() != 'winmail.dat') {
-                    $files[] = $file->getFilename();
-                }
+        foreach ($dir as $file) {
+            if ($file->isFile() && $file->getFilename() != 'winmail.dat') {
+                $files[] = $file->getFilename();
             }
         }
 
@@ -1150,6 +1139,21 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $files;
     }
 
+    /**
+     * @param $datFile
+     * @param $path
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _extractWinMailDatToDir($datFile, $path)
+    {
+        if (Tinebase_Core::systemCommandExists('tnef')) {
+            Tinebase_Core::callSystemCommand('tnef -C ' . $path . ' ' . $datFile);
+        } elseif (Tinebase_Core::systemCommandExists('ytnef')) {
+            Tinebase_Core::callSystemCommand('ytnef -f ' . $path . ' ' . $datFile);
+        } else {
+            throw new Tinebase_Exception_NotFound('no (y)tnef executable found');
+        }
+    }
 
     /**
      * fetch attachment filename from part
