@@ -965,10 +965,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * </code>
      *
      * @param array $_options [hash that may contain override values for admin user name and password]
+     * @param boolean $onlyAdmin
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function createInitialAccounts($_options)
+    public static function createInitialAccounts($_options, $onlyAdmin = false)
     {
         if (! isset($_options['adminPassword']) || ! isset($_options['adminLoginName'])) {
             throw new Tinebase_Exception_InvalidArgument('Admin password and login name have to be set when creating initial account.', 503);
@@ -982,24 +983,26 @@ class Tinebase_User implements Tinebase_Controller_Interface
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
-        // create the replication user
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new replication user.');
+        if (! $onlyAdmin) {
+            // create the replication user
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new replication user.');
 
-        $replicationUser = static::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
-            Tinebase_Group::getInstance()->getDefaultReplicationGroup());
-        if (null !== $replicationUser) {
-            $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
-            if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
-                $password = Tinebase_Record_Abstract::generateUID(12);
+            $replicationUser = static::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
+                Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+            if (null !== $replicationUser) {
+                $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
+                if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
+                    $password = Tinebase_Record_Abstract::generateUID(12);
+                }
+                Tinebase_User::getInstance()->setPassword($replicationUser, $password);
             }
-            Tinebase_User::getInstance()->setPassword($replicationUser, $password);
+
+            // create the anonymous user
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new anonymous user.');
+
+            static::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS,
+                Tinebase_Group::getInstance()->getDefaultAnonymousGroup());
         }
-
-        // create the anonymous user
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new anonymous user.');
-
-        static::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS,
-            Tinebase_Group::getInstance()->getDefaultAnonymousGroup());
 
         $oldAcl = $addressBookController->doContainerACLChecks(false);
         $oldRequestContext = $addressBookController->getRequestContext();
