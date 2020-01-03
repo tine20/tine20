@@ -978,7 +978,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Got winmail.dat attachment (contentType=' . $part['contentType'] . '). Trying to extract files ...');
 
-                    if ($part['contentType'] == 'application/ms-tnef' || $part['contentType'] == 'text/plain') {
+                    if (preg_match('/^application\/.{0,4}ms-tnef$/', $part['contentType']) || $part['contentType'] == 'text/plain') {
                         $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
 
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
