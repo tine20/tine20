@@ -1679,14 +1679,14 @@ class Felamimail_Controller_MessageTest extends TestCase
      */
     public function testTnefAttachment()
     {
-        if (! Tinebase_Core::systemCommandExists('tnef')) {
-            $this->markTestSkipped('The tnef command could not be found!');
+        if (! Tinebase_Core::systemCommandExists('tnef') && ! Tinebase_Core::systemCommandExists('ytnef')) {
+            $this->markTestSkipped('The (y)tnef command could not be found!');
         }
         
         $cachedMessage = $this->messageTestHelper('winmail_dat_attachment.eml');
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
     
-        $this->assertEquals(2, count($message->attachments));
+        $this->assertEquals(2, count($message->attachments), print_r($message->attachments, true));
         
         $this->assertEquals('bookmark.htm', $message->attachments[0]['filename']);
         $this->assertEquals('zappa_av1.jpg', $message->attachments[1]['filename']);
