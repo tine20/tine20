@@ -2177,7 +2177,7 @@ class Tinebase_FileSystem implements
         $hashDirectory = $this->_basePath . '/' . substr($hash, 0, 3);
         if (!file_exists($hashDirectory)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
-            if (mkdir($hashDirectory, 0700) === false) {
+            if (@mkdir($hashDirectory, 0700) === false) {
                 if (!is_dir($hashDirectory)) {
                     throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
                 }
