@@ -162,7 +162,18 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
             $message->getId()
         );
 
+        $path = Tinebase_Core::getTempDir() . '/winmail/' . $message->getId() . '/';
+        $content = file_get_contents($path . 'bookmark.htm');
+        $dataSize = strlen($content);
+        $this->assertStringStartsWith('<!DOCTYPE NETSCAPE-Bookmark-file-1>', $content);
+
         self::assertEquals(2, count($syncrotonModelEmail->attachments), print_r($syncrotonModelEmail->attachments, true));
+        $this->assertEquals($dataSize, $syncrotonModelEmail->attachments[0]->estimatedDataSize);
+
+        // try to get file by reference
+        $syncrotonFileReference = $controller->getFileReference($syncrotonModelEmail->attachments[0]->fileReference);
+        $this->assertEquals('text/html', $syncrotonFileReference->contentType);
+        $this->assertEquals($dataSize, strlen(stream_get_contents($syncrotonFileReference->data)));
     }
 
     /**
