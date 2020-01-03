@@ -570,7 +570,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         foreach ($this->_sqlPlugins as $plugin) {
             try {
-                $userId = $this->_getPluginUserId($plugin, $user);
+                $userId = $user instanceof Tinebase_Model_User ? $this->_getPluginUserId($plugin, $user) : $user;
                 $plugin->inspectSetPassword($userId, $password, $encrypt);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not change plugin password: ' . $e);
