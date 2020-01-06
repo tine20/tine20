@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -873,14 +873,9 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testForwardMessageWithAttachment()
     {
-        $testFolder = $this->_getFolder($this->_testFolderName);
-        $message = fopen(dirname(__FILE__) . '/../files/multipart_related.eml', 'r');
-        Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
+        $message = $this->_appendMessageforForwarding();
 
-        $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
-        $message = $this->_searchForMessageBySubject($subject, $this->_testFolderName);
-
-        $fwdSubject = 'Fwd: ' . $subject;
+        $fwdSubject = 'Fwd: ' . $message['subject'];
         $forwardMessageData = array(
             'account_id' => $this->_account->getId(),
             'subject' => $fwdSubject,
@@ -910,6 +905,16 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
+    }
+
+    protected function _appendMessageforForwarding()
+    {
+        $testFolder = $this->_getFolder($this->_testFolderName);
+        $message = fopen(dirname(__FILE__) . '/../files/multipart_related.eml', 'r');
+        Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
+
+        $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
+        return $this->_searchForMessageBySubject($subject, $this->_testFolderName);
     }
 
     /**
@@ -2392,5 +2397,33 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $result = $this->_json->deleteDraft($draft['messageuid'], $draft['account_id']);
         self::assertTrue($result['success']);
         $this->_assertDraftNotFound($draft);
+    }
+
+    public function testSaveDraftWithForwardAttachment()
+    {
+        $message = $this->_appendMessageforForwarding();
+
+        $subject = 'Verbessurüngsvorschlag';
+        $fwdSubject = 'Fwd: ' . $subject;
+        $forwardMessageData = array(
+            'account_id' => $this->_account->getId(),
+            'subject' => $fwdSubject,
+            'to' => array($this->_getEmailAddress()),
+            'body' => "aaaaaä <br>",
+            'headers' => array('X-Tine20TestMessage' => 'jsontest'),
+            'original_id' => $message['id'],
+            'attachments' => [[
+                'type' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
+                'name' => $subject,
+                'size' => '9709', // needed?
+                'id' => $message['id'],
+                'attachment_type' => 'attachment',
+            ]],
+            'flags' => Zend_Mail_Storage::FLAG_PASSED,
+        );
+
+        $draft = $this->_json->saveDraft($forwardMessageData);
+        $this->_foldersToClear = array($this->_account->drafts_folder);
+        self::assertNotEmpty($draft['messageuid'], 'messageuid of draft message missing: ' . print_r($draft, true));
     }
 }
