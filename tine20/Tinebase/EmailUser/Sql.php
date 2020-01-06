@@ -476,7 +476,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (!$queryResult) {
             return false;
         }
-        
+
         return true;
     }
 

@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -14,6 +14,8 @@
  */
 class Felamimail_Controller_AccountTestWithXprops extends Felamimail_Controller_AccountTest
 {
+    protected $_oldSetting = null;
+
     /**
      * This method is called before the first test of this test class is run.
      *
@@ -35,6 +37,13 @@ class Felamimail_Controller_AccountTestWithXprops extends Felamimail_Controller_
     {
         parent::setUp();
 
+        $this->_oldSetting = Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS};
         Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = $this->_oldSetting;
     }
 }

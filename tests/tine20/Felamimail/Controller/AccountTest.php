@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -418,6 +418,8 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
     public function testCreateUserInternalAccount()
     {
+        $this->_skipIfXpropsUserIdDeactivated();
+
         $scleverExtraAccount = $this->_createUserInternalAccount($this->_personas['sclever']);
         $json = new Felamimail_Frontend_Json();
         $result = $json->searchAccounts([]);
@@ -427,9 +429,18 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             }
         }
 
-        // TODO check email home
-//        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-//        $data = $emailUserBackend->getById($userid);
+        // check email home
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($scleverExtraAccount, [
+            'user_id' => Felamimail_Controller_Account::getUserInternalEmailUserId($scleverExtraAccount)
+        ]);
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $extraUserInBackend = $emailUserBackend->getRawUserById($emailUser);
+        self::assertNotFalse($extraUserInBackend, 'email user not found');
+
+        // compare with original email home (should be different!)
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($this->_personas['sclever']);
+        $originalUserInBackend = $emailUserBackend->getRawUserById($emailUser);
+        self::assertNotEquals($originalUserInBackend['home'], $extraUserInBackend['home']);
     }
 
     public function testCreateNewUserAccountWithINBOX()

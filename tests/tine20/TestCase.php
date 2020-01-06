@@ -1053,4 +1053,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return $account;
     }
+
+    protected function _skipIfXpropsUserIdDeactivated()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()
+            || ! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS})
+        {
+            self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS config required');
+        }
+    }
 }

@@ -328,27 +328,49 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         $translation = Tinebase_Translation::getTranslation($this->_applicationName);
 
+        if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            // this leads to major problems otherwise ...
+            throw new Tinebase_Exception_UnexpectedValue($translation->_('userInternal accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS'));
+        }
         if (! $_record->email) {
             throw new Tinebase_Exception_UnexpectedValue($translation->_('userInternal accounts need to have an email set'));
         }
         if (! $_record->user_id) {
             throw new Tinebase_Exception_UnexpectedValue($translation->_('userInternal accounts need to have an user_id set'));
         }
+
+        $newEmailAddress = $_record->email;
+
         $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
-        $user->accountEmailAddress = $_record->email;
+        if ($user->accountEmailAddress === $newEmailAddress) {
+            throw new Tinebase_Exception_UnexpectedValue($translation->_('Please choose a new email address for userInternal accounts'));
+        }
+        $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+        // needed to set new email address in copyUser
+        $systemEmailUser->accountEmailAddress = $newEmailAddress;
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $_record->setId(Tinebase_Record_Abstract::generateUID());
-        $userId = substr($_record->user_id, 0,32) . '#~#' . substr($_record->getId(), 0, 5);
-        $user->accountLoginName = $emailUserBackend->getLoginName($userId, $user->accountLoginName, $_record->email);
 
-        Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record, $user);
+        // make sure that system account exists before copy
+        if (! $emailUserBackend->userExists($systemEmailUser)) {
+            throw new Tinebase_Exception_UnexpectedValue($translation->_('system account for user does not exist'));
+        }
 
-        $emailUserBackend->copyUser($user, $userId);
+        Tinebase_EmailUser_XpropsFacade::setXprops($_record);
+        $newEmailUserId = self::getUserInternalEmailUserId($_record);
+        $newEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user, [
+            'user_id' => $newEmailUserId,
+            'accountLoginName' => $emailUserBackend->getLoginName($newEmailUserId, $user->accountLoginName, $_record->email),
+        ]);
+        $newEmailUser->accountEmailAddress = $_record->email;
+        Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record, $newEmailUser);
+        // FIXME email is overwritten by addSystemAccountConfigValues
+        $_record->email = $newEmailAddress;
 
+        // copy emailuser accounts (with new email address)
+        $emailUserBackend->copyUser($systemEmailUser, $newEmailUserId);
         $smtpEmailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-
         try {
-            $smtpEmailUserBackend->copyUser($user, $userId);
+            $smtpEmailUserBackend->copyUser($systemEmailUser, $newEmailUserId);
         } catch (Exception $e) {
             if (Tinebase_Exception::isDbDuplicate($e)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
@@ -357,6 +379,20 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             } else {
                 throw $e;
             }
+        }
+    }
+
+    /**
+     * @param $account
+     * @param string $xprop
+     * @return string
+     */
+    public static function getUserInternalEmailUserId($account, $xprop = Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP)
+    {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            return Tinebase_EmailUser_XpropsFacade::getEmailUserId($account, $xprop);
+        } else {
+            return substr($account->user_id, 0, 32) . '#~#' . substr($account->getId(), 0, 5);
         }
     }
 
