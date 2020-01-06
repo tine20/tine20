@@ -1276,7 +1276,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         record.beginEdit();
 
-        if (isCopy != true) {
+        if (isCopy !== true) {
             // remove from ui before update
             var oldRecord = store.getAt(store.findExact('id', record.getId()));
             if (oldRecord && oldRecord.hasOwnProperty('ui')) {
@@ -1334,7 +1334,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         record.endEdit();
 
-        if (isCopy == true) {
+        if (isCopy === true) {
             record.isCopy = true;
             Tine.Tinebase.data.Clipboard.push(record);
             if (record.ui) {

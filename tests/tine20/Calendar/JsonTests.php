@@ -101,7 +101,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_getPersona('sclever')->getId());
         $contentSeqBefore = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         
-        $eventData = $this->_getEvent($now)->toArray();
+        $eventData = $this->_getEventWithAlarm($now)->toArray();
         
         $tag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
             'name' => 'phpunit-' . substr(Tinebase_Record_Abstract::generateUID(), 0, 10),
@@ -2457,5 +2457,19 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         $searchResultData = $this->_uit->searchEvents(false, array());
         self::assertGreaterThanOrEqual(0, $searchResultData['totalcount']);
+    }
+
+    public function testCopyEvent()
+    {
+        $eventData = $this->testCreateEvent();
+
+        $eventData['id'] = null;
+        $eventData['alarms'][0]['record_id'] = null;
+        $eventData['alarms'][0]['id'] = Tinebase_Record_Abstract::generateUID();
+
+        $copiedEventData = $this->_uit->saveEvent($eventData);
+
+        $this->assertTrue($eventData['alarms'][0]['id'] !== $copiedEventData['alarms'][0]['id']);
+        $this->assertTrue($eventData['alarms'][0]['record_id'] !== $copiedEventData['alarms'][0]['record_id']);
     }
 }
