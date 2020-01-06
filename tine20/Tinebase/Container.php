@@ -296,6 +296,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
         $container = $this->create($_container);
+        Tinebase_Notes::getInstance()->addSystemNote($container, Tinebase_Core::getUser());
         $this->setGrants($container->getId(), $event->grants, TRUE, FALSE);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
@@ -2096,14 +2097,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        //use get (avoids cache) or getContainerById, guess its better to avoid the cache
+        // use get (avoids cache) or getContainerById, guess its better to avoid the cache
         $oldContainer = $this->get($_record->getId(), $_updateDeleted);
 
         $result = parent::update($_record);
 
         unset($result->account_grants);
         unset($oldContainer->account_grants);
-        $this->_writeModLog($result, $oldContainer);
+        $mods = $this->_writeModLog($result, $oldContainer);
+        Tinebase_Notes::getInstance()->addSystemNote($result, Tinebase_Core::getUser(),
+            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $mods);
 
         if ($_fireEvent) {
             $event = new Tinebase_Event_Record_Update();

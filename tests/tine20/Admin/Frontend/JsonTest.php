@@ -4,7 +4,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -1023,15 +1023,39 @@ class Admin_Frontend_JsonTest extends TestCase
         static::assertTrue($containerUpdated['account_grants'][0][Tinebase_Model_Grants::GRANT_ADMIN]);
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
             ->getReplicationModificationsByInstanceSeq($instance_seq);
-        static::assertEquals(2, $modifications->count(), 'modification count doesnt match');
+        static::assertEquals(3, $modifications->count(), 'modification count does not match: '
+            . print_r($modifications->toArray(), true));
         $firstModification = new Tinebase_Record_Diff(json_decode($modifications->getFirstRecord()->new_value, true));
         static::assertTrue(isset($firstModification->diff['account_grants']), 'expect account_grants to be set');
         static::assertEquals(1, count($firstModification->diff), 'expect only account_grants to be set');
         $secondModification = new Tinebase_Record_Diff(json_decode($modifications->getLastRecord()->new_value,
             true));
         static::assertTrue(isset($secondModification->diff['name']), 'expect name to be set');
-        static::assertEquals(1, count($secondModification->diff), 'expect only name to be set');
-        
+        static::assertEquals(2, count($secondModification->diff));
+
+        // check history of updated container
+        $tfj = new Tinebase_Frontend_Json();
+        $filter = array(array(
+            'field' => 'record_id',
+            'operator' => 'equals',
+            'value' => $containerUpdated['id']
+        ), array(
+            'field' => "record_model",
+            'operator' => "equals",
+            'value' => 'Tinebase_Model_Container'
+        ));
+        $sort = array(
+            'sort' => array('note_type_id', 'creation_time')
+        );
+        $history = $tfj->searchNotes($filter, $sort);
+        $this->assertEquals(5, $history['totalcount'], print_r($history, TRUE));
+
+        // change container via Tinebase_Frontend_Json_Container -> should also write a note
+        $tfjc = new Tinebase_Frontend_Json_Container();
+        $tfjc->renameContainer($containerUpdated['id'], 'testcontainerupdatedAgain');
+        $history = $tfj->searchNotes($filter, $sort);
+        $this->assertEquals(6, $history['totalcount'], print_r($history, TRUE));
+
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
         static::assertEquals('success', $deleteResult['status']);
     }
