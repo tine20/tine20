@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # jaruwan <luca.ingianni@gmail.com>, 2014
 # jaruwan <luca.ingianni@gmail.com>, 2014
@@ -9,496 +9,95 @@ msgstr ""
 "PO-Revision-Date: 2018-11-28 11:10+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Model/Account.php:35 js/FreeTimeEditDialog.js:277
-msgid "Personal account"
-msgid_plural "Personal accounts"
-msgstr[0] "บัญชีส่วนตัว"
+#: Controller.php:74
+msgid "You do not have admin rights on HumanResources"
+msgstr "คุณไม่มีสิทธิ์ของผู้ดูแลระบบใน HumanResources"
 
-#: Model/Account.php:53
-msgid "Quick search"
-msgstr "ค้นหาอย่างรวดเร็ว"
+#: Controller.php:104
+msgid "Wage types"
+msgstr ""
 
-#: Model/Account.php:95 js/AccountGridPanel.js:46
-msgid "Year"
-msgstr "ปี"
+#: Controller.php:111
+msgid "Free time types"
+msgstr ""
 
-#: Model/Account.php:102
-msgid "Extra free times"
-msgstr "เวลาว่างพิเศษ"
-
-#: Model/Account.php:113 Model/ExtraFreeTime.php:91 Model/FreeTime.php:103
-#: Model/Employee.php:100 js/ExtraFreeTimeEditDialog.js:153
-#: js/FreeTimeEditDialog.js:527 js/AccountEditDialog.js:165
-#: js/EmployeeEditDialog.js:502
-msgid "Description"
-msgstr "การอธิบาย"
-
-#: Model/Account.php:114 js/AccountEditDialog.js:156
-msgid "Miscellaneous"
-msgstr "เบ็ดเตล็ด"
-
-#: Model/ExtraFreeTime.php:34 js/ExtraFreeTimeEditDialog.js:97
-#: js/ExtraFreeTimeEditDialog.js:109 js/AccountEditDialog.js:78
-msgid "Extra free time"
-msgid_plural "Extra free times"
-msgstr[0] "เวลาว่างพิเศษ"
-
-#: Model/ExtraFreeTime.php:83 Model/FreeTime.php:95
-#: js/ExtraFreeTimeEditDialog.js:127
-msgid "Type"
-msgstr "ประเภท"
-
-#: Model/ExtraFreeTime.php:99 js/ExtraFreeTimeEditDialog.js:122
-msgid "Days"
-msgstr "วัน"
-
-#: Model/ExtraFreeTime.php:103 js/ExtraFreeTimeEditDialog.js:131
-msgid "Expiration date"
-msgstr "หมดเขตวันที่"
-
-#: Model/FreeTime.php:35
-msgid "Free Time"
-msgid_plural "Free Times"
-msgstr[0] "เวลาที่ว่าง"
-
-#: Model/FreeTime.php:72 Model/Contract.php:72 Model/CostCenter.php:73
-#: Model/Employee.php:36 js/FreeTimeEmployeeFilter.js:31
-#: js/EmployeeEditDialog.js:187 js/EmployeeEditDialog.js:200
-msgid "Employee"
-msgid_plural "Employees"
-msgstr[0] "ลูกจ้าง"
-
-#: Model/FreeTime.php:84 Model/Employee.php:84
-msgid "Account"
-msgstr "บัญชี"
-
-#: Model/FreeTime.php:110 js/FreeTimeEditDialog.js:377
-msgid "Status"
-msgstr "สถานะ"
-
-#: Model/FreeTime.php:118
-msgid "First Day"
-msgstr "วันแรก"
-
-#: Model/FreeTime.php:124
-msgid "Last Day"
-msgstr "วันสุดท้าย"
-
-#: Model/FreeTime.php:130
-msgid "Days Count"
-msgstr "นับวัน"
-
-#: Model/FreeTime.php:140
-msgid "Free Days"
-msgstr "วันหยุด"
-
-#: Model/WorkingTime.php:36
-msgid "Working time"
-msgid_plural "Working times"
+#: Controller.php:118 Model/WorkingTimeScheme.php:51 Model/Contract.php:137
+msgid "Working time scheme"
+msgid_plural "Working time schemes"
 msgstr[0] ""
 
-#: Model/WorkingTime.php:56 Model/Employee.php:170 js/HumanResources.js:40
-msgid "Title"
-msgstr "คำนำหน้าชื่อ"
+#: js/FreeTimeGridPanel.js:62
+msgid "Book as vacation"
+msgstr "จองเป็นพักร้อน"
 
-#: Model/WorkingTime.php:68
-msgid "Evaluation Start Time"
-msgstr ""
-
-#: Model/WorkingTime.php:74
-msgid "Evaluation End Time"
-msgstr ""
-
-#: Model/WorkingTime.php:89 js/BreakGridPanel.js:50
-msgid "Breaks"
-msgstr ""
-
-#: Model/Break.php:34 Model/Break.php:35
-msgid "Break"
-msgid_plural "Breaks"
-msgstr[0] ""
-
-#: Model/Break.php:72 js/BreakGridPanel.js:104
-msgid "Hours"
-msgstr ""
-
-#: Model/Break.php:80 js/BreakGridPanel.js:109
-msgid "Break duration"
-msgstr ""
-
-#: Model/Contract.php:34 js/ContractGridPanel.js:42
-#: js/ContractEditDialog.js:212 js/ContractEditDialog.js:225
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "สัญญา"
-
-#: Model/Contract.php:85 Model/CostCenter.php:96 js/ContractEditDialog.js:230
-msgid "Start Date"
-msgstr "วันที่เริ่มต้น"
-
-#: Model/Contract.php:96 js/ContractEditDialog.js:231
-msgid "End Date"
-msgstr "วันที่สิ้นสุด"
-
-#: Model/Contract.php:102 js/FreeTimeGridPanel.js:78
-#: js/FreeTimeGridPanel.js:79
-msgid "Vacation Days"
-msgstr "วันพักร้อน"
-
-#: Model/Contract.php:110 js/ContractEditDialog.js:242
-msgid "Feast Calendar"
-msgstr "ปฏิทินงานเทศกาล"
-
-#: Model/Contract.php:122
-msgid "Workingtime"
-msgstr "เวลาทำงาน"
-
-#: Model/CostCenter.php:34 Model/CostCenter.php:85
-#: js/CostCenterGridPanel.js:125
-msgid "Cost Center"
-msgid_plural "Cost Centers"
-msgstr[0] "ศูนย์ต้นทุน"
-
-#: Model/FreeDay.php:35
-msgid "Free Day"
-msgid_plural "Free Days"
-msgstr[0] "วันหยุด"
-
-#: Model/Employee.php:51 js/EmployeeEditDialog.js:444
-msgid "Banking Information"
-msgstr "ข้อมูลธนาคาร"
-
-#: Model/Employee.php:52
-msgid "Private Information"
-msgstr "ข้อมูลส่วนตัว"
-
-#: Model/Employee.php:64
-msgid "Is employed"
-msgstr "ถูกว่าจ้าง"
-
-#: Model/Employee.php:76
-msgid "Number"
-msgstr "หมายเลข"
-
-#: Model/Employee.php:92
-msgid "Badge Id"
-msgstr ""
-
-#: Model/Employee.php:106 js/EmployeeEditDialog.js:343
-msgid "Country"
-msgstr "ประเทศ"
-
-#: Model/Employee.php:108
-msgid "Germany"
-msgstr "เยอรมนี"
-
-#: Model/Employee.php:114
-msgid "Locality"
-msgstr "ถิ่นที่อยู่"
-
-#: Model/Employee.php:121
-msgid "Postalcode"
-msgstr "รหัสไปรษณีย์"
-
-#: Model/Employee.php:128
-msgid "Region"
-msgstr "เขต"
-
-#: Model/Employee.php:135
-msgid "Street"
-msgstr "ถนน"
-
-#: Model/Employee.php:142
-msgid "Street 2"
-msgstr "ถนน 2"
-
-#: Model/Employee.php:149
-msgid "E-Mail"
-msgstr "อีเมล"
-
-#: Model/Employee.php:156
-msgid "Telephone Number"
-msgstr "หมายเลขโทรศัพท์"
-
-#: Model/Employee.php:163
-msgid "Cell Phone Number"
-msgstr "หมายเลขโทรศัพท์เคลื่อนที่"
-
-#: Model/Employee.php:175 js/EmployeeEditDialog.js:279
-msgid "Salutation"
-msgstr "คำขึ้นต้น"
-
-#: Model/Employee.php:180
-msgid "Last Name"
-msgstr "นามสกุล"
-
-#: Model/Employee.php:185
-msgid "First Name"
-msgstr "ชื่อตัว"
-
-#: Model/Employee.php:190
-msgid "Employee name"
-msgstr "ชื่อลูกจ้าง"
-
-#: Model/Employee.php:197 js/EmployeeEditDialog.js:387
-msgid "Birthday"
-msgstr "วันเกิด"
-
-#: Model/Employee.php:204
-msgid "Account Holder"
-msgstr "เจ้าของบัญชี"
-
-#: Model/Employee.php:211
-msgid "Account Number"
-msgstr "หมายเลขบัญชี"
-
-#: Model/Employee.php:235
-msgid "Bank Name"
-msgstr "ชื่อธนาคาร"
-
-#: Model/Employee.php:242
-msgid "Code Number"
-msgstr "หมายเลขรหัส"
-
-#: Model/Employee.php:250
-msgid "Employment begin"
-msgstr "การจ้างงาน เริ่ม"
-
-#: Model/Employee.php:257
-msgid "Employment end"
-msgstr "การจ้างงาน สิ้นสุด"
-
-#: Model/Employee.php:264
-msgid "Supervisor"
-msgstr "หัวหน้า"
-
-#: Model/Employee.php:278 js/EmployeeEditDialog.js:141
-msgid "Division"
-msgstr "แผนก"
-
-#: Model/Employee.php:287 js/EmployeeEditDialog.js:148
-msgid "Health Insurance"
-msgstr "ประกันสุขภาพ"
-
-#: Model/Employee.php:293
-msgid "Profession"
-msgstr "วิชาชีพ"
-
-#: Model/Employee.php:298
-msgid "Position"
-msgstr "ตำแหน่ง"
-
-#: Model/Employee.php:304
-msgid "Contracts"
-msgstr ""
-
-#: Model/Employee.php:318
-msgid "Cost Centers"
-msgstr "ศูนย์ต้นทุน"
-
-#: Model/Employee.php:330 js/FreeTimeGridPanel.js:77
-#: js/FreeTimeGridPanel.js:275 Config.php:84
-msgid "Vacation"
-msgstr "พักร้อน"
-
-#: Model/Employee.php:343 js/AccountEditDialog.js:125
-#: js/FreeTimeGridPanel.js:73 js/FreeTimeGridPanel.js:273 Config.php:83
+#: js/FreeTimeGridPanel.js:73 js/FreeTimeGridPanel.js:273
+#: js/AccountEditDialog.js:125 Setup/Initialize.php:134 Config.php:92
+#: Model/Employee.php:345
 msgid "Sickness"
 msgstr "เจ็บป่วย"
 
-#: js/ContractGridPanel.js:150
-msgid "Vacation in same period"
-msgstr ""
+#: js/FreeTimeGridPanel.js:74 js/FreeTimeGridPanel.js:75
+msgid "Sickness Days"
+msgstr "วันที่ลาเจ็บป่วย"
 
-#: js/ContractGridPanel.js:151
-msgid ""
-"There are some vacation days matching the period of the contract you added. "
-"After saving this employee, changing the contract is not possible anymore."
-msgstr ""
+#: js/FreeTimeGridPanel.js:77 js/FreeTimeGridPanel.js:275
+#: Setup/Initialize.php:133 Config.php:93 Model/Employee.php:332
+msgid "Vacation"
+msgstr "พักร้อน"
 
-#: js/AdminPanel.js:64
-msgid "Cancel"
-msgstr "ยกเลิก"
+#: js/FreeTimeGridPanel.js:78 js/FreeTimeGridPanel.js:79 Model/Contract.php:110
+msgid "Vacation Days"
+msgstr "วันพักร้อน"
 
-#: js/AdminPanel.js:72
-msgid "OK"
-msgstr "ตกลง"
-
-#: js/AdminPanel.js:126
-msgid "Please use the following format: MM-DD"
-msgstr "กรุณาใช้รูปแบบดังต่อไปนี้: MM-DD"
-
-#: js/AdminPanel.js:219 js/ContractEditDialog.js:235
-msgid "Calendar"
-msgstr "ปฏิทิน"
-
-#: js/AdminPanel.js:220 js/ContractEditDialog.js:236
-msgid "Calendars"
-msgstr "ปฏิทิน"
-
-#: js/AdminPanel.js:231 Config.php:151
-msgid "Vacation expires"
-msgstr "พักร้อนหมด"
-
-#: js/ContractEditDialog.js:88
+#: js/FreeTimeGridPanel.js:88
 #, python-brace-format
-msgid "Edit {0}"
-msgstr "แก้ไข {0}"
-
-#: js/ContractEditDialog.js:250 js/WorkingTimeEditDialog.js:199
-#: js/AccountEditDialog.js:139
-msgid "Working Time"
+msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
 msgstr ""
 
-#: js/ContractEditDialog.js:258
-msgid "Choose the template"
-msgstr "เลือกแม่แบบ ..."
+#: js/FreeTimeGridPanel.js:135
+msgid "Could not book as vacation"
+msgstr "ไม่สามารถจองเป็นพักร้อนได้"
 
-#: js/ContractEditDialog.js:268 js/WorkingTimeEditDialog.js:225
-msgid "Working Hours per week"
-msgstr "ชั่วโมงทำงานต่อสัปดาห์"
-
-#: js/ContractEditDialog.js:276
-msgid "Vacation days of one calendar year"
-msgstr "วันพักร้อนของหนึ่งปีปฏิทิน"
-
-#: js/ContractEditDialog.js:280 js/WorkingTimeEditDialog.js:236
-msgid "Mon."
-msgstr "จ"
-
-#: js/ContractEditDialog.js:283 js/WorkingTimeEditDialog.js:239
-msgid "Tue."
-msgstr "อังคาร"
-
-#: js/ContractEditDialog.js:286 js/WorkingTimeEditDialog.js:242
-msgid "Wed."
-msgstr "พุธ"
-
-#: js/ContractEditDialog.js:289 js/WorkingTimeEditDialog.js:245
-msgid "Thu."
-msgstr "พฤ."
-
-#: js/ContractEditDialog.js:292 js/WorkingTimeEditDialog.js:248
-msgid "Fri."
-msgstr "ศ."
-
-#: js/ContractEditDialog.js:295 js/WorkingTimeEditDialog.js:251
-msgid "Sat."
-msgstr "ส."
-
-#: js/ContractEditDialog.js:298 js/WorkingTimeEditDialog.js:254
-msgid "Sun."
-msgstr "อา."
-
-#: js/ExtraFreeTimeEditDialog.js:167 js/FreeTimeEditDialog.js:541
-#: js/EmployeeEditDialog.js:516
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
-
-#: js/CostCenterGridPanel.js:58
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "ศูนย์ต้นทุน"
-
-#: js/CostCenterGridPanel.js:128
-msgid "Startdate"
-msgstr "วันเริ่ม"
-
-#: js/FreeTimeEditDialog.js:155
-#, python-brace-format
-msgid "Edit {0} \"{1}\""
-msgstr "แก้ไข {0} \"{1}\""
-
-#: js/FreeTimeEditDialog.js:169
-#, python-brace-format
-msgid "Edit {0} for {1}"
-msgstr "แก้ไข {0} สำหรับ {1}"
-
-#: js/FreeTimeEditDialog.js:171
-#, python-brace-format
-msgid "Add {0} for {1}"
-msgstr "เพิ่ม {0} สำหรับ {1}"
-
-#: js/FreeTimeEditDialog.js:186
-msgid "You have to select at least one day to save this sickness entry."
-msgstr "คุณต้องเลือกอย่างน้อยหนึ่งวันเพื่อบันทึกการเจ็บป่วยครั้งนี้"
-
-#: js/FreeTimeEditDialog.js:187
-msgid "You have to select at least one day to save this vacation entry."
-msgstr "คุณต้องเลือกอย่างน้อยหนึ่งวันเพื่อบันทึกการพักร้อนครั้งนี้"
-
-#: js/FreeTimeEditDialog.js:191
-msgid "No day selected"
-msgstr "ไม่ได้เลือกวันใด ๆ"
-
-#: js/FreeTimeEditDialog.js:455
-msgid "Remaining"
-msgstr "คงค้าง"
-
-#: js/FreeTimeEditDialog.js:508
-msgid "Select Days"
-msgstr "เลือก วัน"
-
-#: js/AccountGridPanel.js:32
-msgid "Book remaining vacation"
-msgstr "จองพักร้อนที่คงค้าง"
-
-#: js/AccountGridPanel.js:46
-msgid "Please enter the year you want to create accounts for:"
+#: js/FreeTimeGridPanel.js:136
+msgid "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
 msgstr ""
 
-#: js/AccountGridPanel.js:68
-msgid "Accounts have been created"
+#: js/HumanResources.js:27
+msgid "Human Resources"
+msgid_plural "Human Resources"
+msgstr[0] ""
+
+#: js/HumanResources.js:68
+msgid "Template"
 msgstr ""
 
-#: js/AccountGridPanel.js:69
-#, python-brace-format
-msgid "{0} accounts for the year {1} have been created successfully!"
+#: js/HumanResources.js:69
+msgid "Individual"
 msgstr ""
 
-#: js/AccountGridPanel.js:80
-msgid "Create new accounts"
-msgstr "สร้าง บัญชีใหม่"
-
-#: js/AccountGridPanel.js:134
-msgid "Booking has been successfull!"
-msgstr "ประสบความสำเร็จในการจอง!"
-
-#: js/AccountGridPanel.js:135
-msgid ""
-"The remaining vacation days of the selected accounts have been booked "
-"successfully!"
-msgstr "วันพักร้อนที่คงค้างของบัญชีที่เลือกนั้นได้ทำการจองแล้วเรียบร้อย!"
-
-#: js/WorkingTimeEditDialog.js:186
-msgid "Working time Model"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:213
-msgid "Work start"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:215 js/WorkingTimeEditDialog.js:221
-msgid "not set"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:219
-msgid "Work end"
+#: js/HumanResources.js:70
+msgid "Shared"
 msgstr ""
 
 #: js/AccountEditDialog.js:56
 #, python-brace-format
 msgid "Edit {0} for {1} - {2}"
 msgstr "แก้ไข {0} สำหรับ {1} - {2}"
+
+#: js/AccountEditDialog.js:78 js/ExtraFreeTimeEditDialog.js:97
+#: js/ExtraFreeTimeEditDialog.js:109 Model/ExtraFreeTime.php:34
+msgid "Extra free time"
+msgid_plural "Extra free times"
+msgstr[0] "เวลาว่างพิเศษ"
 
 #: js/AccountEditDialog.js:95
 msgid "Summary"
@@ -536,6 +135,11 @@ msgstr ""
 msgid "Unexcused sickness days"
 msgstr ""
 
+#: js/AccountEditDialog.js:139 js/ContractEditDialog.js:282
+#: js/WorkingTimeSchemeEditDialog.js:219
+msgid "Working Time"
+msgstr ""
+
 #: js/AccountEditDialog.js:145
 msgid "Days to work"
 msgstr "วันที่ทำงาน"
@@ -552,59 +156,291 @@ msgstr "วันที่ทำงานหลังจากลาพักร
 msgid "Hours to work after vacation and sickness"
 msgstr "ชั่วโมงที่ทำงานหลังจากลาพักร้อนและเจ็บป่วย"
 
-#: js/HumanResources.js:23
-msgid "Human Resources"
-msgid_plural "Human Resources"
-msgstr[0] ""
+#: js/AccountEditDialog.js:156 Model/Account.php:114
+msgid "Miscellaneous"
+msgstr "เบ็ดเตล็ด"
 
-#: js/HumanResources.js:46
-msgid "Work Start"
+#: js/AccountEditDialog.js:165 js/FreeTimeEditDialog.js:527
+#: js/EmployeeEditDialog.js:502 js/ExtraFreeTimeEditDialog.js:153
+#: Model/WageType.php:87 Model/Account.php:113 Model/ExtraFreeTime.php:91
+#: Model/FreeTimeType.php:96 Model/FreeTime.php:107 Model/Employee.php:102
+msgid "Description"
+msgstr "การอธิบาย"
+
+#: js/FreeTimeEmployeeFilter.js:31 js/EmployeeEditDialog.js:187
+#: js/EmployeeEditDialog.js:200 Model/MonthlyWTReport.php:103
+#: Model/CostCenter.php:73 Model/FreeTime.php:74 Model/Employee.php:38
+#: Model/Contract.php:80
+msgid "Employee"
+msgid_plural "Employees"
+msgstr[0] "ลูกจ้าง"
+
+#: js/DailyWTReportGridPanel.js:39
+msgid "Calculate all Reports"
 msgstr ""
 
-#: js/HumanResources.js:53
-msgid "Work End"
+#: js/MonthlyWTReportEditDialog.js:26
+msgid "Recalculate"
 msgstr ""
+
+#: js/AdminPanel.js:64
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: js/AdminPanel.js:72
+msgid "OK"
+msgstr "ตกลง"
+
+#: js/AdminPanel.js:126
+msgid "Please use the following format: MM-DD"
+msgstr "กรุณาใช้รูปแบบดังต่อไปนี้: MM-DD"
+
+#: js/AdminPanel.js:219 js/ContractEditDialog.js:265
+msgid "Calendar"
+msgstr "ปฏิทิน"
+
+#: js/AdminPanel.js:220 js/ContractEditDialog.js:266
+msgid "Calendars"
+msgstr "ปฏิทิน"
+
+#: js/AdminPanel.js:231 Config.php:180
+msgid "Vacation expires"
+msgstr "พักร้อนหมด"
+
+#: js/AccountGridPanel.js:32
+msgid "Book remaining vacation"
+msgstr "จองพักร้อนที่คงค้าง"
+
+#: js/AccountGridPanel.js:46 Model/Account.php:95
+msgid "Year"
+msgstr "ปี"
+
+#: js/AccountGridPanel.js:46
+msgid "Please enter the year you want to create accounts for:"
+msgstr ""
+
+#: js/AccountGridPanel.js:68
+msgid "Accounts have been created"
+msgstr ""
+
+#: js/AccountGridPanel.js:69
+#, python-brace-format
+msgid "{0} accounts for the year {1} have been created successfully!"
+msgstr ""
+
+#: js/AccountGridPanel.js:80
+msgid "Create new accounts"
+msgstr "สร้าง บัญชีใหม่"
+
+#: js/AccountGridPanel.js:134
+msgid "Booking has been successfull!"
+msgstr "ประสบความสำเร็จในการจอง!"
+
+#: js/AccountGridPanel.js:135
+msgid "The remaining vacation days of the selected accounts have been booked successfully!"
+msgstr "วันพักร้อนที่คงค้างของบัญชีที่เลือกนั้นได้ทำการจองแล้วเรียบร้อย!"
+
+#: js/CostCenterGridPanel.js:58
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "ศูนย์ต้นทุน"
+
+#: js/CostCenterGridPanel.js:125 Model/CostCenter.php:34
+#: Model/CostCenter.php:85
+msgid "Cost Center"
+msgid_plural "Cost Centers"
+msgstr[0] "ศูนย์ต้นทุน"
+
+#: js/CostCenterGridPanel.js:128
+msgid "Startdate"
+msgstr "วันเริ่ม"
+
+#: js/ContractGridPanel.js:42 js/ContractEditDialog.js:239
+#: js/ContractEditDialog.js:253 Model/Contract.php:42
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "สัญญา"
+
+#: js/ContractGridPanel.js:150
+msgid "Vacation in same period"
+msgstr ""
+
+#: js/ContractGridPanel.js:151
+msgid "There are some vacation days matching the period of the contract you added. After saving this employee, changing the contract is not possible anymore."
+msgstr ""
+
+#: js/ContractEditDialog.js:83
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "แก้ไข {0}"
+
+#: js/ContractEditDialog.js:208 js/WorkingTimeSchemeEditDialog.js:167
+msgid "Working Time Rules"
+msgstr ""
+
+#: js/ContractEditDialog.js:259 Model/CostCenter.php:96 Model/Contract.php:93
+msgid "Start Date"
+msgstr "วันที่เริ่มต้น"
+
+#: js/ContractEditDialog.js:260 Model/Contract.php:104
+msgid "End Date"
+msgstr "วันที่สิ้นสุด"
+
+#: js/ContractEditDialog.js:273 Model/Contract.php:118
+msgid "Feast Calendar"
+msgstr "ปฏิทินงานเทศกาล"
+
+#: js/ContractEditDialog.js:275
+msgid "Vacation days of one calendar year"
+msgstr "วันพักร้อนของหนึ่งปีปฏิทิน"
+
+#: js/ContractEditDialog.js:290 js/WorkingTimeSchemeEditDialog.js:198
+msgid "Working Time Schema"
+msgstr ""
+
+#: js/ContractEditDialog.js:300 js/WorkingTimeSchemeEditDialog.js:232
+msgid "Working Hours per week"
+msgstr "ชั่วโมงทำงานต่อสัปดาห์"
+
+#: js/ContractEditDialog.js:310 js/WorkingTimeSchemeEditDialog.js:241
+msgid "Mon."
+msgstr "จ"
+
+#: js/ContractEditDialog.js:313 js/WorkingTimeSchemeEditDialog.js:244
+msgid "Tue."
+msgstr "อังคาร"
+
+#: js/ContractEditDialog.js:316 js/WorkingTimeSchemeEditDialog.js:247
+msgid "Wed."
+msgstr "พุธ"
+
+#: js/ContractEditDialog.js:319 js/WorkingTimeSchemeEditDialog.js:250
+msgid "Thu."
+msgstr "พฤ."
+
+#: js/ContractEditDialog.js:322 js/WorkingTimeSchemeEditDialog.js:253
+msgid "Fri."
+msgstr "ศ."
+
+#: js/ContractEditDialog.js:325 js/WorkingTimeSchemeEditDialog.js:256
+msgid "Sat."
+msgstr "ส."
+
+#: js/ContractEditDialog.js:328 js/WorkingTimeSchemeEditDialog.js:259
+msgid "Sun."
+msgstr "อา."
+
+#: js/FreeTimeEditDialog.js:155
+#, python-brace-format
+msgid "Edit {0} \"{1}\""
+msgstr "แก้ไข {0} \"{1}\""
+
+#: js/FreeTimeEditDialog.js:169
+#, python-brace-format
+msgid "Edit {0} for {1}"
+msgstr "แก้ไข {0} สำหรับ {1}"
+
+#: js/FreeTimeEditDialog.js:171
+#, python-brace-format
+msgid "Add {0} for {1}"
+msgstr "เพิ่ม {0} สำหรับ {1}"
+
+#: js/FreeTimeEditDialog.js:186
+msgid "You have to select at least one day to save this sickness entry."
+msgstr "คุณต้องเลือกอย่างน้อยหนึ่งวันเพื่อบันทึกการเจ็บป่วยครั้งนี้"
+
+#: js/FreeTimeEditDialog.js:187
+msgid "You have to select at least one day to save this vacation entry."
+msgstr "คุณต้องเลือกอย่างน้อยหนึ่งวันเพื่อบันทึกการพักร้อนครั้งนี้"
+
+#: js/FreeTimeEditDialog.js:191
+msgid "No day selected"
+msgstr "ไม่ได้เลือกวันใด ๆ"
+
+#: js/FreeTimeEditDialog.js:277 Model/Account.php:35
+msgid "Personal account"
+msgid_plural "Personal accounts"
+msgstr[0] "บัญชีส่วนตัว"
+
+#: js/FreeTimeEditDialog.js:377 Model/FreeTime.php:114
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/FreeTimeEditDialog.js:455
+msgid "Remaining"
+msgstr "คงค้าง"
+
+#: js/FreeTimeEditDialog.js:508
+msgid "Select Days"
+msgstr "เลือก วัน"
+
+#: js/FreeTimeEditDialog.js:541 js/EmployeeEditDialog.js:516
+#: js/ExtraFreeTimeEditDialog.js:167
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
 
 #: js/EmployeeEditDialog.js:106
 msgid "Account is disabled or deleted!"
 msgstr ""
 
+#: js/EmployeeEditDialog.js:141 Model/Employee.php:280
+msgid "Division"
+msgstr "แผนก"
+
+#: js/EmployeeEditDialog.js:148 Model/Employee.php:289
+msgid "Health Insurance"
+msgstr "ประกันสุขภาพ"
+
 #: js/EmployeeEditDialog.js:242
 msgid "Apply contact data on form"
 msgstr "ใช้ข้อมูลการติดต่อบนแบบฟอร์ม"
+
+#: js/EmployeeEditDialog.js:279 Model/Employee.php:177
+msgid "Salutation"
+msgstr "คำขึ้นต้น"
 
 #: js/EmployeeEditDialog.js:333
 msgid "Personal Information"
 msgstr "ข้อมูลส่วนตัว"
 
+#: js/EmployeeEditDialog.js:343 Model/Employee.php:108
+msgid "Country"
+msgstr "ประเทศ"
+
+#: js/EmployeeEditDialog.js:387 Model/Employee.php:199
+msgid "Birthday"
+msgstr "วันเกิด"
+
 #: js/EmployeeEditDialog.js:395
 msgid "Internal Information"
 msgstr "ข้อมูลภายใน"
 
-#: js/FreeTimeGridPanel.js:62
-msgid "Book as vacation"
-msgstr "จองเป็นพักร้อน"
+#: js/EmployeeEditDialog.js:444 Model/Employee.php:53
+msgid "Banking Information"
+msgstr "ข้อมูลธนาคาร"
 
-#: js/FreeTimeGridPanel.js:74 js/FreeTimeGridPanel.js:75
-msgid "Sickness Days"
-msgstr "วันที่ลาเจ็บป่วย"
+#: js/WorkingTimeSchemeEditDialog.js:210 js/ExtraFreeTimeEditDialog.js:127
+#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:60
+#: Model/ExtraFreeTime.php:83 Model/FreeTime.php:97
+#: Model/WorkingTimeScheme.php:73
+msgid "Type"
+msgstr "ประเภท"
 
-#: js/FreeTimeGridPanel.js:88
-#, python-brace-format
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria "
-"or view-options."
+#: js/WorkingTimeSchemeEditDialog.js:212
+msgid "Template (individual working time schemas are created for each contract)"
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:135
-msgid "Could not book as vacation"
-msgstr "ไม่สามารถจองเป็นพักร้อนได้"
-
-#: js/FreeTimeGridPanel.js:136
-msgid ""
-"The unexcused sickness days could not be booked as vacation. There are not "
-"enough days left!"
+#: js/WorkingTimeSchemeEditDialog.js:213
+msgid "Shared (this working time schemas can be shared among contracts)"
 msgstr ""
+
+#: js/ExtraFreeTimeEditDialog.js:122 Model/ExtraFreeTime.php:99
+msgid "Days"
+msgstr "วัน"
+
+#: js/ExtraFreeTimeEditDialog.js:131 Model/ExtraFreeTime.php:103
+msgid "Expiration date"
+msgstr "หมดเขตวันที่"
 
 #: js/DatePicker.js:107
 msgid "WK"
@@ -619,9 +455,7 @@ msgid "Year can not be changed"
 msgstr "ปีไม่สามารถเปลี่ยนได้"
 
 #: js/DatePicker.js:416
-msgid ""
-"You have already selected some dates from another year. Please create a new "
-"record to add dates from another year!"
+msgid "You have already selected some dates from another year. Please create a new record to add dates from another year!"
 msgstr ""
 
 #: js/DatePicker.js:486
@@ -629,109 +463,617 @@ msgid "No more vacation days"
 msgstr "ไม่มีวันพักร้อนแล้ว"
 
 #: js/DatePicker.js:487
-msgid ""
-"The Employee has no more possible vacation days left for this year. Create a"
-" new vacation and use another personal account the vacation should be taken "
-"from."
+msgid "The Employee has no more possible vacation days left for this year. Create a new vacation and use another personal account the vacation should be taken from."
 msgstr ""
 
-#: Config.php:74
-msgid "Freetime Type"
-msgstr "ประเภท เวลาว่าง"
-
-#: Config.php:76
-msgid "Possible free time definitions"
-msgstr "จำกัดความเรื่องเวลาว่างที่เป็นไปได้"
-
-#: Config.php:90
-msgid "Vacation Status"
-msgstr "สถานะ การพักร้อน"
-
-#: Config.php:92
-msgid "Possible vacation status definitions"
-msgstr "จำกัดความสถานะการพักร้อนที่เป็นไปได้"
-
-#: Config.php:99
-msgid "Requested"
-msgstr "ได้ทำเรื่องขอ"
-
-#: Config.php:100
-msgid "In process"
-msgstr "อยู่ระหว่างดำเนินการ"
-
-#: Config.php:101
-msgid "Accepted"
-msgstr "ได้อนุมัติแล้ว"
-
-#: Config.php:102
-msgid "Declined"
-msgstr "ได้ปฏิเสธแล้ว"
-
-#: Config.php:109
-msgid "Sickness Status"
-msgstr "สถานะ เจ็บป่วย"
-
-#: Config.php:111
-msgid "Possible sickness status definitions"
-msgstr "จำกัดความเรื่องสถานะของการอาจจะเกิดการเจ็บป่วย"
-
-#: Config.php:118 Setup/Update/Release6.php:299
+#: Setup/Update/Release6.php:299 Config.php:127
 msgid "Excused"
 msgstr ""
 
-#: Config.php:119 Setup/Update/Release6.php:300
+#: Setup/Update/Release6.php:300 Config.php:128
 msgid "Unexcused"
 msgstr ""
 
-#: Config.php:126
-msgid "Default Feast Calendar"
-msgstr "ปฏิทินงานเทศกาลหลัก"
+#: Setup/Update/Release6.php:330
+msgid "Currently employed"
+msgstr "ถูกว่าจ้างในเวลานี้"
 
-#: Config.php:128
-msgid ""
-"Here you can define the default feast calendar used to set feast days and "
-"other free days in datepicker"
-msgstr "ตรงนี้คุณสามารถจำกัดปฏิทินงานเทศกาลหลักเพื่อใช้เป็นตัวตั้งวันฉลองและวันหยุดอื่น ๆ ได้"
+#: Setup/Update/Release6.php:331 Setup/Initialize.php:36
+msgid "Employees which are currently employed"
+msgstr "ลูกจ้างที่กำลังถูกว่าจ้าง"
 
-#: Config.php:135
-msgid "Extra freetime type"
-msgstr "ประเภท เวลาว่างพิเศษ"
+#: Setup/Update/Release7.php:143 Setup/Initialize.php:41
+msgid "All employees"
+msgstr "ลูกจ้างทั้งหมด"
 
-#: Config.php:137
-msgid "Possible extra free time definitions"
-msgstr "จำกัดความเรื่องเวลาว่างพิเศษที่เป็นไปได้"
+#: Setup/Update/Release7.php:144 Setup/Initialize.php:42
+msgid "All available employees"
+msgstr "ลูกจ้างทั้งหมดที่ว่างอยู่"
 
-#: Config.php:144 Setup/Update/Release7.php:373
+#: Setup/Update/Release7.php:373 Config.php:173
 msgid "Payed"
 msgstr "จ่ายแล้ว"
 
-#: Config.php:145 Setup/Update/Release7.php:374
+#: Setup/Update/Release7.php:374 Config.php:174
 msgid "Not payed"
 msgstr "ไม่ได้จ่าย"
 
-#: Config.php:153
-msgid ""
-"Here you can define the day, when the vacation days taken from last year "
-"expires, the format is MM-DD."
+#: Setup/Initialize.php:35
+msgid "Currently employed employees"
+msgstr "ลูกจ้างที่ถูกว่าจ้างในเวลานี้"
+
+#: Setup/Initialize.php:54
+msgid "All accounts"
+msgstr "บัญชีทั้งหมด"
+
+#: Setup/Initialize.php:55
+msgid "All available accounts"
+msgstr "บัญชีทั้งหมดที่มีอยู่"
+
+#: Setup/Initialize.php:94 Import/DemoData/Csv.php:73
+msgid "Full-time 40 hours"
+msgstr "เต็มเวลา 40 ชั่วโมง"
+
+#: Setup/Initialize.php:102
+msgid "Full-time 37.5 hours"
+msgstr "เต็มเวลา 37.5 ชั่วโมง"
+
+#: Setup/Initialize.php:110
+msgid "Part-time 20 hours"
+msgstr ""
+
+#: Setup/Initialize.php:123
+msgid "Default wage type"
+msgstr ""
+
+#: Setup/Initialize.php:124
+msgid "Salary"
+msgstr ""
+
+#: Setup/Initialize.php:125
+msgid "Business trip"
+msgstr ""
+
+#: Setup/Initialize.php:126
+msgid "Sunday bonus"
+msgstr ""
+
+#: Setup/Initialize.php:127
+msgid "Feast day"
+msgstr ""
+
+#: Setup/Initialize.php:128
+msgid "Feast day bonus"
+msgstr ""
+
+#: Setup/Initialize.php:129
+msgid "Overtime"
+msgstr ""
+
+#: Setup/Initialize.php:130
+msgid "Overtime bonus"
+msgstr ""
+
+#: Setup/Initialize.php:131
+msgid "Late shift bonus"
+msgstr ""
+
+#: Setup/Initialize.php:132
+msgid "Night bonus"
+msgstr ""
+
+#: Setup/Initialize.php:135
+msgid "Break"
+msgstr ""
+
+#: Setup/Initialize.php:136
+msgid "Stand by"
+msgstr ""
+
+#: Setup/Initialize.php:137
+msgid "Unpaid"
+msgstr ""
+
+#: Setup/Initialize.php:151
+msgid "[S] Sickness"
+msgstr ""
+
+#: Setup/Initialize.php:152
+msgid "[D] Visit doctor"
+msgstr ""
+
+#: Setup/Initialize.php:153
+msgid "[V] Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:154
+msgid "[BT] Business trip"
+msgstr ""
+
+#: Setup/Initialize.php:155
+msgid "[FT] Flex time"
+msgstr ""
+
+#: Setup/Initialize.php:156
+msgid "[BK] Break"
+msgstr ""
+
+#: Setup/Initialize.php:157
+msgid "[T] Training"
+msgstr ""
+
+#: Config.php:83
+msgid "Freetime Type"
+msgstr "ประเภท เวลาว่าง"
+
+#: Config.php:85
+msgid "Possible free time definitions"
+msgstr "จำกัดความเรื่องเวลาว่างที่เป็นไปได้"
+
+#: Config.php:99
+msgid "Vacation Status"
+msgstr "สถานะ การพักร้อน"
+
+#: Config.php:101
+msgid "Possible vacation status definitions"
+msgstr "จำกัดความสถานะการพักร้อนที่เป็นไปได้"
+
+#: Config.php:108
+msgid "Requested"
+msgstr "ได้ทำเรื่องขอ"
+
+#: Config.php:109
+msgid "In process"
+msgstr "อยู่ระหว่างดำเนินการ"
+
+#: Config.php:110
+msgid "Accepted"
+msgstr "ได้อนุมัติแล้ว"
+
+#: Config.php:111
+msgid "Declined"
+msgstr "ได้ปฏิเสธแล้ว"
+
+#: Config.php:118
+msgid "Sickness Status"
+msgstr "สถานะ เจ็บป่วย"
+
+#: Config.php:120
+msgid "Possible sickness status definitions"
+msgstr "จำกัดความเรื่องสถานะของการอาจจะเกิดการเจ็บป่วย"
+
+#: Config.php:135
+msgid "Default Feast Calendar"
+msgstr "ปฏิทินงานเทศกาลหลัก"
+
+#: Config.php:137
+msgid "Here you can define the default feast calendar used to set feast days and other free days in datepicker"
+msgstr "ตรงนี้คุณสามารถจำกัดปฏิทินงานเทศกาลหลักเพื่อใช้เป็นตัวตั้งวันฉลองและวันหยุดอื่น ๆ ได้"
+
+#: Config.php:144
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:146
+msgid "Enabled Features in HumanResources Application."
+msgstr ""
+
+#: Config.php:154
+msgid "Calculate Daily Reports"
+msgstr ""
+
+#: Config.php:156
+msgid "Activate to calculate daily reports with a nightly scheduler job"
+msgstr ""
+
+#: Config.php:164
+msgid "Extra freetime type"
+msgstr "ประเภท เวลาว่างพิเศษ"
+
+#: Config.php:166
+msgid "Possible extra free time definitions"
+msgstr "จำกัดความเรื่องเวลาว่างพิเศษที่เป็นไปได้"
+
+#: Config.php:182
+msgid "Here you can define the day, when the vacation days taken from last year expires, the format is MM-DD."
 msgstr "ตรงนี้คุณสามารถจำกัดวันได้ เมื่อวันพักร้อนของปีก่อนได้นำมาใช้ รูปแบบจะเป็น MM-DD"
 
-#: Config.php:161
+#: Config.php:190
 msgid "Report Templates Node ID"
 msgstr ""
 
-#: Config.php:170
+#: Config.php:199
 msgid "Timetracker Timeaccount for Workingtime Tracking"
 msgstr ""
 
-#: Acl/Rights.php:93
-msgid "edit private employee data"
-msgstr "แก้ไขข้อมูลลูกจ้างที่เป็นเรื่องส่วนตัว"
+#: Controller/DailyWTReport.php:253
+msgid "No valid contract for this date"
+msgstr ""
 
-#: Acl/Rights.php:94
-msgid ""
-"Edit birthday, account data and other private information of employee "
-"records"
-msgstr "แก้ไขวันเกิด ข้อมูลปัญชีและความเป็๋นส่วนตัวอื่น ๆ ของบันทึกลูกจ้าง"
+#: Controller/DailyWTReport.php:314 Controller/DailyWTReport.php:326
+msgid "unexpected error: "
+msgstr ""
+
+#: Controller/DailyWTReport.php:567
+msgid "daily wt reports can't be created"
+msgstr ""
+
+#: Controller/DailyWTReport.php:601 Controller/MonthlyWTReport.php:165
+msgid "It is not allowed to update a cleared report"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:135
+msgid "monthly wt reports can't be created"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:193
+msgid "previous months need to be cleared first"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:216
+msgid "following months need to be uncleared first"
+msgstr ""
+
+#: Model/DailyWTReport.php:77
+msgid "Daily Working Time Report"
+msgid_plural "Daily Working Time Reports"
+msgstr[0] ""
+
+#: Model/DailyWTReport.php:169
+msgid "Date"
+msgstr ""
+
+#: Model/DailyWTReport.php:177
+msgid "Evaluation Start Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:184
+msgid "Evaluation End Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:191
+msgid "Corrected Evaluation Start Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:198
+msgid "Corrected Evaluation End Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:208 Model/MonthlyWTReport.php:158
+msgid "Target Working Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:217
+msgid "Target Working Time Correction"
+msgstr ""
+
+#: Model/DailyWTReport.php:227
+msgid "Break Time Net"
+msgstr ""
+
+#: Model/DailyWTReport.php:235
+msgid "Break Deduction Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:242
+msgid "Working Times"
+msgstr ""
+
+#: Model/DailyWTReport.php:255 Model/MonthlyWTReport.php:150
+msgid "Actual Working Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:265 Model/MonthlyWTReport.php:165
+msgid "Working Time Correction"
+msgstr ""
+
+#: Model/DailyWTReport.php:273
+msgid "Total Working Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:281
+msgid "System Remark"
+msgstr ""
+
+#: Model/DailyWTReport.php:289
+msgid "Remark"
+msgstr ""
+
+#: Model/DailyWTReport.php:297 Model/MonthlyWTReport.php:178
+msgid "Is Cleared"
+msgstr ""
+
+#: Model/DailyWTReport.php:306
+msgid "Calculation Error"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:58
+msgid "Monthly Working Time Report"
+msgid_plural "Monthly Working Time Reports"
+msgstr[0] ""
+
+#: Model/MonthlyWTReport.php:117
+msgid "Month"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:128
+msgid "Daily Working Time Reports"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:142
+msgid "Working Time Balance Previous Month"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:173
+msgid "Total Working Time Balance"
+msgstr ""
+
+#: Model/WageType.php:53 Model/FreeTimeType.php:113
+msgid "Wage type"
+msgid_plural "Wage types"
+msgstr[0] ""
+
+#: Model/WageType.php:76 Model/FreeTimeType.php:85
+msgid "Abbreviation"
+msgstr ""
+
+#: Model/WageType.php:82 Model/FreeTimeType.php:91
+msgid "Name"
+msgstr ""
+
+#: Model/WageType.php:94 Model/FreeTimeType.php:103
+msgid "System"
+msgstr ""
+
+#: Model/WageType.php:102
+msgid "Factor (%)"
+msgstr ""
+
+#: Model/WageType.php:108
+msgid "Additional Wage"
+msgstr ""
+
+#: Model/Account.php:53
+msgid "Quick search"
+msgstr "ค้นหาอย่างรวดเร็ว"
+
+#: Model/Account.php:102
+msgid "Extra free times"
+msgstr "เวลาว่างพิเศษ"
+
+#: Model/BLDailyWTReport/PopulateReportConfig.php:46
+#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:55
+msgid "Start time"
+msgstr ""
+
+#: Model/BLDailyWTReport/BreakTimeConfig.php:47
+msgid "Break Time"
+msgid_plural "Break Times"
+msgstr[0] ""
+
+#: Model/BLDailyWTReport/BreakTimeConfig.php:48
+msgid "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted automatically."
+msgstr ""
+
+#: Model/BLDailyWTReport/BreakTimeConfig.php:56
+msgid "Time worked"
+msgstr ""
+
+#: Model/BLDailyWTReport/BreakTimeConfig.php:62
+msgid "Break time"
+msgstr ""
+
+#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:47
+msgid "Work Time Limit"
+msgid_plural "Work Time Limits"
+msgstr[0] ""
+
+#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:48
+msgid "Working time is evaluated from {{start_time|date(\"H:i\")}} until {{end_time|date(\"H:i\")}}."
+msgstr ""
+
+#: Model/FreeTimeType.php:61
+msgid "Absence reason"
+msgid_plural "Absence reasons"
+msgstr[0] ""
+
+#: Model/FreeTimeType.php:120
+msgid "Allow Booking"
+msgstr ""
+
+#: Model/FreeTimeType.php:126
+msgid "Allow Planning"
+msgstr ""
+
+#: Model/FreeTimeType.php:132
+msgid "Enable Freetime Timetracking"
+msgstr ""
+
+#: Model/FreeTimeType.php:142
+msgid "Timeaccount"
+msgstr ""
+
+#: Model/FreeTime.php:37
+msgid "Free Time"
+msgid_plural "Free Times"
+msgstr[0] "เวลาที่ว่าง"
+
+#: Model/FreeTime.php:86 Model/Employee.php:86
+msgid "Account"
+msgstr "บัญชี"
+
+#: Model/FreeTime.php:122
+msgid "First Day"
+msgstr "วันแรก"
+
+#: Model/FreeTime.php:128
+msgid "Last Day"
+msgstr "วันสุดท้าย"
+
+#: Model/FreeTime.php:134
+msgid "Days Count"
+msgstr "นับวัน"
+
+#: Model/FreeTime.php:144
+msgid "Free Days"
+msgstr "วันหยุด"
+
+#: Model/Employee.php:54
+msgid "Private Information"
+msgstr "ข้อมูลส่วนตัว"
+
+#: Model/Employee.php:66
+msgid "Is employed"
+msgstr "ถูกว่าจ้าง"
+
+#: Model/Employee.php:78
+msgid "Number"
+msgstr "หมายเลข"
+
+#: Model/Employee.php:94
+msgid "Transponder Id"
+msgstr ""
+
+#: Model/Employee.php:110
+msgid "Germany"
+msgstr "เยอรมนี"
+
+#: Model/Employee.php:116
+msgid "Locality"
+msgstr "ถิ่นที่อยู่"
+
+#: Model/Employee.php:123
+msgid "Postalcode"
+msgstr "รหัสไปรษณีย์"
+
+#: Model/Employee.php:130
+msgid "Region"
+msgstr "เขต"
+
+#: Model/Employee.php:137
+msgid "Street"
+msgstr "ถนน"
+
+#: Model/Employee.php:144
+msgid "Street 2"
+msgstr "ถนน 2"
+
+#: Model/Employee.php:151
+msgid "E-Mail"
+msgstr "อีเมล"
+
+#: Model/Employee.php:158
+msgid "Telephone Number"
+msgstr "หมายเลขโทรศัพท์"
+
+#: Model/Employee.php:165
+msgid "Cell Phone Number"
+msgstr "หมายเลขโทรศัพท์เคลื่อนที่"
+
+#: Model/Employee.php:172 Model/WorkingTimeScheme.php:67
+msgid "Title"
+msgstr "คำนำหน้าชื่อ"
+
+#: Model/Employee.php:182
+msgid "Last Name"
+msgstr "นามสกุล"
+
+#: Model/Employee.php:187
+msgid "First Name"
+msgstr "ชื่อตัว"
+
+#: Model/Employee.php:192
+msgid "Employee name"
+msgstr "ชื่อลูกจ้าง"
+
+#: Model/Employee.php:206
+msgid "Account Holder"
+msgstr "เจ้าของบัญชี"
+
+#: Model/Employee.php:213
+msgid "Account Number"
+msgstr "หมายเลขบัญชี"
+
+#: Model/Employee.php:237
+msgid "Bank Name"
+msgstr "ชื่อธนาคาร"
+
+#: Model/Employee.php:244
+msgid "Code Number"
+msgstr "หมายเลขรหัส"
+
+#: Model/Employee.php:252
+msgid "Employment begin"
+msgstr "การจ้างงาน เริ่ม"
+
+#: Model/Employee.php:259
+msgid "Employment end"
+msgstr "การจ้างงาน สิ้นสุด"
+
+#: Model/Employee.php:266
+msgid "Supervisor"
+msgstr "หัวหน้า"
+
+#: Model/Employee.php:295
+msgid "Profession"
+msgstr "วิชาชีพ"
+
+#: Model/Employee.php:300
+msgid "Position"
+msgstr "ตำแหน่ง"
+
+#: Model/Employee.php:306
+msgid "Contracts"
+msgstr ""
+
+#: Model/Employee.php:320
+msgid "Cost Centers"
+msgstr "ศูนย์ต้นทุน"
+
+#: Model/FreeDay.php:35
+msgid "Free Day"
+msgid_plural "Free Days"
+msgstr[0] "วันหยุด"
+
+#: Exception/NoContract.php:26
+msgid "No contract could be found."
+msgstr "ไม่พบข้อมูล"
+
+#: Exception/NoContract.php:31
+msgid "Please create a contract for this employee!"
+msgstr "กรุณาสร้างสัญญาการจ้างให้ลูกจ้างคนนี้!"
+
+#: Exception/ContractDates.php:26
+msgid "Negative Timespace"
+msgstr ""
+
+#: Exception/ContractDates.php:31
+msgid "The start date of the contract must be before the end date!"
+msgstr "วันเริ่มในสัญญาการจ้างต้องอยู่ก่อนวันสิ้นสุดการว่าจ้าง!"
+
+#: Exception/RemainingNotBookable.php:26
+msgid "Not allowed!"
+msgstr "ไม่ได้รับอนุญาต!"
+
+#: Exception/RemainingNotBookable.php:31
+msgid "It's only allowed to book remaining vacation days from years in the past!"
+msgstr "อนุญาตให้จองวันพักร้อนจากปีที่ผ่านมาเท่านั้น!"
+
+#: Exception/ContractOverlap.php:26
+msgid "Contracts overlap"
+msgstr "สัญญาซ้อนทับกัน"
+
+#: Exception/ContractOverlap.php:31
+msgid "The contracts must not overlap!"
+msgstr "สัญญาต้องไม่ซ้อนทับกัน!"
+
+#: Exception/NeedsYear.php:26
+msgid "No or no valid year given"
+msgstr "ไม่มี หรือ ไม่ได้ให้ปีที่ถูกต้องมา"
+
+#: Exception/NeedsYear.php:31
+msgid "Please use a valid year!"
+msgstr "กรุณาใช้ปีที่ถูกต้อง"
 
 #: Exception/NoCurrentContract.php:33
 msgid "No current contract!"
@@ -746,9 +1088,7 @@ msgid "Contract not editable"
 msgstr "สัญญาว่าจ้างไม่สามารถแก้ไขได้"
 
 #: Exception/ContractNotEditable.php:31
-msgid ""
-"You are not allowed to change the record if a vacation has been booked "
-"already!"
+msgid "You are not allowed to change the record if a vacation has been booked already!"
 msgstr "คุณไม่สามารถเปลี่ยนบันทึกได้ กรณีที่มีการจองวันพักร้อนเรียบร้อยแล้ว!"
 
 #: Exception/NoAccount.php:26
@@ -759,91 +1099,16 @@ msgstr "ไม่พบบัญชีส่วนตัว"
 msgid "An existing personal account could not be found. Please create one!"
 msgstr "บัญชีส่วนตัวที่มีอยู่ค้นหาไม่พบ กรุณาสร้างบัญชีใหม่!"
 
-#: Exception/NoContract.php:26
-msgid "No contract could be found."
-msgstr "ไม่พบข้อมูล"
+#: Acl/Rights.php:93
+msgid "edit private employee data"
+msgstr "แก้ไขข้อมูลลูกจ้างที่เป็นเรื่องส่วนตัว"
 
-#: Exception/NoContract.php:31
-msgid "Please create a contract for this employee!"
-msgstr "กรุณาสร้างสัญญาการจ้างให้ลูกจ้างคนนี้!"
+#: Acl/Rights.php:94
+msgid "Edit birthday, account data and other private information of employee records"
+msgstr "แก้ไขวันเกิด ข้อมูลปัญชีและความเป็๋นส่วนตัวอื่น ๆ ของบันทึกลูกจ้าง"
 
-#: Exception/ContractOverlap.php:26
-msgid "Contracts overlap"
-msgstr "สัญญาซ้อนทับกัน"
+#~ msgid "Workingtime"
+#~ msgstr "เวลาทำงาน"
 
-#: Exception/ContractOverlap.php:31
-msgid "The contracts must not overlap!"
-msgstr "สัญญาต้องไม่ซ้อนทับกัน!"
-
-#: Exception/ContractDates.php:26
-msgid "Negative Timespace"
-msgstr ""
-
-#: Exception/ContractDates.php:31
-msgid "The start date of the contract must be before the end date!"
-msgstr "วันเริ่มในสัญญาการจ้างต้องอยู่ก่อนวันสิ้นสุดการว่าจ้าง!"
-
-#: Exception/NeedsYear.php:26
-msgid "No or no valid year given"
-msgstr "ไม่มี หรือ ไม่ได้ให้ปีที่ถูกต้องมา"
-
-#: Exception/NeedsYear.php:31
-msgid "Please use a valid year!"
-msgstr "กรุณาใช้ปีที่ถูกต้อง"
-
-#: Exception/RemainingNotBookable.php:26
-msgid "Not allowed!"
-msgstr "ไม่ได้รับอนุญาต!"
-
-#: Exception/RemainingNotBookable.php:31
-msgid ""
-"It's only allowed to book remaining vacation days from years in the past!"
-msgstr "อนุญาตให้จองวันพักร้อนจากปีที่ผ่านมาเท่านั้น!"
-
-#: Controller.php:74
-msgid "You do not have admin rights on HumanResources"
-msgstr "คุณไม่มีสิทธิ์ของผู้ดูแลระบบใน HumanResources"
-
-#: Controller.php:104
-msgid "Working time model"
-msgstr ""
-
-#: Setup/Initialize.php:33
-msgid "Currently employed employees"
-msgstr "ลูกจ้างที่ถูกว่าจ้างในเวลานี้"
-
-#: Setup/Initialize.php:34 Setup/Update/Release6.php:331
-msgid "Employees which are currently employed"
-msgstr "ลูกจ้างที่กำลังถูกว่าจ้าง"
-
-#: Setup/Initialize.php:39 Setup/Update/Release7.php:143
-msgid "All employees"
-msgstr "ลูกจ้างทั้งหมด"
-
-#: Setup/Initialize.php:40 Setup/Update/Release7.php:144
-msgid "All available employees"
-msgstr "ลูกจ้างทั้งหมดที่ว่างอยู่"
-
-#: Setup/Initialize.php:52
-msgid "All accounts"
-msgstr "บัญชีทั้งหมด"
-
-#: Setup/Initialize.php:53
-msgid "All available accounts"
-msgstr "บัญชีทั้งหมดที่มีอยู่"
-
-#: Setup/Initialize.php:65
-msgid "Full-time 40 hours"
-msgstr "เต็มเวลา 40 ชั่วโมง"
-
-#: Setup/Initialize.php:72
-msgid "Full-time 37.5 hours"
-msgstr "เต็มเวลา 37.5 ชั่วโมง"
-
-#: Setup/Initialize.php:79
-msgid "Part-time 20 hours"
-msgstr ""
-
-#: Setup/Update/Release6.php:330
-msgid "Currently employed"
-msgstr "ถูกว่าจ้างในเวลานี้"
+#~ msgid "Choose the template"
+#~ msgstr "เลือกแม่แบบ ..."

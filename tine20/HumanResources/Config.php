@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,6 +15,8 @@
  */
 class HumanResources_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'HumanResources';
+
     /**
      * FreeTime Type
      * @var string
@@ -59,6 +61,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_CALCULATE_DAILY_REPORTS = 'calculateDailyRepots';
+
+    /**
+     * enable working time tracking
+     *
+     * @string
+     */
+    const FEATURE_WORKING_TIME_ACCOUNTING = 'workingTimeAccounting';
 
     /**
      * id of (filsystem) container for vacation templates
@@ -153,8 +162,17 @@ class HumanResources_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION           => 'Activate to calculate daily reports with a nightly scheduler job',
                     //_('Activate to calculate daily reports with a nightly scheduler job')
                     self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
+                self::FEATURE_WORKING_TIME_ACCOUNTING => [
+                    self::LABEL                 => 'Enable Working Time Tracking',
+                    //_('Enable Working Time Tracking')
+                    self::DESCRIPTION           => 'Activate to enable working time tracking and reporting',
+                    //_('Activate to enable working time tracking and reporting')
+                    self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
+
             ],
             self::DEFAULT_STR => [],
         ],

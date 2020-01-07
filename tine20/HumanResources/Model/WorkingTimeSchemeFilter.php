@@ -13,7 +13,7 @@
  * employee filter Class
  * @package     HumanResources
  */
-class HumanResources_Model_WorkingTimeFilter extends Tinebase_Model_Filter_FilterGroup
+class HumanResources_Model_WorkingTimeSchemeFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
      * @var string application of this filter group
@@ -23,7 +23,7 @@ class HumanResources_Model_WorkingTimeFilter extends Tinebase_Model_Filter_Filte
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = HumanResources_Model_WorkingTime::class;
+    protected $_modelName = HumanResources_Model_WorkingTimeScheme::class;
 
     /**
      * @var array filter model fieldName => definition
@@ -31,7 +31,6 @@ class HumanResources_Model_WorkingTimeFilter extends Tinebase_Model_Filter_Filte
     protected $_filterModel = array(
         'id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
         'title'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'working_hours' => array('filter' => 'Tinebase_Model_Filter_Text'),
         'query'         => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('title'))),
         'created_by'    => array('filter' => 'Tinebase_Model_Filter_User')
     );
