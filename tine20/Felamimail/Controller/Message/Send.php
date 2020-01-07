@@ -813,7 +813,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         if (isset($attachment['type'])
             && $attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
-            && $_message->original_id instanceof Felamimail_Model_Message
+            && $_message->original_id
         ) {
             return 'rfc822';
         } elseif (isset($attachment['attachment_type'])) {
