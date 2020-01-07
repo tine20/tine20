@@ -15,28 +15,6 @@
 class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
 {
     /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-    
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-        
-    /**
      * test employee import
      */
     public function testOdsExport()
@@ -50,7 +28,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
         $export = new HumanResources_Export_Ods_MonthlyWTReport($filter, null,
             [
                 'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
-                    new Tinebase_Model_ImportExportDefinitionFilter([
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                         'model' => HumanResources_Model_MonthlyWTReport::class,
                         'name' => 'monthlyWTReport'
                     ]))->getFirstRecord()->getId()
@@ -82,7 +60,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
         $httpFE->exportMonthlyWTReportt('', [
             'recordData' => $data->toArray(),
             'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
-                new Tinebase_Model_ImportExportDefinitionFilter([
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => HumanResources_Model_MonthlyWTReport::class,
                     'name' => 'monthlyWTReport'
                 ]))->getFirstRecord()->getId()
