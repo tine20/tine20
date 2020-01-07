@@ -203,15 +203,20 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         
         // create / update alarms
         foreach ($alarms as $alarm) {
-            $id = $alarm->getId();
             $alarm->record_id = $_record->getId();
             if (! $alarm->model) {
                 $alarm->model = $model;
             }
 
-            if ($id) {
-                $this->_backend->update($alarm);
-            } else {
+            if ($alarm->id) {
+                try {
+                    $this->_backend->update($alarm);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $alarm->id = null;
+                }
+            }
+
+            if (!$alarm->id) {
                 $this->_backend->create($alarm);
             }
         }
