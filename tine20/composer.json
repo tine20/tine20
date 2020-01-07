@@ -75,7 +75,7 @@
     "ext-zip": "*",
     "doctrine/dbal": "v2.5.13pl4 as v2.5.13",
     "doctrine/orm": "2.5.14pl1 as v2.5.14",
-    "ezyang/htmlpurifier": "v4.6.0",
+    "ezyang/htmlpurifier": "dev-master",
     "giggsey/libphonenumber-for-php": "^8.10",
     "metaways/opendocument": "1.1",
     "metaways/timezoneconvert": "1.*",

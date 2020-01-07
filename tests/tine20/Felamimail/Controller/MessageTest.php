@@ -1401,7 +1401,7 @@ class Felamimail_Controller_MessageTest extends TestCase
     
 //     <p>text</p>', $message->body);
         $this->assertContains('<div></div>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="w38GIAXDIBKE0DHxgljNBAAO 9TXL0Y4OHwAAAAB" />
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="w38GIAXDIBKE0DHxgljNBAAO 9TXL0Y4OHwAAAABJRU5ErkJggg==" />
     
     <p>text</p>', $message->body);
     }
