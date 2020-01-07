@@ -2081,6 +2081,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectEvent($_record, $skipEvent = false)
     {
+        if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $_record->isReplicable()) {
+            throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+        }
+
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
         $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
@@ -2185,7 +2189,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $events = $this->_backend->getMultiple($_ids);
         
         foreach ($events as $event) {
-            
+
+            if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $event->isReplicable()) {
+                throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+            }
+
             // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
                 $exceptions = $this->getRecurExceptions($event);
