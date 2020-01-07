@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>HumanResources_Model_MonthlyWTReport</model>
+    <name>monthlyWTReport</name>
+    <type>export</type>
+    <favorite>true</favorite>
+    <scope>single</scope>
+    <plugin>HumanResources_Export_Ods_MonthlyWTReport</plugin>
+    <description>...</description>
+    <template>tine20:///Tinebase/folders/shared/export/templates/HumanResources/monthlyWTReport.ods</template>
+    <group>date</group>
+</config>

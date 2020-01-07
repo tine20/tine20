@@ -4,7 +4,7 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Christian Feitl<c.feitl@metaways.de>
  */
 
@@ -20,7 +20,7 @@ class Timetracker_Import_TimesheetTest extends TestCase
      */
     protected $_importContainer = null;
 
-    public function testImportDemoData()
+    public function testImportDemoData($options = [])
     {
         $tat = new Timetracker_Import_TimeaccountTest();
         $tat->importDemoData();
@@ -31,10 +31,10 @@ class Timetracker_Import_TimesheetTest extends TestCase
             static::markTestSkipped('utc / usertimezone have a different date, test would fail');
         }
 
-        $importer_timesheet = new Tinebase_Setup_DemoData_Import('Timetracker_Model_Timesheet', [
+        $importer_timesheet = new Tinebase_Setup_DemoData_Import('Timetracker_Model_Timesheet', array_merge([
             'definition' => 'time_import_timesheet_csv',
             'file' => 'timesheet.csv',
-        ]);
+        ], $options));
 
         $importer_timesheet->importDemodata();
 

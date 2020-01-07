@@ -22,7 +22,7 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
             'HumanResources_Model_Contract'     => array('name' => 'humanresources_contract',    'version' => 3),
             'HumanResources_Model_Employee'     => array('name' => 'humanresources_employee',    'version' => 6),
             'HumanResources_Model_FreeTime'     => array('name' => 'humanresources_freetime',    'version' => 3),
-            'HumanResources_Model_WorkingTime'  => array('name' => 'humanresources_workingtime', 'version' => 2),
+            'HumanResources_Model_WorkingTimeScheme' => array('name' => 'humanresources_workingtime', 'version' => 2),
         );
         
         $declaration = Tinebase_Setup_Update_Release7::getRecordSeqDeclaration();

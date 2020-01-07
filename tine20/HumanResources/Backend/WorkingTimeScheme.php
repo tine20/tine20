@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -16,7 +16,7 @@
  * @package     HumanResources
  * @subpackage  Backend
  */
-class HumanResources_Backend_WorkingTime extends Tinebase_Backend_Sql_Abstract
+class HumanResources_Backend_WorkingTimeScheme extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
@@ -30,12 +30,12 @@ class HumanResources_Backend_WorkingTime extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_modelName = 'HumanResources_Model_WorkingTime';
+    protected $_modelName = 'HumanResources_Model_WorkingTimeScheme';
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
      *
      * @var boolean
      */
-    protected $_modlogActive = FALSE;
+    protected $_modlogActive = true;
 }

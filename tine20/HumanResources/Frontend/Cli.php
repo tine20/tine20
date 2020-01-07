@@ -40,7 +40,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'params' => array(
                     'delete_private'        => "removes private information of the contact-record of the imported account",
                     'feast_calendar_id'     => 'the id of the contracts\' feast calendar (container)',
-                    'working_time_model_id' => 'use this working time model for the contract',
+                    'working_time_model_id' => 'use this working time schema for the contract',
                     'vacation_days'         => 'use this amount of vacation days for the contract'
             )
         ),
@@ -48,7 +48,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'description'   => 'Import Employee csv file',
                 'params' => array(
                     'feast_calendar_id'     => 'the id of the contracts\' feast calendar (container)',
-                    'working_time_model_id' => 'use this working time model for the contract',
+                    'working_time_model_id' => 'use this working time schema for the contract',
                     'vacation_days'         => 'use this amount of vacation days for the contract'
             )
         ),

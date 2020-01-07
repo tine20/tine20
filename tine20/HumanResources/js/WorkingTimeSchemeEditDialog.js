@@ -3,38 +3,33 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.HumanResources');
 
 /**
  * @namespace   Tine.HumanResources
- * @class       Tine.HumanResources.ContractEditDialog
+ * @class       Tine.HumanResources.WorkingTimeSchemeEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
- * 
- * <p>Contract Compose Dialog</p>
- * <p></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.HumanResources.ContractEditDialog
  */
-Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * @private
      */
     windowNamePrefix: 'WorkingTimeEditWindow_',
     appName: 'HumanResources',
-    modelName: 'WorkingTime',
-    recordClass: Tine.HumanResources.Model.WorkingTime,
-    
+    modelName: 'WorkingTimeScheme',
     
     
     windowHeight: 500,
+    evalGrants: false,
     
 
     /**
@@ -48,7 +43,8 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
      * inits the component
      */
     initComponent: function() {
-        Tine.HumanResources.WorkingTimeEditDialog.superclass.initComponent.call(this);
+        this.recordClass = Tine.HumanResources.Model.WorkingTimeScheme;
+        Tine.HumanResources.WorkingTimeSchemeEditDialog.superclass.initComponent.call(this);
     },
     
     /**
@@ -57,15 +53,39 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
      * @private
      */
     onRecordLoad: function(jsonData) {
-        Tine.HumanResources.WorkingTimeEditDialog.superclass.onRecordLoad.call(this);
+        Tine.HumanResources.WorkingTimeSchemeEditDialog.superclass.onRecordLoad.call(this);
         
-        var jsonData = jsonData ? Ext.decode(jsonData) : ! Ext.isEmpty(this.record.get('json')) ? Ext.decode(this.record.get('json')) : null;
+        var jsonData = jsonData || this.record.get('json') || null;
+        if (Ext.isString(jsonData)) {
+            jsonData = Ext.decode(jsonData);
+        }
+
         if (jsonData) {
             this.applyJsonData(jsonData);
         }
-        
+
+        var type = this.record.get('type');
+        if (type == 'individual') {
+            this.setReadOnly(true);
+        }
+
+        if (type == 'shared') {
+            this.typeCombo.readOnly = true;
+        }
     },
-    
+
+    setReadOnly: function(readOnly) {
+        this.typeCombo.readOnly = true;
+        this.blConfigPanel.setReadOnly(readOnly);
+        this.getForm().items.each(function(formField) {
+            if (formField.name.match(/^weekdays/)) {
+                formField.setDisabled(readOnly);
+            }
+        }, this);
+        this.btnSaveAndClose.setDisabled(readOnly);
+
+    },
+
     /**
      * applies the json data to the form
      * 
@@ -87,7 +107,7 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
     updateWorkingHours: function(formField, newValue, oldValue) {
         var sum = 0;
         for (var index = 0; index < 7; index++) {
-            sum += parseFloat(this.getForm().findField(('weekdays_' + index)).getValue());
+            sum += this.getForm().findField(('weekdays_' + index)).getValue();
         }
         
         this.getForm().findField('working_hours').setValue(sum);
@@ -106,7 +126,7 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
             days[index] = parseFloat(values['weekdays_' + index]);
         }
         
-        return Ext.encode({days: days});
+        return {days: days};
     },
 
     /**
@@ -124,13 +144,11 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
         Tine.HumanResources.ContractEditDialog.superclass.onRecordUpdate.call(this);
         
         this.record.set('json', this.getJson());
-        this.record.set('breaks', this.breaksPanel.getData());
 
     },
 
     onAfterRecordLoad: function () {
-        this.breaksPanel.onRecordLoad(this.record);
-        Tine.HumanResources.WorkingTimeEditDialog.superclass.onAfterRecordLoad.call(this);
+        Tine.HumanResources.WorkingTimeSchemeEditDialog.superclass.onAfterRecordLoad.call(this);
     },
     
     /**
@@ -142,26 +160,20 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
      * @private
      */
     getFormItems: function() {
-        this.breaksPanel = new Tine.HumanResources.BreakGridPanel({
+        // blpipes is of type records with subrecord hr.blconfig
+        this.blConfigPanel = new Tine.Tinebase.BL.BLConfigPanel({
             app: this.app,
-            editDialog: this
+            editDialog: this,
+            title: this.app.i18n._('Working Time Rules')
         });
-        
+
         var weekdayFieldDefaults = {
             
-            xtype: 'uxspinner',
-            strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                incrementValue : .5,
-                alternateIncrementValue: 1,
-                minValue: 0,
-                maxValue: 24,
-                allowDecimals : true
-            }),
-            decimalPrecision: 2,
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            xtype: 'durationspinner',
+            baseUnit: 'seconds',
             anchor: '100%',
             labelSeparator: '',
-            allowBlank: true,
+            allowBlank: false,
             columnWidth: 1/7,
             listeners: {
                 scope:  this,
@@ -183,16 +195,24 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
             activeTab: 0,
             border: false,
             items: [{
-            title: this.app.i18n._('Working time Model'),
+            title: this.app.i18n._('Working Time Schema'),
             autoScroll: true,
             border: false,
             frame: true,
             layout: 'border',
             items: [{
-                region: 'center',
+                region: 'north',
+                height: 130,
                 layout: 'hfit',
                 border: false,
-                items: [{
+                items: [this.typeCombo = new Ext.form.ComboBox ({
+                    name: 'type',
+                    fieldLabel: this.app.i18n._('Type'),
+                    store: [
+                        ['template', this.app.i18n._('Template (individual working time schemas are created for each contract)')],
+                        ['shared', this.app.i18n._('Shared (this working time schemas can be shared among contracts)')]
+                    ]
+                }),{
                     xtype: 'fieldset',
                     layout: 'hfit',
                     autoHeight: true,
@@ -206,30 +226,15 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
                                 'title',
                                 Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
                                 {
-                                    columnWidth: 1
+                                    columnWidth: 2/3
                                 }
-                            )], [
-                            {
-                                fieldLabel: this.app.i18n._('Work start'),
-                                columnWidth: 1/4,
-                                emptyText: this.app.i18n._('not set'),
-                                name: 'evaluation_period_start',
-                                xtype: 'timefield'
-                            }, {
-                                fieldLabel: this.app.i18n._('Work end'),
-                                columnWidth: 1/4,
-                                emptyText: this.app.i18n._('not set'),
-                                name: 'evaluation_period_end',
-                                xtype: 'timefield'
-                            }, {
+                            ), {
                                 fieldLabel: this.app.i18n._('Working Hours per week'),
-                                xtype: 'displayfield',
-                                style: { border: 'silver 1px solid', padding: '3px', height: '11px'},
-                                minValue: 1,
-                                decimalPrecision: 2,
-                                decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+                                xtype: 'durationspinner',
+                                baseUnit: 'seconds',
                                 name: 'working_hours',
-                                columnWidth: 2/4
+                                disabled: true,
+                                columnWidth: 1/3
                             }],
                             
                             [Ext.apply({
@@ -258,13 +263,13 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
                     }]
                 }]
             },{
-                region: 'south',
+                region: 'center',
                 layout: 'fit',
                 flex: 1,
-                height: 300,
                 border: false,
                 items: [
-                    this.breaksPanel
+                    this.blConfigPanel
+                    // this.breaksPanel
                 ]
             }]
         }]
@@ -281,13 +286,13 @@ Tine.HumanResources.WorkingTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
  *
  * @return {Ext.ux.Window}
  */
-Tine.HumanResources.WorkingTimeEditDialog.openWindow = function (config) {
+Tine.HumanResources.WorkingTimeSchemeEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
-        width: 400,
-        height: 500,
-        name: Tine.HumanResources.WorkingTimeEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.HumanResources.WorkingTimeEditDialog',
+        width: 600,
+        height: 520,
+        name: Tine.HumanResources.WorkingTimeSchemeEditDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.HumanResources.WorkingTimeSchemeEditDialog',
         contentPanelConstructorConfig: config
     });
     return window;

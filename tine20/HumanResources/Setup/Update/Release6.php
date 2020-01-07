@@ -384,10 +384,10 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         
         // update json of workingtime models if they still exist
         
-        $controller = HumanResources_Controller_WorkingTime::getInstance();
+        $controller = HumanResources_Controller_WorkingTimeScheme::getInstance();
         $controller->modlogActive(FALSE);
         
-        $filter = new HumanResources_Model_WorkingTimeFilter(array());//array('field' => 'working_hours', 'operator' => 'equals', 'value' => '40')));
+        $filter = new HumanResources_Model_WorkingTimeSchemeFilter(array());//array('field' => 'working_hours', 'operator' => 'equals', 'value' => '40')));
         $allWT = $controller->search($filter);
         
         $wt40 = $allWT->filter('working_hours', "40");

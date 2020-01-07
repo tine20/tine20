@@ -70,6 +70,7 @@ class Setup_Frontend_Cli
         }
 
         $lang = $_opts->lang ? $_opts->lang : getenv('LANGUAGE');
+
         if ($lang) {
             Tinebase_Core::setLocale($lang);
         }

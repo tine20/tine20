@@ -4,7 +4,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -34,6 +34,11 @@ class HumanResources_TestCase extends TestCase
     protected $_department = NULL;
 
     /**
+     * @var HumanResources_Model_WorkingTimeScheme;
+     */
+    protected $_40hoursWorkingTimeScheme = null;
+
+    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -51,6 +56,17 @@ class HumanResources_TestCase extends TestCase
         parent::setUp();
     }
 
+    protected function _getWorkingTimeScheme40()
+    {
+        if (null === $this->_40hoursWorkingTimeScheme) {
+            $translate = Tinebase_Translation::getTranslation('HumanResources');
+            $this->_40hoursWorkingTimeScheme = HumanResources_Controller_WorkingTimeScheme::getInstance()->search(
+                new HumanResources_Model_WorkingTimeSchemeFilter([
+                    ['field' => 'title', 'operator' => 'equals', 'value' => $translate->_('Full-time 40 hours')]
+                ]))->getFirstRecord();
+        }
+        return $this->_40hoursWorkingTimeScheme;
+    }
     /**
      * returns the current user or the user defined by the login name
      * @return Tinebase_Model_User
@@ -67,12 +83,12 @@ class HumanResources_TestCase extends TestCase
     /**
      * returns one of the on setup created workingtimes
      * 
-     * @return HumanResources_Model_WorkingTime
+     * @return HumanResources_Model_WorkingTimeScheme
      */
     protected function _getWorkingTime()
     {
-        $filter = new HumanResources_Model_WorkingTimeFilter();
-        $wt = HumanResources_Controller_WorkingTime::getInstance()->search($filter);
+        $filter = new HumanResources_Model_WorkingTimeSchemeFilter();
+        $wt = HumanResources_Controller_WorkingTimeScheme::getInstance()->search($filter);
         return $wt->getFirstRecord();
     }
 
@@ -135,13 +151,16 @@ class HumanResources_TestCase extends TestCase
     protected function _getSalesCostCenter($number = NULL)
     {
         if ($number !== NULL) {
-            $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
-                'field'    => 'number',
-                'operator' => 'equals',
-                'value'    => $number,
-            ))))->getFirstRecord();
+            $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter([[
+                'field' => 'number', 'operator' => 'equals', 'value' => $number,
+            ], [
+                'field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET,
+            ]]))->getFirstRecord();
             
             if ($c) {
+                if ($c->is_deleted) {
+                    $c = Sales_Controller_CostCenter::getInstance()->unDelete($c);
+                }
                 return $c;
             }
         }
@@ -191,6 +210,7 @@ class HumanResources_TestCase extends TestCase
             'employee_id' => null,
             'vacation_days' => 30,
             'feast_calendar_id' => $this->_getFeastCalendar(),
+            'working_time_scheme' => $this->_getWorkingTimeScheme40()
         ), true);
 
         return $c;

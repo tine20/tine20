@@ -30,7 +30,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     appName: 'HumanResources',
     evalGrants: false,
     
-    windowHeight: 300,
+    windowHeight: 550,
     
     /**
      * just update the contract grid panel, no persisten
@@ -68,7 +68,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * 
      * @private
      */
-    onRecordLoad: function(jsonData) {
+    onRecordLoad: function() {
         // interrupt process flow until dialog is rendered
         if (! this.rendered) {
             this.onRecordLoad.defer(250, this);
@@ -76,39 +76,59 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }
         
         Tine.HumanResources.ContractEditDialog.superclass.onRecordLoad.call(this);
-        
-        var jsonData = jsonData ? Ext.decode(jsonData) : ! Ext.isEmpty(this.record.get('workingtime_json')) ? Ext.decode(this.record.get('workingtime_json')) : null;
-        if (jsonData) {
-            this.applyJsonData(jsonData);
-        }
-        
+
         if (! this.record.id) {
             this.getForm().findField('feast_calendar_id').setValue(Tine.HumanResources.registry.get('defaultFeastCalendar'));
         } else {
             this.window.setTitle(String.format(i18n._('Edit {0}'), this.i18nRecordName));
-            this.getForm().findField('workingtime_template').setValue(null);
         }
-        
+
+        this.applyWorkingTimeSchema(this.record.get('working_time_scheme'));
+
         // disable fields if there are already some vacations booked
         // but allow setting end_date
-        
         if (this.record.get('creation_time')) {
             if (! this.record.get('is_editable')) {
                 this.getForm().items.each(function(formField) {
                     if (formField.name != 'end_date') {
-                        formField.disable();
+                        formField.setDisabled(true);
                     }
                 }, this);
+
+                this.blConfigPanel.setReadOnly(true);
             }
         }
     },
-    
+
+    applyWorkingTimeSchema: function(workingtimeSchema) {
+        if (! workingtimeSchema) {
+            return;
+        }
+
+        var _ = window.lodash,
+            type = _.get(workingtimeSchema, 'data.type', _.get(workingtimeSchema, 'type'));
+
+        this.applyJsonData(_.get(workingtimeSchema, 'data.json', _.get(workingtimeSchema, 'json')));
+        this.blConfigPanel.onRecordLoad(this, this.record);
+
+        var readOnly = type == 'shared';
+
+        this.blConfigPanel.setReadOnly(readOnly);
+        this.getForm().items.each(function(formField) {
+            if (formField.name.match(/^weekdays/)) {
+                formField.setDisabled(readOnly);
+            }
+        }, this);
+    },
+
     /**
      * applies the json data to the form
      * 
      * @param {Object} jsonData
      */
     applyJsonData: function(jsonData) {
+        jsonData = Ext.isString(jsonData) ? Ext.decode(jsonData) : jsonData;
+
         var days = jsonData.days,
         form = this.getForm(),
         sum = 0.0;
@@ -129,13 +149,13 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         this.getForm().findField('working_hours').setValue(sum);
     },
-    
+
     /**
      * returns appropriate json for the template or the contract
      * 
      * @return {String}
      */
-    getJson: function() {
+    getJsonData: function() {
         var values = this.getForm().getFieldValues(),
             days = [];
         
@@ -143,7 +163,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             days[index] = parseFloat(values['weekdays_' + index]);
         }
         
-        return Ext.encode({days: days});
+        return {days: days};
     },
 
     /**
@@ -158,10 +178,16 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     onRecordUpdate: function() {
+        var _ = window.lodash,
+            working_time_scheme = this.record.get('working_time_scheme');
+
+        // NOTE: this reduces working_time_scheme to id...
         Tine.HumanResources.ContractEditDialog.superclass.onRecordUpdate.call(this);
         
-        this.record.set('workingtime_json', this.getJson());
         this.record.set('feast_calendar_id', this.getForm().findField('feast_calendar_id').selectedContainer);
+        this.record.set('working_time_scheme', working_time_scheme);
+        this.blConfigPanel.onRecordUpdate(this, this.record);
+        _.set(this.record, 'data.working_time_scheme.json', this.getJsonData());
     },
     
     /**
@@ -173,18 +199,19 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
+        // blpipes is of type records with subrecord hr.blconfig
+        this.blConfigPanel = new Tine.Tinebase.BL.BLConfigPanel({
+            app: this.app,
+            editDialog: this,
+            owningRecordClass: Tine.HumanResources.Model.WorkingTimeScheme,
+            dataPath: 'data.working_time_scheme.blpipe',
+            title: this.app.i18n._('Working Time Rules')
+        });
+
         var weekdayFieldDefaults = {
-            
-            xtype: 'uxspinner',
-            strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                incrementValue : .5,
-                alternateIncrementValue: 1,
-                minValue: 0,
-                maxValue: 24,
-                allowDecimals : true
-            }),
-            decimalPrecision: 2,
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+
+            xtype: 'durationspinner',
+            baseUnit: 'seconds',
             anchor: '100%',
             labelSeparator: '',
             allowBlank: true,
@@ -215,8 +242,9 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             frame: true,
             layout: 'border',
             items: [{
-                region: 'center',
+                region: 'north',
                 layout: 'hfit',
+                height: 220,
                 border: false,
                 items: [{
                     xtype: 'fieldset',
@@ -226,21 +254,25 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     items: [{
                         xtype: 'columnform',
                         labelAlign: 'top',
+                        defaults: {columnWidth: 1/2},
                         items: [[
-                            {xtype: 'datefield', name: 'start_date', fieldLabel: this.app.i18n._('Start Date'), allowBlank: false },
-                            {xtype: 'extuxclearabledatefield', name: 'end_date',   fieldLabel: this.app.i18n._('End Date')},
-                            {
-                                xtype: 'tinewidgetscontainerselectcombo', 
-                                name: 'feast_calendar_id',
-                                containerName: this.app.i18n._('Calendar'),
-                                containersName: this.app.i18n._('Calendars'),
-                                recordClass: Tine.Calendar.Model.Event,
-                                requiredGrant: 'readGrant',
-                                hideTrigger2: true,
-                                allowBlank: false,
-                                blurOnSelect: true,
-                                fieldLabel: this.app.i18n._('Feast Calendar')
-                            }
+                                {xtype: 'datefield', name: 'start_date', fieldLabel: this.app.i18n._('Start Date'), allowBlank: false, columnWidth: 1/2 },
+                                {xtype: 'extuxclearabledatefield', name: 'end_date',   fieldLabel: this.app.i18n._('End Date'), columnWidth: 1/2}
+                            ], [
+                                {
+                                    xtype: 'tinewidgetscontainerselectcombo',
+                                    name: 'feast_calendar_id',
+                                    containerName: this.app.i18n._('Calendar'),
+                                    containersName: this.app.i18n._('Calendars'),
+                                    recordClass: Tine.Calendar.Model.Event,
+                                    requiredGrant: 'readGrant',
+                                    hideTrigger2: true,
+                                    allowBlank: false,
+                                    blurOnSelect: true,
+                                    columnWidth: 1/2,
+                                    fieldLabel: this.app.i18n._('Feast Calendar')
+                                },
+                                {name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation days of one calendar year'), allowBlank: false, columnWidth: 1/2}
                         ]]
                     }]
                 }, {
@@ -253,27 +285,25 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         labelAlign: 'top',
                         items: [
                         [
-                                Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {
+                                Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTimeScheme', {
                                     value: this.record,
-                                    fieldLabel: this.app.i18n._('Choose the template'),
+                                    fieldLabel: this.app.i18n._('Working Time Schema'),
                                     selectedRecord: this.record,
                                     ref: '../../../../../../../templateChooser',
-                                    columnWidth: 1/3,
-                                    name: 'workingtime_template',
+                                    columnWidth: 2/3,
+                                    name: 'working_time_scheme',
                                     listeners: {
                                         scope:  this,
-                                        select: this.updateTemplate.createDelegate(this)
+                                        select: this.onWorkingtimeSchemaSelect.createDelegate(this)
                                     }
                                 }), {
                                     fieldLabel: this.app.i18n._('Working Hours per week'),
-                                    xtype: 'displayfield',
-                                    style: { border: 'silver 1px solid', padding: '3px', height: '11px'},
-                                    minValue: 1,
-                                    decimalPrecision: 2,
-                                    decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+                                    xtype: 'durationspinner',
+                                    baseUnit: 'seconds',
+                                    disabled: true,
                                     name: 'working_hours',
                                     columnWidth: 1/3
-                                },{name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation days of one calendar year'), columnWidth: 1/3, allowBlank: false}
+                                }
                             ],
                             
                             [Ext.apply({
@@ -301,12 +331,21 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         ]
                     }]
                 }]
+            }, {
+                region: 'center',
+                layout: 'fit',
+                flex: 1,
+                border: false,
+                items: [
+                    this.blConfigPanel
+                ]
             }]
         }]
         };
     },
     
-    updateTemplate: function(combo, record, index) {
-        this.applyJsonData(Ext.decode(record.get('json')));
+    onWorkingtimeSchemaSelect: function(combo, record, index) {
+        this.record.set('working_time_scheme', record.data);
+        this.applyWorkingTimeSchema(record);
     }
 });

@@ -345,7 +345,11 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'HumanResources' => array(
                 HumanResources_Model_Account::class,
-                HumanResources_Model_Break::class,
+                HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class,
+                HumanResources_Model_BLDailyWTReport_BreakTimeConfig::class,
+                HumanResources_Model_BLDailyWTReport_Config::class,
+                HumanResources_Model_BLDailyWTReport_PopulateReportConfig::class,
+                HumanResources_Model_BLDailyWTReport_WorkingTime::class,
                 HumanResources_Model_Contract::class,
                 HumanResources_Model_CostCenter::class,
                 HumanResources_Model_DailyWTReport::class,
@@ -356,7 +360,9 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_FreeTime::class,
                 HumanResources_Model_FreeTimeStatus::class,
                 HumanResources_Model_FreeTimeType::class,
-                HumanResources_Model_WorkingTime::class,
+                HumanResources_Model_MonthlyWTReport::class,
+                HumanResources_Model_WageType::class,
+                HumanResources_Model_WorkingTimeScheme::class,
             ),
             'Inventory' => array(
                 Inventory_Model_InventoryItem::class,
