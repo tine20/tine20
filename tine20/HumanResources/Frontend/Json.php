@@ -196,43 +196,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
-        $aids = array();
-        $fids = array();
-        
-        // TODO: resolve this in controller
-        foreach(array('vacation', 'sickness') as $type) {
-            if (! empty($employee[$type]) && is_array($employee[$type])) {
-                foreach($employee[$type] as $v) {
-                    $aids[] = $v['account_id'];
-                    $fids[] = $v['id'];
-                }
-            }
-        }
-        
-        $aids = array_unique($aids);
-        $fids = array_unique($fids);
-        $acs = HumanResources_Controller_Account::getInstance()->getMultiple($aids);
-        $freedayFilter = new HumanResources_Model_FreeDayFilter(array());
-        $freedayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $fids)));
-        $fds = HumanResources_Controller_FreeDay::getInstance()->search($freedayFilter);
-        $fds->setTimezone(Tinebase_Core::getUserTimezone());
-        
-        foreach(array('vacation', 'sickness') as $type) {
-            if (! empty($employee[$type]) && is_array($employee[$type])) {
-                for ($i = 0; $i < count($employee[$type]); $i++) {
-                    
-                    $account = $acs->filter('id', $employee[$type][$i]['account_id'])->getFirstRecord();
-                    
-                    if ($account) {
-                        $employee[$type][$i]['account_id'] = $account->toArray();
-                    }
-                    
-                    $freedays = $fds->filter('freetime_id', $employee[$type][$i]['id']);
-                    $employee[$type][$i]['freedays'] = $freedays->toArray();
-                }
-            }
-        }
-        
         return $employee;
     }
 
@@ -268,37 +231,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
         }
-        
-        foreach(array('vacation', 'sickness') as $prop) {
-            if (! empty($recordData[$prop])) {
-                for ($i = 0; $i < count($recordData[$prop]); $i++) {
-                    // add account id by year if no account id is given (sickness)
-                    if (! $recordData[$prop][$i]['account_id']) {
-                        
-                        $date = new Tinebase_DateTime($recordData[$prop][$i]['firstday_date']);
-                        $year = $date->format('Y');
-                        
-                        if (! isset($this->_cachedAccountsOnSaveEmployee[$year])) {
-                            $filter = new HumanResources_Model_AccountFilter(array(array('field' => 'year', 'operator' => 'equals', 'value' => $year)));
-                            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $recordData['id'])));
-                            $account = HumanResources_Controller_Account::getInstance()->search($filter)->getFirstRecord();
-                            if (! $account) {
-                                throw new HumanResources_Exception_NoAccount();
-                            }
-                            $this->_cachedAccountsOnSaveEmployee[$year] = $account;
-                        } else {
-                            $account = $this->_cachedAccountsOnSaveEmployee[$year];
-                        }
-                        
-                        $recordData[$prop][$i]['account_id'] = $account->getId();
-                    }
-                    // flat account id
-                    if (is_array($recordData[$prop][$i]['account_id'])) {
-                        $recordData[$prop][$i]['account_id'] = $recordData[$prop][$i]['account_id']['id'];
-                    }
-                }
-            }
-        }
+
         // auto set dates of the first contract to dates of the employee, if none are given
         if (! empty($recordData['contracts'])) {
             
