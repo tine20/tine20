@@ -439,7 +439,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
         // sync direct properties
         foreach($this->_syncFields as $fieldName) {
-            $alternativeEvents->{$fieldName} = $event{$fieldName};
+            $alternativeEvents->{$fieldName} = $event->{$fieldName};
         }
     }
 

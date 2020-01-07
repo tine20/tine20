@@ -419,7 +419,7 @@ class Setup_Controller
         
         foreach ($dirIterator as $item) {
             $appName = $item->getFileName();
-            if ($appName{0} != '.' && $appName != 'Tinebase' && $item->isDir()) {
+            if ($appName[0] != '.' && $appName != 'Tinebase' && $item->isDir()) {
                 $fileName = $this->_baseDir . $appName . '/Setup/setup.xml' ;
                 if (file_exists($fileName) && ($getInstalled || ! $this->isInstalled($appName))) {
                     $applications[$appName] = $this->getSetupXml($appName);
