@@ -77,7 +77,7 @@
     "composer/semver": "^1.4",
     "doctrine/dbal": "v2.5.13pl6 as v2.5.13",
     "doctrine/orm": "2.5.14pl1 as v2.5.14",
-    "ezyang/htmlpurifier": "v4.*",
+    "ezyang/htmlpurifier": "dev-master",
     "firebase/php-jwt": "^5.0",
     "giggsey/libphonenumber-for-php": "^8.10",
     "http-interop/http-middleware": "^0.5.0",
