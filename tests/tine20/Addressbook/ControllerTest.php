@@ -802,4 +802,260 @@ class Addressbook_ControllerTest extends TestCase
 
         /** TODO add sieve asserts! */
     }
+
+    public function testListMemberFilterEquals()
+    {
+        $listContainer = $this->_getTestContainer('Addressbook', 'Addressbook_Model_List');
+        $list1 = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => $listContainer->getId(),
+        ]));
+        $list2 = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => $listContainer->getId(),
+        ]));
+
+        $contact1 = $this->_instance->get($this->_personas['sclever']->contact_id);
+        $contact2 = $this->_instance->get($this->_personas['pwulf']->contact_id);
+
+        Addressbook_Controller_List::getInstance()->addListMember($list1->getId(), [$contact1->getId()]);
+        Addressbook_Controller_List::getInstance()->addListMember($list2->getId(), [$contact2->getId()]);
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+                ['field' => 'list', 'operator' => 'equals', 'value' => $list1->getId()]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'equals', 'value' => [$list1->getId()]]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'equals', 'value' => $list2->getId()]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact2->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'equals', 'value' => [$list1->getId(), $list2->getId()]]
+        ]));
+        static::assertSame(2, $result->count(), 'search result count mismatch');
+
+
+        $contact = $this->_instance->create($this->objects['initialContact']);
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'equals', 'value' => null]
+        ]));
+        static::assertNotNull($result->find('id', $contact->getId()), 'search did not find unlisted contact');
+        static::assertNull($result->find('id', $contact1->getId()), 'search did find listed contact');
+        static::assertNull($result->find('id', $contact2->getId()), 'search did find listed contact');
+
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'equals', 'value' => [null]]
+        ]));
+        static::assertSame(0, $result->count(), 'broken search should never find anything');
+    }
+
+    public function testListMemberFilterIn()
+    {
+        $listContainer = $this->_getTestContainer('Addressbook', 'Addressbook_Model_List');
+        $list1 = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => $listContainer->getId(),
+        ]));
+        $list2 = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => $listContainer->getId(),
+        ]));
+
+        $contact1 = $this->_instance->get($this->_personas['sclever']->contact_id);
+        $contact2 = $this->_instance->get($this->_personas['pwulf']->contact_id);
+
+        Addressbook_Controller_List::getInstance()->addListMember($list1->getId(), [$contact1->getId()]);
+        Addressbook_Controller_List::getInstance()->addListMember($list2->getId(), [$contact2->getId()]);
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'in', 'value' => $list1->getId()]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'in', 'value' => [$list1->getId()]]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'in', 'value' => $list2->getId()]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact2->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'in', 'value' => [$list1->getId(), $list2->getId()]]
+        ]));
+        static::assertSame(2, $result->count(), 'search result count mismatch');
+
+
+        $contact = $this->_instance->create($this->objects['initialContact']);
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'in', 'value' => null]
+        ]));
+        static::assertNotNull($result->find('id', $contact->getId()), 'search did not find unlisted contact');
+        static::assertNull($result->find('id', $contact1->getId()), 'search did find listed contact');
+        static::assertNull($result->find('id', $contact2->getId()), 'search did find listed contact');
+
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'in', 'value' => [null]]
+        ]));
+        static::assertSame(0, $result->count(), 'broken search should never find anything');
+    }
+
+    public function testListMemberFilterAll()
+    {
+        $listContainer = $this->_getTestContainer('Addressbook', 'Addressbook_Model_List');
+        $list1 = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => $listContainer->getId(),
+        ]));
+        $list2 = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => $listContainer->getId(),
+        ]));
+
+        $contact1 = $this->_instance->get($this->_personas['sclever']->contact_id);
+        $contact2 = $this->_instance->get($this->_personas['pwulf']->contact_id);
+
+        Addressbook_Controller_List::getInstance()->addListMember($list1->getId(), [$contact1->getId()]);
+        Addressbook_Controller_List::getInstance()->addListMember($list2->getId(), [$contact2->getId()]);
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'all', 'value' => $list1->getId()]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'all', 'value' => [$list1->getId()]]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'all', 'value' => $list2->getId()]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact2->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'all', 'value' => [$list1->getId(), $list2->getId()]]
+        ]));
+        static::assertSame(0, $result->count(), 'search result count mismatch');
+
+
+        Addressbook_Controller_List::getInstance()->addListMember($list1->getId(), [$contact2->getId()]);
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'all', 'value' => [$list1->getId(), $list2->getId()]]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact2->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+
+        $contact = $this->_instance->create($this->objects['initialContact']);
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'all', 'value' => null]
+        ]));
+        static::assertNotNull($result->find('id', $contact->getId()), 'search did not find unlisted contact');
+        static::assertNull($result->find('id', $contact1->getId()), 'search did find listed contact');
+        static::assertNull($result->find('id', $contact2->getId()), 'search did find listed contact');
+
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'all', 'value' => [null]]
+        ]));
+        static::assertNotNull($result->find('id', $contact->getId()), 'search did not find unlisted contact');
+        static::assertNull($result->find('id', $contact1->getId()), 'search did find listed contact');
+        static::assertNull($result->find('id', $contact2->getId()), 'search did find listed contact');
+    }
+
+    public function testListMemberFilterAnd()
+    {
+        $listContainer = $this->_getTestContainer('Addressbook', 'Addressbook_Model_List');
+        $list1 = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => $listContainer->getId(),
+        ]));
+        $list2 = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => $listContainer->getId(),
+        ]));
+
+        $contact1 = $this->_instance->get($this->_personas['sclever']->contact_id);
+        $contact2 = $this->_instance->get($this->_personas['pwulf']->contact_id);
+
+        Addressbook_Controller_List::getInstance()->addListMember($list1->getId(), [$contact1->getId()]);
+        Addressbook_Controller_List::getInstance()->addListMember($list2->getId(), [$contact2->getId()]);
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'AND', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $list1->getId()]
+            ]]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'AND', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $list2->getId()]
+            ]]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact2->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'AND', 'value' => [
+                ['field' => 'id', 'operator' => 'in', 'value' => [$list1->getId(), $list2->getId()]]
+            ]]
+        ]));
+        static::assertSame(2, $result->count(), 'search result count mismatch');
+
+
+        // create contact without any lists
+        $this->_instance->create($this->objects['initialContact']);
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'in', 'value' => [
+                ['field' => 'id', 'operator' => 'in', 'value' => ['asdfadfa']]
+            ]]
+        ]));
+        static::assertSame(0, $result->count(), 'broken search should never find anything');
+    }
 }

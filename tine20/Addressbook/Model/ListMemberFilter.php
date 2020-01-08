@@ -25,6 +25,8 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
     protected $_operators = array(
         0 => 'equals',
         1 => 'in',
+        2 => 'all',
+        3 => 'AND'
     );
 
     /**
@@ -35,28 +37,43 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $correlationName = Tinebase_Record_Abstract::generateUID(30);
-
         // make filter work for lists and contacts
         if ($this->_field === 'contact') {
             $myField = 'list_id';
             $foreignField = 'contact_id';
+            if ('AND' === $this->_operator) {
+                throw new Tinebase_Exception_NotImplemented('defined_by is not supported for list searches');
+            }
         } else {
             $myField = 'contact_id';
             $foreignField = 'list_id';
+            if ('AND' === $this->_operator) {
+                $listFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class,
+                    $this->_value);
+                $this->_value = Addressbook_Controller_List::getInstance()->search($listFilter, null, false, true);
+                if (empty($this->_value)) {
+                    $this->_value = null;
+                }
+            }
         }
 
+        $values = 'all' === $this->_operator ? (array)($this->_value ?: [null]) : [$this->_value];
         $db = $_backend->getAdapter();
-        $_select->joinLeft(
-            /* table  */ array($correlationName => $db->table_prefix . 'addressbook_list_members'), 
-            /* on     */ $db->quoteIdentifier($correlationName . '.' . $myField)
-                        . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id'),
-            /* select */ array()
-        );
-        if (null === $this->_value) {
-            $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IS NULL');
-        } else {
-            $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IN (?)', (array)$this->_value);
+
+        foreach ($values as $value) {
+            $correlationName = Tinebase_Record_Abstract::generateUID(30);
+
+            $_select->joinLeft(
+            /* table  */ array($correlationName => $db->table_prefix . 'addressbook_list_members'),
+                /* on     */ $db->quoteIdentifier($correlationName . '.' . $myField)
+                . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id'),
+                /* select */ array()
+            );
+            if (null === $value) {
+                $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IS NULL');
+            } else {
+                $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IN (?)', (array)$value);
+            }
         }
     }
     
