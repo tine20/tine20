@@ -777,13 +777,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ),
         /**
-         * TODO add AUTODETECT (check for webpack-asset.json -> RELEASE)
+         * One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE
          */
         self::BUILD_TYPE => array(
             //_('Build Type')
             'label' => 'Build Type',
-            //_('One of: DEBUG, DEVELOPMENT, RELEASE')
-            'description' => 'One of: DEBUG, DEVELOPMENT, RELEASE',
+            //_('One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE')
+            'description' => 'One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE',
             'type' => 'string',
             'clientRegistryInclude' => false,
             'setByAdminModule' => false,
