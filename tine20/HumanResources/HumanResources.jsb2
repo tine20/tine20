@@ -96,11 +96,7 @@
           "path": "js/"
         },
         {
-          "text": "WorkingTimeEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "BreakGridPanel.js",
+          "text": "WorkingTimeSchemeEditDialog.js",
           "path": "js/"
         }
       ]

@@ -293,8 +293,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _getWorkingTime()
     {
         if (! $this->_workingtimes) {
-            $filter = new HumanResources_Model_WorkingTimeFilter();
-            $this->_workingtimes = HumanResources_Controller_WorkingTime::getInstance()->search($filter);
+            $filter = new HumanResources_Model_WorkingTimeSchemeFilter();
+            $this->_workingtimes = HumanResources_Controller_WorkingTimeScheme::getInstance()->search($filter);
         }
         $count = $this->_workingtimes->count();
         $wt = $this->_workingtimes->getByIndex(rand(0, $count-1));
@@ -321,7 +321,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'employee_id' => null,
             'vacation_days' => 30,
             'feast_calendar_id' => $this->_feastCalendar,
-            'workingtime_json'  => $this->_getWorkingTime()->json
+            'working_time_scheme'  => $this->_getWorkingTime()->getId(),
         ), TRUE);
 
         return $c;

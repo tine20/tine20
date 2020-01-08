@@ -473,10 +473,32 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             . ' ' . print_r($partStructure, TRUE));
 
         $rawContent = $this->_getPartContent($message, $_partId, $partStructure, $_onlyBodyOfRfc822);
-
+        if (! $partStructure) {
+            // try to get part structure from attachment
+            $partStructure = $this->_getPartStructureFromAttachments($message, $_partId);
+        }
         $part = $this->_createMimePart($rawContent, $partStructure);
 
         return $part;
+    }
+
+    protected function _getPartStructureFromAttachments($message, $partId)
+    {
+        $attachment = array_filter($message->attachments, function($el) use ($partId) {
+            return isset($el['partId']) && $el['partId'] === $partId;
+        });
+        if (count($attachment) >= 1) {
+            return [
+                'contentType' => $attachment[0]['content-type'],
+                'description' => $attachment[0]['description'],
+                'parameters' => [
+                    'name' => $attachment[0]['filename'],
+                ]
+            ];
+        } else {
+            // not found
+            return null;
+        }
     }
 
     /**
@@ -533,6 +555,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_partStructure
      * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
      * @return string
+     * @throws Felamimail_Exception_IMAPMessageNotFound
      */
     protected function _getPartContent(Felamimail_Model_Message $_message, $_partId, &$_partStructure, $_onlyBodyOfRfc822 = FALSE)
     {
@@ -553,6 +576,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
 
             $section = $_partId . '.TEXT';
+        } else if (preg_match('/winmail-([0-9]+)/', $_partId, $matches)) {
+            // winmail.dat part requested
+            $_message = $this->getCompleteMessage($_message);
+            if (isset($_message->attachments[$matches[1]])) {
+                return $this->getWinmailAttachmentContents($_message, $_message->attachments[$matches[1]]);
+            }
+            throw new Felamimail_Exception_IMAPMessageNotFound('part ' . $_partId . ' not found in message');
         } else {
             $logmessage = ($_partId !== NULL)
                 ? 'Fetch message part ' . $_partId . ' of messageuid ' . $_message->messageuid
@@ -561,9 +591,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $section = $_partId;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_partStructure, TRUE));
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $logmessage);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . $logmessage);
 
         $rawContent .= $imapBackend->getRawContent($_message->messageuid, $section, TRUE);
 
@@ -579,8 +608,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _createMimePart($_rawContent, $_partStructure)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Content: ' . $_rawContent);
-
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $_rawContent);
         rewind($stream);
@@ -589,22 +616,22 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $part = new Zend_Mime_Part($stream, true);
         $part->type = $_partStructure['contentType'];
-        $part->encoding = (isset($_partStructure['encoding']) || array_key_exists('encoding', $_partStructure)) ? $_partStructure['encoding'] : null;
-        $part->id = (isset($_partStructure['id']) || array_key_exists('id', $_partStructure)) ? $_partStructure['id'] : null;
-        $part->description = (isset($_partStructure['description']) || array_key_exists('description', $_partStructure)) ? $_partStructure['description'] : null;
-        $part->charset = (isset($_partStructure['parameters']['charset']) || array_key_exists('charset', $_partStructure['parameters']))
+        $part->encoding = isset($_partStructure['encoding'])? $_partStructure['encoding'] : null;
+        $part->id = isset($_partStructure['id']) ? $_partStructure['id'] : null;
+        $part->description = isset($_partStructure['description']) ? $_partStructure['description'] : null;
+        $part->charset = isset($_partStructure['parameters']['charset'])
             ? $_partStructure['parameters']['charset']
             : Tinebase_Mail::DEFAULT_FALLBACK_CHARSET;
-        $part->boundary = (isset($_partStructure['parameters']['boundary']) || array_key_exists('boundary', $_partStructure['parameters'])) ? $_partStructure['parameters']['boundary'] : null;
-        $part->location = $_partStructure['location'];
-        $part->language = $_partStructure['language'];
-        if (is_array($_partStructure['disposition'])) {
+        $part->boundary = isset($_partStructure['parameters']['boundary'])? $_partStructure['parameters']['boundary'] : null;
+        $part->location = isset($_partStructure['location']) ? $_partStructure['location'] : null;
+        $part->location = isset($_partStructure['language']) ? $_partStructure['language'] : null;
+        if (isset($_partStructure['disposition']) && is_array($_partStructure['disposition'])) {
             $part->disposition = $_partStructure['disposition']['type'];
-            if ((isset($_partStructure['disposition']['parameters']) || array_key_exists('parameters', $_partStructure['disposition']))) {
+            if (isset($_partStructure['disposition']['parameters'])) {
                 $part->filename = (isset($_partStructure['disposition']['parameters']['filename']) || array_key_exists('filename', $_partStructure['disposition']['parameters'])) ? $_partStructure['disposition']['parameters']['filename'] : null;
             }
         }
-        if (empty($part->filename) && (isset($_partStructure['parameters']) || array_key_exists('parameters', $_partStructure)) && (isset($_partStructure['parameters']['name']) || array_key_exists('name', $_partStructure['parameters']))) {
+        if (empty($part->filename) && isset($_partStructure['parameters']) && isset($_partStructure['parameters']['name'])) {
             $part->filename = $_partStructure['parameters']['name'];
         }
 
@@ -1015,12 +1042,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $expanded = array();
 
                 // if a winmail.dat exists, try to expand it
-                if (preg_match('/^winmail[.]*\.dat/i', $filename) && Tinebase_Core::systemCommandExists('tnef')) {
+                if (preg_match('/^winmail[.]*\.dat/i', $filename) && (
+                    Tinebase_Core::systemCommandExists('tnef') || Tinebase_Core::systemCommandExists('ytnef')
+                )) {
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Got winmail.dat attachment (contentType=' . $part['contentType'] . '). Trying to extract files ...');
 
-                    if ($part['contentType'] == 'application/ms-tnef' || $part['contentType'] == 'text/plain') {
+                    if (preg_match('/^application\/.{0,4}ms-tnef$/', $part['contentType']) || $part['contentType'] == 'text/plain') {
                         $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
 
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1061,6 +1090,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string $messageId
      * @param string $partId
+     * @return array
      */
     protected function _expandWinMailDat($messageId, $partId)
     {
@@ -1103,46 +1133,32 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // create path for this message id
-        if (!is_dir($path . $messageId)) {
-            if (file_exists($path . $messageId)) {
-                unlink($path . $messageId);
+        $pathWithMessageId = $path . $messageId;
+        if (!is_dir($pathWithMessageId)) {
+            if (file_exists($pathWithMessageId)) {
+                unlink($pathWithMessageId);
             }
 
-            mkdir($path . $messageId);
+            mkdir($pathWithMessageId);
 
             $part = $this->getMessagePart($messageId, $partId);
 
-            $path = $path . $messageId . '/';
-            $datFile = $path . 'winmail.dat';
+            $datFile = $pathWithMessageId . '/winmail.dat';
 
             $stream = $part->getDecodedStream();
             $tmpFile = fopen($datFile, 'w');
             stream_copy_to_stream($stream, $tmpFile);
             fclose($tmpFile);
 
-            // find out filenames
-            $files = array();
-            $fileString = explode(chr(10), Tinebase_Core::callSystemCommand('tnef -t ' . $datFile));
+            $this->_extractWinMailDatToDir($datFile, $pathWithMessageId);
+        }
 
-            foreach ($fileString as $line) {
-                $split = explode('|', $line);
-                $clean = trim($split[0]);
-                if (!empty($clean)) {
-                    $files[] = $clean;
-                }
-            }
+        $dir = new DirectoryIterator($pathWithMessageId);
+        $files = array();
 
-            // extract files
-            Tinebase_Core::callSystemCommand('tnef -C ' . $path . ' ' . $datFile);
-
-        } else { // temp files still existing
-            $dir = new DirectoryIterator($path . $messageId);
-            $files = array();
-
-            foreach ($dir as $file) {
-                if ($file->isFile() && $file->getFilename() != 'winmail.dat') {
-                    $files[] = $file->getFilename();
-                }
+        foreach ($dir as $file) {
+            if ($file->isFile() && $file->getFilename() != 'winmail.dat') {
+                $files[] = $file->getFilename();
             }
         }
 
@@ -1150,6 +1166,42 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $files;
     }
 
+    /**
+     * @param $datFile
+     * @param $path
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _extractWinMailDatToDir($datFile, $path)
+    {
+        if (Tinebase_Core::systemCommandExists('tnef')) {
+            Tinebase_Core::callSystemCommand('tnef -C ' . $path . ' ' . $datFile);
+        } elseif (Tinebase_Core::systemCommandExists('ytnef')) {
+            Tinebase_Core::callSystemCommand('ytnef -f ' . $path . ' ' . $datFile);
+        } else {
+            throw new Tinebase_Exception_NotFound('no (y)tnef executable found');
+        }
+    }
+
+    /**
+     * @param $message
+     * @param $attachment
+     * @param bool $extract
+     * @return false|string
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getWinmailAttachmentContents($message, $attachment, $extract = true)
+    {
+        $path = Tinebase_Core::getTempDir() . '/winmail/' . $message->getId();
+        $attachmentFilename = $path . '/' . $attachment['filename'];
+        if (file_exists($attachmentFilename)) {
+            return file_get_contents($attachmentFilename);
+        } elseif ($extract) {
+            $this->extractWinMailDat($message->getId());
+            return $this->getWinmailAttachmentContents($message, $attachment, false);
+        } else {
+            throw new Tinebase_Exception_NotFound('no winmail.dat found in message');
+        }
+    }
 
     /**
      * fetch attachment filename from part

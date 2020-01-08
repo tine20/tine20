@@ -64,7 +64,7 @@ class Tinebase_ImageHelper
         
         $imgInfo = @getimagesize($tmpPath);
         unlink($tmpPath);
-        if (! in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
+        if (! $imgInfo || ! in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
             throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');
         }
         if (! (isset($imgInfo['channels']) || array_key_exists('channels', $imgInfo))) {

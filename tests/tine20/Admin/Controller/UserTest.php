@@ -37,7 +37,12 @@ class Admin_Controller_UserTest extends TestCase
 
     public function testAddAccountWithEmailUserXprops()
     {
-        $xpropsConf = Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        $xpropsConf = Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS};
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
 
         // create user + check if email user is created
         $user = $this->_createUserWithEmailAccount();

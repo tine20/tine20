@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -15,12 +15,6 @@
  */
 class Felamimail_Frontend_ActiveSyncTest extends TestCase
 {
-    /**
-     * 
-     * @var unknown_type
-     */
-    protected $_domDocument;
-    
     /**
      * email test class for checking emails on IMAP server
      * 
@@ -149,7 +143,39 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         $this->assertEquals('1744', $syncrotonModelEmail->body->estimatedDataSize);
     }
-    
+
+    /**
+     * validate getEntry with winmail.dat
+     */
+    public function testGetEntryWithWinmailDat()
+    {
+        if (! Tinebase_Core::systemCommandExists('tnef') && ! Tinebase_Core::systemCommandExists('ytnef')) {
+            $this->markTestSkipped('The (y)tnef command could not be found!');
+        }
+
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+
+        $message = $this->_createTestMessage('winmail_dat_attachment.eml', 'winmail_dat_attachment.eml');
+
+        $syncrotonModelEmail = $controller->getEntry(
+            new Syncroton_Model_SyncCollection(array('collectionId' => 'foobar', 'options' => array('bodyPreferences' => array('2' => array('type' => '2'))))),
+            $message->getId()
+        );
+
+        $path = Tinebase_Core::getTempDir() . '/winmail/' . $message->getId() . '/';
+        $content = file_get_contents($path . 'bookmark.htm');
+        $dataSize = strlen($content);
+        $this->assertStringStartsWith('<!DOCTYPE NETSCAPE-Bookmark-file-1>', $content);
+
+        self::assertEquals(2, count($syncrotonModelEmail->attachments), print_r($syncrotonModelEmail->attachments, true));
+        $this->assertEquals($dataSize, $syncrotonModelEmail->attachments[0]->estimatedDataSize);
+
+        // try to get file by reference
+        $syncrotonFileReference = $controller->getFileReference($syncrotonModelEmail->attachments[0]->fileReference);
+        $this->assertEquals('text/html', $syncrotonFileReference->contentType);
+        $this->assertEquals($dataSize, strlen(stream_get_contents($syncrotonFileReference->data)));
+    }
+
     /**
      * validate fetching email by filereference(hashid-partid)
      */

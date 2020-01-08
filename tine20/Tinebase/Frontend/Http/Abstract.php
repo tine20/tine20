@@ -158,7 +158,6 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Model_Tree_Node $_node
      * @param string $_type
      * @param int $_num
-     * @throws Tinebase_Exception_NotFound
      */
     protected function _downloadPreview(Tinebase_Model_Tree_Node $_node, $_type, $_num = 0)
     {
@@ -171,11 +170,12 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         $handle = fopen($fileSystem->getRealPathForHash($previewNode->hash), 'r');
 
         if (false === $handle) {
-            throw new Tinebase_Exception_NotFound('could not open preview by real path for hash');
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' could not open preview by real path for hash');
+            $this->_handleFailure();
         }
 
         fpassthru($handle);
-
         fclose($handle);
     }
 
@@ -183,11 +183,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * download (fpassthru) tempfile
      *
-     * @param Tinebase_Model_Tree_Node $node
+     * @param Tinebase_Model_TempFile $tempFile
      * @param string $filesystemPath
-     * @param int|null $revision
-     * @param boolean $ignoreAcl
-     * @throws Tinebase_Exception_NotFound
      */
     protected function _downloadTempFile(Tinebase_Model_TempFile $tempFile, $filesystemPath)
     {
@@ -211,12 +208,11 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $filesystemPath
      * @param int|null $revision
      * @param boolean $ignoreAcl
-     * @throws Tinebase_Exception_AccessDenied
      */
     protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null, $ignoreAcl = false)
     {
         if (! $ignoreAcl && ! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
-            throw new Tinebase_Exception_AccessDenied('download not allowed');
+            $this->_handleFailure(403);
         }
 
         Tinebase_Core::setExecutionLifeTime(0);
@@ -243,6 +239,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' Could not open file: ' . $filesystemPath);
+            $this->_handleFailure();
         }
     }
 
@@ -275,10 +272,6 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
         }
         header("Content-Type: " . $contentType);
-
-//        if ($length) {
-//            header("Content-Length: " . $length);
-//        }
     }
 
     /**
@@ -286,6 +279,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param string $method
      * @param array  $args
+     * @return mixed|null
      */
     public function __call($method, array $args)
     {
@@ -306,6 +300,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                     break;
             }
         }
+
+        return null;
     }
 
     /**
@@ -335,9 +331,6 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
     /**
      * receives file uploads and stores it in the file_uploads db
-     *
-     * @throws Tinebase_Exception_UnexpectedValue
-     * @throws Tinebase_Exception_NotFound
      */
     protected function _uploadTempFile()
     {
@@ -352,14 +345,29 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 'tempFile' => $tempFile->toArray(),
             )));
         } catch (Tinebase_Exception $exception) {
-            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " File upload could not be done, due to the following exception: \n" . $exception);
-
-            if (! headers_sent()) {
-                header("HTTP/1.0 500 Internal Server Error");
-            }
-            die(Zend_Json::encode(array(
-                'status'   => 'failed',
-            )));
+            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__
+                . " File upload could not be done, due to the following exception: \n" . $exception);
+            $this->_handleFailure();
         }
+    }
+
+    /**
+     * @param int $code
+     */
+    protected function _handleFailure($code = 500)
+    {
+        if (! headers_sent()) {
+            switch ($code) {
+                case 403:
+                    header('HTTP/1.1 403 Forbidden');
+                    break;
+                default:
+                    header("HTTP/1.1 500 Internal Server Error");
+            }
+        }
+        die(Zend_Json::encode(array(
+            'code' => $code,
+            'status' => 'failed',
+        )));
     }
 }
