@@ -9,6 +9,7 @@
 Ext.ns('Tine.Addressbook');
 
 require('./StructurePanel');
+require('./Model/ContactPersonalGrants');
 
 /**
  * @namespace   Tine.Addressbook
@@ -227,4 +228,20 @@ Tine.Tinebase.appMgr.isInitialised('Addressbook').then(() => {
             Tine.widgets.grid.RendererManager.register('Addressbook', 'Contact', col.dataIndex, col.renderer);
         }
     });
+});
+
+// register grants for calendar containers
+Tine.widgets.container.GrantsManager.register('Addressbook_Model_Contact', function(container) {
+    var _ = window.lodash,
+        me = this,
+        grants = Tine.widgets.container.GrantsManager.defaultGrants(container);
+
+    grants.push('privateData');
+    return grants;
+});
+
+Ext.override(Tine.widgets.container.GrantsGrid, {
+    privateDataGrantTitle: 'Private', // i18n._('Private')
+    privateDataGrantDescription: 'The grant to access contacts private information', // i18n._('The grant to access contacts private information')
+
 });

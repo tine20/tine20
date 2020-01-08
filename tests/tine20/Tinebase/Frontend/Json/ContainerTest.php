@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -136,21 +136,25 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
             array(
                 'account_id'     => Zend_Registry::get('currentAccount')->getId(),
                 'account_type'   => 'user',
-                //'account_name'   => 'not used',
                 Tinebase_Model_Grants::GRANT_READ      => true,
                 Tinebase_Model_Grants::GRANT_ADD       => true,
                 Tinebase_Model_Grants::GRANT_EDIT      => true,
                 Tinebase_Model_Grants::GRANT_DELETE    => false,
-                Tinebase_Model_Grants::GRANT_ADMIN     => true
+                Tinebase_Model_Grants::GRANT_ADMIN     => true,
+                Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA     => true,
             )
         );
         
         $grants = $this->_backend->setContainerGrants($container['id'], $newGrants);
         
-        $this->assertEquals(1, count($grants['results']));
-        $this->assertFalse($grants['results'][0]["deleteGrant"]);
-        $this->assertTrue($grants['results'][0]["adminGrant"]);
-        
+        self::assertEquals(1, count($grants['results']));
+        $containergrants = $grants['results'][0];
+        self::assertFalse($containergrants["deleteGrant"]);
+        self::assertTrue($containergrants["adminGrant"]);
+        self::assertTrue(isset($containergrants[ Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA]),
+            print_r($containergrants, true));
+        self::assertTrue($containergrants[ Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA]);
+
 
         $this->_backend->deleteContainer($container['id']);
 

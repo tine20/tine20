@@ -208,7 +208,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         width: 110,
                         xtype: 'extuxclearabledatefield',
                         fieldLabel: this.app.i18n._('Birthday'),
-                        name: 'bday'
+                        name: 'bday',
+                        requiredGrant: 'privateDataGrant'
                     }
                 ]]
             }]
@@ -244,17 +245,20 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     fieldLabel: this.app.i18n._('Phone (private)'),
                     labelIcon: 'images/icon-set/icon_phone.svg',
                     name: 'tel_home',
-                    maxLength: 40
+                    maxLength: 40,
+                    requiredGrant: 'privateDataGrant'
                 }, {
                     fieldLabel: this.app.i18n._('Mobile (private)'),
                     labelIcon: 'images/icon-set/icon_mobile.svg',
                     name: 'tel_cell_private',
-                    maxLength: 40
+                    maxLength: 40,
+                    requiredGrant: 'privateDataGrant'
                 }, {
                     fieldLabel: this.app.i18n._('Fax (private)'),
                     labelIcon: 'images/icon-set/icon_print.svg',
                     name: 'tel_fax_home',
-                    maxLength: 40
+                    maxLength: 40,
+                    requiredGrant: 'privateDataGrant'
                 }], [{
                     fieldLabel: this.app.i18n._('E-Mail'),
                     labelIcon: 'images/icon-set/icon_email.svg',
@@ -267,7 +271,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     labelIcon: 'images/icon-set/icon_email.svg',
                     name: 'email_home',
                     vtype: 'email',
-                    maxLength: 64
+                    maxLength: 64,
+                    requiredGrant: 'privateDataGrant'
                 }, {
                     xtype: 'mirrortextfield',
                     fieldLabel: this.app.i18n._('Web'),
@@ -359,32 +364,38 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     name: 'adr_two_street',
                     xtype: 'tine.widget.field.AutoCompleteField',
                     recordClass: this.recordClass,
-                    maxLength: 64
+                    maxLength: 64,
+                    requiredGrant: 'privateDataGrant'
                 }, {
                     fieldLabel: this.app.i18n._('Street 2'),
                     name: 'adr_two_street2',
-                    maxLength: 64
+                    maxLength: 64,
+                    requiredGrant: 'privateDataGrant'
                 }, {
                     fieldLabel: this.app.i18n._('Region'),
                     name: 'adr_two_region',
                     xtype: 'tine.widget.field.AutoCompleteField',
                     recordClass: this.recordClass,
-                    maxLength: 64
+                    maxLength: 64,
+                    requiredGrant: 'privateDataGrant'
                 }], [{
                     fieldLabel: this.app.i18n._('Postal Code'),
                     name: 'adr_two_postalcode',
-                    maxLength: 64
+                    maxLength: 64,
+                    requiredGrant: 'privateDataGrant'
                 }, {
                     fieldLabel: this.app.i18n._('City'),
                     name: 'adr_two_locality',
                     xtype: 'tine.widget.field.AutoCompleteField',
                     recordClass: this.recordClass,
-                    maxLength: 64
+                    maxLength: 64,
+                    requiredGrant: 'privateDataGrant'
                 }, {
                     xtype: 'widget-countrycombo',
                     fieldLabel: this.app.i18n._('Country'),
                     name: 'adr_two_countryname',
-                    maxLength: 64
+                    maxLength: 64,
+                    requiredGrant: 'privateDataGrant'
                 }], [this.preferredAddressPrivateCheckbox]]
             }]
         };
@@ -604,6 +615,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         }
         return false;
     },
+    
 
     /**
      * onRecordLoad
@@ -627,7 +639,29 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         if (this.record.id) {
             this.groupsPanel.store.loadData(this.record.get('groups'));
         }
+        
         this.supr().onRecordLoad.apply(this, arguments);
+        
+        if(Tine.Tinebase.registry.get('currentAccount').contact_id == this.record.id) {
+            this.enableOwnPrivateFields();
+        }
+    },
+
+    /**
+     * Enable fields we have no privateData grant for, when this is the users own contact (special case).
+     */
+    enableOwnPrivateFields: function() {
+        this.getForm().findField('bday').setDisabled(false);
+        this.getForm().findField('email_home').setDisabled(false);
+        this.getForm().findField('tel_cell_private').setDisabled(false);
+        this.getForm().findField('tel_home').setDisabled(false);
+        this.getForm().findField('tel_fax_home').setDisabled(false);
+        this.getForm().findField('adr_two_countryname').setDisabled(false);
+        this.getForm().findField('adr_two_locality').setDisabled(false);
+        this.getForm().findField('adr_two_postalcode').setDisabled(false);
+        this.getForm().findField('adr_two_region').setDisabled(false);
+        this.getForm().findField('adr_two_street').setDisabled(false);
+        this.getForm().findField('adr_two_street2').setDisabled(false);
     }
 });
 

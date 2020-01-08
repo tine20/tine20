@@ -125,6 +125,8 @@ Tine.Tinebase.Model.Grant = Tine.Tinebase.data.Record.create([
     {name: 'editGrant',    type: 'boolean'},
     {name: 'deleteGrant',  type: 'boolean'},
     {name: 'privateGrant', type: 'boolean'},
+    // TODO app specific (ADB) grant definition is currently needed here - make it work without
+    {name: 'privateDataGrant', type: 'boolean'},
     {name: 'exportGrant',  type: 'boolean'},
     {name: 'syncGrant',    type: 'boolean'},
     {name: 'downloadGrant',type: 'boolean'},

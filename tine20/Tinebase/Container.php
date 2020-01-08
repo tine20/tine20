@@ -270,6 +270,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
         
         if($_grants === NULL || count($_grants) == 0) {
+            // TODO fetch personal grants depending on grants/record model
             $grants = Tinebase_Model_Grants::getPersonalGrants($accountId);
             if (    $_container->type === Tinebase_Model_Container::TYPE_SHARED
                  && ! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {

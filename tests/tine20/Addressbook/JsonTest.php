@@ -406,6 +406,79 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * Test getting a Contact with and without the PrivateDataGrant
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function testGetPrivateContactData() {
+        $originalUser = Tinebase_Core::getUser();
+        $contact = $this->_addContact();
+
+        $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+        $this->assertArrayHasKey('tel_cell_private', $contact);
+        
+        $this->_setPersonaGrantsForTestContainer($contact['container_id'], 'sclever');
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+
+        $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
+        $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
+
+        Tinebase_Core::setUser($originalUser);
+    }
+
+    /**
+     * sclever has no PrivateData Grant or Admin Grant for InternalContacts
+     * But still sees her own Contacts private data
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function testGetPrivateContactDataOfOwnContact() {
+        $originalUser = Tinebase_Core::getUser();
+        $internalContainer = Tinebase_Container::getInstance()->getContainerByName(Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($internalContainer->getId(), Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($internalContainer->getId(), Tinebase_Model_Grants::GRANT_ADMIN));
+
+
+        $contactWithoutPrivate = $this->_uit->getContact(Tinebase_Core::getUser()->contact_id);
+        $this->assertArrayHasKey('tel_cell_private', $contactWithoutPrivate);
+
+        Tinebase_Core::setUser($originalUser);
+    }
+
+    /**
+     * Test seraching for a contact with and without the privateDataGrant
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function testSearchPrivateContactData() {
+        $originalUser = Tinebase_Core::getUser();
+        $contact = $this->_addContact();
+
+        $paging = $this->objects['paging'];
+
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'contains', 'value' => 'PHPUNIT')
+        );
+        $contacts = $this->_uit->searchContacts($filter, $paging);
+
+        $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+        $this->assertArrayHasKey('tel_cell_private', $contacts['results'][0]);
+
+        $this->_setPersonaGrantsForTestContainer($contact['container_id'], 'sclever');
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+
+        $contactWithoutPrivate = $this->_uit->searchContacts($filter, $paging);
+        $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate['results'][0]);
+        
+        Tinebase_Core::setUser($originalUser);
+    }
+    
+    /**
      * this test is for Tinebase_Frontend_Json updateMultipleRecords with contact data in the addressbook app
      */
     public function testUpdateMultipleRecords()
