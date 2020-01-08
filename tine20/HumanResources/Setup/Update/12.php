@@ -144,7 +144,11 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         HumanResources_Setup_Initialize::createReportTemplatesFolder();
         HumanResources_Setup_Initialize::createtWageTypes(false);
         HumanResources_Setup_Initialize::createFreeTimeTypes(false);
-        HumanResources_Setup_Initialize::createWorkingTimeModels();
+        try {
+            HumanResources_Setup_Initialize::createWorkingTimeModels();
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            // already there
+        }
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.8', self::RELEASE012_UPDATE003);
     }
