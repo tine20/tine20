@@ -1,0 +1,73 @@
+.mariadb_service: &abstract_test-mariadb_service
+  name: mariadb:10.4.1
+  alias: db
+.redis_service: &abstract_test-redis_service
+  name: redis:5.0.5
+  alias: cache
+.postfix_service: &abstract_test-postfix_service
+  name: dockerregistry.metaways.net/tine20/docker/postfix:1.0.0
+  alias: postfix
+  # fix service service discovery https://gitlab.com/gitlab-org/gitlab-runner/issues/1042#note_144420147
+  entrypoint: ["/bin/sh", "-c", "while [ ! -f /$CI_PROJECT_DIR/hosts_$CI_JOB_ID ]; do sleep 1; done && cat /$CI_PROJECT_DIR/hosts_$CI_JOB_ID > /etc/hosts && postconf -e 'smtp_host_lookup = native' 'lmtp_host_lookup = native' && /bin/sh /root/docker-entrypoint.sh"]
+.dovecot_service: &abstract_test-dovecot_service
+  name: dockerregistry.metaways.net/tine20/docker/dovecot:1.0.1
+  alias: dovecot
+  entrypoint: ["/bin/sh", "-c", "while [ ! -f /$CI_PROJECT_DIR/hosts_$CI_JOB_ID ]; do sleep 1; done && cat /$CI_PROJECT_DIR/hosts_$CI_JOB_ID > /etc/hosts && /bin/sh /root/docker-entrypoint.sh"]
+.ldap_service: &abstract_test-ldap_service
+  name: dockerregistry.metaways.net/tine20/docker/ldap:1.0.0
+  alias: ldap
+  entrypoint: ["/container/tool/run", "--copy-service"]
+
+.abstract_test.php_unit_test:
+  variables:
+    MYSQL_HOST: db
+    MYSQL_ROOT_PASSWORD: rootpw
+    MYSQL_DATABASE: tine20db
+    MYSQL_USER: tine20
+    MYSQL_PASSWORD: tine20pw
+    TINE20_BUILDTYPE: DEVELOPMENT
+    TINE20_DATABASE_HOST: db
+    TINE20_DATABASE_DBNAME: tine20db
+    TINE20_DATABASE_USERNAME: tine20
+    TINE20_DATABASE_PASSWORD: tine20pw
+    TINE20_SETUPUSER_USERNAME: tine20setup
+    TINE20_SETUPUSER_PASSWORD: tine20setup
+    TINE20_LOGIN_USERNAME: tine20admin
+    TINE20_LOGIN_PASSWORD: tine20admin
+    TINE20_ADMIN_EMAIL: tine20admin@mail.test
+    TINE20_EMAIL_IMAP: "active:true,host:dovecot,port:143,useSystemAccount:1,ssl:none,verifyPeer:0,backend:dovecot_imap,domain:mail.test,instanceName:tine.test,dovecot_host:db,dovecot_dbname:dovecot,dovecot_username:tine20,dovecot_password:tine20pw,dovecot_uid:vmail,dovecot_gid:vmail,dovecot_home:/var/vmail/%d/%u,dovecot_scheme:SSHA256"
+    TINE20_EMAIL_SMTP: "active:true,backend:postfix,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfix_host:db,postfix_dbname:postfix,postfix_username:tine20,postfix_password:tine20pw"
+    TINE20_EMAIL_SIEVE: "hostname:dovecot,port:4190,ssl:none"
+  services:
+    - *abstract_test-mariadb_service
+    - *abstract_test-redis_service
+    - *abstract_test-postfix_service
+    - *abstract_test-dovecot_service
+  before_script:
+    - cp /etc/hosts "${CI_PROJECT_DIR}/hosts_$CI_JOB_ID"
+    - /usr/sbin/confd -onetime -backend env
+    - php /wait_for_db.php
+    - bash /install_mail.sh
+    - bash /install_tine.sh
+    - supervisord
+    # /usr/sbin/confd -onetime -backend env && php /wait_for_db.php && bash /install_mail.sh && bash /install_tine.sh && supervisord && cd /tine/tests/tine20/
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci CiTestSuite$CI_NODE_INDEX
+  parallel: 10
+
+.abstract_test.php_unit_test_with_ldap:
+  extends: .abstract_test.php_unit_test
+  stage: test_built
+  variables:
+    LDAP_ORGANISATION: "Tine20 dev"
+    LDAP_DOMAIN: "tine.test"
+    LDAP_ADMIN_PASSWORD: "admin"
+    TINE20_AUTHENTICATION: "bindRequiresDn:1,backend:ldap,host:ldap\\://ldap,port:389,username:cn=admin\\,dc=tine\\,dc=test,password:admin,baseDn:ou=users\\,dc=tine\\,dc=test,accountFilterFormat:(&(objectClass=posixAccount)(uid=%s)),accountCanonicalForm:2"
+    TINE20_ACCOUNTS: "backend:ldap,host:ldap\\://ldap,port:389,username:cn=admin\\,dc=tine\\,dc=test,password:admin,userDn:ou=users\\,dc=tine\\,dc=test,groupsDn:ou=groups\\,dc=tine\\,dc=test,defaultUserGroupName:Users,defaultAdminGroupName:Administrators"
+  services:
+    - *abstract_test-mariadb_service
+    - *abstract_test-redis_service
+    - *abstract_test-postfix_service
+    - *abstract_test-dovecot_service
+    - *abstract_test-ldap_service

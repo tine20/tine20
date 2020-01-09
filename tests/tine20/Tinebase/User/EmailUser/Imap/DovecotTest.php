@@ -150,6 +150,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      * testSavingDuplicateAccount
      *
      * @see 0006546: saving user with duplicate imap/smtp user entry fails
+     *
+     * @group nogitlabci
      */
     public function testSavingDuplicateAccount()
     {

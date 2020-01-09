@@ -1,0 +1,11 @@
+[template]
+prefix = "/nginxv"
+src = "nginx-vhost.conf.tmpl"
+dest = "/etc/nginx/conf.d/default.conf"
+owner = "root"
+mode = "0644"
+keys = [
+    "/server/name",
+    "/client/max/body/size",
+
+]

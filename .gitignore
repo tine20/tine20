@@ -31,3 +31,9 @@ tine20/.htaccess
 tine20/install.properties
 tine20/Tinebase/js/node_modules*
 tine20/vendor*
+/ci/dependency/package.json
+/ci/dependency/composer.json
+/ci/dependency/composer.lock
+/ci/dependency/library/
+/ci/source/tine20/
+/ci/dependency/npm-shrinkwrap.json

@@ -18,7 +18,9 @@ class HumanResources_Import_DemoDataTest extends TestCase
      */
     protected $_importContainer = null;
     
-
+    /**
+     * @group nogitlabci
+     */
     public function testImportDemoData()
     {
         $this->_skipIfLDAPBackend();

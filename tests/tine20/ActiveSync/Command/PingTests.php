@@ -267,6 +267,8 @@ class ActiveSync_Command_PingTests extends TestCase
     
     /**
      * test sync of existing imap folder
+     *
+     * @group nogitlabci
      */
     public function testPingForEmails()
     {

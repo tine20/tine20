@@ -1457,6 +1457,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      * set and get vacation sieve script
      *
      * @see 0007768: Sieve - Vacation notify frequency not being set (Cyrus)
+     *
+     * @group nogitlabci
      */
     public function testGetSetVacation()
     {
@@ -1504,6 +1506,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
     /**
      * test mime vacation sieve script
+     *
+     * @group nogitlabci
      */
     public function testMimeVacation()
     {
@@ -1520,6 +1524,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
     /**
      * test get/set of rules sieve script
+     * @group nogitlabci
      */
     public function testGetSetRules()
     {
@@ -1543,6 +1548,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      * testRemoveRules
      *
      * @see 0006490: can not delete single filter rule
+     *
+     * @group nogitlabci
      */
     public function testRemoveRules()
     {
@@ -1602,6 +1609,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     /**
      * test to set a forward rule to this accounts email address
      * -> should throw exception to prevent mail cycling
+     *
+     * @group nogitlabci
      */
     public function testSetForwardRuleToSelf()
     {
@@ -1633,6 +1642,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
     /**
      * @see 0006222: Keep a copy from mails forwarded to another emailaddress
+     *
+     * @group nogitlabci
      */
     public function testSetForwardRuleWithCopy()
     {
@@ -1658,6 +1669,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
     /**
      * @see 0006222: Keep a copy from mails forwarded to another emailaddress
+     *
+     * @group nogitlabci
      */
     public function testSetForwardRuleWithoutCopy()
     {
@@ -1776,6 +1789,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     * testSetVacationWithStartAndEndDate
     *
     * @see 0006266: automatic deactivation of vacation message
+     *
+     * @group nogitlabci
     */
     public function testSetVacationWithStartAndEndDate()
     {
@@ -1792,6 +1807,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      * testSieveRulesOrder
      *
      * @see 0007240: order of sieve rules changes when vacation message is saved
+     *
+     * @group nogitlabci
      */
     public function testSieveRulesOrder()
     {
@@ -1814,6 +1831,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         // compare sieve scripts
         $this->assertContains($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
+
+    /**
+     * @group nogitlabci
+     */
     public function testSieveEmailNotification()
     {
         $this->_setTestScriptname();
@@ -2184,6 +2205,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      * type = download_protected: uploaded from harddisk, supposed to be a protected download link
      *
      * @see 0012950: More attachment methods for mail
+     *
+     * @group nogitlabci
      */
     public function testAttachmentMethodProtectedDownloadLink()
     {

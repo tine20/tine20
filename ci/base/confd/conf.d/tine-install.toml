@@ -1,0 +1,11 @@
+[template]
+prefix = "/install"
+src = "install.tmpl"
+dest = "/etc/tine20/install.properties"
+owner = "root"
+mode = "0644"
+keys = [
+    "/login/username",
+    "/login/password",
+    "/admin/email"
+]

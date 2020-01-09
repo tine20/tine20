@@ -192,6 +192,7 @@ class Tinebase_TranslationTest extends TestCase
      * check if lang helper is outputting usage information
      *
      * TODO add more langHelper functionality tests
+     * @group nogitlabci
      */
     public function testLangHelperUsageInfo()
     {

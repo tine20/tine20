@@ -1390,6 +1390,8 @@ class Felamimail_Controller_MessageTest extends TestCase
      * @see 0007726: show inline images of multipart/related message parts
      * 
      * @todo allow external resources
+     *
+     * @group nogitlabci
      */
     public function testHtmlPurify()
     {
@@ -1713,6 +1715,8 @@ class Felamimail_Controller_MessageTest extends TestCase
      *       https://forge.tine20.org/mantisbt/view.php?id=10126
      *       
      *       http://htmlpurifier.org/live/configdoc/plain.html#HTML.TidyLevel
+     *
+     * @group nogitlabci
      */
     public function testInvalidHtml()
     {

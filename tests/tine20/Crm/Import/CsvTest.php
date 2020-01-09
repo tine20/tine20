@@ -136,6 +136,8 @@ class Crm_Import_CsvTest extends ImportTestCase
 
     /**
      * @see 0011376: send mail on lead import to responsibles
+     *
+     * @group nogitlabci
      */
     public function testEmailNotification()
     {

@@ -1,0 +1,14 @@
+[template]
+prefix = "/nginx"
+src = "nginx.conf.tmpl"
+dest = "/etc/nginx/nginx.conf"
+owner = "root"
+mode = "0644"
+keys = [
+    "/client/max/body/size",
+    "/keepalive/timeout",
+    "/tcp/nopush",
+    "/gzip",
+    "/gzip/static"
+]
+check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
