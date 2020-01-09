@@ -181,7 +181,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'order'                       => (int)$config->order,
                 'mapUndefinedFieldsEnable'    => $config->mapUndefinedFieldsEnable,
                 'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
-                'postMappingHook'             => $config->postMappingHook
+                'postMappingHook'             => $config->postMappingHook,
+                'filter'                      => $config->filter,
             ));
             
             return $definition;

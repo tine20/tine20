@@ -65,7 +65,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter = null, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         parent::__construct($_filter, $_controller, $_additionalOptions);
 
