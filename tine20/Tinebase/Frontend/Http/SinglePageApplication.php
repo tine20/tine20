@@ -103,7 +103,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      */
     public static function getAssetsMap($asJson = false)
     {
-        $jsonFile = 'Tinebase/js/webpack-assets-FAT.json';
+        $jsonFile = self::getAssetsJsonFilename();
 
         if (TINE20_BUILDTYPE =='DEVELOPMENT') {
             $devServerURL = Tinebase_Config::getInstance()->get('webpackDevServerURL', 'http://localhost:10443');
@@ -113,11 +113,33 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 Tinebase_Core::getLogger()->ERR(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
                 throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
             }
+        } else if ($absoluteJsonFilePath = self::getAbsoluteAssetsJsonFilename) {
+            $json = file_get_contents($absoluteJsonFilePath);
         } else {
-            $json = file_get_contents(__DIR__ . '/../../../' . $jsonFile);
+            throw new Tinebase_Exception_NotFound(('assets json not found'));
         }
 
         return $asJson ? $json : json_decode($json, true);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getAssetsJsonFilename()
+    {
+        return 'Tinebase/js/webpack-assets-FAT.json';
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getAbsoluteAssetsJsonFilename()
+    {
+        $path = __DIR__ . '/../../../' . self::getAssetsJsonFilename();
+        if (! file_exists($path)) {
+            return null;
+        }
+        return $path;
     }
 
     /**
