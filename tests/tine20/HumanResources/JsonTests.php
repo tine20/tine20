@@ -137,8 +137,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $employee = $this->_json->saveEmployee($employee);
         
-//        $this->assertEquals(5, $employee['vacation'][0]['days_count']);
-//        $this->assertEquals(17, count($employee['vacation'][0]));
+        $this->assertEquals(5, $employee['vacation'][0]['days_count']);
+        $this->assertEquals(17, count($employee['vacation'][0]));
         $this->assertEquals(3, count($employee['costcenters']));
         
         // @see: 0010050: Delete last dependent record fails
@@ -932,6 +932,17 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $accountController->createMissingAccounts(2013, $employee);
         $account = $accountController->getAll()->getFirstRecord();
         
+        $employeeJson['vacation'] = array(array(
+            'account_id' => $account->getId(),
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'freedays' => array(array('duration' => '1', 'date' => '2013-01-11 00:00:00')),
+        ));
+        
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        
+        $this->assertEquals(1, count($employeeJson['vacation']));
+        
         // manually set the end date and add a new contract
         $employeeJson['contracts'][0]['end_date'] = '2013-05-31 00:00:00';
         $employeeJson['contracts'][1] = array(
@@ -949,21 +960,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employeeJson['contracts'][0]['end_date'] = $endDate;
         $recordData = $this->_json->saveEmployee($employeeJson);
         $this->assertEquals($endDate, $recordData['contracts'][0]['end_date']);
-
-        HumanResources_Controller_FreeTime::getInstance()->create(new HumanResources_Model_FreeTime([
-            'employee_id' => $employeeJson['id'],
-            'account_id' => $account->getId(),
-            'type' => 'vacation',
-            'status' => 'ACCEPTED',
-            'freedays' => [['duration' => '1', 'date' => '2013-01-11 00:00:00']],
-        ]));
         
         $employeeJson['contracts'][0]['vacation_days'] = 31;
         try {
             $employeeJson = $this->_json->saveEmployee($employeeJson);
             $this->fail('an exception should be thrown');
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable, $e->getMessage());
+            $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable);
         }
     }
     
