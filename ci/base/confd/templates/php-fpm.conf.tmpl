@@ -1,0 +1,38 @@
+[global]
+error_log = /dev/stderr
+
+[www]
+user = nginx
+group = nginx
+
+listen = 127.0.0.1:9000
+
+;listen.backlog = 511
+
+;listen.allowed_clients = 127.0.0.1
+
+pm = {{getv "/dynamic" "dynamic"}}
+pm.max_children = {{getv "/pm/max/children" "5"}}
+pm.start_servers = {{getv "/pm/start/server" "2"}}
+pm.min_spare_servers = {{getv "/pm/min/spare/servers" "1"}}
+pm.max_spare_servers = {{getv "/pm/max/spare/servers" "3"}}
+;pm.process_idle_timeout = 10s;
+pm.max_requests = {{getv "/pm/max/requests" "500"}}
+
+access.log = /dev/stdout
+slowlog = /dev/stdout
+
+;request_slowlog_timeout = 0
+;request_slowlog_trace_depth = 20
+;request_terminate_timeout = 0
+
+;rlimit_files = 1024
+;rlimit_core = 0
+
+;catch_workers_output = yes
+;decorate_workers_output = no
+clear_env = no
+
+pm.status_path = /ADMIN/fpm-status
+ping.path = /ADMIN/fpm-ping
+;ping.response = pong

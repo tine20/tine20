@@ -1,0 +1,51 @@
+<?php
+$conf = include('/etc/tine20/config.inc.php');
+
+if ( ! (is_array($conf) && key_exists('database', $conf) && is_array($conf['database']))) {
+    return;
+}
+
+if ( ! key_exists('adapter', $conf['database'])) {
+    return;
+}
+
+$type = "";
+
+switch ($conf['database']['adapter']) {
+    case 'pdo_mysql':
+        $type = 'mysql';
+        break;
+    default:
+        return;
+}
+
+if ( ! ( key_exists('dbname', $conf['database'])
+     &&  key_exists('host', $conf['database'])
+     &&  key_exists('username', $conf['database'])
+     &&  key_exists('password', $conf['database'])
+)) {
+    return;
+}
+
+$host = $conf['database']['host'];
+$dbname = $conf['database']['dbname'];
+$user = $conf['database']['username'];
+$pass = $conf['database']['password'];
+
+$timeout = intval(getenv('WAIT_FOR_DB_TIMEOUT') ?: '60');
+
+for ($i = 0; $i < $timeout; $i++) {
+    try {
+        new PDO("$type:host=$host;dbname=$dbname", $user, $pass);
+        print("DB available");
+        return;
+    } catch (PDOException $e) {
+        if ($i > 20) {
+            print($e->getMessage());
+        }
+    }
+    sleep(1);
+}
+
+print("Failed to connect to database, with: type=$type, host=$host, dbname=$dbname, username=$user, password=********.");
+print("Loaded from /etc/tine20/config.inc.php");
