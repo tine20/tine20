@@ -1443,6 +1443,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
 
         return array_merge([
+            Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
             'branding' => [
                 'logo' => $this->_logoPath,
                 'title' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE},
