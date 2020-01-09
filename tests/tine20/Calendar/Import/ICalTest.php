@@ -194,6 +194,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testCliImport()
     {
         $this->markTestSkipped('FIXME: 0010343: fix some CLI tests');
+        self::markTestSkipped('docker ci dose not have the same hardcoded relative filepath');
         
         $this->_testNeedsTransaction();
         
@@ -215,6 +216,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
      */
     public function testImportTwice()
     {
+        self::markTestSkipped('docker ci dose not have the same hardcoded relative filepath');
         $this->_testNeedsTransaction();
         
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.import ' .

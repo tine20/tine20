@@ -1,0 +1,59 @@
+<?php
+
+return array(
+    'buildtype' => '{{getv "/buildtype" "RELEASE"}}',
+    'confdfolder'       => '/tine/conf.d',
+
+    'logger' => array (
+        'active' => true,
+        'filename' => 'php://stdout',
+        'priority' => {{getv "/logger/priority" "5"}},
+        'additionalWriters' => array(array(
+            'active' => true,
+            'filename' => '/tine/logs/debug.log',
+            'priority' => '7',
+        ))
+    ),
+
+    'filesdir'  => '{{getv "/filesdir" "/tine/files"}}',
+    'tmpdir' => '{{getv "/tmpdir" "/tine/tmp"}}',
+
+    'database' => array(
+        'host'          => '{{getv "/database/host" ""}}',
+        'dbname'        => '{{getv "/database/dbname" ""}}',
+        'username'      => '{{getv "/database/username" ""}}',
+        'password'      => '{{getv "/database/password" ""}}',
+        'tableprefix'   => '{{getv "/database/tableprefix" "tine20_"}}',
+        'adapter'       => '{{getv "/database/adapter" "pdo_mysql"}}',
+    ),
+
+    'setupuser' => array(
+        'username'      => '{{getv "/setupuser/username" "tine20setup"}}',
+        'password'      => '{{getv "/setupuser/password" "tine20setup"}}',
+    ),
+
+   'login' => array(
+       'username'      => '{{getv "/login/username" "tine20admin"}}',
+       'password'      => '{{getv "/login/password" "tine20admin"}}',
+    ),
+
+    'caching' => array (
+       'active' => {{getv "/caching/active" "true"}},
+       'lifetime' => {{getv "/caching/lifetime" "3600"}},
+       'backend' => '{{getv "/caching/backend" "File"}}',
+       'redis' => array (
+           'host' => '{{getv "/caching/redis/host" ""}}',
+           'port' => {{getv "/caching/redis/port" "null"}},
+           'prefix' => '{{getv "/caching/redis/prefix" "master"}}',
+       ),
+       'path' => '{{getv "/caching/path" "/tine/caching"}}',
+    ),
+
+    'session' => array (
+        'lifetime' => {{getv "/session/lifetime" "86400"}},
+        'backend' => '{{getv "/session/backend" "File"}}',
+        'path' => '{{getv "/session/path" "/tine/sessions"}}',
+    ),
+
+    'credentialCacheSharedKey' => '{{getv "/credentialcachesharedkey" "changeMeNow"}}',
+);
