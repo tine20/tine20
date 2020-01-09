@@ -262,7 +262,27 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                     continue;
                 }
 
-                $blPipe = $this->_getBLPipe($contract->working_time_scheme);
+                if (false === ($blPipe = $this->_getBLPipe($contract->working_time_scheme))) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ .
+                            '::' . __LINE__ . 'employees ' . $employee->getId() . ' ' . $employee->getTitle() .
+                            ' contract has no valid working time scheme for dailyreporting at ' .
+                            $this->_currentDate->toString());
+
+                    if (isset($existingReports[$dateStr])) {
+                        $oldReport = $existingReports[$dateStr]->getCleanClone();
+                        $oldReport->calculation_failure = 1;
+                        $oldReport->system_remark =
+                            Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)
+                                ->_('No valid blpipe for the working time scheme of this contract for this date');
+
+                        $this->update($oldReport);
+                        $this->_reportResult['errors'] += 1;
+                    }
+
+                    $dailyTransaction->commit();
+                    continue;
+                }
+                
                 $blPipeData = new HumanResources_BL_DailyWTReport_Data();
                 $blPipeData->workingTimeModel = $contract->working_time_scheme;
                 $blPipeData->date = $this->_currentDate->getClone();
@@ -352,11 +372,14 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
     /**
      * @param HumanResources_Model_WorkingTimeScheme $_wts
-     * @return Tinebase_BL_Pipe
+     * @return Tinebase_BL_Pipe | false
      */
     protected function _getBLPipe(HumanResources_Model_WorkingTimeScheme $_wts)
     {
         if (!isset($this->_wtsBLPipes[$_wts->getId()])) {
+            if (! $_wts->blpipe instanceof  Tinebase_Record_RecordSet || $_wts->blpipe->count() === 0) {
+                return $this->_wtsBLPipes[$_wts->getId()] = false; // assignment on purpose
+            }
             $rs = $_wts->blpipe->getClone(true);
             $record = new HumanResources_Model_BLDailyWTReport_Config([
                 HumanResources_Model_BLDailyWTReport_Config::FLDS_CLASSNAME =>
