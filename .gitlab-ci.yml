@@ -1,0 +1,263 @@
+# $REG see settings>ci_cd>variables
+# $REG_USER see settings>ci_cd>variables
+# $REG_PASS see settings>ci_cd>variables
+# $CI_PROJECT_DIR set by gitlab
+# $REG_PREFIX see settings>ci_cd>variables
+# $CI_PIPELINE_ID set by gitlab
+# $PHP_IMAGE_TAG default = 7.3-fpm-alpine
+# $SKIP_TEST_SOURCE default = false
+# $SKIP_TEST_BUILT default = false
+# $SKIP_DEPLOY_1 default = false
+# $SKIP_DEPLOY_2 default = false
+
+# $PUSH default = true, false -> to skip pushing final images to registry
+
+
+stages:
+  - build_1
+  - build_2
+  - test_source
+  - build_3
+  - test_built
+  - deploy_1
+  - deploy_2
+
+variables:
+  PUSH: "true"
+
+.run_test_abstract: &run_test_abstract
+  stage: test
+  variables:
+    MYSQL_ROOT_PASSWORD: rootpw
+    MYSQL_DATABASE: tine20db
+    MYSQL_USER: tine20
+    MYSQL_PASSWORD: tine20pw
+    TINE20_BUILDTYPE: DEVELOPMENT
+    TINE20_DATABASE_HOST: db
+    TINE20_DATABASE_DBNAME: tine20db
+    TINE20_DATABASE_USERNAME: tine20
+    TINE20_DATABASE_PASSWORD: tine20pw
+    TINE20_SETUPUSER_USERNAME: tine20setup
+    TINE20_SETUPUSER_PASSWORD: tine20setup
+    TINE20_LOGIN_USERNAME: tine20admin
+    TINE20_LOGIN_PASSWORD: tine20admin
+  services:
+    - name: mariadb:10.4.1
+      alias: db
+    - name: redis:5.0.5
+      alias: cache
+  before_script:
+    - /usr/sbin/confd -onetime -backend env
+    - php /wait_for_db.php
+    - bash /install_tine.sh
+    - supervisord
+
+build_1::base_and_dependency:
+  image: docker:19.03.1
+  stage: build_1
+  before_script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+  script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_build_1
+  only: &build_1_condition
+    changes:
+      - ci/base/**/**/*
+      - ci/dependency/*
+      - tine20/composer.json
+      - tine20/composer.lock
+      - tine20/Tinebase/js/npm-shrinkwrap.json
+      - tine20/Tinebase/js/package.json
+
+build_1::use_dependency_image_from_registry:
+  image: docker:19.03.1
+  stage: build_1
+  before_script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+  script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_build_1_lazy
+  except:
+    << : *build_1_condition
+
+build_2::source_test-source:
+  image: docker:19.03.1
+  stage: build_2
+  before_script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+  script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_build_2
+
+.run_test_source_abstract: &run_test_source_abstract
+  << : *run_test_abstract
+  stage: test_source
+  image:
+    name: "$REG/$REG_PREFIX/test-source:$CI_PIPELINE_ID"
+  except:
+    variables:
+      - $SKIP_TEST_SOURCE == "true"
+
+test_source::run_test_suite_1:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite1
+
+test_source::run_test_suite_2:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite2
+
+test_source::run_test_suite_3:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite3
+
+test_source::run_test_suite_4:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite4
+
+test_source::run_test_suite_5:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite5
+
+test_source::run_test_suite_6:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite6
+
+test_source::run_test_suite_7:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite7
+
+test_source::run_test_suite_8:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite8
+
+test_source::run_test_suite_9:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite9
+
+test_source::run_test_suite_10:
+  << : *run_test_source_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild CiTestSuite10
+
+build_3::built_dev_test-built:
+  image: docker:19.03.1
+  stage: build_3
+  before_script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+  script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_build_3
+  except:
+    variables:
+      - $CI_COMMIT_REF_NAME =~ /^feat\// # todo match feature branches
+
+.run_test_built_abstract: &run_test_built_abstract
+  << : *run_test_abstract
+  stage: test_built
+  image:
+    name: "$REG/$REG_PREFIX/test-built:$CI_PIPELINE_ID"
+  except:
+    variables:
+      - $SKIP_TEST_BUILT == "true"
+      - $CI_COMMIT_REF_NAME =~ /^feat\// # todo match feature branches
+
+test_built::run_test_suite_1:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite1
+
+test_built::run_test_suite_2:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite2
+
+test_built::run_test_suite_3:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite3
+
+test_built::run_test_suite_4:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite4
+
+test_built::run_test_suite_5:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite5
+
+test_built::run_test_suite_6:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debu --exclude-group longrunning CiTestSuite6
+
+test_built::run_test_suite_7:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite7
+
+test_built::run_test_suite_8:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite8
+
+test_built::run_test_suite_9:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite9
+
+test_built::run_test_suite_10:
+  << : *run_test_built_abstract
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning CiTestSuite10
+
+deploy_1::base_and_dependency:
+  image: docker:19.03.1
+  stage: deploy_1
+  dependencies:
+    - build_1::base_and_dependency
+  before_script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+  script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_deploy_1
+  except:
+    variables:
+      - $SKIP_DEPLOY_1 == "true"
+
+deploy_2::built_dev_test:
+  image: docker:19.03.1
+  stage: deploy_2
+  dependencies:
+    - build_3::built_dev_test-built
+  before_script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+  script:
+    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_deploy_2
+  except:
+    variables:
+      - $SKIP_DEPLOY_2 == "true"
