@@ -87,7 +87,6 @@ class Scheduler_SchedulerTest extends TestCase
      */
     public function testCanDispatchTask()
     {
-        self::markTestSkipped("Dose not work in docker ci test");
         $oldValue = $this->_scheduler->doContainerACLChecks(false);
 
         try {

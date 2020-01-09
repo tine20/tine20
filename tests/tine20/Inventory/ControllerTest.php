@@ -16,9 +16,7 @@ class Inventory_ControllerTest extends Inventory_TestCase
 {
     public function testGetModels()
     {
-        self::markTestSkipped("Dose not work in docker ci test");
         $models = Inventory_Controller::getInstance()->getModels();
-
         $this->assertEquals(array(
             'Inventory_Model_InventoryItem',
             'Inventory_Model_Status'
