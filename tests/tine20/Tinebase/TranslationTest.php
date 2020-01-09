@@ -195,6 +195,7 @@ class Tinebase_TranslationTest extends TestCase
      */
     public function testLangHelperUsageInfo()
     {
+        self::markTestSkipped('docker ci dose not have the same hardcoded relative filepath');
         $cmd = realpath(__DIR__ . '/../../../tine20/langHelper.php');
         $cmd = TestServer::assembleCliCommand($cmd);
         exec($cmd, $output);
