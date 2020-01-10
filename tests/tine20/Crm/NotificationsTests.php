@@ -162,6 +162,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
      */
     public function testNoNotificationConfigPartner()
     {
+        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_PARTNER, false);
         $this->_notificationHelper(Crm_Config::SEND_NOTIFICATION_TO_PARTNER, 'PARTNER');
     }
 
@@ -170,6 +171,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
      */
     public function testNoNotificationConfigCustomer()
     {
+        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_CUSTOMER, false);
         $this->_notificationHelper(Crm_Config::SEND_NOTIFICATION_TO_CUSTOMER, 'CUSTOMER');
     }
 
