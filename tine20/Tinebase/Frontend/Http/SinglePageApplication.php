@@ -113,7 +113,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 Tinebase_Core::getLogger()->ERR(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
                 throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
             }
-        } else if ($absoluteJsonFilePath = self::getAbsoluteAssetsJsonFilename) {
+        } else if ($absoluteJsonFilePath = self::getAbsoluteAssetsJsonFilename()) {
             $json = file_get_contents($absoluteJsonFilePath);
         } else {
             throw new Tinebase_Exception_NotFound(('assets json not found'));
