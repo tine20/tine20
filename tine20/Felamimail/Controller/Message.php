@@ -488,11 +488,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return isset($el['partId']) && $el['partId'] === $partId;
         });
         if (count($attachment) >= 1) {
+            $partAttachment = array_pop($attachment);
             return [
-                'contentType' => $attachment[0]['content-type'],
-                'description' => $attachment[0]['description'],
+                'contentType' => $partAttachment['content-type'],
+                'description' => $partAttachment['description'],
                 'parameters' => [
-                    'name' => $attachment[0]['filename'],
+                    'name' => $partAttachment['filename'],
                 ]
             ];
         } else {
