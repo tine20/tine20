@@ -10,6 +10,8 @@
 
 Ext.ns('Tine.Felamimail');
 
+import waitFor from "util/waitFor.es6";
+
 require('Felamimail/js/MailDetailsPanel');
 
 require('Tinebase/js/Application');
@@ -773,7 +775,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
 
             this.accountStore = new Ext.data.JsonStore({
                 fields: Tine.Felamimail.Model.Account,
-                autoLoad: true,
                 id: 'id',
                 root: 'results',
                 totalProperty: 'totalcount',
@@ -785,6 +786,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     }, this)
                 }
             });
+            this.accountStore.load();
 
             postal.subscribe({
                 channel: "recordchange",
@@ -906,7 +908,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
      * compose mail via mailto link
      *
-     * @param params from mailto link
+     * @param paramString from mailto link
      */
     mailto: function(paramString) {
         var decodedParamString = decodeURIComponent(paramString).replace(/mailto:/, ''),
@@ -924,12 +926,16 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             params[param] = value.length > 1 ? value : value[0];
         });
 
-        var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
-        params['accountId'] = activeAccount ? activeAccount.id : null;
+        waitFor(() => {
+            return !! Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
+        }, 10000).then(() => {
+            var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
+            params['accountId'] = activeAccount ? activeAccount.id : null;
 
-        //@TODO: remove old url from popstate. its ugly!
-        Tine.Tinebase.MainScreenPanel.show(this);
-        Tine.Felamimail.MessageEditDialog.openWindow(params);
+            //@TODO: remove old url from popstate. its ugly!
+            Tine.Tinebase.MainScreenPanel.show(this);
+            Tine.Felamimail.MessageEditDialog.openWindow(params);
+        });
     }
 });
 
@@ -999,7 +1005,7 @@ Tine.Felamimail.getSignature = function(account, signature) {
     let signatureText = '';
 
     account = _.isString(account) ? app.getAccountStore().getById(account) : account;
-    account = account || Tine.Felamimail.getActiveAccount();
+    account = account || app.getActiveAccount();
 
     if (account) {
         Tine.log.info('Tine.Felamimail.getSignature() - Fetch signature of account ' + account.id + ' (' + account.name + ')');
