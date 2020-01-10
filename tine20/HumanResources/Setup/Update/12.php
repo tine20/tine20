@@ -55,7 +55,10 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
 
         $rows = Tinebase_Core::getDb()->query('SELECT id, workingtime_json, employee_id, start_date FROM ' . SQL_TABLE_PREFIX .
             'humanresources_contract')->fetchAll();
-        Tinebase_Core::getLogger()->warn('found these deprecated HR contract data:' . print_r($rows, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN) && count($rows) > 0) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' .
+                'found these deprecated HR contract data:' . print_r($rows, true));
+        }
 
         $this->_backend->dropTable('humanresources_wt_dailyreport', HumanResources_Config::APP_NAME);
         $this->_backend->dropTable('humanresources_breaks', HumanResources_Config::APP_NAME);
@@ -74,7 +77,8 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         foreach ($rows as $row) {
             if (!is_array($wtData = json_decode($row['workingtime_json'], true)) || !isset($wtData['days']) ||
                     count($wtData['days']) !== 7) {
-                Tinebase_Core::getLogger()->warn('bad row: ' . print_r($row, true));
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' .
+                    'bad row: ' . print_r($row, true));
                 continue;
             }
 
