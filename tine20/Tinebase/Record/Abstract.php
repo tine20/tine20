@@ -1505,7 +1505,13 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 }
             } else {
                 if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
-                    $oldValue = new Tinebase_DateTime($oldValue);
+                    if (is_array($oldValue)) {
+                        foreach ($oldValue as &$tmpVal) {
+                            $tmpVal = new Tinebase_DateTime($tmpVal);
+                        }
+                    } else {
+                        $oldValue = new Tinebase_DateTime($oldValue);
+                    }
                 }
                 $this->$property = $oldValue;
             }
