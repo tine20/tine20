@@ -153,14 +153,25 @@ class Tinebase_Frontend_Http_SinglePageApplication {
     {
         $map = self::getAssetsMap();
 
-        if ($userEnabledOnly) {
-            $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-            foreach($map as $asset => $ressources) {
-                if (! $enabledApplications->filter('name', basename($asset))->count()) {
+        try {
+            $installedApplications = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
+            $enabledApplications = $userEnabledOnly ?
+                Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) :
+                $installedApplications;
+
+            foreach ($map as $asset => $ressources) {
+                $isInstalled = $installedApplications->filter('name', basename($asset))->count();
+                $isEnabled = $userEnabledOnly ? $enabledApplications->filter('name', basename($asset))->count() : true;
+                if (!($isInstalled && $isEnabled)) {
                     unset($map[$asset]);
                 }
             }
+        } catch (Exception $e) {
+            Tinebase_Core::getLogLogger()->NOTICE(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') cannot filter assetMap by installed apps');
+            Tinebase_Core::getLogLogger()->NOTICE(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') ' . $e);
         }
+
+
 
         return sha1(json_encode($map) . TINE20_BUILDTYPE);
     }
