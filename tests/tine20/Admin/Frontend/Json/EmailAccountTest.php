@@ -541,6 +541,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $rules = $this->_getSieveRuleData();
         $result = $this->_json->saveRules($account['id'], $rules);
         self::assertEquals(1, count($result));
+
+        $result = $this->_json->getSieveRules($account['id']);
+        self::assertEquals(1, $result['totalcount']);
     }
 
     protected function _getSieveRuleData()
@@ -609,7 +612,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     {
         $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
 
-        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($sharedAccount, ['user_id' => 'user_id']);
+        $emailUser = Felamimail_Controller_Account::getInstance()->getSharedAccountEmailUser($sharedAccount);
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         $userInBackend = $emailUserBackend->getRawUserById($emailUser);
         self::assertTrue(is_array($userInBackend), 'user not found in backend');

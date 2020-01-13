@@ -1801,4 +1801,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $this->_backend->update($account);
         }
     }
+
+    /**
+     * @param Felamimail_Model_Account $account
+     * @return Tinebase_Model_FullUser
+     */
+    public function getSharedAccountEmailUser(Felamimail_Model_Account $account)
+    {
+        return Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account, ['user_id' => 'user_id']);
+    }
 }
