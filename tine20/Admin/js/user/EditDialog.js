@@ -718,7 +718,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initForwardsGrid: function(commonConfig) {
         let aliasesStore = this.aliasesGrid.getStore();
         let app = this.app;
-
+        let record = this.record;
+        
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
