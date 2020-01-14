@@ -555,8 +555,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
     /**
      * @param Felamimail_Model_Account $_list
-     * @return Felamimail_Model_Account
-     * @throws Tinebase_Exception_InvalidArgument
+     * @return NULL|Tinebase_Record_Interface
      */
     protected function _getMailAccount($_list)
     {

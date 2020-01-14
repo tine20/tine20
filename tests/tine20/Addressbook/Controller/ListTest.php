@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo implement search test
@@ -30,8 +30,10 @@ class Addressbook_Controller_ListTest extends TestCase
      * 
      * @var Addressbook_Controller_List
      */
-    protected $_instance = NULL; 
-    
+    protected $_instance = null;
+
+    protected $_oldXpropsSetting = null;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -41,6 +43,8 @@ class Addressbook_Controller_ListTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+
+        $this->_oldXpropsSetting = Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS};
         
         $this->_instance = Addressbook_Controller_List::getInstance();
         
@@ -155,6 +159,8 @@ class Addressbook_Controller_ListTest extends TestCase
         }
 
         parent::tearDown();
+
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = $this->_oldXpropsSetting;
     }
 
     /**
@@ -175,8 +181,10 @@ class Addressbook_Controller_ListTest extends TestCase
 
     public function testListAsMailinglist()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
+        if (! TestServer::isEmailSystemAccountConfigured()
+            || ! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}
+        ) {
+            self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS configs required');
         }
 
         $this->_testNeedsTransaction();
@@ -188,9 +196,10 @@ class Addressbook_Controller_ListTest extends TestCase
         $accountCtrl = Felamimail_Controller_Account::getInstance();
         
         $this->objects['initialList']->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
-        $this->objects['initialList']->email = 'test@' . $domain;
+        $this->objects['initialList']->email = 'testlist' . Tinebase_Record_Abstract::generateUID(8) .  '@' . $domain;
 
         $list = $this->testAddList();
+        $this->_listsToDelete[] = $list;
         $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
@@ -199,8 +208,20 @@ class Addressbook_Controller_ListTest extends TestCase
         static::assertNotNull($account, 'could not get account');
         static::assertSame($list->email, $account->name);
 
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            self::assertNotEmpty($account->xprops()[Addressbook_Model_List::XPROP_EMAIL_USERID_IMAP], 'xprops not set in list');
+        } else {
+            self::assertNotEquals($list->getId(), $account->user_id);
+        }
+
+        // assert email user
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+        $userInBackend = $emailUserBackend->getRawUserById($emailUser);
+        self::assertEquals($this->objects['initialList']->email, $userInBackend['loginname'], print_r($userInBackend, true));
+
         // test change email
-        $list->email = 'shoo@' . $domain;
+        $list->email = 'shoo' . Tinebase_Record_Abstract::generateUID(8) .  '@' . $domain;
         $this->_instance->update($list);
 
         $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
@@ -215,16 +236,26 @@ class Addressbook_Controller_ListTest extends TestCase
         $list->email = '';
         $this->_instance->update($list);
 
-        $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+        $deletedAccount = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
             ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
         ]))->getFirstRecord();
-        static::assertNull($account, 'account was not deleted');
+        static::assertNull($deletedAccount, 'account was not deleted');
 
-        $this->_listsToDelete[] = $list;
+        // check if email user is removed, too
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+        $userInBackend = $emailUserBackend->getRawUserById($emailUser);
+        self::assertFalse($userInBackend, print_r($userInBackend, true));
 
         return $list;
+    }
+
+    public function testListAsMailinglistWithXprops()
+    {
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
+        $this->testListAsMailinglist();
     }
 
     public function testChangeListEmailToAlreadyUsed()

@@ -297,14 +297,18 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * @param Felamimail_Model_Account $_record
      * @throws Tinebase_Exception_SystemGeneric
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _createSharedEmailUser($_record)
     {
         $userId = $_record->user_id ? $_record->user_id : Tinebase_Record_Abstract::generateUID();
         if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             Tinebase_EmailUser_XpropsFacade::setXprops($_record, $userId);
-            $_record->user_id = null;
         } else {
+            if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+                throw new Tinebase_Exception_InvalidArgument(
+                    'it is not possible to create MAILINGLIST accounts without EMAIL_USER_ID_IN_XPROPS config');
+            }
             $_record->user_id = $userId;
         }
 
