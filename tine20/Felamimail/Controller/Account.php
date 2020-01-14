@@ -1797,15 +1797,30 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // get all shared email accounts
         $sharedAccounts = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
-            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED]
+            ['field' => 'type', 'operator' => 'in', 'value' => [
+                Felamimail_Model_Account::TYPE_SHARED,
+                Felamimail_Model_Account::TYPE_ADB_LIST
+            ]]
         ]));
         $this->doContainerACLChecks($checks);
 
+        $listBackend = new Addressbook_Backend_List();
         foreach ($sharedAccounts as $account) {
-            // save in record
-            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP] = $account->user_id;
-            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP] = $account->user_id;
+            $emailUserId = $account->user_id;
+            if (empty($emailUserId)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
+                    __LINE__ . ' user_id not set ... skipping account');
+                continue;
+            }
+            if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+                $account->user_id = null;
+            }
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                __LINE__ . ' update xprops of account ' . $account->name);
+
+            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP] = $emailUserId;
+            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP] = $emailUserId;
             $this->_backend->update($account);
         }
     }
