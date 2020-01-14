@@ -185,7 +185,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
             }
         }
 
-        $this->_removeDestinations($_smtpSettings['id']);
+        $this->_removeDestinations($_smtpSettings);
         
         // check if it should be forward only
         if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
@@ -199,12 +199,12 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
     /**
      * remove all current aliases and forwards for user
      * 
-     * @param string $userId
+     * @param array $user
      */
-    protected function _removeDestinations($userId)
+    protected function _removeDestinations($user)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('users_id') . ' = ?', $userId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('users_id') . ' = ?', $user['id']),
         );
         
         $this->_db->delete($this->_destinationTable, $where);
