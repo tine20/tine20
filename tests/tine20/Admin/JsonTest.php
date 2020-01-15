@@ -1825,8 +1825,11 @@ class Admin_JsonTest extends TestCase
         // client sends empty pws - should not be changed!
         $account['password'] = '';
         $account['smtp_password'] = '';
+        // client also sends empty user_id - server should handle this
+        $account['user_id'] = null;
         $updatedAccount = $this->_json->saveEmailAccount($account);
         self::assertEquals(Felamimail_Model_Account::DISPLAY_PLAIN, $updatedAccount['display_format']);
+        self::assertNotEmpty($updatedAccount['user_id']);
 
         // we need to commit so imap user is in imap db
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
