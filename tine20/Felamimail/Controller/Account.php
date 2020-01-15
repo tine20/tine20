@@ -457,10 +457,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // TODO move to converter
         if (is_array($_record->user_id)) {
             $_record->user_id = $_record->user_id['accountId'];
-        } else if (empty($_record->user_id)) {
-            // prevent overwriting of user_id - client might send user_id = null for shared accounts
-            // as the user_id is not a real user ...
-            $_record->user_id = $_oldRecord->user_id;
         }
 
         if ($_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
@@ -469,6 +465,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             || $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
             if ($this->doConvertToShared($_record, $_oldRecord)) {
                 $this->_convertToShared($_record);
+            } else if (empty($_record->user_id)) {
+                // prevent overwriting of user_id - client might send user_id = null for shared accounts
+                // as the user_id is not a real user ...
+                $_record->user_id = $_oldRecord->user_id;
             }
 
             if ($_oldRecord->email !== $_record->email) {
