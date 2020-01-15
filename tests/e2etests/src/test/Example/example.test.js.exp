@@ -1,0 +1,21 @@
+const timeout = process.env.SLOWMO ? 30000 : 30000;
+const expect = require('expect-puppeteer');
+const lib = require('../../lib/browser');
+const help = require('../../lib/helper');
+require('dotenv').config();
+
+beforeAll(async () => {
+        await lib.getBrowser('ExampleApp');
+});
+
+describe('Test mainpage', () => {
+
+});
+
+describe('Edit Contact', () => {
+
+});
+
+afterAll(async () => {
+    browser.close();
+});

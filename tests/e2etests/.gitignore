@@ -1,0 +1,12 @@
+.idea
+.buildpath
+.externalToolBuilders
+.project
+.pydevproject
+.cache
+.settings
+.DS_Store
+nbproject
+vagrant
+node_modules
+*.png
