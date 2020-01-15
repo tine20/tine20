@@ -29,7 +29,7 @@ class TravisTests
 
         // some more json tests
         $suite->addTestSuite(Timetracker_JsonTest::class);
-        $suite->addTestSuite(Admin_JsonTest::class);
+        $suite->addTestSuite(Admin_Frontend_JsonTest::class);
         $suite->addTestSuite(Tinebase_Frontend_JsonTest::class);
         $suite->addTestSuite(CoreData_JsonTest::class);
 
