@@ -280,14 +280,19 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     } else if (is_array($result['value']['value'])) {
                         //  this is very bad - @refactor
                         foreach ($result['value']['value'] as $key => $subfilter) {
-                            if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value']) &&
-                                is_string($subfilter['value'])) {
-                                try {
-                                    $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
-                                } catch (Tinebase_Exception_NotFound $tenf) {
-                                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                                        __METHOD__ . '::' . __LINE__ . ' Record not found: ' . $tenf->getMessage());
-                                    unset($result['value']['value'][$key]);
+                            if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value'])) {
+                                foreach ((array) $subfilter['value'] as $index =>$recordId) {
+                                    try {
+                                        if(is_string($result['value']['value'][$key]['value'])) {
+                                            $result['value']['value'][$key]['value'] = $controller->get($recordId)->toArray();
+                                        } else {
+                                            $result['value']['value'][$key]['value'][$index] = $controller->get($recordId)->toArray();
+                                        }
+                                    } catch (Tinebase_Exception_NotFound $tenf) {
+                                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                            __METHOD__ . '::' . __LINE__ . ' Record not found: ' . $tenf->getMessage());
+                                        unset($result['value']['value'][$key]);
+                                    }
                                 }
                             }
                         }

@@ -51,9 +51,10 @@ class Tinebase_EmailUser_XpropsFacade
             if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
                 self::setIdFromXprops($record, $user);
             } else {
+                // property config might already contain the ID
                 $user_id = isset($propertyConfig['user_id'])
-                    ? ($record->has($propertyConfig['user_id']) ? $record->{$propertyConfig['user_id']} : null)
-                    : ($record->has('user_id') ? $record->user_id : null);
+                    ? ($record->has($propertyConfig['user_id']) ? $record->{$propertyConfig['user_id']} : $propertyConfig['user_id'])
+                    : ($record->has('user_id') ? $record->user_id : $record->getId());
                 $user->setId($user_id);
             }
         }
@@ -76,9 +77,9 @@ class Tinebase_EmailUser_XpropsFacade
         $user->setId($user_id);
     }
 
-    public static function setXprops($record, $userId = null)
+    public static function setXprops($record, $userId = null, $createIfEmpty = true)
     {
-        if (! $userId) {
+        if (! $userId && $createIfEmpty) {
             $userId = Tinebase_Record_Abstract::generateUID();
         }
 

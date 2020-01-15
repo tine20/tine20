@@ -178,10 +178,25 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     public function getRawUserById(Tinebase_Model_User $_user)
     {
-        $userId = $_user->getId();
+        return $this->getRawUserByProperty($_user, 'emailUserId');
+    }
+
+    /**
+     * @param Tinebase_Model_User $_user
+     * @param $property
+     * @param $userProperty
+     * @return mixed
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function getRawUserByProperty(Tinebase_Model_User $_user, $property, $userProperty = null)
+    {
+        $value = $property === 'emailUserId'
+            ? $_user->getId()
+            : ($userProperty ? $_user->{$userProperty} : $_user->{$this->_propertyMapping[$property]});
 
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?', $userId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable
+                    . '.' . $this->_propertyMapping[$property]) . ' = ?', $value)
         );
         $this->_appendClientIdOrDomain($where);
 
@@ -197,7 +212,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
         if (!$queryResult) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' ' . $this->_subconfigKey . ' config for user ' . $userId . ' not found');
+                . ' ' . $this->_subconfigKey . ' config for user with ' . $this->_propertyMapping[$property] . ' = ' . $value . ' not found');
         }
 
         return $queryResult;
@@ -476,7 +491,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (!$queryResult) {
             return false;
         }
-        
+
         return true;
     }
 

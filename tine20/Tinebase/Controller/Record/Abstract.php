@@ -917,7 +917,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         if (count($duplicates) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Found ' . count($duplicates) . ' duplicate(s).');
+                ' Found ' . count($duplicates) . ' duplicate(s). Checked fields: ' . print_r($this->_duplicateCheckFields, TRUE));
 
             // fetch tags here as they are not included yet - this is important when importing records with merge strategy
             if ($_record->has('tags')) {
@@ -947,9 +947,6 @@ abstract class Tinebase_Controller_Record_Abstract
             return NULL;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Duplicate check fields: ' . print_r($this->_duplicateCheckFields, TRUE));
-
         $filters = array();
         foreach ($this->_duplicateCheckFields as $group) {
             $addFilter = array();

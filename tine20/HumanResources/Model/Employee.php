@@ -327,6 +327,32 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     'dependentRecords' => TRUE
                 ),
             ),
+            'vacation' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Vacation', // _('Vacation')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName' => 'HumanResources',
+                    'modelName'   => 'FreeTime',
+                    'refIdField'  => 'employee_id',
+                    'addFilters' => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation')),
+                    'paging'        => array('sort' => 'firstday_date', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
+            ),
+            'sickness' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Sickness', // _('Sickness')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName' => 'HumanResources',
+                    'modelName'   => 'FreeTime',
+                    'refIdField'  => 'employee_id',
+                    'addFilters' => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'sickness')),
+                    'paging'        => array('sort' => 'firstday_date', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
+            )
         )
     );
 

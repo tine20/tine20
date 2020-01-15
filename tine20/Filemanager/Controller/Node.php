@@ -1602,10 +1602,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $description .= "\n";
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Description: ' . $description);
-
-        return $description;
+        return Tinebase_Core::filterInputForDatabase($description);
     }
 
     /**

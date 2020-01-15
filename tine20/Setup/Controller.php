@@ -499,20 +499,22 @@ class Setup_Controller
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
 
-        $this->updateAllImportExportDefinitions();
-
         $result = ['updated' => 0];
         $iterationCount = 0;
         do {
             $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
 
-            if (empty($updatesByPrio)) {
-                return $result;
+            if (!isset($updatesByPrio[Setup_Update_Abstract::PRIO_TINEBASE_AFTER_STRUCTURE])) {
+                $updatesByPrio[Setup_Update_Abstract::PRIO_TINEBASE_AFTER_STRUCTURE] = [];
             }
+            array_unshift($updatesByPrio[Setup_Update_Abstract::PRIO_TINEBASE_AFTER_STRUCTURE], [
+                Setup_Update_Abstract::CLASS_CONST      => self::class,
+                Setup_Update_Abstract::FUNCTION_CONST   => 'updateAllImportExportDefinitions',
+            ]);
 
             ksort($updatesByPrio);
             $db = Setup_Core::getDb();
-            $classes = [];
+            $classes = [self::class => $this];
 
             try {
                 $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());

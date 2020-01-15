@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>13.0</version>
+    <version>13.1</version>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
@@ -2480,7 +2480,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>11</version>
+            <version>12</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2552,6 +2552,11 @@
                     <name>format</name>
                     <type>text</type>
                     <length>255</length>
+                </field>
+                <field>
+                    <name>filter</name>
+                    <type>text</type>
+                    <length>16000</length>
                 </field>
                 <field>
                     <name>favorite</name>

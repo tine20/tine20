@@ -11,9 +11,16 @@
 class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
 {
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
-        self::PRIO_TINEBASE_UPDATE => [
+        self::PRIO_TINEBASE_STRUCTURE   => [
+            self::RELEASE013_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
+            ],
+        ],
+        self::PRIO_TINEBASE_UPDATE      => [
             self::RELEASE013_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
@@ -25,4 +32,21 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
     {
         $this->addApplicationUpdate('Tinebase', '13.0', self::RELEASE013_UPDATE001);
     }
+
+    public function update002()
+    {
+        if ($this->getTableVersion('importexport_definition') < 12) {
+            $this->_backend->addCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>filter</name>
+                    <type>text</type>
+                    <length>16000</length>
+                </field>'));
+            $this->setTableVersion('importexport_definition', 12);
+        }
+
+        $this->addApplicationUpdate('Tinebase', '13.1', self::RELEASE013_UPDATE002);
+    }
+
+
 }

@@ -48,6 +48,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
     const FLDS_PLUGIN_OPTIONS_JSON = 'plugin_options_json';
     const FLDS_FORMAT = 'format';
     const FLDS_FILENAME = 'filename';
+    const FLDS_FILTER = 'filter';
 
     /**
      * key in $_validators/$_properties array for the filed which
@@ -202,6 +203,11 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::TYPE => self::TYPE_STRING,
             ],
+            self::FLDS_FILTER => [
+                self::LABEL => 'Filter', // _('Filter')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE => self::TYPE_TEXT,
+            ],
         ]
     ];
 
@@ -218,6 +224,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
      */
     public function getFilter()
     {
-        return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->model);
+        $filter = json_decode($this->{self::FLDS_FILTER}, true);
+        return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->model, is_array($filter) ? $filter : []);
     }
 }

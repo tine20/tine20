@@ -277,7 +277,7 @@ class Addressbook_CliTest extends TestCase
             'container_id'      => $this->_container->id,
             'adr_one_street'    => 'Pickhuben 2',
             'adr_one_region'    => $region,
-        )));
+        )), false);
 
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'n_fileas', 'operator' => 'equals', 'value' => 'duplicate, test')

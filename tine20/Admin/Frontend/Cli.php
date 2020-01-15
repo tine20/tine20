@@ -254,4 +254,44 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         echo "Repaired " . $groupUpdateCount . " groups and or lists\n";
     }
+
+    public function fixUserIdInSharedEmailAccounts($opts)
+    {
+        $sharedAccounts = Admin_Controller_EmailAccount::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED]
+            ]
+        ));
+        if (count($sharedAccounts) === 0) {
+            // nothing to do
+            return 0;
+        }
+
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+
+        echo "Found " . count($sharedAccounts) . " shared email accounts to check\n";
+
+        $accountsBackend = new Felamimail_Backend_Account();
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $repaired = 0;
+        foreach ($sharedAccounts as $account) {
+            if (empty($account->user_id)) {
+                // if empty: get user from dovecot table by email
+                $emailUser = Felamimail_Controller_Account::getInstance()->getSharedAccountEmailUser($account);
+                $userInBackend = $emailUserBackend->getRawUserByProperty($emailUser, 'emailLoginname', 'accountEmailAddress');
+                if ($userInBackend) {
+                    echo "Setting user_id " . $userInBackend['userid'] . "for account " . $account->name . "...\n";
+                    if (! $opts->d) {
+                        $account->user_id = $userInBackend['userid'];
+                        $accountsBackend->update($account);
+                    }
+                    $repaired++;
+                }
+            }
+        }
+        echo "Repaired " . $repaired . " shared email accounts\n";
+        return 0;
+    }
 }

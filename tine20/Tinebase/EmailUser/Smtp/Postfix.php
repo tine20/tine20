@@ -252,7 +252,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                         . __LINE__ . ' Removing old email data of userid ' . $queryResult['userid']);
                 }
                 $this->deleteUserById($queryResult['userid']);
-                $this->_removeDestinations($queryResult['userid']);
+                $this->_removeDestinations($queryResult);
             }
         }
     }
@@ -283,7 +283,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Setting default alias/forward for ' . print_r($_smtpSettings, true));
         
-        $this->_removeDestinations($_smtpSettings[$this->_propertyMapping['emailUserId']]);
+        $this->_removeDestinations($_smtpSettings);
         
         // check if it should be forward only
         if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
@@ -297,12 +297,13 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     /**
      * remove all current aliases and forwards for user
      * 
-     * @param string $userId
+     * @param array $user
      */
-    protected function _removeDestinations($userId)
+    protected function _removeDestinations($user)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $userId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?',
+                $user[$this->_propertyMapping['emailUserId']])
         );
         
         $this->_db->delete($this->_destinationTable, $where);

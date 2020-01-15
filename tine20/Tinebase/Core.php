@@ -649,10 +649,27 @@ class Tinebase_Core
             return;
         }
         $config = self::getConfig();
-        define('TINE20_BUILDTYPE', strtoupper($config->get(Tinebase_Config::BUILD_TYPE)));
+        $buildType = strtoupper($config->get(Tinebase_Config::BUILD_TYPE));
+        if (empty($buildType) || $buildType === 'AUTODETECT') {
+            // config might be a Zend_Config (without proper default handling) - set type to AUTODETECT
+            $buildType = Tinebase_Core::detectBuildType();
+        }
+        define('TINE20_BUILDTYPE', $buildType);
         define('TINE20_CODENAME', Tinebase_Helper::getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
         define('TINE20_RELEASETIME', 'none');
+    }
+
+    /**
+     * @return string
+     */
+    public static function detectBuildType()
+    {
+        if (Tinebase_Frontend_Http_SinglePageApplication::getAbsoluteAssetsJsonFilename()) {
+            return 'RELEASE';
+        } else {
+            return 'DEVELOPMENT';
+        }
     }
     
     /**

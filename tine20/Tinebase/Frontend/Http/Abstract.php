@@ -163,7 +163,11 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     {
         $fileSystem = Tinebase_FileSystem::getInstance();
 
-        $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
+        try {
+            $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->_handleFailure(404);
+        }
 
         $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline', $previewNode->size);
 
@@ -356,10 +360,16 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _handleFailure($code = 500)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' HTTP request failed - code: ' . $code);
+
         if (! headers_sent()) {
             switch ($code) {
                 case 403:
                     header('HTTP/1.1 403 Forbidden');
+                    break;
+                case 404:
+                    header('HTTP/1.1 404 Not Found');
                     break;
                 default:
                     header("HTTP/1.1 500 Internal Server Error");

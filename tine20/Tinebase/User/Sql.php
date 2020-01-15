@@ -938,6 +938,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->updatePluginUser($updatedUser, $_user);
         }
 
+        if ($updatedUser->xprops() != $_user->xprops()) {
+            // update user xprops if necessary (plugin user with xprops might have been updated)
+            $updatedUser = $this->updateUserInSqlBackend($updatedUser);
+        }
+
         return $updatedUser;
     }
     
@@ -981,11 +986,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $params = [$pluginUser, $updatePluginUser];
             } else {
                 $params = [$pluginUser];
+                $updatePluginUser = null;
             }
             call_user_func_array([$plugin, $method], $params);
 
-            if ($method === 'add') {
-                // save new xprops in user
+            // save new/missing xprops in user
+            if ($updatePluginUser) {
                 Tinebase_EmailUser_XpropsFacade::setXprops($user, $updatePluginUser->getId());
             }
         } else {
