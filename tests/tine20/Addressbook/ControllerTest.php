@@ -773,6 +773,8 @@ class Addressbook_ControllerTest extends TestCase
             self::markTestSkipped('no imap config found');
         }
 
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
+
         $pwd = Tinebase_Record_Abstract::generateUID();
 
         $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser([

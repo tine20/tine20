@@ -1,0 +1,16 @@
+{
+  "name": "e2_puppeteer-testing",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "expect-puppeteer": "^4.3.0",
+    "jest": "^24.9.0",
+    "jest-puppeteer": "^4.3.0",
+    "puppeteer": "^2.0.0"
+  }
+}

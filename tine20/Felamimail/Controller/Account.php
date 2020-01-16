@@ -297,14 +297,18 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * @param Felamimail_Model_Account $_record
      * @throws Tinebase_Exception_SystemGeneric
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _createSharedEmailUser($_record)
     {
         $userId = $_record->user_id ? $_record->user_id : Tinebase_Record_Abstract::generateUID();
         if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             Tinebase_EmailUser_XpropsFacade::setXprops($_record, $userId);
-            $_record->user_id = null;
         } else {
+            if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+                throw new Tinebase_Exception_InvalidArgument(
+                    'it is not possible to create MAILINGLIST accounts without EMAIL_USER_ID_IN_XPROPS config');
+            }
             $_record->user_id = $userId;
         }
 
@@ -547,6 +551,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         if ($this->doConvertToShared($_record, $_oldRecord)) {
             $this->_convertToShared($_record);
+        } else if (empty($_record->user_id)) {
+            // prevent overwriting of user_id - client might send user_id = null for shared accounts
+            // as the user_id is not a real user ...
+            $_record->user_id = $_oldRecord->user_id;
         }
 
         if ($_oldRecord->email !== $_record->email) {
@@ -1789,15 +1797,30 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // get all shared email accounts
         $sharedAccounts = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
-            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED]
+            ['field' => 'type', 'operator' => 'in', 'value' => [
+                Felamimail_Model_Account::TYPE_SHARED,
+                Felamimail_Model_Account::TYPE_ADB_LIST
+            ]]
         ]));
         $this->doContainerACLChecks($checks);
 
+        $listBackend = new Addressbook_Backend_List();
         foreach ($sharedAccounts as $account) {
-            // save in record
-            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP] = $account->user_id;
-            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP] = $account->user_id;
+            $emailUserId = $account->user_id;
+            if (empty($emailUserId)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
+                    __LINE__ . ' user_id not set ... skipping account');
+                continue;
+            }
+            if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+                $account->user_id = null;
+            }
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                __LINE__ . ' update xprops of account ' . $account->name);
+
+            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP] = $emailUserId;
+            $account->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP] = $emailUserId;
             $this->_backend->update($account);
         }
     }

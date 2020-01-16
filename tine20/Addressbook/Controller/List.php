@@ -555,8 +555,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
     /**
      * @param Felamimail_Model_Account $_list
-     * @return Felamimail_Model_Account
-     * @throws Tinebase_Exception_InvalidArgument
+     * @return NULL|Tinebase_Record_Interface
      */
     protected function _getMailAccount($_list)
     {
@@ -642,7 +641,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                     $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
                     preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $list->email)) {
-                Felamimail_Controller_Account::getInstance()->delete($this->_getMailAccount($list)->getId());
+                $mailAccount = $this->_getMailAccount($list);
+                if ($mailAccount) {
+                    Felamimail_Controller_Account::getInstance()->delete($mailAccount->getId());
+                }
             }
         }
 
