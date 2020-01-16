@@ -47,11 +47,16 @@ class Tinebase_Setup_DemoData_ImportSet
 
     /**
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception
      */
     public function importDemodata()
     {
         if (!isset($this->_options['files']) || empty($this->_options['files'])) {
             throw new Tinebase_Exception_InvalidArgument('no yml files given.');
+        }
+
+        if (! extension_loaded('yaml')) {
+            throw new Tinebase_Exception('yaml extension required');
         }
 
         $importDir = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR
