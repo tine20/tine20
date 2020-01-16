@@ -276,22 +276,22 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
         });
 
-        this.action_rename = Tine.Filemanager.nodeActionsMgr.get('rename', {
-            initialApp: this.app,
-            sm: this.getSelectionModel(),
-            executor: function(record, text) {
-                if (_.isFunction(_.get(record, 'set'))) {
-                    record.set('name', text);
+        let contextActions = [];
+        if (Tine.Tinebase.common.hasRight('run', 'Filemanager')) {
+            this.action_rename = Tine.Filemanager.nodeActionsMgr.get('rename', {
+                initialApp: this.app,
+                sm: this.getSelectionModel(),
+                executor: function(record, text) {
+                    if (_.isFunction(_.get(record, 'set'))) {
+                        record.set('name', text);
+                    }
                 }
-            }
-        });
-
-        // TODO: does user need rights for Filemanager?
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+            });
             this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
                 initialApp: this.app,
                 sm: this.getSelectionModel()
             });
+            contextActions = contextActions.concat([this.action_rename, this.action_preview]);
         }
 
         this.tbar = new Ext.Toolbar({
@@ -306,6 +306,13 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }],
         });
 
+        contextActions = contextActions.concat([
+            this.action_download,
+            '-',
+            this.action_remove,
+            this.action_pause,
+            this.action_resume
+        ]);
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -314,15 +321,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 ptype: 'ux.itemregistry',
                 key: 'Tinebase-FileUploadGrid-ContextMenu'
             }],
-            items: [
-                this.action_preview,
-                this.action_rename,
-                this.action_download,
-                '-',
-                this.action_remove,
-                this.action_pause,
-                this.action_resume
-            ]
+            items: contextActions
         });
 
         this.actionUpdater.addActions(this.tbar.items);

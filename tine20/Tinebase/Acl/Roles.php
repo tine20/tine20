@@ -646,12 +646,17 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      *
      * @param  mixed $_roleId
      * @param  array $_account as role member ("type" => account type, "id" => account id)
-     * @throws Tinebase_Exception_InvalidArgument
      */
     public function removeRoleMember($_roleId, $_account)
     {
         /** @var Tinebase_Model_Role $oldRole */
-        $oldRole = $this->get($_roleId);
+        try {
+            $oldRole = $this->get($_roleId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' ' . $tenf->getMessage());
+            $oldRole = null;
+        }
         
         $where = array(
             $this->_getDb()->quoteIdentifier('role_id') . ' = ?'      => (string) $_roleId,
@@ -661,7 +666,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         
         $this->_getDb()->delete(SQL_TABLE_PREFIX . 'role_accounts', $where);
 
-        $this->_writeModLogForRole($oldRole);
+        if ($oldRole) {
+            $this->_writeModLogForRole($oldRole);
+        }
         
         $this->resetClassCache();
     }
