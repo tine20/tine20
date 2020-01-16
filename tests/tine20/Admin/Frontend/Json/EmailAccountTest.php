@@ -218,7 +218,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $account['user_id'] = null;
         $updatedAccount = $this->_json->saveEmailAccount($account);
         self::assertEquals(Felamimail_Model_Account::DISPLAY_PLAIN, $updatedAccount['display_format']);
-        self::assertNotEmpty($updatedAccount['user_id']);
+        if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            self::assertNotEmpty($updatedAccount['user_id'], print_r($updatedAccount, true));
+        }
 
         // we need to commit so imap user is in imap db
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
