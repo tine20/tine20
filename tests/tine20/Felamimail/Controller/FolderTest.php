@@ -69,10 +69,12 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         }
         
         // delete all remaining folders from cache of account
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folders = $folderBackend->getMultipleByProperty($this->_account->getId(), 'account_id');
-        foreach ($folders as $folder) {
-            $folderBackend->delete($folder);
+        if ($this->_account) {
+            $folderBackend = new Felamimail_Backend_Folder();
+            $folders = $folderBackend->getMultipleByProperty($this->_account->getId(), 'account_id');
+            foreach ($folders as $folder) {
+                $folderBackend->delete($folder);
+            }
         }
     }
 

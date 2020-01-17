@@ -116,8 +116,10 @@ class Addressbook_JsonTest extends TestCase
     protected function tearDown()
     {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
-        
-        $this->_uit->deleteContacts($this->_contactIdsToDelete);
+
+        if ($this->_uit) {
+            $this->_uit->deleteContacts($this->_contactIdsToDelete);
+        }
 
         if ($this->_makeSCleverVisibleAgain) {
             $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
