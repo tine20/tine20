@@ -652,3 +652,9 @@ msgstr "All"
 
 msgid "Nobody"
 msgstr "Nobody"
+
+msgid "send notification"
+msgstr "send notification"
+
+msgid "controls sending notification of Leads"
+msgstr "controls sending notification of Leads"

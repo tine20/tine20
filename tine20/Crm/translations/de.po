@@ -664,10 +664,16 @@ msgid "Nobody"
 msgstr "Niemand"
 
 msgid "send notification to responsible"
-msgstr "Versendet Benachrichtungen zum Verantwortlichen"
+msgstr "Versendet Benachrichtigungen zum Verantwortlichen"
 
 msgid "send notification to customer"
-msgstr "Versendet Benachrichtungen zum Kunden"
+msgstr "Versendet Benachrichtigungen zum Kunden"
 
 msgid "send notification to partner"
-msgstr "Versendet Benachrichtungen zum Partner"
+msgstr "Versendet Benachrichtigungen zum Partner"
+
+msgid "send notification"
+msgstr "Versendet Benachrichtigungen"
+
+msgid "controls sending notification of Leads"
+msgstr "Steuert das versenden von Benachrichtigungen für Leads"

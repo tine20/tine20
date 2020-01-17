@@ -165,6 +165,10 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending of Lead notifications disabled by user.');
             return;
         }
+        if (!(Crm_Config::getInstance()->get(Crm_Config::SEND_NOTIFICATION))) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending of Lead notifications disabled by config.');
+            return;
+        }
         
         $view = new Zend_View();
         $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
