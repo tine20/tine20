@@ -503,7 +503,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     {id: 'related_record', dataIndex: 'related_record', header: i18n._('Description'), renderer: this.relatedRecordRenderer.createDelegate(this), editor: false, scope: this},
                     {id: 'remark', dataIndex: 'remark', header: i18n._('Remark'), renderer: this.remarkRenderer.createDelegate(this), editor: Ext.form.Field, scope: this, width: 120},
                     {id: 'related_degree', hidden: this.hideRelatedDegree, dataIndex: 'related_degree', header: i18n._('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
-                    {id: 'type', dataIndex: 'type', renderer: this.typeRenderer, header: i18n._('Type'),  scope: this, width: 120, editor: true},
+                    {id: 'type', dataIndex: 'type', renderer: this.typeRenderer.createDelegate(this), header: i18n._('Type'),  scope: this, width: 120, editor: true},
                     {id: 'creation_time', dataIndex: 'creation_time', editor: false, renderer: Tine.Tinebase.common.dateTimeRenderer, header: i18n._('Creation Time'), width: 140}
                 ]
             });
