@@ -264,7 +264,7 @@ class Admin_CliTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->_groupIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
+        $this->_groupIdsToDelete = $this->_groupsToDelete ? $this->_groupsToDelete->getArrayOfIds() : null;
         parent::tearDown();
     }
     
