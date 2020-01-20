@@ -1,4 +1,3 @@
-const timeout = process.env.SLOWMO ? 30000 : 30000;
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 const help = require('../../lib/helper');
@@ -25,7 +24,7 @@ describe('Product', () => {
     test('open editDialog', async () => {
         await expect(page).toClick('.t-app-sales button', {text: 'Produkt hinzufügen'});
         let newPage = await lib.getNewWindow();
-        await newPage.waitFor(2000);
+        await newPage.waitFor(5000);
         await newPage.screenshot({path: 'screenshots/8_sales/3_sales_produkt_neu.png'}); //@todo daten eingeben
         await newPage.close();
     });
@@ -40,7 +39,7 @@ describe('customer', () => {
     test('open editDialog', async () => {
         await expect(page).toClick('.t-app-sales button', {text: 'Kunde hinzufügen'});
         let newPage = await lib.getNewWindow();
-        await newPage.waitFor(2000);
+        await newPage.waitFor(5000);
         await newPage.screenshot({path: 'screenshots/8_sales/4_sales_kunden_neu.png'}); //@todo daten eingeben
         await newPage.close();
     });
@@ -56,7 +55,7 @@ describe('contracts', () => {
         await page.waitFor(1000);
         await expect(page).toClick('.t-app-sales button', {text: 'Vertrag hinzufügen'});
         newPage = await lib.getNewWindow();
-        await newPage.waitFor(2000);
+        await newPage.waitFor(5000);
         await newPage.screenshot({path: 'screenshots/8_sales/5_sales_vertrag_neu.png'}); //@todo daten eingeben
     });
     test('add product', async () => {

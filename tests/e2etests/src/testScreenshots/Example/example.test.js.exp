@@ -1,4 +1,4 @@
-const timeout = process.env.SLOWMO ? 30000 : 30000;
+
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 const help = require('../../lib/helper');

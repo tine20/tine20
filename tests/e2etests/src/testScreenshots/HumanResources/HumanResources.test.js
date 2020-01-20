@@ -1,36 +1,40 @@
-const timeout = process.env.SLOWMO ? 30000 : 30000;
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 const help = require('../../lib/helper');
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({ timeout: 1000});
+    expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Human Resources');
     // modules
-    await page.screenshot({path: 'screenshots/10_humanresources/1_human_module.png', clip: {x:0 , y:0 , width:150 , height:300} })
+    await page.screenshot({
+        path: 'screenshots/10_humanresources/1_human_module.png',
+        clip: {x: 0, y: 0, width: 150, height: 300}
+    })
 });
 
-describe('MainScreen', ()=> {
+describe('MainScreen', () => {
 
 });
 
 describe('employee', () => {
     let newPage;
     test('open EditDialog', async () => {
-        await expect(page).toClick('.tine-mainscreen-centerpanel-west span' , {text: 'Mitarbeiter'});
+        await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Mitarbeiter'});
         var [button] = await help.getElement('button', page, 'Mitarbeiter hinzufügen');
         await button.click();
         //console.log('Klick Button');
         newPage = await lib.getNewWindow();
-        await newPage.waitFor(3000);
+        await newPage.waitFor(5000); //@todo wait for selector etc...
         await newPage.screenshot({path: 'screenshots/2_allgemeines/16_allgemein_hr_eingabemaske_neu.png'});
         await newPage.screenshot({path: 'screenshots/10_humanresources/2_human_mitarbeiter_hinzu.png'});
         let stick = await newPage.$$('button');
         await stick[1].hover();
         await newPage.waitFor(1000);
-        await newPage.screenshot({path: 'screenshots/10_humanresources/3_human_mitarbeiter_kontaktdaten_zauberstab.png',
-            clip: {x:0 , y:0 , width:1366 , height:(768/3)}});
+        await newPage.screenshot({
+            path: 'screenshots/10_humanresources/3_human_mitarbeiter_kontaktdaten_zauberstab.png',
+            clip: {x: 0, y: 0, width: 1366, height: (768 / 3)}
+        });
     });
 
     test('costcenter', async () => {
@@ -96,17 +100,18 @@ describe('employee', () => {
 describe('employee accounts', () => {
     let newPage;
     test('mainpage', async () => {
-        await expect(page).toClick('.tine-mainscreen-centerpanel-west span' , {text: 'Personalkonten'});
+        await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Personalkonten'});
         await page.waitFor(2000);
         let row = await page.$$('.t-app-humanresources .t-contenttype-account .x-grid3-row');
         await page.waitFor(2000);
         await row[2].click({clickCount: 2});
         newPage = await lib.getNewWindow();
-        await newPage.waitFor(1000);
+        await newPage.waitFor(5000);
         await newPage.screenshot({path: 'screenshots/10_humanresources/10_human_personalkonto.png'});
-    })
+    });
 
-    test('special leave', async () => {
+    // not in BE
+    test.skip('special leave', async () => {
         await expect(newPage).toClick('span', {text: 'Sonderurlaub'});
         await page.waitFor(2000);
         await expect(newPage).toClick('button', {text: 'Sonderurlaub hinzufügen'});
