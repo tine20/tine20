@@ -146,9 +146,11 @@ class Addressbook_ControllerTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->_instance->useNotes(true);
-        if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
-            $this->_instance->delete($this->objects['contact']);
+        if ($this->_instance) {
+            $this->_instance->useNotes(true);
+            if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
+                $this->_instance->delete($this->objects['contact']);
+            }
         }
 
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
