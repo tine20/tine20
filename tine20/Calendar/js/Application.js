@@ -152,7 +152,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
                         event = record;
                     }
 
-                    sm.select.defer(250, sm, [event]);
+                    sm.selectRecords.defer(250, sm, [[event]]);
 
                 }, this, { single: true });
 
