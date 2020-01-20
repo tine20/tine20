@@ -111,7 +111,7 @@ Tine.widgets.grid.ColumnManager = function() {
 
             Ext.applyIf(column, {
                 id: fieldName,
-                dataIndex: (fieldDefinition.type == 'relation') ? 'relations' : fieldName,
+                dataIndex: fieldName,
                 header: i18n._(fieldDefinition.label),
                 hidden: fieldDefinition.hasOwnProperty('shy') ? fieldDefinition.shy : false,    // defaults to false
                 sortable: (fieldDefinition.hasOwnProperty('sortable') && fieldDefinition.sortable == false) ? false : true // defaults to true

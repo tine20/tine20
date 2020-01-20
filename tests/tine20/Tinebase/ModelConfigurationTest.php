@@ -56,22 +56,6 @@ class Tinebase_ModelConfigurationTest extends TestCase
     }
 
     /**
-     * testSortableVirtualFields
-     */
-    public function testSortableVirtualFields()
-    {
-        $customer = new Sales_Model_Customer([], true);
-        $cObj = $customer->getConfiguration();
-        $fields = $cObj->getFields();
-        foreach ($fields as $field) {
-            if ($field['type'] === 'virtual') {
-                self::assertTrue(isset($field['config']['sortable']), print_r($field, true));
-                self::assertFalse($field['config']['sortable'], 'field should not be sortable: ', print_r($field, true));
-            }
-        }
-    }
-
-    /**
      * testModelConfigWithDisabledRelationApp
      */
     public function testModelConfigWithDisabledRelationApp()
