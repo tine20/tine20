@@ -453,18 +453,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
 
         $rawData['domain'] = $domain;
 
-        // replace home wildcards when storing to db
-        // %d = domain
-        // %n = user
-        // %u == user@domain
-        $search = array('%n', '%d', '%u');
-        $replace = array(
-            $localPart,
-            $domain,
-            $emailUsername
-        );
-        
-        $rawData[$this->_propertyMapping['emailHome']] = str_replace($search, $replace, $this->_config['emailHome']);
+        $rawData[$this->_propertyMapping['emailHome']] = $this->_getEmailHome($emailUsername, $localPart, $domain);
         $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
 
         // set primary email address as optional login name

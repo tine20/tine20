@@ -429,18 +429,32 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             }
         }
 
-        // check email home
-        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($scleverExtraAccount, [
-            'user_id' => Felamimail_Controller_Account::getUserInternalEmailUserId($scleverExtraAccount)
+        $extraUserInBackend = self::checkInternalUserAccount($scleverExtraAccount);
+
+        // compare with original email home (should be different!)
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($this->_personas['sclever']);
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $originalUserInBackend = $emailUserBackend->getRawUserById($emailUser);
+        self::assertNotEquals($originalUserInBackend['home'], $extraUserInBackend['home']);
+    }
+
+    public static function checkInternalUserAccount(Felamimail_Model_Account $account)
+    {
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account, [
+            'user_id' => Felamimail_Controller_Account::getUserInternalEmailUserId($account)
         ]);
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         $extraUserInBackend = $emailUserBackend->getRawUserById($emailUser);
         self::assertNotFalse($extraUserInBackend, 'email user not found');
+        self::assertNotEmpty($extraUserInBackend['loginname'], 'loginname empty: '
+            . print_r($extraUserInBackend, true));
+        self::assertNotEmpty($extraUserInBackend['username'], 'username empty: '
+            . print_r($extraUserInBackend, true));
+        self::assertContains(TestServer::getPrimaryMailDomain() . '/'
+            . $extraUserInBackend['userid'], $extraUserInBackend['home'],
+            'home not matching: ' . print_r($extraUserInBackend, true));
 
-        // compare with original email home (should be different!)
-        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($this->_personas['sclever']);
-        $originalUserInBackend = $emailUserBackend->getRawUserById($emailUser);
-        self::assertNotEquals($originalUserInBackend['home'], $extraUserInBackend['home']);
+        return $extraUserInBackend;
     }
 
     public function testCreateNewUserAccountWithINBOX()

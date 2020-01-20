@@ -570,7 +570,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      */
     public function getSmtpConfig()
     {
-        $this->resolveCredentials(FALSE, TRUE, TRUE);
+        if (! $this->smtp_user || ! $this->smtp_password) {
+            $this->resolveCredentials(FALSE, TRUE, TRUE);
+        }
         
         $result = array();
         

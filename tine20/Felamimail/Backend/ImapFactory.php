@@ -59,8 +59,6 @@ class Felamimail_Backend_ImapFactory
 
     /**
      * reset the factory backends
-     *
-     * TODO needed?
      */
     static public function reset()
     {
