@@ -832,7 +832,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $deleteCount = 0;
             try {
                 if ($table === 'tree_nodes') {
-                    $this->_purgeTreeNodes($where);
+                    $deleteCount = $this->_purgeTreeNodes($where);
                 } else {
                     $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
                 }
@@ -860,11 +860,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $idsQuery = 'SELECT n.id from ' . $table . ' as n LEFT JOIN ' . $table . ' as '
             . 'child on n.id = child.parent_id WHERE child.id is NULL AND ' . implode(' AND ', $where);
         $deleteQuery = 'DELETE FROM ' . $table . ' WHERE id IN (?)';
+        $deleteCount = 0;
 
         do {
             $ids = Tinebase_Core::getDb()->query($idsQuery)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+            $deleteCount += count($ids);
         } while (!empty($ids) && Tinebase_Core::getDb()->query(Tinebase_Core::getDb()->quoteInto($deleteQuery, $ids))
             ->rowCount() > 0);
+
+        return $deleteCount;
     }
 
     /**
