@@ -4636,7 +4636,7 @@ msgid "Outdated Browser"
 msgstr "Veralteter Browser"
 
 msgid "You need a current Browser to use this program."
-msgstr "Sie benötigen einen akutellen Browser um dieses Programm zu nutzen."
+msgstr "Sie benötigen einen aktuellen Browser um dieses Programm zu nutzen."
 
 msgid "A: select all visible rows"
 msgstr "A: Alle sichtbaren Zeilen selektieren"
