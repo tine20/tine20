@@ -185,6 +185,12 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
             }
         }
 
+        if (empty($_smtpSettings['id'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not find userid for smtp user: ' . print_r($_smtpSettings, true));
+            return;
+        }
+
         $this->_removeDestinations($_smtpSettings['id']);
         
         // check if it should be forward only
