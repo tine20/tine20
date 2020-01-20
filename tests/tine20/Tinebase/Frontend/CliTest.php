@@ -130,6 +130,13 @@ class Tinebase_Frontend_CliTest extends TestCase
     public function testPurgeDeletedRecordsAllTables()
     {
         $opts = $this->_getOpts();
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            $deletedFile = $this->_addAndDeleteFile();
+            static::assertSame(1, Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getMultipleByProperty(
+                $deletedFile->getId(), 'id', true)->count());
+            static::assertSame(1, Tinebase_FileSystem::getInstance()->getFileObjectBackend()->getMultipleByProperty(
+                $deletedFile->object_id, 'id', true)->count());
+        }
         $deletedContact = $this->_addAndDeleteContact();
         $deletedLead = $this->_addAndDeleteLead();
 
@@ -145,6 +152,15 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->_cli->purgeDeletedRecords($opts);
         $out = ob_get_clean();
 
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            $this->assertContains('Cleared table tree_nodes (deleted ', $out);
+            $this->assertContains('Cleared table tree_fileobjects (deleted ', $out);
+
+            static::assertSame(0, Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getMultipleByProperty(
+                $deletedFile->getId(), 'id', true)->count());
+            static::assertSame(0, Tinebase_FileSystem::getInstance()->getFileObjectBackend()->getMultipleByProperty(
+                $deletedFile->object_id, 'id', true)->count());
+        }
         $this->assertContains('Removing all deleted entries before', $out);
         $this->assertContains('Cleared table addressbook (deleted ', $out);
         $this->assertContains('Cleared table metacrm_lead (deleted ', $out);
@@ -158,7 +174,15 @@ class Tinebase_Frontend_CliTest extends TestCase
         $leads = $leadsBackend->getMultipleByProperty($deletedLead->getId(), 'id', TRUE);
         $this->assertEquals(0, count($leads));
     }
-    
+
+    protected function _addAndDeleteFile()
+    {
+        $path = '/Tinebase/folders/shared/unittest' . Tinebase_Record_Abstract::generateUID();
+        $node = Tinebase_FileSystem::getInstance()->mkdir($path);
+        Tinebase_FileSystem::getInstance()->rmdir($path);
+
+        return $node;
+    }
     /**
      * creates and deletes a contact + returns the deleted record
      * 
