@@ -268,7 +268,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
         $this->_onAfterExportRecords($result);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Exported ' . $result['totalcount'] . ' records.');
+            . ' Exported ' . (is_array($result) ? $result['totalcount'] : 0) . ' records.');
     }
     
     /**
