@@ -74,3 +74,12 @@ div.page
   font-size: 12px;
   font-family: arial;
 }
+
+.preview-panel-right {
+  float: right;
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-left: 5px;
+  font-size: 12px;
+  font-family: arial;
+}
