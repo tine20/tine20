@@ -406,7 +406,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
                 
                 // we need to resolve the modelName and the record value if array is given (e.g. on updating customfield)
-                if (strtolower($customField->definition['type']) == 'record' || strtolower($customField->definition['type']) == 'recordlist') {
+                if (isset($customField->definition['type']) && (strtolower($customField->definition['type']) == 'record' || strtolower($customField->definition['type']) == 'recordlist')) {
                     $value = $this->_getValueForRecordOrListCf($_record, $customField, $value);
                 }
 
