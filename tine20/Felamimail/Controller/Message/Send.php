@@ -1067,12 +1067,47 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         // might be an attachment defined by message id + part id -> fetch this and attach
         list($messageId, $partId) = explode('_', $attachment['id']);
-        $part = $this->getMessagePart($messageId, $partId);
-        $part->decodeContent();
+        try {
+            $part = $this->getMessagePart($messageId, $partId);
+            $part->decodeContent();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // TODO we should mark this attachment / message as node (part)
+            // might be a node attachment part
+            $part = $this->_getMessageAttachmentPartFromNode($messageId, $partId);
+        }
 
         return $part;
     }
 
+    /**
+     * @param $nodeId
+     * @param $partId
+     * @return Zend_Mime_Part
+     * @throws Tinebase_Exception_NotFound
+     *
+     * TODO write a test for this case
+     */
+    protected function _getMessageAttachmentPartFromNode($nodeId, $partId)
+    {
+        $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId);
+        $attachment = isset($message['attachments'][$partId]) ? $message['attachments'][$partId] : null;
+        if (! $attachment) {
+            throw new Tinebase_Exception_NotFound('node attachment not found');
+        }
+        $stream = $attachment['contentstream'];
+        $stream->rewind();
+        $content = $stream->getContents();
+        $part = new Zend_Mime_Part($content);
+        // is this always base64?
+        $part->encoding = Zend_Mime::ENCODING_BASE64;
+
+        return $part;
+    }
+
+    /**
+     * @param array $attachment
+     * @return bool
+     */
     protected function _isMessagePartAttachment($attachment)
     {
         return isset($attachment['id']) && strpos($attachment['id'], '_') !== false;
