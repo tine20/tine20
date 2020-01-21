@@ -277,11 +277,11 @@ function split_quoted_string($d, $s, $n = 0)
     $quote = false;
     $len = strlen($s);
     for ($i = 0; $i < $len && ($n == 0 || $n > 1); $i++) {
-        $c = $s{$i};
+        $c = $s[$i];
         if ($c == '"') {
             $quote = !$quote;
         } else if (!$quote && $c == $d) {
-            $s{$i} = "\x00";
+            $s[$i] = "\x00";
             if ($n > 0) {
                 $n--;
             }
