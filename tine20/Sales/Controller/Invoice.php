@@ -1386,7 +1386,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             
             $address = Sales_Controller_Address::getInstance()->get(is_string($record->address_id) ? $record->address_id : $record->address_id.id);
             
-            $string = $foundCustomer['name'] . PHP_EOL;
+            $string = (isset($foundCustomer['name']) ? $foundCustomer['name'] : '') . PHP_EOL;
             $string .= $address->prefix1 ? $address->prefix1 . "\n" : '';
             $string .= $address->prefix2 ? $address->prefix2 . "\n" : '';
             $string .= $address->pobox   ? $address->pobox   . "\n" : '';

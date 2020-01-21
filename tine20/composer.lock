@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "379fad9d2309ba8003fb5c937445e37b",
+    "content-hash": "09e73251a6f8c44bdcc8f56607e4d27c",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -2684,17 +2684,11 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.42.4",
+            "version": "v1.42.4pl1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "e587180584c3d2d6cb864a0454e777bb6dcb6152"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e587180584c3d2d6cb864a0454e777bb6dcb6152",
-                "reference": "e587180584c3d2d6cb864a0454e777bb6dcb6152",
-                "shasum": ""
+                "url": "https://github.com/tine20/Twig.git",
+                "reference": "d4e31ae03aa6b3a0649e467cfd8518c8447add82"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -2702,8 +2696,7 @@
             },
             "require-dev": {
                 "psr/container": "^1.0",
-                "symfony/debug": "^3.4|^4.2",
-                "symfony/phpunit-bridge": "^4.4@dev|^5.0"
+                "symfony/phpunit-bridge": "^4.4|^5.0"
             },
             "type": "library",
             "extra": {
@@ -2719,7 +2712,11 @@
                     "Twig\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Twig\\Tests\\": "tests"
+                }
+            },
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2732,7 +2729,6 @@
                 },
                 {
                     "name": "Twig Team",
-                    "homepage": "https://twig.symfony.com/contributors",
                     "role": "Contributors"
                 },
                 {
@@ -2746,7 +2742,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-11-11T16:49:32+00:00"
+            "time": "2020-01-21T16:04:48+00:00"
         },
         {
             "name": "webimpress/http-middleware-compatibility",
@@ -4649,6 +4645,7 @@
                 "hydrator",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-hydrator",
             "time": "2016-02-18T22:38:26+00:00"
         },
         {
@@ -4698,6 +4695,7 @@
                 "psr",
                 "psr-7"
             ],
+            "abandoned": "laminas/laminas-psr7bridge",
             "time": "2016-05-10T21:44:39+00:00"
         }
     ],
