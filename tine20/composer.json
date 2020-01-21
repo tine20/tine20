@@ -50,6 +50,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine20/Twig.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine20/vobject.git"
     },
     {
@@ -97,7 +101,7 @@
     "syncroton/syncroton": "1.4.3",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
-    "twig/twig": "^1.0",
+    "twig/twig": "v1.42.4pl1",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "1.*",
     "zendframework/zend-diactoros": "^1.6",
