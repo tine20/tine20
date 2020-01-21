@@ -468,8 +468,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // find out disabled days for the different contracts
         foreach ($contracts as $contract) {
             $json = $contract->getWorkingTimeJson();
-            $startDay = ($contract->start_date == NULL) ? $minDate : ($contract->start_date < $minDate) ? $minDate : $contract->start_date;
-            $stopDay  = ($contract->end_date == NULL)   ? $maxDate : ($contract->end_date > $maxDate)   ? $maxDate : $contract->end_date;
+            $startDay = ($contract->start_date == NULL) ? $minDate : (($contract->start_date < $minDate) ? $minDate : $contract->start_date);
+            $stopDay  = ($contract->end_date == NULL)   ? $maxDate : (($contract->end_date > $maxDate)   ? $maxDate : $contract->end_date);
 
             if ($first) {
                 $firstDay = clone $startDay;
