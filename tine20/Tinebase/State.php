@@ -222,7 +222,7 @@ class Tinebase_State
         } else if(is_bool($state)) {
             $enc = "b:" . ($state ? "1" : "0");
         } else if($state instanceof DateTime){
-            $enc = "d:" . $state->format('D, d M Y H:i:s') + ' GMT';
+            $enc = "d:" . $state->format('D, d M Y H:i:s') . ' GMT';
         } else if(is_array($state)) {
             $flat = "";
             if (! count(array_filter(array_keys($state), 'is_string'))) {
