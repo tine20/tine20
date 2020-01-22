@@ -2627,11 +2627,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.3",
+            "version": "1.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "1809f2b115a8c637b3c308ee469c864b77c8e14d"
+                "reference": "972ece8c10627d89878462d641a678bc41c44e34"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -2655,7 +2655,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2019-01-24T11:17:53+00:00"
+            "time": "2020-01-21T13:46:53+00:00"
         },
         {
             "name": "tine20/composerapploader",
