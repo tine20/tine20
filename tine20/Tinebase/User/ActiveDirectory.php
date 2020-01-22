@@ -632,7 +632,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $encodedPassword = null;
 
         for ($pos = 0; $pos < $passwordLength; $pos++) {
-            $encodedPassword .= "{$password{$pos}}\000";
+            $encodedPassword .= "{$password[$pos]}\000";
         }
         
         return $encodedPassword;
