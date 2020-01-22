@@ -98,7 +98,7 @@
     "sentry/sentry": "^1.8",
     "symfony/config": "^3.3",
     "symfony/dependency-injection": "^3.4",
-    "syncroton/syncroton": "1.4.3",
+    "syncroton/syncroton": "1.4.4",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
     "twig/twig": "v1.42.4pl1",
