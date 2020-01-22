@@ -38,6 +38,13 @@ class Tinebase_FileSystem_StreamWrapper
      * @var Tinebase_Record_RecordTest
      */
     protected $_readDirRecordSet;
+
+    /**
+     * stores the list of directory children for readdir
+     *
+     * @var ArrayIterator
+     */
+    protected $_readDirIterator;
     
     /**
      * @var resource
@@ -81,7 +88,7 @@ class Tinebase_FileSystem_StreamWrapper
         
         $this->_readDirRecordSet = Tinebase_FileSystem::getInstance()->scanDir(substr($_path, 9));
         $this->_readDirIterator  = $this->_readDirRecordSet->getIterator();
-        reset($this->_readDirIterator);
+        $this->_readDirIterator->rewind();
         
         return true;
     }
@@ -91,10 +98,11 @@ class Tinebase_FileSystem_StreamWrapper
      */
     public function dir_readdir() 
     {
-        if (($node = current($this->_readDirIterator)) === false) {
+        if (!$this->_readDirIterator->valid()) {
             return false;
         }
-        next($this->_readDirIterator);
+        $node = $this->_readDirIterator->current();
+        $this->_readDirIterator->next();
         
         return $node->name;
     }
@@ -104,7 +112,7 @@ class Tinebase_FileSystem_StreamWrapper
      */
     public function dir_rewinddir()
     {
-        reset($this->_readDirIterator);
+        $this->_readDirIterator->rewind();
     }
     
     /**

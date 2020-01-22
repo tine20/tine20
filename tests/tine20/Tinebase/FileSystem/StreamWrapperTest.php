@@ -163,7 +163,7 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
                 
         $children = scandir(dirname($testPath));
         
-        $this->assertTrue(in_array('phpunit.txt', $children));
+        $this->assertTrue(in_array('phpunit.txt', $children), print_r($children, true));
     }
     
     public function testRename()
