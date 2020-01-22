@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "09e73251a6f8c44bdcc8f56607e4d27c",
+    "content-hash": "47a0d44942552be92413a701cf9c0c20",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -2627,11 +2627,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.4",
+            "version": "1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "972ece8c10627d89878462d641a678bc41c44e34"
+                "reference": "fa85b3ff3e1620dab502a1caa14afd782e91c6d7"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -2655,7 +2655,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2020-01-21T13:46:53+00:00"
+            "time": "2020-01-22T10:19:26+00:00"
         },
         {
             "name": "tine20/composerapploader",
