@@ -103,6 +103,15 @@ class Tinebase_FileSystemTest extends TestCase
         return $testPath;
     }
 
+    public function testMkdirRecycle()
+    {
+        $testPath = $this->testMkdir();
+
+        Tinebase_FileSystem::getInstance()->rmdir($testPath);
+
+        $this->testMkdir();
+    }
+
     public function testMkdirFailAppId()
     {
         try {

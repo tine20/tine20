@@ -203,7 +203,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     public function runConvertToData()
     {
         if (array_key_exists('deleted_time', $this->_properties) && null === $this->_properties['deleted_time']) {
-            unset($this->_properties['deleted_time']);
+            $this->_properties['deleted_time'] = '1970-01-01 00:00:00';
         }
         if (isset($this->_properties[self::XPROPS_REVISION]) && is_array($this->_properties[self::XPROPS_REVISION])) {
             if (count($this->_properties[self::XPROPS_REVISION]) > 0) {
