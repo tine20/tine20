@@ -2108,7 +2108,7 @@ class Tinebase_Core
      */
     public static function getTineUserAgent($submodule = '')
     {
-        return 'Tine 2.0 ' . $submodule . '(version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+        return 'Tine 2.0 ' . $submodule . ' (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
     }
 
     /**
