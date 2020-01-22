@@ -496,6 +496,12 @@ class Setup_Controller
         Tinebase_Group_Sql::doJoinXProps(false);
         try {
 
+            // TODO remove this in release 13 - those might be needed to create/update setup user
+            $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
+            $release11->addIsSystemToCustomFieldConfig();
+            $release12 = new Tinebase_Setup_Update_12(Setup_Backend_Factory::factory());
+            $release12->addPasswordMustChangeToAccounts();
+
             if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
                 throw new Tinebase_Exception('could not create setup user');
             }
@@ -628,7 +634,6 @@ class Setup_Controller
 
         // TODO remove this in release 13
         $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
-        $release11->addIsSystemToCustomFieldConfig();
         $release11->fsAVupdates();
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_Tree_RefLog::class,
