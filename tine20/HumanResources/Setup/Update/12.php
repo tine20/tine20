@@ -53,6 +53,17 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         // force closed transaction
         Tinebase_TransactionManager::getInstance()->rollBack();
 
+        // make sure, workingtime_json exists
+        if (! $this->_backend->columnExists('workingtime_json', 'humanresources_contract')) {
+            $this->_backend->addCol('humanresources_contract', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>workingtime_json</name>
+                    <type>text</type>
+                    <length>1024</length>
+                    <notnull>false</notnull>
+                </field>'));
+        }
+
         $rows = Tinebase_Core::getDb()->query('SELECT id, workingtime_json, employee_id, start_date FROM ' . SQL_TABLE_PREFIX .
             'humanresources_contract')->fetchAll();
         if (Tinebase_Core::isLogLevel(Zend_Log::WARN) && count($rows) > 0) {
@@ -141,7 +152,14 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
                 $workingTimeScheme->json = ['days' => [0, 0, 0, 0, 0, 0, 0]];
             }
             if ($workingTimeScheme->isDirty()) {
-                $workingTimeSchemeCtrl->update($workingTimeScheme);
+                try {
+                    $workingTimeSchemeCtrl->update($workingTimeScheme);
+                } catch (Tinebase_Exception_Record_Validation $terv) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN) && count($rows) > 0) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' .
+                            ' ' . $terv);
+                    }
+                }
             }
         }
 
