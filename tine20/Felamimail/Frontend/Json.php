@@ -140,6 +140,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param array  $filterData
      * @return array of folder status
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function getFolderStatus($filterData)
     {
@@ -147,7 +148,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Session::writeClose(true);
         
         $filter = new Felamimail_Model_FolderFilter($filterData);
-        $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
+        try {
+            $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
+        } catch (Exception $e) {
+            // we have to convert this exception because the frontend does not handle the imap errors well...
+            throw new Tinebase_Exception_SystemGeneric('Failed to get folder status: ' . $e->getMessage());
+        }
         return $this->_multipleRecordsToJson($result);
     }
     
