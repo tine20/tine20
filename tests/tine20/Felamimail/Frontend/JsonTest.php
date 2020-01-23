@@ -2426,4 +2426,42 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_foldersToClear = array($this->_account->drafts_folder);
         self::assertNotEmpty($draft['messageuid'], 'messageuid of draft message missing: ' . print_r($draft, true));
     }
+
+    public function testUpdateUserAccountCredentials()
+    {
+        $account = $this->_createExternalUserAccount();
+        // update credentials of account
+        $account['password'] = 'updatedpass';
+        $this->_json->saveAccount($account);
+        $this->_assertPassword($account['id'], $account['password']);
+    }
+
+    protected function _assertPassword($accountId, $pass)
+    {
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($accountId);
+        $imapConfig = $fmailaccount->getImapConfig();
+        self::assertEquals($pass, $imapConfig['password']);
+    }
+
+    protected function _createExternalUserAccount()
+    {
+        $pass = 'somepass';
+        $account = $this->_json->saveAccount([
+            'email' => Tinebase_Core::getUser()->accountEmailAddress,
+            'type' => Felamimail_Model_Account::TYPE_USER,
+            'user' => Tinebase_Core::getUser()->accountEmailAddress,
+            'password' => $pass,
+            'user_id' => Tinebase_Core::getUser()->toArray(),
+        ]);
+        $this->_assertPassword($account['id'], $pass);
+        return $account;
+    }
+
+    public function testChangeUserAccountCredentials()
+    {
+        $account = $this->_createExternalUserAccount();
+        $pass = 'newpass';
+        $this->_json->changeCredentials($account['id'], Tinebase_Core::getUser()->accountEmailAddress, $pass);
+        $this->_assertPassword($account['id'], $pass);
+    }
 }
