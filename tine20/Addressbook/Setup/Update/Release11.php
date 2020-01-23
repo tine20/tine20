@@ -260,8 +260,8 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
         $select = $db->select();
         $columns = array('id', 'tel_assistent', 'tel_car', 'tel_cell', 'tel_cell_private', 'tel_fax', 'tel_fax_home', 'tel_home', 'tel_pager', 'tel_work', 'tel_other', 'tel_prefer');
 
-            // get all telephone columns
-        $select->from(SQL_TABLE_PREFIX . 'addressbook', $columns);
+        // get all telephone columns
+        $select->from(SQL_TABLE_PREFIX . 'addressbook', $columns)->where('is_deleted=0');
         $result = $db->query($select);
         $data = array();
         array_shift($columns);
