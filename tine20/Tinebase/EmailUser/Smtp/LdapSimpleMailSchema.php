@@ -450,4 +450,17 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
 
         }
     }
+
+    /**
+     * check if user exists already in email backend user table
+     *
+     * @param  Tinebase_Model_FullUser  $_user
+     * @return boolean
+     *
+     * TODO implement
+     */
+    public function emailAddressExists(Tinebase_Model_FullUser $_user)
+    {
+        return false;
+    }
 }

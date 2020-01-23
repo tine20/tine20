@@ -263,7 +263,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             Felamimail_Controller_Account::getInstance()->addSystemAccountConfigValues($_record);
 
             $user = $this->_getEmailUserFromAccount($_record);
-            $this->_checkIfEmailUserExists($user, $emailUserBackend);
+            $this->_checkIfEmailUserExists($user);
 
             $emailUserBackend->inspectAddUser($user, $user);
             Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectAddUser($user, $user);
@@ -287,7 +287,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
             $emailUserBackend->copyUser($user, $userId);
             Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->copyUser($user, $userId);
-            
+
             // we dont need a credential cache here neither
             return;
         }
@@ -296,7 +296,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
             return;
         }
-        
+
         // add imap & smtp credentials
         if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST ||
                 $_record->type === Felamimail_Model_Account::TYPE_SHARED) {
@@ -320,7 +320,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $_record->smtp_credentials_id = $_record->credentials_id;
             }
         }
-        
+
         $this->_checkSignature($_record);
     }
 
@@ -437,10 +437,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         return $user;
     }
 
-    protected function _checkIfEmailUserExists($user, $emailUserBackend = null)
+    protected function _checkIfEmailUserExists($user)
     {
-        $emailUserBackend = $emailUserBackend ? $emailUserBackend : Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        if ($emailUserBackend->userExists($user)) {
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        if ($emailUserBackend->emailAddressExists($user)) {
             throw new Tinebase_Exception_SystemGeneric('email account already exists');
         }
     }
@@ -1436,7 +1436,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $this->_addUserValues($_account, $_user);
             }
         }
-        
+
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE));
     }
     

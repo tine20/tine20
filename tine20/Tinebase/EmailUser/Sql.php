@@ -451,10 +451,12 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
         $select = $this->_getSelect();
         
-        $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) .
-            ' = ?',   $data[$this->_propertyMapping['emailUserId']] . ' AND ' . $this->_appendClientIdOrDomain());
+        if (! empty($data[$this->_propertyMapping['emailUserId']])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) .
+                ' = ?', $data[$this->_propertyMapping['emailUserId']]);
+        }
         $select->orwhere($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']) .
-            ' = ?',   $data[$this->_propertyMapping['emailUsername']]);
+            ' = ?', $data[$this->_propertyMapping['emailUsername']]);
 
         if ($this->_propertyMapping['emailUsername'] !== 'loginname' && isset($data['loginname'])) {
             $select->orwhere($this->_db->quoteIdentifier($this->_userTable . '.loginname') .
