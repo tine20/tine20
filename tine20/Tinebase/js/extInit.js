@@ -158,7 +158,7 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         if( (metadata && metadata.zeroMoney && v == '0')) {
             return '';
         }
-        return v.toLocaleString(locale) + " " + currencySymbol;
+        return v.toLocaleString(locale,{minimumFractionDigits: 2}) + " " + currencySymbol;
 
     },
     percentage: function(v){

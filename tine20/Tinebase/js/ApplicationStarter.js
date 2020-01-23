@@ -217,7 +217,7 @@ Tine.Tinebase.ApplicationStarter = {
                             // if this option is set, zero values are hidden in the grid
                             gridRenderer = function (value) {
                                 return Ext.util.Format.money(value, {zeroMoney: true});
-                            }
+                            };
                             break;
                         }
                     }
