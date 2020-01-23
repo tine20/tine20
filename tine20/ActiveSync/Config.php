@@ -22,6 +22,8 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
      */
     const DEFAULT_POLICY = 'defaultPolicy';
 
+    const DEVICE_MODEL_DENY_LIST = 'deviceModelDenyList';
+
     const USER_AGENT_DENY_LIST = 'userAgentDenyList';
 
     /**
@@ -63,6 +65,19 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
             'default'               => null,
+        ),
+        self::DEVICE_MODEL_DENY_LIST => array(
+            //_('Device Model Agent Deny List')
+            'label'                 => 'Device Model Agent Deny List',
+            //_('Array of regular expressions of Device-Model strings')
+            'description'           => 'Array of regular expressions of Device-Model strings',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => [
+                // '/^Redmi 4X$/', // example if you like to deny all c models
+            ],
         ),
         self::USER_AGENT_DENY_LIST => array(
             //_('User Agent Deny List')
