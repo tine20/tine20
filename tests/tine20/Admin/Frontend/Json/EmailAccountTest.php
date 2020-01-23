@@ -286,6 +286,38 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         }
     }
 
+    public function testCreateExternalAccountAndUpdateCredentials()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        // add sclevers email account as external
+        $this->_uit = $this->_json;
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $accountdata = [
+            'email' => $this->_personas['sclever']->accountEmailAddress,
+            'type' => Felamimail_Model_Account::TYPE_USER,
+            'user' => $this->_personas['sclever']->accountEmailAddress,
+            'password' => $credentials['password'],
+            'user_id' => $this->_personas['sclever']->toArray(),
+        ];
+        $account = $this->_json->saveEmailAccount($accountdata);
+
+        // check pw of account
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($account['id']);
+        $imapConfig = $fmailaccount->getImapConfig();
+        self::assertEquals($credentials['password'], $imapConfig['password']);
+
+        // update credentials
+        $account['password'] = 'someotherpw';
+        $account['user'] = $this->_personas['sclever']->accountEmailAddress;
+        $this->_json->saveEmailAccount($account);
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($account['id']);
+        $imapConfig = $fmailaccount->getImapConfig();
+        self::assertEquals($account['password'], $imapConfig['password']);
+    }
+
     public function testUpdateSystemAccountWithDuplicateEmailAddress()
     {
         if (! TestServer::isEmailSystemAccountConfigured()) {

@@ -457,14 +457,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
     protected function _createUserCredentials($_record)
     {
-        $_record->credentials_id = $this->_createCredentials($_record->user, $_record->password);
-        if ($_record->smtp_user && $_record->smtp_password) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
+        if ($_record->user_id === Tinebase_Core::getUser()->getId()) {
+            $_record->credentials_id = $this->_createCredentials($_record->user, $_record->password);
+            if ($_record->smtp_user && $_record->smtp_password) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create SMTP credentials.');
+                }
+                $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
+            } else {
+                $_record->smtp_credentials_id = $_record->credentials_id;
             }
-            $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
+        } else if (! $this->doContainerACLChecks()) {
+            // created shared credentials in admin mode
+            $this->_createOrUpdateSharedCredentials($_record);
         } else {
-            $_record->smtp_credentials_id = $_record->credentials_id;
+            throw new Tinebase_Exception_AccessDenied('it is not allowed to change user account credentials');
         }
     }
 
@@ -914,6 +921,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _beforeUpdateStandardAccountCredentials($_record, $_oldRecord)
     {
+        if ($_record->user_id !== Tinebase_Core::getUser()->getId()) {
+            if ($this->doContainerACLChecks()) {
+                throw new Tinebase_Exception_AccessDenied('no access to user account');
+            } else if ($_record->user && $_record->password) {
+                // created shared credentials in admin mode
+                $this->_createOrUpdateSharedCredentials($_record);
+                return;
+            }
+        }
+
         // get old credentials
         $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
         $userCredentialCache = Tinebase_Core::getUserCredentialCache();

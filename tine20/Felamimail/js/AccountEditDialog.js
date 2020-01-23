@@ -141,8 +141,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.disablePasswordField(item);
                     break;
                 case 'user':
-                    // TODO show message 'User needs to enter credentials after login' here?
-                    disabled = !(!this.record.get('type') || this.record.get('type') === 'userInternal' || (! this.asAdminModule && this.record.get('type') === 'user'));
+                    disabled = !(
+                        !this.record.get('type')
+                        || this.record.get('type') === 'userInternal'
+                        || this.record.get('type') === 'user'
+                    );
                     item.setDisabled(disabled);
                     break;
                 case 'smtp_user':
@@ -174,7 +177,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (! this.asAdminModule) {
             item.hide();
         } else {
-            disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
+            let disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
             item.setDisabled(disabled);
             if (disabled) {
                 item.setValue('');
@@ -184,14 +187,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     disablePasswordField: function(item) {
         if (this.record.get('type') && this.record.get('type') === 'user') {
-            if (this.asAdminModule) {
-                // TODO make this work - we want to see the text!
-                // item.onTrigger1Click();
-                item.setRawValue(this.app.i18n._('User needs to enter credentials after login'));
-                item.setDisabled(true);
-            } else {
-                item.setDisabled(false);
-            }
+            item.setDisabled(false);
         } else {
             item.setDisabled(! (
                 !this.record.get('type') || this.record.get('type') === 'shared')
