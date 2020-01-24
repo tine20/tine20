@@ -48,10 +48,6 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
 
     public function testCreatePersonalSystemAccount()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $this->_testNeedsTransaction();
 
         // create "user" account for sclever
@@ -235,9 +231,6 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
 
     public function testConvertInternalToSharedToUserInternalEmailAccount()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
         $user = $this->_createUserWithEmailAccount();
         $sharedAccount = $this->testConvertUserInternalEmailAccount($user);
         $sharedAccount['user_id'] = $user->getId();
