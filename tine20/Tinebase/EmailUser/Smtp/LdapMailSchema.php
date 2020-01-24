@@ -92,5 +92,18 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($_ldapData, true));
     }
+
+    /**
+     * check if user exists already in email backend user table
+     *
+     * @param  Tinebase_Model_FullUser  $_user
+     * @return boolean
+     *
+     * TODO implement
+     */
+    public function emailAddressExists(Tinebase_Model_FullUser $_user)
+    {
+        return false;
+    }
 }
 

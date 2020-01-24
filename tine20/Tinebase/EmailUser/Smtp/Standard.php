@@ -138,8 +138,20 @@ class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_Abstract imp
      * check if user exists already in plugin user table
      * 
      * @param Tinebase_Model_FullUser $_user
+     * @return boolean
      */
     protected function _userExists(Tinebase_Model_FullUser $_user)
+    {
+        return false;
+    }
+
+    /**
+     * check if user exists already in email backend user table
+     *
+     * @param  Tinebase_Model_FullUser  $_user
+     * @return boolean
+     */
+    public function emailAddressExists(Tinebase_Model_FullUser $_user)
     {
         return false;
     }
