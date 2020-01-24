@@ -1416,16 +1416,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.app.getAccountStore();
 
         var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
-            record: newAccount,
-            listeners: {
-                scope: this,
-                'update': function(record) {
-                    // add to tree
-                    var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
-                    var treePanel = this.app.getMainScreen().getTreePanel();
-                    treePanel.addAccount(account);
-                }
-            }
+            record: newAccount
         });
     },
     

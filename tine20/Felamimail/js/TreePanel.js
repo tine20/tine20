@@ -826,7 +826,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     deleteAccount: function(store, account) {
         let accountNode = this.root.findChild('path', '/' + account.data.id);
         if (accountNode) {
-            removeChild(accountNode);
+            try {
+                accountNode.remove(true);
+            } catch (e) {}
         }
     },
     /**
