@@ -542,6 +542,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
                     ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' .
                     $request->getRemoteAddress() . '". (session timeout?)');
+                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ .
+                    ' unauthorised request details: ' .
+                    print_r($request->getServer()->toArray(), true));
             } else {
                 Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
                     ' affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), true) .
