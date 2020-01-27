@@ -1,0 +1,121 @@
+Return-Path: <haproxy+bounces-36051-someone=metaways.de@formilux.org>
+Delivered-To: someone@metaways.de
+Received: from mailserver.net ([10.10.10.2])
+	by mailserver.net (Dovecot) with LMTP id G1ueJUudhlnEEQAAHd4clg
+	for <someone@metaways.de>; Sun, 06 Aug 2017 06:38:35 +0200
+Received: from mailserver.net ([10.10.10.2])
+	by mailserver.net (Dovecot) with LMTP id sQcPJUudhln8YwAAsL3Y6g
+	; Sun, 06 Aug 2017 06:38:35 +0200
+Received: from flx04.formilux.org (flx04.formilux.org [51.15.8.218])
+	by mailserver.net (Postfix) with ESMTP id 47C921F758
+	for <someone@metaways.de>; Sun,  6 Aug 2017 06:38:35 +0200 (CEST)
+Received: from flx04.formilux.org (flx04.formilux.org [51.15.8.218])
+	by flx04.formilux.org (Postfix) with SMTP id C941E441623
+	for <someone@metaways.de>; Sun,  6 Aug 2017 06:18:53 +0200 (CEST)
+X-Original-To: haproxy@formilux.org
+Delivered-To: haproxy@formilux.org
+X-Tine20TestMessage: 24706.eml
+X-ASG-Debug-ID: 1501993045-0ce1f20c246f260001-BQmXlo
+X-Barracuda-Envelope-From: unbekann.unbekannt@mail.org
+X-Barracuda-Apparent-Source-IP: 10.10.10.10
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mail.org;
+	s=key1; t=1501993045;
+	bh=IHwEozCKn8tcfp7z3IK/+N63C0ceEfsIPsPTR57iFP8=;
+	h=Date:From:To:Subject;
+	b=iZaY1Ojxc9WglZxsqgx3pnPHEzuEwzhzp54nMgx4UKoVOPDxOVWiWFcmJCv8OAPcN
+	 znnuHWFNw64pa22+chR5169fjl572KhpI65m4c9lCd2CxerAeQwa6EkJLa7pKAFc/8
+	 EoJlVwxgBmzV8VGqfI5NHGYy0znlUOhNOJBdWNn4=
+Date: Sun, 6 Aug 2017 06:17:24 +0200
+Message-Id: <201708060417.v764HOAa019652@mail.org>
+From: werbung werbung <unbekann.unbekannt@mail.org>
+To: haproxy@formilux.org
+Subject: =?UTF-8?Q?FWD: Ärgern Sie sich auch heimlich über die langen Wartezeiten beim Arzt??=
+X-Mailing-List: haproxy@formilux.org
+List-Id: Haproxy <haproxy@formilux.org>
+List-Post: <mailto:haproxy@formilux.org>
+MIME-Version: 1.0
+X-ASG-Orig-Subj: =?UTF-8?Q?FWD: Ärgern Sie sich auch heimlich über die langen Wartezeiten beim Arzt??=
+X-Mailer: FJBBvE) qwHJS
+User-Agent: FJBBvE) qwHJS
+Content-Type: multipart/alternative; boundary=tcTsuVCPn; charset=utf-8
+X-Barracuda-Connect: mail.org[10.10.10.10]
+X-Barracuda-Start-Time: 1501993046
+X-Barracuda-URL: https://205.234.165.74:443/cgi-mod/mark.cgi
+Received-SPF: none (haproxy.com: unbekann.unbekannt@mail.org does not designate permitted sender hosts)
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.10
+X-Barracuda-Spam-Status: No, SCORE=0.10 using global scores of TAG_LEVEL=3.5 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=1000.0 tests=BAD_ENC_HEADER, DKIM_SIGNED, DKIM_VERIFIED, HTML_MESSAGE, SUBJ_ILLEGAL_CHARS
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.41688
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.00 BAD_ENC_HEADER         Message has bad MIME encoding in the header
+	0.10 SUBJ_ILLEGAL_CHARS     Subject: has too many raw illegal characters
+	-0.00 DKIM_VERIFIED          Domain Keys Identified Mail: signature passes
+	                           verification
+	0.00 DKIM_SIGNED            Domain Keys Identified Mail: message has a signature
+	0.00 HTML_MESSAGE           BODY: HTML included in message
+X-Bogosity: Unsure, tests=bogofilter, spamicity=0.817036, version=1.2.4
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	HTML_MESSAGE,LOTS_OF_MONEY,RP_MATCHES_RCVD,SPF_PASS,SUBJ_ILLEGAL_CHARS,
+	URIBL_DBL_ABUSE_REDIR autolearn=no autolearn_force=no version=3.4.1
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on
+	mailserver.net
+X-Virus-Scanned: clamav-milter 0.99.2 at vmail-smtp02
+X-Virus-Status: Clean
+
+--tcTsuVCPn
+Content-Type: text/plain; charset=utf-8
+
+Hallo,
+
+welche Private Krankenversicherung ist für mich die beste? Wir
+stellen die Testsieger von Stiftung Warentest, Focus Money etc
+vor und vergleichen für Sie Hier können Sie schon ab 93,52 €
+im Monat eine Top-PKV erhalten:
+
+Ist ein Wechsel zurück in die gesetzliche Krankenkasse irgendwann
+möglich?
+
+Bei einem Statuswechsel rutschen Sie automatisch wieder in die
+gesetzliche Krankenkasse. Dies passiert zum Beispiel, sofern Sie aus
+der Selbständigkeit in ein Angestelltenverhältnis wechseln. Ebenfalls
+gesetzlich pflichtversichert sind Sie, wenn Sie als Angestellter unterhalb
+der Versicherungspflichtgrenze (4.687,50 EUR monatlich) liegen oder
+sich beruflich eine Auszeit nehmen.
+
+Es grüßt Sie freundlich Ihre
+
+
+
+werbung werbung
+um die ecke 9, 11111 Schkortleben
+
+--tcTsuVCPn
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    <p>Hallo,<br>
+      <br>
+      welche Private Krankenversicherung ist für mich die beste? Wir<br>stellen die Testsieger von Stiftung Warentest, Focus Money etc<br>vor und vergleichen für Sie Hier können Sie schon ab 93,52 €<br>im Monat eine Top-PKV erhalten:<br>
+      <br>
+      <br>
+      Ist ein Wechsel zurück in die gesetzliche Krankenkasse irgendwann<br>möglich?<br><br>Bei einem Statuswechsel rutschen Sie automatisch wieder in die<br>gesetzliche Krankenkasse. Dies passiert zum Beispiel, sofern Sie aus<br>der Selbständigkeit in ein Angestelltenverhältnis wechseln. Ebenfalls<br>gesetzlich pflichtversichert sind Sie, wenn Sie als Angestellter unterhalb<br>der Versicherungspflichtgrenze (4.687,50 EUR monatlich) liegen oder<br>sich beruflich eine Auszeit nehmen.<br>
+      <br>
+       Es grüßt Sie freundlich Ihre<br>
+      <br>
+      werbung werbung<br>
+      um die ecke 9, 11111 Schkortleben<br>
+      <br>
+      <br>
+    </p>
+  </body>
+</html>
+
+--tcTsuVCPn--
+

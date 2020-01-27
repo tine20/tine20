@@ -72,12 +72,16 @@ class Felamimail_Controller_MessageTest extends TestCase
      */
     protected function setUp()
     {
-        $this->_account    = $this->_getTestUserFelamimailAccount();
-        $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
+        $this->_account = $this->_getTestUserFelamimailAccount();
+        $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
         
-        $this->_folder     = $this->getFolder($this->_testFolderName);
-        $this->_imap->selectFolder($this->_testFolderName);
-        $this->_cache      = Felamimail_Controller_Cache_Message::getInstance();
+        $this->_folder = $this->getFolder($this->_testFolderName);
+        try {
+            $this->_imap->selectFolder($this->_testFolderName);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            Felamimail_Controller_Folder::getInstance()->create($this->_account, $this->_testFolderName);
+        }
+        $this->_cache = Felamimail_Controller_Cache_Message::getInstance();
         $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
 
         if (Zend_Registry::isRegistered('personas')) {
@@ -1757,5 +1761,13 @@ Photographer', $message->body);
 
         $this->assertContains('Sollten Sie zukünftig keine E-Mail Nachrichten empfangen wollen,'
             . ' senden sie bitte eine E-Mail mit dem Subject "OUT-MAIL" an info@', $message->body);
+    }
+
+    public function testBrokenEncodingInHeader()
+    {
+        $cachedMessage = $this->messageTestHelper('24706.eml');
+        $message = $this->_getController()->getCompleteMessage($cachedMessage, null, Zend_Mime::TYPE_TEXT);
+
+        $this->assertContains('welche Private Krankenversicherung ist für mich die beste', $message->body);
     }
 }

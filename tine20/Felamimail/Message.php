@@ -66,6 +66,7 @@ class Felamimail_Message extends Zend_Mail_Message
                 return strtoupper($matches[1]);
             }, $string);
             if ($_isHeader) {
+                $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
                 $string = iconv_mime_decode($string, 2);
             }
         }
