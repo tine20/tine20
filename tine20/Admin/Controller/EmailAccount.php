@@ -82,10 +82,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_EmailAccountId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $this->_checkRight('get');
-        
-        $account = $this->_backend->get($_id);
 
-        return $account;
+        return $this->_backend->get($_id);
     }
 
     /**

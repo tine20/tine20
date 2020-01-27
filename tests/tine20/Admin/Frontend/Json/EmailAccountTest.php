@@ -292,10 +292,13 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         // update credentials
         $account['password'] = 'someotherpw';
         $account['user'] = $this->_personas['sclever']->accountEmailAddress;
-        $this->_json->saveEmailAccount($account);
+        $updatedAccount = $this->_json->saveEmailAccount($account);
         $fmailaccount = Felamimail_Controller_Account::getInstance()->get($account['id']);
         $imapConfig = $fmailaccount->getImapConfig();
         self::assertEquals($account['password'], $imapConfig['password']);
+        self::assertTrue(isset($updatedAccount['user']), 'username should be resolved: '
+            . print_r($updatedAccount, true));
+        self::assertEquals($account['user'], $updatedAccount['user']);
     }
 
     public function testUpdateSystemAccountWithDuplicateEmailAddress()
