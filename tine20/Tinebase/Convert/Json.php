@@ -124,8 +124,10 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 if (!empty($record->relations)) {
                     /** @var Tinebase_Model_Relation $relation */
                     foreach ($record->relations as $relation) {
-                        if ($relation->related_model === Timetracker_Model_Timesheet::class && $relation->related_record
-                                instanceof Tinebase_Record_Interface) {
+                        if (is_object($relation)
+                            && $relation->related_model === Timetracker_Model_Timesheet::class
+                            && $relation->related_record instanceof Tinebase_Record_Interface
+                        ) {
                             if (isset($ts[$relation->related_record->getId()])) {
                                 $relation->related_record = $ts[$relation->related_record->getId()];
                             } else {
@@ -144,7 +146,6 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     ],
                 ]);
                 $expander->expand($ts);
-
             }
         }
 
