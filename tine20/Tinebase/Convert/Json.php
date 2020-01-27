@@ -297,9 +297,6 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     $idx = $foreignRecords->getIndexById($foreignId);
                     if (isset($idx) && $idx !== FALSE) {
                         $record->{$field} = $foreignRecords[$idx];
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' No matching foreign record found for id: ' . $foreignId);
                     }
                 }
             }
