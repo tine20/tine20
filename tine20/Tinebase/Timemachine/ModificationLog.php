@@ -1354,6 +1354,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 Tinebase_Exception::log($e);
             }
             if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                    ' Could not login: ' . print_r($authResponse, true));
                 throw new Tinebase_Exception_AccessDenied('login failed');
             }
             unset($authResponse);
