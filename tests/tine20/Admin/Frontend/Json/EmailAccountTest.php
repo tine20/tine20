@@ -444,9 +444,15 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
         $sharedAccountArray = $sharedAccount->toArray();
         $sharedAccountArray['password'] = 'someupdatedPW';
+        // FE might send empty user
+        $sharedAccountArray['user'] = '';
         $this->_json->saveEmailAccount($sharedAccountArray);
         // test imap login
+        $sharedAccount = Felamimail_Controller_Account::getInstance()->get($sharedAccount);
         Felamimail_Backend_ImapFactory::factory($sharedAccount->getId());
+        $sharedAccount->resolveCredentials();
+        self::assertNotEmpty($sharedAccount->user, 'username should not be empty/overwritten! '
+            . print_r($sharedAccount->toArray(), true));
 
         // check if pw was changed
         $userInBackend = $emailUserBackend->getRawUserById($emailUser);

@@ -615,8 +615,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         if (! empty($_record->password)) {
-            $this->_createOrUpdateSharedCredentials($_record);
+            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
+            // always set defined username
+            $_record->user = $emailUserBackend->getLoginName($user->getId(), $_record->email, $_record->email);
+            $this->_beforeUpdateSharedAccountCredentials($_record, $_oldRecord);
             Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectSetPassword($user->getId(), $_record->password);
         }
     }
