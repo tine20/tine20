@@ -169,7 +169,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
 
-        var xprops = {};
+        var xprops = this.record.get('xprops');
+        xprops = Ext.isObject(xprops) ? xprops : {};
         xprops.personalFSQuota = this.getForm().findField('personalFSQuota').getValue();
         Tine.Tinebase.common.assertComparable(xprops);
         this.record.set('xprops', xprops);
