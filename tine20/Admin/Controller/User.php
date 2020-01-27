@@ -549,10 +549,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 continue;
             }
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                __LINE__ . ' Set xprops of user ' . $user->accountLoginName);
+
             Tinebase_EmailUser_XpropsFacade::setXprops($user, $user->getId());
             Tinebase_User::getInstance()->updateUserInSqlBackend($user);
         }
-
-        // TODO convert userInternal accounts, too
     }
 }
