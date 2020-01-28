@@ -1382,6 +1382,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                         $this->_filterModel[$fieldKey]['options']['filtergroup'] = (isset($config['recordClassName']) ? $config['recordClassName'] : ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
                         $this->_filterModel[$fieldKey]['options']['controller']  = isset($config['controllerClassName']) ? $config['controllerClassName'] : ($config['appName'] . '_Controller_' . $config['modelName']);
                     }
+                } else if ($type === 'relation') {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                        . '::' . __LINE__ . ' Remove relation filter without options as it needs at least "related_model". Model: '
+                        , $this->_recordName);
+                    unset($this->_filterModel[$fieldKey]);
                 }
             }
         }
