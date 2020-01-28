@@ -249,9 +249,11 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         $offset = 0;
 
         do {
-            if (false === ($offset = strpos($xmlData, 'descr="tine20://', $offset))) {
+            if (false === ($newOffset = strpos($xmlData, 'descr="tine20://', $offset)) &&
+                    false === ($newOffset = strpos($xmlData, 'descr="file://', $offset))) {
                 break;
             }
+            $offset = $newOffset;
             if (false === ($drawOffset = strrpos($xmlData, '<w:drawing', 0 - (strlen($xmlData) - $offset)))) {
                 break;
             }
