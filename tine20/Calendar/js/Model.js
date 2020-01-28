@@ -769,14 +769,14 @@ Tine.Calendar.Model.Attender.getSortOrder = function(user_type) {
  * @return {Object} default data
  * @static
  */ 
-Tine.Calendar.Model.Attender.getDefaultData = function() {
-    return {
+Tine.Calendar.Model.Attender.getDefaultData = function(overrides) {
+    return _.assign({
         // @TODO have some config here? user vs. default?
         user_type: 'any',
         role: 'REQ',
         quantity: 1,
         status: 'NEEDS-ACTION'
-    };
+    }, overrides);
 };
 
 /**
