@@ -954,8 +954,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             try {
                 $credentialsBackend->getCachedCredentials($credentials);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                // create new credentials in this case
-                Tinebase_Exception::log($tenf);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Credentials could not be found/decrypted ... '
+                    . ' Creating new credentials.');
                 $credentials = null;
             }
         }
@@ -984,7 +985,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         
         if ($_record->smtp_user && $_record->smtp_password) {
             // create extra smtp credentials
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
             $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
             
         } else if (
