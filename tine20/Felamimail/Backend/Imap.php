@@ -1041,9 +1041,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     protected function _fixHeader($_header, $_messageId, &$_leadingSpaces = 0)
     {
         $header = $this->_replaceHeaderSpaces($_header, $_messageId, $_leadingSpaces);
-        $result = $this->_fixHeaderEncoding($header);
-        
-        return $result;
+        return $this->_fixHeaderEncoding($header);
     }
     
     /**
@@ -1077,8 +1075,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * 
      * @param string $_header
      * @return string
-     * 
-     * @todo support multiple to, ... headers
      */
     protected function _fixHeaderEncoding($_header)
     {
@@ -1092,9 +1088,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             
             foreach (array('subject', 'from', 'to', 'cc', 'bcc') as $field) {
                 if (preg_match('/' . $field . ': (.*?[\n][\s]*?)/i', $result, $matches)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' ' . print_r($matches, TRUE));
-                    
                     $headerValue = str_replace("\n", '', $matches[1]);
                     $headerValue = Tinebase_Helper::mbConvertTo($headerValue);
                     $headerString = iconv_mime_encode(ucfirst($field), $headerValue);
@@ -1102,9 +1095,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                     $result = str_replace($matches[0], $headerString . "\n", $result);
                 }
             }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' ' .$result);
+
+            // remove other bad chars to prevent "iconv_mime_decode_headers(): Detected an illegal character in input string"
+            $result = iconv('UTF-8', 'ASCII//TRANSLIT', $result);
         }
         
         return $result;
