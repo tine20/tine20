@@ -277,15 +277,24 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     $controller = Tinebase_Core::getApplicationInstance($modelName);
                     if (is_string($result['value']['value'])) {
                         $result['value']['value'] = $controller->get($result['value']['value'])->toArray();
-                    } else if (is_array($result['value']['value'])) {
+                    }  elseif (is_array($result['value']['value'])) {
                         //  this is very bad - @refactor
                         foreach ($result['value']['value'] as $key => $subfilter) {
                             if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value'])) {
                                 try {
                                     if (is_string($subfilter['value'])) {
                                         $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                                    } elseif (is_array($subfilter['value']) && isset($subfilter['value']['id'])) {
+                                        // nothing to do here!
                                     } elseif (is_array($subfilter['value'])) {
-                                        $result['value']['value'][$key]['value'] = $controller->getMultiple($subfilter['value'])->toArray();
+                                        $tmpArr = current($subfilter['value']);
+                                        if (is_array($tmpArr) && isset($tmpArr['id'])) {
+                                            // nothing to do here
+                                        } elseif (is_string($tmpArr)) {
+                                            $result['value']['value'][$key]['value'] = $controller->getMultiple($subfilter['value'])->toArray();
+                                        } else {
+                                            unset($result['value']['value'][$key]);
+                                        }
                                     } else {
                                         unset($result['value']['value'][$key]);
                                     }
