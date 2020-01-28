@@ -417,6 +417,7 @@ class Tinebase_Relation_RelationTest extends TestCase
      *
      * - remove right to Tasks app of related record
      * - other relations should still be visible
+     * @group nogitlabci
      */
     public function testRemoveRelationsByAppACL()
     {

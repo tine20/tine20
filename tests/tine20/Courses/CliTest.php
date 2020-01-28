@@ -116,6 +116,8 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
      * 
      * @see 0006370: add cli function for setting all courses to filtered internet
      * @see 0006872: cli function for internet filter does not update memberships
+     *
+     * @group nogitlabci
      */
     public function testResetCoursesInternetAccess()
     {
