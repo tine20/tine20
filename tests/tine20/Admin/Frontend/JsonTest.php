@@ -316,6 +316,9 @@ class Admin_Frontend_JsonTest extends TestCase
         self::assertEquals(2, $account['groups']['totalcount']);
     }
 
+    /**
+     * @group nogitlabci_ldap
+     */
     protected function _removeGrantsOfInternalContainer($account)
     {
         /** @var Tinebase_Model_Container $internalContainer */

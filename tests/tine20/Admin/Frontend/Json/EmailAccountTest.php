@@ -348,6 +348,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         self::assertEquals($emailAccount->email, $updatedUser->accountEmailAddress);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testSetSieveVacation()
     {
         $this->_checkMasterUserTable();
@@ -359,6 +362,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         self::assertEquals($vacation['subject'], $result['subject']);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testSetSieveRules()
     {
         $this->_checkMasterUserTable();
