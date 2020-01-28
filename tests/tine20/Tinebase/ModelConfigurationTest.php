@@ -4,14 +4,9 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_ModelConfiguration, using the test class from hr
@@ -85,7 +80,7 @@ class Tinebase_ModelConfigurationTest extends TestCase
         $found = false;
         foreach ($fields as $name => $field) {
             if ($name === 'contract') {
-                self::assertTrue(! isset($field['label']) || $field['label'] === null,
+                self::assertTrue(!isset($field['label']) || $field['label'] === null,
                     'contract field should have no label: ' . print_r($field, true));
                 $found = true;
             }
@@ -140,5 +135,15 @@ class Tinebase_ModelConfigurationTest extends TestCase
         self::assertTrue(isset($fields['is_cleared_combined']));
         self::assertTrue(isset($fields['is_cleared_combined']['config']['label']));
         self::assertTrue(isset($fields['is_cleared_combined']['filterDefinition']['options']));
+    }
+
+    public function testRelationFilter()
+    {
+        // do not have generic "Relation" filter
+        $record = new Sales_Model_OrderConfirmation([], true);
+        $cObj = $record->getConfiguration();
+
+        $filterModel = $cObj->getFilterModel();
+        self::assertFalse(isset($filterModel['_filterModel']['relations']), print_r($filterModel, true));
     }
 }
