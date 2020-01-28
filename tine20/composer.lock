@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8cade67a6cc182bb5d5866156b8c245a",
+    "content-hash": "1ae885ab1032830d77d8db1040f66521",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -778,12 +778,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "d15890222b6deb08fe44a57fa8e2e6ec2e25eb84"
+                "reference": "37dd61c45fdc51100ba445551ce278f6401c246f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d15890222b6deb08fe44a57fa8e2e6ec2e25eb84",
-                "reference": "d15890222b6deb08fe44a57fa8e2e6ec2e25eb84",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/37dd61c45fdc51100ba445551ce278f6401c246f",
+                "reference": "37dd61c45fdc51100ba445551ce278f6401c246f",
                 "shasum": ""
             },
             "require": {
@@ -820,7 +820,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-01-02T11:58:15+00:00"
+            "time": "2020-01-21T16:17:18+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "3d868b7a1a1a2e7cfa71126743d1322c82722bdc"
+                "reference": "c85ea8697515a1e04e5bb7fbe8f0b6485596a186"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/3d868b7a1a1a2e7cfa71126743d1322c82722bdc",
-                "reference": "3d868b7a1a1a2e7cfa71126743d1322c82722bdc",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/c85ea8697515a1e04e5bb7fbe8f0b6485596a186",
+                "reference": "c85ea8697515a1e04e5bb7fbe8f0b6485596a186",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2019-12-09T13:22:05+00:00"
+            "time": "2020-01-09T13:10:09+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1415,6 +1415,7 @@
                 "cron",
                 "schedule"
             ],
+            "abandoned": "dragonmantank/cron-expression",
             "time": "2017-01-23T04:29:33+00:00"
         },
         {
@@ -2974,11 +2975,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.3",
+            "version": "1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "1809f2b115a8c637b3c308ee469c864b77c8e14d"
+                "reference": "fa85b3ff3e1620dab502a1caa14afd782e91c6d7"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -3002,7 +3003,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2019-01-24T11:17:53+00:00"
+            "time": "2020-01-22T10:19:26+00:00"
         },
         {
             "name": "tine20/composerapploader",
@@ -3086,38 +3087,39 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.33.2",
+            "version": "v1.42.4pl1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "dd6ca96227917e1e85b41c7c3cc6507b411e0927"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/dd6ca96227917e1e85b41c7c3cc6507b411e0927",
-                "reference": "dd6ca96227917e1e85b41c7c3cc6507b411e0927",
-                "shasum": ""
+                "url": "https://github.com/tine20/Twig.git",
+                "reference": "d4e31ae03aa6b3a0649e467cfd8518c8447add82"
             },
             "require": {
-                "php": ">=5.2.7"
+                "php": ">=5.5.0",
+                "symfony/polyfill-ctype": "^1.8"
             },
             "require-dev": {
                 "psr/container": "^1.0",
-                "symfony/debug": "~2.7",
-                "symfony/phpunit-bridge": "~3.3@dev"
+                "symfony/phpunit-bridge": "^4.4|^5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.33-dev"
+                    "dev-master": "1.42-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
+                },
+                "psr-4": {
+                    "Twig\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Twig\\Tests\\": "tests"
+                }
+            },
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3129,22 +3131,21 @@
                     "role": "Lead Developer"
                 },
                 {
+                    "name": "Twig Team",
+                    "role": "Contributors"
+                },
+                {
                     "name": "Armin Ronacher",
                     "email": "armin.ronacher@active-4.com",
                     "role": "Project Founder"
-                },
-                {
-                    "name": "Twig Team",
-                    "homepage": "http://twig.sensiolabs.org/contributors",
-                    "role": "Contributors"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
-            "homepage": "http://twig.sensiolabs.org",
+            "homepage": "https://twig.symfony.com",
             "keywords": [
                 "templating"
             ],
-            "time": "2017-04-20T17:39:48+00:00"
+            "time": "2020-01-21T16:04:48+00:00"
         },
         {
             "name": "webimpress/composer-extra-dependency",

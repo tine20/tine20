@@ -678,10 +678,10 @@ class Setup_Frontend_Cli
         }
 
         $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
-        $userController = Tinebase_User::getInstance();
+        $userController = Admin_Controller_User::getInstance();
         $emailUser = Tinebase_EmailUser::getInstance();
         /** @var Tinebase_Model_FullUser $user */
-        foreach ($userController->getFullUsers() as $user) {
+        foreach ($userController->searchFullUsers('') as $user) {
             $emailUser->inspectGetUserByProperty($user);
 
             if (empty($user->accountEmailAddress) && isset($data['createEmail']) && $data['createEmail']) {
@@ -709,7 +709,7 @@ class Setup_Frontend_Cli
                     $user->accountEmailAddress = $newEmailAddress;
                 }
                 try {
-                    $userController->updateUser($user);
+                    $userController->update($user);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' ' . $tenf);

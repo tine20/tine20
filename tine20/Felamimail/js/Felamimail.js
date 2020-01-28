@@ -793,7 +793,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 topic: "Felamimail.Account.*",
                 callback: _.bind(this.onAccountRecordChange, this)
             });
-
             postal.subscribe({
                 channel: "recordchange",
                 topic: "Admin.EmailAccount.*",

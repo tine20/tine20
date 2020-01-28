@@ -406,39 +406,31 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
         }
         
-        this.priceNetField = new Ext.ux.form.NumberField({
-            name: 'price_net',
-            xtype: 'numberfield',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            decimalPrecision: 2,
-            suffix: ' €',
+        this.priceNetField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Net'),
+            name: 'price_net',
             columnWidth: 1/4,
             listeners: {
                 scope: this,
                 blur: this.calcGross.createDelegate(this)
+
             }
         });
 
-        this.priceTaxField = new Ext.ux.form.NumberField({
-            decimalPrecision: 2,
-            name: 'price_tax',
-            disabled: true,
-            xtype: 'numberfield',
-            suffix: ' €',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+        this.priceTaxField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Tax'),
-            columnWidth: 1/4
+            disabled: true,
+            name: 'price_tax',
+            columnWidth: 1/4,
         });
-        
-        this.priceGrossField = new Ext.ux.form.NumberField({
-            decimalPrecision: 2,
-            name: 'price_gross',
-            xtype: 'numberfield',
-            suffix: ' €',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+
+        this.priceGrossField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Gross'),
-            columnWidth: 1/4
+            name: 'price_gross',
+            columnWidth: 1/4,
         });
         
         this.salesTaxField = Ext.create({
@@ -463,13 +455,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
         
-        this.inventoryChange = new Ext.ux.form.NumberField({
-            name: 'inventory_change',
-            xtype: 'numberfield',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            decimalPrecision: 2,
-            suffix: ' €',
+        this.inventoryChange = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Inventory Change'),
+            name: 'inventory_change',
             columnWidth: 1/4,
             listeners: {
                 scope: this,

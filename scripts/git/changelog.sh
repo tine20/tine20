@@ -17,9 +17,15 @@ then
 fi
 
 echo -e "#Features"
-git log $VERSION1...$VERSION2 --oneline | grep -v "Merge branch" | grep feature
+git log $VERSION1...$VERSION2 --oneline | grep feature
 
 echo -e "\n#Bugfixes"
-git log $VERSION1...$VERSION2 --oneline | grep -v "Merge branch" | grep fix
+git log $VERSION1...$VERSION2 --oneline | grep fix
 
 # TODO allow to get all other changes with a param --full
+
+if [ "$3" = "--full" ]
+then
+  echo -e "\n#Other Changes"
+  git log $VERSION1...$VERSION2 --oneline | grep -v "Merge branch" | grep -v "Merge remote" | grep -v feature | grep -v fix
+fi

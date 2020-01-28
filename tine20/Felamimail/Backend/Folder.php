@@ -211,6 +211,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
 
         $data = array();
         foreach ($_counters as $counter => $value) {
+            $value = (string)$value;
             if ($value[0] == '+' || $value[0] == '-') {
                 // increment or decrement values
                 $intValue = (int) substr($value, 1);
@@ -223,9 +224,10 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
                     $folder->{$counter} += $intValue;
                 }
             } else {
+                $value = (int)$value;
                 // set values
-                $data[$counter] = ($value >= 0) ? (int)$value : 0;
-                $folder->{$counter} = ($value >= 0) ? (int)$value : 0;
+                $data[$counter] = ($value >= 0) ? $value : 0;
+                $folder->{$counter} = ($value >= 0) ? $value : 0;
             }
         }
         

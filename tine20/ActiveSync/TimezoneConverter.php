@@ -394,7 +394,7 @@ class ActiveSync_TimezoneConverter
             // the milestone is sending a positive value for daylightBias while it should send a negative value
             $daylightOffsetMilestone = ($_offsets['bias'] + ($_offsets['daylightBias'] * -1) ) * 60 * -1;
             
-            if ($daylightOffset == $_daylightTransition['offset'] || $daylightOffsetMilestone == $_daylightTransition['offset']) {
+            if ($_daylightTransition && isset($_daylightTransition['offset']) && ($daylightOffset == $_daylightTransition['offset'] || $daylightOffsetMilestone == $_daylightTransition['offset'])) {
                 $standardParsed = getdate($_standardTransition['ts']);
                 $daylightParsed = getdate($_daylightTransition['ts']);
 

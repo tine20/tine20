@@ -148,6 +148,14 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     public function __construct(Syncroton_Model_IDevice $_device, DateTime $_syncTimeStamp)
     {
+        $denyList = ActiveSync_Config::getInstance()->get(ActiveSync_Config::DEVICE_MODEL_DENY_LIST);
+        foreach ($denyList as $deny) {
+            if (preg_match($deny, $_device->model)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Device model blocked: ' . $_device->model);
+                throw new Tinebase_Exception_ProgramFlow(' Device model blocked: ' . $_device->model);
+            }
+        }
+
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
         }

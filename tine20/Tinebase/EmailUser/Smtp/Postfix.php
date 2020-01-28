@@ -196,16 +196,20 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             $this->_db->quoteIdentifier('forwards.' . $this->_propertyMapping['emailAliases']) . ')', // AND ON (right)
             array($this->_propertyMapping['emailForwards'] => $this->_dbCommand->getAggregate('forwards.' . $this->_propertyMapping['emailForwards']))); // Select
 
-        // append domain if set or domain IS NULL
+        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
+
+        return $select;
+    }
+
+    protected function _appendDomainOrClientIdOrInstanceToSelect($select)
+    {
         if (! empty($this->_clientId)) {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.client_idnr') . ' = ?', $this->_clientId);
         } else {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.client_idnr') . ' IS NULL');
         }
-
-        return $select;
     }
-    
+
     /**
     * interceptor before add
     *
@@ -689,5 +693,25 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     protected function _checkDomain($_email, $_throwException = false)
     {
         return Tinebase_EmailUser::checkDomain($_email, $_throwException, $this->_config['alloweddomains']);
+    }
+
+    /**
+     * check if user exists already in email backend user table
+     *
+     * @param  Tinebase_Model_FullUser  $_user
+     * @return boolean
+     */
+    public function emailAddressExists(Tinebase_Model_FullUser $_user)
+    {
+        $select = $this->_db->select()
+            ->from($this->_userTable)
+            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress'])
+                . ' = ?', $_user->accountEmailAddress)
+            ->limit(1);
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+
+        return (bool) $queryResult;
     }
 }

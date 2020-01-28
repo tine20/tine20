@@ -422,7 +422,7 @@ function contributorsMerge($_verbose, $_language, $_archive)
     }
     
     foreach ($contents as $appName) {
-        if ($appName{0} == '.' || $appName{0} == '_') continue;
+        if ($appName[0] == '.' || $appName[0] == '_') continue;
         
         if( ! checkAppName($appName, $_verbose)) {
             continue;

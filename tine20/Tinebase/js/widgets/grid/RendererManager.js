@@ -86,7 +86,8 @@ Tine.widgets.grid.RendererManager = function() {
             } else {
                 var renderer = null,
                     recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
-                    fieldDefinition = recordClass ? recordClass.getField(fieldName) : null,
+                    field = recordClass ? recordClass.getField(fieldName) : null,
+                    fieldDefinition = _.get(field, 'fieldDefinition', field),
                     fieldType = fieldDefinition ? fieldDefinition.type : 'auto';
             }
             switch (fieldType) {
@@ -105,6 +106,20 @@ Tine.widgets.grid.RendererManager = function() {
                     break;
                 case 'json':
                     renderer = Tine.widgets.grid.jsonRenderer;
+                    break;
+                case 'relation':
+                    let cc = fieldDefinition.config;
+
+                    if (cc && cc.type && cc.appName && cc.modelName) {
+                        let rendererObj = new Tine.widgets.relation.GridRenderer({
+                            appName: appName,
+                            type: cc.type,
+                            foreignApp: cc.appName,
+                            foreignModel: cc.modelName
+                        });
+                        renderer = _.bind(rendererObj.render, rendererObj);
+                        break;
+                    }
                     break;
                 case 'records':
                 case 'recodList':

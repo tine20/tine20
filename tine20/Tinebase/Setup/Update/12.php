@@ -159,18 +159,25 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         $this->addApplicationUpdate('Tinebase', '12.23', self::RELEASE012_UPDATE005);
     }
 
-    public function update006()
+    public function addPasswordMustChangeToAccounts()
     {
-        if ($this->getTableVersion('accounts') < 16) {
+        if (!$this->_backend->columnExists('password_must_change', 'accounts')) {
             $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>password_must_change</name>
                     <type>boolean</type>                 
                     <default>false</default>
                 </field>'));
-            $this->setTableVersion('accounts', 16);
         }
 
+        if ($this->getTableVersion('accounts') < 16) {
+            $this->setTableVersion('accounts', 16);
+        }
+    }
+
+    public function update006()
+    {
+        $this->addPasswordMustChangeToAccounts();
         $this->addApplicationUpdate('Tinebase', '12.24', self::RELEASE012_UPDATE006);
     }
 

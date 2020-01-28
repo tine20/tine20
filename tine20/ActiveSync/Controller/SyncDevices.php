@@ -120,7 +120,7 @@ class ActiveSync_Controller_SyncDevices extends Tinebase_Controller_Record_Abstr
         }
         
         foreach ($fieldsToUnset as $field) {
-            $_record->{$field} = $_oldRecord{$field};
+            $_record->{$field} = $_oldRecord[$field];
         }
     }
 

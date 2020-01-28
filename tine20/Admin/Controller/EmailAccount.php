@@ -82,10 +82,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_EmailAccountId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $this->_checkRight('get');
-        
-        $account = $this->_backend->get($_id);
 
-        return $account;
+        return $this->_backend->get($_id);
     }
 
     /**
@@ -131,11 +129,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
 
-        if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
-            // remove password for "user" accounts
-            unset($_record->password);
-        }
-
         $account = $this->_backend->create($_record);
 
         return $account;
@@ -170,11 +163,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
-            // remove password for "user" accounts
-            unset($_record->password);
-        }
-
         if ($_record->email !== $_oldRecord->email && $_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             // change user email address
             $user = Admin_Controller_User::getInstance()->get($_record->user_id);

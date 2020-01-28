@@ -325,12 +325,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             // Only want 1 user (shouldn't be more than 1 anyway)
             ->limit(1);
 
-        $this->_appendInstanceNameOrDomainToSelect($select);
+        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
 
         return $select;
     }
 
-    protected function _appendInstanceNameOrDomainToSelect(Zend_Db_Select $select)
+    protected function _appendDomainOrClientIdOrInstanceToSelect(Zend_Db_Select $select)
     {
         $schema = $this->getSchema();
         // append instancename OR domain if set or domain IS NULL
@@ -453,18 +453,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
 
         $rawData['domain'] = $domain;
 
-        // replace home wildcards when storing to db
-        // %d = domain
-        // %n = user
-        // %u == user@domain
-        $search = array('%n', '%d', '%u');
-        $replace = array(
-            $localPart,
-            $domain,
-            $emailUsername
-        );
-        
-        $rawData[$this->_propertyMapping['emailHome']] = str_replace($search, $replace, $this->_config['emailHome']);
+        $rawData[$this->_propertyMapping['emailHome']] = $this->_getEmailHome($emailUsername, $localPart, $domain);
         $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
 
         // set primary email address as optional login name
@@ -482,7 +471,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     public function getAllDomains()
     {
         $select = $this->_db->select()->from(array($this->_userTable), 'domain')->distinct();
-        $this->_appendInstanceNameOrDomainToSelect($select);
+        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
 
         $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
         return $result;

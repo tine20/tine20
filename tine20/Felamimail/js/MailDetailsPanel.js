@@ -371,7 +371,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         partId: attachment.partId
                     };
 
-                    if (this.nodeRecord) {
+                    if (this.nodeRecord || this.record.get('from_node')) {
                         params.nodeId = messageId;
                         params.method = 'Felamimail.downloadNodeAttachment';
                     } else {

@@ -557,7 +557,22 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         // no transactions yet
         // get root node ids
         $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl(null);
-        return $this->_recalculateFolderSize($_fileObjectBackend, $this->_getIdsOfDeepestFolders($this->search($searchFilter, null, true)));
+        $result = $this->_recalculateFolderSize($_fileObjectBackend, $this->_getIdsOfDeepestFolders($this->search($searchFilter, null, true)));
+
+        $size = 0;
+        $revisionSize = 0;
+        /** @var Tinebase_Model_Tree_Node $rootNode */
+        foreach ($this->search($searchFilter) as $rootNode) {
+            $size += $rootNode->size;
+            $revisionSize += $rootNode->revision_size;
+        }
+
+        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Core::getTinebaseId(),
+            Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $size);
+        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Core::getTinebaseId(),
+            Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, $revisionSize);
+
+        return $result;
     }
 
     /**

@@ -27,4 +27,17 @@ class Tinebase_EmailUser_Smtp_LdapQmailSchema extends Tinebase_EmailUser_Smtp_Ld
     protected $_requiredObjectClass = array(
         'qmailUser',
     );
+
+    /**
+     * check if user exists already in email backend user table
+     *
+     * @param  Tinebase_Model_FullUser  $_user
+     * @return boolean
+     *
+     * TODO implement
+     */
+    public function emailAddressExists(Tinebase_Model_FullUser $_user)
+    {
+        return false;
+    }
 }  

@@ -1981,9 +1981,13 @@ class Tinebase_FileSystem implements
             if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $name, true, false)) &&
                     $deletedNode->is_deleted) {
                 $deletedNode->is_deleted = 0;
+                $deletedNode->deleted_time = null;
+                $deletedNode->deleted_by = null;
                 $object = $this->_fileObjectBackend->get($deletedNode->object_id, true);
                 if ($object->is_deleted) {
                     $object->is_deleted = 0;
+                    $object->deleted_time = null;
+                    $object->deleted_by = null;
                     $this->_fileObjectBackend->update($object);
                 }
                 $treeNode = $this->_getTreeNodeBackend()->update($deletedNode);

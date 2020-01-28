@@ -35,6 +35,10 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      */
     protected function setUp()
     {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
         parent::setUp();
 
         $this->_json = new Admin_Frontend_Json();
@@ -62,10 +66,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     
     public function testEmailAccountApi()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $this->_uit = $this->_json;
         $account = $this->_testSimpleRecordApi(
             'EmailAccount', // use non-existant model to make simple api test work
@@ -112,17 +112,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         return $accountdata;
     }
 
-    public static function getUserInternalAccountData($user)
-    {
-        $accountData = [
-            'name' => 'unittest user internal account',
-            'email' => 'myinternal' . Tinebase_Record_Abstract::generateUID(6) . '@' . TestServer::getPrimaryMailDomain(),
-            'type' => Felamimail_Model_Account::TYPE_USER_INTERNAL,
-            'user_id' => $user->getId(),
-        ];
-        return $accountData;
-    }
-
     /**
      * testSearchUserEmailAccounts - returns all TYPE_SYSTEM user accounts
      *
@@ -130,10 +119,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      */
     public function testSearchUserEmailAccounts()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         // we should already have some "SYSTEM" accounts for the persona users
         $filter = [[
             'field' => 'type',
@@ -194,10 +179,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      */
     public function testEmailAccountApiSharedAccount($delete = true, $accountdata = [])
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $this->_uit = $this->_json;
         $accountdata = self::getSharedAccountData(true, $accountdata);
         $account = $this->_json->saveEmailAccount($accountdata);
@@ -258,10 +239,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
     public function testUpdateSystemAccount()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $systemaccount = $this->_getTestUserFelamimailAccount();
         if (! $systemaccount) {
             self::markTestSkipped('no systemaccount configured');
@@ -279,10 +256,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
     public function testCreateSystemAccountWithDuplicateEmailAddress()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => Tinebase_Core::getUser()->accountEmailAddress,
@@ -297,12 +270,39 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         }
     }
 
+    public function testCreateExternalAccountAndUpdateCredentials()
+    {
+        // add sclevers email account as external
+        $this->_uit = $this->_json;
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $accountdata = [
+            'email' => $this->_personas['sclever']->accountEmailAddress,
+            'type' => Felamimail_Model_Account::TYPE_USER,
+            'user' => $this->_personas['sclever']->accountEmailAddress,
+            'password' => $credentials['password'],
+            'user_id' => $this->_personas['sclever']->toArray(),
+        ];
+        $account = $this->_json->saveEmailAccount($accountdata);
+
+        // check pw of account
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($account['id']);
+        $imapConfig = $fmailaccount->getImapConfig();
+        self::assertEquals($credentials['password'], $imapConfig['password']);
+
+        // update credentials
+        $account['password'] = 'someotherpw';
+        $account['user'] = $this->_personas['sclever']->accountEmailAddress;
+        $updatedAccount = $this->_json->saveEmailAccount($account);
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($account['id']);
+        $imapConfig = $fmailaccount->getImapConfig();
+        self::assertEquals($account['password'], $imapConfig['password']);
+        self::assertTrue(isset($updatedAccount['user']), 'username should be resolved: '
+            . print_r($updatedAccount, true));
+        self::assertEquals($account['user'], $updatedAccount['user']);
+    }
+
     public function testUpdateSystemAccountWithDuplicateEmailAddress()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
@@ -322,10 +322,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
     public function testUpdateSystemAccountChangeUsername()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
@@ -343,10 +339,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
     public function testUpdateSystemAccountChangeEmail()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $user = $this->_createUserWithEmailAccount();
         $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
         $emailAccount->email = 'somenewmail' . Tinebase_Record_Abstract::generateUID(6) . '@' . TestServer::getPrimaryMailDomain();
@@ -354,176 +346,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         self::assertEquals($emailAccount->email, $updatedAccount['email']);
         $updatedUser = Tinebase_User::getInstance()->getFullUserById($user->getId());
         self::assertEquals($emailAccount->email, $updatedUser->accountEmailAddress);
-    }
-
-    public function testConvertEmailAccount()
-    {
-        self::markTestSkipped('TODO activate me');
-
-        $this->_skipIfXpropsUserIdDeactivated();
-        $this->_testNeedsTransaction();
-
-        $user = $this->_createUserWithEmailAccount();
-
-        $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
-        $this->_convertAccount($emailAccount, $user, Felamimail_Model_Account::TYPE_SHARED);
-    }
-
-    /**
-     * @return array
-     * @param Felamimail_Model_Account $emailAccount
-     * @param Tinebase_Model_FullUser $user
-     * @param string $convertTo
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_Validation
-     * @throws Tinebase_Exception_SystemGeneric
-     */
-    protected function _convertAccount(Felamimail_Model_Account $emailAccount, $user, $convertTo)
-    {
-        if ($emailAccount->type !== Felamimail_Model_Account::TYPE_SHARED) {
-            $emailAccount->migration_approved = 1;
-            Admin_Controller_EmailAccount::getInstance()->update($emailAccount);
-        }
-
-        $emailAccountArray = $emailAccount->toArray();
-        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED) {
-            $emailAccountArray['password'] = Tinebase_Record_Abstract::generateUID(10);
-        } else if (in_array($convertTo, [
-            Felamimail_Model_Account::TYPE_SYSTEM,
-            Felamimail_Model_Account::TYPE_USER_INTERNAL,
-        ])) {
-            $emailAccountArray['user_id'] = $user->getId();
-        }
-        $convertFrom = $emailAccount->type;
-        $emailAccountArray['type'] = $convertTo;
-        $convertedAccount = $this->_json->saveEmailAccount($emailAccountArray);
-        $this->_emailAccounts[] = $convertedAccount;
-
-        self::assertEquals($convertTo, $convertedAccount['type']);
-        if (in_array($convertTo, [
-            Felamimail_Model_Account::TYPE_SYSTEM,
-            Felamimail_Model_Account::TYPE_USER_INTERNAL,
-        ])) {
-            self::assertTrue(is_array($convertedAccount['user_id']), print_r($convertedAccount, true));
-            self::assertEquals($user->getId(), $convertedAccount['user_id']['accountId'],
-                'user id of ' . $user->accountLoginName . ' not found in converted account: '
-                . print_r($convertedAccount, true));
-            $testUserAccount = $convertedAccount['user_id']['accountId'] === Tinebase_Core::getUser()->getId();
-        } else {
-            self::assertEmpty($convertedAccount['user_id'], 'user_id should be empty: ' . print_r($convertedAccount, true));
-            $testUserAccount = false;
-        }
-
-        if ($convertFrom === Felamimail_Model_Account::TYPE_SYSTEM) {
-            $updatedUser = Tinebase_User::getInstance()->getUserById($user->getId());
-            self::assertEmpty($updatedUser->accountEmailAddress, 'user email address should be empty after account conversion');
-        }
-
-        // add current user to shared account
-        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED) {
-            $convertedAccount['grants'][] = [
-                'readGrant' => true,
-                'editGrant' => true,
-                'addGrant' => true,
-                'account_type' => 'user',
-                'account_id' => Tinebase_Core::getUser()->getId(),
-            ];
-            $this->_json->saveEmailAccount($convertedAccount);
-        }
-
-        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED || $testUserAccount) {
-            // check if email account exists and mail sending works
-            $subject = 'test message ' . Tinebase_Record_Abstract::generateUID(10);
-            $message = new Felamimail_Model_Message(array(
-                'account_id'    => $convertedAccount['id'],
-                'subject'       => $subject,
-                'to'            => Tinebase_Core::getUser()->accountEmailAddress,
-                'body'          => 'aaaaaä <br>',
-            ));
-            $sendMessage = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
-            self::assertEquals($message->subject, $sendMessage->subject);
-        }
-
-        return $convertedAccount;
-    }
-
-    /**
-     * @return array
-     * @param Tinebase_Model_FullUser $user
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_Validation
-     * @throws Tinebase_Exception_SystemGeneric
-     */
-    public function testConvertUserInternalEmailAccount($user = null)
-    {
-        self::markTestSkipped('TODO activate me');
-
-        $this->_skipIfXpropsUserIdDeactivated();
-
-        $this->_testNeedsTransaction();
-
-        if (! $user) {
-            $user = $this->_createUserWithEmailAccount();
-        }
-        $accountData = self::getUserInternalAccountData($user);
-        $internalAccount = Admin_Controller_EmailAccount::getInstance()->create(
-            new Felamimail_Model_Account($accountData));
-        $this->_emailAccounts[] = $internalAccount;
-
-        return $this->_convertAccount($internalAccount, $user, Felamimail_Model_Account::TYPE_SHARED);
-    }
-
-    public function testConvertSharedToUserInternalEmailAccount()
-    {
-        self::markTestSkipped('TODO activate me');
-
-        $this->_skipIfXpropsUserIdDeactivated();
-
-        $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
-        $this->_convertAccount($sharedAccount, Tinebase_Core::getUser(), Felamimail_Model_Account::TYPE_USER_INTERNAL);
-    }
-
-    public function testConvertInternalToSharedToUserInternalEmailAccount()
-    {
-        self::markTestSkipped('TODO activate me');
-
-        $this->_skipIfXpropsUserIdDeactivated();
-
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-        $user = $this->_createUserWithEmailAccount();
-        $sharedAccount = $this->testConvertUserInternalEmailAccount($user);
-        $sharedAccount['user_id'] = $user->getId();
-
-        $this->_convertAccount(new Felamimail_Model_Account($sharedAccount), $user, Felamimail_Model_Account::TYPE_USER_INTERNAL);
-    }
-
-    public function testConvertSharedToUserInternalEmailAccountWithMails()
-    {
-        self::markTestSkipped('TODO activate me');
-
-        $this->_skipIfXpropsUserIdDeactivated();
-
-        // send mail to shared account
-        $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
-        $subject = 'test message ' . Tinebase_Record_Abstract::generateUID(10);
-        $message = new Felamimail_Model_Message(array(
-            'account_id'    => $sharedAccount->getId(),
-            'subject'       => $subject,
-            'to'            => $sharedAccount->email,
-            'body'          => 'aaaaaä <br>',
-        ));
-        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
-        $account = $this->_convertAccount($sharedAccount, Tinebase_Core::getUser(), Felamimail_Model_Account::TYPE_USER_INTERNAL);
-
-        Felamimail_Controller_Cache_Folder::getInstance()->update($account['id']);
-        $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account['id'], 'INBOX');
-        $updatedFolder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10, 1);
-        self::assertEquals($folder->imap_totalcount + 1, $updatedFolder->imap_totalcount);
     }
 
     public function testSetSieveVacation()
@@ -597,10 +419,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
     protected function _checkMasterUserTable()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
-
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
             try {
@@ -626,9 +444,15 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
         $sharedAccountArray = $sharedAccount->toArray();
         $sharedAccountArray['password'] = 'someupdatedPW';
+        // FE might send empty user
+        $sharedAccountArray['user'] = '';
         $this->_json->saveEmailAccount($sharedAccountArray);
         // test imap login
+        $sharedAccount = Felamimail_Controller_Account::getInstance()->get($sharedAccount);
         Felamimail_Backend_ImapFactory::factory($sharedAccount->getId());
+        $sharedAccount->resolveCredentials();
+        self::assertNotEmpty($sharedAccount->user, 'username should not be empty/overwritten! '
+            . print_r($sharedAccount->toArray(), true));
 
         // check if pw was changed
         $userInBackend = $emailUserBackend->getRawUserById($emailUser);

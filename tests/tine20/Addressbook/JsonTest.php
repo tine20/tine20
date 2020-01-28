@@ -116,8 +116,10 @@ class Addressbook_JsonTest extends TestCase
     protected function tearDown()
     {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
-        
-        $this->_uit->deleteContacts($this->_contactIdsToDelete);
+
+        if ($this->_uit) {
+            $this->_uit->deleteContacts($this->_contactIdsToDelete);
+        }
 
         if ($this->_makeSCleverVisibleAgain) {
             $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
@@ -589,6 +591,8 @@ class Addressbook_JsonTest extends TestCase
         )));
         list(,$sharedTagId) = $this->_createAndAttachTag($filter, $type);
         $this->_checkChangedNote($contact['id'], array('tags ( ->  0: ' . $sharedTagId));
+
+        return $contact;
     }
     
     /**
@@ -635,7 +639,7 @@ class Addressbook_JsonTest extends TestCase
         
         $contact = $this->_uit->getContact($contact['id']);
         
-        $this->assertTrue(! isset($contact['tags']) || count($contact['tags'] === 0), 'record should not have any tags');
+        $this->assertTrue(! isset($contact['tags']) || count($contact['tags']) === 0, 'record should not have any tags');
     }
     
     /**

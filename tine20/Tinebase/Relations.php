@@ -144,6 +144,11 @@ class Tinebase_Relations
         $toAdd = $relations->getIdLessIndexes();
         $toDel = $this->_getToDeleteIds($currentRelations, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
+        foreach ($relations as $key => $relation) {
+            if (!empty($id = $relation->getId()) && !in_array($id, $toDel) && !in_array($id, $toUpdate)) {
+                $toAdd[] = $key;
+            }
+        }
 
         // prevent two empty related_ids of the same relation type
         $emptyRelatedId = array();

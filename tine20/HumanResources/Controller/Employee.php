@@ -219,10 +219,10 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             $lastInterval = array_shift($intervals);
             foreach ($intervals as $interval) {
                 // check overlapping
-                if (($interval['stop'] == NULL) ? FALSE
-                    : ($lastInterval['stop'] == $interval['stop']) ? TRUE
-                    : ($lastInterval['stop'] > $interval['start']) ? TRUE 
-                    : FALSE) {
+                if ($interval['stop'] == NULL ? FALSE
+                    : ($lastInterval['stop'] == $interval['stop'] ? TRUE
+                    : ($lastInterval['stop'] > $interval['start'] ? TRUE
+                    : FALSE))) {
                         throw new HumanResources_Exception_ContractOverlap();
                 }
                 $lastInterval = $interval;

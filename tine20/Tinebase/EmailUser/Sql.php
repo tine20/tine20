@@ -466,10 +466,12 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
         $select = $this->_getSelect();
         
-        $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) .
-            ' = ?',   $data[$this->_propertyMapping['emailUserId']] . ' AND ' . $this->_appendClientIdOrDomain());
+        if (! empty($data[$this->_propertyMapping['emailUserId']])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) .
+                ' = ?', $data[$this->_propertyMapping['emailUserId']]);
+        }
         $select->orwhere($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']) .
-            ' = ?',   $data[$this->_propertyMapping['emailUsername']]);
+            ' = ?', $data[$this->_propertyMapping['emailUsername']]);
 
         if ($this->_propertyMapping['emailUsername'] !== 'loginname' && isset($data['loginname'])) {
             $select->orwhere($this->_db->quoteIdentifier($this->_userTable . '.loginname') .
@@ -689,8 +691,10 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             }
         }
 
-        $query .= join(', ', $escapedColumns) . ') SELECT ' . $this->_db->quote($newId) . ', ' .
-            $this->_db->quote($_user->accountLoginName) . ', ';
+
+        $query .= join(', ', $escapedColumns) . ') SELECT '
+            /* ID */ . $this->_db->quote($newId) . ', '
+            /* USERNAME */ . $this->_db->quote($_user->accountLoginName) . ', ';
 
         foreach (['emailAddress', 'emailLoginname'] as $column) {
             if (isset($this->_propertyMapping[$column])) {
@@ -699,8 +703,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         }
 
         if (isset($this->_propertyMapping['emailHome'])) {
-            $rawData = $this->_recordToRawData( $_user, $_user);
-            $query .= $this->_db->quote($rawData[$this->_propertyMapping['emailHome']]) . ', ';
+            $emailhome = $this->_getEmailHome($newId);
+            $query .= $this->_db->quote($emailhome) . ', ';
         }
 
         $query .= join(', ', $escapedColumns) .
@@ -712,5 +716,50 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             __METHOD__ . '::' . __LINE__ . ' ' . $query);
 
         $this->_db->query($query);
+    }
+
+    /**
+     * copy email password from another email user account
+     *
+     * @param $fromUser
+     * @param $toUser
+     */
+    public function copyPassword($fromUser, $toUser)
+    {
+        $rawUser = $this->getRawUserById($fromUser);
+        $this->inspectSetPassword($toUser->getId(), $rawUser[$this->_propertyMapping['emailPassword']], false);
+    }
+
+    /**
+     * replace home wildcards when storing to db
+     *  %d = domain
+     *  %n = user
+     *  %u == user@domain
+     *
+     * @param $localPart
+     * @param $domain
+     * @param $emailUsername
+     * @return string|string[]
+     */
+    protected function _getEmailHome($emailUsername, $localPart = null, $domain = null)
+    {
+        if ($localPart === null || $domain === null) {
+            if (strpos($emailUsername, '@') !== false) {
+                list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
+                $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
+            } else {
+                $localPart = $emailUsername;
+                $domain = $this->_config['domain'];
+            }
+        }
+
+        $search = array('%n', '%d', '%u');
+        $replace = array(
+            $localPart,
+            $domain,
+            $emailUsername
+        );
+
+        return str_replace($search, $replace, $this->_config['emailHome']);
     }
 }

@@ -281,18 +281,18 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                         //  this is very bad - @refactor
                         foreach ($result['value']['value'] as $key => $subfilter) {
                             if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value'])) {
-                                foreach ((array) $subfilter['value'] as $index =>$recordId) {
-                                    try {
-                                        if(is_string($result['value']['value'][$key]['value'])) {
-                                            $result['value']['value'][$key]['value'] = $controller->get($recordId)->toArray();
-                                        } else {
-                                            $result['value']['value'][$key]['value'][$index] = $controller->get($recordId)->toArray();
-                                        }
-                                    } catch (Tinebase_Exception_NotFound $tenf) {
-                                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                                            __METHOD__ . '::' . __LINE__ . ' Record not found: ' . $tenf->getMessage());
+                                try {
+                                    if (is_string($subfilter['value'])) {
+                                        $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                                    } elseif (is_array($subfilter['value'])) {
+                                        $result['value']['value'][$key]['value'] = $controller->getMultiple($subfilter['value'])->toArray();
+                                    } else {
                                         unset($result['value']['value'][$key]);
                                     }
+                                } catch (Tinebase_Exception_NotFound $tenf) {
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                        __METHOD__ . '::' . __LINE__ . ' Record not found: ' . $tenf->getMessage());
+                                    unset($result['value']['value'][$key]);
                                 }
                             }
                         }

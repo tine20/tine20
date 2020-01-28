@@ -25,6 +25,10 @@ class Felamimail_Convert_Account_Json extends Tinebase_Convert_Json
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
+        // add usernames
+        $_record->resolveCredentials(); // imap
+        $_record->resolveCredentials(TRUE, FALSE, TRUE); // smtp
+
         $result = parent::fromTine20Model($_record);
         if (isset($result['grants'])) {
             $result['grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($result['grants']);
