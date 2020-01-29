@@ -9,9 +9,6 @@
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
-echo __FILE__ . ' must not be used or autoloaded or required etc.' . PHP_EOL;
-exit(1);
-
 /**
  * updates for major release 11
  *
