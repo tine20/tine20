@@ -30,6 +30,7 @@ class Admin_AllTests
         $suite->addTestSuite('Admin_CliTest');
         $suite->addTestSuite('Admin_Acl_RightsTest');
         $suite->addTestSuite('Admin_Import_AllTests');
+        $suite->addTestSuite(Admin_Controller_UserTest::class);
         return $suite;
     }
 }

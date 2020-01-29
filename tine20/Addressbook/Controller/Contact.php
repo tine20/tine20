@@ -1093,6 +1093,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
+        // $_addedUser is the result of user sql backend create -> lacks "virtual" property container_id
+        $_addedUser->container_id = $_newUserProperties->container_id;
+
         $contactId = $_addedUser->contact_id;
         if (!empty($contactId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
