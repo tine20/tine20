@@ -9,9 +9,6 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
-echo __FILE__ . ' must not be used or autoloaded or required etc.' . PHP_EOL;
-exit(1);
-
 class Tasks_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**

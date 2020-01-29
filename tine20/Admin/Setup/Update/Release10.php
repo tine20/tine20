@@ -8,9 +8,6 @@
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
-echo __FILE__ . ' must not be used or autoloaded or required etc.' . PHP_EOL;
-exit(1);
-
 class Admin_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**

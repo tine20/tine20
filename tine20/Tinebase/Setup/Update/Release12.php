@@ -9,10 +9,6 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-echo __FILE__ . ' must not be used or autoloaded or required etc.' . PHP_EOL;
-exit(1);
-
-
 class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
 {
     /**
