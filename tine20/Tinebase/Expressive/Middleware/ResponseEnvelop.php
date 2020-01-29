@@ -68,7 +68,7 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             // $response->getBody()->rewind();
             // $response->getBody()->write(json_encode(['results' => [], 'status' => $response->getStatusCode()]));
             //}
-        } catch (Tinebase_Exception_Expressive_HTTPstatus $teeh) {
+        } catch (Tinebase_Exception_Expressive_HttpStatus $teeh) {
             // the exception can use logToSentry and logLevelMethod properties to achieve desired logging
             // default is false (no sentry) and info log level
             Tinebase_Exception::log($teeh);

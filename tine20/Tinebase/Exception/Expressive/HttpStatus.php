@@ -27,5 +27,7 @@ class Tinebase_Exception_Expressive_HttpStatus extends Tinebase_Exception_Progra
     public function __construct($_message, $_code)
     {
         parent::__construct($_message, $_code);
+
+        $this->_logToSentry = false;
     }
 }
