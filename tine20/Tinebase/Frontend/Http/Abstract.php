@@ -363,18 +363,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' HTTP request failed - code: ' . $code);
 
-        if (! headers_sent()) {
-            switch ($code) {
-                case 403:
-                    header('HTTP/1.1 403 Forbidden');
-                    break;
-                case 404:
-                    header('HTTP/1.1 404 Not Found');
-                    break;
-                default:
-                    header("HTTP/1.1 500 Internal Server Error");
-            }
-        }
+        Tinebase_Server_Abstract::setHttpHeader($code);
+
         die(Zend_Json::encode(array(
             'code' => $code,
             'status' => 'failed',

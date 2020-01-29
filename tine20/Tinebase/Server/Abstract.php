@@ -200,4 +200,26 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 
         return $definitions;
     }
+
+    /**
+     * @param int $code
+     */
+    public static function setHttpHeader($code)
+    {
+        if (! headers_sent()) {
+            switch ($code) {
+                case 403:
+                    header('HTTP/1.1 403 Forbidden');
+                    break;
+                case 404:
+                    header('HTTP/1.1 404 Not Found');
+                    break;
+                case 503:
+                    header('HTTP/1.1 503 Service Unavailable');
+                    break;
+                default:
+                    header("HTTP/1.1 500 Internal Server Error");
+            }
+        }
+    }
 }
