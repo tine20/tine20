@@ -620,7 +620,20 @@ class Setup_Controller
             Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
         }
 
-        $this->_enforceCollation();
+        try {
+            $this->_enforceCollation();
+        } catch (Tinebase_Exception_Backend $teb) {
+            Setup_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__
+                . ' Try _enforceCollation again because something might have gone wrong during bootstrap (for example charset detection)'
+                . $teb
+            );
+            $cacheId = md5(Tinebase_Backend_Sql_Adapter_Pdo_Mysql::class . '::useUtf8mb4');
+            Tinebase_Core::getCache()->remove($cacheId);
+            Setup_Core::getDb()->closeConnection();
+            Setup_Core::set(Setup_Core::DB, null);
+            Setup_Core::setupDatabaseConnection();
+            $this->_enforceCollation();
+        }
 
         // we need to clone here because we would taint the app cache otherwise
         // update tinebase first (to biggest major version)
