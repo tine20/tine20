@@ -1133,6 +1133,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $flags = array(Zend_Mail_Storage::FLAG_SEEN);
         }
 
+        $result = false;
         try {
             $result = $this->_protocol->append($folder, $message, $flags);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
