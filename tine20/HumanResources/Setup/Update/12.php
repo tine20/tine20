@@ -82,7 +82,11 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
             HumanResources_Model_WageType::class,
         ]);
 
-        HumanResources_Setup_Initialize::addCORSystemCustomField();
+        try {
+            HumanResources_Setup_Initialize::addCORSystemCustomField();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // sometimes this throws a TENF - we'll ignore that
+        }
 
         $workingTimeSchemeCtrl = HumanResources_Controller_WorkingTimeScheme::getInstance();
         foreach ($rows as $row) {
