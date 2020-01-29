@@ -275,6 +275,10 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
             throw new DAV\Exception\Forbidden('Access denied');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tesg->getMessage());
+            throw new DAV\Exception\PreconditionFailed($tesg->getMessage());
         }
         $this->_vcard   = null;
         
