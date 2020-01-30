@@ -288,6 +288,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      *
      * @todo improve handling
      * @return void
+     * @throws Sabre\DAV\Exception\NotFound
      */
     public function delete() 
     {
@@ -299,7 +300,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         // (re) fetch event as tree move does not refresh src node before delete
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
-        $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
+        try {
+            $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\NotFound("Event not found");
+        }
         
         // disallow event cleanup in the past
         if (max($event->dtend, $event->rrule_until) < Tinebase_DateTime::now()->subMonth(2)) {
