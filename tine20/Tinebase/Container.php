@@ -391,17 +391,25 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * in getDefaultContainer and getPersonalContainer
      * @param string|Tinebase_Record_Interface $_recordClass
      * @throws Tinebase_Exception_InvalidArgument
+     * @return array
      */
     protected function _resolveRecordClassArgument($_recordClass)
     {
         $ret = array();
         if(is_string($_recordClass)) {
             $split = explode('_', $_recordClass);
-            switch(count($split)) {
+            switch (count($split)) {
                 case 1:
-                    throw new Tinebase_Exception_InvalidArgument(
-                        'Using application name is deprecated. Use the classname of the model itself.');
-                case 3: 
+                    // only app name given - check if it has a default model
+                    $defaultModel = Tinebase_Core::getApplicationInstance('Calendar')->getDefaultModel();
+                    if ($defaultModel) {
+                        $ret['appName'] = $split[0];
+                        $ret['recordClass'] = $defaultModel;
+                    } else {
+                        throw new Tinebase_Exception_InvalidArgument(
+                            'Using application name is deprecated and no default model found. Use the classname of the model itself.');
+                    }
+                case 3:
                     $ret['appName'] = $split[0];
                     $ret['recordClass'] = $_recordClass;
                     break;

@@ -209,4 +209,12 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
         self::assertEquals($container1, $container2, 'no new container should be created: '
             . print_r($container2, true));
     }
+
+    public function testGetCalendarSharedContainer()
+    {
+        $containers = $this->_backend->getContainer('Calendar',
+            Tinebase_Model_Container::TYPE_SHARED,
+            false);
+        self::assertTrue(is_array($containers));
+    }
 }
