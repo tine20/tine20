@@ -357,6 +357,7 @@ abstract class Felamimail_TestCase extends TestCase
      * @param string $_emailFrom
      * @param string $_subject
      * @param null $_messageToSend
+     * @param boolean $_hasAttachment
      * @return array
      */
     protected function _sendMessage(
@@ -364,11 +365,26 @@ abstract class Felamimail_TestCase extends TestCase
         $additionalHeaders = array(),
         $_emailFrom = '',
         $_subject = 'test',
-        $_messageToSend = null)
+        $_messageToSend = null,
+        $_hasAttachment = false)
     {
         $messageToSend = $_messageToSend ? $_messageToSend : $this->_getMessageData($_emailFrom, $_subject);
         $messageToSend['headers'] = array_merge($messageToSend['headers'], $additionalHeaders);
+
+        if ($_hasAttachment) {
+            $tempFile = $this->_createTempFile();
+            $messageToSend['attachments'] = array(
+                array(
+                    // 'filename' => 'test.txt'
+                    'tempFile' => array('id' => $tempFile->getId(), 'type' => $tempFile->type),
+                )
+            );
+        }
+
         $this->_json->saveMessage($messageToSend);
+        if ($_hasAttachment) {
+            unlink($tempFile->path);
+        }
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
 
         $i = 0;
@@ -385,6 +401,17 @@ abstract class Felamimail_TestCase extends TestCase
 
         $this->assertTrue(!empty($message), 'Sent message not found.');
         return $message;
+    }
+
+    /**
+     * @param string $tempfileName
+     * @return Tinebase_Model_TempFile
+     */
+    protected function _createTempFile($tempfileName = 'test.txt')
+    {
+        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
+        file_put_contents($tempfilePath, 'some content');
+        return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
     }
 
     /**
