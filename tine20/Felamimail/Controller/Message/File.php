@@ -201,6 +201,17 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
         return $suggestions;
     }
 
+    /**
+     * @param $id
+     * @param $locations
+     * @param $attachments
+     * @param string $model
+     * @return bool
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     *
+     * @todo return false if filing fails?
+     */
     public function fileAttachments($id, $locations, $attachments, $model = 'Felamimail_Model_Message')
     {
         $message = Felamimail_Controller_Message::getInstance()->get($id);

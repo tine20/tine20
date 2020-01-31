@@ -1319,6 +1319,10 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         self::assertTrue($node !== null, 'could not find attachment file node');
         self::assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $node->type);
         self::assertEquals('text/plain', $node->contenttype);
+
+        // test to file it again to the same location
+        $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);
+        self::assertTrue($result['success']);
     }
 
     /**
