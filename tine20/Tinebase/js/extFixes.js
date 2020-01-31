@@ -495,6 +495,15 @@ Ext.override(Ext.Button, {
                 iconEl.addClass(['x-btn-image', cls || '']);
             }
             this.setButtonClass();
+
+            if (this.scale === 'medium') {
+                var iconEl = Ext.fly(this.el.query('td.x-btn-mc div')[0]);
+                if (cls === 'x-btn-wait') {
+                    iconEl.setLeft(this.el.getWidth()/2 - iconEl.getWidth() /2);
+                } else {
+                    iconEl.dom.style.left = "";
+                }
+            }
         }
         return this;
     },
