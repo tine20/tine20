@@ -24,6 +24,9 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      *
      * @param  string  $messageId
      * @param  string  $partId
+     *
+     * @todo only one api fn downloadAttachment/downloadNodeAttachment
+     *       -> add $model param
      */
     public function downloadAttachment($messageId, $partId)
     {

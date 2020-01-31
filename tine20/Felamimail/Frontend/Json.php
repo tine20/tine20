@@ -306,16 +306,42 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $filter = $this->_decodeFilter($filterData, 'Felamimail_Model_MessageFilter');
 
-        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, new Tinebase_Record_RecordSet(
-            Felamimail_Model_MessageFileLocation::class,
-            $locations,
-            true
-        ));
+        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter,
+            new Tinebase_Record_RecordSet(
+                Felamimail_Model_MessageFileLocation::class,
+                $locations,
+                true
+            )
+        );
 
         return array(
             'totalcount' => ($result === false) ? 0 : $result,
             'success'    => ($result > 0),
         );
+    }
+
+    /**
+     * @param string $id
+     * @param array $locations
+     * @param array $attachments
+     * @param string $model
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function fileAttachments($id, $locations, $attachments = [], $model = 'Felamimail_Model_Message')
+    {
+        return [
+            'success' => Felamimail_Controller_Message_File::getInstance()->fileAttachments(
+                $id,
+                new Tinebase_Record_RecordSet(
+                    Felamimail_Model_MessageFileLocation::class,
+                    $locations,
+                    true
+                ),
+                $attachments,
+                $model
+            )
+        ];
     }
 
     /**
