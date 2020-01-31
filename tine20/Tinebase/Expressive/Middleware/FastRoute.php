@@ -59,7 +59,7 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . ' returning 404 not found');
+                    . __LINE__ . ' returning 404 method not found');
 
                 // 404 not found
                 return new Response('php://memory', 404);
