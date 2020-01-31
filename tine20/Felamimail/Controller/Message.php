@@ -504,11 +504,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
     /**
      * @param Felamimail_Model_Message $message
+     * @param string $partId
      * @return string
      */
-    public function getMessageRawContent(Felamimail_Model_Message $message)
+    public function getMessageRawContent(Felamimail_Model_Message $message, $partId = null)
     {
-        $partId = null;
         $partStructure = $message->getPartStructure(/* partId */ $partId, /* $_useMessageStructure */ FALSE);
         return $this->_getPartContent($message, $partId, $partStructure);
     }
@@ -537,15 +537,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
     /**
      * @param Felamimail_Model_Message $message
+     * @param string $partId
      * @return Tinebase_Model_TempFile
      */
-    public function putRawMessageIntoTempfile($message)
+    public function putRawMessageIntoTempfile($message, $partId = null)
     {
-        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message);
+        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message, $partId);
         $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
         file_put_contents($tempFilename, $rawContent);
-        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
-        return $tempFile;
+        return Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
     }
 
     /**

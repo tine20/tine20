@@ -2926,7 +2926,7 @@ HumanResources_CliTests.testSetContractsEndDate */
      *
      * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
-     * @returns Tinebase_Record_Interface|null
+     * @return Tinebase_Record_Interface|null
      * @throws Zend_Db_Statement_Exception
      */
     public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
@@ -2937,10 +2937,20 @@ HumanResources_CliTests.testSetContractsEndDate */
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
         $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
 
+        $node = $this->_addTempfileAttachment($record, $filename, $tempFile);
+        if (! $node) {
+            return null;
+        }
+        Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record, $node);
+        $this->_setFileMessageNote($record, $node);
+
+        return $record;
+    }
+
+    protected function _addTempfileAttachment($record, $filename, $tempFile)
+    {
         try {
             $node = Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $filename, $tempFile);
-            Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record, $node);
-            $this->_setFileMessageNote($record, $node);
 
         } catch (Tinebase_Exception_Duplicate $ted) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -2955,7 +2965,7 @@ HumanResources_CliTests.testSetContractsEndDate */
             }
             return null;
         }
-        return $record;
+        return $node;
     }
 
     protected function _setFileMessageNote($record, $node)
@@ -2979,6 +2989,34 @@ HumanResources_CliTests.testSetContractsEndDate */
         ]);
         $record->notes->addRecord($note);
         Tinebase_Notes::getInstance()->setNotesOfRecord($record);
+    }
+
+    public function fileMessageAttachment($location, $message, $attachment)
+    {
+        $recordId = is_array($location['record_id']) && isset($location['record_id']['id'])
+            ? $location['record_id']['id']
+            : $location['record_id'];
+        $record = $this->get($recordId);
+
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile(
+            $message,
+            $attachment['partId']);
+        $filename = $this->_getfiledAttachmentFilename($attachment, $message);
+
+        $node = $this->_addTempfileAttachment($record, $filename, $tempFile);
+        if (! $node) {
+            return null;
+        }
+
+        return $record;
+    }
+
+    protected function _getfiledAttachmentFilename($attachment, $message)
+    {
+        return ! empty($attachment['filename'])
+            ? $attachment['filename']
+            : Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message)
+            . 'part_' . $attachment['partId'];
     }
 
     /**
