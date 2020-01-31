@@ -1570,7 +1570,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $targetPath = $this->_getLocationTargetPath($location);
         $node = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile);
 
-        return $this->get($node->parent_id);
+        return $node ? $this->get($node->parent_id) : false;
     }
 
     /**
