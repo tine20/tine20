@@ -232,10 +232,11 @@ class Tinebase_Log extends Zend_Log
      * @param float $time_start
      * @param string $method
      * @param int $pid
+     * @param bool $asJson
      *
      * @todo we could make $time_start optional and use Tinebase_Core::STARTTIME if set
      */
-    public static function logUsageAndMethod($file, $time_start, $method, $pid = null)
+    public static function logUsageAndMethod($file, $time_start, $method, $pid = null, $asJson = true)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             // log profiling information
@@ -243,12 +244,24 @@ class Tinebase_Log extends Zend_Log
             $time = $time_end - $time_start;
             $pid = $pid === null ? getmypid() : $pid;
 
+            if ($asJson) {
+                $message = json_encode([
+                    'file' => $file,
+                    'method' => $method,
+                    'time' => Tinebase_Helper::formatMicrotimeDiff($time),
+                    'memory' => Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize(),
+                    'pid' => $pid,
+                ]);
+            } else {
+                $message = ' FILE: ' . $file
+                    . ' METHOD: ' . $method
+                    . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
+                    . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
+                    . ' / PID: ' . $pid;
+            }
+
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' FILE: ' . $file
-                . ' METHOD: ' . $method
-                . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
-                . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
-                . ' / PID: ' . $pid
+                . $message
             );
         }
     }
