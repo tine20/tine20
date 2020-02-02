@@ -15,6 +15,7 @@
  */
 class Addressbook_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'Addressbook';
 
     /**
      * contact nominatim during contact import

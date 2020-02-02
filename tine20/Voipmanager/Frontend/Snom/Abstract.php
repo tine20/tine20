@@ -80,7 +80,14 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
      */
     public static function getBaseUrl($phone = null)
     {
-        $protocol = ! empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        if (! empty($_SERVER['HTTPS'])) {
+            $protocol = 'https://';
+        } else if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+            $protocol = 'https://';
+        } else {
+            $protocol = 'http://';
+        }
+
         if ($phone instanceof Voipmanager_Model_Snom_Phone) {
             $protocol .= $phone->http_client_user . ':' . $phone->http_client_pass . '@';
         }

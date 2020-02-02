@@ -60,7 +60,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
                 );
 
             } catch (Tinebase_Exception_MaintenanceMode $temm) {
-                header('HTTP/1.1 503 Service Unavailable');
+                Tinebase_Server_Abstract::setHttpHeader(503);
                 return;
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
@@ -97,6 +97,22 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
 
             Tinebase_Controller::getInstance()->logout();
         } catch (Throwable $e) {
+            $this->_handleException($e);
+        }
+    }
+
+    /**
+     * @param Throwable $e
+     * @throws Throwable
+     */
+    protected function _handleException(Throwable $e)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' ActiveSync Request failed: ' . $e->getMessage());
+
+        if ($e instanceof Tinebase_Exception_NotFound) {
+            Tinebase_Server_Abstract::setHttpHeader(404);
+        } else {
             Tinebase_Exception::log($e);
             throw $e;
         }

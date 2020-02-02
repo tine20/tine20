@@ -96,28 +96,12 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' About to file ' . count($messages) . ' messages to location ' . print_r($location->toArray(), true));
 
-        if ($location->model === 'Addressbook_Model_EmailAddress') {
-            // @todo this is a little bit unsuspected - maybe it can be improved at some point
-            $location->model = Addressbook_Model_Contact::class;
-            $recordController = Tinebase_Core::getApplicationInstance(Addressbook_Model_Contact::class);
-            if (isset($location['record_id']['email'])) {
-                $location->record_id = Addressbook_Controller_Contact::getInstance()->getContactByEmail($location['record_id']['email']);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Skipping location ' . print_r($location->toArray(), true));
-                $location->record_id = null;
-            }
-            if ($location->record_id === null) {
-                return;
-            }
-        } else {
-            $recordController = $this->_getRecordController($location->model);
-            if (! $recordController) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Skipping location ' . print_r($location->toArray(), true));
-            }
+        $recordController = $this->_getLocationRecordController($location);
+        if (! $recordController) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Skipping location ' . print_r($location->toArray(), true));
+            return;
         }
-
         foreach ($messages as $message) {
             /** @var Tinebase_Controller_Record_Abstract $recordController */
             $recordController->fileMessage($location, $message);
@@ -128,22 +112,35 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
         }
     }
 
-    protected function _getRecordController($model)
+    protected function _getLocationRecordController($location)
     {
-        if (! isset($this->_modelControllers[$model])) {
-            try {
-                $this->_modelControllers[$model] = Tinebase_Core::getApplicationInstance($model);
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' ' . $tead->getMessage());
-                return null;
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' ' . $tenf->getMessage());
-                return null;
+        if (! isset($this->_modelControllers[$location->model])) {
+            $recordController = null;
+            if ($location->model === 'Addressbook_Model_EmailAddress') {
+                // @todo this is a little bit unsuspected - maybe it can be improved at some point
+                $location->model = Addressbook_Model_Contact::class;
+                $recordController = Tinebase_Core::getApplicationInstance(Addressbook_Model_Contact::class);
+                if (isset($location['record_id']['email'])) {
+                    $location->record_id = Addressbook_Controller_Contact::getInstance()->getContactByEmail($location['record_id']['email']);
+                } else {
+                    return null;
+                }
+            } else {
+                try {
+                    $recordController = Tinebase_Core::getApplicationInstance($location->model);
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $tead->getMessage());
+                    return null;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $tenf->getMessage());
+                    return null;
+                }
             }
+            $this->_modelControllers[$location->model] = $recordController;
         }
-        return $this->_modelControllers[$model];
+        return $this->_modelControllers[$location->model];
     }
 
     /**
@@ -202,5 +199,35 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
         }
 
         return $suggestions;
+    }
+
+    /**
+     * @param $id
+     * @param $locations
+     * @param $attachments
+     * @param string $model
+     * @return bool
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     *
+     * @todo return false if filing fails?
+     */
+    public function fileAttachments($id, $locations, $attachments, $model = 'Felamimail_Model_Message')
+    {
+        $message = Felamimail_Controller_Message::getInstance()->get($id);
+        foreach ($locations as $location) {
+            $recordController = $this->_getLocationRecordController($location);
+            if (! $recordController) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Skipping location ' . print_r($location->toArray(), true));
+                continue;
+            }
+            foreach ($attachments as $attachment) {
+                /** @var Tinebase_Controller_Record_Abstract $recordController */
+                $recordController->fileMessageAttachment($location, $message, $attachment);
+            }
+        }
+
+        return true;
     }
 }

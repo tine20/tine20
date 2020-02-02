@@ -24,6 +24,9 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      *
      * @param  string  $messageId
      * @param  string  $partId
+     *
+     * @todo only one api fn downloadAttachment/downloadNodeAttachment
+     *       -> add $model param
      */
     public function downloadAttachment($messageId, $partId)
     {
@@ -32,6 +35,49 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         );
         
         $this->_outputMessagePart($messageId, $partId);
+    }
+
+    /**
+     * download multiple email attachments as zip file
+     *
+     * @param  string  $messageId
+     * @param  array  $partIds
+     */
+    public function downloadAttachments($messageId, $partIds = [])
+    {
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId);
+
+        // collect all parts and build zip for download
+        $zip = new ZipArchive();
+        $zipfilename = Tinebase_TempFile::getTempPath();
+        $opened = $zip->open($zipfilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+
+        if( $opened !== true ) {
+            throw new Exception('could not open zip file');
+        }
+
+        foreach ($message['attachments'] as $attachment) {
+            if (! empty($partIds) &&  ! in_array($attachment['partId'], $partIds)) {
+                // skip
+                continue;
+            }
+
+            // create temp file for each attachment
+            $part = Felamimail_Controller_Message::getInstance()->getMessagePart($message, $attachment['partId']);
+
+            // $stream = $part->getRawStream(); // : $part->getDecodedStream();
+            $stream = $part->getDecodedStream();
+            $tempfile = Tinebase_TempFile::getInstance()->createTempFileFromStream($stream);
+
+            $zip->addFile($tempfile->path, $attachment['filename']);
+        }
+        $zip->close();
+
+        $stream = fopen($zipfilename, 'r');
+        // TODO use subject as filename?
+        $this->_prepareHeader('attachments.zip', 'application/zip');
+        fpassthru($stream);
+        fclose($stream);
     }
 
     /**

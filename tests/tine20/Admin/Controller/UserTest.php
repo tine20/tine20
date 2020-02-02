@@ -73,4 +73,18 @@ class Admin_Controller_UserTest extends TestCase
 
         Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = $xpropsConf;
     }
+
+    public function testAddUserAdbContainer()
+    {
+        $container = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class, true);
+
+        $userToCreate = TestCase::getTestUser();
+        $userToCreate->container_id = $container->getId();
+        $pw = Tinebase_Record_Abstract::generateUID(12);
+
+        $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+
+        static::assertSame($container->getId(), $user->container_id);
+    }
 }

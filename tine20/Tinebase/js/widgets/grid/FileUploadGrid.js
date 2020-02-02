@@ -586,7 +586,11 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         fileRecord.beginEdit();
         fileRecord.set('status', 'complete');
         fileRecord.set('progress', 100);
-        fileRecord.commit(false);
+        try {
+            fileRecord.commit(false);
+        } catch (e) {
+            console.log(e);
+        }
         Tine.Tinebase.uploadManager.onUploadComplete();
     },
 

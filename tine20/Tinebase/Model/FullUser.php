@@ -76,6 +76,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         'exposeHttpApi'     => false,
         'exposeJsonApi'     => false,
 
+        // container_id is used by admin module to create an account's contact directly in the proper adb container
         'containerProperty' => 'container_id',
         // ????
         'containerUsesFilter' => false,

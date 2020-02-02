@@ -1491,7 +1491,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      *
      * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
-     * @returns Filemanager_Model_Node|null
+     * @return Filemanager_Model_Node|null
      * @throws Filemanager_Exception_NodeExists
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
@@ -1502,6 +1502,43 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             // file message as attachment
             return parent::fileMessage($location, $message);
         }
+        $targetPath = $this->_getLocationTargetPath($location);
+
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
+        $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
+        $emlNode = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile);
+
+        $emlNode->description = $this->_getMessageNodeDescription($message);
+        $emlNode->last_modified_time = Tinebase_DateTime::now();
+        $this->update($emlNode);
+
+        $parent = $this->get($emlNode->parent_id);
+        Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $parent, $emlNode);
+
+        return $parent;
+    }
+
+    protected function _createNodeFromTempfile($targetPath, $filename, $tempFile)
+    {
+        try {
+            $node = $this->createNodes(
+                array($targetPath . '/' . $filename),
+                Tinebase_Model_Tree_FileObject::TYPE_FILE,
+                array($tempFile->getId()),
+                /* $_forceOverwrite */
+                false
+            )->getFirstRecord();
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $fene->getMessage());
+            return null;
+        }
+
+        return $node;
+    }
+
+    protected function _getLocationTargetPath($location)
+    {
         if (isset($location['record_id']['path'])) {
             $targetPath = $location['record_id']['path'];
         } else {
@@ -1516,32 +1553,24 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $node = $this->get($recordId);
             $targetPath = $node->path;
         }
+        return $targetPath;
+    }
 
-        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
-        $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
-
-        try {
-            $emlNode = $this->createNodes(
-                array($targetPath . '/' . $filename),
-                Tinebase_Model_Tree_FileObject::TYPE_FILE,
-                array($tempFile->getId()),
-                /* $_forceOverwrite */
-                false
-            )->getFirstRecord();
-        } catch (Filemanager_Exception_NodeExists $fene) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' ' . $fene->getMessage());
-            return null;
+    public function fileMessageAttachment($location, $message, $attachment)
+    {
+        if ($location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
+            return parent::fileMessageAttachment($location, $message, $attachment);
         }
 
-        $emlNode->description = $this->_getMessageNodeDescription($message);
-        $emlNode->last_modified_time = Tinebase_DateTime::now();
-        $this->update($emlNode);
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile(
+            $message,
+            $attachment['partId']);
 
-        $parent = $this->get($emlNode->parent_id);
-        Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $parent, $emlNode);
+        $filename = $this->_getfiledAttachmentFilename($attachment, $message);
+        $targetPath = $this->_getLocationTargetPath($location);
+        $node = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile);
 
-        return $parent;
+        return $node ? $this->get($node->parent_id) : false;
     }
 
     /**

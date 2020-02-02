@@ -954,6 +954,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      * testSendMessageWithAttachmentWithoutExtension
      *
      * @see 0008328: email attachment without file extension is not sent properly
+     *
+     * @return array
      */
     public function testSendMessageWithAttachmentWithoutExtension()
     {
@@ -973,6 +975,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $attachment = $fullMessage['attachments'][0];
         $this->assertContains($tempfileName, $attachment['filename'], 'wrong attachment filename: ' . print_r($attachment, TRUE));
         $this->assertEquals(16, $attachment['size'], 'wrong attachment size: ' . print_r($attachment, TRUE));
+
+        return $fullMessage;
     }
 
     /**
@@ -1124,9 +1128,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $emlNode = $nodes->getFirstRecord();
 
         // assertions!
-        $completeMessage = $this->_assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer);
-
-        return $completeMessage;
+        return $this->_assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer);
     }
 
     protected function _assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer)
@@ -1290,7 +1292,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      * @param Tinebase_Model_User $_user
      * @return NULL|Tinebase_Record_Interface
      */
-    protected function _getPersonalContainerNode($_modelName, $_user = null)
+    protected function _getPersonalContainerNode($_modelName = 'Filemanager', $_user = null)
     {
         $user = ($_user) ? $_user : Tinebase_Core::getUser();
         return Tinebase_FileSystem::getInstance()->getPersonalContainer(
@@ -1298,6 +1300,29 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             $_modelName,
             $user
         )->getFirstRecord();
+    }
+
+    public function testFileAttachment()
+    {
+        $personalFilemanagerContainer = $this->_getPersonalContainerNode();
+        $path = $this->_getPersonalFilemanagerPath($personalFilemanagerContainer);
+        $location = $this->_getTestLocation('path', $personalFilemanagerContainer, $path);
+
+        $message = $this->testSendMessageWithAttachmentWithoutExtension();
+        $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);
+        self::assertTrue($result['success']);
+
+        $nodes = $this->_getTestNodes($path);
+        $node = $nodes->getFirstRecord();
+
+        // check if attachment exists in Filemanager
+        self::assertTrue($node !== null, 'could not find attachment file node');
+        self::assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $node->type);
+        self::assertEquals('text/plain', $node->contenttype);
+
+        // test to file it again to the same location
+        $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);
+        self::assertTrue($result['success']);
     }
 
     /**
@@ -2074,17 +2099,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $complete = $this->_json->getMessage($message['id']);
 
         return $complete;
-    }
-
-    /**
-     * @param string $tempfileName
-     * @return Tinebase_Model_TempFile
-     */
-    protected function _createTempFile($tempfileName = 'test.txt')
-    {
-        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
-        file_put_contents($tempfilePath, 'some content');
-        return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
     }
 
     public function testGetMessageFromNode()

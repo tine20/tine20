@@ -60,6 +60,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         self::USERTYPE_RESOURCE    => array(),
         Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF => array()
     );
+
+    protected static $_resolveAttendeeCustomfield;
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -1058,7 +1060,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
 
         $contactIds = array_merge($typeMap[self::USERTYPE_USER], $typeMap[self::USERTYPE_GROUPMEMBER], $organizerIds);
-        $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(false);
+        $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(static::$_resolveAttendeeCustomfield);
         try {
             $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($contactIds), true);
             $contacts->resolveAttenderCleanUp();
@@ -1179,6 +1181,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 }
             });
         }
+    }
+    
+    public static function setContactCustomfieldResolve($_resolve) {
+        static::$_resolveAttendeeCustomfield = $_resolve;
     }
     
     /**

@@ -92,7 +92,15 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      * @var array
      */
     protected $_replace = array();
-    
+
+    /**
+     * number of chars of request id
+     *
+     * @todo make this configurable?
+     * @var int $_requestIdLength
+     */
+    protected $_requestIdLength = 6;
+
     /**
      * overwritten parent constructor to load configuration, calls parent constructor
      * 
@@ -107,7 +115,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         parent::__construct($format);
         
         if (!self::$_requestId || self::$_requestId === '-') {
-            self::$_requestId = Tinebase_Record_Abstract::generateUID(5);
+            self::$_requestId = Tinebase_Record_Abstract::generateUID($this->_requestIdLength);
         }
         
         if (self::$_starttime === NULL) {
