@@ -232,7 +232,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION           => 'Show Reply-To field in message compose dialog',
                     //_('Show Reply-To field in message compose dialog')
                     self::TYPE                  => self::TYPE_BOOL,
-                    self::DEFAULT_STR           => true,
+                    self::DEFAULT_STR           => false,
                 ],
                 self::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS   => [
                     self::LABEL                 => 'Auto-Create Folders',
