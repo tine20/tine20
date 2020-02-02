@@ -1168,83 +1168,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         return $completeMessage;
     }
 
-    /**
-     * @param null|Tinebase_Model_Container $personalFilemanagerContainer
-     * @return string
-     */
-    protected function _getPersonalFilemanagerPath($personalFilemanagerContainer = null)
-    {
-        if (!$personalFilemanagerContainer) {
-            $personalFilemanagerContainer = $this->_getPersonalContainerNode(
-                'Filemanager',
-                Tinebase_Core::getUser()
-            );
-        }
-
-        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
-            . '/' . Tinebase_Core::getUser()->accountLoginName
-            . '/' . $personalFilemanagerContainer->name;
-        return $path;
-    }
-
-    protected function _getTestNodes($path, $name = 'test')
-    {
-        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
-            'field' => 'path',
-            'operator' => 'equals',
-            'value' => $path
-        ), array(
-            'field' => 'name',
-            'operator' => 'contains',
-            'value' => 'test'
-        )));
-        return Filemanager_Controller_Node::getInstance()->search($filter, new Tinebase_Model_Pagination([
-            'sort' => 'name',
-            'dir'  => 'DESC',
-        ]));
-    }
-
-    /**
-     * @param $locationType
-     * @param $personalFilemanagerContainer
-     * @param $path
-     * @return array
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _getTestLocation($locationType, $personalFilemanagerContainer, $path)
-    {
-        $nodeWithoutPath = $personalFilemanagerContainer->toArray();
-        unset($nodeWithoutPath['path']);
-        switch ($locationType) {
-            case 'path':
-                $location = [
-                    'model' => Filemanager_Model_Node::class,
-                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
-                    'record_id' => [
-                        'path' => $path
-                    ],
-                ];
-                break;
-            case 'node':
-                $location = [
-                    'model' => Filemanager_Model_Node::class,
-                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
-                    'record_id' => $nodeWithoutPath,
-                ];
-                break;
-            case 'id':
-                $location = [
-                    'model' => Filemanager_Model_Node::class,
-                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
-                    'record_id' => $nodeWithoutPath['id'],
-                ];
-                break;
-            default:
-                throw new Tinebase_Exception_InvalidArgument('type not supported');
-        }
-        return $location;
-    }
-
     public function testFileMessagesAsNodeWithoutPath()
     {
         $this->testFileMessagesAsNode('node');
@@ -1287,21 +1210,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->testFileMessagesAsNode();
     }
 
-    /**
-     * @param $_modelName
-     * @param Tinebase_Model_User $_user
-     * @return NULL|Tinebase_Record_Interface
-     */
-    protected function _getPersonalContainerNode($_modelName = 'Filemanager', $_user = null)
-    {
-        $user = ($_user) ? $_user : Tinebase_Core::getUser();
-        return Tinebase_FileSystem::getInstance()->getPersonalContainer(
-            $user,
-            $_modelName,
-            $user
-        )->getFirstRecord();
-    }
-
     public function testFileAttachment()
     {
         $personalFilemanagerContainer = $this->_getPersonalContainerNode();
@@ -1314,13 +1222,13 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             '',
             'test file attachment',
             null,
-            true
+            1
         );
         $message = $this->_json->getMessage($message['id']);
         $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);
         self::assertTrue($result['success']);
 
-        $nodes = $this->_getTestNodes($path, $message['subject']);
+        $nodes = $this->_getTestNodes($path, 'test1.txt');
         $node = $nodes->getFirstRecord();
 
         // check if attachment exists in Filemanager
