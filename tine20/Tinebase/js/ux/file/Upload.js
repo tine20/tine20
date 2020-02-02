@@ -393,7 +393,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('progress', 99);
             this.fileRecord.set('tempFile', '');
             this.fileRecord.set('tempFile', response);
-            this.fileRecord.commit(false);
+            try {
+                this.fileRecord.commit(false);
+            } catch (e) {
+                console.log(e);
+            }
             this.fireEvent('uploadcomplete', this, this.fileRecord);
             this.fireEvent('update', 'uploadcomplete', this, this.fileRecord);
 
@@ -428,7 +432,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.fileRecord.beginEdit();
         this.fileRecord.set('tempFile', responseObj.tempFile);
         this.fileRecord.set('size', 0);
-        this.fileRecord.commit(false);
+        try {
+            this.fileRecord.commit(false);
+        } catch (e) {
+            console.log(e);
+        }
 
         this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
         
@@ -447,7 +455,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
             this.fileRecord.beginEdit();
             this.fileRecord.set('progress', percent);
-            this.fileRecord.commit(false);
+            try {
+                fileRecord.commit(false);
+            } catch (e) {
+                console.log(e);
+            }
 
             if(this.lastChunk) {
 
