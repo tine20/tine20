@@ -1187,7 +1187,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         return $path;
     }
 
-    protected function _getTestNodes($path)
+    protected function _getTestNodes($path, $name = 'test')
     {
         $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
             'field' => 'path',
@@ -1308,17 +1308,29 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $path = $this->_getPersonalFilemanagerPath($personalFilemanagerContainer);
         $location = $this->_getTestLocation('path', $personalFilemanagerContainer, $path);
 
-        $message = $this->testSendMessageWithAttachmentWithoutExtension();
+        $message = $this->_sendMessage(
+            'INBOX',
+            [],
+            '',
+            'test file attachment',
+            null,
+            true
+        );
+        $message = $this->_json->getMessage($message['id']);
         $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);
         self::assertTrue($result['success']);
 
-        $nodes = $this->_getTestNodes($path);
+        $nodes = $this->_getTestNodes($path, $message['subject']);
         $node = $nodes->getFirstRecord();
 
         // check if attachment exists in Filemanager
         self::assertTrue($node !== null, 'could not find attachment file node');
         self::assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $node->type);
         self::assertEquals('text/plain', $node->contenttype);
+
+        // check node contents
+        $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
+        self::assertEquals('some content', $content);
 
         // test to file it again to the same location
         $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);

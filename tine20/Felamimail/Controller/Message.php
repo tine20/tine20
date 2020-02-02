@@ -542,7 +542,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function putRawMessageIntoTempfile($message, $partId = null)
     {
-        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message, $partId);
+        if ($partId) {
+            $part = $this->getMessagePart($message, $partId);
+            $rawContent = $part->getDecodedContent();
+        } else {
+            $rawContent = $this->getMessageRawContent($message, $partId);
+        }
         $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
         file_put_contents($tempFilename, $rawContent);
         return Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
