@@ -2101,17 +2101,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         return $complete;
     }
 
-    /**
-     * @param string $tempfileName
-     * @return Tinebase_Model_TempFile
-     */
-    protected function _createTempFile($tempfileName = 'test.txt')
-    {
-        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
-        file_put_contents($tempfilePath, 'some content');
-        return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
-    }
-
     public function testGetMessageFromNode()
     {
         $result = $this->_createTestNode(
