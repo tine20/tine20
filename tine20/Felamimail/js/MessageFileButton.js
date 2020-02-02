@@ -37,7 +37,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18n = this.app.i18n;
 
-        this.text = this.i18n._('File Message');
+        this.text = this.i18n._('Save Message as');
 
         this.menu = [];
 
@@ -289,16 +289,16 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
         me.menu.addItem('-');
         me.menu.addItem({
-            text: me.app.i18n._('Filemanager ...'),
+            text: me.app.i18n._('File (in Filemanager) ...'),
             hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
             handler: me.selectFilemanagerFolder.createDelegate(me)
         });
         me.menu.addItem({
-            text: me.app.i18n._('Attachment'),
+            text: me.app.i18n._('Attachment (of Record)'),
             menu:_.reduce(Tine.Tinebase.data.RecordMgr.items, function(menu, model) {
                 if (model.hasField('attachments') && model.getMeta('appName') !== 'Felamimail') {
                     menu.push({
-                        text: model.getRecordName(),
+                        text: model.getRecordName() + ' ...',
                         iconCls: model.getIconCls(),
                         handler: me.selectAttachRecord.createDelegate(me, [model], true)
                     });
@@ -352,7 +352,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         this.setIconClass('x-btn-wait');
         Tine.Felamimail.fileMessages(messageFilter, locations)
             .then(function() {
-                var msg = me.app.formatMessage('{messageCount, plural, one {Message was filed} other {# messages where filed}}',
+                var msg = me.app.formatMessage('{messageCount, plural, one {Message was saved} other {# messages where saved}}',
                     {messageCount: messageCount });
                 Ext.ux.MessageBox.msg(me.app.formatMessage('Success'), msg);
             })
@@ -397,7 +397,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
      */
     itemToLocation:function(item) {
         return {
-            type: item.fileTarget.model.getMeta('appName') == 'Filemanager' ? 'node' : 'attachment',
+            type: item.fileTarget.model.getMeta('appName') === 'Filemanager' ? 'node' : 'attachment',
             model: item.fileTarget.model.getPhpClassName(),
             record_id: item.fileTarget.data,
             record_title: item.fileTarget.record_title
@@ -468,7 +468,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
             height: 100,
             padding: '5px',
             modal: true,
-            title: this.app.i18n._('File Messages as Attachment'),
+            title: this.app.i18n._('Save Messages as Attachment'),
             items: new Tine.Tinebase.dialog.Dialog({
                 listeners: {
                     scope: this,
@@ -478,7 +478,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                     }
                 },
                 getEventData: function(eventName) {
-                    if (eventName == 'apply') {
+                    if (eventName === 'apply') {
                         var attachRecord = this.getForm().findField('attachRecord').selectedRecord;
                         return {
                             record_title: attachRecord.getTitle(),

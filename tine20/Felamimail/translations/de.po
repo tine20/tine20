@@ -1039,24 +1039,16 @@ msgid "Delete Signature"
 msgstr "Signatur löschen"
 
 #: js/MessageFileButton.js:35
-msgid "File Message"
-msgstr "Nachricht ablegen"
-
-#: js/MessageFileButton.js:280
-msgid "Filemanager ..."
-msgstr "Dateimanager ..."
-
-#: js/MessageFileButton.js:285 js/AttachmentUploadGrid.js:83
-msgid "Attachment"
-msgstr "Anhang"
+msgid "Save Message as"
+msgstr "Nachricht speichern als"
 
 #: js/MessageFileButton.js:311 js/AttachmentUploadGrid.js:59
 msgid "Download"
 msgstr "Herunterladen"
 
 #: js/MessageFileButton.js:344
-msgid "{messageCount, plural, one {Message was filed} other {# messages where filed}}"
-msgstr "{messageCount, plural, one {Nachricht wurde abgelegt} other {# Nachrichten wurden abgelegt}}"
+msgid "{messageCount, plural, one {Message was saved} other {# messages where saved}}"
+msgstr "{messageCount, plural, one {Nachricht wurde gespeichert} other {# Nachrichten wurden gespeichert}}"
 
 #: js/MessageFileButton.js:346
 msgid "Success"
@@ -1067,8 +1059,8 @@ msgid "Error"
 msgstr "Fehler"
 
 #: js/MessageFileButton.js:460
-msgid "File Messages as Attachment"
-msgstr "Nachrichten als Anhang ablegen"
+msgid "Save Messages as Attachment"
+msgstr "Nachrichten als Anhang speichern"
 
 #: js/AccountEditDialog.js:84
 msgid "Add New Account"
@@ -1724,6 +1716,21 @@ msgstr ".eml Dateianhang in weitergeleiteten Mails"
 #: Preference.php:144
 msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr "Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge seperat"
+
+msgid "{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}"
+msgstr "{attachmentCount, plural, one {Anhang wurde gespeichert} other {# Anhänge wurden gespeichert}}"
+
+msgid "Save As"
+msgstr "Speichern als"
+
+msgid "File (in Filemanager) ..."
+msgstr "Datei (im Dateimanager) ..."
+
+msgid "Attachment (of Record)"
+msgstr "Anhang (eines Datensatzes)"
+
+msgid "Save as Record Attachment"
+msgstr "Als Datensatz Anhang speichern"
 
 #~ msgid "Convert this account to a shared account. Please set a new password for the account:"
 #~ msgstr "Dieses Konto in einen gemeinsamen Account umwandeln. Bitte setzen Sie ein neues Passwort:"
