@@ -9,7 +9,7 @@
 
 /**
  * Felamimail config class
- * 
+ *
  * @package     Felamimail
  * @subpackage  Config
  */
@@ -17,7 +17,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
 {
     /**
      * is email body cached
-     * 
+     *
      * @var string
      */
     const CACHE_EMAIL_BODY = 'cacheEmailBody';
@@ -129,11 +129,38 @@ class Felamimail_Config extends Tinebase_Config_Abstract
 
     const SIEVE_MAILINGLIST_REJECT_REASON = 'sieveMailingListRejectReason';
 
+
+    /**
+     * keyFieldConfig vor mail account types
+     */
+    const MAIL_ACCOUNT_TYPE = 'mailAccountType';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::MAIL_ACCOUNT_TYPE => array(
+            //_('Mail Type')
+            self::LABEL              => 'Type',
+            //_('Possible mail types.')
+            self::DESCRIPTION        => 'Possible mail types.',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => array('recordModel' => Felamimail_Model_MailType::class),
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => array(
+                'records' => array(
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_USER,    'value' => 'Additional Personal External Account', 'system' => true), //_('Additional Personal External Account')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_SHARED,    'value' => 'Shared System Account',  'system' => true), //_('Shared System Account')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,   'value' => 'Additional Personal System Account',  'system' => true), //_('Additional Personal System Account')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,   'value' => 'Default Personal System Account',   'system' => true), //_('Default Personal System Account')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,   'value' => 'Mailinglist',   'system' => true), //_('Mailinglist')
+                ),
+                self::DEFAULT_STR => Tinebase_EmailUser_Model_Account::TYPE_USER
+            )
+        ),
         self::SIEVE_MAILINGLIST_REJECT_REASON => [
             self::LABEL                 => 'Mailinglist Reject Reason', // _('Mailinglist Reject Reason')
             self::DESCRIPTION           => 'Mailinglist Reject Reason',
@@ -340,48 +367,48 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => false,
         ),
     );
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::$_appName
      */
     protected $_appName = 'Felamimail';
-    
+
     /**
      * holds the instance of the singleton
      *
      * @var Tinebase_Config
      */
     private static $_instance = NULL;
-    
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
-     */    
+     * don't use the constructor. use the singleton
+     */
     private function __construct() {}
-    
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
-     */    
+     * don't use the constructor. use the singleton
+     */
     private function __clone() {}
-    
+
     /**
      * Returns instance of Tinebase_Config
      *
      * @return Tinebase_Config
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new self();
         }
-        
+
         return self::$_instance;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::getProperties()

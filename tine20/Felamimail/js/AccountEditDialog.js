@@ -84,7 +84,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.window.setTitle(this.app.i18n._('Add New Account'));
             if (this.asAdminModule) {
                 this.record.set('type', 'shared');
-                this.typePicker.setValue('shared');
             }
         } else {
             this.grantsGrid.setValue(this.record.get('grants'));
@@ -247,23 +246,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
                             allowBlank: this.asAdminModule
-                        }, this.typePicker = new Ext.form.ComboBox({
-                            fieldLabel: this.app.i18n._('Account Type'),
+                        },new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Felamimail',
+                            keyFieldName: 'mailAccountType',
+                            fieldLabel: this.app.i18n._('Type'),
                             name: 'type',
                             hidden: ! this.asAdminModule,
-                            typeAhead: false,
-                            triggerAction: 'all',
-                            lazyRender: true,
-                            editable: false,
-                            mode: 'local',
-                            forceSelection: true,
-                            xtype: 'combo',
-                            store: new Ext.data.JsonStore({
-                                data: Tine.Felamimail.Model.getAvailableAccountTypes(),
-                                fields: Tine.Tinebase.Model.KeyFieldRecord
-                            }),
-                            valueField: 'id',
-                            displayField: 'value',
                             listeners: {
                                 scope: this,
                                 select: this.onSelectType,
@@ -604,6 +592,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         } else if (newValue === 'system') {
             this.onTypeChangeError(combo, this.app.i18n._('System accounts cannot be created manually.'));
+            return false;
+        } else if (newValue === 'adblist') {
+            this.onTypeChangeError(combo, this.app.i18n._('Mailinglist accounts cannot be created manually.'));
             return false;
         }
 

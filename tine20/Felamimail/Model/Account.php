@@ -88,16 +88,12 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 40,
             ],
             'type' => [
-                // TODO make this a keyfield to get a better filter?
-                self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 20,
+                self::TYPE => self::TYPE_KEY_FIELD,
                 self::LABEL => 'Type', // _('Type')
+                self::NAME => 'mailAccountType',
                 self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
-                    ['InArray', [self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED, self::TYPE_USER_INTERNAL]]
-                ],
-                self::QUERY_FILTER              => true,
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::DEFAULT_VALUE => Tinebase_EmailUser_Model_Account::TYPE_USER],
             ],
             'name' => [
                 self::TYPE => self::TYPE_STRING,
