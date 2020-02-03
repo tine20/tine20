@@ -163,13 +163,41 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     {
         $fileSystem = Tinebase_FileSystem::getInstance();
 
+        $request = Tinebase_Core::getRequest();
+        $syncHeader = $request->getHeader('X-TINE20-PREVIEWSERICE-SYNC');
+
+        if ('regenerate' === $syncHeader) {
+            Tinebase_FileSystem_Previews::getInstance()->deletePreviews([$_node->hash]);
+            if (false === Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_node)) {
+                $this->_handleFailure(); // defaults 500
+            }
+        }
+
         try {
             $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $this->_handleFailure(404);
+            if ('true' === $syncHeader) {
+                if (false === Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_node)) {
+                    $this->_handleFailure(); // defaults 500
+                }
+                try {
+                    $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $this->_handleFailure(404);
+                }
+            } else {
+                $this->_handleFailure(404);
+            }
         }
 
-        $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline', $previewNode->size);
+        if (false !== $syncHeader) {
+            $additionalHeader = ['X-TINE20-PREVIEWSERICE-PREVIEW-COUNT' =>
+                Tinebase_FileSystem_Previews::getInstance()->getPreviewCountForNodeAndType($_node, $_type)];
+        } else {
+            $additionalHeader = [];
+        }
+
+        $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline', $previewNode->size, $additionalHeader);
 
         $handle = fopen($fileSystem->getRealPathForHash($previewNode->hash), 'r');
 
@@ -253,12 +281,13 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $filename
      * @param string $contentType
      * @param string $disposition
-     * @param string $length
+     * @param string $length WILL BE IGNORED! webserver might apply compression -> content length might change
+     * @param array $additionalHeaders
      *
      * TODO make length param work
      * @see 0010522: Anonymous download link - no or wrong filesize in header
      */
-    protected function _prepareHeader($filename, $contentType, $disposition = 'attachment', $length = null)
+    protected function _prepareHeader($filename, $contentType, $disposition = 'attachment', $length = null, $additionalHeaders = [])
     {
         if (headers_sent()) {
             return;
@@ -276,6 +305,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
         }
         header("Content-Type: " . $contentType);
+
+        foreach ($additionalHeaders as $key => $val) {
+            header($key . ': ' . $val);
+        }
     }
 
     /**

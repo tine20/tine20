@@ -338,6 +338,46 @@ class Tinebase_FileSystem_Previews
     /**
      * @param Tinebase_Model_Tree_Node $_node
      * @param string $_type
+     * @return int
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getPreviewCountForNodeAndType(Tinebase_Model_Tree_Node $_node, $_type)
+    {
+        if (empty($_node->hash) || strlen($_node->hash) < 4) {
+            throw new Tinebase_Exception_NotFound('node needs to have proper hash set');
+        }
+
+        $config = $this->_getConfig();
+        if (!isset($config[$_type])) {
+            throw new Tinebase_Exception_NotFound('type ' . $_type . ' not configured');
+        }
+
+        $previewCount = (int)($_node->preview_count);
+
+        if ($previewCount < 1) return 0;
+
+        $basePath = $this->_getBasePath() . '/' . substr($_node->hash, 0, 3) . '/' . substr($_node->hash, 3)
+            . '/' . $_type . '_';
+        $ending = '.' . $config[$_type]['filetype'];
+
+        if ($this->_fsController->fileExists($basePath . ($previewCount - 1) . $ending)) {
+            return $previewCount;
+        }
+        if (!$this->_fsController->fileExists($basePath . '0' . $ending)) {
+            return 0;
+        }
+
+        $count = 1;
+        do {
+            if (!$this->_fsController->fileExists($basePath . ($count) . $ending)) {
+                return $count;
+            }
+        } while (++$count < $previewCount);
+    }
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_node
+     * @param string $_type
      * @param int $_num
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_NotFound
