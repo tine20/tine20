@@ -2190,6 +2190,8 @@ class Tinebase_FileSystem implements
         
         $hashFile      = $hashDirectory . '/' . substr($hash, 3);
         $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
+        $fileCreated = false;
+
         while (!file_exists($hashFile)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
             $hashHandle = fopen($hashFile, 'x');
@@ -2202,6 +2204,7 @@ class Tinebase_FileSystem implements
             rewind($handle);
             stream_copy_to_stream($handle, $hashHandle);
             fclose($hashHandle);
+            $fileCreated = true;
 
             // AV scan
             if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
@@ -2219,6 +2222,27 @@ class Tinebase_FileSystem implements
                 }
             }
             break;
+        }
+
+        $tries = 0;
+        $currentFilesHash = null;
+        $previousCurrentFilesHash = null;
+        while (!$fileCreated && ($currentFilesHash = sha1_file($hashFile)) !== $hash && $tries++ < 10) {
+            if ($previousCurrentFilesHash === $currentFilesHash) {
+                // hash did not change -> we will start cleaning up then
+                break;
+            }
+            $previousCurrentFilesHash = $currentFilesHash;
+            // hash file mismatch! First lets sleep some time, maybe somebody is writting the file...
+            usleep(100000); // 100ms
+        }
+        if (!$fileCreated && $currentFilesHash !== $hash) {
+            // we have a corrupt hash file, lets remove it.
+            if (!unlink($hashFile)) {
+                throw new Tinebase_Exception_UnexpectedValue('failed to unlink corrupt hash file');
+            }
+
+            return $this->createFileBlob($contents);
         }
         
         return array($hash, $hashFile, $avResult);
