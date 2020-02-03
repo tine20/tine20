@@ -177,22 +177,22 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     /**
      * return folder + parent_id filter with ignore acl
      *
-     * @param $folderId
+     * @param string|null $folderId
+     * @param boolean $getDeleted
      * @return Tinebase_Model_Tree_Node_Filter
      */
-    public static function getFolderParentIdFilterIgnoringAcl($folderId)
+    public static function getFolderParentIdFilterIgnoringAcl($folderId, $getDeleted = false)
     {
-        return new Tinebase_Model_Tree_Node_Filter(array(
-            array(
-                'field'     => 'parent_id',
-                'operator'  => $folderId === null ? 'isnull' : 'equals',
-                'value'     => $folderId
-            ), array(
-                'field'     => 'type',
-                'operator'  => 'equals',
-                'value'     => Tinebase_Model_Tree_FileObject::TYPE_FOLDER
-            )
-        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+        $filterArr = [
+            ['field' => 'parent_id', 'operator' => $folderId === null ? 'isnull' : 'equals', 'value' => $folderId],
+            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
+        ];
+        if (true === $getDeleted) {
+            $filterArr[] =
+                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET];
+        }
+        return new Tinebase_Model_Tree_Node_Filter($filterArr, Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
+            ['ignoreAcl' => true]);
     }
 
     /**

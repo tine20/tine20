@@ -23,6 +23,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE010 = __CLASS__ . '::update010';
     const RELEASE012_UPDATE011 = __CLASS__ . '::update011';
     const RELEASE012_UPDATE012 = __CLASS__ . '::update012';
+    const RELEASE012_UPDATE013 = __CLASS__ . '::update013';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -79,6 +80,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE011          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update011',
+            ],
+            self::RELEASE012_UPDATE013          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update013',
             ],
         ],
     ];
@@ -256,5 +261,24 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             Tinebase_Model_Tree_RefLog::class,
         ]);
         $this->addApplicationUpdate('Tinebase', '12.30', self::RELEASE012_UPDATE012);
+    }
+
+    public function update013()
+    {
+        $foBackend = Tinebase_FileSystem::getInstance()->getFileObjectBackend();
+
+        // previews should only have one revision... they never should get a second
+        foreach ($foBackend->search(new Tinebase_Model_Tree_FileObjectFilter([
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_PREVIEW],
+                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+                ])) as $fileObject) {
+            /** @var Tinebase_Model_Tree_FileObject $fileObject */
+            if ($fileObject->revision_size < $fileObject->size) {
+                $fileObject->revision_size = $fileObject->size;
+                $foBackend->update($fileObject);
+            }
+        }
+
+        $this->addApplicationUpdate('Tinebase', '12.31', self::RELEASE012_UPDATE013);
     }
 }
