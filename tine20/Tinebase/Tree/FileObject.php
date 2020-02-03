@@ -313,7 +313,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             $data['id'] = $_record->getId();
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
 
-            if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type) {
+            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
                     array('revision_size' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision_size') . ' + ' . (int)$_record->size)),
@@ -330,7 +330,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
 
             if (1 === count($currentRecord->available_revisions) &&
-                    Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type &&
+                    Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type &&
                     (int)$currentRecord->revision_size !== (int)$_record->size) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
