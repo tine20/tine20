@@ -307,6 +307,8 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             arguments[0][fieldName.replace(/^#/, '')] = cfValue;
         }
 
+        metaData.css = metaData.css + ' tine-dublicateResolve-cell';
+
         return renderer.apply(this, arguments);
     }
 });

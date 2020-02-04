@@ -119,7 +119,7 @@ Tine.Tinebase.common = {
      */
     dateRenderer: function (date, metadata) {
         if (metadata) {
-            metadata.css = 'tine-gird-cell-date';
+            metadata.css = metadata.css + ' tine-gird-cell-date';
         }
 
         var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
