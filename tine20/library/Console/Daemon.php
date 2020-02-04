@@ -365,6 +365,9 @@ abstract class Console_Daemon
             @unlink($pidFile);
         }
 
+        usleep(1000);
+        pcntl_signal_dispatch();
+
         exit(0);
     }
 

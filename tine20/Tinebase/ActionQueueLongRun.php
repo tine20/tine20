@@ -45,4 +45,10 @@ class Tinebase_ActionQueueLongRun extends Tinebase_ActionQueue
 
         return parent::_createQueueBackendInstance($className, $options);
     }
+
+    public function cleanDaemonStruct()
+    {
+        // 5 hours
+        $this->_queue->cleanDaemonStruct(5 * 60 * 60);
+    }
 }
