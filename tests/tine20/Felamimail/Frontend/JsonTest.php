@@ -1142,6 +1142,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         self::assertEquals('message/rfc822', $emlNode->contenttype);
         self::assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
         self::assertContains(Tinebase_Core::getUser()->accountEmailAddress, $emlNode->name);
+        $now = Tinebase_DateTime::now();
+        self::assertContains($now->toString('Y-m-d'), $emlNode->name);
 
         $nodeWithDescription = Filemanager_Controller_Node::getInstance()->get($emlNode['id']);
         self::assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
