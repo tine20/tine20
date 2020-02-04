@@ -164,7 +164,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         $fileSystem = Tinebase_FileSystem::getInstance();
 
         $request = Tinebase_Core::getRequest();
-        $syncHeader = $request->getHeader('X-TINE20-PREVIEWSERICE-SYNC');
+        $syncHeader = $request->getHeader('X-TINE20-PREVIEWSERVICE-SYNC');
 
         if ('regenerate' === $syncHeader) {
             Tinebase_FileSystem_Previews::getInstance()->deletePreviews([$_node->hash]);
