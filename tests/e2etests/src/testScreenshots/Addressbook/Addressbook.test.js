@@ -1,4 +1,3 @@
-const timeout = process.env.SLOWMO ? 30000 : 30000;
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 const help = require('../../lib/helper');
@@ -316,6 +315,7 @@ describe('Group', () => {
     describe('Mainscreen', () => {
         test('go to Mainscreen', async () => {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Gruppen'});
+            await page.waitFor(500);
             await page.screenshot({path: 'screenshots/1_adressverwaltung/22_adressbuch_gruppen_uebersicht.png'});
             await page.screenshot({
                 path: 'screenshots/1_adressverwaltung/23_adressbuch_gruppen_modul.png',

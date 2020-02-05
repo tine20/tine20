@@ -7,9 +7,9 @@ module.exports = {
         app: '',
     },
     testMatch: [
-        "**/test/**/*.test.js"
+        "**/" + process.env.TEST_DIR + "/**/*.test.js"
     ],
     verbose: true,
-    maxWorkers: 1,
+    maxWorkers: process.env.TEST_WORKER,
     testTimeout: 60000,
 };
