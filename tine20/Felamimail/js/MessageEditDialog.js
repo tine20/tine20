@@ -1651,8 +1651,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return string;
         }
 
-        var angleBracketExtraction = string.match(/<([^>;]+)>/i)[1];
-        if (null !== angleBracketExtraction && Ext.form.VTypes.email(angleBracketExtraction)) {
+        let angleBracketExtraction = string.match(/<([^>;]+)>/i);
+        if (angleBracketExtraction && angleBracketExtraction[1] && Ext.form.VTypes.email(angleBracketExtraction)) {
             return angleBracketExtraction;
         }
 
