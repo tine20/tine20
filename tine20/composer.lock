@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "1ae885ab1032830d77d8db1040f66521",
@@ -1312,7 +1312,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
+                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1344,7 +1344,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3011,7 +3011,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
+                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -3891,11 +3891,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl36",
+            "version": "1.12.20pl37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "18a5d17b4abea1d5cfdc7c5d02f901b88e3adbe9"
+                "reference": "c654316810b4013520c29a4a01eaa6968cfb24d2"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3912,7 +3912,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2019-12-23T10:12:48+00:00"
+            "time": "2020-02-05T10:59:42+00:00"
         }
     ],
     "packages-dev": [
@@ -5319,7 +5319,6 @@
                 "hydrator",
                 "zf2"
             ],
-            "abandoned": "laminas/laminas-hydrator",
             "time": "2016-02-18T22:38:26+00:00"
         },
         {
@@ -5369,7 +5368,6 @@
                 "psr",
                 "psr-7"
             ],
-            "abandoned": "laminas/laminas-psr7bridge",
             "time": "2016-05-10T21:44:39+00:00"
         }
     ],
@@ -5401,7 +5399,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch36",
+            "version": "1.12.20.0-patch37",
             "package": "zendframework/zendframework1"
         }
     ],

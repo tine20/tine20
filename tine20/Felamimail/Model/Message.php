@@ -23,6 +23,7 @@
  * @property    string  $sender             the sender of the email
  * @property    string  $content_type       the content type of the message
  * @property    string  $body_content_type  the content type of the message body
+ * @property    Tinebase_DateTime  received received date
  * @property    array   $to                 the to receipients
  * @property    array   $cc                 the cc receipients
  * @property    array   $bcc                the bcc receipients

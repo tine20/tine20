@@ -723,10 +723,14 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
 
 /******** downloads ***********/
 
-.tinebase-download-link{
+.tinebase-download-link {
     cursor: pointer;
     color: blue;
     display: inline-block;
+}
+
+.tinebase-download-link b {
+    color: black;
 }
 
 span:hover.tinebase-download-link {
@@ -743,6 +747,10 @@ span:hover.tinebase-download-link {
     height: 10px;
     float: right;
     width: 10px;
+}
+
+.tinebase-download-link.tinebase-download-all {
+    margin-right: 2px;
 }
 
 .action_download {

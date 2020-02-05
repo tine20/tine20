@@ -1062,4 +1062,55 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS config required');
         }
     }
+
+    /**
+     * @param $_modelName
+     * @param Tinebase_Model_User $_user
+     * @return NULL|Tinebase_Record_Interface
+     */
+    protected function _getPersonalContainerNode($_modelName = 'Filemanager', $_user = null)
+    {
+        $user = ($_user) ? $_user : Tinebase_Core::getUser();
+        return Tinebase_FileSystem::getInstance()->getPersonalContainer(
+            $user,
+            $_modelName,
+            $user
+        )->getFirstRecord();
+    }
+
+    /**
+     * @param null|Tinebase_Model_Container $personalFilemanagerContainer
+     * @return string
+     */
+    protected function _getPersonalFilemanagerPath($personalFilemanagerContainer = null)
+    {
+        if (!$personalFilemanagerContainer) {
+            $personalFilemanagerContainer = $this->_getPersonalContainerNode(
+                'Filemanager',
+                Tinebase_Core::getUser()
+            );
+        }
+
+        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
+            . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $personalFilemanagerContainer->name;
+        return $path;
+    }
+
+    protected function _getTestNodes($path, $name = 'test')
+    {
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field' => 'path',
+            'operator' => 'equals',
+            'value' => $path
+        ), array(
+            'field' => 'name',
+            'operator' => 'contains',
+            'value' => $name
+        )));
+        return Filemanager_Controller_Node::getInstance()->search($filter, new Tinebase_Model_Pagination([
+            'sort' => 'name',
+            'dir'  => 'DESC',
+        ]));
+    }
 }
