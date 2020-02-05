@@ -495,6 +495,30 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * send to semicolon separated recipient list
+     */
+    public function testSendMessageWithDelimiterSeparatedEmails($delimiter = ';')
+    {
+        $message = $this->_getMessageData();
+        $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $delimiter . $this->_personas['sclever']->accountEmailAddress];
+        $this->_sendMessage(
+            'INBOX',
+            array(),
+            '',
+            'test',
+            $_messageToSend = $message
+        );
+    }
+
+    /**
+     * send to semicolon separated recipient list
+     */
+    public function testSendMessageWithCommaSeparatedEmails()
+    {
+        $this->testSendMessageWithDelimiterSeparatedEmails(',');
+    }
+
+    /**
      * try to get a message from imap server (with complete body, attachments, etc)
      *
      * @see 0006300: add unique message-id header to new messages (for message-id check)
