@@ -1,4 +1,3 @@
-const timeout = process.env.SLOWMO ? 30000 : 30000;
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 const help = require('../../lib/helper');
@@ -7,6 +6,7 @@ require('dotenv').config();
 beforeAll(async () => {
     expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Aufgaben');
+    await page.waitFor(1000);
     await page.screenshot({path: 'screenshots/5_aufgaben/1_aufgaben_uebersicht.png'});
 });
 
@@ -14,11 +14,12 @@ describe('Test mainpage', () => {
 
 });
 
-describe('mainScreen' , () => {
+describe('mainScreen', () => {
 
 });
 
 describe('Edit Contact', () => {
+    let newPage;
     test('open EditDialog', async () => {
         var [button] = await help.getElement('button', page, 'Aufgabe hinzufügen');
         await button.click();

@@ -358,9 +358,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * 
      * @param  string|Tinebase_Model_Tree_Node  $nodeId  the id of the node
      * @param  bool $ignoreAcl default is true
+     * @param  bool $getDeleted
      * @return Tinebase_Record_RecordSet
      */
-    public function getChildren($nodeId, $ignoreAcl = true)
+    public function getChildren($nodeId, $ignoreAcl = true, $getDeleted = false)
     {
         $nodeId = $nodeId instanceof Tinebase_Model_Tree_Node ? $nodeId->getId() : $nodeId;
 
@@ -368,16 +369,16 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         if ($ignoreAcl) {
             $options['ignoreAcl'] = true;
         }
-        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-            array(
-                'field'     => 'parent_id',
-                'operator'  => 'equals',
-                'value'     => $nodeId
-            )
-        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, $options);
-        $children = $this->search($searchFilter);
-        
-        return $children;
+        $filterArr = [[
+            'field' => 'parent_id', 'operator' => 'equals', 'value' => $nodeId
+        ]];
+        if (true === $getDeleted) {
+            $filterArr[] = [
+                'field' => 'is_deleted', 'operator'  => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET
+            ];
+        }
+        return $this->search(new Tinebase_Model_Tree_Node_Filter($filterArr,
+            Tinebase_Model_Filter_FilterGroup::CONDITION_AND, $options));
     }
 
     /**
@@ -557,7 +558,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         // no transactions yet
         // get root node ids
         $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl(null);
-        $result = $this->_recalculateFolderSize($_fileObjectBackend, $this->_getIdsOfDeepestFolders($this->search($searchFilter, null, true)));
+        $result = $this->_recalculateFolderSize($_fileObjectBackend, $this->_getIdsOfDeepestFolders($this->search($searchFilter, null, true), true));
 
         $size = 0;
         $revisionSize = 0;
@@ -592,7 +593,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             try {
                 try {
                     /** @var Tinebase_Model_Tree_Node $record */
-                    $record = $this->get($id);
+                    $record = $this->get($id, true);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     $transactionManager->commitTransaction($transactionId);
                     continue;
@@ -602,20 +603,22 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                     $parentIds[$record->parent_id] = $record->parent_id;
                 }
 
-                $childrenNodes = $this->getChildren($id);
+                $childrenNodes = $this->getChildren($id, true, true);
                 $size = 0;
                 $revision_size = 0;
 
                 /** @var Tinebase_Model_Tree_Node $child */
                 foreach($childrenNodes as $child) {
-                    $size += ((int)$child->size);
+                    if (!$child->is_deleted) {
+                        $size += ((int)$child->size);
+                    }
                     $revision_size += ((int)$child->revision_size);
                 }
 
                 if ($size !== ((int)$record->size) || $revision_size !== ((int)$record->revision_size)) {
                     /** @var Tinebase_Model_Tree_FileObject $fileObject */
                     try {
-                        $fileObject = $_fileObjectBackend->get($record->object_id);
+                        $fileObject = $_fileObjectBackend->get($record->object_id, true);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         $transactionManager->commitTransaction($transactionId);
                         continue;
@@ -648,15 +651,16 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * returns ids of folders that do not have any sub folders
      *
      * @param array $_folderIds
+     * @param boolean $_getDeleted
      * @return array
      */
-    protected function _getIdsOfDeepestFolders(array $_folderIds)
+    protected function _getIdsOfDeepestFolders(array $_folderIds, $_getDeleted = false)
     {
         $result = array();
         $subFolderIds = array();
         foreach($_folderIds as $folderId) {
             // children folders
-            $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl($folderId);
+            $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl($folderId, $_getDeleted);
             $nodeIds = $this->search($searchFilter, null, true);
             if (empty($nodeIds)) {
                 // no children, this is a result
@@ -667,7 +671,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
 
         if (!empty($subFolderIds)) {
-            $result = array_merge($result, $this->_getIdsOfDeepestFolders($subFolderIds));
+            $result = array_merge($result, $this->_getIdsOfDeepestFolders($subFolderIds, $_getDeleted));
         }
 
         return $result;

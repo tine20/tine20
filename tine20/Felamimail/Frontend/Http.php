@@ -1,13 +1,11 @@
 <?php
 /**
- * backend class for Tinebase_Http_Server
- *
- * This class handles all Http requests for the felamimail application
+ * This class handles all Http requests for the Felamimail application
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
@@ -18,17 +16,53 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @var string
      */
     protected $_applicationName = 'Felamimail';
-    
+
+    /**
+     * download email attachment(s)
+     *
+     * if multiple partIds are given, a zip file is created for download
+     *
+     * @param $id
+     * @param string $partIds (comma separated part ids)
+     * @param string $model
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function downloadAttachments($id, $partIds, $model = 'Felmimail_Model_Message')
+    {
+        $partIds = strpos($partIds, ',') !== false
+            ? explode(',', $partIds)
+            : [$partIds];
+
+        switch ($model) {
+            case 'Felamimail_Model_Message':
+                if (count($partIds) === 1) {
+                    $this->_downloadAttachment($id, array_pop($partIds));
+                } else {
+                    $this->_downloadAttachments($id, $partIds);
+                }
+                break;
+            case 'Filemanager_Model_Node':
+            case 'Tinebase_Model_Node':
+                if (count($partIds) === 1) {
+                    $this->_downloadNodeAttachment($id, array_pop($partIds));
+                } else {
+                    throw new Tinebase_Exception_NotImplemented(
+                        'download of multiple node attachments not implemented yet');
+                }
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument(
+                    'attachments of model ' . $model . ' cannot be downloaded');
+        }
+    }
+
     /**
      * download email attachment
      *
      * @param  string  $messageId
      * @param  string  $partId
-     *
-     * @todo only one api fn downloadAttachment/downloadNodeAttachment
-     *       -> add $model param
      */
-    public function downloadAttachment($messageId, $partId)
+    protected function _downloadAttachment($messageId, $partId)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Downloading Attachment ' . $partId . ' of message with id ' . $messageId
@@ -43,8 +77,12 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param  string  $messageId
      * @param  array  $partIds
      */
-    public function downloadAttachments($messageId, $partIds = [])
+    protected function _downloadAttachments($messageId, $partIds = [])
     {
+        if (empty($partIds)) {
+            return;
+        }
+
         $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId);
 
         // collect all parts and build zip for download
@@ -57,7 +95,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         foreach ($message['attachments'] as $attachment) {
-            if (! empty($partIds) &&  ! in_array($attachment['partId'], $partIds)) {
+            if (! in_array($attachment['partId'], $partIds)) {
                 // skip
                 continue;
             }
@@ -85,10 +123,8 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      *
      * @param  string  $nodeId
      * @param  string  $partId
-     *
-     * @todo write a test
      */
-    public function downloadNodeAttachment($nodeId, $partId)
+    protected function _downloadNodeAttachment($nodeId, $partId)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Downloading Attachment ' . $partId . ' of node with id ' . $nodeId

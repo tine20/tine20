@@ -23,6 +23,7 @@
  * @property    string  $sender             the sender of the email
  * @property    string  $content_type       the content type of the message
  * @property    string  $body_content_type  the content type of the message body
+ * @property    Tinebase_DateTime  received received date
  * @property    array   $to                 the to receipients
  * @property    array   $cc                 the cc receipients
  * @property    array   $bcc                the bcc receipients
@@ -807,7 +808,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         // explode email addresses if multiple
         $recipientType = array('to', 'cc', 'bcc');
-        $delimiter = ';';
 
         foreach ($recipientType as $field) {
             if (!empty($recordData[$field])) {
@@ -817,6 +817,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 }
                 foreach ($recordData[$field] as $addresses) {
                     if (substr_count($addresses, '@') > 1) {
+                        $delimiter = strpos($addresses,';') !== false ? ';' : ',';
                         $recipients = array_merge($recipients, explode($delimiter, $addresses));
                     } else {
                         // single recipient

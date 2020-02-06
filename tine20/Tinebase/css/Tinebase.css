@@ -723,13 +723,34 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
 
 /******** downloads ***********/
 
-.tinebase-download-link{
+.tinebase-download-link {
     cursor: pointer;
     color: blue;
+    display: inline-block;
+}
+
+.tinebase-download-link b {
+    color: black;
 }
 
 span:hover.tinebase-download-link {
     color: #4444ff;
+    background-image: url(../../images/icon-set/icon_arrow_down.svg) !important;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 10px 10px;
+}
+
+.tinebase-download-link-wait {
+    margin-top: 2px;
+    margin-left: 2px;
+    height: 10px;
+    float: right;
+    width: 10px;
+}
+
+.tinebase-download-link.tinebase-download-all {
+    margin-right: 2px;
 }
 
 .action_download {
@@ -1081,6 +1102,7 @@ textarea.x-form-invalid,
 .x-btn-wait + div,
 div.x-btn-wait,
 .x-item-disabled .x-tbar-loading + div,
+.tinebase-download-link-anim .tinebase-download-link-wait,
 .x-item-disabled .x-tbar-loading {
     animation-name: loading-animation;
     animation-duration: 1000ms;
@@ -1119,6 +1141,7 @@ div.x-btn-wait,
 .x-item-disabled .x-tbar-loading + div,
 .x-item-disabled div.x-tbar-loading,
 div.x-btn-wait,
+.tinebase-download-link-anim .tinebase-download-link-wait,
 .x-btn-wait + div {
     box-sizing: border-box;
     border: 2px solid #ccc !important;

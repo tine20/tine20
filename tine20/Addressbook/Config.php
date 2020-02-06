@@ -123,6 +123,8 @@ class Addressbook_Config extends Tinebase_Config_Abstract
 
     const DEFAULT_TEL_COUNTRY_CODE = 'defaultTelCountryCode';
 
+    const INSTALLATION_REPRESENTATIVE = 'installationRepresentative';
+
     /**
      * (FEATURE_LIST_VIEW-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -195,6 +197,15 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 ],
             ],
             self::DEFAULT_STR => [],
+        ],
+        self::INSTALLATION_REPRESENTATIVE => [
+            self::LABEL                 => 'Contact (id) representing this installation',
+            self::DESCRIPTION           => 'Contact (id) representing this installation', // _('Contact (id) representing this installation')
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => null,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYSETUPMODULE      => false,
+            self::SETBYADMINMODULE      => true,
         ],
         self::CONTACT_DUP_FIELDS => array(
                                    //_('Contact duplicate check fields')
@@ -357,5 +368,24 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     public static function getProperties()
     {
         return self::$_properties;
+    }
+
+    /**
+     * @return Addressbook_Model_Contact|null
+     */
+    public static function getInstallationRepresentative()
+    {
+        /** @var Addressbook_Model_Contact $contact */
+        static $contact = null;
+        if (null === $contact && !empty(self::getInstance()->{self::INSTALLATION_REPRESENTATIVE})) {
+            try {
+                $contact = Addressbook_Controller_Contact::getInstance()->get(self::$_instance
+                    ->{self::INSTALLATION_REPRESENTATIVE});
+            } catch (Tinebase_Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
+
+        return $contact;
     }
 }

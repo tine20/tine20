@@ -285,12 +285,15 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 },
 
                 showAttachments: function(attachments, messageData) {
-                    var result = (attachments.length > 0) ? '<b>' + this.app.i18n._('Attachments') + ':</b> ' : '';
+                    const idPrefix = Ext.id();
+                    const attachmentsStr = this.app.i18n._('Attachments');
+
+                    let result = (attachments.length > 0) ? `<span id=${idPrefix}:all class="tinebase-download-link tinebase-download-all"><b>${attachmentsStr}:</b><div class="tinebase-download-link-wait"></div></span>` : '';
 
                     for (var i=0, id, cls; i < attachments.length; i++) {
-                        result += '<span id="' + Ext.id() + ':' + i + '" class="tinebase-download-link">'
+                        result += `<span id="${idPrefix}:${i}" class="tinebase-download-link">`
                             + '<i>' + attachments[i].filename + '</i>'
-                            + ' (' + Ext.util.Format.fileSize(attachments[i].size) + ')</span> ';
+                            + ' (' + Ext.util.Format.fileSize(attachments[i].size) + ')<div class="tinebase-download-link-wait"></div></span> ';
                     }
 
                     return result;
@@ -322,7 +325,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
      */
     onClick: function(e) {
         var selectors = [
-            'span[class=tinebase-download-link]',
+            'span[class^=tinebase-download-link]',
             'a[class=tinebase-email-link]',
             'span[class=tinebase-addtocontacts-link]',
             'span[class=tinebase-showheaders-link]',
@@ -341,9 +344,11 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         Tine.log.debug('Tine.Felamimail.GridDetailsPanel::onClick found target:"' + selector + '".');
 
         switch (selector) {
-            case 'span[class=tinebase-download-link]':
+            case 'span[class^=tinebase-download-link]':
                 var idx = target.id.split(':')[1],
-                    attachment = this.record.get('attachments')[idx];
+                    attachments = idx !== 'all' ? [this.record.get('attachments')[idx]] : this.record.get('attachments'),
+                    sourceModel = this.nodeRecord || this.record.get('from_node') ?
+                        'Filemanager_Model_Node' : 'Felamimail_Model_Message';
 
                 if (! this.record.bodyIsFetched()) {
                     // sometimes there is bad timing and we do not have the attachments available -> refetch body
@@ -353,36 +358,130 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 }
 
                 // remove part id if set (that is the case in message/rfc822 attachments)
-                var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
+                const messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
 
-                if (attachment['content-type'] === 'message/rfc822') {
-                    Tine.log.debug('Tine.Felamimail.GridDetailsPanel::onClick openWindow for:"' + messageId + '_' + attachment.partId + '".');
-                    // display message
-                    Tine.Felamimail.MessageDisplayDialog.openWindow({
-                        record: new Tine.Felamimail.Model.Message({
-                            id: messageId + '_' + attachment.partId
-                        })
-                    });
+                const menu = Ext.create({
+                    xtype: 'menu',
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   'Tine.Felamimail.MailDetailPanel.AttachmentMenu'
+                    }],
+                    items: [{
+                            text: this.app.i18n._('Open'),
+                            iconCls: 'action_preview',
+                            hidden: attachments.length !== 1 || _.get(attachments, '[0]content-type') !== 'message/rfc822',
+                            handler: () => {
+                                Tine.Felamimail.MessageDisplayDialog.openWindow({
+                                    record: new Tine.Felamimail.Model.Message({
+                                        id: messageId + '_' + attachments[0].partId
+                                    })
+                                });
+                            }
+                        }, {
+                            xtype: 'menuseparator',
+                            hidden: attachments.length !== 1 || _.get(attachments, '[0]content-type') !== 'message/rfc822'
+                        }, {
+                            text: this.app.i18n._('Save As'),
+                            menu: [{
+                                text: this.app.i18n._('File (in Filemanager) ...'),
+                                hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
+                                handler: () => {
+                                    var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+                                        constraint: 'folder',
+                                        singleSelect: true,
+                                        requiredGrants: ['addGrant']
+                                    });
 
-                } else {
-                    // download attachment
-                    var params = {
-                        requestType: 'HTTP',
-                        partId: attachment.partId
-                    };
+                                    filePickerDialog.on('selected', async (nodes) => {
+                                        await this.attachmentAnnimation(target, async () => {
+                                            const locations = [{
+                                                type: 'node',
+                                                model: 'Filemanager_Model_Node',
+                                                record_id: _.get(nodes[0], 'nodeRecord.data', nodes[0]),
+                                            }];
 
-                    if (this.nodeRecord || this.record.get('from_node')) {
-                        params.nodeId = messageId;
-                        params.method = 'Felamimail.downloadNodeAttachment';
-                    } else {
-                        params.messageId = messageId;
-                        params.method = 'Felamimail.downloadAttachment';
-                    }
+                                            await Tine.Felamimail.fileAttachments(messageId, locations, attachments, sourceModel);
+                                        });
 
-                    new Ext.ux.file.Download({
-                        params: params
-                    }).start();
-                }
+                                        const msg = this.app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}',
+                                            {attachmentCount: attachments.length });
+                                        Ext.ux.MessageBox.msg(this.app.formatMessage('Success'), msg);
+                                    });
+                                    filePickerDialog.openWindow();
+                                }
+                            }, {
+                                text: this.app.i18n._('Attachment (of Record)'),
+                                menu:_.reduce(Tine.Tinebase.data.RecordMgr.items, (menu, model) => {
+                                    if (model.hasField('attachments') && model.getMeta('appName') !== 'Felamimail') {
+                                        menu.push({
+                                            text: model.getRecordName() + ' ...',
+                                            iconCls: model.getIconCls(),
+                                            handler: () => {
+                                                var pickerDialog = Tine.WindowFactory.getWindow({
+                                                    layout: 'fit',
+                                                    width: 250,
+                                                    height: 100,
+                                                    padding: '5px',
+                                                    modal: true,
+                                                    title: this.app.i18n._('Save as Record Attachment'),
+                                                    items: new Tine.Tinebase.dialog.Dialog({
+                                                        listeners: {
+                                                            apply: async (fileTarget) => {
+                                                                await this.attachmentAnnimation(target, async () => {
+                                                                    await Tine.Felamimail.fileAttachments(messageId, [fileTarget], attachments, sourceModel);
+                                                                });
+
+                                                                const msg = this.app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}',
+                                                                    {attachmentCount: attachments.length });
+                                                                Ext.ux.MessageBox.msg(this.app.formatMessage('Success'), msg);
+                                                            }
+                                                        },
+                                                        getEventData: function(eventName) {
+                                                            if (eventName === 'apply') {
+                                                                var attachRecord = this.getForm().findField('attachRecord').selectedRecord;
+                                                                return {
+                                                                    type: 'attachment',
+                                                                    model: model.getPhpClassName(),
+                                                                    record_id: attachRecord.data,
+                                                                };
+                                                            }
+                                                        },
+                                                        items: Tine.widgets.form.RecordPickerManager.get(model.getMeta('appName'), model.getMeta('modelName'), {
+                                                            fieldLabel: model.getRecordName(),
+                                                            name: 'attachRecord'
+                                                        })
+                                                    })
+                                                });
+                                            }
+                                        });
+                                    }
+                                    return menu;
+                                }, [])
+                            }]
+                        }, {
+                            xtype: 'menuseparator'
+                        }, {
+                            text: this.app.i18n._('Download'),
+                            iconCls: 'action_download',
+                            // hidden: user has no download rights!
+                            handler: () => {
+                                this.attachmentAnnimation(target, async () => {
+                                    return Ext.ux.file.Download.start({
+                                        params: {
+                                            requestType: 'HTTP',
+                                            method: 'Felamimail.downloadAttachments',
+                                            id: messageId,
+                                            partIds: _.map(attachments, 'partId'),
+                                            model: sourceModel
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    ]
+                });
+                menu.showAt(e.getXY());
+
 
                 break;
 
@@ -464,6 +563,16 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 }
                 break;
         }
+    },
+
+    attachmentAnnimation: async function (target, workload) {
+        Ext.fly(target).addClass('tinebase-download-link-anim');
+        try {
+            await workload()
+        } finally {
+            Ext.fly(target).removeClass('tinebase-download-link-anim');
+        }
+
     }
 });
 

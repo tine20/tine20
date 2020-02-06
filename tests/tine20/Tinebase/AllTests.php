@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -28,6 +28,7 @@ class Tinebase_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
 
         $suite->addTestSuite(Tinebase_ActionQueue_Test::class);
+        $suite->addTestSuite(Tinebase_ActionQueue_Backend_RedisTest::class);
         $suite->addTestSuite(Tinebase_CacheTest::class);
         $suite->addTestSuite(Tinebase_AccessLogTest::class);
         $suite->addTestSuite(Tinebase_AccountTest::class);

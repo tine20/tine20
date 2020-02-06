@@ -357,7 +357,7 @@ abstract class Felamimail_TestCase extends TestCase
      * @param string $_emailFrom
      * @param string $_subject
      * @param null $_messageToSend
-     * @param boolean $_hasAttachment
+     * @param integer $_attachments
      * @return array
      */
     protected function _sendMessage(
@@ -366,24 +366,31 @@ abstract class Felamimail_TestCase extends TestCase
         $_emailFrom = '',
         $_subject = 'test',
         $_messageToSend = null,
-        $_hasAttachment = false)
+        $_attachments = 0)
     {
         $messageToSend = $_messageToSend ? $_messageToSend : $this->_getMessageData($_emailFrom, $_subject);
         $messageToSend['headers'] = array_merge($messageToSend['headers'], $additionalHeaders);
 
-        if ($_hasAttachment) {
-            $tempFile = $this->_createTempFile();
-            $messageToSend['attachments'] = array(
-                array(
-                    // 'filename' => 'test.txt'
-                    'tempFile' => array('id' => $tempFile->getId(), 'type' => $tempFile->type),
-                )
-            );
+        $tempFiles = [];
+        if ($_attachments > 0) {
+            $messageToSend['attachments'] = [];
+            for ($i = 1; $i <= $_attachments; $i++) {
+                $filename = 'test' . $i . '.txt';
+                $tempFiles[$i] = $this->_createTempFile($filename);
+                $messageToSend['attachments'][] = array(
+                    'tempFile' => array(
+                        'id' => $tempFiles[$i]->getId(),
+                        'type' => $tempFiles[$i]->type
+                    )
+                );
+            }
         }
 
         $this->_json->saveMessage($messageToSend);
-        if ($_hasAttachment) {
-            unlink($tempFile->path);
+        if (count($tempFiles) > 0) {
+            foreach ($tempFiles as $tempFile) {
+                unlink($tempFile->path);
+            }
         }
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
 
@@ -543,5 +550,46 @@ abstract class Felamimail_TestCase extends TestCase
         $result = $this->_getMessages('INBOX', $filter, $account);
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
         return $result['results'][0];
+    }
+
+    /**
+     * @param $locationType
+     * @param $personalFilemanagerContainer
+     * @param $path
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getTestLocation($locationType, $personalFilemanagerContainer, $path)
+    {
+        $nodeWithoutPath = $personalFilemanagerContainer->toArray();
+        unset($nodeWithoutPath['path']);
+        switch ($locationType) {
+            case 'path':
+                $location = [
+                    'model' => Filemanager_Model_Node::class,
+                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
+                    'record_id' => [
+                        'path' => $path
+                    ],
+                ];
+                break;
+            case 'node':
+                $location = [
+                    'model' => Filemanager_Model_Node::class,
+                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
+                    'record_id' => $nodeWithoutPath,
+                ];
+                break;
+            case 'id':
+                $location = [
+                    'model' => Filemanager_Model_Node::class,
+                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
+                    'record_id' => $nodeWithoutPath['id'],
+                ];
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('type not supported');
+        }
+        return $location;
     }
 }

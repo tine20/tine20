@@ -516,8 +516,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * create node filename from message data
      *
-     * @param $message
+     * @param Felamimail_Model_Message $message
      * @return string
+     *
+     * @todo allow to configure this via twig (config)
      */
     public function getMessageNodeFilename($message)
     {
@@ -529,8 +531,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // remove possible harmful utf-8 chars
         // TODO should not be enabled by default (configurable?)
         $subjectAndMail = Tinebase_Helper::mbConvertTo($message->from_email . '_' . $subject, 'ASCII');
-        $name = mb_substr($subjectAndMail, 0, 245)
-            . '_' . mb_substr(md5($message->messageuid . $message->folder_id), 0, 10) . '.eml';
+        $name = str_replace(' ', '_', $message->received->toString('Y-m-d'))
+            . '_' . mb_substr($subjectAndMail, 0, 245)
+            . '_' . mb_substr(md5($message->messageuid
+            . $message->folder_id), 0, 10)
+            . '.eml';
 
         return $name;
     }
@@ -542,7 +547,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function putRawMessageIntoTempfile($message, $partId = null)
     {
-        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message, $partId);
+        if ($partId) {
+            $part = $this->getMessagePart($message, $partId);
+            $rawContent = $part->getDecodedContent();
+        } else {
+            $rawContent = $this->getMessageRawContent($message, $partId);
+        }
         $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
         file_put_contents($tempFilename, $rawContent);
         return Tinebase_TempFile::getInstance()->createTempFile($tempFilename);

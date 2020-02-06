@@ -1,7 +1,6 @@
 {
   "name": "e2_puppeteer-testing",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "test": "jest"
