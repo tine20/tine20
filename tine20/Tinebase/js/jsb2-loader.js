@@ -13,6 +13,7 @@ module.exports = function(source) {
         requires    = '';
 
     jsb2.pkgs.forEach(function(pkg) {
+        requires += '/* pkg: ' + pkg.name + ' (' + pkg.file + ')*/\n';
         pkg.fileIncludes.forEach(function(includeFile) {
             var file = './' + includeFile.path + '/' + includeFile.text;
             requires += 'require("' + file + '");\n';

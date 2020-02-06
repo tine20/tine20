@@ -1013,6 +1013,7 @@ Tine.Tinebase.tineInit = {
         require('Locale/Gettext');
 
         await waitFor( function() { return Tine.__translationData.__isLoaded; });
+        Tine.__applyExtTranslations();
 
         _.each(Tine.__translationData.msgs, function(msgs, category) {
             Locale.Gettext.prototype._msgs[category] = new Locale.Gettext.PO(msgs);
