@@ -83,6 +83,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * west panel has favorites panel (defaults to null -> autodetection)
      */
     hasFavoritesPanel: null,
+
+    /**
+     * @cfg {object} NodeGridPanel
+     * needs for filterToolBar in EditDialog
+     */
+    gridPanel: null,
     
     layout: 'column',
     cls : 'x-portal',
@@ -216,9 +222,9 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
 
         if (! this[panelName]) {
             if (Tine[this.app.appName].hasOwnProperty(panelName)) {
-                this[panelName] = new Tine[this.app.appName][panelName]({app: this.app});
+                this[panelName] = new Tine[this.app.appName][panelName]({app: this.app, grid: this.gridPanel});
             } else {
-                this[panelName] = new Tine.widgets.persistentfilter.PickerPanel({app: this.app, contentType: contentType});
+                this[panelName] = new Tine.widgets.persistentfilter.PickerPanel({app: this.app, contentType: contentType, grid: this.gridPanel});
             }
             this[panelName].on('click', function (node, event) {
                 // no scope here -> this means containerTree
@@ -259,6 +265,8 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     app: this.app,
                     contentType: ct,
                     recordClass: this.recordClass,
+                    // needs for filterToolBar in EditDialog
+                    grid: this.gridPanel,
 
                     style: {
                         width: '100%',

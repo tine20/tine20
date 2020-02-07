@@ -582,4 +582,28 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         $result = $adbJson->searchContacts($result['id'], []);
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
     }
+
+    public function testSaveFilemanagerFilter()
+    {
+        $filter = [
+            'name' => 'test',
+            'model' => 'Filemanager_Model_NodeFilter',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId(),
+            'desciption' => '',
+            'filters' => [
+                ['field' => 'query', 'operator' => 'contains', 'test'],
+                ['field' => 'path', 'operator' => 'equals', '/personal/tine20admin']
+            ]
+        ];
+
+        $result = $this->_uit->savePersistentFilter($filter);
+
+        // get backend record
+        $backend = new Tinebase_PersistentFilter_Backend_Sql();
+        $filterData = $backend->getRawDataByProperty($result['id'], 'id');
+
+        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+        $this->assertEquals(1, $searchResult['totalcount']);
+
+    }
 }
