@@ -249,11 +249,12 @@ class Tinebase_Log extends Zend_Log
                     'file' => $file,
                     'method' => $method,
                     'time' => Tinebase_Helper::formatMicrotimeDiff($time),
-                    'memory' => Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize(),
+                    'memory' => Tinebase_Core::logMemoryUsage(),
+                    'cache' => Tinebase_Core::logCacheSize(),
                     'pid' => $pid,
                 ]);
             } else {
-                $message = ' FILE: ' . $file
+                $message = 'FILE: ' . $file
                     . ' METHOD: ' . $method
                     . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
                     . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
@@ -261,7 +262,7 @@ class Tinebase_Log extends Zend_Log
             }
 
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . $message
+                . ' ' . $message
             );
         }
     }
