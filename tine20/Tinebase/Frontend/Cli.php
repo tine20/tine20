@@ -943,7 +943,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             $data['application_id'],
-            $data['name']);
+            $data['name'],
+            null,
+            false,
+            true
+        );
 
         if (! $cf) {
             throw new Tinebase_Exception_InvalidArgument('customfield not found');

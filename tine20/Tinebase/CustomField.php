@@ -190,12 +190,13 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string $customFieldName
      * @param string $modelName
      * @param bool $getSystemCFs (default false)
+     * @param bool $ignoreAcl (default false)
      * @return Tinebase_Model_CustomField_Config|null
      */
-    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null, $getSystemCFs = false)
+    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null, $getSystemCFs = false, $ignoreAcl = false)
     {
         $allAppCustomfields = $this->getCustomFieldsForApplication($applicationId, $modelName,
-            Tinebase_Model_CustomField_Grant::GRANT_READ, $getSystemCFs);
+            Tinebase_Model_CustomField_Grant::GRANT_READ, $getSystemCFs, $ignoreAcl);
         return $allAppCustomfields->find('name', $customFieldName);
     }
     
@@ -208,15 +209,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string                            $_modelName
      * @param string                            $_requiredGrant (read grant by default)
      * @param bool                              $_getSystemCFs (false by default)
+     * @param bool                              $_ignoreAcl (default false)
      * @return Tinebase_Record_RecordSet|Tinebase_Model_CustomField_Config of Tinebase_Model_CustomField_Config records
      */
-    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_requiredGrant = Tinebase_Model_CustomField_Grant::GRANT_READ, $_getSystemCFs = false)
+    public function getCustomFieldsForApplication($_applicationId,
+                                                  $_modelName = NULL,
+                                                  $_requiredGrant = Tinebase_Model_CustomField_Grant::GRANT_READ,
+                                                  $_getSystemCFs = false,
+                                                  $_ignoreAcl = false)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
         $userId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : 'nouser';
         $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '') . $_requiredGrant . $userId .
-            (int)$_getSystemCFs;
+            (int)$_getSystemCFs . (int)$_ignoreAcl;
         
         if (isset($this->_cfByApplicationCache[$cfIndex])) {
             return $this->_cfByApplicationCache[$cfIndex];
@@ -244,7 +250,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 );
             }
             
-            $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+            $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues, '', [
+                'ignoreAcl' => $_ignoreAcl
+            ]);
             $filter->setRequiredGrants((array)$_requiredGrant);
             try {
                 if ($_getSystemCFs) {
