@@ -279,51 +279,61 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                     if (!empty($fileContent)) {
                         $this->zipClass->deleteName('word/' . $relMatch[1]);
                         $this->zipClass->addFromString('word/' . $relMatch[1], $fileContent);
-                        if (false === ($imageSize = getimagesize($match[1]))) {
+
+                        $message = '';
+                        try {
+                            $imageSize = getimagesize($match[1]);
+                        } catch (Throwable $exception) {
+                            $imageSize = false;
+                            $message = $exception->getMessage();
+                        }
+
+                        if (!$imageSize) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                                 Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
-                                    . ' could not get image size: ' . $match[1]);
+                                    . ' Could not get image size: ' . $match[1] . '/  error: ' . $message);
+                            continue;
+                        }
+
+                        $replaceStr = $match[0];
+                        $replaced = false;
+                        $width = $imageSize[0] * 914400 / 96;
+                        $height = $imageSize[1] * 914400 / 96;
+                        if (preg_match_all('#<a:ext[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
+                            $submatches, PREG_SET_ORDER)) {
+                            if (count($submatches) > 1) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
+                                    . count($submatches) . ' <a:ext cx= cy= ' . $match[1]);
+                            }
+                            foreach ($submatches as $submatch) {
+                                $this->_replaceSubmatch($submatch, $replaceStr, $width, $height);
+                            }
+                            $replaced = true;
                         } else {
-                            $replaceStr = $match[0];
-                            $replaced = false;
-                            $width = $imageSize[0] * 914400 / 96;
-                            $height = $imageSize[1] * 914400 / 96;
-                            if (preg_match_all('#<a:ext[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
-                                $submatches, PREG_SET_ORDER)) {
-                                if (count($submatches) > 1) {
-                                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
-                                        . count($submatches) . ' <a:ext cx= cy= ' . $match[1]);
-                                }
-                                foreach ($submatches as $submatch) {
-                                    $this->_replaceSubmatch($submatch, $replaceStr, $width, $height);
-                                }
-                                $replaced = true;
-                            } else {
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
-                                    . ' could not find <a:ext cx= cy= ' . $match[1]);
-                            }
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
+                                . ' could not find <a:ext cx= cy= ' . $match[1]);
+                        }
 
-                            if (preg_match_all('#<wp:extent[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
-                                $submatches, PREG_SET_ORDER)) {
-                                if (count($submatches) > 1) {
-                                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
-                                        . count($submatches) . ' <wp:extent cx= cy= ' . $match[1]);
-                                }
-                                foreach ($submatches as $submatch) {
-                                    $this->_replaceSubmatch($submatch, $replaceStr, $width, $height);
-                                }
-                                $replaced = true;
-                            } else {
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
-                                    . ' could not find <wp:extent cx= cy= ' . $match[1]);
+                        if (preg_match_all('#<wp:extent[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
+                            $submatches, PREG_SET_ORDER)) {
+                            if (count($submatches) > 1) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
+                                    . count($submatches) . ' <wp:extent cx= cy= ' . $match[1]);
                             }
+                            foreach ($submatches as $submatch) {
+                                $this->_replaceSubmatch($submatch, $replaceStr, $width, $height);
+                            }
+                            $replaced = true;
+                        } else {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
+                                . ' could not find <wp:extent cx= cy= ' . $match[1]);
+                        }
 
-                            if ($replaced) {
-                                $replacements[] = [
-                                    $match[0],
-                                    $replaceStr
-                                ];
-                            }
+                        if ($replaced) {
+                            $replacements[] = [
+                                $match[0],
+                                $replaceStr
+                            ];
                         }
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
