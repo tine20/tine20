@@ -3750,6 +3750,11 @@ class Tinebase_FileSystem implements
      */
     public function checkForCRUDNotifications($_fileNodeId, $_crudAction)
     {
+        if (! Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            // only done with FILESYSTEM_MODLOGACTIVE
+            return true;
+        }
+
         $nodeId = $_fileNodeId;
         $foundUsers = array();
         $foundGroups = array();
