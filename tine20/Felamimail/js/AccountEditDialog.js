@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -126,6 +126,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'compose_format':
                 case 'preserve_format':
                 case 'sieve_notification_email':
+                case 'sieve_notification_move':
+                case 'sieve_notification_move_folder':
                 case 'reply_to':
                 case 'sent_folder':
                 case 'trash_folder':
@@ -462,7 +464,18 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Notification Email'),
                     name: 'sieve_notification_email',
                     vtype: 'email'
-                }]]
+                }, {
+                    fieldLabel: this.app.i18n._('Auto-move notifications'),
+                    name: 'sieve_notification_move',
+                    xtype: 'checkbox',
+                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications')
+                }, {
+                    fieldLabel: this.app.i18n._('Auto-move notifications folder'),
+                    name: 'sieve_notification_move_folder',
+                    maxLength: 255,
+                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications')
+                }
+                ]]
             }, {
                 title: this.app.i18n._('Other Settings'),
                 autoScroll: true,

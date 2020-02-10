@@ -37,6 +37,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FEATURE_ACCOUNT_MIGRATION = 'accountMigration';
 
     /**
+     * move notifications to a subfolder via sieve
+     *
+     * @var string
+     */
+    const FEATURE_ACCOUNT_MOVE_NOTIFICATIONS = 'accountMoveNotifications';
+
+    /**
      * auto save drafts
      *
      * @const string
@@ -234,6 +241,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     //_('Account Migration')
                     self::DESCRIPTION           => 'Shows context menu for system accounts to approve migration',
                     //_('Shows context menu for system accounts to approve migration')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
+                self::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS => [
+                    self::LABEL                 => 'Move notifications',
+                    //_('Move notifications')
+                    self::DESCRIPTION           => 'Move notifications to a subfolder via sieve',
+                    //_('Move notifications to a subfolder via sieve')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],

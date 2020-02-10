@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>13.0</version>
+    <version>13.1</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>26</version>
+            <version>27</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -183,6 +183,16 @@
                     <name>sieve_vacation_active</name>
                     <type>boolean</type>
                     <default>false</default>
+                </field>
+                <field>
+                    <name>sieve_notification_move</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>sieve_notification_move_folder</name>
+                    <type>text</type>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>sieve_notification_email</name>

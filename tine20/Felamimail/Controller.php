@@ -90,7 +90,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 /** @var Tinebase_Event_User_CreatedAccount $_eventObject */
                 if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
                         ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
-                    Felamimail_Controller_Account::getInstance()->addSystemAccount($_eventObject->account,
+                    Felamimail_Controller_Account::getInstance()->createSystemAccount($_eventObject->account,
                         $_eventObject->pwd);
                 }
                 break;
@@ -110,7 +110,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
         if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
             // this is sort of a wired flag to make addSystemAccount do its actual work
             $_account->imapUser = new Tinebase_Model_EmailUser(null, true);
-            Felamimail_Controller_Account::getInstance()->addSystemAccount($_account, $pwd);
+            Felamimail_Controller_Account::getInstance()->createSystemAccount($_account, $pwd);
         }
     }
 

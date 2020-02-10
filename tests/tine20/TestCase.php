@@ -1113,4 +1113,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             'dir'  => 'DESC',
         ]));
     }
+
+    /**
+     * @param Tinebase_Config_Abstract $config
+     * @param string $feature
+     * @param boolean $enable
+     */
+    protected function _setFeatureForTest(Tinebase_Config_Abstract $config, $feature, $enable = true)
+    {
+        $enabledFeatures = $config->get(Addressbook_Config::ENABLED_FEATURES);
+        $enabledFeatures[$feature] = $enable;
+        $config->set(Tinebase_Config::ENABLED_FEATURES, $enabledFeatures);
+
+        // TODO reset in tear down? use raii?
+    }
 }

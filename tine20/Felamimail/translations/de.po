@@ -605,6 +605,12 @@ msgstr "Filterregeln bearbeiten"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
+msgid "Auto-move notifications"
+msgstr "Automatisches Verschieben von Benachrichtigungen"
+
+msgid "Auto-move notifications folder"
+msgstr "Ordner für Benachrichtigungen"
+
 #: js/TreeContextMenu.js:177
 msgid "Mark Folder as read"
 msgstr "Ordner als gelesen markieren"

@@ -804,6 +804,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'last_modified_time',
             'last_modified_by',
             'sieve_notification_email',
+            'sieve_notification_move',
+            'sieve_notification_move_folder',
             'sent_folder',
             'trash_folder',
             'drafts_folder',
@@ -1011,6 +1013,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if ($updatedRecord->sieve_notification_email != $currentRecord->sieve_notification_email) {
             Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($updatedRecord->getId(),
                 $updatedRecord->sieve_notification_email);
+        }
+
+        if ($updatedRecord->sieve_notification_move !==
+            $currentRecord->sieve_notification_move
+            || $updatedRecord->sieve_notification_move_folder !==
+            $currentRecord->sieve_notification_move_folder
+        ) {
+            Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
         }
     }
     
@@ -1433,80 +1443,107 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     }
 
     /**
-     * add system account with tine user credentials
+     * add system account with tine20 user credentials
      *
      * @param Tinebase_Model_FullUser
+     * @param string $pwd
      * @return Felamimail_Model_Account|null
      */
-    public function addSystemAccount(Tinebase_Model_FullUser $_account, $pwd)
+    public function createSystemAccount(Tinebase_Model_FullUser $_account, $pwd)
     {
         $email = $this->_getAccountEmail($_account);
-        
-        // only create account if email address is set
-        if ($email && $_account->imapUser instanceof Tinebase_Model_EmailUser) {
-            if (null !== ($systemAccount = $this->getSystemAccount($_account->getId()))) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' system account "' . $systemAccount->name . '" already exists.');
-                return $systemAccount;
-            }
 
-            $oldACLValue = $this->doContainerACLChecks(false);
-            $oldRightValue = $this->doRightChecks(false);
-            $raii = new Tinebase_RAII(function() use ($oldACLValue, $oldRightValue) {
-                Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldACLValue);
-                Felamimail_Controller_Account::getInstance()->doRightChecks($oldRightValue);
-            });
-
-            $systemAccount = new Felamimail_Model_Account([
-                'type'      => Felamimail_Model_Account::TYPE_SYSTEM,
-                'user_id'   => $_account->getId(),
-            ], true);
-
-            $this->addSystemAccountConfigValues($systemAccount, $_account);
-
-            $this->_addFolderDefaults($systemAccount, true);
-
-            // create new account and update capabilities
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($systemAccount, 'create');
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), true));
-            }
-
-            try {
-                /** @var Felamimail_Model_Account $systemAccount */
-                $systemAccount = $this->create($systemAccount);
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
-                return null;
-            }
-
-            if (Felamimail_Config::getInstance()
-                    ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
-                $emailUser = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-                $systemAccount->user = $emailUser->getEmailUserName($_account);
-                $systemAccount->password = $pwd;
-                $this->_autoCreateSystemAccountFolders($systemAccount);
-            }
-            
-            // set as default account preference
-            Tinebase_Core::getPreference($this->_applicationName)->setValueForUser(
-                Felamimail_Preference::DEFAULTACCOUNT, $systemAccount->getId(), $_account->getId(), true);
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Created new system account "' . $systemAccount->name . '".');
-
-            // just for unused variable check:
-            unset($raii);
-
-            return $systemAccount;
-        } else {
+        if (! $email || ! $_account->imapUser instanceof Tinebase_Model_EmailUser) {
+            // only create account if email address is set
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Could not create system account for user ' . $_account->accountLoginName
                 . '. No email address or imapUser given.');
+            return null;
         }
 
-        return null;
+        if (null !== ($systemAccount = $this->getSystemAccount($_account->getId()))) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' system account "' . $systemAccount->name . '" already exists.');
+            return $systemAccount;
+        }
+
+        $oldACLValue = $this->doContainerACLChecks(false);
+        $oldRightValue = $this->doRightChecks(false);
+        $raii = new Tinebase_RAII(function() use ($oldACLValue, $oldRightValue) {
+            Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldACLValue);
+            Felamimail_Controller_Account::getInstance()->doRightChecks($oldRightValue);
+        });
+
+        $systemAccount = $this->_createSystemAccount($_account, $pwd);
+
+        // just for unused variable check:
+        unset($raii);
+
+        return $systemAccount;
+    }
+
+    /**
+     * finally create the new system account
+     *
+     * @param Tinebase_Model_FullUser $_user
+     * @param $pwd
+     * @return Felamimail_Model_Account|null
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _createSystemAccount(Tinebase_Model_FullUser $_user, $pwd)
+    {
+        $systemAccount = new Felamimail_Model_Account([
+            'type' => Felamimail_Model_Account::TYPE_SYSTEM,
+            'user_id' => $_user->getId(),
+        ], true);
+
+        $this->addSystemAccountConfigValues($systemAccount, $_user);
+
+        $this->_addFolderDefaults($systemAccount, true);
+
+        // create new account and update capabilities
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($systemAccount, 'create');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), true));
+        }
+
+        try {
+            /** @var Felamimail_Model_Account $systemAccount */
+            $systemAccount = $this->create($systemAccount);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+            return null;
+        }
+
+        // credentials needed for auto create folders & notification sieve script
+        $emailUser = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $systemAccount->user = $emailUser->getEmailUserName($_user);
+        $systemAccount->password = $pwd;
+
+        if (Felamimail_Config::getInstance()
+            ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
+            $this->_autoCreateSystemAccountFolders($systemAccount);
+        }
+
+        if (Felamimail_Config::getInstance()
+            ->featureEnabled(Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS)) {
+            $this->_autoCreateMoveNotifications($systemAccount);
+        }
+
+        // set as default account preference
+        Tinebase_Core::getPreference($this->_applicationName)->setValueForUser(
+            Felamimail_Preference::DEFAULTACCOUNT, $systemAccount->getId(), $_user->getId(), true);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Created new system account "' . $systemAccount->name . '".');
+
+        return $systemAccount;
     }
     
     /**
@@ -1555,6 +1592,28 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $folderName = $_account->{$systemFolderField};
                 $this->_createSystemFolder($_account, $folderName);
             }
+        } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
+        } catch (Exception $e) {
+            // skip creation at this point
+            Tinebase_Exception::log($e);
+        }
+    }
+
+    /**
+     * @param Felamimail_Model_Account $_account
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _autoCreateMoveNotifications(Felamimail_Model_Account $_account)
+    {
+        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
+        $_account->sieve_notification_move = true;
+        $_account->sieve_notification_move_folder = $translate->_('Notifications');
+
+        try {
+            Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($_account);
+            $this->_backend->update($_account);
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
         } catch (Exception $e) {
@@ -1850,6 +1909,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         return $filter;
     }
 
+    /**
+     * @param Tinebase_Model_FullUser $user
+     * @param Tinebase_Model_FullUser $oldUser
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public function updateSystemAccount(Tinebase_Model_FullUser $user, Tinebase_Model_FullUser $oldUser)
     {
         $checks = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);

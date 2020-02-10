@@ -140,13 +140,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             try {
                 $script = new Felamimail_Sieve_Backend_Sql($_accountId);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                $serverScript = $this->_getServerSieveScript($_accountId);
-                if ($serverScript !== NULL) {
-                    $script = $this->_createNewSieveScript($_accountId, $serverScript);
-                }
             }
         } else {
             $script = $this->_getServerSieveScript($_accountId);
+        }
+
+        if (! $script) {
+            $serverScript = $this->_getServerSieveScript($_accountId);
+            $script = $this->_createNewSieveScript($_accountId, $serverScript);
         }
         
         return $script;
@@ -165,26 +166,32 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $result = NULL;
         $scripts = $this->_backend->listScripts();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));
    
         foreach (array($this->_scriptName, $this->_oldScriptName) as $scriptNameToFetch) {
             if (count($scripts) > 0 && (isset($scripts[$scriptNameToFetch]) || array_key_exists($scriptNameToFetch, $scripts))) {
                 $scriptName = $scripts[$scriptNameToFetch]['name'];
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
                 
                 $script = $this->_backend->getScript($scriptName);
                 if ($script) {
                     if ($scriptNameToFetch == $this->_oldScriptName) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got old SIEVE script for migration.');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' Got old SIEVE script for migration.');
                     }
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Got SIEVE script: ' . $script);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__ . ' Got SIEVE script: ' . $script);
                     return new Felamimail_Sieve_Backend_Script($script);
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not get SIEVE script: ' . $scriptName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' Could not get SIEVE script: ' . $scriptName);
                 }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No relevant SIEVE scripts found.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' No relevant SIEVE scripts found.');
             }
         }
         
@@ -745,26 +752,26 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             Felamimail_Controller_Account::getInstance()->get($_accountId);
         }
 
+        $this->_updateScriptParts($_accountId, $_scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION);
+    }
+
+    protected function _updateScriptParts($_accountId, Tinebase_Record_RecordSet $_scriptParts, $type)
+    {
         if ($_scriptParts->count() !==
-                $_scriptParts->filter('type', Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION)->count()) {
+            $_scriptParts->filter('type', $type)->count()) {
             throw new Tinebase_Exception_UnexpectedValue('all script parts need to be of type '
-                . Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION);
+                . $type);
         }
         $_scriptParts->account_id = $_accountId;
 
         $script = $this->getSieveScript($_accountId);
-
-        if (null === $script) {
-            $script = $this->_createNewSieveScript($_accountId);
-        }
 
         try {
             $script->readScriptData();
         } catch(Tinebase_Exception_NotFound $tenf) {}
 
         $oldScripParts = $script->getScriptParts();
-        $oldScripParts->removeRecords($oldScripParts->filter('type',
-            Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION));
+        $oldScripParts->removeRecords($oldScripParts->filter('type', $type));
         $oldScripParts->merge($_scriptParts);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -775,6 +782,30 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $this->_putScript($_accountId, $script);
     }
 
+    /**
+     * set auto move notification script for account
+     *
+     * @param string|Felamimail_Model_Account $_account
+     */
+    public function updateAutoMoveNotificationScript($_account)
+    {
+        $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
+        if (isset($_account->sieve_notification_move)
+            && $_account->sieve_notification_move
+            && ! empty($_account->sieve_notification_move_folder)
+        ) {
+            $scriptParts->addRecord(new Felamimail_Model_Sieve_ScriptPart([
+                'account_id' => $_account,
+                'type' => Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION,
+                'script' => 'require ["fileinto", "mailbox"];
+if header :contains "X-Tine20-Type" "Notification" {
+    fileinto :create "' . $_account->sieve_notification_move_folder . '";
+}',
+                'name' => 'auto_move_notification',
+            ]));
+        }
+        $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION);
+    }
 
     /**
      * set adb list script for account
@@ -784,32 +815,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function setAdbListScript(Felamimail_Model_Account $_account, Felamimail_Model_Sieve_ScriptPart $_scriptPart)
     {
-        if ($_scriptPart->type !== Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST) {
-            throw new Tinebase_Exception_UnexpectedValue('script part need to be of type '
-                . Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST);
-        }
-        $_scriptPart->account_id = $_account->getId();
-
-        $script = $this->getSieveScript($_account);
-
-        if (null === $script) {
-            $script = $this->_createNewSieveScript($_account);
-        }
-
-        try {
-            $script->readScriptData();
-        } catch(Tinebase_Exception_NotFound $tenf) {}
-
-        $oldScripParts = $script->getScriptParts();
-        $oldScripParts->removeRecords($oldScripParts->filter('type',
-            Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST));
-        $oldScripParts->addRecord($_scriptPart);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated rules SIEVE script ' .
-                $this->_scriptName);
-        }
-
-        $this->_putScript($_account, $script);
+        $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
+        $scriptParts->addRecord($_scriptPart);
+        $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST);
     }
 }
