@@ -185,10 +185,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     . ' Got non-json response, last json error: ' . json_last_error_msg() . ' ' . get_class($e) . ' ' .
                     $e->getMessage());
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    foreach ($response as $r) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' response: ' . print_r($r->getResult(), true));
-                    }
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' response: ' . print_r($response, true));
                 }
             }
 
