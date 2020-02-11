@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -104,7 +104,6 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertTrue($this->_controller->fileExists($testPath), 'path created by mkdir not found');
         $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
         $this->assertEquals(1, $node->revision);
-        $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($this->_basePath)->hash);
         static::assertNull($node->deleted_time, 'deleted_time should be null');
         
         return $testPath;
@@ -309,7 +308,7 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertFalse($result);
     }
     
-    public function testCreateFile($_name = 'phpunit.txt')
+    public function testCreateFile($_name = 'phpunit.txt', $_data = null)
     {
         $testDir  = $this->testMkdir();
         $testFile = $_name;
@@ -321,10 +320,11 @@ class Tinebase_FileSystemTest extends TestCase
         $handle = $this->_controller->fopen($testPath, 'x');
         
         $this->assertEquals('resource', gettype($handle), 'opening file failed');
+
+        if (null === $_data) $_data = 'phpunit';
+        $written = fwrite($handle, $_data);
         
-        $written = fwrite($handle, 'phpunit');
-        
-        $this->assertEquals(7, $written);
+        $this->assertEquals(strlen($_data), $written);
         
         $this->_controller->fclose($handle);
         Tinebase_FileSystem::flushRefLogs();
@@ -845,7 +845,7 @@ class Tinebase_FileSystemTest extends TestCase
         $dirNode = $this->_controller->stat($testDir);
         /** @var Tinebase_Model_Tree_FileObject $dirObject */
         $dirObject = $fileObjectController->get($dirNode->object_id);
-        static::assertEquals(7, $dirObject->size, 'direcotry size wrong');
+        static::assertGreaterThanOrEqual(7, $dirObject->size, 'direcotry size wrong');
 
         $dirObject->size = 3;
         $fileObjectController->update($dirObject);
@@ -878,7 +878,8 @@ class Tinebase_FileSystemTest extends TestCase
         Tinebase_FileSystem_TestAVScanner::$desiredResult = null;
 
         $now = Tinebase_DateTime::now();
-        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile());
+        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile('avModeUnittest.txt',
+            'shalalalalablabla'));
         static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
         static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);
         static::assertTrue(!$node->is_quarantined, 'expect is_quarantined to be false');
@@ -893,7 +894,8 @@ class Tinebase_FileSystemTest extends TestCase
             Tinebase_FileSystem_AVScan_Result::RESULT_FOUND, 'unittest virus');
 
         $now = Tinebase_DateTime::now();
-        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile());
+        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile('avModeUnittestFound.txt',
+            'shubidubidulala'));
         static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
         static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);
         static::assertFalse(!$node->is_quarantined, 'expect is_quarantined to be true');
