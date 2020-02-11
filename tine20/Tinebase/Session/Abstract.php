@@ -279,7 +279,38 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                 }
                 
                 break;
-                
+
+            case 'RedisProxy':
+                if ($config->session) {
+                    $host = ($config->session->host) ? $config->session->host : 'localhost';
+                    $port = ($config->session->port) ? $config->session->port : 6379;
+                    if ($config->session && $config->session->prefix) {
+                        $prefix = $config->session->prefix;
+                    } else {
+                        $prefix = ($config->database && $config->database->tableprefix) ? $config->database->tableprefix : 'tine20';
+                    }
+                    $prefix = $prefix . '_SESSION_';
+
+                    $redisProxy = new Zend_RedisProxy();
+                    if (!$redisProxy->connect($host, $port)) {
+                        throw new Tinebase_Exception_Backend('could not connect to session redis');
+                    }
+                    $redisSaveHandler = new Tinebase_Session_SaveHandler_Redis($redisProxy, $maxLifeTime, $prefix);
+                    $redisSaveHandler->setRedisLogDelegator(function($exception) {
+                        Tinebase_Exception::log($exception);
+                    });
+                    Zend_Session::setOptions([
+                        'gc_maxlifetime' => $maxLifeTime,
+                    ]);
+                    Zend_Session::setSaveHandler($redisSaveHandler);
+                } else {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . " Unable to setup redis proxy session backend - config missing");
+                    return;
+                }
+
+                break;
+
             case 'Redis':
                 if ($config->session) {
                     $host = ($config->session->host) ? $config->session->host : 'localhost';
