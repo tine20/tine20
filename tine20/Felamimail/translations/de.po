@@ -1417,6 +1417,9 @@ msgstr "Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese N
 msgid "PGP encrypted Message"
 msgstr "PGP verschlüsselte Nachricht"
 
+msgid "Encrypted Message"
+msgstr "Verschlüsselte Nachricht"
+
 #: js/Model.js:25
 msgid "Shared System Account"
 msgstr "Gemeinsames Systemkonto"
