@@ -99,4 +99,24 @@ class Tinebase_ActionQueue_Backend_Test implements Tinebase_ActionQueue_Backend_
     {
         return static::$_hasAsyncBackend;
     }
+
+    public function getDaemonStructSize()
+    {
+        return 0;
+    }
+
+    public function getQueueKeys()
+    {
+        return  [];
+    }
+
+    public function getDaemonStructKeys()
+    {
+        return [];
+    }
+
+    public function iterateAllData()
+    {
+        return false;
+    }
 }

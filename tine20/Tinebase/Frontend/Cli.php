@@ -1256,6 +1256,190 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             . ($now - $lastDurationUpdate);
                     }
 
+                    if (null === ($queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_STATE), true))) {
+                        $queueState = [
+                            'lastFullCheck' => 0,
+                            'lastSizeOver10k' => false,
+                            'lastMissingQueueKeys' => [],
+                            'lastMissingDaemonKeys' => [],
+                            'lastLRSizeOver10k' => false,
+                            'lastLRMissingQueueKeys' => [],
+                            'lastLRMissingDaemonKeys' => [],
+                        ];
+                    }
+
+                    $queueSize = $actionQueue->getQueueSize();
+                    if (null === $warn && $actionQueue->getDaemonStructSize() > 12) {
+                        $warn = 'daemon struct size > 12';
+                    }
+                    $actionLRQueue = Tinebase_ActionQueueLongRun::getInstance();
+                    $queueSizeLR = $actionLRQueue->getQueueSize();
+                    if (null === $warn && $actionLRQueue->getDaemonStructSize() > 2) {
+                        $warn = 'LR daemon struct size > 2';
+                    }
+
+                    // last full check older than one hour
+                    if (null === $warn && time() - $queueState['lastFullCheck'] > 3600) {
+                        do {
+
+                            $missingQueueKeys = [];
+                            $missingDaemonKeys = [];
+                            $err = null;
+                            // go through queue and daemon struct and check timestamps in data
+                            // remember stuff we did not find
+                            foreach ($actionQueue->getQueueKeys() as $key) {
+                                if (empty($data = $actionQueue->getData($key))) {
+                                    if (isset($queueState['lastMissingQueueKeys'][$key])) {
+                                        if (null === $warn) {
+                                            $warn = 'queue contains keys which are not present in data';
+                                        }
+                                    } else {
+                                        $missingQueueKeys[$key] = true;
+                                    }
+                                } else {
+                                    if (($timediff = time() - $data['time']) > 15 * 60) {
+                                        if (null === $warn) {
+                                            $warn = 'data contains data older than 15 minutes';
+                                        }
+                                    }
+                                    if ($timediff > 60 * 60) {
+                                        $err = 'data contains data older than 1 hour';
+                                    }
+                                }
+                            }
+                            $queueState['lastMissingQueueKeys'] = $missingQueueKeys;
+
+                            foreach ($actionQueue->getDaemonStructKeys() as $key) {
+                                if (empty($data = $actionQueue->getData($key))) {
+                                    if (isset($queueState['lastMissingDaemonKeys'][$key])) {
+                                        if (null === $warn) {
+                                            $warn = 'daemon contains keys which are not present in data';
+                                        }
+                                    } else {
+                                        $missingDaemonKeys[$key] = true;
+                                    }
+                                } else {
+                                    if (($timediff = time() - $data['time']) > 15 * 60) {
+                                        if (null === $warn) {
+                                            $warn = 'data contains data older than 15 minutes';
+                                        }
+                                    }
+                                    if ($timediff > 60 * 60) {
+                                        $err = 'data contains data older than 1 hour';
+                                    }
+                                }
+                            }
+                            $queueState['lastMissingDaemonKeys'] = $missingDaemonKeys;
+
+                            // go through data keys and check timestmaps
+                            while (false !== ($data = $actionQueue->iterateAllData())) {
+                                foreach ($data as $jobId) {
+                                    if (!empty($job = $actionQueue->getData($jobId))) {
+                                        if (($timediff = time() - $job['time']) > 15 * 60) {
+                                            if (null === $warn) {
+                                                $warn = 'data contains data older than 15 minutes';
+                                            }
+                                        }
+                                        if ($timediff > 60 * 60) {
+                                            $err = 'data contains data older than 1 hour';
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($queueSize > 10000) {
+                                if (null === $warn && $queueState['lastSizeOver10k']) {
+                                    $warn = 'at least two consecutive full checks with queue size > 10k';
+                                }
+                                $queueState['lastSizeOver10k'] = true;
+                            } else {
+                                $queueState['lastSizeOver10k'] = false;
+                            }
+
+
+                            // do LR
+
+                            $missingLRQueueKeys = [];
+                            $missingLRDaemonKeys = [];
+                            // go through queue and daemon struct and check timestamps in data
+                            // remember stuff we did not find
+                            foreach ($actionLRQueue->getQueueKeys() as $key) {
+                                if (empty($data = $actionLRQueue->getData($key))) {
+                                    if (isset($queueState['lastLRMissingQueueKeys'][$key])) {
+                                        if (null === $warn) {
+                                            $warn = 'LR queue contains keys which are not present in data';
+                                        }
+                                    } else {
+                                        $missingLRQueueKeys[$key] = true;
+                                    }
+                                } else {
+                                    if (($timediff = time() - $data['time']) > 60 * 60) {
+                                        if (null === $warn) {
+                                            $warn = 'LR data contains data older than 60 minutes';
+                                        }
+                                    }
+                                    if ($timediff > 5 * 60 * 60) {
+                                        $err = 'LR data contains data older than 5 hour';
+                                    }
+                                }
+                            }
+                            $queueState['lastLRMissingQueueKeys'] = $missingLRQueueKeys;
+
+                            foreach ($actionLRQueue->getDaemonStructKeys() as $key) {
+                                if (empty($data = $actionLRQueue->getData($key))) {
+                                    if (isset($queueState['lastLRMissingDaemonKeys'][$key])) {
+                                        if (null === $warn) {
+                                            $warn = 'LR daemon contains keys which are not present in data';
+                                        }
+                                    } else {
+                                        $missingLRDaemonKeys[$key] = true;
+                                    }
+                                } else {
+                                    if (($timediff = time() - $data['time']) > 60 * 60) {
+                                        if (null === $warn) {
+                                            $warn = 'LR data contains data older than 60 minutes';
+                                        }
+                                    }
+                                    if ($timediff > 5 * 60 * 60) {
+                                        $err = 'LR data contains data older than 5 hour';
+                                    }
+                                }
+                            }
+                            $queueState['lastLRMissingDaemonKeys'] = $missingLRDaemonKeys;
+
+                            // go through data keys and check timestmaps
+                            while (false !== ($data = $actionLRQueue->iterateAllData())) {
+                                foreach ($data as $jobId) {
+                                    if (!empty($job = $actionLRQueue->getData($jobId))) {
+                                        if (($timediff = time() - $job['time']) > 60 * 60) {
+                                            if (null === $warn) {
+                                                $warn = 'LR data contains data older than 60 minutes';
+                                            }
+                                        }
+                                        if ($timediff > 5 * 60 * 60) {
+                                            $err = 'data contains data older than 5 hour';
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($queueSizeLR > 10000) {
+                                if (null === $warn && $queueState['lastLRSizeOver10k']) {
+                                    $warn = 'LR at least two consecutive full checks with queue size > 10k';
+                                }
+                                $queueState['lastLRSizeOver10k'] = true;
+                            } else {
+                                $queueState['lastLRSizeOver10k'] = false;
+                            }
+
+                            $queueState['lastFullCheck'] = time();
+                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode($queueState));
+
+                            if (null !== $err) throw new Tinebase_Exception($err);
+                        } while (false);
+                    }
 
                     if (null !== $warn) {
                         $message = 'QUEUE WARN: ' . $warn;
@@ -1263,7 +1447,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     } else {
                         $message = 'QUEUE OK';
                     }
-                    $queueSize = $actionQueue->getQueueSize();
+
+
                     $message .= ' | size=' . $queueSize . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration .
                         ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
                 } catch (Exception $e) {
