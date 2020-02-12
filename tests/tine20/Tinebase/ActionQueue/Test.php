@@ -37,7 +37,10 @@ class Tinebase_ActionQueue_Test extends TestCase
         $config->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} = true;
         $config->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_BACKEND} = 'Test';
 
+        Tinebase_ActionQueue::destroyInstance();
+        Tinebase_ActionQueueLongRun::destroyInstance();
         $this->_uit = Tinebase_ActionQueue::getInstance('Test');
+        Tinebase_ActionQueueLongRun::getInstance('Test');
     }
 
     protected function tearDown()
@@ -49,6 +52,7 @@ class Tinebase_ActionQueue_Test extends TestCase
         parent::tearDown();
 
         Tinebase_ActionQueue::destroyInstance();
+        Tinebase_ActionQueueLongRun::destroyInstance();
     }
 
     protected function checkMonitoringCheckQueueOutput($expectedOutput, $expectedReturn)
@@ -138,5 +142,35 @@ class Tinebase_ActionQueue_Test extends TestCase
         $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE, time() - 850);
         $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val,
                 'QUEUE WARN: last job id change > ' . $config->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - 8') === 0;}, 1);
+        $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE, time());
+
+        Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 13;
+        $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val,
+            'QUEUE WARN: daemon struct size > 12 ') === 0;}, 1);
+        Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 0;
+
+        Tinebase_ActionQueue_Backend_Test::$_daemonStructSizeCall = function() {
+            static $a = 0;
+            if (++$a > 1) Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 3;
+        };
+        $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val,
+                'QUEUE WARN: LR daemon struct size > 2 ') === 0;}, 1);
+        Tinebase_ActionQueue_Backend_Test::$_daemonStructSizeCall = null;
+        Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 0;
+
+
+        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode(null));
+        Tinebase_ActionQueue_Backend_Test::$_queueKeys = ['a'];
+        $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val, 'QUEUE OK') === 0;}, 0);
+        $queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_STATE), true);
+        static::assertArrayHasKey('lastMissingQueueKeys', $queueState);
+        static::assertSame(['a' => true], $queueState['lastMissingQueueKeys']);
+        $queueState['lastFullCheck'] = 0;
+        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode($queueState));
+        $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val,
+                'QUEUE WARN: queue contains keys which are not present in data') === 0;}, 1);
     }
 }
