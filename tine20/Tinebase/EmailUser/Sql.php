@@ -606,6 +606,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             $recordData['instancename'] = $this->_config['instanceName'];
             $recordData['domain'] = empty($this->_config['domain']) ? $recordData['instancename'] : $this->_config['domain'];
             $recordData['username'] = str_replace($fromInstance, $recordData['instancename'], $recordData['username']);
+            $recordData['loginname'] = str_replace($fromInstance, $recordData['instancename'], $recordData['loginname']);
             $recordData['home'] = str_replace($fromInstance, $recordData['instancename'], $recordData['home']);
             try {
                 $this->_db->insert($this->_userTable, $recordData);
