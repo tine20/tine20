@@ -599,7 +599,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     flagRenderer: function(value, metadata, record) {
         var icons = [],
-            result = '';
+            result = '',
+            i18n = Tine.Tinebase.appMgr.get('Felamimail').i18n;
             
         if (record.hasFlag('\\Answered')) {
             icons.push({src: 'images/icon-set/icon_email_answer.svg', qtip: i18n._('Answered')});
@@ -610,6 +611,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (record.hasFlag('Tine20')) {
             const icon = record.getTine20Icon();
             icons.push({src: icon, qtip: i18n._('Tine20')});
+        }
+        if (record.get('content_type') === 'multipart/encrypted') {
+            icons.push({src: 'images/icon-set/icon_lock.svg', qtip: i18n._('Encrypted Message')});
         }
 
         Ext.each(icons, function(icon) {
