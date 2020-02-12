@@ -107,7 +107,7 @@
     "zendframework/zend-diactoros": "^1.6",
     "zendframework/zend-http": "2.5.*",
     "zendframework/zend-stratigility": "^2.1",
-    "zendframework/zendframework1": "1.12.20pl37 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl38 as 1.12.20"
   },
   "require-dev": {
     "phing/phing": "2.16.*",

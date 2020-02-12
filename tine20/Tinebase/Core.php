@@ -584,20 +584,7 @@ class Tinebase_Core
     {
         if (! Tinebase_Session::isStarted()) {
             Tinebase_Session::setSessionBackend();
-            $tries = 0;
-            while (true) {
-                try {
-                    Zend_Session::start();
-                    break;
-                } catch (RedisException $re) {
-                    if (++$tries < 5) {
-                        // wait 100ms on the redis
-                        usleep(100000);
-                    } else {
-                        throw $re;
-                    }
-                }
-            }
+            Zend_Session::start();
         }
 
         $coreSession = Tinebase_Session::getSessionNamespace();
