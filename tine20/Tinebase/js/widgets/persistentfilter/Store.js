@@ -41,16 +41,36 @@ Tine.widgets.persistentfilter.store.getPersistentFilterStore = function() {
             
             // create store
             var s = Tine.widgets.persistentfilter.store.persistentFilterStore = new Tine.widgets.persistentfilter.store.PersistentFilterStore({
-                fields: fields
+                fields: fields,
+                listeners: {
+                    add: (store, records, idx) => {
+                        let filters = Tine.Tinebase.registry.get('persistentFilters');
+                        _.set(filters, 'results', _.concat(_.get(filters, 'results'), _.map(records,
+                            'data')));
+                        _.set(filters, 'totalcount', _.get(filters, 'totalcount') +1);
+
+                        Tine.Tinebase.registry.set("persistentFilters", filters);
+                    },
+                    remove: (store, record, idx) => {
+                        let filters = Tine.Tinebase.registry.get('persistentFilters');
+                        _.set(filters, 'results', _.pull(_.get(filters, 'results'), _.find(_.get(filters,
+                            'results'), {id: record.id})));
+                        _.set(filters, 'totalcount', _.get(filters, 'totalcount') -1);
+                        Tine.Tinebase.registry.set("persistentFilters", filters);
+                    }
+                }
             });
             
             // populate store
             var persistentFiltersData = Tine.Tinebase.registry.get("persistentFilters").results;
 
+            s.suspendEvents();
             Ext.each(persistentFiltersData, function(data,index) {
                 var filterRecord = new Tine.widgets.persistentfilter.model.PersistentFilter(data);
                 s.add(filterRecord);
             }, this);
+            s.resumeEvents();
+
         } else {
             // TODO test this in IE!
             var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
