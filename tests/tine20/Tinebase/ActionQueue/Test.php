@@ -107,6 +107,8 @@ class Tinebase_ActionQueue_Test extends TestCase
         $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val, 'QUEUE FAIL: ' .
             Tinebase_Exception::class . ' - last duration update > 3600 sec - 36') === 0;}, 2);
 
+        $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE, time());
+        $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION, 59);
         $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE,
             time() - 390);
         $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val,

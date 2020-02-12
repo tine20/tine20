@@ -1120,6 +1120,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'action'    => 'Tinebase.measureActionQueue',
                 'params'    => [microtime(true)]
             ]);
+            Tinebase_ActionQueueLongRun::getInstance()->executeAction([
+                'action'    => 'Tinebase.measureActionQueueLongRun',
+                'params'    => [microtime(true)]
+            ]);
         }
         return true;
     }
@@ -1139,6 +1143,24 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION, sprintf('%.3f', $duration));
             Tinebase_Application::getInstance()->setApplicationState('Tinebase',
                 Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE, $now);
+        }
+    }
+
+    /**
+     * @param float $start
+     */
+    public function measureActionQueueLongRun($start)
+    {
+        $end = microtime(true);
+        $duration = $end - $start;
+        $now = time();
+        $lastUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE);
+        if ($now - intval($lastUpdate) > 58) {
+            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION, sprintf('%.3f', $duration));
+            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE, $now);
         }
     }
 
