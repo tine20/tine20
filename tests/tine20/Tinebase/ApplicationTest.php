@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -462,6 +462,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_Tag::class,
                 Tinebase_Model_TagRight::class,
                 Tinebase_Model_TempFile::class,
+                Tinebase_Model_Tree_FileLocation::class,
                 Tinebase_Model_Tree_FileObject::class,
                 Tinebase_Model_Tree_Node::class,
                 Tinebase_Model_Tree_RefLog::class,

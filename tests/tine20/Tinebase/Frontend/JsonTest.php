@@ -155,6 +155,58 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $list = $this->_instance->getCountryList();
         $this->assertTrue(count($list['results']) > 200);
     }
+
+    public function testRestoreRevision()
+    {
+        if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            static::markTestSkipped('modlog not active');
+        }
+
+        Tinebase_FileSystem::getInstance()->mkdir('/Filemanager/folders/shared/unittest');
+        file_put_contents('tine20:///Filemanager/folders/shared/unittest/test.txt', 'data1');
+        $node1 = Tinebase_FileSystem::getInstance()->stat('Filemanager/folders/shared/unittest/test.txt');
+
+        file_put_contents('tine20:///Filemanager/folders/shared/unittest/test.txt', 'data2');
+        static::assertSame('data2', file_get_contents('tine20:///Filemanager/folders/shared/unittest/test.txt'));
+        $node2 = Tinebase_FileSystem::getInstance()->stat('Filemanager/folders/shared/unittest/test.txt');
+
+        $result = $this->_instance->restoreRevision([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE      => Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
+            Tinebase_Model_Tree_FileLocation::FLD_FM_PATH   => '/shared/unittest/test.txt',
+            Tinebase_Model_Tree_FileLocation::FLD_REVISION  => (int)$node2->revision - 1,
+        ]);
+        $node3 = Tinebase_FileSystem::getInstance()->stat('Filemanager/folders/shared/unittest/test.txt');
+
+        static::assertSame(['success' => true], $result);
+        static::assertSame($node1->hash, $node3->hash, 'hash mismatch');
+        static::assertSame((int)$node1->revision + 2, (int)$node3->revision, 'revision not as expected');
+        static::assertSame('data1', file_get_contents('tine20:///Filemanager/folders/shared/unittest/test.txt'));
+    }
+
+    public function testRestoreRevisionNodeIdFail()
+    {
+        if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            static::markTestSkipped('modlog not active');
+        }
+
+        Tinebase_FileSystem::getInstance()->mkdir('/Filemanager/folders/shared/unittest');
+        file_put_contents('tine20:///Filemanager/folders/shared/unittest/test.txt', 'data1');
+        $node1 = Tinebase_FileSystem::getInstance()->stat('Filemanager/folders/shared/unittest/test.txt');
+
+        file_put_contents('tine20:///Filemanager/folders/shared/unittest/test.txt', 'data2');
+        static::assertSame('data2', file_get_contents('tine20:///Filemanager/folders/shared/unittest/test.txt'));
+        $node2 = Tinebase_FileSystem::getInstance()->stat('Filemanager/folders/shared/unittest/test.txt');
+
+        static::setExpectedException(Tinebase_Exception_UnexpectedValue::class,
+            Tinebase_Model_Tree_FileLocation::FLD_FM_PATH . ' and ' . Tinebase_Model_Tree_FileLocation::FLD_NODE_ID .
+            ' mismatch');
+        $this->_instance->restoreRevision([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE      => Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
+            Tinebase_Model_Tree_FileLocation::FLD_FM_PATH   => '/shared/unittest/test.txt',
+            Tinebase_Model_Tree_FileLocation::FLD_REVISION  => (int)$node2->revision - 1,
+            Tinebase_Model_Tree_FileLocation::FLD_NODE_ID   => 'shooo',
+        ]);
+    }
     
     /**
      * test get translations
