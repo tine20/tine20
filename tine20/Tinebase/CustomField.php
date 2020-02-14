@@ -869,7 +869,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     * @todo this needs to clear in a more efficient way
     */
     public function clearCacheForConfig(/** @noinspection PhpUnusedParameterInspection */
-        Tinebase_Model_CustomField_Config $record)
+        Tinebase_Model_CustomField_Config $record = null)
     {
         $this->_clearCache();
         
