@@ -4,7 +4,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Frederic Heihoff <heihoff@sh-systems.eu>
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -90,14 +90,15 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 vtype: 'email',
                                 maxLength: 255,
                                 allowBlank: true,
-                                disabled: this.record.get('type') == 'group'
+                                disabled: this.record.get('type') === 'group'
                             }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
                                 columnWidth: 0.75,
                                 fieldLabel: this.app.i18n._('List type'),
                                 name: 'list_type',
                                 app: 'Addressbook',
                                 keyFieldName: 'listType',
-                                value: ''
+                                value: '',
+                                hidden: this.app.featureEnabled('featureMailinglist')
                             }), {
                                 columnWidth: 0.25,
                                 xtype: 'checkbox',
