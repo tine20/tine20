@@ -789,6 +789,17 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function updateAutoMoveNotificationScript($_account)
     {
+        // get account user and check forward_only - disable sieve if forward_only address
+        if ($_account->user_id) {
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserById($_account->user_id);
+                if (isset($user->smtpUser) && $user->emailForwardOnly) {
+                    $_account->sieve_notification_move = false;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
+        }
+
         $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
         if (isset($_account->sieve_notification_move)
             && $_account->sieve_notification_move
