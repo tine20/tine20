@@ -506,11 +506,18 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
     }
 
+    /**
+     * check list email address
+     *
+     * - throw exception if another system user or group is found with this address
+     *   or the domain mismatches
+     *
+     * @param $email
+     * @throws Tinebase_Exception_Backend_Database
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     protected function _checkEmailAddress($email)
     {
-        // TODO check email accounts db for duplicates?
-        // TODO check system accounts + groups?
-
         // already used (check contacts & lists)
         $backendAndFilter = [
             'contact' => [
@@ -518,6 +525,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 'filter' => Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                     Addressbook_Model_Contact::class, [
                     ['field' => 'email_query', 'operator' => 'equals', 'value' => $email],
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_USER],
                 ])
             ],
             'list' => [
@@ -525,6 +533,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 'filter' => Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                     Addressbook_Model_List::class, [
                     ['field' => 'email', 'operator' => 'equals', 'value' => $email],
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP],
                 ])
             ],
         ];
