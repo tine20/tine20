@@ -797,11 +797,11 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $scriptParts->addRecord(new Felamimail_Model_Sieve_ScriptPart([
                 'account_id' => $_account,
                 'type' => Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION,
-                'script' => 'require ["fileinto", "mailbox"];
-if header :contains "X-Tine20-Type" "Notification" {
+                'script' => 'if header :contains "X-Tine20-Type" "Notification" {
     fileinto :create "' . $_account->sieve_notification_move_folder . '";
 }',
                 'name' => 'auto_move_notification',
+                'requires' => ['"fileinto"', '"mailbox"'],
             ]));
         }
         $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION);

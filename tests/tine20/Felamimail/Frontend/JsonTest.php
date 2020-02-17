@@ -24,21 +24,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     protected $_pathsToDelete = array();
 
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        // feature is off by default and enabled only for specific tests
-        $this->_setFeatureForTest(Felamimail_Config::getInstance(),
-            Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS, false);
-    }
-
     protected function tearDown()
     {
         // vfs cleanup
