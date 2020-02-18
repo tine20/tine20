@@ -98,6 +98,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
     {
         $this->_handleCompleted($_task);
         $_task->originator_tz = $_task->originator_tz ? $_task->originator_tz : Tinebase_Core::getUserTimezone();
+        $_task->priority = $_task->priority ? $_task->priority : Tasks_Model_Priority::NORMAL;
         
         $task = parent::create($_task, $_duplicateCheck);
         
