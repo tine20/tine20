@@ -141,6 +141,9 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
                 continue;
             }
 
+            // we may have slept (sort of a spinning sleep though) for a looong time, better reconnect db
+            Tinebase_Core::getDb()->closeConnection();
+
             // check for maintenance mode
             Tinebase_Core::getConfig()->clearMemoryCache(Tinebase_Config::MAINTENANCE_MODE);
             while (Tinebase_Core::inMaintenanceModeAll()) {
