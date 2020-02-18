@@ -544,9 +544,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         try {
             $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
         } catch (Tinebase_Exception_UnexpectedValue $teuv) {
-            Tinebase_Exception::log($teuv);
-            header('HTTP/1.1 404 Not Found');
-            return;
+            $this->_handleFailure(404);
         }
 
         $serverETag = sha1($image->blob . $width . $height . $ratiomode);
@@ -565,17 +563,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header("HTTP/1.0 304 Not Modified");
             header('Content-Length: 0');
         } else {
-            #$cache = Tinebase_Core::getCache();
-            
-            #if ($cache->test($serverETag) === true) {
-            #    $image = $cache->load($serverETag);
-            #} else {
-                if ($width != -1 && $height != -1) {
-                    Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
-                }
-            #    $cache->save($image, $serverETag);
-            #}
-        
+            if ($width != -1 && $height != -1) {
+                Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
+            }
+
             header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
             header('Content-Type: '. $image->mime);
             header('Etag: "' . $serverETag . '"');

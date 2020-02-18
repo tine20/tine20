@@ -35,6 +35,30 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     singleSelect: true,
 
     /**
+     * allow creation of new files
+     * @cfg {Boolean} allowCreateNew
+     */
+    allowCreateNew: false,
+
+    /**
+     * check if file exists on file creation
+     * @cfg {Boolean} checkOverwrite
+     */
+    checkOverwrite: true,
+
+    /**
+     * initial fileName for new files
+     * @cfg {String} initialNewFileName
+     */
+    initialNewFileName: '',
+
+    /**
+     * initial path
+     * @cfg {String} initialPath
+     */
+    initialPath: null,
+
+    /**
      * A constraint allows to alter the selection behaviour of the picker, for example only allow to select files.
      *
      * By default, file and folder are allowed to be selected, the concrete implementation needs to define it's purpose
@@ -73,7 +97,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             ]
         }];
 
-        this.on('apply', function() {
+        this.on('apply', async function() {
             this.fireEvent('selected', this.nodes);
         }, this);
 
@@ -97,6 +121,38 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         Tine.Filemanager.FilePickerDialog.superclass.initComponent.call(this);
     },
 
+    onButtonApply: async function() {
+        if (this.allowCreateNew && this.checkOverwrite && !await this.assertCheckOverwrite(this.nodes[0])) {
+            return;
+        }
+
+        Tine.Filemanager.FilePickerDialog.superclass.onButtonApply.call(this);
+    },
+
+    assertCheckOverwrite: async function(node) {
+        return new Promise((resolve) => {
+            const loadMask = new Ext.LoadMask(this.getEl(), {
+                msg: this.app.i18n._('Checking ...'),
+                removeMask: true
+            });
+            loadMask.show();
+
+            Tine.Filemanager.searchNodes([
+                {field: 'path', operator: 'equals', value: node.get('path')}
+            ]).then((results) => {
+                loadMask.hide();
+                const title = i18n._('Overwrite Existing File?');
+                const msg = i18n._('Do you really want to overwrite the selected file?');
+                Ext.MessageBox.confirm(title, msg, (btn) => {
+                    resolve(btn === 'yes');
+                });
+            }).catch(() => {
+                // NOTE: path filter throws an error in not existent
+                resolve(true);
+            })
+        });
+    },
+
     getEventData: function () {
         return this.nodes;
     },
@@ -106,16 +162,21 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      * @returns {*}
      */
     getFilePicker: function () {
-        var picker = new Tine.Filemanager.FilePicker({
-            requiredGrants: this.requiredGrants,
-            constraint: this.constraint,
-            singleSelect: this.singleSelect
-        });
+        if (! this.filePicker) {
+            this.filePicker = new Tine.Filemanager.FilePicker({
+                requiredGrants: this.requiredGrants,
+                constraint: this.constraint,
+                singleSelect: this.singleSelect,
+                allowCreateNew: this.allowCreateNew,
+                initialNewFileName: this.initialNewFileName,
+                initialPath: this.initialPath
+            });
 
-        picker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
-        picker.on('invalidNodeSelected', this.onInvalidNodesSelected.createDelegate(this));
+            this.filePicker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
+            this.filePicker.on('invalidNodeSelected', this.onInvalidNodesSelected.createDelegate(this));
+        }
 
-        return picker;
+        return this.filePicker;
     },
 
     /**
@@ -144,10 +205,9 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      *
      * @returns {null}
      */
-    openWindow: function () {
-        this.window = Tine.WindowFactory.getWindow({
+    openWindow: function (config) {
+        this.window = Tine.WindowFactory.getWindow(_.assign({
             title: this.windowTitle,
-            closeAction: 'close',
             modal: true,
             width: 550,
             height: 500,
@@ -156,7 +216,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             items: [
                 this
             ]
-        });
+        }, config));
 
         return this.window;
     }

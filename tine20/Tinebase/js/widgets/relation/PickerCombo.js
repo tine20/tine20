@@ -38,6 +38,16 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
     app: null,
 
     /**
+     * config spec for additionalFilters
+     *
+     * @type: {object} e.g.
+     * additionalFilterConfig: {config: { 'name': 'configName', 'appName': 'myApp'}}
+     * additionalFilterConfig: {preference: {'appName': 'myApp', 'name': 'preferenceName}}
+     * additionalFilterConfig: {favorite: {'appName': 'myApp', 'id': 'favoriteId', 'name': 'optionallyuseaname'}}
+     */
+    additionalFilterSpec: null,
+
+    /**
      * initializes the component
      */
     initComponent: function() {

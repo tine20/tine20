@@ -239,6 +239,24 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         }
         
         return (this.constructor.hasField('last_modified_time')) ? record.get('last_modified_time') > this.get('last_modified_time') : false;
+    },
+
+    /**
+     * update complete record with data from given record
+     *
+     * @param record
+     */
+    update: function(record) {
+        record = _.get(record, 'data', false) ? record :
+            Tine.Tinebase.data.Record.setFromJson(record, this.constructor);
+
+        this.beginEdit();
+        this.fields.each((field) => {
+            let newValue = Tine.Tinebase.common.assertComparable(record.get(field.name));
+            Tine.Tinebase.common.assertComparable(_.get(this, 'data.' + field.name));
+            this.set(field.name, newValue);
+        }, this);
+        this.endEdit();
     }
 });
 
@@ -423,6 +441,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     },
     
     get: function(appName, modelName) {
+        if (! appName) return;
         if (Ext.isFunction(appName.getMeta)) {
             return appName;
         }
@@ -432,7 +451,18 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
         if (appName.appName) {
             appName = appName.appName;
         }
-            
+
+        if (_.isString(appName) && !modelName) {
+            appName = appName.replace(/^Tine[._]/, '')
+                .replace(/[._]Model[._]/, '.');
+
+            let appPart = appName.match(/^.+\./);
+            if (appPart) {
+                modelName = appName.replace(appPart[0], '')
+                appName = appPart[0].replace(/\.$/, '');
+            }
+        }
+
         if (! Ext.isString(appName)) {
             throw new Ext.Error('appName must be a string');
         }
@@ -465,14 +495,17 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         totalProperty: 'totalcount'
     }, recordClass);
 
-    var recordData = {results: [
+    var recordData = {results: _.compact([
             Ext.isString(json) ? Ext.decode(json) : json
-        ]},
+        ])},
         data = jsonReader.readRecords(recordData),
         record = data.records[0],
-        recordId = record.get(record.idProperty);
+        recordId = _.get(record, 'data.' + _.get(record, 'idProperty'), Tine.Tinebase.data.Record.generateUID());
 
-    record.id = recordId ? recordId : Tine.Tinebase.data.Record.generateUID();
+    if (! record) {
+        record = new recordClass({}, recordId);
+    }
+    record.id = recordId;
 
     return record;
 };

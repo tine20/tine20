@@ -50,7 +50,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 13,
+        'version'           => 14,
         'containerName'     => 'Timeaccount',
         'containersName'    => 'Timeaccounts',
         'recordName'        => 'Timeaccount',
@@ -457,7 +457,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
     */
     public function loadBillables(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate)
     {
-        $this->_referenceDate = $date;
+        $this->_referenceDate = clone $date;
         $this->_billables = array();
         
         if (intval($this->budget) > 0) {

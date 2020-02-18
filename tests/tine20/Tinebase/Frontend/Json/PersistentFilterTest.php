@@ -52,8 +52,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
      */
     public function testSaveFilter($filterData = NULL)
     {
-        $exampleFilterData = $filterData ? $filterData : self::getPersistentFilterData();
-        $savedFilterData = $this->_uit->savePersistentFilter(self::getPersistentFilterData());
+        $filterData = $filterData ? $filterData : self::getPersistentFilterData();
+        $exampleFilterData = $filterData;
+        $savedFilterData = $this->_uit->savePersistentFilter($filterData);
         
         $this->_assertSavedFilterData($exampleFilterData, $savedFilterData);
         $this->assertTrue(! empty($savedFilterData['grants']));
@@ -63,6 +64,53 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         }
         
         return $savedFilterData;
+    }
+
+    /*
+     * save customfield site!
+     */
+    function testSaveCustomField()
+    {
+        $user = Tinebase_Core::getUser();
+
+        $cfCfg = $this->_createCustomField('YomiName', Calendar_Model_Event::class, 'record');
+
+        $contact = Addressbook_Controller_Contact::getInstance()->getAll()->getFirstRecord();
+
+        $filter = [
+            'name' => 'PHPUnit testFilter',
+            'description' => 'a test filter created by PHPUnit',
+            'account_id' => $user->getId(),
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model' => Calendar_Model_EventFilter::class,
+            'filters' => [[
+                'field' => 'customfield',
+                'operator' => 'AND',
+                'value' => [
+                    'cfId' => $cfCfg->getId(),
+                    'value' => [[
+                        'field' => ':id',
+                        'operator' => 'in',
+                        'value' => [['id' => $contact->getId()]]
+                    ]]
+                ]
+            ]]
+        ];
+
+        $savedFilterData = $this->_uit->savePersistentFilter($filter);
+
+        $filterData = array(
+            array('field' => 'model',   'operator' => 'equals', 'value' => 'Calendar_Model_EventFilter'),
+            array('field' => 'id',      'operator' => 'equals', 'value' => $savedFilterData['id'])
+        );
+
+        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        $this->assertTrue(isset($searchResult['results'][0]), 'filter not found in results: ' . print_r($searchResult['results'], true));
+
+        $filter['filters'][0]['value']['value'][0]['value'][0] = $contact->toArray();
+
+        $this->_assertSavedFilterData($filter, $searchResult['results'][0]);
     }
     
     /**
@@ -319,6 +367,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                 case 'due':
                     $this->assertEquals($requestFilter['value'], $responseFilter['value'], 'wrong due date');
                     break;
+                case 'customfield':
+                    $this->assertEquals($requestFilter['value']['value'][0]['value'][0]['n_fileas'], $responseFilter['value']['value'][0]['value'][0]['n_fileas'], 'wrong contact');
                 default:
                     // do nothting
                     break;

@@ -39,9 +39,20 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      */
     const LISTTYPE_GROUP = 'group';
 
-    const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
+    /**
+     * mailinglist xprops
+     */
     const XPROP_SIEVE_ALLOW_EXTERNAL = 'sieveAllowExternal';
     const XPROP_SIEVE_ALLOW_ONLY_MEMBERS = 'sieveAllowOnlyMembers';
+    const XPROP_SIEVE_FORWARD_ONLY_SYSTEM = 'sieveForwardOnlySystem';
+    const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
+    const XPROP_USE_AS_MAILINGLIST = 'useAsMailinglist';
+
+    /**
+     * external email user ids (for example in dovecot/postfix sql)
+     */
+    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     /**
      * name of fields which require manage accounts to be updated
@@ -154,6 +165,12 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
+            'account_only'          => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'boolean',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'virtual'           => true,
+            ),
             'emails'            => array(
                 'label'             => null, // TODO fill this?
                 'type'              => 'string',
@@ -251,36 +268,34 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     {
         $result = parent::getPathNeighbours();
 
+        $members = [];
         if (!empty($this->members)) {
-            foreach(Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true) as $member) {
+            if ($this->members instanceof Tinebase_Record_RecordSet) {
+                $tmp = $this->members;
+            } else {
+                $tmp = Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true);
+            }
+            foreach($tmp as $member) {
                 $members[$member->getId()] = $member;
             }
-        } else {
-            $members = array();
         }
 
-        if (!empty($this->memberroles)) {
+        if (!is_object($this->memberroles)) {
+            $this->memberroles = Addressbook_Controller_List::getInstance()->getMemberRoles($this);
+        }
 
-            $listRoles = array();
+        if ($this->memberroles->count() > 0) {
+
+            $pathController = Tinebase_Record_Path::getInstance();
             /** @var Addressbook_Model_ListMemberRole $role */
             foreach($this->memberroles as $role)
             {
-                $listRoles[$role->list_role_id] = $role->list_role_id;
                 if (isset($members[$role->contact_id])) {
                     unset($members[$role->contact_id]);
                 }
+                $pathController->addToRebuildQueue($role);
+                $members[] = $role;
             }
-
-            $pathController = Tinebase_Record_Path::getInstance();
-            $pathController->addAfterRebuildQueueHook(array(array('Addressbook_Model_ListRole', 'setParent')));
-            Addressbook_Model_ListRole::setParent($this);
-
-            $memberRoles = Addressbook_Controller_ListRole::getInstance()->getMultiple($listRoles, true)->asArray();
-            foreach($memberRoles as $memberRole) {
-                $pathController->addToRebuildQueue($memberRole);
-                $members[] = $memberRole;
-            }
-
         }
 
         $result['children'] = array_merge($result['children'], $members);

@@ -151,7 +151,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                 }
                 
                 // get names from import export definitions
-                $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
                     array('field' => 'plugin', 'operator' => 'equals', 'value' => $plugin),
                 ));
                 

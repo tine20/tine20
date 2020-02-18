@@ -43,7 +43,7 @@ Tine.Admin.config.FieldManager = function() {
                         options = Ext.apply({
                             mode: 'local',
                             forceSelection: true,
-                            allowEmpty: false,
+                            allowBlank: false,
                             triggerAction: 'all',
                             editable: false,
                             store: [[true, i18n._('Yes')], [false, i18n._('No')]]
@@ -60,7 +60,7 @@ Tine.Admin.config.FieldManager = function() {
                         options = Ext.apply({
                             mode: 'local',
                             forceSelection: true,
-                            allowEmpty: false,
+                            allowBlank: false,
                             triggerAction: 'all',
                             editable: false,
                             store: store

@@ -149,7 +149,43 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             }
         }
     }
-    
+
+    public function testReversal()
+    {
+        $this->_createFullFixtures();
+
+        // the whole year, 12 months
+        $date = clone $this->_referenceDate;
+        $date->addMonth(12);
+        $this->_invoiceController->createAutoInvoices($date);
+
+        // test if timesheets get cleared
+        $invoices = $this->_uit->searchInvoices(array(
+            array('field' => 'foreignRecord', 'operator' => 'AND', 'value' => array(
+                'appName' => 'Sales',
+                'linkType' => 'relation',
+                'modelName' => 'Customer',
+                'filters' => array(
+                    array('field' => 'name', 'operator' => 'equals', 'value' => 'Customer3')
+                )
+            ))
+
+        ), array());
+
+        $invoice = $invoices['results'][0];
+        static::assertGreaterThan(0, count($invoice['relations']));
+        unset($invoice['number']);
+        unset($invoice['id']);
+        $invoice['type'] = 'REVERSAL';
+        foreach ($invoice['relations'] as &$rel) {
+            $rel['id'] = Tinebase_Record_Abstract::generateUID();
+        }
+
+        $createInvoice = $this->_uit->saveInvoice($invoice);
+
+        static::assertSame(count($invoice['relations']), count($createInvoice['relations']));
+    }
+
     /**
      * tests if timeaccounts/timesheets get cleared if the invoice get billed
      */

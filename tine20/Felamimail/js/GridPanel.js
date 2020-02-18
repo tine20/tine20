@@ -618,10 +618,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         let fileLocations = record.get('fileLocations');
         if (_.isArray(fileLocations) && fileLocations.length) {
-            result += '<img class="FelamimailFlagIcon MessageFileIcon" src="images/icon-set/icon_download.svg" ' +
+            const fileLocationText = Tine.Felamimail.MessageFileButton.getFileLocationText(fileLocations, '<br>');
+
+            result +=  fileLocationText ? ('<img class="FelamimailFlagIcon MessageFileIcon" src="images/icon-set/icon_download.svg" ' +
                 'ext:qtitle="' + Ext.util.Format.htmlEncode(i18n._('Filed as:')) + '"' +
-                'ext:qtip="' + Ext.util.Format.htmlEncode(Tine.Felamimail.MessageFileButton.getFileLocationText(fileLocations, '<br>')) + '"' +
-            '>';
+                'ext:qtip="' + Ext.util.Format.htmlEncode(fileLocationText) + '"' +
+            '>') : '';
         }
 
         return result;
@@ -648,14 +650,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return (result) ? result : record.get('name');
             }
         }
-            
+
         result += '/';
         if (folder) {
             result += folder.get('globalname');
-        } else {
-            result += folderId;
         }
-            
+
         return result;
     },
     
@@ -976,7 +976,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Ext.each(affectedMsgs, function(msg) {
                 if (['reply', 'forward'].indexOf(action) !== -1) {
                     msg.addFlag(action === 'reply' ? '\\Answered' : 'Passed');
-                } else if (action == 'senddraft') {
+                } else if (action === 'senddraft') {
                     this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(msg.id, '\\Deleted', {
                         callback: this.onAfterDelete.createDelegate(this, [[msg.id]])
                     });
@@ -1088,11 +1088,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (sm.getCount() == 1 && sm.isIdSelected(record.id) && !record.hasFlag('\\Seen')) {
             Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Selected unread message');
             Tine.log.debug(record);
-            
-            record.addFlag('\\Seen');
-            record.mtime = new Date().getTime();
-            Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
-            this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+
+            if (Tine.Felamimail.registry.get('preferences').get('markEmailRead') === 1) {
+                record.addFlag('\\Seen');
+                record.mtime = new Date().getTime();
+                Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
+                this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+            }
             
             if (record.get('headers')['disposition-notification-to']) {
                 Ext.Msg.confirm(
@@ -1401,27 +1403,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Event} event
      */
     onAddAccount: function(button, event) {
+        // it is only allowed to create user (external) accounts here
+        var newAccount = new Tine.Felamimail.Model.Account({
+            type: 'user'
+        });
+        // this is a little bit clunky but seems to be required to prevent record loading in AccountEditDialog
+        newAccount.id = null;
+
+        // make sure accountStore is initialised
+        this.app.getAccountStore();
+
         var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
-            record: null,
-            listeners: {
-                scope: this,
-                'update': function(record) {
-                    var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
-                    
-                    // add to registry
-                    Tine.Felamimail.registry.get('preferences').replace('defaultEmailAccount', account.id);
-                    // need to do this because store could be unitialized yet
-                    var registryAccounts = Tine.Felamimail.registry.get('accounts');
-                    registryAccounts.results.push(account.data);
-                    registryAccounts.totalcount++;
-                    Tine.Felamimail.registry.replace('accounts', registryAccounts);
-                    
-                    // add to tree / store
-                    var treePanel = this.app.getMainScreen().getTreePanel();
-                    treePanel.addAccount(account);
-                    treePanel.accountStore.add([account]);
-                }
-            }
+            record: newAccount
         });
     },
     

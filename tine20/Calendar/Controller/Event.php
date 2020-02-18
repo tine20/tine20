@@ -105,11 +105,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_modelName       = 'Calendar_Model_Event';
         $this->_backend         = new Calendar_Backend_Sql();
 
-        // set default CU
-        $this->setCalendarUser(new Calendar_Model_Attender(array(
-            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => Calendar_Controller_MSEventFacade::getCurrentUserContactId()
-        )));
+        try {
+            // set default CU
+            $this->setCalendarUser(new Calendar_Model_Attender(array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id' => Calendar_Controller_MSEventFacade::getCurrentUserContactId()
+            )));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " User might not have a contact (visibility: hidden) - exception: " . $tenf->getMessage());
+        }
     }
 
     /**
@@ -312,6 +317,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (! empty($event->rrule) && ! $event->recurid) {
             try {
                 $eventSet->merge($this->getRecurExceptions($event, true));
+            } catch (Tinebase_Exception_AccessDenied $e) {
+                // it's ok, if we dont see the (base)event, we dont see the exceptions as well
             } catch (Tinebase_Exception_NotFound $e) {
                 // it's ok, event is not exising yet so we don't have exceptions as well
             }
@@ -354,7 +361,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $conflictFilter = clone $conflictCriteria;
         $conflictFilter->addFilterGroup($periodCandidates);
+
+        // NOTE: we need attendee in conflictingPeriods
+        $doContainerAclChecks = $this->doContainerACLChecks(false);
         $conflictCandidates = $this->search($conflictFilter);
+        $this->doContainerACLChecks($doContainerAclChecks);
 
         $from = $until = false;
         foreach ($periodCandidates as $periodFilter) {
@@ -531,12 +542,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         'dtend'     => clone $event->dtend,
                         'type'      => $type,
                     ), true);
-                    
+
                     if ($event->{Tinebase_Model_Grants::GRANT_READ}) {
                         $fbInfo->event = clone $event;
+                        $fbInfo->event->doFreeBusyCleanup();
                         unset($fbInfo->event->attendee);
                     }
-                    
+
                     //$typeMap[$attender->user_type][$attender->user_id][] = $fbInfo;
                     $fbInfoSet->addRecord($fbInfo);
                 }
@@ -964,7 +976,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         }
                     }
                 }
-
+                
                 parent::update($_record);
 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
@@ -1709,7 +1721,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $_alarm->setOption('minutes_before', $minutesBefore);
         $_alarm->alarm_time = $eventStart->subMinute($minutesBefore);
-        
+
+        if ($_alarm->sent_status === Tinebase_Model_Alarm::STATUS_SUCCESS && null !== $_alarm->sent_time &&
+                $_alarm->alarm_time > $_alarm->sent_time) {
+            $_alarm->sent_time = null;
+            $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
+        }
+
         if ($_record->rrule && $_alarm->sent_status == Tinebase_Model_Alarm::STATUS_PENDING && $_alarm->alarm_time < $_alarm->sent_time) {
             $this->adoptAlarmTime($_record, $_alarm, 'instance');
         }
@@ -2063,6 +2081,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectEvent($_record, $skipEvent = false)
     {
+        if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $_record->isReplicable()) {
+            throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+        }
+
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
         $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
@@ -2167,16 +2189,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $events = $this->_backend->getMultiple($_ids);
         
         foreach ($events as $event) {
-            
+
+            if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $event->isReplicable()) {
+                throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+            }
+
             // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
                 $exceptions = $this->getRecurExceptions($event);
+                // if we have grants to delete base event -> force grants on all recur exceptions too
+                $exceptions->class = Calendar_Model_Event::CLASS_PUBLIC;
+                $exceptions->{Tinebase_Model_Grants::GRANT_DELETE} = true;
                 $events->merge($exceptions);
 
                 $exceptionIds = $exceptions->getId();
                 $_ids = array_merge($_ids, $exceptionIds);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
+                    . ' Implicitly deleting ' . $exceptions->count() . ' persistent exception(s) for recurring series with uid' . $event->uid);
             }
 
             // TODO make this undoable!
@@ -2242,7 +2271,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if (    ! $this->_doContainerACLChecks 
             // admin grant includes all others (only if class is PUBLIC)
-            ||  (! empty($this->class) && $this->class === Calendar_Model_Event::CLASS_PUBLIC 
+            ||  (($_record->class === Calendar_Model_Event::CLASS_PUBLIC || $_action === self::ACTION_DELETE)
                 && $_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))
             // external invitations are in a spechial invitaion calendar. only attendee can see it via displaycal
             ||  $_record->hasExternalOrganizer()
@@ -3311,6 +3340,32 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         } finally {
             $this->_doContainerACLChecks = $oldDoContainerAcl;
             $this->_sendNotifications = $oldSendNotifications;
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_Container $_container
+     * @param bool $_ignoreAcl
+     * @param null $_filter
+     */
+    public function deleteContainerContents(Tinebase_Model_Container $_container, $_ignoreAcl = false, $_filter = null)
+    {
+        if (null === $_filter) {
+            // do not use container_id here! it would use a Calendar_Model_CalendarFilter, we do NOT want that
+            $_filter = new Calendar_Model_EventFilter([
+                ['field' => 'base_event_id', 'operator' => 'isnull', 'value' => true]
+            ]);
+            $_filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $_container->id));
+
+            // we first delete all base events, then in a second go, we delete again everything that has not yet been deleted
+            parent::deleteContainerContents($_container, $_ignoreAcl, $_filter);
+
+            // do not use container_id here! it would use a Calendar_Model_CalendarFilter, we do NOT want that
+            $_filter = new Calendar_Model_EventFilter();
+            $_filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $_container->id));
+            parent::deleteContainerContents($_container, $_ignoreAcl, $_filter);
+        } else {
+            parent::deleteContainerContents($_container, $_ignoreAcl, $_filter);
         }
     }
 }

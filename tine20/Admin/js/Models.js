@@ -78,6 +78,7 @@ Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.ge
     {name: 'description'},
     {name: 'container_id'},
     {name: 'visibility'},
+    {name: 'account_only', type: 'boolean'},
     {name: 'email'},
     {name: 'xprops'},
     {name: 'members'}

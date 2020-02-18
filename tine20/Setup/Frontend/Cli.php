@@ -54,11 +54,14 @@ class Setup_Frontend_Cli
         // always set real setup user if Tinebase is installed
         if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             try {
+                // TODO remove this if no update occure from < 12.7
+                Tinebase_Group_Sql::doJoinXProps(false);
                 $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
                 $setupUser = Tinebase_User::SYSTEM_USER_SETUP;
             }
+            Tinebase_Group_Sql::doJoinXProps(true);
             if ($setupUser && ! Setup_Core::getUser() instanceof Tinebase_Model_User) {
                 Setup_Core::set(Tinebase_Core::USER, $setupUser);
             }
@@ -67,6 +70,7 @@ class Setup_Frontend_Cli
         }
 
         $lang = $_opts->lang ? $_opts->lang : getenv('LANGUAGE');
+
         if ($lang) {
             Tinebase_Core::setLocale($lang);
         }
@@ -445,31 +449,9 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        return $this->_updateApplications();
-    }
-    
-    /**
-     * update all applications
-     * 
-     * @return int
-     */
-    protected function _updateApplications()
-    {
-        // TODO remove this loop in Release 13
-        $ran = false;
-        $controller = Setup_Controller::getInstance();
-
-        $maxLoops = 50;
-        do {
-            $result = $controller->updateApplications();
-
-            if (!$ran || $result['updated'] > 0) {
-                echo "Updated " . $result['updated'] . " application(s).\n";
-            }
-            $ran = true;
-        } while (isset($result['updated']) && $result['updated'] > 0 && --$maxLoops > 0);
-
-        return ($maxLoops > 0) ? 0 : 1;
+        $result = Setup_Controller::getInstance()->updateApplications();
+        echo "Updated " . $result['updated'] . " application(s).\n";
+        return 0;
     }
 
     /**
@@ -681,7 +663,7 @@ class Setup_Frontend_Cli
 
     /**
      * create/update email users with current account
-     *  USAGE: php tine20.php --method=Tinebase.updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
+     *  USAGE: php setup.php --updateAllAccountsWithAccountEmail -- [fromInstance=master.mytine20.com createEmail=1 domain=mydomain.org]
      *
      * @param Zend_Console_Getopt $_opts
      * @return int
@@ -696,20 +678,43 @@ class Setup_Frontend_Cli
         }
 
         $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
-        $userController = Tinebase_User::getInstance();
+        $userController = Admin_Controller_User::getInstance();
         $emailUser = Tinebase_EmailUser::getInstance();
         /** @var Tinebase_Model_FullUser $user */
-        foreach ($userController->getFullUsers() as $user) {
+        foreach ($userController->searchFullUsers('') as $user) {
             $emailUser->inspectGetUserByProperty($user);
+
+            if (empty($user->accountEmailAddress) && isset($data['createEmail']) && $data['createEmail']) {
+                $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+                // TODO allow to set other domains via args?
+                if (! empty($config['primarydomain'])) {
+                    $mail = $user->accountLoginName . '@' . $config['primarydomain'];
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Setting new email address for user: ' . $mail);
+                    $user->accountEmailAddress = $mail;
+                }
+            }
+
             if (! empty($user->accountEmailAddress)) {
                 list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
+                if (isset($data['domain']) && $domainPart !== $data['domain']) {
+                    // skip user because not in given domain
+                    continue;
+                }
+                // TODO allow to skip this?
                 if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
                     $newEmailAddress = $userPart . '@' . $allowedDomains[0];
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
                     $user->accountEmailAddress = $newEmailAddress;
                 }
-                $userController->updateUser($user);
+                try {
+                    $userController->update($user);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' ' . $tenf);
+                }
+
             }
         }
 
@@ -841,14 +846,15 @@ class Setup_Frontend_Cli
             $config = Tinebase_Config_Abstract::factory($applicationName);
         }
 
-        if (empty($options['configkey'])) {
+        if (! isset($options['configkey']) || empty($options['configkey'])) {
             $errors[] = 'Missing argument: configkey';
             if ($config) {
                 $errors[] = 'Available config settings:';
                 $errors[] = print_r($config::getProperties(), true);
             }
+        } else {
+            $configKey = (string)$options['configkey'];
         }
-        $configKey = (string)$options['configkey'];
         
         if (empty($errors)) {
             $value = $config->get($configKey);
@@ -916,7 +922,7 @@ class Setup_Frontend_Cli
                 'adminLoginName' => $username,
                 'adminPassword'  => $password,
                 'expires'        => $tomorrow,
-            ));
+            ), true);
             echo "Created new admin user '$username' that expires tomorrow.\n";
         }
     }
@@ -1262,5 +1268,7 @@ class Setup_Frontend_Cli
             $db->query('REPAIR TABLE ' . $db->quoteIdentifier($table));
             $db->query('OPTIMIZE TABLE ' . $db->quoteIdentifier($table));
         }
+
+        Setup_Controller::getInstance()->clearCache();
     }
 }

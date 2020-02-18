@@ -116,7 +116,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         this.recordClass = Tine[this.app.appName].Model[this.contentType];
         
         this.on('click', this.saveClickedNodeState, this);
-        
+
         Ext.each (this.contentTypes, function(ct) {
             var modelName = ct.hasOwnProperty('meta') 
                 ? ct.meta.modelName 
@@ -167,7 +167,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             var c = {
                 id : 'treenode-' + contentType,
                 contentType: contentType,
-                iconCls: ct.iconCls ? ct.iconCls : modelApp.appName + modelName,
+                iconCls: ct.iconCls ? ct.iconCls : (modelName ? modelApp.appName + modelName : contentType),
                 text: ct.text ? ct.text : recordClass.getModuleName(),
                 leaf : true
             };

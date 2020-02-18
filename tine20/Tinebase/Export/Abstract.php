@@ -475,7 +475,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $parent = Tinebase_FileSystem::getInstance()->stat($dir);
         $match = null;
         $matchVersion = null;
-        $fileNameRegex = '/^' . preg_quote($startsWith) . '(-v[\.\d]+)?' . preg_quote($endsWith) . '$/';
+        $fileNameRegex = '/^' . preg_quote($startsWith, '/') . '(-v[\.\d]+)?' . preg_quote($endsWith, '/') . '$/';
 
         /** @var Tinebase_Model_Tree_Node $node */
         foreach (Tinebase_FileSystem::getInstance()->getTreeNodeChildren($parent) as $node) {
@@ -534,7 +534,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
 
             // get export definition by name / model
-            $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
                 array('field' => 'model', 'operator' => 'equals', 'value' => $this->_modelName),
                 array('field' => 'name',  'operator' => 'equals', 'value' => $exportName),
             ));
@@ -599,6 +599,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     public function getDownloadFilename($_appName, $_format)
     {
+        if (isset($this->_config->exportFilename) && $this->_hasTwig()) {
+            $this->_twig->addLoader(new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]));
+            $twigTmpl = $this->_twig->load('fileNameTmpl');
+            return $twigTmpl->render($this->_getTwigContext([]));
+        }
+
         $model = '';
         if (null !== $this->_modelName) {
             /** @var Tinebase_Record_Interface $model */
@@ -1102,7 +1108,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 if (isset($relations[$idx])) {
                     $record->relations = $relations[$idx];
                     $record->relations->sort(function(Tinebase_Model_Relation $a, Tinebase_Model_Relation $b) {
-                        return strcmp($a->related_record->getTitle(), $b->related_record->getTitle());
+                        if (! $a->related_record) {
+                            return true;
+                        } else if (! $b->related_record) {
+                            return false;
+                        } else {
+                            return strcmp($a->related_record->getTitle(), $b->related_record->getTitle());
+                        }
                     }, null, 'function');
                 }
             }
@@ -1431,6 +1443,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
 
         return array_merge([
+            Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
             'branding' => [
                 'logo' => $this->_logoPath,
                 'title' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE},

@@ -473,12 +473,20 @@ class Tinebase_Application
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing app ' . $_applicationId . ' from applications table.');
-        
+
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+
+        if ($_applicationId instanceof Tinebase_Model_Application) {
+            $application = $_applicationId;
+        } else {
+            $application = $this->getApplicationById($applicationId);
+        }
         
         $this->resetClassCache();
         
         $this->_getBackend()->delete($applicationId);
+
+        $this->_writeModLog(null, $application);
     }
     
     /**
@@ -712,17 +720,21 @@ class Tinebase_Application
     }
 
     /**
-     * returns the Models of all installed applications
+     * returns the Models of all enabled (or all installed) applications
      * uses Tinebase_Application::getApplicationsByState
      * and Tinebase_Controller_Abstract::getModels
      *
      * @return array
      */
-    public function getModelsOfAllApplications()
+    public function getModelsOfAllApplications($allApps = false)
     {
         $models = array();
 
-        $apps = $this->getApplicationsByState(Tinebase_Application::ENABLED);
+        if ($allApps) {
+            $apps = $this->getApplications();
+        } else {
+            $apps = $this->getApplicationsByState(Tinebase_Application::ENABLED);
+        }
 
         /** @var Tinebase_Model_Application $app */
         foreach($apps as $app) {
@@ -804,6 +816,21 @@ class Tinebase_Application
                 Setup_Controller::getInstance()->installApplications([$record->getId() => $record->name],
                     [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true,
                         Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true]);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $model = $_modification->record_type;
+                /** @var Tinebase_Model_Application $record */
+                $record = new $model($diff->oldData);
+
+                // close transaction open in \Tinebase_Timemachine_ModificationLog::applyReplicationModLogs
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                Setup_Core::set(Setup_Core::CHECKDB, true);
+                Setup_Controller::destroyInstance();
+                Setup_Controller::getInstance()->uninstallApplications([$record->name], [
+                    Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true
+                ]);
                 break;
 
             default:

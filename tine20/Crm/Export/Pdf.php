@@ -229,29 +229,33 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                 foreach ($taskRelations as $relation) {
                     try {
                         $task = $relation->related_record;
-                        
-                        $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
-                        // @todo add big icon to db or preg_replace? 
-                        if ( !empty($task->status) ) {
-                            $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->getById($task->status);
-                            $icon = "/" . $status['icon'];
-                            $linkedObjects[] = array ($taskTitle, 'separator', $icon);
+
+                        if ($task) {
+                            $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
+                            // @todo add big icon to db or preg_replace?
+                            if (!empty($task->status)) {
+                                $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->getById($task->status);
+                                $icon = "/" . $status['icon'];
+                                $linkedObjects[] = array($taskTitle, 'separator', $icon);
+                            } else {
+                                $linkedObjects[] = array($taskTitle, 'separator');
+                            }
+
+                            // get due date
+                            if (!empty($task->due)) {
+                                $dueDate = new Tinebase_DateTime($task->due);
+                                $linkedObjects[] = array(
+                                    $_translate->_('Due Date'),
+                                    Tinebase_Translation::dateToStringInTzAndLocaleFormat($dueDate, NULL, NULL, 'date')
+                                );
+                            }
+
+                            // get task priority
+                            $taskPriority = $this->getTaskPriority($task->priority, $_translate);
+                            $linkedObjects[] = array($_translate->_('Priority'), $taskPriority);
                         } else {
-                            $linkedObjects[] = array ($taskTitle, 'separator');
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' related task not found - no permissions...');
                         }
-                        
-                        // get due date
-                        if (! empty($task->due)) {
-                            $dueDate = new Tinebase_DateTime($task->due);
-                            $linkedObjects[] = array(
-                                $_translate->_('Due Date'), 
-                                Tinebase_Translation::dateToStringInTzAndLocaleFormat($dueDate, NULL, NULL, 'date')
-                            );
-                        }    
-                        
-                        // get task priority
-                        $taskPriority = $this->getTaskPriority($task->priority, $_translate);
-                        $linkedObjects[] = array ($_translate->_('Priority'), $taskPriority );
                         
                     } catch (Exception $e) {
                         // do nothing so far

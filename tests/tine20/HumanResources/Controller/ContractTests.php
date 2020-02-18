@@ -108,7 +108,6 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
         $employeeController = HumanResources_Controller_Employee::getInstance();
         $employee = $employeeController->create($employee, false);
         $contract = $this->_getContract($sdate);
-        $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
 
         // create feast days
         $feastDays2013 = array(
@@ -198,5 +197,24 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
 
         // we expect 10 here
         $this->assertEquals(10, count($feastDays), '10 feast days should have been found!');
+    }
+
+    public function testWTScopy()
+    {
+        $wts = HumanResources_Controller_WorkingTimeScheme::getInstance()->create(
+            new HumanResources_Model_WorkingTimeScheme([
+                HumanResources_Model_WorkingTimeScheme::FLDS_TITLE => 'test123',
+                HumanResources_Model_WorkingTimeScheme::FLDS_TYPE
+                    => HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE,
+            ]));
+        $employee = HumanResources_Controller_Employee::getInstance()->create($this->_getEmployee());
+
+        $c = $this->_getContract();
+        $c->working_time_scheme = $wts;
+        $c->employee_id = $employee->getId();
+
+        $createdContract = HumanResources_Controller_Contract::getInstance()->create($c);
+        $wts = HumanResources_Controller_WorkingTimeScheme::getInstance()->get($createdContract->working_time_scheme);
+        static::assertTrue(is_array($wts->json));
     }
 }

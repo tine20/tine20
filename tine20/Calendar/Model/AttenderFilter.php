@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -98,8 +98,21 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         $adapter = $_backend->getAdapter();
         $isExcept = strpos($this->_operator, 'Except') !== false;
         $sign = $isExcept ? '<>' : '=';
-        
+        $dname = 'attendee-' . Tinebase_Record_Abstract::generateUID(20);
+        $this->_parent->filterWalk(function($filter) use($dname) {
+            if ($filter instanceof  Calendar_Model_AttenderRoleFilter || $filter instanceof
+                    Calendar_Model_AttenderStatusFilter) {
+                $filter->addAttendeeJoinName($dname);
+            }
+        });
+
         foreach ($this->_value as $attenderValue) {
+            if (! isset($attenderValue['user_id']) || empty($attenderValue['user_id'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Skipping invalid attender: ' . print_r($attenderValue, true));
+                continue;
+            }
+
             if (in_array($attenderValue['user_type'], array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
                 
                 // @todo user_id might contain filter in the future -> get userids from addressbook controller with contact filter
@@ -161,15 +174,14 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
             
             foreach ($attendee as $attender) {
                 $gs->orWhere(
-                    ($isExcept ? '' : $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_type') . ' = ?', $attender['user_type']) . ' AND ') .
-                    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_id') .   ' ' . $sign . ' ?', $attender['user_id'])
+                    ($isExcept ? '' : $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_type') . ' = ?', $attender['user_type']) . ' AND ') .
+                    $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_id') .   ' ' . $sign . ' ?', $attender['user_id'])
                 );
             }
         }
 
         if (substr($this->_operator, 0, 3) === 'not') {
             // join attendee to be excluded as a new column. records having this column NULL don't have the attendee
-            $dname = 'attendee-not-' . Tinebase_Record_Abstract::generateUID(5);
             $_select->joinLeft(
             /* table  */
                 array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
@@ -181,7 +193,6 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
             $_select->having($_backend->getDbCommand()->getAggregate($dname . '.id') . ' IS NULL');
         } else {
             if ($isExcept) {
-                $dname = 'attendee-hasSome-' . Tinebase_Record_Abstract::generateUID(5);
                 $_select->joinLeft(
                 /* table  */
                     array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
@@ -192,6 +203,14 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                     array($dname => $_backend->getDbCommand()->getAggregate($dname . '.id')));
                 $_select->having($_backend->getDbCommand()->getAggregate($dname . '.id') . ' IS NOT NULL');
             } else {
+                $_select->joinLeft(
+                /* table  */
+                    array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
+                    /* on     */
+                    $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id'),
+                    /* select */
+                    []
+                );
                 $gs->appendWhere(Zend_Db_Select::SQL_OR);
             }
         }

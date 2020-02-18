@@ -178,10 +178,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $importOptions
      * @param array $clientRecordData
      * @return array
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function importEvents($tempFileId, $definitionId, $importOptions, $clientRecordData = array())
     {
-        return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
+        try {
+            $result = $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
+        } catch (Calendar_Exception_IcalParser $ceip) {
+            throw new Tinebase_Exception_SystemGeneric('Import error: ' . $ceip->getMessage());
+        }
+        return $result;
     }
     
     /**
@@ -544,9 +550,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $events = array_filter($events);
 
-        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
-        $calendarController = Calendar_Controller_Event::getInstance();
         $fbInfo = [];
+        try {
+            $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
+        } catch (Tinebase_Exception_Record_Validation $terv) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $terv->getMessage() . ' attendee: '
+                . print_r($attendee, true));
+            return $fbInfo;
+        }
+
+        $calendarController = Calendar_Controller_Event::getInstance();
         $periods = [];
         $aggregatedPeriods = [];
 
@@ -573,13 +587,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $fbInfo[$eventRecord->getId()] = [];
             $periods[$eventRecord->getId()] = $eventPeriods;
             $aggregatedPeriods = array_merge($aggregatedPeriods, $eventPeriods);
-
-            /*$periods = $calendarController->getBlockingPeriods($eventRecord, [
-                'from'  => $eventRecord->dtstart,
-                'until' => $eventRecord->dtstart->getClone()->addMonth(2)
-            ]);
-
-            $fbInfo[$eventRecord->getId()] = $calendarController->getFreeBusyInfo($periods, $attendee, $ignoreUIDs)->toArray();*/
         }
 
         if (count($aggregatedPeriods = $this->_reduceAggregatePeriods($aggregatedPeriods)) === 0) {
@@ -736,7 +743,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER})) {
                 $contactFilter = [['condition' => 'AND', 'filters' => [
-                    $contactFilter[0],
+                    ['condition' => 'AND', 'filters' => $contactFilter],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER}
                 ]]];
             }
@@ -757,7 +764,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $groupFilter[] = array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP);
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP})) {
                 $groupFilter = [['condition' => 'AND', 'filters' => [
-                    $groupFilter[0],
+                    ['condition' => 'AND', 'filters' => $groupFilter],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP}
                 ]]];
             }
@@ -783,7 +790,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE})) {
                 $resourceFilter = [['condition' => 'AND', 'filters' => [
-                    $resourceFilter[0],
+                    ['condition' => 'AND', 'filters' => $resourceFilter],
                     $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE}
                 ]]];
             }

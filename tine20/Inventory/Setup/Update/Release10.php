@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
+
 class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**

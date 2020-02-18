@@ -261,6 +261,25 @@ class Tinebase_PreferenceTest extends TestCase
     }
 
     /**
+     * testSetForcedDefaultPref
+     */
+    public function testSetForcedDefaultPrefDefaultValue()
+    {
+        $defaultPref = (new Filemanager_Preference())->getApplicationPreferenceDefaults(
+            Filemanager_Preference::DB_CLICK_ACTION);
+        (new Tinebase_Frontend_Json())->savePreferences(['Filemanager' => [
+            $defaultPref->getId() => array(
+                'type'  => Tinebase_Model_Preference::TYPE_FORCED,
+                'value' => Tinebase_Model_Preference::DEFAULT_VALUE,
+                'name'  => Filemanager_Preference::DB_CLICK_ACTION
+            )
+        ]], 1);
+
+        $appPrefs = Tinebase_Core::getPreference('Filemanager');
+        static::assertSame('download', $appPrefs->{Filemanager_Preference::DB_CLICK_ACTION});
+    }
+
+    /**
      * testSetLockedPref
      *
      * @see 0011178: allow to lock preferences for individual users

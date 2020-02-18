@@ -422,7 +422,7 @@ function contributorsMerge($_verbose, $_language, $_archive)
     }
     
     foreach ($contents as $appName) {
-        if ($appName{0} == '.' || $appName{0} == '_') continue;
+        if ($appName[0] == '.' || $appName[0] == '_') continue;
         
         if( ! checkAppName($appName, $_verbose)) {
             continue;
@@ -438,7 +438,6 @@ function contributorsMerge($_verbose, $_language, $_archive)
         if (! is_file($tinePoFile)) {
             echo "Error: could not find langfile $_language.po in Tine 2.0's $appName \n";
             continue;
-            exit;
         }
         if (! is_file($contributedPoFile)) {
             //check leggacy

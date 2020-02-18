@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -29,22 +29,21 @@ class Addressbook_AllTests
         $suite->addTest(Addressbook_Frontend_AllTests::suite());
         $suite->addTest(Addressbook_Import_AllTests::suite());
 
-        $suite->addTestSuite('Addressbook_ControllerTest');
-        $suite->addTestSuite('Addressbook_Controller_ListTest');
-        $suite->addTestSuite('Addressbook_PdfTest');
-        $suite->addTestSuite('Addressbook_JsonTest');
-        $suite->addTestSuite('Addressbook_CliTest');
-        $suite->addTestSuite('Addressbook_Model_ContactIdFilterTest');
-        $suite->addTestSuite('Addressbook_Export_DocTest');
-        $suite->addTestSuite('Addressbook_Export_XlsTest');
-        $suite->addTestSuite(Addressbook_ListControllerTest::class);
+        $suite->addTestSuite(Addressbook_ControllerTest::class);
+        $suite->addTestSuite(Addressbook_Controller_ListTest::class);
+        $suite->addTestSuite(Addressbook_PdfTest::class);
+        $suite->addTestSuite(Addressbook_JsonTest::class);
+        $suite->addTestSuite(Addressbook_CliTest::class);
+        $suite->addTestSuite(Addressbook_Model_ContactIdFilterTest::class);
+        $suite->addTestSuite(Addressbook_Export_DocTest::class);
+        $suite->addTestSuite(Addressbook_Export_XlsTest::class);
 
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
-            $suite->addTestSuite('Addressbook_LdapSyncTest');
+            $suite->addTestSuite(Addressbook_LdapSyncTest::class);
         }
 
         // TODO: enable this again, when its fast
-//         $suite->addTestSuite('Addressbook_Setup_DemoDataTests');
+//         $suite->addTestSuite(Addressbook_Setup_DemoDataTests::class);
         return $suite;
     }
 }

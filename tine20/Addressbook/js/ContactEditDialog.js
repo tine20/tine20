@@ -261,7 +261,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     name: 'email',
                     vtype: 'email',
                     maxLength: 64,
-                    disabled: (this.checkDisableEmailField())                     
+                    disabled: this.checkDisableEmailField()
                 }, {
                     fieldLabel: this.app.i18n._('E-Mail (private)'),
                     labelIcon: 'images/icon-set/icon_email.svg',

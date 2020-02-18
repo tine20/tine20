@@ -886,10 +886,23 @@ Tine.Tinebase.common = {
             allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('secondarydomains').split(','));
         }
 
+        if (Ext.isString(Tine.Tinebase.registry.get('additionaldomains'))) {
+            allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('additionaldomains').split(','));
+        }
+
         Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - allowedDomains:');
         Tine.log.debug(allowedDomains);
 
         return (allowedDomains.indexOf(emailDomain) !== -1);
+    },
+
+    getMimeIconCls: function(mimeType) {
+        return 'mime-content-type-' + mimeType.replace(/\/.*$/, '') +
+            ' mime-suffix-' + (mimeType.match(/\+/) ? mimeType.replace(/^.*\+/, '') : 'none') +
+            ' mime-type-' + mimeType
+                .replace(/\//g, '-slash-')
+                .replace(/\./g, '-dot-')
+                .replace(/\+/g, '-plus-');
     }
 };
 

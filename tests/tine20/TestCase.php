@@ -106,6 +106,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected $_originalGrants = [];
 
     /**
+     * @var array lists to delete in tearDown
+     */
+    protected $_listsToDelete = [];
+
+    /**
      * set up tests
      */
     protected function setUp()
@@ -115,6 +120,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $refProp = new ReflectionProperty(Felamimail_Controller_Account::class, '_instance');
+        $refProp->setAccessible(true);
+        $refProp->setValue(Felamimail_Controller_AccountMock::getInstance());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
 
@@ -167,7 +176,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Container::getInstance()->setGrants($container, $grants, true);
         }
 
+        foreach ($this->_listsToDelete as $list) {
+            Addressbook_Controller_List::getInstance()->delete($list->getId());
+        }
+
         Tinebase_Lock_UnitTestFix::clearLocks();
+
+        Felamimail_Controller_AccountMock::getInstance()->cleanUp();
     }
 
     /**
@@ -372,16 +387,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId(),
             'model'          => $model,
         ), true));
-    }
-    
-    /**
-     * get test mail domain
-     * 
-     * @return string
-     */
-    protected function _getMailDomain()
-    {
-        return TestServer::getPrimaryMailDomain();
     }
     
     /**
@@ -714,7 +719,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $classParts = explode('_', get_called_class());
         $realModelName = $classParts[0] . '_Model_' . $modelName;
         /** @var Tinebase_Record_Abstract $realModelName */
-        $configuration = $realModelName::getConfiguration();
+        if (class_exists($realModelName)) {
+            $configuration = $realModelName::getConfiguration();
+        } else {
+            $configuration = null;
+        }
 
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         if ($nameField) {
@@ -749,7 +758,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $savedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
-        self::assertEquals(1, $result['totalcount']);
+        self::assertEquals(1, $result['totalcount'], print_r($result['results'], true));
 
         if (null !== $configuration && $configuration->modlogActive && $recordWasUpdated) {
             self::assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
@@ -931,7 +940,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
         ) {
-            self::markTestSkipped('FIXME: Does not work with LDAP/AD backend');
+            self::markTestSkipped('Does not work with LDAP/AD backend');
         }
     }
 
@@ -967,5 +976,141 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         );
         self::assertEquals(1, count($result));
         return $result;
+    }
+
+    /**
+     * @return NULL|Felamimail_Model_Account
+     */
+    protected function _getTestUserFelamimailAccount()
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+           ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM]
+        ]);
+        return Felamimail_Controller_Account::getInstance()->search($filter)->getFirstRecord();
+    }
+
+    /**
+     * @param array $xpropsToSet
+     * @return Addressbook_Model_List
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _createMailinglist($xpropsToSet = [])
+    {
+        // create list with unittest user as member
+        $name = 'testsievelist' . Tinebase_Record_Abstract::generateUID(5);
+        $list = new Addressbook_Model_List([
+            'name' => $name,
+            'email' => $name . '@' . TestServer::getPrimaryMailDomain(),
+            'container_id' => $this->_getTestContainer('Addressbook', 'Addressbook_Model_List'),
+            'members'      => [Tinebase_Core::getUser()->contact_id],
+        ]);
+        $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
+        foreach ($xpropsToSet as $xprop) {
+            $list->xprops()[$xprop] = 1;
+        }
+        $mailinglist = Addressbook_Controller_List::getInstance()->create($list);
+        $this->_listsToDelete[] = $mailinglist;
+        return $mailinglist;
+    }
+
+    /**
+     * create user account
+     *
+     * @param array $data
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _createUserWithEmailAccount($data = [])
+    {
+        $data = array_merge($data, $this->_getUserData(true));
+        return $this->_createTestUser($data);
+    }
+
+    protected function _getUserData($withEmail = false)
+    {
+        $username = 'phpunit_' . Tinebase_Record_Abstract::generateUID(6);
+        $data = [
+            'accountLoginName'      => $username,
+            'accountEmailAddress'   => $username . '@' . TestServer::getPrimaryMailDomain(),
+        ];
+        if ($withEmail) {
+            $data['imapUser'] = new Tinebase_Model_EmailUser([
+                'emailAddress' => $username . '@' . TestServer::getPrimaryMailDomain()
+            ]);
+        }
+        return $data;
+    }
+
+    protected function _createTestUser($data = null)
+    {
+        if ($data === null) {
+            $data = $this->_getUserData();
+        }
+        $pw = isset($data['password']) ? $data['password'] : Tinebase_Record_Abstract::generateUID(16);
+        $account = Admin_Controller_User::getInstance()->create(self::getTestUser($data), $pw, $pw);
+        $this->_usernamesToDelete[] = $account->accountLoginName;
+
+        return $account;
+    }
+
+    protected function _skipIfXpropsUserIdDeactivated()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()
+            || ! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS})
+        {
+            self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS config required');
+        }
+    }
+
+    /**
+     * @param $_modelName
+     * @param Tinebase_Model_User $_user
+     * @return NULL|Tinebase_Record_Interface
+     */
+    protected function _getPersonalContainerNode($_modelName = 'Filemanager', $_user = null)
+    {
+        $user = ($_user) ? $_user : Tinebase_Core::getUser();
+        return Tinebase_FileSystem::getInstance()->getPersonalContainer(
+            $user,
+            $_modelName,
+            $user
+        )->getFirstRecord();
+    }
+
+    /**
+     * @param null|Tinebase_Model_Container $personalFilemanagerContainer
+     * @return string
+     */
+    protected function _getPersonalFilemanagerPath($personalFilemanagerContainer = null)
+    {
+        if (!$personalFilemanagerContainer) {
+            $personalFilemanagerContainer = $this->_getPersonalContainerNode(
+                'Filemanager',
+                Tinebase_Core::getUser()
+            );
+        }
+
+        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
+            . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $personalFilemanagerContainer->name;
+        return $path;
+    }
+
+    protected function _getTestNodes($path, $name = 'test')
+    {
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field' => 'path',
+            'operator' => 'equals',
+            'value' => $path
+        ), array(
+            'field' => 'name',
+            'operator' => 'contains',
+            'value' => $name
+        )));
+        return Filemanager_Controller_Node::getInstance()->search($filter, new Tinebase_Model_Pagination([
+            'sort' => 'name',
+            'dir'  => 'DESC',
+        ]));
     }
 }

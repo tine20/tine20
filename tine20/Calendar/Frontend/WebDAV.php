@@ -22,6 +22,7 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
     /**
      * (non-PHPdoc)
      * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()
+     * @throws \Sabre\DAV\Exception\Forbidden
      */
     public function createExtendedCollection($name, array $resourceType, array $properties)
     {
@@ -34,7 +35,7 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
                 if (Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN)) {
                     $tasks = new Tasks_Frontend_WebDAV('tasks/' . $this->getName(), $this->_useIdAsName);
                 } else {
-                    throw new \Sabre\DAV\Forbidden('Tasks not allowed for user');
+                    throw new  \Sabre\DAV\Exception\Forbidden('Tasks not allowed for user');
                 }
                 
                 return $tasks->createExtendedCollection($name, $resourceType, $properties);

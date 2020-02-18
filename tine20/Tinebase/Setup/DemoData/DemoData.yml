@@ -1,0 +1,37 @@
+########################
+# Tine 2.0
+# @package     Admin
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Christian Feitl <c.feitl@metaways.de>
+# @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for Admin module
+# imports users, groups and roles
+########################
+---
+name: DemoData
+
+files:
+  #$app,$model,$definition,$file
+  - Admin/User/admin_user_import_csv/*
+  - Admin/Group/admin_group_import_csv/*
+  - Admin/Role/admin_role_import_csv/*
+  - Addressbook/Contact/adb_tine_import_csv/*
+  - Calendar/Event/cal_import_event_csv/*
+  - Inventory/InventroyItem/inv_tine_import_csv/*
+  - Tasks/Task/task_import_demo_csv/*
+  - Sales/Division/sales_import_division_csv/*
+  - Sales/CostCenter/sales_import_costcenter_csv/*
+  - Sales/Product/sales_import_product_csv/*
+  - Crm/Lead/crm_demo_import_csv/*
+  - HumanResources/Employee/hr_demodata_employee_import_csv/*
+  - Sales/Customer/sales_import_customer_csv/*
+  - Sales/Supplier/sales_import_supplier_csv/* # maybe field address import?'
+  - Sales/Contract/sales_import_contract_csv/*
+  - Sales/Offer/sales_import_offer_csv/*
+  - Sales/Invoice/sales_import_invoice_csv/*
+  - Sales/PurchaseInvoice/sales_import_purchaseinvoice_csv/*
+  - Sales/OrderConfirmation/sales_import_orderconfirmation_csv/*
+  - Timetracker/Timeaccount/time_import_timeaccount_csv/*
+  - Timetracker/Timesheet/time_import_timesheet_csv/*

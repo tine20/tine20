@@ -366,22 +366,6 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
 });
 
 /**
- * Model of an export/import definition
- * 
- * @constructor {Ext.data.Record}
- */
-Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
-    {name: 'id'             },
-    {name: 'name'           },
-    {name: 'label', sortType: Ext.data.SortTypes.asUCText },
-    {name: 'filename'       },
-    {name: 'plugin'         },
-    {name: 'description'    },
-    {name: 'model'          },
-    {name: 'plugin_options' }
-]));
-
-/**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.Credentials
  * @extends   Tine.Tinebase.data.Record
@@ -516,6 +500,7 @@ Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'grants', label: 'Grants' }, // _('Grants')
     { name: 'acl_node', label: 'Grants Folder' }, // _('Grants Folder')
     { name: 'object_id'},
+    { name: 'hash', label: 'MD5 Hash' }, // _('MD5 Hash')
     { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
     { name: 'preview_count', label: 'Preview Count', type: 'int' }, // _('Preview Count')
     { name: 'isIndexed', label: 'Indexed' }, // _('Indexed')

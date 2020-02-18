@@ -140,4 +140,19 @@ class Tinebase_WebDav_Plugin_ACL extends \Sabre\DAVACL\Plugin
         return $principals;
 
     }
+
+    /**
+     * Use this method to tell the server this plugin defines additional
+     * HTTP methods.
+     *
+     * This method is passed a uri. It should only return HTTP methods that are
+     * available for the specified uri.
+     *
+     * @param string $uri
+     * @return array
+     */
+    public function getHTTPMethods($uri) {
+
+        return ['ACL'];
+    }
 }

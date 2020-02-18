@@ -30,6 +30,20 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const DELETE_ARCHIVED_MAIL = 'deleteArchivedMail';
 
     /**
+     * migrate system accounts
+     *
+     * @var string
+     */
+    const FEATURE_ACCOUNT_MIGRATION = 'accountMigration';
+
+    /**
+     * auto save drafts
+     *
+     * @const string
+     */
+    const FEATURE_AUTOSAVE_DRAFTS = 'autoSaveDrafts';
+
+    /**
      * Tine 2.0 flag feature
      *
      * @var string
@@ -113,11 +127,22 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FLAG_ICON_OTHER_DOMAIN = 'flagIconOtherDomain';
     const FLAG_ICON_OTHER_DOMAIN_REGEX = 'flagIconOtherDomainRegex';
 
+    const SIEVE_MAILINGLIST_REJECT_REASON = 'sieveMailingListRejectReason';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::SIEVE_MAILINGLIST_REJECT_REASON => [
+            self::LABEL                 => 'Mailinglist Reject Reason', // _('Mailinglist Reject Reason')
+            self::DESCRIPTION           => 'Mailinglist Reject Reason',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => 'Your email has been rejected', // _('Your email has been rejected')
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::VACATION_TEMPLATES_CONTAINER_ID => array(
         //_('Vacation Templates Node ID')
             'label'                 => 'Vacation Templates Node ID',
@@ -177,6 +202,22 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => true,
             self::CONTENT               => [
+                self::FEATURE_ACCOUNT_MIGRATION => [
+                    self::LABEL                 => 'Account Migration',
+                    //_('Account Migration')
+                    self::DESCRIPTION           => 'Shows context menu for system accounts to approve migration',
+                    //_('Shows context menu for system accounts to approve migration')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
+                self::FEATURE_AUTOSAVE_DRAFTS   => [
+                    self::LABEL                 => 'Auto-Save Drafts',
+                    //_('Auto-Save Drafts')
+                    self::DESCRIPTION           => 'Save drafts automatically while editing an email',
+                    //_('Save drafts automatically while editing an email')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
                 self::FEATURE_TINE20_FLAG   => [
                     self::LABEL                 => 'Tine 2.0 Flag',
                     //_('Tine 2.0 Flag')
@@ -191,7 +232,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION           => 'Show Reply-To field in message compose dialog',
                     //_('Show Reply-To field in message compose dialog')
                     self::TYPE                  => self::TYPE_BOOL,
-                    self::DEFAULT_STR           => true,
+                    self::DEFAULT_STR           => false,
                 ],
                 self::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS   => [
                     self::LABEL                 => 'Auto-Create Folders',

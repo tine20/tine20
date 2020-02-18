@@ -1,13 +1,11 @@
 <?php
 /**
- * backend class for Tinebase_Http_Server
- *
- * This class handles all Http requests for the felamimail application
+ * This class handles all Http requests for the Felamimail application
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
@@ -18,14 +16,53 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @var string
      */
     protected $_applicationName = 'Felamimail';
-    
+
+    /**
+     * download email attachment(s)
+     *
+     * if multiple partIds are given, a zip file is created for download
+     *
+     * @param $id
+     * @param string $partIds (comma separated part ids)
+     * @param string $model
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function downloadAttachments($id, $partIds, $model = 'Felmimail_Model_Message')
+    {
+        $partIds = strpos($partIds, ',') !== false
+            ? explode(',', $partIds)
+            : [$partIds];
+
+        switch ($model) {
+            case 'Felamimail_Model_Message':
+                if (count($partIds) === 1) {
+                    $this->_downloadAttachment($id, array_pop($partIds));
+                } else {
+                    $this->_downloadAttachments($id, $partIds);
+                }
+                break;
+            case 'Filemanager_Model_Node':
+            case 'Tinebase_Model_Node':
+                if (count($partIds) === 1) {
+                    $this->_downloadNodeAttachment($id, array_pop($partIds));
+                } else {
+                    throw new Tinebase_Exception_NotImplemented(
+                        'download of multiple node attachments not implemented yet');
+                }
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument(
+                    'attachments of model ' . $model . ' cannot be downloaded');
+        }
+    }
+
     /**
      * download email attachment
      *
      * @param  string  $messageId
      * @param  string  $partId
      */
-    public function downloadAttachment($messageId, $partId)
+    protected function _downloadAttachment($messageId, $partId)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Downloading Attachment ' . $partId . ' of message with id ' . $messageId
@@ -35,14 +72,59 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
 
     /**
+     * download multiple email attachments as zip file
+     *
+     * @param  string  $messageId
+     * @param  array  $partIds
+     */
+    protected function _downloadAttachments($messageId, $partIds = [])
+    {
+        if (empty($partIds)) {
+            return;
+        }
+
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId);
+
+        // collect all parts and build zip for download
+        $zip = new ZipArchive();
+        $zipfilename = Tinebase_TempFile::getTempPath();
+        $opened = $zip->open($zipfilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+
+        if( $opened !== true ) {
+            throw new Exception('could not open zip file');
+        }
+
+        foreach ($message['attachments'] as $attachment) {
+            if (! in_array($attachment['partId'], $partIds)) {
+                // skip
+                continue;
+            }
+
+            // create temp file for each attachment
+            $part = Felamimail_Controller_Message::getInstance()->getMessagePart($message, $attachment['partId']);
+
+            // $stream = $part->getRawStream(); // : $part->getDecodedStream();
+            $stream = $part->getDecodedStream();
+            $tempfile = Tinebase_TempFile::getInstance()->createTempFileFromStream($stream);
+
+            $zip->addFile($tempfile->path, $attachment['filename']);
+        }
+        $zip->close();
+
+        $stream = fopen($zipfilename, 'r');
+        // TODO use subject as filename?
+        $this->_prepareHeader('attachments.zip', 'application/zip');
+        fpassthru($stream);
+        fclose($stream);
+    }
+
+    /**
      * download node attachment
      *
      * @param  string  $nodeId
      * @param  string  $partId
-     *
-     * @todo write a test
      */
-    public function downloadNodeAttachment($nodeId, $partId)
+    protected function _downloadNodeAttachment($nodeId, $partId)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Downloading Attachment ' . $partId . ' of node with id ' . $nodeId
@@ -137,8 +219,15 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             if ($validateImage) {
                 $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_imgdata');
                 $tmpFile = fopen($tmpPath, 'w');
-                stream_copy_to_stream($stream, $tmpFile);
-                fclose($tmpFile);
+                try {
+                    stream_copy_to_stream($stream, $tmpFile);
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Could not copy stream: ' . $e->getMessage());
+                } finally {
+                    fclose($tmpFile);
+                }
                 // @todo check given mimetype or all images types?
                 if (! Tinebase_ImageHelper::isImageFile($tmpPath)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
@@ -154,9 +243,9 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
             
             fclose($stream);
-            
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to get message part: ' . $e->getMessage());
+
+        } catch (Throwable $t) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to get message part: ' . $t->getMessage());
         }
         
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -178,7 +267,9 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             return $part->filename;
         }
         
-        if ($contentType != Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && preg_match('@[a-z]+/([a-z]+)@', $contentType, $extensionMatch)) {
+        if ($contentType != Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+            && preg_match('@[a-z]+/([a-z]+)@', $contentType, $extensionMatch))
+        {
             $extension = '.' . $extensionMatch[1];
         } else {
             $extension = '.eml';
@@ -200,9 +291,12 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Requesting resource <' . $cid . '> for message ' . $messageId);
-        
-        $resPart = Felamimail_Controller_Message::getInstance()->getResourcePartStructure($cid, $messageId);
-        
-        $this->_outputMessagePart($messageId, $resPart['partId'], 'inline', TRUE);
+
+        try {
+            $resPart = Felamimail_Controller_Message::getInstance()->getResourcePartStructure($cid, $messageId);
+            $this->_outputMessagePart($messageId, $resPart['partId'], 'inline', TRUE);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+        }
     }
 }

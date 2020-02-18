@@ -46,15 +46,11 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
             listeners: {scope: this, check: this.onMailinglistCheck}
         });
 
-        // TODO add description?
-        // this.isMailinglistDescription = new Ext.form.Label({
-        //     text: this.app.i18n._("Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself.")
-        // });
-
         var checkboxLabels = {
             'sieveKeepCopy': this.app.i18n._('Keep copy of group mails'),
             'sieveAllowExternal': this.app.i18n._('Forward external mails'),
-            'sieveAllowOnlyMembers': this.app.i18n._('Only forward member mails')
+            'sieveAllowOnlyMembers': this.app.i18n._('Only forward member mails'),
+            'sieveForwardOnlySystem': this.app.i18n._('Only forward to system email accounts')
         }, checkboxItems = [this.isMailinglistCheckbox];
         _.forOwn(checkboxLabels, function(label, key) {
             panel.checkboxes[key] = new Ext.form.Checkbox({
@@ -122,7 +118,7 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         var xprops = record.get('xprops'),
             isMailingList = this.isMailinglistCheckbox.getValue();
 
-        if (! xprops) {
+        if (! xprops || Ext.isArray(xprops)) {
             xprops = {};
         }
         xprops.useAsMailinglist = isMailingList;

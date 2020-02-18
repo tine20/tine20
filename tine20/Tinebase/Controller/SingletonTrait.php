@@ -54,5 +54,11 @@ trait Tinebase_Controller_SingletonTrait
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {}
+    protected function __construct() {}
+
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    protected function __clone() {}
 }

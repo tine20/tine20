@@ -150,10 +150,6 @@ Tine.Sales.InvoiceDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             } else {
                                 return '';
                             }
-                        case 'contract':
-                        case 'customer':
-                            var renderer = Tine.widgets.grid.RendererManager.get('Sales', 'Invoice', key);
-                            return renderer(that.record.get('relations'));
                         case 'price_gross':
                             return Ext.util.Format.money(value.price_gross);
                         case 'price_net':

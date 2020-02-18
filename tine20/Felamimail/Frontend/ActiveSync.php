@@ -172,7 +172,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $replyBody = NULL;
         }
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody, $account->signature);
         if ($rfc822) {
             $mail->addAttachment($rfc822);
         }
@@ -249,8 +249,13 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " fileReference " . $fileReference);
-        
-        list($messageId, $partId) = explode(ActiveSync_Frontend_Abstract::LONGID_DELIMITER, $fileReference, 2);
+
+        if (strpos($fileReference, ActiveSync_Frontend_Abstract::LONGID_DELIMITER) !== false) {
+            list($messageId, $partId) = explode(ActiveSync_Frontend_Abstract::LONGID_DELIMITER, $fileReference, 2);
+        } else {
+            $messageId = $fileReference;
+            $partId = null;
+        }
         
         $part = $this->_contentController->getMessagePart($messageId, $partId);
         
@@ -319,7 +324,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $replyBody = null;
         }
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody, $account->signature);
         
         Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
     }
@@ -379,7 +384,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . " Send Message with subject " . $subject . " (saveInSent: " . $saveInSent . ")");
-            
+
             $mail = Tinebase_Mail::createFromZMM($incomingMessage, null, $account->signature);
         
             Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
@@ -848,8 +853,11 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             } catch (Tinebase_Exception_NotFound $ten) {
                 return NULL;
             }
+
+            // set default signature
+            $this->_account->setSignatureText();
         }
-        
+
         return $this->_account;
     }
     

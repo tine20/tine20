@@ -76,6 +76,8 @@ class TestServer
         Zend_Session::$_unitTestEnabled = TRUE;
 
         Tinebase_Core::set('frameworkInitialized', true);
+
+        Tinebase_Core::set(Tinebase_Core::CONTAINER, Tinebase_Core::getPreCompiledContainer());
     }
     
     /**
@@ -197,7 +199,7 @@ class TestServer
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Script name: ' . $_SERVER['SCRIPT_NAME']);
         
         $cmd = preg_replace(array(
-            '@' . preg_quote($_SERVER['SCRIPT_NAME']) . '@',
+            '@' . preg_quote($_SERVER['SCRIPT_NAME'], '@') . '@',
             '/--stderr /',
             '/--colors{0,1} /',
             '/--verbose /',
@@ -319,6 +321,7 @@ class TestServer
      * @return array
      * 
      * @todo DRY: should be moved to abstract TestCase and used in ServerTestCase
+     * @todo should return a Std object with user/pw properties
      */
     public function getTestCredentials()
     {
@@ -330,5 +333,15 @@ class TestServer
             'username' => $username,
             'password' => $password
         );
+    }
+
+    /**
+     * @return bool
+     *
+     * TODO replace usage with Tinebase_EmailUser::isEmailSystemAccountConfigured()
+     */
+    public static function isEmailSystemAccountConfigured()
+    {
+        return Tinebase_EmailUser::isEmailSystemAccountConfigured();
     }
 }

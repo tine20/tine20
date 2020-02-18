@@ -401,7 +401,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             throw new Tinebase_Exception_InvalidArgument('mandatory parameter "jobId" is missing');
         }
 
-        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if (isset($args[1]) && $args[1] === 'longRunning=true') {
+            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+        } else {
+            $actionQueue = Tinebase_ActionQueue::getInstance();
+        }
         $job = $actionQueue->receive($jobId);
 
         if (isset($job['account_id'])) {
@@ -433,7 +437,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
         $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
 
-        $db = Tinebase_Core::getDb();
         foreach ((array)$args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
@@ -520,6 +523,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * cleanNotes: removes notes of records that have been deleted
+     *
+     * -- purge=1 param also removes redundant notes (empty updates + create notes)
+     * supports dry run (-d)
      */
     public function cleanNotes(Zend_Console_Getopt $_opts)
     {
@@ -534,6 +540,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $models = array();
         $deleteIds = array();
         $deletedCount = 0;
+        $purge = isset($args['purge']) ? $args['purge'] : false;
+        $purgeCountCreated = 0;
+        $purgeCountEmptyUpdate = 0;
 
         do {
             echo "\noffset $offset...";
@@ -602,6 +611,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                     if ($result === 0) {
                         $deleteIds[] = $note->getId();
+                    } else if ($purge) {
+                        if ($note->note_type_id == 4) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountCreated++;
+                        } else if ($note->note_type_id == 5 && strpos($note->note, '|') === false) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountEmptyUpdate++;
+                        }
                     }
                 } else {
                     try {
@@ -613,19 +630,31 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
             if (count($deleteIds) > 0) {
                 $deletedCount += count($deleteIds);
-                $offset -= $notesController->purgeNotes($deleteIds);
-                if ($offset < 0) $offset = 0;
+                if ($_opts->d) {
+                    $offset -= count($deleteIds);
+                } else {
+                    $offset -= $notesController->purgeNotes($deleteIds);
+                }
+                if ($offset < 0) {
+                    $offset = 0;
+                }
                 $deleteIds = [];
             }
             echo ' done';
         } while ($notes->count() === $limit);
 
-
-
         foreach($controllers as $model => $controller) {
             $controller->doContainerACLChecks($models[$model][3]);
         }
 
+        if ($_opts->d) {
+            echo "\nDRY RUN!";
+        }
+
+        if ($purge) {
+            echo "\npurged " . $purgeCountEmptyUpdate . " system notes with empty updates";
+            echo "\npurged " . $purgeCountCreated . " create system notes";
+        }
         echo "\ndeleted " . $deletedCount . " notes\n";
     }
 
@@ -753,7 +782,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected function _orderTables($tables)
     {
-        // tags should be deleted first
+        // tags + tree_nodes should be deleted first
         // containers should be deleted last
 
         $orderedTables = array();
@@ -767,6 +796,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     array_unshift($lastTables, $table);
                     break;
                 case 'tags':
+                case 'tree_nodes': // delete them before tree_objects
+                case 'cal_attendee': // delete them before events
                     array_unshift($orderedTables, $table);
                     break;
                 default:
@@ -797,9 +828,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 continue;
             }
 
+
             $deleteCount = 0;
             try {
-                $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                if ($table === 'tree_nodes') {
+                    $deleteCount = $this->_purgeTreeNodes($where);
+                } else {
+                    $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                }
             } catch (Zend_Db_Statement_Exception $zdse) {
                 echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
             }
@@ -811,6 +847,28 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo "\nNothing to purge from $table";
             }
         }
+    }
+
+    protected function _purgeTreeNodes($where)
+    {
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
+
+        array_walk($where, function (&$item) {
+            $item = 'n.' . $item;
+        });
+        $table = SQL_TABLE_PREFIX . 'tree_nodes';
+        $idsQuery = 'SELECT n.id from ' . $table . ' as n LEFT JOIN ' . $table . ' as '
+            . 'child on n.id = child.parent_id WHERE child.id is NULL AND ' . implode(' AND ', $where);
+        $deleteQuery = 'DELETE FROM ' . $table . ' WHERE id IN (?)';
+        $deleteCount = 0;
+
+        do {
+            $ids = Tinebase_Core::getDb()->query($idsQuery)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+            $deleteCount += count($ids);
+        } while (!empty($ids) && Tinebase_Core::getDb()->query(Tinebase_Core::getDb()->quoteInto($deleteQuery, $ids))
+            ->rowCount() > 0);
+
+        return $deleteCount;
     }
 
     /**
@@ -1167,23 +1225,31 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, '');
                     }
 
-                    if ($lastDuration > 3600) {
-                        throw new Tinebase_Exception('last duration > 3600 sec - ' . $lastDuration);
+                    if ($lastDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_CRIT}) {
+                        throw new Tinebase_Exception('last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_CRIT} . ' sec - ' . $lastDuration);
                     }
-                    if ($now - $lastDurationUpdate > 3600) {
-                        throw new Tinebase_Exception('last duration update > 3600 sec - ' . ($now - $lastDurationUpdate));
-                    }
-
-                    if ($diff > 60 && null === $warn) {
-                        $warn = 'last job id change > 60 sec - ' . $diff;
+                    if ($now - $lastDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT}) {
+                        throw new Tinebase_Exception('last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT} . ' sec - ' . ($now - $lastDurationUpdate));
                     }
 
-                    if ($lastDuration > 60 && null === $warn) {
-                        $warn = 'last duration > 60 sec - ' . $lastDuration;
+                    if ($diff > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last job id change > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - ' . $diff;
                     }
 
-                    if ($now - $lastDurationUpdate > 70 && null === $warn) {
-                        $warn = 'last duration update > 70 sec - ' . ($now - $lastDurationUpdate);
+                    if ($lastDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - ' . $lastDuration;
+                    }
+
+                    if ($now - $lastDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN}
+                        && null === $warn
+                    ) {
+                        $warn = 'last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN} . ' sec - '
+                            . ($now - $lastDurationUpdate);
                     }
 
 
@@ -1276,7 +1342,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'record_type',
             'modification_time',
             'modification_account',
-            'record_id'
+            'record_id',
+            'client',
         );
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFilters)) {
@@ -1454,7 +1521,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemCheckIndexing()
     {
-
         $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->checkIndexing();
@@ -1471,7 +1537,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemCheckPreviews()
     {
-
         $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
@@ -1486,9 +1551,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemRecreateAllPreviews()
     {
-
         $this->_checkAdminRight();
 
+        // TODO reset preview_error_count
         Tinebase_FileSystem_Previews::getInstance()->deleteAllPreviews();
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
 
@@ -1817,5 +1882,52 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $messageBody = 'Tine 2.0 test notification has been sent successfully';
         Tinebase_Notification::getInstance()->send(null, array($recipient), $messageSubject, $messageBody);
         return 0;
+    }
+
+    /**
+     * Delete duplicate personal container without content.
+     *
+     * e.g. php tine20.php --method=Tinebase.duplicatePersonalContainerCheck app=Addressbook [-d]
+     *
+     * @param $opts
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_SystemContainer
+     */
+    public function duplicatePersonalContainerCheck($opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($opts, array('app'));
+
+        $removeCount = Tinebase_Container::getInstance()->deleteDuplicateContainer($args['app'], $opts->d);
+        if ($opts->d) {
+            echo "Would remove " . $removeCount . " duplicates\n";
+        } else {
+            echo $removeCount . " duplicates removed\n";
+        }
+    }
+
+    public function repairTreeIsDeletedState($opts)
+    {
+        $this->_checkAdminRight();
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
+    }
+
+    /**
+     * activate saving of email user id in xprops and converts existing accounts
+     */
+    public function emailUserIdInXprops()
+    {
+        $this->_checkAdminRight();
+
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            Felamimail_Controller_Account::getInstance()->convertAccountsToSaveUserIdInXprops();
+        }
+
+        Admin_Controller_User::getInstance()->convertAccountsToSaveUserIdInXprops();
+
+        // activate config
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
     }
 }

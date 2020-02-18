@@ -33,6 +33,7 @@ class Tinebase_Model_Tree_FileObjectFilter extends Tinebase_Model_Filter_FilterG
      */
     protected $_filterModel = [
         'is_deleted'            => ['filter' => Tinebase_Model_Filter_Bool::class],
-        'type'                  => ['filter' => Tinebase_Model_Filter_Text::class]
+        'type'                  => ['filter' => Tinebase_Model_Filter_Text::class],
+        'size'                  => ['filter' => Tinebase_Model_Filter_Int::class, 'options' => ['tablename' => 'tree_filerevisions']]
     ];
 }

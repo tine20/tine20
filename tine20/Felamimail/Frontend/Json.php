@@ -19,7 +19,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_applicationName = 'Felamimail';
-    
+
+    protected $_configuredModels = [
+        'Account',
+        'Signature',
+    ];
+
     /***************************** folder funcs *******************************/
     
     /**
@@ -135,6 +140,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param array  $filterData
      * @return array of folder status
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function getFolderStatus($filterData)
     {
@@ -142,7 +148,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Session::writeClose(true);
         
         $filter = new Felamimail_Model_FolderFilter($filterData);
-        $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
+        try {
+            $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
+        } catch (Exception $e) {
+            // we have to convert this exception because the frontend does not handle the imap errors well...
+            throw new Tinebase_Exception_SystemGeneric('Failed to get folder status: ' . $e->getMessage());
+        }
         return $this->_multipleRecordsToJson($result);
     }
     
@@ -236,9 +247,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveMessage($recordData)
     {
-        $message = new Felamimail_Model_Message();
-        $message->setFromJsonInUsersTimezone($recordData);
-        
+        $message = $this->_jsonToRecord($recordData, Felamimail_Model_Message::class);
         $result = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
         $result = $this->_recordToJson($result);
         
@@ -254,13 +263,34 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveMessageInFolder($folderName, $recordData)
     {
-        $message = new Felamimail_Model_Message();
-        $message->setFromJsonInUsersTimezone($recordData);
-        
+        $message = $this->_jsonToRecord($recordData, Felamimail_Model_Message::class);
         $result = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($folderName, $message);
-        $result = $this->_recordToJson($result);
-        
-        return $result;
+        return $this->_recordToJson($result);
+    }
+
+    /**
+     * @param $recordData
+     * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function saveDraft($recordData)
+    {
+        $message = $this->_jsonToRecord($recordData, Felamimail_Model_Message::class);
+        $result = Felamimail_Controller_Message::getInstance()->saveDraft($message);
+        return $this->_recordToJson($result);
+    }
+
+    /**
+     * @param integer $uid
+     * @param string $accountid
+     * @return array
+     */
+    public function deleteDraft($uid, $accountid)
+    {
+        return [
+            'success' => Felamimail_Controller_Message::getInstance()->deleteDraft($uid, $accountid)
+        ];
     }
 
     /**
@@ -276,16 +306,42 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $filter = $this->_decodeFilter($filterData, 'Felamimail_Model_MessageFilter');
 
-        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, new Tinebase_Record_RecordSet(
-            Felamimail_Model_MessageFileLocation::class,
-            $locations,
-            true
-        ));
+        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter,
+            new Tinebase_Record_RecordSet(
+                Felamimail_Model_MessageFileLocation::class,
+                $locations,
+                true
+            )
+        );
 
         return array(
             'totalcount' => ($result === false) ? 0 : $result,
             'success'    => ($result > 0),
         );
+    }
+
+    /**
+     * @param string $id
+     * @param array $locations
+     * @param array $attachments
+     * @param string $model
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function fileAttachments($id, $locations, $attachments = [], $model = 'Felamimail_Model_Message')
+    {
+        return [
+            'success' => Felamimail_Controller_Message_File::getInstance()->fileAttachments(
+                $id,
+                new Tinebase_Record_RecordSet(
+                    Felamimail_Model_MessageFileLocation::class,
+                    $locations,
+                    true
+                ),
+                $attachments,
+                $model
+            )
+        ];
     }
 
     /**
@@ -373,12 +429,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
-            
-        } else if ($_record instanceof Felamimail_Model_Account) {
-            // add usernames
-            $_record->resolveCredentials();                   // imap
-            $_record->resolveCredentials(TRUE, FALSE, TRUE); // smtp
-            
+
         } else if ($_record instanceof Felamimail_Model_Sieve_Vacation) {
             if (! $_record->mime) {
                 $_record->reason = Tinebase_Mail::convertFromTextToHTML($_record->reason, 'felamimail-body-blockquote');
@@ -431,7 +482,57 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchAccounts($filter)
     {
-        return $results = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
+        $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
+        // add signatures and remove ADB list type from result set
+        // TODO move this to a better place (default filter?)
+        foreach ($accounts['results'] as $idx => $account) {
+            if (in_array($account['type'], [
+                Felamimail_Model_Account::TYPE_SHARED,
+                Felamimail_Model_Account::TYPE_USER,
+                Felamimail_Model_Account::TYPE_USER_INTERNAL,
+                Felamimail_Model_Account::TYPE_SYSTEM,
+            ])) {
+                $fullAccount = $this->getAccount($account['id']);
+                $this->_reloadFolderCacheOnPrimaryAccount($fullAccount);
+                $accounts['results'][$idx] = $fullAccount;
+            } else {
+                unset($accounts['results'][$idx]);
+                $accounts['totalcount']--;
+            }
+        }
+        // Reorder the array (client does not like missing indices
+        $accounts['results'] = array_values($accounts['results']);
+
+        return $accounts;
+    }
+
+    /**
+     * reload folder cache on primary account - only do this once an hour (with caching)
+     *
+     * @param $account
+     * @return boolean
+     */
+    protected function _reloadFolderCacheOnPrimaryAccount($account)
+    {
+        if (Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} !== $account['id']) {
+            return false;
+        }
+
+        $cache = Tinebase_Core::getCache();
+        $cacheId = Tinebase_Helper::convertCacheId('_reloadFolderCacheOnPrimaryAccount' . $account['id']);
+        if ($cache->test($cacheId)) {
+            return $cache->load($cacheId);
+        }
+
+        try {
+            $this->updateFolderCache($account['id'], '');
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Could not update account folder cache: ' . $e->getMessage()
+            );
+        }
+        $cache->save(true, $cacheId, [], 3600);
+        return true;
     }
     
     /**
@@ -478,8 +579,22 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function changeCredentials($id, $username, $password)
     {
         $result = Felamimail_Controller_Account::getInstance()->changeCredentials($id, $username, $password);
-        
-        return array('status' => ($result) ? 'success' : 'failure');
+        return [
+            'status' => ($result) ? 'success' : 'failure'
+        ];
+    }
+
+    /**
+     * @param string $accountId
+     * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function approveAccountMigration($accountId)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->approveMigration($accountId);
+        return [
+            'status' => ($account->migration_approved === 1) ? 'success' : 'failure'
+        ];
     }
     
     /***************************** sieve funcs *******************************/
@@ -580,26 +695,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
-     * 
-     * @todo get default account data (host, port, ...) from preferences?
      */
     public function getRegistryData()
     {
-        try {
-            $accounts = $this->searchAccounts('');
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            $accounts = array(
-                'results'       => array(),
-                'totalcount'    => 0,
-            );
-        }
-        
         $supportedFlags = Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags();
         
         $result = array(
-            'accounts'              => $accounts,
             'supportedFlags'        => array(
                 'results'       => $supportedFlags,
                 'totalcount'    => count($supportedFlags),
@@ -668,16 +769,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getFileSuggestions($message)
     {
-        $suggestions = Felamimail_Controller_Message_File::getInstance()->getFileSuggestions(
-            new Felamimail_Model_Message($message), true
-        );
         $result = [];
-        foreach ($suggestions as $suggestion) {
-            $result[] = [
-                'type' => $suggestion->type,
-                'model' => $suggestion->model,
-                'record' => $this->_recordToJson($suggestion->record),
-            ];
+        if ($message) {
+            $record = $this->_jsonToRecord($message, Felamimail_Model_Message::class);
+            $suggestions = Felamimail_Controller_Message_File::getInstance()->getFileSuggestions($record);
+            foreach ($suggestions as $suggestion) {
+                $result[] = [
+                    'type' => $suggestion->type,
+                    'model' => $suggestion->model,
+                    'record' => $this->_recordToJson($suggestion->record),
+                ];
+            }
         }
         return $result;
     }

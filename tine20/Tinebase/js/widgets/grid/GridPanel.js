@@ -35,6 +35,13 @@ Tine.widgets.grid.GridPanel = function(config) {
         limit: 50
     };
 
+    // allow to initialize with string
+    this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+
+    if (! this.app && this.recordClass) {
+        this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+    }
+
     // autogenerate stateId
     if (this.stateful !== false && ! this.stateId) {
         this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
@@ -53,6 +60,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * instance of the app object (required)
      */
     app: null,
+    /**
+     * @cfg {Boolean} asAdminModule is the panel in an admin context? this is passed to the edit dialog, too
+     */
+    asAdminModule: false,
     /**
      * @cfg {Object} gridConfig
      * Config object for the Ext.grid.GridPanel
@@ -204,6 +215,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @cfg {Boolean} hasQuickSearchFilterToolbarPlugin 
      */
     hasQuickSearchFilterToolbarPlugin: true,
+
+    /**
+     * display selections helper on paging tb
+     * @cfg {Boolean} displaySelectionHelper
+     */
+    displaySelectionHelper: true,
 
     /**
      * disable 'select all pages' in paging toolbar
@@ -456,7 +473,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (existingRecord && e.topic.match(/\.update/)) {
             // NOTE: local mode saves again (and again...)
             this.onUpdateRecord(JSON.stringify(data)/*, 'local'*/);
-        } if (existingRecord && e.topic.match(/\.delete/)) {
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
             this.store.remove(existingRecord);
         } else {
             // we can't evaluate the filters on client side to check compute if this affects us
@@ -466,7 +483,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         }
         // NOTE: grid doesn't update selections itself
-        this.actionUpdater.updateActions(this.grid.getSelectionModel());
+        this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
     },
 
     /**
@@ -1205,8 +1222,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.editBuffer = [];
         }
 
-//        options.preserveSelection = options.hasOwnProperty('preserveSelection') ? options.preserveSelection : true;
-//        options.preserveScroller = options.hasOwnProperty('preserveScroller') ? options.preserveScroller : true;
+        if (! options.preserveSelection) {
+            this.actionUpdater.updateActions([]);
+        }
 
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
@@ -1236,6 +1254,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }, this);
         }
+        this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
 
         // restore scroller
         if (Ext.isNumber(options.preserveScroller)) {
@@ -1246,6 +1265,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (window.isMainWindow && this.autoRefreshInterval) {
             this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
         }
+    },
+
+    /**
+     * gets currently displayed container in case a container filter is set
+     * NOTE: this data is unresolved as it comes from filter and not through json convert!
+     */
+    getFilteredContainers: function() {
+        const containerFilter = _.find(_.get(this, 'store.reader.jsonData.filter[0].filters[0].filters', {}), {field: this.recordClass.getMeta('containerProperty')});
+        const operator = _.get(containerFilter, 'operator', '');
+        const value = operator.match(/equals|in/) ? _.get(containerFilter, 'value', null) : null;
+
+        return value && _.isArray(value) ? [value] : value;
     },
 
     /**
@@ -1410,12 +1441,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nEmptyText = i18n.gettext('No data to display');
         
         // init sel model
-        this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
-            store: this.store,
-            gridPanel: this
-        });
+        if (! this.selectionModel) {
+            this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
+                store: this.store,
+                gridPanel: this
+            });
+        }
+
         this.selectionModel.on('selectionchange', function(sm) {
-            this.actionUpdater.updateActions(sm);
+            this.actionUpdater.updateActions(sm, this.getFilteredContainers());
 
             this.ctxNode = this.selectionModel.getSelections();
             if (this.updateOnSelectionChange && this.detailsPanel) {
@@ -1430,7 +1464,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 displayInfo: true,
                 displayMsg: i18n._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
                 emptyMsg: String.format(i18n._("No {0} to display"), this.i18nRecordsName),
-                displaySelectionHelper: true,
+                displaySelectionHelper: this.displaySelectionHelper,
                 sm: this.selectionModel,
                 disableSelectAllPages: this.disableSelectAllPages,
                 nested: this.editDialog ? true : false
@@ -1447,9 +1481,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.gridConfig.quickaddMandatory) {
             Grid = Ext.ux.grid.QuickaddGridPanel;
             this.gridConfig.validate = true;
-
-            // TODO allow to configure this?
-            this.gridConfig.resetAllOnNew = true;
         } else {
             Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
         }
@@ -1538,7 +1569,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} options
      */
     loadGridData: function(options) {
-        var options = options || {};
+        options = options || {};
 
         Ext.applyIf(options, {
             callback:           Ext.emptyFn,
@@ -1872,27 +1903,39 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
             result = [];
         Ext.each(cfConfigs, function(cfConfig) {
-            var cfDefinition = cfConfig.get('definition');
-            switch (cfDefinition.type) {
-                case 'record':
-                    result.push({
-                        filtertype: 'foreignrecord',
-                        label: cfDefinition.label,
-                        app: this.app,
-                        ownRecordClass: this.recordClass,
-                        foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
-                        linkType: 'foreignId',
-                        ownField: 'customfield:' + cfConfig.id
-                    });
-                    break;
-                case 'keyfield':
-                    // @TODO implement me
-                    break;
-                default:
-                    result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
-                    break;
+            try {
+                var cfDefinition = cfConfig.get('definition');
+                switch (cfDefinition.type) {
+                    case 'record':
+                        if (_.get(window, cfDefinition.recordConfig.value.records)) {
+                            result.push({
+                                filtertype: 'foreignrecord',
+                                label: cfDefinition.label,
+                                app: this.app,
+                                ownRecordClass: this.recordClass,
+                                foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
+                                linkType: 'foreignId',
+                                ownField: 'customfield:' + cfConfig.id,
+                                pickerConfig: cfDefinition.recordConfig.additionalFilterSpec ? {
+                                    additionalFilterSpec: cfDefinition.recordConfig.additionalFilterSpec
+                                } : null
+                            });
+                        }
+                        break;
+                    case 'keyfield':
+                        // @TODO implement me
+                        break;
+                    default:
+                        result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+                        break;
+                }
+
+            } catch (e) {
+                Tine.log.warn('CustomfieldFilters ' + cfDefinition.label + ' doesnt create');
+
             }
         }, this);
+
 
         return result;
     },
@@ -1952,6 +1995,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // no keys for quickadds etc.
         if (e.getTarget('input') || e.getTarget('textarea')) return;
 
+        // do not catch modified keys (CTRL, ALT)
+        if (e.ctrlKey || e.altKey) return;
+
         switch (e.getKey()) {
             case e.A:
                 // select only current page
@@ -1999,14 +2045,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     }
                 }
                 if (e.browserEvent.key === '?') {
-                    // TODo translate key bindings
                     // TODO only show keys of actions that are available
-                    var helpText = 'A: select all visible rows<br/>' +
-                        'C: copy record<br/>' +
-                        'E: edit record<br/>' +
-                        'N: new record<br/>' +
-                        'F: find<br/>' +
-                        'R: reload grid<br/>';
+                    var helpText = i18n._('A: select all visible rows') + '<br/>' +
+                        i18n._('C: copy record') + '<br/>' +
+                        i18n._('E: edit record') + '<br/>' +
+                        i18n._('N: new record') + '<br/>' +
+                        i18n._('F: find') + '<br/>' +
+                        i18n._('ESC: focus grid') + '<br/>' +
+                        i18n._('R: reload grid') + '<br/>';
                     Ext.MessageBox.show({
                         title: i18n._('Grid Panel Key Bindings'),
                         msg: helpText,
@@ -2153,17 +2199,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                plugins: plugins ? Ext.encode(plugins) : null,
+                plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 recordId: record.getId(),
                 copyRecord: (button.actionType == 'copy'),
+                asAdminModule: this.asAdminModule,
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'record,recordId,listeners,fixedFields,copyRecord,plugins,additionalConfig')
+            }, 'record,recordId,listeners,fixedFields,copyRecord,plugins,additionalConfig,asAdminModule')
         );
         return true;
     },
@@ -2220,28 +2267,39 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.log.debug(record, mode);
 
         if (record && Ext.isFunction(record.copy)) {
-            var idx = this.getStore().indexOfId(record.id);
+            var idx = this.getStore().indexOfId(record.id),
+                isSelected = this.getGrid().getSelectionModel().isSelected(idx),
+                store = this.getStore();
+
             if (idx >= 0) {
                 // only run do this in local mode as we reload the store in remote mode
                 // NOTE: this would otherwise delete the record if a record proxy exists!
                 if (mode == 'local') {
-                    var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
-                    this.getStore().removeAt(idx);
-                    this.getStore().insert(idx, [record]);
-                    if (isSelected) {
-                        this.getGrid().getSelectionModel().selectRow(idx, true);
-                    }
+                    store.removeAt(idx);
+                    store.insert(idx, [record]);
                 }
             } else {
                 this.getStore().add([record]);
             }
+
+            // sort new/edited record
+            store.remoteSort = false;
+            store.sort(store.sortInfo.field, store.sortInfo.direction)
+            store.remoteSort = this.storeRemoteSort;
+
+            if (isSelected) {
+                this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
+            }
+
             this.addToEditBuffer(record);
         }
 
         if (mode == 'local') {
             this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
         } else {
-            this.bufferedLoadGridData();
+            this.bufferedLoadGridData({
+                removeStrategy: 'keepBuffered',
+            });
         }
     },
 

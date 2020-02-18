@@ -935,7 +935,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             }
             $id = $_id->getId();
         } elseif (is_array($_id)) {
-            throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
+            if (isset($_id['id'])) {
+                $id = $_id['id'];
+            } else {
+                throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
+            }
         } else {
             $id = $_id;
         }
@@ -1026,12 +1030,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                         $ownField = $ownField->getId();
                     }
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                            ' Doing subdiff for field ' . $fieldName);
-                    }
                     $subdiff = $ownField->diff($recordField);
-                    if (is_object($subdiff) && !$subdiff->isEmpty()) {
+                    if (($subdiff instanceof Tinebase_Record_Diff || $subdiff instanceof Tinebase_Record_RecordSetDiff)
+                        && !$subdiff->isEmpty()
+                    ) {
                         $diff[$fieldName] = $subdiff;
                         $oldData[$fieldName] = $ownField;
                     }
@@ -1393,6 +1395,8 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 if (isset($this->_properties[$key])) {
                     /** @var Tinebase_Model_Converter_Interface $converter */
                     $this->_properties[$key] = $converter->convertToData($this, $key, $this->_properties[$key]);
+                } elseif ($converter instanceof Tinebase_Model_Converter_RunOnNullInterface) {
+                    $this->_properties[$key] = $converter->convertToData($this, $key, null);
                 }
             }
         }
@@ -1501,7 +1505,13 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 }
             } else {
                 if (in_array($property, $this->_datetimeFields) && ! is_object($oldValue)) {
-                    $oldValue = new Tinebase_DateTime($oldValue);
+                    if (is_array($oldValue)) {
+                        foreach ($oldValue as &$tmpVal) {
+                            $tmpVal = new Tinebase_DateTime($tmpVal);
+                        }
+                    } else {
+                        $oldValue = new Tinebase_DateTime($oldValue);
+                    }
                 }
                 $this->$property = $oldValue;
             }
@@ -1583,9 +1593,14 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * and containing the children neighbours in the key 'children'
      *
      * @return array
+     * @throws Tinebase_Exception_Record_StopPathBuild
      */
     public function getPathNeighbours()
     {
+        if (! $this->has('relations')) {
+            throw new Tinebase_Exception_Record_StopPathBuild('record has no relations');
+        }
+
         $oldRelations = $this->relations;
         $this->relations = null;
 
@@ -1713,6 +1728,14 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     public function setValidators(array $_validators)
     {
         $this->_validators = $_validators;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotesTranslatedText()
+    {
+        return $this->getTitle();
     }
 
     /**

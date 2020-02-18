@@ -117,6 +117,8 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      * @param  array|string|Zend_Db_Expr  $_cols        columns to get, * per default
      * @param  boolean                    $_getDeleted  get deleted records (if modlog is active)
      * @return Zend_Db_Select
+     *
+     * TODO remove code duplication with \Tinebase_EmailUser_Smtp_Postfix::_getSelect
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
@@ -157,17 +159,6 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
     }
     
     /**
-    * interceptor before add
-    *
-    * @param array $emailUserData
-    */
-    protected function _beforeAddOrUpdate(&$emailUserData)
-    {
-        unset($emailUserData[$this->_propertyMapping['emailForwards']]);
-        unset($emailUserData[$this->_propertyMapping['emailAliases']]);
-    }
-
-    /**
      * set email aliases and forwards
      * 
      * removes all aliases for user
@@ -177,6 +168,8 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      * 
      * @param  array  $_smtpSettings  as returned from _recordToRawData
      * @return void
+     *
+     * TODO remove code duplication with \Tinebase_EmailUser_Smtp_Postfix::_setAliasesAndForwards
      */
     protected function _setAliasesAndForwards($_smtpSettings)
     {
@@ -185,10 +178,21 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
 
         if (!isset($_smtpSettings['id'])) {
             $_smtpSettings['id'] = $this->_db->lastInsertId();
+            if (!$_smtpSettings['id']) {
+                $row = $this->_getSelect()->where('userid = ?', $_smtpSettings['userid'])->query()
+                    ->fetch(Zend_Db::FETCH_ASSOC);
+                $_smtpSettings['id'] = $row['id'];
+            }
         }
 
-        $this->_removeDestinations($_smtpSettings['id']);
-        
+        if (empty($_smtpSettings['id'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not find userid for smtp user: ' . print_r($_smtpSettings, true));
+            return;
+        }
+
+        $this->_removeDestinations($_smtpSettings);
+
         // check if it should be forward only
         if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
             $this->_createDefaultDestinations($_smtpSettings);
@@ -201,12 +205,12 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
     /**
      * remove all current aliases and forwards for user
      * 
-     * @param string $userId
+     * @param array $user
      */
-    protected function _removeDestinations($userId)
+    protected function _removeDestinations($user)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('users_id') . ' = ?', $userId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('users_id') . ' = ?', $user['id']),
         );
         
         $this->_db->delete($this->_destinationTable, $where);
@@ -238,45 +242,16 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
 
     /**
      * set aliases
-     * 
-     * @param array $_smtpSettings
-     * @throws Tinebase_Exception_SystemGeneric
      *
-     * @todo remove code duplication with parent::_createAliasDestinations
+     * @param array $_smtpSettings
+     * @param string $userIdField
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _createAliasDestinations($_smtpSettings)
+    protected function _createAliasDestinations($_smtpSettings, $userIdField = 'userid')
     {
-        if (! ((isset($_smtpSettings[$this->_propertyMapping['emailAliases']]) || array_key_exists($this->_propertyMapping['emailAliases'], $_smtpSettings)) && is_array($_smtpSettings[$this->_propertyMapping['emailAliases']]))) {
-            return;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Setting aliases for '
-            . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailAliases']], TRUE));
-
-        $users_id = $_smtpSettings['id'];
-            
-        foreach ($_smtpSettings[$this->_propertyMapping['emailAliases']] as $aliasAddress) {
-            if ($aliasAddress === $_smtpSettings['email']) {
-                throw new Tinebase_Exception_SystemGeneric('It is not allowed to set an alias equal to the main email address');
-            }
-
-            // check if in primary or secondary domains
-            if (! empty($aliasAddress) && $this->_checkDomain($aliasAddress)) {
-                
-                if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
-                    // create alias -> email
-                    $this->_addDestination(array(
-                        'users_id'    => $users_id,
-                        'source'      => $aliasAddress,
-                        'destination' => $_smtpSettings[$this->_propertyMapping['emailAddress']], // email 
-                    ));
-                } else if ($this->_hasForwards($_smtpSettings)) {
-                    $this->_addForwards($users_id, $aliasAddress, $_smtpSettings[$this->_propertyMapping['emailForwards']]);
-                }
-            }
-        }
+        parent::_createAliasDestinations($_smtpSettings, 'users_id');
     }
-    
+
     /**
      * check if forward addresses exist
      * 
@@ -294,19 +269,11 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      * @param string $users_id
      * @param string $source
      * @param array $forwards
+     * @param string $userIdField
      */
-    protected function _addForwards($users_id, $source, $forwards)
+    protected function _addForwards($users_id, $source, $forwards, $userIdField = 'userid')
     {
-        foreach ($forwards as $forwardAddress) {
-            if (! empty($forwardAddress)) {
-                // create email -> forward
-                $this->_addDestination(array(
-                    'users_id'    => $users_id,
-                    'source'      => $source,
-                    'destination' => $forwardAddress
-                ));
-            }
-        }
+        parent::_addForwards($users_id, $source, $forwards, 'users_id');
     }
     
     /**
@@ -335,6 +302,8 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      *
      * @param  array $_rawdata
      * @return Tinebase_Record_Interface
+     *
+     * TODO remove code duplication with \Tinebase_EmailUser_Smtp_Postfix::_rawDataToRecord
      */
     protected function _rawDataToRecord(array &$_rawdata)
     {
@@ -368,6 +337,11 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
                         if (count($data[$keyMapping]) == 1 && empty($data[$keyMapping][0])) {
                             $data[$keyMapping] = array();
                         }
+
+                        if (! empty($data[$keyMapping]) && $keyMapping === 'emailAliases') {
+                            // get dispatch_address
+                            $data[$keyMapping] = $this->_getDispatchAddress($_rawdata['id'], $data[$keyMapping], 'users_id');
+                        }
                         break;
                         
                     case 'emailForwardOnly':
@@ -384,8 +358,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
         $emailUser = new Tinebase_Model_EmailUser($data, TRUE);
 
         if (isset($_rawdata['id'])) {
-            $destionationsId = $_rawdata['id'];
-            $this->_getForwardedAliases($emailUser, $destionationsId);
+            $this->_getForwardedAliases($emailUser, $_rawdata['id']);
         }
         
         return $emailUser;
@@ -401,27 +374,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      */
     protected function _getForwardedAliases(Tinebase_Model_EmailUser $emailUser, $usersId = null)
     {
-        if (! $emailUser->emailForwardOnly) {
-            return;
-        }
-        
-        $select = $this->_db->select()
-            ->from($this->_destinationTable)
-            ->where($this->_db->quoteIdentifier($this->_destinationTable . '.users_id') . ' = ?', $usersId);
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetchAll();
-        $stmt->closeCursor();
-        
-        $aliases = ($emailUser->emailAliases && is_array($emailUser->emailAliases)) ? $emailUser->emailAliases : array();
-        foreach ($queryResult as $destination) {
-            if ($destination['source'] !== $emailUser->emailAddress
-                && in_array($destination['destination'], $emailUser->emailForwards)
-                && ! in_array($destination['source'], $aliases)
-            ) {
-                $aliases[] = $destination['source'];
-            }
-        }
-        $emailUser->emailAliases = $aliases;
+        parent::_getForwardedAliases($emailUser, $usersId);
     }
     
     /**

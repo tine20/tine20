@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -51,11 +51,18 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_doRightChecks = TRUE;
 
     /**
-     * only do second factor validation once
+     * only do area lock validation once
      *
      * @var boolean
      */
     protected $_areaLockValidated = false;
+
+    /**
+     * do area lock check
+     *
+     * @var boolean
+     */
+    protected $_doAreaLockCheck = true;
 
     /**
      * use notes - can be enabled/disabled by useNotes
@@ -150,6 +157,8 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_duplicateCheckFields = NULL;
 
     protected $_duplicateCheckConfig = array();
+
+    protected $_duplicateCheck = true;
     
     /**
      * holds new relation on update multiple
@@ -330,6 +339,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
+        $this->_addDefaultFilter($_filter);
         
         $count = $this->_backend->searchCount($_filter);
         
@@ -400,7 +410,18 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         return $this->_setBooleanMemberVar('_doContainerACLChecks', $setTo);
     }
-    
+
+    /**
+     * set/get checking area lock
+     *
+     * @param  boolean $setTo
+     * @return boolean
+     */
+    public function doAreaLockCheck($setTo = NULL)
+    {
+        return $this->_setBooleanMemberVar('_doAreaLockCheck', $setTo);
+    }
+
     /**
      * set/get resolving of customfields
      *
@@ -491,7 +512,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! $_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
             
-            if ($this->_doContainerACLChecks) {
+            if ($this->_doContainerACLChecks && $record->has('container_id')) {
                 if ($_containerId === NULL) {
                     $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_modelName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
                     $record->container_id = $containers[0]->getId();
@@ -650,6 +671,8 @@ abstract class Tinebase_Controller_Record_Abstract
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         $this->_checkRight(self::ACTION_CREATE);
+
+        $this->_duplicateCheck = $_duplicateCheck;
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($_record->toArray(),true));
@@ -894,7 +917,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         if (count($duplicates) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Found ' . count($duplicates) . ' duplicate(s).');
+                ' Found ' . count($duplicates) . ' duplicate(s). Checked fields: ' . print_r($this->_duplicateCheckFields, TRUE));
 
             // fetch tags here as they are not included yet - this is important when importing records with merge strategy
             if ($_record->has('tags')) {
@@ -924,9 +947,6 @@ abstract class Tinebase_Controller_Record_Abstract
             return NULL;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Duplicate check fields: ' . print_r($this->_duplicateCheckFields, TRUE));
-
         $filters = array();
         foreach ($this->_duplicateCheckFields as $group) {
             $addFilter = array();
@@ -1126,10 +1146,12 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+        $this->_duplicateCheck = $_duplicateCheck;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . ' Record to update: ' . print_r($_record->toArray(), TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Update ' . $this->_modelName);
+            . ' Update ' . $this->_modelName . ' (duplicate check: ' . (int) $_duplicateCheck . ')');
 
         $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
         if ($_record->has('attachments') && isset($_record->attachments) && Tinebase_Core::isFilesystemAvailable()) {
@@ -1292,7 +1314,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
         }
         if ($record->has('notes') && $this->_setNotes !== false) {
-            if (isset($record->notes) && is_array($record->notes)) {
+            if (isset($record->notes) && (is_array($record->notes) || $record->notes instanceof Tinebase_Record_RecordSet)) {
                 $updatedRecord->notes = $record->notes;
                 Tinebase_Notes::getInstance()->setNotesOfRecord($updatedRecord);
             }
@@ -1411,7 +1433,12 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         if (null !== ($mc = $_record::getConfiguration())) {
             foreach ($mc->{Tinebase_ModelConfiguration_Const::CONTROLLER_HOOK_BEFORE_UPDATE} as $hook) {
-                call_user_func($hook, $_record, $_oldRecord);
+                if (is_callable($hook)) {
+                    call_user_func($hook, $_record, $_oldRecord);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' hook is not callable: ' . print_r($hook, true));
+                }
             }
         }
     }
@@ -1794,7 +1821,8 @@ abstract class Tinebase_Controller_Record_Abstract
 
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
             throw $e;
         }
         
@@ -2080,6 +2108,15 @@ abstract class Tinebase_Controller_Record_Abstract
         }
     }
 
+    public function public_checkRight($_action)
+    {
+        $this->_checkRight($_action);
+    }
+
+    public function checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    {
+        return $this->_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
+    }
 
     /**
      * check grant for action (CRUD)
@@ -2479,7 +2516,9 @@ abstract class Tinebase_Controller_Record_Abstract
         // don't handle dependent records on property if it is set to null or doesn't exist.
         if (($_record->{$_property} === NULL) || (! $_record->has($_property))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Skip updating dependent records (got NULL) on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName . ' with id = "' . $_record->getId() . '"');
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Skip updating dependent records (got NULL) on property ' . $_property . ' for '
+                    . $this->_applicationName . ' ' . $this->_modelName . ' with id = "' . $_record->getId() . '"');
             }
             return;
         }
@@ -2890,7 +2929,7 @@ HumanResources_CliTests.testSetContractsEndDate */
      *
      * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
-     * @returns Tinebase_Record_Interface|null
+     * @return Tinebase_Record_Interface|null
      * @throws Zend_Db_Statement_Exception
      */
     public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
@@ -2901,10 +2940,20 @@ HumanResources_CliTests.testSetContractsEndDate */
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
         $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
 
+        $node = $this->_addTempfileAttachment($record, $filename, $tempFile);
+        if (! $node) {
+            return null;
+        }
+        Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record, $node);
+        $this->_setFileMessageNote($record, $node);
+
+        return $record;
+    }
+
+    protected function _addTempfileAttachment($record, $filename, $tempFile)
+    {
         try {
             $node = Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $filename, $tempFile);
-            Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $record, $node);
-            $this->_setFileMessageNote($record, $node);
 
         } catch (Tinebase_Exception_Duplicate $ted) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -2919,7 +2968,7 @@ HumanResources_CliTests.testSetContractsEndDate */
             }
             return null;
         }
-        return $record;
+        return $node;
     }
 
     protected function _setFileMessageNote($record, $node)
@@ -2943,6 +2992,34 @@ HumanResources_CliTests.testSetContractsEndDate */
         ]);
         $record->notes->addRecord($note);
         Tinebase_Notes::getInstance()->setNotesOfRecord($record);
+    }
+
+    public function fileMessageAttachment($location, $message, $attachment)
+    {
+        $recordId = is_array($location['record_id']) && isset($location['record_id']['id'])
+            ? $location['record_id']['id']
+            : $location['record_id'];
+        $record = $this->get($recordId);
+
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile(
+            $message,
+            $attachment['partId']);
+        $filename = $this->_getfiledAttachmentFilename($attachment, $message);
+
+        $node = $this->_addTempfileAttachment($record, $filename, $tempFile);
+        if (! $node) {
+            return null;
+        }
+
+        return $record;
+    }
+
+    protected function _getfiledAttachmentFilename($attachment, $message)
+    {
+        return ! empty($attachment['filename'])
+            ? $attachment['filename']
+            : Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message)
+            . 'part_' . $attachment['partId'];
     }
 
     /**

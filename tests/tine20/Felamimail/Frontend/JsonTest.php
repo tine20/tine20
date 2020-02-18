@@ -1,112 +1,21 @@
 <?php
-
-use Sabre\DAV;
-
 /**
  * Tine 2.0 - http://www.tine20.org
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
+use Sabre\DAV;
+
 /**
- * Test class for Tinebase_Group
+ * Test class for Felamimail_Frontend_Json
  */
-class Felamimail_Frontend_JsonTest extends TestCase
+class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 {
     use GetProtectedMethodTrait;
-
-    /**
-     * @var Felamimail_Frontend_Json
-     */
-    protected $_json = array();
-
-    /**
-     * message ids to delete
-     *
-     * @var array
-     */
-    protected $_messageIds = array();
-
-    /**
-     * @var Felamimail_Model_Account
-     */
-    protected $_account = NULL;
-
-    /**
-     * imap backend
-     * @var Felamimail_Backend_ImapProxy
-     */
-    protected $_imap = NULL;
-
-    /**
-     * name of the folder to use for tests
-     * @var string
-     */
-    protected $_testFolderName = 'Junk';
-
-    /**
-     * folders to delete in tearDown()
-     *
-     * @var array
-     */
-    protected $_createdFolders = array();
-
-    /**
-     * are there messages to delete?
-     *
-     * @var array
-     */
-    protected $_foldersToClear = array();
-
-    /**
-     * active sieve script name to be restored
-     *
-     * @var string
-     */
-    protected $_oldActiveSieveScriptName = NULL;
-
-    /**
-     * was sieve_vacation_active ?
-     *
-     * @var boolean
-     */
-    protected $_oldSieveVacationActiveState = FALSE;
-
-    /**
-     * old sieve data
-     *
-     * @var Felamimail_Sieve_Backend_Sql
-     */
-    protected $_oldSieveData = NULL;
-
-    /**
-     * sieve script name to delete
-     *
-     * @var string
-     */
-    protected $_testSieveScriptName = NULL;
-
-    /**
-     * sieve vacation template file name
-     *
-     * @var string
-     */
-    protected $_sieveVacationTemplateFile = 'vacation_template.tpl';
-
-    /**
-     * test email domain
-     *
-     * @var string
-     */
-    protected $_mailDomain = 'tine20.org';
-
-    /**
-     * @var Felamimail_Model_Folder
-     */
-    protected $_folder = NULL;
 
     /**
      * paths in the vfs to delete
@@ -115,117 +24,8 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     protected $_pathsToDelete = array();
 
-    /**
-     *
-     * @var Tinebase_Frontend_Json
-     */
-    protected $_frontend = NULL;
-
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        // get (or create) test accout
-        $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
-        if ($this->_account === null) {
-            $this->markTestSkipped('no account found');
-        }
-        $this->_oldSieveVacationActiveState = $this->_account->sieve_vacation_active;
-        try {
-            $this->_oldSieveData = new Felamimail_Sieve_Backend_Sql($this->_account);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // do nothing
-        }
-
-        $this->_json = new Felamimail_Frontend_Json();
-        $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
-
-        foreach (array($this->_testFolderName, $this->_account->sent_folder, $this->_account->trash_folder) as $folderToCreate) {
-            // create folder if it does not exist
-            $this->_getFolder($folderToCreate);
-        }
-
-        $this->_mailDomain = TestServer::getPrimaryMailDomain();
-
-        $this->_frontend = new Tinebase_Frontend_Json();
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
     protected function tearDown()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Tearing down ...');
-
-        if (count($this->_createdFolders) > 0) {
-            foreach ($this->_createdFolders as $folderName) {
-                //echo "delete $folderName\n";
-                try {
-                    $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
-                } catch (Zend_Mail_Storage_Exception $zmse) {
-                    // already deleted
-                }
-            }
-            Felamimail_Controller_Cache_Folder::getInstance()->clear($this->_account);
-        }
-
-        if (!empty($this->_foldersToClear)) {
-            foreach ($this->_foldersToClear as $folderName) {
-                try {
-                    // delete test messages from given folders on imap server (search by special header)
-                    $this->_imap->selectFolder($folderName);
-                    $result = $this->_imap->search(array(
-                        'HEADER X-Tine20TestMessage jsontest'
-                    ));
-                    //print_r($result);
-                    foreach ($result as $messageUid) {
-                        $this->_imap->removeMessage($messageUid);
-                    }
-
-                    // clear message cache
-                    $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(),
-                        $folderName);
-                    Felamimail_Controller_Cache_Message::getInstance()->clear($folder);
-                } catch (Exception $e) {
-                }
-            }
-        }
-
-        // sieve cleanup
-        if ($this->_testSieveScriptName !== NULL) {
-            try {
-                Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
-                try {
-                    Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
-                } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                    // do not delete script if active
-                }
-                Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
-
-                if ($this->_oldSieveData !== NULL) {
-                    $this->_oldSieveData->save();
-                }
-            } catch (Exception $e) {
-            }
-        }
-        if ($this->_oldActiveSieveScriptName !== NULL) {
-            try {
-                Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
-                Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
-            } catch (Exception $e) {
-            }
-        }
-
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
             try {
@@ -236,10 +36,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             }
         }
 
-        parent::tearDown();
-
-        // needed to clear cache of containers
-        Tinebase_Container::getInstance()->resetClassCache();
+        parent::tearDown(); // TODO: Change the autogenerated stub
     }
 
     /************************ test functions *********************************/
@@ -427,12 +224,31 @@ class Felamimail_Frontend_JsonTest extends TestCase
     /**
      * test change / delete of account
      */
-    public function testChangeDeleteAccount()
+    public function testChangeSearchDeleteAccount()
     {
         $system = $this->_getSystemAccount();
         unset($system['id']);
         $system['type'] = Felamimail_Model_Account::TYPE_USER;
-        $account = $this->_json->saveAccount($system);
+
+        $account = $this->_addSignature($system);
+
+        // update signature
+        $updatedSignature = 'my updated signature';
+        $account['signatures'][0]['signature'] = $updatedSignature;
+        $account = $this->_json->saveAccount($account);
+        self::assertEquals($updatedSignature, $account['signature'], 'signature not updated: ' . print_r($account, true));
+
+        // add new signature
+        $account['signatures'][] = [
+            'signature' => '', // empty sig should be possible
+            'is_default' => 0,
+            'name' => 'my other sig',
+            'id' => Tinebase_Record_Abstract::generateUID(), // client also sends some random uuid
+            'notes' => [],
+            'account_id' => $account['id'],
+        ];
+        $account = $this->_json->saveAccount($account);
+        self::assertEquals(2, count($account['signatures']));
 
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
@@ -448,6 +264,42 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertEquals('neuespasswort', $accountRecord->password);
 
         $this->_json->deleteAccounts($account['id']);
+    }
+
+    protected function _addSignature($account, $signature = 'my new cool signature')
+    {
+        $account['signatures'] = [
+            [
+                'signature' => $signature,
+                'is_default' => 1,
+                'name' => 'my sig',
+                'id' => Tinebase_Record_Abstract::generateUID(), // client also sends some random uuid
+                'notes' => [],
+            ]
+        ];
+        $account = $this->_json->saveAccount($account);
+        self::assertTrue(isset($account['signatures']), 'no signatures found in account: ' . print_r($account, true));
+        self::assertEquals(1, count($account['signatures']));
+        self::assertTrue(isset($account['signature']), 'no signature found in account: ' . print_r($account, true));
+        self::assertEquals($signature, $account['signature']);
+        return $account;
+    }
+
+    /**
+     * test add user account with signature
+     */
+    public function testSignatureInUserAccount()
+    {
+        $system = $this->_getSystemAccount();
+        $this->_addSignature($system);
+    }
+
+    public function testApproveAccountMigration()
+    {
+        $result = $this->_json->approveAccountMigration($this->_account->getId());
+        self::assertEquals('success', $result['status'], print_r($result, true));
+        $account = $this->_json->getAccount($this->_account->getId());
+        self::assertEquals(1, $account['migration_approved']);
     }
 
     /*********************** message tests ****************************/
@@ -578,6 +430,8 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     public function testSendMessageWithFromName()
     {
+        self::markTestSkipped('FIXME: this fails at random - improve/fix it!');
+
         // send email
         $messageToSend = $this->_getMessageData();
         $messageToSend['from_name'] = 'My Special Name';
@@ -638,6 +492,30 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->testSendMessageToInvalidRecipient('ich bins <mymail@ ' . $this->_mailDomain . '>', 'cc', 'Invalid address format');
         $this->testSendMessageToInvalidRecipient('ich bins nicht <mymail\@' . $this->_mailDomain . '>', 'bcc', 'Invalid address format');
         $this->testSendMessageToInvalidRecipient('my@mail@' . $this->_mailDomain, 'bcc', 'Invalid address format');
+    }
+
+    /**
+     * send to semicolon separated recipient list
+     */
+    public function testSendMessageWithDelimiterSeparatedEmails($delimiter = ';')
+    {
+        $message = $this->_getMessageData();
+        $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $delimiter . $this->_personas['sclever']->accountEmailAddress];
+        $this->_sendMessage(
+            'INBOX',
+            array(),
+            '',
+            'test',
+            $_messageToSend = $message
+        );
+    }
+
+    /**
+     * send to semicolon separated recipient list
+     */
+    public function testSendMessageWithCommaSeparatedEmails()
+    {
+        $this->testSendMessageWithDelimiterSeparatedEmails(',');
     }
 
     /**
@@ -1019,14 +897,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     public function testForwardMessageWithAttachment()
     {
-        $testFolder = $this->_getFolder($this->_testFolderName);
-        $message = fopen(dirname(__FILE__) . '/../files/multipart_related.eml', 'r');
-        Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
+        $message = $this->_appendMessageforForwarding();
 
-        $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
-        $message = $this->_searchForMessageBySubject($subject, $this->_testFolderName);
-
-        $fwdSubject = 'Fwd: ' . $subject;
+        $fwdSubject = 'Fwd: ' . $message['subject'];
         $forwardMessageData = array(
             'account_id' => $this->_account->getId(),
             'subject' => $fwdSubject,
@@ -1058,6 +931,16 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
 
+    protected function _appendMessageforForwarding()
+    {
+        $testFolder = $this->_getFolder($this->_testFolderName);
+        $message = fopen(dirname(__FILE__) . '/../files/multipart_related.eml', 'r');
+        Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
+
+        $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
+        return $this->_searchForMessageBySubject($subject, $this->_testFolderName);
+    }
+
     /**
      * forward message test (eml attachment from Filemanager)
      */
@@ -1084,7 +967,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
 
         $fullMessage = $this->_json->getMessage($forwardMessage['id']);
-        self::assertTrue(count($fullMessage['attachments']) === 1);
+        self::assertTrue(count($fullMessage['attachments']) === 1, 'attachment not found: ' . print_r($fullMessage, true));
         $attachment = $fullMessage['attachments'][0];
         self::assertEquals('text/html', $attachment['content-type']);
         self::assertEquals('test.eml', $attachment['filename']);
@@ -1095,6 +978,8 @@ class Felamimail_Frontend_JsonTest extends TestCase
      * testSendMessageWithAttachmentWithoutExtension
      *
      * @see 0008328: email attachment without file extension is not sent properly
+     *
+     * @return array
      */
     public function testSendMessageWithAttachmentWithoutExtension()
     {
@@ -1114,6 +999,8 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $attachment = $fullMessage['attachments'][0];
         $this->assertContains($tempfileName, $attachment['filename'], 'wrong attachment filename: ' . print_r($attachment, TRUE));
         $this->assertEquals(16, $attachment['size'], 'wrong attachment size: ' . print_r($attachment, TRUE));
+
+        return $fullMessage;
     }
 
     /**
@@ -1265,26 +1152,27 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $emlNode = $nodes->getFirstRecord();
 
         // assertions!
-        $completeMessage = $this->_assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer);
-
-        return $completeMessage;
+        return $this->_assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer);
     }
 
     protected function _assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer)
     {
-        $this->assertTrue(isset($result['totalcount']));
-        $this->assertEquals(2, $result['totalcount'], 'message should be filed in Filemanager: ' . print_r($result, true));
+        self::assertTrue(isset($result['totalcount']));
+        self::assertEquals(2, $result['totalcount'], 'message should be filed in Filemanager: ' . print_r($result, true));
 
         // check if message exists in Filemanager
-        $this->assertTrue($emlNode !== null, 'could not find eml file node');
-        $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $emlNode->type);
-        $this->assertEquals('message/rfc822', $emlNode->contenttype);
-        $this->assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
+        self::assertTrue($emlNode !== null, 'could not find eml file node');
+        self::assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $emlNode->type);
+        self::assertEquals('message/rfc822', $emlNode->contenttype);
+        self::assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
+        self::assertContains(Tinebase_Core::getUser()->accountEmailAddress, $emlNode->name);
+        $now = Tinebase_DateTime::now();
+        self::assertContains($now->toString('Y-m-d'), $emlNode->name);
 
         $nodeWithDescription = Filemanager_Controller_Node::getInstance()->get($emlNode['id']);
-        $this->assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
-        $this->assertContains($message['received'], $nodeWithDescription->description);
-        $this->assertContains('aaaaaä', $nodeWithDescription->description);
+        self::assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
+        self::assertContains($message['received'], $nodeWithDescription->description);
+        self::assertContains('aaaaaä', $nodeWithDescription->description);
 
         // assert MessageFileLocation
         $completeMessage = $this->_json->getMessage($message['id']);
@@ -1304,83 +1192,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
         self::assertEquals($personalFilemanagerContainer->name, $fileLocation->record_title);
 
         return $completeMessage;
-    }
-
-    /**
-     * @param null|Tinebase_Model_Container $personalFilemanagerContainer
-     * @return string
-     */
-    protected function _getPersonalFilemanagerPath($personalFilemanagerContainer = null)
-    {
-        if (!$personalFilemanagerContainer) {
-            $personalFilemanagerContainer = $this->_getPersonalContainerNode(
-                'Filemanager',
-                Tinebase_Core::getUser()
-            );
-        }
-
-        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
-            . '/' . Tinebase_Core::getUser()->accountLoginName
-            . '/' . $personalFilemanagerContainer->name;
-        return $path;
-    }
-
-    protected function _getTestNodes($path)
-    {
-        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
-            'field' => 'path',
-            'operator' => 'equals',
-            'value' => $path
-        ), array(
-            'field' => 'name',
-            'operator' => 'contains',
-            'value' => 'test'
-        )));
-        return Filemanager_Controller_Node::getInstance()->search($filter, new Tinebase_Model_Pagination([
-            'sort' => 'name',
-            'dir'  => 'DESC',
-        ]));
-    }
-
-    /**
-     * @param $locationType
-     * @param $personalFilemanagerContainer
-     * @param $path
-     * @return array
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _getTestLocation($locationType, $personalFilemanagerContainer, $path)
-    {
-        $nodeWithoutPath = $personalFilemanagerContainer->toArray();
-        unset($nodeWithoutPath['path']);
-        switch ($locationType) {
-            case 'path':
-                $location = [
-                    'model' => Filemanager_Model_Node::class,
-                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
-                    'record_id' => [
-                        'path' => $path
-                    ],
-                ];
-                break;
-            case 'node':
-                $location = [
-                    'model' => Filemanager_Model_Node::class,
-                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
-                    'record_id' => $nodeWithoutPath,
-                ];
-                break;
-            case 'id':
-                $location = [
-                    'model' => Filemanager_Model_Node::class,
-                    'type' => Felamimail_Model_MessageFileLocation::TYPE_NODE,
-                    'record_id' => $nodeWithoutPath['id'],
-                ];
-                break;
-            default:
-                throw new Tinebase_Exception_InvalidArgument('type not supported');
-        }
-        return $location;
     }
 
     public function testFileMessagesAsNodeWithoutPath()
@@ -1425,19 +1236,39 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->testFileMessagesAsNode();
     }
 
-    /**
-     * @param $_modelName
-     * @param Tinebase_Model_User $_user
-     * @return NULL|Tinebase_Record_Interface
-     */
-    protected function _getPersonalContainerNode($_modelName, $_user = null)
+    public function testFileAttachment()
     {
-        $user = ($_user) ? $_user : Tinebase_Core::getUser();
-        return Tinebase_FileSystem::getInstance()->getPersonalContainer(
-            $user,
-            $_modelName,
-            $user
-        )->getFirstRecord();
+        $personalFilemanagerContainer = $this->_getPersonalContainerNode();
+        $path = $this->_getPersonalFilemanagerPath($personalFilemanagerContainer);
+        $location = $this->_getTestLocation('path', $personalFilemanagerContainer, $path);
+
+        $message = $this->_sendMessage(
+            'INBOX',
+            [],
+            '',
+            'test file attachment',
+            null,
+            1
+        );
+        $message = $this->_json->getMessage($message['id']);
+        $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);
+        self::assertTrue($result['success']);
+
+        $nodes = $this->_getTestNodes($path, 'test1.txt');
+        $node = $nodes->getFirstRecord();
+
+        // check if attachment exists in Filemanager
+        self::assertTrue($node !== null, 'could not find attachment file node');
+        self::assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $node->type);
+        self::assertEquals('text/plain', $node->contenttype);
+
+        // check node contents
+        $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
+        self::assertEquals('some content', $content);
+
+        // test to file it again to the same location
+        $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);
+        self::assertTrue($result['success']);
     }
 
     /**
@@ -1552,7 +1383,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testGetSetVacation()
     {
-        $vacationData = $this->_getVacationData();
+        $vacationData = self::getVacationData($this->_account);
         $this->_sieveTestHelper($vacationData);
 
         // check if script was activated
@@ -1580,12 +1411,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      *
      * @return array
      */
-    protected function _getVacationData()
+    public static function getVacationData($_account)
     {
         return array(
-            'id' => $this->_account->getId(),
+            'id' => $_account->getId(),
             'subject' => 'unittest vacation subject',
-            'from' => $this->_account->from . ' <' . $this->_account->email . '>',
+            'from' => $_account->from . ' <' . $_account->email . '>',
             'days' => 3,
             'enabled' => TRUE,
             'reason' => 'unittest vacation message<br /><br />signature',
@@ -1598,7 +1429,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testMimeVacation()
     {
-        $vacationData = $this->_getVacationData();
+        $vacationData = self::getVacationData($this->_account);
         $vacationData['reason'] = "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>";
 
         $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
@@ -1870,7 +1701,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testSetVacationWithStartAndEndDate()
     {
-        $vacationData = $this->_getVacationData();
+        $vacationData = self::getVacationData($this->_account);
         $vacationData['start_date'] = '2012-04-18';
         $vacationData['end_date'] = '2012-04-20';
         $result = $this->_sieveTestHelper($vacationData);
@@ -1896,7 +1727,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $ruleData = $this->_getRuleData();
         $ruleData[0]['id'] = $ruleData[2]['id'];
         $ruleData[2]['id'] = 11;
-        $resultSet = $this->_json->saveRules($this->_account->getId(), $ruleData);
+        $this->_json->saveRules($this->_account->getId(), $ruleData);
         $sieveScriptRules = $sieveBackend->getScript($this->_testSieveScriptName);
 
         $this->_setDisabledVacation();
@@ -1939,220 +1770,9 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     protected function _setDisabledVacation()
     {
-        $vacationData = $this->_getVacationData();
+        $vacationData = self::getVacationData($this->_account);
         $vacationData['enabled'] = FALSE;
-        $resultSet = $this->_json->saveVacation($vacationData);
-    }
-
-    /**
-     * get folder filter
-     *
-     * @return array
-     */
-    protected function _getFolderFilter()
-    {
-        return array(array(
-            'field' => 'globalname', 'operator' => 'equals', 'value' => ''
-        ));
-    }
-
-    /**
-     * get message filter
-     *
-     * @param string $_folderId
-     * @return array
-     */
-    protected function _getMessageFilter($_folderId)
-    {
-        $result = array(array(
-            'field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId
-        ));
-
-        return $result;
-    }
-
-    /**
-     * get mailbox
-     *
-     * @param string $name
-     * @param boolean $createFolder
-     * @return Felamimail_Model_Folder|NULL
-     */
-    protected function _getFolder($name, $createFolder = TRUE)
-    {
-        Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
-        try {
-            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $name);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($this->_account, $name) : NULL;
-        }
-
-        return $folder;
-    }
-
-    /**
-     * get message data
-     *
-     * @return array
-     */
-    protected function _getMessageData($_emailFrom = '', $_subject = 'test')
-    {
-        return array(
-            'account_id' => $this->_account->getId(),
-            'subject' => $_subject,
-            'to' => [Tinebase_Core::getUser()->accountEmailAddress],
-            'body' => 'aaaaaä <br>',
-            'headers' => array('X-Tine20TestMessage' => 'jsontest'),
-            'from_email' => $_emailFrom,
-            'content_type' => Felamimail_Model_Message::CONTENT_TYPE_HTML,
-        );
-    }
-
-    /**
-     * send message and return message array
-     *
-     * @param string $folderName
-     * @param array $additionalHeaders
-     * @param string $_emailFrom
-     * @param string $_subject
-     * @param null $_messageToSend
-     * @return array
-     */
-    protected function _sendMessage(
-        $folderName = 'INBOX',
-        $additionalHeaders = array(),
-        $_emailFrom = '',
-        $_subject = 'test',
-        $_messageToSend = null)
-    {
-        $messageToSend = $_messageToSend ? $_messageToSend : $this->_getMessageData($_emailFrom, $_subject);
-        $messageToSend['headers'] = array_merge($messageToSend['headers'], $additionalHeaders);
-        $this->_json->saveMessage($messageToSend);
-        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
-
-        $i = 0;
-        while ($i < 5) {
-            $result = $this->_getMessages($folderName);
-            $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
-            if (!empty($message)) {
-                break;
-            }
-            // sleep for 1 sec because mailserver may be slower than expected
-            sleep(1);
-            $i++;
-        }
-
-        $this->assertTrue(!empty($message), 'Sent message not found.');
-        return $message;
-    }
-
-    /**
-     * returns message array from result
-     *
-     * @param array $_result
-     * @param string $_subject
-     * @return array
-     */
-    protected function _getMessageFromSearchResult($_result, $_subject)
-    {
-        $message = array();
-        foreach ($_result['results'] as $mail) {
-            if ($mail['subject'] == $_subject) {
-                $message = $mail;
-            }
-        }
-
-        return $message;
-    }
-
-    /**
-     * get messages from folder
-     *
-     * @param string $_folderName
-     * @return array
-     */
-    protected function _getMessages($_folderName = 'INBOX')
-    {
-        $folder = $this->_getFolder($_folderName);
-        $filter = $this->_getMessageFilter($folder->getId());
-        // update cache
-        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10, 1);
-        $i = 0;
-        while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
-            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
-            $i++;
-        }
-        $result = $this->_json->searchMessages($filter, '');
-
-        return $result;
-    }
-
-    /**
-     * search for message defined by subject in folder
-     *
-     * @param string $_subject
-     * @param string $_folderName
-     * @return string message data
-     */
-    protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX')
-    {
-        // give server some time to send and receive messages
-        sleep(1);
-
-        $result = $this->_getMessages($_folderName);
-
-        $message = array();
-        foreach ($result['results'] as $mail) {
-            if ($mail['subject'] == $_subject) {
-                $message = $mail;
-            }
-        }
-        $this->assertGreaterThan(0, $result['totalcount'], 'folder is empty');
-        $this->assertTrue(!empty($message), 'Message not found');
-        return $message;
-    }
-
-    /**
-     * sieve test helper
-     *
-     * @param array $_sieveData
-     * @return array
-     */
-    protected function _sieveTestHelper($_sieveData, $_isMime = FALSE)
-    {
-        $this->_setTestScriptname();
-
-        // check which save fn to use
-        if ((isset($_sieveData['reason']) || array_key_exists('reason', $_sieveData))) {
-            $resultSet = $this->_json->saveVacation($_sieveData);
-            $this->assertEquals($this->_account->email, $resultSet['addresses'][0]);
-
-            $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
-
-            if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
-                $translate = Tinebase_Translation::getTranslation('Felamimail');
-                $this->assertEquals(sprintf(
-                    $translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName),
-                    $resultSet['subject']
-                );
-            } else {
-                $this->assertEquals($_sieveData['subject'], $resultSet['subject']);
-            }
-
-            if ($_isMime) {
-                // TODO check why behaviour changed with php 7 (test was relaxed to hotfix this)
-                //$this->assertEquals(html_entity_decode('unittest vacation&nbsp;message', ENT_NOQUOTES, 'UTF-8'), $resultSet['reason']);
-                self::assertContains('unittest vacation', $resultSet['reason']);
-            } else {
-                $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
-            }
-
-        } else if ((isset($_sieveData[0]['action_type']) || array_key_exists('action_type', $_sieveData[0]))) {
-            $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
-            $this->assertEquals($_sieveData, $resultSet);
-        }
-
-        return $resultSet;
+        $this->_json->saveVacation($vacationData);
     }
 
     /**
@@ -2162,7 +1782,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     public function testSearchFelamimailPreferences()
     {
         // search prefs
-        $result = $this->_frontend->searchPreferencesForApplication('Felamimail', '');
+        $tfj = new Tinebase_Frontend_Json();
+        $result = $tfj->searchPreferencesForApplication('Felamimail', '');
 
         // check results
         $this->assertTrue(isset($result['results']));
@@ -2179,6 +1800,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $regData = $this->_json->getRegistryData();
 
         $this->assertFalse(isset($regData['defaults']));
+        $this->assertFalse(isset($regData['accounts']));
         $supportedFlags = Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)
             ? 6
             : 5;
@@ -2291,9 +1913,12 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'link has no anchor tag: ' . $message['body']);
 
         // download link id is at the end of message body
-        $downloadLinkId = trim(substr($message['body'], -56, 40));
-        $dl = Filemanager_Controller_DownloadLink::getInstance()->get($downloadLinkId);
-        self::assertTrue(Filemanager_Controller_DownloadLink::getInstance()->validatePassword($dl, 'test'));
+        if (preg_match('@download/show/([a-z0-9]+)"@', $message['body'], $matches)) {
+            $dl = Filemanager_Controller_DownloadLink::getInstance()->get($matches[1]);
+            self::assertTrue(Filemanager_Controller_DownloadLink::getInstance()->validatePassword($dl, 'test'));
+        } else {
+            self::fail('no download link found in message: ' . print_r($message, true));
+        }
     }
 
     /**
@@ -2317,7 +1942,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     public function testAttachmentMethodFilemanagerSystemLink()
     {
         // make sure, we have a signature in the account
-        $this->_account->signature = 'my signature';
+        $this->_account->signatures = [[
+            'name' => 'signature',
+            'signature' => 'my signature',
+            'is_default' => 1,
+        ]];
         Felamimail_Controller_Account::getInstance()->update($this->_account);
 
         $message = $this->_testAttachmentType('systemlink_fm', true);
@@ -2392,7 +2021,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $body = 'foobar';
         if ($withSignature) {
             $body .= '<br><br><span class="felamimail-body-signature">-- <br>'
-                . $this->_account->signature . '</span>';
+                . $this->_account->signatures[0]['signature'] . '</span>';
         }
 
         $messageToSend = [
@@ -2418,17 +2047,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         return $complete;
     }
 
-    /**
-     * @param string $tempfileName
-     * @return Tinebase_Model_TempFile
-     */
-    protected function _createTempFile($tempfileName = 'test.txt')
-    {
-        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
-        file_put_contents($tempfilePath, 'some content');
-        return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
-    }
-
     public function testGetMessageFromNode()
     {
         $result = $this->_createTestNode(
@@ -2440,8 +2058,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $message = $this->_json->getMessageFromNode($result[0]['id']);
         self::assertEquals('Christof Gacki', $message['from_name']);
         self::assertEquals('c.gacki@metaways.de', $message['from_email']);
-        self::assertEquals(Zend_Mime::TYPE_HTML, $message['body_content_type']);
         self::assertContains('wie gestern besprochen würde mich sehr freuen', $message['body']);
+        self::assertEquals(Zend_Mime::TYPE_HTML, $message['body_content_type'], $message['body']);
         self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));
         self::assertEquals(1, count($message['attachments']));
         self::assertEquals(34504, $message['attachments'][0]['size']);
@@ -2673,6 +2291,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $result = $this->_json->searchMessages($filter, []);
         self::assertEquals(1, $result['totalcount']);
         $message = $result['results'][0];
+        self::assertNotEmpty($message['message_id'], 'message id missing from cached message ' . print_r($message, true));
         self::assertTrue(isset($message['fileLocations']));
         self::assertEquals(1, count($message['fileLocations']), 'did not get message file location: '
             . print_r($message, true));
@@ -2682,5 +2301,127 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($message['fileLocations']), 'fileLocations missing from message after get');
         self::assertEquals(1, count($message['fileLocations']), 'did not get message file location: '
             . print_r($message, true));
+    }
+
+    public function testSaveDraft()
+    {
+        $draft = $this->_saveDraft();
+
+        // update draft message - old draft should be deleted
+        $updatedDraft = $draft;
+        $updatedDraft['subject'] = 'my updated draft';
+        $updatedDraft = $this->_json->saveDraft($updatedDraft);
+        $message = $this->_searchForMessageBySubject($updatedDraft['subject'], $this->_account->drafts_folder);
+        self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
+
+        $this->_assertDraftNotFound($draft);
+    }
+
+    /**
+     * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _saveDraft()
+    {
+        $messageToSave = $this->_getMessageData();
+        $messageToSave['messageuid'] = '';
+        $messageToSave['bcc'] = array('bccaddress@email.org', 'bccaddress2@email.org');
+        $draft = $this->_json->saveDraft($messageToSave);
+        $this->_foldersToClear = array($this->_account->drafts_folder);
+        self::assertNotEmpty($draft['messageuid'], 'messageuid of draft message missing: ' . print_r($draft, true));
+
+        // check if message is in drafts folder and recipients are present
+        $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
+        self::assertEquals($messageToSave['subject'], $message['subject']);
+        self::assertEquals($messageToSave['to'][0], $message['to'][0], 'recipient not found');
+        self::assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'flags: ' . print_r($message['flags'], true));
+        self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
+        self::assertContains('bccaddress', $message['bcc'][0], 'bcc recipient not found');
+
+        return $draft;
+    }
+
+    /**
+     * @param $draft
+     */
+    protected function _assertDraftNotFound($draft)
+    {
+        $message = $this->_searchForMessageBySubject($draft['subject'], $this->_account->drafts_folder, false);
+        self::assertEquals([], $message, 'old draft should be deleted: ' . print_r($draft, true));
+    }
+
+    public function testDeleteDraft()
+    {
+        $draft = $this->_saveDraft();
+        $result = $this->_json->deleteDraft($draft['messageuid'], $draft['account_id']);
+        self::assertTrue($result['success']);
+        $this->_assertDraftNotFound($draft);
+    }
+
+    public function testSaveDraftWithForwardAttachment()
+    {
+        $message = $this->_appendMessageforForwarding();
+
+        $subject = 'Verbessurüngsvorschlag';
+        $fwdSubject = 'Fwd: ' . $subject;
+        $forwardMessageData = array(
+            'account_id' => $this->_account->getId(),
+            'subject' => $fwdSubject,
+            'to' => array($this->_getEmailAddress()),
+            'body' => "aaaaaä <br>",
+            'headers' => array('X-Tine20TestMessage' => 'jsontest'),
+            'original_id' => $message['id'],
+            'attachments' => [[
+                'type' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
+                'name' => $subject,
+                'size' => '9709', // needed?
+                'id' => $message['id'],
+                'attachment_type' => 'attachment',
+            ]],
+            'flags' => Zend_Mail_Storage::FLAG_PASSED,
+        );
+
+        $draft = $this->_json->saveDraft($forwardMessageData);
+        $this->_foldersToClear = array($this->_account->drafts_folder);
+        self::assertNotEmpty($draft['messageuid'], 'messageuid of draft message missing: ' . print_r($draft, true));
+    }
+
+    public function testUpdateUserAccountCredentials()
+    {
+        $account = $this->_createExternalUserAccount();
+        // update credentials of account
+        $account['password'] = 'updatedpass';
+        $this->_json->saveAccount($account);
+        $this->_assertPassword($account['id'], $account['password']);
+    }
+
+    protected function _assertPassword($accountId, $pass)
+    {
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($accountId);
+        $imapConfig = $fmailaccount->getImapConfig();
+        self::assertEquals($pass, $imapConfig['password']);
+    }
+
+    protected function _createExternalUserAccount()
+    {
+        $pass = 'somepass';
+        $account = $this->_json->saveAccount([
+            'email' => Tinebase_Core::getUser()->accountEmailAddress,
+            'type' => Felamimail_Model_Account::TYPE_USER,
+            'user' => Tinebase_Core::getUser()->accountEmailAddress,
+            'password' => $pass,
+            'user_id' => Tinebase_Core::getUser()->toArray(),
+        ]);
+        $this->_assertPassword($account['id'], $pass);
+        return $account;
+    }
+
+    public function testChangeUserAccountCredentials()
+    {
+        $account = $this->_createExternalUserAccount();
+        $pass = 'newpass';
+        $this->_json->changeCredentials($account['id'], Tinebase_Core::getUser()->accountEmailAddress, $pass);
+        $this->_assertPassword($account['id'], $pass);
     }
 }

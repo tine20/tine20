@@ -62,5 +62,14 @@
 .x-tree-node-expanded .x-tree-node-icon.x-tree-node-leaf-checkbox, 
 .x-tree-node-leaf .x-tree-node-icon.x-tree-node-leaf-checkbox ,
 .x-tree-node-leaf-checkbox {
-    width:0px;
+    width: 0px;
+}
+
+.admin-checkbox{
+    top: 9px;
+    height: 30px;
+}
+
+.admin-checkbox-box{
+    margin-bottom: 3px !important;
 }

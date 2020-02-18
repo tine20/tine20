@@ -76,7 +76,6 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         if (! this.recordClass) {
             this.recordClass = Tine.Tinebase.container.getGrantsModel(this.grantContainer);
         }
-
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         }

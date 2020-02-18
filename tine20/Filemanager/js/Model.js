@@ -502,7 +502,11 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
         if (change === 'uploadstart') {
             Tine.Tinebase.uploadManager.onUploadStart();
         } else if (change === 'uploadfailure') {
-            grid.onUploadFail();
+            if (Ext.isFunction(grid.onUploadFail)) {
+                grid.onUploadFail();
+            } else {
+                // TODO do something on failure?
+            }
         }
 
         if (rowsToUpdate.get(0)) {
@@ -576,7 +580,15 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
                 forceOverwrite: true
             },
             success: proxy.onNodeCreated.createDelegate(this, [upload], true),
-            failure: proxy.onNodeCreated.createDelegate(this, [upload], true)
+            failure: function(response, request) {
+                let app = Tine.Tinebase.appMgr.get('Filemanager');
+                let msg = app.formatMessage('Error while uploading "{fileName}". Please try again later.',
+                    {fileName: file.get('name') });
+
+                Ext.MessageBox.alert(app.formatMessage('Upload Failed'), msg)
+                    .setIcon(Ext.MessageBox.ERROR);
+
+            }
         });
 
     },

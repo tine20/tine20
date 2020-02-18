@@ -90,16 +90,25 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
 
     onButtonCancel: function() {
         this.fireEvent.apply(this, ['cancel'].concat(this.getEventData('cancel')));
-        this.purgeListeners();
-        this.window.close();
+        if (this.window.closeAction !== 'hide') {
+            this.purgeListeners();
+            this.window.close();
+        } else {
+            this.window.hide();
+        }
+
     },
 
     onButtonApply: function() {
         var eventData = this.getEventData('apply');
         if (this.fireEvent.apply(this, ['beforeapply'].concat(eventData)) !== false) {
             this.fireEvent.apply(this, ['apply'].concat(eventData));
-            this.purgeListeners();
-            this.window.close();
+            if (this.window.closeAction !== 'hide') {
+                this.purgeListeners();
+                this.window.close();
+            } else {
+                this.window.hide();
+            }
         }
     },
 

@@ -81,6 +81,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_CUSTOMFIELDS = 'manage_customfields';
 
     /**
+     * the right to manage importexportdefinitions
+     * @staticvar string
+     */
+    const MANAGE_IMPORTEXPORTDEFINITIONS = 'manage_importexportdefinitions';
+
+    /**
      * the right to view roles
      * @staticvar string
      */
@@ -91,6 +97,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const VIEW_ACCOUNTS = 'view_accounts';
+
+    /**
+     * the right to view shared tags
+     * @staticvar string
+     */
+    const VIEW_SHARED_TAGS = 'viewshared_tags';
 
     /**
      * the right to view email accounts
@@ -141,6 +153,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const VIEW_QUOTA_USAGE = 'view_quota_usage';
+
+    /**
+     * the right to view importexportdefinitions
+     * @staticvar string
+     */
+    const VIEW_IMPORTEXPORTDEFINITIONS = 'view_importexportdefinitions';
         
     /**
      * holds the instance of the singleton
@@ -199,16 +217,20 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_COMPUTERS,
             self::MANAGE_CONTAINERS,
             self::MANAGE_CUSTOMFIELDS,
+            self::MANAGE_IMPORTEXPORTDEFINITIONS,
             self::VIEW_ACCESS_LOG,
             self::VIEW_ACCOUNTS,
             self::VIEW_EMAILACCOUNTS,
             self::VIEW_APPS,
+            self::VIEW_SHARED_TAGS,
             self::VIEW_ROLES,
             self::VIEW_COMPUTERS,
             self::VIEW_CONTAINERS,
             self::VIEW_CUSTOMFIELDS,
             self::VIEW_SERVERINFO,
             self::VIEW_QUOTA_USAGE,
+            self::VIEW_IMPORTEXPORTDEFINITIONS,
+
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -260,7 +282,11 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CUSTOMFIELDS   => array(
                 'text'          => $translate->_('manage customfields'),
                 'description'   => $translate->_('add and edit customfields'),
-            ),            
+            ),
+            self::MANAGE_IMPORTEXPORTDEFINITIONS => array(
+                'text'          => $translate->_('manage ImportExportDefinitions'),
+                'description'   => $translate->_('add and edit ImportExportDefinitions'),
+            ),
             self::VIEW_ACCESS_LOG   => array(
                 'text'          => $translate->_('view access log'),
                 'description'   => $translate->_('view access log list'),
@@ -269,7 +295,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('view accounts'),
                 'description'   => $translate->_('view accounts list and details'),
             ),
-            self::MANAGE_EMAILACCOUNTS   => array(
+            self::VIEW_EMAILACCOUNTS   => array(
                 'text'          => $translate->_('view email accounts'),
                 'description'   => $translate->_('view shared and personal email accounts'),
             ),
@@ -280,6 +306,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::VIEW_ROLES  => array(
                 'text'          => $translate->_('view roles'),
                 'description'   => $translate->_('view roles list and details'),
+            ),
+            self::VIEW_SHARED_TAGS    => array(
+                'text'          => $translate->_('view shared tags'),
+                'description'   => $translate->_('view shared tags list and details'),
             ),
             self::VIEW_COMPUTERS  => array(
                 'text'          => $translate->_('view computers'),
@@ -301,9 +331,15 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('view quota usage'),
                 'description'   => $translate->_('view quota usage'),
             ),
+            self::VIEW_IMPORTEXPORTDEFINITIONS => array(
+                'text'          => $translate->_('view ImportExportDefinitions'),
+                'description'   => $translate->_('view ImportExportDefinitions'),
+            ),
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
+        unset($rightDescriptions[self::USE_PERSONAL_TAGS]);
+        
         return $rightDescriptions;
     }
 }

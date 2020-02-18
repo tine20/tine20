@@ -192,7 +192,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             listWidth: 300,
             mode: 'local',
             forceSelection: true,
-            allowEmpty: false,
+            allowBlank: false,
             triggerAction: 'all',
             editable: false,
             tabIndex: this.getTabIndex

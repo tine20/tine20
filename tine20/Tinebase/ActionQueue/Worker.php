@@ -21,7 +21,9 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
     const EXECUTION_METHOD_EXEC_CLI = 'exec_cli';
 
     protected $_stopped = false;
-    
+
+    protected $_isLongRunning = false;
+
     /** 
      * default configurations of this daemon
      * 
@@ -38,6 +40,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             'maxRetry'        => 10,
             'maxChildren'     => 10,
             'shutDownWait'    => 60,
+            'longRunning'     => false,
         )
     );
     
@@ -80,7 +83,12 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         // setup proper logging
         Tinebase_Core::set(Tinebase_Core::LOGGER, $this->_getLogger());
 
-        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if ($this->_getConfig()->tine20->longRunning) {
+            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+            $this->_isLongRunning = true;
+        } else {
+            $actionQueue = Tinebase_ActionQueue::getInstance();
+        }
         if ($actionQueue->getBackendType() !== 'Tinebase_ActionQueue_Backend_Redis') {
             $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__
                 . ' not Tinebase_ActionQueue_Backend_Redis used. There is nothing to do for the worker!'
@@ -271,8 +279,8 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         //if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
 
             exec(PHP_BINARY . ' -d include_path=' . escapeshellarg(get_include_path()) .
-                ' ' . $this->_tineExecutable . ' --method Tinebase.executeQueueJob jobId=' .
-                escapeshellarg($jobId), $output, $exitCode);
+                ' ' . $this->_tineExecutable . ' --method Tinebase.executeQueueJob jobId=' . escapeshellarg($jobId)
+                . ($this->_isLongRunning ? ' longRunning=true':''), $output, $exitCode);
             if ($exitCode != 0) {
                 throw new Exception('Problem during execution with shell: ' . join(PHP_EOL, $output));
             }

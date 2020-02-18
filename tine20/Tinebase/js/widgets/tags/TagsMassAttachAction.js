@@ -126,7 +126,7 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             tags.push(r.data);
         }, this);
         
-        if (! tags) {
+        if (!tags.length) {
             this.win.close();
             return;
         }

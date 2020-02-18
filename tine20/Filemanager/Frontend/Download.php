@@ -30,7 +30,8 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         try {
             $splittedPath = explode('/', trim($path, '/'));
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__
                 . ' Display download node with path ' . print_r($splittedPath, true));
             
             $downloadId = array_shift($splittedPath);
@@ -56,7 +57,12 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             }
             
         } catch (Exception $e) {
-            Tinebase_Exception::log($e);
+            if ($e instanceof Tinebase_Exception_ProgramFlow) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            } else {
+                Tinebase_Exception::log($e);
+            }
             $this->_renderNotFoundPage();
         }
         

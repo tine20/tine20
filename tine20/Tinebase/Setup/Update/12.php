@@ -16,6 +16,14 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE012_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE012_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE012_UPDATE010 = __CLASS__ . '::update010';
+    const RELEASE012_UPDATE011 = __CLASS__ . '::update011';
+    const RELEASE012_UPDATE012 = __CLASS__ . '::update012';
+    const RELEASE012_UPDATE013 = __CLASS__ . '::update013';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -23,7 +31,12 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
             ],
+            self::RELEASE012_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
+            ],
         ],
+
         self::PRIO_TINEBASE_STRUCTURE => [
             self::RELEASE012_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
@@ -33,7 +46,20 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
             ],
+            self::RELEASE012_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE012_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE012_UPDATE012          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update012',
+            ],
         ],
+
         self::PRIO_TINEBASE_UPDATE        => [
             self::RELEASE012_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
@@ -42,6 +68,22 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE012_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE012_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
+            ],
+            self::RELEASE012_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
+            ],
+            self::RELEASE012_UPDATE013          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update013',
             ],
         ],
     ];
@@ -120,5 +162,126 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '12.23', self::RELEASE012_UPDATE005);
+    }
+
+    public function addPasswordMustChangeToAccounts()
+    {
+        if (!$this->_backend->columnExists('password_must_change', 'accounts')) {
+            $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>password_must_change</name>
+                    <type>boolean</type>                 
+                    <default>false</default>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('accounts') < 16) {
+            $this->setTableVersion('accounts', 16);
+        }
+    }
+
+    public function update006()
+    {
+        $this->addPasswordMustChangeToAccounts();
+        $this->addApplicationUpdate('Tinebase', '12.24', self::RELEASE012_UPDATE006);
+    }
+
+    public function update007()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        foreach (Tinebase_Core::getDb()->query('SELECT tnchild.id, tnparent.acl_node FROM ' .
+                SQL_TABLE_PREFIX . 'tree_nodes as tnchild JOIN ' . SQL_TABLE_PREFIX .
+                'tree_nodes as tnparent ON tnchild.parent_id = tnparent.id WHERE tnchild.is_deleted = 1 AND ' .
+                'tnparent.is_deleted = 0 AND (tnparent.acl_node <> tnchild.acl_node OR (tnparent.acl_node IS NOT NULL '
+                . 'AND tnchild.acl_node IS NULL))')->fetchAll() as $row) {
+
+            if (empty($row['acl_node'])) continue;
+
+            $node = $fs->get($row['id'], true);
+
+            $r = new ReflectionMethod(Tinebase_FileSystem::class, '_recursiveInheritPropertyUpdate');
+            $r->setAccessible(true);
+            $r->invoke($fs, $node, 'acl_node', $row['acl_node'], $node->acl_node, true, true);
+            $node->acl_node = $row['acl_node'];
+            $fs->_getTreeNodeBackend()->update($node);
+        }
+
+        $this->addApplicationUpdate('Tinebase', '12.25', self::RELEASE012_UPDATE007);
+    }
+
+    public function update008()
+    {
+        if ($this->getTableVersion('groups') < 9) {
+            $this->_backend->addCol('groups', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>account_only</name>
+                    <type>boolean</type>                 
+                    <default>true</default>
+                </field>'));
+            $this->setTableVersion('groups', 9);
+        }
+
+        $this->addApplicationUpdate('Tinebase', '12.26', self::RELEASE012_UPDATE008);
+    }
+
+    public function update009()
+    {
+        // clear open transactions
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Tree_RefLog::class,
+        ]);
+        $this->addApplicationUpdate('Tinebase', '12.27', self::RELEASE012_UPDATE009);
+    }
+
+    public function update010()
+    {
+        $this->addApplicationUpdate('Tinebase', '12.28', self::RELEASE012_UPDATE010);
+    }
+
+    public function update011()
+    {
+        $scheduler = new Tinebase_Backend_Scheduler();
+        try {
+            /** @var Tinebase_Model_SchedulerTask $task */
+            $task = $scheduler->getByProperty('Tinebase_FileSystem::avScan', 'name');
+            $task->config->setCron(Tinebase_Scheduler_Task::TASK_TYPE_WEEKLY);
+            $scheduler->update($task);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Scheduler_Task::addFileSystemAVScanTask(Tinebase_Scheduler::getInstance());
+        }
+        $this->addApplicationUpdate('Tinebase', '12.29', self::RELEASE012_UPDATE011);
+    }
+
+    public function update012()
+    {
+        // clear open transactions
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Tree_RefLog::class,
+        ]);
+        $this->addApplicationUpdate('Tinebase', '12.30', self::RELEASE012_UPDATE012);
+    }
+
+    public function update013()
+    {
+        $foBackend = Tinebase_FileSystem::getInstance()->getFileObjectBackend();
+        $db = $this->getDb();
+        // previews should only have one revision... they never should get a second
+        foreach ($foBackend->search(new Tinebase_Model_Tree_FileObjectFilter([
+            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_PREVIEW],
+            ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+        ])) as $fileObject) {
+            /** @var Tinebase_Model_Tree_FileObject $fileObject */
+            if ($fileObject->revision_size < $fileObject->size) {
+                $db->update(
+                    SQL_TABLE_PREFIX . 'tree_fileobjects',
+                    ['revision_size' => $fileObject->size],
+                    $db->quoteInto('id = ?', $fileObject->getId())
+                );
+            }
+        }
+
+        $this->addApplicationUpdate('Tinebase', '12.31', self::RELEASE012_UPDATE013);
     }
 }

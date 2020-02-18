@@ -114,7 +114,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             Tinebase_Lock::keepLocksAlive();
 
             if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
-
+                $areaLockCheck = method_exists($appController, 'doAreaLockCheck')
+                    ? $appController->doAreaLockCheck(false)
+                    : false;
                 $alarm->sent_time = Tinebase_DateTime::now();
 
                 try {
@@ -132,6 +134,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     . ' Updating alarm status: ' . $alarm->sent_status);
 
                 $this->update($alarm);
+                if ($areaLockCheck) {
+                    $appController->doAreaLockCheck($areaLockCheck);
+                }
             }
         }
 
@@ -198,17 +203,21 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         
         // create / update alarms
         foreach ($alarms as $alarm) {
-            $id = $alarm->getId();
-            
-            if ($id) {
-                $alarm = $this->_backend->update($alarm);
-                
-            } else {
-                $alarm->record_id = $_record->getId();
-                if (! $alarm->model) {
-                    $alarm->model = $model;
+            $alarm->record_id = $_record->getId();
+            if (! $alarm->model) {
+                $alarm->model = $model;
+            }
+
+            if ($alarm->id) {
+                try {
+                    $this->_backend->update($alarm);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $alarm->id = null;
                 }
-                $alarm = $this->_backend->create($alarm);
+            }
+
+            if (!$alarm->id) {
+                $this->_backend->create($alarm);
             }
         }
     }

@@ -55,6 +55,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         return $persistentEvent;
     }
+
+    /**
+     * testCreateEvent
+     *
+     * @return Calendar_Model_Event
+     */
+    public function testCreateEventWithBadTZ()
+    {
+        $event = $this->_getEvent();
+        $event->originator_tz = 'BRT';
+        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        $this->_controller->create($event);
+    }
     
     /**
      * testCreateAlldayEventWithoutDtend
@@ -1114,7 +1127,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
+            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain(),
         )), $pw, $pw);
         return $newUser;
     }
@@ -2021,6 +2034,36 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             $this->_controller->get($updatedEvent->getId());
             static::fail('delete did not work');
         } catch (Tinebase_Exception_NotFound $tenf) {}
+    }
+
+    public function testAlarmReSendOnReSchedule()
+    {
+        $event = $this->_getEvent();
+        $event->alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class, [
+            new Tinebase_Model_Alarm([
+                'minutes_before' => 15,
+
+                // this is a shortcut, which may and should fail in future, thats why we assert it below
+                // change this test once it starts failing
+                'sent_status' => Tinebase_Model_Alarm::STATUS_SUCCESS,
+                'sent_time' => $event->dtstart->getClone()->subMinute(5)
+            ], TRUE)
+        ]);
+
+        $createdEvent = $this->_controller->create($event);
+        static::assertInstanceOf(Tinebase_Record_RecordSet::class, $createdEvent->alarms);
+        static::assertNotNull($alarm = $createdEvent->alarms->getFirstRecord());
+        static::assertSame(Tinebase_Model_Alarm::STATUS_SUCCESS, $alarm->sent_status);
+        static::assertSame((string)$event->dtstart->getClone()->subMinute(5), (string)$alarm->sent_time);
+
+        $createdEvent->dtstart->addMinute(12);
+        $createdEvent->dtend->addMinute(12);
+        $updatedEvent = $this->_controller->update($createdEvent);
+
+        static::assertInstanceOf(Tinebase_Record_RecordSet::class, $updatedEvent->alarms);
+        static::assertNotNull($alarm = $updatedEvent->alarms->getFirstRecord());
+        static::assertSame(Tinebase_Model_Alarm::STATUS_PENDING, $alarm->sent_status);
+        static::assertNull($alarm->sent_time);
     }
 
     public function testModLogUndo()

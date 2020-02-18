@@ -83,7 +83,6 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'

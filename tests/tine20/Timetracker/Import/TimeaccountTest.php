@@ -36,6 +36,7 @@ class Timetracker_Import_TimeaccountTest extends TestCase
 
         $importer_timeaccount = new Tinebase_Setup_DemoData_Import('Timetracker_Model_Timeaccount', [
             'definition' => 'time_import_timeaccount_csv',
+            'file' => 'timeaccount.csv',
         ]);
 
         $importer_timeaccount->importDemodata();

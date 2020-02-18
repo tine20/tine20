@@ -42,7 +42,7 @@ class Crm_Preference extends Tinebase_Preference_Abstract
      * send notifications of own updates
      */
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
-    
+
     /**
      * @var string application
      */
@@ -62,6 +62,7 @@ class Crm_Preference extends Tinebase_Preference_Abstract
             //self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
             self::DEFAULTPERSISTENTFILTER,
+
         );
             
         return $allPrefs;
@@ -147,10 +148,22 @@ class Crm_Preference extends Tinebase_Preference_Abstract
                 break;
             */
             case self::SEND_NOTIFICATION_OF_OWN_ACTIONS:
-                $preference->value      = 1;
+                $translate = Tinebase_Translation::getTranslation($this->_application);
+                $preference->value      = 'all';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                        <option>
+                            <label>' . $translate->_('All') . '</label>
+                            <value>all</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('All without me') . '</label>
+                            <value>without</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('Nobody') . '</label>
+                            <value>nobody</value>
+                        </option>
                     </options>';
                 break;
             case self::DEFAULTPERSISTENTFILTER:

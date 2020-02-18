@@ -170,6 +170,8 @@ class Tinebase_EmailUser
      * @var array
      */
     private static $_configs = array();
+
+    private static $_configuredBackends = [];
     
     /**
      * the constructor
@@ -187,7 +189,14 @@ class Tinebase_EmailUser
     private function __clone() 
     {
     }
-    
+
+    public static function clearCaches()
+    {
+        self::$_configuredBackends = [];
+        self::$_configs = [];
+        self::$_backends = [];
+    }
+
     /**
      * the singleton pattern
      *
@@ -235,6 +244,10 @@ class Tinebase_EmailUser
      */
     public static function getConfiguredBackend($configType = Tinebase_Config::IMAP)
     {
+        if (isset(self::$_configuredBackends[$configType])) {
+            return self::$_configuredBackends[$configType];
+        }
+
         $config = self::getConfig($configType);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
         
@@ -247,7 +260,9 @@ class Tinebase_EmailUser
         if (!isset(self::$_supportedBackends[$backend])) {
             throw new Tinebase_Exception_NotFound("Config for type $configType / $backend not found.");
         }
-        
+
+        self::$_configuredBackends[$configType] = $backend;
+
         return $backend;
     }
     
@@ -289,10 +304,21 @@ class Tinebase_EmailUser
     public static function manages($_configType)
     {
         $config = self::getConfig($_configType);
+        return (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
+    }
 
-        $result = (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
-        
-        return $result;
+    /**
+     * return true if smtp backend supports AliasesDispatchFlag
+     *
+     * @return bool
+     */
+    public static function smtpAliasesDispatchFlag()
+    {
+        if (! self::manages(Tinebase_Config::SMTP)) {
+            return false;
+        }
+        $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        return $plugin->supportsAliasesDispatchFlag();
     }
     
     /**
@@ -363,9 +389,10 @@ class Tinebase_EmailUser
 
     /**
      * @param array|null $config
+     * @param boolean $_includeAdditional
      * @return array
      */
-    public static function getAllowedDomains($config = null)
+    public static function getAllowedDomains($config = null, $_includeAdditional = false)
     {
         if ($config === null) {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
@@ -378,8 +405,24 @@ class Tinebase_EmailUser
                 // merge primary and secondary domains and split secondary domains + trim whitespaces
                 $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', $config['secondarydomains']));
             }
+            if ($_includeAdditional) {
+                $allowedDomains = array_merge($allowedDomains, self::getAdditionalDomains($config));
+            }
         }
         return $allowedDomains;
+    }
+
+    public static function getAdditionalDomains($config = null)
+    {
+        if ($config === null) {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+        }
+
+        $result = [];
+        if (! empty($config['additionaldomains'])) {
+            $result = preg_split('/\s*,\s*/', $config['additionaldomains']);
+        }
+        return $result;
     }
 
     /**
@@ -388,17 +431,25 @@ class Tinebase_EmailUser
      * @param string $_email
      * @param boolean $_throwException
      * @param array $_allowedDomains
+     * @param boolean $_includeAdditional
      * @return boolean
-     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Tinebas_Exception_SystemGeneric
+     * @throws Tinebase_Exception_EmailInAddionalDomains
      */
-    public static function checkDomain($_email, $_throwException = false, $_allowedDomains = null)
+    public static function checkDomain($_email, $_throwException = false, $_allowedDomains = null, $_includeAdditional = false)
     {
         $result = true;
-        $allowedDomains = $_allowedDomains ? $_allowedDomains : self::getAllowedDomains();
+        $allowedDomains = $_allowedDomains ? $_allowedDomains : self::getAllowedDomains(null, $_includeAdditional);
 
         if (! empty($_email) && ! empty($allowedDomains)) {
 
-            list($user, $domain) = explode('@', $_email, 2);
+            if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' No valid email address: ' . $_email);
+                $domain = null;
+            } else {
+                list($user, $domain) = explode('@', $_email, 2);
+            }
 
             if (! in_array($domain, $allowedDomains)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
@@ -408,13 +459,16 @@ class Tinebase_EmailUser
                     __METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($allowedDomains, TRUE));
 
                 if ($_throwException) {
-                    // _('User E-Mail-Address {0} not in allowed domains')
-                    $translation = Tinebase_Translation::getTranslation('Tinebase');
-                    throw new Tinebase_Exception_SystemGeneric(str_replace(
-                        ['{0}', '{1}'],
-                        [$_email, implode(',', Tinebase_EmailUser::getAllowedDomains())],
-                        $translation->_('E-Mail-Address {0} not in allowed domains [{1}]')
-                    ));
+                    if (! $_includeAdditional && in_array($domain, self::getAdditionalDomains())) {
+                        throw new Tinebase_Exception_EmailInAdditionalDomains();
+                    } else {
+                        $translation = Tinebase_Translation::getTranslation('Tinebase');
+                        throw new Tinebase_Exception_SystemGeneric(str_replace(
+                            ['{0}', '{1}'],
+                            [$_email, implode(',', $allowedDomains)],
+                            $translation->_('Email address {0} not in allowed domains [{1}] or invalid')
+                        ));
+                    }
                 } else {
                     $result = false;
                 }
@@ -422,5 +476,24 @@ class Tinebase_EmailUser
         }
 
         return $result;
+    }
+
+    /**
+     * @param mixed $plugin
+     * @return false|int
+     */
+    public static function isEmailUserPlugin($plugin)
+    {
+        $pluginName = is_object($plugin) ? get_class($plugin) : $plugin;
+        return preg_match('/^Tinebase_EmailUser/', $pluginName);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isEmailSystemAccountConfigured()
+    {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        return (! empty($imapConfig) && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) && $imapConfig['useSystemAccount']);
     }
 }

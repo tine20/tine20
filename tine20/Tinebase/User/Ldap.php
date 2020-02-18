@@ -372,6 +372,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -423,6 +425,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function setStatusInSyncBackend($_accountId, $_status)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -477,6 +481,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -510,6 +516,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return $_account;
         }
         
@@ -572,6 +580,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function addUserToSyncBackend(Tinebase_Model_FullUser $user)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return null;
         }
         
@@ -608,6 +618,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function deleteUserInSyncBackend($_userId)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -637,6 +649,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function deleteUsersInSyncBackend(array $_accountIds)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         

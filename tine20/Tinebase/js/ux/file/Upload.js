@@ -130,11 +130,6 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     fileRecord: null,
     
     /**
-     * currentChunk to upload
-     */
-    currentChunk: null,
-       
-    /**
      * uploadPath
      */
     uploadPath: '/',
@@ -156,18 +151,14 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     
     /**
      * collected tempforary files
+     * @property {Array} tempFiles
      */
-    tempFiles: new Array(),
+    tempFiles: null,
     
     /**
      * did the last chunk upload fail
      */
     lastChunkUploadFailed: false,
-    
-    /**
-     * current chunk to upload
-     */
-    currentChunk: null,
     
     /**
      * how many retries were made while trying to upload current chunk
@@ -393,7 +384,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('progress', 99);
             this.fileRecord.set('tempFile', '');
             this.fileRecord.set('tempFile', response);
-            this.fileRecord.commit(false);
+            try {
+                this.fileRecord.commit(false);
+            } catch (e) {
+                console.log(e);
+            }
             this.fireEvent('uploadcomplete', this, this.fileRecord);
             this.fireEvent('update', 'uploadcomplete', this, this.fileRecord);
 
@@ -428,7 +423,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.fileRecord.beginEdit();
         this.fileRecord.set('tempFile', responseObj.tempFile);
         this.fileRecord.set('size', 0);
-        this.fileRecord.commit(false);
+        try {
+            this.fileRecord.commit(false);
+        } catch (e) {
+            console.log(e);
+        }
 
         this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
         
@@ -447,7 +446,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
             this.fileRecord.beginEdit();
             this.fileRecord.set('progress', percent);
-            this.fileRecord.commit(false);
+            try {
+                fileRecord.commit(false);
+            } catch (e) {
+                console.log(e);
+            }
 
             if(this.lastChunk) {
 
@@ -459,7 +462,14 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                         tempFilesData: this.tempFiles
                     },
                     success: this.finishUploadRecord.createDelegate(this), 
-                    failure: this.finishUploadRecord.createDelegate(this)
+                    failure: _.bind(function(response, request) {
+                        let msg = formatMessage('Error while uploading "{fileName}". Please try again later.',
+                            {fileName: this.fileRecord.get('name') });
+
+                        Ext.MessageBox.alert(formatMessage('Upload Failed'), msg)
+                            .setIcon(Ext.MessageBox.ERROR);
+
+                    }, this)
                     });
                 }).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
 
@@ -744,7 +754,10 @@ Ext.ux.file.Upload.file = Ext.data.Record.create([
     {name: 'path', system: true},
     {name: 'tempFile', system: true}
 ]);
-
+Ext.ux.file.Upload.file.prototype.toString = function() {
+    const data = Ext.ux.file.Upload.file.getFileData(this);
+    return JSON.stringify(data);
+};
 Ext.ux.file.Upload.file.getFileData = function(file) {
     return Ext.copyTo({}, file.data, ['tempFile', 'name', 'path', 'size', 'type', 'id']);
 };

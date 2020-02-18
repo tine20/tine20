@@ -154,7 +154,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @type Boolean
      */
     disableCfs: false,
-    
+
+    /**
+     * check for unsaved changes before closing
+     * @type Boolean
+     */
+    checkUnsavedChanges: true,
+
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -894,7 +900,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 for (var index = 0; index < r.length; index++) {
                     Ext.each(properties,
                         function(prop) {
-                            r[index][prop] = null;
+                            r[index][prop] = prop == 'id' ?  Tine.Tinebase.data.Record.generateUID() : null;
                         }
                     );
                 }
@@ -988,9 +994,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.record.commit();
         }).defer(100, this);
         
-        if (this.loadMask && !this.saving) {
-            this.loadMask.hide();
-        }
+        this.hideLoadMask();
     },
     
     /**
@@ -1033,11 +1037,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }
         ]);
-        
-        if (this.loadMask !== false && this.i18nRecordName) {
-            this.loadMask = new Ext.LoadMask(ct, {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
-            this.loadMask.show();
-        }
+
+        this.showLoadMask();
 
         // init change event
         var form = this.getForm().items.each(function(item) {
@@ -1045,6 +1046,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }, this);
         this.on('change', this.checkStates, this, {buffer: 100});
         this.on('select', this.checkStates, this, {buffer: 100});
+        this.window.on('beforeclose', this.onBeforeClose, this);
     },
     
     /**
@@ -1088,14 +1090,26 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     isMultipleValid: function() {
         return true;
     },
-    
+
+    onBeforeClose: function() {
+        if (this.checkUnsavedChanges && this.window.confirmLeavSite && this.record) {
+            this.checkStates();
+            if (_.keys(this.record.getChanges()).length) {
+                console.warn('this changes would be lost:');
+                console.warn(this.record.getChanges());
+                return false;
+            }
+        }
+        this.purgeListeners();
+    },
     /**
      * @private
      */
-    onCancel : function(){
-        this.fireEvent('cancel');
-        this.purgeListeners();
-        this.window.close();
+    onCancel : function(force){
+        if(force===true || this.fireEvent('beforecancel', this) !== false) {
+            this.fireEvent('cancel', this);
+            this.window.close(force);
+        }
     },
     
     /**
@@ -1116,7 +1130,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         this.saving = true;
 
-        this.loadMask.show();
+        this.showLoadMask();
 
         var ticketFn = this.doApplyChanges.deferByTickets(this, [closeWindow]),
             wrapTicket = ticketFn();
@@ -1155,18 +1169,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     success: function (record) {
                         // override record with returned data
                         me.record = record;
-                        if (!Ext.isFunction(me.window.cascade)) {
-                            // update form with this new data
-                            // NOTE: We update the form also when window should be closed,
-                            //       cause sometimes security restrictions might prevent
-                            //       closing of native windows
-                            me.afterIsRendered().then(me.onRecordLoad.bind(me));
-                        }
-                        var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
-                            wrapTicket = ticketFn();
+                        me.afterIsRendered()
+                            .then(me.onRecordLoad.bind(me))
+                            .then(() => {
+                                let ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]);
+                                let wrapTicket = ticketFn();
 
-                        me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
-                        wrapTicket();
+                                me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
+                                wrapTicket();
+                            });
+
                     },
                     failure: me.onRequestFailed,
                     timeout: 300000 // 5 minutes
@@ -1184,7 +1196,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         }, function (message) {
             me.saving = false;
-            me.loadMask.hide();
+            me.hideLoadMask();
             Ext.MessageBox.alert(i18n._('Errors'), message);
         });
     },
@@ -1207,10 +1219,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         if (closeWindow) {
             this.window.fireEvent('saveAndClose');
-            this.purgeListeners();
-            this.window.close();
+            this.window.close(true);
         } else {
-            this.loadMask.hide();
+            this.hideLoadMask();
         }
     },
     
@@ -1220,9 +1231,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {String}
      */
     getValidationErrorMessage: function() {
-        return i18n._('Please fix the errors noted.');
+        return i18n._('Please review the fields marked red. They contain invalid values.');
     },
-    
+
     /**
      * generic delete handler
      */
@@ -1235,7 +1246,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 this.recordProxy.deleteRecords(this.record, {
                     scope: this,
                     success: function() {
-                        this.purgeListeners();
                         this.window.close();
                     },
                     failure: function () {
@@ -1325,7 +1335,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
 
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     /**
@@ -1362,6 +1372,32 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.attachmentsPanel = new Tine.widgets.dialog.AttachmentsGridPanel({ anchor: '100% 100%', editDialog: this }); 
             this.items.items.push(this.attachmentsPanel);
         }
+    },
+
+    showLoadMask: async function() {
+        return this.afterIsRendered().then(() => {
+            if (this.loadMask !== false && this.i18nRecordName) {
+                if (!this.loadMask) {
+                    this.loadMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
+                }
+                this.loadMask.show();
+            }
+        });
+    },
+
+    hideLoadMask: async function() {
+        let me = this;
+        return this.afterIsRendered().then(() => {
+            if (this.loadMask) {
+                return new Promise((resolve) => {
+                    _.defer(() => {
+                        me.loadMask.hide();
+                        resolve();
+                    });
+                })
+            }
+            return Promise.resolve();
+        });
     }
 });
 

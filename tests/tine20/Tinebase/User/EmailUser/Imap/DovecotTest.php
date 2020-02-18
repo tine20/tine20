@@ -64,6 +64,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
 
         $this->_objects['addedUsers'] = array();
         $this->_objects['fullUsers'] = array();
+        $this->_objects['emailUserIds'] = array();
     }
 
     /**
@@ -81,6 +82,17 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
 
         foreach ($this->_objects['fullUsers'] as $user) {
             Tinebase_User::getInstance()->deleteUser($user);
+        }
+
+        // also remove remaining stuff from dovecot table - mail accounts no longer linked to a tine user account
+        foreach ($this->_objects['emailUserIds'] as $userId) {
+            $this->_backend->deleteUserById($userId);
+        }
+
+        // also delete from smtp
+        $smtpBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        foreach ($this->_objects['emailUserIds'] as $userId) {
+            $smtpBackend->deleteUserById($userId);
         }
     }
 
@@ -149,16 +161,16 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
     {
         $user = $this->_addUser();
         $userId = $user->getId();
+        $this->_objects['emailUserIds'][] = $userId;
 
         // delete user in tine accounts table
         $userBackend = new Tinebase_User_Sql();
         $userBackend->deleteUserInSqlBackend($userId);
 
-        // create user again
+        // create user again - should not throw an exception as old email user data gets deleted
         unset($user->accountId);
         $newUser = Tinebase_User::getInstance()->addUser($user);
         $this->_objects['fullUsers'] = array($newUser);
-
         $this->assertNotEquals($userId, $newUser->getId());
         $this->assertTrue(isset($newUser->imapUser), 'imapUser data not found: ' . print_r($newUser->toArray(), true));
     }
@@ -208,7 +220,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         // fetch dovecot user from db
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
         $rawDovecotUser = $dovecot->getRawUserById(Tinebase_Core::getUser());
-        self::assertTrue(isset($rawDovecotUser['loginname']), 'loginname property not found');
+        self::assertTrue(isset($rawDovecotUser['loginname']), 'loginname property not found ' . print_r($rawDovecotUser, true));
         self::assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $rawDovecotUser['loginname']);
     }
 
@@ -228,6 +240,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
 
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
         $rawDovecotUser = $dovecot->getRawUserById($user);
+        self::assertNotNull($rawDovecotUser['username'], 'username missing: ' . print_r($rawDovecotUser, true));
         self::assertEquals($user->getId() . '@' . $this->_config['instanceName'], $rawDovecotUser['username'],
             'username has not been updated in dovecot user table ' . print_r($rawDovecotUser, true));
     }
@@ -252,7 +265,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
         $rawDovecotUser = $dovecot->getRawUserById($user);
 
-        self::assertTrue(is_array($rawDovecotUser));
+        self::assertTrue(is_array($rawDovecotUser), 'did not fetch dovecotuser: ' . print_r($rawDovecotUser, true));
         self::assertEquals($user->getId() . '@' . $this->_config['instanceName'], $rawDovecotUser['username']);
         self::assertTrue(isset($rawDovecotUser['instancename']), 'instancename missing: ' . print_r($rawDovecotUser, true));
         self::assertEquals($this->_config['instanceName'], $rawDovecotUser['instancename']);

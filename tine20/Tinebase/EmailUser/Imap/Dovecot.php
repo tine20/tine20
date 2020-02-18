@@ -212,6 +212,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     protected $_propertyMapping = array(
         'emailUserId'       => 'userid',
         'emailUsername'     => 'username',
+        'emailLoginname'    => 'loginname',
         'emailPassword'     => 'password',
         'emailUID'          => 'uid', 
         'emailGID'          => 'gid', 
@@ -265,7 +266,9 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      * @var string
      */
     protected $_subconfigKey = 'dovecot';
-    
+
+    protected $_masterUserTable = 'dovecot_master_users';
+
     /**
      * the constructor
      */
@@ -322,12 +325,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             // Only want 1 user (shouldn't be more than 1 anyway)
             ->limit(1);
 
-        $this->_appendInstanceNameOrDomainToSelect($select);
+        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
 
         return $select;
     }
 
-    protected function _appendInstanceNameOrDomainToSelect(Zend_Db_Select $select)
+    protected function _appendDomainOrClientIdOrInstanceToSelect(Zend_Db_Select $select)
     {
         $schema = $this->getSchema();
         // append instancename OR domain if set or domain IS NULL
@@ -439,7 +442,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
 
-        $emailUsername = $this->_getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
+        $emailUsername = $this->getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
 
         list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
         $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
@@ -450,18 +453,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
 
         $rawData['domain'] = $domain;
 
-        // replace home wildcards when storing to db
-        // %d = domain
-        // %n = user
-        // %u == user@domain
-        $search = array('%n', '%d', '%u');
-        $replace = array(
-            $localPart,
-            $domain,
-            $emailUsername
-        );
-        
-        $rawData[$this->_propertyMapping['emailHome']] = str_replace($search, $replace, $this->_config['emailHome']);
+        $rawData[$this->_propertyMapping['emailHome']] = $this->_getEmailHome($emailUsername, $localPart, $domain);
         $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
 
         // set primary email address as optional login name
@@ -479,9 +471,45 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     public function getAllDomains()
     {
         $select = $this->_db->select()->from(array($this->_userTable), 'domain')->distinct();
-        $this->_appendInstanceNameOrDomainToSelect($select);
+        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
 
         $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
         return $result;
+    }
+
+    public function setMasterPassword($username, $password, $type = 'sieve')
+    {
+        $this->checkMasterUserTable();
+        $data = [
+            'username' => $username,
+            'password' => Hash_Password::generate($this->_config['emailScheme'], $password),
+            'service' => $type,
+        ];
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+            . __LINE__ . ' Add new ' . $type . ' master user: ' . $username);
+
+        $this->_db->insert($this->_masterUserTable, $data);
+    }
+
+    public function removeMasterPassword($username)
+    {
+        $this->checkMasterUserTable();
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('username') . ' = ?', $username)
+        );
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+            . __LINE__ . ' Remove master user: ' . $username);
+
+        $this->_db->delete($this->_masterUserTable, $where);
+    }
+
+    public function checkMasterUserTable()
+    {
+        $tables = $this->_db->listTables();
+        if (! in_array($this->_masterUserTable, $tables)) {
+            throw new Tinebase_Exception_NotFound('Dovecot master user table not found');
+        }
     }
 }

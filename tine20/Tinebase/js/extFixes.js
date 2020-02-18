@@ -481,6 +481,34 @@ Ext.ButtonToggleMgr = function(){
    };
 }();
 
+Ext.override(Ext.Button, {
+    setIconClass : function(cls){
+        this.iconCls = cls;
+        if(this.el){
+            var iconEl = this.btnEl.next('.x-btn-image') || this.btnEl;
+            this.btnEl.dom.className = '';
+            if (iconEl === this.btnEl) {
+                this.btnEl.addClass(['x-btn-text', cls || '']);
+            } else {
+                this.btnEl.addClass(['x-btn-text']);
+                iconEl.dom.className = '';
+                iconEl.addClass(['x-btn-image', cls || '']);
+            }
+            this.setButtonClass();
+
+            if (this.scale === 'medium') {
+                var iconEl = Ext.fly(this.el.query('td.x-btn-mc div')[0]);
+                if (cls === 'x-btn-wait') {
+                    iconEl.setLeft(this.el.getWidth()/2 - iconEl.getWidth() /2);
+                } else {
+                    iconEl.dom.style.left = "";
+                }
+            }
+        }
+        return this;
+    },
+});
+
 /**
  * add beforeloadrecords event
  */
@@ -981,6 +1009,9 @@ Ext.override(Ext.menu.Menu, {
     })
 });
 
+/**
+ * FIXME: we already overwrite the email regex above!! which one is better?
+ */
 Ext.apply(Ext.form.VTypes, {
     //@see https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
     emailRe: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,

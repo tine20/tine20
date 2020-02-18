@@ -89,6 +89,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function login($loginName, $password, \Zend\Http\PhpEnvironment\Request $request, $clientIdString = NULL)
     {
+        // enforce utf8
+        $password = Tinebase_Helper::mbConvertTo($password);
+
         // make sure pw is always replaced in Logger
         Tinebase_Core::getLogger()->addReplacement($password);
 
@@ -117,6 +120,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if ($userController instanceof Tinebase_User_Sql) {
                 $userController->updateNtlmV2Hash($user->getId(), $password);
             }
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail', true)) {
+            Felamimail_Controller::getInstance()->handleAccountLogin($user, $password);
         }
 
         return true;
@@ -326,6 +333,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function initUser(Tinebase_Model_FullUser $_user, $fixCookieHeader = true)
     {
         Tinebase_Core::set(Tinebase_Core::USER, $_user);
+        $ravenClient = Tinebase_Core::getSentry();
+        if ($ravenClient) {
+            $ravenClient->tags['user'] = $_user->accountLoginName;
+        }
         
         if (Tinebase_Session_Abstract::getSessionEnabled()) {
             $this->_initUserSession($fixCookieHeader);
@@ -541,6 +552,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if ($_pwType === 'password') {
             if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
                 throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
+            }
+            if ($_oldPassword == $_newPassword) {
+                // @Todo translation didn work
+                throw new Tinebase_Exception_SystemGeneric('The new password must be different from the old one.'); // _('The new password must be different from the old one.')
             }
             Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
         } else {
@@ -895,6 +910,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function userAccountChanged()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ .' check if userAccountChanged');
+
         try {
             $session = Tinebase_Session::getSessionNamespace();
         } catch (Zend_Session_Exception $zse) {
@@ -1100,6 +1118,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception_UnexpectedValue('image format not supported');
         }
 
+        if (! is_numeric($size)) {
+            throw new Tinebase_Exception_UnexpectedValue('size should be numeric');
+        }
+
         $cacheId = sha1(self::class . 'getFavicon' . $size . $mime);
         $imageBlob = Tinebase_Core::getCache()->load($cacheId);
 
@@ -1294,7 +1316,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         /** @var \Zend\Diactoros\Request $request */
         $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
-        $body = (string)$request->getBody();
+        $body = Tinebase_Helper::mbConvertTo((string)$request->getBody());
         if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' request body: ' . $body);
         $reqXml = simplexml_load_string($body);

@@ -236,6 +236,11 @@ div.page
     margin-bottom: 1cm;
 }
 
+.cal-print-single-logo img {
+    max-width: 400px;
+    max-height: 80px;
+}
+
 /* ------------ tags (from)
  tinebase ------------ */
 .tb-grid-tags {

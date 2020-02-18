@@ -117,7 +117,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @cfg
      */
     border: false,
-    recordClass: Tine.Felamimail.Model.Account,
     filterMode: 'filterToolbar',
     
     /**
@@ -130,6 +129,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @private
      */
     initComponent: function() {
+
+        this.recordClass = Tine.Felamimail.Model.Account;
+
         // get folder store
         this.folderStore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
         
@@ -192,7 +194,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.on('containerdelete', this.onFolderDelete, this);
         this.selModel.on('selectionchange', this.onSelectionChange, this);
         this.folderStore.on('update', this.onUpdateFolderStore, this);
-        
+
         // call parent::initComponent
         Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
     },
@@ -204,7 +206,15 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     initAccounts: function() {
         this.accountStore = this.app.getAccountStore();
         this.accountStore.each(this.addAccount, this);
+
+        this.accountStore.on('load', function(store, records) {
+            this.root.removeAll();
+            _.map(records, _.bind(this.addAccount, this));
+            this.selectInbox();
+        }, this);
+        this.accountStore.on('add', function(store, records) {_.map(records, _.bind(this.addAccount, this)); }, this);
         this.accountStore.on('update', this.onAccountUpdate, this);
+        this.accountStore.on('remove', this.deleteAccount, this);
     },
     
     /**
@@ -320,6 +330,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     selectInbox: function(account) {
         var accountId = (account) ? account.id : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+
+        // expand portal column "Email Accounts" first
+        Ext.each(this.app.getMainScreen().getWestPanel().getPortalColumn().items.items, function (item) {
+            if (Ext.isFunction(item.expand) && item.recordClass) {
+                item.expand();
+            }
+        });
         
         this.expandPath('/root/' + accountId + '/', null, function(success, parentNode) {
             Ext.each(parentNode.childNodes, function(node) {
@@ -435,9 +452,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                                this.accountStore.getById(node.id);
         
         if (! folder) {
-            // edit/remove account
             if (account.get('ns_personal') !== 'default') {
+                // disable some account actions if needed
                 this.contextMenuAccount.items.each(function(item) {
+                    // TODO don't rely on iconCls here!
                     // check account personal namespace -> disable 'add folder' if namespace is other than root 
                     if (item.iconCls == 'action_add') {
                         item.setDisabled(account.get('ns_personal') != '');
@@ -445,6 +463,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                     // disable filter rules/vacation if no sieve hostname is set
                     if (item.iconCls == 'action_email_replyAll' || item.iconCls == 'action_email_forward') {
                         item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
+                    }
+                    // disable account migration approval if already approved
+                    if (item.iconCls == 'action_approve_migration') {
+                        item.setDisabled(
+                               account.get('migration_approved') == 1
+                            || account.get('type') == 'user'
+                            || account.get('type') == 'shared'
+                        );
                     }
                 });
                 
@@ -791,8 +817,20 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.suspendEvents();
         this.root.appendChild(node);
         this.resumeEvents();
+
+        _.defer(() => {
+            this.app.getMainScreen().getCenterPanel().action_write.setDisabled(! this.app.getActiveAccount());
+        });
     },
-    
+
+    deleteAccount: function(store, account) {
+        let accountNode = this.root.findChild('path', '/' + account.data.id);
+        if (accountNode) {
+            try {
+                accountNode.remove(true);
+            } catch (e) {}
+        }
+    },
     /**
      * get active account by checking selected node
      * @return Tine.Felamimail.Model.Account

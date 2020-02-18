@@ -101,6 +101,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         $this->_exportRecords();
         if (null !== $this->_docTemplate) {
             $this->_docTemplate->replaceTine20ImagePaths();
+            $this->_docTemplate->postProcessMarkers();
         }
     }
 

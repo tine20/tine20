@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
 class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**
@@ -653,7 +654,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_31()
     {
         $obsoleteNames = ['adb_default_xls', 'adb_ods', 'lead_excel5_xls'];
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter([
+        $filter =Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
             ['field' => 'name', 'operator' => 'in', 'value' => $obsoleteNames]
         ]);
         Tinebase_ImportExportDefinition::getInstance()->deleteByFilter($filter);
@@ -920,7 +921,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         /** @var Tinebase_Model_Application $application */
         foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
-            $setupController->createImportExportDefinitions($application);
+            $setupController->createImportExportDefinitions($application, Tinebase_Core::isReplicationSlave());
         }
 
         $this->setApplicationVersion('Tinebase', '11.45');
@@ -940,9 +941,69 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 12.0
+     * update foreign key on delete cascade
      */
     public function update_46()
+    {
+        try {
+            $this->_backend->dropForeignKey('group_members', 'group_members::account_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('group_members', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>group_members::account_id--accounts::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                    </reference>
+                </index>'));
+
+        try {
+            $this->_backend->dropForeignKey('import', 'import::user_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('import', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>import::user_id--accounts::id</name>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                    </reference>
+                </index>'));
+
+        try {
+            $this->_backend->dropForeignKey('openid_sites', 'openid_sites::account_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('openid_sites', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>openid_sites::account_id--accounts::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <!-- add onupdate/ondelete? -->
+                    </reference>
+                </index>'));
+
+        $this->setApplicationVersion('Tinebase', '11.47');
+    }
+
+    /**
+     * update to 12.0
+     */
+    public function update_47()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }

@@ -247,15 +247,21 @@ class Tinebase_Core
         // NOTE: we put the request in the registry here - should be kept in mind when we implement more
         //       middleware pattern / expressive functionality as each handler might create a new request / request is modified
         $request = self::getRequest();
+
+        // we need to initialize sentry at the very beginning to catch ALL errors
+        $ravenClient = self::setupSentry();
         
         // check transaction header
         if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
             $transactionId = $request->getHeaders()->get('X-TINE20-TRANSACTIONID')->getFieldValue();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Client transaction $transactionId");
-            Tinebase_Log_Formatter::setPrefix(substr($transactionId, 0, 5));
+            Tinebase_Log_Formatter::setTransactionId(substr($transactionId, 0, 5));
+            if ($ravenClient) {
+                $ravenClient->tags['transaction_id'] = $transactionId;
+            }
         }
-        
+
         $server = self::getDispatchServer($request);
         
         $server->handle($request);
@@ -643,11 +649,27 @@ class Tinebase_Core
             return;
         }
         $config = self::getConfig();
-
-        define('TINE20_BUILDTYPE', strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        $buildType = strtoupper($config->get(Tinebase_Config::BUILD_TYPE));
+        if (empty($buildType) || $buildType === 'AUTODETECT') {
+            // config might be a Zend_Config (without proper default handling) - set type to AUTODETECT
+            $buildType = Tinebase_Core::detectBuildType();
+        }
+        define('TINE20_BUILDTYPE', $buildType);
         define('TINE20_CODENAME', Tinebase_Helper::getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
         define('TINE20_RELEASETIME', 'none');
+    }
+
+    /**
+     * @return string
+     */
+    public static function detectBuildType()
+    {
+        if (Tinebase_Frontend_Http_SinglePageApplication::getAbsoluteAssetsJsonFilename()) {
+            return 'RELEASE';
+        } else {
+            return 'DEVELOPMENT';
+        }
     }
     
     /**
@@ -1117,6 +1139,10 @@ class Tinebase_Core
                         $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
                     }
                 }
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . '  connection id: ' . $db->query('SELECT connection_id()')->fetchColumn());
+
                 break;
                 
             case self::PDO_OCI:
@@ -1149,9 +1175,6 @@ class Tinebase_Core
                 break;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . '  connection id: ' . $db->query('SELECT connection_id()')->fetchColumn());
-        
         return $db;
     }
 
@@ -1776,26 +1799,15 @@ class Tinebase_Core
     
     /**
      * returns protocol + hostname
-     * 
+     *
+     * @deprecated use getUrl(GET_URL_NOPATH) instead
      * @return string
      */
     public static function getHostname()
     {
         $hostname = self::get('HOSTNAME');
         if (! $hostname) {
-            if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
-                $url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL);
-                if (empty($url)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
-                    $hostname = 'http://'; // backward compatibility. This is what used to happen if you ask zend
-                } else {
-                    $hostname = parse_url($url, PHP_URL_SCHEME) . '://' . parse_url($url, PHP_URL_HOST);
-                }
-            } else {
-                $request = new Zend_Controller_Request_Http();
-                $hostname = $request->getScheme() . '://' . $request->getHttpHost();
-            }
+            $hostname = self::getUrl(self::GET_URL_NOPATH);
 
             self::set('HOSTNAME', $hostname);
         }
@@ -1808,6 +1820,7 @@ class Tinebase_Core
     const GET_URL_PROTOCOL = 'protocol';
     const GET_URL_NO_PROTO = 'noProtocol';
     const GET_URL_FULL = 'full';
+    const GET_URL_NOPATH = 'noPath';
 
     /**
      * returns requested url part
@@ -1821,7 +1834,7 @@ class Tinebase_Core
             if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
-                $protocol = 'http://'; // backward compatibility. This is what used to happen if you ask zend
+                $protocol = 'http'; // backward compatibility. This is what used to happen if you ask zend
                 $hostname = '';
                 $pathname = '';
             } else {
@@ -1848,6 +1861,9 @@ class Tinebase_Core
                 break;
             case self::GET_URL_NO_PROTO:
                 $url = '//' . $hostname . $pathname;
+                break;
+            case self::GET_URL_NOPATH:
+                $url = $protocol . '://' . $hostname;
                 break;
             case self::GET_URL_FULL:
             default:
@@ -2062,7 +2078,8 @@ class Tinebase_Core
     public static function inMaintenanceMode()
     {
         $config = self::getConfig();
-        return !empty($config->{Tinebase_Config::MAINTENANCE_MODE});
+        $mode = $config->{Tinebase_Config::MAINTENANCE_MODE};
+        return !( empty($mode) || $mode === 'off');
     }
 
     /**
@@ -2084,7 +2101,7 @@ class Tinebase_Core
      */
     public static function getTineUserAgent($submodule = '')
     {
-        return 'Tine 2.0 ' . $submodule . '(version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+        return 'Tine 2.0 ' . $submodule . ' (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
     }
 
     /**
@@ -2246,12 +2263,21 @@ class Tinebase_Core
 
     /**
      * setup sentry Raven_Client
+     *
+     * @return Raven_Client
      */
     public static function setupSentry()
     {
-        $sentryServerUri = Tinebase_Config::getInstance()->get(Tinebase_Config::SENTRY_URI);
+        if (self::isRegistered('SENTRY')) {
+            return self::getSentry();
+        }
+
+        $tinebaseConfig = Setup_Controller::getInstance()->isInstalled('Tinebase')
+            ? Tinebase_Config::getInstance()
+            : self::getConfig();
+        $sentryServerUri = $tinebaseConfig->{Tinebase_Config::SENTRY_URI};
         if (! $sentryServerUri) {
-            return;
+            return null;
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
@@ -2276,6 +2302,8 @@ class Tinebase_Core
         $error_handler->registerShutdownFunction();
 
         self::set('SENTRY', $client);
+
+        return $client;
     }
 
     /**

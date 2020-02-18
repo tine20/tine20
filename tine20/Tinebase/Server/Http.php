@@ -109,9 +109,13 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         } catch (Zend_Json_Server_Exception $zjse) {
             // invalid method requested or not authenticated, etc.
             Tinebase_Exception::log($zjse);
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                . ' Attempt to request a privileged Http-API method without valid session from "'
+                . $_SERVER['REMOTE_ADDR']);
 
-            header('HTTP/1.0 403 Forbidden');
+            if (! headers_sent()) {
+                header('HTTP/1.0 403 Forbidden');
+            }
 
         } catch (Throwable $exception) {
             Tinebase_Exception::log($exception, false);

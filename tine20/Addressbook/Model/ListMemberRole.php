@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @property string $list_id
  * @property string $list_role_id
@@ -48,10 +48,53 @@ class Addressbook_Model_ListMemberRole extends Tinebase_Record_Abstract
      *
      * @return string
      */
+    public function getNotesTranslatedText()
+    {
+        $listController = Addressbook_Controller_List::getInstance();
+        $contactController = Addressbook_Controller_Contact::getInstance();
+
+        $oldListAclCheck = $listController->doContainerACLChecks(false);
+        $oldContactAclCheck = $contactController->doContainerACLChecks(false);
+
+        try {
+            $listRole = Addressbook_Controller_ListRole::getInstance()->get($this->list_role_id, null, false, true);
+            $contact = Addressbook_Controller_Contact::getInstance()->get($this->contact_id, null, false, true);
+            return $listRole->getTitle() . ': ' . $contact->getTitle();
+        } finally {
+            $listController->doContainerACLChecks($oldListAclCheck);
+            $contactController->doContainerACLChecks($oldContactAclCheck);
+        }
+    }
+
     public function getTitle()
     {
-        $listRole = Addressbook_Controller_ListRole::getInstance()->get($this->list_role_id);
-        $contact = Addressbook_Controller_Contact::getInstance()->get($this->contact_id);
-        return $listRole->getTitle() . ': ' . $contact->getTitle();
+        $listController = Addressbook_Controller_List::getInstance();
+        $oldListAclCheck = $listController->doContainerACLChecks(false);
+
+        try {
+            return Addressbook_Controller_ListRole::getInstance()->get($this->list_role_id, null, false, true)
+                ->getTitle();
+        } finally {
+            $listController->doContainerACLChecks($oldListAclCheck);
+        }
+    }
+
+    public function getPathNeighbours()
+    {
+        $listController = Addressbook_Controller_List::getInstance();
+        $contactController = Addressbook_Controller_Contact::getInstance();
+
+        $oldListAclCheck = $listController->doContainerACLChecks(false);
+        $oldContactAclCheck = $contactController->doContainerACLChecks(false);
+
+        try {
+            return [
+                'parents' => [$listController->get($this->list_id, null, true, true)],
+                'children' => [$contactController->get($this->contact_id, null, true, true)],
+            ];
+        } finally {
+            $listController->doContainerACLChecks($oldListAclCheck);
+            $contactController->doContainerACLChecks($oldContactAclCheck);
+        }
     }
 }

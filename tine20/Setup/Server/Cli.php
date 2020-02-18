@@ -66,7 +66,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                            setup.php --updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com',
                 'backup'                    => 'backup config and data
                          Examples:
-                           setup.php --backup -- config=1 db=1 files=1 backupDir=/backup/tine20 noTimestamp=1',
+                           setup.php --backup -- config=1 db=1 files=1 backupDir=/backup/tine20 noTimestamp=1 novalidate=1',
                 'restore'                   => 'restore config and data
                          Examples:
                            setup.php --restore -- config=1 db=1 files=1 backupDir=/backup/tine20',

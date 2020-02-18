@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -45,24 +45,23 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     ';
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_TransactionManagerTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * setup test
      */
     protected function setup()
     {
         $this->_testTableName = SQL_TABLE_PREFIX . 'transactiontest';
         $this->_instance      = Tinebase_TransactionManager::getInstance();
+    }
+
+    /**
+     * This method is called after the last test of this test class is run.
+     *
+     * @since Method available since Release 3.4.0
+     */
+    public static function tearDownAfterClass()
+    {
+        $setupBackend = Setup_Backend_Factory::factory();
+        $setupBackend->dropTable('transactiontest');
     }
     
     /**

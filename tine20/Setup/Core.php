@@ -32,12 +32,14 @@ class Setup_Core extends Tinebase_Core
     public static function initFramework()
     {
         Setup_Core::setupConfig();
-        
+
         Setup_Core::setupTempDir();
         
         //Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX"
         Setup_Core::setupDatabaseConnection();
-        
+
+        self::setupSentry();
+
         Setup_Core::setupStreamWrapper();
         
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
@@ -96,7 +98,7 @@ class Setup_Core extends Tinebase_Core
         self::set(self::REQUEST, $request);
         
         $server = NULL;
-        
+
         /**************************** JSON API *****************************/
         if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')

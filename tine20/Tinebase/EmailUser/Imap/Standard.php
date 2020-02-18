@@ -61,7 +61,7 @@ class Tinebase_EmailUser_Imap_Standard extends Tinebase_User_Plugin_Abstract imp
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
         
-        $emailUser->emailUsername = $this->_getEmailUserName($_user);
+        $emailUser->emailUsername = $this->getEmailUserName($_user);
         
         if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
             $_user->smtpUser  = $emailUser;
@@ -104,31 +104,7 @@ class Tinebase_EmailUser_Imap_Standard extends Tinebase_User_Plugin_Abstract imp
     {
         // do nothing
     }
-    
-    protected function _getConfiguredSystemDefaults()
-    {
-        $systemDefaults = array();
-        
-        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
-        if (!empty($this->_config[$hostAttribute])) {
-            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
-        }
-        
-        if (!empty($this->_config['port'])) {
-            $systemDefaults['emailPort'] = $this->_config['port'];
-        }
-        
-        if (!empty($this->_config['ssl'])) {
-            $systemDefaults['emailSecure'] = $this->_config['ssl'];
-        }
-        
-        if (!empty($this->_config['auth'])) {
-            $systemDefaults['emailAuth'] = $this->_config['auth'];
-        }
-        
-        return $systemDefaults;
-    }
-    
+
     /**
      * converts raw data from adapter into a single record / do mapping
      *

@@ -21,11 +21,15 @@ class Felamimail_Sieve_AdbList
     protected $_allowExternal = false;
     protected $_allowOnlyGroupMembers = false;
     protected $_keepCopy = false;
+    protected $_forwardOnlySystem = false;
     protected $_receiverList = [];
 
     public function __toString()
     {
-        $result = 'require ["envelope"];' . PHP_EOL;
+        $result = 'require ["envelope", "copy", "reject"];' . PHP_EOL;
+        $rejectMsg = Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_MAILINGLIST_REJECT_REASON};
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $rejectMsg = $translation->_($rejectMsg);
 
         if ($this->_allowExternal) {
             $this->_addRecieverList($result);
@@ -34,35 +38,46 @@ class Felamimail_Sieve_AdbList
             }
 
         } else {
-            if ($this->_allowOnlyGroupMembers) {
+            if ($this->_allowOnlyGroupMembers && !empty($this->_receiverList)) {
                 $result .= 'if address :is :all "from" ["' . join('","', $this->_receiverList) . '"] {' . PHP_EOL;
             } else {
                 // only internal email addresses are allowed to mail!
-                // TODO FIX ME, get list of allowed domains!
-                $result .= 'if address :is :domain "from" ["tine20.org"] {' . PHP_EOL;
+                if (empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
+                    throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
+                }
+                $result .= 'if address :is :domain "from" ["' . join('","', $internalDomains) . '"] {' . PHP_EOL;
             }
 
             $this->_addRecieverList($result);
 
-            if (!$this->_keepCopy) {
-                // we don't keep a copy, so discard everything
-                $result .= '}' . PHP_EOL . 'discard;' . PHP_EOL;
-            } else {
-                // we keep msg by default, only if the condition was not met we discard?
-                // always discard non-allowed msgs?!?
-                $result .= '} else { discard; }' . PHP_EOL;
-            }
+            // we keep msg by default, only if the condition was not met we discard?
+            // always discard non-allowed msgs?!?
+            $result .= '} else { reject "' . $rejectMsg . '"; }' . PHP_EOL;
         }
-
-
 
         return $result;
     }
 
     protected function _addRecieverList(&$result)
     {
+        if ($this->_forwardOnlySystem && empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
+            throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
+        }
+
         foreach ($this->_receiverList as $email) {
-            $result .= 'redirect :copy ' . $email . ';' . PHP_EOL;
+            if ($this->_forwardOnlySystem) {
+                $match = false;
+                foreach ($internalDomains as $domain) {
+                    if (preg_match('/@' . preg_quote($domain, '/') . '$/', $email)) {
+                        $match = true;
+                        break;
+                    }
+                }
+                if (!$match) {
+                    continue;
+                }
+            }
+            $result .= 'redirect :copy "' . $email . '";' . PHP_EOL;
         }
     }
 
@@ -74,14 +89,19 @@ class Felamimail_Sieve_AdbList
     {
         $sieveRule = new self();
 
-        if (empty($_list->members) || empty($_list->email)) {
-            return $sieveRule;
-        }
+        $oldAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function() use($oldAcl) {
+            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldAcl);
+        });
 
-        $sieveRule->_receiverList = array_keys(Addressbook_Controller_Contact::getInstance()->search(
+        $sieveRule->_receiverList = array_filter(array_keys(Addressbook_Controller_Contact::getInstance()->search(
             new Addressbook_Model_ContactFilter([
-                ['field' => 'id', 'operator' => 'in', 'value' => $_list->members]
-            ]), null, false, ['email']));
+                ['field' => 'id', 'operator' => 'in', 'value' => $_list->members],
+                ['field' => 'showDisabled', 'operator' => 'equals', 'value' => false],
+            ]), null, false, ['email'])));
+
+        // for unused variable check
+        unset($raii);
 
         if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY]) && $_list
                 ->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY]) {
@@ -96,11 +116,54 @@ class Felamimail_Sieve_AdbList
         if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS]) && $_list
                 ->xprops()[Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS]) {
             if ($sieveRule->_allowExternal) {
-                throw new Tinebase_Exception_UnexpectedValue('can not combine allowExternal and allowOnlyMembers');
+                $translation = Tinebase_Translation::getTranslation('Felamimail');
+                throw new Tinebase_Exception_SystemGeneric($translation->_('Can not combine "allow external" and "allow only members"'));
             }
             $sieveRule->_allowOnlyGroupMembers = true;
         }
 
+        if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_FORWARD_ONLY_SYSTEM]) && $_list
+                ->xprops()[Addressbook_Model_List::XPROP_SIEVE_FORWARD_ONLY_SYSTEM]) {
+            $sieveRule->_forwardOnlySystem = true;
+        }
+
         return $sieveRule;
+    }
+
+    static public function setScriptForList(Addressbook_Model_List $list)
+    {
+        $oldValue = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function() use ($oldValue) {
+            Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldValue);});
+
+        $account = Felamimail_Controller_Account::getInstance()->getAccountForList($list);
+
+        if (! $account) {
+            throw new Tinebase_Exception_NotFound('account of list not found');
+        }
+
+        $sieveRule = static::createFromList($list)->__toString();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+            __LINE__ . ' add sieve script: ' . $sieveRule);
+
+        Felamimail_Controller_Sieve::getInstance()->setAdbListScript($account,
+            Felamimail_Model_Sieve_ScriptPart::createFromString(
+                Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $list->getId(), $sieveRule));
+
+        // for unused variable check only
+        unset($raii);
+
+        return true;
+    }
+
+    static public function getSieveScriptForAdbList(Addressbook_Model_List $list)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->getAccountForList($list);
+        if ($account) {
+            return Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+        } else {
+            return null;
+        }
     }
 }

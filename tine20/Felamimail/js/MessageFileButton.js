@@ -15,7 +15,12 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     mode: 'fileInstant',
 
     /**
-     * @property {bool} isManualSelection
+     * @cfg {Tinebase.data.Record} record optional instead of selectionModel (implicit fom grid)
+     */
+    record: null,
+
+    /**
+     * @property {Boolean} isManualSelection (of file locations)
      */
     isManualSelection: false,
 
@@ -32,15 +37,15 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18n = this.app.i18n;
 
-        this.text = this.i18n._('File Message');
+        this.text = this.i18n._('Save Message as');
 
         this.menu = [];
 
-        this.selectionHandler = this.mode == 'fileInstant' ?
+        this.selectionHandler = this.mode === 'fileInstant' ?
             this.fileMessage.createDelegate(this) :
             this.selectLocation.createDelegate(this);
 
-        if (this.mode != 'fileInstant') {
+        if (this.mode !== 'fileInstant') {
             this.disabled = false;
             this.enableToggle = true;
             this.pressed = Tine.Felamimail.registry.get('preferences').get('autoAttachNote');
@@ -55,14 +60,17 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
         // grid selection interface for DisplayPanel/Dialog
         if (! this.initialConfig.selectionModel && this.initialConfig.record) {
-            this.initialConfig.selectionModel = {
-                getSelectionFilter: function() {
-                    return [{field: 'id', operator: 'equals', value: me.initialConfig.record.id }];
-                },
-                getCount: function() {
-                    return 1
+            _.assign(this.initialConfig, {
+                selections: [this.initialConfig.record],
+                selectionModel: {
+                    getSelectionFilter: function() {
+                        return [{field: 'id', operator: 'equals', value: me.initialConfig.record.id }];
+                    },
+                    getCount: function() {
+                        return 1
+                    }
                 }
-            };
+            });
         }
         this.supr().initComponent.call(this);
     },
@@ -110,7 +118,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         var _ = window.lodash,
             selection = _.map(this.initialConfig.selections, 'data');
 
-        if (! this.suggestionsLoaded || this.mode == 'fileInstant') {
+        if (! this.suggestionsLoaded || this.mode === 'fileInstant') {
             this.loadSuggestions(selection[0])
                 .then(this.showMenu.createDelegate(this));
         } else {
@@ -140,6 +148,10 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                     me.resumeEvents();
                     me.fireEvent('selectionchange', me, selection);
                 }
+            }).catch(function(error) {
+                Tine.log.notice('No file suggestions available for this message');
+                Tine.log.notice(error);
+                me.addStaticMenuItems();
             })
         } else {
             me.addStaticMenuItems();
@@ -277,16 +289,16 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
         me.menu.addItem('-');
         me.menu.addItem({
-            text: me.app.i18n._('Filemanager ...'),
+            text: me.app.i18n._('File (in Filemanager) ...'),
             hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
             handler: me.selectFilemanagerFolder.createDelegate(me)
         });
         me.menu.addItem({
-            text: me.app.i18n._('Attachment'),
+            text: me.app.i18n._('Attachment (of Record)'),
             menu:_.reduce(Tine.Tinebase.data.RecordMgr.items, function(menu, model) {
-                if (model.hasField('attachments') && model.getMeta('appName') != 'Felamimail') {
+                if (model.hasField('attachments') && model.getMeta('appName') !== 'Felamimail') {
                     menu.push({
-                        text: model.getRecordName(),
+                        text: model.getRecordName() + ' ...',
                         iconCls: model.getIconCls(),
                         handler: me.selectAttachRecord.createDelegate(me, [model], true)
                     });
@@ -301,16 +313,15 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
         var me = this,
             messageFilter = this.initialConfig.selectionModel.getSelectionFilter(),
-            messageIds = messageFilter.length == 1 && messageFilter[0].field == 'id' ?
+            messageIds = messageFilter.length === 1 && messageFilter[0].field === 'id' ?
                 messageFilter[0].value : null,
             messageCount = this.initialConfig.selectionModel.getCount();
 
-        if (messageCount == 1 && messageIds) {
+        if (messageCount === 1 && messageIds) {
             me.menu.addItem('-');
             me.menu.addItem({
                 text: me.app.i18n._('Download'),
                 iconCls: 'action_download',
-                // hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
                 handler: me.onMessageDownload.createDelegate(me, [messageIds])
             });
         }
@@ -341,7 +352,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         this.setIconClass('x-btn-wait');
         Tine.Felamimail.fileMessages(messageFilter, locations)
             .then(function() {
-                var msg = me.app.formatMessage('{messageCount, plural, one {Message was filed} other {# messages where filed}}',
+                var msg = me.app.formatMessage('{messageCount, plural, one {Message was saved} other {# messages where saved}}',
                     {messageCount: messageCount });
                 Ext.ux.MessageBox.msg(me.app.formatMessage('Success'), msg);
             })
@@ -386,7 +397,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
      */
     itemToLocation:function(item) {
         return {
-            type: item.fileTarget.model.getMeta('appName') == 'Filemanager' ? 'node' : 'attachment',
+            type: item.fileTarget.model.getMeta('appName') === 'Filemanager' ? 'node' : 'attachment',
             model: item.fileTarget.model.getPhpClassName(),
             record_id: item.fileTarget.data,
             record_title: item.fileTarget.record_title
@@ -457,7 +468,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
             height: 100,
             padding: '5px',
             modal: true,
-            title: this.app.i18n._('File Messages as Attachment'),
+            title: this.app.i18n._('Save Messages as Attachment'),
             items: new Tine.Tinebase.dialog.Dialog({
                 listeners: {
                     scope: this,
@@ -467,7 +478,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                     }
                 },
                 getEventData: function(eventName) {
-                    if (eventName == 'apply') {
+                    if (eventName === 'apply') {
                         var attachRecord = this.getForm().findField('attachRecord').selectedRecord;
                         return {
                             record_title: attachRecord.getTitle(),
@@ -492,11 +503,13 @@ Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations, glue
     return _.reduce(locations, function(text, location) {
         var model = _.isString(location.model) ? Tine.Tinebase.data.RecordMgr.get(location.model) : location.model,
             iconCls = model ? model.getIconCls() : '',
-            icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '';
+            icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '',
+            span = model ? '<span class="felamimail-location" ' +
+                'onclick="Tine.Felamimail.MessageFileButton.locationClickHandler(\'' + model.getPhpClassName() +
+                "','" + location.record_id + '\')">' + icon + '<span class="felamimail-location-text">'
+                + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>' : '';
 
-        return text.concat('<span class="felamimail-location" ' +
-            'onclick="Tine.Felamimail.MessageFileButton.locationClickHandler(\'' + model.getPhpClassName() + "','" + location.record_id + '\')">' + icon +
-            '<span class="felamimail-location-text">' + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>');
+        return text.concat(span);
     }, []).join(glue);
 };
 

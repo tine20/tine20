@@ -61,7 +61,10 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
     {
         $recordAttachments = Tinebase_FileSystem_RecordAttachments::getInstance();
         
-        $record = new Addressbook_Model_Contact(array('n_family' => Tinebase_Record_Abstract::generateUID()));
+        $record = new Addressbook_Model_Contact(array(
+            'n_family' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => Addressbook_Controller::getDefaultInternalAddressbook()
+        ));
         $record = Addressbook_Controller_Contact::getInstance()->create($record);
         
         $recordAttachments->addRecordAttachment($record, 'Test.txt', fopen(__FILE__, 'r'));
@@ -77,6 +80,19 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
             getApplicationBasePath('Addressbook') . '/folders' . $contactJson['attachments'][0]['path']);
 
         return $record;
+    }
+
+    public function testRecordAttachmentNodeAcl()
+    {
+        $record = $this->testAddRecordAttachments();
+        $sclever = $this->_personas['sclever'];
+        Tinebase_Core::setUser($sclever);
+        $nodeId = $record->attachments->getFirstRecord()->getId();
+        $node = Tinebase_FileSystem::getInstance()->get($nodeId);
+        $nodePath = Tinebase_FileSystem::getInstance()->getPathOfNode($node, true);
+        $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($nodePath);
+        $result = Tinebase_FileSystem::getInstance()->checkPathACL($path);
+        self::assertTrue($result);
     }
 
     public function testRecordAttachmentFilter()

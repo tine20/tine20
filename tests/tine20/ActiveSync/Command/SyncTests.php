@@ -141,7 +141,7 @@ class ActiveSync_Command_SyncTests extends TestCase
         );
         $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
         $folderSync->handle();
-        $folderSync->getResponse();
+        return $folderSync->getResponse();
     }
     
     /**
@@ -558,5 +558,23 @@ class ActiveSync_Command_SyncTests extends TestCase
                 $this->assertEquals('id not found', $e->getMessage());
             }
         }
+    }
+
+    public function testDeniedModel()
+    {
+        $denyList = ActiveSync_Config::getInstance()->{ActiveSync_Config::DEVICE_MODEL_DENY_LIST};
+
+        ActiveSync_Config::getInstance()->{ActiveSync_Config::DEVICE_MODEL_DENY_LIST} = [
+            '/^Redmi 4X$/',
+        ];
+
+        $this->_device->model = 'Redmi 4X';
+
+        try {
+            $this->assertContains('<SyncKey>0</SyncKey>', $this->_syncFolder()->saveXML());
+        } finally {
+            ActiveSync_Config::getInstance()->{ActiveSync_Config::DEVICE_MODEL_DENY_LIST} = $denyList;
+        }
+
     }
 }

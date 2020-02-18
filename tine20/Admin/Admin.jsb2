@@ -84,6 +84,14 @@
           "path": "js/"
         },
         {
+          "text": "ImportExportDefinition.js",
+          "path": "js/"
+        },
+        {
+          "text": "ImportExportDefinitionEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "Container.js",
           "path": "js/container/"
         },

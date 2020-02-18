@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -788,8 +788,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
-        'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms', 'idProperty', 'splitButton',
-        'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields', 'group', 'multipleEdit', 'multipleEditRequiredRight'
+        'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms',
+        'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
+        'group', 'multipleEdit', 'multipleEditRequiredRight', 'copyNoAppendTitle'
     );
 
     /**
@@ -858,6 +859,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'container'             => Tinebase_Model_Filter_Container::class,
         'tag'                   => Tinebase_Model_Filter_Tag::class,
         'user'                  => Tinebase_Model_Filter_User::class,
+        'application'           => Tinebase_Model_Filter_Text::class,
         'numberableStr'         => Tinebase_Model_Filter_Text::class,
         'numberableInt'         => Tinebase_Model_Filter_Int::class,
     );
@@ -939,6 +941,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     protected $_recursiveResolvingFields = [];
 
+    protected $_hasDeletedTimeUnique = false;
+
     /**
      * the constructor (must be called by the singleton pattern)
      *
@@ -971,20 +975,22 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         $this->_identifier = $this->_idProperty;
 
         $this->_filters = array();
-        $this->_fields[$this->_idProperty] = array(
-            'id' => true,
-            'label' => 'ID',
-            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            'length' => 40,
-            'shy' => true,
-            'filterDefinition'  => [
-                'filter'    => 'Tinebase_Model_Filter_Id',
-                'options'   => [
-                    'idProperty'    => $this->_idProperty,
-                    'modelName'     => $this->_appName . '_Model_' . $this->_modelName
+        if (!isset($this->_fields[$this->_idProperty])) {
+            $this->_fields[$this->_idProperty] = array(
+                'id' => true,
+                'label' => 'ID',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'length' => 40,
+                'shy' => true,
+                'filterDefinition' => [
+                    'filter' => 'Tinebase_Model_Filter_Id',
+                    'options' => [
+                        'idProperty' => $this->_idProperty,
+                        'modelName' => $this->_appName . '_Model_' . $this->_modelName
+                    ]
                 ]
-            ]
-        );
+            );
+        }
 
         $hooks = [];
         if ($this->_hasSystemCustomFields) {
@@ -1126,6 +1132,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             // don't show deleted information
             $this->_fields['deleted_by']         = array('label' => NULL, 'system' => true, 'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
             $this->_fields['deleted_time']       = array('label' => NULL, 'system' => true, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'nullable' => true);
+            if ($this->_hasDeletedTimeUnique) {
+                $this->_fields['deleted_time'][self::NULLABLE] = false;
+                $this->_fields['deleted_time'][self::DEFAULT_VAL] = '1970-01-01 00:00:00';
+                $this->_fields['deleted_time'][self::CONVERTERS] = [Tinebase_Model_Converter_DateTimeFakeNull::class];
+            }
             $this->_fields['is_deleted']         = [
                 self::TYPE    => self::TYPE_BOOLEAN,
                 self::UNSIGNED => true,
@@ -1193,7 +1204,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     }
                 }
             } elseif ($fieldDef[self::TYPE] === 'virtual') {
-                $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] : false;
+                $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] : true;
                 $virtualField = $fieldDef['config'];
                 $virtualField['key'] = $fieldKey;
                 if ((isset($virtualField['default']))) {
@@ -1371,6 +1382,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                         $this->_filterModel[$fieldKey]['options']['filtergroup'] = (isset($config['recordClassName']) ? $config['recordClassName'] : ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
                         $this->_filterModel[$fieldKey]['options']['controller']  = isset($config['controllerClassName']) ? $config['controllerClassName'] : ($config['appName'] . '_Controller_' . $config['modelName']);
                     }
+                } else if ($type === 'relation') {
+                    unset($this->_filterModel[$fieldKey]);
                 }
             }
         }

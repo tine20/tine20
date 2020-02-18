@@ -28,7 +28,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         $this->_modelName             = 'Tinebase_Model_Container';
         $this->_doContainerACLChecks  = false;
         $this->_purgeRecords          = false;
-        // modlog will be written by Tinebase_Container aka the backend, disable it in Tinebase_Controller_Record_Abstract
+        // modlog will be written by Tinebase_Container aka the backend, disable it in Tinebase_Controller_Record_Abstract (exception: update)
         $this->_omitModLog            = true;
 
         // we need to avoid that anybody else gets this instance ... as it has acl turned off!
@@ -141,8 +141,11 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
     {
+        // do not skip modlog here because we use the abstract record controller for updates
+        $this->_omitModLog = false;
         $container = parent::update($_record);
-        
+        $this->_omitModLog = true;
+
         if ($container->type === Tinebase_Model_Container::TYPE_PERSONAL) {
             $this->_sendNotification($container, ((isset($_additionalArguments['note']) || array_key_exists('note', $_additionalArguments))) ? $_additionalArguments['note'] : '');
         }    

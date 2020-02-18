@@ -54,6 +54,7 @@ class Setup_SchemaTool
                 }
             }
 
+            $dbParams['defaultTableOptions']['row_format'] = 'DYNAMIC';
 
             static::$_dbParams = $dbParams;
         }
@@ -165,7 +166,7 @@ class Setup_SchemaTool
      * @param $otherDbName
      * @return array of sql statements
      */
-    public static function compareSchema($otherDbName)
+    public static function compareSchema($otherDbName, $otherUserName = null, $otherPassword = null)
     {
         $dbParams = self::getDBParams();
 
@@ -176,6 +177,12 @@ class Setup_SchemaTool
 
         $otherDbParams = $dbParams;
         $otherDbParams['dbname'] = $otherDbName;
+        if (null !== $otherUserName) {
+            $otherDbParams['user'] = $otherUserName;
+        }
+        if (null !== $otherPassword) {
+            $otherDbParams['password'] = $otherPassword;
+        }
         $otherConn = \Doctrine\DBAL\DriverManager::getConnection(
             $otherDbParams
         );

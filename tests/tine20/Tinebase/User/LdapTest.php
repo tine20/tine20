@@ -363,11 +363,6 @@ class Tinebase_User_LdapTest extends TestCase
     {
         $user = $this->testAddUser();
 
-        // add user contact
-        $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($user);
-        $user->contact_id = $contact->getId();
-        Tinebase_User::getInstance()->updateUser($user);
-
         // delete user in ldap
         Tinebase_User::getInstance()->deleteUserInSyncBackend($user->getId());
 

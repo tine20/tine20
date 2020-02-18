@@ -72,7 +72,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * west panel has containerTreePanel (defaults to null -> autodetection)
      */
     hasContainerTreePanel: null,
-    
+
+    /**
+     * @cfg {Boolean} defaultCollapseContainerTree
+     */
+    defaultCollapseContainerTree: false,
+
     /**
      * @cfg {Bool} hasFavoritesPanel
      * west panel has favorites panel (defaults to null -> autodetection)
@@ -91,6 +96,10 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * inits this west panel
      */
     initComponent: function() {
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+        if (! this.app && this.recordClass) {
+            this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+        }
         this.stateId = this.app.appName + this.getContentType() + '-mainscreen-westpanel';
         this.canonicalName = this.canonicalName ? this.canonicalName : this.getContentType();
         var fpcn = this.getContentType() + this.favoritesPanelClassName;
@@ -153,7 +162,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     applyState: function(state) {
         var collection = this.getPortalColumn().items,
             c = new Array(collection.getCount()), k = collection.keys, items = collection.items;
-        
+
+        // do not apply broken state
+        if (_.remove(state.order, function(v) {return _.isNumber(v) && !_.isNaN(v)}).length < items.length) {
+            return;
+        }
+
         Ext.each(state.order, function(position, idx) {
             c[idx] = {key: k[position], value: items[position], index: position};
         }, this);
@@ -330,7 +344,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 
                 items.push(Ext.apply(this.getContainerTreePanel(), {
                     title: isContainerTreePanel ? containersName : false,
-                    collapsed: isContainerTreePanel
+                    collapsed: isContainerTreePanel && this.defaultCollapseContainerTree
                 }, this.defaults));
                 
             }

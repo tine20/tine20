@@ -64,6 +64,24 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         return $persistentEvent;
     }
 
+    public function testCreatePollDuplicateContainer()
+    {
+        $containersBefore = Tinebase_Container::getInstance()->getPersonalContainer(
+            Tinebase_Core::getUser()->getId(),
+            'Calendar_Model_Event',
+            Tinebase_Core::getUser()->getId()
+        );
+
+        $this->testCreatePoll();
+
+        $containersAfter = Tinebase_Container::getInstance()->getPersonalContainer(
+            Tinebase_Core::getUser()->getId(),
+            'Calendar_Model_Event',
+            Tinebase_Core::getUser()->getId()
+        );
+        self::assertEquals(count($containersBefore), count($containersAfter));
+    }
+
     public function testCreatePollDuringUpdate()
     {
         $event = $this->_getEvent()->toArray();

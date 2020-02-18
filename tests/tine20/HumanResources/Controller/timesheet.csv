@@ -1,0 +1,5 @@
+time,is_billable,billed_in,is_cleared,start_date,start_time,duration,description
+EO-231,1,,0,2018-08-06,10:00:00,300,Probe
+EO-231,1,2018-08-10,0,2018-08-07,10:00:00,300,Probe
+KV-02,1,,0,2018-08-02,10:00:00,360,Druckerrei gesucht
+HF-225,1,,0,2018-08-08,15:00:00,120,Gießen der Pflanzen

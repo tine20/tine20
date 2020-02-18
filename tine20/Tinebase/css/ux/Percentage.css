@@ -29,24 +29,33 @@
 }
 
 .PercentBar-below {
-    background-color:#9cbfee;
-    background-image:url(../../../images/progress/progress-bgGreen.gif) !important;
+    border-right: none;
+    background-color: #c6e8ae;
+    background-image: none;
+    /*background-color:#9cbfee;*/
+    /*background-image:url(../../../images/progress/progress-bgGreen.gif) !important;*/
     border-top-color:#c6e8ae !important;
     border-bottom-color:#7fa9e4;
     border-right-color:#7fa9e4;
 }
 
 .PercentBar-over {
-    background-color:#9cbfee;
-    background-image:url(../../../images/progress/progress-bgYellow.gif) !important;
+    border-right: none;
+    background-color: #fff5b8;
+    background-image: none;
+    /*background-color:#9cbfee;*/
+    /*background-image:url(../../../images/progress/progress-bgYellow.gif) !important;*/
     border-top-color:#fff5b8 !important;
     border-bottom-color:#7fa9e4;
     border-right-color:#7fa9e4;
 }
 
 .PercentBar-limit {
-    background-color:#9cbfee;
-    background-image:url(../../../images/progress/progress-bgRed.gif) !important;
+    border-right: none;
+    background-color: #f7bfbf;
+    background-image: none;
+    /*background-color:#9cbfee;*/
+    /*background-image:url(../../../images/progress/progress-bgRed.gif) !important;*/
     border-top-color:#f7bfbf !important;
     border-bottom-color:#7fa9e4;
     border-right-color:#7fa9e4;

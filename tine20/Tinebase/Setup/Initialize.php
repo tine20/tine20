@@ -180,6 +180,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemAVScanTask($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemRepairDeleteTask($scheduler);
             Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
             Tinebase_Scheduler_Task::addActionQueueMonitoringTask($scheduler);
         } finally {

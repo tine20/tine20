@@ -389,13 +389,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
                                    //_('Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.')
             'description'           => 'Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            'options'               => array('recordModel' => 'Calendar_Model_AttendeeRole'),
+            'options'               => array('recordModel' => Calendar_Model_AttendeeRole::class),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'REQ', 'value' => 'Required', 'system' => true), //_('Required')
-                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true), //_('Optional')
+                    array('id' => 'REQ', 'value' => 'Required', 'system' => true, 'order' => 0), //_('Required')
+                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true, 'order' => 1), //_('Optional')
                 ),
                 'default' => 'REQ'
             )

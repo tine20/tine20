@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
 class Tasks_Setup_Update_Release12 extends Setup_Update_Abstract
 {
     /**

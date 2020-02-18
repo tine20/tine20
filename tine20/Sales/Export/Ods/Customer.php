@@ -169,7 +169,8 @@ class Sales_Export_Ods_Customer extends Sales_Export_Ods_Abstract
                 $address = $this->_customerAddresses[$customerId]['postal'];
                 break;
             case 'address':
-                return $this->_contacts->filter('id', $_record->{$_param['identifier']})->getFirstRecord()->n_fn;
+                $addresses = $this->_contacts->filter('id', $_record->{$_param['identifier']});
+                return $addresses->getFirstRecord() ? $addresses->getFirstRecord()->n_fn : '';
             default:
                 if (isset($this->_customerAddresses[$customerId][$_param['type']]['records'])) {
                     $address = $this->_customerAddresses[$customerId][$_param['type']]['records']->getByIndex($this->_customerAddresses[$customerId][$_param['type']]['index']);

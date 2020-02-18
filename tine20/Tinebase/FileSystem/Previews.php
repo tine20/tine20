@@ -131,15 +131,15 @@ class Tinebase_FileSystem_Previews
             'thumbnail' => array(
                 'firstPage' => true,
                 'filetype'  => 'jpg',
-                'x'         => 142,
-                'y'         => 200,
+                'x'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X},
+                'y'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y},
                 'color'     => 'white'
             ),
             'previews'  => array(
                 'firstPage' => false,
                 'filetype'  => 'jpg',
-                'x'         => 708,
-                'y'         => 1000,
+                'x'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_PREVIEW_SIZE_X},
+                'y'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y},
                 'color'     => 'white'
             )
         );
@@ -267,27 +267,22 @@ class Tinebase_FileSystem_Previews
             }
         }
 
-        // reduce deadlock risk. We (remove and) create the base folder outside the transaction. This will fill
-        // the stat cache and the update on the directory tree hashes will happen without prior read locks
-        $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
-        if (!$this->_fsController->isDir($basePath)) {
-            $this->_fsController->mkdir($basePath);
-        } else {
-            if ($this->_fsController->fileExists($basePath)) {
-                $this->_fsController->rmdir($basePath, true);
-            }
-            $this->_fsController->mkdir($basePath);
-        }
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         try {
+            $this->_fsController->acquireWriteLock();
 
-            $files = array();
             $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
             if (!$this->_fsController->isDir($basePath)) {
                 $this->_fsController->mkdir($basePath);
+            } else {
+                if ($this->_fsController->fileExists($basePath)) {
+                    $this->_fsController->rmdir($basePath, true);
+                }
+                $this->_fsController->mkdir($basePath);
             }
 
+            $files = [];
             $maxCount = 0;
             foreach ($config as $key => $cnf) {
                 $i = 0;
@@ -298,7 +293,6 @@ class Tinebase_FileSystem_Previews
                     $maxCount = $i;
                 }
             }
-
             unset($result);
 
             if ((int)$node->preview_count !== $maxCount) {
@@ -320,9 +314,7 @@ class Tinebase_FileSystem_Previews
 
                     // this means we create a file node of type preview
                     $this->_fsController->setStreamOptionForNextOperation(
-                        Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW,
-                        true
-                    );
+                        Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW, true);
                     $this->_fsController->copyTempfile($fh, $name);
                     fclose($fh);
                 } finally {
@@ -341,6 +333,46 @@ class Tinebase_FileSystem_Previews
         }
 
         return true;
+    }
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_node
+     * @param string $_type
+     * @return int
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getPreviewCountForNodeAndType(Tinebase_Model_Tree_Node $_node, $_type)
+    {
+        if (empty($_node->hash) || strlen($_node->hash) < 4) {
+            throw new Tinebase_Exception_NotFound('node needs to have proper hash set');
+        }
+
+        $config = $this->_getConfig();
+        if (!isset($config[$_type])) {
+            throw new Tinebase_Exception_NotFound('type ' . $_type . ' not configured');
+        }
+
+        $previewCount = (int)($_node->preview_count);
+
+        if ($previewCount < 1) return 0;
+
+        $basePath = $this->_getBasePath() . '/' . substr($_node->hash, 0, 3) . '/' . substr($_node->hash, 3)
+            . '/' . $_type . '_';
+        $ending = '.' . $config[$_type]['filetype'];
+
+        if ($this->_fsController->fileExists($basePath . ($previewCount - 1) . $ending)) {
+            return $previewCount;
+        }
+        if (!$this->_fsController->fileExists($basePath . '0' . $ending)) {
+            return 0;
+        }
+
+        $count = 1;
+        do {
+            if (!$this->_fsController->fileExists($basePath . ($count) . $ending)) {
+                return $count;
+            }
+        } while (++$count < $previewCount);
     }
 
     /**

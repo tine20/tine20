@@ -153,8 +153,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $stmt = $select->query();
         while ($row = $stmt->fetch()) {
             $foreignKeyNames[$row['CONSTRAINT_NAME']] = array(
-                'table_name'      => preg_replace('/' . SQL_TABLE_PREFIX . '/', '', $row['TABLE_NAME']),
-                'constraint_name' => preg_replace('/' . SQL_TABLE_PREFIX. '/', '', $row['CONSTRAINT_NAME']));
+                'table_name'      => substr($row['TABLE_NAME'], strlen(SQL_TABLE_PREFIX)),
+                'constraint_name' => (strpos($row['CONSTRAINT_NAME'], SQL_TABLE_PREFIX) === 0 ?
+                    substr($row['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)) : $row['CONSTRAINT_NAME'])
+            );
         }
         
         return $foreignKeyNames;
@@ -463,20 +465,22 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         exec($cmd);
         unlink($mycnf);
 
-        // validate all tables have been dumped
-        exec("bzcat $backupDir/tine20_mysql.sql.bz2 | grep 'CREATE TABLE `'", $output);
-        array_walk($output, function (&$val) {
-            if (preg_match('/`(.*)`/', $val, $m)) {
-                $val = $m[1];
-            } else {
-                $val = null;
+        if (! $option['novalidate']) {
+            // validate all tables have been dumped
+            exec("bzcat $backupDir/tine20_mysql.sql.bz2 | grep 'CREATE TABLE `'", $output);
+            array_walk($output, function (&$val) {
+                if (preg_match('/`(.*)`/', $val, $m)) {
+                    $val = $m[1];
+                } else {
+                    $val = null;
+                }
+            });
+            $output = array_filter($output);
+            $allTables = $this->_db->listTables();
+            $diff = array_diff($allTables, $output);
+            if (!empty($diff)) {
+                throw new Tinebase_Exception_Backend('dump did not work, table diff: ' . print_r($diff, true));
             }
-        });
-        $output = array_filter($output);
-        $allTables = $this->_db->listTables();
-        $diff = array_diff($allTables, $output);
-        if (!empty($diff)) {
-            throw new Tinebase_Exception_Backend('dump did not work, table diff: ' . print_r($diff, true));
         }
     }
 
@@ -536,16 +540,22 @@ EOT;
      */
     public function supports($requirement)
     {
+        return static::mariaDBFuckedUsSupports($this->_db, $requirement);
+    }
+
+
+    public static function mariaDBFuckedUsSupports($db, $requirement)
+    {
         if (preg_match('/mysql ([<>=]+) ([\d\.]+)/', $requirement, $m))
         {
-            $version = $this->_db->getServerVersion();
-            if (version_compare($m[2], '10', '<') === true && version_compare($version, $m[2], $m[1]) === true) {
+            $version = $db->getServerVersion();
+            if (version_compare($version, '10', '<') === true && version_compare($version, $m[2], $m[1]) === true) {
                 return true;
             }
         }
         if (preg_match('/mariadb ([<>=]+) ([\d\.]+)/', $requirement, $m))
         {
-            $version = $this->_db->getServerVersion();
+            $version = $db->getServerVersion();
             if (version_compare($m[2], '10', '>=') === true && version_compare($version, $m[2], $m[1]) === true) {
                 return true;
             }

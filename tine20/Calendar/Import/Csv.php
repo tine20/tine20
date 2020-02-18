@@ -35,6 +35,7 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
      */
     protected $_additionalOptions = array(
         'container_id' => '',
+        'dates'        => ['date'],
     );
 
     /**
@@ -117,8 +118,15 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
      */
     protected function _setDate($result)
     {
+        if (! isset($result['date']) || ! isset($result['time'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                ' "date" and/or "time" not found in csv input: ' . print_r($result, true)
+            );
+            return $result;
+        }
+
         $time = explode(':', $result['time']);
-        $date = $this->_getDay($result['date']);
+        $date = $result['date'];
         $date->setTime(
             (integer)$time['0'],
             isset($time['1']) ? (integer)$time['1'] : 0,
@@ -202,7 +210,6 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
             $attender->user_type = Calendar_Model_Attender::USERTYPE_RESOURCE;
             $attender->cal_event_id = $importedRecord['id'];
             $attender->status_authkey = Tinebase_Record_Abstract::generateUID();
-
 
             Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($attender, 'create');
 

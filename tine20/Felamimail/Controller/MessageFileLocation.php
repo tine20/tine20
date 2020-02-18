@@ -114,11 +114,16 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
             }
         }
 
+        if (! $message->folder_id) {
+            // skip message without folder
+            return $result;
+        }
+
         try {
             $messageId = $this->_getMessageId($message);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Message might be removed from cache. Error:' . $e->getMessage());
+                . ' Message might be removed from cache. Error: ' . $e->getMessage());
             return $result;
         }
         $locations = Felamimail_Controller_MessageFileLocation::getInstance()->getLocationsByReference(
@@ -170,7 +175,9 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
      */
     protected function _getMessageId($message)
     {
-        if (! isset($message->headers['message-id'])) {
+        if ($message->message_id && ! empty($message->message_id)) {
+            $messageId = $message->message_id;
+        } else if (! isset($message->headers['message-id'])) {
             $headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message, null, true);
             if (! isset($headers['message-id'])) {
                 throw new Tinebase_Exception_NotFound('no message-id header found');

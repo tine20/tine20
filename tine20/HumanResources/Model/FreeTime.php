@@ -15,6 +15,8 @@
  *
  * @package     HumanResources
  * @subpackage  Model
+ *
+ * @property Tinebase_Record_RecordSet freedays
  */
 class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
 {
@@ -92,13 +94,14 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 )
             ),
             'type'            => array(
-                self::LABEL             => 'Type', // _('Type')
-                self::TYPE              => self::TYPE_KEY_FIELD,
-                self::OPTIONS           => array('recordModel' => HumanResources_Model_FreeTimeType::class),
-                self::NAME              => HumanResources_Config::FREETIME_TYPE,
-                self::QUERY_FILTER      => TRUE,
-                self::VALIDATORS        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                self::NULLABLE          => true,
+                'label' => 'Type', // _('Type')
+                'type'  => self::TYPE_RECORD,
+                'config' => array(
+                    'appName'     => HumanResources_Config::APP_NAME,
+                    'modelName'   => HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
+                ),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'description'          => array(
                 'label' => 'Description', // _('Description')
@@ -108,13 +111,12 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 'nullable' => true,
             ),
             'status'          => array(
-                self::LABEL             => 'Status', // _('Status')
-                self::QUERY_FILTER      => TRUE,
-                self::TYPE              => self::TYPE_KEY_FIELD,
-                self::OPTIONS           => array('recordModel' => HumanResources_Model_FreeTimeStatus::class),
-                self::NAME              => HumanResources_Config::VACATION_STATUS,
-                self::VALIDATORS        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                self::NULLABLE          => true,
+                'label' => 'Status', // _('Status')
+                'queryFilter' => TRUE,
+                'type'  => 'keyfield',
+                'name'  => HumanResources_Config::VACATION_STATUS,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
             ),
             'firstday_date'   => array(
                 'label' => 'First Day', // _('First Day')

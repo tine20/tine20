@@ -38,6 +38,13 @@ class Tinebase_Scheduler_Task
      */
     const TASK_TYPE_DAILY = '0 0 * * *';
 
+    /**
+     * weekly task (thursdays)
+     *
+     * @var string
+     */
+    const TASK_TYPE_WEEKLY = '0 1 * * 4';
+
     const CLASS_NAME = 'class';
     const CONTROLLER = 'controller';
     const METHOD_NAME = 'method';
@@ -545,6 +552,23 @@ class Tinebase_Scheduler_Task
             . ' Saved task Tinebase_FileSystem::notifyQuota in scheduler.');
     }
 
+    public static function addFileSystemRepairDeleteTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileSystem::repairTreeIsDeletedState')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_FileSystem::repairTreeIsDeletedState', self::TASK_TYPE_DAILY, [[
+            self::CONTROLLER    => 'Tinebase_FileSystem',
+            self::METHOD_NAME   => 'repairTreeIsDeletedState',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::repairTreeIsDeletedState in scheduler.');
+    }
+
     /**
      * add file system av scan task to scheduler
      *
@@ -556,7 +580,7 @@ class Tinebase_Scheduler_Task
             return;
         }
 
-        $task = self::_getPreparedTask('Tinebase_FileSystem::avScan', self::TASK_TYPE_DAILY, [[
+        $task = self::_getPreparedTask('Tinebase_FileSystem::avScan', self::TASK_TYPE_WEEKLY, [[
             self::CONTROLLER    => 'Tinebase_FileSystem',
             self::METHOD_NAME   => 'avScan',
         ]]);

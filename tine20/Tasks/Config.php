@@ -41,7 +41,8 @@ class Tasks_Config extends Tinebase_Config_Abstract
             'description'           => 'Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Status'),
-            'clientRegistryInclude' => TRUE,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
             'default'               => array(
                 'records' => array(
                     array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1,  'icon' => 'images/icon-set/icon_invite.svg', 'system' => true), //_('No response')

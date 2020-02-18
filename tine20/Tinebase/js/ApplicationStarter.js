@@ -217,7 +217,7 @@ Tine.Tinebase.ApplicationStarter = {
                             // if this option is set, zero values are hidden in the grid
                             gridRenderer = function (value) {
                                 return Ext.util.Format.money(value, {zeroMoney: true});
-                            }
+                            };
                             break;
                         }
                     }
@@ -233,17 +233,9 @@ Tine.Tinebase.ApplicationStarter = {
                     gridRenderer = Tine.widgets.grid.jsonRenderer;
                     break;
                 case 'relation':
-                    var cc = config.config;
-                    
-                    if (cc && cc.type && cc.appName && cc.modelName) {
-                        gridRenderer = new Tine.widgets.relation.GridRenderer({
-                            appName: appName,
-                            type: cc.type,
-                            foreignApp: cc.appName,
-                            foreignModel: cc.modelName
-                        });
-                        break; 
-                    }
+                    // moved to renderer manager
+                    gridRenderer = null;
+                    break;
                 default:
                     gridRenderer = Ext.util.Format.htmlEncode;
             }
@@ -538,7 +530,8 @@ Tine.Tinebase.ApplicationStarter = {
                     if (! Tine[appName].Model.hasOwnProperty(modelName)) {
                         Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], 
                             Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
-                               'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group,copyOmitFields')
+                               'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
+                                'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle')
                         );
 
                         // called from legacy code - but all filters should come from registy (see below)

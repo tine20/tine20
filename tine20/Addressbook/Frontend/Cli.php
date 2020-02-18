@@ -249,21 +249,42 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * update geodata - only updates addresses without geodata for adr_one
      *
+     * opts tag update only Contact with tagging
+     *
      * @param Zend_Console_Getopt $opts
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function updateContactGeodata($opts)
     {
         $params = $this->_parseArgs($opts, array('containerId'));
 
+        $filter = [
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $params['containerId']],
+            ['field' => 'adr_one_lon', 'operator' => 'isnull', 'value' => null]
+        ];
+
+        $oldACL = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+
+        if (isset($params['tag'])) {
+            $tag = Tinebase_Tags::getInstance()->searchTags(
+                new Tinebase_Model_TagFilter(array(
+                    'name' => $params['tag'],
+                    'application' => $this->_applicationName,
+                ))
+            );
+            $filter[] = ['field' => 'tag', 'operator' => 'equals', 'value' => $tag->getId()];
+        }
+
         // get all contacts in a container
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $params['containerId']),
-            array('field' => 'adr_one_lon', 'operator' => 'isnull', 'value' => null)
-        ));
+        $filter = new Addressbook_Model_ContactFilter($filter);
+        $records = Addressbook_Controller_Contact::getInstance()->search($filter);
+        echo 'Found records: ' . $records->count() . "\n";
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
         $result = Addressbook_Controller_Contact::getInstance()->updateMultiple($filter, array());
-
-        echo 'Updated ' . $result['totalcount'] . ' Record(s)';
+        echo 'Updated ' . $result['totalcount'] . ' Record(s)' . "\n";
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldACL);
     }
 
     const ROLE_ID = 'roleId';
@@ -313,5 +334,52 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $listRoleBackend->delete($role->getId());
             }
         }
+    }
+
+    /**
+     * delete duplicate contacts
+     *  - allowed params:
+     *      created_by=USER (equals)
+     *      fields=FIELDS (equals)
+     *      -d (dry run)
+     *    e.g. php tine20.php --method=Addressbook.searchDuplicatesContactByUser -d created_by=test fields=n_fileas,adr_one_region
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return integer
+     **/
+    public function searchDuplicatesContactByUser($opts)
+    {
+        $be = new Addressbook_Backend_Sql;
+
+        // @ToDo
+        //$this->_addOutputLogWriter(6);
+
+        $args = $this->_parseArgs($opts);
+        if (isset($args['created_by'])) {
+            $user = Tinebase_User::getInstance()->getUserByLoginName($args['created_by']);
+        }else {
+            return 1;
+        }
+        $filterData = array(array(
+            'field' => 'created_by',
+            'operator' => 'equals',
+            'value' => $user->getId(),
+        ));
+        if (isset($args['container_id']))
+        {
+            $filterData[] = [
+                'field' => 'container_id',
+                'operator' => 'equals',
+                'value' => $args['container_id'],
+            ];
+        }
+
+        isset($args['fields']) ? $duplicateFields = $args['fields'] : $duplicateFields = array('n_fileas');
+
+        $filter = new Addressbook_Model_ContactFilter($filterData);
+
+        $be->deleteDuplicateRecords($filter, $duplicateFields, $opts->d);
+
+        return 0;
     }
 }

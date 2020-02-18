@@ -21,7 +21,14 @@
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
     const APP_NAME = 'Tinebase';
-    
+
+    /**
+     * the current Tinebase version
+     *
+     * @var int
+     */
+    const TINEBASE_VERSION = 13;
+
     /**
      * access log rotation in days
      *
@@ -72,6 +79,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AVAILABLE_LANGUAGES = 'availableLanguages';
 
     /**
+     * build type
+     *
+     * @const string
+     */
+    const BUILD_TYPE = 'buildtype';
+
+    /**
      * CACHE
      *
      * @var string
@@ -98,6 +112,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
     /**
+     * emailUserIdInXprops
+     */
+    const EMAIL_USER_ID_IN_XPROPS = 'emailUserIdInXprops';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -110,6 +129,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const IMAP = 'imap';
+
+    const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
 
     /**
      * trusted proxy config
@@ -665,16 +686,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_SERVICE_VERSION = 'previewServiceVersion';
     const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
     const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
+    const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X = 'previewThumbnailSizeX';
+    const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y = 'previewThumbnailSizeY';
+    const FILESYSTEM_PREVIEW_PREVIEW_SIZE_X = 'previewPreviewSizeX';
+    const FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y = 'previewPreviewSizeY';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
+    const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
 
     const ACTIONQUEUE = 'actionqueue';
-    const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_ACTIVE = 'active';
+    const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_HOST = 'host';
+    const ACTIONQUEUE_LONG_RUNNING = 'longRunning';
     const ACTIONQUEUE_PORT = 'port';
     const ACTIONQUEUE_NAME = 'queueName';
+    const ACTIONQUEUE_MONITORING_DURATION_WARN = 'durationWarn';
+    const ACTIONQUEUE_MONITORING_LASTUPDATE_WARN = 'lastUpdateWarn';
+    const ACTIONQUEUE_MONITORING_DURATION_CRIT = 'durationCrit';
+    const ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT = 'lastUpdateCrit';
 
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
@@ -766,6 +797,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ),
         /**
+         * One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE
+         */
+        self::BUILD_TYPE => array(
+            //_('Build Type')
+            'label' => 'Build Type',
+            //_('One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE')
+            'description' => 'One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE',
+            'type' => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule' => false,
+            'setBySetupModule' => false,
+            'default' => 'DEVELOPMENT',
+        ),
+        /**
          * for example: 'de'
          */
         self::DEFAULT_LOCALE => array(
@@ -822,16 +867,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
-        self::TRUSTED_PROXIES => array(
-            //_('Trusted Proxies')
-            'label'                 => 'Trusted Proxies',
-            //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
-            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
-            'type'                  => 'array',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
+        /**
+         * config keys:
+         *
+         * "backend":"postfix" (string)
+         * "hostname":"smtphost" (string)
+         * "port":"25" (integer)
+         * "ssl":"none" (string)
+         * "auth":"none" (string)
+         * "primarydomain":"mail.test" (string)
+         * "secondarydomains":"second.test,third.test" (string - comma separated)
+         * "additionaldomains":"another.test,onemore.test" (string - comma separated)
+         * "instanceName":"tine.test" (string)
+         */
         self::SMTP => array(
                                    //_('System SMTP')
             'label'                 => 'System SMTP',
@@ -850,6 +898,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'System SIEVE server configuration.',
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::EMAIL_USER_ID_IN_XPROPS => [
+            //_('Use record XPROPS to save email user id')
+            'label'                 => 'Use record XPROPS to save email user id',
+            //_('Use record XPROPS to save email user id')
+            'description'           => 'Use record XPROPS to save email user id',
+            'type'                  => 'bool',
+            // we need this to disable any convert actions in the GUI
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => false,
+        ],
+        self::TRUSTED_PROXIES => array(
+            //_('Trusted Proxies')
+            'label'                 => 'Trusted Proxies',
+            //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
+            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
+            'type'                  => 'array',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
@@ -965,7 +1035,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'                           => array()
         ),
-        self::ACTIONQUEUE => array(
+        self::ACTIONQUEUE => [
             //_('Action queue configuration')
             'label'                 => 'Action queue configuration',
             //_('Action queue configuration.')
@@ -975,30 +1045,50 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
-            'content'               => array(
-                self::ACTIONQUEUE_BACKEND       => array(
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'Direct'
-                ),
-                self::ACTIONQUEUE_ACTIVE       => array(
+            'content'               => [
+                self::ACTIONQUEUE_ACTIVE        => [
                     'type'                              => Tinebase_Config::TYPE_BOOL,
-                    'default'                           => false
-                ),
-                self::ACTIONQUEUE_HOST       => array(
+                    'default'                           => false,
+                ],
+                self::ACTIONQUEUE_BACKEND       => [
                     'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'localhost'
-                ),
-                self::ACTIONQUEUE_PORT       => array(
+                    'default'                           => 'Direct',
+                ],
+                self::ACTIONQUEUE_HOST          => [
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'localhost',
+                ],
+                self::ACTIONQUEUE_LONG_RUNNING  => [
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => '',
+                ],
+                self::ACTIONQUEUE_PORT          => [
                     'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 6379
-                ),
-                self::ACTIONQUEUE_NAME       => array(
+                    'default'                           => 6379,
+                ],
+                self::ACTIONQUEUE_NAME          => [
                     'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'TinebaseQueue'
-                ),
-            ),
-            'default'                           => array()
-        ),
+                    'default'                           => 'TinebaseQueue',
+                ],
+                self::ACTIONQUEUE_MONITORING_DURATION_WARN       => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 60,
+                ],
+                self::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN     => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 180,
+                ],
+                self::ACTIONQUEUE_MONITORING_DURATION_CRIT       => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600,
+                ],
+                self::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT     => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600,
+                ],
+            ],
+            'default'                           => [],
+        ],
         self::USERBACKEND => array(
                                    //_('User Configuration')
             'label'                 => 'User Configuration',
@@ -1534,7 +1624,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     //_('Minimum length')
                     'label'                 => 'Minimum length',
                     //_('Minimum password length')
-                    'description'           => 'Minimum password length.',
+                    'description'           => 'Minimum password length',
                     'type'                  => 'int',
                     'clientRegistryInclude' => TRUE,
                     'setByAdminModule'      => FALSE,
@@ -1820,8 +1910,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::MAINTENANCE_MODE => array(
             //_('Maintenance mode enabled')
             'label'                 => 'Maintenance mode enabled',
-            //_('Set Tine 2.0 maintenance mode. Possible values: "off", "normal" (only users having the maintenance right can login) and "all"')
-            'description'           => 'Set Tine 2.0 maintenance mode. Possible values: "off", "normal" (only users having the maintenance right can login) and "all"',
+            //_('Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"')
+            'description'           => 'Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"',
             'type'                  => 'string',
             'default'               => '',
             'clientRegistryInclude' => FALSE,
@@ -2153,6 +2243,61 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => FALSE,
                     'default'               => 5,
                 ),
+                self::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X => array(
+                    //_('X size of thumbnail images.')
+                    'label'                 => 'X size of thumbnail images.',
+                    //_('X size of thumbnail images.')
+                    'description'           => 'X size of thumbnail images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 142,
+                ),
+                self::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y => array(
+                    //_('Y size of thumbnail images.')
+                    'label'                 => 'Y size of thumbnail images.',
+                    //_('Y size of thumbnail images.')
+                    'description'           => 'Y size of thumbnail images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 200,
+                ),
+                self::FILESYSTEM_PREVIEW_PREVIEW_SIZE_X => array(
+                    //_('X size of preview images.')
+                    'label'                 => 'X size of preview images.',
+                    //_('X size of preview images.')
+                    'description'           => 'X size of preview images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 1416,
+                ),
+                self::FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y => array(
+                    //_('Y size of preview images.')
+                    'label'                 => 'Y size of preview images.',
+                    //_('Y size of preview images.')
+                    'description'           => 'Y size of preview images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 2000,
+                ),
+                self::FILESYSTEM_AVSCAN_MAXFSIZE => [
+                    //_('Antivirus Scan Max File Size')
+                    self::LABEL                 => 'Antivirus Scan Max File Size',
+                    //_('Antivirus Scan Max File Size')
+                    self::DESCRIPTION           => 'Antivirus Scan Max File Size',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                    self::DEFAULT_STR           => 25 * 1024 * 1024,
+                ],
                 self::FILESYSTEM_AVSCAN_MODE => [
                     //_('Antivirus Scan Mode')
                     self::LABEL                 => 'Antivirus Scan Mode',

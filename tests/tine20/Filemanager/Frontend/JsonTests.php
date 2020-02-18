@@ -465,6 +465,23 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->searchNodes(array(), array());
         $this->_assertRootNodes($result);
     }
+
+    public function testCreateEmptyNodeWithContentType()
+    {
+        $containerName = 'testcontainer';
+        $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $containerName . '/someEmptyTestFile';
+
+        $folderNode = $this->testCreateContainerNodeInPersonalFolder($containerName);
+
+        $result = $this->_getUit()->createNodes($testPath, 'myContentType', array(), false);
+        $createdNode = $result[0];
+
+        static::assertTrue(isset($createdNode['name']));
+        static::assertEquals('someEmptyTestFile', $createdNode['name']);
+        static::assertEquals(strtolower('myContentType'), $createdNode['contenttype']);
+        static::assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
+    }
     
     /**
      * create container in personal folder
@@ -483,6 +500,48 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
         
         return $createdNode;
+    }
+
+    public function testAclNodeUnset()
+    {
+        $node = $this->testCreateContainerNodeInPersonalFolder();
+        $node['acl_node'] = null;
+        $node = $this->_getUit()->saveNode($node);
+        static::assertSame($node['id'], $node['acl_node'], 'must not be possible to null acl_node');
+    }
+
+    public function testAclNodeChangeInheritedToDeleted()
+    {
+        $this->testCreateContainerNodeInPersonalFolder();
+
+        $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/testcontainer/test';
+        $node = $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false)[0];
+
+        $testPath .= '/toBeDeleted';
+        $toBeDeleted = $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false)[0];
+        $this->_getUit()->deleteNodes($testPath);
+
+        $node['acl_node'] = $node['id'];
+        $node = $this->_getUit()->saveNode($node);
+        static::assertSame($node['id'], $node['acl_node'], 'acl_node update did not work');
+
+        static::assertSame(Tinebase_Core::getDb()->query(
+            'SELECT acl_node FROM ' . SQL_TABLE_PREFIX . 'tree_nodes WHERE id = "' . $toBeDeleted['id'] . '"')
+            ->fetchColumn(), $node['id'], 'deleted node has not been updated');
+
+        static::assertSame(Tinebase_Core::getDb()->query(
+            'SELECT is_deleted FROM ' . SQL_TABLE_PREFIX . 'tree_nodes WHERE id = "' . $toBeDeleted['id'] . '"')
+            ->fetchColumn(), '1', 'deleted node has not been deleted');
+    }
+
+    public function testAclAdminLost()
+    {
+        $node = $this->testCreateContainerNodeInPersonalFolder();
+        $node['grants'] = [];
+
+        static::setExpectedException(Tinebase_Exception_SystemGeneric::class, 'you can\'t remove your own admin grant');
+        $this->_getUit()->saveNode($node);
     }
 
     /**
@@ -771,6 +830,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         try {
             $filePaths = $this->testCreateFileNodes(true);
             $secondFolderNode = $this->testCreateContainerNodeInPersonalFolder('fooContainer');
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
 
             $file0Path = Filemanager_Controller_Node::getInstance()->addBasePath($filePaths[0]);
             $targetPath = Filemanager_Controller_Node::getInstance()->addBasePath($secondFolderNode['path']);
@@ -793,6 +855,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 'effectiveAndLocalQuota is not right: ' . print_r($parentFolderJson, true));
 
             $this->_getUit()->moveNodes($file0Path, $targetPath, false);
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
 
             $parentFolder = $this->_fsController->get($parentFolder->getId());
             static::assertEquals(8, $parentFolder->size, 'one file with 8 bytes expected');
@@ -830,6 +895,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 false;
             $this->_fsController = Tinebase_FileSystem::getInstance();
             $this->_fsController->resetBackends();
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
 
             $this->_getUit()->createNode([$targetFile], Tinebase_Model_Tree_FileObject::TYPE_FILE);
             $tempPath = Tinebase_TempFile::getTempPath();
@@ -1424,6 +1492,35 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals('dir1', $result[0]['name'], print_r($result[0], true));
     }
 
+    public function testMoveFileToRenameIt()
+    {
+        $filepaths = $this->testCreateFileNodes(true);
+
+        $result = $this->_getUit()->moveNodes($filepaths[0], [$filepaths[0] . 'foo'], false);
+
+        $node = Tinebase_FileSystem::getInstance()->get($this->_createdNodesJson[0]['id']);
+        static::assertSame($node->hash, $result[0]['hash'], 'hash did change');
+        $path = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
+        static::assertTrue(is_file($path), 'hash does not exist in FS');
+        static::assertSame('someData', file_get_contents($path));
+    }
+
+    public function testMoveFolderToRenameIt()
+    {
+        $orgFolder = $this->testCreateContainerNodeInPersonalFolder();
+
+        sleep(1);
+        $result = $this->_getUit()->moveNodes($orgFolder['path'], [$orgFolder['path'] . 'foo'], false);
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_fsController->processRefLogs();
+        $this->_fsController->clearStatCache();
+        $result[0] = $this->_getUit()->getNode($result[0]['id']);
+
+        static::assertNotSame($orgFolder['hash'], $result[0]['hash'], 'hash did not change');
+        static::assertNotSame($orgFolder['last_modified_time'], $result[0]['last_modified_time'],
+            'last_modified_date did not change');
+    }
+
     /**
      * Test if notes are correctly decorated with path field
      */
@@ -1459,6 +1556,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $filepaths = $this->testCreateFileNodes($_addData);
 
         if (true === $_addData) {
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
             $parentFolder = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath(dirname($filepaths[0])));
             static::assertEquals(16, $parentFolder->size, 'two files with 8 bytes each created, excpected 16 bytes folder size');
         }
@@ -1466,6 +1566,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->deleteNodes($filepaths);
 
         if (true === $_addData) {
+            Tinebase_FileSystem::flushRefLogs();
+            $this->_fsController->processRefLogs();
+            $this->_fsController->clearStatCache();
             $parentFolder = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath(dirname($filepaths[0])));
             static::assertEquals(0, $parentFolder->size, 'after deletion expected 0 byte folder size');
         }
@@ -1642,7 +1745,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals(1, count($contact['relations']));
         $relatedNode = $contact['relations'][0]['related_record'];
         $this->assertEquals($node['name'], $relatedNode['name']);
-        $pathRegEx = '@^/personal/[a-f0-9-]+/testcontainer/' . preg_quote($relatedNode['name']) . '$@';
+        $pathRegEx = '@^/personal/[a-f0-9-]+/testcontainer/' . preg_quote($relatedNode['name'], '@') . '$@';
         $this->assertTrue(preg_match($pathRegEx, $relatedNode['path']) === 1, 'path mismatch: ' . print_r($relatedNode, true) . ' regex: ' . $pathRegEx);
     }
     

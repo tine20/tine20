@@ -32,7 +32,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     protected $_useUid;
     
     /**
-     * activate logging in IMAP protocal class?
+     * activate logging in IMAP protocol class?
      * 
      * NOTE: should be disabled by default as credentials might be logged 
      * 
@@ -49,6 +49,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      *   - port port for IMAP server [optional, default = 110]
      *   - ssl 'SSL' or 'TLS' for secure sockets
      *   - folder select this folder [optional, default = 'INBOX']
+     *   - account
      *
      * @param  object $params mail reader specific parameters
      */
@@ -77,10 +78,18 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
         
         $this->connectAndLogin($params);
-        
+
+        if ($params->account) {
+            $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($params->account, $this);
+        } else {
+            $capabilities['capabilities'] = [];
+        }
+
         $folderToSelect = isset($params->folder) ? $params->folder : 'INBOX';
+        $selectParams = $capabilities && in_array('CONDSTORE', $capabilities['capabilities']) ? ['(CONDSTORE)'] : [];
+
         try {
-            $this->selectFolder($folderToSelect);
+            $this->selectFolder($folderToSelect, $selectParams);
         } catch (Zend_Mail_Storage_Exception $zmse) {
             throw new Felamimail_Exception_IMAPFolderNotFound('Could not select ' . $folderToSelect . '(' . $zmse->getMessage() . ')');
         }
@@ -128,8 +137,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $timeEndLogin = microtime(true);
         $loginTime = $timeEndLogin - $timeEndConnect;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' CONNECT TIME: ' . $connectTime . ' seconds');
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' LOGIN TIME: ' . $loginTime . ' seconds');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' CONNECT TIME: ' . $connectTime . ' seconds');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' LOGIN TIME: ' . $loginTime . ' seconds');
     }
     
     /**
@@ -144,10 +155,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @throws Zend_Mail_Storage_Exception
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function selectFolder($globalName)
+    public function selectFolder($globalName, $params=[])
     {
         $this->_currentFolder = $globalName;
-        if (!$result = $this->_protocol->select($this->_currentFolder)) {
+        if (!$result = $this->_protocol->select($this->_currentFolder, $params)) {
             $this->_currentFolder = null;
             /**
              * @see Zend_Mail_Storage_Exception
@@ -736,17 +747,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     protected function _parseStructureNonMultiPart($_structure, $_partId)
     {
-        if (is_array($_structure[0]) || is_array($_structure[1])) {
+        if (is_array($_structure[0]) || is_array($_structure[1]) || ! is_array($_structure) || count($_structure) < 7) {
             $structStr = print_r($_structure, true);
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $structStr);
-            throw new Felamimail_Exception_IMAP('Invalid structure. String expected, got array: ' . $structStr);
+            throw new Felamimail_Exception_IMAP('Invalid structure: ' . $structStr);
         }
-        if (count($_structure) < 7) {
-            $structStr = print_r($_structure, true);
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $structStr);
-            throw new Felamimail_Exception_IMAP('Invalid structure. count < 7: ' . $structStr);
-        }
-        
+
         $structure = $this->_getBasicNonMultipartStructure($_partId);
         
         /** basic fields begin **/
@@ -1036,9 +1041,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     protected function _fixHeader($_header, $_messageId, &$_leadingSpaces = 0)
     {
         $header = $this->_replaceHeaderSpaces($_header, $_messageId, $_leadingSpaces);
-        $result = $this->_fixHeaderEncoding($header);
-        
-        return $result;
+        return $this->_fixHeaderEncoding($header);
     }
     
     /**
@@ -1072,8 +1075,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * 
      * @param string $_header
      * @return string
-     * 
-     * @todo support multiple to, ... headers
      */
     protected function _fixHeaderEncoding($_header)
     {
@@ -1087,9 +1088,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             
             foreach (array('subject', 'from', 'to', 'cc', 'bcc') as $field) {
                 if (preg_match('/' . $field . ': (.*?[\n][\s]*?)/i', $result, $matches)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' ' . print_r($matches, TRUE));
-                    
                     $headerValue = str_replace("\n", '', $matches[1]);
                     $headerValue = Tinebase_Helper::mbConvertTo($headerValue);
                     $headerString = iconv_mime_encode(ucfirst($field), $headerValue);
@@ -1097,9 +1095,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                     $result = str_replace($matches[0], $headerString . "\n", $result);
                 }
             }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' ' .$result);
+
+            // remove other bad chars to prevent "iconv_mime_decode_headers(): Detected an illegal character in input string"
+            $result = iconv('UTF-8', 'ASCII//TRANSLIT', $result);
         }
         
         return $result;
@@ -1114,5 +1112,43 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     public function getQuota($_mailbox)
     {
         return $this->_protocol->getQuotaRoot($_mailbox);
+    }
+
+    /**
+     * append a new message to mail storage
+     *
+     * @param  string                                     $message message as string or instance of message class
+     * @param  null|string|Zend_Mail_Storage_Folder       $folder  folder for new message, else current folder is taken
+     * @param  null|array                                 $flags   set flags for new message, else a default set is used
+     * @throws Zend_Mail_Storage_Exception
+     * @return integer UID of appended message
+     */
+    public function appendMessage($message, $folder = null, $flags = null)
+    {
+        if ($folder === null) {
+            $folder = $this->_currentFolder;
+        }
+
+        if ($flags === null) {
+            $flags = array(Zend_Mail_Storage::FLAG_SEEN);
+        }
+
+        $result = false;
+        try {
+            $result = $this->_protocol->append($folder, $message, $flags);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            // log message string for future examination
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage() . ' Broken message: ' . $message);
+        }
+        if (! $result) {
+            /**
+             * @see Zend_Mail_Storage_Exception
+             */
+            require_once 'Zend/Mail/Storage/Exception.php';
+            throw new Zend_Mail_Storage_Exception('cannot create message, please check if the folder exists and your flags');
+        }
+
+        return $result;
     }
 }

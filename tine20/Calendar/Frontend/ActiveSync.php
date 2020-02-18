@@ -630,7 +630,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         }
         
         // Update seq to entries seq to prevent concurrent update
-        $event->seq = $entry['seq'];
+        $event->seq = isset($entry['seq']) ? $entry['seq'] : null;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . " Event before mapping: " . print_r($event->toArray(), true));
@@ -733,7 +733,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                         }
 
                         $eventException->is_deleted = (bool) $exception->deleted;
-                        $eventException->seq = $entry['seq'];
+                        $eventException->seq = isset($entry['seq']) ? $entry['seq'] : null;
                         $exdates->addRecord($eventException);
                     }
                     

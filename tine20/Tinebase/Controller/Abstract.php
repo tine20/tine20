@@ -215,7 +215,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
 
         // no default model defined, using first model of app...
         $models = $this->getModels();
-        return (count($models) > 0) ? $models[0] : null;
+        return (is_array($models) && count($models) > 0) ? $models[0] : null;
     }
 
     /**

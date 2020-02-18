@@ -143,6 +143,13 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     list($loginName, $password) = $this->_getAuthData($this->_request);
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
+                } catch (Zend_Session_Exception $zse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Maintenance mode / other session problem: ' . $zse->getMessage());
+                    }
+                    header('HTTP/1.1 503 Service Unavailable');
+                    return;
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
                     header('HTTP/1.1 401 Unauthorized');
@@ -218,10 +225,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             // compute base uri
             self::$_server->setBaseUri($this->_request->getBaseUrl() . '/');
 
-            $tempDir = Tinebase_Core::getTempDir();
-            if (!empty($tempDir)) {
+            if (Tinebase_Core::isFilesystemAvailable()) {
                 self::$_server->addPlugin(
-                    new \Sabre\DAV\Locks\Plugin(new \Sabre\DAV\Locks\Backend\File($tempDir . '/webdav.lock'))
+                    new \Sabre\DAV\Locks\Plugin(
+                        new \Sabre\DAV\Locks\Backend\File('tine20://Tinebase/folders/shared/webdav.lock'))
                 );
             }
 
@@ -285,6 +292,11 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
 
             Tinebase_Controller::getInstance()->logout();
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+            }
+            @header('HTTP/1.1 403 Forbidden');
         } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');

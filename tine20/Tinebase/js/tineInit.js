@@ -23,9 +23,8 @@ Ext.ux.Printer.BaseRenderer.prototype.stylesheetPath = 'Tinebase/js/ux/Printer/p
 
 /**
  * @class Tine
- * @singleton
  */
-Ext.namespace('Tine', 'Tine.Tinebase', 'Tine.Calendar');
+Ext.namespace('Tine');
 
 /**
  * version of Tine 2.0 javascript client version, gets set a build / release time <br>
@@ -47,6 +46,29 @@ Tine.clientVersion.buildRevision    = 'none';
 Tine.clientVersion.codeName         = 'none';
 Tine.clientVersion.packageString    = 'none';
 Tine.clientVersion.releaseTime      = 'none';
+
+Tine.__appLoader = require('./app-loader!app-loader.js');
+Tine.__onAllAppsLoaded = new Promise( (resolve) => {
+    Tine.__onAllAppsLoadedResolve = resolve;
+});
+
+/**
+ * returns promise that resolves when app code of given app is loaded
+ *
+ * @param appName
+ * @return {*|Promise<never>}
+ */
+Tine.onAppLoaded = (appName) => {
+    return _.get(Tine.__appLoader.appLoadedPromises, appName) || Promise.reject();
+};
+
+/**
+ * returns promise that resolves when code of all user apps is loaded
+ * @return {Promise<any>}
+ */
+Tine.onAllAppsLoaded = () => {
+    return Tine.__onAllAppsLoaded;
+};
 
 /**
  * quiet logging in release mode
@@ -185,6 +207,17 @@ Tine.Tinebase.tineInit = {
                         window.opener.location.href = href;
                         window.close();
                     }
+                }
+            }
+
+            else {
+                let wavesEl = e.getTarget('.x-btn', 10, true)
+                    || e.getTarget('.x-tree-node-el', 10, true);
+
+                if (wavesEl) {
+                    wavesEl.addClass('waves-effect');
+                    Waves.ripple(wavesEl.dom);
+                    wavesEl.removeClass.defer(1500, wavesEl, ['waves-effect']);
                 }
             }
         }, this);
@@ -333,16 +366,19 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.ApplicationStarter.init();
         Tine.Tinebase.appMgr.getAll();
 
-        if (winConfig) {
-            var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
-                card = Tine.WindowFactory.getCenterPanel(winConfig);
+        // dispatch _after_ init resolvers/awaits
+        _.defer(() => {
+            if (winConfig) {
+                var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
+                    card = Tine.WindowFactory.getCenterPanel(winConfig);
 
-            mainCardPanel.add(card);
-            mainCardPanel.layout.setActiveItem(card.id);
-            card.doLayout();
-        } else {
-            Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
-        }
+                mainCardPanel.add(card);
+                mainCardPanel.layout.setActiveItem(card.id);
+                card.doLayout();
+            } else {
+                Tine.Tinebase.router.dispatch('on', '/' + route.join('/'));
+            }
+        });
     },
 
     initAjax: function () {
@@ -746,9 +782,9 @@ Tine.Tinebase.tineInit = {
 
         // load initial js of user enabled apps
         // @TODO: move directly after login (login should return requested parts of registry)
-        var appLoader = require('./app-loader!app-loader.js');
-        return appLoader(Tine.Tinebase.registry.get('userApplications')).then(function() {
-            return Tine.Tinebase.tineInit.initCustomJS();
+        return Tine.__appLoader.loadAllApps(Tine.Tinebase.registry.get('userApplications')).then(function() {
+            Tine.Tinebase.tineInit.initCustomJS();
+            Tine.__onAllAppsLoadedResolve();
         });
     },
 
@@ -977,6 +1013,7 @@ Tine.Tinebase.tineInit = {
         require('Locale/Gettext');
 
         await waitFor( function() { return Tine.__translationData.__isLoaded; });
+        Tine.__applyExtTranslations();
 
         _.each(Tine.__translationData.msgs, function(msgs, category) {
             Locale.Gettext.prototype._msgs[category] = new Locale.Gettext.PO(msgs);

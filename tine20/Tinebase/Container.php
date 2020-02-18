@@ -296,6 +296,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
         $container = $this->create($_container);
+        Tinebase_Notes::getInstance()->addSystemNote($container, Tinebase_Core::getUser());
         $this->setGrants($container->getId(), $event->grants, TRUE, FALSE);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
@@ -390,17 +391,25 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * in getDefaultContainer and getPersonalContainer
      * @param string|Tinebase_Record_Interface $_recordClass
      * @throws Tinebase_Exception_InvalidArgument
+     * @return array
      */
     protected function _resolveRecordClassArgument($_recordClass)
     {
         $ret = array();
         if(is_string($_recordClass)) {
             $split = explode('_', $_recordClass);
-            switch(count($split)) {
+            switch (count($split)) {
                 case 1:
-                    throw new Tinebase_Exception_InvalidArgument(
-                        'Using application name is deprecated. Use the classname of the model itself.');
-                case 3: 
+                    // only app name given - check if it has a default model
+                    $defaultModel = Tinebase_Core::getApplicationInstance('Calendar')->getDefaultModel();
+                    if ($defaultModel) {
+                        $ret['appName'] = $split[0];
+                        $ret['recordClass'] = $defaultModel;
+                    } else {
+                        throw new Tinebase_Exception_InvalidArgument(
+                            'Using application name is deprecated and no default model found. Use the classname of the model itself.');
+                    }
+                case 3:
                     $ret['appName'] = $split[0];
                     $ret['recordClass'] = $_recordClass;
                     break;
@@ -672,7 +681,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $this->addGrantsSql($select, $accountId, $grant);
         
         if ($meta['recordClass']) {
-            $select->where("{$this->_db->quoteIdentifier('container.model')} = ?", $meta['recordClass']);
+            // TODO needs fixing, you dont get container by application name, maybe by models (yet maybe we want to have
+            //      containers containing multiple models at some point? ... needs a proper uniqueness here!)
+            // TODO we also might fix (or remove) createPersonalFolder for Addressbook + Calendar as they always create Contact/Event containers
+            if (in_array($meta['recordClass'], ['Addressbook_Model_List', 'Calendar_Model_Poll'])) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' FIXME: Lists+Contacts and Events+Polls share the containers! Implement multi-model containers');
+            } else {
+                $select->where("{$this->_db->quoteIdentifier('container.model')} = ?", $meta['recordClass']);
+            }
         }
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
@@ -1196,6 +1213,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
         } catch (Exception $e) {
             $tm->rollBack();
+            // otherwise it would not be logged by the server code
+            if ($e instanceof Tinebase_Exception_ProgramFlow) {
+                Tinebase_Exception::log($e);
+            }
             throw $e;
         }
         
@@ -2084,14 +2105,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        //use get (avoids cache) or getContainerById, guess its better to avoid the cache
+        // use get (avoids cache) or getContainerById, guess its better to avoid the cache
         $oldContainer = $this->get($_record->getId(), $_updateDeleted);
 
         $result = parent::update($_record);
 
         unset($result->account_grants);
         unset($oldContainer->account_grants);
-        $this->_writeModLog($result, $oldContainer);
+        $mods = $this->_writeModLog($result, $oldContainer);
+        Tinebase_Notes::getInstance()->addSystemNote($result, Tinebase_Core::getUser(),
+            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $mods);
 
         if ($_fireEvent) {
             $event = new Tinebase_Event_Record_Update();
@@ -2248,6 +2271,77 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         } finally {
             $this->_doSearchAclFilter = $oldDoSearchAcl;
         }
+    }
+
+    /**
+     * Delete duplicate container without contents.
+     *
+     * @param $application
+     * @param null $dryrun
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_SystemContainer
+     * @return integer
+     *
+     * TODO also check translated names
+     * TODO allow to move records into the older container
+     */
+    public function deleteDuplicateContainer($application, $dryrun = null)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationByName($application);
+
+        $filter = new Tinebase_Model_ContainerFilter([
+            ['field' => 'type', 'operator' => 'equals', 'value' => 'personal'],
+            ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()]
+        ]);
+
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
+
+        $containers = Tinebase_Container::getInstance()->search($filter);
+
+        Tinebase_Container::getInstance()->doSearchAclFilter(true);
+
+        $removeCount = 0;
+        foreach ($containers as $container) {
+            $duplicate = $containers->filter('name', $container['name']);
+            $duplicate->sort('creation_time', 'ASC');
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Container: . ' . $duplicate->getFirstRecord()['id'] . ' is the default Container');
+
+            $duplicate->removeFirst();
+            if ($duplicate->count() > 0) {
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Duplicates found. ' . $duplicate);
+
+                foreach ($duplicate as $dupContainer) {
+                    if ($dupContainer['content_seq'] == 0) {
+                        if ($dryrun) {
+
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                . ' Dry run: Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' will remove.');
+
+                        } else {
+                            Tinebase_Container::getInstance()->deleteContainer($dupContainer['id'], true);
+
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' remove.');
+
+                        }
+                        $removeCount++;
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' don´t remove, because in container exist records');
+
+                    }
+                }
+            }
+            $containers->removeRecords($duplicate);
+        }
+
+        return $removeCount;
     }
 
     public function getModel()

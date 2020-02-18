@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use Tinebase_NewModelConfiguration as MC;
-
 /**
  * class to hold contact data
  * 
@@ -104,6 +102,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      */
     protected static $_configurationObject = NULL;
 
+    public static $doResolveAttenderCleanUp = true;
+
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -175,14 +175,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
         'filterModel'       => [
             'id'                => [
-                'filter'            => 'Addressbook_Model_ContactIdFilter',
+                'filter'            => Addressbook_Model_ContactIdFilter::class,
                 'options'           => [
                     'idProperty'        => 'id',
                     'modelName'         => 'Addressbook_Model_Contact'
                 ]
             ],
             'showDisabled'      => [
-                'filter'            => 'Addressbook_Model_ContactHiddenFilter',
+                'filter'            => Addressbook_Model_ContactHiddenFilter::class,
                 'title'             => 'Show Disabled', // _('Show Disabled') // TODO is this right?
                 'options'           => [
                     'requiredCols'      => ['account_id' => 'accounts.id'],
@@ -190,25 +190,25 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'jsConfig'          => ['filtertype' => 'addressbook.contactshowDisabled'] // TODO later with FE fix it
             ],
             'path'              => [
-                'filter'            => 'Tinebase_Model_Filter_Path',
+                'filter'            => Tinebase_Model_Filter_Path::class,
                 'title'             => 'Path', // _('Path') // TODO is this right?
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactpath'] // TODO later with FE fix it
             ],
             'list'              => [
-                'filter'            => 'Addressbook_Model_ListMemberFilter',
+                'filter'            => Addressbook_Model_ListMemberFilter::class,
                 'title'             => 'List Member', // _('List Member') // TODO is this right?
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactlist'] // TODO later with FE fix it
             ],
             'list_role_id'      => [
-                'filter'            => 'Addressbook_Model_ListRoleMemberFilter',
+                'filter'            => Addressbook_Model_ListRoleMemberFilter::class,
                 'title'             => 'List Role Member', // _('List Role Member') // TODO is this right?
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactlistroleid'] // TODO later with FE fix it
             ],
             'telephone'         => [
-                'filter'            => 'Tinebase_Model_Filter_Query',
+                'filter'            => Tinebase_Model_Filter_Query::class,
                 'title'             => 'Telephone', // _('Telephone') // TODO is this right?
                 'options'           => [
                     'fields'            => [
@@ -228,7 +228,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'jsConfig'          => ['filtertype' => 'addressbook.contacttelephone'] // TODO later with FE fix it
             ],
             'telephone_normalized' => [
-                'filter'            => 'Tinebase_Model_Filter_Query',
+                'filter'            => Tinebase_Model_Filter_Query::class,
                 'title'             => 'Telephone Normalized', // _('Telephone Normalized') // TODO is this right?
                 'options'           => [
                     'fields'            => [
@@ -248,7 +248,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'jsConfig'          => ['filtertype' => 'addressbook.contacttelephoneNormalized'] // TODO later with FE fix it
             ],
             'email_query'       => [
-                'filter'            => 'Tinebase_Model_Filter_Query',
+                'filter'            => Tinebase_Model_Filter_Query::class,
                 'title'             => 'Email', // _('Email') // TODO is this right?
                 'options'           => [
                     'fields'            => [
@@ -1144,19 +1144,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             array('field' => 'contact_id',  'operator' => 'equals', 'value' => $this->getId())
         )));
 
-        $listRoles = array();
         /** @var Addressbook_Model_ListMemberRole $listMemberRole */
         foreach($listMemberRoles as $listMemberRole) {
-            $listRoles[$listMemberRole->list_role_id] = $listMemberRole->list_role_id;
             $lists->removeById($listMemberRole->list_id);
         }
 
-        if (count($listRoles) > 0) {
-            $listRoles = Addressbook_Controller_ListRole::getInstance()->getMultiple($listRoles, true)->asArray();
-        }
-
         $result = parent::getPathNeighbours();
-        $result['parents'] = array_merge($result['parents'], $lists->asArray(), $listRoles);
+        $result['parents'] = array_merge($result['parents'], $lists->asArray(), $listMemberRoles->asArray());
 
         $listController->doContainerACLChecks($oldAclCheck);
 
@@ -1195,6 +1189,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
     public function resolveAttenderCleanUp()
     {
+        if (!static::$doResolveAttenderCleanUp) {
+            return;
+        }
+
         $this->_data = array_intersect_key($this->_data, [
             'id'          => true,
             'note'        => true,

@@ -23,7 +23,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'n_suffix', label: 'Suffix', group: 'Name'}, //_('Suffix')
     {name: 'n_short', label: 'Short Name', group: 'Name'}, //_('Short Name')
     {name: 'n_fn', label: 'Display Name', group: 'Name', omitDuplicateResolving: true }, //_('Display Name')
-    {name: 'n_fileas', group: 'Name', omitDuplicateResolving: true },
+    {name: 'n_fileas', group: 'Name', omitDuplicateResolving: true, sortType: Ext.data.SortTypes.asUCString },
     {name: 'bday', label: 'Birthday', type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
     {name: 'org_name', label: 'Company', group: 'Company' }, //_('Company')
     {name: 'org_unit', label: 'Unit', group: 'Company' }, //_('Unit')
@@ -240,6 +240,7 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     {name: 'type'},
     {name: 'list_type'},
     {name: 'group_id'},
+    {name: 'account_only', type: 'boolean'},
     {name: 'emails'},
     {name: 'notes', omitDuplicateResolving: true},
     {name: 'paths', omitDuplicateResolving: true},
@@ -273,7 +274,7 @@ Tine.Addressbook.Model.List.getFilterModel = function() {
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app, field: 'contact'},
         {label: app.i18n._('Name'),                                               field: 'name' },
-        {label: app.i18n._('Description'),                                                field: 'description',           valueType: 'fulltext'},
+        {label: app.i18n._('Description'),                                                      field: 'description',        valueType: 'text'},
         {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
         {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
         {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},

@@ -320,7 +320,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             disabled: false,
             handler: this.onImport,
             minWidth: 60,
-            requiredGrant: 'readGrant',
             iconCls: 'action_import',
             scope: this,
             allowMultiple: true
@@ -1010,13 +1009,19 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             panel = this.getCalendarPanel(this.activeView),
             store = this.getStore(),
             view = panel.getView(),
+            isSelected = panel.getSelectionModel().isSelected(event),
             me = this,
             promise = Promise.resolve();
 
         if (updatedEvent.ui) {
             updatedEvent.ui.markDirty();
         }
+
         store.replaceRecord(event, updatedEvent);
+
+        if (isSelected) {
+            panel.getSelectionModel().select(updatedEvent);
+        }
 
         if (! event.inPeriod(view.getPeriod())) {
             view.updatePeriod({from: event.get('dtstart')});
@@ -1270,7 +1275,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         record.beginEdit();
 
-        if (isCopy != true) {
+        if (isCopy !== true) {
             // remove from ui before update
             var oldRecord = store.getAt(store.findExact('id', record.getId()));
             if (oldRecord && oldRecord.hasOwnProperty('ui')) {
@@ -1328,7 +1333,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         record.endEdit();
 
-        if (isCopy == true) {
+        if (isCopy === true) {
             record.isCopy = true;
             Tine.Tinebase.data.Clipboard.push(record);
             if (record.ui) {

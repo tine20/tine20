@@ -158,7 +158,7 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         if( (metadata && metadata.zeroMoney && v == '0')) {
             return '';
         }
-        return v.toLocaleString(locale) + " " + currencySymbol;
+        return v.toLocaleString(locale,{minimumFractionDigits: 2}) + " " + currencySymbol;
 
     },
     percentage: function(v){
@@ -212,3 +212,7 @@ Ext.Button.buttonTemplate = new Ext.Template(
     '<tr><td class="x-btn-bl"><i>&#160;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&#160;</i></td></tr>',
     '</tbody></table>');
 Ext.Button.buttonTemplate.compile();
+
+Ext.Window.prototype.shadow = false;
+Ext.Tip.prototype.shadow = false;
+Ext.QuickTip.prototype.shadow = false;

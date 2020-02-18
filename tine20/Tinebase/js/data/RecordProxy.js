@@ -144,7 +144,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
             if (! options.suppressBusEvents) {
-                this.postMessage('update', response.responseText);
+                _.defer(_.bind(this.postMessage, this), 'update', response.responseText);
             }
             return [this.recordReader(response)];
         };
@@ -219,8 +219,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
             if (! options.suppressBusEvents) {
-                // do we need to distingush create/update?
-                this.postMessage('update', response.responseText);
+                let recordData = JSON.parse(response.responseText);
+                let action = (!_.get(record, 'data.id') && _.get(recordData, 'id')) ||
+                    (!_.get(record, 'data.creation_time') && _.get(recordData, 'creation_time')) ?
+                    'create' : 'update';
+
+                _.defer(_.bind(this.postMessage, this), action, recordData);
             }
             return [this.recordReader(response)];
         };
@@ -295,6 +299,26 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options.timeout = this.deleteTimeout;
         
         return this.doXHTTPRequest(options);
+    },
+
+    promiseDeleteRecords: function(record, options, additionalArguments) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.deleteRecords(record, Ext.apply(options || {}, {
+                    success: function (r) {
+                        fulfill(r);
+                    },
+                    failure: function (error) {
+                        reject(new Error(error));
+                    }
+                }), additionalArguments);
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
     },
 
     /**
@@ -448,16 +472,6 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      */
     recordReader: function(response) {
         return Tine.Tinebase.data.Record.setFromJson(response.responseText, this.recordClass);
-    },
-    
-    /**
-     * is request still loading?
-     * 
-     * @param  {Number} Ext.Ajax transaction id
-     * @return {Bool}
-     */
-    isLoading: function(tid) {
-        return Ext.Ajax.isLoading(tid);
     },
     
     /**

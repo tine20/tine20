@@ -87,9 +87,18 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         // increase execution time (sending message with attachments can take a long time)
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
-        
+
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        
+
+        // only check send grant for shared accounts
+        if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+            // TODO generalize that? Tinebase_Core::getUser()->hasGrant() anyone?
+            $userGrants = Felamimail_Controller_Account::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $account);
+            if (!$userGrants->{Felamimail_Model_AccountGrants::GRANT_ADD}) {
+                throw new Tinebase_Exception_AccessDenied('User is not allowed to send a message with this account');
+            }
+        }
+
         try {
             $this->_resolveOriginalMessage($_message);
             $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
@@ -210,12 +219,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * 
      * @param string|Felamimail_Model_Folder $_folder globalname or folder record
      * @param Felamimail_Model_Message $_message
+     * @param array flags
      * @return Felamimail_Model_Message
      */
-    public function saveMessageInFolder($_folder, $_message)
+    public function saveMessageInFolder($_folder, $_message, $_flags = [])
     {
         $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        
+
         if (is_string($_folder) && ($_folder === $sourceAccount->templates_folder || $_folder === $sourceAccount->drafts_folder)) {
             // make sure that system folder exists
             $systemFolder = $_folder === $sourceAccount->templates_folder ? Felamimail_Model_Folder::FOLDER_TEMPLATES : Felamimail_Model_Folder::FOLDER_DRAFTS;
@@ -232,19 +242,28 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         $transport = new Felamimail_Transport();
         $mailAsString = $transport->getRawMessage($mailToAppend, $this->_getAdditionalHeaders($_message));
-        $flags = ($folder->globalname === $targetAccount->drafts_folder) ? array(Zend_Mail_Storage::FLAG_DRAFT) : null;
-        
+        if ($folder->globalname === $targetAccount->drafts_folder) {
+            $flags = array_merge($_flags, [Zend_Mail_Storage::FLAG_DRAFT]);
+        } else {
+            $flags = $_flags;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Appending message ' . $_message->subject . ' to folder ' . $folder->globalname . ' in account ' . $targetAccount->name);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
             ' ' . $mailAsString);
-        
-        Felamimail_Backend_ImapFactory::factory($targetAccount)->appendMessage(
+
+        $imap = Felamimail_Backend_ImapFactory::factory($targetAccount);
+        $uid = $imap->appendMessage(
             $mailAsString,
             Felamimail_Model_Folder::encodeFolderName($folder->globalname),
             $flags
         );
-        
+
+        if ($uid) {
+            $_message->messageuid = $uid;
+        }
+
         return $_message;
     }
     
@@ -355,23 +374,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             return;
         }
 
-        // update cache to fetch new message
-        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($_sentFolder, 10, 1);
-        $i = 0;
-        while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
-            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
-            $i++;
-        }
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
-            ['field' => 'subject', 'operator' => 'equals', 'value' => $_message->subject],
-            ['field' => 'received', 'operator' => 'within', 'value' => Tinebase_Model_Filter_Date::DAY_THIS],
-        ]);
-        $result = Felamimail_Controller_Message::getInstance()->search($filter, new Tinebase_Model_Pagination([
-            'sort' => 'received',
-            'dir' => 'DESC',
-            'limit' => 1,
-        ]));
-        $sentMessage = $result->getFirstRecord();
+        $sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder($_sentFolder, $_message);
 
         if ($sentMessage) {
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
@@ -536,6 +539,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
      * @return array
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _setMailRecipients(Zend_Mail $_mail, Felamimail_Model_Message $_message)
     {
@@ -577,8 +581,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (count($invalidEmailAddresses) > 0) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
             $messageText = '<' . implode(',', $invalidEmailAddresses) . '>: ' . $translation->_('Invalid address format');
-            $fe = new Felamimail_Exception($messageText);
-            throw $fe;
+            throw new Tinebase_Exception_SystemGeneric($messageText);
         }
         
         return $nonPrivateRecipients;
@@ -718,7 +721,18 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $totalSize = 0;
 
         foreach ($_message->attachments as $attachment) {
-            $part = $this->_getAttachmentPartByType($attachment, $_message);
+            try {
+                $part = $this->_getAttachmentPartByType($attachment, $_message);
+            } catch (Felamimail_Exception_IMAPMessageNotFound $feimnf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Skipping attachment ' . $feimnf->getMessage());
+                continue;
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' ' . $teia->getMessage()
+                    . ' - Skipping attachment ' . print_r($attachment, true));
+                continue;
+            }
 
             if (! $part || ! isset($attachment['type'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -782,6 +796,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             case 'tempfile':
                 $part = $this->_getTempFileAttachment($attachment);
                 break;
+            case 'messagepart':
             default:
                 $part = $this->_getMessagePartAttachment($attachment);
         }
@@ -796,22 +811,25 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getAttachmentType($attachment, $_message)
     {
-        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment') {
-            if (isset($attachment['tempFile']) && $attachment['tempFile']) {
-                return 'tempfile';
-            } else {
-                return 'filenode';
-            }
-        }
-
-        if (isset($attachment['attachment_type'])) {
-            return $attachment['attachment_type'];
-        } elseif (isset($attachment['type'])
+        if (isset($attachment['type'])
             && $attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
-            && $_message->original_id instanceof Felamimail_Model_Message
+            && $_message->original_id
         ) {
             return 'rfc822';
+        } elseif (isset($attachment['attachment_type'])) {
+            if ($attachment['attachment_type'] === 'attachment') {
+                if (isset($attachment['tempFile'])) {
+                    return 'tempfile';
+                } else if ($this->_isMessagePartAttachment($attachment)) {
+                    return 'messagepart';
+                } else {
+                    return 'filenode';
+                }
+            } else {
+                return $attachment['attachment_type'];
+            }
         } elseif ($attachment instanceof Tinebase_Model_TempFile || isset($attachment['tempFile'])) {
+            // tempfile last because we other attachment_types also have a tempfile
             return 'tempfile';
         }
 
@@ -1007,7 +1025,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
         $part->encoding = ($tempFile->type == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
 
-        $attachment['name'] = $tempFile->name;
+        if (!isset($attachment['name']) || empty($attachment['name'])) {
+            $attachment['name'] = $tempFile->name;
+        }
         $attachment['type'] = $tempFile->type;
 
         if (! empty($tempFile->size)) {
@@ -1040,17 +1060,57 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getMessagePartAttachment(&$attachment)
     {
-        if (! isset($attachment['id']) || strpos($attachment['id'], '_') === false) {
+        if (! $this->_isMessagePartAttachment($attachment)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No valid message id/part id');
             return null;
         }
 
         // might be an attachment defined by message id + part id -> fetch this and attach
         list($messageId, $partId) = explode('_', $attachment['id']);
-        $part = $this->getMessagePart($messageId, $partId);
-        $part->decodeContent();
+        try {
+            $part = $this->getMessagePart($messageId, $partId);
+            $part->decodeContent();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // TODO we should mark this attachment / message as node (part)
+            // might be a node attachment part
+            $part = $this->_getMessageAttachmentPartFromNode($messageId, $partId);
+        }
 
         return $part;
+    }
+
+    /**
+     * @param $nodeId
+     * @param $partId
+     * @return Zend_Mime_Part
+     * @throws Tinebase_Exception_NotFound
+     *
+     * TODO write a test for this case
+     */
+    protected function _getMessageAttachmentPartFromNode($nodeId, $partId)
+    {
+        $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId);
+        $attachment = isset($message['attachments'][$partId]) ? $message['attachments'][$partId] : null;
+        if (! $attachment) {
+            throw new Tinebase_Exception_NotFound('node attachment not found');
+        }
+        $stream = $attachment['contentstream'];
+        $stream->rewind();
+        $content = $stream->getContents();
+        $part = new Zend_Mime_Part($content);
+        // is this always base64?
+        $part->encoding = Zend_Mime::ENCODING_BASE64;
+
+        return $part;
+    }
+
+    /**
+     * @param array $attachment
+     * @return bool
+     */
+    protected function _isMessagePartAttachment($attachment)
+    {
+        return isset($attachment['id']) && strpos($attachment['id'], '_') !== false;
     }
     
     /**

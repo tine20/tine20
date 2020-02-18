@@ -41,8 +41,12 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     useModuleTreePanel: null,
 
     layout: 'border',
+    border: false,
 
     initComponent: function() {
+        var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + this.app.appName, []);
+        this.contentTypes = (this.contentTypes || []).concat(registeredContentTypes);
+
         this.useModuleTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
         this.initLayout();
         this.initMessageBus();
@@ -106,7 +110,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             region: 'north',
             layout: 'card',
             activeItem: 0,
-            height: 59,
+            height: 44,
             border: false,
             items: []
         }, {
@@ -395,11 +399,13 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 }
             });
 
-            westPanelToolbar.show();
+            // westPanelToolbar.show();
+            // flat design
+            westPanelToolbar.hide();
         } else {
             westPanelToolbar.hide();
         }
-        
+
         westPanelToolbar.doLayout();
 
         this.setActiveTreePanel(westPanel, true);
@@ -498,3 +504,20 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         }
     }
 });
+
+/**
+ * content type registry
+ *
+ * @param {String} appName
+ * @param {Collection} contentType
+ *   contentType:   {String}
+ *   text:          {String}
+ *   group:         {String} (optional)
+ *   xtype:         {String} (optional)
+ */
+Tine.widgets.MainScreen.registerContentType = function(appName, contentType) {
+    var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + appName, []);
+    registeredContentTypes.push(contentType);
+
+    _.set(Tine.widgets.MainScreen.registerContentType, 'registry.' + appName, registeredContentTypes);
+};

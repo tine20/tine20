@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -15,12 +15,6 @@
  */
 class Felamimail_Frontend_ActiveSyncTest extends TestCase
 {
-    /**
-     * 
-     * @var unknown_type
-     */
-    protected $_domDocument;
-    
     /**
      * email test class for checking emails on IMAP server
      * 
@@ -78,7 +72,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
             $this->markTestSkipped('IMAP backend not configured');
         }
         $this->_testUser    = Tinebase_Core::getUser();
-        
+
         $this->_emailTestClass = new Felamimail_Controller_MessageTest();
         $this->_emailTestClass->setup();
         $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
@@ -149,7 +143,39 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         $this->assertEquals('1744', $syncrotonModelEmail->body->estimatedDataSize);
     }
-    
+
+    /**
+     * validate getEntry with winmail.dat
+     */
+    public function testGetEntryWithWinmailDat()
+    {
+        if (! Tinebase_Core::systemCommandExists('tnef') && ! Tinebase_Core::systemCommandExists('ytnef')) {
+            $this->markTestSkipped('The (y)tnef command could not be found!');
+        }
+
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+
+        $message = $this->_createTestMessage('winmail_dat_attachment.eml', 'winmail_dat_attachment.eml');
+
+        $syncrotonModelEmail = $controller->getEntry(
+            new Syncroton_Model_SyncCollection(array('collectionId' => 'foobar', 'options' => array('bodyPreferences' => array('2' => array('type' => '2'))))),
+            $message->getId()
+        );
+
+        $path = Tinebase_Core::getTempDir() . '/winmail/' . $message->getId() . '/';
+        $content = file_get_contents($path . 'bookmark.htm');
+        $dataSize = strlen($content);
+        $this->assertStringStartsWith('<!DOCTYPE NETSCAPE-Bookmark-file-1>', $content);
+
+        self::assertEquals(2, count($syncrotonModelEmail->attachments), print_r($syncrotonModelEmail->attachments, true));
+        $this->assertEquals($dataSize, $syncrotonModelEmail->attachments[0]->estimatedDataSize);
+
+        // try to get file by reference
+        $syncrotonFileReference = $controller->getFileReference($syncrotonModelEmail->attachments[0]->fileReference);
+        $this->assertEquals('text/html', $syncrotonFileReference->contentType);
+        $this->assertEquals($dataSize, strlen(stream_get_contents($syncrotonFileReference->data)));
+    }
+
     /**
      * validate fetching email by filereference(hashid-partid)
      */
@@ -313,16 +339,27 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
     
     /**
      * testSendEmail
-     * 
-     * @group longrunning
      */
     public function testSendEmail()
     {
+        // add account signature
+        $account = $this->_getTestUserFelamimailAccount();
+        $account->signatures = new Tinebase_Record_RecordSet(Felamimail_Model_Signature::class, [[
+            'signature' => 'my special signature',
+            'is_default' => 1,
+            'name' => 'my sig',
+            'id' => Tinebase_Record_Abstract::generateUID(), // client also sends some random uuid
+            'notes' => []
+        ]]);
+        Felamimail_Controller_Account::getInstance()->update($account);
+
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
         
         $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
-        $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
-        $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org', $this->_emailTestClass->getEmailAddress(), $email);
+        $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org',
+            $this->_emailTestClass->getEmailAddress(), $email);
+        $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org',
+            $this->_emailTestClass->getEmailAddress(), $email);
         
         $controller->sendEmail($email, true);
         
@@ -332,11 +369,17 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
         $this->_createdMessages->addRecord($message);
         $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
-        
+
         // check duplicate headers
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        $this->assertEquals(1, count($completeMessage->headers['mime-version']));
-        $this->assertEquals(1, count($completeMessage->headers['content-type']));
+
+        self::assertTrue(is_array($completeMessage->headers), 'headers are no array: '
+            . print_r($completeMessage->toArray(), true));
+        self::assertEquals('1.0', $completeMessage->headers['mime-version']);
+        self::assertEquals('text/plain; charset=ISO-8859-1', $completeMessage->headers['content-type']);
+
+        // check signature
+        self::assertContains('my special signature', $completeMessage->body);
     }
 
     /**

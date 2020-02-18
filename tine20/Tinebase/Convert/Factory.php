@@ -41,7 +41,7 @@ class Tinebase_Convert_Factory
                 $converterClass = str_replace('Model', 'Convert', $recordClass);
                 $converterClass .= '_Json';
                 
-                $converter = class_exists($converterClass) ? new $converterClass() : new Tinebase_Convert_Json();
+                $converter = class_exists($converterClass) ? new $converterClass($recordClass) : new Tinebase_Convert_Json($recordClass);
                 return $converter;
                  
                 break;
