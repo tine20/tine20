@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -84,7 +84,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.window.setTitle(this.app.i18n._('Add New Account'));
             if (this.asAdminModule) {
                 this.record.set('type', 'shared');
-                this.typePicker.setValue('shared');
             }
         } else {
             this.grantsGrid.setValue(this.record.get('grants'));
@@ -127,6 +126,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'compose_format':
                 case 'preserve_format':
                 case 'sieve_notification_email':
+                case 'sieve_notification_move':
+                case 'sieve_notification_move_folder':
                 case 'reply_to':
                 case 'sent_folder':
                 case 'trash_folder':
@@ -247,23 +248,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
                             allowBlank: this.asAdminModule
-                        }, this.typePicker = new Ext.form.ComboBox({
-                            fieldLabel: this.app.i18n._('Account Type'),
+                        },new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Felamimail',
+                            keyFieldName: 'mailAccountType',
+                            fieldLabel: this.app.i18n._('Type'),
                             name: 'type',
                             hidden: ! this.asAdminModule,
-                            typeAhead: false,
-                            triggerAction: 'all',
-                            lazyRender: true,
-                            editable: false,
-                            mode: 'local',
-                            forceSelection: true,
-                            xtype: 'combo',
-                            store: new Ext.data.JsonStore({
-                                data: Tine.Felamimail.Model.getAvailableAccountTypes(),
-                                fields: Tine.Tinebase.Model.KeyFieldRecord
-                            }),
-                            valueField: 'id',
-                            displayField: 'value',
                             listeners: {
                                 scope: this,
                                 select: this.onSelectType,
@@ -474,7 +464,18 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Notification Email'),
                     name: 'sieve_notification_email',
                     vtype: 'email'
-                }]]
+                }, {
+                    fieldLabel: this.app.i18n._('Auto-move notifications'),
+                    name: 'sieve_notification_move',
+                    xtype: 'checkbox',
+                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications')
+                }, {
+                    fieldLabel: this.app.i18n._('Auto-move notifications folder'),
+                    name: 'sieve_notification_move_folder',
+                    maxLength: 255,
+                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications')
+                }
+                ]]
             }, {
                 title: this.app.i18n._('Other Settings'),
                 autoScroll: true,
@@ -604,6 +605,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         } else if (newValue === 'system') {
             this.onTypeChangeError(combo, this.app.i18n._('System accounts cannot be created manually.'));
+            return false;
+        } else if (newValue === 'adblist') {
+            this.onTypeChangeError(combo, this.app.i18n._('Mailinglist accounts cannot be created manually.'));
             return false;
         }
 

@@ -33,10 +33,15 @@ class Tinebase_Application
      */
     const DISABLED = 'disabled';
 
+    const STATE_ACTION_QUEUE_LR_LAST_DURATION = 'actionQueueLRLastDuration';
+    const STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE = 'actionQueueLRLastDurationUpdate';
+    const STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
+    const STATE_ACTION_QUEUE_LR_LAST_JOB_ID = 'actionQueueLastJobId';
     const STATE_ACTION_QUEUE_LAST_DURATION = 'actionQueueLastDuration';
     const STATE_ACTION_QUEUE_LAST_DURATION_UPDATE = 'actionQueueLastDurationUpdate';
     const STATE_ACTION_QUEUE_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
     const STATE_ACTION_QUEUE_LAST_JOB_ID = 'actionQueueLastJobId';
+    const STATE_ACTION_QUEUE_STATE = 'actionQueueState';
     const STATE_FILESYSTEM_ROOT_REVISION_SIZE = 'filesystemRootRevisionSize';
     const STATE_FILESYSTEM_ROOT_SIZE = 'filesystemRootSize';
     const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';

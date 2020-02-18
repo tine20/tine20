@@ -20,6 +20,9 @@ class Tinebase_ActionQueue_Backend_Test implements Tinebase_ActionQueue_Backend_
     public static $_hasAsyncBackend = true;
     public static $_peekJobId = false;
     public static $_queueSize = 0;
+    public static $_daemonStructSize = 0;
+    public static $_daemonStructSizeCall = null;
+    public static $_queueKeys = [];
 
     /**
      * Constructor
@@ -98,5 +101,31 @@ class Tinebase_ActionQueue_Backend_Test implements Tinebase_ActionQueue_Backend_
     public function hasAsyncBackend()
     {
         return static::$_hasAsyncBackend;
+    }
+
+    public function getDaemonStructSize()
+    {
+        if (null !== static::$_daemonStructSizeCall) (static::$_daemonStructSizeCall)();
+        return static::$_daemonStructSize;
+    }
+
+    public function getData()
+    {
+        return [];
+    }
+
+    public function getQueueKeys()
+    {
+        return  static::$_queueKeys;
+    }
+
+    public function getDaemonStructKeys()
+    {
+        return [];
+    }
+
+    public function iterateAllData()
+    {
+        return false;
     }
 }

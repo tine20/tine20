@@ -125,7 +125,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     $appController->sendAlarm($alarm);
 
                 } catch (Exception $e) {
-                    Tinebase_Exception::log($e);
+                    if (!$e instanceof Tinebase_Exception_ProgramFlow) {
+                        Tinebase_Exception::log($e);
+                    }
                     $alarm->sent_message = $e->getMessage();
                     $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
                 }

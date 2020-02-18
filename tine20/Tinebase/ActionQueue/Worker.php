@@ -59,6 +59,11 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
     protected $_tineExecutable = null;
 
     /**
+     * @var Tinebase_ActionQueue
+     */
+    protected $_actionQueue = null;
+
+    /**
      * constructor
      *
      * @param Zend_Config $config
@@ -84,12 +89,12 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         Tinebase_Core::set(Tinebase_Core::LOGGER, $this->_getLogger());
 
         if ($this->_getConfig()->tine20->longRunning) {
-            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+            $this->_actionQueue = Tinebase_ActionQueueLongRun::getInstance();
             $this->_isLongRunning = true;
         } else {
-            $actionQueue = Tinebase_ActionQueue::getInstance();
+            $this->_actionQueue = Tinebase_ActionQueue::getInstance();
         }
-        if ($actionQueue->getBackendType() !== 'Tinebase_ActionQueue_Backend_Redis') {
+        if ($this->_actionQueue->getBackendType() !== 'Tinebase_ActionQueue_Backend_Redis') {
             $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__
                 . ' not Tinebase_ActionQueue_Backend_Redis used. There is nothing to do for the worker!'
                 . ' Configure Redis backend if you want to make use of the worker.');
@@ -99,6 +104,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         $this->_tineExecutable = $this->_getConfig()->tine20->tine20php;
         $maxChildren = $this->_getConfig()->tine20->maxChildren;
         $lastMaxChildren = 0;
+        $lastDSCheck = 0;
 
         while (!$this->_stopped) {
 
@@ -108,24 +114,30 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
                 // log only every minute
                 if (time() - $lastMaxChildren > 60) {
                     $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " reached max children limit: " . $maxChildren);
-                    $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ . " number of pending jobs:" . $actionQueue->getQueueSize());
+                    $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ . " number of pending jobs:" . $this->_actionQueue->getQueueSize());
                     $lastMaxChildren = time();
                 }
                 usleep(1000); // save some trees
                 pcntl_signal_dispatch();
                 continue;
             }
+
+            // only check every 5 minute
+            if (time() - $lastDSCheck > 300 && $this->_actionQueue->getDaemonStructSize() > count($this->_children)) {
+                $lastDSCheck = time();
+                $this->_actionQueue->cleanDaemonStruct();
+            }
             
             $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " trying to fetch a job from queue " . microtime(true));
 
-            $jobId = $actionQueue->waitForJob();
+            $jobId = $this->_actionQueue->waitForJob();
 
             $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " signal dispatch " . microtime(true));
 
             pcntl_signal_dispatch();
 
             // no job found
-            if ($jobId === FALSE || $this->_stopped) {
+            if ($jobId === FALSE) {
                 continue;
             }
 
@@ -134,18 +146,22 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             while (Tinebase_Core::inMaintenanceModeAll()) {
                 usleep(10000); // save some trees
                 pcntl_signal_dispatch();
+                if ($this->_stopped) {
+                    $this->_actionQueue->reschedule($jobId);
+                    break 2;
+                }
                 Tinebase_Core::getConfig()->clearMemoryCache(Tinebase_Config::MAINTENANCE_MODE);
             }
             
             try {
-                $job = $actionQueue->receive($jobId);
+                $job = $this->_actionQueue->receive($jobId);
             } catch (RuntimeException $re) {
                 $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " failed to receive message: " . $re->getMessage());
                 
                 // we are unable to process the job
                 // probably the retry count is exceeded
-                // TODO push message to dead letter queue
-                $actionQueue->delete($jobId);
+                // push message to dead letter queue
+                $this->_actionQueue->delete($jobId, true);
                 
                 continue;
             }
@@ -154,7 +170,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " process message: " . print_r($job, TRUE)); 
 
 
-            // TODO fork may not work!!!
+            // this method will exit on fork errors, no need to take care of it
             $childPid = $this->_forkChild();
             
             if ($childPid == 0) { // executed in child process
@@ -218,13 +234,15 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      * We have to destroy the Tinebase_ActionQueue instance before the process forks.
      * Otherwise the resource holding the connection to the queue backend will be
      * shared between the parent and the child which leads to strange problems
-     * 
+     *
+     * THE CHILD IS NOT DOING ANYTHING, just calling exec and then exiting and writting some logs -> no need to close it
+     *
      * @see Console_Daemon::_beforeFork()
-     */
+     *
     protected function _beforeFork()
     {
         Tinebase_ActionQueue::destroyInstance();
-    }
+    }*/
     
     /**
      * handle terminated processes
@@ -240,28 +258,26 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
         $jobId = $this->_jobScoreBoard[$pid];
         unset($this->_jobScoreBoard[$pid]);
+        parent::_childTerminated($pid, $status);
 
         if (true !== pcntl_wifexited($status)) {
             $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " child $pid did not finish successfully!");
 
-            Tinebase_ActionQueue::getInstance()->reschedule($jobId);
+            $this->_actionQueue->reschedule($jobId);
 
             return;
         }
-        parent::_childTerminated($pid, $status);
         
         $status = pcntl_wexitstatus($status);
-        
-
         if ($status > 0) { // failure
             $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " job $jobId in pid $pid did not finish successfully. Will be rescheduled!");
-            
-            Tinebase_ActionQueue::getInstance()->reschedule($jobId);
+
+            $this->_actionQueue->reschedule($jobId);
             
         } else {           // success
             $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ .    " job $jobId in pid $pid finished successfully");
-            
-            Tinebase_ActionQueue::getInstance()->delete($jobId);
+
+            $this->_actionQueue->delete($jobId);
         }
     }
     

@@ -605,6 +605,12 @@ msgstr "Filterregeln bearbeiten"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
+msgid "Auto-move notifications"
+msgstr "Automatisches Verschieben von Benachrichtigungen"
+
+msgid "Auto-move notifications folder"
+msgstr "Ordner für Benachrichtigungen"
+
 #: js/TreeContextMenu.js:177
 msgid "Mark Folder as read"
 msgstr "Ordner als gelesen markieren"
@@ -1416,6 +1422,9 @@ msgstr "Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese N
 #: js/PGPDetailsPanel.js:36
 msgid "PGP encrypted Message"
 msgstr "PGP verschlüsselte Nachricht"
+
+msgid "Encrypted Message"
+msgstr "Verschlüsselte Nachricht"
 
 #: js/Model.js:25
 msgid "Shared System Account"

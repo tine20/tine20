@@ -419,4 +419,13 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         }
         return false;
     }
+
+    public function getHighestRevision()
+    {
+        if (is_array($ar = $this->available_revisions) && !empty($ar)) {
+            sort($ar, SORT_NUMERIC);
+            return (int)end($ar);
+        }
+        return 0;
+    }
 }

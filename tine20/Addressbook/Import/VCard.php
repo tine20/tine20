@@ -225,7 +225,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
             foreach ($properties as $property){
                 // types available from RFC (custom allowed): "internet", "x400", "pref"
                 // home and work are commons, so we manage them
-                $types = $property->params['TYPE'];
+                $types = isset($property->params['TYPE']) ? $property->params['TYPE'] : null;
                 
                 $key = 'email';
                 if ($types){

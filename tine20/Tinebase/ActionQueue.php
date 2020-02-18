@@ -19,6 +19,7 @@
  * @subpackage  ActionQueue
  *
  * @method int getQueueSize()
+ * @method int getDaemonStructSize()
  * @method int waitForJob()
  * @method array receive(integer $jobId)
  * @method void delete(integer $jobId)
@@ -275,6 +276,12 @@
      */
     public function suspendEvents()
     {
+    }
+
+    public function cleanDaemonStruct()
+    {
+        // 15 minutes
+        $this->_queue->cleanDaemonStruct(15 * 60);
     }
 
     /**

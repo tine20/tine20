@@ -18,7 +18,6 @@ require('Tinebase/js/Application');
 require('Tinebase/js/ux/ItemRegistry');
 require('Tinebase/js/widgets/MainScreen');
 
-require('./AccountGridPanel');
 require('./admin/AccountGridPanel');
 
 /**

@@ -535,11 +535,7 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testEnableResourcesFeature()
     {
-        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::ENABLED_FEATURES);
-        $enabledFeatures[Addressbook_Config::FEATURE_LIST_VIEW] = true;
-
-        Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
-
+        $this->_setFeatureForTest(Addressbook_Config::getInstance(), Addressbook_Config::FEATURE_LIST_VIEW);
         $this->assertTrue(Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_LIST_VIEW));
     }
 

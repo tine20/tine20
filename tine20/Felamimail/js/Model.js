@@ -13,30 +13,6 @@ Ext.ns('Tine.Felamimail.Model');
 // for Tine.Felamimail.Model.Account see hack in Felamimail.initAccountModel
 
 /**
- * return available account types
- *
- * @param withSystem
- * @return {*[]}
- */
-Tine.Felamimail.Model.getAvailableAccountTypes = function(withSystem) {
-    let app = Tine.Tinebase.appMgr.get('Felamimail');
-
-    let availableTypes = [
-        {id: 'shared', value: app.i18n._('Shared System Account')},
-        {id: 'userInternal', value: app.i18n._('Additional Personal System Account')},
-        {id: 'user', value: app.i18n._('Additional Personal External Account')},
-        {id: 'system', value: app.i18n._('Default Personal System Account')}
-    ];
-
-    if (withSystem) {
-        // new records can't be mailinglists
-        availableTypes.push({id: 'adblist', value: app.i18n._('Mailinglist')});
-    }
-
-    return availableTypes;
-};
-
-/**
  * @namespace Tine.Felamimail.Model
  * @class Tine.Felamimail.Model.Message
  * @extends Tine.Tinebase.data.Record
@@ -87,7 +63,6 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     // ngettext('Folder', 'Folders', n);
     containerName: 'Folder',
     containersName: 'Folders',
-    
     /**
      * check if message has given flag
      * 

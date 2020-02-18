@@ -6,9 +6,9 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        use generic (JSON encoded) field / xprops for 'other' settings like folder names
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ * @todo        move more fields (like folder names) to xprops)
  * @todo        convert to MCV2
  */
 
@@ -27,6 +27,8 @@
  * @property  string    email
  * @property  string    user_id
  * @property  string    sieve_notification_email
+ * @property  boolean   sieve_notification_move
+ * @property  string    sieve_notification_move_folder
  * @property  string    migration_approved
  *
  * @package   Felamimail
@@ -54,7 +56,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      */
     protected static $_modelConfiguration = [
         # TODO switch to mcv2
-        # self::VERSION => 26,
+        # self::VERSION => 27,
         'recordName' => 'Account',
         'recordsName' => 'Accounts', // ngettext('Account', 'Accounts', n)
         'containerName' => 'Email Accounts', // ngettext('Email Account', 'Email Accounts', n)
@@ -88,16 +90,12 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LENGTH => 40,
             ],
             'type' => [
-                // TODO make this a keyfield to get a better filter?
-                self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 20,
+                self::TYPE => self::TYPE_KEY_FIELD,
                 self::LABEL => 'Type', // _('Type')
+                self::NAME => 'mailAccountType',
                 self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => self::TYPE_USER,
-                    ['InArray', [self::TYPE_USER, self::TYPE_SYSTEM, self::TYPE_ADB_LIST, self::TYPE_SHARED, self::TYPE_USER_INTERNAL]]
-                ],
-                self::QUERY_FILTER              => true,
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::DEFAULT_VALUE => Tinebase_EmailUser_Model_Account::TYPE_USER],
             ],
             'name' => [
                 self::TYPE => self::TYPE_STRING,
@@ -503,6 +501,25 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
             ],
+            'sieve_notification_move' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::LABEL => 'Auto-move notifications', // _('Auto-move notifications')
+                self::SHY => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false,
+                ],
+            ],
+            'sieve_notification_move_folder' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LABEL => 'Auto-move notifications folder', // _('Auto-move notifications folder')
+                self::LENGTH => 255,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => null,
+                ],
+            ],
             'all_folders_fetched' => [
                 self::TYPE => self::TYPE_BOOLEAN,
                 // client only
@@ -619,21 +636,20 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
     {
         $this->resolveCredentials(FALSE);
         
-        $result = array(
+        return array(
             'host'      => $this->sieve_hostname,
             'port'      => $this->sieve_port, 
             'ssl'       => ($this->sieve_ssl && $this->sieve_ssl !== self::SECURE_NONE) ? $this->sieve_ssl : FALSE,
             'username'  => $this->user,
             'password'  => $this->password,
         );
-        
-        return $result;
     }
     
     /**
      * to array
      *
      * @param boolean $_recursive
+     * @return array
      */
     public function toArray($_recursive = TRUE)
     {

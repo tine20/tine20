@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -31,6 +31,9 @@ class Felamimail_Model_Sieve_ScriptPart extends Tinebase_Record_Abstract
 
     /** @var string  */
     const TYPE_ADB_LIST = 'adblist';
+
+    /** @var string  */
+    const TYPE_AUTO_MOVE_NOTIFICATION = 'autoMoveNotification';
 
     /**
      * key in $_validators/$_properties array for the field which

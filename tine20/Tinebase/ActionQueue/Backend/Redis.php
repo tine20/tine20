@@ -32,7 +32,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         'redisQueueSuffix'  => 'Queue',
         'redisDataSuffix'   => 'Data',
         'redisDaemonSuffix' => 'Daemon',
-        'redisDaemonNumber' => 1,
+        'redisDeadLetterSuffix' => 'DeadLetter',
     );
     
     /**
@@ -55,11 +55,18 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      * @var string
      */
     protected $_dataStructName;
+
+    protected $_dataStructIterator = null;
     
     /**
      * @var string
      */
     protected $_daemonStructName;
+
+    /**
+     * @var string
+     */
+    protected $_deadLetterStructName;
     
     /**
      * Constructor
@@ -78,7 +85,8 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
 
         $this->_queueStructName  = $this->_options['queueName'] . $this->_options['redisQueueSuffix'];
         $this->_dataStructName   = $this->_options['queueName'] . $this->_options['redisDataSuffix'];
-        $this->_daemonStructName = $this->_options['queueName'] . $this->_options['redisDaemonSuffix'] . $this->_options['redisDaemonNumber'];
+        $this->_daemonStructName = $this->_options['queueName'] . $this->_options['redisDaemonSuffix'];
+        $this->_deadLetterStructName = $this->_options['queueName'] . $this->_options['redisDeadLetterSuffix'];
 
         // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' options: ' . print_r($this->_options, true));
 
@@ -115,9 +123,16 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      * Delete a job from the queue
      *
      * @param  string  $jobId  the id of the job
+     * @param  boolean $deadLetter wether to push msg to dead letter queue, defaults false
      */
-    public function delete($jobId)
+    public function delete($jobId, $deadLetter = false)
     {
+        if ($deadLetter) {
+            $data = $this->_redis->dump($this->_dataStructName . ":" . $jobId);
+            if (false !== $data) {
+                $this->_redis->restore($this->_deadLetterStructName . ":" . $jobId, 0, $data);
+            }
+        }
         // remove from redis
         $this->_redis->lRemove($this->_daemonStructName ,     $jobId, 0);
         $this->_redis->delete ($this->_dataStructName . ":" . $jobId);
@@ -130,6 +145,58 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
     public function getQueueSize()
     {
         return $this->_redis->lLen($this->_queueStructName);
+    }
+
+    /**
+     * return daemon struct length
+     * @return int the daemon struct length
+     */
+    public function getDaemonStructSize()
+    {
+        return $this->_redis->lLen($this->_daemonStructName);
+    }
+
+    public function cleanDaemonStruct($maxTime)
+    {
+        foreach ($this->_redis->lRange($this->_daemonStructName, 0, 1000) as $jobId) {
+            $data = $this->_redis->hMGet(
+                $this->_dataStructName . ':' . $jobId, ['time']
+            );
+
+            if (!is_array($data) || !isset($data['time'])) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                    ' hMGet did not return valid data, deleting, possibly deadlettering job');
+                $this->delete($jobId, true);
+            }
+            if ($data['time'] + $maxTime < time()) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . 'job timed out in daemon struct!');
+                $this->reschedule($jobId);
+            }
+        }
+    }
+
+    public function iterateAllData()
+    {
+        if (false === ($result = $this->_redis->scan($this->_dataStructIterator, $this->_dataStructName . '*'))) {
+            $this->_dataStructIterator = null;
+        }
+
+        return $result;
+    }
+
+    public function getData($jobId)
+    {
+        return $this->_redis->hgetall($this->_dataStructName . ':'. $jobId);
+    }
+
+    public function getQueueKeys($max = 10000)
+    {
+        return $this->_redis->lRange($this->_dataStructName, 0, $max);
+    }
+
+    public function getDaemonStructKeys($max = 10000)
+    {
+        return $this->_redis->lRange($this->_daemonStructName, 0, $max);
     }
     
     /**
@@ -172,6 +239,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         /** @noinspection PhpUndefinedMethodInspection */
         $this->_redis->multi()
             ->hIncrBy($this->_dataStructName . ":" . $jobId, 'retry' , 1)
+            ->hSet($this->_dataStructName . ':' . $jobId, 'time', time())
             ->lRemove($this->_daemonStructName , $jobId)
             ->lPush  ($this->_queueStructName,   $jobId)
             ->exec();
@@ -239,6 +307,8 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         if ($jobId === FALSE || $jobId === '*-1') {
             return FALSE;
         }
+
+        $this->_redis->hSet($this->_dataStructName . ':' . $jobId, 'time', time());
         
         return $jobId;
     }

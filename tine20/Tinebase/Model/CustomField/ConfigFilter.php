@@ -46,7 +46,7 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
      * @var boolean
      */
     protected $_isResolved = FALSE;
-    
+
     /**
      * check for customfield ACLs
      *
@@ -93,7 +93,7 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if ($this->_customfieldACLChecks) {
+        if ($this->_customfieldACLChecks && ! $this->_ignoreAcl) {
             // only search for ids for which the user has the required grants
             if (! $this->_isResolved) {
                 $result = array();

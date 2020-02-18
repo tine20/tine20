@@ -283,7 +283,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $credentialsBackend->getCachedCredentials($credentials);
         // $credentialCachePwd = substr($credentials->password, 0, 24); ?!?
 
-        $this->_account = $this->_controller->addSystemAccount(Tinebase_Core::getUser(), $credentials->password);
+        $this->_account = $this->_controller->createSystemAccount(Tinebase_Core::getUser(), $credentials->password);
         // make sure the user is resolved again
         unset($this->_account->user);
         $this->_account->resolveCredentials();
@@ -492,5 +492,39 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             'XPROP_EMAIL_USERID_IMAP empty ' . print_r($convertedAccount->toArray(), true));
         self::assertNotEmpty($convertedAccount->xprops[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP],
             'XPROP_EMAIL_USERID_SMTP empty ' . print_r($convertedAccount->toArray(), true));
+    }
+
+    public function testAutoMoveNotifications()
+    {
+        $this->_testNeedsTransaction();
+        $this->_setFeatureForTest(Felamimail_Config::getInstance(), Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS);
+        // create new user with fmail account
+        $creds = TestServer::getInstance()->getTestCredentials();
+        $user = $this->_createUserWithEmailAccount([
+            'password' => $creds['password']
+        ]);
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        self::assertEquals(1, $account->sieve_notification_move);
+        self::assertEquals('Notifications', $account->sieve_notification_move_folder);
+
+        $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+        $sievescript = $script->getSieve();
+        self::assertContains('Notification', $sievescript);
+        self::assertContains('fileinto', $sievescript);
+
+        return $account;
+    }
+
+    public function testEnableDisableAutoMoveNotifications()
+    {
+        $account = $this->testAutoMoveNotifications();
+        $account->sieve_notification_move = false;
+        $updatedAccount = Admin_Controller_EmailAccount::getInstance()->update($account);
+        self::assertEquals(0, $updatedAccount->sieve_notification_move);
+
+        $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+        $sievescript = $script->getSieve();
+        self::assertNotContains('Notification', $sievescript);
+        self::assertNotContains('fileinto', $sievescript);
     }
 }

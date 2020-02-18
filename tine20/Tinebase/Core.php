@@ -584,20 +584,7 @@ class Tinebase_Core
     {
         if (! Tinebase_Session::isStarted()) {
             Tinebase_Session::setSessionBackend();
-            $tries = 0;
-            while (true) {
-                try {
-                    Zend_Session::start();
-                    break;
-                } catch (RedisException $re) {
-                    if (++$tries < 5) {
-                        // wait 100ms on the redis
-                        usleep(100000);
-                    } else {
-                        throw $re;
-                    }
-                }
-            }
+            Zend_Session::start();
         }
 
         $coreSession = Tinebase_Session::getSessionNamespace();
@@ -985,6 +972,13 @@ class Tinebase_Core
         // getting a Zend_Cache_Core object
         try {
             $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
+            if (($cacheBackend = $cache->getBackend()) instanceof Zend_Cache_Backend_Redis) {
+                $refProp = new ReflectionProperty(Zend_Cache_Backend_Redis::class, '_redis');
+                $refProp->setAccessible(true);
+                $refProp->getValue($cacheBackend)->setLogDelegator(function($exception) {
+                    Tinebase_Exception::log($exception);
+                });
+            }
             
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
