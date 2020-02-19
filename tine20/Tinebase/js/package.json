@@ -38,6 +38,7 @@
     "postal.federation": "github:tine20/postal.federation",
     "postal.request-response": "github:tine20/postal.request-response",
     "postal.xwindow": "github:tine20/postal.xwindow",
+    "promises-to-retry": "^1.2.1",
     "store2": "^2.7.1",
     "svg-url-loader": "^2.3.2",
     "twing": "^2.2.3",
