@@ -31,7 +31,9 @@ class Tinebase_Export_Doc2 extends Tinebase_Export_Doc
      */
     protected function _processRecord(Tinebase_Record_Interface $_record)
     {
-        $this->_currentProcessor->setMainPart(str_replace(["\n", "\r", '\''], ['</w:t><w:br/><w:t>', '', '&apos;'],
+        $this->_currentProcessor->setMainPart(str_replace(["\n", "\r", '\'',
+            Tinebase_Export_Richtext_TemplateProcessor::NEW_LINE_PLACEHOLDER],
+            ['</w:t><w:br/><w:t>', '', '&apos;', '</w:t><w:br/><w:t>'],
             $this->_twig->load($this->_templateFileName . '#~#' . $this->_currentProcessor->getTwigName())
             ->render($this->_getTwigContext(['record' => $_record]))));
     }

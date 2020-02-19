@@ -509,7 +509,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
         $_value = (string)$_value;
         if (strlen($_value) > 0) {
-            $_value = str_replace("\r", '', $_value);
+            $_value = str_replace(["\r", Tinebase_Export_Richtext_TemplateProcessor::NEW_LINE_PLACEHOLDER], ['', "\n"],
+                $_value);
             $_value = explode("\n", $_value);
             array_walk($_value, function(&$val) {
                 $val = htmlspecialchars($val);
