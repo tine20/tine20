@@ -14880,6 +14880,11 @@
       "integrity": "sha1-mEcocL8igTL8vdhoEputEsPAKeM=",
       "dev": true
     },
+    "promises-to-retry": {
+      "version": "1.2.1",
+      "resolved": "https://registry.npmjs.org/promises-to-retry/-/promises-to-retry-1.2.1.tgz",
+      "integrity": "sha512-RtfUJi04wMDXQow7NrZeZl69/pZJiUjlHr5npu2TilYFtIqkSg1I7gc15BH/wzG/+P7xqAQUaivHQakJZ7Qtlw=="
+    },
     "prop-types": {
       "version": "15.7.2",
       "resolved": "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz",
