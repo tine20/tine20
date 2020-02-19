@@ -52,6 +52,13 @@ class Tinebase_Export_Doc2 extends Tinebase_Export_Doc
             $src = $this->_currentProcessor->getMainPart();
         }
 
+        while (preg_match('/\{\{[^\}]+\([^\}\)]+=&gt;/', $src, $m)) {
+            $src = str_replace($m[0], substr($m[0], 0, strlen($m[0]) - 4) . '>', $src);
+        }
+        while (preg_match('/\{\{[^\}]+\([^\}\)]+=>[^\)]*&quot;/', $src, $m)) {
+            $src = str_replace($m[0], substr($m[0], 0, strlen($m[0]) - 6 /*? oder 5*/) . '"', $src);
+        }
+
         return str_replace(["\n", "\r", '&apos;'], ['', '', '\''], $src);
     }
 
