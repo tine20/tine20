@@ -964,7 +964,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 } else {
                     $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
                     $accountId = $user->getId();
-                    $accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+                    $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
                 }
             } else {
                 $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;

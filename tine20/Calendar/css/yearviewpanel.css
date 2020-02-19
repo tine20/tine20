@@ -28,7 +28,7 @@
 }
 
 .cal-yearview-inner-header,
-cal-yearview-wkcell-header {
+.cal-yearview-wkcell-header {
     position: relative;
     background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
     height: 23px;
@@ -71,8 +71,6 @@ cal-yearview-wkcell-header {
 }
 
 .cal-yearview-event {
-    margin: 0px 0px;
-/*    width: 100%;*/
     cursor: pointer;
     border-radius: 8px;
     margin: 0px 1px 0px 1px;
@@ -108,45 +106,11 @@ cal-yearview-wkcell-header {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
 }
-/*
-.ext-gecko .cal-yearview-alldayevent-cropleft {
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-bottomleft: 0px;
-}
 
-.ext-safari .cal-yearview-alldayevent-cropleft {
-    -webkit-border-top-left-radius: 0px;
-    -webkit-border-bottom-left-radius: 0px;
-}
-
-.cal-yearview-alldayevent-cropleft {
-    -khtml-border-top-left-radius: 0px;
-    -khtml-border-bottom-left-radius: 0px;
-}
-*/
 .cal-yearview-event-cropbottom {
-/*    margin-right: 0px;
-    background-image: none;
-    border-right-style: hidden;*/
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
-/*
-.ext-gecko .cal-yearview-alldayevent-cropright {
-    -moz-border-radius-topright: 0px;
-    -moz-border-radius-bottomright: 0px;
-}
-
-.ext-safari .cal-yearview-alldayevent-cropright {
-    -webkit-border-top-right-radius: 0px;
-    -webkit-border-bottom-right-radius: 0px;
-}
-
-.cal-yearview-alldayevent-cropright {
-    -khtml-border-top-right-radius: 0px;
-    -khtml-border-bottom-right-radius: 0px;
-}
-*/
 
 .cal-yearview-alldayevent-summary {
     white-space: nowrap;

@@ -207,7 +207,6 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }],[{
                     xtype: 'textfield',
                     fieldLabel: this.app.i18n._('Container Hierarchy/Name'),
-                    allowBlank: false,
                     columnWidth: 1,
                     name: 'hierarchy',
                     allowBlank: true

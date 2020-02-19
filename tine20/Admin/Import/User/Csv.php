@@ -104,7 +104,7 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
     {
         $result = parent::_doMapping($_data);
             $result['smtpUser'] = array(
-                'emailForwardOnly' => isset($_recordData['emailForwardOnly']) ? $_recordData['emailForwardOnly'] : true,
+                'emailForwardOnly' => isset($result['emailForwardOnly']) ? $result['emailForwardOnly'] : true,
                 'emailForwards'    => isset($result['emailForwards']) && !empty($result['emailForwards']) ? explode(' ', trim($result['emailForwards'])) : array(),
                 'emailAliases'     => isset($result['emailAliases']) ? explode(' ', trim($result['emailAliases'])) : array()
                             );

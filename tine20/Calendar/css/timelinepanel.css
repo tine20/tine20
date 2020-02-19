@@ -41,7 +41,7 @@
     overflow: hidden;
 }
 
-.cal-timelinepanel-headeritem:hover, cal-timelinepanel-headeritem-today{
+.cal-timelinepanel-headeritem:hover, .cal-timelinepanel-headeritem-today{
     background:#EBF3FD url(../../library/ExtJS/resources/images/default/grid/grid3-hrow-over.gif) repeat-x scroll 0 bottom;
 }
 

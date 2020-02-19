@@ -103,7 +103,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                     'creation_time'         => $this->convertDate($egwContactData['contact_created']),
                     'created_by'            => $this->mapAccountIdEgw2Tine($egwContactData['contact_creator'], FALSE),
                     'last_modified_time'    => $egwContactData['contact_modified'] ? $this->convertDate($egwContactData['contact_modified']) : NULL,
-                    'last_modified_by'      => $egwContactData['contact_modifier'] ? $this->mapAccountIdEgw2Tine($contact['contact_modifier'], FALSE) : NULL,
+                    'last_modified_by'      => $egwContactData['contact_modifier'] ? $this->mapAccountIdEgw2Tine($egwContactData['contact_modifier'], FALSE) : NULL,
                 ));
                 
                 $contactData['created_by'] = $contactData['created_by'] ?: $owner;

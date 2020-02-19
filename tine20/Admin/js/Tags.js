@@ -71,8 +71,6 @@ Tine.Admin.Tags.Main = {
                         tagIds.push(selectedRows[i].id);
                     }
                     
-                    tagIds = tagIds;
-                    
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
