@@ -347,9 +347,9 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         }
 
         try {
-            $cacheData = Tinebase_Helper::jsonDecode(trim($jsonEncodedData));
-        } catch(Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+            $cacheData = Zend_Json::decode(trim($jsonEncodedData));
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' persisted cache data is no valid json');
             throw new Tinebase_Exception_NotFound('persisted cache data is no valid json');
         }
