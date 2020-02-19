@@ -50,7 +50,8 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
             static $a = 0;
             $a += 1;
             $t->_twigSource = $xml;
-            $xml = str_replace(["\n", "\r", '\''], ['</w:t><w:br/><w:t>', '', '&apos;'],
+            $xml = str_replace(["\n", "\r", '\'', Tinebase_Export_Richtext_TemplateProcessor::NEW_LINE_PLACEHOLDER],
+            ['</w:t><w:br/><w:t>', '', '&apos;', '</w:t><w:br/><w:t>'],
                 // the uniqid is a cache bust
                 $this->_twig->load($t->_templateFileName . '#~#' . $t->_docTemplate->getTwigName() . uniqid($a))
                     ->render($t->_getTwigContext(['record' => null])));

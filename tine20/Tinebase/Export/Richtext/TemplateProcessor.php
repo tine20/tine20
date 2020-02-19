@@ -26,6 +26,8 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     const TYPE_RECORD = 'record';
     const TYPE_SUBRECORD = 'subrecord';
 
+    const NEW_LINE_PLACEHOLDER = 'WORD_NEWLINE';
+
     /**
      * Content of document rels (in XML format) of the temporary document.
      *
@@ -416,17 +418,6 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         foreach($this->_tempFooterRels as $index => $data) {
             $this->zipClass->addFromString('word/_rels/footer' . $index . '.xml.rels', $data);
         }
-
-        // TODO here we use \x0B as a placeholder, but Tinebase_Twig adds a function which uses \n...
-        // replace newline placeholder vertical tab (ascii 11)
-        /*
-        foreach ($this->tempDocumentHeaders as &$xml) {
-            $xml = join('</w:t><w:br /><w:t>', mb_split("\x0B", $xml));
-        }
-        $this->tempDocumentMainPart = join('</w:t><w:br /><w:t>', mb_split("\x0B", $this->tempDocumentMainPart));
-        foreach ($this->tempDocumentFooters as &$xml) {
-            $xml = join('</w:t><w:br /><w:t>', mb_split("\x0B", $xml));
-        }*/
 
         return parent::save();
     }
