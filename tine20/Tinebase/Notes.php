@@ -433,9 +433,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function addSystemNote($_record, $_userId = NULL, $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
     {
-        if (empty($_mods) && $_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED) {
+        if ((empty($_mods) || $_mods instanceof Tinebase_Record_RecordSet && count($_mods) === 0)
+            && $_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED
+        ) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Nothing changed -> do not add "changed" note.');
-            return FALSE;
+            return false;
         }
         
         $id = $_record instanceof Tinebase_Record_Interface ? $_record->getId() : $_record;
@@ -451,11 +453,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         if ($_mods !== NULL) {
             if ($_mods instanceof Tinebase_Record_RecordSet && count($_mods) > 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                    .' mods to log: ' . print_r($_mods->toArray(), TRUE));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    .' Adding "' . $_type . '" system note note to record (id ' . $id . ')');
-                
                 $noteText .= ' | ' .$translate->_('Changed fields:');
                 foreach ($_mods as $mod) {
                     $modifiedAttribute = $mod->modified_attribute;
@@ -469,7 +466,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 $noteText = $_mods;
             }
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            .' Adding "' . $_type . '" system note note to record (id ' . $id . ')');
+
         $noteType = $this->getNoteTypeByName($_type);
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => $noteType->getId(),
