@@ -42,6 +42,62 @@ class Tinebase_Export_DocTest extends TestCase
         }
     }
 
+    public function testDoc2TwigMap()
+    {
+        $export = new Tinebase_Export_Doc2(new Addressbook_Model_ContactFilter(), null, [
+            'definitionFilename'=> dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_doc.xml',
+            'template'          => dirname(__DIR__) . '/files/export/addressbook_contact_twigMap.docx',
+        ]);
+        $refProp = new ReflectionProperty(Tinebase_Export_Doc2::class, '_records');
+        $refProp->setAccessible(true);
+        $refProp->setValue($export, new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [
+            new Addressbook_Model_Contact([
+                'room'              => [['name' => 'test'], ['name' => 'Name']],
+                'n_family'          => 'moreTest',
+                'bday'              => '2000-01-02'
+            ], true)
+        ]));
+        $export->generate();
+        $tmpFile = Tinebase_TempFile::getTempPath();
+        try {
+            $export->save($tmpFile);
+        } finally {
+            @unlink($tmpFile);
+        }
+
+        $refProp = new ReflectionProperty(Tinebase_Export_Richtext_TemplateProcessor::class, 'tempDocumentMainPart');
+        $refProp->setAccessible(true);
+        static::assertContains('test, Name', $refProp->getValue($export->getDocument()));
+    }
+
+    public function testDocV2TwigMap()
+    {
+        $export = new Tinebase_Export_DocV2(new Addressbook_Model_ContactFilter(), null, [
+            'definitionFilename'=> dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_doc.xml',
+            'template'          => dirname(__DIR__) . '/files/export/addressbook_contact_twigMap.docx',
+        ]);
+        $refProp = new ReflectionProperty(Tinebase_Export_DocV2::class, '_records');
+        $refProp->setAccessible(true);
+        $refProp->setValue($export, new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [
+            new Addressbook_Model_Contact([
+                'room'              => [['name' => 'test'], ['name' => 'Name']],
+                'n_family'          => 'moreTest',
+                'bday'              => '2000-01-02'
+            ], true)
+        ]));
+        $export->generate();
+        $tmpFile = Tinebase_TempFile::getTempPath();
+        try {
+            $export->save($tmpFile);
+        } finally {
+            @unlink($tmpFile);
+        }
+
+        $refProp = new ReflectionProperty(Tinebase_Export_Richtext_TemplateProcessor::class, 'tempDocumentMainPart');
+        $refProp->setAccessible(true);
+        static::assertContains('test, Name', $refProp->getValue($export->getDocument()));
+    }
+
     public function testDocTwigFunctions2()
     {
         $export = new Tinebase_Export_Doc2(new Addressbook_Model_ContactFilter(), null, [
