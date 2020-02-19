@@ -816,12 +816,23 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     throw new Tinebase_Exception_Record_Validation($field . ' property should be an array');
                 }
                 foreach ($recordData[$field] as $addresses) {
-                    if (substr_count($addresses, '@') > 1) {
-                        $delimiter = strpos($addresses,';') !== false ? ';' : ',';
-                        $recipients = array_merge($recipients, explode($delimiter, $addresses));
+                    if (is_array($addresses)) {
+                        if (isset($addresses['email'])) {
+                            $email = $addresses['email'];
+                        } else {
+                            // invalid: skip
+                            continue;
+                        }
+                    } else {
+                        $email = $addresses;
+                    }
+
+                    if (substr_count($email, '@') > 1) {
+                        $delimiter = strpos($email,';') !== false ? ';' : ',';
+                        $recipients = array_merge($recipients, explode($delimiter, $email));
                     } else {
                         // single recipient
-                        $recipients[] =  $this->sanitizeMailAddress($addresses);
+                        $recipients[] =  $this->sanitizeMailAddress($email);
                     }
                 }
                 
