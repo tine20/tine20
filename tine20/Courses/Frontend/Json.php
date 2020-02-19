@@ -300,6 +300,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function resetPassword($account, $password, $mustChange)
     {
+        Tinebase_Core::getLogger()->addReplacement($password);
         $password = $this->_controller->getStudentPassword($password);
         $adminJson = new Admin_Frontend_Json();
         return $adminJson->resetPassword($account, $password, (bool)$mustChange);

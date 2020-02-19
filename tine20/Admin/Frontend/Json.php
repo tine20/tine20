@@ -338,6 +338,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveUser($recordData)
     {
         $password = (isset($recordData['accountPassword'])) ? $recordData['accountPassword'] : '';
+        if (! empty($password)) {
+            Tinebase_Core::getLogger()->addReplacement($password);
+        }
         
         $account = new Tinebase_Model_FullUser();
         
@@ -462,6 +465,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->getFullUserById($account);
         }
+
+        Tinebase_Core::getLogger()->addReplacement($password);
         
         $controller = Admin_Controller_User::getInstance();
         $controller->setAccountPassword($account, $password, $password, (bool)$mustChange);

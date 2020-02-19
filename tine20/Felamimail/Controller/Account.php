@@ -227,6 +227,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        if (! empty($_record->password)) {
+            Tinebase_Core::getLogger()->addReplacement($_record->password);
+        }
+
         // add user id
         if (empty($_record->user_id) && ($_record->type === Felamimail_Model_Account::TYPE_USER ||
                 $_record->type === Felamimail_Model_Account::TYPE_SYSTEM)) {
@@ -565,6 +569,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if (! empty($_record->password)) {
+            Tinebase_Core::getLogger()->addReplacement($_record->password);
+        }
+
         // TODO move to converter
         if (is_array($_record->user_id)) {
             $_record->user_id = $_record->user_id['accountId'];
@@ -1085,7 +1093,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function changeCredentials($_accountId, $_username, $_password)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Changing credentials for account id ' . $_accountId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Changing credentials for account id ' . $_accountId);
         
         // get account and set pwd
         $account = $this->get($_accountId);

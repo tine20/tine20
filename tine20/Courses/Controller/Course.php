@@ -276,6 +276,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             . $course->name . ': ' . print_r($account->toArray(), true));
         
         $password = $this->_config->get(Courses_Config::TEACHER_PASSWORD, $account->accountLoginName);
+        Tinebase_Core::getLogger()->addReplacement($password);
         $account = $this->_userController->create($account, $password, $password);
         $this->_groupController->addGroupMember(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $account->getId());
         
