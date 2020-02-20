@@ -147,11 +147,40 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
         $currentAccount = $this->get($_record->getId());
 
+        if ($this->_sieveBackendSupportsMasterPassword()) {
+            $raii = $this->prepareAccountForSieveAdminAccess($_record->getId());
+        }
+
         $this->_inspectBeforeUpdate($_record, $currentAccount);
         $account = $this->_backend->update($_record);
         $this->_inspectAfterUpdate($account, $_record, $currentAccount);
-        
+
+        if ($this->_sieveBackendSupportsMasterPassword()) {
+            $this->removeSieveAdminAccess();
+            unset($raii);
+        }
+
         return $account;
+    }
+
+    /**
+     * check if imap/sieve backend supports setting a sieve master password
+     *
+     * @return bool
+     */
+    protected function _sieveBackendSupportsMasterPassword()
+    {
+        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
+            try {
+                $imapEmailBackend->checkMasterUserTable();
+                return true;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     /**
