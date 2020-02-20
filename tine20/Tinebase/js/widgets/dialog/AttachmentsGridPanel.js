@@ -186,26 +186,34 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         }
     },
 
-    onRowDbClick: function () {
-        var _ = window.lodash,
-            downloadsAllowed = Tine.Tinebase.configManager.get('downloadsAllowed');
+    // NOTE: this method is mixed in Tine.Filemanager.NodeGridPanel
+    onRowDbClick: function (grid, row, e) {
+        const rowRecord = grid.getStore().getAt(row);
 
-        // TODO: does user need rights for Filemanager?
-        if (! Tine.Tinebase.appMgr.isEnabled('Filemanager') && downloadsAllowed) {
-            this.onDownload();
-            return;
+        if (rowRecord.data.type === 'folder') {
+            this.expandFolder(rowRecord);
+        } else if (!this.readOnly) {
+            const dblClickHandlers = [{
+                prio: 100,
+                fn: _.bind(this.action_preview.execute, this.action_preview)
+            }];
+
+            if (Tine.Tinebase.configManager.get('downloadsAllowed')
+                && Tine.Tinebase.appMgr.isEnabled('Filemanager')
+                && Tine.Tinebase.appMgr.get('Filemanager').getRegistry().get('preferences').get('dbClickAction') === 'download' ) {
+
+                dblClickHandlers[0].fn = _.bind(this.action_download.execute, this.action_download);
+            }
+
+            Tine.emit('filesystem.fileDoubleClick', rowRecord, dblClickHandlers);
+
+            const dblClickHandler = _.last(_.sortBy(dblClickHandlers, ['prio']));
+            if (dblClickHandler && _.isFunction(dblClickHandler.fn)) {
+                dblClickHandler.fn.call(dblClickHandler.scope);
+            }
+
         }
 
-        var prefs = Tine.Tinebase.appMgr.get('Filemanager').getRegistry().get('preferences');
-
-        var selectedRows = this.getSelectionModel().getSelections(),
-            rowRecord = selectedRows[0];
-
-        if (prefs.get('dbClickAction') === 'download' && downloadsAllowed) {
-            this.onDownload();
-        } else if (prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file') {
-            this.action_preview.execute();
-        }
     },
 
     /**

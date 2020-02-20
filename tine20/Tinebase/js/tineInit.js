@@ -13,6 +13,7 @@
 /*global Ext, Tine, google, OpenLayers, Locale, */
 
 import waitFor from 'util/waitFor.es6';
+var EventEmitter = require('events');
 
 /** ------------------------- Ext.ux Initialisation ------------------------ **/
 
@@ -75,6 +76,15 @@ Tine.onAllAppsLoaded = () => {
  */
 Ext.LOGLEVEL = Tine.clientVersion.buildType === 'RELEASE' ? 0 : 7;
 Tine.log = Ext.ux.log;
+
+/**
+ * in memory per window msg bus for sync events
+ */
+(() => {
+    let ee = new EventEmitter();
+    Tine.on = ee.on;
+    Tine.emit = ee.emit;
+})();
 
 Ext.namespace('Tine.Tinebase');
 
