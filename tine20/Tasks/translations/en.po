@@ -280,3 +280,15 @@ msgstr "Default Task List"
 #: Preference.php:71
 msgid "The default task list to create new tasks in."
 msgstr "The default task list to create new tasks in."
+
+msgid "Enable Standard Alarm"
+msgstr "Enable Standard Alarm"
+
+msgid "New task get a standard alarm as defined below"
+msgstr "New task get a standard alarm as defined below"
+
+msgid "Minutes before the task ends"
+msgstr "Minutes before the task ends"
+
+msgid "Standard Alarm Time"
+msgstr "Standard Alarm Time"

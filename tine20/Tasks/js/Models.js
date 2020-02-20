@@ -80,14 +80,21 @@ Tine.Tasks.Model.Task = Tine.Tinebase.data.Record.create(Tine.Tasks.Model.TaskAr
  * @return {Object} default data
  */
 Tine.Tasks.Model.Task.getDefaultData = function() {
-    var app = Tine.Tinebase.appMgr.get('Tasks');
+    var app = Tine.Tinebase.appMgr.get('Tasks'),
+        prefs = app.getRegistry().get('preferences');
 
-    return {
+    var data =  {
         'class': 'PUBLIC',
         percent: 0,
         organizer: Tine.Tinebase.registry.get('currentAccount'),
         container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer()
     };
+
+    if (prefs.get('defaultalarmenabled')) {
+        data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
+    }
+
+    return data;
 };
 
 /**

@@ -313,3 +313,15 @@ msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
 #: Setup/Initialize.php:83
 msgid "Tasks without responsible"
 msgstr "Aufgaben ohne Verantwortlichen"
+
+msgid "Enable Standard Alarm"
+msgstr "Standardalarm"
+
+msgid "New task get a standard alarm as defined below"
+msgstr "Neue Aufgaben bekommen einen Standardalarm wie unten definiert"
+
+msgid "Minutes before the task ends"
+msgstr "Minuten bevor die Aufgabe endet"
+
+msgid "Standard Alarm Time"
+msgstr "Standardalarmzeit"
