@@ -241,7 +241,7 @@ class Addressbook_ListControllerTest extends TestCase
         // try to set memberships without MANAGE_ACCOUNTS
         $this->_removeRoleRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS, true);
 
-        $listId = Tinebase_Group::getInstance()->getDefaultGroup()->list_id;
+        $listId = Tinebase_Group::getInstance()->getGroupByName('Secretary')->list_id;
         try {
             Addressbook_Controller_List::getInstance()->addListMember($listId, array($this->objects['contact1']->getId()));
             $this->fail('should not be possible to add list member to system group');
@@ -249,10 +249,19 @@ class Addressbook_ListControllerTest extends TestCase
             $this->assertEquals('No permission to add list member.', $tead->getMessage());
         }
 
-        $list = Addressbook_Controller_List::getInstance()->get($listId);
-        $list->name = 'my new name';
+        $listBeforeUpdate = Addressbook_Controller_List::getInstance()->get($listId);
+        self::assertGreaterThan(0, count($listBeforeUpdate->members));
+        $list = clone($listBeforeUpdate);
+        // save the list and check if it still has its members
+        Addressbook_Controller_List::getInstance()->update($list);
+        $listBackend = new Addressbook_Backend_List();
+        Tinebase_Core::getCache()->clean();
+        $updatedList = $listBackend->get($listId);
+        self::assertEquals($listBeforeUpdate->members, $updatedList->members);
+
+        $updatedList->name = 'my new name';
         try {
-            Addressbook_Controller_List::getInstance()->update($list);
+            Addressbook_Controller_List::getInstance()->update($updatedList);
             $this->fail('should not be possible to set name of system group');
         } catch (Tinebase_Exception_AccessDenied $tead) {
             $this->assertEquals('You are not allowed to MANAGE_ACCOUNTS in application Admin !', $tead->getMessage());

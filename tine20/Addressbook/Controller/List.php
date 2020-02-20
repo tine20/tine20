@@ -303,6 +303,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $list = $this->get($_listId);
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Removing members '
+            . ' from list ' . $list->getId());
+
         $this->_checkGrant($list, 'update', TRUE, 'No permission to remove list member.');
         $this->_checkGroupGrant($list, TRUE, 'No permission to remove list member.');
 
@@ -420,7 +424,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 $this->_checkNonAccountMembers($_record);
             }
             $this->_updateGroup($group, $_record, $_oldRecord);
-            $this->_updateGroupMembers($group, $_record);
+            $this->_updateGroupMembers($group, $_record, $_oldRecord);
         }
     }
 
@@ -429,8 +433,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      *
      * @param $group
      * @param $list
+     * @param $oldList
      */
-    protected function _updateGroupMembers($group, $list)
+    protected function _updateGroupMembers($group, $list, $oldList)
     {
         // get all system contacts
         $checks = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
@@ -446,8 +451,12 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
         $removeListMembers = [];
         foreach ($systemcontacts as $contact) {
-            if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
-                // no right to update group members - remove from list members
+            if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS) &&
+                ! in_array($contact->getId(), $oldList->members)
+            ) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' no right to update group members - remove contact (id: '
+                    . $contact->getId() . ') from list members');
                 $removeListMembers[] = $contact->getId();
             } else if (! in_array($contact->account_id, $groupMembers)) {
                 $groupMembers[] = $contact->account_id;
@@ -657,8 +666,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     public function createOrUpdateByGroup(Tinebase_Model_Group $group)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), TRUE));
-
         try {
             if (empty($group->list_id)) {
                 $list = $this->_backend->getByGroupName($group->name, $group->container_id);
