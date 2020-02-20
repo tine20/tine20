@@ -1048,13 +1048,13 @@ class Admin_Frontend_JsonTest extends TestCase
             'sort' => array('note_type_id', 'creation_time')
         );
         $history = $tfj->searchNotes($filter, $sort);
-        $this->assertEquals(5, $history['totalcount'], print_r($history, TRUE));
+        $this->assertEquals(3, $history['totalcount'], print_r($history, TRUE));
 
         // change container via Tinebase_Frontend_Json_Container -> should also write a note
         $tfjc = new Tinebase_Frontend_Json_Container();
         $tfjc->renameContainer($containerUpdated['id'], 'testcontainerupdatedAgain');
         $history = $tfj->searchNotes($filter, $sort);
-        $this->assertEquals(6, $history['totalcount'], print_r($history, TRUE));
+        $this->assertEquals(4, $history['totalcount'], print_r($history, TRUE));
 
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
         static::assertEquals('success', $deleteResult['status']);
