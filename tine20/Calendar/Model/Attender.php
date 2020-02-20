@@ -235,6 +235,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     }
 
     /**
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getTitle()
+    {
+        try {
+            return $this->getName();
+        } catch (Exception $e) {
+            return parent::getTitle();
+        }
+    }
+
+    /**
      * get name of attender
      * 
      * @return string
