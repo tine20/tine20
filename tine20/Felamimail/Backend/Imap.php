@@ -1097,7 +1097,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             }
 
             // remove other bad chars to prevent "iconv_mime_decode_headers(): Detected an illegal character in input string"
-            $result = iconv('UTF-8', 'ASCII//TRANSLIT', $result);
+            // TODO catch exceptions here? this still sometimes throws ErrorException "iconv(): Detected an illegal character in input string"
+            $result = @iconv('UTF-8', 'ASCII//TRANSLIT', $result);
         }
         
         return $result;
