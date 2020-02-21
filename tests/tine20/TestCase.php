@@ -1092,7 +1092,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     protected function _getTestNodes($path, $name = 'test')
     {
-        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
+        $filter = new Tinebase_Model_Tree_Node_Filter();
+        $filter->setFromArrayInUsersTimezone(array(array(
             'field' => 'path',
             'operator' => 'equals',
             'value' => $path

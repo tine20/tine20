@@ -182,6 +182,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @var Tinebase_Model_Filter_FilterGroup|null reference to parent group
      */
     protected $_parent = null;
+
+    protected $_isInSetFromUser = false;
     
     /******************************** functions ********************************/
     
@@ -282,7 +284,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function getRootParent()
     {
-        if (null != $this->_parent) {
+        if (null !== $this->_parent) {
             return $this->_parent->getRootParent();
         }
         return $this;
@@ -896,7 +898,17 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function setFromArrayInUsersTimezone($_data)
     {
         $this->_options['timezone'] = Tinebase_Core::getUserTimezone();
-        $this->setFromArray($_data);
+        try {
+            $this->_isInSetFromUser = true;
+            $this->setFromArray($_data);
+        } finally {
+            $this->_isInSetFromUser = false;
+        }
+    }
+
+    public function isInSetFromUser()
+    {
+        return $this->_isInSetFromUser;
     }
     
     /**

@@ -66,6 +66,32 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         return $savedFilterData;
     }
 
+    /**
+     * test to save a persistent filter
+     *
+     * @param array|null $filterData
+     * @return array
+     */
+    public function testSaveFilemanagerPathFilter()
+    {
+        Tinebase_FileSystem::getInstance()->mkdir('/Filemanager/folders/shared/path');
+        $filterData = self::getPersistentFilterData();
+        $filterData['application_id']   = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')
+            ->getId();
+        $filterData['model']            = Filemanager_Model_NodeFilter::class;
+        $filterData['filters']          = [
+            ['field' => 'path', 'operator' => 'equals', 'value' => '/shared/path']
+        ];
+        $savedFilterData = $this->_uit->savePersistentFilter($filterData);
+
+        $this->_assertSavedFilterData($filterData, $savedFilterData);
+        $this->assertTrue(! empty($savedFilterData['grants']));
+        $this->assertTrue(! empty($savedFilterData['account_grants']));
+        foreach (array('readGrant', 'editGrant', 'deleteGrant') as $grant) {
+            $this->assertTrue($savedFilterData['account_grants'][$grant]);
+        }
+    }
+
     /*
      * save customfield site!
      */
