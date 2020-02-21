@@ -163,8 +163,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
 
 
-            if (!$hasIdentity && null !== ($denyList = Tinebase_Config::getInstance()->get(
-                    Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) && is_array($denyList)) {
+            if (!$hasIdentity && $this->_request->getMethod() !== 'GET' && null !== ($denyList = Tinebase_Config
+                    ::getInstance()->get(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) && is_array($denyList)) {
                 foreach ($denyList as $deny) {
                     if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
                         header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
