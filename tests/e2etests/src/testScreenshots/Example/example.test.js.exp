@@ -1,0 +1,21 @@
+
+const expect = require('expect-puppeteer');
+const lib = require('../../lib/browser');
+
+require('dotenv').config();
+
+beforeAll(async () => {
+        await lib.getBrowser('ExampleApp');
+});
+
+describe('Test mainpage', () => {
+
+});
+
+describe('Edit Contact', () => {
+
+});
+
+afterAll(async () => {
+    browser.close();
+});
