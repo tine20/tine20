@@ -771,12 +771,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
         $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
         
-        $result = $this->_backendValue->search($filter);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Fetched ' . count($result) . ' customfield values.');
-        
-        return $result;
+        return $this->_backendValue->search($filter);
     }
     
     /**

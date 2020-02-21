@@ -294,4 +294,58 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "Repaired " . $repaired . " shared email accounts\n";
         return 0;
     }
+
+    /**
+     * enabled sieve_notification_move for all system accounts
+     *
+     * usage: method=Admin.enableAutoMoveNotificationsinSystemEmailAccounts [-d] -- [folder=Benachrichtigungen]
+     *
+     * @param $opts
+     * @return int
+     */
+    public function enableAutoMoveNotificationsinSystemEmailAccounts($opts)
+    {
+        $systemAccounts = Admin_Controller_EmailAccount::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM]
+            ]
+        ));
+        if (count($systemAccounts) === 0) {
+            // nothing to do
+            return 0;
+        }
+
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+
+        echo "Found " . count($systemAccounts) . " system email accounts to check\n";
+
+        $args = $this->_parseArgs($opts, array());
+
+        $accountsController = Admin_Controller_EmailAccount::getInstance();
+        $translate = Tinebase_Translation::getTranslation('Felamimail');
+        $folderName = isset($args['folder']) ? $args['folder'] : $translate->_('Notifications');
+        $enabled = 0;
+        foreach ($systemAccounts as $account) {
+            /* @var Felamimail_Model_Account $account */
+            if (! $account->sieve_notification_move) {
+                if (! $opts->d) {
+                    $account->sieve_notification_move = true;
+                    $account->sieve_notification_move_folder = $folderName;
+                    try {
+                        $accountsController->update($account);
+                        $enabled++;
+                    } catch (Exception $e) {
+                        echo "Could not activate sieve_notification_move for account " . $account->name . ". Error: "
+                            . $e->getMessage() . "\n";
+                    }
+                } else {
+                    $enabled++;
+                }
+            }
+        }
+        echo "Enabled auto-move notification script for " . $enabled . " email accounts\n";
+        return 0;
+    }
 }

@@ -206,8 +206,7 @@ class Tinebase_EmailUser
     public static function getInstance($configType = Tinebase_Config::IMAP)
     {
         $type = self::getConfiguredBackend($configType);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $type);
-        
+
         if (!isset(self::$_backends[$type])) {
             self::$_backends[$type] = self::factory($type);
         }
