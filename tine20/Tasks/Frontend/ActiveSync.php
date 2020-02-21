@@ -193,7 +193,11 @@ class Tasks_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract
 
         foreach($this->_mapping as $syncrotonProperty => $tine20Property) {
             if (!isset($data->$syncrotonProperty)) {
-                $task->$tine20Property = null;
+                if ($tine20Property === 'priority') {
+                    $task->$tine20Property = Tasks_Model_Priority::NORMAL;
+                } else {
+                    $task->$tine20Property = null;
+                }
             
                 continue;
             }
