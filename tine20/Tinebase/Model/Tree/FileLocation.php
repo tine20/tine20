@@ -85,11 +85,12 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
                 $fs = Tinebase_FileSystem::getInstance();
                 $fs->checkPathACL($trgtPath->getParent(), 'update', FALSE);
                 if ($fs->fileExists($trgtPath)) {
-                    throw new Tinebase_Exception('TODO what exception?!? target exists already');
+                    $trgtNode = $fs->stat($trgtPath);
+                } else {
+                    $trgtNode = $fs->createFileTreeNode($fs->stat($trgtPath->getParent()), $this->{FLD_FILE_NAME});
                 }
-                $newNode = $fs->createFileTreeNode($fs->stat($trgtPath->getParent()), $this->{FLD_FILE_NAME});
-                $newNode->hash = $srcNode->hash;
-                $fs->update($newNode);
+                $trgtNode->hash = $srcNode->hash;
+                $fs->update($trgtNode);
                 break;
             case self::TYPE_ATTACHMENT:
                 list($record, $ctrl) = $this->_getAttachmentRecordAndCtrl();
