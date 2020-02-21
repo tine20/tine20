@@ -268,20 +268,11 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                 case 'adr_one_countryname':
                 case 'adr_two_countryname':
                     $contact->$value = Tinebase_Translation::getRegionCodeByCountryName($data->$fieldName);
-                    
                     break;
 
                 case 'adr_one_street':
                 case 'adr_two_street':
-                    // TODO do this for all fields? this is a generic problem with the sync...
-                    // we might fetch the field length from MCV2 when available
-                    $fieldLength = 64;
-                    if (mb_strlen($data->$fieldName) > $fieldLength) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                            . ' field truncated: ' . $fieldName . ' / was: ' . $data->$fieldName);
-                    }
-                    $contact->$value = mb_substr($data->$fieldName, 0, $fieldLength);
-
+                    $this->_truncateField($contact, $value, $data->$fieldName, 64);
                     break;
                     
                 case 'email':
@@ -336,9 +327,6 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
         
         // contact should be valid now
         $contact->isValid();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($contact->toArray(), true));
         
         return $contact;
     }

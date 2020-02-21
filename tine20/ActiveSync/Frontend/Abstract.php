@@ -787,4 +787,23 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         return empty($value) && $value != '0'
             || is_array($value) && count($value) === 0;
     }
+
+    /**
+     * TODO do this for all fields (in toTineModel)? this is a generic problem with the sync...
+     *
+     * we might fetch the field length from MCV2 when available
+     *
+     * @param Tinebase_Record_Interface $record
+     * @param string $fieldName
+     * @param string $syncrotonValue
+     * @param int $fieldLength
+     */
+    protected function _truncateField($record, $fieldName, $syncrotonValue, $fieldLength = 255)
+    {
+        if (mb_strlen($syncrotonValue) > $fieldLength) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' field truncated: ' . $fieldName . ' / was: ' . $syncrotonValue);
+        }
+        $record->$fieldName = mb_substr($syncrotonValue, 0, $fieldLength);
+    }
 }
