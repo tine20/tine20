@@ -322,7 +322,7 @@ class Tinebase_EmailUser
     
     /**
      * get config for type IMAP/SMTP
-     * 
+     *
      * @param string $_configType
      * @return array
      */
@@ -330,60 +330,69 @@ class Tinebase_EmailUser
     {
         if (!isset(self::$_configs[$_configType])) {
             self::$_configs[$_configType] = Tinebase_Config::getInstance()->get($_configType, new Tinebase_Config_Struct())->toArray();
-            
-            /*
-             * If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
-             * e.g. ldap://localhost/ou=domains,ou=mailConfig,dc=example,dc=com?dc?sub?objectclass=mailDomain
-             */
+
+            // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
             if (($_configType == Tinebase_Config::SMTP) && (array_key_exists('secondarydomains', self::$_configs[Tinebase_Config::SMTP])) &&
                     preg_match("~^ldaps?://~i", self::$_configs[Tinebase_Config::SMTP]['secondarydomains']))
             {
-                $ldap_url = parse_url(self::$_configs[Tinebase_Config::SMTP]['secondarydomains']);
-                $ldap_url['path'] = substr($ldap_url['path'], 1);
-                $query = explode('?', $ldap_url['query']);
-                (count($query) > 0) ? $ldap_url['attributes'] = explode(',', $query[0]) : $ldap_url['attributes'] = array();
-                $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_BASE;
-                if (count($query) > 1)
-                {
-                    switch ($query[1]) {
-                        case 'subtree':
-                        case 'sub':
-                            $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_SUB;
-                            break;
-                        case 'one':
-                            $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_ONE;
-                            break;
-
-                    }
-                }
-                (count($query) > 2) ? $ldap_url['filter'] = $query[2] : $ldap_url['filter'] = 'objectClass=*';
-                // By now your options are limited to configured server
-                $ldap = new Tinebase_Ldap(Tinebase_User::getBackendConfiguration());
-                $ldap->connect()->bind();
-                $secondarydomains = $ldap->searchEntries(
-                        $ldap_url['filter'],
-                        $ldap_url['path'],
-                        $ldap_url['scope'],
-                        $ldap_url['attributes']
-                );
-                self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] = '';
-                foreach ($secondarydomains as $dn) 
-                {
-                    foreach ($ldap_url['attributes'] as $attr) 
-                    {
-                        if (array_key_exists($attr, $dn)) foreach ($dn[$attr] as $domain) 
-                        {
-                            self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] != '' ? $domain = ','.$domain : $domain;
-                            self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] .= $domain;                            
-                        }
-
-                    }
-                }
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' Secondarydomains: ' . print_r(self::$_configs[Tinebase_Config::SMTP]['secondarydomains'], true));
+                self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl(self::$_configs[Tinebase_Config::SMTP]['secondarydomains']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Secondarydomains from ldap (config): '. print_r(self::$_configs[Tinebase_Config::SMTP]['secondarydomains'], true));
             }
         }
-        
+
         return self::$_configs[$_configType];
+    }
+
+    /**
+     * Secondary domains may come from ldap url as in rfc 4516 (instead of a comma separated list)
+     * e.g. ldap://localhost/ou=domains,ou=mailConfig,dc=example,dc=com?dc?sub?objectclass=mailDomain
+     *
+     * @param string $ldapUrl
+     * @return string
+     */
+    private static function _getSecondaryDomainsFromLdapUrl($_ldapUrl)
+    {
+        $ldap_url = parse_url($_ldapUrl);
+        $ldap_url['path'] = substr($ldap_url['path'], 1);
+        $query = explode('?', $ldap_url['query']);
+        (count($query) > 0) ? $ldap_url['attributes'] = explode(',', $query[0]) : $ldap_url['attributes'] = array();
+        $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_BASE;
+        if (count($query) > 1)
+        {
+            switch ($query[1]) {
+                case 'subtree':
+                case 'sub':
+                    $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_SUB;
+                    break;
+                case 'one':
+                    $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_ONE;
+                    break;
+            }
+        }
+        (count($query) > 2) ? $ldap_url['filter'] = $query[2] : $ldap_url['filter'] = 'objectClass=*';
+        // By now your options are limited to configured server
+        $ldap = new Tinebase_Ldap(Tinebase_User::getBackendConfiguration());
+        $ldap->connect()->bind();
+        $secondarydomains = $ldap->searchEntries(
+            $ldap_url['filter'],
+            $ldap_url['path'],
+            $ldap_url['scope'],
+            $ldap_url['attributes']
+        );
+        $foundDomains = '';
+        foreach ($secondarydomains as $dn)
+        {
+            foreach ($ldap_url['attributes'] as $attr)
+            {
+                if (array_key_exists($attr, $dn)) foreach ($dn[$attr] as $domain)
+                {
+                    $foundDomains != '' ? $domain = ','.$domain : $domain;
+                    $foundDomains .= $domain;
+                }
+            }
+        }
+        // return a comma separated list
+        return $foundDomains;
     }
 
     /**
@@ -401,7 +410,12 @@ class Tinebase_EmailUser
         if (! empty($config['primarydomain'])) {
             $allowedDomains = array($config['primarydomain']);
             if (! empty($config['secondarydomains'])) {
-                // merge primary and secondary domains and split secondary domains + trim whitespaces
+                // merge primary and secondary domains + trim whitespaces
+                if (preg_match("~^ldaps?://~i", $config['secondarydomains'])) {
+                    // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
+                    $config['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl($config['secondarydomains']);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Secondarydomains from ldap (allowed domains): ' . print_r($config['secondarydomains'], true));
+                }
                 $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', $config['secondarydomains']));
             }
             if ($_includeAdditional) {
