@@ -284,7 +284,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      */
     protected function _setAliasesAndForwards($_smtpSettings)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Setting default alias/forward for ' . print_r($_smtpSettings, true));
         
         $this->_removeDestinations($_smtpSettings);
@@ -344,7 +344,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      */
     protected function _addDestination($destinationData)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Insert into table destinations: ' . print_r($destinationData, true));
 
         $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_destinationTable, $this->_db);

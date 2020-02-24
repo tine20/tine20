@@ -4,7 +4,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -55,6 +55,37 @@ class Admin_Controller_UserTest extends TestCase
         self::assertEquals($user->accountEmailAddress, $userInBackend['email'], 'email was not added: '
             . print_r($userInBackend, true));
         self::assertEquals($user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP], $userInBackend['userid']);
+
+        // add alias
+        $emailUser = array (
+            'emailMailQuota' => 0,
+            'emailMailSize' => 0,
+            'emailSieveQuota' => 0,
+            'emailSieveSize' => 0,
+            'emailLastLogin' => '',
+            'emailForwardOnly' => false,
+            'emailAliases' =>
+                array (
+                    0 =>
+                        array (
+                            'email' => 'aliasxprops@' . TestServer::getPrimaryMailDomain(),
+                            'dispatch_address' => 1,
+                        ),
+                ),
+            'emailForwards' =>
+                array (
+                ),
+        );
+        $user->emailUser = new Tinebase_Model_EmailUser($emailUser);
+        $user->imapUser  = new Tinebase_Model_EmailUser($emailUser);
+        $user->smtpUser  = new Tinebase_Model_EmailUser($emailUser);
+        $user = Admin_Controller_User::getInstance()->update($user);
+        // check aliases
+        $user = Admin_Controller_User::getInstance()->get($user->getId());
+        self::assertTrue(isset($user->smtpUser->emailAliases) && count($user->smtpUser->emailAliases) === 1,
+            print_r($user->toArray(), true));
+        self::assertEquals('aliasxprops@' . TestServer::getPrimaryMailDomain(),
+            $user->smtpUser->emailAliases[0]['email'], print_r($user->smtpUser->toArray(), true));
 
         // update user (email address) + check if email user is updated
         $newEmail = 'newaddress' . Tinebase_Record_Abstract::generateUID(6)

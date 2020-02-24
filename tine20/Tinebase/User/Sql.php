@@ -990,6 +990,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             }
             call_user_func_array([$plugin, $method], $params);
 
+            // return email user properties to $user
+            if ($method === 'inspectGetUserByProperty') {
+                foreach (['smtpUser', 'emailUser', 'imapUser'] as $prop) {
+                    if ($pluginUser->{$prop}) {
+                        $user->{$prop} = $pluginUser->{$prop};
+                    }
+                }
+            }
+
             // save new/missing xprops in user
             if ($updatePluginUser) {
                 Tinebase_EmailUser_XpropsFacade::setXprops($user, $updatePluginUser->getId());

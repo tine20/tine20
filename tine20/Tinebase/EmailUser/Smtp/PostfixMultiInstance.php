@@ -184,7 +184,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
      */
     protected function _setAliasesAndForwards($_smtpSettings)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Setting default alias/forward for ' . print_r($_smtpSettings, true));
 
         if (!isset($_smtpSettings['id'])) {
