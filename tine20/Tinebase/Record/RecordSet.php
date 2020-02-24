@@ -127,8 +127,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $recordId = $_record->getId();
 
         if ($recordId && isset($this->_idMap[$recordId]) && isset($this->_listOfRecords[$this->_idMap[$recordId]])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Record (id ' . $recordId . ') already in set - we don\'t want duplicates)');
             return $this->_idMap[$recordId];
         }
 

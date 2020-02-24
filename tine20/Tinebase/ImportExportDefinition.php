@@ -212,17 +212,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $config = new Zend_Config_Xml($xmlConfig, /* section = */ null, /* runtime mods allowed = */ true);
             $cache->save($config, $cacheId);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Get Zend_Config_Xml from cache' . $cacheId);
             $config = $cache->load($cacheId);
         }
         
         if (! empty($_additionalOptions)) {
             $config->merge(new Zend_Config($_additionalOptions));
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Config: ' . print_r($config->toArray(), true));
         
         return $config;
     }
