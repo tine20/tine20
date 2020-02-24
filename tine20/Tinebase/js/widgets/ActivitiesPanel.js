@@ -198,6 +198,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             if (!options.params) {
                 options.params = {};
             }
+
+            this.paging.limit = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10);
             
             // paging toolbar only works with this properties in the options!
             options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort;
