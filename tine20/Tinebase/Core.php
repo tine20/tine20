@@ -973,6 +973,8 @@ class Tinebase_Core
         try {
             $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
             if (($cacheBackend = $cache->getBackend()) instanceof Zend_Cache_Backend_Redis) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                    . '::' . __LINE__ . ' Adding exception logger to Redis Backend');
                 $refProp = new ReflectionProperty(Zend_Cache_Backend_Redis::class, '_redis');
                 $refProp->setAccessible(true);
                 $refProp->getValue($cacheBackend)->setLogDelegator(function($exception) {
@@ -985,7 +987,8 @@ class Tinebase_Core
 
             $enabled = false;
             if ('File' === $backendType && isset($backendOptions['cache_dir']) && ! is_dir($backendOptions['cache_dir'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create cache directory and re-try');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__
+                    . '::' . __LINE__ . ' Create cache directory and re-try');
                 if (@mkdir($backendOptions['cache_dir'], 0770, true)) {
                     $enabled = $_enabled;
                 }
