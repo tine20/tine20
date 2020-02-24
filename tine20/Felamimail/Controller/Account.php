@@ -1013,6 +1013,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
+        switch ($updatedRecord->type) {
+            case Felamimail_Model_Account::TYPE_SYSTEM:
+            case Felamimail_Model_Account::TYPE_SHARED:
+            case Felamimail_Model_Account::TYPE_USER_INTERNAL:
+                $this->_afterUpdateSetSieve($updatedRecord, $currentRecord);
+                break;
+        }
+    }
+
+    protected function _afterUpdateSetSieve($updatedRecord, $currentRecord)
+    {
         if ($updatedRecord->sieve_notification_email != $currentRecord->sieve_notification_email) {
             Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($updatedRecord->getId(),
                 $updatedRecord->sieve_notification_email);
@@ -1026,7 +1037,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
         }
     }
-    
+
     /**
      * check if user has the right to manage accounts
      * 

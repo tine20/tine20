@@ -147,7 +147,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
         $currentAccount = $this->get($_record->getId());
 
-        if ($this->_sieveBackendSupportsMasterPassword()) {
+        if ($this->_sieveBackendSupportsMasterPassword($_record)) {
             $raii = $this->prepareAccountForSieveAdminAccess($_record->getId());
         }
 
@@ -155,7 +155,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $account = $this->_backend->update($_record);
         $this->_inspectAfterUpdate($account, $_record, $currentAccount);
 
-        if ($this->_sieveBackendSupportsMasterPassword()) {
+        if ($this->_sieveBackendSupportsMasterPassword($_record)) {
             $this->removeSieveAdminAccess();
             unset($raii);
         }
@@ -166,10 +166,19 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     /**
      * check if imap/sieve backend supports setting a sieve master password
      *
+     * @param $account
      * @return bool
      */
-    protected function _sieveBackendSupportsMasterPassword()
+    protected function _sieveBackendSupportsMasterPassword($account)
     {
+        if (! in_array($account->type, [
+            Felamimail_Model_Account::TYPE_SYSTEM,
+            Felamimail_Model_Account::TYPE_SHARED,
+            Felamimail_Model_Account::TYPE_USER_INTERNAL,
+        ])) {
+            return false;
+        }
+
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
             try {
@@ -298,7 +307,9 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     protected function _setSieveMasterPassword(Felamimail_Model_Account $account)
     {
         $this->_masterUser = Tinebase_Record_Abstract::generateUID(8);
-        $account->user = $this->_getAccountUsername($account);
+        if (empty($account->user)) {
+            $account->user = $this->_getAccountUsername($account);
+        }
         $account->password = Tinebase_Record_Abstract::generateUID(20);
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         if (method_exists($imapEmailBackend, 'setMasterPassword')) {
@@ -308,8 +319,9 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
     protected function _getAccountUsername($account)
     {
+        $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $imapLoginname = $imapEmailBackend->getLoginName($account->user_id, null, $account->email);
+        $imapLoginname = $imapEmailBackend->getLoginName($user->getId(), null, $account->email);
         return $imapLoginname . '*' . $this->_masterUser;
     }
 
