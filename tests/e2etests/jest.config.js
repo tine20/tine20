@@ -4,7 +4,6 @@ module.exports = {
     globals: {
         browser: '',
         page: '',
-        app: '',
     },
     testMatch: [
         "**/" + process.env.TEST_DIR + "/**/*.test.js"

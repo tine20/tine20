@@ -4,7 +4,6 @@ const help = require('../../lib/helper');
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Admin');
 });
 
