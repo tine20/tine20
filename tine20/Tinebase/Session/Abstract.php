@@ -280,7 +280,7 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                 
                 break;
 
-            case 'RedisProxy':
+            case 'Redis':
                 if ($config->session) {
                     $host = ($config->session->host) ? $config->session->host : 'localhost';
                     $port = ($config->session->port) ? $config->session->port : 6379;
@@ -311,33 +311,6 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
 
                 break;
 
-            case 'Redis':
-                if ($config->session) {
-                    $host = ($config->session->host) ? $config->session->host : 'localhost';
-                    $port = ($config->session->port) ? $config->session->port : 6379;
-                    if ($config->session && $config->session->prefix) {
-                        $prefix = $config->session->prefix;
-                    } else {
-                        $prefix = ($config->database && $config->database->tableprefix) ? $config->database->tableprefix : 'tine20';
-                    }
-                    $prefix = $prefix . '_SESSION_';
-                    $savePath = "tcp://$host:$port?prefix=$prefix";
-                } else if ($defaultSessionSavePath) {
-                    $savePath = $defaultSessionSavePath;
-                } else {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . " Unable to setup redis session backend - config missing");
-                    return;
-                }
-
-                Zend_Session::setOptions(array(
-                    'gc_maxlifetime' => $maxLifeTime,
-                    'save_handler'   => 'redis',
-                    'save_path'      => $savePath
-                ));
-                
-                break;
-                
             default:
                 break;
         }
