@@ -7,35 +7,26 @@ beforeAll(async () => {
 
     //expect.setDefaultOptions({timeout: 1000});
 
-    await lib.getBrowser('Adressbuch');
+    await lib.getBrowser('Adressbuch', 'Kontakte');
 });
 
 
 describe('Contacts', () => {
     describe('Test MainPage', () => {
-
-        test('go to mainscreen', async () => {
-            await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Kontakte'});
-            await page.waitFor(2000);
-            await page.screenshot({path: ''});
-        });
-
         test('choose grid fields', async () => {
             await expect(page).toMatchElement('span', {text: 'Tine 2.0'});
             await page.click('.t-app-addressbook .ext-ux-grid-gridviewmenuplugin-menuBtn');
-            await page.waitFor('.x-menu-list');
+            await page.waitForSelector('.x-menu-list');
             await page.screenshot({path: 'screenshots/1_adressverwaltung/9_adressbuch_mit_spaltenauswahl.png'});
         });
 
         test('Import', async () => {
-            var [button] = await lib.getElement('button', page, 'Kontakte importieren');
-            var newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));
-            await button.click();
-            newPage = await lib.getNewWindow();
-            await newPage.waitForXPath('//button');
-            await newPage.screenshot({path: 'screenshots/1_adressverwaltung/1_adressbuch_importfenster.png'});
+            await expect(page).toClick('button', {text: 'Kontakte importieren'});
+            let popupWindow = await lib.getNewWindow();
+            await popupWindow.waitForXPath('//button');
+            await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/1_adressbuch_importfenster.png'});
             /*
-            //var [button] = await  help.getElement('button', newPage, 'Wählen Sie die Datei mit Ihren Kontakte');
+            //var [button] = await  help.getElement('button', popupWindow, 'Wählen Sie die Datei mit Ihren Kontakte');
             //await button.click();
             await page.setRequestInterception(true);
 
@@ -59,93 +50,69 @@ describe('Contacts', () => {
             await newPage.waitFor(5000);
             //@ todo für den weiteren Dialog muss man eine datei hochladen können.
             */
-            await newPage.close();
+            await popupWindow.close();
         });
 
         test('show map', async () => {
             await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            var newPage = await lib.getNewWindow();
+            let popupWindow = await lib.getNewWindow();
+            await popupWindow.waitFor('.x-tab-edge');
             try {
-                await newPage.waitFor('.x-tab-edge');
-                await expect(newPage).toClick('span', {text: 'Karte', clickCount: 2});
-                await newPage.waitFor(10000); // wait to load map
-                await newPage.screenshot({path: 'screenshots/1_adressverwaltung/12_adressbuch_kontakt_karte.png'});
+                await expect(popupWindow).toClick('span', {text: 'Karte'});
+                await popupWindow.waitFor(10000); // wait to load map
+                await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/12_adressbuch_kontakt_karte.png'});
             } catch (e) {
                 //console.log('Map musst enabled');
             }
-            var [button2] = await lib.getElement('button', newPage, 'Abbrechen');
-            //console.log('Save Kontakt');
-            await button2.click();
+            await popupWindow.close();
         });
 
         test('notes', async () => {
-            console.log('start notes');
             await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            var newPage = await lib.getNewWindow();
-            await newPage.waitFor('.x-tab-edge');
-            await expect(newPage).toClick('span', {text: new RegExp("Notizen.*")});
-            await newPage.screenshot({path: 'screenshots/2_allgemeines/17_allgemein_hr_eingabemaske_neu_notiz.png'});
-            let [button] = await lib.getElement('button', newPage, 'Notizen hinzufügen');
-            await button.click();
-            await newPage.waitFor('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
-            await newPage.click('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
-            await newPage.waitFor(1000);
-            await newPage.screenshot({path: 'screenshots/2_allgemeines/18_allgemein_hr_eingabemaske_neu_notiz_notiz.png'});
-            await expect(newPage).toClick('.x-window-bwrap button', newPage, 'Abbrechen');
-            [button] = await lib.getElement('button', newPage, 'Abbrechen');
-            //console.log('Save Kontakt');
-            await button.click();
+            let popupWindow = await lib.getNewWindow();
+            await popupWindow.waitFor('.x-tab-edge');
+            await expect(popupWindow).toClick('span', {text: new RegExp("Notizen.*")});
+            await popupWindow.screenshot({path: 'screenshots/2_allgemeines/17_allgemein_hr_eingabemaske_neu_notiz.png'});
+            await expect(popupWindow).toClick('button', {text: 'Notizen hinzufügen'});
+            await popupWindow.waitFor('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
+            await popupWindow.click('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
+            //await popupWindow.waitFor(1000);
+            await popupWindow.screenshot({path: 'screenshots/2_allgemeines/18_allgemein_hr_eingabemaske_neu_notiz_notiz.png'});
+            await expect(popupWindow).toClick('.x-window-bwrap button', 'Abbrechen');
+            await popupWindow.close();
         });
 
         test('attachments', async () => {
             await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            var newPage = await lib.getNewWindow();
-            await newPage.waitFor('.x-tab-edge');
-            await expect(newPage).toClick('span', {text: new RegExp("Anhänge.*"), clickCount: 2});
-            await newPage.screenshot({path: 'screenshots/2_allgemeines/22_allgemein_hr_mitarbeiter_anhang.png'});
-            [button] = await lib.getElement('button', newPage, 'Abbrechen');
-            //console.log('Save Kontakt');
-            await button.click();
+            var popupWindow = await lib.getNewWindow();
+            await popupWindow.waitFor('.x-tab-edge');
+            await expect(popupWindow).toClick('span', {text: new RegExp("Anhänge.*")});
+            await popupWindow.screenshot({path: 'screenshots/2_allgemeines/22_allgemein_hr_mitarbeiter_anhang.png'});
+            await popupWindow.close();
         });
 
         test('relations', async () => {
             await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            var newPage = await lib.getNewWindow();
-            await newPage.waitFor('.x-tab-edge');
-            await expect(newPage).toClick('span', {text: new RegExp("Verknüpfungen.*")});
-            await newPage.waitFor(3000);
-            await newPage.screenshot({path: 'screenshots/2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen.png'});
-            let arrowtrigger = await newPage.$$('.x-form-arrow-trigger');
-            arrowtrigger.forEach(async function (element, index) {
-                if (index == 9) {
-                    await element.click({clickCount: 2});
-                    await newPage.waitFor(1000);
-                    await newPage.screenshot({path: 'screenshots/1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links.png'});
-                    await newPage.screenshot({path: 'screenshots/2_allgemeines/24_allgemein_hr_mitarbeiter_verknuepfungen_hinzu.png'});
-                }
-            });
-            arrowtrigger.forEach(async function (element, index) {
-                if (index == 10) {
-                    await element.click();
-                    await newPage.waitFor(1000);
-                    await newPage.screenshot({path: 'screenshots/1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts.png'});
-
-                }
-            });
-            await newPage.waitFor(3000);
-            var [button2] = await lib.getElement('button', newPage, 'Abbrechen');
-            await button2.click();
+            var popupWindow = await lib.getNewWindow();
+            await popupWindow.waitFor('.x-tab-edge');
+            await expect(popupWindow).toClick('span', {text: new RegExp("Verknüpfungen.*")});
+            await popupWindow.waitFor(3000);
+            await popupWindow.screenshot({path: 'screenshots/2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen.png'});
+            let arrowtrigger = await popupWindow.$$('.x-form-arrow-trigger');
+            await arrowtrigger[9].click();
+            await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links.png'});
+            await popupWindow.screenshot({path: 'screenshots/2_allgemeines/24_allgemein_hr_mitarbeiter_verknuepfungen_hinzu.png'});
+            await arrowtrigger[10].click();
+            await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts.png'});
+            await popupWindow.close();
         });
 
         test('history', async () => {
             await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            var newPage = await lib.getNewWindow();
-            await newPage.waitFor(2000);
-            await expect(newPage).toClick('span', {text: new RegExp("Historie.*")});
-            await newPage.screenshot({path: 'screenshots/2_allgemeines/21_allgemein_hr_mitarbeiter_historie.png'});
-            var [button2] = await lib.getElement('button', newPage, 'Abbrechen');
-            //console.log('Save Kontakt');
-            await button2.click();
+            var popupWindow = await lib.getNewWindow();
+            await expect(popupWindow).toClick('span', {text: new RegExp("Historie.*")});
+            await popupWindow.screenshot({path: 'screenshots/2_allgemeines/21_allgemein_hr_mitarbeiter_historie.png'});
+            await popupWindow.close();
         });
 
         describe('ContextMenu', () => {
@@ -153,9 +120,8 @@ describe('Contacts', () => {
             test('test Tags', async () => {
                 await expect(page).toClick('.x-grid3-row', {button: 'right'});
                 await expect(page).toClick('.action_tag.x-menu-item-icon');
-                await page.waitFor(500);
                 await expect(page).toClick('.x-window .x-form-arrow-trigger');
-                await page.waitFor(1000);
+                await page.waitForSelector('.x-widget-tag-tagitem-text');
                 await page.hover('.x-widget-tag-tagitem-text');
                 await page.screenshot({path: 'screenshots/1_adressverwaltung/18_adressbuch_kontakten_tags_zuweisen.png'});
                 await page.keyboard.press('Escape');
@@ -226,79 +192,65 @@ describe('Contacts', () => {
 
 
     describe('Edit Contact', () => {
-        let newPage;
+        let popupWindow;
         test('open EditDialog', async () => {
-            var [button] = await lib.getElement('button', page, 'Kontakt hinzufügen');
-            await button.click();
-            //console.log('Klick Button');
-            newPage = await lib.getNewWindow();
-            //console.log('Get Popup');
+            popupWindow = await lib.getEditDialog('Kontakt hinzufügen');
         });
 
         test('From Fields', async () => {
             //console.log('Fill fields');
-            await newPage.waitForXPath('//input');
+            await popupWindow.waitForXPath('//input');
             // @ todo make a array wiht key(n_prefix....) and value -> forech!
-            await expect(newPage).toMatchElement('input[name=n_prefix]');
-            await newPage.waitFor(2000);
+            await expect(popupWindow).toMatchElement('input[name=n_prefix]');
+            await popupWindow.waitFor(2000);
             //console.log('wait ');
-            await expect(newPage).toFill('input[name=n_prefix]', 'Dr.');
-            await expect(newPage).toFill('input[name=n_given]', 'Thomas');
-            await expect(newPage).toFill('input[name=n_middle]', 'Bernd');
-            await expect(newPage).toFill('input[name=n_family]', 'Gaurad');
-            await expect(newPage).toFill('input[name=org_name]', 'DWE');
-            await expect(newPage).toFill('input[name=org_unit]', 'Personalwesen');
-            await expect(newPage).toFill('input[name=title]', 'CEO');
-            await expect(newPage).toFill('input[name=bday]', '12.03.1956');
-            await expect(newPage).toFill('input[name=tel_work]', '040734662533');
-            await expect(newPage).toFill('input[name=tel_cell]', '0179461021');
-            await expect(newPage).toFill('input[name=adr_one_region]', 'Hamburg');
-            await expect(newPage).toFill('input[name=adr_one_postalcode]', '20475');
-            await expect(newPage).toFill('input[name=adr_one_street]', 'Pickhuben');
-            await expect(newPage).toFill('input[name=adr_one_locality]', 'Hamburg');
-            await expect(newPage).toFill('input[name=adr_one_countryname]', 'Deutschland');
-            await newPage.waitFor('.x-combo-list-item');
-            await newPage.keyboard.down('Enter');
-            await newPage.screenshot({path: 'screenshots/1_adressverwaltung/10_adressbuch_kontakt_bearbeiten.png'})
+            await expect(popupWindow).toFill('input[name=n_prefix]', 'Dr.');
+            await expect(popupWindow).toFill('input[name=n_given]', 'Thomas');
+            await expect(popupWindow).toFill('input[name=n_middle]', 'Bernd');
+            await expect(popupWindow).toFill('input[name=n_family]', 'Gaurad');
+            await expect(popupWindow).toFill('input[name=org_name]', 'DWE');
+            await expect(popupWindow).toFill('input[name=org_unit]', 'Personalwesen');
+            await expect(popupWindow).toFill('input[name=title]', 'CEO');
+            await expect(popupWindow).toFill('input[name=bday]', '12.03.1956');
+            await expect(popupWindow).toFill('input[name=tel_work]', '040734662533');
+            await expect(popupWindow).toFill('input[name=tel_cell]', '0179461021');
+            await expect(popupWindow).toFill('input[name=adr_one_region]', 'Hamburg');
+            await expect(popupWindow).toFill('input[name=adr_one_postalcode]', '20475');
+            await expect(popupWindow).toFill('input[name=adr_one_street]', 'Pickhuben');
+            await expect(popupWindow).toFill('input[name=adr_one_locality]', 'Hamburg');
+            await expect(popupWindow).toFill('input[name=adr_one_countryname]', 'Deutschland');
+            await popupWindow.waitFor('.x-combo-list-item');
+            await popupWindow.keyboard.down('Enter');
+            await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/10_adressbuch_kontakt_bearbeiten.png'})
         });
 
         test('parseAddress', async () => {
-            var [button3] = await lib.getElement('button', newPage, 'Adresse einlesen');
-            await button3.click();
-            //console.log('Klich parse Button');
-            await newPage.waitFor('.ext-mb-textarea');
-            await expect(newPage).toFill('.ext-mb-textarea', 'Max Mustermann \nBeispielweg 1 \n \n354234 Musterdorf !');
-            await newPage.screenshot({path: 'screenshots/1_adressverwaltung/11_adressbuch_kontakt_neu_einlesen.png'});
-            await newPage.click('.x-tool-close');
+            await expect(popupWindow).toClick('button', {text: 'Adresse einlesen'});
+            await popupWindow.waitFor('.ext-mb-textarea');
+            await expect(popupWindow).toFill('.ext-mb-textarea', 'Max Mustermann \nBeispielweg 1 \n \n354234 Musterdorf !');
+            await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/11_adressbuch_kontakt_neu_einlesen.png'});
+            await popupWindow.click('.x-tool-close');
         });
 
         test('add Tag', async () => {
             //await newPage.waitFor(1000);
-            let arrowtrigger = await newPage.$$('.x-form-arrow-trigger');
-            arrowtrigger.forEach(async function (element, index) {
-                //console.log(index + ' \n ' + element);
-                if (index == 8) await element.click();
-            });
-            await newPage.waitFor(2000);
-            await newPage.waitFor('.x-widget-tag-tagitem-text');
-            await newPage.screenshot({path: 'screenshots/1_adressverwaltung/15_adressbuch_tag_hinzu.png'});
-            let btn_text = await newPage.$$('.x-btn-text');
-            btn_text.forEach(async function (element, index) {
-                //console.log(index + ' \n ' + element);
-                if (index == 3) await element.click();
-            });
-            await newPage.waitFor(2000);
-            await newPage.waitFor('.ext-mb-input');
-            await expect(newPage).toFill('.ext-mb-input', 'Persönlicher Tag');
-            await newPage.screenshot({path: 'screenshots/1_adressverwaltung/16_adressbuch_persoenlicher_tag_hinzu.png'});
-            await expect(newPage).toClick('button', {text: 'Abbrechen'});
+            let arrowtrigger = await popupWindow.$$('.x-form-arrow-trigger');
+            await arrowtrigger[8].click();
+            await popupWindow.waitFor(2000);
+            await popupWindow.waitFor('.x-widget-tag-tagitem-text');
+            await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/15_adressbuch_tag_hinzu.png'});
+            let btn_text = await popupWindow.$$('.x-btn-text');
+            await btn_text[3].click();
+            await popupWindow.waitFor(2000);
+            await popupWindow.waitFor('.ext-mb-input');
+            await expect(popupWindow).toFill('.ext-mb-input', 'Persönlicher Tag');
+            await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/16_adressbuch_persoenlicher_tag_hinzu.png'});
+            await expect(popupWindow).toClick('button', {text: 'Abbrechen'});
         });
 
 
         test('save', async () => {
-            var [button2] = await lib.getElement('button', newPage, 'Ok');
-            //console.log('Save Kontakt');
-            await button2.click();
+            await expect(popupWindow).toClick('button', {text: 'Ok'});
         });
     });
 
