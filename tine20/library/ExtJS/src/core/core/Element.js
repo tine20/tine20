@@ -692,7 +692,7 @@ el.un('click', this.handlerFn);
      * @param {String} namespace (optional) The namespace in which to look for the attribute
      * @return {String} The attribute value
      */
-    getAttribute : Ext.isIE ? function(name, ns){
+    getAttribute : (Ext.isIE6 || Ext.isIE7 || Ext.isIE8) ? function(name, ns){
         var d = this.dom,
             type = typeof d[ns + ":" + name];
 
