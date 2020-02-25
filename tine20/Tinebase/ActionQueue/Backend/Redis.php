@@ -177,9 +177,13 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
 
     public function iterateAllData()
     {
-        if (false === ($result = $this->_redis->scan($this->_dataStructIterator, $this->_dataStructName . '*'))) {
+        if (null !== $this->_dataStructIterator && 1 > $this->_dataStructIterator) {
             $this->_dataStructIterator = null;
+            return false;
         }
+
+        while (false === ($result = $this->_redis->scan($this->_dataStructIterator, $this->_dataStructName . '*')) &&
+                $this->_dataStructIterator > 0) ;
 
         return $result;
     }
