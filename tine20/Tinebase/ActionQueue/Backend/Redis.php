@@ -272,7 +272,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $data = array(
             'data'       => $encodedMessage,
             'sha1'       => sha1($encodedMessage),
-            'time'       => date_create()->format(Tinebase_Record_Abstract::ISO8601LONG),
+            'time'       => time(),
             'retry'      => 0,
             'status'     => 'inQueue',
         );
