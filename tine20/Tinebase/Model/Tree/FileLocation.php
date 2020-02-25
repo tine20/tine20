@@ -127,7 +127,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
 
     protected function _getAttachmentRecordAndCtrl()
     {
-        list($app) = explode($this->{self::FLD_MODEL}, '_');
+        list($app) = explode('_', $this->{self::FLD_MODEL});
         $recordCtrl = Tinebase_Core::getApplicationInstance($app, $this->{self::FLD_MODEL});
         $record = $recordCtrl->get($this->{self::FLD_RECORD_ID}, null, false);
 
@@ -139,8 +139,8 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
         list($record) = $this->_getAttachmentRecordAndCtrl();
         $fs = Tinebase_FileSystem::getInstance();
         $pNode = $fs->stat(Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($record));
-        if (!empty($this->{self::FLD_RECORD_ID})) {
-            $node = $fs->get($this->{self::FLD_RECORD_ID}, false, $this->{self::FLD_REVISION} ?: null);
+        if (!empty($this->{self::FLD_NODE_ID})) {
+            $node = $fs->get($this->{self::FLD_NODE_ID}, false, $this->{self::FLD_REVISION} ?: null);
             if ($node->parent_id != $pNode->getId()) {
                 throw new Tinebase_Exception_UnexpectedValue(self::FLD_NODE_ID . ' contains invalid node id');
             }
@@ -151,7 +151,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
         }
 
         $node = $fs->getTreeNode($pNode, $this->{self::FLD_FILE_NAME});
-        if (!empty($this->{self::FLD_REVISION}) && (int)$node->revision !== (int)$this->{FLD_REVISION}) {
+        if (!empty($this->{self::FLD_REVISION}) && (int)$node->revision !== (int)$this->{self::FLD_REVISION}) {
             $node = $fs->get($node->getId(), false, $this->{self::FLD_REVISION});
         }
         return $node;
@@ -160,7 +160,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
     protected function _getFMNode()
     {
         $fmCtrl = Filemanager_Controller_Node::getInstance();
-        return $fmCtrl->getFileNode(Tinebase_Model_Tree_Node_Path::createFromStatPath($fmCtrl->addBasePath($this
+        return $fmCtrl->getFileNode(Tinebase_Model_Tree_Node_Path::createFromPath($fmCtrl->addBasePath($this
             ->{self::FLD_FM_PATH})), $this->{self::FLD_REVISION} ?: null);
     }
 }

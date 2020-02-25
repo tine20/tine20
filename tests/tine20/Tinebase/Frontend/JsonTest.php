@@ -183,6 +183,104 @@ class Tinebase_Frontend_JsonTest extends TestCase
         static::assertSame('data1', file_get_contents('tine20:///Filemanager/folders/shared/unittest/test.txt'));
     }
 
+    public function testRestoreRevisionPersonal()
+    {
+        if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            static::markTestSkipped('modlog not active');
+        }
+
+        $folderNode = Filemanager_Controller_Node::getInstance()->createNodes('/personal/' . Tinebase_Core::getUser()
+                ->accountDisplayName . '/unittest', Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord();
+
+        $path = Tinebase_FileSystem::getInstance()->getPathOfNode($folderNode, true);
+        file_put_contents('tine20://' . $path . '/test.txt', 'data1');
+        $node1 = Tinebase_FileSystem::getInstance()->stat($path . '/test.txt');
+
+        file_put_contents('tine20://' . $path . '/test.txt', 'data2');
+        static::assertSame('data2', file_get_contents('tine20://' . $path . '/test.txt'));
+        $node2 = Tinebase_FileSystem::getInstance()->stat($path . '/test.txt');
+
+        $result = $this->_instance->restoreRevision([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE      => Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
+            Tinebase_Model_Tree_FileLocation::FLD_FM_PATH   => '/personal/' . Tinebase_Core::getUser()
+                    ->accountDisplayName . '/unittest/test.txt',
+            Tinebase_Model_Tree_FileLocation::FLD_REVISION  => (int)$node2->revision - 1,
+        ]);
+        $node3 = Tinebase_FileSystem::getInstance()->stat($path . '/test.txt');
+
+        static::assertSame(['success' => true], $result);
+        static::assertSame($node1->hash, $node3->hash, 'hash mismatch');
+        static::assertSame((int)$node1->revision + 2, (int)$node3->revision, 'revision not as expected');
+        static::assertSame('data1', file_get_contents('tine20://' . $path . '/test.txt'));
+    }
+
+    public function testRestoreRevisionAttachement()
+    {
+        if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            static::markTestSkipped('modlog not active');
+        }
+
+        $recAttachTest = new Tinebase_FileSystem_RecordAttachmentsTest();
+        $contact = $recAttachTest->testAddRecordAttachments();
+
+        $path = $contact->getApplication() . '/folders' . $contact->attachments->getFirstRecord()->path;
+        $node1 = Tinebase_FileSystem::getInstance()->stat($path);
+        $content = file_get_contents('tine20://' . $path);
+
+        file_put_contents('tine20://' . $path, 'data');
+        static::assertSame('data', file_get_contents('tine20://' . $path));
+        $node2 = Tinebase_FileSystem::getInstance()->stat($path);
+
+        $result = $this->_instance->restoreRevision([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE      => Tinebase_Model_Tree_FileLocation::TYPE_ATTACHMENT,
+            Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME => 'Test.txt',
+            Tinebase_Model_Tree_FileLocation::FLD_RECORD_ID => $contact->getId(),
+            Tinebase_Model_Tree_FileLocation::FLD_MODEL     => get_class($contact),
+            Tinebase_Model_Tree_FileLocation::FLD_REVISION  => (int)$node1->revision,
+        ]);
+        $node3 = Tinebase_FileSystem::getInstance()->stat($path);
+
+        static::assertSame(['success' => true], $result);
+        static::assertSame($node1->hash, $node3->hash, 'hash mismatch');
+        static::assertSame((int)$node1->revision + 2, (int)$node3->revision, 'revision not as expected');
+        static::assertSame($content, file_get_contents('tine20://' . $path));
+    }
+
+    public function testRestoreRevisionAttachementNodeId()
+    {
+        if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            static::markTestSkipped('modlog not active');
+        }
+
+        $recAttachTest = new Tinebase_FileSystem_RecordAttachmentsTest();
+        $contact = $recAttachTest->testAddRecordAttachments();
+
+        $path = $contact->getApplication() . '/folders' . $contact->attachments->getFirstRecord()->path;
+        $node1 = Tinebase_FileSystem::getInstance()->stat($path);
+        $content = file_get_contents('tine20://' . $path);
+
+        file_put_contents('tine20://' . $path, 'data');
+        static::assertSame('data', file_get_contents('tine20://' . $path));
+        $node2 = Tinebase_FileSystem::getInstance()->stat($path);
+
+        $result = $this->_instance->restoreRevision([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE      => Tinebase_Model_Tree_FileLocation::TYPE_ATTACHMENT,
+            Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME => 'Test.txt',
+            Tinebase_Model_Tree_FileLocation::FLD_RECORD_ID => $contact->getId(),
+            Tinebase_Model_Tree_FileLocation::FLD_MODEL     => get_class($contact),
+            Tinebase_Model_Tree_FileLocation::FLD_REVISION  => (int)$node1->revision,
+            Tinebase_Model_Tree_FileLocation::FLD_NODE_ID   => $node1->getId(),
+        ]);
+        $node3 = Tinebase_FileSystem::getInstance()->stat($path);
+
+        static::assertSame(['success' => true], $result);
+        static::assertSame($node1->hash, $node3->hash, 'hash mismatch');
+        static::assertSame((int)$node1->revision + 2, (int)$node3->revision, 'revision not as expected');
+        static::assertSame($content, file_get_contents('tine20://' . $path));
+        static::assertSame($node1->getId(), $node2->getId());
+        static::assertSame($node1->getId(), $node3->getId());
+    }
+
     public function testRestoreRevisionNodeIdFail()
     {
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
