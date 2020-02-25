@@ -1377,28 +1377,36 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         $virtualPath = $emailPath . '/Emails';
         $path = '';
+        $pathArray = null;
         if (null !== $filter) {
-            array_walk($filter, function ($val) use (&$path) {
+            $key = null;
+            array_walk($filter, function ($val, $k) use (&$path, &$pathArray, &$key) {
                 if ('path' === $val['field']) {
                     $path = $val['value'];
+                    $pathArray = $val;
+                    $key = $k;
                 }
             });
+            if (null !== $key) {
+                unset($filter[$key]);
+            }
         }
 
         if ($isFelamimailInstalled && strpos($path, $virtualPath) === 0) {
             $records = $this->_getVirtualEmailQuotaNodes(str_replace($virtualPath, '', $path));
             $filterArray = $filter;
+            if (null !== $pathArray) {
+                $filterArray[] = $pathArray;
+            }
             $result = $this->_multipleRecordsToJson($records);
         } else {
             $filter = $this->_decodeFilter($filter, 'Tinebase_Model_Tree_Node_Filter');
             // ATTENTION sadly the pathfilter to Array does path magic, returns the flatpath and not the statpath
             // etc. this is Filemanager path magic. We don't want that here!
             $filterArray = $filter->toArray();
-            array_walk($filterArray, function (&$val) use ($path) {
-                if ('path' === $val['field']) {
-                    $val['value'] = $path;
-                }
-            });
+            if (null !== $pathArray) {
+                $filterArray[] = $pathArray;
+        }
             $filter = new Tinebase_Model_Tree_Node_Filter($filterArray, '', array('ignoreAcl' => true));
 
             $pathFilters = $filter->getFilter('path', true);

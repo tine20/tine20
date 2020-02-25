@@ -44,6 +44,25 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
         
         $this->_options = $_options;
     }
+
+    /**
+     * sets value
+     *
+     * @param string $_value
+     */
+    public function setValue($_value)
+    {
+        // cope with resolved records
+        if (is_array($_value)) {
+            if (isset($_value['path'])) {
+                $_value = $_value['path'];
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue('pathFilters value can\'t be an array');
+            }
+        }
+
+        $this->_value = $_value;
+    }
     
     /**
      * returns array with the filter settings of this filter
@@ -127,5 +146,17 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
             $parentIdFilter = new Tinebase_Model_Filter_Text('parent_id', 'equals', $node->getId());
         }
         $parentIdFilter->appendFilterSql($_select, $_backend);
+    }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $_parent
+     */
+    public function setParent(Tinebase_Model_Filter_FilterGroup $_parent)
+    {
+        parent::setParent($_parent);
+
+        if ($_parent->getRootParent()->isInSetFromUser()) {
+            $this->_value = Filemanager_Controller_Node::getInstance()->addBasePath($this->_value);
+        }
     }
 }
