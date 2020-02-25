@@ -91,7 +91,7 @@
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "phpoffice/phpexcel": "1.8.*",
-    "phpoffice/phpspreadsheet": "1.7.0",
+    "phpoffice/phpspreadsheet": "1.8.2",
     "phpoffice/phpword": "v0.14.0 as v0.13.0",
     "sabre/dav": "1.8.*",
     "sabre/vobject": "3.5.3pl1 as 2.1.0",
