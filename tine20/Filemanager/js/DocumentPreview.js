@@ -25,19 +25,11 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
     initialApp: null,
 
     /**
-     * Required for overflow auto
-     */
-    autoScroll: true,
-
-    /**
-     * Overflow auto to enable scrollbar automatically
-     */
-    overflow: 'auto',
-
-    /**
      * Layout
      */
-    layout: 'fit',
+    layout: 'anchor',
+
+    bodyStyle: 'overflow-y: scroll;',
 
     initComponent: function () {
         this.addEvents(
