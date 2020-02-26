@@ -256,18 +256,18 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 fclose($fJoin);
                 unlink($path);
                 foreach ($_tempFiles as $tempFile) {
-                    unlink($tempFile->path);
-                    try {
-                        $this->delete($tempFile);
-                    } catch (Exception $e) {
-                        Tinebase_Exception::log($e);
-                    }
+                    $this->deleteTempFile($tempFile);
                 }
                 throw new Tinebase_Exception_Backend('av scan found: ' . $avResult->message);
             }
         }
         
         fclose($fJoin);
+
+        // delete chunk tempfiles after join
+        foreach ($_tempFiles as $tempFile) {
+            $this->deleteTempFile($tempFile);
+        }
         
         return $this->createTempFile($path, $name, $type, $size);
     }
