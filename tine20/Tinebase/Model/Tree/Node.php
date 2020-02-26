@@ -428,4 +428,16 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         }
         return 0;
     }
+
+    public function getPreviousRevision()
+    {
+        // sort resets keys! so we can use it
+        if (is_array($ar = $this->available_revisions) && !empty($ar)) {
+            sort($ar, SORT_NUMERIC);
+            if (false !== ($idx = array_search($this->revision, $ar)) && $idx > 0) {
+                return $ar[$idx - 1];
+            }
+        }
+        return 0;
+    }
 }
