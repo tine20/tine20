@@ -952,4 +952,23 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
 
         return $result;
     }
+
+    public function unshiftRecord($record)
+    {
+        if (null !== ($id = $record->getId()) && isset($this->_idMap[$id])) {
+            $this->removeById($id);
+        }
+
+        $this->_idLess = [];
+        $this->_idMap = [];
+        array_unshift($this->_listOfRecords, $record);
+
+        foreach ($this->_listOfRecords as $idx => $rec) {
+            if (null !== ($id = $rec->getId())) {
+                $this->_idMap[$id] = $idx;
+            } else {
+                $this->_idLess[] = $idx;
+            }
+        }
+    }
 }
