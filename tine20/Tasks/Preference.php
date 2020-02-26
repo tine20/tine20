@@ -29,6 +29,16 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
      * default task list where all new tasks are placed in
      */
     const DEFAULTTASKLIST = 'defaultTaskList';
+
+    /**
+     * enable default alarm
+     */
+    const DEFAULTALARM_ENABLED = 'defaultalarmenabled';
+
+    /**
+     * default alarm time in minutes before
+     */
+    const DEFAULTALARM_MINUTESBEFORE = 'defaultalarmminutesbefore';
     
     /**
      * @var string application
@@ -47,6 +57,8 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
         $allPrefs = array(
             self::DEFAULTPERSISTENTFILTER,
             self::DEFAULTTASKLIST,
+            self::DEFAULTALARM_ENABLED,
+            self::DEFAULTALARM_MINUTESBEFORE,
         );
             
         return $allPrefs;
@@ -69,6 +81,14 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTTASKLIST  => array(
                 'label'         => $translate->_('Default Task List'),
                 'description'   => $translate->_('The default task list to create new tasks in.'),
+            ),
+            self::DEFAULTALARM_ENABLED => array(
+                'label'         => $translate->_('Enable Standard Alarm'),
+                'description'   => $translate->_('New task get a standard alarm as defined below'),
+            ),
+            self::DEFAULTALARM_MINUTESBEFORE => array(
+                'label'         => $translate->_('Standard Alarm Time'),
+                'description'   => $translate->_('Minutes before the task ends'),
             ),
         );
         
@@ -93,6 +113,17 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTTASKLIST:
                 $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
+                break;
+            case self::DEFAULTALARM_ENABLED:
+                $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::DEFAULTALARM_MINUTESBEFORE:
+                $preference->value      = 15;
+                $preference->options    = '';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

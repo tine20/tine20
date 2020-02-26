@@ -82,6 +82,29 @@ class Tinebase_PreferenceTest extends TestCase
             $this->_instance->create($preference);
         }
     }
+
+
+    /**
+     * test set TaskAlarm pref
+     * @throws Tinebase_Exception_NotFound
+     *
+     */
+    public function testTaskPreferenceAlarm()
+    {
+        Tinebase_Core::getPreference('Tasks')->setValue(Tasks_Preference::DEFAULTALARM_ENABLED,false);
+        $noDefaultAlarms = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTALARM_ENABLED);
+
+        Tinebase_Core::getPreference('Tasks')->setValue(Tasks_Preference::DEFAULTALARM_ENABLED,true);
+        $setDefaultAlarms = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTALARM_ENABLED);
+        $minutesBeforeDefaultAlarms = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTALARM_MINUTESBEFORE);
+        Tinebase_Core::getPreference('Tasks')->setValue(Tasks_Preference::DEFAULTALARM_MINUTESBEFORE,30);
+        $minutesBeforeDefaultAlarms2 = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTALARM_MINUTESBEFORE);
+
+        $this->assertEquals(0, $noDefaultAlarms);
+        $this->assertEquals(15, $minutesBeforeDefaultAlarms);
+        $this->assertEquals(30, $minutesBeforeDefaultAlarms2);
+        $this->assertEquals(1, $setDefaultAlarms);
+    }
     
     /**
      * test set timezone pref
