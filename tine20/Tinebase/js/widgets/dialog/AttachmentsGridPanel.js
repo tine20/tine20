@@ -106,7 +106,9 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             const idx = this.store.indexOf(existingRecord);
             const isSelected = this.selModel.isSelected(idx);
             const oldRecord = this.store.getAt(idx);
-            record.data.path = oldRecord.data.path; // BE does not set the path
+            // BE does not set the path / resolve properly
+            record.data.path = oldRecord.data.path;
+            record.data.created_by = oldRecord.data.created_by;
 
             if (idx >= 0) {
                 this.store.removeAt(idx);
