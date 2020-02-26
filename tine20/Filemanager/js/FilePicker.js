@@ -133,6 +133,15 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 header: false,
                 collapseMode: 'mini',
                 items: [
+                    /*
+                    @todo needs filterToolBar to clear filter
+                    new Tine.widgets.mainscreen.WestPanel({
+                        app: this.app,
+                        contentType: 'Node',
+                        NodeTreePanel: this.treePanel,
+                        gridPanel: this.gridPanel
+                    })
+                    */
                     this.treePanel
                 ]
             }, {
