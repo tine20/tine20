@@ -2974,7 +2974,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         $noteText = str_replace(
             ['{0}'],
             [$node->name],
-            $translation->_('A Message has been filed to this record. Subject: "{0}"')
+            $translation->_("A Message has been filed to this record. Subject: {0}")
         );
 
         // TODO add link to node attachment (like attachment icon in grid)

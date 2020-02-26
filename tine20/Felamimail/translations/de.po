@@ -1606,7 +1606,7 @@ msgstr "Tine20"
 
 #: js/GridPanel.js:624
 msgid "Filed as:"
-msgstr "Abgelebt unter:"
+msgstr "Abgelegt unter:"
 
 #: js/GridPanel.js:737
 msgid "Select Message File Location"

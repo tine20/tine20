@@ -4659,5 +4659,8 @@ msgstr "ESC: Liste fokussieren"
 msgid "R: reload grid"
 msgstr "R: Liste neu laden"
 
+msgid "A Message has been filed to this record. Subject: {0}"
+msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
+
 msgid "Password failed to match the following policy requirements: "
 msgstr "Das eingegebene Kennwort entspricht nicht den Mindestanforderungen: "
