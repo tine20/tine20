@@ -695,6 +695,10 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
     text-align: right;
 }
 
+.tine-dublicateResolve-cell {
+    text-align: left !important;
+}
+
 .tine-editorgrid-row-invalid, .x-grid3-row-selected .tine-editorgrid-row-invalid {
     border: 1px dotted red!important;
 }
