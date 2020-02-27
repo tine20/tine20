@@ -39,7 +39,7 @@ module.exports = {
             height: 768,
         });
         await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded'});
-        await expect(page).toMatchElement('title', {text: 'Tine'});
+        await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
         await page.waitForSelector('input[name=username]');
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
