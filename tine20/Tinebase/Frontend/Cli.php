@@ -1579,14 +1579,18 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                 // write, read and delete to test cache
                 $cacheId = Tinebase_Helper::convertCacheId(__METHOD__);
-                $cache->save(true, $cacheId);
-                $value = $cache->load($cacheId);
-                $cache->remove($cacheId);
+                if (false !== $cache->save(true, $cacheId)) {
+                    $value = $cache->load($cacheId);
+                    $cache->remove($cacheId);
 
-                if ($value) {
-                    $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                    if ($value) {
+                        $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                    } else {
+                        $message = 'CACHE FAIL: loading value failed';
+                        $result = 1;
+                    }
                 } else {
-                    $message = 'CACHE FAIL: loading value failed';
+                    $message = 'CACHE FAIL: saving value failed';
                     $result = 1;
                 }
             } catch (Exception $e) {
