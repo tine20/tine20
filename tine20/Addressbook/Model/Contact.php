@@ -249,7 +249,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'email_query'       => [
                 'filter'            => Tinebase_Model_Filter_Query::class,
-                'title'             => 'Email', // _('Email') // TODO is this right?
+                'title'             => 'Email', // _('Email')
                 'options'           => [
                     'fields'            => [
                         'email',
@@ -257,6 +257,20 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     ]
                 ],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactemail'] // TODO later with FE fix it
+            ],
+            'name_email_query'       => [
+                'filter'            => Tinebase_Model_Filter_Query::class,
+                'title'             => 'Name/Email', // _('Name/Email')
+                'options'           => [
+                    'fields'            => [
+                        'n_family',
+                        'n_given',
+                        'n_middle',
+                        'org_name',
+                        'email',
+                        'email_home',
+                    ]
+                ],
             ],
         ],
 

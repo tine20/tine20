@@ -118,12 +118,22 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             'container_id'      => array(
                 'filter'  => Tinebase_Model_Filter_Container::class,
                 'options' => array('modelName' => Addressbook_Model_Contact::class),
-            )
+            ),
+            'name_email_query'       => [
+                'filter'            => Tinebase_Model_Filter_Query::class,
+                'title'             => 'Name/Email', // _('Name/Email')
+                'options'           => [
+                    'fields'            => [
+                        'name',
+                        'email',
+                    ]
+                ],
+            ],
         ),
 
         'fields'            => array(
             'name'              => array(
-                'label'             => 'Name', //_('Percent')
+                'label'             => 'Name', //_('Name')
                 'type'              => 'string',
                 'queryFilter'       => true,
                 'validators'        => array('presence' => 'required'),
