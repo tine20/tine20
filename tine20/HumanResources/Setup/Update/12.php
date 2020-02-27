@@ -159,9 +159,8 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
                 try {
                     $workingTimeSchemeCtrl->update($workingTimeScheme);
                 } catch (Tinebase_Exception_Record_Validation $terv) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN) && count($rows) > 0) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' .
-                            ' ' . $terv);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $terv);
                     }
                 }
             }
