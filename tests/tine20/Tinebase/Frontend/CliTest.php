@@ -393,6 +393,9 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->_cli->cleanNotes(new Zend_Console_Getopt([], []));
         $out = ob_get_clean();
 
+        $calPersonalContainer = Tinebase_Container::getInstance()
+            ->getDefaultContainer(Calendar_Model_Event::class, Tinebase_Core::getUser());
+
         $noteController = Tinebase_Notes::getInstance();
         $models = Tinebase_Application::getInstance()->getModelsOfAllApplications();
 
@@ -443,6 +446,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $realDataNotes += 2; // created a custom note
 
         $event = new Calendar_Model_Event(array(
+            'container_id' => $calPersonalContainer->getId(),
             'organizer' => 'a@b.shooho',
             'dtstart'   => '2015-01-01 00:00:00',
             'dtend'     => '2015-01-01 01:00:00',
