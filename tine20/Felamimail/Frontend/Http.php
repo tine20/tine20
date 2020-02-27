@@ -296,7 +296,9 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $resPart = Felamimail_Controller_Message::getInstance()->getResourcePartStructure($cid, $messageId);
             $this->_outputMessagePart($messageId, $resPart['partId'], 'inline', TRUE);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_FORBIDDEN);
         }
     }
 }
