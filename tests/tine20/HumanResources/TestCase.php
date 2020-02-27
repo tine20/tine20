@@ -64,6 +64,13 @@ class HumanResources_TestCase extends TestCase
                 new HumanResources_Model_WorkingTimeSchemeFilter([
                     ['field' => 'title', 'operator' => 'equals', 'value' => $translate->_('Full-time 40 hours')]
                 ]))->getFirstRecord();
+
+            if (!$this->_40hoursWorkingTimeScheme->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE} ||
+                $this->_40hoursWorkingTimeScheme->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE}->count() < 1) {
+                $this->_40hoursWorkingTimeScheme->{HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE} =
+                    HumanResources_Setup_Initialize::getDefaultWTS_BL();
+                HumanResources_Controller_WorkingTimeScheme::getInstance()->update($this->_40hoursWorkingTimeScheme);
+            }
         }
         return $this->_40hoursWorkingTimeScheme;
     }
