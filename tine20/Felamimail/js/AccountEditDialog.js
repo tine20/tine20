@@ -125,9 +125,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'display_format':
                 case 'compose_format':
                 case 'preserve_format':
-                case 'sieve_notification_email':
-                case 'sieve_notification_move':
-                case 'sieve_notification_move_folder':
                 case 'reply_to':
                 case 'sent_folder':
                 case 'trash_folder':
@@ -165,6 +162,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'sieve_ssl':
                     // always disabled for system accounts
                     item.setDisabled(this.isSystemAccount());
+                    break;
+                case 'sieve_notification_email':
+                case 'sieve_notification_move':
+                case 'sieve_notification_move_folder':
+                    // always disabled for non-system accounts
+                    item.setDisabled(! this.isSystemAccount());
                     break;
                 default:
                     item.setDisabled(! this.asAdminModule && this.isSystemAccount());
