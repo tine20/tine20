@@ -5,6 +5,9 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+var EventEmitter = require('events');
+
 Ext.ns('Tine.Tinebase');
 
 /**
@@ -28,6 +31,15 @@ Tine.Tinebase.Application = function(config) {
 
     this.i18n = new Locale.Gettext();
     this.i18n.textdomain(this.appName);
+
+    /**
+     * in memory msg bus for sync events
+     */
+    (() => {
+        let ee = new EventEmitter();
+        this.on = ee.on;
+        this.emit = ee.emit;
+    })();
 
     this.init();
     if (Tine.CoreData && Tine.CoreData.Manager) {
