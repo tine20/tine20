@@ -80,6 +80,8 @@ class Setup_Frontend_Cli
             $result = $this->_install($_opts);
         } elseif(isset($_opts->update)) {
             $result = $this->_update($_opts);
+        } elseif(isset($_opts->update_needed)) {
+            $result = $this->_updateNeeded($_opts);
         } elseif(isset($_opts->uninstall)) {
             $this->_uninstall($_opts);
         } elseif(isset($_opts->install_dump)) {
@@ -451,6 +453,20 @@ class Setup_Frontend_Cli
     {
         $result = Setup_Controller::getInstance()->updateApplications();
         echo "Updated " . $result['updated'] . " application(s).\n";
+        return 0;
+    }
+
+    /**
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     */
+    protected function _updateNeeded(Zend_Console_Getopt $_opts)
+    {
+        $result = Setup_Controller::getInstance()->updateNeeded();
+        if ($result) {
+            echo "Update required\n";
+            return 1;
+        }
         return 0;
     }
 
