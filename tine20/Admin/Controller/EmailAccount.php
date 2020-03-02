@@ -225,6 +225,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $userId = is_array($currentRecord->user_id) ? $currentRecord->user_id['accountId'] :  $currentRecord->user_id;
             $user = Admin_Controller_User::getInstance()->get($userId);
             $user->accountEmailAddress = '';
+            // remove xprops from user
+            Tinebase_EmailUser_XpropsFacade::setXprops($user, null, false);
             Admin_Controller_User::getInstance()->updateUserWithoutEmailPluginUpdate($user);
         }
     }

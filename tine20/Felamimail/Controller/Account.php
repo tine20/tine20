@@ -769,6 +769,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // copy password from system user account
         if ($_oldRecord->type !== Felamimail_Model_Account::TYPE_SYSTEM) {
             $systemEmailUser = $this->_getEmailSystemUser($_record->user_id);
+            if (! $systemEmailUser->getId()) {
+                $translation = Tinebase_Translation::getTranslation('Felamimail');
+                throw new Tinebase_Exception_UnexpectedValue($translation->_('System account of user is missing'));
+            }
             $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $emailUserBackend->copyPassword($systemEmailUser, $emailUser);

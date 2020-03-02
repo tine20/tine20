@@ -126,9 +126,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
-        $user = $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser');
-        
-        return $user;
+        return $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser');
     }
     
     /**
