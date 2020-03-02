@@ -635,7 +635,8 @@ Tine.Filemanager.Model.Node.getFilterModel = function() {
         {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
         {label: app.i18n._('Description'), field: 'description', valueType: 'fulltext'},
         {filtertype : 'tine.filemanager.pathfiltermodel', app : app},
-        {filtertype : 'tinebase.tag', app : app} 
+        {filtertype : 'tinebase.tag', app : app},
+        {label : app.i18n._('Name'), field : 'name', operators : [ 'contains' ]}
     ].concat(Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase') ? [
         {label : app.i18n._('File Contents'), field : 'content', operators : [ 'wordstartswith' ]},
         {label : i18n._('Indexed'), field : 'isIndexed', valueType: 'bool'}
