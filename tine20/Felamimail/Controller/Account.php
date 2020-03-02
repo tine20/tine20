@@ -708,6 +708,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $this->_transferEmailUserIdXprops($_record, $_oldRecord);
 
         if (! isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
             throw new Tinebase_Exception_SystemGeneric($translate->_('Could not find email user xprops!'));
         }
 
@@ -740,8 +741,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (isset($_oldRecord->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
             Tinebase_EmailUser_XpropsFacade::setXprops($_record,
                 $_oldRecord->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP], false);
-        } else if ($_record->user_id) {
-            $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+        } else if ($_oldRecord->user_id) {
+            $user = Tinebase_User::getInstance()->getFullUserById($_oldRecord->user_id);
             Tinebase_EmailUser_XpropsFacade::setXprops($_record,
                 $user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP], false);
         }
