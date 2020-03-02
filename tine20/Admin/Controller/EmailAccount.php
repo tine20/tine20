@@ -147,6 +147,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
         $currentAccount = $this->get($_record->getId());
 
+        $raii = false;
         if ($this->_sieveBackendSupportsMasterPassword($_record)) {
             $raii = $this->prepareAccountForSieveAdminAccess($_record->getId());
         }
@@ -155,7 +156,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $account = $this->_backend->update($_record);
         $this->_inspectAfterUpdate($account, $_record, $currentAccount);
 
-        if ($this->_sieveBackendSupportsMasterPassword($_record)) {
+        if ($raii && $this->_sieveBackendSupportsMasterPassword($_record)) {
             $this->removeSieveAdminAccess();
             unset($raii);
         }
@@ -271,7 +272,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     /**
      * @param string $_accountId
      * @param string $_rightToCheck
-     * @return Tinebase_RAII
+     * @return Tinebase_RAII|boolean
      */
     public function prepareAccountForSieveAdminAccess($_accountId, $_rightToCheck = Admin_Acl_Rights::VIEW_EMAILACCOUNTS)
     {
@@ -296,10 +297,17 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                 . __LINE__ . ' ' . $tenf->getMessage());
+            return false;
         }
 
         // sieve login
-        Felamimail_Backend_SieveFactory::factory($account);
+        try {
+            Felamimail_Backend_SieveFactory::factory($account);
+        } catch (Felamimail_Exception_Sieve $fes) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::'
+                . __LINE__ . ' ' . $fes->getMessage());
+            return false;
+        }
 
         return $raii;
     }
@@ -319,7 +327,12 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
     protected function _getAccountUsername($account)
     {
-        $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+        if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM) {
+            $record = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+        } else {
+            $record  = $account;
+        }
+        $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($record);
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         $imapLoginname = $imapEmailBackend->getLoginName($user->getId(), null, $account->email);
         return $imapLoginname . '*' . $this->_masterUser;
