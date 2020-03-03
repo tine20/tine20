@@ -294,6 +294,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 executor: function(record, text) {
                     if (_.isFunction(_.get(record, 'set'))) {
                         record.set('name', text);
+                        const tempFile = record.get('tempFile');
+                        if (tempFile) {
+                            _.set(tempFile, 'name', text);
+                        }
                     }
                 }
             });
@@ -577,24 +581,27 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      *
      * @param nodes
      */
-    onFileSelectFromFilemanager: function (nodes) {
+    onFileSelectFromFilemanager: function (fileLocations) {
         var me = this;
 
-        Ext.each(nodes, function (node) {
-            const nodeData = _.get(node, 'node_id');
-            const record = Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
-            _.set(record, 'data.type', record.get('contenttype'));
-            
-            if (me.store.find('name', record.get('name')) === -1) {
-                me.store.add(record);
-            } else {
-                Ext.MessageBox.show({
-                    title: i18n._('Failure'),
-                    msg: i18n._('This file is already attached to this record.'),
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            }
+        _.each(fileLocations, async (fileLocation) => {
+            const fileRecord = new Ext.ux.file.Upload.file({
+                name: _.get(fileLocation, 'node_id.name'),
+                size: _.get(fileLocation, 'node_id.size'),
+                type: _.get(fileLocation, 'node_id.contenttype'),
+                status: 'uploading',
+                progress: 80
+            });
+            this.store.addUnique(fileRecord, 'name');
+
+            Tine.Tinebase.createTempFile(fileLocation).then((tempFileData) => {
+                fileRecord.beginEdit();
+                fileRecord.set('id', tempFileData.id);
+                fileRecord.set('tempFile', tempFileData);
+                fileRecord.set('status', 'complete');
+                fileRecord.set('progress', 100);
+                fileRecord.commit();
+            });
         });
     },
 

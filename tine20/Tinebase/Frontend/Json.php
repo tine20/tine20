@@ -1592,6 +1592,26 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $state == Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0);
     }
 
+    public function createTempFile($fileLocation)
+    {
+        $src = new Tinebase_Model_Tree_FileLocation($fileLocation);
+
+        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
+        $raii = (new Tinebase_RAII(function() use (&$transId) {
+            if (null !== $transId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }))->setReleaseFunc(function () use (&$transId) {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+            $transId = null;
+        });
+
+        $result = Tinebase_TempFile::getInstance()->createTempFileFromNode($src->getNode())->toArray();
+        $raii->release();
+        return $result;
+    }
+
     public function restoreRevision($fileLocationSrc, $fileLocationTrgt = null)
     {
         $src = new Tinebase_Model_Tree_FileLocation($fileLocationSrc);
