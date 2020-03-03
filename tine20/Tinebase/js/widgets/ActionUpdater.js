@@ -100,13 +100,14 @@
      * @param {Array|Tine.Tinebase.Model.Container} container
      */
     updateActions: function(records, container) {
+        records = records || [];
         var isFilterSelect = false,
             selectionModel = null;
 
         if (typeof(records.getSelections) == 'function') {
             isFilterSelect = records.isFilterSelect;
             selectionModel = records;
-            records = records.getSelections();
+            records = records.getSelections() || [];
         } else if (typeof(records.beginEdit) == 'function') {
             records = [records];
         }
