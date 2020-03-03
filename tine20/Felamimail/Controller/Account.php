@@ -1023,8 +1023,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
     }
 
+    /**
+     * @param Felamimail_Model_Account $updatedRecord
+     * @param Felamimail_Model_Account $currentRecord
+     */
     protected function _afterUpdateSetSieve($updatedRecord, $currentRecord)
     {
+        if (empty($updatedRecord->sieve_hostname)) {
+            return;
+        }
+
         if ($updatedRecord->sieve_notification_email != $currentRecord->sieve_notification_email) {
             Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($updatedRecord->getId(),
                 $updatedRecord->sieve_notification_email);
