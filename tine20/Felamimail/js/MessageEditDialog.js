@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+const { retryAllRejectedPromises } = require('promises-to-retry');
+
 require('./MessageFileButton');
 
 Ext.namespace('Tine.Felamimail');
@@ -703,13 +705,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         me.action_saveAsDraft.setIconClass('x-btn-wait');
 
-        return me.saveAsDraftPromise = Tine.Felamimail.saveDraft(me.record.data)
-            .then((savedDraft) => {
-                me.draftUid = savedDraft.messageuid;
-            })
-            .finally(() => {
-                me.action_saveAsDraft.setIconClass('action_saveAsDraft');
-            });
+        return me.saveAsDraftPromise = retryAllRejectedPromises([_.partial(Tine.Felamimail.saveDraft, me.record.data)], {
+            maxAttempts: 5, delay: 500
+        })
+        .then((savedDraft) => {
+            me.draftUid = savedDraft.messageuid;
+        })
+        .finally(() => {
+            me.action_saveAsDraft.setIconClass('action_saveAsDraft');
+        });
     },
 
     deleteDraft: function(draftUid) {
