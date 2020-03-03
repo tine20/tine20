@@ -516,8 +516,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _getTempFile()
     {
         $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->createTempFile(dirname(__FILE__) . '/Filemanager/files/test.txt');
-        return $tempFile;
+        $handle = fopen(dirname(__FILE__) . '/Filemanager/files/test.txt', 'r');
+        $tempfile = $tempFileBackend->createTempFileFromStream($handle);
+        fclose($handle);
+        return $tempfile;
     }
     
     /**
