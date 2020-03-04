@@ -289,6 +289,7 @@ class Courses_JsonTest extends TestCase
      * test for import of members (4) / json import
      * 
      * @see 0006672: allow to import (csv) files with only CR linebreaks
+     * @group nogitlabci
      */
     public function testImportMembersIntoCourse4()
     {

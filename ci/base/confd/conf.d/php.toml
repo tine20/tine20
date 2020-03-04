@@ -1,0 +1,23 @@
+[template]
+prefix = "/php"
+src = "php.ini.tmpl"
+dest = "/usr/local/etc/php/conf.d/php.ini"
+owner = "root"
+mode = "0644"
+keys = [
+    "/percision",
+    "/output/buffering",
+    "/implicit/flush",
+    "/expose/php",
+    "/max/execution/time",
+    "/max/input/time",
+    "/max/input/nesting/level",
+    "/max/input/vars",
+    "/memory/limit",
+    "/display/errors",
+    "/variables/order",
+    "/post/max/size",
+    "/upload/max/filesize",
+    "/max/file/uploads",
+    "/default/socket/timeout"
+]
