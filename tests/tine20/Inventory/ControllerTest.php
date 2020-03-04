@@ -14,9 +14,13 @@
  */
 class Inventory_ControllerTest extends Inventory_TestCase
 {
+    /**
+     * @group nogitlabci
+     */
     public function testGetModels()
     {
         $models = Inventory_Controller::getInstance()->getModels();
+
         $this->assertEquals(array(
             'Inventory_Model_InventoryItem',
             'Inventory_Model_Status'

@@ -1,0 +1,15 @@
+[template]
+prefix = "/phpfpm"
+src = "php-fpm.conf.tmpl"
+dest = "/usr/local/etc/php-fpm.d/www.conf"
+owner = "root"
+mode = "0644"
+keys = [
+    "/dynamic",
+    "/pm/max/children",
+    "/pm/start/server",
+    "/pm/min/spare/servers",
+    "/pm/max/spare/servers",
+    "/pm/max/requests",
+    "healthcheck"
+]

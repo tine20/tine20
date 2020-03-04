@@ -139,6 +139,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * 
      * @see 0008592: append event file attachments to invitation mail
      * @see 0009246: Mail address of organizer is broken in invite mails
+     *
+     * @group nogitlabci
      */
     public function testInvitationWithAttachment()
     {

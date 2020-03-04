@@ -185,7 +185,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
     
     /**
      * test ical cli export
-     * 
+     * @group nogitlabci
      */
     public function testCliExport()
     {
