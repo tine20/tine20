@@ -28,55 +28,14 @@
 class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_Relation
 {
     /**
-     * returns own ids defined by relation filter
-     *
-     * @param string $_modelName
-     * @return array
-     */
-    protected function _getOwnIds($_modelName)
-    {
-        if (! $this->_options['own_filtergroup']) {
-            throw new Tinebase_Exception_InvalidArgument('own filter group has to be defined!');
-        }
-        if (! $this->_options['own_controller']) {
-            throw new Tinebase_Exception_InvalidArgument('own controller has to be defined!');
-        }
-
-        $idProperty = 'id';
-        $filtergroup = $this->_options['own_filtergroup'];
-        $controller = $this->_options['own_controller'];
-
-        if (!isset($this->_value[0]) || !($this->_value[0]['value'])) {
-            $relationFilter = new Tinebase_Model_RelationFilter(array(
-                array('field' => 'own_model',     'operator' => 'equals', 'value' => $_modelName),
-                array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model']),
-            ));
-
-            $notInIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
-            $filter = new $filtergroup(array(
-
-            ),'AND');
-
-            // Deal with generic filtermodel!
-            if ($this->_options['own_filtergroup'] === Tinebase_Model_Filter_FilterGroup::class) {
-                $filter->setConfiguredModel($_modelName);
-            }
-
-            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => $idProperty, 'operator' => 'notin', 'value' => $notInIds)));
-
-            return $controller::getInstance()->search($filter, null, false, true);
-        }
-
-        return parent::_getOwnIds($_modelName);
-    }
-
-    /**
      * (non-PHPdoc)
      * @see Tinebase_Model_Filter_Relation::toArray()
      */
     public function toArray($_valueToJson = false)
     {
         $ret = parent::toArray($_valueToJson);
+        if (!isset($ret['value']) || !is_array($ret['value'])) return $ret;
+
         foreach($ret['value'] as &$filter) {
             if ($filter['field'] == ':id' && $filter['operator'] == 'equals' && is_string($filter['value']) && strlen($filter['value']) == 40) {
                 $split = explode('_Model_', $this->_options['related_model']);
