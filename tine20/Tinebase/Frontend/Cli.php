@@ -1338,13 +1338,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
 
                     $queueSize = $actionQueue->getQueueSize();
-                    if (null === $warn && $actionQueue->getDaemonStructSize() > 12) {
-                        $warn = 'daemon struct size > 12';
+                    if (null === $warn && $actionQueue->getDaemonStructSize() > $queueConfig
+                            ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
+                        $warn = 'daemon struct size > ' . $queueConfig
+                                ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT};
                     }
 
                     $queueSizeLR = $actionLRQueue->getQueueSize();
-                    if (null === $warn && $actionLRQueue->getDaemonStructSize() > 2) {
-                        $warn = 'LR daemon struct size > 2';
+                    if (null === $warn && $actionLRQueue->getDaemonStructSize() > $queueConfig
+                            ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
+                        $warn = 'LR daemon struct size > ' . $queueConfig
+                                ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT};
                     }
 
                     // last full check older than one hour
