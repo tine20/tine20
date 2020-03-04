@@ -479,6 +479,15 @@ class Setup_Controller
         return $updatesByPrio;
     }
 
+    protected function preUpdateHooks()
+    {
+        // put any db struct updates here that need to be executed before the update stuff runs ... like changes to
+        // user / group table (as the setup user might get created!)
+        // application / application_state tables
+        // NOTE: this function, this code here will be executed every time somebody does update
+
+    }
+
     /**
      * updates installed applications. does nothing if no applications are installed
      *
@@ -493,6 +502,8 @@ class Setup_Controller
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
     {
         $this->clearCache();
+
+        $this->preUpdateHooks();
 
         if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
             throw new Tinebase_Exception('could not create setup user');
