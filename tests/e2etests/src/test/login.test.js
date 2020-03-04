@@ -5,8 +5,7 @@ require('dotenv').config();
 
 describe('login', () => {
     test('login test', async () => {
-        await lib.getBrowser('Aufgaben');
-        await expect(page).toMatchElement('tr', { class: 'new-row' });
+        await lib.getBrowser();
 
         await expect(page).toClick('button', { text: 'Abmelden' });
         await expect(page).toClick('button', { text: 'Ja' });
