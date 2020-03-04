@@ -27,9 +27,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
     /**
      * Layout
      */
-    layout: 'anchor',
-
-    bodyStyle: 'overflow-y: scroll;',
+    layout: 'fit',
 
     initComponent: function () {
         this.addEvents(
@@ -101,6 +99,10 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             return;
         }
 
+        me.add(this.previewContainer = new Ext.Panel({
+            layout: 'anchor',
+            bodyStyle: 'overflow-y: scroll;'
+        }));
         this.afterIsRendered().then(function () {
             _.each(records, function(record) {
                 me.addPreviewPanelForRecord(me, record);
@@ -124,7 +126,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                 _revision: revision
             }, Tine.Tinebase.tineInit.requestUrl + '?');
 
-            me.add({
+            me.previewContainer.add({
                 html: '<img style="width: 100%;" src="' + url + '" />',
                 xtype: 'panel',
                 frame: true,
