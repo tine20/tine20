@@ -1,130 +1,97 @@
-# $REG see settings>ci_cd>variables
-# $REG_USER see settings>ci_cd>variables
-# $REG_PASS see settings>ci_cd>variables
-# $CI_PROJECT_DIR set by gitlab
-# $REG_PREFIX see settings>ci_cd>variables
-# $CI_PIPELINE_ID set by gitlab
-# $PHP_IMAGE_TAG default = 7.3-fpm-alpine
-# $SKIP_TEST_SOURCE default = false
-# $SKIP_TEST_BUILT default = false
-# $SKIP_DEPLOY_1 default = false
-# $SKIP_DEPLOY_2 default = false
-
-# $PUSH default = true, false -> to skip pushing final images to registry
 include:
-  - local: '/ci/gitlab-ci.yml/abstract_test.yml'
+  - local: '/ci/abstract_jobs.yml'
+  - local: '/ci/ci-config.yml'
+
 
 stages:
-  - build_1
-  - build_2
-  - test_source
-  - build_3
-  - test_built
-  - deploy_1
-  - deploy_2
-  - cleanup
+  - build
+  - build_and_source_test
+  - built_test_and_deploy
+  - deploy
 
-variables:
-  PUSH: "true"
-  REG: "$CI_REGISTRY"
-  REG_USER: "$CI_REGISTRY_USER"
-  REG_PASS: "$CI_REGISTRY_PASSWORD"
-
-docker_build_base_and_dependency_images:
-  image: docker:19.03.1
-  stage: build_1
-  before_script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+"docker retag php image":
+  extends: .abstract_jobs.docker
+  stage: .pre
   script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_build_1
-
-docker_build_source_and_source_test_images:
-  image: docker:19.03.1
-  stage: build_2
-  before_script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
-  script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_build_2
+    - docker pull php:$PHP_IMAGE_TAG
+    - docker tag php:$PHP_IMAGE_TAG $REGISTRY/php:$PHP_IMAGE_TAG
+    - docker push $REGISTRY/php:$PHP_IMAGE_TAG
   rules:
-    - when: on_success
-
-php_unit_all_test_source:
-  extends: .abstract_test.php_unit_test
-  stage: test_source
-  image:
-    name: "$REG/$REG_PREFIX/test-source:$CI_PIPELINE_ID"
-  rules:
-    - if: $SKIP_TEST_SOURCE == "true"
-      when: never
-    - when: on_success
-
-docker_build_dev_and_built_and_built_test_images:
-  image: docker:19.03.1
-  stage: build_3
-  before_script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
-  script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_build_3
-  rules:
-    - if: &working_branch_condition $CI_COMMIT_REF_NAME =~ /^feat\// # todo match feature branches
-      when: never
-    - when: on_success
-
-
-php_unit_all_tests_built:
-  extends: .abstract_test.php_unit_test
-  stage: test_built
-  image:
-    name: "$REG/$REG_PREFIX/test-built:$CI_PIPELINE_ID"
-  rules:
-    - if: $SKIP_TEST_BUILT == "true"
-      when: never
-    - if: *working_branch_condition
-      when: never
-    - when: on_success
-
-php_unit_all_tests_built_with_ldap:
-  extends: .abstract_test.php_unit_test_with_ldap
-  stage: test_built
-  image:
-    name: "$REG/$REG_PREFIX/test-built:$CI_PIPELINE_ID"
-  rules:
-    - if: $RUN_LDAP_TESTA == "true"
+    - if: $DOCKER_RETAG_PHP_IMAGE == "true"
       when: on_success
     - when: never
 
-docker_push_base_and_dependency_images:
-  image: docker:19.03.1
-  stage: deploy_1
-  before_script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+"docker: build base, source and test-source image":
+  extends: .abstract_jobs.docker
+  stage: build
   script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_deploy_1
-  rules:
-    - if: $SKIP_DEPLOY == "true"
-      when: never
-    - when: on_success
+    - build_and_push base
+    - build_and_push source
+    - build_and_push test-source
 
-docker_push_built_and_built_test_and_dev_images:
-  image: docker:19.03.1
-  stage: deploy_2
-  before_script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
-  script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_deploy_2
+"php unit: all tests source":
+  extends: .abstract_jobs.php_unit_test
+  stage: build_and_source_test
+  image:
+    name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
-    - if: $SKIP_DEPLOY == "true"
-      when: never
-    - if: *working_branch_condition
-      when: never
-    - when: on_success
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
+      when: on_success
+    - when: never
 
-docker_untag_build_id_tag_images:
-  image: docker:19.03.1
-  stage: cleanup
-  before_script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh docker_login
+"docker: build dev, build, built and test-built image":
+  extends: .abstract_jobs.docker
+  stage: build_and_source_test
   script:
-    - sh -e $CI_PROJECT_DIR/ci/build.sh stage_delete_images
+    - build_and_push build
+    - build_and_push built
+    - build_and_push test-built
+    - build_and_push dev
   rules:
-    - when: always
+    - if: $DOCKER_BUILD_BUILD == "true"
+      when: on_success
+    - when: never
+
+"php unit: all tests built":
+  extends: .abstract_jobs.php_unit_test
+  stage: built_test_and_deploy
+  image:
+    name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
+      when: on_success
+    - when: never
+
+"php unit: all tests built with ldap":
+  extends: .abstract_jobs.php_unit_test_with_ldap
+  stage: built_test_and_deploy
+  image:
+    name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap CiTestSuite$CI_NODE_INDEX
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
+      when: on_success
+    - when: never
+
+"docker: push base, source and test-source image":
+  extends: .abstract_jobs.docker
+  stage: built_test_and_deploy
+  script:
+    - pull_tag_push base commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+    - pull_tag_push source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+    - pull_tag_push test-source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+
+"docker: push build, built, test-built and dev image":
+  extends: .abstract_jobs.docker
+  stage: deploy
+  script:
+    - pull_tag_push build commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+    - pull_tag_push built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+    - pull_tag_push test-built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+    - pull_tag_push dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+  rules:
+    - if: $DOCKER_BUILD_BUILD == "true"
+      when: on_success
+    - when: never

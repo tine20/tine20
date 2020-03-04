@@ -47,7 +47,6 @@ server {
 
     location ~ ^(/setup.php$|/hidden) {
         try_files $uri /index.php;
-        fastcgi_param PHP_ADMIN_VALUE $PHP_ADMIN_VALUE;
         fastcgi_param PHP_VALUE $PHP_VALUE;
         include /etc/nginx/fastcgi_params;
         #fastcgi_pass unix:/var/run/php-fpm.sock;
@@ -59,7 +58,6 @@ server {
 
     location ~ .+\.php$ {
         try_files $uri /index.php;
-        fastcgi_param PHP_ADMIN_VALUE $PHP_ADMIN_VALUE;
         fastcgi_param PHP_VALUE $PHP_VALUE;
         include /etc/nginx/fastcgi_params;
         #fastcgi_pass unix:/var/run/php-fpm.sock;
