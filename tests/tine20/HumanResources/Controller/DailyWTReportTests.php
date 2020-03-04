@@ -35,6 +35,9 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $this->employee->contracts = new Tinebase_Record_RecordSet(HumanResources_Model_Contract::class, [$contract]);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testCalculateAllReports()
     {
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
@@ -58,6 +61,9 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         static::assertSame($days, $reportResult['created']);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEnd()
     {
         $this->_createBasicData();
@@ -106,6 +112,9 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         return HumanResources_Controller_DailyWTReport::getInstance()->search($filter);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEndUpdate()
     {
         $employee = $this->testCalculateReportsForEmployeeTimesheetsWithStartAndEnd();
@@ -151,6 +160,9 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         // @todo implement
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testCalculateReportsForEmployeeFeast()
     {
         $this->_createBasicData();
@@ -182,6 +194,9 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         self::assertEquals('unittest feast', $result->system_remark);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testCalculateReportsForEmployeeVacation()
     {
         $this->_createBasicData();
@@ -215,6 +230,9 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
             HumanResources_Model_WageType::ID_VACATION)->name, $result->system_remark);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testCalculateReportsForEmployeeSickness()
     {
         $this->_createBasicData();

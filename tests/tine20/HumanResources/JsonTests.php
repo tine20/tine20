@@ -35,6 +35,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     /**
      * Creates an employee with contracts and contact, account etc.
      * tests auto end_date of old contract
+     *
+     * @group nogitlabci
      */
     public function testEmployee()
     {
@@ -190,6 +192,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
     /**
      * Tests the duplicate check
+     *
+     * @group nogitlabci
      */
     public function testDuplicateException()
     {
@@ -221,6 +225,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      *
      * #6600: generic foreign record resolving method
      * https://forge.tine20.org/mantisbt/view.php?id=6600
+     *
+     * @group nogitlabci
      */
     public function testResolveMultiple()
     {
@@ -276,6 +282,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->_json->deleteEmployees($eIds);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testContractDirect()
     {
         $e = $this->_getEmployee('rwright');
@@ -296,6 +305,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
     /**
      * test employee creation/update with contracts
+     * @group nogitlabci
      */
     public function testContract()
     {
@@ -446,6 +456,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     
     /**
      * tests account summary and getFeastAndFreeDays method calculation
+     *
+     * @group nogitlabci
      */
     public function testCalculation()
     {
@@ -714,6 +726,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * tests the correct values of the freetime record
      * @see 0009168: HR saving sickness days days_count failure
      *      https://forge.tine20.org/mantisbt/view.php?id=9168
+     * @group nogitlabci
      */
     public function testFirstAndLastDayOfFreetime() {
         $employmentBegin  = new Tinebase_DateTime('2012-12-15');
@@ -773,6 +786,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     
     /**
      * tests datetime conversion of dependent records
+     *
+     * @group nogitlabci
      */
     public function testDateTimeConversion()
     {
@@ -799,6 +814,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * testSearchForEmptyEmploymentEnd
      * 
      * @see 0009362: allow to filter for empty datetimes
+     *
+     * @group nogitlabci
      */
     public function testSearchForEmptyEmploymentEnd()
     {
@@ -816,6 +833,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     /**
      * @see: 0009574: vacation or sickness days can't be booked on the last working day
      *       https://forge.tine20.org/mantisbt/view.php?id=9574
+     *
+     * @group nogitlabci
      */
     public function testGetFeastAndFreeDays()
     {
@@ -873,6 +892,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     /**
      * test contract dates on update dependent
      * must not throw the HumanResources_Exception_ContractNotEditable exception
+     *
+     * @group nogitlabci
      */
     public function testContractDates()
     {
@@ -905,6 +926,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * test adding a contract with manually setting the end_date of the contract before
      *
      * @see 0011962: contract end_date can't be changed if vacation has been added
+     *
+     * @group nogitlabci
      */
     public function testAddContract()
     {
@@ -972,6 +995,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10122
+     *
+     * @group nogitlabci
      */
     public function testAlternatingContracts()
     {
@@ -1155,6 +1180,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10176
+     *
+     * @group nogitlabci
      */
     public function testSavingRelatedRecord()
     {
@@ -1217,6 +1244,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10176
+     *
+     * @group nogitlabci
      */
     public function testSavingRelatedRecordWithCorruptId()
     {
