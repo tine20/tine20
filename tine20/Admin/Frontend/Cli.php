@@ -198,15 +198,15 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo("\n");
     }
 
-    public function deleteUser($_opts)
+    public function deleteAccount($_opts)
     {
         $args = $this->_parseArgs($_opts);
-        if (!isset($args['username'])) exit('username required');
+        if (!isset($args['accountName'])) exit('accountName required');
 
         Admin_Controller_User::getInstance()->delete([Tinebase_User::getInstance()
-            ->getUserByLoginName($args['username'])->getId()]);
+            ->getUserByLoginName($args['accountName'])->getId()]);
 
-        echo 'deleted user ' . $args['username'] . PHP_EOL;
+        echo 'deleted account ' . $args['accountName'] . PHP_EOL;
     }
 
     /**
