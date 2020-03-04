@@ -216,4 +216,45 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
     {
         return $this->_backend->getLastRun();
     }
+
+    public function spreadTasks()
+    {
+        $toUpdate = [];
+
+        /** @var Tinebase_Model_SchedulerTask $task */
+        foreach ($this->_backend->getAll('RAND()') as $task) {
+
+            // not minutely
+            if (preg_match('/^\d+( .*)$/', $task->config->getCron(), $m)) {
+                $toUpdate[] = [
+                    'record'  => $task,
+                    'matches' => $m
+                ];
+            }
+        }
+
+        if (($count = count($toUpdate)) < 2) return;
+        $spread = 60 / $count;
+        $start = 0.0;
+
+        foreach ($toUpdate as $data) {
+            $minute = floor($start);
+            if ($minute > 59) $minute = 59;
+            $data['record']->config->setCron($minute . $data['matches'][1]);
+            $this->_backend->update($data['record']);
+            $start += $spread;
+        }
+    }
+
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        $this->spreadTasks();
+    }
 }
