@@ -2482,9 +2482,7 @@ Steuernummer 33/111/32212";
      */
     public function testSearchEmailAddresssWithMailinglist()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
+        $this->_skipWithoutEmailSystemAccountConfig();
 
         Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
 

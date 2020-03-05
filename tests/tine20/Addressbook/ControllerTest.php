@@ -789,7 +789,7 @@ class Addressbook_ControllerTest extends TestCase
         Addressbook_Controller_List::getInstance()->addListMember($list->getId(), [$newContact->getId()]);
 
         $newUser->accountEmailAddress = $newUser->accountLoginName . '@' . TestServer::getPrimaryMailDomain();
-        $newUser = Admin_Controller_User::getInstance()->update($newUser);
+        $newUser = Admin_Controller_User::getInstance()->update($newUser, 'pwd', 'pwd');
 
         $updatedContact = $this->_instance->get($newUser->contact_id);
         static::assertSame($newUser->accountLoginName . '@' . TestServer::getPrimaryMailDomain(),

@@ -37,9 +37,7 @@ class Admin_Controller_UserTest extends TestCase
 
     public function testAddAccountWithEmailUserXprops()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
+        $this->_skipWithoutEmailSystemAccountConfig();
 
         $xpropsConf = Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS};
         Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
@@ -117,5 +115,26 @@ class Admin_Controller_UserTest extends TestCase
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
 
         static::assertSame($container->getId(), $user->container_id);
+    }
+
+    public function testUpdateUserWithEmailButNoPassword()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+        $pw = 'aw%6N64ZR2Pev';
+
+        $userToCreate = TestCase::getTestUser();
+        $email = $userToCreate->accountEmailAddress;
+        unset($userToCreate->accountEmailAddress);
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
+
+        $user->accountEmailAddress = $email;
+        try {
+            Admin_Controller_User::getInstance()->update($user);
+            self::fail('exception expected because no pw given for user email account');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            self::assertEquals($translate->_('Password is needed for system account creation'), $tesg->getMessage());
+        }
     }
 }

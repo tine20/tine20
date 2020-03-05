@@ -492,7 +492,12 @@ class Tinebase_EmailUser
      */
     public static function isEmailSystemAccountConfigured()
     {
-        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        return (! empty($imapConfig) && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) && $imapConfig['useSystemAccount']);
+        $imapConfig = Tinebase_Config::getInstance()->get(
+            Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        return (
+            ! empty($imapConfig)
+            && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig))
+            && $imapConfig['useSystemAccount']
+        );
     }
 }
