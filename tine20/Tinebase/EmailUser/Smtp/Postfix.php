@@ -714,4 +714,20 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
 
         return (bool) $queryResult;
     }
+
+    /**
+     * copy email user
+     *
+     * @param Tinebase_Model_FullUser $_user
+     * @param string $newId
+     * @throws Tinebase_Exception
+     * @throws Zend_Db_Statement_Exception
+     * @return array
+     */
+    public function copyUser(Tinebase_Model_FullUser $_user, $newId)
+    {
+        $rawUser = parent::copyUser($_user, $newId);
+        $this->_createDefaultDestinations($rawUser);
+        return $rawUser;
+    }
 }

@@ -59,7 +59,7 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
             'user_id' => $this->_personas['sclever']->getId(),
         ];
         try {
-            $account = $this->_json->saveEmailAccount($accountData);
+            $userInternalAccount = $this->_json->saveEmailAccount($accountData);
         } catch (Tinebase_Exception_UnexpectedValue $teuv) {
             // (re-)create system account for sclever first
             $credentials = TestServer::getInstance()->getTestCredentials();
@@ -67,9 +67,9 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
             Admin_Controller_User::getInstance()->update($this->_personas['sclever']);
             Admin_Controller_User::getInstance()->setAccountPassword(
                 $this->_personas['sclever'], $credentials['password'], $credentials['password']);
-            $account = $this->_json->saveEmailAccount($accountData);
+            $userInternalAccount = $this->_json->saveEmailAccount($accountData);
         }
-        $this->_emailAccounts[] = $account;
+        $this->_emailAccounts[] = $userInternalAccount;
 
         $filter = [[
             'field' => 'type',
@@ -85,11 +85,21 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
         $account = $result['results'][0];
         self::assertEquals($email, $account['email'], print_r($account, true));
 
-        // check email user
+        // check imap email user
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord(new Felamimail_Model_Account($account));
         $userInBackend = $emailUserBackend->getRawUserById($emailUser);
         self::assertEquals($email, $userInBackend['loginname'], print_r($userInBackend, true));
+        // credentials of new $userInternalAccount have been resolved in \Felamimail_Convert_Account_Json::fromTine20Model - check if they match
+        self::assertEquals($userInternalAccount['user'], $userInBackend['username'], print_r($userInBackend, true));
+
+        // check smtp email user
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        $userInSmtpBackend = $emailUserBackend->getRawUserById($emailUser);
+        self::assertNotEmpty($userInSmtpBackend['destination'], print_r($userInSmtpBackend, true));
+
+        // write message to userInternal account
+        $this->_sendMessageWithAccount(null, $userInternalAccount['email']);
     }
 
     public function testConvertEmailAccount()
@@ -170,17 +180,7 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
         }
 
         if ($convertTo === Felamimail_Model_Account::TYPE_SHARED || $testUserAccount) {
-            Felamimail_Backend_ImapFactory::reset();
-            // check if email account exists and mail sending works
-            $subject = 'test message ' . Tinebase_Record_Abstract::generateUID(10);
-            $message = new Felamimail_Model_Message(array(
-                'account_id'    => $convertedAccount['id'],
-                'subject'       => $subject,
-                'to'            => Tinebase_Core::getUser()->accountEmailAddress,
-                'body'          => 'aaaaaä <br>',
-            ));
-            $sendMessage = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
-            self::assertEquals($message->subject, $sendMessage->subject);
+            $this->_sendMessageWithAccount($convertedAccount);
         }
 
         return $convertedAccount;

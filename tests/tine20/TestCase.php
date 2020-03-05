@@ -1139,4 +1139,23 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         // TODO reset in tear down? use raii?
     }
+
+    protected function _sendMessageWithAccount($account = null, $to = null)
+    {
+        if (! $account) {
+            $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount(Tinebase_Core::getUser());
+        }
+
+        Felamimail_Backend_ImapFactory::reset();
+        // check if email account exists and mail sending works
+        $subject = 'test message ' . Tinebase_Record_Abstract::generateUID(10);
+        $message = new Felamimail_Model_Message(array(
+            'account_id'    => $account['id'],
+            'subject'       => $subject,
+            'to'            => $to ? $to : Tinebase_Core::getUser()->accountEmailAddress,
+            'body'          => 'aaaaaä <br>',
+        ));
+        $sendMessage = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+        self::assertEquals($message->subject, $sendMessage->subject);
+    }
 }
