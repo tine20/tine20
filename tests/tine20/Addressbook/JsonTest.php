@@ -4,7 +4,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  */
@@ -2543,15 +2543,7 @@ Steuernummer 33/111/32212";
 
     public function testSetImage()
     {
-        // create tempfile
-        $tempFileBackend = new Tinebase_TempFile();
-        $image = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/images/favicon.png';
-        $tempFile = $tempFileBackend->createTempFile($image);
-
-        // save contact with tempfile
-        $contact = $this->_getContactData();
-        $contact['jpegphoto'] = 'index.php?method=Tinebase.getImage&application=Tinebase&location=tempFile&id='
-            . $tempFile->getId() . '&width=88&height=118&ratiomode=0&mtime=1546880445806';
+        $contact = $this->_getContactWithImage();
         $savedContactWithImage = $this->_uit->saveContact($contact);
 
         // save contact again
@@ -2562,6 +2554,43 @@ Steuernummer 33/111/32212";
         self::assertEquals($savedContactWithImage['jpegphoto'], $savedContactWithImageAgain['jpegphoto'],
             'image should not change!');
         return $savedContactWithImageAgain;
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getContactWithImage()
+    {
+        // create tempfile
+        $tempFileBackend = new Tinebase_TempFile();
+        $image = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/images/favicon.png';
+        $tempFile = $tempFileBackend->createTempFile($image);
+
+        // save contact with tempfile
+        $contact = $this->_getContactData();
+        $contact['jpegphoto'] = 'index.php?method=Tinebase.getImage&application=Tinebase&location=tempFile&id='
+            . $tempFile->getId() . '&width=88&height=118&ratiomode=0&mtime=1546880445806';
+        return $contact;
+    }
+
+    public function testSetImageCreateDuplicateContact()
+    {
+        $contact = $this->_getContactWithImage();
+        // let's throw a duplicate exception
+        $contact['email'] = Tinebase_Core::getUser()->accountEmailAddress;
+        try {
+            $result = $this->_uit->saveContact($contact);
+            self::fail('duplicate exception expected');
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            try {
+                $jsonResponse = json_encode($ted->toArray());
+            } catch (Throwable $e) {
+                // pre php 7.2
+                $jsonResponse = false;
+            }
+            self::assertNotFalse($jsonResponse);
+        }
+
     }
 
     public function testRemoveImage()

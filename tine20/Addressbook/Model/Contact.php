@@ -462,7 +462,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                 ],
                 self::OMIT_MOD_LOG              => true,
-                self::SYSTEM                    => true
+                self::SYSTEM                    => true,
             ],
             'note'                          => [
                 self::TYPE                      => self::TYPE_FULLTEXT,
@@ -1204,5 +1204,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'n_short'     => true,
             'account_id'  => true,
         ]);
+    }
+
+    public function unsetFieldsBeforeConvertingToJson()
+    {
+        parent::unsetFieldsBeforeConvertingToJson();
+
+        unset($this->jpegphoto);
     }
 }
