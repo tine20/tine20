@@ -18,6 +18,11 @@
  */
 abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
+    const HTTP_ERROR_CODE_FORBIDDEN = 403;
+    const HTTP_ERROR_CODE_NOT_FOUND = 404;
+    const HTTP_ERROR_CODE_SERVICE_UNAVAILABLE = 503;
+    const HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
+
     /**
      * the request
      *
@@ -208,13 +213,13 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     {
         if (! headers_sent()) {
             switch ($code) {
-                case 403:
+                case self::HTTP_ERROR_CODE_FORBIDDEN:
                     header('HTTP/1.1 403 Forbidden');
                     break;
-                case 404:
+                case self::HTTP_ERROR_CODE_NOT_FOUND:
                     header('HTTP/1.1 404 Not Found');
                     break;
-                case 503:
+                case self::HTTP_ERROR_CODE_SERVICE_UNAVAILABLE:
                     header('HTTP/1.1 503 Service Unavailable');
                     break;
                 default:

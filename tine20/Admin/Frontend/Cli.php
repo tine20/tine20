@@ -197,7 +197,18 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo('Found ' . $count . ' users!');
         echo("\n");
     }
-    
+
+    public function deleteAccount($_opts)
+    {
+        $args = $this->_parseArgs($_opts);
+        if (!isset($args['accountName'])) exit('accountName required');
+
+        Admin_Controller_User::getInstance()->delete([Tinebase_User::getInstance()
+            ->getUserByLoginName($args['accountName'])->getId()]);
+
+        echo 'deleted account ' . $args['accountName'] . PHP_EOL;
+    }
+
     /**
      * shorten loginnmes to fit ad samaccountname
      *

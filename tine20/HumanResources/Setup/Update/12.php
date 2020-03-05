@@ -15,6 +15,7 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -35,6 +36,10 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE012_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -155,13 +160,19 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
             } else {
                 $workingTimeScheme->json = ['days' => [0, 0, 0, 0, 0, 0, 0]];
             }
+            if (!in_array($workingTimeScheme->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE}, [
+                    HumanResources_Model_WorkingTimeScheme::TYPES_INDIVIDUAL,
+                    HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE,
+                    HumanResources_Model_WorkingTimeScheme::TYPES_SHARED])) {
+                $workingTimeScheme->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} =
+                    HumanResources_Model_WorkingTimeScheme::TYPES_INDIVIDUAL;
+            }
             if ($workingTimeScheme->isDirty()) {
                 try {
                     $workingTimeSchemeCtrl->update($workingTimeScheme);
                 } catch (Tinebase_Exception_Record_Validation $terv) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN) && count($rows) > 0) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' .
-                            ' ' . $terv);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $terv);
                     }
                 }
             }
@@ -189,5 +200,31 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         ], 'id = "03"');
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.9', self::RELEASE012_UPDATE004);
+    }
+
+    public function update005()
+    {
+        $workingTimeSchemeCtrl = HumanResources_Controller_WorkingTimeScheme::getInstance();
+        /** @var HumanResources_Model_WorkingTimeScheme $workingTimeScheme */
+        foreach ($workingTimeSchemeCtrl->getAll() as $workingTimeScheme) {
+            if (!in_array($workingTimeScheme->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE}, [
+                    HumanResources_Model_WorkingTimeScheme::TYPES_INDIVIDUAL,
+                    HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE,
+                    HumanResources_Model_WorkingTimeScheme::TYPES_SHARED])) {
+                $workingTimeScheme->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} =
+                    HumanResources_Model_WorkingTimeScheme::TYPES_INDIVIDUAL;
+            }
+            if ($workingTimeScheme->isDirty()) {
+                try {
+                    $workingTimeSchemeCtrl->update($workingTimeScheme);
+                } catch (Tinebase_Exception_Record_Validation $terv) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $terv);
+                    }
+                }
+            }
+        }
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.10', self::RELEASE012_UPDATE005);
     }
 }

@@ -1338,13 +1338,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
 
                     $queueSize = $actionQueue->getQueueSize();
-                    if (null === $warn && $actionQueue->getDaemonStructSize() > 12) {
-                        $warn = 'daemon struct size > 12';
+                    if (null === $warn && $actionQueue->getDaemonStructSize() > $queueConfig
+                            ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
+                        $warn = 'daemon struct size > ' . $queueConfig
+                                ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT};
                     }
 
                     $queueSizeLR = $actionLRQueue->getQueueSize();
-                    if (null === $warn && $actionLRQueue->getDaemonStructSize() > 2) {
-                        $warn = 'LR daemon struct size > 2';
+                    if (null === $warn && $actionLRQueue->getDaemonStructSize() > $queueConfig
+                            ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
+                        $warn = 'LR daemon struct size > ' . $queueConfig
+                                ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT};
                     }
 
                     // last full check older than one hour
@@ -1579,14 +1583,18 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                 // write, read and delete to test cache
                 $cacheId = Tinebase_Helper::convertCacheId(__METHOD__);
-                $cache->save(true, $cacheId);
-                $value = $cache->load($cacheId);
-                $cache->remove($cacheId);
+                if (false !== $cache->save(true, $cacheId)) {
+                    $value = $cache->load($cacheId);
+                    $cache->remove($cacheId);
 
-                if ($value) {
-                    $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                    if ($value) {
+                        $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                    } else {
+                        $message = 'CACHE FAIL: loading value failed';
+                        $result = 1;
+                    }
                 } else {
-                    $message = 'CACHE FAIL: loading value failed';
+                    $message = 'CACHE FAIL: saving value failed';
                     $result = 1;
                 }
             } catch (Exception $e) {

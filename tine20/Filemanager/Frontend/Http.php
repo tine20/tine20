@@ -7,7 +7,7 @@
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
@@ -41,7 +41,6 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param      $id
      * @param null $revision
      * @throws Filemanager_Exception
-     * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _downloadFileNodeByPathOrId($path, $id, $revision = null)
@@ -51,7 +50,13 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $nodeController = Filemanager_Controller_Node::getInstance();
         if ($path) {
             $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($path));
-            $node = $nodeController->getFileNode($pathRecord);
+            try {
+                $node = $nodeController->getFileNode($pathRecord);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_FORBIDDEN);
+            }
         } elseif ($id) {
             $node = $nodeController->get($id);
             $nodeController->resolveMultipleTreeNodesPath($node);

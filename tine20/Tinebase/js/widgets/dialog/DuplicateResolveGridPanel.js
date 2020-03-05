@@ -307,6 +307,8 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             arguments[0][fieldName.replace(/^#/, '')] = cfValue;
         }
 
+        metaData.css = metaData.css + ' tine-dublicateResolve-cell';
+
         return renderer.apply(this, arguments);
     }
 });
@@ -582,7 +584,8 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
      * returns record with conflict resolved data
      */
     getResolvedRecord: function() {
-        var record = (this.resolveStrategy == 'keep' ? this.clientRecord : this.duplicates[this.duplicateIdx]).copy();
+        var record = ((this.resolveStrategy == 'keep' || this.resolveStrategy == 'mergeMine')
+            ? this.clientRecord : this.duplicates[this.duplicateIdx]).copy();
 
         this.each(function(resolveRecord) {
             var fieldName = resolveRecord.get('fieldName'),

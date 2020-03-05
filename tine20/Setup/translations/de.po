@@ -808,3 +808,6 @@ msgstr "PLAIN"
 #: js/EnvCheckGridPanel.js:162
 msgid "Message"
 msgstr "Informationen"
+
+msgid "Updating {0} Applications."
+msgstr "Aktualisiere {0} Anwendungen."

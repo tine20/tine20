@@ -16,6 +16,8 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
 {
     /**
      * test employee import
+     *
+     * @group nogitlabci
      */
     public function testOdsExport()
     {
@@ -44,6 +46,9 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
         unlink($tempfile);
     }
 
+    /**
+     * @group nogitlabci
+     */
     public function testHTTPfe()
     {
         $dailWTRT = new HumanResources_Controller_DailyWTReportTests();

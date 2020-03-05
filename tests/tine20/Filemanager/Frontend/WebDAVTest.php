@@ -245,6 +245,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     /**
      * test (UN)LOCK functionality of WebDAV
      * @group ServerTests
+     *
+     * @group nogitlabci_ldap
      */
     public function testUNandLOCKQueries()
     {

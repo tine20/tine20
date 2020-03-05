@@ -29,6 +29,7 @@
  * @property  string    sieve_notification_email
  * @property  boolean   sieve_notification_move
  * @property  string    sieve_notification_move_folder
+ * @property  string    sieve_hostname
  * @property  string    migration_approved
  *
  * @package   Felamimail

@@ -1,0 +1,34 @@
+[template]
+prefix = "/tine20"
+src = "config.inc.php.tmpl"
+dest = "/etc/tine20/config.inc.php"
+owner = "root"
+mode = "0644"
+keys = [
+    "/buildtype",
+    "/logger/priority",
+    "/filesdir",
+    "/tmpdir",
+    "/database/host",
+    "/database/dbname",
+    "/database/username",
+    "/database/password",
+    "/database/tableprefix",
+    "/database/adapter",
+    "/setupuser/username",
+    "/setupuser/password",
+    "/login/username",
+    "/login/password",
+    "/caching/active",
+    "/caching/lifetime",
+    "/caching/backend",
+    "/caching/redis/host",
+    "/caching/redis/port",
+    "/caching/redis/prefix",
+    "/caching/path",
+    "/session/lifetime",
+    "/session/backend",
+    "/session/host",
+    "/session/port",
+    "/session/path"
+]

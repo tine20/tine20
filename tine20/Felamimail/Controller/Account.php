@@ -708,6 +708,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $this->_transferEmailUserIdXprops($_record, $_oldRecord);
 
         if (! isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
             throw new Tinebase_Exception_SystemGeneric($translate->_('Could not find email user xprops!'));
         }
 
@@ -740,8 +741,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (isset($_oldRecord->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
             Tinebase_EmailUser_XpropsFacade::setXprops($_record,
                 $_oldRecord->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP], false);
-        } else if ($_record->user_id) {
-            $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+        } else if ($_oldRecord->user_id) {
+            $user = Tinebase_User::getInstance()->getFullUserById($_oldRecord->user_id);
             Tinebase_EmailUser_XpropsFacade::setXprops($_record,
                 $user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP], false);
         }
@@ -768,6 +769,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // copy password from system user account
         if ($_oldRecord->type !== Felamimail_Model_Account::TYPE_SYSTEM) {
             $systemEmailUser = $this->_getEmailSystemUser($_record->user_id);
+            if (! $systemEmailUser->getId()) {
+                $translation = Tinebase_Translation::getTranslation('Felamimail');
+                throw new Tinebase_Exception_UnexpectedValue($translation->_('System account of user is missing'));
+            }
             $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $emailUserBackend->copyPassword($systemEmailUser, $emailUser);
@@ -1022,8 +1027,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
     }
 
+    /**
+     * @param Felamimail_Model_Account $updatedRecord
+     * @param Felamimail_Model_Account $currentRecord
+     */
     protected function _afterUpdateSetSieve($updatedRecord, $currentRecord)
     {
+        if (empty($updatedRecord->sieve_hostname)) {
+            return;
+        }
+
         if ($updatedRecord->sieve_notification_email != $currentRecord->sieve_notification_email) {
             Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($updatedRecord->getId(),
                 $updatedRecord->sieve_notification_email);

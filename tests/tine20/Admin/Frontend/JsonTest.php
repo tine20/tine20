@@ -105,10 +105,13 @@ class Admin_Frontend_JsonTest extends TestCase
      * try to save an account
      * 
      * @return array
+     *
+     * @group nogitlabci_ldap
      */
     public function testSaveAccount()
     {
         $this->testAddGroup();
+
 
         $accountData = $this->_getUserArrayWithPw();
         $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup')->getId();
@@ -188,9 +191,11 @@ class Admin_Frontend_JsonTest extends TestCase
         $account =$this->_json->getUser($account['accountId']);
         self::assertEquals(0, $account['password_must_change']);
     }
-    
+
     /**
      * try to get all accounts
+     *
+     * @group nogitlabci_ldap
      */
     public function testGetAccounts()
     {
@@ -205,6 +210,8 @@ class Admin_Frontend_JsonTest extends TestCase
      * testGetUserCount
      * 
      * @see 0006544: fix paging in admin/users grid
+     *
+     * @group nogitlabci_ldap
      */
     public function testGetUserCount()
     {
@@ -238,8 +245,10 @@ class Admin_Frontend_JsonTest extends TestCase
     
     /**
      * try to create an account with existing login name 
-     * 
+     *
      * @see 0006770: check if username already exists when creating new user / changing username
+     *
+     * @group nogitlabci_ldap
      */
     public function testSaveAccountWithExistingName()
     {
@@ -288,6 +297,8 @@ class Admin_Frontend_JsonTest extends TestCase
      * testUpdateUserWithoutContainerACL
      * 
      * @see 0006254: edit/create user is not possible
+     *
+     * @group nogitlabci_ldap
      */
     public function testUpdateUserWithoutContainerACL()
     {
@@ -305,6 +316,9 @@ class Admin_Frontend_JsonTest extends TestCase
         self::assertEquals(2, $account['groups']['totalcount']);
     }
 
+    /**
+     * @group nogitlabci_ldap
+     */
     protected function _removeGrantsOfInternalContainer($account)
     {
         /** @var Tinebase_Model_Container $internalContainer */
@@ -316,11 +330,13 @@ class Admin_Frontend_JsonTest extends TestCase
 
         return $internalContainer;
     }
-    
+
     /**
      * testUpdateUserRemoveGroup
      * 
      * @see 0006762: user still in admin role when admin group is removed
+     *
+     * @group nogitlabci_ldap
      */
     public function testUpdateUserRemoveGroup()
     {
@@ -383,6 +399,8 @@ class Admin_Frontend_JsonTest extends TestCase
 
     /**
      * try to set account state
+     *
+     * @group nogitlabci_ldap
      */
     public function testSetAccountState()
     {
@@ -399,6 +417,8 @@ class Admin_Frontend_JsonTest extends TestCase
      * test send deactivation notification
      * 
      * @see 0009956: send mail on account deactivation
+     *
+     * @group nogitlabci_ldap
      */
     public function testAccountDeactivationNotification()
     {
@@ -431,6 +451,8 @@ class Admin_Frontend_JsonTest extends TestCase
     
     /**
      * try to reset password
+     *
+     * @group nogitlabci_ldap
      */
     public function testResetPassword()
     {
@@ -447,6 +469,8 @@ class Admin_Frontend_JsonTest extends TestCase
      * try to reset pin
      *
      * @see 0013320: allow admin to reset pin for accounts
+     *
+     * @group nogitlabci_ldap
      */
     public function testResetPin()
     {
@@ -504,7 +528,7 @@ class Admin_Frontend_JsonTest extends TestCase
         $userArray = $this->_createUser();
         $groupMembers = array($userArray['accountId']);
         $data['members'] = $groupMembers;
-        
+
         $result = $this->_json->saveGroup($data);
 
         $this->assertGreaterThan(0,sizeof($result['members']));
@@ -624,6 +648,8 @@ class Admin_Frontend_JsonTest extends TestCase
     
     /**
      * try to get all access log entries
+     *
+     * @group nogitlabci_ldap
      */
     public function testGetAccessLogsWithDeletedUser()
     {
@@ -703,6 +729,8 @@ class Admin_Frontend_JsonTest extends TestCase
 
     /**
      * try to add role and set members/rights
+     *
+     * @group nogitlabci_ldap
      */
     public function testAddRole()
     {
@@ -741,6 +769,7 @@ class Admin_Frontend_JsonTest extends TestCase
     /**
      * try to get role rights
      *
+     * @group nogitlabci_ldap
      */
     public function testGetRoleRights()
     {
@@ -755,6 +784,8 @@ class Admin_Frontend_JsonTest extends TestCase
     
     /**
      * try to save role
+     *
+     * @group nogitlabci_ldap
      */
     public function testUpdateRole()
     {
@@ -780,6 +811,8 @@ class Admin_Frontend_JsonTest extends TestCase
     
     /**
      * try to delete roles
+     *
+     * @group nogitlabci_ldap
      */
     public function testDeleteRoles()
     {
@@ -1328,6 +1361,8 @@ class Admin_Frontend_JsonTest extends TestCase
 
     /**
      * testChangeContactEmailCheckPrimaryDomain
+     *
+     * @group nogitlabci_ldap
      */
     public function testChangeContactEmailCheckPrimaryDomain()
     {
@@ -1490,6 +1525,8 @@ class Admin_Frontend_JsonTest extends TestCase
 
     /**
      * @see 0011504: deactivated user is removed from group when group is saved
+     *
+     * @group nogitlabci_ldap
      */
     public function testDeactivatedUserGroupSave()
     {
@@ -1516,6 +1553,8 @@ class Admin_Frontend_JsonTest extends TestCase
 
     /**
      * @see 0011504: deactivated user is removed from group when group is saved
+     *
+     * @group nogitlabci_ldap
      */
     public function testBlockedUserGroupSave()
     {
@@ -1543,6 +1582,8 @@ class Admin_Frontend_JsonTest extends TestCase
 
     /**
      * test set expired status
+     *
+     * @group nogitlabci_ldap
      */
     public function testSetUserExpiredStatus()
     {

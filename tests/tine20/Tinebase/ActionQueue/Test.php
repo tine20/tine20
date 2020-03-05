@@ -146,17 +146,21 @@ class Tinebase_ActionQueue_Test extends TestCase
                 'QUEUE WARN: last job id change > ' . $config->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - 8') === 0;}, 1);
         $tbApp->setApplicationState('Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE, time());
 
-        Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 13;
+        Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = $config
+                ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT} + 1;
         $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val,
-            'QUEUE WARN: daemon struct size > 12 ') === 0;}, 1);
+            'QUEUE WARN: daemon struct size > ' . $config
+                ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT} . ' ') === 0;}, 1);
         Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 0;
 
-        Tinebase_ActionQueue_Backend_Test::$_daemonStructSizeCall = function() {
+        Tinebase_ActionQueue_Backend_Test::$_daemonStructSizeCall = function() use($config) {
             static $a = 0;
-            if (++$a > 1) Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 3;
+            if (++$a > 1) Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = $config
+                    ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT} + 1;
         };
         $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val,
-                'QUEUE WARN: LR daemon struct size > 2 ') === 0;}, 1);
+                'QUEUE WARN: LR daemon struct size > ' . $config
+                    ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT} . ' ') === 0;}, 1);
         Tinebase_ActionQueue_Backend_Test::$_daemonStructSizeCall = null;
         Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 0;
 

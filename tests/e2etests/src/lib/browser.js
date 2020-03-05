@@ -39,7 +39,7 @@ module.exports = {
             height: 768,
         });
         await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded'});
-        await expect(page).toMatchElement('title', {text: 'Tine'});
+        await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
         await page.waitForSelector('input[name=username]');
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
@@ -47,12 +47,12 @@ module.exports = {
         await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME);
         await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD);
         await expect(page).toClick('button', {text: 'Anmelden'});
+        await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
 
-        await page.waitForSelector('.x-panel.tine-mainscreen-apptabs.x-panel-noborder.x-box-item', {timeout: 30000});
-
-        await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
-        await expect(page).toClick('.x-menu-item-text', {text: app});
-
+        if(app) {
+            await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+            await expect(page).toClick('.x-menu-item-text', {text: app});
+        }
         if (module) {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: module});
         }

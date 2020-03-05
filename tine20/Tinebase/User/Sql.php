@@ -979,7 +979,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         // add email user xprops here if configured
         if (Tinebase_EmailUser::isEmailUserPlugin($plugin) && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             $pluginUser = clone($user);
-            Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $pluginUser, true);
+            Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $pluginUser, $method !== 'inspectGetUserByProperty');
             if ($newUserProperties) {
                 $updatePluginUser = clone($newUserProperties);
                 Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $updatePluginUser);

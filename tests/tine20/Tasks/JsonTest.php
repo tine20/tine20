@@ -145,6 +145,8 @@ class Tasks_JsonTest extends TestCase
     
     /**
      * test alarm sending failure (with wrong stmp user/password)
+     *
+     * @group nogitlabci
      */
     public function testAlarmSendingFailure()
     {

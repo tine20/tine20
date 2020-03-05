@@ -20,7 +20,10 @@ class HumanResources_Import_DemoDataTest extends TestCase
 
     /**
      * @group longrunning
+     * @group nogitlabci
      * @throws Tinebase_Exception_InvalidArgument
+     *
+     * @group nogitlabci
      */
     public function testImportDemoData()
     {

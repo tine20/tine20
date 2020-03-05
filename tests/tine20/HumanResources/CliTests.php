@@ -158,6 +158,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
     
     /**
      * tests set_contracts_end_date
+     * @group nogitlabci
      */
     public function testSetContractsEndDate()
     {

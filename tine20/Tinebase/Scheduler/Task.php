@@ -108,6 +108,14 @@ class Tinebase_Scheduler_Task
         ];
     }
 
+    /**
+     * @return string
+     */
+    public function getCron()
+    {
+        return $this->_cron;
+    }
+
     public function setCron($cron)
     {
         $this->_cron = $cron;

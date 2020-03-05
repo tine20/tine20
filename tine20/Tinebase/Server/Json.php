@@ -415,7 +415,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     /**
      * handle exceptions
      * 
-     * @param Zend_Json_Server_Request_Http $request
+     * @param Zend_Json_Server_Request_Http|Tinebase_Http_Request $request
      * @param Throwable $exception
      * @return Zend_Json_Server_Response
      */
@@ -449,7 +449,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
         
         $response = $server->getResponse();
-        if (null !== ($id = $request->getId())) {
+        // NOTE: Tinebase_Http_Request has no getId() - should we add the function?
+        if (method_exists($request, 'getId') && null !== ($id = $request->getId())) {
             $response->setId($id);
         }
         if (null !== ($version = $request->getVersion())) {

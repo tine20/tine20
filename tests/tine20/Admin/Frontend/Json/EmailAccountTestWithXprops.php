@@ -101,6 +101,10 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
         $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
         $this->_emailAccounts[] = $emailAccount;
         $this->_convertAccount($emailAccount, $user, Felamimail_Model_Account::TYPE_SHARED);
+        $updatedUser = Admin_Controller_User::getInstance()->get($user->getId());
+        self::assertEmpty($updatedUser->accountEmailAddress);
+        self::assertFalse(isset($updatedUser->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP]),
+            'email user xprops still set: ' . print_r($updatedUser->xprops(), true));
     }
 
     /**
@@ -235,7 +239,12 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
         $sharedAccount = $this->testConvertUserInternalEmailAccount($user);
         $sharedAccount['user_id'] = $user->getId();
 
-        $this->_convertAccount(new Felamimail_Model_Account($sharedAccount), $user, Felamimail_Model_Account::TYPE_USER_INTERNAL);
+        try {
+            // does not work because the users system account has been converted and the users password is needed
+            $this->_convertAccount(new Felamimail_Model_Account($sharedAccount), $user, Felamimail_Model_Account::TYPE_USER_INTERNAL);
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            self::assertEquals('System account of user is missing', $teuv->getMessage());
+        }
     }
 
     public function testConvertSharedToUserInternalEmailAccountWithMails()

@@ -15,6 +15,8 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
 {
     /**
      * tests for the contract controller
+     *
+     * @group nogitlabci
      */
     public function testUpdateContract()
     {
@@ -97,6 +99,8 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
 
     /**
      * some contract tests (more in jsontests)
+     *
+     * @group nogitlabci
      */
     public function testContract()
     {

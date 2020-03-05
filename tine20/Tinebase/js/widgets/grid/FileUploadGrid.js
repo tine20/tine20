@@ -133,7 +133,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             existingRecord.beginEdit();
             _.each(data, (v, k) => {
                 const p = _.find(existingRecord.fields.items, {name: k});
-                if (p) {
+                if (p && /* preserve uniq name */ k !== 'name') {
                     existingRecord.set(k, v);
                 }
             });
@@ -144,7 +144,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         } else {
             const record = new Ext.ux.file.Upload.file(JSON.parse(JSON.stringify(data)), data.id);
             record.set('tempFile', JSON.parse(JSON.stringify(data)));
-            this.store.add([record]);
+            this.store.addUnique(record, 'name');
         }
         // NOTE: grid doesn't update selections itself
         this.actionUpdater.updateActions(this.selModel, [_.get(this, 'record.data')]);
@@ -466,7 +466,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             for (var i = 0; i < files.length; i += 1) {
                 var file = new Ext.ux.file.Upload.file(files[i]);
                 file.data.status = 'complete';
-                this.store.add(file);
+                this.store.addUnique(file, 'name');
             }
         }
     },
@@ -550,7 +550,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
 
             if (fileRecord.get('status') !== 'failure') {
-                this.store.add(fileRecord);
+                this.store.addUnique(fileRecord, 'name');
             }
 
 

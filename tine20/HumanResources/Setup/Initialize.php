@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -57,7 +57,11 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         ))));
     }
 
-    public static function createWorkingTimeModels()
+    /**
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function getDefaultWTS_BL()
     {
         $rs = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_Config::class, [
             [
@@ -84,7 +88,14 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             ]
         ]);
         $rs->runConvertToRecord();
-        $blPipe = $rs->toArray();
+
+        return $rs;
+    }
+
+    public static function createWorkingTimeModels()
+    {
+
+        $blPipe = static::getDefaultWTS_BL()->toArray();
 
         $translate = Tinebase_Translation::getTranslation('HumanResources');
         $_record = new HumanResources_Model_WorkingTimeScheme(array(

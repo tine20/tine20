@@ -883,7 +883,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function update(Tinebase_Record_Interface $_record)
     {
-        $data = $_record->toArray(false);
+        $data = $_record->toArray(false, false);
 
         if (!isset($data['id'])) throw new Tinebase_Exception_Backend('id not set');
         if (mb_strlen($data['note']) > 65535) {

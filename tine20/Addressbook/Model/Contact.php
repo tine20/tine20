@@ -249,7 +249,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'email_query'       => [
                 'filter'            => Tinebase_Model_Filter_Query::class,
-                'title'             => 'Email', // _('Email') // TODO is this right?
+                'title'             => 'Email', // _('Email')
                 'options'           => [
                     'fields'            => [
                         'email',
@@ -257,6 +257,20 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     ]
                 ],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactemail'] // TODO later with FE fix it
+            ],
+            'name_email_query'       => [
+                'filter'            => Tinebase_Model_Filter_Query::class,
+                'title'             => 'Name/Email', // _('Name/Email')
+                'options'           => [
+                    'fields'            => [
+                        'n_family',
+                        'n_given',
+                        'n_middle',
+                        'org_name',
+                        'email',
+                        'email_home',
+                    ]
+                ],
             ],
         ],
 
@@ -462,7 +476,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                 ],
                 self::OMIT_MOD_LOG              => true,
-                self::SYSTEM                    => true
+                self::SYSTEM                    => true,
             ],
             'note'                          => [
                 self::TYPE                      => self::TYPE_FULLTEXT,
@@ -1204,5 +1218,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'n_short'     => true,
             'account_id'  => true,
         ]);
+    }
+
+    public function unsetFieldsBeforeConvertingToJson()
+    {
+        parent::unsetFieldsBeforeConvertingToJson();
+
+        unset($this->jpegphoto);
     }
 }

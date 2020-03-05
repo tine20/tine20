@@ -26,7 +26,7 @@ describe('mainScreen', () => {
         await expect(page).toClick('span', {text: 'Adressbuch'});
         await page.waitFor(5000);
         await page.screenshot({path: 'screenshots/2_allgemeines/1_allgemein_alle_reiter.png'});
-    }, 60000)
+    })
 });
 
 describe('usersettings', () => {

@@ -706,10 +706,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE_MONITORING_LASTUPDATE_WARN = 'lastUpdateWarn';
     const ACTIONQUEUE_MONITORING_DURATION_CRIT = 'durationCrit';
     const ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT = 'lastUpdateCrit';
+    const ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT = 'daemonStructSizeCrit';
     const ACTIONQUEUE_LR_MONITORING_DURATION_WARN = 'LRdurationWarn';
     const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN = 'LRlastUpdateWarn';
     const ACTIONQUEUE_LR_MONITORING_DURATION_CRIT = 'LRdurationCrit';
     const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT = 'LRlastUpdateCrit';
+    const ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT = 'LRdaemonStructSizeCrit';
 
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
@@ -1090,6 +1092,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'type'                              => Tinebase_Config::TYPE_INT,
                     'default'                           => 3600,
                 ],
+                self::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT   => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 30,
+                ],
                 self::ACTIONQUEUE_LR_MONITORING_DURATION_WARN       => [
                     'type'                              => Tinebase_Config::TYPE_INT,
                     'default'                           => 360,
@@ -1105,6 +1111,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT     => [
                     'type'                              => Tinebase_Config::TYPE_INT,
                     'default'                           => 3600,
+                ],
+                self::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT=> [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3,
                 ],
             ],
             'default'                           => [],

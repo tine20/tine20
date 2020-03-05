@@ -336,7 +336,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     onSearchComboSelect: function(combo) {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSelect()');
 
-        var selectedRecord = combo.selectedRecord;
         var value = combo.getValue();
         
         if (combo.getValueIsList()) {

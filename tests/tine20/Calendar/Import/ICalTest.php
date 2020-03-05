@@ -190,6 +190,8 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
      * test ical cli import
      * 
      * @see 0007104: Calender Import Crashes
+     *
+     * @group nogitlabci
      */
     public function testCliImport()
     {
@@ -212,6 +214,8 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
      * testImportTwice (forceUpdateExisting)
      * 
      * @see 0008652: Import von .ics-Dateien in Kalender schlägt fehl
+     *
+     * @group nogitlabci
      */
     public function testImportTwice()
     {
