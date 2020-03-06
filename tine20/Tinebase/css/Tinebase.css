@@ -411,19 +411,33 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
 }
 
 /* -------- tags renderer ------------------------------------------------------------*/
+.tw-tagtogglebox .tagcheckel {
+    display: inline;
+    margin-right: 3px;
+}
+
+.tw-tagtogglebox .tb-grid-tags {
+    display: inline;
+    position: absolute;
+    float: inherit;
+    top: 3px;
+}
 .tb-grid-tags {
-    width: 8px; 
+    width: 8px;
     height: 8px; 
-    border: 1px solid black; 
+    border: 1px solid black;
     float: left;
     margin-right: 2px;
-    margin-top: 1px;
+    margin-top: 3px;
     border-radius: 5px;
 }
 
-.ext-gecko .tb-grid-tags {
-    -moz-border-radius: 5px;
-    margin-top: 2px;
+.x-grid3-cell-inner .tb-grid-tags {
+    margin-top: 1px;
+}
+
+.tw-tagtogglebox .x-combo-list-item {
+    position: relative;
 }
 
 .x-menu-item-text .tb-grid-tags {
