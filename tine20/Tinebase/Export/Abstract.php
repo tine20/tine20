@@ -1201,7 +1201,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $keyField = Tinebase_Config::factory($keyField['application'])->{$keyField['name']};
             }
             foreach ($_records as $record) {
-                $record->{$property} = $keyField->getTranslatedValue($record->{$property});
+                try {
+                    $record->{$property} = $keyField->getTranslatedValue($record->{$property});
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " keyfield $property from definition is no field of this record");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                }
             }
         }
 
