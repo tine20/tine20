@@ -690,9 +690,9 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             event.ui.resizeable.snap = function(value, inc, min) {
                 var pos = this.activeHandle.position;
 
-                if (pos == 'south' && inc == this.heightIncrement) {
+                if (pos === 'south' && inc === this.heightIncrement) {
                     value = value - this.correctionY;
-                } else if (pos == 'east' && inc == this.widthIncrement) {
+                } else if (pos === 'east' && inc === this.widthIncrement) {
                     value = value - this.correctionX;
                 }
 
@@ -985,9 +985,11 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             var rzInfo = ui.getRzInfo(this);
 
             if (e.type === 'mousemove') {
-                // getRzInfo calcs wrong values???
-                let shouldHeight = me.getTimeOffset(rzInfo.dtend) - me.getTimeOffset(event.get('dtstart'));
-                this.el.setHeight(shouldHeight);
+                if (! event.get('is_all_day_event')) {
+                    // getRzInfo calcs wrong values???
+                    let shouldHeight = me.getTimeOffset(rzInfo.dtend) - me.getTimeOffset(event.get('dtstart'));
+                    this.el.setHeight(shouldHeight);
+                }
 
                 if (this.durationEl) {
                     this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
