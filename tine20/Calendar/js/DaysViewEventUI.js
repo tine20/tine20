@@ -222,6 +222,9 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                     dynamic: true,
                     minHeight: view.getTimeOffset(view.timeGranularity),
                     heightIncrement: view.getTimeOffset(view.timeGranularity),
+                    resizeElement: function() {
+                        return this.proxy.getBox();
+                    },
                     listeners: {
                         scope: view,
                         resize: view.onEventResize,
