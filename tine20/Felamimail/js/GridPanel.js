@@ -715,13 +715,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
-     * delete messages handler
+     * move messages handler
      *
      * @return {void}
      */
     onMoveRecords: function() {
         var selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
-            account: this.app.getActiveAccount(),
+            allAccounts: true,
             listeners: {
                 scope: this,
                 folderselect: function(node) {
