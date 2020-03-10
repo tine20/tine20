@@ -207,7 +207,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 $contentType = self::$_server->httpRequest->getHeader('Content-Type');
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $this->_request->getMethod());
 
-                if (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false) {
+                if ($this->_request->getMethod() !== 'PUT' && (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false)) {
                     // NOTE inputstream can not be rewinded
                     $debugStream = fopen('php://temp', 'r+');
                     stream_copy_to_stream($this->_body, $debugStream);
@@ -282,7 +282,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 }
             }
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
-            self::$_server->httpResponse->startBodyLog(Tinebase_Core::isLogLevel(Zend_Log::DEBUG));
+            self::$_server->httpResponse->startBodyLog(Tinebase_Core::isLogLevel(Zend_Log::DEBUG) &&
+                $this->_request->getMethod() !== 'GET');
 
             self::$_server->exec();
 
