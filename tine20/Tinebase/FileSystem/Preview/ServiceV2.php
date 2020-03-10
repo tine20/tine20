@@ -66,7 +66,7 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
      */
     protected function _getHttpClient($_synchronRequest)
     {
-        return $this->_networkAdapter->getHttpsClient(array('timeout' => ($_synchronRequest ? 10 : 300)));
+        return $this->_networkAdapter->getHttpsClient(array('timeout' => ($_synchronRequest ? 10 : self::ASYNC_REQUEST_TIMEOUT)));
     }
 
     protected function _processJsonResponse(array $responseJson)
