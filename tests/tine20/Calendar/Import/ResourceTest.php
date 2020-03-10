@@ -13,7 +13,7 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Calendar_Import_EventTest extends TestCase
+class Calendar_Import_ResourceTest extends TestCase
 {
     /**
      * @var Tinebase_Model_Container
@@ -27,18 +27,19 @@ class Calendar_Import_EventTest extends TestCase
 
     public function testImportDemoData()
     {
-        $this->_importContainer = $this->_getTestContainer('Calendar', 'Calendar_Model_Event');
-        $importer = new Tinebase_Setup_DemoData_Import('Calendar_Model_Event', [
+        $now = Tinebase_DateTime::now();
+        $this->_importContainer = $this->_getTestContainer('Calendar', 'Calendar_Model_Resource');
+        $importer = new Tinebase_Setup_DemoData_Import('Calendar_Model_Resource', [
             'container_id' => $this->_importContainer->getId(),
-            'definition' => 'cal_import_event_csv',
-            'file' => 'event.csv',
+            'definition' => 'cal_import_resource_csv',
+            'file' => 'resource.csv',
         ]);
         $importer->importDemodata();
 
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Calendar_Model_Event', [
-            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_importContainer->getId()]
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Calendar_Model_Resource', [
+            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
-        $result = Calendar_Controller_Event::getInstance()->search($filter);
-        self::assertEquals(4, count($result));
+        $result = Calendar_Controller_Resource::getInstance()->search($filter);
+        self::assertEquals(1, count($result));
     }
 }

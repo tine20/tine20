@@ -29,6 +29,7 @@ class Calendar_Import_DemoDataTest
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar Demo Data Test');
         $suite->addTestSuite('Calendar_Import_EventTest');
+        $suite->addTestSuite('Calendar_Import_ResourceTest');
 
         return $suite;
     }
