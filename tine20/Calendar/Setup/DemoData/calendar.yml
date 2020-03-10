@@ -1,0 +1,23 @@
+########################
+# Tine 2.0
+# @package     Calendar
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Philipp Schüle <p.schuele@metaways.de>
+# @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for Calendar module
+# imports resource event
+########################
+---
+name: resource event
+
+files:
+  #$app,$model,$definition,$file
+  - Calendar/Resource/cal_import_resource_csv/*
+  - Calendar/Event/cal_import_event_csv/*
+
+
+# this set could contain other sets:
+# sets:
+#   - another_set.yml

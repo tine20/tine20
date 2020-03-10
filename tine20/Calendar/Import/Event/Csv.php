@@ -16,7 +16,7 @@
  * @subpackage  Import
  *
  */
-class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
+class Calendar_Import_Event_Csv extends Tinebase_Import_Csv_Generic
 {
 
     protected $_members;
@@ -158,6 +158,7 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
 
     protected function _createResourceAttender($importedRecord)
     {
+        $config =Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
         if (empty($this->_resources)) {
             return;
         }
@@ -183,7 +184,7 @@ class Calendar_Import_Csv extends Tinebase_Import_Csv_Generic
                 $resource_Model = new Calendar_Model_Resource(array(
                     'name' => $resource,
                     'description' => 'Import Csv resource',
-                    'email' => 'csv@resource.com',
+                    'email' => $resource . '@' . $config['primarydomain'],
                     'is_location' => TRUE,
                     'grants' => [
                         array_merge([
