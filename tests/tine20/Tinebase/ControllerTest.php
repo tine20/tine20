@@ -157,6 +157,8 @@ class Tinebase_ControllerTest extends TestCase
         $counts = [];
         $newCounts = [];
 
+        $this->_instance->cleanAclTables();
+
         foreach ($aclTables as $table) {
             $row = $db->select()->from(SQL_TABLE_PREFIX . $table, new Zend_Db_Expr('count(*)'))->query()->
                 fetch(Zend_Db::FETCH_NUM);

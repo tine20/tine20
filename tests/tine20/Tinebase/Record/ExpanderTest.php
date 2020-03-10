@@ -69,10 +69,13 @@ class Tinebase_Record_ExpanderTest extends TestCase
             $expander->expand($contacts);
             static::assertTrue(is_string($contact->last_modified_by), 'last_modified_by is not a string');
             static::assertTrue(is_object($contact->created_by), 'created_by is not a object');
-            if (!empty(Tinebase_Core::getUser()->created_by)) {
-                static::assertTrue(is_object($contact->created_by->created_by),
-                    'created_by->created_by is not a object');
-            }
+            try {
+                if (!empty(Tinebase_Core::getUser()->created_by) && Tinebase_User::getInstance()
+                        ->getUserById(Tinebase_Core::getUser()->created_by)) {
+                    static::assertTrue(is_object($contact->created_by->created_by),
+                        'created_by->created_by is not a object');
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {}
         } finally {
             $adbController->resolveCustomfields($oldCustomfields);
         }
@@ -101,10 +104,13 @@ class Tinebase_Record_ExpanderTest extends TestCase
             $expander->expand($contacts);
             static::assertTrue(is_object($contact->last_modified_by), 'last_modified_by is not a object');
             static::assertTrue(is_object($contact->created_by), 'created_by is not a object');
-            if (!empty(Tinebase_Core::getUser()->created_by)) {
-                static::assertTrue(is_object($contact->created_by->created_by),
-                    'created_by->created_by is not a object');
-            }
+            try {
+                if (!empty(Tinebase_Core::getUser()->created_by) && Tinebase_User::getInstance()
+                        ->getUserById(Tinebase_Core::getUser()->created_by)) {
+                    static::assertTrue(is_object($contact->created_by->created_by),
+                        'created_by->created_by is not a object');
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {}
         } finally {
             $adbController->resolveCustomfields($oldCustomfields);
         }
