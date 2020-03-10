@@ -1194,6 +1194,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         // TODO FE data resolving: what about this?
         foreach ((array)$this->_keyFields as $property => $keyField) {
+            if (!$_records->getFirstRecord()->has($property)) {
+                continue;
+            }
+
             /** @var Tinebase_Config_KeyField $keyField */
             if ($keyField['application'] === $this->_applicationName) {
                 $keyField = $appConfig->{$keyField['name']};
@@ -1201,12 +1205,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $keyField = Tinebase_Config::factory($keyField['application'])->{$keyField['name']};
             }
             foreach ($_records as $record) {
-                try {
-                    $record->{$property} = $keyField->getTranslatedValue($record->{$property});
-                } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " keyfield $property from definition is no field of this record");
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
-                }
+                $record->{$property} = $keyField->getTranslatedValue($record->{$property});
             }
         }
 
