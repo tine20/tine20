@@ -305,6 +305,22 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         return $diff;
     }
+
+    public function sortExdates()
+    {
+        $exdates = $this->exdate;
+        if ($exdates instanceof Tinebase_Record_RecordSet) {
+            $exdates = $exdates->asArray();
+        }
+        if (empty($exdates)) return;
+
+        usort($exdates, function (Tinebase_DateTime $a, Tinebase_DateTime $b) {
+            return $a->isLater($b);
+        });
+
+        $this->exdate = $exdates;
+    }
+
     /**
      * add given attendee if not present under given conditions
      * 
