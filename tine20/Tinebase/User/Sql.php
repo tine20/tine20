@@ -57,7 +57,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'openid'                    => 'openid',
         'visibility'                => 'visibility',
         'contactId'                 => 'contact_id',
-        'xprops'                    => 'xprops'
+        'xprops'                    => 'xprops',
+        'creation_time'             => 'creation_time',
     );
     
     /**
