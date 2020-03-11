@@ -115,6 +115,8 @@ class Admin_Controller_UserTest extends TestCase
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
 
         static::assertSame($container->getId(), $user->container_id);
+        static::assertSame($container->getId(),
+            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
     }
 
     public function testUpdateUserWithEmailButNoPassword()
