@@ -47,6 +47,11 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
             default:
                 throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs correct model in config.');
         }
+
+        if(($this->_options['accountEmailDomain']) == null) {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+            $this->_options['accountEmailDomain'] = $config['primarydomain'];
+        }
     }
     
     /**
