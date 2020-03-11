@@ -186,14 +186,13 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     }
 
     /**
-     * @todo JSON encode all config data via update script! remove this function
-     *
-     * @deprecated
      * @param string $val
      * @return string
      */
     public static function uncertainJsonDecode($val)
     {
+        if (!is_string($val)) return $val;
+        
         $result = json_decode($val, TRUE);
         if (null === $result && strtolower($val) !== '{null}') $result = $val;
 
