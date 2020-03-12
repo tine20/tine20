@@ -655,6 +655,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $_oldRecord,
             $_throw,
             [
+                Felamimail_Model_Account::TYPE_SYSTEM,
                 Felamimail_Model_Account::TYPE_SHARED,
             ],
             Felamimail_Model_Account::TYPE_USER_INTERNAL
@@ -669,13 +670,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @param $_to
      * @return bool
      * @throws Tinebase_Exception_SystemGeneric
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     protected function _doConvertTo($_record, $_oldRecord, $_throw, $_from, $_to)
     {
         $result = ($_record->type === $_to && in_array($_oldRecord->type, $_from));
 
         if ($_throw && $_record->type !== $_oldRecord->type && ! $result) {
-            throw new Tinebase_Exception_UnexpectedValue('type can not change');
+            throw new Tinebase_Exception_UnexpectedValue('Account type cannot be changed');
         }
 
         if ($result) {

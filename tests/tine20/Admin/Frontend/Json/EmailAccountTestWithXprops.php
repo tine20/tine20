@@ -266,4 +266,18 @@ class Admin_Frontend_Json_EmailAccountTestWithXprops extends Admin_Frontend_Json
         $updatedFolder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10, 1);
         self::assertGreaterThan($folder->imap_totalcount, $updatedFolder->imap_totalcount);
     }
+
+    public function testConvertSystemToUserInternalEmailAccount()
+    {
+        $this->_testNeedsTransaction();
+
+        $user = $this->_createUserWithEmailAccount();
+
+        $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $this->_emailAccounts[] = $emailAccount;
+        $this->_convertAccount($emailAccount, $user, Felamimail_Model_Account::TYPE_USER_INTERNAL);
+        $updatedUser = Admin_Controller_User::getInstance()->get($user->getId());
+        self::assertFalse(isset($updatedUser->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP]),
+            'email user xprops still set: ' . print_r($updatedUser->xprops(), true));
+    }
 }

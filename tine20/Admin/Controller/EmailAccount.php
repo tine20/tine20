@@ -220,7 +220,11 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        if ($this->_backend->doConvertToShared($updatedRecord, $currentRecord, false) && $currentRecord->type === Felamimail_Model_Account::TYPE_SYSTEM) {
+        if ($currentRecord->type === Felamimail_Model_Account::TYPE_SYSTEM
+            && (   $this->_backend->doConvertToShared($updatedRecord, $currentRecord, false)
+                || $this->_backend->doConvertToUserInternal($updatedRecord, $currentRecord, false)
+            )
+        ) {
             // update user (don't delete email account!)
             $userId = is_array($currentRecord->user_id) ? $currentRecord->user_id['accountId'] :  $currentRecord->user_id;
             $user = Admin_Controller_User::getInstance()->get($userId);
