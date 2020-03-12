@@ -1,0 +1,8 @@
+name: grants
+
+updateRoleRights:
+  #$app,#$rights
+  - Admin/view_accounts,run,view_apps,manage_shared_tags,view_access_log
+  - Addressbook/manage_shared_contact_favorites,manage_shared_folders,run
+  - Timetracker/run
+  - Sales/run
