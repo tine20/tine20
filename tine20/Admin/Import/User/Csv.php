@@ -5,8 +5,8 @@
  * @package     Admin
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,6 +37,8 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
     
     /**
      * set controller
+     *
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _setController()
     {
@@ -48,9 +50,11 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
                 throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs correct model in config.');
         }
 
-        if(($this->_options['accountEmailDomain']) == null) {
+        if (empty($this->_options['accountEmailDomain'])) {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
-            $this->_options['accountEmailDomain'] = $config['primarydomain'];
+            if (isset($config['primarydomain'])) {
+                $this->_options['accountEmailDomain'] = $config['primarydomain'];
+            }
         }
     }
     
