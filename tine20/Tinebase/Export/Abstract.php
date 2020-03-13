@@ -212,6 +212,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_records = null;
 
+    protected $_currentIterationRecords = null;
+
     protected $_lastGroupValue = null;
 
     protected $_groupByProperty = null;
@@ -820,7 +822,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      *
      * @param Tinebase_Record_RecordSet|array $_records
      */
-    public function processIteration($_records)
+    public function processIteration($_records, $_resolveRecords = true)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' iterating over export data...');
@@ -828,9 +830,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (is_array($_records)) {
 
             foreach ($_records as $key => $value) {
+
+                $this->_currentIterationRecords = $value;
+                if ($_resolveRecords) {
+                    $this->_resolveRecords($value);
+                }
+
                 $this->_startDataSource($key);
 
-                $this->processIteration($value);
+                $this->processIteration($value, false);
 
                 $this->_endDataSource($key);
             }
@@ -838,7 +846,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             return;
         }
 
-        $this->_resolveRecords($_records);
+        $this->_currentIterationRecords = $_records;
+        if ($_resolveRecords) {
+            $this->_resolveRecords($_records);
+        }
 
         if (true === $this->_firstIteration && true === $this->_writeGenericHeader) {
             $this->_writeGenericHead();
