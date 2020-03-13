@@ -29,6 +29,7 @@ class Addressbook_Import_DemoDataTest extends TestCase
         $importer = new Tinebase_Setup_DemoData_Import('Addressbook_Model_Contact', [
             'container_id' => $this->_importContainer->getId(),
             'definition' => 'adb_tine_import_csv',
+            'file' => 'Contact.csv'
         ]);
         $importer->importDemodata();
 
