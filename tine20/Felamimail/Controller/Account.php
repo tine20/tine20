@@ -278,7 +278,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             throw new Felamimail_Exception_PasswordMissing($translation->_('shared / adb_list accounts need to have a password set'));
         }
         if (! $_record->email) {
-            throw new Tinebase_Exception_UnexpectedValue($translation->_('shared / adb_list accounts need to have an email set'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('shared / adb_list accounts need to have an email set'));
         }
 
         $this->_createSharedEmailUser($_record);
