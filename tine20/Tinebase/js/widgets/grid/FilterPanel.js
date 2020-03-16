@@ -252,7 +252,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
         }
         
-        // NOTE: always trigger a OR condition, otherwise we sould loose inactive FilterPanles
+        // NOTE: always trigger an OR condition, otherwise we could lose inactive FilterPanels
         return [{'condition': 'OR', 'filters': filters, id: 'FilterPanel'}];
     },
 
@@ -280,11 +280,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
         }, this);
         
-        
         if (! alternateCriterias) {
             // reset criterias
-//            this.criteriaCount = 0;
-//            this.activeFilterPanel.setTitle(String.format(i18n._('Criteria {0}'), ++this.criteriaCount));
             this.activeFilterPanel.setTitle(this.activeFilterPanel.generateTitle());
             for (var id in this.filterPanels) {
                 if (this.filterPanels.hasOwnProperty(id)) {
@@ -338,7 +335,6 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                     this.removeFilterPanel(id);
                 }
             }
-            
         }
     }
 });
