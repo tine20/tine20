@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <plugin>Addressbook_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <description>Import CSV formated contacts from Outlook 2010 German address book</description>
+    <!-- _("Import CSV formated contacts from Outlook 2010 German address book") -->
+    <extension>csv</extension>
+    <encoding>auto</encoding>
+    <label>CSV Outlook 2010 German</label>
+    <!-- _("CSV Outlook 2010 German") -->
+    <mapping>
+        <field>
+            <source>Anrede</source>
+            <destination>salutation</destination>
+        </field>
+        <field>
+            <source>Vorname</source>
+            <destination>n_given</destination>
+        </field>
+        <field>
+            <source>Weitere Vornamen</source>
+            <destination>n_middle</destination>
+        </field>
+        <field>
+            <source>Nachname</source>
+            <destination>n_family</destination>
+        </field>
+        <field>
+            <source>Suffix</source>
+            <destination>n_prefix</destination>
+        </field>
+        <field>
+            <source>Firma</source>
+            <destination>org_name</destination>
+        </field>
+        <field>
+            <source>Abteilung</source>
+            <destination>org_unit</destination>
+        </field>
+        <field>
+            <source>Position</source>
+            <destination>title</destination>
+        </field>
+        <field>
+            <source>Straße geschäftlich</source>
+            <destination>adr_one_street</destination>
+        </field>
+        <field>
+            <source>Straße geschäftlich 2</source>
+            <destination>adr_one_street2</destination>
+        </field>
+        <field>
+            <source>Straße geschäftlich 3</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Ort geschäftlich</source>
+            <destination>adr_one_locality</destination>
+        </field>
+        <field>
+            <source>Region geschäftlich</source>
+            <destination>adr_one_region</destination>
+        </field>
+        <field>
+            <source>Postleitzahl geschäftlich</source>
+            <destination>adr_one_postalcode</destination>
+        </field>
+        <field>
+            <source>Land/Region geschäftlich</source>
+            <destination>adr_one_countryname</destination>
+        </field>
+        <field>
+            <source>Straße privat</source>
+            <destination>adr_two_street</destination>
+        </field>
+        <field>
+            <source>Straße privat 2</source>
+            <destination>adr_two_street2</destination>
+        </field>
+        <field>
+            <source>Straße privat 3</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Ort privat</source>
+            <destination>adr_two_locality</destination>
+        </field>
+        <field>
+            <source>Bundesland/Kanton privat</source>
+            <destination>adr_two_region</destination>
+        </field>
+        <field>
+            <source>Postleitzahl privat</source>
+            <destination>adr_two_postalcode</destination>
+        </field>
+        <field>
+            <source>Land/Region privat</source>
+            <destination>adr_two_countryname</destination>
+        </field>
+        <field>
+            <source>Weitere Straße</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Weitere Straße 2</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Weitere Straße 3</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Weiterer Ort</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Weiteres/r Bundesland/Kanton</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Weitere Postleitzahl</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Weiteres/e Land/Region</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Telefon Assistent</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Fax geschäftlich</source>
+            <destination>tel_fax</destination>
+        </field>
+        <field>
+            <source>Telefon geschäftlich</source>
+            <destination>tel_work</destination>
+        </field>
+        <field>
+            <source>Telefon geschäftlich 2</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Rückmeldung</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Autotelefon</source>
+            <destination>tel_car</destination>
+        </field>
+        <field>
+            <source>Telefon Firma</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Fax privat</source>
+            <destination>tel_fax_home</destination>
+        </field>
+        <field>
+            <source>Telefon privat</source>
+            <destination>tel_home</destination>
+        </field>
+        <field>
+            <source>Telefon privat 2</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>ISDN</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Mobiltelefon</source>
+            <destination>tel_cell</destination>
+        </field>
+        <field>
+            <source>Weiteres Fax</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Weiteres Telefon</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Pager</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Haupttelefon</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Mobiltelefon 2</source>
+            <destination>tel_cell_private</destination>
+        </field>
+        <field>
+            <source>Telefon für Hörbehinderte</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Telex</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Abrechnungsinformation</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Benutzer 1</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Benutzer 2</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Benutzer 3</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Benutzer 4</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Beruf</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Büro</source>
+            <destination>room</destination>
+        </field>
+        <field>
+            <source>E-Mail-Adresse</source>
+            <destination>email</destination>
+        </field>
+        <field>
+            <source>E-Mail-Typ</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>E-Mail: Angezeigter Name</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>E-Mail 2: Adresse</source>
+            <destination>email_home</destination>
+        </field>
+        <field>
+            <source>E-Mail 2: Typ</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>E-Mail 2: Angezeigter Name</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>E-Mail 3: Adresse</source>
+            <destination>email_home</destination>
+        </field>
+        <field>
+            <source>E-Mail 3: Typ</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>E-Mail 3: Angezeigter Name</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Empfohlen von</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Geburtstag</source>
+            <destination>bday</destination>
+        </field>
+        <field>
+            <source>Geschlecht</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Hobby</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Initialen</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Internet-Frei/Gebucht</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Jahrestag</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Kategorien</source>
+            <destination>tags</destination>
+        </field>
+        <field>
+            <source>Kinder</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Konto</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Name Assistent</source>
+            <destination>assistent</destination>
+        </field>
+        <field>
+            <source>Name des/der Vorgesetzten</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Notizen</source>
+            <destination>note</destination>
+        </field>
+        <field>
+            <source>Organisationsnr</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Ort</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Partner</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Postfach geschäftlich</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Postfach privat</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Priorität</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Privat</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Regierungsnr.</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Reisekilometer</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Sprache</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Stichwörter</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Vertraulichkeit</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Verzeichnisserver</source>
+            <destination></destination>
+        </field>
+        <field>
+            <source>Webseite</source>
+            <destination>url</destination>
+        </field>
+        <field>
+            <source>Weiteres Postfach</source>
+            <destination></destination>
+        </field>
+    </mapping>
+</config> 
