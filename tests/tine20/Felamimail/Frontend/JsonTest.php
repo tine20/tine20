@@ -847,7 +847,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
    <20120620092902.88C8C10131@ganymed.de>'
         ));
         $replyMessage = $this->_getReply($messageInSent);
-        $returned = $this->_json->saveMessage($replyMessage);
+        $this->_json->saveMessage($replyMessage);
 
         $result = $this->_getMessages();
         $sentMessage = $this->_getMessageFromSearchResult($result, $replyMessage['subject']);
@@ -856,6 +856,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
     /**
      * test move
+     *
+     * @param string $moveToFolderName
      */
     public function testMoveMessage($moveToFolderName = null)
     {
@@ -863,35 +865,68 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             $moveToFolderName = $this->_testFolderName;
         }
 
-        $message = $this->_sendMessage();
-        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $moveToFolderName);
-
         $inbox = $this->_getFolder('INBOX');
         $inboxBefore = $this->_json->updateMessageCache($inbox['id'], 30);
 
+        $message = $this->_moveMessageToFolder($moveToFolderName);
+        $inboxAfter = $this->_getFolder('INBOX');
+
+        $this->assertEquals($inboxBefore['cache_unreadcount'], $inboxAfter['cache_unreadcount']);
+        $this->assertEquals($inboxBefore['cache_totalcount'], $inboxAfter['cache_totalcount']);
+
+        $this->_assertMessageInFolder($moveToFolderName, $message['subject']);
+    }
+
+    protected function _moveMessageToFolder($moveToFolderName, $keepOriginalMessages = false, $account = null)
+    {
+        $message = $this->_sendMessage();
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $moveToFolderName);
+
         // move
-        $testFolder = $this->_getFolder($moveToFolderName);
+        $testFolder = $this->_getFolder($moveToFolderName, true, $account);
         $this->_json->moveMessages(array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
-        )), $testFolder->getId());
+        )), $testFolder->getId(), $keepOriginalMessages);
 
         // sleep for 2 secs because mailserver may be slower than expected
         sleep(2);
 
-        $inboxAfter = $this->_getFolder('INBOX');
+        return $message;
+    }
 
-        // check if count was decreased correctly
-        $this->assertEquals($inboxBefore['cache_unreadcount'] - 1, $inboxAfter['cache_unreadcount']);
-        $this->assertEquals($inboxBefore['cache_totalcount'] - 1, $inboxAfter['cache_totalcount']);
+    public function testMoveMessageToAnotherAccount()
+    {
+        // create shared account
+        $account = $this->_createSharedAccount();
 
-        $result = $this->_getMessages($moveToFolderName);
-        $movedMessage = array();
-        foreach ($result['results'] as $mail) {
-            if ($mail['subject'] == $message['subject']) {
-                $movedMessage = $mail;
-            }
+        // send message and move to other INBOX
+        $message = $this->_moveMessageToFolder('INBOX', false, $account);
+        $this->_assertMessageNotInFolder('INBOX', $message['subject']);
+        $this->_assertMessageInFolder('INBOX', $message['subject'], $account);
+    }
+
+    public function testCopyMessageToAnotherFolder()
+    {
+        $moveToFolderName = $this->_testFolderName;
+        $message = $this->_moveMessageToFolder($moveToFolderName, true);
+
+        $this->_assertMessageInFolder('INBOX', $message['subject']);
+        $this->_assertMessageInFolder($moveToFolderName, $message['subject']);
+    }
+
+    public function testCopyMessageToAnotherFolderDisabled()
+    {
+        Felamimail_Config::getInstance()->set(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT, true);
+
+        try {
+            $this->testCopyMessageToAnotherFolder();
+            self::fail('copy should not be possible');
+        } catch (Exception $e) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            self::assertEquals($translation->_('It is not allowed to copy e-mails in the same account.'), $e->getMessage());
         }
-        $this->assertTrue(!empty($movedMessage), 'moved message not found');
+
+        Felamimail_Config::getInstance()->set(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT, false);
     }
 
     public function testMoveMessageToFolderWithUmlaut()

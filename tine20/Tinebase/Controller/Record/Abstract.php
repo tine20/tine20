@@ -1903,7 +1903,8 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (count((array)$ids) != count($records)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
+                . ' of ' . count((array)$ids) . ' records exist.');
         }
         
         if (empty($records)) {

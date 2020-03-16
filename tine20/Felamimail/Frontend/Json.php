@@ -217,24 +217,22 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * move messsages to folder
+     * move messages to folder
      *
-     * @param  array $filterData filter data
-     * @param  string $targetFolderId
+     * @param array $filterData filter data
+     * @param string $targetFolderId
+     * @param boolean $keepOriginalMessages
      * @return array source folder status
      */
-    public function moveMessages($filterData, $targetFolderId)
+    public function moveMessages($filterData, $targetFolderId, $keepOriginalMessages = false)
     {
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
         
-        $filter = new Felamimail_Model_MessageFilter(array());
-        $filter->setFromArrayInUsersTimezone($filterData);
-        $updatedFolders = Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $targetFolderId);
-        
-        $result = ($updatedFolders !== NULL) ? $this->_multipleRecordsToJson($updatedFolders) : array();
-        
-        return $result;
+        $filter = $this->_decodeFilter($filterData, Felamimail_Model_Message::class);
+        $updatedFolders = Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $targetFolderId, $keepOriginalMessages);
+
+        return ($updatedFolders !== NULL) ? $this->_multipleRecordsToJson($updatedFolders) : array();
     }
     
     /**

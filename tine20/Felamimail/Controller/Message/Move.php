@@ -32,6 +32,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
     private function __construct() 
     {
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
+        $this->_modelName = Felamimail_Model_Message::class;
     }
     
     /**
@@ -57,13 +58,14 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
     }
     
     /**
-     * move messages to folder
+     * move/copy messages to folder
      *
-     * @param  mixed  $_messages
-     * @param  mixed  $_targetFolder can be one of: folder_id, Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
+     * @param mixed  $_messages
+     * @param mixed  $_targetFolder can be one of: folder_id, Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
+     * @param boolean $keepOriginalMessages
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function moveMessages($_messages, $_targetFolder)
+    public function moveMessages($_messages, $_targetFolder, $keepOriginalMessages = false)
     {
         if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
@@ -78,12 +80,11 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
                 'filter'     => $_messages,
                 'function'   => 'processMoveIteration',
             ));
-            $iterateResult = $iterator->iterate($targetFolder);
+            $iterateResult = $iterator->iterate($targetFolder, $keepOriginalMessages);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Moved ' . $iterateResult['totalcount'] . ' message(s).');
+                . ' Moved/copied ' . $iterateResult['totalcount'] . ' message(s).');
             
-            // @todo return all results?
             $result = (! empty($iterateResult['results'])) ? array_pop($iterateResult['results']) : new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         } else {
             $messages = $this->_convertToRecordSet($_messages, TRUE);
@@ -98,9 +99,10 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * 
      * @param Tinebase_Record_RecordSet $_messages
      * @param  mixed  $_targetFolder can be one of: Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
+     * @param boolean $keepOriginalMessages
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function processMoveIteration($_messages, $_targetFolder)
+    public function processMoveIteration($_messages, $_targetFolder, $keepOriginalMessages = false)
     {
         $folderName = ($_targetFolder instanceof Felamimail_Model_Folder ? $_targetFolder->globalname : $_targetFolder);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -110,22 +112,25 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         
         $movedMessages = FALSE;
         foreach (array_unique($_messages->folder_id) as $folderId) {
-            $movedMessages = ($this->_moveMessagesByFolder($_messages, $folderId, $_targetFolder) || $movedMessages);
+            $movedMessages = ($this->_moveMessagesByFolder($_messages, $folderId, $_targetFolder, $keepOriginalMessages) || $movedMessages);
         }
         
         if (! $movedMessages) {
             // no messages have been moved -> return empty record set
             $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         } else {
-            // delete messages in local cache
-            try {
-                $number = $this->_backend->delete($_messages->getArrayOfIds());
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                    ' Error deleting cached messages from folder ' . $folderName . ': ' . $zdse);
+            if (! $keepOriginalMessages) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Delete messages in local cache');
+                try {
+                    $number = $this->_backend->delete($_messages->getArrayOfIds());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number . ' messages from cache');
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                        ' Error deleting cached messages from folder ' . $folderName . ': ' . $zdse);
+                }
             }
-        
+
             $result = $this->_updateCountsAfterMove($_messages);
         }
         
@@ -138,9 +143,11 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * @param Tinebase_Record_RecordSet $_messages
      * @param string $_folderId
      * @param Felamimail_Model_Folder|string $_targetFolder
+     * @param boolean $keepOriginalMessages
      * @return boolean did we move messages?
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _moveMessagesByFolder(Tinebase_Record_RecordSet $_messages, $_folderId, $_targetFolder)
+    protected function _moveMessagesByFolder(Tinebase_Record_RecordSet $_messages, $_folderId, $_targetFolder, $keepOriginalMessages = false)
     {
         $messagesInFolder = $_messages->filter('folder_id', $_folderId);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
@@ -153,9 +160,17 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             // no need to move
             $result = FALSE;
         } else if ($messagesInFolder->getFirstRecord()->account_id == $_targetFolder->account_id) {
-            $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $_targetFolder);
+            if (Felamimail_Config::getInstance()->get(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT)) {
+                $translation = Tinebase_Translation::getTranslation('Felamimail');
+                throw new Tinebase_Exception_SystemGeneric($translation->_('It is not allowed to copy e-mails in the same account.'));
+            }
+            $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $_targetFolder, $keepOriginalMessages);
         } else {
             $this->_moveMessagesToAnotherAccount($messagesInFolder, $_targetFolder);
+            if (! $keepOriginalMessages) {
+                // we might also do this: $_imap->addFlags($messagesInFolder, array(Zend_Mail_Storage::FLAG_DELETED));
+                $this->_moveMessagesToTrash($messagesInFolder, $_folderId);
+            }
         }
         
         if (! $result) {
@@ -199,8 +214,11 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * 
      * @param Tinebase_Record_RecordSet $_messages
      * @param Felamimail_Model_Folder $_targetFolder
+     * @param boolean $keepOriginalMessages
      */
-    protected function _moveMessagesInFolderOnSameAccount(Tinebase_Record_RecordSet $_messages, Felamimail_Model_Folder $_targetFolder)
+    protected function _moveMessagesInFolderOnSameAccount(Tinebase_Record_RecordSet $_messages,
+                                                          Felamimail_Model_Folder $_targetFolder,
+                                                          $keepOriginalMessages = false)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Move ' . count($_messages) . ' message(s) to ' . $_targetFolder->globalname
@@ -216,14 +234,14 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $imapMessageUids[] = $message->messageuid;
             
             if (count($imapMessageUids) >= 50) {
-                $this->_moveBatchOfMessages($imapMessageUids, $_targetFolder->globalname, $imapBackend);
+                $this->_moveBatchOfMessages($imapMessageUids, $_targetFolder->globalname, $imapBackend, $keepOriginalMessages);
                 $imapMessageUids = array();
             }
         }
         
         // the rest
         if (count($imapMessageUids) > 0) {
-            $this->_moveBatchOfMessages($imapMessageUids, $_targetFolder->globalname, $imapBackend);
+            $this->_moveBatchOfMessages($imapMessageUids, $_targetFolder->globalname, $imapBackend, $keepOriginalMessages);
         }
     }
 
@@ -233,7 +251,8 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * @param Tinebase_Record_RecordSet $_messages
      * @param Felamimail_Model_Folder $_targetFolder
      */
-    protected function _moveMessagesToAnotherAccount(Tinebase_Record_RecordSet $_messages, Felamimail_Model_Folder $_targetFolder)
+    protected function _moveMessagesToAnotherAccount(Tinebase_Record_RecordSet $_messages,
+                                                     Felamimail_Model_Folder $_targetFolder)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
             ' Move ' . count($_messages) . ' message(s) to ' . $_targetFolder->globalname . ' in account ' . $_targetFolder->account_id
@@ -255,7 +274,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
     protected function _updateCountsAfterMove(Tinebase_Record_RecordSet $_messages)
     {
         $folderCounterById = array();
-        foreach($_messages as $message) {
+        foreach ($_messages as $message) {
             if (! (isset($folderCounterById[$message->folder_id]) || array_key_exists($message->folder_id, $folderCounterById))) {
                 $folderCounterById[$message->folder_id] = array(
                     'decrementUnreadCounter'    => 0,
@@ -269,9 +288,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             }
             $folderCounterById[$message->folder_id]['decrementMessagesCounter']++;
         }
-        $affectedFolders = $this->_updateFolderCounts($folderCounterById);
-
-        return $affectedFolders;
+        return $this->_updateFolderCounts($folderCounterById);
     }
     
     /**
@@ -279,17 +296,20 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * 
      * @param array $_uids
      * @param string $_targetFolderName
+     * @param boolean $keepOriginalMessages
      * @param Felamimail_Backend_ImapProxy $_imap
      * 
      * @todo perhaps we should check the existance of the messages on the imap instead of catching the exceptions here
      */
-    protected function _moveBatchOfMessages($_uids, $_targetFolderName, Felamimail_Backend_ImapProxy $_imap)
+    protected function _moveBatchOfMessages($_uids, $_targetFolderName, Felamimail_Backend_ImapProxy $_imap, $keepOriginalMessages)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Move ' . count($_uids) . ' messages to folder ' . $_targetFolderName . ' on imap server');
         try {
             $_imap->copyMessage($_uids, Felamimail_Model_Folder::encodeFolderName($_targetFolderName));
-            $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
+            if (! $keepOriginalMessages) {
+                $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
+            }
         } catch (Zend_Mail_Storage_Exception $zmse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmse);
         } catch (Felamimail_Exception_IMAP $fei) {

@@ -219,13 +219,15 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Felamimail.Model.Message,
     
     /**
-     * move messsages to folder
+     * move messages to folder
      *
-     * @param  array $filterData filter data
-     * @param  string $targetFolderId
+     * @param {Object} filter filter data
+     * @param {String} targetFolderId
+     * @param {Boolean} keepOriginalMessages
+     * @param {Object} options
      * @return  {Number} Ext.Ajax transaction id
      */
-    moveMessages: function(filter, targetFolderId, options) {
+    moveMessages: function(filter, targetFolderId, keepOriginalMessages, options) {
         options = options || {};
         options.params = options.params || {};
         
@@ -234,6 +236,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         p.method = this.appName + '.moveMessages';
         p.filterData = filter;
         p.targetFolderId = targetFolderId;
+        p.keepOriginalMessages = keepOriginalMessages;
         
         options.beforeSuccess = function(response) {
             return [Tine.Felamimail.folderBackend.recordReader(response)];
@@ -241,6 +244,8 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         
         // increase timeout as this can take a longer (5 minutes)
         options.timeout = 300000;
+
+        options.failure = Tine.Felamimail.handleRequestException;
         
         return this.doXHTTPRequest(options);
     },

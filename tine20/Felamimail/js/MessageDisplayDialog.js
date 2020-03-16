@@ -207,7 +207,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         if (trashId) {
             var filter = [{field: 'id', operator: 'equals', value: this.record.id}];
             
-            Tine.Felamimail.messageBackend.moveMessages(filter, trashId, {
+            Tine.Felamimail.messageBackend.moveMessages(filter, trashId, false, {
                 callback: this.onAfterDelete.createDelegate(this, ['move'])
             });
         } else {

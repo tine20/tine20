@@ -393,11 +393,28 @@ abstract class Felamimail_TestCase extends TestCase
             }
         }
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+        return $this->_assertMessageInFolder($folderName, $messageToSend['subject']);
+    }
 
+    /**
+     * @param string $folderName
+     * @param string $subject
+     * @param Felamimail_Model_Account $account
+     * @return array
+     */
+    protected function _assertMessageInFolder($folderName, $subject, $account = null)
+    {
+        $message = $this->_searchForMessage($folderName, $subject, $account);
+        $this->assertTrue(!empty($message), 'Message with subject "' . $subject . '" not found in folder ' . $folderName);
+        return $message;
+    }
+
+    protected function _searchForMessage($folderName, $subject, $account = null)
+    {
         $i = 0;
         while ($i < 5) {
-            $result = $this->_getMessages($folderName);
-            $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
+            $result = $this->_getMessages($folderName, [], $account);
+            $message = $this->_getMessageFromSearchResult($result, $subject);
             if (!empty($message)) {
                 break;
             }
@@ -406,7 +423,19 @@ abstract class Felamimail_TestCase extends TestCase
             $i++;
         }
 
-        $this->assertTrue(!empty($message), 'Sent message not found.');
+        return $message;
+    }
+
+    /**
+     * @param string $folderName
+     * @param string $subject
+     * @param Felamimail_Model_Account $account
+     * @return array
+     */
+    protected function _assertMessageNotInFolder($folderName, $subject, $account = null)
+    {
+        $message = $this->_searchForMessage($folderName, $subject, $account);
+        $this->assertTrue(empty($message), 'Message with subject "' . $subject . '" found in folder ' . $folderName);
         return $message;
     }
 
