@@ -2932,7 +2932,18 @@ HumanResources_CliTests.testSetContractsEndDate */
     public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
     {
         $recordId = is_array($location['record_id']) ? $location['record_id']['id'] : $location['record_id'];
-        $record = $this->get($recordId);
+        try {
+            $record = $this->get($recordId);
+            if (! $record->getId()) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Record has no ID: ' . print_r($record->toArray(), true));
+                return null;
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Record not found');
+            return null;
+        }
 
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
         $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
