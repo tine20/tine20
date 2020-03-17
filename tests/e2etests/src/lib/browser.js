@@ -2,7 +2,6 @@ const puppeteer = require('puppeteer');
 const expect = require('expect-puppeteer');
 require('dotenv').config();
 
-
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
@@ -32,6 +31,7 @@ module.exports = {
     getNewWindow: async function () {
         return new Promise((fulfill) => browser.once('targetcreated', (target) => fulfill(target.page())));
     },
+
     getEditDialog: async function(btnText) {
         await expect(page).toClick('.x-btn-text', {text: btnText});
         let popupWindow = await this.getNewWindow();
@@ -40,12 +40,56 @@ module.exports = {
         await popupWindow.screenshot({path:'screenshots/test.png'});
         return popupWindow;
     },
+
     getElement: async function (type, page, text) {
         return page.$x("//" + type + "[contains(., '" + text + "')]");
     },
+
     getCurrentUser: async function (page) {
         return page.evaluate(() => Tine.Tinebase.registry.get('currentAccount'));
     },
+
+    reloadRegistry: async function (page) {
+        page.evaluate(() => Tine.Tinebase.common.reload({
+            clearCache: true
+        }));
+        await page.waitFor(1000);
+        await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon',20000);
+    },
+
+    /**
+     * set tine20 preference and reload registry afterwards
+     *
+     * @param appName
+     * @param preference
+     * @param value
+     * @returns {Promise<void>}
+     */
+    setPreference: async function(page, appName, preference, value) {
+        console.log('setting preference ' + preference + ' of app '
+            + appName + ' to "' + value + '"');
+
+        await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
+        await page.waitFor(2000);
+        const frame = await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer',{visible: true});
+        await expect(frame).toClick('.x-menu-item-icon.action_adminMode');
+        const preferencePopup = await this.getNewWindow();
+        await preferencePopup.waitFor(2000);
+        await expect(preferencePopup).toClick('span', {text: appName});
+        await preferencePopup.waitFor(1000);
+
+        // change setting to YES
+        await expect(preferencePopup).toMatchElement('input[name=' + preference + ']');
+        await expect(preferencePopup).toFill('input[name=' + preference + ']', value);
+        await preferencePopup.waitFor(500);
+        await preferencePopup.keyboard.press('Enter');
+        await preferencePopup.waitFor(500);
+        await expect(preferencePopup).toClick('button', {text: 'Ok'});
+        await page.waitFor(1000);
+
+        await this.reloadRegistry(page);
+    },
+
     getBrowser: async function (app, module) {
 
         expect.setDefaultOptions({timeout: 5000});
