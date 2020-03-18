@@ -366,15 +366,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getDefaultPeriodFilter()
     {
-        $now = Tinebase_DateTime::now()->setTime(0,0,0);
+        $now = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         
         $from = $now->getClone()->subMonth(Calendar_Config::getInstance()->get(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM, 0));
         $until = $now->getClone()->addMonth(Calendar_Config::getInstance()->get(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL, 1));
-        $periodFilter = new Calendar_Model_PeriodFilter(array(
+        $periodFilter = new Calendar_Model_PeriodFilter([
             'field' => 'period',
             'operator' => 'within',
-            'value' => array("from" => $from, "until" => $until)
-        ));
+            'value' => array("from" => $from, "until" => $until),
+            'options' => ['timezone' => Tinebase_Core::getUserTimezone()]
+        ]);
         
         return $periodFilter;
     }

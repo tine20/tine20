@@ -180,10 +180,19 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     public function toArray($_valueToJson = false)
     {
         $result = parent::toArray($_valueToJson);
-        $result['value'] = array(
-            'from'  => $this->_from,
-            'until' => $this->_until,
-        );
+        if ($_valueToJson && Tinebase_Core::getUserTimezone() !== 'UTC') {
+            $result['value'] = [
+                'from' => (new Tinebase_DateTime($this->_from))->setTimezone(Tinebase_Core::getUserTimezone())
+                    ->toString(),
+                'until' => (new Tinebase_DateTime($this->_until))->setTimezone(Tinebase_Core::getUserTimezone())
+                    ->toString(),
+            ];
+        } else {
+            $result['value'] = [
+                'from' => $this->_from,
+                'until' => $this->_until,
+            ];
+        }
         
         return $result;
     }
