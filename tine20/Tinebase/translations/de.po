@@ -430,7 +430,7 @@ msgstr "Bestätigen"
 
 #: js/MainMenu.js:293
 msgid "Are you sure you want to logout?"
-msgstr "Wollen Sie sich wirklich Abmelden?"
+msgstr "Wollen Sie sich wirklich abmelden?"
 
 #: js/MainMenu.js:308
 msgid "Logging you out..."
