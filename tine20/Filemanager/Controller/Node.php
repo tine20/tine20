@@ -1502,6 +1502,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
         $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
         $emlNode = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile);
+        if (! $emlNode) {
+            return null;
+        }
 
         $emlNode->description = $this->_getMessageNodeDescription($message);
         $emlNode->last_modified_time = Tinebase_DateTime::now();
