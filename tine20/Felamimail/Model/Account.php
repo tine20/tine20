@@ -807,7 +807,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
     {
         $emailUser = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
-            if ($this->user_id) {
+            if ($this->user_id && $this->type === Felamimail_Model_Account::TYPE_SYSTEM) {
                 $user = Tinebase_User::getInstance()->getFullUserById($this->user_id);
                 $emailUserId = $user->getEmailUserId();
             } else {

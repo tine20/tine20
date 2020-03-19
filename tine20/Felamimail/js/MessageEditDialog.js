@@ -705,14 +705,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         me.action_saveAsDraft.setIconClass('x-btn-wait');
 
-        return me.saveAsDraftPromise = retryAllRejectedPromises([_.partial(Tine.Felamimail.saveDraft, me.record.data)], {
+        return me.saveAsDraftPromise = retryAllRejectedPromises([() => {
+            return Tine.Felamimail.saveDraft(me.record.data)
+                .then((savedDraft) => {
+                    me.draftUid = savedDraft.messageuid;
+                })
+                .finally(() => {
+                    me.action_saveAsDraft.setIconClass('action_saveAsDraft');
+                });
+            }
+        ], {
             maxAttempts: 5, delay: 500
-        })
-        .then((savedDraft) => {
-            me.draftUid = savedDraft.messageuid;
-        })
-        .finally(() => {
-            me.action_saveAsDraft.setIconClass('action_saveAsDraft');
         });
     },
 

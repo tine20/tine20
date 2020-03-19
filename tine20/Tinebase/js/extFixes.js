@@ -83,10 +83,10 @@ Ext.override(Ext.data.Store, {
      */
     addUnique: function(record, prop) {
         prop = prop.match(/^data\./) ? prop : `data.${prop}`;
-        let [,name, idx, ext] = String(_.get(record, prop)).match(/(.*?)(?:\s\((\d+)\))?\.(.*)/) ;
+        let [,name, idx, ext] = String(_.get(record, prop)).match(/(.*?)(?:\s\((\d+)\))?(\..*)/) || [null, _.get(record, prop)];
         while(_.find(this.data.items, (item) => {return _.get(item, prop) === _.get(record, prop)})) {
             idx = idx || 0;
-            _.set(record, prop, `${name} (${++idx}).${ext}`);
+            _.set(record, prop, `${name} (${++idx})${ext}`);
         }
 
         this.add([record]);

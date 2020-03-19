@@ -35,9 +35,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      */
     protected function setUp()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
+        $this->_skipWithoutEmailSystemAccountConfig();
 
         parent::setUp();
 

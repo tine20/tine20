@@ -181,11 +181,7 @@ class Addressbook_Controller_ListTest extends TestCase
 
     public function testListAsMailinglist()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()
-            || ! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}
-        ) {
-            self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS configs required');
-        }
+        $this->_skipIfXpropsUserIdDeactivated();
 
         $this->_testNeedsTransaction();
 

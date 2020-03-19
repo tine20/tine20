@@ -168,7 +168,6 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             })
         });
 
-        
         this.intervalEditor = new Ext.ux.form.Spinner({
             fieldLabel: this.app.i18n._('Interval'),
             name: 'interval',
@@ -224,13 +223,14 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         var columns = [
             {id: 'product_id', dataIndex: 'product_id', type: Tine.Sales.Model.ProductAggregate, header: this.app.i18n._('Product'),
                  quickaddField: this.productQuickadd, renderer: this.renderProductAggregate,
-                 editor: this.productEditor, scope: this, width: 270
+                 editor: this.productEditor, scope: this, width: 150
             },
             {id: 'quantity', editor: this.quantityEditor, renderer: this.renderQuantity, quickaddField: this.quantityQuickadd, dataIndex: 'quantity', header: this.app.i18n._('Quantity'),  scope: this, width: 54},
             {id: 'interval', editor: this.intervalEditor, quickaddField: this.intervalQuickadd, dataIndex: 'interval', header: this.app.i18n._('Interval'),  scope: this, width: 60},
             {id: 'billing_point', renderer: this.renderBillingPoint , editor: this.billingPointEditor, quickaddField: this.billingPointQuickadd, dataIndex: 'billing_point', header: this.app.i18n._('Billing Point'),  scope: this, width: 140},
             {id: 'start_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'start_date', header: this.app.i18n._('Start Date'),  scope: this, width: 110},
             {id: 'end_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'end_date', header: this.app.i18n._('End Date'),  scope: this, width: 110},
+            {id: 'json_attributes', renderer: this.renderAttributes, dataIndex: 'json_attributes', header: this.app.i18n._('Attributes'),  scope: this, width: 300},
             {id: 'last_autobill', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), hidden: true, dataIndex: 'last_autobill', header: this.app.i18n._('Last Autobill'),  scope: this, width: 110},
             {id: 'creation_time',      header: i18n._('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
             {id: 'created_by',         header: i18n._('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true },
@@ -246,6 +246,29 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             }, 
             columns: columns
        });
+    },
+
+    /**
+     * TODO let accountable define its presentation
+     * TODO add qtip?
+     *
+     * @param value
+     * @returns {string}
+     */
+    renderAttributes: function(value, cell, record) {
+        // let qtipText = JSON.stringify(value);
+        let result = [];
+
+        _.forOwn(value, function(value, key) {
+            if (key !== 'assignedAccountables') {
+                result.push(key + ': ' + value);
+            } else {
+                result.push('#: ' + value.length);
+            }
+        });
+
+        // let result = '<div ext:qtip="' + qtipText + '">' + attributes + '</div>';
+        return result.join('/',);
     },
     
     /**
@@ -484,7 +507,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
 
         if (accountable == 'WebAccounting_Model_ProxmoxVM') {
             // TODO get accountable keys from modelconfig / registry (Tine.WebAccounting.registry.get('models')[MODEL])
-            return ['vcpus', 'memory', 'storage', 'assignedAccountables'];
+            return ['vcpus', 'memory', 'storage', 'ssdstorage', 'assignedAccountables'];
         } else {
             return [];
         }

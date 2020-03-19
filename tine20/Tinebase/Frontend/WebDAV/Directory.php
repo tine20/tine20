@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -286,11 +286,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         // combine all chunks to one file
         $joinedFile = Tinebase_TempFile::getInstance()->joinTempFiles($uploadedChunks);
         $joinedFile->name = $chunkInfo['name'];
-        
-        foreach ($uploadedChunks as $chunk) {
-            unlink($chunk->path);
-        }
-        
+
         return $joinedFile;
     }
 }

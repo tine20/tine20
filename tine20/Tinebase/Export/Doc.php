@@ -151,6 +151,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         $this->_currentProcessor = $this->_dataSources[$_name];
         $this->_currentDataSource = $_name;
         $this->_rowCount = 0;
+
+        $this->renderProcessorsTwigTemplate();
     }
 
     /**
@@ -212,6 +214,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             $processor->setValue('${GROUP_BLOCK}', $this->_cutXml($this->_currentProcessor->getMainPart()));
             $this->_currentProcessor = $processor;
         }
+
+        $this->renderProcessorsTwigTemplate();
     }
 
     protected function _startGroup()
@@ -225,6 +229,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         if ($this->_currentProcessor->hasConfig('group')) {
             $this->_currentProcessor = $this->_currentProcessor->getConfig('group');
         }
+
+        $this->renderProcessorsTwigTemplate();
 
         if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_GROUP ||
                 $this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_SUBGROUP) {
@@ -289,12 +295,16 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
         $this->_rowCount += 1;
 
+        $this->renderProcessorsTwigTemplate();
+
         if ($this->_currentProcessor->hasConfig('recordRow')) {
             $recordRow = $this->_currentProcessor->getConfig('recordRow');
             $this->_currentProcessor->setValue('${RECORD_ROW}', $recordRow['recordRow'] . '${RECORD_ROW}');
         } else {
             if ($this->_currentProcessor->hasConfig('record')) {
                 $this->_currentProcessor = $this->_currentProcessor->getConfig('record');
+
+                $this->renderProcessorsTwigTemplate();
             }
 
             if ($this->_currentProcessor->getType() === Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD ||
@@ -320,8 +330,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     }
                     $parent->setValue($name, $data);
                 }
-            } else {
-                throw new Tinebase_Exception_UnexpectedValue('template and definition do not match');
             }
         }
     }
@@ -348,6 +356,24 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             $this->_currentProcessor->getParent()->setValue('${RECORD_BLOCK}',
                 $this->_currentProcessor->getConfig('footer') . '${RECORD_BLOCK}');
         }
+    }
+
+    protected function renderProcessorsTwigTemplate()
+    {
+        if (null === ($src = $this->_currentProcessor->getTwigSource())) {
+            return;
+        }
+
+        $twigName = $this->_currentProcessor->getTwigName() . ' _twig';
+        $this->_twig->addLoader(new Tinebase_Twig_CallBackLoader($twigName, $this->_getLastModifiedTimeStamp(),
+            array($this->_currentProcessor, 'getTwigSource')));
+
+        $result = $this->_twig->load($twigName)->render($this->_getTwigContext([
+            'records' => $this->_currentIterationRecords,
+            'record'  => null,
+        ]));
+        $this->_currentProcessor->setValue('${TWIG_TEMPLATE}', $result);
+        $this->_currentProcessor->unsetTwigSource();
     }
 
     /**
@@ -588,6 +614,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                 $this->_dataSources[$match[1]] = $processor;
 
                 $this->_findAndReplaceGroup($processor);
+
+                $processor->replaceTwigTemplate();
             }
         }
     }
@@ -627,6 +655,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             $groupProcessor->setConfig($config);
             $config = array('group' => $groupProcessor);
 
+            $groupProcessor->replaceTwigTemplate();
+
         } elseif (null === ($record = $this->_findAndReplaceRecord($_templateProcessor))) {
             $config['recordRow'] = $this->_findAndReplaceRecordRow($_templateProcessor);
         } else {
@@ -663,6 +693,9 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                 $config['separator'] = $recordSeparator;
             }
             $processor->setConfig(array_merge($processor->getConfig(), $config));
+
+            $_templateProcessor->replaceTwigTemplate();
+
             return $processor;
         }
 
@@ -703,7 +736,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                 $result['groupSeparatorRow'] = str_replace('${GROUP_SEPARATOR}', '', $_templateProcessor->replaceRow('${GROUP_SEPARATOR}', ''));
             }
         } else {
-            throw new Tinebase_Exception_UnexpectedValue('template without RECORD_BLOCK needs to contain a table row with a replacement variable');
+            $_templateProcessor->replaceTwigTemplate();
+            $result = null;
         }
 
         return $result;

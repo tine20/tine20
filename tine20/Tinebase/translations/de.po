@@ -430,7 +430,7 @@ msgstr "Bestätigen"
 
 #: js/MainMenu.js:293
 msgid "Are you sure you want to logout?"
-msgstr "Wollen Sie sich wirklich Abmelden?"
+msgstr "Wollen Sie sich wirklich abmelden?"
 
 #: js/MainMenu.js:308
 msgid "Logging you out..."
@@ -4661,11 +4661,11 @@ msgstr "ESC: Liste fokussieren"
 msgid "R: reload grid"
 msgstr "R: Liste neu laden"
 
-msgid "Password failed to match the following policy requirements: "
-msgstr "Das eingegebene Kennwort entspricht nicht den Mindestanforderungen: "
-
 msgid "A Message has been filed to this record. Subject: {0}"
 msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
+
+msgid "Password failed to match the following policy requirements: "
+msgstr "Das eingegebene Kennwort entspricht nicht den Mindestanforderungen: "
 
 msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"

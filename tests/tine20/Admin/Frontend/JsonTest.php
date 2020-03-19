@@ -1383,9 +1383,7 @@ class Admin_Frontend_JsonTest extends TestCase
 
     public function testAdditionalDomainInUserAccount()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()) {
-            self::markTestSkipped('imap systemaccount config required');
-        }
+        $this->_skipWithoutEmailSystemAccountConfig();
 
         $addDomain = 'anotherdomain.com';
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);

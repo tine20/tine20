@@ -202,15 +202,14 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_exportTimeStamp = null;
 
-    /**
-     * @var null|string
-     */
-    protected $_logoPath = null;
+    protected $_baseContext = null;
 
     /**
      * @var Tinebase_Record_RecordSet|null
      */
     protected $_records = null;
+
+    protected $_currentIterationRecords = null;
 
     protected $_lastGroupValue = null;
 
@@ -826,7 +825,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      *
      * @param Tinebase_Record_RecordSet|array $_records
      */
-    public function processIteration($_records)
+    public function processIteration($_records, $_resolveRecords = true)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' iterating over export data...');
@@ -834,9 +833,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (is_array($_records)) {
 
             foreach ($_records as $key => $value) {
+
+                $this->_currentIterationRecords = $value;
+                if ($_resolveRecords) {
+                    $this->_resolveRecords($value);
+                }
+
                 $this->_startDataSource($key);
 
-                $this->processIteration($value);
+                $this->processIteration($value, false);
 
                 $this->_endDataSource($key);
             }
@@ -844,7 +849,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             return;
         }
 
-        $this->_resolveRecords($_records);
+        $this->_currentIterationRecords = $_records;
+        if ($_resolveRecords) {
+            $this->_resolveRecords($_records);
+        }
 
         if (true === $this->_firstIteration && true === $this->_writeGenericHeader) {
             $this->_writeGenericHead();
@@ -1046,11 +1054,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }
                 }
                 foreach (array_diff_key($availableCFNames, $cfs) as $name => $cfc) {
-                    $cfs[$name] = clone $cfc;
+                    $cfs[$name] = $cfc;
                 }
 
                 array_walk($cfs, function(Tinebase_Model_CustomField_Config $val, $key)
                         use($cfNameLabelMap, $stringifyCallBack) {
+                    if ($val->value instanceof Tinebase_CustomField_Value) return;
+
                     $val->label = $cfNameLabelMap[$key];
                     $val->value = new Tinebase_CustomField_Value($val->value, $val->definition, $stringifyCallBack,
                         $val->application_id);
@@ -1194,6 +1204,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         // TODO FE data resolving: what about this?
         foreach ((array)$this->_keyFields as $property => $keyField) {
+            if (!$_records->getFirstRecord()->has($property)) {
+                continue;
+            }
+
             /** @var Tinebase_Config_KeyField $keyField */
             if ($keyField['application'] === $this->_applicationName) {
                 $keyField = $appConfig->{$keyField['name']};
@@ -1436,29 +1450,28 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getTwigContext(array $context)
     {
-        if (null === $this->_logoPath) {
-            $this->_logoPath = Tinebase_Core::getInstallLogo();
+        if (null === $this->_baseContext) {
+            $this->_baseContext = [
+                Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
+                'branding' => [
+                    'logo' => Tinebase_Core::getInstallLogo(),
+                    'title' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE},
+                    'description' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_DESCRIPTION},
+                    'weburl' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_WEBURL},
+                ],
+                'export' => [
+                    'config' => $this->_config->toArray(),
+                    'timestamp' => $this->_exportTimeStamp,
+                    'account' => Tinebase_Core::getUser(),
+                    'contact' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
+                    'groupdata' => $this->_lastGroupValue,
+                ],
+                'additionalRecords' => $this->_additionalRecords,
+            ];
         }
+        $this->_baseContext['export']['groupdata'] = $this->_lastGroupValue;
 
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-
-        return array_merge([
-            Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
-            'branding' => [
-                'logo' => $this->_logoPath,
-                'title' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE},
-                'description' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_DESCRIPTION},
-                'weburl' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_WEBURL},
-            ],
-            'export' => [
-                'config'    => $this->_config->toArray(),
-                'timestamp' => $this->_exportTimeStamp,
-                'account'   => Tinebase_Core::getUser(),
-                'contact'   => $contact,
-                'groupdata' => $this->_lastGroupValue,
-            ],
-            'additionalRecords' => $this->_additionalRecords,
-        ], $context);
+        return array_merge($this->_baseContext, $context);
     }
 
     /**

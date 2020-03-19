@@ -575,7 +575,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $rawContent = '';
 
         // special handling for rfc822 messages
-        if ($_partId !== NULL && $_partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+        if ($_partId !== NULL && $_partStructure && $_partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
             if ($_onlyBodyOfRfc822) {
                 $logmessage = 'Fetch message part (TEXT) ' . $_partId . ' of messageuid ' . $_message->messageuid;
                 if ((isset($_partStructure['messageStructure']) || array_key_exists('messageStructure', $_partStructure))) {

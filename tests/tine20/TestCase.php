@@ -852,7 +852,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         $emailDomain = TestServer::getPrimaryMailDomain();
 
-        $user = new Tinebase_Model_FullUser(array_merge([
+        return new Tinebase_Model_FullUser(array_merge([
             'accountLoginName'      => 'tine20phpunituser',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
@@ -861,8 +861,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             'accountFirstName'      => 'PHPUnit User',
             'accountEmailAddress'   => 'phpunit@' . $emailDomain,
         ], $userdata));
-
-        return $user;
     }
 
     /**
@@ -943,6 +941,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
         ) {
             self::markTestSkipped('Does not work with LDAP/AD backend');
+        }
+    }
+
+    protected function _skipWithoutEmailSystemAccountConfig()
+    {
+        if (!Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
         }
     }
 
@@ -1029,6 +1034,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         return $this->_createTestUser($data);
     }
 
+    /**
+     * @param bool $withEmail
+     * @return array
+     */
     protected function _getUserData($withEmail = false)
     {
         $username = 'phpunit_' . Tinebase_Record_Abstract::generateUID(6);
@@ -1058,7 +1067,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     protected function _skipIfXpropsUserIdDeactivated()
     {
-        if (! TestServer::isEmailSystemAccountConfigured()
+        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()
             || ! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS})
         {
             self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS config required');
@@ -1129,5 +1138,24 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $config->set(Tinebase_Config::ENABLED_FEATURES, $enabledFeatures);
 
         // TODO reset in tear down? use raii?
+    }
+
+    protected function _sendMessageWithAccount($account = null, $to = null)
+    {
+        if (! $account) {
+            $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount(Tinebase_Core::getUser());
+        }
+
+        Felamimail_Backend_ImapFactory::reset();
+        // check if email account exists and mail sending works
+        $subject = 'test message ' . Tinebase_Record_Abstract::generateUID(10);
+        $message = new Felamimail_Model_Message(array(
+            'account_id'    => $account['id'],
+            'subject'       => $subject,
+            'to'            => $to ? $to : Tinebase_Core::getUser()->accountEmailAddress,
+            'body'          => 'aaaaaä <br>',
+        ));
+        $sendMessage = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+        self::assertEquals($message->subject, $sendMessage->subject);
     }
 }

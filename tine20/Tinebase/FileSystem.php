@@ -1099,7 +1099,7 @@ class Tinebase_FileSystem implements
             }
         }
         
-        while (($path = dirname($path)) !== '/') {
+        while (($path = dirname($path)) !== DIRECTORY_SEPARATOR) {
             $parentNode = $this->stat($path);
             $parentNode->size += $_sizeDiff;
             $parentNode->revision_size += $_revisionSizeDiff;

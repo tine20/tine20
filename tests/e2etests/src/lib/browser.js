@@ -2,7 +2,33 @@ const puppeteer = require('puppeteer');
 const expect = require('expect-puppeteer');
 require('dotenv').config();
 
+
+const fs = require('fs');
+const mkdirp = require('mkdirp');
+const path = require('path');
+const uuid = require('uuid/v1');
+
 module.exports = {
+    download: async function (page, selector, option= {}) {
+        const downloadPath = path.resolve(__dirname, 'download', uuid());
+        mkdirp(downloadPath);
+        console.log('Downloading file to:', downloadPath);
+        await page._client.send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: downloadPath });
+        await expect(page).toClick(selector,option);
+        let filename = await this.waitForFileToDownload(downloadPath);
+        return path.resolve(downloadPath, filename);
+    },
+
+     waitForFileToDownload: async function (downloadPath) {
+        console.log('Waiting to download file...');
+        let filename;
+        while (!filename || filename.endsWith('.crdownload')) {
+            filename = fs.readdirSync(downloadPath)[0];
+            await page.waitFor(500);
+        }
+        return filename;
+    },
+
     getNewWindow: async function () {
         return new Promise((fulfill) => browser.once('targetcreated', (target) => fulfill(target.page())));
     },
@@ -17,7 +43,7 @@ module.exports = {
     getElement: async function (type, page, text) {
         return page.$x("//" + type + "[contains(., '" + text + "')]");
     },
-    getCurrenUser: async function (page) {
+    getCurrentUser: async function (page) {
         return page.evaluate(() => Tine.Tinebase.registry.get('currentAccount'));
     },
     getBrowser: async function (app, module) {

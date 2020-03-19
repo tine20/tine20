@@ -79,9 +79,15 @@ msgstr "CSV-Kontaktimport aus dem Mac-Adressbuch"
 msgid "Import CSV formated contacts from Outlook 2007 German address book"
 msgstr "Importiere CSV formatierte Kontakte aus einem Outlook 2007 Deutsch Adressbuch"
 
+msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgstr "Importiere CSV formatierte Kontakte aus einem Outlook 2010 Deutsch Adressbuch"
+
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:15
 msgid "CSV Outlook 2007 German"
 msgstr "CSV Outlook 2007 Deutsch"
+
+msgid "CSV Outlook 2010 German"
+msgstr "CSV Outlook 2010 Deutsch"
 
 #: Controller/Contact.php:548
 msgid "It is not allowed to delete a contact linked to an user account!"

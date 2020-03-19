@@ -429,7 +429,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
         $this->_filename = dirname(__FILE__) . '/files/import_split_duplicate.csv';
         $this->_deletePersonalContacts = TRUE;
-        $this->_deleteImportFile = FALSE;
+        $this->_deleteImportFile = false;
 
         $result = $this->_doImport(array('dryrun' => false), $definition);
 
@@ -446,5 +446,16 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
         $result = $this->_doImport(array('dryrun' => true), $definition);
         $this->assertEquals('c.baumann@unittest.de', $result['results'][0]->email);
+    }
+
+    public function testAppendField()
+    {
+        $definition = $this->_getDefinitionFromFile('adb_import_csv_append.xml');
+        $this->_filename = dirname(__FILE__) . '/files/append.csv';
+        $this->_deleteImportFile = false;
+        $result = $this->_doImport(array('dryrun' => true), $definition);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        $contact = $result['results']->getFirstRecord();
+        self::assertEquals('0190 800', $contact->tel_work, print_r($contact->toArray(), true));
     }
 }

@@ -48,7 +48,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
         if (this.mode !== 'fileInstant') {
             this.disabled = false;
             this.enableToggle = true;
-            this.pressed = Tine.Felamimail.registry.get('preferences').get('autoAttachNote');
+            this.pressed = Tine.Felamimail.registry.get('preferences').get('autoAttachNote') === "1";
 
             // check suggestions (file_location) for reply/forward
             if (this.composeDialog) {

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "41d10947d9fe06f31e2ba35baea541f4",
+    "content-hash": "e5d61afce1fad5c2fae34fd8235e0b47",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -641,7 +641,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -1307,14 +1307,14 @@
         },
         {
             "name": "metaways/opendocument",
-            "version": "1.1",
+            "version": "1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
+                "reference": "fea9b9d94ab36a3c28368d69bf209d4e8b2b87ce"
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=7.0.0"
             },
             "type": "project",
             "autoload": {
@@ -1335,7 +1335,7 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2016-04-01T11:09:24+00:00"
+            "time": "2020-03-09T12:15:55+00:00"
         },
         {
             "name": "metaways/timezoneconvert",
@@ -1343,7 +1343,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2163,7 +2163,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
+                "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
@@ -3020,7 +3020,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
+                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"

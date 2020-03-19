@@ -334,7 +334,11 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             if (empty($_data_indexed) && isset($_data[$index])) {
                 $value = $_data[$index];
             } else if (isset($field['source']) && isset($_data_indexed[$field['source']])) {
-                $value = $_data_indexed[$field['source']];
+                if (isset($field['append']) && isset($data[$field['destination']])) {
+                    $value = $data[$field['destination']] . $field['append'] . $_data_indexed[$field['source']];
+                } else {
+                    $value = $_data_indexed[$field['source']];
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' No value found for field ' . (isset($field['source']) ? $field['source'] : print_r($field, true)));

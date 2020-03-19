@@ -192,6 +192,19 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         );
     }
 
+    public function resetPreviewErrorCount()
+    {
+        $maxErrorCount = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
+            {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT};
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            [
+                'preview_error_count' => 0
+            ],
+            $this->_db->quoteInto('preview_error_count >= ?', $maxErrorCount)
+        );
+    }
+
     /**
      * get value of next revision for given fileobject
      *

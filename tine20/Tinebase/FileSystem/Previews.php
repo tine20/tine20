@@ -440,4 +440,10 @@ class Tinebase_FileSystem_Previews
     {
         return $this->_fsController->rmdir($this->_getBasePath(), true);
     }
+
+    public function resetErrorCount()
+    {
+        $foBackend = new Tinebase_Tree_FileObject();
+        $foBackend->resetPreviewErrorCount();
+    }
 }

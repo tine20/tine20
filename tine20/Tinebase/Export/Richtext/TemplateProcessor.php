@@ -49,6 +49,8 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
 
     protected $_postPCallMap = [];
 
+    protected $_twigTemplateSrc = null;
+
     /**
      * @param string $documentTemplate The fully qualified template filename.
      * @param bool   $inMemory
@@ -178,6 +180,21 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                 },
             ],*/
         ];
+    }
+
+    public function replaceTwigTemplate()
+    {
+        $this->_twigTemplateSrc = $this->findBlock('TWIG_TEMPLATE', '${TWIG_TEMPLATE}');
+    }
+
+    public function unsetTwigSource()
+    {
+        $this->_twigTemplateSrc = null;
+    }
+
+    public function getTwigSource()
+    {
+        return $this->_twigTemplateSrc;
     }
 
     /**

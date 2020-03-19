@@ -70,7 +70,7 @@ describe('context menu', () => {
     let mail;
     test('open context menu', async () => {
         await page.waitFor(1000);
-        mail = await lib.getCurrenUser(page);
+        mail = await lib.getCurrentUser(page);
         await expect(page).toClick('span', {text: mail.accountEmailAddress, button: 'right'}); // @todo currten user mail
         await page.waitFor(1000);
         await page.hover('.x-menu-item-icon.action_add');
@@ -118,7 +118,7 @@ describe('context menu', () => {
         await page.screenshot({path: 'screenshots/4_email/9_email_ordner_kontextmenu.png'});
         await page.keyboard.press('Escape')
     });
-    test.skip('gird context', async () => {
+    test.skip('grid context', async () => {
         //@ todo need one mail in inbox
         await page.click('.t-app-felamimail .x-grid3-row.x-grid3-row-first', {button: 'right'});
         await page.screenshot({path: 'screenshots/4_email/17_email_kontextmenu_email.png'});

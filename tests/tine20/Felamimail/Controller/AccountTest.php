@@ -435,7 +435,9 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($this->_personas['sclever']);
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         $originalUserInBackend = $emailUserBackend->getRawUserById($emailUser);
-        self::assertNotEquals($originalUserInBackend['home'], $extraUserInBackend['home']);
+        if ($originalUserInBackend) {
+            self::assertNotEquals($originalUserInBackend['home'], $extraUserInBackend['home']);
+        }
     }
 
     public static function checkInternalUserAccount(Felamimail_Model_Account $account)

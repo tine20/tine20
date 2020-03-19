@@ -15,6 +15,33 @@
  */
 class Tinebase_Export_DocTest extends TestCase
 {
+    public function testDocTwigTemplate()
+    {
+        /** @var Addressbook_Export_Doc $export */
+        $export = Tinebase_Export::factory(new Addressbook_Model_ContactFilter(),
+            [
+                'format'             => 'doc',
+                'definitionFilename' => dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_doc.xml',
+                'template'           => dirname(__DIR__) . '/files/export/addressbook_contact_twigTemplate.docx',
+                'recordData'         => [
+                    'n_given'       => 'testName',
+                    'n_family'      => 'moreTest',
+                    'bday'          => '2000-01-02'
+                ]
+            ], Addressbook_Controller_Contact::getInstance());
+
+        $export->generate();
+        $tmpFile = Tinebase_TempFile::getTempPath();
+
+        try {
+            $export->save($tmpFile);
+
+            static::assertContains('twig template: 1', file_get_contents('zip://' . $tmpFile . '#word/document.xml'));
+        } finally {
+            unlink($tmpFile);
+        }
+    }
+
     public function testDocTwigFunctions()
     {
         /** @var Addressbook_Export_Doc $export */

@@ -550,7 +550,7 @@ EOS
 
         $stream = $node->get();
         static::assertTrue(is_resource($stream));
-        static::assertTrue(empty(stream_get_contents($stream)));
+        static::assertTrue(empty(@stream_get_contents($stream)));
         static::assertSame('"' . sha1($node->getNode()->object_id) . '"', $node->getETag());
     }
     

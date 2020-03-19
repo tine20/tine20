@@ -543,8 +543,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 $data[$key] = $this->_splitBySeparator($field['separator'], $_data[$key]);
             } else if (isset($field['fixed'])) {
                 $data[$key] = $field['fixed'];
-            } else if (isset($field['append'])) {
-                $data[$key] .= $field['append'] . $_data[$key];
             } else if (isset($field['typecast'])) {
                 switch ($field['typecast']) {
                     case 'int':

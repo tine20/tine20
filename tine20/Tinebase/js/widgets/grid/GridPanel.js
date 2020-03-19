@@ -949,6 +949,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         if (container) {
             container = treePanel.getDefaultContainer(container);
+        } else if (Ext.isFunction(this.getDefaultContainer)) {
+            container = this.getDefaultContainer();
         }
 
         Tine.widgets.dialog.ImportDialog.openWindow({

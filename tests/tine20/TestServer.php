@@ -334,14 +334,4 @@ class TestServer
             'password' => $password
         );
     }
-
-    /**
-     * @return bool
-     *
-     * TODO replace usage with Tinebase_EmailUser::isEmailSystemAccountConfigured()
-     */
-    public static function isEmailSystemAccountConfigured()
-    {
-        return Tinebase_EmailUser::isEmailSystemAccountConfigured();
-    }
 }

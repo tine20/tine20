@@ -218,10 +218,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
         $deactivated = false;
-        
+
+        $this->_checkSystemEmailAccountCreation($_user, $oldUser, $_password);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
-        
+
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
@@ -268,6 +270,23 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->_updateCurrentUser($user);
 
         return $user;
+    }
+
+    /**
+     * @param $user
+     * @param $oldUser
+     * @param $password
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkSystemEmailAccountCreation($user, $oldUser, $password)
+    {
+        if (Tinebase_EmailUser::isEmailSystemAccountConfigured()
+            && empty($oldUser->accountEmailAddress)
+            && ! empty($user->accountEmailAddress)
+            && ! $password ) {
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Password is needed for system account creation'));
+        }
     }
 
     /**
