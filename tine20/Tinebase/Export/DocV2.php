@@ -122,11 +122,6 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
             if ($this->_currentProcessor->hasConfig('record')) {
                 $this->_currentProcessor = $this->_currentProcessor->getConfig('record');
             }
-
-            if ($this->_currentProcessor->getType() !== Tinebase_Export_Richtext_TemplateProcessor::TYPE_RECORD &&
-                $this->_currentProcessor->getType() !== Tinebase_Export_Richtext_TemplateProcessor::TYPE_SUBRECORD) {
-                throw new Tinebase_Exception_UnexpectedValue('template and definition do not match');
-            }
         }
     }
 
