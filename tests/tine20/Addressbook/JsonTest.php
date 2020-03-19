@@ -2557,8 +2557,6 @@ Steuernummer 33/111/32212";
     {
         $this->_skipWithoutEmailSystemAccountConfig();
 
-        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
-
         $list = $this->_createMailinglist();
         $result = $this->_uit->searchEmailAddresss([
             ["condition" => "AND", "filters" => [["condition" => "AND", "filters" => [

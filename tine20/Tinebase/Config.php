@@ -908,6 +908,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        // TODO remove this config and all old code in 2021.11
         self::EMAIL_USER_ID_IN_XPROPS => [
             //_('Use record XPROPS to save email user id')
             'label'                 => 'Use record XPROPS to save email user id',
@@ -918,7 +919,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
-            'default'               => false,
+            'default'               => true,
         ],
         self::TRUSTED_PROXIES => array(
             //_('Trusted Proxies')

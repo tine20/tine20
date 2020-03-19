@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tinebase_DovecotTest
  */
-class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
 {
     /**
      * email user backend
@@ -58,10 +58,6 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
 
         $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
 
-        $personas = Zend_Registry::get('personas');
-        $this->_objects['user'] = clone $personas['jsmith'];
-        //$this->_objects['user']->setId(Tinebase_Record_Abstract::generateUID());
-
         $this->_objects['addedUsers'] = array();
         $this->_objects['fullUsers'] = array();
         $this->_objects['emailUserIds'] = array();
@@ -101,18 +97,20 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testAddEmailAccount()
     {
-        $emailUser = clone $this->_objects['user'];
+        $user = $this->_createTestUser();
+        $emailUser = clone $user;
         $emailUser->imapUser = new Tinebase_Model_EmailUser(array(
             'emailPassword' => Tinebase_Record_Abstract::generateUID(),
             'emailUID' => '1000',
-            'emailGID' => '1000'
+            'emailGID' => '1000',
+            'emailAddress' => $user->accountLoginName . '@' . TestServer::getPrimaryMailDomain(),
         ));
 
-        $this->_backend->inspectAddUser($this->_objects['user'], $emailUser);
-        $this->_objects['addedUsers']['emailUser'] = $this->_objects['user'];
+        $this->_backend->inspectAddUser($user, $emailUser);
+        $this->_objects['addedUsers']['emailUser'] = $user;
 
-        $this->_assertImapUser();
-        return $this->_objects['user'];
+        $this->_assertImapUser($user);
+        return $user;
     }
 
     /**
@@ -124,22 +122,24 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $user = $this->testAddEmailAccount();
 
         // update user
-        $user->imapUser->emailMailQuota = 600 * 1024 * 1024;
+        $emailUser = clone $user;
+        $emailUser->imapUser->emailMailQuota = 600 * 1024 * 1024;
 
-        $this->_backend->inspectUpdateUser($this->_objects['user'], $user);
-        $this->_assertImapUser(array('emailMailQuota' => 600  * 1024 * 1024));
+        $this->_backend->inspectUpdateUser($user, $emailUser);
+        $this->_assertImapUser($user, array('emailMailQuota' => 600  * 1024 * 1024));
     }
 
     /**
      * asserts that imapUser object contains the correct data
      *
+     * @param $user
      * @param array $additionalExpectations
      */
-    protected function _assertImapUser($additionalExpectations = array())
+    protected function _assertImapUser($user, $additionalExpectations = array())
     {
         $this->assertEquals(array_merge(array(
-            'emailUserId' => $this->_objects['user']->getId(),
-            'emailUsername' => $this->_objects['user']->imapUser->emailUsername,
+            'emailUserId' => $user->getId(),
+            'emailUsername' => $user->imapUser->emailUsername,
             'emailMailQuota' => 2097152000,
             'emailUID' => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID' => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
@@ -149,7 +149,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
             'emailPort' => $this->_config['port'],
             'emailSecure' => $this->_config['ssl'],
             'emailHost' => $this->_config['host']
-        ), $additionalExpectations), $this->_objects['user']->imapUser->toArray());
+        ), $additionalExpectations), $user->imapUser->toArray());
     }
 
     /**
@@ -172,6 +172,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         // create user again - should not throw an exception as old email user data gets deleted
         unset($user->accountId);
         $newUser = Tinebase_User::getInstance()->addUser($user);
+        $newUser = Tinebase_User::getInstance()->getFullUserById($newUser->getId());
         $this->_objects['fullUsers'] = array($newUser);
         $this->assertNotEquals($userId, $newUser->getId());
         $this->assertTrue(isset($newUser->imapUser), 'imapUser data not found: ' . print_r($newUser->toArray(), true));
@@ -208,7 +209,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $user = $this->testAddEmailAccount();
 
         $newPassword = Tinebase_Record_Abstract::generateUID();
-        $this->_backend->inspectSetPassword($this->_objects['user']->getId(), $newPassword);
+        $this->_backend->inspectSetPassword($user->getId(), $newPassword);
 
         // fetch email pw from db
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
@@ -221,7 +222,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
     {
         // fetch dovecot user from db
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
-        $rawDovecotUser = $dovecot->getRawUserById(Tinebase_Core::getUser());
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord(Tinebase_Core::getUser());
+        $rawDovecotUser = $dovecot->getRawUserById($emailUser);
         self::assertTrue(isset($rawDovecotUser['loginname']), 'loginname property not found ' . print_r($rawDovecotUser, true));
         self::assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $rawDovecotUser['loginname']);
     }
@@ -241,9 +243,11 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $user = Tinebase_User::getInstance()->updateUser($user);
 
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
-        $rawDovecotUser = $dovecot->getRawUserById($user);
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+        $rawDovecotUser = $dovecot->getRawUserById($emailUser);
         self::assertNotNull($rawDovecotUser['username'], 'username missing: ' . print_r($rawDovecotUser, true));
-        self::assertEquals($user->getId() . '@' . $this->_config['instanceName'], $rawDovecotUser['username'],
+        self::assertEquals($user->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP]
+            . '@' . $this->_config['instanceName'], $rawDovecotUser['username'],
             'username has not been updated in dovecot user table ' . print_r($rawDovecotUser, true));
     }
 
@@ -265,10 +269,11 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
 
         // check email tables (username + instancename)
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
-        $rawDovecotUser = $dovecot->getRawUserById($user);
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+        $rawDovecotUser = $dovecot->getRawUserById($emailUser);
 
         self::assertTrue(is_array($rawDovecotUser), 'did not fetch dovecotuser: ' . print_r($rawDovecotUser, true));
-        self::assertEquals($user->getId() . '@' . $this->_config['instanceName'], $rawDovecotUser['username']);
+        self::assertEquals($emailUser->getId() . '@' . $this->_config['instanceName'], $rawDovecotUser['username']);
         self::assertTrue(isset($rawDovecotUser['instancename']), 'instancename missing: ' . print_r($rawDovecotUser, true));
         self::assertEquals($this->_config['instanceName'], $rawDovecotUser['instancename']);
     }

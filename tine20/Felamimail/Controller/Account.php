@@ -2018,7 +2018,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         ]));
         $this->doContainerACLChecks($checks);
 
-        $listBackend = new Addressbook_Backend_List();
         foreach ($sharedAccounts as $account) {
             $emailUserId = $account->user_id;
             if (empty($emailUserId)) {

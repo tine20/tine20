@@ -39,9 +39,6 @@ class Admin_Controller_UserTest extends TestCase
     {
         $this->_skipWithoutEmailSystemAccountConfig();
 
-        $xpropsConf = Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS};
-        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
-
         // create user + check if email user is created
         $user = $this->_createUserWithEmailAccount();
         self::assertTrue(isset($user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]),
@@ -99,8 +96,6 @@ class Admin_Controller_UserTest extends TestCase
         $userInBackend = $emailUserBackend->getRawUserById($xpropsUser);
         self::assertEmpty($userInBackend['email'], 'email user should be deleted: '
             . print_r($userInBackend, true));
-
-        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = $xpropsConf;
     }
 
     public function testAddUserAdbContainer()

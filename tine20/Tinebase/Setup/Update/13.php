@@ -12,6 +12,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
 {
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -24,6 +25,10 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE013_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ]
     ];
@@ -48,5 +53,17 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         $this->addApplicationUpdate('Tinebase', '13.1', self::RELEASE013_UPDATE002);
     }
 
+    public function update003()
+    {
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            Felamimail_Controller_Account::getInstance()->convertAccountsToSaveUserIdInXprops();
+        }
 
+        Admin_Controller_User::getInstance()->convertAccountsToSaveUserIdInXprops();
+
+        // activate config
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
+
+        $this->addApplicationUpdate('Tinebase', '13.2', self::RELEASE013_UPDATE003);
+    }
 }

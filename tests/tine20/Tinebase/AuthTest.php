@@ -174,7 +174,7 @@ class Tinebase_AuthTest extends TestCase
         $testCredentials = TestServer::getInstance()->getTestCredentials();
         
         // valid authentication
-        $username = Tinebase_Core::getUser()->getId();
+        $username = Tinebase_Core::getUser()->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP];
         $authResult = Tinebase_Auth::getInstance()->authenticate($username, $testCredentials['password']);
         $this->assertTrue($authResult->isValid(), 'could not authenticate with imap');
         
