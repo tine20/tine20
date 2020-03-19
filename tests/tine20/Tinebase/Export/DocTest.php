@@ -15,6 +15,45 @@
  */
 class Tinebase_Export_DocTest extends TestCase
 {
+    public function testDocTwigTemplateDS()
+    {
+        /** @var Addressbook_Export_Doc $export */
+        $export = Tinebase_Export::factory(new Addressbook_Model_ContactFilter(),
+            [
+                'format'             => 'doc',
+                'definitionFilename' => dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_doc.xml',
+                'template'           => dirname(__DIR__) . '/files/export/addressbook_contact_twigTemplateDS.docx',
+                'recordData'         => [
+                    'n_given'       => 'testName',
+                    'n_family'      => 'moreTest',
+                    'bday'          => '2000-01-02'
+                ]
+            ], Addressbook_Controller_Contact::getInstance());
+
+        $rs1 = new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [[
+            'n_given'       => 'testName',
+            'n_family'      => 'moreTest',
+            'bday'          => '2000-01-02'
+        ]]);
+        $rs2 = new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [$rs1->getFirstRecord()]);
+        $refProp = new ReflectionProperty(Addressbook_Export_Doc::class, '_records');
+        $refProp->setAccessible(true);
+        $refProp->setValue($export, ['A' => $rs1, 'B' => $rs2]);
+
+        $export->generate();
+        $tmpFile = Tinebase_TempFile::getTempPath();
+
+        try {
+            $export->save($tmpFile);
+
+            $data = file_get_contents('zip://' . $tmpFile . '#word/document.xml');
+            static::assertContains('twig template: 1', $data);
+            static::assertContains('twig templateB: 1', $data);
+        } finally {
+            unlink($tmpFile);
+        }
+    }
+
     public function testDocTwigTemplate()
     {
         /** @var Addressbook_Export_Doc $export */
