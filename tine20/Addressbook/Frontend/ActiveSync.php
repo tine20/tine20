@@ -272,6 +272,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
 
                 case 'adr_one_street':
                 case 'adr_two_street':
+                case 'title':
                     $this->_truncateField($contact, $value, $data->$fieldName, 64);
                     break;
                     
