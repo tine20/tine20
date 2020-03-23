@@ -843,6 +843,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         if ($_record->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
             if ($_record->type === Felamimail_Model_Account::TYPE_USER) {
+                if ($_record->user_id !== $_oldRecord->user_id) {
+                    // owner is changed - only allow this in admin mode
+                    if ($this->doContainerACLChecks()) {
+                        throw new Tinebase_Exception_AccessDenied('owner change is not allowed');
+                    }
+                    $this->_setDefaultGrants($_record);
+                }
+
                 $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
             } else {
                 $this->_beforeUpdateSharedAccountCredentials($_record, $_oldRecord);
