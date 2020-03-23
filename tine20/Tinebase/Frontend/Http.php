@@ -638,7 +638,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // some grids can house tempfiles and filemanager nodes, therefor first try tmpfile and if no tmpfile try filemanager
         if (!$tmpFile && Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
             $filemanagerNodeController = Filemanager_Controller_Node::getInstance();
-            $file = $filemanagerNodeController->get($tmpfileId);
+            try {
+                $file = $filemanagerNodeController->get($tmpfileId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->_handleFailure(404);
+            }
 
             $filemanagerHttpFrontend = new Filemanager_Frontend_Http();
             $filemanagerHttpFrontend->downloadFile($file->path, null);
