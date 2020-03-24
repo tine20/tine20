@@ -227,8 +227,10 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
             $contact = new Addressbook_Model_Contact(null, true);
         }
         unset($contact->jpegphoto);
-        
-        foreach($this->_mapping as $fieldName => $value) {
+        $mc = Addressbook_Model_Contact::getConfiguration();
+        $fields = $mc->getFields();
+
+        foreach ($this->_mapping as $fieldName => $value) {
             if (!isset($data->$fieldName)) {
                 $contact->$value = null;
                 
@@ -308,8 +310,16 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     
                 default:
                     $contact->$value = $data->$fieldName;
-                    
                     break;
+            }
+
+            if (in_array($fields[$value]['type'], [
+                Tinebase_Record_NewAbstract::TYPE_STRING,
+                Tinebase_Record_NewAbstract::TYPE_STRING_AUTOCOMPLETE,
+                Tinebase_Record_NewAbstract::TYPE_FULLTEXT,
+                Tinebase_Record_NewAbstract::TYPE_TEXT,
+            ])) {
+                $contact->$value = Tinebase_Core::filterInputForDatabase($contact->$value);
             }
         }
 
