@@ -67,6 +67,16 @@ module.exports = {
         await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded'});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
+        if (process.env.TEST_MODE !== 'headless' && process.env.TEST_BROWSER_LANGUAGE !== 'de') {
+            console.log('switching to german');
+            await page.waitForSelector('input[name=locale]');
+            await page.click('input[name=locale]');
+            await expect(page).toClick('.x-combo-list-item', {text: 'Deutsch [de]'});
+            // wait for reload
+            await page.waitFor(500);
+            await page.waitForSelector('input[name=locale]');
+        }
+
         await page.waitForSelector('input[name=username]');
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toMatchElement('input[name=username]');
