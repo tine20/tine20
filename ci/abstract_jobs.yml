@@ -1,24 +1,24 @@
-.mariadb_service: &abstract_test-mariadb_service
+.mariadb_service: &abstract_jobs-mariadb_service
   name: mariadb:10.4.1
   alias: db
-.redis_service: &abstract_test-redis_service
+.redis_service: &abstract_jobs-redis_service
   name: redis:5.0.5
   alias: cache
-.postfix_service: &abstract_test-postfix_service
+.postfix_service: &abstract_jobs-postfix_service
   name: dockerregistry.metaways.net/tine20/docker/postfix:1.0.0
   alias: postfix
   # fix service service discovery https://gitlab.com/gitlab-org/gitlab-runner/issues/1042#note_144420147
   entrypoint: ["/bin/sh", "-c", "while [ ! -f /$CI_PROJECT_DIR/hosts_$CI_JOB_ID ]; do sleep 1; done && cat /$CI_PROJECT_DIR/hosts_$CI_JOB_ID > /etc/hosts && postconf -e 'smtp_host_lookup = native' 'lmtp_host_lookup = native' && /bin/sh /root/docker-entrypoint.sh"]
-.dovecot_service: &abstract_test-dovecot_service
+.dovecot_service: &abstract_jobs-dovecot_service
   name: dockerregistry.metaways.net/tine20/docker/dovecot:1.0.1
   alias: dovecot
   entrypoint: ["/bin/sh", "-c", "while [ ! -f /$CI_PROJECT_DIR/hosts_$CI_JOB_ID ]; do sleep 1; done && cat /$CI_PROJECT_DIR/hosts_$CI_JOB_ID > /etc/hosts && /bin/sh /root/docker-entrypoint.sh"]
-.ldap_service: &abstract_test-ldap_service
+.ldap_service: &abstract_jobs-ldap_service
   name: dockerregistry.metaways.net/tine20/docker/ldap:1.0.0
   alias: ldap
   entrypoint: ["/container/tool/run", "--copy-service"]
 
-.abstract_test.php_unit_test:
+.abstract_jobs.php_unit_test:
   variables:
     MYSQL_HOST: db
     MYSQL_ROOT_PASSWORD: rootpw
@@ -39,10 +39,10 @@
     TINE20_EMAIL_SMTP: "active:true,backend:postfix,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfix_host:db,postfix_dbname:postfix,postfix_username:tine20,postfix_password:tine20pw"
     TINE20_EMAIL_SIEVE: "hostname:dovecot,port:4190,ssl:none"
   services:
-    - *abstract_test-mariadb_service
-    - *abstract_test-redis_service
-    - *abstract_test-postfix_service
-    - *abstract_test-dovecot_service
+    - *abstract_jobs-mariadb_service
+    - *abstract_jobs-redis_service
+    - *abstract_jobs-postfix_service
+    - *abstract_jobs-dovecot_service
   before_script:
     - cp /etc/hosts "${CI_PROJECT_DIR}/hosts_$CI_JOB_ID"
     - /usr/sbin/confd -onetime -backend env
@@ -56,8 +56,8 @@
     - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci CiTestSuite$CI_NODE_INDEX
   parallel: 10
 
-.abstract_test.php_unit_test_with_ldap:
-  extends: .abstract_test.php_unit_test
+.abstract_jobs.php_unit_test_with_ldap:
+  extends: .abstract_jobs.php_unit_test
   stage: test_built
   variables:
     LDAP_ORGANISATION: "Tine20 dev"
@@ -66,8 +66,14 @@
     TINE20_AUTHENTICATION: "bindRequiresDn:1,backend:ldap,host:ldap\\://ldap,port:389,username:cn=admin\\,dc=tine\\,dc=test,password:admin,baseDn:ou=users\\,dc=tine\\,dc=test,accountFilterFormat:(&(objectClass=posixAccount)(uid=%s)),accountCanonicalForm:2"
     TINE20_ACCOUNTS: "backend:ldap,host:ldap\\://ldap,port:389,username:cn=admin\\,dc=tine\\,dc=test,password:admin,userDn:ou=users\\,dc=tine\\,dc=test,groupsDn:ou=groups\\,dc=tine\\,dc=test,defaultUserGroupName:Users,defaultAdminGroupName:Administrators"
   services:
-    - *abstract_test-mariadb_service
-    - *abstract_test-redis_service
-    - *abstract_test-postfix_service
-    - *abstract_test-dovecot_service
-    - *abstract_test-ldap_service
+    - *abstract_jobs-mariadb_service
+    - *abstract_jobs-redis_service
+    - *abstract_jobs-postfix_service
+    - *abstract_jobs-dovecot_service
+    - *abstract_jobs-ldap_service
+
+.abstract_jobs.docker:
+  image: $REGISTRY/docker:19.03.1
+  before_script:
+    - source ci/build.sh
+    - export DOCKER_BUILDKIT=1
