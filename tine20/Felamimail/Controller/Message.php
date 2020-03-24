@@ -368,12 +368,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $userAgent = (isset($_message->headers['user-agent'])) ? $_message->headers['user-agent'] : NULL;
         $parameters = (isset($_partData['parameters'])) ? $_partData['parameters'] : array();
-        $decodedContent = $part->getDecodedContent();
+        $decodedContent = Tinebase_Core::filterInputForDatabase($part->getDecodedContent());
 
         switch ($part->type) {
             case Felamimail_Model_Message::CONTENT_TYPE_CALENDAR:
                 if (!version_compare(PHP_VERSION, '5.3.0', '>=')) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' PHP 5.3+ is needed for vcalendar support.');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' PHP 5.3+ is needed for vcalendar support.');
                     return NULL;
                 }
 
@@ -386,7 +387,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 ));
                 break;
             default:
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create iMIP of content type ' . $part->type);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Could not create iMIP of content type ' . $part->type);
                 $partData = NULL;
         }
 
