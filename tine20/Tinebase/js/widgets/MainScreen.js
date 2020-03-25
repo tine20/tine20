@@ -132,7 +132,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             //id: 'west',
             stateful: false,
             split: true,
-            width: 200,
+            width: 200 + Ext.getScrollBarWidth(),
             minSize: 100,
             border: false,
             collapsible:true,
