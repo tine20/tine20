@@ -5,7 +5,7 @@
 
 Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](http://www.tine20.com).
 
-## Official Community ressources
+## Official Community resources
 * [Tine2.0 Contributors Guide](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/blob/master/CONTRIBUTING.md)
 * [Documentation Wiki](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki)
 * [Mantis Issue tracker](https://forge.tine20.org/mantisbt/)
@@ -16,6 +16,9 @@ Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Bus
 * [Twitter](https://twitter.com/tine20org)
 * [Matrix chat room #tine20:matrix.org](https://riot.im/app/#/room/#tine20:matrix.org)
 * [Gitter chat room](https://gitter.im/tine20/Lobby)
+
+## Other Community resources
+* [all in one docker image - by talsen-team](https://github.com/talsen-team/docker-app--tine20)
 
 ## Free Software without compromise
 In contrast to the so called "open core" approach, where only a subset of the software is released as open source, 
