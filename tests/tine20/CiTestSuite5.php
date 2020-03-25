@@ -8,6 +8,8 @@ class CiTestSuite5
         $suite->addTestSuite(CoreData_AllTests::class);
         $suite->addTestSuite(Phone_AllTests::class);
         $suite->addTestSuite(Courses_AllTests::class);
+        $suite->addTestSuite(Felamimail_AllTests::class);
+        $suite->addTestSuite(Timetracker_AllTests::class);
 
         return $suite;
     }

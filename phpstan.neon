@@ -1,0 +1,11 @@
+parameters:
+    paths:
+      - tine20
+    level: 0
+    excludes_analyse:
+      - 'tine20/vendor'
+      - 'tine20/library'
+      - 'tine20/Tinebase/User/Typo3.php'
+      - 'tine20/Setup/Backend/Oracle.php'
+      - 'tine20/Setup/Backend/Pgsql.php'
+      - 'tine20/Voipmanager/Setup/Update/Release10.php'

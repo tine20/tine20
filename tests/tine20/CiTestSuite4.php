@@ -7,6 +7,9 @@ class CiTestSuite4
 
         $suite->addTestSuite(Calendar_AllTests::class);
         $suite->addTestSuite(OpenDocument_AllTests::class);
+        $suite->addTestSuite(Tasks_AllTests::class);
+        $suite->addTestSuite(SimpleFAQ_AllTests::class);
+        $suite->addTestSuite(Projects_AllTests::class);
 
         return $suite;
     }

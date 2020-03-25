@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-class Voipmanager_Setup_Update_Release10 extends Setup_Update_Abstract
+class Voipmanager_Setup_Update_Release9 extends Setup_Update_Abstract
 {
     /**
      * update to 10.0
@@ -18,6 +18,6 @@ class Voipmanager_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $this->setApplicationVersion('Voipmanager', '11.0');
+        $this->setApplicationVersion('Voipmanager', '10.0');
     }
 }
