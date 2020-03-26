@@ -45,22 +45,20 @@
     background-image:url(../../images/icon-set/icon_calendar_month.svg) !important;
 }
 
+.cal-year-view {
+    background-image: url(../../images/icon-set/icon_calendar_365.svg) !important;
+}
+
+.cal-customperiod-view {
+    background-image:url(../../images/icon-set/icon_calendar_custom_period.svg) !important;
+}
+
 .cal-resource, .CalendarResource {
     background-image:url(../../images/icon-set/icon_resource.svg) !important;
 }
 
 .cal-calendartree-resource-icon .x-tree-node-icon {
     background-image: none;
-}
-
-.cal-year-view {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-workweek.png) !important;
-}
-.x-btn-medium .cal-year-view {
-    background-image:url(../../images/oxygen/22x22/actions/view-calendar-workweek.png) !important;
-}
-.x-btn-large .cal-year-view {
-    background-image:url(../../images/oxygen/32x32/actions/view-calendar-workweek.png) !important;
 }
 
 .cal-action_fretimesearch {

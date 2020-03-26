@@ -2541,3 +2541,18 @@ msgstr "Es kann nicht mehr als einen Rechtefilter geben"
 
 msgid "You can not have more than one calendar filter"
 msgstr "Es kann nicht mehr als einen Kalenderfilter geben"
+
+msgid "Custom Selection"
+msgstr "Eigene Auswahl"
+
+msgid "From"
+msgstr "Von"
+
+msgid "from"
+msgstr "von"
+
+msgid "Until"
+msgstr "Bis"
+
+msgid "until"
+msgstr "bis"
