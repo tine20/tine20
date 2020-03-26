@@ -425,7 +425,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 foreach ($_record->preparedParts as $preparedPart) {
                     if ($preparedPart->preparedData instanceof Calendar_Model_iMIP) {
                         $iMIPFrontend = new Calendar_Frontend_iMIP();
-                        $iMIPFrontend->prepareComponent($preparedPart->preparedData, /* $_throwException = */ false);
+                        try {
+                            $iMIPFrontend->prepareComponent($preparedPart->preparedData, /* $_throwException = */ false);
+                        } catch (Exception $e) {
+                            // maybe this wasn't an iMIP part ... or it could not be parsed - skip it
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__ . ' Could not handle preparedPart: ' . $e->getMessage()
+                            );
+                        }
                     }
                 }
             }
