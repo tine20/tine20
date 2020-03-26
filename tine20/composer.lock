@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "fadb0a1ac4a88e901b6ff9b891ec1deb",
@@ -1275,7 +1275,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
+                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1307,7 +1307,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2882,7 +2882,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
+                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -3154,16 +3154,16 @@
         },
         {
             "name": "zbateson/mail-mime-parser",
-            "version": "1.1.1",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/mail-mime-parser.git",
-                "reference": "805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8"
+                "reference": "faa065d4baeb3022054d2ce52821e019d950eeba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/mail-mime-parser/zipball/805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8",
-                "reference": "805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8",
+                "url": "https://api.github.com/repos/zbateson/mail-mime-parser/zipball/faa065d4baeb3022054d2ce52821e019d950eeba",
+                "reference": "faa065d4baeb3022054d2ce52821e019d950eeba",
                 "shasum": ""
             },
             "require": {
@@ -3173,11 +3173,11 @@
                 "zbateson/stream-decorators": "^1.0"
             },
             "require-dev": {
-                "evert/phpdoc-md": "^0.1.1",
+                "jms/serializer": "^1.7.0",
                 "mikey179/vfsstream": "^1.6.0",
                 "phing/phing": "^2.15.0",
-                "phpdocumentor/phpdocumentor": "^2.8.0",
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5"
+                "phpdocumentor/phpdocumentor": "^2.9.0",
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5"
             },
             "suggest": {
                 "ext-iconv": "For best support/performance",
@@ -3196,6 +3196,10 @@
             "authors": [
                 {
                     "name": "Zaahid Bateson"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/zbateson/mail-mime-parser/graphs/contributors"
                 }
             ],
             "description": "MIME email message parser",
@@ -3210,7 +3214,7 @@
                 "parser",
                 "php-imap"
             ],
-            "time": "2018-10-18T14:27:46+00:00"
+            "time": "2019-03-08T04:28:42+00:00"
         },
         {
             "name": "zbateson/mb-wrapper",
@@ -3272,16 +3276,16 @@
         },
         {
             "name": "zbateson/stream-decorators",
-            "version": "1.0.0",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/stream-decorators.git",
-                "reference": "300d7944b16cc1c3c6053bbc4735a178cb35073e"
+                "reference": "a1873c22d2d6189931dd145d766157c6f75cc8d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/stream-decorators/zipball/300d7944b16cc1c3c6053bbc4735a178cb35073e",
-                "reference": "300d7944b16cc1c3c6053bbc4735a178cb35073e",
+                "url": "https://api.github.com/repos/zbateson/stream-decorators/zipball/a1873c22d2d6189931dd145d766157c6f75cc8d7",
+                "reference": "a1873c22d2d6189931dd145d766157c6f75cc8d7",
                 "shasum": ""
             },
             "require": {
@@ -3290,7 +3294,7 @@
                 "zbateson/mb-wrapper": "^1.0.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5"
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5"
             },
             "type": "library",
             "autoload": {
@@ -3319,7 +3323,7 @@
                 "stream",
                 "uuencode"
             ],
-            "time": "2018-09-28T18:17:52+00:00"
+            "time": "2020-02-10T00:22:40+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",
