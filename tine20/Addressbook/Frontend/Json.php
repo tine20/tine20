@@ -118,8 +118,16 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $contactPaging = $paging;
         $contactPaging["sort"] = "n_fn"; // Field are not named the same for contacts and lists
         $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
+
+        $emailFields = ['n_fileas', 'email', 'email_home'];
         foreach ($contacts["results"] as $contact) {
-            array_push($results, array("n_fileas" => $contact["n_fileas"], "email" => $contact["email"], "email_home" => $contact["email_home"]));
+            $emailData = [];
+            foreach ($emailFields as $field) {
+                if (isset($contact[$field])) {
+                    $emailData[$field] = $contact[$field];
+                }
+            }
+            array_push($results, $emailData);
         }
 
         $dont_add = false;
