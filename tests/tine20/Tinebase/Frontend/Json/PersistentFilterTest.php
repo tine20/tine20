@@ -90,6 +90,39 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         foreach (array('readGrant', 'editGrant', 'deleteGrant') as $grant) {
             $this->assertTrue($savedFilterData['account_grants'][$grant]);
         }
+
+        return $savedFilterData;
+    }
+
+    public function testFilemanagerPathFilterLoadAll()
+    {
+        $apps = Tinebase_Application::getInstance()->getApplications(null,'id');
+        $appsId = [];
+        foreach ($apps as $app) {
+            $appsId[] = $app->getId();
+        }
+        $filterData = array(
+            array('field' => 'account_id',   'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
+            array('field' => 'application_id',      'operator' => 'in', 'value' => $appsId
+            )
+        );
+        $persistent = $this->_uit->searchPersistentFilter($filterData, NULL);
+        self::assertGreaterThan(1,$persistent['totalcount']);
+        $createdFilter = $this->testSaveFilemanagerPathFilter();
+        Tinebase_FileSystem::getInstance()->rmdir('/Filemanager/folders/shared/path');
+
+        $persistent = $this->_uit->searchPersistentFilter($filterData, NULL);
+        self::assertGreaterThan(1,$persistent['totalcount']);
+
+        $found = false;
+        foreach ($persistent['results'] as $filter) {
+            if ($filter['id'] === $createdFilter['id']) {
+                self::assertSame('/', $filter['filters'][0]['value']['path']);
+                $found = true;
+                break;
+            }
+        }
+        self::assertTrue($found, 'did not find path filemanager path filter');
     }
 
     /*
