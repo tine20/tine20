@@ -102,17 +102,20 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         self::$_instance = null;
     }
 
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = self::ACTION_GET)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL,
+                           Tinebase_Model_Pagination $_pagination = NULL,
+                           $_getRelations = FALSE,
+                           $_onlyIds = FALSE,
+                           $_action = self::ACTION_GET)
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
-        if (!$_onlyIds) {
-            foreach ($result as &$contact) {
+        if (!$_onlyIds && is_object(Tinebase_Core::getUser())) {
+            foreach ($result as $contact) {
                 if (!Tinebase_Core::getUser()->hasGrant(
                         $contact->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
                     Tinebase_Core::getUser()->contact_id !== $contact->getId()) {
-                    // Remove that personal data!
-                    $contact = $this->removePersonalData($contact);
+                    $this->removePersonalData($contact);
                 };
             }
         }
@@ -1322,10 +1325,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * Unset Personal data of a contact
      * 
-     * @param $contact
-     * @return mixed
+     * @param Addressbook_Model_Contact $contact
+     * @return Addressbook_Model_Contact
      */
-    private function removePersonalData($contact) {
+    private function removePersonalData(Addressbook_Model_Contact $contact) {
         unset($contact->bday);
         unset($contact->adr_two_countryname);
         unset($contact->adr_two_locality);
