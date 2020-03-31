@@ -31,9 +31,6 @@ describe('message', () => {
 
         // send message
         await expect(popupWindow).toClick('button', {text: 'Senden'});
-
-
-        // @todo check if window is closed
     });
 
     let newMail;
@@ -89,8 +86,31 @@ describe('message', () => {
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Tine 2.0 Admin Account\'s personal files'});
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Tine 2.0 Admin Account\'s personal files', clickCount: 2});
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'attachment.txt'});
+    });
+});
 
-
+describe('email note preference', () => {
+    test('open Felamimail settings and set note=yes', async () => {
+        await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+        await expect(page).toClick('.x-menu-item-text', {text: 'E-Mail'});
+        await page.waitFor(2000);
+        await lib.setPreference(page,'E-Mail', 'autoAttachNote', 'ja');
+    });
+    test('open compose dialog and check button pressed', async () => {
+        await page.waitFor(2000);
+        let popupWindow = await lib.getEditDialog('Verfassen');
+        await popupWindow.waitForSelector('.x-btn.x-btn-text-icon.x-btn-pressed');
+        await popupWindow.close();
+    });
+    test('open Felamimail settings and set note=no', async () => {
+        await page.waitFor(2000);
+        await lib.setPreference(page,'E-Mail', 'autoAttachNote', 'nein');
+    });
+    test('open editDialog and check button unpressed', async () => {
+        await page.waitFor(2000);
+        let popupWindow = await lib.getEditDialog('Verfassen');
+        if (await popupWindow.$('.x-btn.x-btn-text-icon.x-btn-pressed') !== null) return Promise.reject('Error: The button is pressed');
+        await popupWindow.close();
     });
 });
 

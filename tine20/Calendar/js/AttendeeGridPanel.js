@@ -146,11 +146,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initColumns();
         
         this.mon(Ext.getBody(), 'click', this.stopEditingIf, this);
-        
-        this.viewConfig = {
+
+        this.viewConfig = _.assign(this.viewConfig || {},{
             getRowClass: this.getRowClass
-        };
-        
+        });
+
         Tine.Calendar.AttendeeGridPanel.superclass.initComponent.call(this);
 
         this.initPhoneGridPanelHook();

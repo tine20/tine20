@@ -21,27 +21,6 @@ class Felamimail_Controller_SieveTest extends Felamimail_TestCase
 {
     protected $_oldXpropsSetting = null;
 
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->_oldXpropsSetting = Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS};
-        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = $this->_oldXpropsSetting;
-    }
-
     public function testAdbMailinglistPutSieveRule()
     {
         $this->_testNeedsTransaction();

@@ -185,6 +185,9 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     public function replaceTwigTemplate()
     {
         $this->_twigTemplateSrc = $this->findBlock('TWIG_TEMPLATE', '${TWIG_TEMPLATE}');
+        if (null !== $this->_twigTemplateSrc) {
+            $this->_twigTemplateSrc = $this->fixBrokenTwigMacros($this->_twigTemplateSrc);
+        }
     }
 
     public function unsetTwigSource()
@@ -711,6 +714,35 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
 
         $fixedDocumentPart = preg_replace_callback(
             '|\{%[^}]*%[^}]*\}|U',
+            function ($match) {
+                return strip_tags($match[0]);
+            },
+            $fixedDocumentPart
+        );
+
+        return $fixedDocumentPart;
+    }
+
+    /**
+     * Finds parts of broken macros and sticks them together.
+     * Macros, while being edited, could be implicitly broken by some of the word processors.
+     *
+     * @param string $documentPart The document part in XML representation.
+     *
+     * @return string
+     */
+    protected function fixBrokenTwigMacros($documentPart)
+    {
+        $fixedDocumentPart = preg_replace_callback(
+            '|\{[^}{%]*\{[^}]*\}[^}]*\}|U',
+            function ($match) {
+                return strip_tags($match[0]);
+            },
+            $documentPart
+        );
+
+        $fixedDocumentPart = preg_replace_callback(
+            '|\{[^}{%]*%[^}]*\}|U',
             function ($match) {
                 return strip_tags($match[0]);
             },

@@ -46,7 +46,6 @@ class Felamimail_AllTests
             $suite->addTestSuite(Felamimail_Controller_FolderTest::class);
             $suite->addTestSuite(Felamimail_Controller_MessageTest::class);
             $suite->addTestSuite(Felamimail_Controller_AccountTest::class);
-            $suite->addTestSuite(Felamimail_Controller_AccountTestWithXprops::class);
             $suite->addTestSuite(Felamimail_Controller_SieveTest::class);
             $suite->addTestSuite(Felamimail_Model_MessageTest::class);
             $suite->addTestSuite(Felamimail_Model_AccountTest::class);

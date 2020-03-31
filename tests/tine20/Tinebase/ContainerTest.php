@@ -306,9 +306,10 @@ class Tinebase_ContainerTest extends TestCase
      */
     public function testSetGrants()
     {
-        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
+        $grantsClass = $this->objects['initialContainer']->getGrantClass();
+        $newGrants = new Tinebase_Record_RecordSet($grantsClass);
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(array(
+            new $grantsClass(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
                     Tinebase_Model_Grants::GRANT_READ      => true,
@@ -325,7 +326,7 @@ class Tinebase_ContainerTest extends TestCase
         )));
         $groupToAdd = $lists->getFirstRecord();
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(array(
+            new $grantsClass(array(
                     'account_id'     => $groupToAdd->group_id,
                     'account_type'   => 'group',
                     Tinebase_Model_Grants::GRANT_READ      => true,
@@ -364,9 +365,10 @@ class Tinebase_ContainerTest extends TestCase
     {
         $this->testSetGrants();
         
-        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
+        $grantsClass = $this->objects['initialContainer']->getGrantClass();
+        $newGrants = new Tinebase_Record_RecordSet($grantsClass);
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(array(
+            new $grantsClass(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
                     Tinebase_Model_Grants::GRANT_ADMIN     => true
@@ -396,7 +398,7 @@ class Tinebase_ContainerTest extends TestCase
         $stmt = Tinebase_Core::getDb()->query('select * from '.Tinebase_Core::getDb()->quoteIdentifier(SQL_TABLE_PREFIX .'container_acl') . ' where ' . Tinebase_Core::getDb()->quoteInto(Tinebase_Core::getDb()->quoteIdentifier('container_id') . ' = ?', $this->objects['initialContainer']->getId()));
         $rows = $stmt->fetchAll();
         
-        $this->assertEquals(7, count($rows));
+        $this->assertEquals(8, count($rows));
     }
     
     /**
@@ -493,9 +495,10 @@ class Tinebase_ContainerTest extends TestCase
      */
     public function testGetSearchContainerWithoutReadButWithAdminGrant()
     {
-        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
+        $grantsClass = $this->objects['initialContainer']->getGrantClass();
+        $newGrants = new Tinebase_Record_RecordSet($grantsClass);
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(array(
+            new $grantsClass(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
                     Tinebase_Model_Grants::GRANT_READ      => false,

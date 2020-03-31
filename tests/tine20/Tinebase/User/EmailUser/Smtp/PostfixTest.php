@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_PostfixTest
@@ -142,22 +137,22 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     {
         // add smtp user
         $user = $this->testAddUser();
-        
+
         // update user
         $user->smtpUser->emailForwardOnly = 1;
         $user->smtpUser->emailAliases = array('bla@' . $this->_mailDomain);
         $user->smtpUser->emailForwards = array();
         $user->accountEmailAddress = 'j.smith@' . $this->_mailDomain;
-        
+
         $testUser = $this->_backend->updateUser($user);
-        
-        $this->assertEquals(array(),                            $testUser->smtpUser->emailForwards, 'forwards mismatch');
+
+        $this->assertEquals(array(), $testUser->smtpUser->emailForwards, 'forwards should be empty');
         $this->assertEquals([
             ['email' => 'bla@' . $this->_mailDomain, 'dispatch_address' => 1]
-        ], $testUser->smtpUser->emailAliases,  'aliases mismatch');
-        $this->assertEquals(false,                              $testUser->smtpUser->emailForwardOnly);
-        $this->assertEquals('j.smith@' . $this->_mailDomain,    $testUser->smtpUser->emailAddress);
-        $this->assertEquals($testUser->smtpUser->emailAliases,  $testUser->emailUser->emailAliases,
+        ], $testUser->smtpUser->emailAliases, 'aliases mismatch');
+        $this->assertEquals(false, $testUser->smtpUser->emailForwardOnly);
+        $this->assertEquals('j.smith@' . $this->_mailDomain, $testUser->smtpUser->emailAddress);
+        $this->assertEquals($testUser->smtpUser->emailAliases, $testUser->emailUser->emailAliases,
             'smtp user data needs to be merged in email user: ' . print_r($testUser->emailUser->toArray(), TRUE));
     }
     
@@ -191,7 +186,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $db = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->getDb();
         $select = $db->select()
             ->from(array('smtp_users'))
-            ->where($db->quoteIdentifier('userid') . ' = ?', $user->getId());
+            ->where($db->quoteIdentifier('userid') . ' = ?', $user->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP]);
         $stmt = $db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
@@ -219,7 +214,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $db = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->getDb();
         $select = $db->select()
             ->from(array('smtp_destinations'))
-            ->where($db->quoteIdentifier('userid') . ' = ?', $user->getId());
+            ->where($db->quoteIdentifier('userid') . ' = ?', $user->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP]);
         $stmt = $db->query($select);
         $queryResult = $stmt->fetchAll();
         $stmt->closeCursor();

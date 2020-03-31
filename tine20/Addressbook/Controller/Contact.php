@@ -102,6 +102,27 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         self::$_instance = null;
     }
 
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL,
+                           Tinebase_Model_Pagination $_pagination = NULL,
+                           $_getRelations = FALSE,
+                           $_onlyIds = FALSE,
+                           $_action = self::ACTION_GET)
+    {
+        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        
+        if (!$_onlyIds && is_object(Tinebase_Core::getUser())) {
+            foreach ($result as $contact) {
+                if (!Tinebase_Core::getUser()->hasGrant(
+                        $contact->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
+                    Tinebase_Core::getUser()->contact_id !== $contact->getId()) {
+                    $this->removePersonalData($contact);
+                };
+            }
+        }
+
+        return $result;
+    }
+
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $contact = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
@@ -113,6 +134,14 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
 
         Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
+        
+        // Remove personal data from contact if no grants. The user has always grants for his/her own contact
+        if (!Tinebase_Core::getUser()->hasGrant(
+            $contact->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
+            Tinebase_Core::getUser()->contact_id !== $contact->getId()) {
+            // Remove that personal data!
+            $contact = $this->removePersonalData($contact);
+        };
 
         return $contact;
     }
@@ -659,6 +688,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        if (!Tinebase_Core::getUser()->hasGrant(
+                $_record->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
+            Tinebase_Core::getUser()->contact_id !== $_record->getId()) {
+            // We need to restore the data we previously removed
+            $_record = $this->removePersonalData($_record);
+        };
 
         // syncBackendIds is read only property!
         unset($_record->syncBackendIds);
@@ -1284,5 +1320,32 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         )));
 
         return $contacts->getFirstRecord();
+    }
+
+    /**
+     * Unset Personal data of a contact
+     * 
+     * @param Addressbook_Model_Contact $contact
+     * @return Addressbook_Model_Contact
+     */
+    private function removePersonalData(Addressbook_Model_Contact $contact) {
+        unset($contact->bday);
+        unset($contact->adr_two_countryname);
+        unset($contact->adr_two_locality);
+        unset($contact->adr_two_postalcode);
+        unset($contact->adr_two_region);
+        unset($contact->adr_two_street);
+        unset($contact->adr_two_street2);
+        unset($contact->adr_two_lon);
+        unset($contact->adr_two_lat);
+        unset($contact->email_home);
+        unset($contact->tel_home);
+        unset($contact->tel_cell_private);
+        unset($contact->tel_fax_home);
+        unset($contact->tel_home_normalized);
+        unset($contact->tel_cell_private_normalized);
+        unset($contact->tel_fax_home_normalized);
+
+        return $contact;
     }
 }

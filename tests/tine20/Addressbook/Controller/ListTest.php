@@ -44,8 +44,6 @@ class Addressbook_Controller_ListTest extends TestCase
     {
         parent::setUp();
 
-        $this->_oldXpropsSetting = Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS};
-        
         $this->_instance = Addressbook_Controller_List::getInstance();
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
@@ -159,8 +157,6 @@ class Addressbook_Controller_ListTest extends TestCase
         }
 
         parent::tearDown();
-
-        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = $this->_oldXpropsSetting;
     }
 
     /**
@@ -204,11 +200,7 @@ class Addressbook_Controller_ListTest extends TestCase
         static::assertNotNull($account, 'could not get account');
         static::assertSame($list->email, $account->name);
 
-        if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
-            self::assertNotEmpty($account->xprops()[Addressbook_Model_List::XPROP_EMAIL_USERID_IMAP], 'xprops not set in list');
-        } else {
-            self::assertNotEquals($list->getId(), $account->user_id);
-        }
+        self::assertNotEmpty($account->xprops()[Addressbook_Model_List::XPROP_EMAIL_USERID_IMAP], 'xprops not set in list');
 
         // assert email user
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
@@ -246,12 +238,6 @@ class Addressbook_Controller_ListTest extends TestCase
         self::assertFalse($userInBackend, print_r($userInBackend, true));
 
         return $list;
-    }
-
-    public function testListAsMailinglistWithXprops()
-    {
-        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
-        $this->testListAsMailinglist();
     }
 
     public function testChangeListEmailToAlreadyUsed()

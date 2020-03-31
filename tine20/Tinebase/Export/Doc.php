@@ -596,6 +596,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
             if (empty($this->_dataSources)) {
                 $this->_findAndReplaceGroup($this->_docTemplate);
+                $this->_docTemplate->replaceTwigTemplate();
             }
         }
     }
@@ -650,12 +651,12 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     isset($config['recordRow']['groupFooterRow']) || isset($config['recordRow']['groupSeparatorRow']))) {
                 throw new Tinebase_Exception_UnexpectedValue('GROUP with record row must not contain header, footer or separator as table row and group block at the same time');
             }
+            $groupProcessor->replaceTwigTemplate();
+
             $config['groupXml'] = $this->_cutXml($groupProcessor->getMainPart());
             $groupProcessor->setMainPart('<?xml');
             $groupProcessor->setConfig($config);
             $config = array('group' => $groupProcessor);
-
-            $groupProcessor->replaceTwigTemplate();
 
         } elseif (null === ($record = $this->_findAndReplaceRecord($_templateProcessor))) {
             $config['recordRow'] = $this->_findAndReplaceRecordRow($_templateProcessor);
@@ -693,8 +694,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                 $config['separator'] = $recordSeparator;
             }
             $processor->setConfig(array_merge($processor->getConfig(), $config));
-
-            $_templateProcessor->replaceTwigTemplate();
 
             return $processor;
         }
@@ -736,7 +735,6 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                 $result['groupSeparatorRow'] = str_replace('${GROUP_SEPARATOR}', '', $_templateProcessor->replaceRow('${GROUP_SEPARATOR}', ''));
             }
         } else {
-            $_templateProcessor->replaceTwigTemplate();
             $result = null;
         }
 

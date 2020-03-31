@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "e5d61afce1fad5c2fae34fd8235e0b47",
@@ -778,12 +778,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "37dd61c45fdc51100ba445551ce278f6401c246f"
+                "reference": "ced089434df320de6df9b610854b8fba8bfe1d1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/37dd61c45fdc51100ba445551ce278f6401c246f",
-                "reference": "37dd61c45fdc51100ba445551ce278f6401c246f",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/ced089434df320de6df9b610854b8fba8bfe1d1e",
+                "reference": "ced089434df320de6df9b610854b8fba8bfe1d1e",
                 "shasum": ""
             },
             "require": {
@@ -820,7 +820,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-01-21T16:17:18+00:00"
+            "time": "2020-02-22T17:12:02+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "b8462edc7bcab5dfb683748757a0d3e6c5e18d53"
+                "reference": "1affa0a2accd94926705a09205111030c11c4b15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/b8462edc7bcab5dfb683748757a0d3e6c5e18d53",
-                "reference": "b8462edc7bcab5dfb683748757a0d3e6c5e18d53",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/1affa0a2accd94926705a09205111030c11c4b15",
+                "reference": "1affa0a2accd94926705a09205111030c11c4b15",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-01-28T14:30:50+00:00"
+            "time": "2020-03-11T10:52:27+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1343,7 +1343,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3020,7 +3020,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -3292,30 +3292,30 @@
         },
         {
             "name": "zbateson/mail-mime-parser",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/mail-mime-parser.git",
-                "reference": "805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8"
+                "reference": "fd49e6f53184529a5ec4bc0b9edd98edeee53f5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/mail-mime-parser/zipball/805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8",
-                "reference": "805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8",
+                "url": "https://api.github.com/repos/zbateson/mail-mime-parser/zipball/fd49e6f53184529a5ec4bc0b9edd98edeee53f5a",
+                "reference": "fd49e6f53184529a5ec4bc0b9edd98edeee53f5a",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.0",
                 "php": ">=5.4",
                 "zbateson/mb-wrapper": "^1.0",
-                "zbateson/stream-decorators": "^1.0"
+                "zbateson/stream-decorators": "^1.0.2"
             },
             "require-dev": {
-                "evert/phpdoc-md": "^0.1.1",
+                "jms/serializer": "^1.1",
                 "mikey179/vfsstream": "^1.6.0",
                 "phing/phing": "^2.15.0",
-                "phpdocumentor/phpdocumentor": "^2.8.0",
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5"
+                "phpdocumentor/phpdocumentor": "^2.9.0",
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5"
             },
             "suggest": {
                 "ext-iconv": "For best support/performance",
@@ -3334,6 +3334,10 @@
             "authors": [
                 {
                     "name": "Zaahid Bateson"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/zbateson/mail-mime-parser/graphs/contributors"
                 }
             ],
             "description": "MIME email message parser",
@@ -3348,7 +3352,7 @@
                 "parser",
                 "php-imap"
             ],
-            "time": "2018-10-18T14:27:46+00:00"
+            "time": "2020-01-09T04:49:13+00:00"
         },
         {
             "name": "zbateson/mb-wrapper",
@@ -3410,16 +3414,16 @@
         },
         {
             "name": "zbateson/stream-decorators",
-            "version": "1.0.0",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/stream-decorators.git",
-                "reference": "300d7944b16cc1c3c6053bbc4735a178cb35073e"
+                "reference": "a1873c22d2d6189931dd145d766157c6f75cc8d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/stream-decorators/zipball/300d7944b16cc1c3c6053bbc4735a178cb35073e",
-                "reference": "300d7944b16cc1c3c6053bbc4735a178cb35073e",
+                "url": "https://api.github.com/repos/zbateson/stream-decorators/zipball/a1873c22d2d6189931dd145d766157c6f75cc8d7",
+                "reference": "a1873c22d2d6189931dd145d766157c6f75cc8d7",
                 "shasum": ""
             },
             "require": {
@@ -3428,7 +3432,7 @@
                 "zbateson/mb-wrapper": "^1.0.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5"
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5"
             },
             "type": "library",
             "autoload": {
@@ -3457,7 +3461,7 @@
                 "stream",
                 "uuencode"
             ],
-            "time": "2018-09-28T18:17:52+00:00"
+            "time": "2020-02-10T00:22:40+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",

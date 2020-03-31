@@ -35,6 +35,10 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         this.record = new Tine.Calendar.Model.Event({
             editGrant: true
         });
+
+        this.viewConfig = {
+            scrollOffset: 0
+        };
         
         this.selModel = new Ext.grid.RowSelectionModel({singleSelect: true});
         this.selModel.on('beforerowselect', this.onBeforeRowSelect, this);
