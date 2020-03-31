@@ -164,7 +164,6 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Order', // _('Order')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required', 'default' => 0],
                 self::TYPE => self::TYPE_INTEGER,
-                self::SHY => true,
             ],
             self::FLDS_ICON_CLASS => [
                 self::LABEL => 'Icon Class', // _('Icon Class')

@@ -76,6 +76,7 @@ Tine.Tinebase.ImportExportDefinitionEditDialog = Ext.extend(Tine.widgets.dialog.
                             fieldManager('application_id', {xtype: 'tw-app-picker'}),
                             fieldManager('model'),
                             fieldManager('plugin'),
+                            fieldManager('order'),
                             fieldManager('plugin_options'),
                             fieldManager('format'),
                             fieldManager('filename')
