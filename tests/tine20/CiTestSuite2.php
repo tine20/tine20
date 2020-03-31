@@ -7,6 +7,8 @@ class CiTestSuite2
 
         $suite->addTestSuite(Addressbook_AllTests::class);
         $suite->addTestSuite(HumanResources_AllTests::class);
+        $suite->addTestSuite(Crm_AllTests::class);
+        $suite->addTestSuite(Sales_AllTests::class);
 
         return $suite;
     }

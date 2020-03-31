@@ -4,7 +4,7 @@ include:
 
 
 stages:
-  - build
+  - build_docker_images
   - build_and_source_test
   - built_test_and_deploy
   - deploy
@@ -23,11 +23,13 @@ stages:
 
 "docker: build base, source and test-source image":
   extends: .abstract_jobs.docker
-  stage: build
+  stage: build_docker_images
   script:
     - build_and_push base
     - build_and_push source
     - build_and_push test-source
+  rules:
+    - when: on_success
 
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit_test
@@ -36,6 +38,25 @@ stages:
     name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
+      when: on_success
+    - when: never
+
+"phpstan: code analyses":
+  stage: build_and_source_test
+  image:
+    name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+  script:
+    - cd /tine
+    - composer require phpstan/phpstan
+    - php -d memory_limit=2G /tine/vendor/bin/phpstan analyse --autoload-file=/tine/tine20/vendor/autoload.php --error-format=prettyJson --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json || true
+  artifacts:
+    reports:
+      codequality: code-quality-report.json
+    paths:
+      - code-quality-report.json
+    expire_in: 1 days
+  rules:
+    - if: $PHP_STAN_ANALYSES == "true"
       when: on_success
     - when: never
 

@@ -8,6 +8,7 @@ class CiTestSuite1
         $suite->addTestSuite(ActiveSync_AllTests::class);
         $suite->addTestSuite(Filemanager_AllTests::class);
         $suite->addTestSuite(Voipmanager_AllTests::class);
+        $suite->addTestSuite(Tinebase_AllTests::class);
 
         return $suite;
     }

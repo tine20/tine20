@@ -5,3 +5,4 @@ variables:
   MAJOR_COMMIT_REF_NAME: "2018.11"
   DOCKER_BUILD_BUILD: "true"
   DOCKER_RETAG_PHP_IMAGE: "false"
+  PHP_STAN_ANALYSES: "true"
