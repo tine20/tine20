@@ -314,6 +314,15 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         static::assertEquals(1, $invoice->count(), 'did not find contracts invoice');
         $invoice = $invoice->getFirstRecord();
 
+        $filterArr = [
+            ['field' => 'customer', 'operator' => 'AND', 'value' => [
+                ['field' => ':id', 'operator' => 'equals', 'value' => null]
+            ]]
+        ];
+        $tmp = Sales_Controller_Invoice::getInstance()->search($filter= new Sales_Model_InvoiceFilter($filterArr));
+        static::assertSame(0, $tmp->count());
+        static::assertSame($filterArr, $filter->toArray(true));
+
         $ip = Sales_Controller_InvoicePosition::getInstance()->search(new Sales_Model_InvoicePositionFilter([
             ['field' => 'invoice_id', 'operator' => 'AND', 'value' => [
                 ['field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()]
@@ -326,6 +335,22 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $updatedTa2 = $this->_timeaccountController->get($ta2->getId());
         static::assertEquals($ta2->seq, $updatedTa2->seq);
         static::assertNotEquals($ta1->seq, $updatedTa1->seq);
+
+        $invoice->relations = Tinebase_Relations::getInstance()->getRelations(get_class($invoice), 'Sql', $invoice->getId());
+        static::assertNotNull($customer = $invoice->relations->find('type', 'CUSTOMER'));
+        static::assertSame(1, ($searchResult = $this->_invoiceController->search(new Sales_Model_InvoiceFilter([
+            ['field' => 'customer', 'operator' => 'notDefinedBy:AND', 'value' => [
+                ['field' => ':id', 'operator' => 'equals', 'value' => $customer->related_id]
+            ]]
+        ])))->count());
+        static::assertNotSame($searchResult->getFirstRecord()->getId(), $invoice->getId());
+
+        static::assertSame(1, ($searchResult = $this->_invoiceController->search(new Sales_Model_InvoiceFilter([
+            ['field' => 'customer', 'operator' => 'AND', 'value' => [
+                ['field' => ':id', 'operator' => 'equals', 'value' => $customer->related_id]
+            ]]
+        ])))->count());
+        static::assertSame($searchResult->getFirstRecord()->getId(), $invoice->getId());
     }
 
     public function testDeleteInvoice()

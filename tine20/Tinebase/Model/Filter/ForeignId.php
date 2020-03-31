@@ -65,12 +65,14 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
         }
 
         if (strpos($this->_operator, 'not') === 0) {
-            if (!empty($this->_foreignIds)) {
+            if ($this->_valueIsNull) {
+                $_select->where($this->_getQuotedFieldName($_backend) . ' IS NOT NULL');
+            } elseif (!empty($this->_foreignIds)) {
                 $_select->where($this->_getQuotedFieldName($_backend) . ' NOT IN (?)', $this->_foreignIds);
             }
         } else {
             $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)',
-                empty($this->_foreignIds) ? new Zend_Db_Expr('NULL') : $this->_foreignIds);
+                empty($this->_foreignIds) ? ($this->_valueIsNull ? new Zend_Db_Expr('NULL') : []) : $this->_foreignIds);
         }
     }
     
