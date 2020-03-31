@@ -33,6 +33,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected $_setGeoDataForContacts = FALSE;
 
+    protected $_addressFields = [];
+
     /**
      * configured syncBackends
      *
