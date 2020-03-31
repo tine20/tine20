@@ -845,8 +845,9 @@ class Sales_JsonTest extends TestCase
     {
         Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
 
+        $title = Tinebase_Record_Abstract::generateUID(20);
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
-        $contract = Sales_Controller_Contract::getInstance()->create($this->_getContract());
+        $contract = Sales_Controller_Contract::getInstance()->create($this->_getContract($title));
         list($contact1) = $this->_createContacts(1);
         $this->_setContractRelations($contract, array($contact1), 'RESPONSIBLE');
         $result = $this->_instance->searchContracts($this->_getFilter('wolf'), array());
@@ -854,7 +855,7 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals(1, $result['totalcount'], 'should find contract of customer person Peter Wolf');
 
         // test notcontains
-        $contract2 = Sales_Controller_Contract::getInstance()->create($this->_getContract('test2'));
+        $contract2 = Sales_Controller_Contract::getInstance()->create($this->_getContract($title));
 
         $this->_deleteContracts = array($contract->getId(), $contract2->getId());
 
@@ -866,6 +867,7 @@ class Sales_JsonTest extends TestCase
         // search with notcontains
         $search = $this->_instance->searchContracts(array(
             array('field' => 'query', 'operator' => 'notcontains', 'value' => 'wolf'),
+            array('field' => 'title', 'operator' => 'equals', 'value' => $title),
         ), $this->_getPaging());
 
         $this->assertEquals(1, $search['totalcount']);
@@ -874,6 +876,7 @@ class Sales_JsonTest extends TestCase
         // search with notcontains
         $search = $this->_instance->searchContracts(array(
             array('field' => 'query', 'operator' => 'notcontains', 'value' => 'sheeeeep'),
+            array('field' => 'title', 'operator' => 'equals', 'value' => $title),
         ), $this->_getPaging());
         
         $this->assertEquals(2, $search['totalcount']);
