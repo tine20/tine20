@@ -54,7 +54,7 @@
   script:
     - cd /tine/tests/tine20/
     - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci CiTestSuite$CI_NODE_INDEX
-  parallel: 10
+  parallel: 5
 
 .abstract_jobs.php_unit_test_with_ldap:
   extends: .abstract_jobs.php_unit_test

@@ -33,6 +33,8 @@ class Tinebase_AccessLogTest extends TestCase
      * Test create a access log and logout to set logout time
      *
      * @see 0010728: Strange error in tine20 log when performing logout from Web
+     *
+     * @group nogitlabci
      */
     public function testSetLogout()
     {
