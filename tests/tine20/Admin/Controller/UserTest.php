@@ -50,4 +50,30 @@ class Admin_Controller_UserTest extends TestCase
         static::assertSame($container->getId(),
             Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
     }
+
+    public function testUpdateUserAdbContainer()
+    {
+        $container = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class, true);
+
+        $userToCreate = TestCase::getTestUser();
+        $userToCreate->container_id = $container->getId();
+        $pw = Tinebase_Record_Abstract::generateUID(12);
+
+        $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+
+        static::assertSame($container->getId(), $user->container_id);
+        static::assertSame($container->getId(),
+            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
+
+        $updateContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class, true);
+
+        $user->container_id = $updateContainer->getId();
+
+        $user = Admin_Controller_User::getInstance()->update($user);
+
+        static::assertSame($updateContainer->getId(), $user->container_id);
+        static::assertSame($updateContainer->getId(),
+            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
+    }
 }
