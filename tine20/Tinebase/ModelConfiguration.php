@@ -355,6 +355,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected $_singularContainerMode = NULL;
 
+    protected $_runConvertToRecordFromJson = false;
+
     /**
      * inspectBeforeUpdateHooks to be called by \Tinebase_Controller_Record_Abstract::_inspectBeforeUpdate
      *
@@ -855,6 +857,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'record'                => Tinebase_Model_Filter_ForeignId::class,
         'records'               => Tinebase_Model_Filter_ForeignRecords::class,
         'relation'              => Tinebase_Model_Filter_Relation::class,
+        'relations'             => Tinebase_Model_Filter_Relation::class,
         'keyfield'              => Tinebase_Model_Filter_Text::class,
         'container'             => Tinebase_Model_Filter_Container::class,
         'tag'                   => Tinebase_Model_Filter_Tag::class,
@@ -1182,6 +1185,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 && in_array($fieldDef[self::TYPE], ['record', 'records', 'virtual'])
                 && ! $this->_isAvailable($fieldDef['config']))
             {
+                $fieldDef['doctrineIgnore'] = true;
                 $fieldDef[self::TYPE] = 'string';
                 $fieldDef['label'] = NULL;
                 unset($this->_filterModel[$fieldKey]);
@@ -1365,9 +1369,10 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
             $type = $fieldDef[self::TYPE];
             $config = isset($fieldDef['config']) ? $fieldDef['config'] : null;
-            if ('virtual' === $type && isset($fieldDef['config']) && isset($fieldDef['config'][self::TYPE]) &&
-                    'relation' === $fieldDef['config'][self::TYPE]) {
-                $type = 'relation';
+            if (self::TYPE_VIRTUAL === $type && isset($fieldDef['config']) && isset($fieldDef['config'][self::TYPE]) &&
+                    (self::TYPE_RELATION === $fieldDef['config'][self::TYPE] || self::TYPE_RELATIONS ===
+                        $fieldDef['config'][self::TYPE])) {
+                $type = $fieldDef['config'][self::TYPE];
                 if (isset($config['config'])) {
                     $config = $config['config'];
                 }
@@ -1389,7 +1394,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                         $this->_filterModel[$fieldKey]['options']['filtergroup'] = (isset($config['recordClassName']) ? $config['recordClassName'] : ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
                         $this->_filterModel[$fieldKey]['options']['controller']  = isset($config['controllerClassName']) ? $config['controllerClassName'] : ($config['appName'] . '_Controller_' . $config['modelName']);
                     }
-                } else if ($type === 'relation') {
+                } else if ($type === self::TYPE_RELATION || $type === self::TYPE_RELATIONS) {
                     unset($this->_filterModel[$fieldKey]);
                 }
             }
@@ -1516,8 +1521,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     public function getFieldModel($field)
     {
-        if (isset($this->_fields[$field]) && isset($this->_fields[$field]['type'])) {
-            switch ($this->_fields[$field]['type']) {
+        if (isset($this->_fields[$field]) && isset($this->_fields[$field][self::TYPE])) {
+            switch ($this->_fields[$field][self::TYPE]) {
                 case 'user':
                     return Tinebase_Model_FullUser::class;
                 case 'relation':
@@ -1531,9 +1536,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 case 'container':
                     return Tinebase_Model_Container::class;
                 case 'record':
-                    return $this->_recordFields[$field]['config']['recordClassName'];
+                    return $this->_recordFields[$field][self::CONFIG][self::RECORD_CLASS_NAME];
                 case 'records':
-                    return $this->_recordsFields[$field]['config']['recordClassName'];
+                    return $this->_recordsFields[$field][self::CONFIG][self::RECORD_CLASS_NAME];
+                case self::TYPE_VIRTUAL:
+                    if (isset($this->_fields[$field][self::CONFIG][self::TYPE]) && (self::TYPE_RELATION ===
+                            $this->_fields[$field][self::CONFIG][self::TYPE] || self::TYPE_RELATIONS ===
+                            $this->_fields[$field][self::CONFIG][self::TYPE])) {
+                        return $this->_fields[$field][self::CONFIG][self::CONFIG][self::RECORD_CLASS_NAME];
+                    }
             }
         }
         return null;
@@ -1635,10 +1646,34 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 }
                 break;
             case 'virtual':
-                if (isset($fieldDef['config']) && isset($fieldDef['config'][self::TYPE]) && 'datetime' ===
-                        $fieldDef['config'][self::TYPE]) {
-                    // add to datetime fields
-                    $this->_datetimeFields[] = $fieldKey;
+                if (isset($fieldDef[self::CONFIG][self::TYPE])) {
+                    switch ($fieldDef[self::CONFIG][self::TYPE]) {
+                        case self::TYPE_DATE:
+                            $this->_dateFields[] = $fieldKey;
+                            break;
+                        case self::TYPE_DATETIME:
+                            $this->_datetimeFields[] = $fieldKey;
+                            break;
+                        case self::TYPE_RELATIONS:
+                        case self::TYPE_RELATION:
+                            if (!isset($fieldDef[self::CONFIG][self::CONFIG][self::RECORD_CLASS_NAME])) {
+                                $fieldDef[self::CONFIG][self::CONFIG][self::RECORD_CLASS_NAME] = $this
+                                    ->_getPhpClassName($fieldDef[self::CONFIG][self::CONFIG]);
+                            }
+                            if (!isset($fieldDef[self::CONFIG][self::CONFIG][self::DEGREE])) {
+                                $fieldDef[self::CONFIG][self::CONFIG][self::DEGREE] =
+                                    Tinebase_Model_Relation::DEGREE_SIBLING;
+                            }
+                            /*if (!isset($fieldDef[self::CONFIG][self::CONFIG][self::CONTROLLER_CLASS_NAME])) {
+                                $fieldDef[self::CONFIG][self::CONFIG][self::CONTROLLER_CLASS_NAME] = $this
+                                    ->_getPhpClassName($fieldDef[self::CONFIG][self::CONFIG], 'Controller');
+                            }
+                            if (!isset($fieldDef[self::CONFIG][self::CONFIG][self::FILTER_CLASS_NAME])) {
+                                $fieldDef[self::CONFIG][self::CONFIG][self::FILTER_CLASS_NAME] = $this
+                                    ->_getPhpClassName($fieldDef[self::CONFIG][self::CONFIG]) . 'Filter';
+                            }*/
+                            break;
+                    }
                 }
                 break;
             case 'keyfield':
@@ -1865,7 +1900,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             switch ($fieldConfig[self::TYPE]) {
                 case 'virtual':
                     $virtualConfig = isset($fieldConfig['config']) ? $fieldConfig['config'] : null;
-                    if (! isset($virtualConfig[self::TYPE]) || $virtualConfig[self::TYPE] !== 'relation') {
+                    if (! isset($virtualConfig[self::TYPE]) || ($virtualConfig[self::TYPE] !== self::TYPE_RELATION &&
+                            self::TYPE_RELATIONS !== $virtualConfig[self::TYPE])) {
                         throw new Tinebase_Exception_NotImplemented('supports only relation virtual type');
                     }
                     $this->_resolveVirtualRelations($_records, $fieldConfig);

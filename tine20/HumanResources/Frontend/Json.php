@@ -52,6 +52,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
         HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
         HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
+        HumanResources_Model_Stream::MODEL_NAME_PART,
+        HumanResources_Model_StreamModality::MODEL_NAME_PART,
+        HumanResources_Model_StreamModalReport::MODEL_NAME_PART,
         HumanResources_Model_WageType::MODEL_NAME_PART,
         HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
     ];
@@ -77,6 +80,38 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 HumanResources_Model_WageType::MODEL_NAME_PART,
             ]);
         }
+    }
+
+    public function searchStreams($filter, $paging)
+    {
+        return $this->_search($filter, $paging, HumanResources_Controller_Stream::getInstance(),
+            HumanResources_Model_Stream::class);
+    }
+
+    public function saveStream($data)
+    {
+        return $this->_save($data, HumanResources_Controller_Stream::getInstance(), HumanResources_Model_Stream::class);
+    }
+
+    public function generateStreamReport($streamId)
+    {
+        $stremCtrl = HumanResources_Controller_Stream::getInstance();
+        $stream = $stremCtrl->get($streamId);
+
+        $expander = new Tinebase_Record_Expander(HumanResources_Model_Stream::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                HumanResources_Model_Stream::FLD_STREAM_MODALITIES  => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        HumanResources_Model_StreamModality::FLD_REPORTS => []
+                    ],
+                ],
+            ],
+        ]);
+        $expander->expand(new Tinebase_Record_RecordSet(HumanResources_Model_Stream::class, [$stream]));
+
+        $stremCtrl->createReports($stream);
+
+        return $this->_recordToJson($stremCtrl->get($streamId));
     }
 
     public function saveMonthlyWTReport($data)

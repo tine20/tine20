@@ -23,6 +23,7 @@ abstract class Tinebase_Record_Expander_Abstract
     const DATA_FETCH_PRIO_CONTAINER = 950;
     const DATA_FETCH_PRIO_USER = 1000;
     const DATA_FETCH_PRIO_RELATION = 800;
+    const DATA_FETCH_PRIO_AFTER_RELATION = 801;
     const DATA_FETCH_PRIO_NOTES = 900;
 
     protected $_model;

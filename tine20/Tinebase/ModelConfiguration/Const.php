@@ -17,20 +17,24 @@
  */
 
 class Tinebase_ModelConfiguration_Const {
+    const ADD_FILTERS = 'addFilters';
     const APP_NAME = 'appName';
     const ASSOCIATIONS = 'associations';
     const AVAILABLE_MODELS = 'availableModels';
 
     const CONFIG = 'config';
     const CONTROLLER = 'controller';
+    const CONTROLLER_CLASS_NAME = 'controllerClassName';
     const CONTROLLER_HOOK_BEFORE_UPDATE = 'controllerHookBeforeUpdate';
     const CONVERTERS = 'converters';
     const COLUMNS = 'columns';
     const COPY_OMIT = 'copyOmit';
+    const COPY_RELATIONS = 'copyRelations';
     const CREATE_MODULE = 'createModule';
 
     const DB_COLUMNS = 'dbColumns';
     const DEFAULT_VAL = 'default';
+    const DEGREE = 'degree';
     const DEPENDENT_RECORDS = 'dependentRecords';
     const DISABLED = 'disabled';
 
@@ -39,12 +43,15 @@ class Tinebase_ModelConfiguration_Const {
 
     const FIELDS = 'fields';
     const FILTER = 'filter';
+    const FILTER_CLASS_NAME = 'filterClassName';
     const FILTER_DEFINITION = 'filterDefinition';
     const FILTER_GROUP = 'filtergroup';
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
+    const FLD_DELETED_TIME = 'deleted_time';
     const FUNCTION = 'function';
 
+    const HAS_ATTACHMENTS = 'hasAttachments';
     const HAS_CUSTOM_FIELDS = 'hasCustomFields';
     const HAS_DELETED_TIME_UNIQUE = 'hasDeletedTimeUnique';
     const HAS_NOTES = 'hasNotes';
@@ -73,6 +80,8 @@ class Tinebase_ModelConfiguration_Const {
     const OMIT_MOD_LOG = 'modlogOmit';
     const OPTIONS = 'options';
 
+    const PAGING = 'paging';
+
     const QUERY_FILTER = 'queryFilter';
 
     const READ_ONLY = 'readOnly';
@@ -81,6 +90,7 @@ class Tinebase_ModelConfiguration_Const {
     const RECORD_CLASS_NAME = 'recordClassName';
     const RECORD_NAME = 'recordName';
     const RECORDS_NAME = 'recordsName';
+    const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
     const SHY = 'shy';
     const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
@@ -112,6 +122,7 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_RECORD = 'record';
     const TYPE_RECORDS = 'records';
     const TYPE_RELATION = 'relation';
+    const TYPE_RELATIONS = 'relations';
     const TYPE_STRING = 'string';
     const TYPE_STRING_AUTOCOMPLETE = 'stringAutocomplete';
     const TYPE_TAG = 'tag';

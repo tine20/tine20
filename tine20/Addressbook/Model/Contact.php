@@ -67,6 +67,8 @@
  */
 class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
+    const MODEL_PART_NAME = 'Contact';
+
     /**
      * const to describe contact of current account id independent
      * 
@@ -113,7 +115,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         self::VERSION       => 26,
         'containerName'     => 'Addressbook',
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
-        'recordName'        => 'Contact',
+        'recordName'        => self::MODEL_PART_NAME,
         'recordsName'       => 'Contacts', // ngettext('Contact', 'Contacts', n)
         'hasRelations'      => true,
         'copyRelations'     => false,
@@ -131,7 +133,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
         'titleProperty'     => 'n_fn',
         'appName'           => 'Addressbook',
-        'modelName'         => 'Contact',
+        'modelName'         => self::MODEL_PART_NAME,
         self::TABLE         => [
             self::NAME          => 'addressbook',
             self::INDEXES       => [
