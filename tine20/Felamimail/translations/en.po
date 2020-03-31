@@ -1708,6 +1708,12 @@ msgstr[1] "{0} unread messages"
 msgid "All inboxes"
 msgstr "All inboxes"
 
+msgid "Default Font"
+msgstr "Default Font"
+
+msgid "Setting the default font in the E-Mail app"
+msgstr "Setting the default font in the E-Mail app"
+
 #: Preference.php:119
 msgid "Default Email Account"
 msgstr "Default Email Account"

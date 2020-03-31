@@ -29,6 +29,7 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
     cls: 'felamimail-message-body-html',
     name: 'body_html',
     allowBlank: true,
+    defaultFont: Tine.Felamimail.registry.get('preferences').get('defaultfont') || 'tahoma',
 
     getDocMarkup: function(){
         var markup = '<html>'

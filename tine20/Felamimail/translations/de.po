@@ -187,7 +187,7 @@ msgstr "Sollen links in E-Mail Text gefiltert werden. Nur interne Verweise sind 
 
 #: Config.php:253
 msgid "System Account Folder Defaults"
-msgstr "Standard Ordner für System Nutzer"
+msgstr "Standardordner für System Nutzer"
 
 #: Config.php:255
 msgid "Paths of the special folders (like Sent, Trash, ...)"
@@ -1663,6 +1663,12 @@ msgstr[1] "{0} ungelesene Nachrichten"
 #: Preference.php:70
 msgid "All inboxes"
 msgstr "Alle Posteingänge"
+
+msgid "Default Font"
+msgstr "Standardschriftart"
+
+msgid "Setting the default font in the E-Mail app"
+msgstr "Einstellung für die Standardschriftart im der E-Mail-Modul"
 
 #: Preference.php:119
 msgid "Default Email Account"

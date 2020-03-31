@@ -376,6 +376,18 @@ class Tinebase_PreferenceTest extends TestCase
         self::assertTrue(in_array($personalContainer->getId(), $fixedCalendarIds));
     }
 
+    /**
+     * testDefaultFontPreference
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function testDefaultFontPreference()
+    {
+        Tinebase_Core::getPreference('Felamimail')->setValue(Felamimail_Preference::DEFAULT_FONT,Felamimail_Preference::FONT_ARIAL);
+        $noDefaultAlarms = Tinebase_Core::getPreference('Felamimail')->getValue(Felamimail_Preference::DEFAULT_FONT);
+
+        $this->assertEquals('arial', $noDefaultAlarms);
+    }
+
     /******************** protected helper funcs ************************/
     
     /**
