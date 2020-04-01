@@ -784,6 +784,22 @@ class Addressbook_JsonTest extends TestCase
 
         // check if industry is resolved in contact
         $this->assertTrue(is_array($contact['industry']), 'Industry not resolved: ' . print_r($contact, true));
+
+        $result = $this->_uit->searchContacts([
+            ['field' => 'industry', 'operator' => 'AND', 'value' => [
+                ['field' => 'name', 'operator' => 'equals', 'value' => $industry['name']]
+            ]]
+        ], null);
+
+        static::assertCount(1, $result['results']);
+
+        $result = $this->_uit->searchContacts([
+            ['field' => 'industry', 'operator' => 'AND', 'value' => [
+                ['field' => 'name', 'operator' => 'equals', 'value' => 'shalalala']
+            ]]
+        ], null);
+
+        static::assertCount(0, $result['results']);
     }
 
     /**
