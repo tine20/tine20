@@ -1102,8 +1102,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testSaveMessageWithInvalidChar()
     {
-        self::markTestSkipped('FIXME ... this broke during introduction of filing messages feature');
-
         $subject = "\xF0\x9F\x98\x8A"; // :-) emoji
         $messageData = $this->_getMessageData('', $subject);
         $this->_foldersToClear[] = 'INBOX';
