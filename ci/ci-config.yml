@@ -6,3 +6,4 @@ variables:
   DOCKER_BUILD_BUILD: "true"
   DOCKER_RETAG_PHP_IMAGE: "false"
   PHP_STAN_ANALYSES: "true"
+  NO_CACHE: "false"
