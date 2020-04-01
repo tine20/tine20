@@ -5,7 +5,23 @@ function login() {
 function build_and_push() {
   NAME=$1
 
-  docker build \
+  if test "$NO_CACHE" == "true"; then
+    docker build \
+    --target $NAME \
+    --tag $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
+    --file ci/dockerimage/Dockerfile \
+    --build-arg BUILDKIT_INLINE_CACHE=1 \
+    --build-arg PHP_IMAGE=$REGISTRY/php \
+    --build-arg PHP_IMAGE_TAG=$PHP_IMAGE_TAG \
+    --build-arg BASE_IMAGE=$REGISTRY/base:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
+    --build-arg SOURCE_IMAGE=$REGISTRY/source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
+    --build-arg BUILD_IMAGE=$REGISTRY/build:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
+    --build-arg BUILT_IMAGE=$REGISTRY/built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
+    --build-arg NPM_INSTALL_COMMAND="$NPM_INSTALL_COMMAND" \
+    --build-arg NODE_TLS_REJECT_UNAUTHORIZED=0 \
+    .
+  else
+   docker build \
     --target $NAME \
     --tag $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --cache-from $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
@@ -21,7 +37,9 @@ function build_and_push() {
     --build-arg BUILD_IMAGE=$REGISTRY/build:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --build-arg BUILT_IMAGE=$REGISTRY/built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --build-arg NPM_INSTALL_COMMAND="$NPM_INSTALL_COMMAND" \
+    --build-arg NODE_TLS_REJECT_UNAUTHORIZED=0 \
     .
+  fi
 
   echo "docker: built $1 image"
 
