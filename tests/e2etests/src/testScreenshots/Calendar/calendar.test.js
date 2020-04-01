@@ -6,6 +6,7 @@ require('dotenv').config();
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Kalender');
+    await expect(page).toClick('button', {text:'Heute'}); //need for init setup!
 });
 
 describe('MainScreen', () => {
@@ -67,12 +68,15 @@ describe('MainScreen', () => {
         await expect(page).toClick('button', {text: 'Zeitstrahl'});
         await page.waitFor(1000);
         await page.screenshot({path: 'screenshots/3_kalender/5_kalender_termine_listenansicht.png'});
+        await page.waitFor(1000);
+        await expect(page).toClick('button', {text:'Heute', visible: true});
     });
 });
 
 describe('editDialog', () => {
 
     test('new event', async () => {
+        await page.waitFor(3000);
         await expect(page).toClick('button', {text: 'Termin hinzufügen'});
         newPage = await lib.getNewWindow();
         await newPage.waitFor(5000);
