@@ -98,6 +98,7 @@ HEALTHCHECK --timeout=30s CMD curl --silent --fail http://127.0.0.1:80/ADMIN/fpm
 FROM ${BASE_IMAGE} as source
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
+ARG NODE_TLS_REJECT_UNAUTHORIZED=1
 
 RUN apk add --no-cache composer git npm
 
@@ -165,6 +166,7 @@ RUN chmod +x /install_tine.sh
 FROM ${BUILT_IMAGE} as test-built
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
+ARG NODE_TLS_REJECT_UNAUTHORIZED=1
 
 RUN apk add --no-cache composer git npm mysql-client
 
