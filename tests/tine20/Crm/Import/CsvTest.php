@@ -138,6 +138,7 @@ class Crm_Import_CsvTest extends ImportTestCase
      * @see 0011376: send mail on lead import to responsibles
      *
      * @group nogitlabci
+     * gitlabci: expecting 2 or more mails (at least for unittest + sclever) / messages:Array ...
      */
     public function testEmailNotification()
     {

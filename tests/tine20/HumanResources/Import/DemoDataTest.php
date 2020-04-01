@@ -20,6 +20,7 @@ class HumanResources_Import_DemoDataTest extends TestCase
     
     /**
      * @group nogitlabci
+     * gitlabci: Failed asserting that 0 matches expected 2.
      */
     public function testImportDemoData()
     {

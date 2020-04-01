@@ -186,6 +186,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
     /**
      * test ical cli export
      * @group nogitlabci
+     * gitlabci: DESCRIPTION not correct: Array ...
      */
     public function testCliExport()
     {

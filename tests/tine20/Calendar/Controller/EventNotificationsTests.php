@@ -141,6 +141,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * @see 0009246: Mail address of organizer is broken in invite mails
      *
      * @group nogitlabci
+     * gitlabci: RSVP=TRUE;EMAIL=pwulf@example.org not found for pwulf in: ...
      */
     public function testInvitationWithAttachment()
     {

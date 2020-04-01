@@ -35,6 +35,10 @@
     TINE20_LOGIN_USERNAME: tine20admin
     TINE20_LOGIN_PASSWORD: tine20admin
     TINE20_ADMIN_EMAIL: tine20admin@mail.test
+    TINE20_CACHING_BACKEND: Redis
+    TINE20_CACHING_REDIS_HOST: cache
+    TINE20_SESSION_BACKEND: Redis
+    TINE20_SESSION_HOST: cache
     TINE20_EMAIL_IMAP: "active:true,host:dovecot,port:143,useSystemAccount:1,ssl:none,verifyPeer:0,backend:dovecot_imap,domain:mail.test,instanceName:tine.test,dovecot_host:db,dovecot_dbname:dovecot,dovecot_username:tine20,dovecot_password:tine20pw,dovecot_uid:vmail,dovecot_gid:vmail,dovecot_home:/var/vmail/%d/%u,dovecot_scheme:SSHA256"
     TINE20_EMAIL_SMTP: "active:true,backend:postfix,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfix_host:db,postfix_dbname:postfix,postfix_username:tine20,postfix_password:tine20pw"
     TINE20_EMAIL_SIEVE: "hostname:dovecot,port:4190,ssl:none"

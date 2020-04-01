@@ -131,9 +131,6 @@ class Tinebase_CoreTest extends TestCase
         }
     }
 
-    /**
-     * @group nogitlabci
-     */
     public function testGetHostname()
     {
         $config = Tinebase_Config::getInstance();
