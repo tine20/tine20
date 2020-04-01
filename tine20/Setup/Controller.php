@@ -510,7 +510,10 @@ class Setup_Controller
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
 
-        $result = ['updated' => 0];
+        $result = [
+            'updated' => 0,
+            'updates' => [],
+        ];
         $iterationCount = 0;
         do {
             $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
@@ -536,6 +539,7 @@ class Setup_Controller
                         $functionName = $update[Setup_Update_Abstract::FUNCTION_CONST];
                         if (!isset($classes[$className])) {
                             $classes[$className] = new $className($this->_backend);
+                            $result['updates'][] = $className;
                         }
                         $class = $classes[$className];
 
