@@ -8,7 +8,6 @@ class CiTestSuite3
         $suite->addTestSuite(Admin_AllTests::class);
         $suite->addTestSuite(Inventory_AllTests::class);
         $suite->addTestSuite(Zend_AllTests::class);
-        $suite->addTestSuite(Events_AllTests::class);
         $suite->addTestSuite(Scheduler_AllTests::class);
 
         return $suite;
