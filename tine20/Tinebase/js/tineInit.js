@@ -658,15 +658,15 @@ Tine.Tinebase.tineInit = {
      * apply registry data
      */
     onRegistryLoad: function() {
-        if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered 
-            && Tine.Tinebase.registry.get('preferences')
-            && Tine.Tinebase.registry.get('currentAccount')
-            && ! Ext.isNewIE
-        ) {
-            Tine.log.info('tineInit::onRegistryLoad - register onPreferenceChange handler');
-            Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
-            Tine.Tinebase.tineInit.onPreferenceChangeRegistered = true;
-        }
+        // if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered
+        //     && Tine.Tinebase.registry.get('preferences')
+        //     && Tine.Tinebase.registry.get('currentAccount')
+        //     && ! Ext.isNewIE
+        // ) {
+        //     Tine.log.info('tineInit::onRegistryLoad - register onPreferenceChange handler');
+        //     Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
+        //     Tine.Tinebase.tineInit.onPreferenceChangeRegistered = true;
+        // }
 
         Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
         //Do we have a custom weburl for branding?
