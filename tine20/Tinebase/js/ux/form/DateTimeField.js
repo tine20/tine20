@@ -137,6 +137,14 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
 
         return date + ' ' + time;
     },
+
+    validateValue : function(value){
+        if(!Ext.form.DateField.superclass.validateValue.call(this, value)){
+            return false;
+        }
+        return true;
+    },
+
     
     markInvalid: function (msg) {
         this.markedInvalid = true;
