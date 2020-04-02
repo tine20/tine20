@@ -650,9 +650,14 @@ Tine.Tinebase.tineInit = {
             && Tine.Tinebase.registry.get('preferences')
             && Tine.Tinebase.registry.get('currentAccount')
         ) {
-            Tine.log.info('tineInit::onRegistryLoad - register onPreferenceChange handler');
-            Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
-            Tine.Tinebase.tineInit.onPreferenceChangeRegistered = true;
+            // NOTE: safari (and maybe other slow browsers) need some time till all events from initial preferences
+            //       loading are processed. so we wait a little bit until we register the listeners to not get notified
+            //       about initial loading.
+            (function() {
+                Tine.log.info('tineInit::onRegistryLoad - register onPreferenceChange handler');
+                Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
+                Tine.Tinebase.tineInit.onPreferenceChangeRegistered = true;
+            }).defer(500);
         }
 
         Ext.util.CSS.updateRule('.tine-favicon', 'background-image', 'url(' + Tine.Tinebase.registry.get('brandingFaviconSvg') + ')');
