@@ -382,4 +382,60 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    /**
+     * updates addressbook shared containers: set privateData grant for all!
+     *
+     * TODO generalize: give set of grants and allow to update containers of all models (move to Tinebase)
+     *
+     * @param $opts
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public function setPrivateGrantForAll($opts)
+    {
+        $containerController = Tinebase_Container::getInstance();
+
+        if ($opts->v) {
+            print_r($opts->d ? '(DRYRUN) Setting private grants for:' . PHP_EOL : 'Setting private grants for:' . PHP_EOL);
+        }
+
+        $filter = [
+            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED],
+            ['field' => 'model', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::class],
+            ['field' => 'application_id', 'operator' => 'equals',
+                'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()],
+        ];
+        $containerController->doSearchAclFilter(false);
+        $containers = $containerController->search(
+            new Tinebase_Model_ContainerFilter($filter)
+        );
+        $containerController->doSearchAclFilter(true);
+
+        $counter = 0;
+        foreach ($containers as $container) {
+            $allgrants = $containerController->getGrantsOfContainer($container, true);
+            $toUpdate = false;
+            foreach ($allgrants as $grant) {
+                if (!$grant->privateDataGrant) {
+                    $toUpdate = true;
+                    $grant->privateDataGrant = true;
+                }
+            }
+            if ($toUpdate) {
+                if ($opts->v) {
+                    echo "- " . $container->name . PHP_EOL;
+                }
+                if (!$opts->d) {
+                    $containerController->setGrants($container, $allgrants, TRUE);
+                }
+                $counter++;
+            }
+        }
+
+        echo "Added privateData grant to $counter shared containers" . PHP_EOL;
+    }
 }
