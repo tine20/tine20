@@ -200,15 +200,9 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
                 'tnparent.is_deleted = 0 AND (tnparent.acl_node <> tnchild.acl_node OR (tnparent.acl_node IS NOT NULL '
                 . 'AND tnchild.acl_node IS NULL))')->fetchAll() as $row) {
 
-            if (empty($row['acl_node'])) continue;
-
-            $node = $fs->get($row['id'], true);
-
-            $r = new ReflectionMethod(Tinebase_FileSystem::class, '_recursiveInheritPropertyUpdate');
-            $r->setAccessible(true);
-            $r->invoke($fs, $node, 'acl_node', $row['acl_node'], $node->acl_node, true, true);
-            $node->acl_node = $row['acl_node'];
-            $fs->_getTreeNodeBackend()->update($node);
+            if (! empty($row['acl_node'])) {
+                $fs->repairAclOfNode($row['id'], $row['acl_node']);
+            }
         }
 
         $this->addApplicationUpdate('Tinebase', '12.25', self::RELEASE012_UPDATE007);

@@ -1777,6 +1777,40 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * repair acl of nodes (supports -d for dry run)
+     *
+     * @param $opts
+     * @return int
+     * @throws ReflectionException
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function repairFileSystemAclNodes($opts)
+    {
+        $this->_checkAdminRight();
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $counter = 0;
+        foreach (Tinebase_Core::getDb()->query('SELECT tnchild.id, tnparent.acl_node FROM ' .
+                SQL_TABLE_PREFIX . 'tree_nodes as tnchild JOIN ' . SQL_TABLE_PREFIX .
+                'tree_nodes as tnparent ON tnchild.parent_id = tnparent.id WHERE tnparent.acl_node IS NOT NULL '
+                . 'AND tnchild.acl_node IS NULL')->fetchAll() as $row) {
+
+            if ($opts->d) {
+                echo "repairing acl of node id " . $row['id'] . PHP_EOL;
+            } else {
+                $fs->repairAclOfNode($row['id'], $row['acl_node']);
+            }
+            $counter++;
+        }
+        echo "repaired $counter nodes" . PHP_EOL;
+
+        return 0;
+    }
+
+    /**
      * recalculates the revision sizes and then the folder sizes
      *
      * @return int
