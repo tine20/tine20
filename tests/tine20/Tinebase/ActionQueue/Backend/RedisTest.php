@@ -53,10 +53,12 @@ class Tinebase_ActionQueue_Backend_RedisTest extends TestCase
     {
         parent::tearDown();
 
-        foreach ($this->_redis->keys('unitTestQueue*') as $key) {
-            $this->_redis->del($key);
+        if ($this->_redis instanceof Redis) {
+            foreach ($this->_redis->keys('unitTestQueue*') as $key) {
+                $this->_redis->del($key);
+            }
+            $this->_redis->close();
         }
-        $this->_redis->close();
     }
 
     public function testSend()
