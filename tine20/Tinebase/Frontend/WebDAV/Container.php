@@ -207,8 +207,12 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         // Loop through the directory, and create objects for each node
         foreach (Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
-            if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)) {
-                $children[] = $this->getChild($node->name);
+            try {
+                if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)) {
+                    $children[] = $this->getChild($node->name);
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // skip
             }
         }
         
