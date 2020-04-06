@@ -299,6 +299,14 @@ class Tinebase_FileSystem implements
         return $this->_treeNodeBackend;
     }
 
+    public function repairAclOfNode($nodeId, $aclNode)
+    {
+        $node = $this->get($nodeId, true);
+        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $aclNode, $node->acl_node, true, true);
+        $node->acl_node = $aclNode;
+        $this->_getTreeNodeBackend()->update($node);
+    }
+
     /**
      * Get multiple tree nodes identified by id
      *
