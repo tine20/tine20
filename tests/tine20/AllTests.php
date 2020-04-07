@@ -48,14 +48,15 @@ class AllTests
             'Zend',
         );
 
-        // this will not find ./library/OpenDocument/AllTests.php ... but it had not been added previously neither. So nothing changed with regards to that
+        // this will not find ./library/OpenDocument/AllTests.php
+        // ... but it had not been added previously neither. So nothing changed with regards to that
         foreach (new DirectoryIterator(__DIR__) as $dirIter) {
             if ($dirIter->isDir() && !$dirIter->isDot() &&
                 is_file($dirIter->getPathname() . DIRECTORY_SEPARATOR . 'AllTests.php') &&
                 'Scheduler' !== $dirIter->getFilename() &&
                 !in_array($dirIter->getFilename(), $suites))
             {
-                $suite[] = $dirIter->getFilename();
+                $suites[] = $dirIter->getFilename();
             }
         }
 
