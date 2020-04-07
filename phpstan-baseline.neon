@@ -11,61 +11,6 @@ parameters:
 			path: tine20/ActiveSync/Controller.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$owner_id\\.$#"
-			count: 2
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Parameter \\$_class of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid typehint type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Parameter \\$_deviceId of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid typehint type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Parameter \\$_filterId of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid typehint type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$calendarfilter_id\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$contactsfilter_id\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$emailfilter_id\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$tasksfilter_id\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Access to an undefined property ActiveSync_Model_Device\\:\\:\\$owner_id\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountDisplayName\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
-			count: 2
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
 			message: "#^Access to an undefined property Syncroton_Model_IDevice\\:\\:\\$model\\.$#"
 			count: 3
 			path: tine20/ActiveSync/Frontend/Abstract.php
@@ -124,96 +69,6 @@ parameters:
 			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Frontend/Cli.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountId\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Server/Http.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_ipAddress$#"
-			count: 1
-			path: tine20/ActiveSync/Server/Http.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Setup/Update/Release0.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 4
-			path: tine20/ActiveSync/Setup/Update/Release6.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/ActiveSync/Setup/Update/Release8.php
-
-		-
-			message: "#^Property ActiveSync_TimezoneConverter\\:\\:\\$_cache has unknown class Zend_CacheCore as its type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_logger\\)\\: Unexpected token \"\\$_logger\", expected type at offset 79$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Parameter \\$_expectedTimezone of method ActiveSync_TimezoneConverter\\:\\:getListOfTimezones\\(\\) has invalid typehint type optional\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Result of method ActiveSync_TimezoneConverter\\:\\:_checkTimezone\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_startDate\\)\\: Unexpected token \"\\$_startDate\", expected type at offset 96$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$daylightTransition$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$standardTransition$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Return typehint of method ActiveSync_TimezoneConverter\\:\\:_getOffsetsTemplate\\(\\) has invalid type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Return typehint of method ActiveSync_TimezoneConverter\\:\\:_validateOffsets\\(\\) has invalid type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Method ActiveSync_TimezoneConverter\\:\\:_validateOffsets\\(\\) should return unknown_type but return statement is missing\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_year\\)\\: Unexpected token \"\\$_year\", expected type at offset 179$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Call to method load\\(\\) on an unknown class Zend_CacheCore\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Call to method save\\(\\) on an unknown class Zend_CacheCore\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
 
 		-
 			message: "#^Array has 2 duplicate keys with value 'adr_one_countryname' \\('adr_one_countryname', 'adr_one_countryname'\\)\\.$#"
@@ -341,6 +196,16 @@ parameters:
 			path: tine20/Addressbook/Controller.php
 
 		-
+			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
+			count: 1
+			path: tine20/Addressbook/Controller.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
+			count: 8
+			path: tine20/Addressbook/Controller/Contact.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$groups\\.$#"
 			count: 1
 			path: tine20/Addressbook/Controller/Contact.php
@@ -406,11 +271,6 @@ parameters:
 			path: tine20/Addressbook/Controller/Contact.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
-			count: 5
-			path: tine20/Addressbook/Controller/Contact.php
-
-		-
 			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
 			count: 3
 			path: tine20/Addressbook/Controller/Contact.php
@@ -462,7 +322,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$email\\.$#"
-			count: 1
+			count: 2
 			path: tine20/Addressbook/Controller/List.php
 
 		-
@@ -486,17 +346,17 @@ parameters:
 			path: tine20/Addressbook/Controller/List.php
 
 		-
-			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$email\\.$#"
+			message: "#^PHPDoc tag @param has invalid value \\(\\$email\\)\\: Unexpected token \"\\$email\", expected type at offset 182$#"
 			count: 1
 			path: tine20/Addressbook/Controller/List.php
 
 		-
-			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$name\\.$#"
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
 			count: 1
 			path: tine20/Addressbook/Controller/List.php
 
 		-
-			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$from\\.$#"
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$from\\.$#"
 			count: 1
 			path: tine20/Addressbook/Controller/List.php
 
@@ -921,6 +781,11 @@ parameters:
 			path: tine20/Addressbook/Frontend/Cli.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$opts\\)\\: Unexpected token \"\\$opts\", expected type at offset 216$#"
+			count: 1
+			path: tine20/Addressbook/Frontend/Cli.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$recordData\\)\\: Unexpected token \"\\$recordData\", expected type at offset 47$#"
 			count: 1
 			path: tine20/Addressbook/Frontend/Json.php
@@ -1026,11 +891,6 @@ parameters:
 			path: tine20/Addressbook/Setup/Import/Egw14.php
 
 		-
-			message: "#^Undefined variable\\: \\$contact$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
 			message: "#^Access to an undefined property Zend_Config\\:\\:\\$birthdayDefaultTimezone\\.$#"
 			count: 1
 			path: tine20/Addressbook/Setup/Import/Egw14.php
@@ -1106,14 +966,19 @@ parameters:
 			path: tine20/Addressbook/Setup/Initialize.php
 
 		-
-			message: "#^Instantiated class Addressbook_Backend_Salutation not found\\.$#"
+			message: "#^Instantiated class Addressbook_Setup_Update_Release9 not found\\.$#"
 			count: 1
-			path: tine20/Addressbook/Setup/Update/Release0.php
+			path: tine20/Addressbook/Setup/Update/Release10.php
 
 		-
-			message: "#^Call to method create\\(\\) on an unknown class Addressbook_Backend_Salutation\\.$#"
-			count: 3
-			path: tine20/Addressbook/Setup/Update/Release0.php
+			message: "#^Call to method update_9\\(\\) on an unknown class Addressbook_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Addressbook/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_10\\(\\) on an unknown class Addressbook_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Addressbook/Setup/Update/Release10.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -1129,21 +994,6 @@ parameters:
 			message: "#^Method Addressbook_Setup_Update_Release11\\:\\:update_15\\(\\) should return Set but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Addressbook/Setup/Update/Release11.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 14
-			path: tine20/Addressbook/Setup/Update/Release3.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Addressbook/Setup/Update/Release5.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Addressbook/Setup/Update/Release9.php
 
 		-
 			message: "#^Property Admin_Backend_SambaMachine\\:\\:\\$_samBackend has unknown class Tinebase_SambaSAM_Ldap as its type\\.$#"
@@ -1287,7 +1137,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_Config\\:\\:\\$value\\.$#"
-			count: 4
+			count: 6
 			path: tine20/Admin/Controller/Config.php
 
 		-
@@ -1307,7 +1157,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$value\\.$#"
-			count: 2
+			count: 4
 			path: tine20/Admin/Controller/Config.php
 
 		-
@@ -1436,8 +1286,33 @@ parameters:
 			path: tine20/Admin/Controller/EmailAccount.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$account\\)\\: Unexpected token \"\\$account\", expected type at offset 101$#"
+			count: 1
+			path: tine20/Admin/Controller/EmailAccount.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$email\\.$#"
+			count: 3
+			path: tine20/Admin/Controller/EmailAccount.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$type\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/EmailAccount.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/EmailAccount.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountEmailAddress\\.$#"
 			count: 2
+			path: tine20/Admin/Controller/EmailAccount.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$type\\.$#"
+			count: 1
 			path: tine20/Admin/Controller/EmailAccount.php
 
 		-
@@ -1446,12 +1321,12 @@ parameters:
 			path: tine20/Admin/Controller/EmailAccount.php
 
 		-
-			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$user_id\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:doConvertToUserInternal\\(\\)\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/EmailAccount.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountEmailAddress\\.$#"
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$user_id\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/EmailAccount.php
 
@@ -1504,6 +1379,26 @@ parameters:
 			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$visibility\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Group.php
+
+		-
+			message: "#^Access to an undefined property Admin_Controller_ImportExportDefinition\\:\\:\\$_doImportExportDefinitionACLChecks\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/ImportExportDefinition.php
+
+		-
+			message: "#^Method Tinebase_Backend_Interface\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/ImportExportDefinition.php
+
+		-
+			message: "#^Method Tinebase_Backend_Interface\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/ImportExportDefinition.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(array array of record identifiers\\)\\: Unexpected token \"array\", expected variable at offset 145$#"
+			count: 1
+			path: tine20/Admin/Controller/ImportExportDefinition.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(array role members\\)\\: Unexpected token \"role\", expected variable at offset 96$#"
@@ -1686,6 +1581,21 @@ parameters:
 			path: tine20/Admin/Controller/User.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$oldUser\\)\\: Unexpected token \"\\$oldUser\", expected type at offset 38$#"
+			count: 1
+			path: tine20/Admin/Controller/User.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$password\\)\\: Unexpected token \"\\$password\", expected type at offset 61$#"
+			count: 1
+			path: tine20/Admin/Controller/User.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$user\\)\\: Unexpected token \"\\$user\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Admin/Controller/User.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getSqlPluginNames\\(\\)\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/User.php
@@ -1746,6 +1656,21 @@ parameters:
 			path: tine20/Admin/Controller/User.php
 
 		-
+			message: "#^Access to an undefined property object\\:\\:\\$accountLoginName\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/User.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:getId\\(\\)\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/User.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:updateUserInSqlBackend\\(\\)\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/User.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_opts\\)\\: Unexpected token \"\\$_opts\", expected type at offset 106$#"
 			count: 1
 			path: tine20/Admin/Frontend/Cli.php
@@ -1772,6 +1697,16 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$opts\\)\\: Unexpected token \"\\$opts\", expected type at offset 88$#"
+			count: 1
+			path: tine20/Admin/Frontend/Cli.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_User_Plugin_Abstract\\:\\:getRawUserByProperty\\(\\)\\.$#"
+			count: 1
+			path: tine20/Admin/Frontend/Cli.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$opts\\)\\: Unexpected token \"\\$opts\", expected type at offset 207$#"
 			count: 1
 			path: tine20/Admin/Frontend/Cli.php
 
@@ -1977,11 +1912,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$imapUser\\.$#"
-			count: 1
-			path: tine20/Admin/Import/User/Csv.php
-
-		-
-			message: "#^Variable \\$_recordData in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: tine20/Admin/Import/User/Csv.php
 
@@ -4693,72 +4623,72 @@ parameters:
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_recordData\\)\\: Unexpected token \"\\$_recordData\", expected type at offset 54$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$importedRecord\\)\\: Unexpected token \"\\$importedRecord\", expected type at offset 77$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Access to an undefined property Calendar_Model_Attender\\:\\:\\$user_id\\.$#"
 			count: 3
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Variable \\$resource_id might not be defined\\.$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Access to an undefined property Calendar_Model_Attender\\:\\:\\$displaycontainer_id\\.$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Variable \\$display_id might not be defined\\.$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Access to an undefined property Calendar_Model_Attender\\:\\:\\$user_type\\.$#"
 			count: 3
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Access to an undefined property Calendar_Model_Attender\\:\\:\\$cal_event_id\\.$#"
 			count: 3
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Access to an undefined property Calendar_Model_Attender\\:\\:\\$status_authkey\\.$#"
 			count: 3
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Variable \\$member_check might not be defined\\.$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Variable \\$container_id might not be defined\\.$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Variable \\$user_id might not be defined\\.$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_Group\\:\\:\\$name\\.$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_Group\\:\\:\\$description\\.$#"
 			count: 1
-			path: tine20/Calendar/Import/Csv.php
+			path: tine20/Calendar/Import/Event/Csv.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Convert_Interface\\:\\:setOptions\\(\\)\\.$#"
@@ -4769,6 +4699,11 @@ parameters:
 			message: "#^Call to an undefined method Tinebase_Convert_Interface\\:\\:toTine20RecordSet\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Import/Ical.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$result\\)\\: Unexpected token \"\\$result\", expected type at offset 59$#"
+			count: 1
+			path: tine20/Calendar/Import/Resource/Csv.php
 
 		-
 			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime alarm_ack_time\\)\\: Unexpected token \"alarm_ack_time\", expected variable at offset 83$#"
@@ -5142,7 +5077,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_Translate\\:\\:_\\(\\)\\.$#"
-			count: 16
+			count: 14
 			path: tine20/Calendar/Model/Event.php
 
 		-
@@ -5571,14 +5506,49 @@ parameters:
 			path: tine20/Calendar/Setup/Import/Egw14.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			message: "#^Instantiated class Calendar_Setup_Update_Release9 not found\\.$#"
 			count: 3
-			path: tine20/Calendar/Setup/Update/Release0.php
+			path: tine20/Calendar/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_7\\(\\) on an unknown class Calendar_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Calendar/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_8\\(\\) on an unknown class Calendar_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Calendar/Setup/Update/Release10.php
+
+		-
+			message: "#^Instantiated class Calendar_Setup_Update_Release8 not found\\.$#"
+			count: 1
+			path: tine20/Calendar/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_11\\(\\) on an unknown class Calendar_Setup_Update_Release8\\.$#"
+			count: 1
+			path: tine20/Calendar/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_4\\(\\) on an unknown class Calendar_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Calendar/Setup/Update/Release10.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$account_type\\.$#"
 			count: 1
 			path: tine20/Calendar/Setup/Update/Release10.php
+
+		-
+			message: "#^Instantiated class Calendar_Setup_Update_Release8 not found\\.$#"
+			count: 1
+			path: tine20/Calendar/Setup/Update/Release11.php
+
+		-
+			message: "#^Call to method update_11\\(\\) on an unknown class Calendar_Setup_Update_Release8\\.$#"
+			count: 1
+			path: tine20/Calendar/Setup/Update/Release11.php
 
 		-
 			message: "#^Access to an undefined property Calendar_Model_Resource\\:\\:\\$grants\\.$#"
@@ -5589,61 +5559,6 @@ parameters:
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$account_type\\.$#"
 			count: 1
 			path: tine20/Calendar/Setup/Update/Release11.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 4
-			path: tine20/Calendar/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_PersistentFilter\\:\\:getByProperty\\(\\)\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/Update/Release3.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/Update/Release5.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 15
-			path: tine20/Calendar/Setup/Update/Release8.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/Update/Release8.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$organizer\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/Update/Release8.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$class\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/Update/Release8.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$rrule\\.$#"
-			count: 2
-			path: tine20/Calendar/Setup/Update/Release8.php
-
-		-
-			message: "#^Variable \\$baseEvent might not be defined\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/Update/Release8.php
-
-		-
-			message: "#^Cannot access property \\$owner_id on array\\|Tinebase_Record_RecordSet\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/Update/Release8.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 9
-			path: tine20/Calendar/Setup/Update/Release9.php
 
 		-
 			message: "#^Undefined variable\\: \\$this$#"
@@ -5769,16 +5684,6 @@ parameters:
 			message: "#^Access to an undefined property Tinebase_Model_Preference\\:\\:\\$value\\.$#"
 			count: 1
 			path: tine20/Courses/Preference.php
-
-		-
-			message: "#^Call to an undefined static method Courses_Setup_Initialize\\:\\:createInternetAccessKeyfield\\(\\)\\.$#"
-			count: 1
-			path: tine20/Courses/Setup/Update/Release5.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Courses/Setup/Update/Release5.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_field\\)\\: Unexpected token \"\\$_field\", expected type at offset 78$#"
@@ -6201,66 +6106,6 @@ parameters:
 			path: tine20/Crm/Setup/DemoData.php
 
 		-
-			message: "#^Access to undefined constant Crm_Acl_Rights\\:\\:MANAGE_LEADS\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release0.php
-
-		-
-			message: "#^Constant defaultstate not found\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release2.php
-
-		-
-			message: "#^Constant defaulttype not found\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release2.php
-
-		-
-			message: "#^Constant defaultsource not found\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release2.php
-
-		-
-			message: "#^Access to constant LEADTYPES on an unknown class Crm_Model_Config\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release2.php
-
-		-
-			message: "#^Access to constant LEADSTATES on an unknown class Crm_Model_Config\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release2.php
-
-		-
-			message: "#^Access to constant LEADSOURCES on an unknown class Crm_Model_Config\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release2.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release2.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_PersistentFilter\\:\\:getByProperty\\(\\)\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release3.php
-
-		-
-			message: "#^Cannot call method getEndedLeadstates\\(\\) on array\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release3.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Crm/Setup/Update/Release8.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$value\\.$#"
-			count: 3
-			path: tine20/Crm/Setup/Update/Release9.php
-
-		-
 			message: "#^Undefined variable\\: \\$this$#"
 			count: 3
 			path: tine20/Crm/views/importNotificationPlain.php
@@ -6536,6 +6381,2431 @@ parameters:
 			path: tine20/ExampleApplication/Model/ExampleRecord.php
 
 		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$folder_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Cache/Sql/Message.php
+
+		-
+			message: "#^Method Tinebase_Lock_Interface\\:\\:tryAcquire\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Folder.php
+
+		-
+			message: "#^Binary operation \"\\-\" between string and string results in an error\\.$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Folder.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$cache_totalcount\\.$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Folder.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$cache_unreadcount\\.$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Folder.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(string\\)\\: Unexpected token \"\\\\n     \\*\", expected variable at offset 511$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Imap.php
+
+		-
+			message: "#^Method Felamimail_Backend_Imap\\:\\:createFolder\\(\\) should return null but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Imap.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$from\\)\\: Unexpected token \"\\$from\", expected type at offset 80$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Imap.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$to\\)\\: Unexpected token \"\\$to\", expected type at offset 100$#"
+			count: 1
+			path: tine20/Felamimail/Backend/Imap.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Event_User_CreatedAccount\\:\\:\\$pwd\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$imapUser\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller.php
+
+		-
+			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$type\\.$#"
+			count: 15
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(array array of record identifiers\\)\\: Unexpected token \"array\", expected variable at offset 67$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$user_id\\.$#"
+			count: 10
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$smtp_hostname\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$host\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$password\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$user\\.$#"
+			count: 4
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$email\\.$#"
+			count: 8
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountEmailAddress\\.$#"
+			count: 6
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Undefined variable\\: \\$translation$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$account\\)\\: Unexpected token \"\\$account\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$grants\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$type\\.$#"
+			count: 4
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$user_id\\.$#"
+			count: 7
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$name\\.$#"
+			count: 10
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_User_Plugin_Abstract\\:\\:emailAddressExists\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$email\\.$#"
+			count: 4
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$user\\.$#"
+			count: 4
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_from\\)\\: Unexpected token \"\\$_from\", expected type at offset 89$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_oldRecord\\)\\: Unexpected token \"\\$_oldRecord\", expected type at offset 41$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 18$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_throw\\)\\: Unexpected token \"\\$_throw\", expected type at offset 67$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_to\\)\\: Unexpected token \"\\$_to\", expected type at offset 110$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_oldRecord\\)\\: Unexpected token \"\\$_oldRecord\", expected type at offset 84$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 61$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_User_Plugin_Abstract\\:\\:copyPassword\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Diff\\:\\:\\$diff\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$credentials_id\\.$#"
+			count: 6
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$key\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$username\\.$#"
+			count: 5
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$password\\.$#"
+			count: 8
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$smtp_password\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$smtp_user\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$smtp_credentials_id\\.$#"
+			count: 6
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_CredentialCache\\:\\:\\$password\\.$#"
+			count: 4
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sieve_notification_email\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sieve_notification_move\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sieve_notification_move_folder\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$has_children_support\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$delimiter\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$ns_personal\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$ns_other\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$ns_shared\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Variable \\$message might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Cannot call method getFolderStatus\\(\\) on Felamimail_Backend_ImapProxy\\|true\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$globalname\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$delimiter\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$_account with type Felamimail_Model_Account\\|string is not subtype of native type Felamimail_Model_Account\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sieve_vacation_active\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_Model_FullUser\\)\\: Unexpected token \"\\\\n     \\*\", expected variable at offset 103$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$imapUser\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$pwd\\)\\: Unexpected token \"\\$pwd\", expected type at offset 115$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_User\\:\\:\\$accountEmailAddress\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_User\\:\\:\\$accountLoginName\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_CredentialCache\\:\\:\\$username\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$from\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_User\\:\\:\\$accountFullName\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$organization\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountFullName\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$accountId\\)\\: Unexpected token \"\\$accountId\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$migration_approved\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Controller_Cache_Folder\\:\\:\\$_delimiter\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$delimiter\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:getFolders\\(\\)\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_account\\)\\: Unexpected token \"\\$_account\", expected type at offset 48$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_folderName\\)\\: Unexpected token \"\\$_folderName\", expected type at offset 72$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$has_children\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$globalname\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_imap$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$account_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:examineFolder\\(\\)\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_uidvalidity\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$imap_uidvalidity\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$imap_totalcount\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$imap_status\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$imap_timestamp\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sent_folder\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$trash_folder\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$is_selectable\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$supports_condstore\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$parent\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Variable \\$isSelectable might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$delimiter\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$localname\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$delimiter\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_account$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_status\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_timestamp\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$imap_uidvalidity\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_totalcount\\.$#"
+			count: 16
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$imap_totalcount\\.$#"
+			count: 22
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$account_id\\.$#"
+			count: 6
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$supports_condstore\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_status\\.$#"
+			count: 20
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$globalname\\.$#"
+			count: 13
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$is_selectable\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Method Felamimail_Controller_Cache_Message\\:\\:_doNotUpdateCache\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:expunge\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$has_children\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_job_actions_est\\.$#"
+			count: 7
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_job_actions_done\\.$#"
+			count: 6
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_job_startuid\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_timestamp\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:resolveMessageUid\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:hasSeenFlag\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:messageUidExists\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:getSummary\\(\\)\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Variable \\$messageSequenceEnd might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Method Felamimail_Controller_Cache_Message\\:\\:_addMessagesToCacheAndIncreaseCounters\\(\\) should return Felamimail_Model_Folder but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_job_lowestuid\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:resolveMessageSequence\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Variable \\$messageSequenceStart might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$has_attachment\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$email\\)\\: Unexpected token \"\\$email\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$received\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$size\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$display_format\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_unreadcount\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:examineFolder\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$imap_lastmodseq\\.$#"
+			count: 5
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:getChangedFlags\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:getFlags\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Variable \\$diff1 might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Variable \\$diff2 might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$localname\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:getQuota\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$quota_usage\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$quota_limit\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:selectFolder\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Cache/Message.php
+
+		-
+			message: "#^Return typehint of method Felamimail_Controller_Folder\\:\\:getMultiple\\(\\) has invalid type Tinebase_RecordSet\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$delimiter\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:createFolder\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_account$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:removeFolder\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:selectFolder\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Variable \\$imap might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$globalname\\.$#"
+			count: 4
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$parent\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:renameFolder\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$localname\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$account_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$globalname\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:emptyFolder\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$account_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_RecordSet\\:\\:\\$globalname\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$has_children_support\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$has_children\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:appendMessage\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$messageuid\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$folder_id\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$account_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$type\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$display_format\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Method Felamimail_Controller_Message\\:\\:getMessageBody\\(\\) invoked with 5 parameters, 3\\-4 required\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$has_attachment\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$body\\.$#"
+			count: 5
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$headers\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$received\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$body_content_type_of_body_property_of_this_record\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:sendReadingConfirmation\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:getPartStructure\\(\\)\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$structure\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:getRawContent\\(\\)\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Variable \\$cache might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Variable \\$cacheId might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_messageId$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$text_partid\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Config\\:\\:\\$caching\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Call to an undefined method HTMLPurifier_Definition\\:\\:addFilter\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(Felamimail_Backend_Folder &\\$_folder\\)\\: Unexpected token \"&\", expected variable at offset 138$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:selectFolder\\(\\)\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_structure$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$datFile\\)\\: Unexpected token \"\\$datFile\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$path\\)\\: Unexpected token \"\\$path\", expected type at offset 41$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attachment\\)\\: Unexpected token \"\\$attachment\", expected type at offset 41$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$message\\)\\: Unexpected token \"\\$message\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_folder\\)\\: Unexpected token \"\\$_folder\", expected type at offset 69$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_totalcount\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_unreadcount\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$nodeId\\)\\: Unexpected token \"\\$nodeId\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$uid\\)\\: Unexpected token \"\\$uid\", expected type at offset 18$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$globalname\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:addFlags\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$accountid\\)\\: Unexpected token \"\\$accountid\", expected type at offset 37$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$cache_status\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Controller_Message_File\\:\\:\\$_modelControllers\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message/File.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attachments\\)\\: Unexpected token \"\\$attachments\", expected type at offset 61$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/File.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$id\\)\\: Unexpected token \"\\$id\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/File.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$locations\\)\\: Unexpected token \"\\$locations\", expected type at offset 36$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/File.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_message$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Flags.php
+
+		-
+			message: "#^Variable \\$imapMessageUids might not be defined\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message/Flags.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_Pagination\\:\\:\\$start\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Flags.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:addFlags\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Flags.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:clearFlags\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Flags.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_messagesToFlag$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Flags.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$flags\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message/Flags.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Flags.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$globalname\\.$#"
+			count: 5
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_RecordSet\\:\\:\\$folder_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$account_id\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Cannot access property \\$account_id on Felamimail_Model_Folder\\|string\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$folder_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$account_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_folderCounterById$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:copyMessage\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:addFlags\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Move.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$type\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$original_part_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(array flags\\)\\: Unexpected token \"flags\", expected variable at offset 243$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$drafts_folder\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$templates_folder\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$account_id\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$globalname\\.$#"
+			count: 8
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:appendMessage\\(\\)\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$smtpConfig\\)\\: Unexpected token \"\\$smtpConfig\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_message\\)\\: Unexpected token \"\\$_message\", expected type at offset 220$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_sentFolder\\)\\: Unexpected token \"\\$_sentFolder\", expected type at offset 244$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Variable \\$sentFolder might not be defined\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$flags\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$body\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$email\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_account\\)\\: Unexpected token \"\\$_account\", expected type at offset 42$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_message\\)\\: Unexpected token \"\\$_message\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountFullName\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$headers\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attachment\\)\\: Unexpected token \"\\$attachment\", expected type at offset 18$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_message\\)\\: Unexpected token \"\\$_message\", expected type at offset 44$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attachment\\)\\: Unexpected token \"\\$attachment\", expected type at offset 83$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$message\\)\\: Unexpected token \"\\$message\", expected type at offset 109$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_attachment\\)\\: Unexpected token \"\\$_attachment\", expected type at offset 29$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_message\\)\\: Unexpected token \"\\$_message\", expected type at offset 67$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$url\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_attachment\\)\\: Unexpected token \"\\$_attachment\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_message\\)\\: Unexpected token \"\\$_message\", expected type at offset 45$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_link\\)\\: Unexpected token \"\\$_link\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_message\\)\\: Unexpected token \"\\$_message\", expected type at offset 39$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attachment\\)\\: Unexpected token \"\\$attachment\", expected type at offset 70$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_Tree_Node_Path\\:\\:\\$streamwrapperpath\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attachment\\)\\: Unexpected token \"\\$attachment\", expected type at offset 68$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$path\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$type\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attachment\\)\\: Unexpected token \"\\$attachment\", expected type at offset 84$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$nodeId\\)\\: Unexpected token \"\\$nodeId\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$partId\\)\\: Unexpected token \"\\$partId\", expected type at offset 40$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Message/Send.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$location\\)\\: Unexpected token \"\\$location\", expected type at offset 41$#"
+			count: 1
+			path: tine20/Felamimail/Controller/MessageFileLocation.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$message\\)\\: Unexpected token \"\\$message\", expected type at offset 18$#"
+			count: 2
+			path: tine20/Felamimail/Controller/MessageFileLocation.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$record\\)\\: Unexpected token \"\\$record\", expected type at offset 65$#"
+			count: 1
+			path: tine20/Felamimail/Controller/MessageFileLocation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$user_id\\.$#"
+			count: 4
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$enabled\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$type\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$email\\.$#"
+			count: 4
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$addresses\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$from\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$from\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$smtpUser\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:getAliasesAsEmails\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$imapUser\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$reason\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$date_enabled\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$account_id\\.$#"
+			count: 3
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$subject\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountFullName\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Variable \\$allowedDomain might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$template_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$contact_ids\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$start_date\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$end_date\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Cannot access property \\$n_fn on bool\\|Tinebase_Record_Interface\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Cannot access property \\$email on bool\\|Tinebase_Record_Interface\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Cannot access property \\$tel_work on bool\\|Tinebase_Record_Interface\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$signature\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountEmailAddress\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$type\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_Tree_Node_Path\\:\\:\\$streamwrapperpath\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_RecordSet\\:\\:\\$account_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Cannot access property \\$user_id on Felamimail_Model_Account\\|string\\.$#"
+			count: 2
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$emailForwardOnly\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Cannot access property \\$sieve_notification_move on Felamimail_Model_Account\\|string\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Sieve.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:resolveCredentials\\(\\)\\.$#"
+			count: 2
+			path: tine20/Felamimail/Convert/Account/Json.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_records\\)\\: Unexpected token \"\\$_records\", expected type at offset 74$#"
+			count: 1
+			path: tine20/Felamimail/Convert/Message/Json.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$flags\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$signature\\.$#"
+			count: 3
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$_endTimeStamp with type unknown_type is not subtype of native type DateTime\\|null\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$_startTimeStamp with type unknown_type is not subtype of native type DateTime\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_field$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Parameter \\$_endTimeStamp of method Felamimail_Frontend_ActiveSync\\:\\:getChangedEntries\\(\\) has invalid typehint type unknown_type\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Parameter \\$_startTimeStamp of method Felamimail_Frontend_ActiveSync\\:\\:getChangedEntries\\(\\) has invalid typehint type unknown_type\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$body\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Cannot access property \\$type on Syncroton_Model_EmailBody\\|void\\.$#"
+			count: 3
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$nativeBodyType\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$messageClass\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$contentClass\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$read\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$lastVerbExecuted\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$lastVerbExecutionTime\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$flag\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$attachments\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$conversationId\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_Email\\:\\:\\$conversationIndex\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_StoreRequest\\:\\:\\$query\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_StoreResponse\\:\\:\\$total\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_StoreRequest\\:\\:\\$options\\.$#"
+			count: 4
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_StoreResponse\\:\\:\\$result\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_StoreResponse\\:\\:\\$range\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Method Felamimail_Controller_Message\\:\\:getMessageBody\\(\\) invoked with 5 parameters, 3\\-4 required\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$size\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_EmailBody\\:\\:\\$data\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_EmailBody\\:\\:\\$preview\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_EmailBody\\:\\:\\$truncated\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_IFolder\\:\\:\\$serverId\\.$#"
+			count: 4
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$account_id\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Cannot access property \\$deletesAsMoves on array\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$timestamp\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$globalname\\.$#"
+			count: 11
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Syncroton_Model_IFolder\\:\\:\\$displayName\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$name\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$delimiter\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$trash_folder\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sent_folder\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$drafts_folder\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Folder\\:\\:\\$localname\\.$#"
+			count: 5
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Call to an undefined method Felamimail_Frontend_ActiveSync\\:\\:getSupportedFolders\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Instantiated class ActiveSync_Exception_FolderNotFound not found\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^Variable \\$received might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/ActiveSync.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$id\\)\\: Unexpected token \"\\$id\", expected type at offset 141$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Http.php
+
+		-
+			message: "#^Variable \\$filename might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Http.php
+
+		-
+			message: "#^Result of method Felamimail_Controller_Folder\\:\\:delete\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$recordData\\)\\: Unexpected token \"\\$recordData\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$mime\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$reason\\.$#"
+			count: 2
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$account\\)\\: Unexpected token \"\\$account\", expected type at offset 114$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$migration_approved\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^Cannot access property \\$email on array\\|Tinebase_Record_RecordSet\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^Cannot access property \\$email_home on array\\|Tinebase_Record_RecordSet\\.$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$nodeId\\)\\: Unexpected token \"\\$nodeId\", expected type at offset 81$#"
+			count: 1
+			path: tine20/Felamimail/Frontend/Json.php
+
+		-
+			message: "#^Access to an undefined property HTMLPurifier_Token\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/HTMLPurifier/URIFilter/TransformURI.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Message\\:\\:\\$_useUid\\.$#"
+			count: 1
+			path: tine20/Felamimail/Message.php
+
+		-
+			message: "#^Variable \\$date might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Message.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_addMarkup$#"
+			count: 1
+			path: tine20/Felamimail/Message.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_eol$#"
+			count: 1
+			path: tine20/Felamimail/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$headers\\.$#"
+			count: 1
+			path: tine20/Felamimail/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$body\\.$#"
+			count: 1
+			path: tine20/Felamimail/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$partId\\)\\: Unexpected token \"\\$partId\", expected type at offset 54$#"
+			count: 1
+			path: tine20/Felamimail/Message.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(boolean   sieve_notification_move\\)\\: Unexpected token \"sieve_notification_move\", expected variable at offset 516$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    delimiter\\)\\: Unexpected token \"delimiter\", expected variable at offset 299$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    display_format\\)\\: Unexpected token \"display_format\", expected variable at offset 260$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    drafts_folder\\)\\: Unexpected token \"drafts_folder\", expected variable at offset 135$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    email\\)\\: Unexpected token \"email\", expected variable at offset 405$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    migration_approved\\)\\: Unexpected token \"migration_approved\", expected variable at offset 658$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    sent_folder\\)\\: Unexpected token \"sent_folder\", expected variable at offset 99$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    sieve_hostname\\)\\: Unexpected token \"sieve_hostname\", expected variable at offset 619$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    sieve_notification_email\\)\\: Unexpected token \"sieve_notification_email\", expected variable at offset 467$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    sieve_notification_move_folder\\)\\: Unexpected token \"sieve_notification_move_folder\", expected variable at offset 564$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    sieve_vacation_active\\)\\: Unexpected token \"sieve_vacation_active\", expected variable at offset 214$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    signature_position\\)\\: Unexpected token \"signature_position\", expected variable at offset 362$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    templates_folder\\)\\: Unexpected token \"templates_folder\", expected variable at offset 173$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    trash_folder\\)\\: Unexpected token \"trash_folder\", expected variable at offset 62$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    type\\)\\: Unexpected token \"type\", expected variable at offset 333$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string    user_id\\)\\: Unexpected token \"user_id\", expected variable at offset 435$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$ssl\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$smtp_password\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$smtp_user\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$smtp_hostname\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$smtp_auth\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$smtp_ssl\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$smtp_port\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sieve_hostname\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sieve_port\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$sieve_ssl\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$user\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$password\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$type\\.$#"
+			count: 7
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_CredentialCache\\:\\:\\$password\\.$#"
+			count: 4
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$key\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Variable \\$credentials might not be defined\\.$#"
+			count: 10
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$credentials_id\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$smtp_credentials_id\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_CredentialCache\\:\\:\\$username\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$username\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$password\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$user_id\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$email\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$_capability\\)\\: Unexpected token \"\\$_capability\", expected type at offset 101$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$signature\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Account.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string         account_grant\\)\\: Unexpected token \"account_grant\", expected variable at offset 168$#"
+			count: 1
+			path: tine20/Felamimail/Model/AccountGrants.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string         account_id\\)\\: Unexpected token \"account_id\", expected variable at offset 210$#"
+			count: 1
+			path: tine20/Felamimail/Model/AccountGrants.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string         account_type\\)\\: Unexpected token \"account_type\", expected variable at offset 249$#"
+			count: 1
+			path: tine20/Felamimail/Model/AccountGrants.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string         id\\)\\: Unexpected token \"id\", expected variable at offset 99$#"
+			count: 1
+			path: tine20/Felamimail/Model/AccountGrants.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string         record_id\\)\\: Unexpected token \"record_id\", expected variable at offset 130$#"
+			count: 1
+			path: tine20/Felamimail/Model/AccountGrants.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(boolean has_children\\)\\: Unexpected token \"has_children\", expected variable at offset 209$#"
+			count: 1
+			path: tine20/Felamimail/Model/Folder.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(boolean is_selectable\\)\\: Unexpected token \"is_selectable\", expected variable at offset 244$#"
+			count: 1
+			path: tine20/Felamimail/Model/Folder.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(boolean supports_condstore\\)\\: Unexpected token \"supports_condstore\", expected variable at offset 280$#"
+			count: 1
+			path: tine20/Felamimail/Model/Folder.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(integer imap_lastmodseq\\)\\: Unexpected token \"imap_lastmodseq\", expected variable at offset 321$#"
+			count: 1
+			path: tine20/Felamimail/Model/Folder.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  account_id\\)\\: Unexpected token \"account_id\", expected variable at offset 111$#"
+			count: 1
+			path: tine20/Felamimail/Model/Folder.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  globalname\\)\\: Unexpected token \"globalname\", expected variable at offset 176$#"
+			count: 1
+			path: tine20/Felamimail/Model/Folder.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  localname\\)\\: Unexpected token \"localname\", expected variable at offset 144$#"
+			count: 1
+			path: tine20/Felamimail/Model/Folder.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime  received received date\\)\\: Unexpected token \"received\", expected variable at offset 788$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(string _name of property\\)\\: Unexpected token \"_name\", expected variable at offset 71$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$flags\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$headers\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$body\\.$#"
+			count: 3
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$received\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$email\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Account\\:\\:\\$from\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$sent\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$message_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Variable \\$foundParts might not be defined\\.$#"
+			count: 2
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$text_partid\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Message\\:\\:\\$html_partid\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$mail\\)\\: Unexpected token \"\\$mail\", expected type at offset 149$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Variable \\$result might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Variable \\$fieldName might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/MessageFilter.php
+
+		-
+			message: "#^Variable \\$fieldEmail might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/MessageFilter.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Rule\\:\\:\\$conjunction\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Rule.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(array   requires\\)\\: Unexpected token \"requires\", expected variable at offset 212$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(integer id\\)\\: Unexpected token \"id\", expected variable at offset 61$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  account_id\\)\\: Unexpected token \"account_id\", expected variable at offset 88$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  name\\)\\: Unexpected token \"name\", expected variable at offset 152$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  script\\)\\: Unexpected token \"script\", expected variable at offset 181$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  type\\)\\: Unexpected token \"type\", expected variable at offset 123$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_ScriptPart\\:\\:\\$type\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_ScriptPart\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_ScriptPart\\:\\:\\$requires\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_ScriptPart\\:\\:\\$script\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/ScriptPart.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(array  addresses\\)\\: Unexpected token \"addresses\", expected variable at offset 62$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(boolean  enabled\\)\\: Unexpected token \"enabled\", expected variable at offset 248$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(integer  days\\)\\: Unexpected token \"days\", expected variable at offset 218$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  from\\)\\: Unexpected token \"from\", expected variable at offset 128$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  mime\\)\\: Unexpected token \"mime\", expected variable at offset 157$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  reason\\)\\: Unexpected token \"reason\", expected variable at offset 186$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string  subject\\)\\: Unexpected token \"subject\", expected variable at offset 96$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$enabled\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$days\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$subject\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$from\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$mime\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$reason\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$date_enabled\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$start_date\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$end_date\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$addresses\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Vacation.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_Preference\\:\\:\\$value\\.$#"
+			count: 6
+			path: tine20/Felamimail/Preference.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_Preference\\:\\:\\$options\\.$#"
+			count: 6
+			path: tine20/Felamimail/Preference.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_Preference\\:\\:\\$personal_only\\.$#"
+			count: 1
+			path: tine20/Felamimail/Preference.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Setup/Update/12.php
+
+		-
+			message: "#^Instantiated class Felamimail_Setup_Update_Release9 not found\\.$#"
+			count: 2
+			path: tine20/Felamimail/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_2\\(\\) on an unknown class Felamimail_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Felamimail/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_3\\(\\) on an unknown class Felamimail_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Felamimail/Setup/Update/Release10.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
+			count: 1
+			path: tine20/Felamimail/Setup/Update/Release10.php
+
+		-
+			message: "#^Variable \\$internalDomains might not be defined\\.$#"
+			count: 1
+			path: tine20/Felamimail/Sieve/AdbList.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_ScriptPart\\:\\:\\$requires\\.$#"
+			count: 1
+			path: tine20/Felamimail/Sieve/Backend/Abstract.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_ScriptPart\\:\\:\\$script\\.$#"
+			count: 1
+			path: tine20/Felamimail/Sieve/Backend/Abstract.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$addresses\\.$#"
+			count: 4
+			path: tine20/Felamimail/Sieve/Backend/Sql.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Rule\\:\\:\\$account_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Sieve/Backend/Sql.php
+
+		-
+			message: "#^Access to an undefined property Felamimail_Model_Sieve_Vacation\\:\\:\\$account_id\\.$#"
+			count: 1
+			path: tine20/Felamimail/Sieve/Backend/Sql.php
+
+		-
+			message: "#^Method Felamimail_Sieve_Rule_Action\\:\\:__toString\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Felamimail/Sieve/Rule/Action.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$reason$#"
+			count: 1
+			path: tine20/Felamimail/Sieve/Vacation.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$string$#"
+			count: 1
+			path: tine20/Felamimail/Sieve/Vacation.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$config\\)\\: Unexpected token \"\\$config\", expected type at offset 38$#"
+			count: 1
+			path: tine20/Felamimail/Transport.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$host\\)\\: Unexpected token \"\\$host\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Felamimail/Transport.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$config with type array\\|null is not subtype of native type array\\.$#"
+			count: 1
+			path: tine20/Felamimail/Transport.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$config with type array\\|null is not subtype of native type array\\.$#"
+			count: 1
+			path: tine20/Felamimail/Transport/Interface.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the account object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
 			count: 1
 			path: tine20/Filemanager/Controller.php
@@ -6791,31 +9061,6 @@ parameters:
 			path: tine20/Filemanager/Frontend/Cli.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$type\\.$#"
-			count: 2
-			path: tine20/Filemanager/Frontend/Download.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$path\\.$#"
-			count: 2
-			path: tine20/Filemanager/Frontend/Download.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_Tree_Node_Path\\:\\:\\$streamwrapperpath\\.$#"
-			count: 1
-			path: tine20/Filemanager/Frontend/Download.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$logoPath\\.$#"
-			count: 1
-			path: tine20/Filemanager/Frontend/Download.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$path\\.$#"
-			count: 1
-			path: tine20/Filemanager/Frontend/Download.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$id\\)\\: Unexpected token \"\\$id\", expected type at offset 90$#"
 			count: 1
 			path: tine20/Filemanager/Frontend/Http.php
@@ -6827,6 +9072,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_Tree_Node_Path\\:\\:\\$streamwrapperpath\\.$#"
+			count: 1
+			path: tine20/Filemanager/Frontend/Http.php
+
+		-
+			message: "#^Variable \\$node might not be defined\\.$#"
 			count: 1
 			path: tine20/Filemanager/Frontend/Http.php
 
@@ -7966,49 +10216,24 @@ parameters:
 			path: tine20/HumanResources/Setup/Update/12.php
 
 		-
+			message: "#^Instantiated class HumanResources_Setup_Update_Release9 not found\\.$#"
+			count: 1
+			path: tine20/HumanResources/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_0\\(\\) on an unknown class HumanResources_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/HumanResources/Setup/Update/Release10.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
 			count: 1
 			path: tine20/HumanResources/Setup/Update/Release10.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the account object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
 			count: 1
-			path: tine20/HumanResources/Setup/Update/Release6.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/HumanResources/Setup/Update/Release6.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
-			count: 1
-			path: tine20/HumanResources/Setup/Update/Release6.php
-
-		-
-			message: "#^Cannot access property \\$id on array\\|Tinebase_Record_RecordSet\\.$#"
-			count: 1
-			path: tine20/HumanResources/Setup/Update/Release6.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$value\\.$#"
-			count: 2
-			path: tine20/HumanResources/Setup/Update/Release6.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
-			count: 1
-			path: tine20/HumanResources/Setup/Update/Release7.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$description\\.$#"
-			count: 1
-			path: tine20/HumanResources/Setup/Update/Release7.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$value\\.$#"
-			count: 2
-			path: tine20/HumanResources/Setup/Update/Release7.php
+			path: tine20/Inventory/Controller.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -8246,6 +10471,16 @@ parameters:
 			path: tine20/Phone/Setup/Update/12.php
 
 		-
+			message: "#^Instantiated class Phone_Setup_Update_Release9 not found\\.$#"
+			count: 1
+			path: tine20/Phone/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_2\\(\\) on an unknown class Phone_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Phone/Setup/Update/Release10.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the accountd object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
 			count: 1
 			path: tine20/Projects/Controller.php
@@ -8296,69 +10531,14 @@ parameters:
 			path: tine20/Sales/Backend/Number.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(array config\\)\\: Unexpected token \"config\", expected variable at offset 58$#"
+			count: 1
+			path: tine20/Sales/Controller.php
+
+		-
 			message: "#^Call to an undefined method Zend_Translate_Adapter\\:\\:getAdapter\\(\\)\\.$#"
 			count: 1
 			path: tine20/Sales/Controller/Address.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$r$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Access to an undefined property Sales_Model_Contract\\:\\:\\$last_autobill\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Access to an undefined property Sales_Model_Contract\\:\\:\\$interval\\.$#"
-			count: 2
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Access to an undefined property Sales_Model_Contract\\:\\:\\$start_date\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Access to an undefined property Sales_Model_Contract\\:\\:\\$billing_point\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Default value of the parameter \\#1 \\$update \\(false\\) of method Sales_Controller_Contract\\:\\:transferBillingInformation\\(\\) is incompatible with type boolen\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Parameter \\$update of method Sales_Controller_Contract\\:\\:transferBillingInformation\\(\\) has invalid typehint type boolen\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$accountable\\.$#"
-			count: 2
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Variable \\$relation might not be defined\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$update$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$model\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Contract.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$month\\.$#"
-			count: 2
-			path: tine20/Sales/Controller/Contract.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$currency\\.$#"
@@ -8378,42 +10558,12 @@ parameters:
 		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$number\\.$#"
 			count: 2
-			path: tine20/Sales/Controller/Offer.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$number\\.$#"
-			count: 2
 			path: tine20/Sales/Controller/OrderConfirmation.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$r$#"
 			count: 1
 			path: tine20/Sales/Controller/Product.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$product_id\\.$#"
-			count: 2
-			path: tine20/Sales/Controller/ProductAggregate.php
-
-		-
-			message: "#^Access to an undefined property Sales_Model_ProductAggregate\\:\\:\\$json_attributes\\.$#"
-			count: 2
-			path: tine20/Sales/Controller/ProductAggregate.php
-
-		-
-			message: "#^Access to an undefined property Sales_Model_ProductAggregate\\:\\:\\$product_id\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/ProductAggregate.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$accountable\\.$#"
-			count: 2
-			path: tine20/Sales/Controller/ProductAggregate.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:getMultiple\\(\\)\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/ProductAggregate.php
 
 		-
 			message: "#^Access to an undefined property Sales_Controller_PurchaseInvoice\\:\\:\\$_currentBillingCostCenter\\.$#"
@@ -8529,6 +10679,16 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$result\\)\\: Unexpected token \"\\$result\", expected type at offset 18$#"
 			count: 3
 			path: tine20/Sales/Import/Contract/Csv.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$result\\)\\: Unexpected token \"\\$result\", expected type at offset 18$#"
+			count: 2
+			path: tine20/Sales/Import/Invoice/Csv.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$result\\)\\: Unexpected token \"\\$result\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Sales/Import/Offer/Csv.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$result\\)\\: Unexpected token \"\\$result\", expected type at offset 18$#"
@@ -8809,6 +10969,11 @@ parameters:
 			message: "#^Access to an undefined property Sales_Model_Supplier\\:\\:\\$number\\.$#"
 			count: 1
 			path: tine20/Sales/Model/Supplier.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$username\\)\\: Unexpected token \"\\$username\", expected type at offset 78$#"
+			count: 1
+			path: tine20/Setup/Auth.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -9096,54 +11261,159 @@ parameters:
 			path: tine20/Setup/Backend/Schema/Table/Xml.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 8
-			path: tine20/Setup/Update/Abstract.php
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$lang\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$install\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Db_Adapter_Pdo_Mysql\\:\\:\\$table_prefix\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Db_Adapter_Pdo_Pgsql\\:\\:\\$table_prefix\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
 
 		-
 			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$v\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$uninstall\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Record_RecordSet\\:\\:\\$name\\.$#"
+			count: 3
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			count: 4
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$onlyusers\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$dbmailldap\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$syncdeletedusers\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$syncaccountstatus\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$syncontactphoto\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_User_Plugin_Abstract\\:\\:copyFromInstance\\(\\)\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
+			count: 3
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountEmailAddress\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Config\\:\\:\\$all\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Access to an undefined property Zend_Config\\:\\:\\$loglevel\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Method Setup_Frontend_Cli\\:\\:_checkRequirements\\(\\) should return array but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Method Setup_Frontend_Cli\\:\\:_setConfig\\(\\) should return array but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Variable \\$configValue might not be defined\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Variable \\$configKey might not be defined\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Cli.php
+
+		-
+			message: "#^Call to an undefined method Zend_Json_Server\\:\\:setTarget\\(\\)\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Http.php
+
+		-
+			message: "#^Parameter \\$options of method Setup_Frontend_Json\\:\\:installApplications\\(\\) has invalid typehint type optional\\.$#"
+			count: 1
+			path: tine20/Setup/Frontend/Json.php
+
+		-
+			message: "#^Constant TINE20_BUILDTYPE not found\\.$#"
 			count: 2
-			path: tine20/Setup/Update/Abstract.php
+			path: tine20/Setup/Frontend/Json.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_newTableName\\)\\: Unexpected token \"\\$_newTableName\", expected type at offset 47$#"
-			count: 1
-			path: tine20/Setup/Update/Abstract.php
+			message: "#^Constant TINE20SETUP_CODENAME not found\\.$#"
+			count: 2
+			path: tine20/Setup/Frontend/Json.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_oldTableName\\)\\: Unexpected token \"\\$_oldTableName\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Setup/Update/Abstract.php
+			message: "#^Constant TINE20SETUP_PACKAGESTRING not found\\.$#"
+			count: 2
+			path: tine20/Setup/Frontend/Json.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getUserByPropertyFromSqlBackend\\(\\)\\.$#"
-			count: 1
-			path: tine20/Setup/Update/Abstract.php
+			message: "#^Constant TINE20SETUP_RELEASETIME not found\\.$#"
+			count: 2
+			path: tine20/Setup/Frontend/Json.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
-			count: 1
-			path: tine20/Setup/Update/Abstract.php
+			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			count: 2
+			path: tine20/Setup/SchemaTool.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:updateUserInSqlBackend\\(\\)\\.$#"
+			message: "#^PHPDoc tag @param has invalid value \\(\\$otherDbName\\)\\: Unexpected token \"\\$otherDbName\", expected type at offset 77$#"
 			count: 1
-			path: tine20/Setup/Update/Abstract.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:addGroupMemberInSqlBackend\\(\\)\\.$#"
-			count: 1
-			path: tine20/Setup/Update/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$configController\\)\\: Unexpected token \"\\$configController\", expected type at offset 51$#"
-			count: 1
-			path: tine20/Setup/Update/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$configName\\)\\: Unexpected token \"\\$configName\", expected type at offset 83$#"
-			count: 1
-			path: tine20/Setup/Update/Abstract.php
+			path: tine20/Setup/SchemaTool.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the accountd object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
@@ -9536,31 +11806,6 @@ parameters:
 			path: tine20/Tasks/Setup/Update/Release11.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tasks/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_PersistentFilter\\:\\:getByProperty\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tasks/Setup/Update/Release3.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tasks/Setup/Update/Release4.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 9
-			path: tine20/Tasks/Setup/Update/Release5.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:ERR\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tasks/Setup/Update/Release5.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_db$#"
 			count: 1
 			path: tine20/Timetracker/Backend/Timesheet.php
@@ -9914,26 +12159,6 @@ parameters:
 			message: "#^Parameter \\$_text of method Timetracker_Setup_Import_Egw14\\:\\:_encode\\(\\) has invalid typehint type unknown_type\\.$#"
 			count: 1
 			path: tine20/Timetracker/Setup/Import/Egw14.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Timetracker/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
-			count: 1
-			path: tine20/Timetracker/Setup/Update/Release0.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 3
-			path: tine20/Timetracker/Setup/Update/Release4.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Timetracker/Setup/Update/Release5.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_AccessLog\\:\\:\\$user_agent\\.$#"
@@ -10341,6 +12566,16 @@ parameters:
 			path: tine20/Tinebase/Auth/NtlmV2.php
 
 		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
+			count: 1
+			path: tine20/Tinebase/Auth/OpenIdConnect.php
+
+		-
+			message: "#^Instantiated class Jumbojett\\\\OpenIDConnectClient not found\\.$#"
+			count: 1
+			path: tine20/Tinebase/Auth/OpenIdConnect.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Model_BLConfig\\:\\:\\$configRecord\\.$#"
 			count: 1
 			path: tine20/Tinebase/BL/Pipe.php
@@ -10496,6 +12731,11 @@ parameters:
 			path: tine20/Tinebase/Config/Abstract.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$filename\\)\\: Unexpected token \"\\$filename\", expected type at offset 107$#"
+			count: 1
+			path: tine20/Tinebase/Config/Abstract.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Model_Config\\:\\:\\$name\\.$#"
 			count: 2
 			path: tine20/Tinebase/Config/Abstract.php
@@ -10644,6 +12884,16 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$application\\)\\: Unexpected token \"\\$application\", expected type at offset 77$#"
 			count: 1
 			path: tine20/Tinebase/Container.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Auth_Interface\\:\\:setOICDResponse\\(\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/Controller.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Auth_Interface\\:\\:getLoginUser\\(\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/Controller.php
 
 		-
 			message: "#^PHPDoc tag @param for parameter \\$request with type Zend\\\\Http\\\\Request is not subtype of native type Zend\\\\Http\\\\PhpEnvironment\\\\Request\\.$#"
@@ -11186,6 +13436,11 @@ parameters:
 			path: tine20/Tinebase/Convert/ImportExportDefinition/Json.php
 
 		-
+			message: "#^Access to an undefined property Tinebase_Model_ImportExportDefinition\\:\\:\\$plugin_options_json\\.$#"
+			count: 1
+			path: tine20/Tinebase/Convert/ImportExportDefinition/Json.php
+
+		-
 			message: "#^PHPDoc tag @param for parameter \\$_records with type Tinebase_Record_Interface\\|Tinebase_Record_RecordSet is not subtype of native type Tinebase_Record_RecordSet\\|null\\.$#"
 			count: 1
 			path: tine20/Tinebase/Convert/Json.php
@@ -11348,6 +13603,11 @@ parameters:
 		-
 			message: "#^Access to an undefined property Tinebase_Config\\:\\:\\$database\\.$#"
 			count: 2
+			path: tine20/Tinebase/Core.php
+
+		-
+			message: "#^Call to method getBackend\\(\\) on an unknown class Zend_Cache_Frontend\\.$#"
+			count: 1
 			path: tine20/Tinebase/Core.php
 
 		-
@@ -11861,6 +14121,16 @@ parameters:
 			path: tine20/Tinebase/EmailUser/Sql.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$property\\)\\: Unexpected token \"\\$property\", expected type at offset 59$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$userProperty\\)\\: Unexpected token \"\\$userProperty\", expected type at offset 83$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/Sql.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Model_EmailUser\\:\\:\\$emailUsername\\.$#"
 			count: 1
 			path: tine20/Tinebase/EmailUser/Sql.php
@@ -11914,6 +14184,41 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$fromInstance\\)\\: Unexpected token \"\\$fromInstance\", expected type at offset 142$#"
 			count: 1
 			path: tine20/Tinebase/EmailUser/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$fromUser\\)\\: Unexpected token \"\\$fromUser\", expected type at offset 84$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$toUser\\)\\: Unexpected token \"\\$toUser\", expected type at offset 108$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$domain\\)\\: Unexpected token \"\\$domain\", expected type at offset 163$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$emailUsername\\)\\: Unexpected token \"\\$emailUsername\", expected type at offset 185$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$localPart\\)\\: Unexpected token \"\\$localPart\", expected type at offset 138$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/Sql.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$imapUser\\.$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/XpropsFacade.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$smtpUser\\.$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/XpropsFacade.php
 
 		-
 			message: "#^PHPDoc tag @param for parameter \\$_eventObject with type Tinebase_Event_Object is not subtype of native type Tinebase_Event_Abstract\\.$#"
@@ -12092,7 +14397,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_CustomField_Config\\:\\:\\$value\\.$#"
-			count: 5
+			count: 4
 			path: tine20/Tinebase/Export/Abstract.php
 
 		-
@@ -12656,11 +14961,6 @@ parameters:
 			path: tine20/Tinebase/Expressive/Middleware/FastRoute.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Exception_Expressive_HttpStatus\\:\\:\\$getCode\\.$#"
-			count: 1
-			path: tine20/Tinebase/Expressive/Middleware/ResponseEnvelop.php
-
-		-
 			message: "#^Variable \\$routeHandler in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: tine20/Tinebase/Expressive/Middleware/RoutePipeInject.php
@@ -13137,7 +15437,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$preview_count\\.$#"
-			count: 2
+			count: 3
+			path: tine20/Tinebase/FileSystem/Previews.php
+
+		-
+			message: "#^Method Tinebase_FileSystem_Previews\\:\\:getPreviewCountForNodeAndType\\(\\) should return int but return statement is missing\\.$#"
+			count: 1
 			path: tine20/Tinebase/FileSystem/Previews.php
 
 		-
@@ -13606,6 +15911,11 @@ parameters:
 			path: tine20/Tinebase/Frontend/Http.php
 
 		-
+			message: "#^Variable \\$image might not be defined\\.$#"
+			count: 4
+			path: tine20/Tinebase/Frontend/Http.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Model_Image\\:\\:\\$mime\\.$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/Http.php
@@ -13641,7 +15951,22 @@ parameters:
 			path: tine20/Tinebase/Frontend/Http.php
 
 		-
+			message: "#^Variable \\$file might not be defined\\.$#"
+			count: 1
+			path: tine20/Tinebase/Frontend/Http.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Model_TempFile\\:\\:\\$path\\.$#"
+			count: 1
+			path: tine20/Tinebase/Frontend/Http.php
+
+		-
+			message: "#^Variable \\$node might not be defined\\.$#"
+			count: 1
+			path: tine20/Tinebase/Frontend/Http.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Auth_Interface\\:\\:providerAuthRequest\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/Http.php
 
@@ -13671,6 +15996,11 @@ parameters:
 			path: tine20/Tinebase/Frontend/Http/Abstract.php
 
 		-
+			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$hash\\.$#"
+			count: 2
+			path: tine20/Tinebase/Frontend/Http/Abstract.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$contenttype\\.$#"
 			count: 2
 			path: tine20/Tinebase/Frontend/Http/Abstract.php
@@ -13686,23 +16016,8 @@ parameters:
 			path: tine20/Tinebase/Frontend/Http/Abstract.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$hash\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Http/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$ignoreAcl$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Http/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$node$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Http/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$revision$#"
-			count: 1
+			message: "#^Variable \\$previewNode might not be defined\\.$#"
+			count: 4
 			path: tine20/Tinebase/Frontend/Http/Abstract.php
 
 		-
@@ -13811,6 +16126,16 @@ parameters:
 			path: tine20/Tinebase/Frontend/Json.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$oidcResponse\\)\\: Unexpected token \"\\$oidcResponse\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Tinebase/Frontend/Json.php
+
+		-
+			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
+			count: 2
+			path: tine20/Tinebase/Frontend/Json.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Config\\:\\:\\$captcha\\.$#"
 			count: 3
 			path: tine20/Tinebase/Frontend/Json.php
@@ -13818,11 +16143,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$captcha\\.$#"
 			count: 4
-			path: tine20/Tinebase/Frontend/Json.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
-			count: 1
 			path: tine20/Tinebase/Frontend/Json.php
 
 		-
@@ -14371,8 +16691,13 @@ parameters:
 			path: tine20/Tinebase/Group/Sql.php
 
 		-
+			message: "#^Access to an undefined property Tinebase_Record_Diff\\:\\:\\$oldData\\.$#"
+			count: 3
+			path: tine20/Tinebase/Group/Sql.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Model_ModificationLog\\:\\:\\$record_id\\.$#"
-			count: 8
+			count: 9
 			path: tine20/Tinebase/Group/Sql.php
 
 		-
@@ -14382,11 +16707,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_ModificationLog\\:\\:\\$record_type\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Sql.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Diff\\:\\:\\$oldData\\.$#"
 			count: 1
 			path: tine20/Tinebase/Group/Sql.php
 
@@ -14792,6 +17112,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Config_Xml\\:\\:\\$postMappingHook\\.$#"
+			count: 1
+			path: tine20/Tinebase/ImportExportDefinition.php
+
+		-
+			message: "#^Access to an undefined property Zend_Config_Xml\\:\\:\\$filter\\.$#"
 			count: 1
 			path: tine20/Tinebase/ImportExportDefinition.php
 
@@ -15573,6 +17898,11 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:get\\(\\)\\.$#"
 			count: 2
+			path: tine20/Tinebase/Model/Filter/CustomField.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:getMultiple\\(\\)\\.$#"
+			count: 1
 			path: tine20/Tinebase/Model/Filter/CustomField.php
 
 		-
@@ -18251,6 +20581,11 @@ parameters:
 			path: tine20/Tinebase/Scheduler.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$cmd\\)\\: Unexpected token \"\\$cmd\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Tinebase/Scheduler/ExecTask.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Model_SchedulerTask\\:\\:\\$last_run\\.$#"
 			count: 1
 			path: tine20/Tinebase/Scheduler/Task.php
@@ -18746,99 +21081,24 @@ parameters:
 			path: tine20/Tinebase/Setup/Update/12.php
 
 		-
-			message: "#^Instantiated class Setup_Backend_Schema_Field not found\\.$#"
+			message: "#^Instantiated class Tinebase_Setup_Update_Release9 not found\\.$#"
+			count: 7
+			path: tine20/Tinebase/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_9\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Tinebase/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_4\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
 			count: 2
-			path: tine20/Tinebase/Setup/Update/Release0.php
+			path: tine20/Tinebase/Setup/Update/Release10.php
 
 		-
-			message: "#^Access to property \\$name on an unknown class Setup_Backend_Schema_Field\\.$#"
-			count: 4
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to property \\$type on an unknown class Setup_Backend_Schema_Field\\.$#"
-			count: 4
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to property \\$notnull on an unknown class Setup_Backend_Schema_Field\\.$#"
-			count: 4
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to property \\$value on an unknown class Setup_Backend_Schema_Field\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to property \\$length on an unknown class Setup_Backend_Schema_Field\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$link_app1\\.$#"
+			message: "#^Call to method update_5\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
 			count: 1
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$link_app2\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$link_remark\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$link_id1\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Variable \\$degree might not be defined\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$link_id2\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Variable \\$type might not be defined\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Table_Row_Abstract\\:\\:\\$link_owner\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release0.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 4
-			path: tine20/Tinebase/Setup/Update/Release1.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:importGroups\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release1.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:importUsers\\(\\)\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release1.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:importGroupMembers\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release1.php
+			path: tine20/Tinebase/Setup/Update/Release10.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -18881,6 +21141,21 @@ parameters:
 			path: tine20/Tinebase/Setup/Update/Release10.php
 
 		-
+			message: "#^Call to method update_11\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Tinebase/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_12\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Tinebase/Setup/Update/Release10.php
+
+		-
+			message: "#^Call to method update_13\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
+			count: 1
+			path: tine20/Tinebase/Setup/Update/Release10.php
+
+		-
 			message: "#^Class Zend_Db referenced with incorrect case\\: Zend_DB\\.$#"
 			count: 2
 			path: tine20/Tinebase/Setup/Update/Release10.php
@@ -18911,7 +21186,22 @@ parameters:
 			path: tine20/Tinebase/Setup/Update/Release10.php
 
 		-
+			message: "#^Instantiated class Tinebase_Setup_Update_Release9 not found\\.$#"
+			count: 4
+			path: tine20/Tinebase/Setup/Update/Release11.php
+
+		-
+			message: "#^Call to method update_11\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
+			count: 2
+			path: tine20/Tinebase/Setup/Update/Release11.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:addGroupInSqlBackend\\(\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/Setup/Update/Release11.php
+
+		-
+			message: "#^Call to method update_12\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
 			count: 1
 			path: tine20/Tinebase/Setup/Update/Release11.php
 
@@ -18921,104 +21211,14 @@ parameters:
 			path: tine20/Tinebase/Setup/Update/Release11.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Model_SchedulerTask\\:\\:\\$config\\.$#"
+			message: "#^Call to method update_13\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
 			count: 1
 			path: tine20/Tinebase/Setup/Update/Release11.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 20
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Class Tinebase_Scheduler_Task constructor invoked with 0 parameters, 1 required\\.$#"
+			message: "#^Access to an undefined property Tinebase_Model_SchedulerTask\\:\\:\\$config\\.$#"
 			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Scheduler_Task\\:\\:setMonths\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Scheduler_Task\\:\\:setWeekdays\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Scheduler_Task\\:\\:setDays\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Scheduler_Task\\:\\:setHours\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Scheduler_Task\\:\\:setMinutes\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Scheduler_Task\\:\\:setRequest\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Scheduler\\:\\:addTask\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Scheduler\\:\\:saveTask\\(\\)\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:NOTICE\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release3.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release4.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release5.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release6.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release7.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$data\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release7.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release8.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tinebase/Setup/Update/Release9.php
-
-		-
-			message: "#^Call to method rowCount\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/Update/Release9.php
+			path: tine20/Tinebase/Setup/Update/Release11.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$data\\.$#"
@@ -20031,7 +22231,7 @@ parameters:
 			path: tine20/Tinebase/User/Plugin/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$alternativeLoginName\\)\\: Unexpected token \"\\$alternativeLoginName\", expected type at offset 116$#"
+			message: "#^PHPDoc tag @param has invalid value \\(\\$alternativeLoginName\\)\\: Unexpected token \"\\$alternativeLoginName\", expected type at offset 170$#"
 			count: 1
 			path: tine20/Tinebase/User/Plugin/Abstract.php
 
@@ -20042,6 +22242,21 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountLoginName\\.$#"
+			count: 1
+			path: tine20/Tinebase/User/Plugin/Abstract.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$accountEmailAddress\\)\\: Unexpected token \"\\$accountEmailAddress\", expected type at offset 75$#"
+			count: 1
+			path: tine20/Tinebase/User/Plugin/Abstract.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$accountId\\)\\: Unexpected token \"\\$accountId\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Tinebase/User/Plugin/Abstract.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$accountLoginName\\)\\: Unexpected token \"\\$accountLoginName\", expected type at offset 43$#"
 			count: 1
 			path: tine20/Tinebase/User/Plugin/Abstract.php
 
@@ -20203,6 +22418,26 @@ parameters:
 		-
 			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
 			count: 5
+			path: tine20/Tinebase/User/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$method\\)\\: Unexpected token \"\\$method\", expected type at offset 93$#"
+			count: 1
+			path: tine20/Tinebase/User/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$newUserProperties\\)\\: Unexpected token \"\\$newUserProperties\", expected type at offset 60$#"
+			count: 1
+			path: tine20/Tinebase/User/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$plugin\\)\\: Unexpected token \"\\$plugin\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Tinebase/User/Sql.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$user\\)\\: Unexpected token \"\\$user\", expected type at offset 40$#"
+			count: 1
 			path: tine20/Tinebase/User/Sql.php
 
 		-
@@ -21157,7 +23392,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Record_Interface\\:\\:\\$name\\.$#"
-			count: 3
+			count: 2
 			path: tine20/Voipmanager/Frontend/Json.php
 
 		-
@@ -21294,246 +23529,6 @@ parameters:
 			message: "#^Access to an undefined property Voipmanager_Model_Snom_Phone\\:\\:\\$lines\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Setup/DemoData.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 5
-			path: tine20/Voipmanager/Setup/Update/Release2.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Voipmanager/Setup/Update/Release8.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$wipe\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function checkAppName not found\\.$#"
-			count: 8
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Variable \\$_verbose might not be defined\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$h\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$contribute\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$u\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$c\\.$#"
-			count: 3
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$mo\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$pot\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$potmerge\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$v\\.$#"
-			count: 10
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function generatePOTFiles not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function potmerge not found\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$newlang\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$overwrite\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function generateNewTranslationFiles not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function msgfmt not found\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$git\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function gitAdd not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function contributorsMerge not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$package\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$statistics\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function statistics not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function buildpackage not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function getExistingLanguages not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function checkAppName not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function checkLang not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function translationExists not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function generatePOTFiles not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function generateNewTranslationFile not found\\.$#"
-			count: 5
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function getPluralForm not found\\.$#"
-			count: 5
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function extractTemplates not found\\.$#"
-			count: 2
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function extractTemplates not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function potmerge not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function getExistingLanguages not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function checkLang not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function contributorsMerge not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function msgfmt not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function buildpackage not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function statistics not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function generateNewTranslationFile not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function generateNewTranslationFiles not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function translationExists not found\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function getPluralForm not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Variable \\$pluralForm might not be defined\\.$#"
-			count: 1
-			path: tine20/langHelper.php
-
-		-
-			message: "#^Function gitAdd not found while trying to analyse it \\- autoloading is probably not configured properly\\.$#"
-			count: 1
-			path: tine20/langHelper.php
 
 		-
 			message: "#^Access to an undefined property Zend_Console_Getopt\\:\\:\\$h\\.$#"
