@@ -642,7 +642,7 @@ Tine.Tinebase.tineInit = {
      * @param {Function} cb
      * @param {Object} scope
      */
-    initRegistry: async function (forceReload, cb, scope) {
+    initRegistry: function (forceReload, cb, scope) {
         Tine.Tinebase.registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + 'Tinebase.registry');
 
         var version = Tine.Tinebase.registry.get('version'),
@@ -654,7 +654,7 @@ Tine.Tinebase.tineInit = {
             || userApplications.length < 2;
 
         if (forceReload || reloadNeeded) {
-            await Tine.Tinebase.tineInit.clearRegistry();
+            Tine.Tinebase.tineInit.clearRegistry();
 
             Ext.Ajax.request({
                 timeout: 120000, // 2 minutes
@@ -669,13 +669,13 @@ Tine.Tinebase.tineInit = {
                         });
                     }
 
-                    // if registry could not be loaded, this is mostly due to misconfiguration
+                    // if registry could not be loaded, this is mostly due to missconfiguaration
                     // don't send error reports for that!
                     Tine.Tinebase.ExceptionHandler.handleRequestException({
                         code: 503
                     });
                 },
-                success: async function (response, request) {
+                success: function (response, request) {
                     var registryData = Ext.util.JSON.decode(response.responseText);
                     for (var app in registryData) {
                         if (registryData.hasOwnProperty(app)) {
@@ -701,16 +701,9 @@ Tine.Tinebase.tineInit = {
                         }
                     }
 
-                    // TODO is this needed? is setting async, too?
-                    await waitFor(() => {
-                        return store.namespace(Tine.Tinebase.tineInit.lsPrefix).has('Tinebase.registry.version')
-                    });
-
                     Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
                         Ext.util.CSS.refreshCache();
-                        if (Ext.isFunction(cb)) {
-                            cb.call(scope);
-                        }
+                        cb.call(scope);
                     });
                 }
             });
@@ -724,11 +717,11 @@ Tine.Tinebase.tineInit = {
 
             Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
                 Ext.util.CSS.refreshCache();
-                if (Ext.isFunction(cb)) {
-                    cb.call(scope);
-                }
+                cb.call(scope);
             });
         }
+
+
     },
 
     /**
@@ -837,13 +830,10 @@ Tine.Tinebase.tineInit = {
     /**
      * remove all registry data
      */
-    clearRegistry: async function() {
+    clearRegistry: function() {
         Tine.log.info('tineInit::clearRegistry');
         if (Ext.isFunction(store.namespace)) {
             store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
-            await waitFor(() => {
-                return ! store.namespace(Tine.Tinebase.tineInit.lsPrefix).has('Tinebase.registry.version')
-            });
         }
     },
 
@@ -1062,10 +1052,4 @@ Ext.onReady(async function () {
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
     });
-
-    // TODO use await
-    // await Tine.Tinebase.tineInit.initRegistry(false);
-    // Tine.Tinebase.tineInit.checkClientVersion();
-    // Tine.Tinebase.tineInit.initWindowMgr();
-    // Tine.Tinebase.tineInit.renderWindow();
 });

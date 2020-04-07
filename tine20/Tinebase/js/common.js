@@ -49,12 +49,12 @@ Tine.Tinebase.common = {
      *      {Boolean} redirectAlways
      *      {String} redirectUrl
      */
-    reload: async function(options) {
+    reload: function(options) {
         options = options || {};
 
         if (! options.keepRegistry) {
             Tine.Tinebase.tineInit.isReloading = true;
-            await Tine.Tinebase.tineInit.clearRegistry();
+            Tine.Tinebase.tineInit.clearRegistry();
         }
 
         if (! options.redirectAlways && options.redirectUrl && options.redirectUrl != '') {

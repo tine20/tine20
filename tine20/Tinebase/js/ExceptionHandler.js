@@ -170,14 +170,14 @@ Tine.Tinebase.ExceptionHandler = function() {
                     msg: i18n._('Your session timed out. You need to login again.'),
                     fn: function() {
                         Tine.Tinebase.tineInit.isReloading = true;
-                        Tine.Tinebase.tineInit.clearRegistry().then(() => {
-                            if (! window.isMainWindow) {
-                                Ext.ux.PopupWindow.close();
-                                return;
-                            }
-                            Tine.Tinebase.common.reload({
-                                clearCache: true
-                            });
+                        Tine.Tinebase.tineInit.clearRegistry();
+
+                        if (! window.isMainWindow) {
+                            Ext.ux.PopupWindow.close();
+                            return;
+                        }
+                        Tine.Tinebase.common.reload({
+                            clearCache: true
                         });
                     }
                 }));

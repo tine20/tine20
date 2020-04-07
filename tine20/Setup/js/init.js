@@ -31,11 +31,13 @@ Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createIntercep
 /**
  * init registry
  */
-Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(async function () {
-    await Tine.Tinebase.tineInit.clearRegistry();
+Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(function () {
+    Tine.Tinebase.tineInit.clearRegistry();
     Tine.Tinebase.tineInit.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
     Tine.Tinebase.tineInit.jsonKeyCookieId = 'TINE20SETUPJSONKEY';
     Tine.Tinebase.tineInit.stateful = false;
+    
+    return true;
 });
 
 Tine.Tinebase.tineInit.onRegistryLoad = Tine.Tinebase.tineInit.onRegistryLoad.createInterceptor(function () {
@@ -72,10 +74,11 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
             loginMethod: 'Setup.login',
             headsUpText: window.i18n._('Setup'),
             scope: this,
-            onLogin: async function (response) {
-                await Tine.Tinebase.tineInit.initRegistry(true);
-                Ext.MessageBox.hide();
-                Tine.Tinebase.tineInit.renderWindow();
+            onLogin: function (response) {
+                Tine.Tinebase.tineInit.initRegistry(true, function() {
+                    Ext.MessageBox.hide();
+                    Tine.Tinebase.tineInit.renderWindow();
+                });
             }
         });
         mainCardPanel.layout.container.add(Tine.loginPanel);
