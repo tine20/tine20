@@ -1,0 +1,4 @@
+name,folder,type,container
+SharedFolder,Gemeinsamer/Shared/Folder,folder,shared
+Privat,Mein/Privater/Folder,folder,tine20admin
+Privat,Mein/Privater/Folder,folder,testUser
