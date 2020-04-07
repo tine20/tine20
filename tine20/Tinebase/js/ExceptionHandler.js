@@ -168,16 +168,16 @@ Tine.Tinebase.ExceptionHandler = function() {
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Authorisation Required'),
                     msg: i18n._('Your session timed out. You need to login again.'),
-                    fn: async function() {
+                    fn: function() {
                         Tine.Tinebase.tineInit.isReloading = true;
-                        await Tine.Tinebase.tineInit.clearRegistry();
-
-                        if (! window.isMainWindow) {
-                            Ext.ux.PopupWindow.close();
-                            return;
-                        }
-                        Tine.Tinebase.common.reload({
-                            clearCache: true
+                        Tine.Tinebase.tineInit.clearRegistry().then(() => {
+                            if (! window.isMainWindow) {
+                                Ext.ux.PopupWindow.close();
+                                return;
+                            }
+                            Tine.Tinebase.common.reload({
+                                clearCache: true
+                            });
                         });
                     }
                 }));
