@@ -398,7 +398,7 @@ class Tinebase_ContainerTest extends TestCase
         $stmt = Tinebase_Core::getDb()->query('select * from '.Tinebase_Core::getDb()->quoteIdentifier(SQL_TABLE_PREFIX .'container_acl') . ' where ' . Tinebase_Core::getDb()->quoteInto(Tinebase_Core::getDb()->quoteIdentifier('container_id') . ' = ?', $this->objects['initialContainer']->getId()));
         $rows = $stmt->fetchAll();
         
-        $this->assertEquals(8, count($rows));
+        $this->assertEquals(12, count($rows), print_r($rows, true));
     }
     
     /**

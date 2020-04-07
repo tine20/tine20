@@ -150,35 +150,17 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
             . ' about to handle Tinebase_Event_Container_BeforeCreate' );
 
-        if ($_eventObject->container &&
-            $_eventObject->container->type === Tinebase_Model_Container::TYPE_PERSONAL &&
-            $_eventObject->container->model === Addressbook_Model_Contact::class &&
-            $_eventObject->container->application_id === Tinebase_Application::getInstance()
-                ->getApplicationByName('Addressbook')->getId()) {
-
-            $_eventObject->container->xprops()['Tinebase']['Container']['GrantsModel'] =
-                Addressbook_Model_ContactGrants::class;
-
-            if ($_eventObject->grants instanceof Tinebase_Record_RecordSet) {
-                // get owner from initial initial grants
-                $grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
-
-                $grants->addRecord(new Addressbook_Model_ContactGrants([
-                    'account_id' => $_eventObject->accountId,
-                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                    Tinebase_Model_Grants::GRANT_READ => true,
-                    Tinebase_Model_Grants::GRANT_ADD => true,
-                    Tinebase_Model_Grants::GRANT_EDIT => true,
-                    Tinebase_Model_Grants::GRANT_DELETE => true,
-                    Tinebase_Model_Grants::GRANT_EXPORT => true,
-                    Tinebase_Model_Grants::GRANT_SYNC => true,
-                    Tinebase_Model_Grants::GRANT_ADMIN => true,
-                    Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA => true,
-                ], true));
-                
-                $_eventObject->grants = $grants;
-            }
-        }
+        $this->_addDefaultPersonalGrantsToContainer(
+            $_eventObject->container,
+            'Addressbook',
+            $_eventObject->grants,
+            $_eventObject->accountId,
+            [
+                Addressbook_Model_Contact::class,
+                Addressbook_Model_List::class,
+            ],
+            Addressbook_Model_ContactGrants::class
+        );
     }
 
     /**

@@ -286,6 +286,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Addressbook_Model_Contact::class,
                 Addressbook_Model_Industry::class,
                 Addressbook_Model_List::class,
+                Addressbook_Model_ListGrants::class,
                 Addressbook_Model_ListMemberRole::class,
                 Addressbook_Model_ListRole::class,
                 Addressbook_Model_Salutation::class,
