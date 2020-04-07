@@ -48,7 +48,7 @@ stages:
   script:
     - cd /tine
     - composer require phpstan/phpstan
-    - php -d memory_limit=2G /tine/vendor/bin/phpstan analyse --autoload-file=/tine/tine20/vendor/autoload.php --error-format=prettyJson --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json || true
+    - php -d memory_limit=2G /tine/vendor/bin/phpstan analyse --autoload-file=/tine/tine20/vendor/autoload.php --error-format=prettyJson --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json
   artifacts:
     reports:
       codequality: code-quality-report.json
@@ -59,6 +59,7 @@ stages:
     - if: $PHP_STAN_ANALYSES == "true"
       when: on_success
     - when: never
+  allow_failure: true
 
 "docker: build dev, build, built and test-built image":
   extends: .abstract_jobs.docker
