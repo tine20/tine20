@@ -1,7 +1,9 @@
+includes:
+  - phpstan-baseline.neon
 parameters:
     paths:
       - tine20
-    level: 0
+    level: 2
     excludes_analyse:
       - 'tine20/vendor'
       - 'tine20/library'
