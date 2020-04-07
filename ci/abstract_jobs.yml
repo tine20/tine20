@@ -38,6 +38,8 @@
     TINE20_EMAIL_IMAP: "active:true,host:dovecot,port:143,useSystemAccount:1,ssl:none,verifyPeer:0,backend:dovecot_imap,domain:mail.test,instanceName:tine.test,dovecot_host:db,dovecot_dbname:dovecot,dovecot_username:tine20,dovecot_password:tine20pw,dovecot_uid:vmail,dovecot_gid:vmail,dovecot_home:/var/vmail/%d/%u,dovecot_scheme:SSHA256"
     TINE20_EMAIL_SMTP: "active:true,backend:postfix,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfix_host:db,postfix_dbname:postfix,postfix_username:tine20,postfix_password:tine20pw"
     TINE20_EMAIL_SIEVE: "hostname:dovecot,port:4190,ssl:none"
+    NODE_TOTAL: "$CI_NODE_TOTAL"
+    NODE_INDEX: "$CI_NODE_INDEX"
   services:
     - *abstract_jobs-mariadb_service
     - *abstract_jobs-redis_service
@@ -53,7 +55,7 @@
     # /usr/sbin/confd -onetime -backend env && php /wait_for_db.php && bash /install_mail.sh && bash /install_tine.sh && supervisord && cd /tine/tests/tine20/
   script:
     - cd /tine/tests/tine20/
-    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci CiTestSuite$CI_NODE_INDEX
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllTests
   parallel: 5
 
 .abstract_jobs.php_unit_test_with_ldap:
