@@ -136,6 +136,8 @@ COPY ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/webpack.ini
 COPY docs/config /config
 COPY ci/dockerimage/install_mail.sh /install_mail.sh
 COPY phpstan.neon /tine/phpstan.neon
+COPY phpstan-baseline.neon /tine/phpstan-baseline.neon
+
 
 ENV TINE20_INSTALL=true
 
