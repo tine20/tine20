@@ -1409,6 +1409,7 @@ class Felamimail_Controller_MessageTest extends TestCase
      * @todo allow external resources
      *
      * @group nogitlabci
+     * gitlabci: Failed asserting that 'Failed asserting that '...' contains "...".
      */
     public function testHtmlPurify()
     {
@@ -1729,8 +1730,8 @@ class Felamimail_Controller_MessageTest extends TestCase
      *       https://forge.tine20.org/mantisbt/view.php?id=10126
      *       
      *       http://htmlpurifier.org/live/configdoc/plain.html#HTML.TidyLevel
-     *
      * @group nogitlabci
+     * gitlabci: Failed asserting that 'Failed asserting that '...' contains "...".
      */
     public function testInvalidHtml()
     {

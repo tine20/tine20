@@ -43,7 +43,7 @@ return array(
        'backend' => '{{getv "/caching/backend" "File"}}',
        'redis' => array (
            'host' => '{{getv "/caching/redis/host" ""}}',
-           'port' => {{getv "/caching/redis/port" "null"}},
+           'port' => {{getv "/caching/redis/port" "6379"}},
            'prefix' => '{{getv "/caching/redis/prefix" "master"}}',
        ),
        'path' => '{{getv "/caching/path" "/tine/caching"}}',
@@ -53,6 +53,8 @@ return array(
         'lifetime' => {{getv "/session/lifetime" "86400"}},
         'backend' => '{{getv "/session/backend" "File"}}',
         'path' => '{{getv "/session/path" "/tine/sessions"}}',
+        'host' => '{{getv "/session/host" ""}}',
+        'port' => '{{getv "/session/port" "6379"}}',
     ),
 
     'credentialCacheSharedKey' => '{{getv "/credentialcachesharedkey" "changeMeNow"}}',

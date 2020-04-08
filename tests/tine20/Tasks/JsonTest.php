@@ -147,6 +147,7 @@ class Tasks_JsonTest extends TestCase
      * test alarm sending failure (with wrong stmp user/password)
      *
      * @group nogitlabci
+     * gitlabci: should not send message with wrong pw - maybe smtp server is not configured correctly? ... Expected: failure, Actual: success
      */
     public function testAlarmSendingFailure()
     {

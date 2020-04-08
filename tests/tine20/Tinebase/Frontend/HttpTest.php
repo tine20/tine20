@@ -40,7 +40,6 @@ class Tinebase_Frontend_HttpTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group needsbuild
-     * @group nogitlabci
      */
     public function testgetPostalXWindow()
     {
