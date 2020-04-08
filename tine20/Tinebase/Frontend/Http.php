@@ -612,7 +612,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             . ' Downloading attachment of ' . $modelName . ' record with id ' . $recordId);
         
         $recordController = Tinebase_Core::getApplicationInstance($modelName);
-        $record = $recordController->get($recordId);
+        try {
+            $record = $recordController->get($recordId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+        }
         
         $node = Tinebase_FileSystem::getInstance()->get($nodeId);
         $node->grants = null;
