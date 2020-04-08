@@ -1,6 +1,7 @@
 includes:
-  - phpstan-baseline.neon
+    - phpstan-baseline.neon
 parameters:
+    reportUnmatchedIgnoredErrors: false
     paths:
       - tine20
     level: 2
