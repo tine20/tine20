@@ -30,6 +30,7 @@ stages:
     - build_and_push test-source
   rules:
     - when: on_success
+  timeout: 20m # time run: 17m, hangs often, time should be as fast as possible
 
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit_test
@@ -40,6 +41,7 @@ stages:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
     - when: never
+  timeout: 25m # time run: 14m
 
 "phpstan: code analyses":
   stage: build_and_source_test
@@ -60,6 +62,7 @@ stages:
       when: on_success
     - when: never
   allow_failure: true
+  timeout: 10m # time run: 4m
 
 "docker: build dev, build, built and test-built image":
   extends: .abstract_jobs.docker
@@ -73,6 +76,7 @@ stages:
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
+  timeout: 40m # time run: 28m
 
 "php unit: all tests built":
   extends: .abstract_jobs.php_unit_test
@@ -83,6 +87,7 @@ stages:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
     - when: never
+  timeout: 25m # time run: 13m
 
 "php unit: nogitlabci tests built":
   extends: .abstract_jobs.php_unit_test
@@ -118,6 +123,7 @@ stages:
     - pull_tag_push base commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push test-source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+  timeout: 10m # time run: 3m
 
 "docker: push build, built, test-built and dev image":
   extends: .abstract_jobs.docker
@@ -131,3 +137,4 @@ stages:
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
+  timeout: 10m # time run: 3m
