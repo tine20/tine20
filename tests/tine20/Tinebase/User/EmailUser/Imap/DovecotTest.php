@@ -158,6 +158,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      * @see 0006546: saving user with duplicate imap/smtp user entry fails
      *
      * @group nogitlabci
+     * gitlabci: Failed asserting that exception of type "Zend_Db_Statement_Exception" is thrown.
      */
     public function testSavingDuplicateAccount()
     {

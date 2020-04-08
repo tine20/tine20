@@ -84,7 +84,6 @@ class Scheduler_SchedulerTest extends TestCase
 
     /**
      * Tests if a task can be successfully dispatched.
-     * @group nogitlabci
      */
     public function testCanDispatchTask()
     {
