@@ -1971,6 +1971,7 @@ class Addressbook_JsonTest extends TestCase
             'color' => '#009B31',
         ));
         $tag = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
+        self::assertNotNull($tag);
 
         $filter = array(array(
             'field'    => 'tag',
