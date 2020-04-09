@@ -53,6 +53,15 @@ class Tinebase_ControllerTest extends TestCase
     }
 
     /**
+     * testGetIdByTitleProperty
+     */
+    public function testGetIdByTitleProperty()
+    {
+        $record = Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty('Tine 2.0 Admin Account');
+        self::assertEquals('Tine 2.0 Admin Account',$record->n_fn);
+    }
+
+    /**
      * testMaintenanceModeLoginFail
      *
      * @param $maintenanceModeSetting
