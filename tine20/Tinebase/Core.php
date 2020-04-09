@@ -401,9 +401,11 @@ class Tinebase_Core
 
         $extract = Tinebase_Application::extractAppAndModel($_applicationName, $_modelName);
         $appName = $extract['appName'];
+        // appName property might be a Tinebase_Model_Application record here
+        $appNameString = ucfirst((string) $appName);
         $modelName = $extract['modelName'];
 
-        $controllerName = ucfirst((string) $appName);
+        $controllerName = $appNameString;
         if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && ! $modelName)) {
             // only app controllers are called "App_Controller_Model"
             $controllerName .= '_Controller';
