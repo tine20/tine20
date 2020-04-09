@@ -77,7 +77,16 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
      */
     protected function _getHttpClient($_synchronRequest)
     {
-        return Tinebase_Core::getHttpClient($this->_url, array('timeout' => ($_synchronRequest ? 10 : self::ASYNC_REQUEST_TIMEOUT)));
+        return Tinebase_Core::getHttpClient($this->_url, $this->_getHttpClientConfig($_synchronRequest));
+    }
+
+    protected function _getHttpClientConfig($_synchronRequest)
+    {
+        return [
+            'timeout' => ($_synchronRequest ? 10 : self::ASYNC_REQUEST_TIMEOUT),
+            'noProxy' => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                ->{Tinebase_Config::FILESYSTEM_PREVIEW_IGNORE_PROXY},
+        ];
     }
 
     protected function _processJsonResponse(array $responseJson)
