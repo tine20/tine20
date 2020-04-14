@@ -25,7 +25,6 @@ function build_and_push() {
     --target $NAME \
     --tag $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --cache-from $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
-    --cache-from $REGISTRY/$NAME:commit$CI_COMMIT_BEFORE_SHA-$PHP_IMAGE_TAG \
     --cache-from $REGISTRY/$NAME:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-$PHP_IMAGE_TAG \
     --cache-from $REGISTRY/$NAME:$(echo $MAJOR_COMMIT_REF_NAME | sed sI/I-Ig)-$PHP_IMAGE_TAG \
     --file ci/dockerimage/Dockerfile \
