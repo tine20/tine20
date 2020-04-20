@@ -84,8 +84,16 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
                 'path' => '/',
             ), true);
         } else {
-            $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
-            $node->path = $this->_path->flatpath;
+            try{
+                $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
+                $node->path = $this->_path->flatpath;
+            } catch (Exception $e) {
+                $node = new Tinebase_Model_Tree_Node(array(
+                    'name' => 'root',
+                    'path' => '/',
+                ), true);
+            }
+
         }
 
         try {
