@@ -757,8 +757,10 @@
                 $attachments[] = $part;
                 
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Not adding attachment " . $attachment->name . ' to invitation mail (size: ' . Tinebase_Helper::convertToMegabytes($attachment-size) . ')');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " Not adding attachment " . $attachment->name
+                    . ' to invitation mail (size: ' . Tinebase_Helper::convertToMegabytes($attachment->size) . ')'
+                );
             }
         }
         
