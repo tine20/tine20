@@ -893,7 +893,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 if ($_type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
                     $_type = null;
                 }
-                if (null === $_tempFileId) {
+                if (! $_tempFileId) {
                     $this->_backend->createFileTreeNode($this->_backend->stat(dirname($_statpath)),
                         basename($_statpath), Tinebase_Model_Tree_FileObject::TYPE_FILE, $_type);
                 } else {
