@@ -99,7 +99,10 @@ class Tinebase_Event
                 try {
                     $controller = Tinebase_Core::getApplicationInstance($application, NULL, TRUE);
                 } catch (Tinebase_Exception_NotFound $e) {
-                    // application has no controller or is not useable at all
+                    // application has no controller or is not usable at all
+                    continue;
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    // application could not be installed because of acl
                     continue;
                 }
                 if (isset($data[$application->getId()])) {
