@@ -1981,7 +1981,11 @@ class Setup_Controller
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
             } else {
-                $this->_installApplication($xml, $_options);
+                try {
+                    $this->_installApplication($xml, $_options);
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    Tinebase_Exception::log($tead);
+                }
             }
         }
 
