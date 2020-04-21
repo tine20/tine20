@@ -30,6 +30,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         4 => 'not', //expects ID as value
         5 => 'notin', //expects IDs as value
         6 => 'notDefinedBy:AND',
+        7 => 'notDefinedBy:OR',
     );
     
     /**
@@ -67,7 +68,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     public function setValue($_value)
     {
         $this->_foreignIds = NULL;
-        $this->_valueIsNull = null === $_value;
+        $this->_valueIsNull = empty($_value) || (is_array($_value) && count($_value) === 1 && isset($_value[0]) &&
+                is_array($_value[0]) && array_key_exists('value', $_value[0]) && empty($_value[0]['value']));
 
         // id(s) is/are to be provided directly as value
         if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
@@ -79,7 +81,9 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             // (not)definedBy filter, value contains the subfilter
             $this->_value = (array)$_value;
             $this->_removePrefixes();
-            $this->_setFilterGroup();
+            if (!$this->_valueIsNull) {
+                $this->_setFilterGroup();
+            }
         }
     }
     
@@ -179,7 +183,23 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                     $result['value'] = $this->_resolveRecord($this->_foreignIds[0]);
                 }
             } else {
-                $result['value'] = $this->_foreignIds;
+                if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
+                        $this->_operator === 'notin') {
+                    $result['value'] = $this->_foreignIds;
+                } else {
+                    // (not)definedBy filter, value contains the subfilter
+                    $result['value'] = $this->_value;
+                    foreach ($result['value'] as $idx => $filterData) {
+                        if (! isset($filterData['field'])) {
+                            continue;
+                        }
+
+                        if (in_array($filterData['field'], $this->_prefixedFields)) {
+                            $result['value'][$idx]['field'] = ':' . $result['value'][$idx]['field'];
+                        }
+                    }
+                }
+
             }
         }
         

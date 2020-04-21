@@ -194,6 +194,7 @@ class Tinebase_TranslationTest extends TestCase
      *
      * TODO add more langHelper functionality tests
      * @group nogitlabci
+     * gitlabci: Failed asserting that 'Usage: php [options] [-f] <file> [--] [args...]' contains "langHelper.php [ options ]".
      */
     public function testLangHelperUsageInfo()
     {

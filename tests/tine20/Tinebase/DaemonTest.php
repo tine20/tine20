@@ -15,7 +15,9 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 
 /**
  * Test class for Tinebase_CustomField
+ *
  * @group nogitlabci
+ * gitlabci:  Tinebase_DaemonTest::testStart: could not find pid file
  */
 class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
 {

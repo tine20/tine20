@@ -579,6 +579,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * call checkState for every field
      */
     checkStates: function() {
+        if(this.loadRequest){
+            return _.delay(_.bind(this.checkStates, this), 250);
+        }
         this.onRecordUpdate();
         this.getForm().items.each(function (item) {
             if (Ext.isFunction(item.checkState)) {
@@ -988,6 +991,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }, this);
         }
+
+        this.loadRequest = null;
         
         (function() {
             this.checkStates();

@@ -42,7 +42,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'install-s'                 => 'Install applications [all if nothing installed yet] or comma separated list (use "all" as parameter to install all available apps);'
                     . ' To specify the login name and login password of the admin user that is created during installation, append \' -- adminLoginName="admin" adminPassword="password"\''
                     . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
-                'update-s'                  => 'Update applications [All] or comma separated list',
+                'update-s'                  => 'Update applications [All] or comma separated list - supports verbose mode (-v)',
                 'update_needed'             => 'returns "Update required" and return code 1 if update is required',
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
                 'install_dump'              => 'Install Tine from a backup

@@ -59,7 +59,7 @@ class HumanResources_TestCase extends TestCase
     protected function _getWorkingTimeScheme40()
     {
         if (null === $this->_40hoursWorkingTimeScheme) {
-            $translate = Tinebase_Translation::getTranslation('HumanResources');
+            $translate = Tinebase_Translation::getTranslation('HumanResources', new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE}));
             $this->_40hoursWorkingTimeScheme = HumanResources_Controller_WorkingTimeScheme::getInstance()->search(
                 new HumanResources_Model_WorkingTimeSchemeFilter([
                     ['field' => 'title', 'operator' => 'equals', 'value' => $translate->_('Full-time 40 hours')]

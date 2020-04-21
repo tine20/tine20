@@ -58,6 +58,26 @@ module.exports = {
     },
 
     /**
+     * TODO make this work / see tests/e2etests/src/test/Felamimail/grid.test.js:9 ('grid adopts to folder selected')
+     *
+     * @param page
+     * @param selector
+     * @param visible
+     * @returns {Promise<unknown>}
+     */
+    checkDisplayOfElement: async function (page, selector, visible) {
+        // TODO allow to pass selector to querySelector
+        const el_display = await page.evaluate((selector) => document.querySelector(selector).style.display);
+        if (visible && el_display === 'none') {
+            return Promise.reject('Error: ' + selector + ' still visible');
+        } else if (! visible && el_display !== 'none') {
+            return Promise.reject('Error: ' + selector + ' still invisible');
+        }
+
+        return Promise.resolve();
+    },
+
+    /**
      * set tine20 preference and reload registry afterwards
      *
      * @param appName

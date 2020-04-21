@@ -97,7 +97,8 @@ HEALTHCHECK --timeout=30s CMD curl --silent --fail http://127.0.0.1:80/ADMIN/fpm
 
 FROM ${BASE_IMAGE} as source
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ARG NPM_ADDITIONAL_ARGS=""
+ARG NPM_INSTALL_COMMAND="npm --no-optional install"
+ARG NODE_TLS_REJECT_UNAUTHORIZED=1
 
 RUN apk add --no-cache composer git npm
 
@@ -108,11 +109,12 @@ COPY tine20/library /tine/tine20/library
 COPY tine20/composer.json /tine/tine20/composer.json
 COPY tine20/composer.lock /tine/tine20/composer.lock
 COPY tine20/Tinebase/js/package.json /tine/tine20/Tinebase/js/package.json
-COPY tine20/Tinebase/js/npm-shrinkwrap.json /tine/tine20/Tinebase/js/package.json
+COPY tine20/Tinebase/js/npm-shrinkwrap.json /tine/tine20/Tinebase/js/npm-shrinkwrap.json
 
 # install tine dependencies
 RUN cd /tine/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
-RUN cd /tine/tine20/Tinebase/js && npm --no-optional ${NPM_ADDITIONAL_ARGS} install
+
+RUN cd /tine/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
 
 # copy tine source
 COPY .git /tine/.git
@@ -133,6 +135,9 @@ RUN apk add mysql-client
 COPY ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/webpack.ini
 COPY docs/config /config
 COPY ci/dockerimage/install_mail.sh /install_mail.sh
+COPY phpstan.neon /tine/phpstan.neon
+COPY phpstan-baseline.neon /tine/phpstan-baseline.neon
+
 
 ENV TINE20_INSTALL=true
 
@@ -162,7 +167,8 @@ RUN chmod +x /install_tine.sh
 
 FROM ${BUILT_IMAGE} as test-built
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ARG NPM_ADDITIONAL_ARGS=""
+ARG NPM_INSTALL_COMMAND="npm --no-optional install"
+ARG NODE_TLS_REJECT_UNAUTHORIZED=1
 
 RUN apk add --no-cache composer git npm mysql-client
 
@@ -173,7 +179,8 @@ COPY --from=copy-build /tine/tests /tine/tests
 COPY --from=copy-build /tine/.git /tine/.git
 
 RUN cd /tine/tine20 && composer install --no-ansi --no-progress --no-suggest
-RUN cd /tine/tine20/Tinebase/js && npm --no-optional ${NPM_ADDITIONAL_ARGS} install
+
+RUN cd /tine/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
 
 ENV TINE20_INSTALL=true
 

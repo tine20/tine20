@@ -228,10 +228,15 @@ Tine.Calendar.PagingToolbar.AbstractPeriodPicker = function(config) {
     this.init();
 };
 Ext.extend(Tine.Calendar.PagingToolbar.AbstractPeriodPicker, Ext.util.Observable, {
+    /**
+     * period NOTE: might not fit to current range on view changes!
+     */
+    period: null,
+
     init:       function() {},
     hide:       function() {this.button.hide();},
     show:       function() {this.button.show();},
-    update:     function(dtStart) {},
+    update:     function(period) {},
     render:     function() {},
     prev:       function() {},
     next:       function() {},
@@ -263,7 +268,8 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
             })
         });
     },
-    update: function(dtStart) {
+    update: function(period) {
+        let dtStart = _.get(period, 'from', period);
         this.dtStart = dtStart.clearTime(true);
         if (this.button && this.button.rendered) {
             this.button.setText(dtStart.format(Ext.DatePicker.prototype.format));
@@ -362,7 +368,8 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         }
         
     },
-    update: function(dtStart) {
+    update: function(period) {
+        let dtStart = _.get(period, 'from', period);
         //recalculate dtstart begin of week 
         var from = dtStart.clearTime(true).add(Date.DAY, -1 * dtStart.getDay());
         if (Ext.DatePicker.prototype.startDay) {
@@ -458,12 +465,13 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
             }
         });
     },
-    update: function(dtStart) {
+    update: function(period) {
+        let dtStart = _.get(period, 'from', period);
         this.dtStart = dtStart.clone();
         if (this.button && this.button.rendered) {
             var monthName = Ext.DatePicker.prototype.monthNames[dtStart.getMonth()];
             this.button.setText(monthName + dtStart.format(' Y'));
-            this.dateMenu.picker.setValue(dtStart);
+            this.dateMenu.picker.setValue(dtStart.clone());
         }
     },
     render: function() {
@@ -519,7 +527,8 @@ Tine.Calendar.PagingToolbar.YearPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         }
         
     },
-    update: function(dtStart) {
+    update: function(period) {
+        let dtStart = _.get(period, 'from', period);
         this.dtStart = dtStart.clearTime(true);
         if (this.field && this.field.rendered) {
             this.field.setValue(dtStart.format('Y'));
@@ -554,4 +563,125 @@ Tine.Calendar.PagingToolbar.YearPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
     }
 });
 
+/**
+ * @class Tine.Calendar.PagingToolbar.CustomPeriodPicker
+ * @extends Tine.Calendar.PagingToolbar.AbstractPeriodPicker
+ * @constructor
+ */
+Tine.Calendar.PagingToolbar.CustomPeriodPicker = Ext.extend(Tine.Calendar.PagingToolbar.AbstractPeriodPicker, {
 
+    init: function() {
+        this.tb.showTodayBtn = false;
+
+        this.fromLabel = new Ext.form.Label({
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('From'),
+            style: 'padding-right: 3px'
+        });
+
+        this.fromPicker = new Ext.ux.form.DateTimeField ({
+            style: 'margin-top: 2px',
+            value: _.get(this, 'tb.period.from', this.tb.startDate) || new Date().clearTime(),
+            listeners: {
+                scope: this,
+                specialkey: this.onSelect,
+                blur: this.onSelect
+            }
+        });
+
+        this.untilLabel = new Ext.form.Label({
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('until'),
+            style: 'padding-left: 10px; padding-right: 3px'
+        });
+
+        this.untilPicker = new Ext.ux.form.DateTimeField ({
+            style: 'margin-top: 2px',
+            value: _.get(this, 'tb.period.until', this.tb.startDate) || new Date().clearTime().add(Date.DAY, 5),
+            listeners: {
+                scope: this,
+                specialkey: this.onSelect,
+                blur: this.onSelect
+            }
+        });
+
+        this.period = this.getPeriod();
+    },
+    onSelect: function(field, e) {
+        if (e && e.getKey() === e.ENTER) {
+            return field.blur();
+        }
+
+        let currentPeriod = this.period;
+        Tine.Tinebase.common.assertComparable(currentPeriod);
+
+        let period = this.getPeriod();
+        Tine.Tinebase.common.assertComparable(period);
+        if (String(currentPeriod) !== String(period)) {
+            this.fireEvent('change', this, 'custom', period);
+        }
+    },
+    update: function(periodStart, period) {
+        let boundaries = ['from', 'until'];
+
+        _.each(boundaries, (boundary) => {
+            if (_.get(this, `${boundary}Picker`) && _.isDate(_.get(period, boundary))) {
+                let date = period[boundary].clone();
+
+                // constrain to other boundary
+                let boundaryIdx = boundaries.indexOf(boundary);
+                let otherBoundary = boundaries[(boundaryIdx+1)%2];
+                let otherDate =  _.isDate(_.get(period, otherBoundary)) ?
+                    _.get(period, otherBoundary) : new Date().clearTime();
+
+                this[`${boundary}Picker`].setValue(
+                    new Date(Math[boundaryIdx ? 'max' : 'min'](date, otherDate))
+                );
+
+                // save state
+                _.set(this, `period.${boundary}`, _.get(period, boundary).clone());
+            }
+        });
+    },
+    render: function() {
+        this.tb.addField(this.fromLabel);
+        this.tb.addField(this.fromPicker);
+        this.tb.addField(this.untilLabel);
+        this.tb.addField(this.untilPicker);
+    },
+    hide: function() {
+        this.fromLabel.hide();
+        this.fromPicker.hide();
+        this.untilLabel.hide();
+        this.untilPicker.hide();
+    },
+    show: function() {
+        this.fromLabel.show();
+        this.fromPicker.show();
+        this.untilLabel.show();
+        this.untilPicker.show();
+    },
+    next: function() {
+        let period = this.getPeriod();
+
+        this.update({
+            from: period.until,
+            until: period.until.add(Date.MILLI,  period.until.getTime() - period.from.getTime())
+                .add(Date.SECOND, period.until.format('Z') - period.from.format('Z'))
+        });
+    },
+    prev: function() {
+        let period = this.getPeriod();
+
+        this.update({
+            from: period.until.add(Date.MILLI, period.from.getTime() - period.until.getTime())
+                .add(Date.SECOND, period.from.format('Z') - period.until.format('Z')),
+            until: period.from
+        });
+    },
+    getPeriod: function() {
+        // let from = this.fromPicker.getValue() || new Date
+        return {
+            from: this.fromPicker.getValue().clone(),
+            until: this.untilPicker.getValue().clone()
+        };
+    }
+});

@@ -82,7 +82,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     // we don't want to update the preview panel on context menu
     updateDetailsPanelOnCtxMenu: false,
-    
+
+    /**
+     * needed to apply second grid state for send folders
+     */
+    sendFolderGridStateId: null,
+
     /**
      * Return CSS class to apply to rows depending upon flags
      * - checks Flagged, Deleted and Seen
@@ -130,6 +135,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
         
         this.initPagingToolbar();
+
+        this.sendFolderGridStateId = this.gridConfig.stateId + '-SendFolder';
     },
     
     /**
@@ -1288,12 +1295,120 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onStoreBeforeload: function(store, options) {
         this.supr().onStoreBeforeload.apply(this, arguments);
-        
+
+        // make sure, our handler is called just before the request is sent
+        this.store.on('beforeload', _.bind(this.onStoreBeforeLoadFolderChange, this), this, {single: true});
+
         if (! Ext.isEmpty(this.deleteQueue)) {
             options.params.filter.push({field: 'id', operator: 'notin', value: this.deleteQueue});
         }
     },
-    
+
+    onStoreBeforeLoadFolderChange: function (store, options) {
+
+        const isSendFolderPath = this.isSendFolderPathInFilterParams(options.params);
+
+        if (isSendFolderPath) {
+            this.changeFilterInParams(options.params, 'query', 'to');
+            this.changeGridState(this.sendFolderGridStateId);
+
+        } else {
+            this.changeFilterInParams(options.params, 'to', 'query');
+            this.changeGridState(this.gridConfig.stateId);
+        }
+    },
+
+    isSendFolderPathInFilterParams: function (params) {
+        const pathFilter = _.find(_.get(params, 'filter[0].filters[0].filters', {}), {
+            field: 'path'
+        });
+        const operator = _.get(pathFilter, 'operator', '');
+        const value = operator.match(/equals|in/) ? _.get(pathFilter, 'value', null) : null;
+        const pathFilterValue =  value && _.isArray(value) ? value[0] : value;
+
+        const pathParts = _.isString(pathFilterValue) ? pathFilterValue.split('/') : null;
+        if (! pathParts || pathParts.length < 3) {
+            return false;
+        }
+        const composerAccount = this.app.getAccountStore().getById(pathParts[1]);
+
+        const sendFolderIds = composerAccount ? [
+            composerAccount.getSendFolderId(),
+            composerAccount.getSpecialFolderId('templates_folder'),
+            composerAccount.getSpecialFolderId('drafts_folder')
+        ]: null;
+
+        return (-1 !== sendFolderIds.indexOf(pathParts[2]));
+    },
+
+    /**
+     * @param params
+     * @param from
+     * @param to
+     *
+     * TODO just change the field??
+     */
+    changeFilterInParams: function (params, from, to) {
+        const queryFilter =_.remove(params.filter[0].filters[0].filters, {
+            field: from
+        });
+        if (queryFilter.length > 0) {
+            params.filter[0].filters[0].filters =
+                params.filter[0].filters[0].filters.concat({
+                    field: to,
+                    operator: 'contains',
+                    value: queryFilter[0].value
+                });
+        }
+    },
+
+    /**
+     * // if send, draft, template folders are selected, do the following:
+     * // - hide from email + name columns from grid
+     * // - show to column in grid
+     * // - save this state
+     * // - if grid state is changed by user, do not change columns by user
+     *
+     * // if switched from send, draft, template to "normal" folder
+     * // - switch to default state
+     *
+     * TODO make it work with current state / set/apply from existing state
+     *
+     * @param stateId
+     */
+    changeGridState: function (stateId) {
+
+        this.stateId = stateId;
+
+        // if (! Ext.state.Manager.get(stateId)) {
+
+        const cm = this.grid.getColumnModel();
+        const from_email_index = cm.getIndexById('from_email');
+        const from_name_index = cm.getIndexById('from_name');
+        const to_index = cm.getIndexById('to');
+
+        if (stateId === this.sendFolderGridStateId) {
+            // - hide from email + name columns from grid
+            // - show to column in grid
+
+            cm.setHidden(from_email_index, true);
+            cm.setHidden(from_name_index, true);
+            cm.setHidden(to_index, false);
+        } else {
+            cm.setHidden(from_email_index, false);
+            cm.setHidden(from_name_index, false);
+            cm.setHidden(to_index, true);
+        }
+
+        // this.saveState();
+
+        // } else {
+        //     // TODO make this work
+        //     const state = this.getState();
+        //     this.applyState(state);
+        // }
+    },
+
     /**
      *  called after a new set of Records has been loaded
      *  
@@ -1306,8 +1421,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.supr().onStoreLoad.apply(this, arguments);
         
         Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad(): store loaded new records.');
-        
-        var folder = this.getCurrentFolderFromTree();
+
+        let folder = this.getCurrentFolderFromTree();
         if (folder && records.length < folder.get('cache_totalcount')) {
             Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad() - Count mismatch: got ' + records.length + ' records for folder ' + folder.get('globalname'));
             Tine.log.debug(folder);

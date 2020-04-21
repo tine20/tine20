@@ -196,6 +196,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
 
     /**
+     * FEATURE_SHOW_ADVANCED_SEARCH
+     *
+     * @const string
+     */
+    const FEATURE_CREATE_PREVIEWS = 'featureCreatePreviews';
+
+    /**
      * FEATURE_SHOW_ACCOUNT_EMAIL
      *
      * @var string
@@ -690,6 +697,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y = 'previewThumbnailSizeY';
     const FILESYSTEM_PREVIEW_PREVIEW_SIZE_X = 'previewPreviewSizeX';
     const FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y = 'previewPreviewSizeY';
+    const FILESYSTEM_PREVIEW_IGNORE_PROXY = 'previewPreviewIgnoreProxy';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
     const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
@@ -1303,6 +1311,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),
+                self::FEATURE_CREATE_PREVIEWS => [
+                    self::LABEL                         => 'Create File Previews', // _('Create File Previews')
+                    self::DESCRIPTION                   => 'Create File Previews',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
                 self::FEATURE_FULLTEXT_INDEX              => [
                     self::LABEL                         => 'Create FullText Indices', // _('Create FullText Indices')
                     self::DESCRIPTION                   => 'Create FullText Indices',
@@ -2317,6 +2331,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setByAdminModule'      => FALSE,
                     'setBySetupModule'      => FALSE,
                     'default'               => 2000,
+                ),
+                self::FILESYSTEM_PREVIEW_IGNORE_PROXY => array(
+                    //_('Ignore Proxy config for preview service')
+                    'label'                 => 'Ignore Proxy config for preview service',
+                    //_('Ignore Proxy config for preview service')
+                    'description'           => 'Ignore Proxy config for preview service',
+                    'type'                  => self::TYPE_BOOL,
+                    'clientRegistryInclude' => false,
+                    'setByAdminModule'      => false,
+                    'setBySetupModule'      => false,
+                    'default'               => false,
                 ),
                 self::FILESYSTEM_AVSCAN_MAXFSIZE => [
                     //_('Antivirus Scan Max File Size')

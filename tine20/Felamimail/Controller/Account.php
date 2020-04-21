@@ -1500,8 +1500,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         if (null !== ($systemAccount = $this->getSystemAccount($_account->getId()))) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' system account "' . $systemAccount->name . '" already exists.');
+            // system account already exists
             return $systemAccount;
         }
 

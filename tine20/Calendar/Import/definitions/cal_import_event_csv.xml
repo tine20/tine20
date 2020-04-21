@@ -2,7 +2,7 @@
 <config>
     <name>cal_import_event_csv</name>
     <model>Calendar_Model_Event</model>
-    <plugin>Calendar_Import_Csv</plugin>
+    <plugin>Calendar_Import_Event_Csv</plugin>
     <type>import</type>
     <scope>hidden</scope>
     <headline>1</headline>

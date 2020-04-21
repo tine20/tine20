@@ -31,6 +31,7 @@ class Calendar_Import_EventTest extends TestCase
         $importer = new Tinebase_Setup_DemoData_Import('Calendar_Model_Event', [
             'container_id' => $this->_importContainer->getId(),
             'definition' => 'cal_import_event_csv',
+            'file' => 'event.csv',
         ]);
         $importer->importDemodata();
 

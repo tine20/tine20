@@ -453,6 +453,9 @@ class Setup_Frontend_Cli
     {
         $result = Setup_Controller::getInstance()->updateApplications();
         echo "Updated " . $result['updated'] . " application(s).\n";
+        if ($_opts->v && count($result['updates']) > 0) {
+            print_r($result['updates']);
+        }
         return 0;
     }
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>cal_import_resource_csv</name>
+    <model>Calendar_Model_Resource</model>
+    <plugin>Calendar_Import_Resource_Csv</plugin>
+    <type>import</type>
+    <scope>hidden</scope>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <description>csv import</description>
+    <label>Import csv-files</label>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>name</source>
+            <destination>name</destination>
+        </field>
+        <field>
+            <source>hierarchy</source>
+            <destination>hierarchy</destination>
+        </field>
+        <field>
+            <source>description</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>max_number_of_people</source>
+            <destination>max_number_of_people</destination>
+        </field>
+        <field>
+            <source>email</source>
+            <destination>email</destination>
+        </field>
+        <field>
+            <source>type</source>
+            <destination>type</destination>
+        </field>
+        <field>
+            <source>busy_type</source>
+            <destination>busy_type</destination>
+        </field>
+        <field>
+            <source>suppress_notification</source>
+            <destination>suppress_notification</destination>
+        </field>
+        <field>
+            <source>site</source>
+            <destination>site</destination>
+        </field>
+    </mapping>
+</config>

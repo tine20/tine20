@@ -612,7 +612,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             . ' Downloading attachment of ' . $modelName . ' record with id ' . $recordId);
         
         $recordController = Tinebase_Core::getApplicationInstance($modelName);
-        $record = $recordController->get($recordId);
+        try {
+            $record = $recordController->get($recordId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+        }
         
         $node = Tinebase_FileSystem::getInstance()->get($nodeId);
         $node->grants = null;
@@ -695,7 +699,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $node = Tinebase_FileSystem::getInstance()->stat('/' . $_appId . '/folders/' . $path, $_revision);
             } else {
                 $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . $_appId . '/folders/' . $path);
-                $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
+                try {
+                    $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+                }
             }
         } else {
             throw new Tinebase_Exception_InvalidArgument('A path is needed to download a preview file.');

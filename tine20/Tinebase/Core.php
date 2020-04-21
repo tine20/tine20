@@ -401,9 +401,11 @@ class Tinebase_Core
 
         $extract = Tinebase_Application::extractAppAndModel($_applicationName, $_modelName);
         $appName = $extract['appName'];
+        // appName property might be a Tinebase_Model_Application record here
+        $appNameString = ucfirst((string) $appName);
         $modelName = $extract['modelName'];
 
-        $controllerName = ucfirst((string) $appName);
+        $controllerName = $appNameString;
         if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && ! $modelName)) {
             // only app controllers are called "App_Controller_Model"
             $controllerName .= '_Controller';
@@ -2104,24 +2106,29 @@ class Tinebase_Core
     /**
      * get http client
      *
-     * @param null $uri
-     * @param null $config
+     * @param null|string $uri
+     * @param null|array $config
      * @return Zend_Http_Client
      */
     public static function getHttpClient($uri = null, $config = null)
     {
-        $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
-        if (! empty($proxyConfig)) {
-            $proxyConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
-            if (is_array($config)) {
-                $config = array_merge($config, $proxyConfig);
-            } else {
-                $config = $proxyConfig;
+        if (! isset($config['noProxy']) || ! $config['noProxy']) {
+            $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
+            if (!empty($proxyConfig)) {
+                $proxyConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
+                if (is_array($config)) {
+                    $config = array_merge($config, $proxyConfig);
+                } else {
+                    $config = $proxyConfig;
+                }
             }
         }
-        $httpClient = new Zend_Http_Client($uri, $config);
 
-        return $httpClient;
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Creating Zend_Http_Client for ' . $uri . ' with config: '
+            . print_r($config, true));
+
+        return new Zend_Http_Client($uri, $config);
     }
 
     /**

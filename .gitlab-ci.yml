@@ -2,9 +2,10 @@ include:
   - local: '/ci/abstract_jobs.yml'
   - local: '/ci/ci-config.yml'
 
+.rule:is_feature_branch_pipeline: &feature_branch_pipeline $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
 
 stages:
-  - build
+  - build_docker_images
   - build_and_source_test
   - built_test_and_deploy
   - deploy
@@ -17,17 +18,24 @@ stages:
     - docker tag php:$PHP_IMAGE_TAG $REGISTRY/php:$PHP_IMAGE_TAG
     - docker push $REGISTRY/php:$PHP_IMAGE_TAG
   rules:
+    - if: *feature_branch_pipeline
+      when: never
     - if: $DOCKER_RETAG_PHP_IMAGE == "true"
       when: on_success
     - when: never
 
 "docker: build base, source and test-source image":
   extends: .abstract_jobs.docker
-  stage: build
+  stage: build_docker_images
   script:
     - build_and_push base
     - build_and_push source
     - build_and_push test-source
+  rules:
+    - if: *feature_branch_pipeline
+      when: never
+    - when: on_success
+  timeout: 20m # time run: 17m, hangs often, time should be as fast as possible
 
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit_test
@@ -35,9 +43,35 @@ stages:
   image:
     name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
+    - if: *feature_branch_pipeline
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
     - when: never
+  timeout: 25m # time run: 14m
+
+"phpstan: code analyses":
+  stage: build_and_source_test
+  image:
+    name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+  script:
+    - cd /tine
+    - composer require phpstan/phpstan
+    - php -d memory_limit=2G /tine/vendor/bin/phpstan analyse --autoload-file=/tine/tine20/vendor/autoload.php --error-format=prettyJson --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json
+  artifacts:
+    reports:
+      codequality: code-quality-report.json
+    paths:
+      - code-quality-report.json
+    expire_in: 1 days
+  rules:
+    - if: *feature_branch_pipeline
+      when: never
+    - if: $PHP_STAN_ANALYSES == "true"
+      when: on_success
+    - when: never
+  allow_failure: true
+  timeout: 10m # time run: 4m
 
 "docker: build dev, build, built and test-built image":
   extends: .abstract_jobs.docker
@@ -48,9 +82,12 @@ stages:
     - build_and_push test-built
     - build_and_push dev
   rules:
+    - if: *feature_branch_pipeline
+      when: never
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
+  timeout: 40m # time run: 28m
 
 "php unit: all tests built":
   extends: .abstract_jobs.php_unit_test
@@ -58,9 +95,28 @@ stages:
   image:
     name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
+    - if: *feature_branch_pipeline
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
     - when: never
+  timeout: 25m # time run: 13m
+
+"php unit: nogitlabci tests built":
+  extends: .abstract_jobs.php_unit_test
+  stage: built_test_and_deploy
+  image:
+    name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+  rules:
+    - if: *feature_branch_pipeline
+      when: never
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
+      when: on_success
+    - when: never
+  script:
+    - cd /tine/tests/tine20/
+    - php /tine/tine20/vendor/bin/phpunit --color --debug --group nogitlabci AllTests
+  allow_failure: true
 
 "php unit: all tests built with ldap":
   extends: .abstract_jobs.php_unit_test_with_ldap
@@ -71,6 +127,8 @@ stages:
     - cd /tine/tests/tine20/
     - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap CiTestSuite$CI_NODE_INDEX
   rules:
+    - if: *feature_branch_pipeline
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
       when: on_success
     - when: never
@@ -82,6 +140,11 @@ stages:
     - pull_tag_push base commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push test-source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+  rules:
+    - if: *feature_branch_pipeline
+      when: never
+    - when: on_success
+  timeout: 10m # time run: 3m
 
 "docker: push build, built, test-built and dev image":
   extends: .abstract_jobs.docker
@@ -92,6 +155,9 @@ stages:
     - pull_tag_push test-built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
   rules:
+    - if: *feature_branch_pipeline
+      when: never
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
+  timeout: 10m # time run: 3m

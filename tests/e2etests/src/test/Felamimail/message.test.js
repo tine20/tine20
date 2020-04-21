@@ -78,6 +78,7 @@ describe('message', () => {
         await popupWindow.waitForSelector('.x-grid3-row.x-grid3-row-first');
         await popupWindow.click('.x-grid3-row.x-grid3-row-first');
         await expect(popupWindow).toClick('button', {text: 'Ok'});
+        await popupWindow.close();
     });
 
     test('attachment file in filemanager', async () => {

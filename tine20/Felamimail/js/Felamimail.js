@@ -167,32 +167,32 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
 
         /**
          * returns sendfolder id
-         * -> needed as trash is saved as globname :(
          */
         Tine.Felamimail.Model.Account.prototype.getSendFolderId = function() {
-            var app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
-                sendName = this.get('sent_folder'),
-                accountId = this.id,
-                send = sendName ? app.getFolderStore().queryBy(function(record) {
-                    return record.get('account_id') === accountId && record.get('globalname') === sendName;
-                }, this).first() : null;
-
-            return send ? send.id : null;
+            return this.getSpecialFolderId('sent_folder');
         };
 
         /**
          * returns trashfolder id
-         * -> needed as trash is saved as globname :(
          */
         Tine.Felamimail.Model.Account.prototype.getTrashFolderId = function() {
-            var app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
-                trashName = this.get('trash_folder'),
+            return this.getSpecialFolderId('trash_folder');
+        };
+
+        /**
+         * returns special folder id
+         *
+         * @param {String} nameProperty
+         */
+        Tine.Felamimail.Model.Account.prototype.getSpecialFolderId = function(nameProperty) {
+            const app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
+                folderName = this.get(nameProperty),
                 accountId = this.id,
-                trash = trashName ? app.getFolderStore().queryBy(function(record) {
-                    return record.get('account_id') === accountId && record.get('globalname') === trashName;
+                folder = folderName ? app.getFolderStore().queryBy(function(record) {
+                    return record.get('account_id') === accountId && record.get('globalname') === folderName;
                 }, this).first() : null;
 
-            return trash ? trash.id : null;
+            return folder ? folder.id : null;
         };
 
         /**

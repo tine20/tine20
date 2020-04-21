@@ -391,10 +391,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * @param int $code
      */
-    protected function _handleFailure($code = 500)
+    protected function _handleFailure($code = Tinebase_Server_Abstract::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' HTTP request failed - code: ' . $code);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' HTTP request failed - code: ' . $code);
 
         Tinebase_Server_Abstract::setHttpHeader($code);
 

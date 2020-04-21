@@ -510,7 +510,10 @@ class Setup_Controller
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
 
-        $result = ['updated' => 0];
+        $result = [
+            'updated' => 0,
+            'updates' => [],
+        ];
         $iterationCount = 0;
         do {
             $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
@@ -536,6 +539,7 @@ class Setup_Controller
                         $functionName = $update[Setup_Update_Abstract::FUNCTION_CONST];
                         if (!isset($classes[$className])) {
                             $classes[$className] = new $className($this->_backend);
+                            $result['updates'][] = $className;
                         }
                         $class = $classes[$className];
 
@@ -1729,7 +1733,11 @@ class Setup_Controller
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
             } else {
-                $this->_installApplication($xml, $_options);
+                try {
+                    $this->_installApplication($xml, $_options);
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    Tinebase_Exception::log($tead);
+                }
             }
         }
 

@@ -106,15 +106,20 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
 
         if (!$this->_valueIsNull) {
             $this->_resolveForeignIds();
-            $ownIds = $this->_getOwnIds($ownModel);
+        }
 
+        $ownIds = $this->_getOwnIds($ownModel);
+        $notOperator = strpos($this->_operator, 'not') === 0;
+        if ($this->_valueIsNull) {
+            $notOperator = !$notOperator;
+        }
+        if (!$notOperator) {
             if (empty($ownIds)) {
                 $_select->where('1=0');
             } else {
                 $_select->where($db->quoteInto("$qField IN (?)", $ownIds));
             }
         } else {
-            $ownIds = $this->_getOwnIds($ownModel);
             if (empty($ownIds)) {
                 $_select->where('1=1');
             } else {

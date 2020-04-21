@@ -144,7 +144,10 @@ class Tinebase_FileSystem implements
             $this->_modLogActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
             $this->_indexingActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
             $this->_notificationActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
-            $this->_previewActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
+            $this->_previewActive = (
+                true === $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}
+                && Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_CREATE_PREVIEWS)
+            );
         }
 
         $this->_fileObjectBackend = new Tinebase_Tree_FileObject(null, array(
@@ -297,6 +300,14 @@ class Tinebase_FileSystem implements
         }
 
         return $this->_treeNodeBackend;
+    }
+
+    public function repairAclOfNode($nodeId, $aclNode)
+    {
+        $node = $this->get($nodeId, true);
+        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $aclNode, $node->acl_node, true, true);
+        $node->acl_node = $aclNode;
+        $this->_getTreeNodeBackend()->update($node);
     }
 
     /**

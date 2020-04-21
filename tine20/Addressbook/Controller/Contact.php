@@ -33,6 +33,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected $_setGeoDataForContacts = FALSE;
 
+    protected $_addressFields = [];
+
     /**
      * configured syncBackends
      *
@@ -1214,6 +1216,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->inspectAddUser($_updatedUser, $_newUserProperties);
             return;
         }
+
+        // $_updatedUser is the result of user sql backend load -> lacks "virtual" property container_id
+        $_updatedUser->container_id = $_newUserProperties->container_id;
 
         // update base information
         $contact = Tinebase_User::user2Contact($_updatedUser, clone $oldContact);
