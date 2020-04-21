@@ -1508,6 +1508,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
 
+        const activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
+
         return {
             border: false,
             frame: true,
@@ -1532,8 +1534,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             ref: '../../massMailingInfoText',
                             padding: '2px',
                             height: 20
-                        },
-                        {
+                        }, {
                             // message file info text
                             cls: 'felamimail-compose-info',
                             hidden: true,
@@ -1552,7 +1553,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             ref: '../../replyToField',
                             hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('showReplyTo'),
                             emptyText: this.app.i18n._('Add email address here for reply-to'),
-                            value: Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount().get('reply_to') // reply-to from account or email
+                            // reply-to from account or email
+                            value: activeAccount ? activeAccount.get('reply_to') : ''
                         },
                         this.recipientGrid,
                         {
