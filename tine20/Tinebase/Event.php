@@ -47,6 +47,10 @@ class Tinebase_Event
             } catch (Tinebase_Exception_NotFound $e) {
                 // application has no controller or is not useable at all
                 continue;
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . ' ' . __LINE__ . ' Access denied to app ' . $application->name);
+                continue;
             }
             if ($controller instanceof Tinebase_Event_Interface) {
                 static::$history[$historyOffset][$application->getId()] = true;
