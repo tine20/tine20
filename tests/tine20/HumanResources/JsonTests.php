@@ -321,7 +321,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $nextMonth->addMonth(1); 
         
         $fcId = $this->_getFeastCalendar();
-        
+
+        $wtscheme = $this->_getWorkingTimeScheme40();
+        self::assertNotNull($wtscheme);
         $contracts = array(array(
             'start_date' => clone $sdate,
             'end_date'   => clone $edate,
@@ -329,7 +331,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'feast_calendar_id' => $fcId,
             'creation_time' => $now,
             'id' => 1234567891,
-            'working_time_scheme' => $this->_getWorkingTimeScheme40()->getId(),
+            'working_time_scheme' =>$wtscheme->getId(),
         ));
         
         $sdate->addMonth(1);
@@ -342,7 +344,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'feast_calendar_id' => $fcId,
             'creation_time' => $now,
             'id' => 1234567890,
-            'working_time_scheme' => $this->_getWorkingTimeScheme40()->getId(),
+            'working_time_scheme' => $wtscheme->getId(),
         );
         
         $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName)->toArray();
@@ -379,7 +381,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'feast_calendar_id' => $fcId,
             'creation_time' => $now->toString(),
             'number' => 1,
-            'working_time_scheme' => $this->_getWorkingTimeScheme40()->getId(),
+            'working_time_scheme' => $wtscheme->getId(),
         );
         
         // doing this manually, this won't be the last assertion, and more assertions are needed
@@ -406,7 +408,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'vacation_days' => 22,
             'feast_calendar_id' => $fcId,
             'creation_time' => $now->toString(),
-            'working_time_scheme' => $this->_getWorkingTimeScheme40()->getId(),
+            'working_time_scheme' => $wtscheme->getId(),
         );
 
         try {
@@ -620,8 +622,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'days_count' => 3
         );
         
-        $refdate = clone $referenceDate;
-        
         $freetime['freedays'] = array(
             array('duration' => '1', 'date' => $referenceDate->toString()),
             array('duration' => '1', 'date' => $referenceDate->addDay(1)->toString()),
@@ -728,23 +728,23 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      *      https://forge.tine20.org/mantisbt/view.php?id=9168
      * @group nogitlabci
      */
-    public function testFirstAndLastDayOfFreetime() {
+    public function testFirstAndLastDayOfFreetime()
+    {
         $employmentBegin  = new Tinebase_DateTime('2012-12-15');
         $employmentEnd    = new Tinebase_DateTime('2014-06-30');
     
-        $referenceDate = new Tinebase_DateTime('2013-10-10');
-        
-        $contractController = HumanResources_Controller_Contract::getInstance();
         $employeeController = HumanResources_Controller_Employee::getInstance();
-        $contractBackend = new HumanResources_Backend_Contract();
-    
+
         $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         $employee->employment_begin = $employmentBegin;
         $employee->employment_end = $employmentEnd;
+
+        $wtscheme = $this->_getWorkingTimeScheme40();
+        self::assertNotNull($wtscheme);
         
         $contract1 = $this->_getContract();
         $contract1->start_date = $employmentBegin;
-        $contract1->working_time_scheme = $this->_getWorkingTimeScheme40()->getId();
+        $contract1->working_time_scheme = $wtscheme->getId();
         $contract1->vacation_days = 25;
         
         $rs = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
@@ -965,14 +965,17 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employeeJson = $this->_json->saveEmployee($employeeJson);
         
         $this->assertEquals(1, count($employeeJson['vacation']));
-        
+
+        $wtscheme = $this->_getWorkingTimeScheme40();
+        self::assertNotNull($wtscheme);
+
         // manually set the end date and add a new contract
         $employeeJson['contracts'][0]['end_date'] = '2013-05-31 00:00:00';
         $employeeJson['contracts'][1] = array(
             'start_date' => '2013-06-01 00:00:00',
             'vacation_days' => 27,
             'feast_calendar_id' => $feastCalendar->getId(),
-            'working_time_scheme' => $this->_getWorkingTimeScheme40()->getId(),
+            'working_time_scheme' => $wtscheme->getId(),
         );
         
         // no exception should be thrown
