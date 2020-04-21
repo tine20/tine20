@@ -138,6 +138,18 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(($testFolder->is_selectable == 1));
     }
 
+    public function testCreateDuplicateFolders()
+    {
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test';
+        Felamimail_Controller_Folder::getInstance()->create($this->_account->getId(), 'test', 'INBOX');
+        try {
+            Felamimail_Controller_Folder::getInstance()->create($this->_account->getId(), 'test', 'INBOX');
+            self::fail('exception expected for duplicate folders');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            self::assertEquals('Folder with this name already exists!', $tesg->getMessage());
+        }
+    }
+
     /**
      * rename mail folder
      */

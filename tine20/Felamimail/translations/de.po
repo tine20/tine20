@@ -1694,6 +1694,12 @@ msgstr "E-Mail Aktualisierungsintervall"
 msgid "How often should Felamimail check for new Emails (in minutes)."
 msgstr "Wie oft Felamimail nach neuen E-Mails schauen soll (in Minuten)."
 
+msgid "Folder with this name already exists!"
+msgstr "Ordner mit dem Namen ist bereits vorhanden!"
+
+msgid "Failure on create folder"
+msgstr "Fehler beim anlegen des Ordners"
+
 #: Preference.php:131
 msgid "Use for mailto links"
 msgstr "Für mailto: Verweise verwenden"

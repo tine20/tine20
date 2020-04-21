@@ -253,8 +253,16 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             if ($folder === NULL) {
                 throw new Felamimail_Exception_IMAPServiceUnavailable($zmse->getMessage());
             }
+
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            $nodeExistException = new Tinebase_Exception_SystemGeneric($translation->translate('Folder with this name already exists!'));
+            $nodeExistException->setTitle($translation->translate('Failure on create folder'));
+
+            if($nodeExistException) {
+                throw $nodeExistException;
+            }
         }
-        
+
         // update parent (has_children)
         $this->_updateHasChildren($_accountId, $_parentFolder, 1);
         

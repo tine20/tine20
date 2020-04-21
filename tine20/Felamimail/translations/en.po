@@ -1768,6 +1768,12 @@ msgstr "Show confirmation dialog when deleting mails."
 msgid ".eml file Attachment in forwarded mails"
 msgstr ".eml file Attachment in forwarded mails"
 
+msgid "Folder with this name already exists!"
+msgstr "Folder with this name already exists!"
+
+msgid "Failure on create folder"
+msgstr "Failure on create folder"
+
 #: Preference.php:144
 msgid ""
 "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
