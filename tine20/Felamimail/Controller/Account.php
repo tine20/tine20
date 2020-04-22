@@ -1563,7 +1563,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $systemAccount->user = $emailUser->getEmailUserName($_user);
         $systemAccount->password = $pwd;
 
-        if ($this->_doAutocreateFolders($pwd)) { {
+        if ($this->_doAutocreateFolders($pwd)) {
             $this->_autoCreateSystemAccountFolders($systemAccount);
         }
 
