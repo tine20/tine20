@@ -1176,6 +1176,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * add system account with tine user credentials
      *
      * @param Tinebase_Model_FullUser
+     * @param string $pwd
      * @return Felamimail_Model_Account|null
      */
     public function addSystemAccount(Tinebase_Model_FullUser $_account, $pwd)
@@ -1221,8 +1222,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 return null;
             }
 
-            if (Felamimail_Config::getInstance()
-                    ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
+            if ($this->_doAutocreateFolders($pwd)) {
                 $emailUser = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
                 $systemAccount->user = $emailUser->_getEmailUserName($_account);
                 $systemAccount->password = $pwd;
@@ -1247,6 +1247,20 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         return null;
+    }
+
+    /**
+     * do we auto-create folders?
+     *
+     * @param $pwd
+     * @return bool
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _doAutocreateFolders($pwd)
+    {
+        return ! empty($pwd) && Felamimail_Config::getInstance()
+            ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS);
     }
     
     /**
