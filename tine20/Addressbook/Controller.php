@@ -147,7 +147,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
 
     protected function _handleContainerBeforeCreateEvent(Tinebase_Event_Container_BeforeCreate $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . ' ' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
             . ' about to handle Tinebase_Event_Container_BeforeCreate' );
 
         if ($_eventObject->container &&

@@ -11,6 +11,7 @@
 /**
  * @package     Tasks
  * @subpackage  Frontend
+ * @todo fix namespace - move to Tasks/Frontend/CalDAV ?
  */
 class Tasks_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBackend
 {

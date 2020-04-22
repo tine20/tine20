@@ -28,8 +28,6 @@ class Phone_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        $update9 = new Phone_Setup_Update_Release9($this->_backend);
-        $update9->update_2();
         $this->setApplicationVersion('Phone', '10.2');
     }
 
