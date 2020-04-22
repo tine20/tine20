@@ -4,14 +4,17 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
- * Test class for Calendar_Backend_Sql
+ * abstract Test class for server tests
  * 
  * @package     Tests
+ *
+ * @todo we should extend a generic TestCase class to prevent code duplication
+ *       NOTE: currently it's not possible to just extend TestCase (because of TestHelper include)
  */
 abstract class ServerTestCase extends PHPUnit_Framework_TestCase
 {
@@ -24,7 +27,14 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
      * @var string
      */
     protected $_transactionId = null;
-    
+
+    /**
+     * usernames to be deleted (in sync backend)
+     *
+     * @var array
+     */
+    protected $_usernamesToDelete = array();
+
     /**
      * @var Zend_Config
      */
@@ -63,6 +73,10 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
+            $this->_deleteUsers();
+        }
+
         Zend_Session::$_unitTestEnabled = false;
         
         if ($this->_transactionId) {
@@ -126,5 +140,34 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
     {
         return Tinebase_Container::getInstance()
             ->getPersonalContainer($account, $recordClass, $account, Tinebase_Model_Grants::GRANT_ADMIN);
+    }
+
+    /**
+     * test needs transaction
+     */
+    protected function _testNeedsTransaction()
+    {
+        if ($this->_transactionId) {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = null;
+        }
+    }
+
+    /**
+     * delete users
+     */
+    protected function _deleteUsers()
+    {
+        foreach ($this->_usernamesToDelete as $username) {
+            try {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Trying to delete user: ' . $username);
+
+                Tinebase_User::getInstance()->deleteUser(Tinebase_User::getInstance()->getUserByLoginName($username));
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Error while deleting user: ' . $e->getMessage());
+            }
+        }
     }
 }
