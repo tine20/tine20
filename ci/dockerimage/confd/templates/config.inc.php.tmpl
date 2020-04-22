@@ -2,39 +2,34 @@
 
 return array(
     'buildtype' => '{{getv "/buildtype" "RELEASE"}}',
-    'confdfolder'       => '/tine/conf.d',
+    'confdfolder'       => '/etc/tine20/conf.d',
 
     'logger' => array (
         'active' => true,
         'filename' => 'php://stdout',
         'priority' => {{getv "/logger/priority" "5"}},
-        'additionalWriters' => array(array(
-            'active' => true,
-            'filename' => '/tine/logs/debug.log',
-            'priority' => '7',
-        ))
     ),
 
-    'filesdir'  => '{{getv "/filesdir" "/tine/files"}}',
-    'tmpdir' => '{{getv "/tmpdir" "/tine/tmp"}}',
+    'filesdir'  => '{{getv "/filesdir" "/var/lib/tine20/files"}}',
+    'tmpdir' => '{{getv "/tmpdir" "/var/lib/tine20/tmp"}}',
 
     'database' => array(
-        'host'          => '{{getv "/database/host" ""}}',
-        'dbname'        => '{{getv "/database/dbname" ""}}',
-        'username'      => '{{getv "/database/username" ""}}',
-        'password'      => '{{getv "/database/password" ""}}',
+        'host'          => '{{getv "/database/host"}}',
+        'dbname'        => '{{getv "/database/dbname"}}',
+        'username'      => '{{getv "/database/username"}}',
+        'password'      => '{{getv "/database/password"}}',
         'tableprefix'   => '{{getv "/database/tableprefix" "tine20_"}}',
         'adapter'       => '{{getv "/database/adapter" "pdo_mysql"}}',
     ),
 
     'setupuser' => array(
-        'username'      => '{{getv "/setupuser/username" "tine20setup"}}',
-        'password'      => '{{getv "/setupuser/password" "tine20setup"}}',
+        'username'      => '{{getv "/setupuser/username"}}',
+        'password'      => '{{getv "/setupuser/password"}}',
     ),
 
    'login' => array(
-       'username'      => '{{getv "/login/username" "tine20admin"}}',
-       'password'      => '{{getv "/login/password" "tine20admin"}}',
+       'username'      => '{{getv "/login/username"}}',
+       'password'      => '{{getv "/login/password"}}',
     ),
 
     'caching' => array (
@@ -46,16 +41,16 @@ return array(
            'port' => {{getv "/caching/redis/port" "6379"}},
            'prefix' => '{{getv "/caching/redis/prefix" "master"}}',
        ),
-       'path' => '{{getv "/caching/path" "/tine/caching"}}',
+       'path' => '{{getv "/caching/path" "/var/lib/tine20/caching"}}',
     ),
 
     'session' => array (
         'lifetime' => {{getv "/session/lifetime" "86400"}},
         'backend' => '{{getv "/session/backend" "File"}}',
-        'path' => '{{getv "/session/path" "/tine/sessions"}}',
+        'path' => '{{getv "/session/path" "/var/lib/tine20/sessions"}}',
         'host' => '{{getv "/session/host" ""}}',
         'port' => '{{getv "/session/port" "6379"}}',
     ),
 
-    'credentialCacheSharedKey' => '{{getv "/credentialcachesharedkey" "changeMeNow"}}',
+    'credentialCacheSharedKey' => '{{getv "/credentialcachesharedkey"}}',
 );
