@@ -1563,8 +1563,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $systemAccount->user = $emailUser->getEmailUserName($_user);
         $systemAccount->password = $pwd;
 
-        if (Felamimail_Config::getInstance()
-            ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
+        if ($this->_doAutocreateFolders($pwd)) { {
             $this->_autoCreateSystemAccountFolders($systemAccount);
         }
 
@@ -1582,7 +1581,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         return $systemAccount;
     }
-    
+
+    /**
+     * do we auto-create folders?
+     *
+     * @param $pwd
+     * @return bool
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _doAutocreateFolders($pwd)
+    {
+        return ! empty($pwd) && Felamimail_Config::getInstance()
+            ->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS);
+    }
+
     /**
      * add folder defaults
      * 
@@ -1658,7 +1671,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             Tinebase_Exception::log($e);
         }
     }
-    
+
     /**
      * returns email address used for the account by checking the user data and imap config
      * 
