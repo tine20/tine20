@@ -1729,6 +1729,12 @@ msgstr[1] "{0} ungelesene Nachrichten"
 msgid "All inboxes"
 msgstr "Alle Posteingänge"
 
+msgid "Default Font"
+msgstr "Standardschriftart"
+
+msgid "Setting the default font in the E-Mail app"
+msgstr "Einstellung für die Standardschriftart im der E-Mail-Modul"
+
 #: Preference.php:119
 msgid "Default Email Account"
 msgstr "Standard E-Mailkonto"
@@ -1814,11 +1820,11 @@ msgstr "Anhang (eines Datensatzes)"
 msgid "Save as Record Attachment"
 msgstr "Als Datensatz Anhang speichern"
 
-msgid "Default Font"
-msgstr "Standardschriftart"
+msgid "Folder with this name already exists!"
+msgstr "Ordner mit dem Namen ist bereits vorhanden!"
 
-msgid "Setting the default font in the E-Mail app"
-msgstr "Einstellung für die Standardschriftart im der E-Mail-Modul"
+msgid "Failure on create folder"
+msgstr "Fehler beim anlegen des Ordners"
 
 msgid ""
 "Convert this account to a shared account. Please set a new password for "
