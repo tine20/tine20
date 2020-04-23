@@ -74,8 +74,12 @@ class Felamimail_Controller_MessageTest extends TestCase
     {
         $this->_account = $this->_getTestUserFelamimailAccount();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
-        
-        $this->_folder = $this->getFolder($this->_testFolderName);
+
+        try {
+            $this->_folder = $this->getFolder($this->_testFolderName);
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            // ignore for the moment - folder cache might not be update2date
+        }
         try {
             $this->_imap->selectFolder($this->_testFolderName);
         } catch (Zend_Mail_Storage_Exception $zmse) {
