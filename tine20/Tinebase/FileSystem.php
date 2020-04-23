@@ -1153,7 +1153,7 @@ class Tinebase_FileSystem implements
             return true;
         }
         if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileObject->type) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' file object ' . $_objectId . ' is not a file: ' . $fileObject->type);
             return true;
         }
