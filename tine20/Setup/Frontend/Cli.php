@@ -170,13 +170,13 @@ class Setup_Frontend_Cli
         }
 
         $this->_promptRemainingOptions($applications, $options);
-        $controller->installApplications($applications, $options);
+        $appCount = $controller->installApplications($applications, $options);
         
         if ((isset($options['acceptedTermsVersion']) || array_key_exists('acceptedTermsVersion', $options))) {
             Setup_Controller::getInstance()->saveAcceptedTerms($options['acceptedTermsVersion']);
         }
         
-        echo "Successfully installed " . count($applications) . " applications.\n";
+        echo "Successfully installed " . count($appCount) . " applications.\n";
         return 0;
     }
 

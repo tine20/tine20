@@ -27,7 +27,10 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     
     /**
      * Override method: Setup needs additional initialisation
-     * 
+     *
+     * @param Tinebase_Model_Application $_application
+     * @param array $_options
+     *
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
      */
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
