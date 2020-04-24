@@ -1,6 +1,6 @@
 /**
  * Tine 2.0
- * 
+ *
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Martin Jatho <m.jatho@metaways.de>
@@ -87,12 +87,18 @@ table.x-btn.x-type-data-safe {
     background-repeat: no-repeat;
 }
 
+.revision-checkbox-field {
+    position: relative;
+}
+
 .revision-checkbox-field .x-form-check-wrap {
-    display: inline;
+    display: inline-block;
 }
 
 .revision-checkbox-field input:last-child {
     margin-left: 5px;
+    position: absolute;
+    top: 5px;
 }
 
 .revision-container {
