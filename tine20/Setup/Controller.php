@@ -1668,6 +1668,7 @@ class Setup_Controller
      *
      * @param array $_applications list of application names
      * @param array|null $_options
+     * @return integer
      */
     public function installApplications($_applications, $_options = null)
     {
@@ -1729,17 +1730,21 @@ class Setup_Controller
             Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
         }
 
+        $count = 0;
         foreach ($applications as $name => $xml) {
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
             } else {
                 $this->_installApplication($xml, $_options);
+                $count++;
             }
         }
 
         $this->clearCache();
 
         Tinebase_Event::reFireForNewApplications();
+
+        return $count;
     }
 
     public function setMaintenanceMode($options)
