@@ -72,7 +72,54 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(5, $rrule->bymonth, 'bymonth not normalized');
         $this->assertEquals(NULL, $rrule->bymonthday, 'bymonthday must not be added');
     }
-    
+
+    public function testDailyCountOneEvent()
+    {
+        $from = new Tinebase_DateTime('2011-04-18 00:00:00');
+        $until = new Tinebase_DateTime('2011-04-24 23:59:59');
+
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2011-04-19 14:00:00', // Tuesday
+            'dtend'         => '2011-04-19 15:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;COUNT=1',
+            'container_id'  => $this->_getTestCalendar()->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+
+        $persistentEvent = $this->_controller->create($event);
+        static::assertSame($persistentEvent->dtend->toString(), $persistentEvent->rrule_until->toString());
+        $events = new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$persistentEvent]);
+
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
+        static::assertEquals(1, count($events), 'there should only be 1 events in the set');
+    }
+
+    public function testWeeklyTwiceCountOneEvent()
+    {
+        $from = new Tinebase_DateTime('2011-04-18 00:00:00');
+        $until = new Tinebase_DateTime('2011-04-24 23:59:59');
+
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2011-04-19 14:00:00', // Tuesday
+            'dtend'         => '2011-04-19 15:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;WKST=SU;BYDAY=TU,TH;COUNT=1',
+            'container_id'  => $this->_getTestCalendar()->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+
+        $persistentEvent = $this->_controller->create($event);
+        $events = new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$persistentEvent]);
+
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
+        $this->assertEquals(1, count($events), 'there should only be 1 events in the set');
+    }
+
     public function testFirstInstanceException()
     {
         $from = new Tinebase_DateTime('2011-04-18 00:00:00');
