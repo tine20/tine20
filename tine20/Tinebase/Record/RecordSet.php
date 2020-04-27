@@ -543,7 +543,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * filter recordset and return subset
      *
-     * @param string $_field
+     * @param string|callable $_field
      * @param string $_value
      * @return Tinebase_Record_RecordSet
      */
@@ -551,9 +551,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         $matchingRecords = $this->_getMatchingRecords($_field, $_value, $_valueIsRegExp);
         
-        $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
-        
-        return $result;
+        return new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
     }
 
     /**

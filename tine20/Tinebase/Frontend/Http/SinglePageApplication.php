@@ -170,8 +170,6 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             Tinebase_Core::getLogger()->NOTICE(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') ' . $e);
         }
 
-
-
         return sha1(json_encode($map) . TINE20_BUILDTYPE);
     }
 }
