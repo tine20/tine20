@@ -186,9 +186,10 @@ class TestServer
      * 
      * @param string $command
      * @param bool   $addCredentials
+     * @param string $additionalParams
      * @return string
      */
-    public static function assembleCliCommand($command = "", $addCredentials = FALSE)
+    public static function assembleCliCommand($command = "", $addCredentials = FALSE, $additionalParams = null)
     {
         //$backtrace = debug_backtrace();
         //return $backtrace[1]['class'];
@@ -234,6 +235,10 @@ class TestServer
         if ($addCredentials) {
             $credentials = TestServer::getInstance()->getTestCredentials();
             $cmd .= " --username {$credentials['username']} --password {$credentials['password']}";
+        }
+
+        if ($additionalParams) {
+            $cmd .= " -- " . $additionalParams;
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Assembled commmand: ' . $cmd);

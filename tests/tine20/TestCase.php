@@ -1109,4 +1109,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             'dir'  => 'DESC',
         ]));
     }
+
+    protected function _importDemoData($app, $model, $definition)
+    {
+        $container = $this->_getTestContainer($app, $model);
+        $importer = new Tinebase_Setup_DemoData_Import($model, [
+            'container_id' => $container->getId(),
+            'definition' => $definition,
+        ]);
+        $importer->importDemodata();
+        return $container;
+    }
 }

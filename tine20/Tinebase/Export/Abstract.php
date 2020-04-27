@@ -117,13 +117,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_format = null;
 
     /**
-     * custom field names for this model
-     *
-     * @var array
-     */
-    protected $_customFieldNames = null;
-
-    /**
      * user fields to resolve
      *
      * @var array
@@ -1470,15 +1463,25 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     }
 
     /**
+     * NOTE: do we need this to be abstract? some exports might not need this - for example Calendar_Export_VCalendar
+     *       -> so I remove the "abstract" here
+     *
      * @param string $_key
      * @param string $_value
      */
-    abstract protected function _setValue($_key, $_value);
+    protected function _setValue($_key, $_value)
+    {
+    }
 
     /**
+     * NOTE: do we need this to be abstract? some exports might not need this - for example Calendar_Export_VCalendar
+     *       -> so I remove the "abstract" here
+     *
      * @param string $_value
      */
-    abstract protected function _writeValue($_value);
+    protected function _writeValue($_value)
+    {
+    }
 
     /**
      * @param mixed $_value
