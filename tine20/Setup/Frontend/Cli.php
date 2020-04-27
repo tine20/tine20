@@ -178,7 +178,7 @@ class Setup_Frontend_Cli
             Setup_Controller::getInstance()->saveAcceptedTerms($options['acceptedTermsVersion']);
         }
         
-        echo "Successfully installed " . count($appCount) . " applications.\n";
+        echo "Successfully installed " . $appCount . " applications.\n";
         return 0;
     }
 
