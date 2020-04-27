@@ -716,7 +716,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         $exceptionRecurIds = self::getExceptionsRecurIds($_event, $_exceptions);
         $recurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        
+
+        $_until = ($_event->rrule_until instanceof DateTime
+            && $_until->isLater($_event->rrule_until))
+            ? $_event->rrule_until
+            : $_until;
+
         switch ($rrule->freq) {
             case self::FREQ_DAILY:
                 
