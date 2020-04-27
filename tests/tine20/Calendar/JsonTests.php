@@ -505,6 +505,46 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $updatedEventData;
     }
 
+    public function testUpdateRecurEventComplexRule()
+    {
+        $eventData = $this->testCreateRecurEvent();
+        $eventData['rrule']['interval'] = 2;
+
+        $updatedEventData = $this->_uit->saveEvent($eventData);
+        static::assertArrayHasKey('rrule', $updatedEventData);
+        static::assertArrayHasKey('interval', $updatedEventData['rrule']);
+        static::assertEquals(2, $updatedEventData['rrule']['interval']);
+
+        $from = $updatedEventData['dtstart'];
+        $until = new Tinebase_DateTime($from);
+        $until->addDay(1);
+        $from = $until->toString();
+        $until->addWeek(3);
+        $until = $until->toString();
+
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
+            array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+        );
+
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        static::assertArrayHasKey('results', $searchResultData);
+        static::assertCount(1, $searchResultData['results']);
+
+        $newEvent = $searchResultData['results'][0];
+        $newEvent['id'] = 'fakeid' . $newEvent['id'];
+        $newEvent['seq'] = 1;
+        $dtstart = new Tinebase_DateTime($newEvent['dtstart']);
+        $dtstart->subDay(1);
+        $newEvent['dtstart'] = $dtstart->toString();
+        $dtend = new Tinebase_DateTime($newEvent['dtend']);
+        $dtend->subDay(1);
+        $newEvent['dtend'] = $dtend->toString();
+        $newEvent['rrule']['byday'] = 'TU';
+
+        $this->_uit->createRecurException($newEvent, false, true, false);
+    }
+
     /**
      * testCreateRecurEventYearly
      * 

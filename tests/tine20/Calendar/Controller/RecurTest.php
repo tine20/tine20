@@ -501,7 +501,39 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $updatedPersistentSClever = Calendar_Model_Attender::getAttendee($updatedPersistentEvent->attendee, $event->attendee[1]);
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedPersistentSClever->status, 'status must change');
     }
-    
+
+    protected function countTestCalendarEvents($from, $until, $expectedCount, $expectedRecurExceptions = null)
+    {
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
+            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until),
+            ))));
+
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
+        $dates = [];
+        $foundRecurExceptions = 0;
+        /** @var Calendar_Model_Event $event */
+        foreach ($events as $event) {
+            if ($event->isRecurException() && strpos($event->getId(), 'fakeid') !== 0) {
+                ++$foundRecurExceptions;
+                $date = $event->getOriginalDtStart()->format('Y-m-d');
+            } else {
+                $date = $event->dtstart->format('Y-m-d');
+            }
+            if (!isset($dates[$date])) {
+                $dates[$date] = [];
+            }
+            $dates[$date][] = [$event->dtstart->toString(), $event->uid];
+        }
+        ksort($dates);
+        static::assertSame($expectedCount, count($events), 'there should be exactly ' . $expectedCount . ' events' . print_r($dates, true));
+        if (null !== $expectedRecurExceptions) {
+            static::assertSame($expectedRecurExceptions, $foundRecurExceptions, print_r($dates, true));
+        }
+
+        return $events;
+    }
+
     public function testCreateRecurExceptionAllFollowingGeneral()
     {
         $from = new Tinebase_DateTime('2011-04-21 00:00:00');
@@ -529,24 +561,32 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
 
         $recurSet[6]->dtstart->subDay(6);
         $recurSet[6]->dtend->subDay(6);
-        
+
+        $this->countTestCalendarEvents($from, $until, 8);
         $this->_controller->createRecurException($recurSet[1], TRUE);  // (23) delete instance
+        $this->countTestCalendarEvents($from, $until, 7);
         
         $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[2]);
+        static::assertCount(1, $updatedBaseEvent->exdate);
         $recurSet[2]->last_modified_time = $updatedBaseEvent->last_modified_time;
-        $this->_controller->createRecurException($recurSet[2], FALSE); // (24) move instance
+        $this->_controller->createRecurException($recurSet[2], FALSE); // (24) only summary update
         
         $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[4]);
+        static::assertCount(2, $updatedBaseEvent->exdate);
         $recurSet[4]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_controller->createRecurException($recurSet[4], TRUE);  // (26) delete instance
+        $this->countTestCalendarEvents($from, $until, 6);
         
         $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[5]);
+        static::assertCount(3, $updatedBaseEvent->exdate);
         $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_controller->createRecurException($recurSet[5], FALSE); // (27) move instance
 
         $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[6]);
+        static::assertCount(4, $updatedBaseEvent->exdate);
         $recurSet[6]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_controller->createRecurException($recurSet[6], FALSE); // (28) move instance to 22
+        $this->countTestCalendarEvents($from, $until, 6);
         
         // now test update allfollowing
         $recurSet[3]->summary = 'Spezi bei Schwinske';
@@ -554,16 +594,12 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $recurSet[3]->dtend->addHour(4);
         
         $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[3]);
+        static::assertCount(5, $updatedBaseEvent->exdate);
         $recurSet[3]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $newBaseEvent = $this->_controller->createRecurException($recurSet[3], FALSE, TRUE); // split at 25
-        
-        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
-            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until),
-        ))));
-        
-        Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
-        $this->assertEquals(6, count($events), 'there should be exactly 6 events');
+        $updatedBaseEvent = $this->_controller->get($updatedBaseEvent->getId());
+        static::assertCount(2, $updatedBaseEvent->exdate);
+        $events = $this->countTestCalendarEvents($from, $until, 6);
         
         $oldSeries = $events->filter('uid', $persistentEvent->uid);
         $newSeries = $events->filter('uid', $newBaseEvent->uid);
@@ -636,14 +672,44 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
         static::assertEquals('2015-07-03 11:00:00', $recurSet->getFirstRecord()->dtstart);
 
+        // delete Friday 10.07.2015
+        $this->_controller->createRecurException($recurSet[2], true);
+        $updatedBaseEvent = $this->_controller->get($persistentEvent->getId());
+        static::assertCount(1, $updatedBaseEvent->exdate);
+
+        // delete Tuesday 14.07.2015
+        $recurSet[3]->last_modified_time = $updatedBaseEvent->last_modified_time;
+        $this->_controller->createRecurException($recurSet[3], true);
+        $updatedBaseEvent = $this->_controller->get($persistentEvent->getId());
+        static::assertCount(2, $updatedBaseEvent->exdate);
+
+        // alter Friday 17.07.2015
+        $recurSet[4]->last_modified_time = $updatedBaseEvent->last_modified_time;
+        $recurSet[4]->dtstart->addMinute(1);
+        $this->_controller->createRecurException($recurSet[4]);
+        $updatedBaseEvent = $this->_controller->get($persistentEvent->getId());
+        static::assertCount(3, $updatedBaseEvent->exdate);
+
+        // alter Tuesday 21.07.2015
+        $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
+        $recurSet[5]->dtstart->addMinute(2);
+        $this->_controller->createRecurException($recurSet[5]);
+        $updatedBaseEvent = $this->_controller->get($persistentEvent->getId());
+        static::assertCount(4, $updatedBaseEvent->exdate);
+
+        $recurSet[1]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[1]->dtstart->addDay(1);
         $recurSet[1]->dtend->addDay(1);
+        $recurSet[1]->exdate = $updatedBaseEvent->exdate;
         $newBaseEvent = $this->_controller->createRecurException($recurSet[1], FALSE, TRUE);
         static::assertEquals('2015-07-08 11:00:00', $newBaseEvent->dtstart);
         static::assertEquals('WE,FR', $newBaseEvent->rrule->byday);
+        static::assertCount(2, $newBaseEvent->exdate);
+        $this->countTestCalendarEvents($newBaseEvent->dtstart, new Tinebase_DateTime('2015-07-22 14:00:00'), 4, 1);
 
         $oldBaseEvent = $this->_controller->get($persistentEvent->getId());
         static::assertEquals('2015-07-07 10:59:59', $oldBaseEvent->rrule->until);
+        static::assertEmpty($oldBaseEvent->exdate);
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $oldRecurSet = Calendar_Model_Rrule::computeRecurrenceSet($oldBaseEvent, $exceptions, $from, $until);
 
