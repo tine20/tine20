@@ -168,13 +168,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         } else {
             $username = $_username;
         }
-
-        // iOS devices send passwords in iso-8859-1
-        // @see https://stackoverflow.com/questions/7242316/what-encoding-should-i-use-for-http-basic-authentication
-        if (Tinebase_Auth::getInstance()->authenticate($username, $_password)->getCode() !== Tinebase_Auth::SUCCESS) {
-            $_password = utf8_encode($_password);
-        }
-
+        
         return Tinebase_Controller::getInstance()->login(
             $username,
             $_password,
