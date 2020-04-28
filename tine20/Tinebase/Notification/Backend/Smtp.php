@@ -120,9 +120,13 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
             try {
                 Tinebase_Smtp::getInstance()->sendMessage($mail);
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                // TODO check Felamimail - there is a similar error handling. should be generalized!
                 if (preg_match('/^5\.1\.1/', $zmpe->getMessage())) {
                     // User unknown in virtual mailbox table
-                    // TODO check Felamimail - there is a similar error handling. should be generalized!
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
+                } else if (preg_match('/^5\.1\.3/', $zmpe->getMessage())) {
+                    // Bad recipient address syntax
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                         __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
                 } else {
