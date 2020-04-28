@@ -246,9 +246,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             $_path = $this->flatpath;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Parsing path: ' . $_path);
-        
         $pathParts = $this->_getPathParts($_path);
         
         $this->name                 = $pathParts[count($pathParts) - 1];
@@ -364,12 +361,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             }
             $this->flatpath = '/' . implode('/', $pathParts);
         }
-        $result = $this->_createStatPathFromParts($pathParts);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Path to stat: ' . $result);
-        
-        return $result;
+        return $this->_createStatPathFromParts($pathParts);
     }
     
     /**
@@ -380,8 +372,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _createStatPathFromParts($pathParts)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($pathParts, TRUE));
-        
         if (count($pathParts) > 3) {
             // replace account login name with id
             if ($this->containerOwner) {
