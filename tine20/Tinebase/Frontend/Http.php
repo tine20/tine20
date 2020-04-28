@@ -391,7 +391,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') $clientETag: ' . $clientETag);
 
-        $serverETag = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
+        $serverETag = md5(implode('', array_map(function($fileName) {
+            return file_exists($fileName) ? md5_file($fileName) : '';
+        }, $filesToWatch)));
 
         if ($clientETag == $serverETag) {
             header("HTTP/1.0 304 Not Modified");
@@ -415,9 +417,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 }
             }
             if ($_fileType != 'lang') {
-                // adds new server version etag for client version check
+                // adds assetHash for client version check
+                $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
                 echo "Tine = Tine || {}; Tine.clientVersion = Tine.clientVersion || {};";
-                echo "Tine.clientVersion.assetHash = '$serverETag';";
+                echo "Tine.clientVersion.assetHash = '$assetHash';";
             }
         }
     }
