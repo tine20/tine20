@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -125,7 +125,42 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $result = $converter->fromTine20RecordSet($result);
         print $result->serialize();
     }
-    
+
+    /**
+     * exports calendars as ICS
+     *
+     * @param $_opts
+     * @return boolean
+     */
+    public function exportVCalendar($_opts)
+    {
+        $this->_checkAdminRight();
+
+        $args = $this->_parseArgs($_opts);
+
+        // @todo implement
+        //   - allow to export all calendars of a user (create zip)
+        //   - allow to export all personal calendars (create zip)
+        //   - allow to export all shared calendars (create zip)
+
+        // @todo implement
+        //   - have param for output file(s)
+
+        if (isset($args['container_id'])) {
+            $containers = explode(',', $args['container_id']);
+            foreach ($containers as $containerId) {
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class,
+                [
+                    ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId]
+                ]);
+                $export = new Calendar_Export_VCalendar($filter);
+                $export->generate();
+            }
+        }
+
+        return 0;
+    }
+
     /**
      * delete duplicate events
      *  - allowed params:
@@ -806,7 +841,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                                     $tine20Event->alarms = $alarmsToSet;
                                     // TODO make this public - atm this needs to be done by hand
-                                    Calendar_Controller_Event::getInstance()->_saveAlarms($tine20Event);
+                                    // Calendar_Controller_Event::getInstance()->_saveAlarms($tine20Event);
                                 }
                             }
                         } else if (count($existingEvents) > 1) {

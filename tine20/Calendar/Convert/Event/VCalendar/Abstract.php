@@ -74,30 +74,24 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     }
 
     /**
-     * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
-     *
-     * @param  Tinebase_Record_RecordSet  $_records
-     * @return Sabre\VObject\Component
+     * @param Tinebase_Record_Interface $_record
+     * @return \Sabre\VObject\Component\VCalendar
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    public function createVCalendar(Tinebase_Record_Interface $_record)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Events: ' . print_r($_records->toArray(), true));
-        
         // required vcalendar fields
         $version = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->version;
-        
+
         $vcalendar = new \Sabre\VObject\Component\VCalendar(array(
             'PRODID'   => "-//tine20.com//Tine 2.0 Calendar V$version//EN",
             'VERSION'  => '2.0',
             'CALSCALE' => 'GREGORIAN'
         ));
-        
-        if (isset($this->_method)) {
-            $vcalendar->add('METHOD', $this->_method);
-        }
-        
-        $originatorTz = $_records->getFirstRecord() ? $_records->getFirstRecord()->originator_tz : NULL;
+
+        $originatorTz = $_record ? $_record->originator_tz : NULL;
         if (empty($originatorTz)) {
             throw new Tinebase_Exception_Record_Validation('originator_tz needed for conversion to Sabre\VObject\Component');
         }
@@ -108,27 +102,50 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             Tinebase_Exception::log($e);
             throw new Tinebase_Exception_Record_Validation('Bad Timezone: ' . $originatorTz);
         }
-        
-        foreach ($_records as $_record) {
-            $this->_convertCalendarModelEvent($vcalendar, $_record);
-            
-            if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
-                $_record->exdate->addIndices(array('is_deleted'));
-                $eventExceptions = $_record->exdate->filter('is_deleted', false);
-                
-                foreach ($eventExceptions as $eventException) {
-                    $this->_convertCalendarModelEvent($vcalendar, $eventException, $_record);
-                }
-                
-            }
+
+        if (isset($this->_method)) {
+            $vcalendar->add('METHOD', $this->_method);
+        }
+
+        return $vcalendar;
+    }
+
+    /**
+     * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
+     *
+     * @param  Tinebase_Record_RecordSet  $_records
+     * @return Sabre\VObject\Component
+     */
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    {
+        $vcalendar = $this->createVCalendar($_records->getFirstRecord());
+
+        foreach ($_records as $record) {
+            $this->addEventToVCalendar($vcalendar, $record);
         }
         
         $this->_afterFromTine20Model($vcalendar);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' card ' . $vcalendar->serialize());
-        
         return $vcalendar;
+    }
+
+    /**
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
+     * @param Calendar_Model_Event $event
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function addEventToVCalendar(\Sabre\VObject\Component\VCalendar $vcalendar, Calendar_Model_Event $event)
+    {
+        $this->_convertCalendarModelEvent($vcalendar, $event);
+
+        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            $event->exdate->addIndices(array('is_deleted'));
+            $eventExceptions = $event->exdate->filter('is_deleted', false);
+
+            foreach ($eventExceptions as $eventException) {
+                $this->_convertCalendarModelEvent($vcalendar, $eventException, $event);
+            }
+        }
     }
 
     /**

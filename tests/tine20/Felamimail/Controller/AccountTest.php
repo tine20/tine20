@@ -478,6 +478,22 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         ]);
         self::assertEquals(5, $folders['totalcount'], 'should find 5 initial folders. got: '
             . print_r($folders, true));
+
+        return $result['results'][0];
+    }
+
+    public function testDeleteUserDeletesAccounts()
+    {
+        $accountArray = $this->testCreateNewUserAccountWithINBOX();
+        Tinebase_Core::setUser($this->_originalTestUser);
+        Admin_Controller_User::getInstance()->delete($accountArray['user_id']['accountId']);
+        $accountBackend = new Felamimail_Backend_Account();
+        try {
+            $accountBackend->get($accountArray['id']);
+            self::fail('account should be deleted: ' . print_r($accountArray, true));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::assertContains('Felamimail_Model_Account record with id', $tenf->getMessage());
+        }
     }
 
     public function testConvertAccountsToSaveUserIdInXprops()
