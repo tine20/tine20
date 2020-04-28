@@ -372,19 +372,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         switch ($part->type) {
             case Felamimail_Model_Message::CONTENT_TYPE_CALENDAR:
-                if (!version_compare(PHP_VERSION, '5.3.0', '>=')) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __METHOD__ . '::' . __LINE__ . ' PHP 5.3+ is needed for vcalendar support.');
-                    return NULL;
+                try {
+                    $partData = new Calendar_Model_iMIP(array(
+                        'id' => $_message->getId() . '_' . $_partId,
+                        'ics' => $decodedContent,
+                        'method' => (isset($parameters['method'])) ? $parameters['method'] : NULL,
+                        'originator' => $_message->from_email,
+                        'userAgent' => $userAgent,
+                    ));
+                } catch (Tinebase_Exception_Record_Validation $terv) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' Could not create iMIP: ' . $terv->getMessage());
+                    $partData = NULL;
                 }
-
-                $partData = new Calendar_Model_iMIP(array(
-                    'id' => $_message->getId() . '_' . $_partId,
-                    'ics' => $decodedContent,
-                    'method' => (isset($parameters['method'])) ? $parameters['method'] : NULL,
-                    'originator' => $_message->from_email,
-                    'userAgent' => $userAgent,
-                ));
                 break;
             default:
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
