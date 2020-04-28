@@ -514,6 +514,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             echo "\nCleaning notes...";
             $this->cleanNotes($_opts);
+
+            echo "\nCleaning files...";
+            $this->clearDeletedFiles();
         }
 
         echo "\n\n";
