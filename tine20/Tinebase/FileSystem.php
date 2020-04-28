@@ -6,7 +6,7 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -1917,7 +1917,7 @@ class Tinebase_FileSystem implements
         }
     }
 
-    protected function _isPreviewActive()
+    public function isPreviewActive()
     {
         if ($this->_previewActive === null) {
             $this->_previewActive = true ===
@@ -1950,7 +1950,7 @@ class Tinebase_FileSystem implements
 
             $this->_getTreeNodeBackend()->softDelete($node->getId());
 
-            if (false === $this->_modLogActive && $this->_isPreviewActive()) {
+            if (false === $this->_modLogActive && $this->isPreviewActive()) {
                 $hashes = $this->_fileObjectBackend->getHashes(array($node->object_id));
             } else {
                 $hashes = array();
@@ -1960,7 +1960,7 @@ class Tinebase_FileSystem implements
                 if (true === $this->_indexingActive) {
                     Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($node->object_id);
                 }
-                if ($this->_isPreviewActive()) {
+                if ($this->isPreviewActive()) {
                     $existingHashes = $this->_fileObjectBackend->checkRevisions($hashes);
                     $hashesToDelete = array_diff($hashes, $existingHashes);
                     Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
@@ -2740,7 +2740,7 @@ class Tinebase_FileSystem implements
             return $count;
         }
 
-        if ($this->_isPreviewActive()) {
+        if ($this->isPreviewActive()) {
             Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
         }
 
@@ -3523,7 +3523,7 @@ class Tinebase_FileSystem implements
     {
         $status = ['missing' => 0, 'created' => 0, 'missing_files' => []];
 
-        if (! $this->_isPreviewActive()) {
+        if (! $this->isPreviewActive()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
             return $status;
         }
@@ -3593,7 +3593,7 @@ class Tinebase_FileSystem implements
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' starting to sanitize previews');
 
-        if (! $this->_isPreviewActive()) {
+        if (! $this->isPreviewActive()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
             return true;
         }
