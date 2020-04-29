@@ -46,10 +46,27 @@ class Admin_Config extends Tinebase_Config_Abstract
     const FEATURE_EMAIL_ACCOUNTS = 'featureEmailAccounts';
 
     /**
+     * DEFAULT_PASSWORD_MUST_CHANGE
+     * @var boolean
+     */
+    const DEFAULT_PASSWORD_MUST_CHANGE = 'defaultPasswordMustChange';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::DEFAULT_PASSWORD_MUST_CHANGE => [
+            //_('Default password must change for new user settings')
+            'label'                 => 'Default password must change for new user settings',
+            //_('Default password must change for new user settings')
+            'description'           => 'Default password must change for new user settings',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
+            'default'               => false
+        ],
         self::DEFAULT_IMAP_USER_SETTINGS => array(
                                    //_('Default IMAP user settings')
             'label'                 => 'Default IMAP user settings',

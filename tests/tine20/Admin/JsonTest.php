@@ -202,12 +202,19 @@ class Admin_JsonTest extends TestCase
 
         $accountData = $this->_getUserArrayWithPw(true);
         $account = $this->_createUser($accountData);
+        $account =$this->_json->getUser($account['accountId']);
         self::assertTrue(isset($account['password_must_change']), 'property not set in account');
         self::assertEquals(1, $account['password_must_change']);
         $credentials = TestServer::getInstance()->getTestCredentials();
         $this->_json->resetPassword($account, $credentials['password'], 0);
-        $account =$this->_json->getUser($account['accountId']);
+        $account = $this->_json->getUser($account['accountId']);
         self::assertEquals(0, $account['password_must_change']);
+        $account['password_must_change'] = 1;
+        $account['accountPassword'] = $credentials['password'];
+        $account['groups'] = array(Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(), $account['groups']['results'][0]['id']);
+        $this->_json->saveUser($account);
+        $updatedAccount =$this->_json->getUser($account['accountId']);
+        self::assertEquals(1, $updatedAccount['password_must_change']);
     }
 
     /**

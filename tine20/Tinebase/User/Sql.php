@@ -492,7 +492,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($userId);
         $this->checkPasswordPolicy($_password, $user);
 
-        $accountData = $this->_updatePasswordProperty($userId, $_password, 'password', $_encrypt);
+        $accountData = $this->_updatePasswordProperty($userId, $_password, 'password', $_encrypt, $_mustChange);
         $this->_setPluginsPassword($userId, $_password, $_encrypt);
 
         $accountData['id'] = $userId;
@@ -505,11 +505,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param        $_userId
      * @param        $_password
      * @param string $_property
-     * @param boolean  $_encrypt
+     * @param boolean $_encrypt
+     * @param boolean|null $_mustChange user needs to change pw next time
      * @return array $accountData
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _updatePasswordProperty($_userId, $_password, $_property = 'password', $_encrypt = true)
+    protected function _updatePasswordProperty($_userId, $_password, $_property = 'password', $_encrypt = true, $_mustChange = null)
     {
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . $this->_tableName));
 
@@ -522,7 +523,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY});
             }
             $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
-            $accountData['password_must_change'] = 0;
+            $accountData['password_must_change'] = $_mustChange ? 1 : 0;
         }
 
         $where = array(
