@@ -72,7 +72,7 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             // the exception can use logToSentry and logLevelMethod properties to achieve desired logging
             // default is false (no sentry) and info log level
             Tinebase_Exception::log($teeh);
-            $response = new Response($body = 'php://memory', $teeh->getCode, $teeh->getMessage());
+            $response = new Response($body = 'php://memory', $teeh->getCode());
         } catch (Exception $e) {
             Tinebase_Exception::log($e, false);
             $response = new Response($body = 'php://memory', 500);
