@@ -1,6 +1,5 @@
 const expect = require('expect-puppeteer');
 const lib = require('../lib/browser');
-const help = require('../lib/helper');
 require('dotenv').config();
 
 describe('login', () => {
