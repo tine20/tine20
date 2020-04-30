@@ -1738,3 +1738,9 @@ msgstr ""
 msgid ""
 "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr ""
+
+msgid "Folder with this name already exists!"
+msgstr ""
+
+msgid "Failure on create folder"
+msgstr ""

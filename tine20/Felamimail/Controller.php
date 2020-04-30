@@ -78,7 +78,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()
-            ->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+            ->debug(__METHOD__ . '::' . __LINE__ . ' Handle event of type ' . get_class($_eventObject));
         
         switch (get_class($_eventObject)) {
             case Tinebase_Event_User_ChangeCredentialCache::class:
@@ -100,6 +100,21 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                     ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
                     Felamimail_Controller_Account::getInstance()->updateSystemAccount(
                         $_eventObject->account, $_eventObject->oldAccount);
+                }
+                break;
+            case Admin_Event_BeforeDeleteAccount::class:
+                /** @var Admin_Event_BeforeDeleteAccount $_eventObject */
+                if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
+                    ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
+                    try {
+                        $systemAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($_eventObject->account);
+                        if ($systemAccount) {
+                            Admin_Controller_EmailAccount::getInstance()->delete($systemAccount->getId());
+                        }
+                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()
+                            ->warn(__METHOD__ . '::' . __LINE__ . ' Could not delete system account: ' . $tead->getMessage());
+                    }
                 }
                 break;
         }
@@ -133,7 +148,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
         foreach ($cacheTables as $table) {
             $db->query("TRUNCATE TABLE " . $db->table_prefix . $table);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()
-                ->info(__METHOD__ . ' (' . __LINE__ . ') Truncated ' . $table . ' table');
+                ->info(__METHOD__ . '::' . __LINE__ . ' Truncated ' . $table . ' table');
         }
 
         $db->query("SET FOREIGN_KEY_CHECKS=1");

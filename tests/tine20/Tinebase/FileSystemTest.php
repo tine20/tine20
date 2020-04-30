@@ -814,7 +814,9 @@ class Tinebase_FileSystemTest extends TestCase
     public function testPreviewImageGeneration()
     {
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = true;
+        Tinebase_Config::getInstance()->{Tinebase_Config::ENABLED_FEATURES}->{Tinebase_Config::FEATURE_CREATE_PREVIEWS} = true;
         $previewController = Tinebase_FileSystem_Previews::getInstance();
+        Tinebase_FileSystem::getInstance()->resetBackends();
         try {
             $oldService = $previewController->setPreviewService(new Tinebase_FileSystem_TestPreviewService());
 

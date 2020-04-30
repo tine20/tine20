@@ -28,6 +28,7 @@
  * @property    string                      accountLoginShell   account login shell
  * @property    string                      accountPrimaryGroup primary group id
  * @property    string                      container_id
+ * @property    string                      contact_id
  * @property    string                      configuration
  * @property    array                       groups              list of group memberships
  * @property    Tinebase_DateTime           lastLoginFailure    time of last login failure

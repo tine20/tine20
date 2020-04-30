@@ -305,7 +305,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $notesOfRecords->addIndices(array('record_id'));
         
         // add notes to records
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($notesOfRecords) . ' notes for ' . count($_records) . ' records.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && count($notesOfRecords) > 0) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($notesOfRecords)
+                . ' notes for ' . count($_records) . ' records.');
+        }
         foreach($_records as $record) {
             //$record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
             $record->{$_notesProperty} = $notesOfRecords->filter('record_id', $record->getId());

@@ -137,7 +137,17 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     render: function() {
         // open popup window first to save time
         if (! this.popup) {
-            this.popup = this.openWindow(this.name, this.url, this.width, this.height);
+            try {
+                this.popup = this.openWindow(this.name, this.url, this.width, this.height);
+            } catch (e) {
+                return Ext.MessageBox.alert(
+                    i18n._('Cannot open new window'),
+                    String.format(i18n._('A new window cannot be opened. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
+                    function () {
+                        this.render()
+                    }.bind(this)
+                );
+            }
         }
 
         //. register window ( in fact register complete PopupWindow )

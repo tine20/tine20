@@ -138,7 +138,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
         
         // Remove personal data from contact if no grants. The user has always grants for his/her own contact
-        if (!Tinebase_Core::getUser()->hasGrant(
+        if (is_object(Tinebase_Core::getUser()) && !Tinebase_Core::getUser()->hasGrant(
             $contact->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
             Tinebase_Core::getUser()->contact_id !== $contact->getId()) {
             // Remove that personal data!

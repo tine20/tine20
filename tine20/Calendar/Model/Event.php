@@ -39,6 +39,7 @@
  * @property Tinebase_DateTime              dtstart
  * @property Tinebase_DateTime              dtend
  * @property Calendar_Model_Rrule           rrule
+ * @property Tinebase_DateTime              rrule_until
  * @property string                         transp
  * @property string                         status
  * @property string                         summary
@@ -304,6 +305,22 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         return $diff;
     }
+
+    public function sortExdates()
+    {
+        $exdates = $this->exdate;
+        if ($exdates instanceof Tinebase_Record_RecordSet) {
+            $exdates = $exdates->asArray();
+        }
+        if (empty($exdates)) return;
+
+        usort($exdates, function (Tinebase_DateTime $a, Tinebase_DateTime $b) {
+            return $a->isLater($b);
+        });
+
+        $this->exdate = $exdates;
+    }
+
     /**
      * add given attendee if not present under given conditions
      * 
@@ -572,7 +589,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 
                 $lastOccurrence = Calendar_Model_Rrule::computeNextOccurrence($this, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $this->dtend, $rrule->count -1);
                 if ($lastOccurrence) {
-                    $this->rrule_until = $lastOccurrence->dtend;
+                    // with count == 1 lastOccurence === $this => we need to clone here, eventhough in most cases it wouldn't be required
+                    $this->rrule_until = clone $lastOccurrence->dtend;
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                         . ' Could not find last occurrence of event ' . $this->getId());

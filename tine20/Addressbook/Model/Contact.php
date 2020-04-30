@@ -1043,6 +1043,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         return null;
     }
 
+    public function getMsisdn()
+    {
+        foreach (['tel_cell_normalized', 'tel_cell_private_normalized','tel_car_normalized'] as $property) {
+            if (strlen($this->{$property}) > 0) {
+                return substr(ltrim(ltrim($this->{$property}, '0'), '+'), 0, 15);
+            }
+        }
+    }
+
     /**
      * fills a contact from json data
      *

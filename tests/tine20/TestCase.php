@@ -1127,6 +1127,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $app
+     * @param $model
+     * @param $options
+     * @return Tinebase_Model_Container
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _importDemoData($app, $model, $options)
+    {
+        $container = $this->_getTestContainer($app, $model);
+        $options['container_id'] = $container->getId();
+        $importer = new Tinebase_Setup_DemoData_Import($model, $options);
+        $importer->importDemodata();
+        return $container;
+    }
+
+    /**
      * @param Tinebase_Config_Abstract $config
      * @param string $feature
      * @param boolean $enable

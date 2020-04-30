@@ -12,12 +12,20 @@
 class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
 {
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
+
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE013_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ]
+        ],
+        self::PRIO_NORMAL_APP_UPDATE        => [
+            self::RELEASE013_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ]
         ],
     ];
@@ -47,5 +55,32 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
             }
         }
         $this->addApplicationUpdate('Addressbook', '13.1', self::RELEASE013_UPDATE001);
+    }
+
+    public function update002()
+    {
+        $containerController = Tinebase_Container::getInstance();
+        $userController = Tinebase_User::getInstance();
+        $users = $userController->getUsers();
+        foreach ($users as $user) {
+            $personalContainers = $containerController->getPersonalContainer(
+                $user,
+                Addressbook_Model_List::class,
+                $user, Tinebase_Model_Grants::GRANT_READ,
+                true
+            );
+            foreach ($personalContainers as $personalContainer) {
+                $allgrants = $containerController->getGrantsOfContainer($personalContainer, true);
+
+                foreach ($allgrants as $grant) {
+                    if ($grant->account_id == $personalContainer->owner_id) {
+                        $grant->privateDataGrant = true;
+                    }
+                }
+
+                $containerController->setGrants($personalContainer, $allgrants, TRUE);
+            }
+        }
+        $this->addApplicationUpdate('Addressbook', '13.2', self::RELEASE013_UPDATE002);
     }
 }

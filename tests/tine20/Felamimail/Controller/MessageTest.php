@@ -74,7 +74,7 @@ class Felamimail_Controller_MessageTest extends TestCase
     {
         $this->_account = $this->_getTestUserFelamimailAccount();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
-        
+
         $this->_folder = $this->getFolder($this->_testFolderName);
         try {
             $this->_imap->selectFolder($this->_testFolderName);
@@ -1659,7 +1659,7 @@ class Felamimail_Controller_MessageTest extends TestCase
     /**
      * get folder
      *
-     * @return Felamimail_Model_Folder
+     * @return Felamimail_Model_Folder|null
      */
     public function getFolder($_folderName = null, $_account = NULL)
     {
@@ -1673,7 +1673,12 @@ class Felamimail_Controller_MessageTest extends TestCase
         $result = Felamimail_Controller_Folder::getInstance()->search($filter);
         $folder = $result->filter('localname', $folderName)->getFirstRecord();
         if (empty($folder)) {
-            $folder = Felamimail_Controller_Folder::getInstance()->create($account, $_folderName);
+            try {
+                $folder = Felamimail_Controller_Folder::getInstance()->create($account, $_folderName);
+            } catch (Tinebase_Exception_SystemGeneric $tesg) {
+                // ignore for the moment - folder cache might not be update2date
+                return null;
+            }
         }
 
         return $folder;

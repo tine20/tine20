@@ -121,7 +121,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
         self::FIELDS        => [
             self::FLDS_APPLICATION_ID => [
                 self::TYPE => 'application',
-                'length' => 255,
+                self::LENGTH => 255,
                 'nullable' => false,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'],
                 self::LABEL => 'Application', // _('Application')
@@ -134,6 +134,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
             ],
             self::FLDS_NAME => [
                 self::LABEL => 'Name', // _('Name')
+                self::LENGTH => 40,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'],
                 self::TYPE => self::TYPE_STRING,
                 self::QUERY_FILTER => true,

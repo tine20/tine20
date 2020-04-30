@@ -105,9 +105,6 @@ class Tinebase_Convert_Tree_Node_Json extends Tinebase_Convert_Json
 
     protected function _resolveGrants($result)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Resolving grants of nodes ....');
-
         if (isset($result['grants'])) {
             $result['grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($result['grants']);
         } else {

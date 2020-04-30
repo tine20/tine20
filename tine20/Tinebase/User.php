@@ -793,6 +793,9 @@ class Tinebase_User implements Tinebase_Controller_Interface
             if (!isset($options['syncContactData'])) {
                 $options['syncContactData'] = $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_DATA};
             }
+            if (!isset($options['syncAccountStatus'])) {
+                $options['syncAccountStatus'] = $syncOptions->{Tinebase_Config::SYNC_USER_ACCOUNT_STATUS};
+            }
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__

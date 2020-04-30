@@ -180,7 +180,7 @@ msgid ""
 "browsers popup blocker for {0}"
 msgstr ""
 "Das Fenster kann nun geschlossen werden. Um diese Nachricht zu vermeiden "
-"deaktivieren Sie bitte den Popup Blocker Ihres Browsers für {0}"
+"deaktivieren Sie bitte den Popup-Blocker Ihres Browsers für {0}"
 
 #: js/ux/PopupWindowManager.js:175
 msgid ""
@@ -4666,6 +4666,16 @@ msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
 
 msgid "Password failed to match the following policy requirements: "
 msgstr "Das eingegebene Kennwort entspricht nicht den Mindestanforderungen: "
+
+msgid "Cannot open new window"
+msgstr "Neues Fenster konnte nicht geöffnet werden"
+
+msgid ""
+"A new window cannot be opened. To avoid this message please deactivate your "
+"browsers popup blocker for {0}"
+msgstr ""
+"Ein neues Fenster konnte nicht geöffnet werden. Bitte deaktivieren Sie den "
+"Popup-Blocker Ihres Browsers für {0}"
 
 msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"

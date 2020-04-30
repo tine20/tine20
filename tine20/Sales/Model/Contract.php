@@ -232,11 +232,15 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'sortable' => false
                 )            
             ),
-            
+
+            // TODO what is the purpose of this field? it is not persisted in the db and does not appear in the client
+            // TODO can't we just remove it?
             'merge_invoices' => array(
                 'type'    => 'boolean',
                 'label'   => 'Merge', // _('Merge')
                 'default' => false,
+                'sortable' => false,
+                'shy' => TRUE,
             ),
         )
     );

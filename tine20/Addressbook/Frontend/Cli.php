@@ -388,7 +388,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * TODO generalize: give set of grants and allow to update containers of all models (move to Tinebase)
      *
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Backend
      * @throws Tinebase_Exception_InvalidArgument

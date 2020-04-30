@@ -158,7 +158,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     $this->_subFilterController = Tinebase_Core::getApplicationInstance($modelName);
                     $this->_subFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
                     $filterClass = null;
-                    $this->_operators = array('AND', 'OR');
+                    $this->_operators = ['AND', 'OR', 'notDefinedBy:AND', 'notDefinedBy:OR'];
                 } else {
                     $filterClass = Tinebase_Model_Filter_Id::class;
                 }
@@ -168,6 +168,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 throw new Tinebase_Exception_NotImplemented('filter for records type not implemented yet');
                 break;
             default:
+                $this->_operators = ['contains', 'AND', 'OR'];
                 // nothing here - parent is used
         }
 
@@ -180,9 +181,6 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     'options' => $this->_valueFilterOptions
                 ]);
             $this->_operators = $this->_valueFilter->getOperators();
-        } else {
-            // allow default operators
-            $this->_operators = ['contains', 'AND', 'OR'];
         }
 
         parent::__construct($_fieldOrData, $_operator, $_value, $_options);
@@ -224,23 +222,42 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
 
         if (null !== $this->_subFilterController && null !== $this->_subFilter) {
             $value = $this->_value['value'];
-            array_walk($value, function(&$val) {
-                if (isset($val['field']) && strpos($val['field'], ':') === 0) {
-                    $val['field'] = substr($val['field'], 1);
-                }
-            });
-            $this->_subFilter->setFromArray($value);
-            $ids = $this->_subFilterController->search($this->_subFilter, null, false, true);
-            if (count($ids)) {
-                $this->_valueFilter = new Tinebase_Model_Filter_Id(
+
+            $queryForEmpty = count($value) === 1 && isset($value[0]) &&
+                is_array($value[0]) && array_key_exists('value', $value[0]) && empty($value[0]['value']);
+            $notOperator = strpos($this->_operator, 'not') === 0;
+
+            if ($queryForEmpty) {
+                (new Tinebase_Model_Filter_Id(
                     [
                         'field' => 'value',
-                        'operator' => 'in',
-                        'value' => $ids,
+                        'operator' => $notOperator ? 'notnull' : 'isnull',
+                        'value' => true,
                         'options' => $this->_valueFilterOptions
-                    ]);
+                    ]))->appendFilterSql($_select, $_backend);
             } else {
-                $_select->where('1=2');
+                array_walk($value, function (&$val) {
+                    if (isset($val['field']) && strpos($val['field'], ':') === 0) {
+                        $val['field'] = substr($val['field'], 1);
+                    }
+                });
+                $this->_subFilter->setFromArray($value);
+                $ids = $this->_subFilterController->search($this->_subFilter, null, false, true);
+                if (count($ids)) {
+                    $this->_valueFilter = new Tinebase_Model_Filter_Id(
+                        [
+                            'field' => 'value',
+                            'operator' => $notOperator ? 'notin' : 'in',
+                            'value' => $ids,
+                            'options' => $this->_valueFilterOptions
+                        ]);
+                } else {
+                    if ($notOperator) {
+                        $_select->where('1=1');
+                    } else {
+                        $_select->where('1=2');
+                    }
+                }
             }
         }
         if (null !== $this->_valueFilter) {

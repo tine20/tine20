@@ -1,12 +1,12 @@
 /**
- * make form elements small in text and height 
+ * make form elements small in text and height
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
- 
+
 .x-tool-toggle-expander {
     position: relative;
     top: -23px;
@@ -33,18 +33,42 @@
     font-size: 11px;
 }
 
-.x-form-check-wrap input
-{
-    margin-bottom: 4px;
+.x-form-label-top .x-form-check-wrap {
+    margin-top: -4px;
 }
 
-.x-form-label-top .x-form-check-wrap input
-{
-    margin-bottom: 9px;
+.ext-gecko .x-form-label-top .x-form-check-wrap {
+    margin-top: -6px;
+}
+    
+.x-form-label-top .x-hide-label .x-form-check-wrap {
+    margin-top: 0;
 }
 
 .x-form-cb-label {
     top: 1px;
+}
+
+.x-form-check-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.x-form-check-wrap input {
+    top: 7px;
+    position: absolute;
+    display: inline-block;
+}
+
+.x-form-check-wrap .x-form-cb-label {
+    white-space: nowrap;
+    border-left: 17px solid transparent;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    margin-left: 0;
 }
 
 .x-form-item {

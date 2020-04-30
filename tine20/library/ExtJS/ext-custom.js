@@ -196,12 +196,6 @@ require('./src/widgets/tree/TreeDropZone');
 require('./src/widgets/tree/TreeDragZone');
 require('./src/widgets/tree/TreeEditor');
 
-/* pkg: Charts (pkgs/pkg-charts.js)*/
-require('./src/widgets/chart/swfobject');
-require('./src/widgets/chart/FlashComponent');
-require('./src/widgets/chart/EventProxy');
-require('./src/widgets/chart/Chart');
-
 /* pkg: Menu (pkgs/pkg-menu.js)*/
 require('./src/widgets/menu/Menu');
 require('./src/widgets/menu/MenuMgr');

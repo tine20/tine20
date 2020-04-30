@@ -37,7 +37,7 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
      * 
      * @var array
      */
-    protected $_relationsTypes = array('CUSTOMER', 'PARTNER', 'RESPONSIBLE', 'TASK');
+    protected $_relationsTypes = array('CUSTOMER', 'PARTNER', 'RESPONSIBLE', 'TASK', 'PRODUCT');
 
     /**
      * lead relation subfields
@@ -56,7 +56,37 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
             'tel_work',
             'tel_cell',
             'email',
-        )
+        ),
+        'PARTNER' => array(
+            'org_name',
+            'n_family',
+            'n_given',
+            'adr_one_street',
+            'adr_one_postalcode',
+            'adr_one_locality',
+            'adr_one_countryname',
+            'tel_work',
+            'tel_cell',
+            'email',
+        ),
+        'RESPONSIBLE' => array(
+            'org_name',
+            'n_family',
+            'n_given',
+            'adr_one_street',
+            'adr_one_postalcode',
+            'adr_one_locality',
+            'adr_one_countryname',
+            'tel_work',
+            'tel_cell',
+            'email',
+        ),
+        'PRODUCT' => [
+            'name'
+        ],
+        'TASK' => [
+            'summary'
+        ]
     );
     
     /**

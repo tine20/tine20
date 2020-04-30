@@ -313,6 +313,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SENTRY_LOGLEVL = 'sentryLoglevel';
 
     /**
+     * configure if user account status data should be synced from sync backend, default no
+     *
+     * @var string
+     */
+    const SYNC_USER_ACCOUNT_STATUS = 'syncUserAccountStatus';
+
+    /**
      * configure hook class for user sync
      *
      * @var string
@@ -1274,6 +1281,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             'setByAdminModule'      => FALSE,
                             'setBySetupModule'      => FALSE,
                             'default'               => TRUE
+                        ),
+                        self::SYNC_USER_ACCOUNT_STATUS => array(
+                            //_('Sync user account status from sync backend')
+                            'label'                 => 'Sync user account status from sync backend',
+                            //_('Sync user account status from sync backend')
+                            'description'           => 'Sync user account status from sync backend',
+                            'type'                  => 'bool',
+                            'clientRegistryInclude' => FALSE,
+                            'setByAdminModule'      => FALSE,
+                            'setBySetupModule'      => FALSE,
+                            'default'               => FALSE
                         ),
                     ),
                     'default'                   => array(),

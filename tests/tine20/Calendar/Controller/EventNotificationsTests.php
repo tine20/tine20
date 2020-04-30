@@ -164,8 +164,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals('text/plain; name="=?utf-8?Q?tempfile.tmp?="', $fileAttachment->type);
         
         $this->_assertMail('pwulf', 'SENT-BY="mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '":mailto:', 'ics');
-        $this->_assertMail('pwulf', 'RSVP=TRUE;EMAIL=pwulf@example.org', 'ics');
-        $this->_assertMail('pwulf', 'RSVP=FALSE;EMAIL=sclever@example.org', 'ics');
+        $this->_assertMail('pwulf', 'RSVP=TRUE;EMAIL=' . $this->_personas['pwulf']->accountEmailAddress, 'ics');
+        $this->_assertMail('pwulf', 'RSVP=FALSE;EMAIL=' . $this->_personas['sclever']->accountEmailAddress, 'ics');
 
         // @todo assert attachment content (this seems to not work with array mailer, maybe we need a "real" email test here)
 //         $content = $fileAttachment->getDecodedContent();

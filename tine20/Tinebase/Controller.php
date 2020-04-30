@@ -102,6 +102,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         // sanitize loginname - we might not support invalid/out of range characters
         $loginName = Tinebase_Core::filterInputForDatabase($loginName);
 
+        // rolechange user: username*authuser?
+        $authUserParts = preg_split('/\*+(?=[^*]+$)/', $loginName);
+        if (isset($authUserParts[1]) && Tinebase_User::getInstance()->getUserByLoginName($authUserParts[1])) {
+            $loginName = $authUserParts[1];
+            $roleChangeUserName = $authUserParts[0];
+        }
+
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
 
         $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
@@ -124,6 +131,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         if (Tinebase_Application::getInstance()->isInstalled('Felamimail', true)) {
             Felamimail_Controller::getInstance()->handleAccountLogin($user, $password);
+        }
+
+        if (isset($roleChangeUserName)) {
+            Tinebase_Controller::getInstance()->changeUserAccount($roleChangeUserName);
         }
 
         return true;

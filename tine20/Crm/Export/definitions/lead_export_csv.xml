@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Crm_Model_Lead</model>
+    <name>lead_export</name>
+    <!-- _('CSV all data') -->
+    <label>CSV all data</label>
+    <type>export</type>
+    <plugin>Crm_Export_Csv</plugin>
+    <icon_class>tinebase-action-export-csv</icon_class>
+</config>

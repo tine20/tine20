@@ -397,45 +397,25 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . ' ' . __LINE__
             . ' about to handle Tinebase_Event_Container_BeforeCreate' );
-        
-        if ($_eventObject->container && 
-                $_eventObject->container->type === Tinebase_Model_Container::TYPE_PERSONAL &&
-                $_eventObject->container->model === Calendar_Model_Event::class &&
-                $_eventObject->container->application_id === Tinebase_Application::getInstance()
-                    ->getApplicationByName('Calendar')->getId()) {
 
-            $_eventObject->container->xprops()['Tinebase']['Container']['GrantsModel'] =
-                Calendar_Model_EventPersonalGrants::class;
-
-            if ($_eventObject->grants instanceof Tinebase_Record_RecordSet) {
-                // get owner from initial initial grants
-                $grants = new Tinebase_Record_RecordSet(Calendar_Model_EventPersonalGrants::class);
-
-                $grants->addRecord(new Calendar_Model_EventPersonalGrants([
-                    'account_id' => $_eventObject->accountId,
-                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                    Tinebase_Model_Grants::GRANT_READ => true,
-                    Tinebase_Model_Grants::GRANT_ADD => true,
-                    Tinebase_Model_Grants::GRANT_EDIT => true,
-                    Tinebase_Model_Grants::GRANT_DELETE => true,
-                    Tinebase_Model_Grants::GRANT_EXPORT => true,
-                    Tinebase_Model_Grants::GRANT_SYNC => true,
-                    Tinebase_Model_Grants::GRANT_ADMIN => true,
-                    Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
-                    Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
-                ], true));
-
-                if (!Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
-                    $grants->addRecord(new Calendar_Model_EventPersonalGrants(array(
+        $this->_addDefaultPersonalGrantsToContainer(
+            $_eventObject->container,
+            'Calendar',
+            $_eventObject->grants,
+            $_eventObject->accountId,
+            [
+                Calendar_Model_Event::class,
+            ],
+            Calendar_Model_EventPersonalGrants::class,
+            ! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED) ?
+                [
+                    new Calendar_Model_EventPersonalGrants(array(
                         'account_id' => '0',
                         'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                         Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true
-                    ), true));
-                }
-
-                $_eventObject->grants = $grants;
-            }
-        }
+                    ), true)
+                ] : []
+        );
     }
     
     /**

@@ -201,9 +201,8 @@ class Tinebase_Application
         
         if ($filter === null && $pagination === null) {
             try {
-                $result = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, 'allApplications', Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
-                
-                return $result;
+                return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__,
+                    'allApplications', Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // do nothing
             }

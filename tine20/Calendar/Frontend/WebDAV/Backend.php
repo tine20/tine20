@@ -9,6 +9,7 @@
 
 /**
  * @package     Calendar
+ * @todo fix namespace - move to Calendar/Frontend/CalDAV ?
  */
 class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBackend
 {
