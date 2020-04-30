@@ -72,7 +72,7 @@ class Tinebase_FileSystem_RecordAttachments
         
         try {
             $record->attachments = $this->_fsController->scanDir($parentPath);
-            foreach($record->attachments as $node) {
+            foreach ($record->attachments as $node) {
                 $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_fsController->getPathOfNode($node,
                     true));
                 $node->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath,

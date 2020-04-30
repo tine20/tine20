@@ -1110,9 +1110,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         ]));
     }
 
-    protected function _importDemoData($app, $model, $definition)
+    protected function _importDemoData($app, $model, $definition, $container = null)
     {
-        $container = $this->_getTestContainer($app, $model);
+        $container = $container ? $container : $this->_getTestContainer($app, $model);
         $importer = new Tinebase_Setup_DemoData_Import($model, [
             'container_id' => $container->getId(),
             'definition' => $definition,

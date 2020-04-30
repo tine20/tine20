@@ -413,6 +413,8 @@ abstract class Felamimail_TestCase extends TestCase
     /**
      * @param string $tempfileName
      * @return Tinebase_Model_TempFile
+     *
+     * @refactor TODO use \TestCase::_getTempFile
      */
     protected function _createTempFile($tempfileName = 'test.txt')
     {

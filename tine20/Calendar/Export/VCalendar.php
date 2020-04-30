@@ -41,6 +41,9 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
     public function generate()
     {
         $this->_converter = new Calendar_Convert_Event_VCalendar_Tine();
+        $this->_converter->setOptions([
+            Calendar_Convert_Event_VCalendar_Tine::OPTION_ADD_ATTACHMENTS_BINARY => true,
+        ]);
         $this->_exportRecords();
         return $this->_vcalendar !== null;
     }
@@ -54,6 +57,7 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
             $this->_vcalendar = $this->_createVCalendar($_record);
         }
 
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($_record);
         $this->_converter->addEventToVCalendar($this->_vcalendar, $_record);
     }
 
