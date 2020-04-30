@@ -155,6 +155,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 ]);
                 $export = new Calendar_Export_VCalendar($filter);
                 $export->generate();
+                $export->write();
             }
         }
 

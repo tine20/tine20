@@ -86,6 +86,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 case 'newPDF':
                 case 'newCsv':
                 case 'csv':
+                case 'ics':
+                case 'vcf':
                 case 'xls':
                 case 'xlsx':
                 case 'doc':
@@ -136,6 +138,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'xls':
             case 'xlsx':
             case 'doc':
+            case 'ics':
+            case 'vcf':
             case 'docx':
             case 'error':
                 // redirect output to client browser
