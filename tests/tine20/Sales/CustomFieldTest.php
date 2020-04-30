@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_CustomField
  */
-class Sales_CustomFieldTest extends PHPUnit_Framework_TestCase
+class Sales_CustomFieldTest extends TestCase // PHPUnit_Framework_TestCase
 {
     /**
      * unit under test (UIT)
@@ -27,22 +27,11 @@ class Sales_CustomFieldTest extends PHPUnit_Framework_TestCase
 
     /**
      * transaction id if test is wrapped in an transaction
-     */
-    protected $_transactionId = NULL;
+     *
+    protected $_transactionId = NULL;*/
     
     protected $_user = NULL;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Sales_CustomFieldTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
+
 
     /**
      * Sets up the fixture.
@@ -52,7 +41,9 @@ class Sales_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
+
+        //$this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = Tinebase_CustomField::getInstance();
     }
 
@@ -64,13 +55,11 @@ class Sales_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if ($this->_transactionId) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-        }
-        
         if ($this->_user) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_user);
         }
+
+        parent::tearDown();
     }
     
     /**
@@ -97,12 +86,8 @@ class Sales_CustomFieldTest extends PHPUnit_Framework_TestCase
                 )
         ), $config));
     }
-    
-    /**
-     * test searching records by record as a customfield type
-     * https://forge.tine20.org/mantisbt/view.php?id=6730
-     */
-    public function testSearchByRecord()
+
+    protected function createCustomFieldTestData()
     {
         $cf = self::getCustomField(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
@@ -127,11 +112,96 @@ class Sales_CustomFieldTest extends PHPUnit_Framework_TestCase
         // contact1 with customfield record = contract
         $contact1 = new Addressbook_Model_Contact(array('n_given' => 'Rita', 'n_family' => 'Blütenrein'));
         $contact1->customfields = array($cf->name => $contract->getId());
-        Addressbook_Controller_Contact::getInstance()->create($contact1, false);
+        $contact1 = Addressbook_Controller_Contact::getInstance()->create($contact1, false);
 
         // contact2 with customfield record is not set -> should act like without this record
         $contact2 = new Addressbook_Model_Contact(array('n_given' => 'Rainer', 'n_family' => 'Blütenrein'));
         $contact2 = Addressbook_Controller_Contact::getInstance()->create($contact2, false);
+
+        return [$cf, $contract, $contact1, $contact2];
+    }
+
+    public function testSearchByRecordNotDefinedBy()
+    {
+        list($cf, $contract, $contact1, $contact2) = $this->createCustomFieldTestData();
+
+        $result = (new Addressbook_Frontend_Json())->searchContacts([[
+                "condition" => "AND", "filters" => [
+                    ["field" => "customfield", "operator" => 'notDefinedBy:AND',
+                            "value" => ["cfId" => $cf->getId(), "value" => [
+                                ['field' => ':id', 'operator' => 'equals', 'value' => $contract->getId()]
+                            ]]],
+                    ['field' => 'n_family', 'operator' => 'equals', 'value' => 'Blütenrein']
+                ]
+        ]], []);
+
+        static::assertCount(1, $result['results']);
+        static::assertSame($contact2->getId(), $result['results'][0]['id']);
+    }
+
+    public function testSearchByRecordNotNull()
+    {
+        list($cf, $contract, $contact1, $contact2) = $this->createCustomFieldTestData();
+
+        $result = (new Addressbook_Frontend_Json())->searchContacts([[
+            "condition" => "OR",
+            "filters" => array(
+                array(
+                    "condition" => "AND",
+                    "filters" => array(
+                        array(
+                            "field" => "customfield",
+                            "operator" => 'notDefinedBy:AND',
+                            "value" => array("cfId" => $cf->getId(), "value" => [
+                                ['field' => ':id', 'operator' => 'in', 'value' => null]
+                            ])
+                        ),
+                    )
+                )
+            )
+        ]
+        ], []);
+
+        static::assertCount(1, $result['results']);
+        static::assertSame($contact1->getId(), $result['results'][0]['id']);
+    }
+
+    public function testSearchByRecordNull()
+    {
+        list($cf, $contract, $contact1, $contact2) = $this->createCustomFieldTestData();
+
+        $result = (new Addressbook_Frontend_Json())->searchContacts([[
+                "condition" => "OR",
+                "filters" => array(
+                    array(
+                        "condition" => "AND",
+                        "filters" => array(
+                            array(
+                                "field" => "customfield",
+                                "operator" => "AND",
+                                "value" => array("cfId" => $cf->getId(), "value" => [
+                                    ['field' => ':id', 'operator' => 'in', 'value' => null]
+                                ])
+                            ),
+                        )
+                    )
+                )
+            ]
+        ], []);
+
+        static::assertGreaterThan(1, count($result['results']));
+        foreach ($result['results'] as $res) {
+            static::assertNotSame($contact1->getId(), $res['id']);
+        }
+    }
+
+    /**
+     * test searching records by record as a customfield type
+     * https://forge.tine20.org/mantisbt/view.php?id=6730
+     */
+    public function testSearchByRecord()
+    {
+        list($cf, $contract, $contact1, $contact2) = $this->createCustomFieldTestData();
 
         $json = new Addressbook_Frontend_Json();
 
@@ -194,8 +264,8 @@ class Sales_CustomFieldTest extends PHPUnit_Framework_TestCase
         $contact2->customfields = array($cf->name => $contract2->getId());
         Addressbook_Controller_Contact::getInstance()->update($contact2, false);
 
-        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        $this->_transactionId = null;
+        //Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        //$this->_transactionId = null;
 
         $result = $json->searchContacts(array(
             array(
