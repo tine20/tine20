@@ -26,6 +26,8 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
 
     protected $_defaultExportname = 'cal_default_vcalendar';
 
+    protected $_format = 'ics';
+
     /**
      * get download content type
      *
@@ -40,11 +42,7 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
     {
         $this->_converter = new Calendar_Convert_Event_VCalendar_Tine();
         $this->_exportRecords();
-        if ($this->_config->filename) {
-            // TODO implement
-        } else {
-            echo $this->_vcalendar->serialize();
-        }
+        return $this->_vcalendar !== null;
     }
 
     /**
@@ -62,5 +60,14 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
     protected function _createVCalendar(Calendar_Model_Event $_record)
     {
         return $this->_converter->createVCalendar($_record);
+    }
+
+    public function write()
+    {
+        if ($this->_config->filename) {
+            // TODO implement
+        } else {
+            echo $this->_vcalendar->serialize();
+        }
     }
 }
