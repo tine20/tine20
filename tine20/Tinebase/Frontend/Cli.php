@@ -1091,26 +1091,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function monitoringCheckConfig()
     {
         $message = 'CONFIG FAIL';
-        $configcheck = FALSE;
+        $configcheck = Tinebase_Controller::getInstance()->checkConfig();
         $result = 0;
-        
-        $configfile = Setup_Core::getConfigFilePath();
-        if ($configfile) {
-            $configfile = escapeshellcmd($configfile);
-            if (preg_match('/^win/i', PHP_OS)) {
-                exec("php -l $configfile 2> NUL", $error, $code);
-            } else {
-                exec("php -l $configfile 2> /dev/null", $error, $code);
-            }
-            if ($code == 0) {
-                $configcheck = TRUE;
-            } else {
-                $message .= ': CONFIG FILE SYNTAX ERROR';
-            }
-        } else {
-            $message .= ': CONFIG FILE MISSING';
-        }
-        
+
         if ($configcheck) {
             $message = "CONFIG FILE OK";
         } else {

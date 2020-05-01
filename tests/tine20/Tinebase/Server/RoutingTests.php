@@ -68,9 +68,6 @@ class Tinebase_Server_RoutingTests extends TestCase
         Tinebase_Application::getInstance()->setApplicationStatus(Tinebase_Application::getInstance()
             ->getApplicationByName('ExampleApplication'), Tinebase_Application::ENABLED);
 
-        $emitter = new Tinebase_Server_UnittestEmitter();
-        $server = new Tinebase_Server_Expressive($emitter);
-
         $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
             'GET /ExampleApplication/testRoute HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
@@ -83,6 +80,14 @@ class Tinebase_Server_RoutingTests extends TestCase
             . "\r\n"
         ));
 
+        $content = $this->_emitRequest($request);
+        static::assertEquals(ExampleApplication_Controller::authTestRouteOutput, $content);
+    }
+
+    protected function _emitRequest($request)
+    {
+        $emitter = new Tinebase_Server_UnittestEmitter();
+        $server = new Tinebase_Server_Expressive($emitter);
         /** @var \Symfony\Component\DependencyInjection\Container $container */
         $container = Tinebase_Core::getPreCompiledContainer();
         $container->set(\Psr\Http\Message\RequestInterface::class, $request);
@@ -91,7 +96,24 @@ class Tinebase_Server_RoutingTests extends TestCase
         $server->handle();
 
         $emitter->response->getBody()->rewind();
-        static::assertEquals(ExampleApplication_Controller::authTestRouteOutput, $emitter->response->getBody()
-            ->getContents());
+        return $emitter->response->getBody()->getContents();
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testHealthCheck()
+    {
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+            'GET /health HTTP/1.1' . "\r\n"
+            . 'Host: localhost' . "\r\n"
+            . 'User-Agent: Tine 2.0 UNITTEST' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . "\r\n"
+        ));
+
+        $content = $this->_emitRequest($request);
+        self::assertNotEmpty($content);
+        self::assertEquals('{"status":"pass","problems":[]}', $content);
     }
 }
