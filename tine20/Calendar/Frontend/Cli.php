@@ -128,14 +128,13 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * exports calendars as ICS
+     * --method Calendar.exportVCalendar --username=USER -- container_id=CALID filename=/my/export/file.ics
      *
      * @param $_opts
      * @return boolean
      */
     public function exportVCalendar($_opts)
     {
-        $this->_checkAdminRight();
-
         $args = $this->_parseArgs($_opts);
 
         // @todo implement
@@ -143,15 +142,15 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         //   - allow to export all personal calendars (create zip)
         //   - allow to export all shared calendars (create zip)
 
-        // @todo implement
-        //   - have param for output file(s)
-
         if (isset($args['container_id'])) {
             $containers = explode(',', $args['container_id']);
             foreach ($containers as $containerId) {
                 $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class,
                 [
-                    ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId]
+                    ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
+                    // TODO add as param
+                    // for keeping the data small
+                    // ['field' => 'dtstart', 'operator' => 'inweek', 'value' => 20],
                 ]);
                 $export = new Calendar_Export_VCalendar($filter, null, $args);
                 $export->generate();
