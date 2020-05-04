@@ -15,6 +15,7 @@ describe('Contacts', () => {
     describe('Test MainPage', () => {
         test('choose grid fields', async () => {
             await expect(page).toMatchElement('span', {text: 'Tine 2.0'});
+            await expect(page).toMatchElement('.t-app-addressbook .ext-ux-grid-gridviewmenuplugin-menuBtn');
             await page.click('.t-app-addressbook .ext-ux-grid-gridviewmenuplugin-menuBtn');
             await page.waitForSelector('.x-menu-list');
             await page.screenshot({path: 'screenshots/1_adressverwaltung/9_adressbuch_mit_spaltenauswahl.png'});
