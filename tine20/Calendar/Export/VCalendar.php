@@ -66,12 +66,19 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
         return $this->_converter->createVCalendar($_record);
     }
 
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     */
     public function write()
     {
+        $vcalSerialized = $this->_vcalendar->serialize();
         if ($this->_config->filename) {
-            // TODO implement
+            if (file_exists($this->_config->filename)) {
+                throw new Tinebase_Exception_AccessDenied('Could not overwrite existing file');
+            }
+            file_put_contents($this->_config->filename, $vcalSerialized);
         } else {
-            echo $this->_vcalendar->serialize();
+            echo $vcalSerialized;
         }
     }
 }

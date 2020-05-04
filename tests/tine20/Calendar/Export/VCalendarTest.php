@@ -26,11 +26,11 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertContains('BEGIN:VTIMEZONE', $result);
     }
 
-    protected function _import()
+    protected function _import($params = '')
     {
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.exportVCalendar';
         $cmd = TestServer::assembleCliCommand($cmd, TRUE, 'container_id=' .
-            $this->_getTestCalendar()->getId());
+            $this->_getTestCalendar()->getId() . ' ' . $params);
         exec($cmd, $output);
         return implode(',', $output);
     }
@@ -68,7 +68,16 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
 
     public function testExportIntoFile()
     {
-        // TODO implement
+        $this->_testNeedsTransaction();
+
+        $this->_importDemoData('Calendar', Calendar_Model_Event::class, 'cal_import_event_csv', $this->_getTestCalendar());
+        $filename = '/tmp/export.ics';
+        $this->_import('filename=' . $filename);
+        $result = file_get_contents($filename);
+        unlink($filename);
+        self::assertContains('Anforderungsanalyse', $result);
+        self::assertContains('BEGIN:VCALENDAR', $result);
+        self::assertContains('BEGIN:VTIMEZONE', $result);
     }
 
     public function testExportAllCalendars()
