@@ -68,9 +68,14 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
 
     /**
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
     public function write()
     {
+        if ($this->_vcalendar === null) {
+            throw new Tinebase_Exception_NotFound('empty export');
+        }
+
         $vcalSerialized = $this->_vcalendar->serialize();
         if ($this->_config->filename) {
             if (file_exists($this->_config->filename)) {
