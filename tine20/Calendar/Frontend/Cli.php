@@ -153,7 +153,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 [
                     ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId]
                 ]);
-                $export = new Calendar_Export_VCalendar($filter);
+                $export = new Calendar_Export_VCalendar($filter, null, $args);
                 $export->generate();
                 $export->write();
             }

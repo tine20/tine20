@@ -23,20 +23,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
 
     public function setUp()
     {
-        $this->_testEvent = new Calendar_Model_Event(array(
-            'dtstart'       => '2010-12-30 12:00:00',
-            'dtend'         => '2010-12-30 13:00:00',
-            'originator_tz' => 'Europe/Berlin',
-            'summary'       => 'take a nap',
-            'description'   => 'hard working man needs some silence',
-            'uid'           => Tinebase_Record_Abstract::generateUID(),
-            'seq'           => 3,
-            'transp'        => Calendar_Model_Event::TRANSP_OPAQUE,
-            'class'         => Calendar_Model_Event::CLASS_PUBLIC,
-            'location'      => 'couch',
-            'priority'      => 1,
-            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2015-12-30 13:00:00'
-        ));
+        $this->_testEvent = $this->_getRecurEvent();
         parent::setUp();
     }
     
