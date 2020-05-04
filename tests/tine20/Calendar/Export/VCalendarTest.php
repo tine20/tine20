@@ -18,15 +18,27 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
     {
         $this->_testNeedsTransaction();
 
-        $importContainer = $this->_importDemoData('Calendar', 'Calendar_Model_Event', [
-            'definition' => 'cal_import_event_csv',
-            'file' => 'event.csv'
-        ]);
+        $this->_importDemoData(
+            'Calendar',
+            Calendar_Model_Event::class, [
+                'definition' => 'cal_import_event_csv',
+                'file' => 'event.csv'
+            ], $this->_getTestCalendar()
+        );
         $result = $this->_import();
 
         self::assertContains('Anforderungsanalyse', $result);
         self::assertContains('BEGIN:VCALENDAR', $result);
         self::assertContains('BEGIN:VTIMEZONE', $result);
+    }
+
+    protected function _import($params = '')
+    {
+        $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.exportVCalendar';
+        $cmd = TestServer::assembleCliCommand($cmd, TRUE, 'container_id=' .
+            $this->_getTestCalendar()->getId() . ' ' . $params);
+        exec($cmd, $output);
+        return implode(',', $output);
     }
 
     public function testExportRecurEvent()
@@ -64,7 +76,12 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
     {
         $this->_testNeedsTransaction();
 
-        $this->_importDemoData('Calendar', Calendar_Model_Event::class, ['cal_import_event_csv']);
+        $this->_importDemoData(
+            'Calendar',
+            Calendar_Model_Event::class, [
+                'definition' => 'cal_import_event_csv'
+            ], $this->_getTestCalendar()
+        );
         $filename = '/tmp/export.ics';
         $this->_import('filename=' . $filename);
         $result = file_get_contents($filename);

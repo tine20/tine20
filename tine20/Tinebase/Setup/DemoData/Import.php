@@ -51,7 +51,9 @@ class Tinebase_Setup_DemoData_Import
             throw new Tinebase_Exception_NotFound('Import dir not found: ' . $importDir);
         }
 
-        // loop all files in import dir
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Importing files in import dir ' . $importDir );
+
         // TODO allow more filters / subdirs
         $fh = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($importDir), RecursiveIteratorIterator::CHILD_FIRST);
         $importedDemoDataFiles = 0;
