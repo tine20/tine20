@@ -159,7 +159,9 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_duplicateCheckConfig = array();
 
     protected $_duplicateCheck = true;
-    
+
+    protected $_duplicateCheckOnUpdate = false;
+
     /**
      * holds new relation on update multiple
      * @var array
@@ -1143,6 +1145,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @throws  Tinebase_Exception_AccessDenied
      * 
      * @todo    fix duplicate check on update / merge needs to remove the changed record / ux discussion
+     *          (duplicate check is currently only enabled in Sales_Controller_PurchaseInvoice)
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
@@ -1176,10 +1179,9 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_forceModlogInfo($_record, $origRecord, self::ACTION_UPDATE);
             $this->_inspectBeforeUpdate($_record, $currentRecord);
             
-            // NOTE removed the duplicate check because we can not remove the changed record yet
-//             if ($_duplicateCheck) {
-//                 $this->_duplicateCheck($_record);
-//             }
+            if ($this->_duplicateCheckOnUpdate && $_duplicateCheck) {
+                 $this->_duplicateCheck($_record);
+            }
 
             $this->_setAutoincrementValues($_record, $currentRecord);
             
