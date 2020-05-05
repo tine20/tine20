@@ -12,8 +12,7 @@ function activateReleaseMode()
 
     echo "RELEASE: $RELEASE REVISION: $REVISION CODENAME: $CODENAME BUILDTYPE: $BUILDTYPE";
 
-    sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" ${TINE20ROOT}/tine20/Tinebase/Core.php
-    sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" ${TINE20ROOT}/tine20/Setup/Core.php
+    sed -i -e "s/'default' *=> *'DEVELOPMENT',/'default' => '$BUILDTYPE',/" ${TINE20ROOT}/tine20/Tinebase/Config.php
 
     sed -i -e "s#'TINE20_CODENAME', *Tinebase_Helper::getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" ${TINE20ROOT}/tine20/Tinebase/Core.php
     sed -i -e "s#'TINE20SETUP_CODENAME', *Tinebase_Helper::getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" ${TINE20ROOT}/tine20/Setup/Core.php
@@ -75,18 +74,18 @@ function cleanup()
                     echo " $FILE"
                     echo -n "  cleanup "
                     # TODO remove unminified js/vue files from pollClient dir?
-                    (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v pollClient))
+                    (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v pollClient | grep -v "\.map"))
                     (cd ${TINE20ROOT}/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
                     ;;
 
                 Tinebase)
                     echo " $FILE"
                     echo -n "  cleanup "
-                    (cd ${TINE20ROOT}/tine20/Addressbook/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
+                    (cd ${TINE20ROOT}/tine20/Addressbook/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "\.map"))
                     (cd ${TINE20ROOT}/tine20/Addressbook/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-                    (cd ${TINE20ROOT}/tine20/Admin/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
+                    (cd ${TINE20ROOT}/tine20/Admin/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "\.map"))
                     (cd ${TINE20ROOT}/tine20/Admin/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-                    (cd ${TINE20ROOT}/tine20/Setup/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
+                    (cd ${TINE20ROOT}/tine20/Setup/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "\.map"))
                     (cd ${TINE20ROOT}/tine20/Setup/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
 
                     # Tinebase/js/ux/Printer/print.css
@@ -94,7 +93,7 @@ function cleanup()
                     # Tinebase/js/ux/data/windowNameConnection*
                     (cd ${TINE20ROOT}/tine20/Tinebase/js/ux/data; rm -rf $(ls | grep -v windowNameConnection))
                     (cd ${TINE20ROOT}/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer | grep -v data))
-                    (cd ${TINE20ROOT}/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux | grep -v "\-lang\-" | grep -v node_modules))
+                    (cd ${TINE20ROOT}/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux | grep -v "\-lang\-" | grep -v node_modules | grep -v "\.map"))
                     (cd ${TINE20ROOT}/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css | grep -v widgets))
                     (cd ${TINE20ROOT}/tine20/Tinebase/css/widgets;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
 
@@ -134,7 +133,7 @@ function cleanup()
 
                     echo -n "  cleanup "
                     if [ -d "${TINE20ROOT}/tine20/$FILE/js" ]; then
-                        (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "empty\.js"))
+                        (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "empty\.js"  | grep -v "\.map"))
                     fi
                     if [ -d "${TINE20ROOT}/tine20/$FILE/css" ]; then
                         (cd ${TINE20ROOT}/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
