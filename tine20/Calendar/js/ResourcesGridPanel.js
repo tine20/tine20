@@ -77,6 +77,12 @@ Tine.Calendar.ResourceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._('Default Status'),
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'attendeeStatus')
         }, {
+            id: 'status_with_grant',
+            dataIndex: 'status_with_grant',
+            width: 140,
+            header: this.app.i18n._('Default Status with status grant'),
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'attendeeStatus')
+        }, {
             id: 'busy_type',
             dataIndex: 'busy_type',
             width: 140,
