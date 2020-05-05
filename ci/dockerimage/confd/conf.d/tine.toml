@@ -30,5 +30,6 @@ keys = [
     "/session/backend",
     "/session/host",
     "/session/port",
-    "/session/path"
+    "/session/path",
+    "/credentialcachesharedkey"
 ]

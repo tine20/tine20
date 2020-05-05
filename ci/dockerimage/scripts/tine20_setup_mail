@@ -1,6 +1,4 @@
-#!/usr/bin/env sh
-
-/usr/local/bin/php /wait_for_db.php
+#!/usr/bin/env bash
 
 mysql -hdb -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot"
 mysql -hdb -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS postfix"

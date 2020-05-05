@@ -35,6 +35,7 @@
     TINE20_LOGIN_USERNAME: tine20admin
     TINE20_LOGIN_PASSWORD: tine20admin
     TINE20_ADMIN_EMAIL: tine20admin@mail.test
+    TINE20_CREDENTIALCACHESHAREDKEY: realysecreatkey
     TINE20_CACHING_BACKEND: Redis
     TINE20_CACHING_REDIS_HOST: cache
     TINE20_SESSION_BACKEND: Redis
@@ -52,14 +53,13 @@
   before_script:
     - cp /etc/hosts "${CI_PROJECT_DIR}/hosts_$CI_JOB_ID"
     - /usr/sbin/confd -onetime -backend env
-    - php /wait_for_db.php
-    - bash /install_mail.sh
-    - bash /install_tine.sh
+    - tine20_await_db
+    - tine20_setup_mail
+    - tine20_install
     - supervisord
-    # /usr/sbin/confd -onetime -backend env && php /wait_for_db.php && bash /install_mail.sh && bash /install_tine.sh && supervisord && cd /tine/tests/tine20/
   script:
-    - cd /tine/tests/tine20/
-    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllTests
+    - cd $TINE20ROOT/tests/tine20/
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllTests
   parallel: 5
 
 .abstract_jobs.php_unit_test_with_ldap:

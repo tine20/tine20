@@ -26,6 +26,8 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
 
     protected $_defaultExportname = 'cal_default_vcalendar';
 
+    protected $_format = 'ics';
+
     /**
      * get download content type
      *
@@ -39,12 +41,11 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
     public function generate()
     {
         $this->_converter = new Calendar_Convert_Event_VCalendar_Tine();
+        $this->_converter->setOptions([
+            Calendar_Convert_Event_VCalendar_Tine::OPTION_ADD_ATTACHMENTS_BINARY => true,
+        ]);
         $this->_exportRecords();
-        if ($this->_config->filename) {
-            // TODO implement
-        } else {
-            echo $this->_vcalendar->serialize();
-        }
+        return $this->_vcalendar !== null;
     }
 
     /**
@@ -56,11 +57,33 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
             $this->_vcalendar = $this->_createVCalendar($_record);
         }
 
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($_record);
         $this->_converter->addEventToVCalendar($this->_vcalendar, $_record);
     }
 
     protected function _createVCalendar(Calendar_Model_Event $_record)
     {
         return $this->_converter->createVCalendar($_record);
+    }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function write()
+    {
+        if ($this->_vcalendar === null) {
+            throw new Tinebase_Exception_NotFound('empty export');
+        }
+
+        $vcalSerialized = $this->_vcalendar->serialize();
+        if ($this->_config->filename) {
+            if (file_exists($this->_config->filename)) {
+                throw new Tinebase_Exception_AccessDenied('Could not overwrite existing file');
+            }
+            file_put_contents($this->_config->filename, $vcalSerialized);
+        } else {
+            echo $vcalSerialized;
+        }
     }
 }

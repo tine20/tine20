@@ -1130,12 +1130,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param $app
      * @param $model
      * @param $options
+     * @param $container
      * @return Tinebase_Model_Container
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _importDemoData($app, $model, $options)
+    protected function _importDemoData($app, $model, $options, $container = null)
     {
-        $container = $this->_getTestContainer($app, $model);
+        $container = $container ? $container : $this->_getTestContainer($app, $model);
         $options['container_id'] = $container->getId();
         $importer = new Tinebase_Setup_DemoData_Import($model, $options);
         $importer->importDemodata();

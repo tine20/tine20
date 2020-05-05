@@ -3,7 +3,7 @@ server {
     listen [::]:80;
 
     server_name {{getv "/server/name" "_"}};
-    root "/tine/tine20";
+    root "/usr/share/tine20";
     index index.php;
 
     error_log    /dev/stderr;
@@ -12,7 +12,7 @@ server {
     port_in_redirect off;
     client_max_body_size {{getv "/client/max/body/size" "24M"}};
 
-    set $PHP_VALUE "include_path=/etc/tine20:/tine/tine20
+    set $PHP_VALUE "include_path=/etc/tine20:/usr/share/tine20
                     max_execution_time = 1800
                     memory_limit = 256M";
 

@@ -8,17 +8,17 @@ const path = require('path');
 const uuid = require('uuid/v1');
 
 module.exports = {
-    download: async function (page, selector, option= {}) {
+    download: async function (page, selector, option = {}) {
         const downloadPath = path.resolve(__dirname, 'download', uuid());
         mkdirp(downloadPath);
         console.log('Downloading file to:', downloadPath);
-        await page._client.send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: downloadPath });
-        await expect(page).toClick(selector,option);
+        await page._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: downloadPath});
+        await expect(page).toClick(selector, option);
         let filename = await this.waitForFileToDownload(downloadPath);
         return path.resolve(downloadPath, filename);
     },
 
-     waitForFileToDownload: async function (downloadPath) {
+    waitForFileToDownload: async function (downloadPath) {
         console.log('Waiting to download file...');
         let filename;
         while (!filename || filename.endsWith('.crdownload')) {
@@ -32,12 +32,12 @@ module.exports = {
         return new Promise((fulfill) => browser.once('targetcreated', (target) => fulfill(target.page())));
     },
 
-    getEditDialog: async function(btnText) {
+    getEditDialog: async function (btnText) {
         await expect(page).toClick('.x-btn-text', {text: btnText});
         let popupWindow = await this.getNewWindow();
         await popupWindow.waitForSelector('.ext-el-mask');
         await popupWindow.waitFor(() => !document.querySelector('.ext-el-mask'));
-        await popupWindow.screenshot({path:'screenshots/test.png'});
+        await popupWindow.screenshot({path: 'screenshots/test.png'});
         return popupWindow;
     },
 
@@ -54,7 +54,7 @@ module.exports = {
             clearCache: true
         }));
         await page.waitFor(1000);
-        await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon',20000);
+        await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon', 20000);
     },
 
     /**
@@ -70,7 +70,7 @@ module.exports = {
         const el_display = await page.evaluate((selector) => document.querySelector(selector).style.display);
         if (visible && el_display === 'none') {
             return Promise.reject('Error: ' + selector + ' still visible');
-        } else if (! visible && el_display !== 'none') {
+        } else if (!visible && el_display !== 'none') {
             return Promise.reject('Error: ' + selector + ' still invisible');
         }
 
@@ -85,13 +85,13 @@ module.exports = {
      * @param value
      * @returns {Promise<void>}
      */
-    setPreference: async function(page, appName, preference, value) {
+    setPreference: async function (page, appName, preference, value) {
         console.log('setting preference ' + preference + ' of app '
             + appName + ' to "' + value + '"');
 
         await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
         await page.waitFor(2000);
-        const frame = await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer',{visible: true});
+        const frame = await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
         await expect(frame).toClick('.x-menu-item-icon.action_adminMode');
         const preferencePopup = await this.getNewWindow();
         await preferencePopup.waitFor(2000);
@@ -122,8 +122,9 @@ module.exports = {
             //defaultViewport: {width: 1366, height: 768},
             args: ['--lang=de-DE,de']
         });
+
         page = await browser.newPage();
-        page.setDefaultTimeout(10000);
+        await page.setDefaultTimeout(15000);
         await page.setViewport({
             width: 1366,
             height: 768,
@@ -147,9 +148,15 @@ module.exports = {
         await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME);
         await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD);
         await expect(page).toClick('button', {text: 'Anmelden'});
-        await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
+        try {
+            await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
+        } catch (e) {
+            console.log('login failed!');
+            console.log(app);
+            console.error(e);
+        }
 
-        if(app) {
+        if (app) {
             await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
             await expect(page).toClick('.x-menu-item-text', {text: app});
         }
