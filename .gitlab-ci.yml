@@ -55,9 +55,9 @@ stages:
   image:
     name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   script:
-    - cd /tine
+    - cd $TINE20ROOT
     - composer require phpstan/phpstan
-    - php -d memory_limit=2G /tine/vendor/bin/phpstan analyse --autoload-file=/tine/tine20/vendor/autoload.php --error-format=prettyJson --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json
+    - php -d memory_limit=2G $TINE20ROOT/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=prettyJson --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json
   artifacts:
     reports:
       codequality: code-quality-report.json
@@ -114,8 +114,8 @@ stages:
       when: on_success
     - when: never
   script:
-    - cd /tine/tests/tine20/
-    - php /tine/tine20/vendor/bin/phpunit --color --debug --group nogitlabci AllTests
+    - cd $TINE20ROOT/tests/tine20/
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --group nogitlabci AllTests
   allow_failure: true
 
 "php unit: all tests built with ldap":
@@ -124,8 +124,8 @@ stages:
   image:
     name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   script:
-    - cd /tine/tests/tine20/
-    - php /tine/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap CiTestSuite$CI_NODE_INDEX
+    - cd $TINE20ROOT/tests/tine20/
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap CiTestSuite$CI_NODE_INDEX
   rules:
     - if: *feature_branch_pipeline
       when: never

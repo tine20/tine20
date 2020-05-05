@@ -1,0 +1,19 @@
+version: '2'
+services:
+  web:
+    image: tine20-dev:2018.11-7.3-fpm-alpine
+    environment:
+      TINE20_BUILDTYPE: DEVELOPMENT
+    volumes:
+      - ./tine20:/usr/share/tine20/
+      - ./tests:/usr/share/tests/
+    ports:
+      - "127.0.0.1:4000:80"
+      - "127.0.0.1:4001:10443"
+
+networks:
+  external_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.118.0.0/16

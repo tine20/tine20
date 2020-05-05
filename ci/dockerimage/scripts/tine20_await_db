@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 $conf = include('/etc/tine20/config.inc.php');
 
@@ -37,11 +38,12 @@ $timeout = intval(getenv('WAIT_FOR_DB_TIMEOUT') ?: '60');
 for ($i = 0; $i < $timeout; $i++) {
     try {
         new PDO("$type:host=$host;dbname=$dbname", $user, $pass);
-        print("DB available");
+        print("DB available\n");
         return;
     } catch (PDOException $e) {
         if ($i > 20) {
-            print($e->getMessage());
+            print($e->getMessage()."\n");
+            flush();
         }
     }
     sleep(1);

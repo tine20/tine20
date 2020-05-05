@@ -122,6 +122,8 @@ class Setup_Frontend_Cli
             $this->_upgradeMysql564();
         } elseif(isset($_opts->migrateUtf8mb4)) {
             $this->_migrateUtf8mb4();
+        } elseif(isset($_opts->config_from_env)) {
+            $this->_configFromEnv();
         }
 
         Tinebase_Log::logUsageAndMethod('setup.php', $time_start, 'Setup.' . implode(',', $_opts->getOptions()));
@@ -1293,5 +1295,59 @@ class Setup_Frontend_Cli
         }
 
         Setup_Controller::getInstance()->clearCache();
+    }
+
+    /**
+     * loads config values from environment
+     */
+    private function _configFromEnv()
+    {
+        $output = [];
+
+        foreach ($_ENV as $env_key => $env_value) {
+            $env_key_array = explode('_', $env_key);
+            if ($env_key_array[0] != 'TINE20' || ! isset($env_key_array[1]) || $env_key_array[1] != '' || ! isset($env_key_array[2])) {
+                //Only accept env vars with format 'TINE20__*'
+                continue;
+            }
+
+            if (isset($env_key_array[3])) {
+                $applicationName = $env_key_array[2];
+                $configKey = $env_key_array[3];
+            } else {
+                $applicationName = 'Tinebase';
+                $configKey = $env_key_array[2];
+            }
+
+            $configValue = self::parseConfigValue($env_value);
+
+            if (! Tinebase_Application::getInstance()->isInstalled('Tinebase') || ! Tinebase_Application::getInstance()->isInstalled($applicationName)) {
+                $output[] = $configKey . " err: " . $applicationName . ' is not installed';
+                continue;
+            }
+
+            $config = Tinebase_Config_Abstract::factory($applicationName);
+
+            if (null === $config->getDefinition($configKey)) {
+                $output[] = $configKey . " err: config property does not exist in " . $applicationName;
+                continue;
+            }
+
+            if ($config->get($configKey) == $configValue) {
+                $output[] = $configKey . " ok";
+                continue;
+            }
+
+            $config->set($configKey, $configValue);
+            $output[] = $configKey . " changed";
+        }
+
+        if (! empty($output)) {
+            foreach ($output as $lines) {
+                echo "- " . $lines . "\n";
+            }
+        } else {
+            echo "Nothing to load\n";
+        }
     }
 }
