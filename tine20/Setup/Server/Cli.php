@@ -89,6 +89,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'maintenance_mode'          => 'set systems maintenance mode state
                         Examples:
                            setup.php --maintenance_mode -- state=[on|all|off]',
+                'config_from_env'           => 'generates config from environment variables like TINE20__<application>_<propertiy>',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -121,7 +122,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->upgradeMysql564) &&
             empty($opts->migrateUtf8mb4) &&
             empty($opts->pgsqlMigration) &&
-            empty($opts->maintenance_mode)))
+            empty($opts->maintenance_mode) &&
+            empty($opts->config_from_env)))
         {
             echo $opts->getUsageMessage();
             exit;

@@ -5,8 +5,12 @@ ARG SOURCE_IMAGE=source
 ARG BUILD_IMAGE=build
 ARG BUILT_IMAGE=built
 
+# scripts and config files still need to be change manualy
+ARG TINE20ROOT=/usr/share
+
 FROM ${PHP_IMAGE}:${PHP_IMAGE_TAG} as base
 ARG PHP_IMAGE_TAG=7.3-fpm-alpine
+ARG TINE20ROOT=/usr/share
 
 # https://github.com/docker-library/php/issues/240
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
@@ -40,55 +44,43 @@ RUN apk --no-cache add nginx supervisor curl && \
     echo "" | pecl install yaml && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/php-ext-yaml.ini && \
 # remove php build dependencies
     apk del --purge .build-deps && \
-    docker-php-source delete && \
-#install.tmpl nodejs and npm
-# create tine folders
-    mkdir /tine && \
-    mkdir /tine/conf.d && \
-    mkdir /tine/logs && \
-    mkdir /tine/files && \
-    mkdir /tine/tmp && \
-    mkdir /tine/caching && \
-    mkdir /tine/sessions && \
-    mkdir /etc/tine20 && \
-    mkdir /var/run/tine20 && \
-    chown nginx:nginx /tine/logs && \
-    chown nginx:nginx /tine/files && \
-    chown nginx:nginx /tine/caching && \
-    chown nginx:nginx /tine/sessions && \
-    chown nginx:nginx /tine/tmp
+    docker-php-source delete
 
-# start up script
-COPY ci/dockerimage/install_tine.sh /install_tine.sh
-COPY ci/dockerimage/wait_for_db.php /wait_for_db.php
+# create tine20 user and folders
+RUN addgroup -S -g 150 tine20 && \
+    adduser -S -H -D -s /bin/ash -g "tine20 user" -G tine20 -u 150 tine20 && \
+    mkdir -p /etc/tine20/conf.d && \
+    mkdir -p /var/log/tine20 && \
+    mkdir -p /var/lib/tine20/files && \
+    mkdir -p /var/lib/tine20/tmp && \
+    mkdir -p /var/lib/tine20/caching && \
+    mkdir -p /var/lib/tine20/sessions && \
+    mkdir -p /var/run/tine20 && \
+    mkdir -p ${TINE20ROOT}/tine20 && \
+    chown tine20:tine20 /var/log/tine20 && \
+    chown tine20:tine20 /var/lib/tine20/files && \
+    chown tine20:tine20 /var/lib/tine20/caching && \
+    chown tine20:tine20 /var/lib/tine20/sessions && \
+    chown tine20:tine20 /var/lib/tine20/tmp && \
+    chown tine20:tine20 /var/lib/nginx && \
+    chown tine20:tine20 /var/lib/nginx/tmp
 
 # copy config templates to confd dir
-RUN mkdir -p /etc/confd/conf.d && mkdir /etc/confd/templates
-COPY ci/dockerimage/confd/conf.d/nginx.toml /etc/confd/conf.d/nginx.toml
-COPY ci/dockerimage/confd/conf.d/nginx-vhost.toml /etc/confd/conf.d/nginx-vhost.toml
-COPY ci/dockerimage/confd/conf.d/php.toml /etc/confd/conf.d/php.toml
-COPY ci/dockerimage/confd/conf.d/php-fpm.toml /etc/confd/conf.d/php-fpm.toml
-COPY ci/dockerimage/confd/conf.d/tine.toml /etc/confd/conf.d/tine.toml
-COPY ci/dockerimage/confd/conf.d/tine-install.toml /etc/confd/conf.d/tine-install.toml
-COPY ci/dockerimage/confd/templates/config.inc.php.tmpl /etc/confd/templates/config.inc.php.tmpl
-COPY ci/dockerimage/confd/templates/install.tmpl /etc/confd/templates/install.tmpl
-COPY ci/dockerimage/confd/templates/nginx.conf.tmpl /etc/confd/templates/nginx.conf.tmpl
-COPY ci/dockerimage/confd/templates/nginx-vhost.conf.tmpl /etc/confd/templates/nginx-vhost.conf.tmpl
-COPY ci/dockerimage/confd/templates/php.ini.tmpl /etc/confd/templates/php.ini.tmpl
-COPY ci/dockerimage/confd/templates/php-fpm.conf.tmpl /etc/confd/templates/php-fpm.conf.tmpl
+RUN mkdir -p /etc/confd/
+COPY ci/dockerimage/confd/conf.d /etc/confd/conf.d
+COPY ci/dockerimage/confd/templates/ /etc/confd/templates
 
 RUN mkdir -p /etc/supervisor.d/
-COPY ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/nginx.ini
-COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/php-fpm.ini
+COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d
+COPY ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d
+COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d
+
+COPY ci/dockerimage/scripts/* /usr/local/bin
 
 # set workdir
-WORKDIR /tine
-
-# setup entrypoint
-# + first runs confd to create configs
-# + then start supervisor
-COPY ci/dockerimage/entrypoint.sh /entrypoint.sh
-CMD ["/entrypoint.sh"]
+WORKDIR ${TINE20ROOT}
+ENV TINE20ROOT=${TINE20ROOT}
+CMD ["/usr/local/bin/entrypoint"]
 
 # checks if php-fpm an nginx are working
 HEALTHCHECK --timeout=30s CMD curl --silent --fail http://127.0.0.1:80/ADMIN/fpm-ping
@@ -99,69 +91,75 @@ FROM ${BASE_IMAGE} as source
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG NODE_TLS_REJECT_UNAUTHORIZED=1
+ARG TINE20ROOT=/usr/share
 
 RUN apk add --no-cache composer git npm
 
-RUN mkdir /tine/tine20
-RUN mkdir -p /tine/tine20/Tinebase/js
+RUN mkdir -p ${TINE20ROOT}/tine20/Tinebase/js
 
-COPY tine20/library /tine/tine20/library
-COPY tine20/composer.json /tine/tine20/composer.json
-COPY tine20/composer.lock /tine/tine20/composer.lock
-COPY tine20/Tinebase/js/package.json /tine/tine20/Tinebase/js/package.json
-COPY tine20/Tinebase/js/npm-shrinkwrap.json /tine/tine20/Tinebase/js/npm-shrinkwrap.json
+COPY tine20/library ${TINE20ROOT}/tine20/library
+COPY tine20/composer.json ${TINE20ROOT}/tine20/composer.json
+COPY tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
+COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
+COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
 
 # install tine dependencies
-RUN cd /tine/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
+RUN cd ${TINE20ROOT}/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
 
-RUN cd /tine/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
+RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
 
 # copy tine source
-COPY .git /tine/.git
-COPY tine20 /tine/tine20/
-COPY tests /tine/tests/
-COPY scripts /tine/scripts/
+COPY .git ${TINE20ROOT}/.git
+COPY tine20 ${TINE20ROOT}/tine20/
+COPY tests ${TINE20ROOT}/tests/
+COPY scripts ${TINE20ROOT}/scripts/
 
 # run composer post install command, cant be run before becouse git is needed
-RUN cd /tine/tine20 && composer run-script post-install-cmd
+RUN cd ${TINE20ROOT}/tine20 && composer run-script post-install-cmd
 
 # ======================================================================================================================
 
 FROM ${SOURCE_IMAGE} as test-source
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ARG TINE20ROOT=/usr/share
 
 RUN apk add mysql-client
 
 COPY ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/webpack.ini
 COPY docs/config /config
-COPY ci/dockerimage/install_mail.sh /install_mail.sh
-COPY phpstan.neon /tine/phpstan.neon
-COPY phpstan-baseline.neon /tine/phpstan-baseline.neon
-
-
-ENV TINE20_INSTALL=true
+COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
+COPY phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon
 
 # ======================================================================================================================
 
 FROM ${SOURCE_IMAGE} as build
+ARG TINE20ROOT=/usr/share
 
-RUN cd /tine/tine20/ && vendor/bin/phing build
-RUN cd /tine/tine20 && composer install --no-dev --no-ansi --no-progress --no-suggest
+ARG RELEASE=local
+ARG CODENAME=local
+ARG REVISION=local
+
+COPY ci/dockerimage/build/build_script.sh /build_script.sh
+
+COPY ci/dockerimage/build/cacert20150305.pem ${TINE20ROOT}/tine20/Tinebase/License/cacert20150305.pem
+
+RUN bash -c "source /build_script.sh && activateReleaseMode"
+RUN bash -c "source /build_script.sh && buildLangStats"
+RUN bash -c "source /build_script.sh && buildClient"
+RUN bash -c "source /build_script.sh && removeComposerDevDependencies"
+RUN bash -c "source /build_script.sh && cleanup"
 
 # ======================================================================================================================
 
+# fixes some bug: Forgot to document it in time, so i do not no witch one
 FROM ${BUILD_IMAGE} as copy-build
 
 # ======================================================================================================================
 
 FROM ${BASE_IMAGE} as built
+ARG TINE20ROOT=/usr/share
 # copy tine source
-COPY --from=copy-build /tine/tine20 /tine/tine20
-COPY --from=copy-build /tine/scripts /tine/scripts
-
-# start up script
-COPY ci/dockerimage/supervisor.d/install_tine.ini /etc/supervisor.d/install_tine.ini
-RUN chmod +x /install_tine.sh
+COPY --from=copy-build ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 
 # ======================================================================================================================
 
@@ -169,20 +167,18 @@ FROM ${BUILT_IMAGE} as test-built
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG NODE_TLS_REJECT_UNAUTHORIZED=1
+ARG TINE20ROOT=/usr/share
 
 RUN apk add --no-cache composer git npm mysql-client
 
 COPY docs/config/ /config
-COPY ci/dockerimage/install_mail.sh /install_mail.sh
 
-COPY --from=copy-build /tine/tests /tine/tests
-COPY --from=copy-build /tine/.git /tine/.git
+COPY --from=copy-build ${TINE20ROOT}/tests ${TINE20ROOT}/tests
+COPY --from=copy-build ${TINE20ROOT}/.git ${TINE20ROOT}/.git
 
-RUN cd /tine/tine20 && composer install --no-ansi --no-progress --no-suggest
+RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
 
-RUN cd /tine/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
-
-ENV TINE20_INSTALL=true
+RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
 
 # ======================================================================================================================
 
@@ -190,6 +186,7 @@ FROM ${BASE_IMAGE} as dev
 
 # install.tmpl php build dependencies
 RUN apk add --no-cache --virtual .build-deps autoconf gcc musl-dev make g++
+RUN apk add nodejs npm composer git
 RUN docker-php-source extract
 
 # xdebug

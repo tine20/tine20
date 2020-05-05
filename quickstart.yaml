@@ -1,0 +1,47 @@
+version: '2'
+services:
+  db:
+    image: mariadb:10.4.1
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: &MYSQL_DATABASE tine20db
+      MYSQL_USER: &MYSQL_USER tine20
+      MYSQL_PASSWORD: &MYSQL_PASSWORD tine20
+    networks:
+      - internal_network
+
+  cache:
+    image: redis:5.0.5
+    networks:
+      - internal_network
+
+  web:
+    image: tine20:2018.11-7.3-fpm-alpine
+    depends_on:
+      - db
+      - cache
+    environment:
+      TINE20_DATABASE_HOST: db
+      TINE20_DATABASE_DBNAME: *MYSQL_DATABASE
+      TINE20_DATABASE_USERNAME: *MYSQL_USER
+      TINE20_DATABASE_PASSWORD: *MYSQL_PASSWORD
+      TINE20_SETUPUSER_USERNAME: tine20setup
+      TINE20_SETUPUSER_PASSWORD: tine20setup
+      TINE20_LOGIN_USERNAME: tine20admin
+      TINE20_LOGIN_PASSWORD: tine20admin
+      TINE20_ADMIN_EMAIL: tine20admin@mail.invalid
+      TINE20_CACHING_BACKEND: Redis
+      TINE20_CACHING_REDIS_HOST: cache
+      TINE20_SESSION_BACKEND: Redis
+      TINE20_SESSION_HOST: cache
+      TINE20_CREDENTIALCACHESHAREDKEY: change_me
+    networks:
+      - external_network
+      - internal_network
+    ports:
+      - "127.0.0.1:4000:80"
+
+networks:
+  external_network:
+  internal_network:
+    internal: true
