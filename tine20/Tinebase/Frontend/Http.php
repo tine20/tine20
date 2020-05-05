@@ -200,17 +200,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if ($this->_redirect()) {
             return;
         }
-
-        // check if setup/update required
-        if (Setup_Controller::getInstance()->updateNeeded()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' updates required');
-            return $this->setupRequired();
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' rendering mainscreen');
-
+        
         return $this->mainScreen();
     }
 
@@ -229,19 +219,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         return false;
     }
 
-    /**
-     * renders the setup/update required dialog
-     */
     public function setupRequired()
     {
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Update/Setup required!');
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('update.php');
-        exit();
+        return $this->mainScreen();
     }
 
     /**

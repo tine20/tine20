@@ -865,6 +865,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'releaseTime'   => TINE20_RELEASETIME,
                 'assetHash'     => $assetHash,
             ),
+            'setupRequired'     => Setup_Controller::getInstance()->setupRequired(),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,

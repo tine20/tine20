@@ -291,7 +291,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Get value for ' . $_preferenceName . ' of account id '. $_accountId . ' / ' . $_accountType);
         
-        $queryResult = $this->_getPrefs($_preferenceName, $_accountId, $_accountType);
+        try {
+            $queryResult = $this->_getPrefs($_preferenceName, $_accountId, $_accountType);
+        } catch (Exception $e) {
+            $queryResult = null;
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' ' . print_r($queryResult, true));
@@ -802,8 +806,14 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     protected function _getDefaultBasePreference($_preferenceName)
     {
+        try {
+            $application_id = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId();
+        } catch (Exception $e) {
+            // app not installed
+            $application_id = null;
+        }
         return new Tinebase_Model_Preference(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
+            'application_id'    => $application_id,
             'name'              => $_preferenceName,
             'account_id'        => 0,
             'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
