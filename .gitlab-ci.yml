@@ -125,7 +125,7 @@ stages:
     name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap CiTestSuite$CI_NODE_INDEX
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap AllTests
   rules:
     - if: *feature_branch_pipeline
       when: never
