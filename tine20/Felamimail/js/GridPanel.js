@@ -73,7 +73,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * @private grid cfg
      */
-    defaultSortInfo: {field: 'received', direction: 'DESC'},
+    defaultSortInfo: {field: 'sent', direction: 'DESC'},
     gridConfig: {
         autoExpandColumn: 'subject',
         // drag n dropfrom
@@ -550,7 +550,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 100,
             sortable: true,
             dataIndex: 'sent',
-            hidden: true,
             renderer: Tine.Tinebase.common.dateTimeRenderer
         },{
             id: 'received',
@@ -558,6 +557,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 100,
             sortable: true,
             dataIndex: 'received',
+            hidden: true,
             renderer: Tine.Tinebase.common.dateTimeRenderer
         },{
             id: 'folder_id',
