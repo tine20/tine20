@@ -741,13 +741,15 @@ class Tinebase_Application
         }
 
         /** @var Tinebase_Model_Application $app */
-        foreach($apps as $app) {
+        foreach ($apps as $app) {
             /** @var Tinebase_Controller $controllerClass */
             $controllerClass = $app->name . '_Controller';
             if (!class_exists(($controllerClass))) {
                 try {
                     $controllerInstance = Tinebase_Core::getApplicationInstance($app->name, '', true);
-                } catch(Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    continue;
+                } catch (Tinebase_Exception_AccessDenied $tead) {
                     continue;
                 }
             } else {
