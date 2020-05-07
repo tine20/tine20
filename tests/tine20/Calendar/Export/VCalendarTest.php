@@ -75,11 +75,14 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         $this->_importDemoData('Calendar', Calendar_Model_Event::class, 'cal_import_event_csv', $this->_getTestCalendar());
         $filename = '/tmp/export.ics';
         $this->_export('filename=' . $filename);
+        self::assertTrue(file_exists($filename), 'export file does not exist');
         $result = file_get_contents($filename);
         unlink($filename);
         self::assertContains('Anforderungsanalyse', $result);
+        self::assertContains('SUMMARY:Mittag', $result);
         self::assertContains('BEGIN:VCALENDAR', $result);
         self::assertContains('BEGIN:VTIMEZONE', $result);
+        self::assertContains('END:VCALENDAR', $result);
     }
 
     public function testExportAllCalendars()

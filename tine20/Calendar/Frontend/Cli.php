@@ -153,8 +153,10 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     // ['field' => 'dtstart', 'operator' => 'inweek', 'value' => 20],
                 ]);
                 $export = new Calendar_Export_VCalendar($filter, null, $args);
-                $export->generate();
-                $export->write();
+                $filename = $export->generate();
+                if (! $filename) {
+                    $export->write();
+                }
             }
         }
 
