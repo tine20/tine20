@@ -30,6 +30,9 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertContains('Anforderungsanalyse', $result);
         self::assertContains('BEGIN:VCALENDAR', $result);
         self::assertContains('BEGIN:VTIMEZONE', $result);
+        // 4 events + 1 time in header
+        self::assertEquals(5, substr_count($result, 'X-CALENDARSERVER-ACCESS:PUBLIC'),
+            'X-CALENDARSERVER-ACCESS:PUBLIC should appear once in header');
     }
 
     protected function _export($params = '')
