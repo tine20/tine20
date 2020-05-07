@@ -698,7 +698,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 // ACL Check
                 $controller->get($pathParts[2]);
 
-                //$pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath();
                 $node = Tinebase_FileSystem::getInstance()->stat('/' . $_appId . '/folders/' . $path, $_revision);
             } else {
                 $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . $_appId . '/folders/' . $path);
@@ -709,7 +708,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 }
             }
         } else {
-            throw new Tinebase_Exception_InvalidArgument('A path is needed to download a preview file.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' A path is needed to download a preview file.');
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
 
         $this->_downloadPreview($node, $_type, $_num);
