@@ -272,7 +272,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
         $class = $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL';
         $vevent->add('X-CALENDARSERVER-ACCESS', $class);
-        if (! $_mainEvent) {
+        if (! $_mainEvent && $vcalendar->{'X-CALENDARSERVER-ACCESS'} === null) {
             // add one time only
             $vcalendar->add('X-CALENDARSERVER-ACCESS', $class);
         }
