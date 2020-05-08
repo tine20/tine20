@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e5d61afce1fad5c2fae34fd8235e0b47",
+    "content-hash": "3900c07225b0d4941c6dea4341acc34b",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "1affa0a2accd94926705a09205111030c11c4b15"
+                "reference": "103cd522d9fb6ba5a31052b404a7cbfc578c84b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/1affa0a2accd94926705a09205111030c11c4b15",
-                "reference": "1affa0a2accd94926705a09205111030c11c4b15",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/103cd522d9fb6ba5a31052b404a7cbfc578c84b5",
+                "reference": "103cd522d9fb6ba5a31052b404a7cbfc578c84b5",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-03-11T10:52:27+00:00"
+            "time": "2020-03-25T12:41:16+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -3904,11 +3904,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl38",
+            "version": "1.12.20pl39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "ca341d0a5392fb9a84818b2eae0fb4e553177133"
+                "reference": "79c11374a4422d8f26fe794d82483e363afac71f"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3925,7 +3925,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2020-02-12T10:41:53+00:00"
+            "time": "2020-05-07T15:40:15+00:00"
         }
     ],
     "packages-dev": [
@@ -5420,7 +5420,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch38",
+            "version": "1.12.20.0-patch39",
             "package": "zendframework/zendframework1"
         }
     ],
