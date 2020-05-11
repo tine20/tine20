@@ -1118,7 +1118,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * nagios monitoring for tine 2.0 logins during the last 5 mins
+     * nagios monitoring for successful tine 2.0 logins during the last 5 mins
      * 
      * @return number
      * 
@@ -1131,7 +1131,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         try {
             $filter = new Tinebase_Model_AccessLogFilter(array(
-                array('field' => 'li', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMinute(5))
+                array('field' => 'li', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMinute(5)),
+                array('field' => 'result', 'operator' => 'equals', 'value' => 1),
             ));
             $accesslogs = Tinebase_AccessLog::getInstance()->search($filter, NULL, FALSE, TRUE);
             $valueString = ' | count=' . count($accesslogs) . ';;;;';
