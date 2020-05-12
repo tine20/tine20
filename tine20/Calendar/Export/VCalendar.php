@@ -15,6 +15,15 @@
 class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
 {
     /**
+     * 10 MB
+     *
+     * @const MAX_ICS_FILE_SIZE
+     *
+     * TODO allow to overwrite this via config
+     */
+    const MAX_ICS_FILE_SIZE = 10 * 1024 * 1024;
+
+    /**
      * @var Calendar_Convert_Event_VCalendar_Tine
      */
     protected $_converter = null;
@@ -29,6 +38,10 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
     protected $_format = 'ics';
 
     protected $_exportFileHandle = null;
+
+    protected $_exportFilenames = [];
+
+    protected $_currentExportFilename = null;
 
     /**
      * get download content type
@@ -56,6 +69,7 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
         ]);
         $this->_exportRecords();
 
+        // TODO return all generated files
         return $this->_writeToFile() ? $this->_config->filename : null;
     }
 
@@ -113,21 +127,52 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
 
     protected function _addRecordToFile(Calendar_Model_Event $_record)
     {
+        $this->_checkMaxFileSize();
+
         $vcalendar = $this->_createVCalendar($_record);
         $this->_converter->addEventToVCalendar($vcalendar, $_record);
 
         if ($this->_exportFileHandle === null) {
-            $this->_exportFileHandle = fopen($this->_config->filename, 'w');
-            if (! $this->_exportFileHandle) {
-                throw new Tinebase_Exception('could not open export file: ' . $this->_config->filename);
-            }
+            $this->_createExportFilehandle();
             fwrite($this->_exportFileHandle, $vcalendar->serialize());
         } else {
-            // add only VEVENT & VALARMs here
             $vevents = $vcalendar->select('VEVENT');
             foreach ($vevents as $vevent) {
                 $this->_addComponentToEndOfFile($vevent);
             }
+        }
+    }
+
+    protected function _checkMaxFileSize()
+    {
+        if (! $this->_exportFileHandle) {
+            return;
+        }
+        $currentSize = ftell($this->_exportFileHandle);
+        $offset = 1024; // use 1 KB as offset
+        if ($currentSize + $offset > self::MAX_ICS_FILE_SIZE) {
+            // close current file - open new file in _createExportFilehandle
+            fclose($this->_exportFileHandle);
+            $this->_exportFileHandle = null;
+            $number = count($this->_exportFilenames) + 1;
+            if (preg_match('/.ics$/i', $this->_currentExportFilename, $matches)) {
+                $this->_currentExportFilename = str_replace($matches[0], '_' . $number . $matches[0],
+                    $this->_currentExportFilename);
+            } else {
+                $this->_currentExportFilename .= '_' . $number;
+            }
+        }
+    }
+
+    protected function _createExportFilehandle()
+    {
+        if (! $this->_currentExportFilename) {
+            $this->_currentExportFilename = $this->_config->filename;
+        }
+        $this->_exportFilenames[] = $this->_currentExportFilename;
+        $this->_exportFileHandle = fopen($this->_currentExportFilename, 'w');
+        if (! $this->_exportFileHandle) {
+            throw new Tinebase_Exception('could not open export file: ' . $this->_currentExportFilename);
         }
     }
 
