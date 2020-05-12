@@ -29,11 +29,15 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
             'X-CALENDARSERVER-ACCESS:PUBLIC should appear once in header');
     }
 
-    protected function _export($params = '')
+    protected function _export($params = '', $addContainerid = true)
     {
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.exportVCalendar';
-        $cmd = TestServer::assembleCliCommand($cmd, TRUE, 'container_id=' .
-            $this->_getTestCalendar()->getId() . ' ' . $params);
+        $args = $addContainerid ? 'container_id=' .
+            $this->_getTestCalendar()->getId() : '';
+        if (! empty($params)) {
+            $args .= ' ' . $params;
+        }
+        $cmd = TestServer::assembleCliCommand($cmd, TRUE,  $args);
         exec($cmd, $output);
         return implode(',', $output);
     }
@@ -87,6 +91,33 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
 
     public function testExportAllCalendars()
     {
-        // TODO implement
+        $this->_testNeedsTransaction();
+
+        $this->_importDemoData('Calendar', Calendar_Model_Event::class, 'cal_import_event_csv', $this->_getTestCalendar());
+
+        $path = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . 'tine20_export_' . Tinebase_Record_Abstract::generateUID(8);
+        mkdir($path);
+        $output = $this->_export('path=' . $path . ' type=personal', false);
+
+        self::assertContains('Exported container ' . $this->_getTestCalendar()->getId() . ' into file', $output);
+
+        // loop files in export dir
+        $exportFilesFound = 0;
+        $fh = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($fh as $splFileInfo) {
+            /** @var SplFileInfo $splFileInfo */
+            $filename = $splFileInfo->getFilename();
+            if ($filename === '.' || $filename === '..') {
+                continue;
+            }
+            self::assertContains(Tinebase_Core::getUser()->accountLoginName, $filename);
+            $result = file_get_contents($splFileInfo->getPathname());
+            self::assertContains('END:VCALENDAR', $result);
+            $exportFilesFound++;
+            unlink($splFileInfo->getPathname());
+        }
+        self::assertGreaterThan(0, $exportFilesFound);
+
+        rmdir($path);
     }
 }
