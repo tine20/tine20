@@ -70,7 +70,7 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
         $this->_exportRecords();
 
         // TODO return all generated files
-        return $this->_writeToFile() ? $this->_config->filename : null;
+        return $this->_writeToFile() && ! empty($this->_exportFilenames) ? $this->_exportFilenames[0] : null;
     }
 
     protected function _writeToFile()
@@ -149,14 +149,15 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
             return;
         }
         $currentSize = ftell($this->_exportFileHandle);
-        $offset = 1024; // use 1 KB as offset
+        $offset = 1024 * 512;
         if ($currentSize + $offset > self::MAX_ICS_FILE_SIZE) {
             // close current file - open new file in _createExportFilehandle
             fclose($this->_exportFileHandle);
             $this->_exportFileHandle = null;
             $number = count($this->_exportFilenames) + 1;
-            if (preg_match('/.ics$/i', $this->_currentExportFilename, $matches)) {
-                $this->_currentExportFilename = str_replace($matches[0], '_' . $number . $matches[0],
+            // TODO invent a helper function for filename generation (with numbers)
+            if (preg_match('/(n[0-9]+)*(.ics)$/i', $this->_currentExportFilename, $matches)) {
+                $this->_currentExportFilename = str_replace($matches[0], 'n' . $number . $matches[2],
                     $this->_currentExportFilename);
             } else {
                 $this->_currentExportFilename .= '_' . $number;
