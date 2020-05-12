@@ -18,24 +18,84 @@ stages:
     - docker tag php:$PHP_IMAGE_TAG $REGISTRY/php:$PHP_IMAGE_TAG
     - docker push $REGISTRY/php:$PHP_IMAGE_TAG
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - if: $DOCKER_RETAG_PHP_IMAGE == "true"
       when: on_success
     - when: never
 
-"docker: build base, source and test-source image":
+# this or the next job "docker: build base, dependency, source and test-source image" should be uses
+# "cache" using job
+"docker: build source and test-source image":
+  extends: .abstract_jobs.docker
+  stage: build_docker_images
+  script:
+    - pull_tag_push base $MAJOR_COMMIT_REF_NAME-$PHP_IMAGE_TAG commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG
+    - pull_tag_push dependency $MAJOR_COMMIT_REF_NAME-$PHP_IMAGE_TAG commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG
+    - build_and_push source
+    - build_and_push test-source
+  rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
+    - if: *feature_branch_pipeline
+      when: never
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - changes:
+        - ci/dockerimage
+        - tine20/library
+        - tine20/composer.json
+        - tine20/composer.lock
+        - tine20/Tinebase/js/package.json
+        - tine20/Tinebase/js/npm-shrinkwrap.json
+      when: never
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_RETAG_PHP_IMAGE == "true"
+      when: never
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
+      when: never
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
+      when: never
+    - when: on_success
+  timeout: 20m
+
+# "cache" updating job
+"docker: build base, dependency, source and test-source image":
   extends: .abstract_jobs.docker
   stage: build_docker_images
   script:
     - build_and_push base
+    - build_and_push dependency
     - build_and_push source
     - build_and_push test-source
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
-    - when: on_success
-  timeout: 20m # time run: 17m, hangs often, time should be as fast as possible
+    # reverse of "docker: build source and test-source image"
+    - changes:
+        - ci/dockerimage
+        - tine20/library
+        - tine20/composer.json
+        - tine20/composer.lock
+        - tine20/Tinebase/js/package.json
+        - tine20/Tinebase/js/npm-shrinkwrap.json
+      when: on_success
+    # reverse of "docker: build source and test-source image"
+    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
+      when: on_success
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
+      when: on_success
+    # reverse of "docker: build source and test-source image"
+    - if: $DOCKER_RETAG_PHP_IMAGE == "true"
+      when: on_success
+    - when: never
+  timeout: 20m
 
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit_test
@@ -43,6 +103,8 @@ stages:
   image:
     name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
@@ -65,6 +127,8 @@ stages:
       - code-quality-report.json
     expire_in: 1 days
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - if: $PHP_STAN_ANALYSES == "true"
@@ -82,6 +146,8 @@ stages:
     - build_and_push test-built
     - build_and_push dev
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - if: $DOCKER_BUILD_BUILD == "true"
@@ -95,6 +161,8 @@ stages:
   image:
     name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
@@ -108,6 +176,8 @@ stages:
   image:
     name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
@@ -127,20 +197,57 @@ stages:
     - cd $TINE20ROOT/tests/tine20/
     - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap AllTests
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
       when: on_success
     - when: never
 
-"docker: push base, source and test-source image":
+"docker: push base and dependency image":
   extends: .abstract_jobs.docker
   stage: built_test_and_deploy
   script:
     - pull_tag_push base commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+    - pull_tag_push dependency commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+  rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
+    - if: *feature_branch_pipeline
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $MAJOR_COMMIT_REF_NAME
+      when: never
+    # reverse of "docker: build source and test-source image"
+    - changes:
+        - ci/dockerimage
+        - tine20/library
+        - tine20/composer.json
+        - tine20/composer.lock
+        - tine20/Tinebase/js/package.json
+        - tine20/Tinebase/js/npm-shrinkwrap.json
+      when: on_success
+    # reverse of "docker: build source and test-source image"
+    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
+      when: on_success
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
+      when: on_success
+    # reverse of "docker: build source and test-source image"
+    - if: $DOCKER_RETAG_PHP_IMAGE == "true"
+      when: on_success
+    - when: never
+  timeout: 10m # time run: 3m
+
+"docker: push source and test-source image":
+  extends: .abstract_jobs.docker
+  stage: built_test_and_deploy
+  script:
     - pull_tag_push source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push test-source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - when: on_success
@@ -155,6 +262,8 @@ stages:
     - pull_tag_push test-built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
   rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
     - if: *feature_branch_pipeline
       when: never
     - if: $DOCKER_BUILD_BUILD == "true"

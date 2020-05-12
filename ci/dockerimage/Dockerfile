@@ -4,6 +4,7 @@ ARG BASE_IMAGE=base
 ARG SOURCE_IMAGE=source
 ARG BUILD_IMAGE=build
 ARG BUILT_IMAGE=built
+ARG DEPENDENCY_IMAGE=dependency
 
 # scripts and config files still need to be change manualy
 ARG TINE20ROOT=/usr/share
@@ -86,8 +87,7 @@ CMD ["/usr/local/bin/entrypoint"]
 HEALTHCHECK --timeout=30s CMD curl --silent --fail http://127.0.0.1:80/ADMIN/fpm-ping
 
 # ======================================================================================================================
-
-FROM ${BASE_IMAGE} as source
+FROM ${BASE_IMAGE} as dependency
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG NODE_TLS_REJECT_UNAUTHORIZED=1
@@ -107,6 +107,13 @@ COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
 
 RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
+
+# ======================================================================================================================
+FROM ${DEPENDENCY_IMAGE} as source
+ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ARG NPM_INSTALL_COMMAND="npm --no-optional install"
+ARG NODE_TLS_REJECT_UNAUTHORIZED=1
+ARG TINE20ROOT=/usr/share
 
 # copy tine source
 COPY .git ${TINE20ROOT}/.git
