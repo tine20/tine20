@@ -95,6 +95,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'mute'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

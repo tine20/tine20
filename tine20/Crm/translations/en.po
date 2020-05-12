@@ -734,3 +734,9 @@ msgstr "send notification"
 
 msgid "controls sending notification of Leads"
 msgstr "controls sending notification of Leads"
+
+msgid "Your are sure, that some changes can send a notification?"
+msgstr "Your are sure, that some changes can send a notification?"
+
+msgid "Mute Notification"
+msgstr "Mute Notification"
