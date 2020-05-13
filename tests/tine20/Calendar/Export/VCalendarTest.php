@@ -104,7 +104,12 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
     {
         $this->_testNeedsTransaction();
 
-        $this->_importDemoData('Calendar', Calendar_Model_Event::class, 'cal_import_event_csv', $this->_getTestCalendar());
+        $this->_importDemoData(
+            'Calendar',
+            Calendar_Model_Event::class, [
+                'definition' => 'cal_import_event_csv'
+            ], $this->_getTestCalendar()
+        );
 
         $path = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . 'tine20_export_' . Tinebase_Record_Abstract::generateUID(8);
         mkdir($path);
