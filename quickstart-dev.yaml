@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    image: tine20-dev:2018.11-7.3-fpm-alpine
+    image: tine20/dev:2018.11-7.3-fpm-alpine
     environment:
       TINE20_BUILDTYPE: DEVELOPMENT
     volumes:
