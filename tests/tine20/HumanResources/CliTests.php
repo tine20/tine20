@@ -158,6 +158,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
     
     /**
      * tests set_contracts_end_date
+     * @group nogitlabci
      */
     public function testSetContractsEndDate()
     {
@@ -186,8 +187,8 @@ class HumanResources_CliTests extends HumanResources_TestCase
             'employee_id' => $employee->getId(),
             'start_date'  => $begin,
             'end_date'    => NULL,
-            'workingtime_json' => '{days: [4,4,4,4,4,0,0]}',
-            'vacation_days' => 34
+            'vacation_days' => 34,
+            'working_time_scheme' => $this->_getWorkingTimeScheme40()->getId(),
         ));
         
         $contract = $cc->create($contract);

@@ -223,12 +223,13 @@ Tine.widgets.dialog.ExceptionHandlerDialog.openWindow = function(config) {
         }
     }
     
-    var window = Tine.WindowFactory.getExtWindow({
+    var window = Tine.WindowFactory.getWindow({
         title: title,
-        width : config.hasOwnProperty('width') ? config.width: 290,
-        height : config.hasOwnProperty('height') ? config.height : 95,
-        contentPanelConstructor : 'Tine.widgets.dialog.ExceptionHandlerDialog',
-        contentPanelConstructorConfig : config
+        modal: true,
+        width: config.hasOwnProperty('width') ? config.width: 290,
+        height: config.hasOwnProperty('height') ? config.height : 95,
+        contentPanelConstructor: 'Tine.widgets.dialog.ExceptionHandlerDialog',
+        contentPanelConstructorConfig: config
     });
     
     return window;

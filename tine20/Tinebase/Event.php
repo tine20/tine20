@@ -47,10 +47,12 @@ class Tinebase_Event
             } catch (Tinebase_Exception_NotFound $e) {
                 // application has no controller or is not useable at all
                 continue;
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . ' ' . __LINE__ . ' Access denied to app ' . $application->name);
+                continue;
             }
             if ($controller instanceof Tinebase_Event_Interface) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
-                    . __LINE__ . ' calling eventhandler for event ' . get_class($_eventObject) . ' of application ' . (string) $application);
                 static::$history[$historyOffset][$application->getId()] = true;
                 try {
                     $controller->handleEvent($_eventObject);
@@ -101,7 +103,7 @@ class Tinebase_Event
                 try {
                     $controller = Tinebase_Core::getApplicationInstance($application, NULL, TRUE);
                 } catch (Tinebase_Exception_NotFound $e) {
-                    // application has no controller or is not useable at all
+                    // application has no controller or is not usable at all
                     continue;
                 }
                 if (isset($data[$application->getId()])) {

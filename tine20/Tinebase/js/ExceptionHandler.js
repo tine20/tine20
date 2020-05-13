@@ -272,7 +272,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 600:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._(exception.title),
-                    msg: i18n._(exception.message)
+                    msg: Ext.util.Format.nl2br(i18n._(exception.message))
                 }));
                 break;
                 

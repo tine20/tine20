@@ -76,6 +76,8 @@ class TestServer
         Zend_Session::$_unitTestEnabled = TRUE;
 
         Tinebase_Core::set('frameworkInitialized', true);
+
+        Tinebase_Core::set(Tinebase_Core::CONTAINER, Tinebase_Core::getPreCompiledContainer());
     }
     
     /**
@@ -184,9 +186,10 @@ class TestServer
      * 
      * @param string $command
      * @param bool   $addCredentials
+     * @param string $additionalParams
      * @return string
      */
-    public static function assembleCliCommand($command = "", $addCredentials = FALSE)
+    public static function assembleCliCommand($command = "", $addCredentials = FALSE, $additionalParams = null)
     {
         //$backtrace = debug_backtrace();
         //return $backtrace[1]['class'];
@@ -197,7 +200,7 @@ class TestServer
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Script name: ' . $_SERVER['SCRIPT_NAME']);
         
         $cmd = preg_replace(array(
-            '@' . preg_quote($_SERVER['SCRIPT_NAME']) . '@',
+            '@' . preg_quote($_SERVER['SCRIPT_NAME'], '@') . '@',
             '/--stderr /',
             '/--colors{0,1} /',
             '/--verbose /',
@@ -232,6 +235,10 @@ class TestServer
         if ($addCredentials) {
             $credentials = TestServer::getInstance()->getTestCredentials();
             $cmd .= " --username {$credentials['username']} --password {$credentials['password']}";
+        }
+
+        if ($additionalParams) {
+            $cmd .= " -- " . $additionalParams;
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Assembled commmand: ' . $cmd);
@@ -319,6 +326,7 @@ class TestServer
      * @return array
      * 
      * @todo DRY: should be moved to abstract TestCase and used in ServerTestCase
+     * @todo should return a Std object with user/pw properties
      */
     public function getTestCredentials()
     {

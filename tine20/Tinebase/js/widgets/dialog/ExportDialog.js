@@ -69,7 +69,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // check if initial data available
         if (Tine[this.appName].registry.get('exportDefinitions')) {
             Ext.each(exportDefinitions, function(defData) {
-                var options = defData.plugin_options,
+                var options = defData.plugin_options_json,
                     extension = options ? options.extension : null;
                 
                 defData.label = this.app.i18n._hidden(defData.label ? defData.label : defData.name);

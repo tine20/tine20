@@ -118,8 +118,16 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $contactPaging = $paging;
         $contactPaging["sort"] = "n_fn"; // Field are not named the same for contacts and lists
         $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
+
+        $emailFields = ['n_fileas', 'email', 'email_home'];
         foreach ($contacts["results"] as $contact) {
-            array_push($results, array("n_fileas" => $contact["n_fileas"], "email" => $contact["email"], "email_home" => $contact["email_home"]));
+            $emailData = [];
+            foreach ($emailFields as $field) {
+                if (isset($contact[$field])) {
+                    $emailData[$field] = $contact[$field];
+                }
+            }
+            array_push($results, $emailData);
         }
 
         $dont_add = false;
@@ -133,7 +141,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
-        // TODO discuss this behaviour - do we still need it when we have the group mailing sieve rules?
         $oldFeatureValue = null;
         $adbConfig = Addressbook_Config::getInstance();
         try {
@@ -152,7 +159,11 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'Addressbook_Model_ListFilter');
             if (!$dont_add) {
                 foreach ($lists["results"] as $list) {
-                    if (! empty($list["emails"])) {
+                    if (isset($list['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
+                        && $list['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] == 1
+                    ) {
+                        array_push($results, array("n_fileas" => $list["name"], "emails" => [$list['email']]));
+                    } else if (! empty($list["emails"])) {
                         array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
                     }
                 }
@@ -261,6 +272,18 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchListRoles($filter, $paging)
     {
         return $this->_search($filter, $paging, Addressbook_Controller_ListRole::getInstance(), 'Addressbook_Model_ListRoleFilter');
+    }
+
+    /**
+     * Search for lists member roles matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchListMemberRoles($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Addressbook_Controller_ListMemberRole::getInstance(), 'Addressbook_Model_ListMemberRoleFilter');
     }
 
     /**

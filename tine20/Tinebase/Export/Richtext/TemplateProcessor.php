@@ -26,6 +26,8 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     const TYPE_RECORD = 'record';
     const TYPE_SUBRECORD = 'subrecord';
 
+    const NEW_LINE_PLACEHOLDER = 'WORD_NEWLINE';
+
     /**
      * Content of document rels (in XML format) of the temporary document.
      *
@@ -44,6 +46,10 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     protected $_config = array();
 
     protected $_twigName = '';
+
+    protected $_postPCallMap = [];
+
+    protected $_twigTemplateSrc = null;
 
     /**
      * @param string $documentTemplate The fully qualified template filename.
@@ -95,6 +101,103 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
             $this->_temporaryDocumentRels = $this->fixBrokenMacros(
                 $this->zipClass->getFromName('word/_rels/document.xml.rels'));
         }
+
+        $this->_postPCallMap = [
+            'TC' => [
+                'FILL' => function(&$data, $offset, array $params) {
+                    $tc1Pos = false;
+                    if (false === ($tcPos = strrpos($data, '<w:tc>', $offset - strlen($data))) &&
+                            false === ($tc1Pos = strrpos($data, '<w:tc ', $offset - strlen($data)))) {
+                        throw new Tinebase_Exception('could not find <w:tc in tc_fill');
+                    }
+                    if (false === $tcPos || (false !== $tc1Pos && $tc1Pos > $tcPos)) $tcPos = $tc1Pos;
+                    if (false === ($tcPrPos = strpos($data, '<w:tcPr', $tcPos)) || $tcPrPos > $offset) {
+                        if (false === ($gtPos = strpos($data, '>', $tcPos))) {
+                            throw new Tinebase_Exception('could not find > for <w:tc in tc_fill');
+                        }
+                        $data = substr($data, 0, $gtPos + 1) . '<w:tcPr><w:shd w:fill="' . $params[0] . '"/></w:tcPr>' .
+                            substr($data, $gtPos + 1);
+                    } elseif (false === ($shdPos = strpos($data, '<w:shd ', $tcPrPos)) || $shdPos > $offset) {
+                        if (false === ($gtPos = strpos($data, '>', $tcPrPos))) {
+                            throw new Tinebase_Exception('could not find > for <w:tcPr in tc_fill');
+                        }
+                        $data = substr($data, 0, $gtPos + 1) . '<w:shd w:fill="' . $params[0] . '"/>' .
+                            substr($data, $gtPos + 1);
+                    } elseif (false === ($fillPos = strpos($data, 'w:fill="', $shdPos)) || $fillPos > $offset) {
+                        if (false === ($gtPos = strpos($data, '/>', $shdPos))) {
+                            throw new Tinebase_Exception('could not find /> for <w:shd in tc_fill');
+                        }
+                        $data = substr($data, 0, $gtPos + 1) . 'w:fill="' . $params[0] . '"' .
+                            substr($data, $gtPos + 1);
+                    } else {
+                        $fillPos += 8;
+                        if (false === ($quotePos = strpos($data, '"', $fillPos))) {
+                            throw new Tinebase_Exception('could not find " for w:fill=" in tc_fill');
+                        }
+                        $data = substr($data, 0, $fillPos) . $params[0] . substr($data, $quotePos);
+                    }
+                },
+            ],
+            /*'TR' => [
+                'FILL' => function(&$data, $offset, array $params) {
+                    $tr1Pos = false;
+                    if (false === ($trPos = strrpos($data, '<w:tr>', $offset - strlen($data))) &&
+                            false === ($tr1Pos = strrpos($data, '<w:tr ', $offset - strlen($data)))) {
+                        throw new Tinebase_Exception('could not find <w:tr in tr_fill');
+                    }
+                    if (false === $trPos || (false !== $tr1Pos && $tr1Pos > $trPos)) $trPos = $tr1Pos;
+                    if (false === ($trPrPos = strpos($data, '<w:trPr', $trPos)) || $trPrPos > $offset) {
+                        if (false === ($gtPos = strpos($data, '>', $trPos))) {
+                            throw new Tinebase_Exception('could not find > for <w:tr in tr_fill');
+                        }
+                        $data = substr($data, 0, $gtPos + 1) . '<w:trPr><w:shd w:fill="' . $params[0] . '"/></w:trPr>' .
+                            substr($data, $gtPos + 1);
+                    } else {
+                        if (false === ($offset1 = strpos($data, '</w:trPr>', $trPos)) || $offset1 > $offset) {
+                            throw new Tinebase_Exception(('could not find </w:trPr> in tr_fill'));
+                        }
+                        $offset = $offset1;
+                        if (false === ($shdPos = strpos($data, '<w:shd ', $trPrPos)) || $shdPos > $offset) {
+                            if (false === ($gtPos = strpos($data, '>', $trPrPos))) {
+                                throw new Tinebase_Exception('could not find > for <w:trPr in tr_fill');
+                            }
+                            $data = substr($data, 0, $gtPos + 1) . '<w:shd w:fill="' . $params[0] . '"/>' .
+                                substr($data, $gtPos + 1);
+                        } elseif (false === ($fillPos = strpos($data, 'w:fill="', $shdPos)) || $fillPos > $offset) {
+                            if (false === ($gtPos = strpos($data, '/>', $shdPos))) {
+                                throw new Tinebase_Exception('could not find /> for <w:shd in tr_fill');
+                            }
+                            $data = substr($data, 0, $gtPos + 1) . 'w:fill="' . $params[0] . '"' .
+                                substr($data, $gtPos + 1);
+                        } else {
+                            $fillPos += 8;
+                            if (false === ($quotePos = strpos($data, '"', $fillPos))) {
+                                throw new Tinebase_Exception('could not find " for w:fill=" in tr_fill');
+                            }
+                            $data = substr($data, 0, $fillPos) . $params[0] . substr($data, $quotePos);
+                        }
+                    }
+                },
+            ],*/
+        ];
+    }
+
+    public function replaceTwigTemplate()
+    {
+        $this->_twigTemplateSrc = $this->findBlock('TWIG_TEMPLATE', '${TWIG_TEMPLATE}');
+        if (null !== $this->_twigTemplateSrc) {
+            $this->_twigTemplateSrc = $this->fixBrokenTwigMacros($this->_twigTemplateSrc);
+        }
+    }
+
+    public function unsetTwigSource()
+    {
+        $this->_twigTemplateSrc = null;
+    }
+
+    public function getTwigSource()
+    {
+        return $this->_twigTemplateSrc;
     }
 
     /**
@@ -121,6 +224,31 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         return $this->_parent;
     }
 
+    public function postProcessMarkers()
+    {
+        while (preg_match('/(POSTP_\w+)\~\!\§/', $this->tempDocumentMainPart, $m, PREG_OFFSET_CAPTURE)) {
+            $this->tempDocumentMainPart = substr($this->tempDocumentMainPart, 0, $m[0][1]) .
+                substr($this->tempDocumentMainPart, $m[0][1] + strlen($m[0][0]));
+
+            $callStack = explode('_', $m[1][0]);
+            array_shift($callStack);
+            $this->callPostProcessor($this->tempDocumentMainPart, $m[0][1], $callStack, $this->_postPCallMap);
+        }
+    }
+
+    protected function callPostProcessor(&$data, $offset, &$callStack, $callMap)
+    {
+        $key = array_shift($callStack);
+        if (!isset($callMap[$key])) {
+            throw new Exception('did not find ' . $key . ' in post processor call map');
+        }
+        if (is_callable($callMap[$key])) {
+            $callMap[$key]($data, $offset, $callStack);
+        } else {
+            $this->callPostProcessor($data, $offset, $callStack, $callMap[$key]);
+        }
+    }
+
     public function replaceTine20ImagePaths()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -140,9 +268,25 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     protected function _replaceTine20ImagePaths(&$xmlData, $relData)
     {
         $replacements = [];
-        if (preg_match_all('#<w:drawing[^>]*>.*?<wp:docPr[^>]+"(\w+://[^"]+)".*?r:embed="([^"]+)".*?</w:drawing>#is', $xmlData, $matches, PREG_SET_ORDER)) {
-            foreach($matches as $match) {
+        $offset = 0;
 
+        do {
+            if (false === ($newOffset = strpos($xmlData, 'descr="tine20://', $offset)) &&
+                    false === ($newOffset = strpos($xmlData, 'descr="file://', $offset))) {
+                break;
+            }
+            $offset = $newOffset;
+            if (false === ($drawOffset = strrpos($xmlData, '<w:drawing', 0 - (strlen($xmlData) - $offset)))) {
+                break;
+            }
+            if (false === ($drawEndOffset = strpos($xmlData, '</w:drawing>', $offset))) {
+                break;
+            }
+
+            $drawingStr = substr($xmlData, $drawOffset, $drawEndOffset - $drawOffset + 12);
+            if (preg_match(
+                    '#<w:drawing[^>]*>.*<wp:docPr[^>]+descr="(\w+://[^"]+)".+r:embed="([^"]+)".+</w:drawing>#is',
+                    $drawingStr, $match)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found url: ' . $match[1]);
 
@@ -157,51 +301,61 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                     if (!empty($fileContent)) {
                         $this->zipClass->deleteName('word/' . $relMatch[1]);
                         $this->zipClass->addFromString('word/' . $relMatch[1], $fileContent);
-                        if (false === ($imageSize = getimagesize($match[1]))) {
+
+                        $message = '';
+                        try {
+                            $imageSize = getimagesize($match[1]);
+                        } catch (Throwable $exception) {
+                            $imageSize = false;
+                            $message = $exception->getMessage();
+                        }
+
+                        if (!$imageSize) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                                 Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
-                                    . ' could not get image size: ' . $match[1]);
+                                    . ' Could not get image size: ' . $match[1] . '/  error: ' . $message);
+                            continue;
+                        }
+
+                        $replaceStr = $match[0];
+                        $replaced = false;
+                        $width = $imageSize[0] * 914400 / 96;
+                        $height = $imageSize[1] * 914400 / 96;
+                        if (preg_match_all('#<a:ext[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
+                            $submatches, PREG_SET_ORDER)) {
+                            if (count($submatches) > 1) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
+                                    . count($submatches) . ' <a:ext cx= cy= ' . $match[1]);
+                            }
+                            foreach ($submatches as $submatch) {
+                                $this->_replaceSubmatch($submatch, $replaceStr, $width, $height);
+                            }
+                            $replaced = true;
                         } else {
-                            $replaceStr = $match[0];
-                            $replaced = false;
-                            $width = $imageSize[0] * 914400 / 96;
-                            $height = $imageSize[1] * 914400 / 96;
-                            if (preg_match_all('#<a:ext[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
-                                    $submatches, PREG_SET_ORDER)) {
-                                if (count($submatches) > 1) {
-                                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
-                                        . count($submatches) . ' <a:ext cx= cy= ' . $match[1]);
-                                }
-                                foreach ($submatches as $submatch) {
-                                    $this->_replaceSubmatch($submatch, $replaceStr, $width, $height);
-                                }
-                                $replaced = true;
-                            } else {
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
-                                    . ' could not find <a:ext cx= cy= ' . $match[1]);
-                            }
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
+                                . ' could not find <a:ext cx= cy= ' . $match[1]);
+                        }
 
-                            if (preg_match_all('#<wp:extent[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
-                                $submatches, PREG_SET_ORDER)) {
-                                if (count($submatches) > 1) {
-                                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
-                                        . count($submatches) . ' <wp:extent cx= cy= ' . $match[1]);
-                                }
-                                foreach ($submatches as $submatch) {
-                                    $this->_replaceSubmatch($submatch, $replaceStr, $width, $height);
-                                }
-                                $replaced = true;
-                            } else {
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
-                                    . ' could not find <wp:extent cx= cy= ' . $match[1]);
+                        if (preg_match_all('#<wp:extent[^>]*c(.)="(\d+)"[^>]*c(.)="(\d+)"[^>]*>#', $match[0],
+                            $submatches, PREG_SET_ORDER)) {
+                            if (count($submatches) > 1) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' found '
+                                    . count($submatches) . ' <wp:extent cx= cy= ' . $match[1]);
                             }
+                            foreach ($submatches as $submatch) {
+                                $this->_replaceSubmatch($submatch, $replaceStr, $width, $height);
+                            }
+                            $replaced = true;
+                        } else {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
+                                . ' could not find <wp:extent cx= cy= ' . $match[1]);
+                        }
 
-                            if ($replaced) {
-                                $replacements[] = [
-                                    $match[0],
-                                    $replaceStr
-                                ];
-                            }
+                        if ($replaced) {
+                            $replacements[] = [
+                                $match[0],
+                                $replaceStr
+                            ];
                         }
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
@@ -214,7 +368,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                             . ' could not find relation matching found url: ' . $match[1]);
                 }
             }
-        }
+        } while (++$offset);
 
         foreach ($replacements as $rep) {
             $xmlData = str_replace($rep[0], $rep[1], $xmlData);
@@ -286,17 +440,6 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         foreach($this->_tempFooterRels as $index => $data) {
             $this->zipClass->addFromString('word/_rels/footer' . $index . '.xml.rels', $data);
         }
-
-        // TODO here we use \x0B as a placeholder, but Tinebase_Twig adds a function which uses \n...
-        // replace newline placeholder vertical tab (ascii 11)
-        /*
-        foreach ($this->tempDocumentHeaders as &$xml) {
-            $xml = join('</w:t><w:br /><w:t>', mb_split("\x0B", $xml));
-        }
-        $this->tempDocumentMainPart = join('</w:t><w:br /><w:t>', mb_split("\x0B", $this->tempDocumentMainPart));
-        foreach ($this->tempDocumentFooters as &$xml) {
-            $xml = join('</w:t><w:br /><w:t>', mb_split("\x0B", $xml));
-        }*/
 
         return parent::save();
     }
@@ -571,6 +714,35 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
 
         $fixedDocumentPart = preg_replace_callback(
             '|\{%[^}]*%[^}]*\}|U',
+            function ($match) {
+                return strip_tags($match[0]);
+            },
+            $fixedDocumentPart
+        );
+
+        return $fixedDocumentPart;
+    }
+
+    /**
+     * Finds parts of broken macros and sticks them together.
+     * Macros, while being edited, could be implicitly broken by some of the word processors.
+     *
+     * @param string $documentPart The document part in XML representation.
+     *
+     * @return string
+     */
+    protected function fixBrokenTwigMacros($documentPart)
+    {
+        $fixedDocumentPart = preg_replace_callback(
+            '|\{[^}{%]*\{[^}]*\}[^}]*\}|U',
+            function ($match) {
+                return strip_tags($match[0]);
+            },
+            $documentPart
+        );
+
+        $fixedDocumentPart = preg_replace_callback(
+            '|\{[^}{%]*%[^}]*\}|U',
             function ($match) {
                 return strip_tags($match[0]);
             },

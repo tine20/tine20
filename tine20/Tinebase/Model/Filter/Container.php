@@ -119,6 +119,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         $value = array();
         foreach ((array) $_value as $v) {
             $this->_flatten($v);
+            $v = trim($v);
             
             // transform id to path
             if (strpos($v, '/') === FALSE) {

@@ -17,13 +17,17 @@ Ext.namespace('Tine.Felamimail.sieve');
      */
     windowNamePrefix: 'NotificationWindow_',
     appName: 'Felamimail',
-    recordClass: Tine.Felamimail.Model.Account,
-    recordProxy: Tine.Felamimail.accountBackend,
     loadRecord: true,
     tbarItems: [],
     evalGrants: false,
     readonlyReason: false,
     
+    initComponent: function() {
+        this.recordClass = Tine.Felamimail.Model.Account;
+        this.recordProxy = Tine.Felamimail.accountBackend;
+        
+        Tine.Felamimail.sieve.NotificationDialog.superclass.initComponent.call(this);
+    }, 
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * 

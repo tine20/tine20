@@ -51,14 +51,15 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $uri = preg_replace('/^' . preg_quote($serverPath, '/') . '/', '', $uri);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' FastRoute dispatching on method: ' . $request->getMethod() . ' and uri: '
-            . $uri);
+            . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), function($headers, $name) use ($request)  {
+                return $headers .= "\n$name: {$request->getHeaderLine($name)}";
+            }, ''));
 
         $routeInfo = $dispatcher->dispatch($request->getMethod(), $uri);
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . ' returning 404 not found');
+                    . __LINE__ . ' returning 404 method not found');
 
                 // 404 not found
                 return new Response('php://memory', 404);

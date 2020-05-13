@@ -158,7 +158,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     $this->_subFilterController = Tinebase_Core::getApplicationInstance($modelName);
                     $this->_subFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
                     $filterClass = null;
-                    $this->_operators = array('AND', 'OR');
+                    $this->_operators = ['AND', 'OR', 'notDefinedBy:AND', 'notDefinedBy:OR'];
                 } else {
                     $filterClass = Tinebase_Model_Filter_Id::class;
                 }
@@ -168,6 +168,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 throw new Tinebase_Exception_NotImplemented('filter for records type not implemented yet');
                 break;
             default:
+                $this->_operators = ['contains', 'AND', 'OR'];
                 // nothing here - parent is used
         }
 
@@ -180,9 +181,6 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     'options' => $this->_valueFilterOptions
                 ]);
             $this->_operators = $this->_valueFilter->getOperators();
-        } else {
-            // allow default operators
-            $this->_operators = ['contains', 'AND', 'OR'];
         }
 
         parent::__construct($_fieldOrData, $_operator, $_value, $_options);
@@ -224,23 +222,42 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
 
         if (null !== $this->_subFilterController && null !== $this->_subFilter) {
             $value = $this->_value['value'];
-            array_walk($value, function(&$val) {
-                if (isset($val['field']) && strpos($val['field'], ':') === 0) {
-                    $val['field'] = substr($val['field'], 1);
-                }
-            });
-            $this->_subFilter->setFromArray($value);
-            $ids = $this->_subFilterController->search($this->_subFilter, null, false, true);
-            if (count($ids)) {
-                $this->_valueFilter = new Tinebase_Model_Filter_Id(
+
+            $queryForEmpty = count($value) === 1 && isset($value[0]) &&
+                is_array($value[0]) && array_key_exists('value', $value[0]) && empty($value[0]['value']);
+            $notOperator = strpos($this->_operator, 'not') === 0;
+
+            if ($queryForEmpty) {
+                (new Tinebase_Model_Filter_Id(
                     [
                         'field' => 'value',
-                        'operator' => 'in',
-                        'value' => $ids,
+                        'operator' => $notOperator ? 'notnull' : 'isnull',
+                        'value' => true,
                         'options' => $this->_valueFilterOptions
-                    ]);
+                    ]))->appendFilterSql($_select, $_backend);
             } else {
-                $_select->where('1=2');
+                array_walk($value, function (&$val) {
+                    if (isset($val['field']) && strpos($val['field'], ':') === 0) {
+                        $val['field'] = substr($val['field'], 1);
+                    }
+                });
+                $this->_subFilter->setFromArray($value);
+                $ids = $this->_subFilterController->search($this->_subFilter, null, false, true);
+                if (count($ids)) {
+                    $this->_valueFilter = new Tinebase_Model_Filter_Id(
+                        [
+                            'field' => 'value',
+                            'operator' => $notOperator ? 'notin' : 'in',
+                            'value' => $ids,
+                            'options' => $this->_valueFilterOptions
+                        ]);
+                } else {
+                    if ($notOperator) {
+                        $_select->where('1=1');
+                    } else {
+                        $_select->where('1=2');
+                    }
+                }
             }
         }
         if (null !== $this->_valueFilter) {
@@ -277,24 +294,44 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     $controller = Tinebase_Core::getApplicationInstance($modelName);
                     if (is_string($result['value']['value'])) {
                         $result['value']['value'] = $controller->get($result['value']['value'])->toArray();
-                    } else if (is_array($result['value']['value'])) {
+                    }  elseif (is_array($result['value']['value'])) {
                         //  this is very bad - @refactor
                         foreach ($result['value']['value'] as $key => $subfilter) {
-                            if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value']) &&
-                                is_string($subfilter['value'])) {
-                                $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                            if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value'])) {
+                                try {
+                                    if (is_string($subfilter['value'])) {
+                                        $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                                    } elseif (is_array($subfilter['value']) && isset($subfilter['value']['id'])) {
+                                        // nothing to do here!
+                                    } elseif (is_array($subfilter['value'])) {
+                                        $tmpArr = current($subfilter['value']);
+                                        if (is_array($tmpArr) && isset($tmpArr['id'])) {
+                                            // nothing to do here
+                                        } elseif (is_string($tmpArr)) {
+                                            $result['value']['value'][$key]['value'] = $controller->getMultiple($subfilter['value'])->toArray();
+                                        } else {
+                                            unset($result['value']['value'][$key]);
+                                        }
+                                    } else {
+                                        unset($result['value']['value'][$key]);
+                                    }
+                                } catch (Tinebase_Exception_NotFound $tenf) {
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                        __METHOD__ . '::' . __LINE__ . ' Record not found: ' . $tenf->getMessage());
+                                    unset($result['value']['value'][$key]);
+                                }
                             }
                         }
-
                     } else {
                         // TODO do we need to do something in this case?
                     }
                 } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                        __METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
                     Tinebase_Exception::log($e);
                 }
             } else if (is_array($result['value']['value'])) {
-                // return hydrated value
+                // return dehydrated value
                 foreach ($result['value']['value'] as $key => $subfilter) {
                     if (isset($subfilter['field'])
                         && $subfilter['field'] === ':id'
@@ -304,8 +341,18 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                         if (isset($subfilter['value']['id'])) {
                             $result['value']['value'][$key]['value'] = $subfilter['value']['id'];
                         } else {
-                            // set empty id value
-                            $result['value']['value'][$key]['value'] = '';
+                            $tmpArr = current($subfilter['value']);
+                            if (is_array($tmpArr) && isset($tmpArr['id'])) {
+                                $result['value']['value'][$key]['value'] = [];
+                                foreach ($subfilter['value'] as $tmpArr) {
+                                    if (isset($tmpArr['id'])) {
+                                        $result['value']['value'][$key]['value'][] = $tmpArr['id'];
+                                    }
+                                }
+                            } else {
+                                // set empty id value
+                                $result['value']['value'][$key]['value'] = '';
+                            }
                         }
                     }
                 }

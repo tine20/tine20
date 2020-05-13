@@ -121,6 +121,9 @@ class Sales_Controller_ProductAggregate extends Tinebase_Controller_Record_Abstr
                         if (null === $gate) {
                             $gate = [];
                         }
+                        if (is_array($val['id'])) {
+                            $val['id'] = $val['id']['id'];
+                        }
                         $id = $val['model'] . $val['id'];
                         if (isset($gate[$id])) {
                             return false;
@@ -142,15 +145,28 @@ class Sales_Controller_ProductAggregate extends Tinebase_Controller_Record_Abstr
      */
     protected function _getProductAccountables(Sales_Model_ProductAggregate $productAggregate) {
         $json_attributes = $productAggregate->json_attributes;
-        if (!is_array($json_attributes) || !isset($json_attributes['assignedAccountables']))
+        if (!is_array($json_attributes) || !isset($json_attributes['assignedAccountables'])) {
             return null;
+        }
 
         $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
-        if ($product->accountable == '')
+        if ($product->accountable == '') {
             return null;
+        }
 
-
+        $accountableIds = [];
+        foreach ($json_attributes['assignedAccountables'] as $accountable) {
+            if (isset($accountable['id'])) {
+                if (isset($accountable['id']['id'])) {
+                    $accountableIds[] = $accountable['id']['id'];
+                } else {
+                    $accountableIds[] = $accountable['id'];
+                }
+            } else {
+                $accountableIds[] = $accountable;
+            }
+        }
         $app = Tinebase_Core::getApplicationInstance($product->accountable, '');
-        return $app->getMultiple($json_attributes['assignedAccountables']);
+        return $app->getMultiple($accountableIds);
     }
 }

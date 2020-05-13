@@ -44,34 +44,27 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         Tine.Felamimail.AttachmentUploadGrid.superclass.initComponent.call(this);
 
         this.on('beforeedit', this.onBeforeEdit.createDelegate(this));
+        this.store.on('add', this.onStoreAddRecords, this);
 
-        this.initActions();
-    },
-
-    /**
-     * initActions
-     */
-    initActions: function () {
-        this.action_download = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: false,
-            actionType: 'download',
-            text: i18n._('Download'),
-            handler: this.onDownload,
-            iconCls: 'action_download',
-            scope: this,
-            disabled:true
-        });
-
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
+        if (this.action_rename) {
+            _.set(this, 'action_rename.initialConfig.actionUpdater', this.renameActionUpdater);
         }
-
-        this.actionUpdater.addActions([this.action_download, this.action_preview]);
-        this.getTopToolbar().addItem(this.action_download);
-        this.contextMenu.addItem(this.action_download);
     },
-    
+
+    onStoreAddRecords: function(store, rs, idx) {
+        _.each(rs, (r) => {
+            _.set(r, 'data.attachment_type', 'attachment');
+        });
+    },
+
+    renameActionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+        const isTempfile = !!_.get(records, '[0].data.tempFile');
+        const enabled = !!isTempfile;
+
+        action.setDisabled(!enabled);
+        action.baseAction.setDisabled(!enabled);
+    },
+
     onBeforeEdit: function (e) {
         var record = e.record;
         this.currentRecord = record;

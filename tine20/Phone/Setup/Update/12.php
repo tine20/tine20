@@ -13,6 +13,7 @@ class Phone_Setup_Update_12 extends Setup_Update_Abstract
 {
     const RELEASE012_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE012_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -26,6 +27,10 @@ class Phone_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE012_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -47,6 +52,12 @@ class Phone_Setup_Update_12 extends Setup_Update_Abstract
 
     public function update002()
     {
+        // needs to be reexecuted, so moved to update003
+        $this->addApplicationUpdate('Phone', '12.2', self::RELEASE012_UPDATE002);
+    }
+
+    public function update003()
+    {
         $call = Phone_Controller_Call::getInstance();
         $result = $this->_db->select()->from(SQL_TABLE_PREFIX . 'phone_callhistory', ['id', 'destination'])
             ->query(Zend_Db::FETCH_NUM);
@@ -56,7 +67,7 @@ class Phone_Setup_Update_12 extends Setup_Update_Abstract
                     Addressbook_Model_Contact::normalizeTelephoneNum($call->resolveInternalNumber($row[1]))
             ], 'id = ' . $this->_db->quote($row[0]));
         }
-        
-        $this->addApplicationUpdate('Phone', '12.2', self::RELEASE012_UPDATE002);
+
+        $this->addApplicationUpdate('Phone', '12.3', self::RELEASE012_UPDATE003);
     }
 }

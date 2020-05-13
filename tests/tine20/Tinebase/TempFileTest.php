@@ -4,14 +4,9 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_TempFileTest
@@ -72,5 +67,15 @@ class Tinebase_TempFileTest extends TestCase
         ));
         $createdTempFile = $this->_instance->create($tempFile);
         $this->assertEquals(4080218931, $createdTempFile->size);
+    }
+
+    public function testJoinTempFiles()
+    {
+        $records = new Tinebase_Record_RecordSet(Tinebase_Model_TempFile::class);
+        $records->addRecord($this->_getTempFile());
+        $records->addRecord($this->_getTempFile());
+
+        $joined = $this->_instance->joinTempFiles($records);
+        self::assertEquals(34, $joined->size);
     }
 }

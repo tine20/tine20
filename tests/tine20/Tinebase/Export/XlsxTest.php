@@ -218,7 +218,7 @@ class Tinebase_Export_XlsxTest extends TestCase
         ]);
         $export = new Addressbook_Export_Xls($filter, null,
             [
-                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => 'Addressbook_Model_Contact',
                     'name' => 'adb_xls'
                 ]))->getFirstRecord()->getId()
@@ -315,7 +315,7 @@ class Tinebase_Export_XlsxTest extends TestCase
         ]);
         $export = new Addressbook_Export_Xls($filter, null,
             [
-                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => 'Addressbook_Model_Contact',
                     'name' => 'adb_xls'
                 ]))->getFirstRecord()->getId()

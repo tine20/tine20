@@ -9,7 +9,7 @@
 
 /**
  * Felamimail config class
- * 
+ *
  * @package     Felamimail
  * @subpackage  Config
  */
@@ -17,7 +17,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
 {
     /**
      * is email body cached
-     * 
+     *
      * @var string
      */
     const CACHE_EMAIL_BODY = 'cacheEmailBody';
@@ -28,6 +28,27 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DELETE_ARCHIVED_MAIL = 'deleteArchivedMail';
+
+    /**
+     * migrate system accounts
+     *
+     * @var string
+     */
+    const FEATURE_ACCOUNT_MIGRATION = 'accountMigration';
+
+    /**
+     * move notifications to a subfolder via sieve
+     *
+     * @var string
+     */
+    const FEATURE_ACCOUNT_MOVE_NOTIFICATIONS = 'accountMoveNotifications';
+
+    /**
+     * auto save drafts
+     *
+     * @const string
+     */
+    const FEATURE_AUTOSAVE_DRAFTS = 'autoSaveDrafts';
 
     /**
      * Tine 2.0 flag feature
@@ -113,11 +134,49 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FLAG_ICON_OTHER_DOMAIN = 'flagIconOtherDomain';
     const FLAG_ICON_OTHER_DOMAIN_REGEX = 'flagIconOtherDomainRegex';
 
+    const SIEVE_MAILINGLIST_REJECT_REASON = 'sieveMailingListRejectReason';
+
+
+    /**
+     * keyFieldConfig vor mail account types
+     */
+    const MAIL_ACCOUNT_TYPE = 'mailAccountType';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::MAIL_ACCOUNT_TYPE => array(
+            //_('Mail Type')
+            self::LABEL              => 'Type',
+            //_('Possible mail types.')
+            self::DESCRIPTION        => 'Possible mail types.',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => array('recordModel' => Felamimail_Model_MailType::class),
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => array(
+                'records' => array(
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_USER,    'value' => 'Additional Personal External Account', 'system' => true), //_('Additional Personal External Account')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_SHARED,    'value' => 'Shared System Account',  'system' => true), //_('Shared System Account')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,   'value' => 'Additional Personal System Account',  'system' => true), //_('Additional Personal System Account')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,   'value' => 'Default Personal System Account',   'system' => true), //_('Default Personal System Account')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,   'value' => 'Mailinglist',   'system' => true), //_('Mailinglist')
+                ),
+                self::DEFAULT_STR => Tinebase_EmailUser_Model_Account::TYPE_USER
+            )
+        ),
+        self::SIEVE_MAILINGLIST_REJECT_REASON => [
+            self::LABEL                 => 'Mailinglist Reject Reason', // _('Mailinglist Reject Reason')
+            self::DESCRIPTION           => 'Mailinglist Reject Reason',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => 'Your email has been rejected', // _('Your email has been rejected')
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::VACATION_TEMPLATES_CONTAINER_ID => array(
         //_('Vacation Templates Node ID')
             'label'                 => 'Vacation Templates Node ID',
@@ -177,6 +236,30 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => true,
             self::CONTENT               => [
+                self::FEATURE_ACCOUNT_MIGRATION => [
+                    self::LABEL                 => 'Account Migration',
+                    //_('Account Migration')
+                    self::DESCRIPTION           => 'Shows context menu for system accounts to approve migration',
+                    //_('Shows context menu for system accounts to approve migration')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
+                self::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS => [
+                    self::LABEL                 => 'Move notifications',
+                    //_('Move notifications')
+                    self::DESCRIPTION           => 'Move notifications to a subfolder via sieve',
+                    //_('Move notifications to a subfolder via sieve')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
+                self::FEATURE_AUTOSAVE_DRAFTS   => [
+                    self::LABEL                 => 'Auto-Save Drafts',
+                    //_('Auto-Save Drafts')
+                    self::DESCRIPTION           => 'Save drafts automatically while editing an email',
+                    //_('Save drafts automatically while editing an email')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
                 self::FEATURE_TINE20_FLAG   => [
                     self::LABEL                 => 'Tine 2.0 Flag',
                     //_('Tine 2.0 Flag')
@@ -191,7 +274,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION           => 'Show Reply-To field in message compose dialog',
                     //_('Show Reply-To field in message compose dialog')
                     self::TYPE                  => self::TYPE_BOOL,
-                    self::DEFAULT_STR           => true,
+                    self::DEFAULT_STR           => false,
                 ],
                 self::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS   => [
                     self::LABEL                 => 'Auto-Create Folders',
@@ -299,48 +382,48 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => false,
         ),
     );
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::$_appName
      */
     protected $_appName = 'Felamimail';
-    
+
     /**
      * holds the instance of the singleton
      *
      * @var Tinebase_Config
      */
     private static $_instance = NULL;
-    
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
-     */    
+     * don't use the constructor. use the singleton
+     */
     private function __construct() {}
-    
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
-     */    
+     * don't use the constructor. use the singleton
+     */
     private function __clone() {}
-    
+
     /**
      * Returns instance of Tinebase_Config
      *
      * @return Tinebase_Config
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new self();
         }
-        
+
         return self::$_instance;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::getProperties()

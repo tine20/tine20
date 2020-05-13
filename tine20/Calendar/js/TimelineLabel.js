@@ -22,6 +22,7 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.TimelineLabel = Ext.extend(Ext.Component, {
     /**
      * @cfg {String} label
+     * Note: must be escaped properly
      */
     label: '',
 
@@ -44,7 +45,7 @@ Tine.Calendar.TimelineLabel = Ext.extend(Ext.Component, {
             '{label}',
         ];
         this.data = {
-            label: Ext.util.Format.htmlEncode(this.label),
+            label: this.label,
             iconCls: this.iconCls
         };
 

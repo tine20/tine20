@@ -131,7 +131,6 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                 app: 'Tasks',
                 keyFieldName: 'taskPriority',
-                value: 'NORMAL'
             })
         }, {
             id: 'percent',
@@ -156,14 +155,14 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 xtype: 'widget-keyfieldcombo',
                 app: 'Tasks',
                 keyFieldName: 'taskStatus',
-                allowEmpty: false
+                allowBlank: false
             },
             quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                 app: 'Tasks',
                 keyFieldName: 'taskStatus',
                 value: 'NEEDS-ACTION',
                 // TODO make this work ...
-                allowEmpty: false
+                allowBlank: false
             })
         }, {
             id: 'completed',
@@ -183,7 +182,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 useAccountRecord: true,
                 blurOnSelect: true,
                 selectOnFocus: true,
-                allowEmpty: true,
+                allowBlank: true,
                 value: Tine.Tinebase.registry.get('currentAccount')
             })
         }].concat(this.getModlogColumns().concat(this.getCustomfieldColumns())));

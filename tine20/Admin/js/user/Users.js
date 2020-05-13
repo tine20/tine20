@@ -52,6 +52,7 @@ Tine.Admin.Model.UserArray = [
     { name: 'accountExpires', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'accountLastLogin', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'accountLastPasswordChange', type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'password_must_change', type: 'boolean'},
     { name: 'accountLastLoginfrom' },
     { name: 'accountEmailAddress' },
     { name: 'accountHomeDirectory' },

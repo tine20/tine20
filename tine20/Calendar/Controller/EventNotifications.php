@@ -152,11 +152,7 @@
             return;
         }
 
-        if ($_event->dtend === NULL) {
-            throw new Tinebase_Exception_UnexpectedValue('no dtend set in event');
-        }
-        
-        if (Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend)) {
+        if ($_event->dtend && Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend)) {
             if ($_action == 'alarm' || ! ($_event->isRecurException() || $_event->rrule)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . " Skip notifications to past events");
@@ -165,7 +161,7 @@
         }
         
         $notificationPeriodConfig = Calendar_Config::getInstance()->get(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM);
-        if (Tinebase_DateTime::now()->subWeek($notificationPeriodConfig)->isLater($_event->dtend)) {
+        if ($_event->dtend && Tinebase_DateTime::now()->subWeek($notificationPeriodConfig)->isLater($_event->dtend)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Skip notifications to past events (MAX_NOTIFICATION_PERIOD_FROM: " . $notificationPeriodConfig . " week(s))");
             return;
@@ -180,12 +176,17 @@
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Notification action: " . $_action);
 
-
         $organizerContact = $_event->resolveOrganizer();
         if (! $organizerContact) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Organizer missing - using creator as organizer for notification purposes.');
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_event->created_by);
+            try {
+                $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_event->created_by);
+            } catch (Addressbook_Exception_NotFound $aenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Creator contact not found: ' . $aenf->getMessage() . ' - skipping notifications');
+                return;
+            }
         }
 
         $organizerIsAttender = false;
@@ -230,7 +231,11 @@
             case 'changed':
                 if (! $organizerIsExternal) {
                     if (! $_oldEvent) {
-                        throw new Tinebase_Exception_InvalidArgument('missing oldEvent ... can not get attendee migration');
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Missing oldEvent ... can not get attendee migration');
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' ' . print_r($_event->toArray(), true));
+                        return;
                     }
 
                     $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
@@ -279,15 +284,17 @@
                 break;
 
             case 'tentative':
-                
-                $prefUser = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE,
-                    $organizerContact->account_id);
+                $prefUser = ($organizerContact->account_id)
+                    ? Tinebase_Core::getPreference('Calendar')->getValueForUser(
+                        Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE,
+                        $organizerContact->account_id)
+                    : false;
                 $attendee = new Calendar_Model_Attender(array(
                     'cal_event_id'      => $_event->getId(),
                     'user_type'         => Calendar_Model_Attender::USERTYPE_USER,
                     'user_id'           => $_event->organizer,
                 ), true);
-                if($prefUser) {
+                if ($prefUser) {
                     $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
                 }
                 break;
@@ -384,7 +391,7 @@
             $messageBody = $view->render('eventNotification.php');
             
             $calendarPart = null;
-            $attachments = $this->_getAttachments($method, $_event, $_action, $_updater, $calendarPart);
+            $attachments = $this->_getAttachments($method, $_event, $_action, $_updater, $calendarPart, $_attender);
             
             $sender = $_action == 'alarm' ? $prefUser : $_updater;
             if (!empty($recipients)) {
@@ -649,15 +656,16 @@
      * @param string $_action
      * @param Tinebase_Model_FullUser $updater
      * @param Zend_Mime_Part $calendarPart
+     * @param Calendar_Model_Attender $attendee
      * @return array
      */
-    protected function _getAttachments($method, $event, $_action, $updater, &$calendarPart)
+    protected function _getAttachments($method, $event, $_action, $updater, &$calendarPart, $attendee)
     {
         if ($method === NULL) {
             return array();
         }
         
-        $vcalendar = $this->_createVCalendar($event, $method, $updater);
+        $vcalendar = $this->_createVCalendar($event, $method, $updater, $attendee);
         
         $calendarPart           = new Zend_Mime_Part($vcalendar->serialize());
         $calendarPart->charset  = 'UTF-8';
@@ -687,12 +695,15 @@
      * @param Calendar_Model_Event $event
      * @param string $method
      * @param Tinebase_Model_FullAccount $updater
+     * @param Calendar_Model_Attender $attendee
      * @return Sabre\VObject\Component
      */
-    protected function _createVCalendar($event, $method, $updater)
+    protected function _createVCalendar($event, $method, $updater, $attendee)
     {
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $converter->setMethod($method);
+        $converter->setCalendarUser($attendee);
+
         $vcalendar = $converter->fromTine20Model($event);
         
         foreach ($vcalendar->children() as $component) {
@@ -746,8 +757,10 @@
                 $attachments[] = $part;
                 
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Not adding attachment " . $attachment->name . ' to invitation mail (size: ' . Tinebase_Helper::convertToMegabytes($attachment-size) . ')');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " Not adding attachment " . $attachment->name
+                    . ' to invitation mail (size: ' . Tinebase_Helper::convertToMegabytes($attachment->size) . ')'
+                );
             }
         }
         

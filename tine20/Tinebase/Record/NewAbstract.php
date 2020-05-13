@@ -1577,4 +1577,22 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         }
         return true;
     }
+
+    /**
+     * @return string
+     */
+    public function getNotesTranslatedText()
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * can be used to remove fields that can't be converted to json
+     *
+     * @todo add this to model config (field config) and just loop the fields here?
+     * @todo move this to TRInterface + TRAbstract?
+     */
+    public function unsetFieldsBeforeConvertingToJson()
+    {
+    }
 }

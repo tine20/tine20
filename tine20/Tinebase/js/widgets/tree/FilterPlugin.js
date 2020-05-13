@@ -62,9 +62,11 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
         Ext.each(selection, function(node) {
             if (node) {
                 // if path was override in frontend for any reason, restore it
-                var container = node.attributes[this.nodeAttributeField];
-                container.path = node.attributes.originalPath || node.attributes.path;
-                values.push(container);
+                let container = node.attributes[this.nodeAttributeField];
+                if (container) {
+                    container.path = node.attributes.originalPath || node.attributes.path;
+                    values.push(container);
+                }
             }
         }, this);
         

@@ -22,8 +22,8 @@
  * @property    Tinebase_DateTime           last_modified_time
  * @property    string                      object_id
  * @property    string                      parent_id
- * @property    string                      size
- * @property    string                      revision_size
+ * @property    int                         size
+ * @property    int                         revision_size
  * @property    string                      type
  * @property    string                      revision
  * @property    string                      available_revisions
@@ -305,7 +305,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     public function runConvertToData()
     {
         if (array_key_exists('deleted_time', $this->_properties) && null === $this->_properties['deleted_time']) {
-            unset($this->_properties['deleted_time']);
+            $this->_properties['deleted_time'] = '1970-01-01 00:00:00';
         }
         if (isset($this->_properties[self::XPROPS_REVISION]) && is_array($this->_properties[self::XPROPS_REVISION])) {
             if (count($this->_properties[self::XPROPS_REVISION]) > 0) {
@@ -418,5 +418,26 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             return true;
         }
         return false;
+    }
+
+    public function getHighestRevision()
+    {
+        if (is_array($ar = $this->available_revisions) && !empty($ar)) {
+            sort($ar, SORT_NUMERIC);
+            return (int)end($ar);
+        }
+        return 0;
+    }
+
+    public function getPreviousRevision()
+    {
+        // sort resets keys! so we can use it
+        if (is_array($ar = $this->available_revisions) && !empty($ar)) {
+            sort($ar, SORT_NUMERIC);
+            if (false !== ($idx = array_search($this->revision, $ar)) && $idx > 0) {
+                return $ar[$idx - 1];
+            }
+        }
+        return 0;
     }
 }

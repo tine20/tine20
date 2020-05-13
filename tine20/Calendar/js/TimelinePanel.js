@@ -166,7 +166,7 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
             attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee'));
 
         attendeeStore.each(function(attendee) {
-            var groupName = attendee.get('user_type') + '-' + attendee.getUserId();
+            var groupName = this.getAttendeeType(attendee) + '-' + attendee.getUserId();
             if (! this.groupingMetadataCache.hasOwnProperty(groupName)) {
                 this.groupingMetadataCache[groupName] = attendee;
             }
@@ -176,16 +176,21 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
         return groups;
     },
 
+    getAttendeeType: function(attendee) {
+        var attendeeType = attendee.get('user_type');
+        return  attendeeType === 'groupmember' ? 'user' : attendeeType;
+    },
+
     onGroupAdd: function(idx, groupStore, groupName) {
         var _ = window.lodash,
             attendee = this.groupingMetadataCache[groupName],
             name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attendee.get('user_id'), false, attendee),
-            type = attendee.get('user_type');
+            type = this.getAttendeeType(attendee);
 
         var label = new Tine.Calendar.TimelineLabel({
             groupName: groupName,
             label: name,
-            iconCls: attendee.getIconCls(),
+            iconCls: type === 'user' ? 'tine-grid-row-action-icon renderer_typeAccountIcon' : attendee.getIconCls(),
             groupSortOrder: Tine.Calendar.Model.Attender.getSortOrder(type)
         });
 

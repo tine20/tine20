@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -14,6 +14,8 @@
  *
  * @package     Calendar
  * @subpackage  Convert
+ *
+ * NOTE: write access for KDE clients has been removed because sometimes it changes/deletes events at random
  */
 class Calendar_Convert_Event_VCalendar_KDE extends Calendar_Convert_Event_VCalendar_Abstract
 {

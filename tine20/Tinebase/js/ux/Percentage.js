@@ -43,7 +43,7 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
     lazyInit: false,
     forceSelection: true,
     itemSelector: 'div.search-item',
-    
+
     //private
     initComponent: function(){
         Ext.ux.PercentCombo.superclass.initComponent.call(this);
@@ -160,29 +160,33 @@ Ext.ux.PercentRenderer = function(percent) {
  */
 Ext.ux.PercentRendererWithName = function(value, metadata, record) {
   
-    var metaStyle = '';
+    var metaStyle = '',
+        dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock('Tinebase.datasafe');
 
     if(record.fileRecord) {
         record = record.fileRecord;
     }
+
+    metadata.css = 'x-grid-mimeicon';
+
     if(record.get('type') == 'folder') {
 
-        metadata.css = 'x-tinebase-typefolder';
+        metadata.css += ' mime-icon-folder';
+        if (dataSafeEnabled && !!record.get('pin_protected_node')) {
+            metadata.css += ' x-type-data-safe'
+        }
 
     }else if(record.get('is_quarantined') == '1') {
 
         metadata.css = 'x-tinebase-virus';
     }
     else {
+        metadata.css += ' mime-icon-file';
 
         var contenttype =  record.get('contenttype');
         if(contenttype) {
-            var iconClass = contenttype.replace("/", "-");
-            metadata.css = iconClass + '_16x16 ';
+            metadata.css += ' ' + Tine.Tinebase.common.getMimeIconCls(contenttype);
         }
-               
-        metadata.css += 'standardFileClass_16x16';
-
     }
     
     
@@ -194,7 +198,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         } 
     
         if(record.get('status') == 'uploading') {
-            metadata.css = 'x-tinebase-uploadrow';
+            metadata.css += ' x-tinebase-uploadrow';
         }
         
         return Ext.util.Format.htmlEncode(fileName);

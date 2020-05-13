@@ -78,6 +78,24 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     requiredGrants: ['readGrant'],
 
     /**
+     * allow creation of new files
+     * @cfg {Boolean} allowCreateNew
+     */
+    allowCreateNew: false,
+
+    /**
+     * initial fileName for new files
+     * @cfg {String} initialNewFileName
+     */
+    initialNewFileName: '',
+
+    /**
+     * initial path
+     * @cfg {String} initialPath
+     */
+    initialPath: null,
+
+    /**
      * Constructor.
      */
     initComponent: function () {
@@ -115,6 +133,15 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 header: false,
                 collapseMode: 'mini',
                 items: [
+                    /*
+                    @todo needs filterToolBar to clear filter
+                    new Tine.widgets.mainscreen.WestPanel({
+                        app: this.app,
+                        contentType: 'Node',
+                        NodeTreePanel: this.treePanel,
+                        gridPanel: this.gridPanel
+                    })
+                    */
                     this.treePanel
                 ]
             }, {
@@ -127,10 +154,79 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 items: [
                     this.gridPanel
                 ]
+            }, {
+                region: 'north',
+                border: false,
+                hidden: !this.allowCreateNew,
+                layout: 'vbox',
+                // height: 58,
+                height: 32,
+                items: [{
+                    layout: 'form',
+                    labelAlign: 'left',
+                    frame: true,
+                    items: {
+                        xtype: 'textfield',
+                        ref: '../../../fileNameField',
+                        fieldLabel: 'Save as',
+                        value: this.initialNewFileName,
+                        width: 300,
+                        enableKeyEvents: true,
+                        validate: Ext.emptyFn,
+                        listeners: {
+                            keyup: this.onFileNameFieldChange.createDelegate(this),
+                            focus: (field) => {
+                                const value = String(field.getValue());
+                                let end = null;
+                                if (_.isRegExp(this.constraint)) {
+                                    const match = value.match(this.constraint);
+                                    if (match) {
+                                        end = match.index
+                                    }
+                                }
+
+                                field.focus();
+                                field.selectText(0, end);
+                            }
+                        }
+                    }
+                }/*, { // @TODO: must somehow cope with tree and grid selections...
+                    xtype: 'toolbar',
+                    items: [
+                        this.gridPanel.action_createFolder
+                    ]
+                }*/],
             }]
         }];
 
+
         Tine.Filemanager.FilePicker.superclass.initComponent.call(this);
+    },
+
+    afterRender: function() {
+        Tine.Filemanager.FilePicker.superclass.afterRender.call(this);
+    },
+
+    onFileNameFieldChange: function(field, e) {
+        this.gridPanel.selectionModel.clearSelections();
+
+        const basePath = _.get(this.treePanel.getSelectedContainer(), 'path')
+        const node = new Tine.Filemanager.Model.Node({
+            id: 'newFile',
+            type: 'file',
+            name: field.getValue(),
+            path: basePath + '/' + field.getValue()
+        });
+
+        if(basePath && this.checkConstraint([node])) {
+            field.clearInvalid();
+            this.selection = [node];
+            this.fireEvent('nodeSelected', this.selection);
+        } else {
+            field.markInvalid(_('Invalid Filename'));
+            this.selection = [];
+            this.fireEvent('invalidNodeSelected');
+        }
     },
 
     /**
@@ -150,6 +246,10 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         Ext.each(nodes, function (node) {
             me.selection.push(node.data || node);
         });
+
+        if (this.allowCreateNew && this.selection.length) {
+            this.fileNameField.setValue(this.selection[0].name);
+        }
 
         this.fireEvent('nodeSelected', this.selection);
     },
@@ -192,18 +292,24 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
 
         var me = this;
 
+        let defaultFilters =  this.initialPath ? [
+            {field: 'query', operator: 'contains', value: ''},
+            {field: 'path', operator: 'equals', value: this.initialPath}
+        ] : null;
+
         var gridPanel = new Tine.Filemanager.NodeGridPanel({
             app: me.app,
             height: 200,
             width: 200,
             border: false,
             frame: false,
-            readOnly: true,
+            readOnly: !this.allowCreateNew,
             enableDD: false,
             enableDrag: false,
             treePanel: this.getTreePanel(),
             hasQuickSearchFilterToolbarPlugin: false,
             stateIdSuffix: '-FilePicker',
+            defaultFilters: defaultFilters,
             plugins: [this.getTreePanel().getFilterPlugin()]
         });
 
@@ -260,23 +366,45 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             return true;
         }
 
-        return node.get('type') == this.constraint;
+        if (_.isString(this.constraint)) {
+            if (this.constraint.match(/file|folder/)) {
+                return node.get('type') === this.constraint;
+            }
+
+            var ext = node.get('path').split('.').pop(),
+                allowedExts = this.constraint.split('|');
+
+            return _.indexOf(allowedExts, ext) >= 0;
+        }
+
+        if (_.isRegExp(this.constraint)) {
+            return node.get('path').match(this.constraint);
+        }
     },
 
     /**
      * checkes if user has requested grant for given node
      *
      * @param {Tine.Filemanager.Model.Node} node
-     * @param {Array} grant
+     * @param {Array} grants
      * @return bool
      */
     hasGrant: function(node, grants) {
         var _ = window.lodash,
             condition = true;
 
+        if (this.allowCreateNew) {
+            if (node.id === 'newFile') {
+                node = new Tine.Filemanager.Model.Node(this.treePanel.getSelectedContainer());
+                grants = ['addGrant'];
+            } else {
+                grants = ['editGrant'];
+            }
+        }
+
         _.each(grants, function(grant) {
             condition = condition && _.get(node, 'data.account_grants.' + grant, false);
-            if (grant == 'addGrant' && node.isVirtual()) {
+            if (grant === 'addGrant' && node.isVirtual()) {
                 condition = false;
             }
         });
@@ -313,7 +441,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             renderer: function (value, metadata, record) {
 
                 var app = Tine.Tinebase.appMgr.get('Filemanager');
-                if (record.data.type == 'folder') {
+                if (record.data.type === 'folder') {
                     return app.i18n._("Folder");
                 }
                 else {

@@ -42,11 +42,19 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine20/PhpSpreadsheet.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine20/syncroton.git"
     },
     {
       "type": "git",
       "url": "https://github.com/tine20/timezoneconvert.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/Twig.git"
     },
     {
       "type": "git",
@@ -75,38 +83,39 @@
     "ext-xml": "*",
     "ext-zip": "*",
     "composer/semver": "^1.4",
-    "doctrine/dbal": "v2.5.13pl4 as v2.5.13",
+    "doctrine/dbal": "v2.5.13pl6 as v2.5.13",
     "doctrine/orm": "2.5.14pl1 as v2.5.14",
-    "ezyang/htmlpurifier": "v4.*",
+    "ezyang/htmlpurifier": "dev-master",
+    "firebase/php-jwt": "^5.0",
     "giggsey/libphonenumber-for-php": "^8.10",
     "http-interop/http-middleware": "^0.5.0",
     "jumbojett/openid-connect-php": "dev-master",
-    "metaways/opendocument": "1.1",
+    "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "phpoffice/phpexcel": "1.8.*",
-    "phpoffice/phpspreadsheet": "dev-master",
+    "phpoffice/phpspreadsheet": "1.10.1pl1 as 1.10.1",
     "phpoffice/phpword": "v0.14.0 as v0.13.0",
     "sabre/dav": "1.8.*",
     "sabre/vobject": "3.5.3pl1 as 2.1.0",
     "sentry/sentry": "^1.8",
     "symfony/config": "^3.3",
     "symfony/dependency-injection": "^3.4",
-    "syncroton/syncroton": "1.4.3",
+    "syncroton/syncroton": "1.4.5",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
-    "twig/twig": "~1.0",
+    "twig/twig": "v1.42.4pl1",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "1.*",
     "zendframework/zend-diactoros": "^1.6",
     "zendframework/zend-http": "2.5.*",
     "zendframework/zend-stratigility": "^2.1",
-    "zendframework/zendframework1": "1.12.20pl35 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl38 as 1.12.20"
   },
   "require-dev": {
     "phing/phing": "2.16.*",
-    "phpunit/phpunit": "4.6.*",
+    "phpunit/phpunit": "5.2.*",
     "tedivm/jshrink": "~1.0",
     "zendframework/zend-psr7bridge": "^0.2"
   },

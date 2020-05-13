@@ -25,8 +25,6 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     increment: 15,
     timeEditable: true,
     markedInvalid: false,
-
-    // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
     minWidth: 160,
 
     /**
@@ -139,6 +137,14 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
 
         return date + ' ' + time;
     },
+
+    validateValue : function(value){
+        if(!Ext.form.DateField.superclass.validateValue.call(this, value)){
+            return false;
+        }
+        return true;
+    },
+
     
     markInvalid: function (msg) {
         this.markedInvalid = true;
@@ -161,6 +167,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         var me = this,
             dateField = (this.allowBlank) ? Ext.ux.form.ClearableDateField : Ext.form.DateField;
 
+        this.width = this.width || this.minWidth;
         //Ext.ux.form.DateTimeField.superclass.onRender.call(this, ct, position);
         this.el = document.createElement(this.autoEl);
         this.el.id = this.getId();

@@ -215,11 +215,15 @@ class Filemanager_ControllerTests extends TestCase
         $node = $nodes->getFirstRecord();
         /** @var Tinebase_Model_FullUser $sClever */
         $sClever = $this->_personas['sclever'];
-        $node->grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [new Tinebase_Model_Grants([
+        $node->grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [[
             'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             'account_id'        => $sClever->getId(),
             Tinebase_Model_Grants::GRANT_READ => true,
-        ])]);
+        ], [
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'        => $oldUser->getId(),
+            Tinebase_Model_Grants::GRANT_ADMIN => true,
+        ]]);
         $fileManager->update($node);
 
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([

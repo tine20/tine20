@@ -14,9 +14,17 @@
  *
  * @package     HumanResources
  * @subpackage  Model
+ *
+ * @property Tinebase_DateTime                      start_date
+ * @property Tinebase_DateTime                      end_date
+ * @property HumanResources_Model_WorkingTimeScheme working_time_scheme
+ * @property HumanResources_Model_Employee          employee_id
+ * @property string                                 feast_calendar_id
  */
 class HumanResources_Model_Contract extends Tinebase_Record_Abstract
 {
+    const FLDS_WORKING_TIME_SCHEME = 'working_time_scheme';
+
     /**
      * holds the configuration object (must be set in the concrete class)
      *
@@ -118,12 +126,16 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
             ),
-            'workingtime_json'  => array(
-                'label'   => 'Workingtime', // _('Workingtime')
-                'default' => '{"days": [8,8,8,8,8,0,0]}',
-                'sortable'   => FALSE,
-                'showInDetailsPanel' => TRUE
-            ),
+            self::FLDS_WORKING_TIME_SCHEME => [
+                self::TYPE              => self::TYPE_RECORD,
+                self::LENGTH            => 40,
+                self::CONFIG            => [
+                    self::APP_NAME          => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME        => HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
+                ],
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::LABEL             => 'Working time scheme', // _('Working time scheme')
+            ],
             'is_editable' => array(
                 'label' => NULL,
                 'type' => 'virtual',
@@ -143,7 +155,11 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      */
     public function getWorkingTimeJson()
     {
-        return json_decode($this->__get('workingtime_json'));
+        if (!$this->{self::FLDS_WORKING_TIME_SCHEME} instanceof HumanResources_Model_WorkingTimeScheme) {
+            $this->{self::FLDS_WORKING_TIME_SCHEME} = HumanResources_Controller_WorkingTimeScheme::getInstance()
+                ->get($this->{self::FLDS_WORKING_TIME_SCHEME});
+        }
+        return $this->{self::FLDS_WORKING_TIME_SCHEME}->{HumanResources_Model_WorkingTimeScheme::FLDS_JSON};
     }
     
     /**
@@ -153,7 +169,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      */
     public function setWorkingTimeJson($workingTimeJson)
     {
-        $this->workingtime_json = json_encode($workingTimeJson);
+        throw new Tinebase_Exception_Backend('deprecated method');
     }
     
     /**
@@ -165,10 +181,24 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
     {
         $json = $this->getWorkingTimeJson();
         $whours = 0;
-        foreach($json->days as $index => $hours) {
+        foreach($json['days'] as $index => $hours) {
             $whours += $hours;
         }
         
         return $whours;
+    }
+
+    /**
+     * @param Tinebase_DateTime $_date
+     * @return bool
+     */
+    public function isValidAt(Tinebase_DateTime $_date)
+    {
+        $_date = $_date->getClone()->setTime(0,0,0);
+        if ($this->start_date->isEarlierOrEquals($_date) && (empty($this->end_date) || $this->end_date
+                    ->isLaterOrEquals($_date))) {
+            return true;
+        }
+        return false;
     }
 }

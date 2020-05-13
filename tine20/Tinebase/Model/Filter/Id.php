@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -28,6 +28,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         'in',
         'notin',
         'isnull',
+        'notnull',
     );
     
     /**
@@ -39,6 +40,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         'in'         => array('sqlop' => ' IN (?)'),
         'notin'      => array('sqlop' => ' NOT IN (?)'),
         'isnull'     => array('sqlop' => ' IS NULL'),
+        'notnull'    => array('sqlop' => ' IS NOT NULL'),
     );
     
     /**

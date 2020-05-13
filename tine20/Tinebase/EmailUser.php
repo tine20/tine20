@@ -170,6 +170,8 @@ class Tinebase_EmailUser
      * @var array
      */
     private static $_configs = array();
+
+    private static $_configuredBackends = [];
     
     /**
      * the constructor
@@ -187,7 +189,14 @@ class Tinebase_EmailUser
     private function __clone() 
     {
     }
-    
+
+    public static function clearCaches()
+    {
+        self::$_configuredBackends = [];
+        self::$_configs = [];
+        self::$_backends = [];
+    }
+
     /**
      * the singleton pattern
      *
@@ -197,8 +206,7 @@ class Tinebase_EmailUser
     public static function getInstance($configType = Tinebase_Config::IMAP)
     {
         $type = self::getConfiguredBackend($configType);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $type);
-        
+
         if (!isset(self::$_backends[$type])) {
             self::$_backends[$type] = self::factory($type);
         }
@@ -235,6 +243,10 @@ class Tinebase_EmailUser
      */
     public static function getConfiguredBackend($configType = Tinebase_Config::IMAP)
     {
+        if (isset(self::$_configuredBackends[$configType])) {
+            return self::$_configuredBackends[$configType];
+        }
+
         $config = self::getConfig($configType);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
         
@@ -247,7 +259,9 @@ class Tinebase_EmailUser
         if (!isset(self::$_supportedBackends[$backend])) {
             throw new Tinebase_Exception_NotFound("Config for type $configType / $backend not found.");
         }
-        
+
+        self::$_configuredBackends[$configType] = $backend;
+
         return $backend;
     }
     
@@ -289,15 +303,26 @@ class Tinebase_EmailUser
     public static function manages($_configType)
     {
         $config = self::getConfig($_configType);
+        return (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
+    }
 
-        $result = (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
-        
-        return $result;
+    /**
+     * return true if smtp backend supports AliasesDispatchFlag
+     *
+     * @return bool
+     */
+    public static function smtpAliasesDispatchFlag()
+    {
+        if (! self::manages(Tinebase_Config::SMTP)) {
+            return false;
+        }
+        $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        return $plugin->supportsAliasesDispatchFlag();
     }
     
     /**
      * get config for type IMAP/SMTP
-     * 
+     *
      * @param string $_configType
      * @return array
      */
@@ -305,67 +330,77 @@ class Tinebase_EmailUser
     {
         if (!isset(self::$_configs[$_configType])) {
             self::$_configs[$_configType] = Tinebase_Config::getInstance()->get($_configType, new Tinebase_Config_Struct())->toArray();
-            
-            /*
-             * If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
-             * e.g. ldap://localhost/ou=domains,ou=mailConfig,dc=example,dc=com?dc?sub?objectclass=mailDomain
-             */
+
+            // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
             if (($_configType == Tinebase_Config::SMTP) && (array_key_exists('secondarydomains', self::$_configs[Tinebase_Config::SMTP])) &&
                     preg_match("~^ldaps?://~i", self::$_configs[Tinebase_Config::SMTP]['secondarydomains']))
             {
-                $ldap_url = parse_url(self::$_configs[Tinebase_Config::SMTP]['secondarydomains']);
-                $ldap_url['path'] = substr($ldap_url['path'], 1);
-                $query = explode('?', $ldap_url['query']);
-                (count($query) > 0) ? $ldap_url['attributes'] = explode(',', $query[0]) : $ldap_url['attributes'] = array();
-                $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_BASE;
-                if (count($query) > 1)
-                {
-                    switch ($query[1]) {
-                        case 'subtree':
-                        case 'sub':
-                            $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_SUB;
-                            break;
-                        case 'one':
-                            $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_ONE;
-                            break;
-
-                    }
-                }
-                (count($query) > 2) ? $ldap_url['filter'] = $query[2] : $ldap_url['filter'] = 'objectClass=*';
-                // By now your options are limited to configured server
-                $ldap = new Tinebase_Ldap(Tinebase_User::getBackendConfiguration());
-                $ldap->connect()->bind();
-                $secondarydomains = $ldap->searchEntries(
-                        $ldap_url['filter'],
-                        $ldap_url['path'],
-                        $ldap_url['scope'],
-                        $ldap_url['attributes']
-                );
-                self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] = '';
-                foreach ($secondarydomains as $dn) 
-                {
-                    foreach ($ldap_url['attributes'] as $attr) 
-                    {
-                        if (array_key_exists($attr, $dn)) foreach ($dn[$attr] as $domain) 
-                        {
-                            self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] != '' ? $domain = ','.$domain : $domain;
-                            self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] .= $domain;                            
-                        }
-
-                    }
-                }
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' Secondarydomains: ' . print_r(self::$_configs[Tinebase_Config::SMTP]['secondarydomains'], true));
+                self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl(self::$_configs[Tinebase_Config::SMTP]['secondarydomains']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Secondarydomains from ldap (config): '. print_r(self::$_configs[Tinebase_Config::SMTP]['secondarydomains'], true));
             }
         }
-        
+
         return self::$_configs[$_configType];
     }
 
     /**
+     * Secondary domains may come from ldap url as in rfc 4516 (instead of a comma separated list)
+     * e.g. ldap://localhost/ou=domains,ou=mailConfig,dc=example,dc=com?dc?sub?objectclass=mailDomain
+     *
+     * @param string $ldapUrl
+     * @return string
+     */
+    private static function _getSecondaryDomainsFromLdapUrl($_ldapUrl)
+    {
+        $ldap_url = parse_url($_ldapUrl);
+        $ldap_url['path'] = substr($ldap_url['path'], 1);
+        $query = explode('?', $ldap_url['query']);
+        (count($query) > 0) ? $ldap_url['attributes'] = explode(',', $query[0]) : $ldap_url['attributes'] = array();
+        $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_BASE;
+        if (count($query) > 1)
+        {
+            switch ($query[1]) {
+                case 'subtree':
+                case 'sub':
+                    $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_SUB;
+                    break;
+                case 'one':
+                    $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_ONE;
+                    break;
+            }
+        }
+        (count($query) > 2) ? $ldap_url['filter'] = $query[2] : $ldap_url['filter'] = 'objectClass=*';
+        // By now your options are limited to configured server
+        $ldap = new Tinebase_Ldap(Tinebase_User::getBackendConfiguration());
+        $ldap->connect()->bind();
+        $secondarydomains = $ldap->searchEntries(
+            $ldap_url['filter'],
+            $ldap_url['path'],
+            $ldap_url['scope'],
+            $ldap_url['attributes']
+        );
+        $foundDomains = '';
+        foreach ($secondarydomains as $dn)
+        {
+            foreach ($ldap_url['attributes'] as $attr)
+            {
+                if (array_key_exists($attr, $dn)) foreach ($dn[$attr] as $domain)
+                {
+                    $foundDomains != '' ? $domain = ','.$domain : $domain;
+                    $foundDomains .= $domain;
+                }
+            }
+        }
+        // return a comma separated list
+        return $foundDomains;
+    }
+
+    /**
      * @param array|null $config
+     * @param boolean $_includeAdditional
      * @return array
      */
-    public static function getAllowedDomains($config = null)
+    public static function getAllowedDomains($config = null, $_includeAdditional = false)
     {
         if ($config === null) {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
@@ -375,11 +410,32 @@ class Tinebase_EmailUser
         if (! empty($config['primarydomain'])) {
             $allowedDomains = array($config['primarydomain']);
             if (! empty($config['secondarydomains'])) {
-                // merge primary and secondary domains and split secondary domains + trim whitespaces
+                // merge primary and secondary domains + trim whitespaces
+                if (preg_match("~^ldaps?://~i", $config['secondarydomains'])) {
+                    // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
+                    $config['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl($config['secondarydomains']);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Secondarydomains from ldap (allowed domains): ' . print_r($config['secondarydomains'], true));
+                }
                 $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', $config['secondarydomains']));
+            }
+            if ($_includeAdditional) {
+                $allowedDomains = array_merge($allowedDomains, self::getAdditionalDomains($config));
             }
         }
         return $allowedDomains;
+    }
+
+    public static function getAdditionalDomains($config = null)
+    {
+        if ($config === null) {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+        }
+
+        $result = [];
+        if (! empty($config['additionaldomains'])) {
+            $result = preg_split('/\s*,\s*/', $config['additionaldomains']);
+        }
+        return $result;
     }
 
     /**
@@ -388,17 +444,25 @@ class Tinebase_EmailUser
      * @param string $_email
      * @param boolean $_throwException
      * @param array $_allowedDomains
+     * @param boolean $_includeAdditional
      * @return boolean
-     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Tinebas_Exception_SystemGeneric
+     * @throws Tinebase_Exception_EmailInAddionalDomains
      */
-    public static function checkDomain($_email, $_throwException = false, $_allowedDomains = null)
+    public static function checkDomain($_email, $_throwException = false, $_allowedDomains = null, $_includeAdditional = false)
     {
         $result = true;
-        $allowedDomains = $_allowedDomains ? $_allowedDomains : self::getAllowedDomains();
+        $allowedDomains = $_allowedDomains ? $_allowedDomains : self::getAllowedDomains(null, $_includeAdditional);
 
         if (! empty($_email) && ! empty($allowedDomains)) {
 
-            list($user, $domain) = explode('@', $_email, 2);
+            if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' No valid email address: ' . $_email);
+                $domain = null;
+            } else {
+                list($user, $domain) = explode('@', $_email, 2);
+            }
 
             if (! in_array($domain, $allowedDomains)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
@@ -408,13 +472,16 @@ class Tinebase_EmailUser
                     __METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($allowedDomains, TRUE));
 
                 if ($_throwException) {
-                    // _('User E-Mail-Address {0} not in allowed domains')
-                    $translation = Tinebase_Translation::getTranslation('Tinebase');
-                    throw new Tinebase_Exception_SystemGeneric(str_replace(
-                        ['{0}', '{1}'],
-                        [$_email, implode(',', Tinebase_EmailUser::getAllowedDomains())],
-                        $translation->_('E-Mail-Address {0} not in allowed domains [{1}]')
-                    ));
+                    if (! $_includeAdditional && in_array($domain, self::getAdditionalDomains())) {
+                        throw new Tinebase_Exception_EmailInAdditionalDomains();
+                    } else {
+                        $translation = Tinebase_Translation::getTranslation('Tinebase');
+                        throw new Tinebase_Exception_SystemGeneric(str_replace(
+                            ['{0}', '{1}'],
+                            [$_email, implode(',', $allowedDomains)],
+                            $translation->_('Email address {0} not in allowed domains [{1}] or invalid')
+                        ));
+                    }
                 } else {
                     $result = false;
                 }
@@ -422,5 +489,29 @@ class Tinebase_EmailUser
         }
 
         return $result;
+    }
+
+    /**
+     * @param mixed $plugin
+     * @return false|int
+     */
+    public static function isEmailUserPlugin($plugin)
+    {
+        $pluginName = is_object($plugin) ? get_class($plugin) : $plugin;
+        return preg_match('/^Tinebase_EmailUser/', $pluginName);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isEmailSystemAccountConfigured()
+    {
+        $imapConfig = Tinebase_Config::getInstance()->get(
+            Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        return (
+            ! empty($imapConfig)
+            && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig))
+            && $imapConfig['useSystemAccount']
+        );
     }
 }

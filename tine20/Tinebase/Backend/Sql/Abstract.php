@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
@@ -137,6 +137,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected $_additionalColumns = array();
 
+    protected $_selectHooks = [];
+
     /**
      * the constructor
      * 
@@ -172,7 +174,17 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             throw new Tinebase_Exception_Backend_Database('Database adapter must be configured or given.');
         }
     }
-    
+
+    public function addSelectHook(callable $callable)
+    {
+        $this->_selectHooks[] = $callable;
+    }
+
+    public function resetSelectHooks()
+    {
+        $this->_selectHooks = [];
+    }
+
     /*************************** getters and setters *********************************/
     
     /**
@@ -864,6 +876,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         $this->_addForeignTableJoins($select, $cols);
+
+        foreach ($this->_selectHooks as $hook) {
+            $hook($select);
+        }
         
         return $select;
     }
@@ -1065,7 +1081,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * returns true if id is a hash value and false if integer
      *
      * @return  boolean
-     * @todo    remove that when all tables use hash ids 
+     * @todo    remove that when all tables use hash ids ... NO, do not remove this, tree_ref_log has auto_increment
      */
     protected function _hasHashId()
     {
@@ -1313,7 +1329,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $identifier = $_record->getIdProperty();
         
         if (!$_record instanceof $this->_modelName) {
-            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
+            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "'
+                . get_class($_record) . '". but should be instance of ' . $this->_modelName);
         }
 
         /** @var Tinebase_Record_Interface $_record */
@@ -1329,7 +1346,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id),
         );
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($recordArray, true));
+
         $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
 
         // update custom fields
@@ -1439,7 +1459,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $data['deleted_time'] = new Zend_Db_Expr('NOW()');
         }
         if (isset($schema['deleted_by'])) {
-            $data['deleted_by'] = Tinebase_Core::getUser()->getId();
+            $data['deleted_by'] = is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : Tinebase_Core::getUser();
         }
 
         return $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
@@ -1959,6 +1979,101 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             if (0 === $result) {
                 $result = 1;
             }
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * delete duplicate records defined by an record filter and there duplicateFields
+     * @param $filter
+     * @param bool $dryrun
+     * @param $duplicateFields
+     * @return int
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function deleteDuplicateRecords($filter, $duplicateFields, $dryrun = TRUE)
+    {
+        if ($dryrun && Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' - Running in dry run mode - using filter: ' . print_r($filter->toArray(), true));
+
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $duplicateFields);
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
+
+        $this->_addFilter($select, $filter);
+
+        $select->group($duplicateFields)
+            ->having('count(*) > 1');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . $select);
+
+        $rows = $this->_fetch($select, self::FETCH_ALL);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($rows, TRUE));
+
+
+        $toDelete = array();
+        foreach ($rows as $row) {
+            $index = "";
+            foreach ($duplicateFields as $field)
+            {
+                $fieldsFilter = array();
+                $index .= $row[$field] . ' ';
+
+                $fieldsFilter[] = array(
+                    'field' => $field,
+                    'operator' => 'equals',
+                    'value' => $row[$field],
+                );
+            }
+
+            $pagination = new Tinebase_Model_Pagination(array('sort' => array($this->_tableName . '.last_modified_time', $this->_tableName . '.creation_time')));
+
+            $select = $this->_db->select();
+            $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName));
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
+
+            $deletFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName,array_merge($fieldsFilter,$filter->toArray()));
+
+            $this->_addFilter($select, $deletFilter);
+            $pagination->appendPaginationSql($select);
+
+            $rows = $this->_fetch($select, self::FETCH_ALL);
+            $events = $this->_rawDataToRecordSet($rows);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($events->toArray(), TRUE));
+
+            $deleteIds = $events->getArrayOfIds();
+            // keep the first
+            array_shift($deleteIds);
+
+            if (!empty($deleteIds)) {
+                $deleteContainerIds = ($events->container_id);
+                $origContainer = array_shift($deleteContainerIds);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Deleting ' . count($deleteIds) . ' duplicates of: ' . $index . ' in container_ids ' . implode(',', $deleteContainerIds) . ' (origin container: ' . $origContainer . ')');
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' ' . print_r($deleteIds, TRUE));
+
+                $toDelete = array_merge($toDelete, $deleteIds);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' No duplicates found for ' . $index);
+            }
+        }
+
+        if (empty($toDelete)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' No duplicates found.');
+            $result = 0;
+        } else {
+            $result = ($dryrun) ? count($toDelete) : $this->delete($toDelete);
         }
 
         return $result;

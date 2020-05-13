@@ -8,6 +8,7 @@
 Ext.ns('Tine.widgets.form');
 
 import 'widgets/form/JsonField';
+import 'widgets/form/XmlField';
 
 /**
  * central form field manager
@@ -56,12 +57,19 @@ Tine.widgets.form.FieldManager = function() {
          * @return {Object}
          */
         getByModelConfig: function(appName, modelName, fieldName, category, config) {
-            var field = {},
-                recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
+            var recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
                 fieldDefinition = modelConfig && modelConfig.fields ? modelConfig.fields[fieldName] : {},
+                app = Tine.Tinebase.appMgr.get(appName);
+
+
+            return this.getByFieldDefinition(fieldDefinition, category, app, modelName, config, fieldName);
+        },
+
+        getByFieldDefinition: function(fieldDefinition, category, app, modelName, config, fieldName) {
+
+            var field = {},
                 fieldType = fieldDefinition.type || 'textfield',
-                app = Tine.Tinebase.appMgr.get(appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
 
@@ -71,11 +79,11 @@ Tine.widgets.form.FieldManager = function() {
             }
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
-            field.name = fieldName;
+            field.name = (fieldName || fieldDefinition.name ||fieldDefinition.fieldName);
             field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
             // make field available via recordForm.formfield_NAME
-            field.ref = '../../formfield_' + fieldName;
+            field.ref = '../../formfield_' + field.name;
 
             if (fieldDefinition['default']) {
                 field['default'] = i18n._hidden(fieldDefinition['default']);
@@ -160,6 +168,9 @@ Tine.widgets.form.FieldManager = function() {
                         field.app = fieldDefinition.config.appName;
                         field.relationType = fieldDefinition.config.type;
                         field.modelUnique = true;
+                        if (fieldDefinition.config.additionalFilterSpec) {
+                            field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
+                        }
                         // TODO pass degree and other options in config?
                         field.relationDegree = 'sibling';
                     }
@@ -201,6 +212,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.height = 70; // 5 lines
                     break;
                 case 'stringAutocomplete':
+                    var recordClass = Tine.Tinebase.data.RecordMgr.get(app, modelName);
                     field.xtype = 'tine.widget.field.AutoCompleteField';
                     field.recordClass = recordClass;
                     break;
@@ -213,8 +225,15 @@ Tine.widgets.form.FieldManager = function() {
                     field.xtype = 'tw-jsonfield';
                     field.height = 150; // 12 lines
                     break;
+                case 'xml':
+                    field.xtype = 'tw-xmlfield';
+                    field.height = 150; // 12 lines
+                    break;
                 default:
                     field.xtype = 'textfield';
+                    if (fieldDefinition.length) {
+                        field.maxLength = fieldDefinition.length;
+                    }
                     break;
             }
 

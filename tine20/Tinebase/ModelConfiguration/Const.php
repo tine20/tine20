@@ -24,6 +24,7 @@ class Tinebase_ModelConfiguration_Const {
     const CONFIG = 'config';
     const CONTROLLER = 'controller';
     const CONTROLLER_HOOK_BEFORE_UPDATE = 'controllerHookBeforeUpdate';
+    const CONVERTERS = 'converters';
     const COLUMNS = 'columns';
     const COPY_OMIT = 'copyOmit';
     const CREATE_MODULE = 'createModule';
@@ -44,6 +45,7 @@ class Tinebase_ModelConfiguration_Const {
     const FLAGS = 'flags';
 
     const HAS_CUSTOM_FIELDS = 'hasCustomFields';
+    const HAS_DELETED_TIME_UNIQUE = 'hasDeletedTimeUnique';
     const HAS_NOTES = 'hasNotes';
     const HAS_PERSONAL_CONTAINER = 'hasPersonalContainer';
     const HAS_RELATIONS = 'hasRelations';
@@ -51,6 +53,8 @@ class Tinebase_ModelConfiguration_Const {
     const HAS_TAGS = 'hasTags';
     const HAS_XPROPS = 'hasXProps';
 
+    const ID = 'id';
+    const ID_GENERATOR_TYPE = 'idGeneratorType';
     const INDEXES = 'indexes';
     const INPUT_FILTERS = 'inputFilters';
     const IS_DEPENDENT = 'isDependent';
@@ -87,6 +91,7 @@ class Tinebase_ModelConfiguration_Const {
     const TABLE = 'table';
     const TITLE_PROPERTY = 'titleProperty';
     const TYPE = 'type';
+    const TYPE_ATTACHMENTS = 'attachments';
     const TYPE_BIGINT = 'bigint';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_CONTAINER = 'container';
@@ -100,12 +105,15 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_KEY_FIELD = 'keyfield';
     const TYPE_MODEL = 'model';
     const TYPE_MONEY = 'money';
+    const TYPE_NOTE = 'note';
     const TYPE_NUMBERABLE_INT = 'numberableInt';
     const TYPE_NUMBERABLE_STRING = 'numberableStr';
     const TYPE_RECORD = 'record';
     const TYPE_RECORDS = 'records';
+    const TYPE_RELATION = 'relation';
     const TYPE_STRING = 'string';
     const TYPE_STRING_AUTOCOMPLETE = 'stringAutocomplete';
+    const TYPE_TAG = 'tag';
     const TYPE_TEXT = 'text';
     const TYPE_TIME = 'time';
     const TYPE_USER = 'user';

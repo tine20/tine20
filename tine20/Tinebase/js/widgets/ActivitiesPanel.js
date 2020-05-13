@@ -71,6 +71,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     title: null,
     layout: 'fit',
     canonicalName: 'HistoryGrid',
+    border: false,
     
     getActivitiesGrid: function () {
         // @todo add row expander on select ?
@@ -197,6 +198,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             if (!options.params) {
                 options.params = {};
             }
+
+            this.paging.limit = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10);
             
             // paging toolbar only works with this properties in the options!
             options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort;
@@ -283,6 +286,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         this.items = [        
             new Ext.Panel({
                 layout: 'border',
+                border: false,
                 items: [{
                     region: 'center',
                     xtype: 'panel',

@@ -79,7 +79,7 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         
         $this->assertEquals(1, preg_match("/PHPUnit/",                          $export), 'no name');
         $this->assertEquals(1, preg_match("/Description/",                      $export), 'no description');
-        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountDisplayName) . '/',          $export), 'no creator');
+        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountDisplayName, '/') . '/',          $export), 'no creator');
         $this->assertEquals(1, preg_match('/' . $translate->_('open') . '/',    $export), 'no leadstate');
         
         unlink($csvFilename);

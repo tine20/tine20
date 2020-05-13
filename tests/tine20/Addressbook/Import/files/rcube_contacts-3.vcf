@@ -1,0 +1,16 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//Mac OS X 10.14.6//EN
+N:some.one@mytine.de;;;;
+FN:Some.One@telekom.de
+EMAIL;type=INTERNET;type=WORK;type=pref:some.one@mytine.de
+NOTE:Dieser Kontakt wurde automatisch bei der Syncronisation angelegt
+UID:6cd3ebdbbd6766cefa0c48e3f35f24348575d53f
+X-ABUID:2504F18F-29BA-4207-A756-3B94F7F2563B\:ABPerson
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:der
+N:der;der;;;
+EMAIL;type=INTERNET;type=HOME;type=pref:der.der@mytine.de
+END:VCARD

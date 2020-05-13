@@ -97,15 +97,17 @@
     /**
      * performs the actual update
      * @param {Array|SelectionModel} records
+     * @param {Array|Tine.Tinebase.Model.Container} container
      */
-    updateActions: function(records) {
+    updateActions: function(records, container) {
+        records = records || [];
         var isFilterSelect = false,
             selectionModel = null;
 
         if (typeof(records.getSelections) == 'function') {
             isFilterSelect = records.isFilterSelect;
             selectionModel = records;
-            records = records.getSelections();
+            records = records.getSelections() || [];
         } else if (typeof(records.beginEdit) == 'function') {
             records = [records];
         }
@@ -117,9 +119,9 @@
             var actionUpdater = action.actionUpdater || action.initialConfig.actionUpdater;
             if (typeof(actionUpdater) == 'function') {
                 var scope = action.scope || action.initialConfig.scope || window;
-                actionUpdater.call(scope, action, grants, records, isFilterSelect);
+                actionUpdater.call(scope, action, grants, records, isFilterSelect, container);
             } else {
-                this.defaultUpdater(action, grants, records, isFilterSelect);
+                this.defaultUpdater(action, grants, records, isFilterSelect, container);
             }
 
             // reference selection into action

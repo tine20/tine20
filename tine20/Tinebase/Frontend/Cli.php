@@ -401,7 +401,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             throw new Tinebase_Exception_InvalidArgument('mandatory parameter "jobId" is missing');
         }
 
-        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if (isset($args[1]) && $args[1] === 'longRunning=true') {
+            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+        } else {
+            $actionQueue = Tinebase_ActionQueue::getInstance();
+        }
         $job = $actionQueue->receive($jobId);
 
         if (isset($job['account_id'])) {
@@ -433,7 +437,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
         $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
 
-        $db = Tinebase_Core::getDb();
         foreach ((array)$args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
@@ -511,6 +514,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             echo "\nCleaning notes...";
             $this->cleanNotes($_opts);
+
+            echo "\nCleaning files...";
+            $this->clearDeletedFiles();
         }
 
         echo "\n\n";
@@ -520,6 +526,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * cleanNotes: removes notes of records that have been deleted
+     *
+     * -- purge=1 param also removes redundant notes (empty updates + create notes)
+     * supports dry run (-d)
      */
     public function cleanNotes(Zend_Console_Getopt $_opts)
     {
@@ -534,6 +543,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $models = array();
         $deleteIds = array();
         $deletedCount = 0;
+        $purge = isset($args['purge']) ? $args['purge'] : false;
+        $purgeCountCreated = 0;
+        $purgeCountEmptyUpdate = 0;
 
         do {
             echo "\noffset $offset...";
@@ -602,6 +614,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                     if ($result === 0) {
                         $deleteIds[] = $note->getId();
+                    } else if ($purge) {
+                        if ($note->note_type_id == 4) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountCreated++;
+                        } else if ($note->note_type_id == 5 && strpos($note->note, '|') === false) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountEmptyUpdate++;
+                        }
                     }
                 } else {
                     try {
@@ -613,19 +633,31 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
             if (count($deleteIds) > 0) {
                 $deletedCount += count($deleteIds);
-                $offset -= $notesController->purgeNotes($deleteIds);
-                if ($offset < 0) $offset = 0;
+                if ($_opts->d) {
+                    $offset -= count($deleteIds);
+                } else {
+                    $offset -= $notesController->purgeNotes($deleteIds);
+                }
+                if ($offset < 0) {
+                    $offset = 0;
+                }
                 $deleteIds = [];
             }
             echo ' done';
         } while ($notes->count() === $limit);
 
-
-
         foreach($controllers as $model => $controller) {
             $controller->doContainerACLChecks($models[$model][3]);
         }
 
+        if ($_opts->d) {
+            echo "\nDRY RUN!";
+        }
+
+        if ($purge) {
+            echo "\npurged " . $purgeCountEmptyUpdate . " system notes with empty updates";
+            echo "\npurged " . $purgeCountCreated . " create system notes";
+        }
         echo "\ndeleted " . $deletedCount . " notes\n";
     }
 
@@ -753,7 +785,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected function _orderTables($tables)
     {
-        // tags should be deleted first
+        // tags + tree_nodes should be deleted first
         // containers should be deleted last
 
         $orderedTables = array();
@@ -767,6 +799,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     array_unshift($lastTables, $table);
                     break;
                 case 'tags':
+                case 'tree_nodes': // delete them before tree_objects
+                case 'cal_attendee': // delete them before events
                     array_unshift($orderedTables, $table);
                     break;
                 default:
@@ -797,9 +831,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 continue;
             }
 
+
             $deleteCount = 0;
             try {
-                $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                if ($table === 'tree_nodes') {
+                    $deleteCount = $this->_purgeTreeNodes($where);
+                } else {
+                    $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                }
             } catch (Zend_Db_Statement_Exception $zdse) {
                 echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
             }
@@ -811,6 +850,28 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo "\nNothing to purge from $table";
             }
         }
+    }
+
+    protected function _purgeTreeNodes($where)
+    {
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
+
+        array_walk($where, function (&$item) {
+            $item = 'n.' . $item;
+        });
+        $table = SQL_TABLE_PREFIX . 'tree_nodes';
+        $idsQuery = 'SELECT n.id from ' . $table . ' as n LEFT JOIN ' . $table . ' as '
+            . 'child on n.id = child.parent_id WHERE child.id is NULL AND ' . implode(' AND ', $where);
+        $deleteQuery = 'DELETE FROM ' . $table . ' WHERE id IN (?)';
+        $deleteCount = 0;
+
+        do {
+            $ids = Tinebase_Core::getDb()->query($idsQuery)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+            $deleteCount += count($ids);
+        } while (!empty($ids) && Tinebase_Core::getDb()->query(Tinebase_Core::getDb()->quoteInto($deleteQuery, $ids))
+            ->rowCount() > 0);
+
+        return $deleteCount;
     }
 
     /**
@@ -885,7 +946,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             $data['application_id'],
-            $data['name']);
+            $data['name'],
+            null,
+            false,
+            true
+        );
 
         if (! $cf) {
             throw new Tinebase_Exception_InvalidArgument('customfield not found');
@@ -902,7 +967,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 } else {
                     $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
                     $accountId = $user->getId();
-                    $accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+                    $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
                 }
             } else {
                 $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
@@ -1127,6 +1192,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if (! $actionQueue->hasAsyncBackend()) {
                 $message = 'QUEUE INACTIVE';
             } else {
+                $actionLRQueue = Tinebase_ActionQueueLongRun::getInstance();
                 try {
                     if (null === ($lastDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION))) {
@@ -1167,25 +1233,288 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, '');
                     }
 
-                    if ($lastDuration > 3600) {
-                        throw new Tinebase_Exception('last duration > 3600 sec - ' . $lastDuration);
+                    if ($lastDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_CRIT}) {
+                        throw new Tinebase_Exception('last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_CRIT} . ' sec - ' . $lastDuration);
                     }
-                    if ($now - $lastDurationUpdate > 3600) {
-                        throw new Tinebase_Exception('last duration update > 3600 sec - ' . ($now - $lastDurationUpdate));
-                    }
-
-                    if ($diff > 60 && null === $warn) {
-                        $warn = 'last job id change > 60 sec - ' . $diff;
+                    if ($now - $lastDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT}) {
+                        throw new Tinebase_Exception('last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT} . ' sec - ' . ($now - $lastDurationUpdate));
                     }
 
-                    if ($lastDuration > 60 && null === $warn) {
-                        $warn = 'last duration > 60 sec - ' . $lastDuration;
+                    if ($diff > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last job id change > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - ' . $diff;
                     }
 
-                    if ($now - $lastDurationUpdate > 70 && null === $warn) {
-                        $warn = 'last duration update > 70 sec - ' . ($now - $lastDurationUpdate);
+                    if ($lastDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - ' . $lastDuration;
                     }
 
+                    if ($now - $lastDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN}
+                        && null === $warn
+                    ) {
+                        $warn = 'last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN} . ' sec - '
+                            . ($now - $lastDurationUpdate);
+                    }
+
+
+                    if (null === ($lastLRDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION))) {
+                        throw new Tinebase_Exception('state ' . Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION .
+                            ' not set');
+                    }
+                    if (null === ($lastLRDurationUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE))) {
+                        throw new Tinebase_Exception('state ' .
+                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE . ' not set');
+                    }
+                    $lastLRDuration = floatval($lastLRDuration);
+                    $lastLRDurationUpdate = intval($lastLRDurationUpdate);
+
+                    $now = time();
+                    $diff = 0;
+                    if (false !== ($currentJobId = $actionLRQueue->peekJobId())) {
+                        if ($currentJobId === ($lastJobId = Tinebase_Application::getInstance()->getApplicationState(
+                                'Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID))) {
+                            if (null === ($lastChange = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                                    Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE))) {
+                                throw new Tinebase_Exception('state ' .
+                                    Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE . ' not set');
+                            }
+                            if (($diff = $now - intval($lastChange)) > (15 * 60)) {
+                                throw new Tinebase_Exception('last job id change > ' . (15 * 60) . ' sec - ' . $diff);
+                            }
+
+                        } else {
+                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE, (string)$now);
+                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID, $currentJobId);
+                        }
+                    } else {
+                        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID, '');
+                    }
+
+                    if ($lastLRDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT}) {
+                        throw new Tinebase_Exception('last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT} . ' sec - ' . $lastLRDuration);
+                    }
+                    if ($now - $lastLRDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT}) {
+                        throw new Tinebase_Exception('last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT} . ' sec - ' . ($now - $lastLRDurationUpdate));
+                    }
+
+                    if ($diff > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last job id change > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} . ' sec - ' . $diff;
+                    }
+
+                    if ($lastLRDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} . ' sec - ' . $lastLRDuration;
+                    }
+
+                    if ($now - $lastLRDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN}
+                        && null === $warn
+                    ) {
+                        $warn = 'last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN} . ' sec - '
+                            . ($now - $lastLRDurationUpdate);
+                    }
+
+
+                    if (null === ($queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_STATE), true))) {
+                        $queueState = [
+                            'lastFullCheck' => 0,
+                            'lastSizeOver10k' => false,
+                            'lastMissingQueueKeys' => [],
+                            'lastMissingDaemonKeys' => [],
+                            'lastLRSizeOver10k' => false,
+                            'lastLRMissingQueueKeys' => [],
+                            'lastLRMissingDaemonKeys' => [],
+                        ];
+                    }
+
+                    $queueSize = $actionQueue->getQueueSize();
+                    if (null === $warn && $actionQueue->getDaemonStructSize() > $queueConfig
+                            ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
+                        $warn = 'daemon struct size > ' . $queueConfig
+                                ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT};
+                    }
+
+                    $queueSizeLR = $actionLRQueue->getQueueSize();
+                    if (null === $warn && $actionLRQueue->getDaemonStructSize() > $queueConfig
+                            ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
+                        $warn = 'LR daemon struct size > ' . $queueConfig
+                                ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT};
+                    }
+
+                    // last full check older than one hour
+                    if (null === $warn && time() - $queueState['lastFullCheck'] > 3600) {
+                        do {
+
+                            $missingQueueKeys = [];
+                            $missingDaemonKeys = [];
+                            $err = null;
+                            // go through queue and daemon struct and check timestamps in data
+                            // remember stuff we did not find
+                            foreach ($actionQueue->getQueueKeys() as $key) {
+                                if (empty($data = $actionQueue->getData($key))) {
+                                    if (isset($queueState['lastMissingQueueKeys'][$key])) {
+                                        if (null === $warn) {
+                                            $warn = 'queue contains keys which are not present in data';
+                                        }
+                                    } else {
+                                        $missingQueueKeys[$key] = true;
+                                    }
+                                } else {
+                                    if (($timediff = time() - $data['time']) > 15 * 60) {
+                                        if (null === $warn) {
+                                            $warn = 'data contains data older than 15 minutes';
+                                        }
+                                    }
+                                    if ($timediff > 60 * 60) {
+                                        $err = 'data contains data older than 1 hour';
+                                    }
+                                }
+                            }
+                            $queueState['lastMissingQueueKeys'] = $missingQueueKeys;
+
+                            foreach ($actionQueue->getDaemonStructKeys() as $key) {
+                                if (empty($data = $actionQueue->getData($key))) {
+                                    if (isset($queueState['lastMissingDaemonKeys'][$key])) {
+                                        if (null === $warn) {
+                                            $warn = 'daemon contains keys which are not present in data';
+                                        }
+                                    } else {
+                                        $missingDaemonKeys[$key] = true;
+                                    }
+                                } else {
+                                    if (($timediff = time() - $data['time']) > 15 * 60) {
+                                        if (null === $warn) {
+                                            $warn = 'data contains data older than 15 minutes';
+                                        }
+                                    }
+                                    if ($timediff > 60 * 60) {
+                                        $err = 'data contains data older than 1 hour';
+                                    }
+                                }
+                            }
+                            $queueState['lastMissingDaemonKeys'] = $missingDaemonKeys;
+
+                            // go through data keys and check timestmaps
+                            while (false !== ($data = $actionQueue->iterateAllData())) {
+                                foreach ($data as $jobId) {
+                                    if (!empty($job = $actionQueue->getData($jobId))) {
+                                        if (($timediff = time() - $job['time']) > 15 * 60) {
+                                            if (null === $warn) {
+                                                $warn = 'data contains data older than 15 minutes';
+                                            }
+                                        }
+                                        if ($timediff > 60 * 60) {
+                                            $err = 'data contains data older than 1 hour';
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($queueSize > 10000) {
+                                if (null === $warn && $queueState['lastSizeOver10k']) {
+                                    $warn = 'at least two consecutive full checks with queue size > 10k';
+                                }
+                                $queueState['lastSizeOver10k'] = true;
+                            } else {
+                                $queueState['lastSizeOver10k'] = false;
+                            }
+
+
+                            // do LR
+
+                            $missingLRQueueKeys = [];
+                            $missingLRDaemonKeys = [];
+                            // go through queue and daemon struct and check timestamps in data
+                            // remember stuff we did not find
+                            foreach ($actionLRQueue->getQueueKeys() as $key) {
+                                if (empty($data = $actionLRQueue->getData($key))) {
+                                    if (isset($queueState['lastLRMissingQueueKeys'][$key])) {
+                                        if (null === $warn) {
+                                            $warn = 'LR queue contains keys which are not present in data';
+                                        }
+                                    } else {
+                                        $missingLRQueueKeys[$key] = true;
+                                    }
+                                } else {
+                                    if (($timediff = time() - $data['time']) > 60 * 60) {
+                                        if (null === $warn) {
+                                            $warn = 'LR data contains data older than 60 minutes';
+                                        }
+                                    }
+                                    if ($timediff > 5 * 60 * 60) {
+                                        $err = 'LR data contains data older than 5 hour';
+                                    }
+                                }
+                            }
+                            $queueState['lastLRMissingQueueKeys'] = $missingLRQueueKeys;
+
+                            foreach ($actionLRQueue->getDaemonStructKeys() as $key) {
+                                if (empty($data = $actionLRQueue->getData($key))) {
+                                    if (isset($queueState['lastLRMissingDaemonKeys'][$key])) {
+                                        if (null === $warn) {
+                                            $warn = 'LR daemon contains keys which are not present in data';
+                                        }
+                                    } else {
+                                        $missingLRDaemonKeys[$key] = true;
+                                    }
+                                } else {
+                                    if (($timediff = time() - $data['time']) > 60 * 60) {
+                                        if (null === $warn) {
+                                            $warn = 'LR data contains data older than 60 minutes';
+                                        }
+                                    }
+                                    if ($timediff > 5 * 60 * 60) {
+                                        $err = 'LR data contains data older than 5 hour';
+                                    }
+                                }
+                            }
+                            $queueState['lastLRMissingDaemonKeys'] = $missingLRDaemonKeys;
+
+                            // go through data keys and check timestmaps
+                            while (false !== ($data = $actionLRQueue->iterateAllData())) {
+                                foreach ($data as $jobId) {
+                                    if (!empty($job = $actionLRQueue->getData($jobId))) {
+                                        if (($timediff = time() - $job['time']) > 60 * 60) {
+                                            if (null === $warn) {
+                                                $warn = 'LR data contains data older than 60 minutes';
+                                            }
+                                        }
+                                        if ($timediff > 5 * 60 * 60) {
+                                            $err = 'data contains data older than 5 hour';
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($queueSizeLR > 10000) {
+                                if (null === $warn && $queueState['lastLRSizeOver10k']) {
+                                    $warn = 'LR at least two consecutive full checks with queue size > 10k';
+                                }
+                                $queueState['lastLRSizeOver10k'] = true;
+                            } else {
+                                $queueState['lastLRSizeOver10k'] = false;
+                            }
+
+                            $queueState['lastFullCheck'] = time();
+                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode($queueState));
+
+                            if (null !== $err) throw new Tinebase_Exception($err);
+                        } while (false);
+                    }
 
                     if (null !== $warn) {
                         $message = 'QUEUE WARN: ' . $warn;
@@ -1193,7 +1522,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     } else {
                         $message = 'QUEUE OK';
                     }
-                    $queueSize = $actionQueue->getQueueSize();
+
+
                     $message .= ' | size=' . $queueSize . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration .
                         ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
                 } catch (Exception $e) {
@@ -1203,6 +1533,28 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                 $this->_logMonitoringResult($result, $message);
             }
+        }
+
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
+     * nagios monitoring for tine 2.0 maintenance mode
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringMaintenanceMode()
+    {
+        $result = 0;
+
+        if (Tinebase_Core::inMaintenanceMode()) {
+            $message = 'MAINTENANCEMODE FAIL: it is on!';
+            $result = 2;
+        } else {
+            $message = 'MAINTENANCEMODE OK';
         }
 
         echo $message . "\n";
@@ -1234,14 +1586,18 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                 // write, read and delete to test cache
                 $cacheId = Tinebase_Helper::convertCacheId(__METHOD__);
-                $cache->save(true, $cacheId);
-                $value = $cache->load($cacheId);
-                $cache->remove($cacheId);
+                if (false !== $cache->save(true, $cacheId)) {
+                    $value = $cache->load($cacheId);
+                    $cache->remove($cacheId);
 
-                if ($value) {
-                    $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                    if ($value) {
+                        $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                    } else {
+                        $message = 'CACHE FAIL: loading value failed';
+                        $result = 1;
+                    }
                 } else {
-                    $message = 'CACHE FAIL: loading value failed';
+                    $message = 'CACHE FAIL: saving value failed';
                     $result = 1;
                 }
             } catch (Exception $e) {
@@ -1276,7 +1632,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'record_type',
             'modification_time',
             'modification_account',
-            'record_id'
+            'record_id',
+            'client',
         );
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFilters)) {
@@ -1431,6 +1788,40 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * repair acl of nodes (supports -d for dry run)
+     *
+     * @param $opts
+     * @return int
+     * @throws ReflectionException
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function repairFileSystemAclNodes($opts)
+    {
+        $this->_checkAdminRight();
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $counter = 0;
+        foreach (Tinebase_Core::getDb()->query('SELECT tnchild.id, tnparent.acl_node FROM ' .
+                SQL_TABLE_PREFIX . 'tree_nodes as tnchild JOIN ' . SQL_TABLE_PREFIX .
+                'tree_nodes as tnparent ON tnchild.parent_id = tnparent.id WHERE tnparent.acl_node IS NOT NULL '
+                . 'AND tnchild.acl_node IS NULL')->fetchAll() as $row) {
+
+            if ($opts->d) {
+                echo "repairing acl of node id " . $row['id'] . PHP_EOL;
+            } else {
+                $fs->repairAclOfNode($row['id'], $row['acl_node']);
+            }
+            $counter++;
+        }
+        echo "repaired $counter nodes" . PHP_EOL;
+
+        return 0;
+    }
+
+    /**
      * recalculates the revision sizes and then the folder sizes
      *
      * @return int
@@ -1454,7 +1845,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemCheckIndexing()
     {
-
         $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->checkIndexing();
@@ -1471,9 +1861,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemCheckPreviews()
     {
-
         $this->_checkAdminRight();
 
+        Tinebase_FileSystem_Previews::getInstance()->resetErrorCount();
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
 
         return 0;
@@ -1486,7 +1876,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemRecreateAllPreviews()
     {
-
         $this->_checkAdminRight();
 
         Tinebase_FileSystem_Previews::getInstance()->deleteAllPreviews();
@@ -1817,5 +2206,35 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $messageBody = 'Tine 2.0 test notification has been sent successfully';
         Tinebase_Notification::getInstance()->send(null, array($recipient), $messageSubject, $messageBody);
         return 0;
+    }
+
+    /**
+     * Delete duplicate personal container without content.
+     *
+     * e.g. php tine20.php --method=Tinebase.duplicatePersonalContainerCheck app=Addressbook [-d]
+     *
+     * @param $opts
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_SystemContainer
+     */
+    public function duplicatePersonalContainerCheck($opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($opts, array('app'));
+
+        $removeCount = Tinebase_Container::getInstance()->deleteDuplicateContainer($args['app'], $opts->d);
+        if ($opts->d) {
+            echo "Would remove " . $removeCount . " duplicates\n";
+        } else {
+            echo $removeCount . " duplicates removed\n";
+        }
+    }
+
+    public function repairTreeIsDeletedState($opts)
+    {
+        $this->_checkAdminRight();
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
     }
 }

@@ -17,9 +17,4 @@ interface Tinebase_FileSystem_AVScan_Interface
      * @return Tinebase_FileSystem_AVScan_Result
      */
     public function scan($handle);
-
-    /**
-     * @return bool
-     */
-    public function update();
 }

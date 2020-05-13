@@ -72,7 +72,7 @@ class Tinebase_FileSystem_RecordAttachments
         
         try {
             $record->attachments = $this->_fsController->scanDir($parentPath);
-            foreach($record->attachments as $node) {
+            foreach ($record->attachments as $node) {
                 $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_fsController->getPathOfNode($node,
                     true));
                 $node->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath,
@@ -236,7 +236,7 @@ class Tinebase_FileSystem_RecordAttachments
                     $attachment = $this->_fsController->stat($tmpPath, null, true);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                            __LINE__ . ' could not find attachement record with id: ' . $attachment->id);
+                            __LINE__ . ' could not find attachment record with id: ' . $attachment->id);
                 }
             } else {
                 // this comes from \Calendar_Frontend_CalDAV_PluginManagedAttachments::httpPOSTHandler

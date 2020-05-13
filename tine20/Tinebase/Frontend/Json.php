@@ -21,6 +21,13 @@ use Jumbojett\OpenIDConnectClient;
 class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     const REQUEST_TYPE = 'JSON-RPC';
+
+    /**
+     * the application name
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Tinebase';
     
     /**
      *
@@ -34,7 +41,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
-        'Tinebase_Model_BLConfig',
+        'BLConfig',
+        'ImportExportDefinition'
     ];
 
     /**
@@ -208,7 +216,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } catch (Tinebase_Exception $e) {
             $response = array(
                 'success'      => FALSE,
-                'errorMessage' => "New password could not be set! Error: " . $e->getMessage()
+                'errorMessage' => $e->getMessage()
             );
         }
 
@@ -524,7 +532,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($authResult->isValid()) {
             $response = array(
                 'status'    => 'success',
-                'msg'       => 'authentication succseed',
+                'msg'       => 'authentication succeed',
                 //'loginUrl'  => 'someurl',
             );
         } else {
@@ -548,7 +556,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function login($username, $password, $securitycode = null, $otp = null)
     {
-        Tinebase_Core::startCoreSession();
+        try {
+            Tinebase_Core::startCoreSession();
+        } catch (Zend_Session_Exception $zse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not start session: ' . $zse->getMessage());
+            }
+            return array(
+                'success'      => false,
+                'errorMessage' => "Could not start session!",
+            );
+        }
         
         if (is_array(($response = $this->_getCaptchaResponse($securitycode)))) {
             return $response;
@@ -904,49 +922,54 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             try {
                 $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
             } catch (Addressbook_Exception_NotFound $aenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) /** @noinspection PhpUndefinedMethodInspection */
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' User not found in Addressbook: ' . $user->accountDisplayName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) /** @noinspection PhpUndefinedMethodInspection */
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' User not found in Addressbook: ' . $user->accountDisplayName);
             }
         }
-        
+
         try {
             $persistentFilters = Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters();
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " Failed to fetch persistent filters. Exception: \n". $tenf);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " Failed to fetch persistent filters. Exception: \n" . $tenf);
             $persistentFilters = array();
-        }  catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " Failed to fetch persistent filters. Exception: \n". $e);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . " Failed to fetch persistent filters. Exception: \n" . $e);
             $persistentFilters = array();
         }
 
-        $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
-        
+        $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
+        $smtpConfig = $manageSmtpEmailUser ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+
         $userRegistryData = array(
-            'accountBackend'     => Tinebase_User::getConfiguredBackend(),
-            'areaLocks'          => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
-            'timeZone'           => Tinebase_Core::getUserTimezone(),
-            'currentAccount'     => $user->toArray(),
-            'userContact'        => $userContactArray,
-            'jsonKey'            => Tinebase_Core::get('jsonKey'),
-            'userApplications'   => $user->getApplications()->toArray(),
-            'NoteTypes'          => $this->getNoteTypes(),
-            'stateInfo'          => Tinebase_State::getInstance()->loadStateInfo(),
-            'mustchangepw'       => $user->mustChangePassword(),
-            'confirmLogout'      => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
-            'advancedSearch'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0),
-            'persistentFilters'  => $persistentFilters,
+            'accountBackend' => Tinebase_User::getConfiguredBackend(),
+            'areaLocks' => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
+            'timeZone' => Tinebase_Core::getUserTimezone(),
+            'currentAccount' => $user->toArray(),
+            'userContact' => $userContactArray,
+            'jsonKey' => Tinebase_Core::get('jsonKey'),
+            'userApplications' => $user->getApplications()->toArray(),
+            'NoteTypes' => $this->getNoteTypes(),
+            'manageImapEmailUser' => Tinebase_EmailUser::manages(Tinebase_Config::IMAP),
+            'manageSmtpEmailUser' => $manageSmtpEmailUser,
+            'stateInfo' => Tinebase_State::getInstance()->loadStateInfo(),
+            'mustchangepw' => $user->mustChangePassword(),
+            'confirmLogout' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
+            'advancedSearch' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0),
+            'persistentFilters' => $persistentFilters,
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
-            'sessionLifeTime'    => Tinebase_Session_Abstract::getSessionLifetime(),
-            'primarydomain'      => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
-            'secondarydomains'   => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
+            'sessionLifeTime' => Tinebase_Session_Abstract::getSessionLifetime(),
+            'primarydomain' => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
+            'secondarydomains' => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
+            'additionaldomains' => isset($smtpConfig['additionaldomains']) ? $smtpConfig['additionaldomains'] : '',
+            'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
         );
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' User registry: ' . print_r($userRegistryData, TRUE));
-        
+
         return $userRegistryData;
     }
 
@@ -981,13 +1004,35 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             foreach ($userApplications as $application) {
                 $appRegistry = $this->_getAppRegistry($application, $clientConfig, $allImportDefinitions);
+
+                $this->_logRegistrySize($appRegistry, $application->name);
+
                 $registryData[$application->name] = $appRegistry;
             }
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Total registry size: ' . strlen(json_encode($registryData)));
+
         return $registryData;
+    }
+
+    protected function _logRegistrySize($appRegistry, $appName)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            $total = 0;
+            foreach ($appRegistry as $key => $value) {
+                $size = strlen(json_encode($value));
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Size of registry key ' . $key . ': ' . $size);
+                $total += $size;
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' App ' . $appName . ' total size: ' . $total);
+        }
+
     }
 
     /**
@@ -1544,6 +1589,39 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $state == Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0);
     }
 
+    public function restoreRevision($fileLocationSrc, $fileLocationTrgt = null)
+    {
+        $src = new Tinebase_Model_Tree_FileLocation($fileLocationSrc);
+        $fs = Tinebase_FileSystem::getInstance();
+
+        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
+        $raii = (new Tinebase_RAII(function() use (&$transId) {
+            if (null !== $transId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }))->setReleaseFunc(function () use (&$transId) {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+            $transId = null;
+        });
+
+        $node = $src->getNode();
+
+        if (null === $fileLocationTrgt) {
+            if ($node->getHighestRevision() > $node->revision && ($currentNode = $fs->get($node->getId()))->hash !==
+                    $node->hash) {
+                $currentNode->hash = $node->hash;
+                $fs->update($currentNode);
+            }
+        } else {
+            $trgt = new Tinebase_Model_Tree_FileLocation($fileLocationTrgt);
+            $trgt->copyNodeTo($node);
+        }
+
+        $raii->release();
+        return ['success' => true];
+    }
+
     /**
      * returns the replication modification logs
      *
@@ -1585,16 +1663,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $path = $fileObject->getFilesystemPath();
 
         if (is_file($path)) {
-            if (false === ($data = file_get_contents($path))) {
+            if (!($fh = fopen($path, 'r'))) {
                 throw new Tinebase_Exception_Backend('could not open blob file: ' . $hash);
             }
+            if (!stream_filter_append($fh, 'convert.base64-encode', STREAM_FILTER_READ)) {
+                throw new Tinebase_Exception_Backend('could not append stream filter');
+            }
+            $data = stream_get_contents($fh);
+            fclose($fh);
         } else {
             throw new Tinebase_Exception_NotFound('could not find blob: ' . $hash);
         }
 
         return array(
             'success' => true,
-            'data'    => base64_encode($data)
+            'data'    => $data
         );
     }
 

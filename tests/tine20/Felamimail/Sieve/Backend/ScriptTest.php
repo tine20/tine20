@@ -166,6 +166,8 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         $this->assertContains('?Q?L=C3=B6=C3=9Flich?=', $sieveScript, $sieveScript);
         $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
         $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
+        $this->assertContains('currentdate :value "le" "date" "2020-01-31"', $sieveScript);
+        $this->assertContains('currentdate :value "ge" "date" "2020-01-28"', $sieveScript);
     }
     
     /**
@@ -182,8 +184,11 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
             ->setDays(8)
             ->setSubject('Lößlich')
             ->setFrom('sieve@example.com')
-            ->setReason('Tine 2.0 Unit Test');
-            
+            ->setReason('Tine 2.0 Unit Test')
+            ->setStartdate('2020-01-28')
+            ->setEnddate('2020-01-31')
+            ->setDateEnabled(true);
+
         return $vacation;
     }
 

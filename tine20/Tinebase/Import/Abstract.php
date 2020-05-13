@@ -543,8 +543,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 $data[$key] = $this->_splitBySeparator($field['separator'], $_data[$key]);
             } else if (isset($field['fixed'])) {
                 $data[$key] = $field['fixed'];
-            } else if (isset($field['append'])) {
-                $data[$key] .= $field['append'] . $_data[$key];
             } else if (isset($field['typecast'])) {
                 switch ($field['typecast']) {
                     case 'int':
@@ -639,9 +637,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $unreplaced = $targetField = $field['targetFieldData'];
         $recordArray = $relation['related_record'];
         foreach ($recordArray as $key => $value) {
-            if (preg_match('/' . preg_quote($key) . '/', $targetField) && is_scalar($value)) {
-                $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
-                $unreplaced = preg_replace('/^[, ]*' . preg_quote($key) . '/', '', $unreplaced);
+            if (preg_match('/' . preg_quote($key, '/') . '/', $targetField) && is_scalar($value)) {
+                $targetField = preg_replace('/' . preg_quote($key, '/') . '/', $value, $targetField);
+                $unreplaced = preg_replace('/^[, ]*' . preg_quote($key, '/') . '/', '', $unreplaced);
             }
         }
 
@@ -734,7 +732,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
 
         // add more data for this relation if available
         foreach ($data as $key => $value) {
-            $regex = '/^' . preg_quote($relationType) . '_/';
+            $regex = '/^' . preg_quote($relationType, '/') . '_/';
             if (preg_match($regex, $key)) {
                 $relatedField = preg_replace($regex, '', $key);
                 $recordArray[$relatedField] = trim($value);
@@ -1184,7 +1182,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if ($e instanceof Tinebase_Exception_Duplicate) {
             $exception = $this->_handleDuplicateExceptions($e, $recordIndex, $record, $allowToResolveDuplicates);
         } else {
-            Tinebase_Exception::log($e);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Import exception: ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . $e->getTraceAsString());
 
             $this->_importResult['failcount']++;
             $exception = array(

@@ -67,12 +67,14 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         foreach ($this->_createdFolders as $foldername) {
             $this->_controller->delete($this->_account->getId(), $foldername);
         }
-        
+
         // delete all remaining folders from cache of account
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folders = $folderBackend->getMultipleByProperty($this->_account->getId(), 'account_id');
-        foreach ($folders as $folder) {
-            $folderBackend->delete($folder);
+        if ($this->_account) {
+            $folderBackend = new Felamimail_Backend_Folder();
+            $folders = $folderBackend->getMultipleByProperty($this->_account->getId(), 'account_id');
+            foreach ($folders as $folder) {
+                $folderBackend->delete($folder);
+            }
         }
     }
 
@@ -134,6 +136,18 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         
         $this->assertFalse($testFolder === NULL, 'No test folder created.');
         $this->assertTrue(($testFolder->is_selectable == 1));
+    }
+
+    public function testCreateDuplicateFolders()
+    {
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test';
+        Felamimail_Controller_Folder::getInstance()->create($this->_account->getId(), 'test', 'INBOX');
+        try {
+            Felamimail_Controller_Folder::getInstance()->create($this->_account->getId(), 'test', 'INBOX');
+            self::fail('exception expected for duplicate folders');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            self::assertEquals('Folder with this name already exists!', $tesg->getMessage());
+        }
     }
 
     /**

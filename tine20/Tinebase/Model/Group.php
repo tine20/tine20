@@ -22,6 +22,7 @@
  * @property    array   members
  * @property    string  visibility
  * @property    string  list_id
+ * @property    boolean account_only
  */
 class Tinebase_Model_Group extends Tinebase_Record_Abstract
 {
@@ -64,6 +65,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             ['InArray', [self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED]],
             Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED
         ),
+        'account_only'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'xprops'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'created_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -120,7 +122,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         parent::setFromArray($_data);
         
         // sanitize members (could be an array of user arrays -> expecting to contain only ids)
-        if (isset($this->members) && is_array($this->members) && count($this->members) > 0 && is_array($this->members[0])) {
+        if (isset($this->members) && is_array($this->members) && count($this->members) > 0 && isset($this->members[0]) && is_array($this->members[0])) {
             $memberIds = array();
             foreach ($this->members as $member) {
                 $memberIds[] = $member['id'];

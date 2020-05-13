@@ -161,7 +161,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     public function updateCustomField(Tinebase_Model_CustomField_Config $_record)
     {
         $this->_clearCache();
-        $result = $this->_backendConfig->update($_record);
+        $this->_backendConfig->setAllCFs();
+        try {
+            $result = $this->_backendConfig->update($_record);
+        } finally {
+            $this->_backendConfig->setNoSystemCFs();
+        }
         Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
         return $result;
     }
@@ -185,12 +190,13 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string $customFieldName
      * @param string $modelName
      * @param bool $getSystemCFs (default false)
+     * @param bool $ignoreAcl (default false)
      * @return Tinebase_Model_CustomField_Config|null
      */
-    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null, $getSystemCFs = false)
+    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null, $getSystemCFs = false, $ignoreAcl = false)
     {
         $allAppCustomfields = $this->getCustomFieldsForApplication($applicationId, $modelName,
-            Tinebase_Model_CustomField_Grant::GRANT_READ, $getSystemCFs);
+            Tinebase_Model_CustomField_Grant::GRANT_READ, $getSystemCFs, $ignoreAcl);
         return $allAppCustomfields->find('name', $customFieldName);
     }
     
@@ -203,15 +209,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string                            $_modelName
      * @param string                            $_requiredGrant (read grant by default)
      * @param bool                              $_getSystemCFs (false by default)
+     * @param bool                              $_ignoreAcl (default false)
      * @return Tinebase_Record_RecordSet|Tinebase_Model_CustomField_Config of Tinebase_Model_CustomField_Config records
      */
-    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_requiredGrant = Tinebase_Model_CustomField_Grant::GRANT_READ, $_getSystemCFs = false)
+    public function getCustomFieldsForApplication($_applicationId,
+                                                  $_modelName = NULL,
+                                                  $_requiredGrant = Tinebase_Model_CustomField_Grant::GRANT_READ,
+                                                  $_getSystemCFs = false,
+                                                  $_ignoreAcl = false)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
         $userId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : 'nouser';
         $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '') . $_requiredGrant . $userId .
-            (int)$_getSystemCFs;
+            (int)$_getSystemCFs . (int)$_ignoreAcl;
         
         if (isset($this->_cfByApplicationCache[$cfIndex])) {
             return $this->_cfByApplicationCache[$cfIndex];
@@ -239,7 +250,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 );
             }
             
-            $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+            $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues, '', [
+                'ignoreAcl' => $_ignoreAcl
+            ]);
             $filter->setRequiredGrants((array)$_requiredGrant);
             try {
                 if ($_getSystemCFs) {
@@ -467,7 +480,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
                 
                 // we need to resolve the modelName and the record value if array is given (e.g. on updating customfield)
-                if (strtolower($customField->definition['type']) == 'record' || strtolower($customField->definition['type']) == 'recordlist') {
+                if (isset($customField->definition['type']) && (strtolower($customField->definition['type']) == 'record' || strtolower($customField->definition['type']) == 'recordlist')) {
                     $value = $this->_getValueForRecordOrListCf($_record, $customField, $value);
                 }
 
@@ -721,6 +734,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                         }
                     }
 
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Could not resolve custom field. Message: ' . $tead);
                 } catch (Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                         . ' Error resolving custom field record: ' . $e->getMessage());
@@ -755,12 +771,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
         $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
         
-        $result = $this->_backendValue->search($filter);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Fetched ' . count($result) . ' customfield values.');
-        
-        return $result;
+        return $this->_backendValue->search($filter);
     }
     
     /**
@@ -853,7 +864,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     * @todo this needs to clear in a more efficient way
     */
     public function clearCacheForConfig(/** @noinspection PhpUnusedParameterInspection */
-        Tinebase_Model_CustomField_Config $record)
+        Tinebase_Model_CustomField_Config $record = null)
     {
         $this->_clearCache();
         

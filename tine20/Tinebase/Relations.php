@@ -142,8 +142,13 @@ class Tinebase_Relations
         $relationsIds = $this->_getRelationIds($relations, $currentRelations);
         
         $toAdd = $relations->getIdLessIndexes();
-        $toDel = array_diff($currentIds, $relationsIds);
+        $toDel = $this->_getToDeleteIds($currentRelations, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
+        foreach ($relations as $key => $relation) {
+            if (!empty($id = $relation->getId()) && !in_array($id, $toDel) && !in_array($id, $toUpdate)) {
+                $toAdd[] = $key;
+            }
+        }
 
         // prevent two empty related_ids of the same relation type
         $emptyRelatedId = array();
@@ -211,13 +216,30 @@ class Tinebase_Relations
                 }
             }
             
-            if (! $current->isEqual($update, array('related_record'))) {
+            if (! $current->isEqual($update, array('related_record', 'record_removed_reason'))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Relation diff: ' . print_r($current->diff($update)->toArray(), true));
                 
                 $this->_updateRelation($update);
             }
         }
+    }
+
+    /**
+     * @param $currentRelations
+     * @param array $relationsIds
+     * @return array
+     */
+    protected function _getToDeleteIds($currentRelations, $relationsIds)
+    {
+        $deleteIds = [];
+        foreach ($currentRelations as $relation) {
+            if (! in_array($relation->getId(), $relationsIds) && empty($relation->record_removed_reason)) {
+                $deleteIds[] = $relation->getId();
+            }
+        }
+
+        return $deleteIds;
     }
 
     /**
@@ -622,27 +644,7 @@ class Tinebase_Relations
 
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
-            
-            // check right
-            $split = explode('_Model_', $modelName);
-            $rightClass = $split[0] . '_Acl_Rights';
-            $rightName = 'manage_' . strtolower($split[1]) . 's';
-            
-            if (class_exists($rightClass)) {
-                
-                $ref = new ReflectionClass($rightClass);
-                $u = Tinebase_Core::getUser();
-                
-                // if a manage right is defined and the user has no manage_record or admin right, remove relations having this record class as related model
-                if (is_object($u) && $ref->hasConstant(strtoupper($rightName)) && (! $u->hasRight($split[0], $rightName)) && (! $u->hasRight($split[0], Tinebase_Acl_Rights::ADMIN))) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        $_relations->removeRecords($relations);
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Skipping relation due to no manage right: ' . $modelName);
-                    }
-                    continue;
-                }
-            }
-            
+
             $getMultipleMethod = 'getMultiple';
 
             $records = null;

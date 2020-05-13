@@ -212,6 +212,9 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
      * testImportTwice (forceUpdateExisting)
      * 
      * @see 0008652: Import von .ics-Dateien in Kalender schlägt fehl
+     *
+     * @group nogitlabci
+     * gitlabci: Events were not imported Array
      */
     public function testImportTwice()
     {

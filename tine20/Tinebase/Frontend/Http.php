@@ -391,7 +391,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') $clientETag: ' . $clientETag);
 
-        $serverETag = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
+        $serverETag = md5(implode('', array_map(function($fileName) {
+            return file_exists($fileName) ? md5_file($fileName) : '';
+        }, $filesToWatch)));
 
         if ($clientETag == $serverETag) {
             header("HTTP/1.0 304 Not Modified");
@@ -415,9 +417,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 }
             }
             if ($_fileType != 'lang') {
-                // adds new server version etag for client version check
+                // adds assetHash for client version check
+                $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
                 echo "Tine = Tine || {}; Tine.clientVersion = Tine.clientVersion || {};";
-                echo "Tine.clientVersion.assetHash = '$serverETag';";
+                echo "Tine.clientVersion.assetHash = '$assetHash';";
             }
         }
     }
@@ -544,9 +547,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         try {
             $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
         } catch (Tinebase_Exception_UnexpectedValue $teuv) {
-            Tinebase_Exception::log($teuv);
-            header('HTTP/1.1 404 Not Found');
-            return;
+            $this->_handleFailure(404);
         }
 
         $serverETag = sha1($image->blob . $width . $height . $ratiomode);
@@ -565,17 +566,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header("HTTP/1.0 304 Not Modified");
             header('Content-Length: 0');
         } else {
-            #$cache = Tinebase_Core::getCache();
-            
-            #if ($cache->test($serverETag) === true) {
-            #    $image = $cache->load($serverETag);
-            #} else {
-                if ($width != -1 && $height != -1) {
-                    Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
-                }
-            #    $cache->save($image, $serverETag);
-            #}
-        
+            if ($width != -1 && $height != -1) {
+                Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
+            }
+
             header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
             header('Content-Type: '. $image->mime);
             header('Etag: "' . $serverETag . '"');
@@ -621,7 +615,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             . ' Downloading attachment of ' . $modelName . ' record with id ' . $recordId);
         
         $recordController = Tinebase_Core::getApplicationInstance($modelName);
-        $record = $recordController->get($recordId);
+        try {
+            $record = $recordController->get($recordId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+        }
         
         $node = Tinebase_FileSystem::getInstance()->get($nodeId);
         $node->grants = null;
@@ -647,7 +645,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // some grids can house tempfiles and filemanager nodes, therefor first try tmpfile and if no tmpfile try filemanager
         if (!$tmpFile && Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
             $filemanagerNodeController = Filemanager_Controller_Node::getInstance();
-            $file = $filemanagerNodeController->get($tmpfileId);
+            try {
+                $file = $filemanagerNodeController->get($tmpfileId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->_handleFailure(404);
+            }
 
             $filemanagerHttpFrontend = new Filemanager_Frontend_Http();
             $filemanagerHttpFrontend->downloadFile($file->path, null);
@@ -700,7 +702,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $node = Tinebase_FileSystem::getInstance()->stat('/' . $_appId . '/folders/' . $path, $_revision);
             } else {
                 $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . $_appId . '/folders/' . $path);
-                $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
+                try {
+                    $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+                }
             }
         } else {
             throw new Tinebase_Exception_InvalidArgument('A path is needed to download a preview file.');

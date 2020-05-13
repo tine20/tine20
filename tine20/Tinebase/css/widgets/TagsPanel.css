@@ -28,7 +28,10 @@
     width: 4px;
     height: 13px;
 }
-
+.tw-tagtogglebox .x-widget-tag-tagitem-text {
+    display: inline;
+    padding: 0 5px 0 10px;
+}
 .x-widget-tag-tagitem-text {
     padding: 0 5px 0 5px;
     margin: 0 0 0 0;

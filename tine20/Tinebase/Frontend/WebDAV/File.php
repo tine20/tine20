@@ -16,6 +16,13 @@
  */
 class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\IFile
 {
+    /**
+     * @return bool|false|mixed|resource|null
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws \Sabre\DAV\Exception\Forbidden
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
     public function get() 
     {
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
@@ -28,14 +35,18 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to download file: ' . $this->_path);
         }
 
-        $node = $pathRecord->getNode();
+        try {
+            $node = $pathRecord->getNode();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
+        }
         if ($node->is_quarantined) {
             throw new Sabre\DAV\Exception\Forbidden('File is quarantined: ' . $this->_path);
         }
 
         if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r'))) {
             // if we have a file without content / revision yet
-            if (empty($node->hash)) {
+            if (empty($node->hash) || $node->size == 0) {
                 return fopen('php://memory', 'r');
             }
             // possible race condition

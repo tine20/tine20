@@ -9,6 +9,7 @@
  * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
 class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**
@@ -20,10 +21,6 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $release9 = new Addressbook_Setup_Update_Release9($this->_backend);
-        $release9->update_9();
-        $release9->update_10();
-
         $this->setApplicationVersion('Addressbook', '10.1');
     }
 

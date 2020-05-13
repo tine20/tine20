@@ -40,7 +40,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_modelName = 'Tinebase_Model_Tree_FileObject';
+    protected $_modelName = Tinebase_Model_Tree_FileObject::class;
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
@@ -192,6 +192,19 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         );
     }
 
+    public function resetPreviewErrorCount()
+    {
+        $maxErrorCount = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
+            {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT};
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            [
+                'preview_error_count' => 0
+            ],
+            $this->_db->quoteInto('preview_error_count >= ?', $maxErrorCount)
+        );
+    }
+
     /**
      * get value of next revision for given fileobject
      *
@@ -313,7 +326,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             $data['id'] = $_record->getId();
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
 
-            if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type) {
+            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
                     array('revision_size' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision_size') . ' + ' . (int)$_record->size)),
@@ -322,6 +335,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             }
 
         } else {
+
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ? AND ' .
                     $this->_db->quoteIdentifier('revision') . ' = ' . (int)$data['revision'], $_record->getId()),
@@ -329,7 +343,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
 
             if (1 === count($currentRecord->available_revisions) &&
-                    Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type &&
+                    Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type &&
                     (int)$currentRecord->revision_size !== (int)$_record->size) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
@@ -386,7 +400,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             // add notes to tree_nodes!
             foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($newRecord->getId()) as
                     $node) {
-                Tinebase_Notes::getInstance()->addSystemNote($node->getId(), Tinebase_Core::getUser(),
+                Tinebase_Notes::getInstance()->addSystemNote($node, Tinebase_Core::getUser(),
                     Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods, 'Sql', 'Tinebase_Model_Tree_Node');
             }
         }

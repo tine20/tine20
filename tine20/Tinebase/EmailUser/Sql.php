@@ -111,23 +111,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
     }
-    
-    /**
-     * get new email user
-     * 
-     * @param  Tinebase_Model_FullUser   $_user
-     * @return Tinebase_Model_EmailUser
-     */
-    public function getNewUser(Tinebase_Model_FullUser $_user)
-    {
-        $result = new Tinebase_Model_EmailUser(array(
-            'emailUserId'     => $_user->getId(),
-            'emailUsername' => $this->_appendDomain($_user->accountLoginName)
-        ));
-        
-        return $result;
-    }
-    
+
     /**
     * delete user by id
     *
@@ -138,7 +122,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Delete ' . $this->_configKey . ' email settings for user ' . $_user->accountLoginName);
         
-        $this->_deleteUserById($_user->getId());
+        $this->deleteUserById($_user->getId());
     }
     
     /**
@@ -146,10 +130,12 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      * 
      * @param string $id
      */
-    protected function _deleteUserById($id)
+    public function deleteUserById($id)
     {
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $id)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $id) . ' OR ' .
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' LIKE ?',
+                substr($id, 0,32) . '#~#%')
         );
         $this->_appendClientIdOrDomain($where);
         
@@ -192,10 +178,25 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     public function getRawUserById(Tinebase_Model_User $_user)
     {
-        $userId = $_user->getId();
+        return $this->getRawUserByProperty($_user, 'emailUserId');
+    }
+
+    /**
+     * @param Tinebase_Model_User $_user
+     * @param $property
+     * @param $userProperty
+     * @return mixed
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function getRawUserByProperty(Tinebase_Model_User $_user, $property, $userProperty = null)
+    {
+        $value = $property === 'emailUserId'
+            ? $_user->getId()
+            : ($userProperty ? $_user->{$userProperty} : $_user->{$this->_propertyMapping[$property]});
 
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?', $userId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable
+                    . '.' . $this->_propertyMapping[$property]) . ' = ?', $value)
         );
         $this->_appendClientIdOrDomain($where);
 
@@ -211,7 +212,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
         if (!$queryResult) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' ' . $this->_subconfigKey . ' config for user ' . $userId . ' not found!');
+                . ' ' . $this->_subconfigKey . ' config for user with ' . $this->_propertyMapping[$property] . ' = ' . $value . ' not found');
         }
 
         return $queryResult;
@@ -239,7 +240,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         // modify/correct user name
         // set emailUsername to Tine 2.0 account login name and append domain for login purposes if set
         if (empty($emailUser->emailUsername)) {
-            $emailUser->emailUsername = $this->_getEmailUserName($_user);
+            $emailUser->emailUsername = $this->getEmailUserName($_user);
         }
         
         if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
@@ -249,30 +250,6 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             $_user->imapUser  = $emailUser;
             $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser);
         }
-    }
-    
-    protected function _getConfiguredSystemDefaults()
-    {
-        $systemDefaults = array();
-        
-        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
-        if (!empty($this->_config[$hostAttribute])) {
-            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
-        }
-        
-        if (!empty($this->_config['port'])) {
-            $systemDefaults['emailPort'] = $this->_config['port'];
-        }
-        
-        if (!empty($this->_config['ssl'])) {
-            $systemDefaults['emailSecure'] = $this->_config['ssl'];
-        }
-        
-        if (!empty($this->_config['auth'])) {
-            $systemDefaults['emailAuth'] = $this->_config['auth'];
-        }
-        
-        return $systemDefaults;
     }
     
     /**
@@ -287,6 +264,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (!isset($this->_propertyMapping['emailPassword'])) {
             return;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+            ' Setting email user password (encrypt: ' . (int) $_encrypt . ') for user id ' . $_userId);
         
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         if ((isset($imapConfig['pwsuffix']) || array_key_exists('pwsuffix', $imapConfig))) {
@@ -302,7 +282,10 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         );
         
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $_userId)
+            '(' . $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?',
+            $_userId) . ' OR ' .
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' LIKE ?',
+                substr($_userId, 0,32) . '#~#%') . ')'
         );
         $this->_appendClientIdOrDomain($where);
         
@@ -342,7 +325,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Adding new ' . $this->_configKey . ' email user ' . $emailUsername);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($emailUserData, TRUE));
         
         try {
@@ -368,6 +351,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         } catch (Zend_Db_Statement_Exception $zdse) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while creating email user: ' . $zdse);
+            throw $zdse;
         }
     }
     
@@ -422,7 +406,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             throw new Tinebase_Exception_SystemGeneric('Could not overwrite existing email user.');
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete obsolete email user ' .$userId);
-            $this->_deleteUserById($userId);
+            $this->deleteUserById($userId);
         }
     }
     
@@ -465,7 +449,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         } catch (Zend_Db_Statement_Exception $zdse) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user');
-            Tinebase_Exception::log($zdse);
+            throw $zdse;
         }
     }
     
@@ -478,10 +462,21 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     protected function _userExists(Tinebase_Model_FullUser $_user)
     {
+        $data = $this->_recordToRawData($_user, $_user);
+
         $select = $this->_getSelect();
         
-        $select
-          ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?',   $_user->getId());
+        if (! empty($data[$this->_propertyMapping['emailUserId']])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) .
+                ' = ?', $data[$this->_propertyMapping['emailUserId']]);
+        }
+        $select->orwhere($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']) .
+            ' = ?', $data[$this->_propertyMapping['emailUsername']]);
+
+        if ($this->_propertyMapping['emailUsername'] !== 'loginname' && isset($data['loginname'])) {
+            $select->orwhere($this->_db->quoteIdentifier($this->_userTable . '.loginname') .
+                ' = ?',   $data['loginname']);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
@@ -498,7 +493,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (!$queryResult) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -611,6 +606,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             $recordData['instancename'] = $this->_config['instanceName'];
             $recordData['domain'] = empty($this->_config['domain']) ? $recordData['instancename'] : $this->_config['domain'];
             $recordData['username'] = str_replace($fromInstance, $recordData['instancename'], $recordData['username']);
+            $recordData['loginname'] = str_replace($fromInstance, $recordData['instancename'], $recordData['loginname']);
             $recordData['home'] = str_replace($fromInstance, $recordData['instancename'], $recordData['home']);
             try {
                 $this->_db->insert($this->_userTable, $recordData);
@@ -637,5 +633,139 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Updated ' . $update
             . ' email records from instance' . $fromInstance);
+    }
+
+    /**
+     * copy email user
+     *
+     * @param Tinebase_Model_FullUser $_user
+     * @param string $newId
+     * @throws Tinebase_Exception
+     * @throws Zend_Db_Statement_Exception
+     * @return array
+     */
+    public function copyUser(Tinebase_Model_FullUser $_user, $newId)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Copy email user for account ' . $_user->getId() . ' - new id: '
+            . $newId);
+
+        $columns = $this->_db->query('show columns from ' . $this->_db->quoteIdentifier($this->_userTable))
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        foreach (['emailUserId', 'emailUsername', 'emailAddress', 'emailLoginname', 'emailHome'] as $colToRemove) {
+            if (isset($this->_propertyMapping[$colToRemove])) {
+                if (false === ($offset = array_search($this->_propertyMapping[$colToRemove], $columns))) {
+                    throw new Tinebase_Exception('did not find ' . $this->_propertyMapping[$colToRemove] . ' in ' .
+                        join(', ', $columns));
+                }
+                unset($columns[$offset]);
+            }
+        }
+
+        // always unset id
+        if (false !== ($offset = array_search('id', $columns))) {
+            unset($columns[$offset]);
+        }
+
+        $escapedColumns = $columns;
+        array_walk($escapedColumns, function(&$val) { $val = $this->_db->quoteIdentifier($val); });
+
+        $where = '';
+        if (isset($this->_config['instanceName']) && $this->_config['instanceName'] &&
+            in_array('instancename', $columns)) {
+            $where = ' AND ' . $this->_db->quoteIdentifier('instancename') . $this->_db->quoteInto(' = ?',
+                    $this->_config['instanceName']);
+        } else {
+            if (in_array('client_idnr', $columns) && $this->_clientId) {
+                $where = ' AND ' . $this->_db->quoteIdentifier('client_idnr') . $this->_db->quoteInto(' = ?',
+                        $this->_clientId);
+            }
+        }
+
+        $query = 'INSERT INTO ' . $this->_db->quoteIdentifier($this->_userTable) . ' (' .
+            $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ', ' .
+            $this->_db->quoteIdentifier($this->_propertyMapping['emailUsername']) . ', ';
+
+        foreach (['emailAddress', 'emailLoginname', 'emailHome'] as $column) {
+            if (isset($this->_propertyMapping[$column])) {
+                $query .= $this->_db->quoteIdentifier($this->_propertyMapping[$column]) . ', ';
+            }
+        }
+
+
+        $query .= join(', ', $escapedColumns) . ') SELECT '
+            /* ID */ . $this->_db->quote($newId) . ', '
+            /* USERNAME */ . $this->_db->quote($_user->accountLoginName) . ', ';
+
+        foreach (['emailAddress', 'emailLoginname'] as $column) {
+            if (isset($this->_propertyMapping[$column])) {
+                $query .= $this->_db->quote($_user->accountEmailAddress) . ', ';
+            }
+        }
+
+        if (isset($this->_propertyMapping['emailHome'])) {
+            $emailhome = $this->_getEmailHome($newId);
+            $query .= $this->_db->quote($emailhome) . ', ';
+        }
+
+        $query .= join(', ', $escapedColumns) .
+            ' FROM ' . $this->_db->quoteIdentifier($this->_userTable) . ' WHERE ' .
+            $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . $this->_db->quoteInto(' = ?',
+                $_user->getId()) . $where;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . $query);
+
+        $this->_db->query($query);
+
+        $newUser = clone($_user);
+        $newUser->setId($newId);
+        return $this->getRawUserById($newUser);
+    }
+
+    /**
+     * copy email password from another email user account
+     *
+     * @param $fromUser
+     * @param $toUser
+     */
+    public function copyPassword($fromUser, $toUser)
+    {
+        $rawUser = $this->getRawUserById($fromUser);
+        $this->inspectSetPassword($toUser->getId(), $rawUser[$this->_propertyMapping['emailPassword']], false);
+    }
+
+    /**
+     * replace home wildcards when storing to db
+     *  %d = domain
+     *  %n = user
+     *  %u == user@domain
+     *
+     * @param $localPart
+     * @param $domain
+     * @param $emailUsername
+     * @return string|string[]
+     */
+    protected function _getEmailHome($emailUsername, $localPart = null, $domain = null)
+    {
+        if ($localPart === null || $domain === null) {
+            if (strpos($emailUsername, '@') !== false) {
+                list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
+                $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
+            } else {
+                $localPart = $emailUsername;
+                $domain = $this->_config['domain'];
+            }
+        }
+
+        $search = array('%n', '%d', '%u');
+        $replace = array(
+            $localPart,
+            $domain,
+            $emailUsername
+        );
+
+        return str_replace($search, $replace, $this->_config['emailHome']);
     }
 }

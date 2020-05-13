@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.Phone');
 
+require('../../Voipmanager/js/Snom/PhoneEditDialog');
+
 /**
  * @namespace   Tine.Phone
  * @class       Tine.Phone.CallEditDialog

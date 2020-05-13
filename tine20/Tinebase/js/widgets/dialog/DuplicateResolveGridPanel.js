@@ -293,6 +293,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     valueRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
         var fieldName = record.get('fieldName'),
             dataIndex = this.getColumnModel().getDataIndex(colIndex),
+            cfValue = arguments[0],
             renderer = Tine.widgets.grid.RendererManager.get(this.app, this.store.recordClass, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
 
         // color management
@@ -300,7 +301,14 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             var action = record.get('finalValue') == value ? 'keep' : 'discard';
             metaData.css = 'tine-duplicateresolve-' + action + 'value';
         }
-        
+
+        if(String(fieldName).match(/^#.+/)) {
+            arguments[0] = {};
+            arguments[0][fieldName.replace(/^#/, '')] = cfValue;
+        }
+
+        metaData.css = metaData.css + ' tine-dublicateResolve-cell';
+
         return renderer.apply(this, arguments);
     }
 });
@@ -576,7 +584,8 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
      * returns record with conflict resolved data
      */
     getResolvedRecord: function() {
-        var record = (this.resolveStrategy == 'keep' ? this.clientRecord : this.duplicates[this.duplicateIdx]).copy();
+        var record = ((this.resolveStrategy == 'keep' || this.resolveStrategy == 'mergeMine')
+            ? this.clientRecord : this.duplicates[this.duplicateIdx]).copy();
 
         this.each(function(resolveRecord) {
             var fieldName = resolveRecord.get('fieldName'),

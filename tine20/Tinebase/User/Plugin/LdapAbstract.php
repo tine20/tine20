@@ -46,6 +46,15 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     protected $_options = array();
 
     /**
+     * supportAliasesDispatchFlag
+     *
+     * @var boolean
+     *
+     * @todo remove DRY (see Tinebase_User_Plugin_Abstract)
+     */
+    protected $_supportAliasesDispatchFlag = false;
+
+    /**
      * the constructor
      * @param array $_options
      * @throws Tinebase_Exception
@@ -207,6 +216,8 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      *
      * @param  string $_userName
      * @return string
+     *
+     * @todo remove code duplication with \Tinebase_User_Plugin_Abstract::_appendDomain
      */
     protected function _appendDomain($_userName)
     {
@@ -240,4 +251,69 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      * @param  array                    $_ldapEntry  the data currently stored in ldap 
      */
     abstract protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array());
+
+    /**
+     * follow-up to "hack" from @2f083b0 which took away the function from Ldap-Plugins
+     * (reintroducing this function into Abstract.php for SQL-Plugins only)
+     *
+     * @return array
+     *
+     * @todo remove code duplication with \Tinebase_User_Plugin_Abstract::_getConfiguredSystemDefaults
+     */
+    public function _getConfiguredSystemDefaults()
+    {
+        $systemDefaults = array();
+        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
+        if (!empty($this->_config[$hostAttribute])) {
+            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
+        }
+        if (!empty($this->_config['port'])) {
+            $systemDefaults['emailPort'] = $this->_config['port'];
+        }
+        if (!empty($this->_config['ssl'])) {
+            $systemDefaults['emailSecure'] = $this->_config['ssl'];
+        }
+        if (!empty($this->_config['auth'])) {
+            $systemDefaults['emailAuth'] = $this->_config['auth'];
+        }
+        return $systemDefaults;
+    }
+
+    /**
+     * @param $accountId
+     * @param $accountLoginName
+     * @param $accountEmailAddress
+     * @param null $alternativeLoginName
+     * @return string|null
+     *
+     * @todo remove code duplication with \Tinebase_User_Plugin_Abstract::getLoginName
+     */
+    public function getLoginName($accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName = null)
+    {
+        $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';
+        if (isset($this->_config['useEmailAsUsername']) && $this->_config['useEmailAsUsername']) {
+            $emailUsername = $accountEmailAddress;
+        } else if (isset($this->_config['instanceName']) && ! empty($this->_config['instanceName'])) {
+            $emailUsername = $accountId . '@' . $this->_config['instanceName'];
+        } else if (isset($this->_config[$domainConfigKey]) && $this->_config[$domainConfigKey] !== null) {
+            $emailUsername = $this->_appendDomain($accountLoginName);
+        } else if ($alternativeLoginName !== null) {
+            $emailUsername = $alternativeLoginName;
+        } else {
+            $emailUsername = $accountLoginName;
+        }
+
+        return $emailUsername;
+    }
+
+    /**
+     * @return bool
+     *
+     * @todo remove DRY (see Tinebase_User_Plugin_Abstract)
+     * @todo make this a generic "capabilities" feature
+     */
+    public function supportsAliasesDispatchFlag()
+    {
+        return $this->_supportAliasesDispatchFlag;
+    }
 }

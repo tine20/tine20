@@ -33,6 +33,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected $_setGeoDataForContacts = FALSE;
 
+    protected $_addressFields = [];
+
     /**
      * configured syncBackends
      *
@@ -102,6 +104,27 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         self::$_instance = null;
     }
 
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL,
+                           Tinebase_Model_Pagination $_pagination = NULL,
+                           $_getRelations = FALSE,
+                           $_onlyIds = FALSE,
+                           $_action = self::ACTION_GET)
+    {
+        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        
+        if (!$_onlyIds && is_object(Tinebase_Core::getUser())) {
+            foreach ($result as $contact) {
+                if (!Tinebase_Core::getUser()->hasGrant(
+                        $contact->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
+                    Tinebase_Core::getUser()->contact_id !== $contact->getId()) {
+                    $this->removePersonalData($contact);
+                };
+            }
+        }
+
+        return $result;
+    }
+
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $contact = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
@@ -113,6 +136,14 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
 
         Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
+        
+        // Remove personal data from contact if no grants. The user has always grants for his/her own contact
+        if (is_object(Tinebase_Core::getUser()) && !Tinebase_Core::getUser()->hasGrant(
+            $contact->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
+            Tinebase_Core::getUser()->contact_id !== $contact->getId()) {
+            // Remove that personal data!
+            $contact = $this->removePersonalData($contact);
+        };
 
         return $contact;
     }
@@ -310,6 +341,31 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
+        if (($updatedRecord->email !== $currentRecord->email || (empty($updatedRecord->email) &&
+                $updatedRecord->email_home !== $currentRecord->email_home)) &&
+                count($listIds = Addressbook_Controller_List::getInstance()->getMemberships($updatedRecord)) > 0) {
+
+            $oldListAclCheck = Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
+            $raii = new Tinebase_RAII(function() use($oldListAclCheck) {
+                Addressbook_Controller_List::getInstance()->doContainerACLChecks($oldListAclCheck);
+            });
+
+            $lists = Addressbook_Controller_List::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $listIds],
+                    ['field' => 'xprops', 'operator' => 'contains', 'value' => Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST],
+                ]));
+            foreach ($lists->filter(function($list) {
+                    return $list->xprops[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST];}) as $list) {
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
+                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                }, [$list]);
+            }
+
+            //for unused variable check
+            unset($raii);
+        }
+
         if (isset($record->account_id) && !isset($updatedRecord->account_id)) {
             $updatedRecord->account_id = $record->account_id;
         }
@@ -519,7 +575,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         /** @var Addressbook_Model_Contact $_record */
         if (!empty($_record->account_id)) {
-            throw new Addressbook_Exception_AccessDenied('It is not allowed to delete a contact linked to an user account!');
+            $translation = Tinebase_Translation::getTranslation('Addressbook');
+            throw new Addressbook_Exception_AccessDenied($translation->_('It is not allowed to delete a contact linked to an user account!'));
         }
 
         Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_BeforeDeleteContact(array(
@@ -560,7 +617,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         /** @var Addressbook_Model_Contact $_record */
         $this->_setGeoData($_record);
 
-        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME)) {
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME) && $this->_duplicateCheck) {
             // Set Short Name if no Short Name is set or the Short Name Already exists
             if (!$_record->n_short) {
                 $this->_setShortName($_record);
@@ -599,7 +656,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_setGeoData($_record);
         }
 
-        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME)) {
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME) && $this->_duplicateCheck) {
             // Set Short Name if no Short Name is set or the Short Name Already exists
             if (!$_record->n_short) {
                 $this->_setShortName($_record);
@@ -633,6 +690,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        if (!Tinebase_Core::getUser()->hasGrant(
+                $_record->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
+            Tinebase_Core::getUser()->contact_id !== $_record->getId()) {
+            // We need to restore the data we previously removed
+            $_record = $this->removePersonalData($_record);
+        };
 
         // syncBackendIds is read only property!
         unset($_record->syncBackendIds);
@@ -744,7 +808,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                     $nominatim->setCountry($country);
                 }
             } catch (Zend_Locale_Exception $zle) {
-                Tinebase_Exception::log($zle, true);
+                // country not found
             }
         }
         
@@ -1067,6 +1131,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
+        // $_addedUser is the result of user sql backend create -> lacks "virtual" property container_id
+        $_addedUser->container_id = $_newUserProperties->container_id;
+
         $contactId = $_addedUser->contact_id;
         if (!empty($contactId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -1113,6 +1180,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             . " Added contact " . $contact->n_given);
 
         $_addedUser->contact_id = $contact->getId();
+        $_addedUser->container_id = $contact->container_id;
         $userController->updateUserInSqlBackend($_addedUser);
 
         $this->doContainerACLChecks($oldACL);
@@ -1149,6 +1217,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             return;
         }
 
+        // $_updatedUser is the result of user sql backend load -> lacks "virtual" property container_id
+        $_updatedUser->container_id = $_newUserProperties->container_id;
+
         // update base information
         $contact = Tinebase_User::user2Contact($_updatedUser, clone $oldContact);
 
@@ -1156,7 +1227,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if ($userController instanceof Tinebase_User_Interface_SyncAble && Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_CONTACT_DATA} &&
             (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA]) || !$this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA])) {
             // let the syncbackend e.g. Tinebase_User_Ldap etc. decide what to add to our $contact
-            $userController->updateContactFromSyncBackend($_updatedUser, $contact);
+            try {
+                $userController->updateContactFromSyncBackend($_updatedUser, $contact);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' do not update contact - user is not found in sync backend: '
+                    . $tenf->getMessage());
+            }
         }
 
         if (is_array($this->_requestContext) && isset($this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO]) &&
@@ -1248,5 +1325,32 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         )));
 
         return $contacts->getFirstRecord();
+    }
+
+    /**
+     * Unset Personal data of a contact
+     * 
+     * @param Addressbook_Model_Contact $contact
+     * @return Addressbook_Model_Contact
+     */
+    private function removePersonalData(Addressbook_Model_Contact $contact) {
+        unset($contact->bday);
+        unset($contact->adr_two_countryname);
+        unset($contact->adr_two_locality);
+        unset($contact->adr_two_postalcode);
+        unset($contact->adr_two_region);
+        unset($contact->adr_two_street);
+        unset($contact->adr_two_street2);
+        unset($contact->adr_two_lon);
+        unset($contact->adr_two_lat);
+        unset($contact->email_home);
+        unset($contact->tel_home);
+        unset($contact->tel_cell_private);
+        unset($contact->tel_fax_home);
+        unset($contact->tel_home_normalized);
+        unset($contact->tel_cell_private_normalized);
+        unset($contact->tel_fax_home_normalized);
+
+        return $contact;
     }
 }

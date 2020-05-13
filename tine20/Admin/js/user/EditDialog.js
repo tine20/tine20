@@ -85,7 +85,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.getForm().loadRecord(this.samRecord);
         this.record.set('sambaSAM', this.samRecord.data);
 
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             if (this.emailRecord.get('emailAliases')) {
                 this.aliasesGrid.setStoreFromArray(this.emailRecord.get('emailAliases'));
             }
@@ -93,7 +93,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
             }
         }
-        if (Tine.Admin.registry.get('manageImapEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageImapEmailUser')) {
             if (!this.emailRecord.get('emailMailQuota')) this.getForm().findField('emailMailQuota').setValue(null);
         }
 
@@ -136,7 +136,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         form.updateRecord(this.emailRecord);
         // get aliases / forwards
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             // forcing blur of quickadd grids
             this.aliasesGrid.doBlur();
             this.forwardsGrid.doBlur();
@@ -169,7 +169,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
 
-        var xprops = {};
+        var xprops = this.record.get('xprops');
+        xprops = Ext.isObject(xprops) ? xprops : {};
         xprops.personalFSQuota = this.getForm().findField('personalFSQuota').getValue();
         Tine.Tinebase.common.assertComparable(xprops);
         this.record.set('xprops', xprops);
@@ -198,7 +199,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return false;
         }
         
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             var emailValue = this.getForm().findField('accountEmailAddress').getValue();
             if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
                 result = false;
@@ -508,7 +509,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Array} - array of IMAP tab items
      */
     initImap: function () {
-        if (Tine.Admin.registry.get('manageImapEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageImapEmailUser')) {
             return [{
                 xtype: 'fieldset',
                 title: this.app.i18n.gettext('IMAP Quota'),
@@ -606,19 +607,18 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * init email grids
      * @return Array
      * 
-     * TODO     add ctx menu
+     * TODO     add ctx menus
      */
     initSmtp: function () {
-        if (! Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (! Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             return [];
         }
         
-        var commonConfig = {
+        let commonConfig = {
             autoExpandColumn: 'email',
             quickaddMandatory: 'email',
             frame: false,
             useBBar: true,
-            dataField: 'email',
             height: 200,
             columnWidth: 0.5,
             recordClass: Ext.data.Record.create([
@@ -626,16 +626,64 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ])
         };
         
-        var smtpPrimarydomain = Tine.Tinebase.registry.get('primarydomain');
-        var smtpSecondarydomains = Tine.Tinebase.registry.get('secondarydomains');
+        this.initAliasesGrid(commonConfig);
+        this.initForwardsGrid(commonConfig);
 
-        var domains = (smtpSecondarydomains && smtpSecondarydomains.length) ? smtpSecondarydomains.split(',') : [];
+        return [
+            [this.aliasesGrid, this.forwardsGrid],
+            [{hidden: true},
+             {
+                fieldLabel: this.app.i18n.gettext('Forward Only'),
+                name: 'emailForwardOnly',
+                xtype: 'checkbox',
+                readOnly: false
+            }]
+        ];
+    },
+
+    initAliasesGrid: function(commonConfig) {
+        let smtpPrimarydomain = Tine.Tinebase.registry.get('primarydomain');
+        let smtpSecondarydomains = Tine.Tinebase.registry.get('secondarydomains');
+
+        let domains = (smtpSecondarydomains && smtpSecondarydomains.length) ? smtpSecondarydomains.split(',') : [];
         if (smtpPrimarydomain.length) {
             domains.push(smtpPrimarydomain);
         }
-        var app = this.app,
-            record = this.record;
-            
+        let app = this.app;
+
+        let smtpAliasesDispatchFlag = Tine.Tinebase.registry.get('smtpAliasesDispatchFlag');
+
+        let cm = [{
+            id: 'email',
+            header: this.app.i18n.gettext('Email Alias'),
+            dataIndex: 'email',
+            width: 260,
+            hideable: false,
+            sortable: true,
+            quickaddField: new Ext.form.TextField({
+                emptyText: this.app.i18n.gettext('Add an alias address...'),
+                vtype: 'email'
+            }),
+            editor: new Ext.form.TextField({allowBlank: false})
+        }];
+
+        let gridPlugins = [];
+        if (smtpAliasesDispatchFlag) {
+            this.aliasesDispatchCheckColumn = new Ext.grid.CheckColumn({
+                id: 'dispatch_address',
+                header: '...',
+                tooltip: this.app.i18n.gettext('This alias can be used for sending e-mails.'),
+                dataIndex: 'dispatch_address',
+                width: 40,
+                hideable: false,
+                sortable: true
+            })
+            cm.push(this.aliasesDispatchCheckColumn);
+            gridPlugins.push(this.aliasesDispatchCheckColumn);
+        } else {
+            commonConfig = Ext.apply({dataField: 'email',}, commonConfig);
+        }
+
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
@@ -645,6 +693,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                     var domain = split[1];
                     if (domains.indexOf(domain) > -1) {
+                        if (smtpAliasesDispatchFlag) {
+                            value.dispatch_address = 1;
+                        }
                         Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.call(this, value);
                     } else {
                         Ext.MessageBox.show({
@@ -658,25 +709,18 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         return false;
                     }
                 },
-                cm: new Ext.grid.ColumnModel([{
-                    id: 'email', 
-                    header: this.app.i18n.gettext('Email Alias'),
-                    dataIndex: 'email', 
-                    width: 300, 
-                    hideable: false, 
-                    sortable: true,
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: this.app.i18n.gettext('Add an alias address...'),
-                        vtype: 'email'
-                    }),
-                    editor: new Ext.form.TextField({allowBlank: false})
-                }])
+                cm: new Ext.grid.ColumnModel(cm),
+                plugins: gridPlugins
             }, commonConfig)
         );
         this.aliasesGrid.render(document.body);
-        
-        var aliasesStore = this.aliasesGrid.getStore();
+    },
 
+    initForwardsGrid: function(commonConfig) {
+        let aliasesStore = this.aliasesGrid.getStore();
+        let app = this.app;
+        let record = this.record;
+        
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
@@ -693,32 +737,21 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 },
                 cm: new Ext.grid.ColumnModel([{
-                    id: 'email', 
+                    id: 'email',
                     header: this.app.i18n.gettext('Email Forward'),
-                    dataIndex: 'email', 
-                    width: 300, 
-                    hideable: false, 
+                    dataIndex: 'email',
+                    width: 300,
+                    hideable: false,
                     sortable: true,
                     quickaddField: new Ext.form.TextField({
                         emptyText: this.app.i18n.gettext('Add a forward address...'),
                         vtype: 'email'
                     }),
-                    editor: new Ext.form.TextField({allowBlank: false}) 
+                    editor: new Ext.form.TextField({allowBlank: false})
                 }])
-            }, commonConfig)
+            }, Ext.apply({dataField: 'email',}, commonConfig))
         );
         this.forwardsGrid.render(document.body);
-        
-        return [
-            [this.aliasesGrid, this.forwardsGrid],
-            [{hidden: true},
-             {
-                fieldLabel: this.app.i18n.gettext('Forward Only'),
-                name: 'emailForwardOnly',
-                xtype: 'checkbox',
-                readOnly: false
-            }]
-        ];
     },
 
     initPasswordConfirmWindow: function() {
@@ -1013,7 +1046,16 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             },
                             scope: this
                         }
-                    }]] 
+                    },
+                     {
+                            hideLabel: true,
+                            xtype: 'checkbox',
+                            boxLabel: this.app.i18n.gettext('Password Must Change'),
+                            hidden: this.ldapBackend,
+                            ctCls: 'admin-checkbox',
+                            fieldClass: 'admin-checkbox-box',
+                            name: 'password_must_change'
+                    }]]
                 }, {
                     xtype: 'fieldset',
                     title: this.app.i18n.gettext('Information'),
@@ -1070,7 +1112,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: this.initFilesystem()
             }, {
                 title: this.app.i18n.gettext('IMAP'),
-                disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
+                disabled: ! Tine.Tinebase.registry.get('manageImapEmailUser'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -1079,7 +1121,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, {
                 xtype: 'columnform',
                 title: this.app.i18n.gettext('SMTP'),
-                disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
+                disabled: ! Tine.Tinebase.registry.get('manageSmtpEmailUser'),
                 border: false,
                 frame: true,
                 labelAlign: 'top',

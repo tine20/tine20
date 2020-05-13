@@ -167,8 +167,10 @@ abstract class Felamimail_Sieve_Backend_Abstract
         if (null !== $this->_scriptParts) {
             /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
             foreach ($this->_scriptParts as $scriptPart) {
-                $require = array_merge($require,
-                    $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES));
+                $partRequires = is_array($scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES))
+                    ? $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES)
+                    : (is_array($scriptPart->requires) ? $scriptPart->requires : []);
+                $require = array_merge($require, $partRequires);
             }
         }
 

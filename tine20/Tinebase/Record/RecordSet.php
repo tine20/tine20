@@ -127,8 +127,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $recordId = $_record->getId();
 
         if ($recordId && isset($this->_idMap[$recordId]) && isset($this->_listOfRecords[$this->_idMap[$recordId]])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Record (id ' . $recordId . ') already in set - we don\'t want duplicates)');
             return $this->_idMap[$recordId];
         }
 
@@ -545,7 +543,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * filter recordset and return subset
      *
-     * @param string $_field
+     * @param string|callable $_field
      * @param string $_value
      * @return Tinebase_Record_RecordSet
      */
@@ -553,9 +551,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         $matchingRecords = $this->_getMatchingRecords($_field, $_value, $_valueIsRegExp);
         
-        $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
-        
-        return $result;
+        return new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
     }
 
     /**
@@ -953,5 +949,24 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         }
 
         return $result;
+    }
+
+    public function unshiftRecord($record)
+    {
+        if (null !== ($id = $record->getId()) && isset($this->_idMap[$id])) {
+            $this->removeById($id);
+        }
+
+        $this->_idLess = [];
+        $this->_idMap = [];
+        array_unshift($this->_listOfRecords, $record);
+
+        foreach ($this->_listOfRecords as $idx => $rec) {
+            if (null !== ($id = $rec->getId())) {
+                $this->_idMap[$id] = $idx;
+            } else {
+                $this->_idLess[] = $idx;
+            }
+        }
     }
 }

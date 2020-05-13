@@ -17,6 +17,8 @@
  */
 class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
 {
+    const FM_REAL_WEBDAV_ROOT = 'fmRealWebdavRoot';
+
     /**
      * app has records folder
      *
@@ -34,6 +36,62 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
     protected $_containerModel = 'Tinebase_Model_Tree_Node';
 
     protected $_model = Filemanager_Model_Node::class;
+
+    /**
+     * @var Tinebase_WebDav_Root
+     */
+    protected $_root = null;
+
+    /**
+     * contructor
+     *
+     * @param string $path          the current path
+     * @param array  $options       options
+     */
+    public function __construct($path, $options = array())
+    {
+        parent::__construct($path, $options);
+
+        if (isset($options[self::FM_REAL_WEBDAV_ROOT])) {
+            $this->_root = $options[self::FM_REAL_WEBDAV_ROOT];
+        }
+    }
+
+    /**
+     * get path parts
+     *
+     * @return array
+     */
+    protected function _getPathParts()
+    {
+        if (!$this->_pathParts) {
+            if (null !== $this->_root) {
+                $this->_pathParts = ['Filemanager'];
+            } else {
+                $this->_pathParts = parent::_getPathParts();
+                if (count($this->_pathParts) === 1 && $this->_pathParts !== ['Filemanager'] && $this->_pathParts !== ['webdav']) {
+                    $this->_pathParts = ['Filemanager', $this->_pathParts[0]];
+                }
+            }
+        }
+        return $this->_pathParts;
+    }
+
+    /**
+     * @param string $name
+     * @return Tinebase_WebDav_Container_Abstract|Tinebase_WebDav_Collection_AbstractContainerTree|Tinebase_Frontend_WebDAV_RecordCollection
+     * @see Sabre\DAV\Collection::getChild()
+     */
+    public function getChild($name)
+    {
+        if (null !== $this->_root) {
+            try {
+                return $this->_root->getChild($name);
+            } catch (\Sabre\DAV\Exception\NotFound $e) {}
+        }
+
+        return parent::getChild($name);
+    }
 
     /**
      * @return array

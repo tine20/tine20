@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>adb_csv_append</name>
+    <model>Addressbook_Model_Contact</model>
+    <plugin>Addressbook_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>;</delimiter>
+    <label>append CSV import</label>
+    <description>append import</description>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>Vorname</source>
+            <destination>n_given</destination>
+        </field>
+        <field>
+            <source>Name</source>
+            <destination>n_family</destination>
+        </field>
+        <field>
+            <source>Vorwahl_Tel</source>
+            <destination>tel_work</destination>
+        </field>
+        <field>
+            <source>Telefonnummer</source>
+            <destination>tel_work</destination>
+            <append> </append>
+        </field>
+    </mapping>
+</config>

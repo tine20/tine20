@@ -31,7 +31,9 @@ class Tinebase_Export_Doc2 extends Tinebase_Export_Doc
      */
     protected function _processRecord(Tinebase_Record_Interface $_record)
     {
-        $this->_currentProcessor->setMainPart(str_replace(["\n", "\r", '\''], ['</w:t><w:br/><w:t>', '', '&apos;'],
+        $this->_currentProcessor->setMainPart(str_replace(["\n", "\r", '\'',
+            Tinebase_Export_Richtext_TemplateProcessor::NEW_LINE_PLACEHOLDER],
+            ['</w:t><w:br/><w:t>', '', '&apos;', '</w:t><w:br/><w:t>'],
             $this->_twig->load($this->_templateFileName . '#~#' . $this->_currentProcessor->getTwigName())
             ->render($this->_getTwigContext(['record' => $_record]))));
     }
@@ -48,6 +50,13 @@ class Tinebase_Export_Doc2 extends Tinebase_Export_Doc
             $src = $this->_currentProcessor->getConfig('recordXml');
         } else {
             $src = $this->_currentProcessor->getMainPart();
+        }
+
+        while (preg_match('/\{\{[^\}]+\([^\}\)]+=&gt;/', $src, $m)) {
+            $src = str_replace($m[0], substr($m[0], 0, strlen($m[0]) - 4) . '>', $src);
+        }
+        while (preg_match('/\{\{[^\}]+\([^\}\)]+=>[^\)]*&quot;/', $src, $m)) {
+            $src = str_replace($m[0], substr($m[0], 0, strlen($m[0]) - 6 /*? oder 5*/) . '"', $src);
         }
 
         return str_replace(["\n", "\r", '&apos;'], ['', '', '\''], $src);

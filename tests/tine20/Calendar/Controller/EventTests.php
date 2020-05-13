@@ -55,6 +55,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         return $persistentEvent;
     }
+
+    /**
+     * testCreateEvent
+     *
+     * @return Calendar_Model_Event
+     */
+    public function testCreateEventWithBadTZ()
+    {
+        $event = $this->_getEvent();
+        $event->originator_tz = 'BRT';
+        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        $this->_controller->create($event);
+    }
     
     /**
      * testCreateAlldayEventWithoutDtend
@@ -121,12 +134,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persistentEvent = $this->testCreateEvent();
         
         $currentTz = Tinebase_Core::getUserTimezone();
-        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, 'farfaraway');
+        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, 'Asia/Tokyo');
         
         $persistentEvent->summary = 'Lunchtime';
         $updatedEvent = $this->_controller->update($persistentEvent);
         $this->assertEquals($persistentEvent->summary, $updatedEvent->summary);
-        $this->assertEquals($currentTz, $updatedEvent->originator_tz, 'originator_tz must not be touchet if dtsart is not updatet!');
+        $this->assertEquals($currentTz, $updatedEvent->originator_tz, 'originator_tz must not be touched if dtsart is not updated!');
         
         $updatedEvent->dtstart->addHour(1);
         $updatedEvent->dtend->addHour(1);
@@ -1114,7 +1127,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
+            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain(),
         )), $pw, $pw);
         return $newUser;
     }
@@ -1840,6 +1853,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         // now make it a recurring event
         $updatedEvent->rrule = 'FREQ=DAILY;INTERVAL=1';
         $updatedEvent = $this->_controller->update($updatedEvent);
+        static::assertNull($updatedEvent->exdate);
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, $updatedEvent->dtend);
 
@@ -1865,6 +1879,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'uid',     'operator' => 'equals', 'value' => $createdEvent->uid),
         )));
         static::assertEquals(2, count($events));
+        /** @var Calendar_Model_Event $event */
+        foreach ($events as $event) {
+            if ($event->isRecurException()) continue;
+            static::assertEquals('Tinebase_DateTime', get_class($event->exdate[0]));
+            static::assertEquals($recurException->dtstart->format('c'), $event->exdate[0]->format('c'));
+        }
 
         // update recur exception
         $updatedException = clone $recurException;
@@ -1876,18 +1896,26 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         )));
         static::assertEquals(2, count($events));
         $updatedEvent = $this->_controller->get($updatedEvent->getId());
+        static::assertEquals('Tinebase_DateTime', get_class($updatedEvent->exdate[0]));
+        static::assertCount(1, $updatedEvent->exdate);
+        static::assertEquals($recurException->dtstart->format('c'), $updatedEvent->exdate[0]->format('c'));
 
         // create a fallout exception
         $fallout = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, $updatedException->dtend);
         $fallout->summary = 'Abendbrot';
         $fallout->last_modified_time = clone $updatedEvent->last_modified_time;
         $persistentEventWithExdate = $this->_controller->createRecurException($fallout, true);
+        $persistentEventWithExdate->sortExdates();
         $updatedEvent = $this->_controller->get($updatedEvent->getId());
+        $updatedEvent->sortExdates();
+        static::assertEquals('Tinebase_DateTime', get_class($updatedEvent->exdate[0]));
+        static::assertEquals($recurException->dtstart->format('c'), $updatedEvent->exdate[0]->format('c'));
+        static::assertEquals('Tinebase_DateTime', get_class($updatedEvent->exdate[1]));
+        static::assertEquals($fallout->dtstart->format('c'), $updatedEvent->exdate[1]->format('c'));
         static::assertEquals('Tinebase_DateTime', get_class($persistentEventWithExdate->exdate[0]));
-        static::assertEquals($updatedException->dtstart->format('c'), $updatedEvent->exdate[0]->getClone()->addMinute(1)
-            ->format('c'));
+        static::assertEquals($recurException->dtstart->format('c'), $persistentEventWithExdate->exdate[0]->format('c'));
         static::assertEquals('Tinebase_DateTime', get_class($persistentEventWithExdate->exdate[1]));
-        static::assertEquals($persistentEventWithExdate->exdate[1]->format('c'), $updatedEvent->exdate[1]->format('c'));
+        static::assertEquals($fallout->dtstart->format('c'), $persistentEventWithExdate->exdate[1]->format('c'));
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $createdEvent->uid),
         )));
@@ -1897,7 +1925,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $updatedEvent->dtend->getClone()->addDay(10)->format('Y-m-d H:i:s');
         $updatedEvent->rrule = $rrule;
         $updatedEvent = $this->_controller->update($updatedEvent);
+        $updatedEvent->sortExdates();
         static::assertEquals(substr($rrule, 0, -8), substr((string)($updatedEvent->rrule), 0 , -8));
+        static::assertEquals('Tinebase_DateTime', get_class($persistentEventWithExdate->exdate[0]));
+        static::assertEquals($recurException->dtstart->format('c'), $updatedEvent->exdate[0]->format('c'));
+        static::assertEquals('Tinebase_DateTime', get_class($persistentEventWithExdate->exdate[1]));
+        static::assertEquals($fallout->dtstart->format('c'), $updatedEvent->exdate[1]->format('c'));
 
         // just testing
         $this->_controller->get($updatedException->getId());
@@ -1934,11 +1967,13 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
         )));
         $undidEvent = $this->_controller->get($updatedEvent->getId());
+        $undidEvent->sortExdates();
+        static::assertCount(2, $undidEvent->exdate);
         static::assertEquals(substr($rrule, 0, -8), substr((string)($undidEvent->rrule), 0 , -8));
         static::assertEquals('Tinebase_DateTime', get_class($undidEvent->exdate[0]));
-        static::assertEquals($undidEvent->exdate[0]->format('c'), $updatedEvent->exdate[0]->format('c'));
+        static::assertEquals($updatedEvent->exdate[0]->format('c'), $undidEvent->exdate[0]->format('c'));
         static::assertEquals('Tinebase_DateTime', get_class($undidEvent->exdate[1]));
-        static::assertEquals($undidEvent->exdate[1]->format('c'), $updatedEvent->exdate[1]->format('c'));
+        static::assertEquals($updatedEvent->exdate[1]->format('c'), $undidEvent->exdate[1]->format('c'));
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $createdEvent->uid),
         )));
@@ -2021,6 +2056,36 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             $this->_controller->get($updatedEvent->getId());
             static::fail('delete did not work');
         } catch (Tinebase_Exception_NotFound $tenf) {}
+    }
+
+    public function testAlarmReSendOnReSchedule()
+    {
+        $event = $this->_getEvent();
+        $event->alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class, [
+            new Tinebase_Model_Alarm([
+                'minutes_before' => 15,
+
+                // this is a shortcut, which may and should fail in future, thats why we assert it below
+                // change this test once it starts failing
+                'sent_status' => Tinebase_Model_Alarm::STATUS_SUCCESS,
+                'sent_time' => $event->dtstart->getClone()->subMinute(5)
+            ], TRUE)
+        ]);
+
+        $createdEvent = $this->_controller->create($event);
+        static::assertInstanceOf(Tinebase_Record_RecordSet::class, $createdEvent->alarms);
+        static::assertNotNull($alarm = $createdEvent->alarms->getFirstRecord());
+        static::assertSame(Tinebase_Model_Alarm::STATUS_SUCCESS, $alarm->sent_status);
+        static::assertSame((string)$event->dtstart->getClone()->subMinute(5), (string)$alarm->sent_time);
+
+        $createdEvent->dtstart->addMinute(12);
+        $createdEvent->dtend->addMinute(12);
+        $updatedEvent = $this->_controller->update($createdEvent);
+
+        static::assertInstanceOf(Tinebase_Record_RecordSet::class, $updatedEvent->alarms);
+        static::assertNotNull($alarm = $updatedEvent->alarms->getFirstRecord());
+        static::assertSame(Tinebase_Model_Alarm::STATUS_PENDING, $alarm->sent_status);
+        static::assertNull($alarm->sent_time);
     }
 
     public function testModLogUndo()

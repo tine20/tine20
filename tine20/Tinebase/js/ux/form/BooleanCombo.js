@@ -21,7 +21,7 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
 Ext.ux.form.BooleanCombo = Ext.extend(Ext.form.ComboBox, {
     mode: 'local',
     forceSelection: true,
-    allowEmpty: false,
+    allowBlank: false,
     triggerAction: 'all',
     editable: false,
 

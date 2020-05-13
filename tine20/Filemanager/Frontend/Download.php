@@ -12,9 +12,9 @@
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        allow to download a folder as ZIP file
+ * @todo        allow to download a folder as ZIP file (see \Felamimail_Frontend_Http::_downloadAttachments)
  *
  * ATTENTION all public methods in this class are reachable without tine authentification
  */
@@ -30,7 +30,8 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         try {
             $splittedPath = explode('/', trim($path, '/'));
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__
                 . ' Display download node with path ' . print_r($splittedPath, true));
             
             $downloadId = array_shift($splittedPath);
@@ -56,11 +57,24 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             }
             
         } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            $this->_renderNotFoundPage();
+            $this->_handleExceptionAndShow404($e);
         }
         
         exit;
+    }
+
+    /**
+     * @param Throwable $e
+     */
+    protected function _handleExceptionAndShow404(Throwable $e)
+    {
+        if ($e instanceof Tinebase_Exception_ProgramFlow) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+        } else {
+            Tinebase_Exception::log($e);
+        }
+        $this->_renderNotFoundPage();
     }
 
     protected function _verfiyPassword($download)
@@ -159,8 +173,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             }
             
         } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            $this->_renderNotFoundPage();
+            $this->_handleExceptionAndShow404($e);
         }
         
         exit;

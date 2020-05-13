@@ -454,6 +454,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
         $result = $container->getChanges('0');
 
-        static::assertTrue(isset($result['create'][$event->getRecord()->uid]));
+        static::assertTrue(isset($result['create'][$event->getRecord()->id]));
     }
 }

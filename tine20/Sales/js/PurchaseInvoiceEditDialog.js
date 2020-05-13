@@ -258,13 +258,10 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }
         });
         
-        this.priceNetField = new Ext.ux.form.NumberField({
-            name: 'price_net',
-            xtype: 'numberfield',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            decimalPrecision: 2,
-            suffix: ' €',
+        this.priceNetField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Net'),
+            name: 'price_net',
             columnWidth: 1/4,
             listeners: {
                 scope: this,
@@ -272,13 +269,10 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }
         });
         
-        this.priceGrossField = new Ext.ux.form.NumberField({
-            decimalPrecision: 2,
-            name: 'price_gross',
-            xtype: 'numberfield',
-            suffix: ' €',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+        this.priceGrossField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Gross'),
+            name: 'price_gross',
             columnWidth: 1/4,
             listeners: {
                 scope: this,
@@ -286,13 +280,10 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }
         });
 
-        this.priceGross2Field = new Ext.ux.form.NumberField({
-            decimalPrecision: 2,
-            name: 'price_gross2',
-            xtype: 'numberfield',
-            suffix: ' €',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+        this.priceGross2Field = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Additional Price Gross'),
+            name: 'price_gross2',
             columnWidth: 1/4,
             listeners: {
                 scope: this,
@@ -300,28 +291,23 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }
         });
 
-        this.priceTotalField = new Ext.ux.form.NumberField({
-            decimalPrecision: 2,
-            name: 'price_total',
-            xtype: 'numberfield',
-            suffix: ' €',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+        this.priceTotalField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Total Price'),
-            columnWidth: 1/4,
+            name: 'price_total',
+            columnWidth: 1 / 4,
             listeners: {
                 scope: this,
                 blur: this.calcTotal.createDelegate(this)
             }
         });
         
-        this.priceTaxField = new Ext.ux.form.NumberField({
-            decimalPrecision: 2,
-            name: 'price_tax',
-            xtype: 'numberfield',
-            suffix: ' €',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+        this.priceTaxField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Tax'),
-            columnWidth: 1/4,
+            name: 'price_tax',
+            disabled: true,
+            columnWidth: 1 / 4,
             listeners: {
                 scope: this,
                 blur: this.onUpdatePriceTax.createDelegate(this)

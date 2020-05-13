@@ -36,23 +36,24 @@ class Tinebase_Record_Expander_Factory
             throw new Tinebase_Exception_NotImplemented($_model . '::' . $_property . ' has a unknown model');
         }
         $fieldDef = $mc->getFields()[$_property];
-        if (!isset($fieldDef['type'])) {
+        if (!isset($fieldDef[MCC::TYPE])) {
             throw new Tinebase_Exception_InvalidArgument($_model . '::' . $_property . ' has not type');
         }
+
         $prio = null;
-        switch ($fieldDef['type']) {
+        switch ($fieldDef[MCC::TYPE]) {
             /** @noinspection PhpMissingBreakStatementInspection */
-            case 'user':
+            case MCC::TYPE_USER:
                 $prio = Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_USER;
             /** @noinspection PhpMissingBreakStatementInspection */
-            case 'container':
+            case MCC::TYPE_CONTAINER:
                 if (null === $prio) {
                     $prio = Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_CONTAINER;
                 }
-            case 'record':
+            case MCC::TYPE_RECORD:
                 return new Tinebase_Record_Expander_RecordProperty($propModel, $_property, $_definition, $_rootExpander,
                      $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
-            case 'records':
+            case MCC::TYPE_RECORDS:
                 if (isset($fieldDef[MCC::CONFIG][MCC::STORAGE]) && MCC::TYPE_JSON ===
                         $fieldDef[MCC::CONFIG][MCC::STORAGE]) {
                     return new Tinebase_Record_Expander_JsonStorageProperty($propModel, $_property, $_definition,
@@ -61,14 +62,14 @@ class Tinebase_Record_Expander_Factory
                     return new Tinebase_Record_Expander_RecordsProperty($propModel, $_property, $_definition,
                         $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
                 }
-            case 'relation':
+            case MCC::TYPE_RELATION:
                 return new Tinebase_Record_Expander_Relations($_model, $propModel, $_property, $_definition,
                     $_rootExpander);
-            case 'tag':
+            case MCC::TYPE_TAG:
                 return new Tinebase_Record_Expander_Tags($propModel, $_property, $_definition, $_rootExpander);
-            case 'note':
+            case MCC::TYPE_NOTE:
                 return new Tinebase_Record_Expander_Note($propModel, $_property, $_definition, $_rootExpander);
-            case 'attachments':
+            case MCC::TYPE_ATTACHMENTS:
                 return new Tinebase_Record_Expander_Attachments($propModel, $_property, $_definition, $_rootExpander);
         }
 

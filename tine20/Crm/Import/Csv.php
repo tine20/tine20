@@ -92,7 +92,7 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
             }
         }
 
-        if($this->_options['demoData']) $data = $this->_getDay($data, $this->_additionalOptions['dates']);
+        //if($this->_options['demoData']) $data = $this->_getDay($data, $this->_additionalOptions['dates']);
 
         return $data;
     }

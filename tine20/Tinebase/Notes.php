@@ -198,12 +198,20 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         if (! is_string($recordModel)) {
             throw new Tinebase_Exception_AccessDenied('no explicit record model set in filter');
         }
-        
-        try {
-            $record = Tinebase_Core::getApplicationInstance($recordModel)->get($recordIdFilter->getValue());
-        } catch (Tinebase_Exception_AccessDenied $tead) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Do not fetch record notes because user has no read grant for container');
+
+        $recordId = $recordIdFilter->getValue();
+        if (empty($recordId)) {
             $recordIdFilter->setValue('');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' record ID is empty');
+        } else {
+            try {
+                Tinebase_Core::getApplicationInstance($recordModel)->get($recordId);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Do not fetch record notes because user has no read grant for container');
+                $recordIdFilter->setValue('');
+            }
         }
     }
     
@@ -297,7 +305,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $notesOfRecords->addIndices(array('record_id'));
         
         // add notes to records
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($notesOfRecords) . ' notes for ' . count($_records) . ' records.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && count($notesOfRecords) > 0) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($notesOfRecords)
+                . ' notes for ' . count($_records) . ' records.');
+        }
         foreach($_records as $record) {
             //$record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
             $record->{$_notesProperty} = $notesOfRecords->filter('record_id', $record->getId());
@@ -359,24 +370,25 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $_record->$_notesProperty = $notesToSet;
         }
         
-        //$toAttach = array_diff($notesToSet->getArrayOfIds(), $currentNotesIds);
         $toDetach = array_diff($currentNotes->getArrayOfIds(), $notesToSet->getArrayOfIds());
         $toDelete = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
-        foreach($toDetach as $detachee) {
+        foreach ($toDetach as $detachee) {
             $toDelete->addRecord($currentNotes->getById($detachee));
         }
 
         // delete detached/deleted notes
         $this->deleteNotes($toDelete);
-        
-        // add new notes
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($notesToSet) . ' note(s) to record.');
-        foreach ($notesToSet as $note) {
-            if (!$note->getId()) {
-                $note->record_model = $model;
-                $note->record_backend = $backend;
-                $note->record_id = $_record->getId();
-                $this->addNote($note);
+
+        if (count($notesToSet) > 0) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Adding ' . count($notesToSet) . ' new note(s) to record.');
+            foreach ($notesToSet as $note) {
+                if (!$note->getId()) {
+                    $note->record_model = $model;
+                    $note->record_backend = $backend;
+                    $note->record_id = $_record->getId();
+                    $this->addNote($note);
+                }
             }
         }
     }
@@ -385,15 +397,20 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * add new note
      *
      * @param Tinebase_Model_Note $_note
+     * @param boolean $skipModlog
      */
-    public function addNote(Tinebase_Model_Note $_note)
+    public function addNote(Tinebase_Model_Note $_note, $skipModlog = false)
     {
         if (!$_note->getId()) {
             $id = $_note->generateUID();
             $_note->setId($id);
         }
 
-        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($_note, 'create');
+        if (! $skipModlog) {
+            $seq = (int)$_note->seq;
+            Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($_note, 'create');
+            $_note->seq = $seq;
+        }
         
         $data = $_note->toArray(FALSE, FALSE);
 
@@ -419,12 +436,15 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function addSystemNote($_record, $_userId = NULL, $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
     {
-        if (empty($_mods) && $_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED) {
+        if ((empty($_mods) || $_mods instanceof Tinebase_Record_RecordSet && count($_mods) === 0)
+            && $_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED
+        ) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Nothing changed -> do not add "changed" note.');
-            return FALSE;
+            return false;
         }
         
-        $id = ($_record instanceof Tinebase_Record_Interface) ? $_record->getId() : $_record;
+        $id = $_record instanceof Tinebase_Record_Interface ? $_record->getId() : $_record;
+        $seq = $_record instanceof Tinebase_Record_Interface && $_record->has('seq') ? $_record->seq : 0;
         $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : 'unknown');
         if (($_userId === NULL)) {
             $_userId = Tinebase_Core::getUser();
@@ -436,11 +456,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         if ($_mods !== NULL) {
             if ($_mods instanceof Tinebase_Record_RecordSet && count($_mods) > 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                    .' mods to log: ' . print_r($_mods->toArray(), TRUE));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    .' Adding "' . $_type . '" system note note to record (id ' . $id . ')');
-                
                 $noteText .= ' | ' .$translate->_('Changed fields:');
                 foreach ($_mods as $mod) {
                     $modifiedAttribute = $mod->modified_attribute;
@@ -454,7 +469,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 $noteText = $_mods;
             }
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            .' Adding "' . $_type . '" system note note to record (id ' . $id . ')');
+
         $noteType = $this->getNoteTypeByName($_type);
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => $noteType->getId(),
@@ -462,6 +480,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             'record_model'      => $modelName,
             'record_backend'    => ucfirst(strtolower($_backend)),
             'record_id'         => $id,
+            'seq'               => $seq,
         ));
         
         return $this->addNote($note);
@@ -497,7 +516,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
                     $return .= ' ' . $translate->_($attribute) . ' (' . $tmpDiff->getTranslatedDiffText() . ')';
                 } else {
-                    $oldData = $diff->oldData[$attribute];
+                    $oldData = $diff->oldData ? $diff->oldData[$attribute] : null;
 
                     if (isset($recordProperties[$attribute]) && ($oldData || $value) &&
                             isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
@@ -867,7 +886,16 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function update(Tinebase_Record_Interface $_record)
     {
-        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+        $data = $_record->toArray(false, false);
+
+        if (!isset($data['id'])) throw new Tinebase_Exception_Backend('id not set');
+        if (mb_strlen($data['note']) > 65535) {
+            $data['note'] = mb_substr($data['note'], 0, 65535);
+        }
+
+        $this->_notesTable->update($data, $this->_db->quoteInto('id = ?', $data['id']));
+
+        return $_record;
     }
 
     /**

@@ -182,6 +182,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @var Tinebase_Model_Filter_FilterGroup|null reference to parent group
      */
     protected $_parent = null;
+
+    protected $_isInSetFromUser = false;
     
     /******************************** functions ********************************/
     
@@ -244,6 +246,24 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
 
     /**
+     * @param bool|null $bool
+     * @return bool
+     */
+    public function doIgnoreAcl($bool = null)
+    {
+        $oldValue = $this->_ignoreAcl;
+        if (null !== $bool) {
+            foreach ($this->_filterObjects as $filter) {
+                if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
+                    $filter->doIgnoreAcl($bool);
+                }
+            }
+            $this->_ignoreAcl = (bool)$bool;
+        }
+        return $oldValue;
+    }
+
+    /**
      * @param Tinebase_Model_Filter_FilterGroup $_parent
      */
     public function setParent($_parent)
@@ -264,7 +284,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function getRootParent()
     {
-        if (null != $this->_parent) {
+        if (null !== $this->_parent) {
             return $this->_parent->getRootParent();
         }
         return $this;
@@ -878,7 +898,17 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function setFromArrayInUsersTimezone($_data)
     {
         $this->_options['timezone'] = Tinebase_Core::getUserTimezone();
-        $this->setFromArray($_data);
+        try {
+            $this->_isInSetFromUser = true;
+            $this->setFromArray($_data);
+        } finally {
+            $this->_isInSetFromUser = false;
+        }
+    }
+
+    public function isInSetFromUser()
+    {
+        return $this->_isInSetFromUser;
     }
     
     /**
@@ -1084,6 +1114,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
 
         return $filter;
+    }
+
+    public function filterWalk(callable $func) {
+        foreach ($this->_filterObjects as $filter) {
+            $func($filter);
+        }
     }
     
     ###### iterator interface ###########

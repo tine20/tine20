@@ -59,6 +59,11 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
         ));
     }
 
+    public function getBackend()
+    {
+        return $this->_configBackend;
+    }
+
     /**
      * get list of records
      *
@@ -102,7 +107,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
                     $definition['id'] = 'virtual-' . $name;
                     $definition['application_id'] = $app->getId();
                     $definition['name'] = $name;
-                    $definition['value'] = json_encode($configFromFile);
+                    $definition['value'] = $configFromFile;
                     $definition['source'] = is_null($configFromFile) ?
                         Tinebase_Model_Config::SOURCE_DEFAULT :
                         Tinebase_Model_Config::SOURCE_FILE;
@@ -114,14 +119,16 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
                 if ($configRecord->source != Tinebase_Model_Config::SOURCE_FILE) {
 
                     if (isset($definition['type']) && Tinebase_Config_Abstract::TYPE_RECORD === $definition['type']) {
-                        $val = Tinebase_Config::resolveRecordValue(
-                            Tinebase_Config_Abstract::uncertainJsonDecode($configRecord->value), $definition);
+                        $val = Tinebase_Config::resolveRecordValue(Tinebase_Config::uncertainJsonDecode(
+                            $configRecord->value), $definition);
                         if ($val instanceof Tinebase_Record_Interface) {
                             $val = $val->toArray(true);
                         }
 
-                        $configRecord->value = json_encode($val);
+                        $configRecord->value = $val;
                     }
+
+                    $configRecord->value = json_encode(Tinebase_Config::uncertainJsonDecode($configRecord->value));
 
                     $configRecords->addRecord($configRecord);
                 }
@@ -172,14 +179,16 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
         $configRecord->source = Tinebase_Model_Config::SOURCE_DB;
 
         if (isset($definition['type']) && Tinebase_Config_Abstract::TYPE_RECORD === $definition['type']) {
-            $val = Tinebase_Config::resolveRecordValue(
-                Tinebase_Config_Abstract::uncertainJsonDecode($configRecord->value), $definition);
+            $val = Tinebase_Config::resolveRecordValue(Tinebase_Config::uncertainJsonDecode($configRecord->value),
+                $definition);
             if ($val instanceof Tinebase_Record_Interface) {
                 $val = $val->toArray(true);
             }
 
-            $configRecord->value = json_encode($val);
+            $configRecord->value = $val;
         }
+
+        $configRecord->value = json_encode(Tinebase_Config::uncertainJsonDecode($configRecord->value));
 
         return $configRecord;
     }
@@ -193,15 +202,19 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
         $appConfigObject = Tinebase_Config::getAppConfig($_app->name);
         $definition = $appConfigObject->getDefinition($_config->name);
 
-        if (isset($definition['type']) && Tinebase_Config_Abstract::TYPE_RECORD === $definition['type'] && ($val =
-                json_decode($_config->value, true))) {
-            if (is_array($val) && isset($val['id']) && !empty($val['id'])) {
-                $val = $val['id'];
-            } else {
-                $val = null;
-            }
+        $_config->value = json_decode($_config->value, true);
 
-            $_config->value = json_encode($val);
+        if (isset($definition['type']) && Tinebase_Config_Abstract::TYPE_RECORD === $definition['type'] &&
+                $_config->value) {
+            if (is_array($_config->value) && isset($_config->value['id']) && !empty($_config->value['id'])) {
+                $_config->value = $_config->value['id'];
+            } else {
+                $_config->value = null;
+            }
+        }
+
+        if (is_array($_config->value)) {
+            $_config->value = json_encode($_config->value);
         }
     }
 

@@ -115,6 +115,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $memberships = Tinebase_Core::getCache()->load($cacheId);
         
         if (! $memberships) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .' fetch group memberships from db');
+
             $select = $this->_db->select()
                 ->distinct()
                 ->from(array('group_members' => SQL_TABLE_PREFIX . 'group_members'), array('group_id'))
@@ -172,8 +175,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function setGroupMembers($_groupId, $_groupMembers)
     {
-        if (! is_array($_groupMembers)) {
-            $_groupMembers = [];
+        if ($_groupMembers === null) {
+            // do nothing
+            return;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -522,6 +526,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         unset($data['container_id']);
         unset($data['xprops']);
 
+        // TODO should be done in the model
+        $data['account_only'] = ! isset($data['account_only']) || empty($data['account_only']) ? 0 : (int) $data['account_only'];
+
         $this->groupsTable->insert($data);
 
         $newGroup = clone $_group;
@@ -569,13 +576,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $_group->visibility = Tinebase_Model_Group::VISIBILITY_HIDDEN;
             $_group->list_id    = null;
         }
-        
+
         $data = array(
             'name'          => $_group->name,
             'description'   => $_group->description,
             'visibility'    => $_group->visibility,
             'email'         => $_group->email,
             'list_id'       => $_group->list_id,
+            'account_only'  => empty($_group->account_only) ? 0 : (int) $_group->account_only,
             'created_by'            => $_group->created_by,
             'creation_time'         => $_group->creation_time,
             'last_modified_by'      => $_group->last_modified_by,
@@ -694,14 +702,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function deleteAllGroups()
     {
         $groups = $this->getGroups();
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' groups');
-        
+
         if(count($groups) > 0) {
             $this->deleteGroups($groups);
         }
     }
-    
+
     /**
      * get list of groups
      *
@@ -778,6 +786,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }
         
         $result = new Tinebase_Model_Group($queryResult, TRUE);
+        $result->runConvertToRecord();
         
         return $result;
     }
@@ -792,6 +801,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function getGroupById($_groupId)
     {
+        if (! $_groupId) {
+            throw new Tinebase_Exception_InvalidArgument('$_groupId required');
+        }
+
         $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $result = $this->getGroupByPropertyFromSqlBackend('id', $groupdId);
@@ -890,7 +903,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             case Tinebase_Timemachine_ModificationLog::UPDATED:
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                 if (isset($diff->diff['members']) && is_array($diff->diff['members'])) {
-                    $this->setGroupMembers($modification->record_id, $diff->diff['members']);
+                    $toAdd = array_diff($diff->diff['members'], $diff->oldData['members']);
+                    $toDelete = array_diff($diff->oldData['members'], $diff->diff['members']);
+                    $members = array_unique(array_merge($toAdd,
+                        array_diff($this->getGroupMembers($modification->record_id), $toDelete)));
+                    $this->setGroupMembers($modification->record_id, $members);
                     $record = $this->getGroupById($modification->record_id);
                     $record->members = $this->getGroupMembers($record->getId());
                     Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);

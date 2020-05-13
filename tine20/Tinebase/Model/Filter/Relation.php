@@ -50,15 +50,20 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
     /**
      * get foreign filter group
      * 
-     * @return Tinebase_Model_Filter_FilterGroup
+     * @return Tinebase_Model_Filter_FilterGroup|null
      */
     protected function _setFilterGroup()
     {
         if ($this->_valueIsNull) {
-            return;
+            return null;
         }
         $filters = $this->_getRelationFilters();
-        $this->_filterGroup = new $this->_options['filtergroup']($filters, $this->_operator);
+        $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            $this->_options['filtergroup'],
+            $filters,
+            $this->_operator
+        );
+        return $this->_filterGroup;
     }
     
     /**
@@ -101,15 +106,20 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
 
         if (!$this->_valueIsNull) {
             $this->_resolveForeignIds();
-            $ownIds = $this->_getOwnIds($ownModel);
+        }
 
+        $ownIds = $this->_getOwnIds($ownModel);
+        $notOperator = strpos($this->_operator, 'not') === 0;
+        if ($this->_valueIsNull) {
+            $notOperator = !$notOperator;
+        }
+        if (!$notOperator) {
             if (empty($ownIds)) {
                 $_select->where('1=0');
             } else {
                 $_select->where($db->quoteInto("$qField IN (?)", $ownIds));
             }
         } else {
-            $ownIds = $this->_getOwnIds($ownModel);
             if (empty($ownIds)) {
                 $_select->where('1=1');
             } else {

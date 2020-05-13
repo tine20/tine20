@@ -11,6 +11,8 @@
  
 Ext.namespace('Tine.Phone');
 
+require('../../Voipmanager/js/Models');
+
 /**************************** dialer form / function *******************************/
 
 Tine.Phone.Application = Ext.extend(Tine.Tinebase.Application, {

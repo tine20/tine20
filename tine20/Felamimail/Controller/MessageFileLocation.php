@@ -60,10 +60,14 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
 
     /**
      * @param string $referenceString
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet of Felamimail_Model_MessageFileLocation
      */
     public function getLocationsByReference($referenceString)
     {
+        if (empty($referenceString)) {
+            return new Tinebase_Record_RecordSet(Felamimail_Model_MessageFileLocation::class);
+        }
+
         if (is_array($referenceString)) {
             // only use the first element?
             $referenceString = array_pop($referenceString);
@@ -71,7 +75,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
       
         if (strpos(',', $referenceString) !== false) {
             $references = explode(',', $referenceString);
-        } else if (strpos(' ', $referenceString) !== false) {
+        } else if (strpos($referenceString,' ') !== false) {
             $references = explode(' ', $referenceString);
         } else {
             $references = [$referenceString];
@@ -84,9 +88,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
                 ['field' => 'message_id_hash', 'operator' => 'in', 'value' => $hashedReferences]
             ]
         );
-        $locations = $this->search($filter);
-
-        return $locations;
+        return $this->search($filter);
     }
 
     /**
@@ -114,11 +116,16 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
             }
         }
 
+        if (! $message->folder_id) {
+            // skip message without folder
+            return $result;
+        }
+
         try {
             $messageId = $this->_getMessageId($message);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Message might be removed from cache. Error:' . $e->getMessage());
+                . ' Message might be removed from cache. Error: ' . $e->getMessage());
             return $result;
         }
         $locations = Felamimail_Controller_MessageFileLocation::getInstance()->getLocationsByReference(
@@ -170,7 +177,9 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
      */
     protected function _getMessageId($message)
     {
-        if (! isset($message->headers['message-id'])) {
+        if ($message->message_id && ! empty($message->message_id)) {
+            $messageId = $message->message_id;
+        } else if (! isset($message->headers['message-id'])) {
             $headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message, null, true);
             if (! isset($headers['message-id'])) {
                 throw new Tinebase_Exception_NotFound('no message-id header found');

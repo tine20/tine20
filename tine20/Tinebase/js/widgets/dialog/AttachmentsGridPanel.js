@@ -85,9 +85,51 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
 
         Tine.widgets.dialog.AttachmentsGridPanel.superclass.initComponent.call(this);
         
-        this.initActions();
+        postal.subscribe({
+            channel: "recordchange",
+            topic: 'Tinebase.Tree_Node.*',
+            callback: this.onAttachmentChanges.createDelegate(this)
+        });
+
+        this.on('rowdblclick', this.onRowDbClick, this);
+        this.on('keydown', this.onKeyDown, this);
     },
-    
+
+    /**
+     * bus notified about record changes
+     */
+    onAttachmentChanges: function(data, e) {
+        const record = Tine.Tinebase.data.Record.setFromJson(data, Tine.Tinebase.Model.Tree_Node);
+        const existingRecord = this.store.getById(data.id);
+
+        if (existingRecord && e.topic.match(/\.update/)) {
+            const idx = this.store.indexOf(existingRecord);
+            const isSelected = this.selModel.isSelected(idx);
+            const oldRecord = this.store.getAt(idx);
+            // BE does not set the path / resolve properly
+            record.data.path = oldRecord.data.path;
+            record.data.created_by = oldRecord.data.created_by;
+
+            if (idx >= 0) {
+                this.store.removeAt(idx);
+                this.store.insert(idx, [record]);
+            } else {
+                this.store.add([record]);
+            }
+
+            if (isSelected) {
+                this.selModel.selectRow(this.store.indexOfId(record.id), true);
+            }
+
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
+            this.store.remove(existingRecord);
+        } else {
+            this.store.add([record]);
+        }
+        // NOTE: grid doesn't update selections itself
+        this.actionUpdater.updateActions(this.selModel, [this.record.data]);
+    },
+
     /**
      * get columns
      * @return Array
@@ -115,7 +157,10 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             dataIndex: 'contenttype',
             width: 80,
             header: i18n._('Content Type'),
-            sortable: true
+            sortable: true,
+            renderer: function(value, meta, record) {
+                return _.get(record, 'data.contenttype', _.get(record, 'data.type'));
+            }
         },{ id: 'creation_time',      header: i18n._('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,     width: 80,
             sortable: true },
           { id: 'created_by',         header: i18n._('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer, width: 80,
@@ -135,67 +180,43 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         });
     },
     
-    /**
-     * initActions
-     */
-    initActions: function () {
-        this.action_download = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: false,
-            actionType: 'download',
-            text: i18n._('Download'),
-            handler: this.onDownload,
-            iconCls: 'action_download',
-            scope: this,
-            disabled: true,
-            hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
-        });
-
-        // TODO: does user need rights for Filemanager?
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
-                initialApp: this.app,
-                sm: this.getSelectionModel()
-            });
-        }
-
-        this.actionUpdater.addActions([this.action_download, this.action_preview]);
-        this.getTopToolbar().addItem(this.action_download);
-        this.contextMenu.addItem(this.action_download);
-        
-        this.on('rowdblclick', this.onRowDbClick, this);
-        this.on('keydown', this.onKeyDown, this);
-    },
-
     onKeyDown: function(e) {
         var selectedRows = this.getSelectionModel().getSelections(),
             rowRecord = selectedRows[0];
 
-        if (e.getKey() == e.SPACE && rowRecord.data.type == 'file' && !this.readOnly) {
+        if (e.getKey() == e.SPACE && rowRecord.data.type == 'file') {
             this.action_preview.execute();
         }
     },
 
-    onRowDbClick: function () {
-        var _ = window.lodash,
-            downloadsAllowed = Tine.Tinebase.configManager.get('downloadsAllowed');
+    // NOTE: this method is mixed in Tine.Filemanager.NodeGridPanel
+    onRowDbClick: function (grid, row, e) {
+        const rowRecord = grid.getStore().getAt(row);
 
-        // TODO: does user need rights for Filemanager?
-        if (! Tine.Tinebase.appMgr.isEnabled('Filemanager') && downloadsAllowed) {
-            this.onDownload();
-            return;
+        if (rowRecord.data.type === 'folder') {
+            this.expandFolder(rowRecord);
+        } else if (!this.readOnly) {
+            const dblClickHandlers = [{
+                prio: 100,
+                fn: _.bind(this.action_preview.execute, this.action_preview)
+            }];
+
+            if (Tine.Tinebase.configManager.get('downloadsAllowed')
+                && Tine.Tinebase.appMgr.isEnabled('Filemanager')
+                && Tine.Tinebase.appMgr.get('Filemanager').getRegistry().get('preferences').get('dbClickAction') === 'download' ) {
+
+                dblClickHandlers[0].fn = _.bind(this.action_download.execute, this.action_download);
+            }
+
+            Tine.emit('filesystem.fileDoubleClick', rowRecord, dblClickHandlers);
+
+            const dblClickHandler = _.last(_.sortBy(dblClickHandlers, ['prio']));
+            if (dblClickHandler && _.isFunction(dblClickHandler.fn)) {
+                dblClickHandler.fn.call(dblClickHandler.scope);
+            }
+
         }
 
-        var prefs = Tine.Tinebase.appMgr.get('Filemanager').getRegistry().get('preferences');
-
-        var selectedRows = this.getSelectionModel().getSelections(),
-            rowRecord = selectedRows[0];
-
-        if (prefs.get('dbClickAction') === 'download' && downloadsAllowed) {
-            this.onDownload();
-        } else if (prefs.get('dbClickAction') === 'preview' && rowRecord.data.type == 'file') {
-            this.action_preview.execute();
-        }
     },
 
     /**
@@ -207,9 +228,9 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      */
     onRecordUpdate: function(dialog, record) {
         if (record.data.hasOwnProperty('attachments')) {
-            delete record.data.attachments;
+            Tine.Tinebase.common.assertComparable(record.data.attachments);
         }
-        var attachments = this.getData();
+        var attachments = Tine.Tinebase.common.assertComparable(this.getData());
         record.set('attachments', attachments);
     },
     
@@ -261,6 +282,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         }
 
         this.setReadOnly(! hasRequiredGrant);
+        this.actionUpdater.updateActions(this.selModel, [record.data]);
     },
 
     /**

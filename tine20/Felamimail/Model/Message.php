@@ -14,6 +14,7 @@
  * 
  * @package     Felamimail
  * @subpackage  Model
+ * @property    string  $account_id         the account id
  * @property    string  $folder_id          the folder id
  * @property    string  $original_id        cache id of original message if replying / forwarding
  * @property    string  $subject            the subject of the email
@@ -22,6 +23,7 @@
  * @property    string  $sender             the sender of the email
  * @property    string  $content_type       the content type of the message
  * @property    string  $body_content_type  the content type of the message body
+ * @property    Tinebase_DateTime  received received date
  * @property    array   $to                 the to receipients
  * @property    array   $cc                 the cc receipients
  * @property    array   $bcc                the bcc receipients
@@ -119,8 +121,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'original_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'original_part_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
-        'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'message_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'from_email'            => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'from_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
@@ -220,16 +223,26 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             }
         }
 
-        // what if message has only plain/text?
-        $data['content_type'] = $message->getContentType();
-        if ($data['content_type'] == Zend_Mime::TYPE_TEXT) {
-            $data['body'] = $message->getContent();
-            $data['body_content_type'] = Zend_Mime::TYPE_TEXT;
-        } else {
-            $data['body'] = $message->getHtmlContent();
-            $data['body_content_type'] = Zend_Mime::TYPE_HTML;
-            // TODO why do we need this?
-            $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+        $contentPart = $message->getPartByMimeType(Zend_Mime::TYPE_HTML);
+        if (! $contentPart) {
+            $contentPart = $message->getPartByMimeType(Zend_Mime::TYPE_TEXT);
+        }
+
+        if ($contentPart) {
+            if ($contentPart->getContentType() == Zend_Mime::TYPE_TEXT) {
+                $data['body'] = $contentPart->getContent();
+                $data['body_content_type'] = Zend_Mime::TYPE_TEXT;
+            } else {
+                if (method_exists($contentPart, 'getHtmlContent')) {
+                    $data['body'] = $contentPart->getHtmlContent();
+                    // TODO why do we need this?
+                    $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+                } else {
+                    $data['body'] = $contentPart->getContent();
+                }
+
+                $data['body_content_type'] = Zend_Mime::TYPE_HTML;
+            }
         }
 
         $data['attachments'] = [];
@@ -254,6 +267,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         }
 
         return new Felamimail_Model_Message($data);
+    }
+
+    protected function _getBodyContent($messagePart, &$data)
+    {
     }
 
     /**
@@ -410,8 +427,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
+        if (isset($_headers['message-id']) && is_scalar($_headers['message-id'])) {
+            $this->message_id = $_headers['message-id'];
+        }
+
         $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
-        
         foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
             if (isset($_headers[$field])) {
                 if (is_array($_headers[$field])) {
@@ -455,10 +475,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->_setStructure($_structure);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Parsing structure: ' . print_r($this->structure, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::'
+            . __LINE__ . ' Parsing structure: ' . print_r($this->structure, TRUE));
         
-        $this->content_type  = isset($this->structure['contentType']) ? $this->structure['contentType'] : Zend_Mime::TYPE_TEXT;
+        $this->content_type = isset($this->structure['contentType']) && !is_null($this->structure['contentType'])
+            ? $this->structure['contentType']
+            : Zend_Mime::TYPE_TEXT;
         $this->_setBodyContentType();
     }
     
@@ -549,7 +571,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         }
         
         if ($result === NULL) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . "Structure for partId $_partId not found!");
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . "Structure for partId $_partId not found!");
         }
         
         return $result;
@@ -786,7 +808,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         // explode email addresses if multiple
         $recipientType = array('to', 'cc', 'bcc');
-        $delimiter = ';';
 
         foreach ($recipientType as $field) {
             if (!empty($recordData[$field])) {
@@ -795,11 +816,23 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     throw new Tinebase_Exception_Record_Validation($field . ' property should be an array');
                 }
                 foreach ($recordData[$field] as $addresses) {
-                    if (substr_count($addresses, '@') > 1) {
-                        $recipients = array_merge($recipients, explode($delimiter, $addresses));
+                    if (is_array($addresses)) {
+                        if (isset($addresses['email'])) {
+                            $email = $addresses['email'];
+                        } else {
+                            // invalid: skip
+                            continue;
+                        }
+                    } else {
+                        $email = $addresses;
+                    }
+
+                    if (substr_count($email, '@') > 1) {
+                        $delimiter = strpos($email,';') !== false ? ';' : ',';
+                        $recipients = array_merge($recipients, explode($delimiter, $email));
                     } else {
                         // single recipient
-                        $recipients[] =  $this->sanitizeMailAddress($addresses);
+                        $recipients[] =  $this->sanitizeMailAddress($email);
                     }
                 }
                 

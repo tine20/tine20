@@ -10,6 +10,8 @@
  */
 Ext.ns('Tine.Felamimail.Model');
 
+// for Tine.Felamimail.Model.Account see hack in Felamimail.initAccountModel
+
 /**
  * @namespace Tine.Felamimail.Model
  * @class Tine.Felamimail.Model.Message
@@ -19,6 +21,7 @@ Ext.ns('Tine.Felamimail.Model');
  */ 
 Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'id' },
+      { name: 'messageuid' },
       { name: 'account_id' },
       { name: 'subject' },
       { name: 'from_email' },
@@ -60,7 +63,6 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     // ngettext('Folder', 'Folders', n);
     containerName: 'Folder',
     containersName: 'Folders',
-    
     /**
      * check if message has given flag
      * 
@@ -269,6 +271,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
             params: {mimeType: mimeType},
             timeout: 120000, // 2 minutes
             scope: this,
+            suppressBusEvents: true, // skip events to prevent gird reloads on message fetch
             success: function(response, options) {
                 var msg = this.recordReader({responseText: Ext.util.JSON.encode(response.data)});
                 // NOTE: Flags from the server might be outdated, so we skip them
@@ -393,158 +396,6 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     handleRequestException: function(exception) {
         Tine.Felamimail.handleRequestException(exception);
     }
-});
-
-/**
- * @namespace Tine.Felamimail.Model
- * @class Tine.Felamimail.Model.Account
- * @extends Tine.Tinebase.data.Record
- * 
- * Account Record Definition
- */ 
-Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
-    { name: 'id' },
-    { name: 'original_id' }, // client only, used in message compose dialog for accounts combo
-    { name: 'user_id' },
-    { name: 'name' },
-    { name: 'type' },
-    { name: 'user' },
-    { name: 'host' },
-    { name: 'email' },
-    { name: 'password' },
-    { name: 'from' },
-    { name: 'organization' },
-    { name: 'port' },
-    { name: 'ssl' },
-    { name: 'imap_status', defaultValue: 'success'}, // client only {success|failure}
-    { name: 'sent_folder' },
-    { name: 'trash_folder' },
-    { name: 'drafts_folder' },
-    { name: 'templates_folder' },
-    { name: 'has_children_support', type: 'bool' },
-    { name: 'delimiter' },
-    { name: 'display_format' },
-    { name: 'compose_format' },
-    { name: 'preserve_format' },
-    { name: 'reply_to' },
-    { name: 'ns_personal' },
-    { name: 'ns_other' },
-    { name: 'ns_shared' },
-    { name: 'signature' },
-    { name: 'signature_position' },
-    { name: 'smtp_port' },
-    { name: 'smtp_hostname' },
-    { name: 'smtp_auth' },
-    { name: 'smtp_ssl' },
-    { name: 'smtp_user' },
-    { name: 'smtp_password' },
-    { name: 'sieve_hostname' },
-    { name: 'sieve_port' },
-    { name: 'sieve_ssl' },
-    { name: 'sieve_vacation_active', type: 'bool' },
-    { name: 'sieve_notification_email' },
-    { name: 'all_folders_fetched', type: 'bool', defaultValue: false } // client only
-]), {
-    appName: 'Felamimail',
-    modelName: 'Account',
-    idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('Account', 'Accounts', n);
-    recordName: 'Account',
-    recordsName: 'Accounts',
-    // ngettext('Email Accounts', 'Email Accounts', n);
-    containerName: 'Email Accounts',
-    containersName: 'Email Accounts',
-    
-    /**
-     * @type Object
-     */
-    lastIMAPException: null,
-    
-    /**
-     * get the last IMAP exception
-     * 
-     * @return {Object}
-     */
-    getLastIMAPException: function() {
-        return this.lastIMAPException;
-    },
-    
-    /**
-     * returns sendfolder id
-     * -> needed as trash is saved as globname :(
-     */
-    getSendFolderId: function() {
-        var app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
-            sendName = this.get('sent_folder'),
-            accountId = this.id,
-            send = sendName ? app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('globalname') === sendName;
-            }, this).first() : null;
-            
-        return send ? send.id : null;
-    },
-    
-    /**
-     * returns trashfolder id
-     * -> needed as trash is saved as globname :(
-     */
-    getTrashFolderId: function() {
-        var app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
-            trashName = this.get('trash_folder'),
-            accountId = this.id,
-            trash = trashName ? app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('globalname') === trashName;
-            }, this).first() : null;
-            
-        return trash ? trash.id : null;
-    },
-    
-    /**
-     * set or clear IMAP exception and update imap_state
-     * 
-     * @param {Object} exception
-     */
-    setLastIMAPException: function(exception) {
-        this.lastIMAPException = exception;
-        this.set('imap_status', exception ? 'failure' : 'success');
-        this.commit();
-    }
-});
-
-/**
- * get default data for account
- * 
- * @return {Object}
- */
-Tine.Felamimail.Model.Account.getDefaultData = function() {
-    var currentUserDisplayName = Tine.Tinebase.registry.get('currentAccount').accountDisplayName;
-    
-    return {
-        from: currentUserDisplayName,
-        port: 143,
-        smtp_port: 25,
-        smtp_ssl: 'none',
-        sieve_port: 2000,
-        sieve_ssl: 'none',
-        signature: 'Sent with love from the Tine 2.0 email client ...<br/>'
-            + 'Please visit <a href="http://www.tine20.com">http://www.tine20.com</a>',
-        sent_folder: 'Sent',
-        trash_folder: 'Trash'
-    };
-};
-
-/**
- * @namespace Tine.Felamimail
- * @class Tine.Felamimail.accountBackend
- * @extends Tine.Tinebase.data.RecordProxy
- * 
- * Account Backend
- */ 
-Tine.Felamimail.accountBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Felamimail',
-    modelName: 'Account',
-    recordClass: Tine.Felamimail.Model.Account
 });
 
 /**
@@ -810,7 +661,7 @@ Tine.Felamimail.Model.Rule.getDefaultData = function() {
  * 
  * Rule Backend
  */ 
-Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
+Tine.Felamimail.RulesBackend = Ext.extend(Tine.Tinebase.data.RecordProxy,{
     appName: 'Felamimail',
     modelName: 'Rule',
     recordClass: Tine.Felamimail.Model.Rule,
@@ -886,6 +737,8 @@ Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
         Tine.Felamimail.handleRequestException(exception);
     }
 });
+
+Tine.Felamimail.rulesBackend = new Tine.Felamimail.RulesBackend({});
 
 /**
  * @namespace Tine.Felamimail.Model

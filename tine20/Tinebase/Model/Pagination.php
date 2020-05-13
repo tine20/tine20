@@ -81,7 +81,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
             if ($this->_readModelConfig()) {
                 foreach ($this->sort as $field) {
                     if (!isset($this->_externalSortMapping[$field]) && (!isset($this->_virtualFields[$field]) ||
-                            (!isset($virtualFields[$field]['type']) ||
+                            (!isset($this->_virtualFields[$field]['type']) ||
                                 ($this->_virtualFields[$field]['type'] !== 'relation' &&
                                     $this->_virtualFields[$field]['type'] !== 'record'))) &&
                             null === ($this->_customFields->find('name', $field))) {

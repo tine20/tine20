@@ -115,7 +115,8 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     protected function _getUserAccountIds()
     {
         if (empty($this->_userAccountIds)) {
-            $this->_userAccountIds = Felamimail_Controller_Account::getInstance()->search(NULL, NULL, FALSE, TRUE);
+            $this->_userAccountIds = Felamimail_Controller_Account::getInstance()->search(
+                Felamimail_Controller_Account::getVisibleAccountsFilterForUser(), NULL, FALSE, TRUE);
         }
         
         return $this->_userAccountIds;

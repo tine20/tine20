@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo add caching? we could use the record seq for this.
  */
@@ -77,7 +77,6 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         
         // always get current record grants
         $currentRecord = $this->_backend->get($record->getId());
-        $this->_getGrants($currentRecord);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Checked record (incl. grants): ' . print_r($currentRecord->toArray(), true));
@@ -131,7 +130,15 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         
         return false;
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getGrantsModel()
+    {
+        return $this->_grantsModel;
+    }
+
     /**
      * set relations / tags / alarms / grants
      * 
@@ -381,5 +388,45 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         }
 
         return $record->grants;
+    }
+
+    /**
+     * Returns a set of records identified by their id's
+     *
+     * @param   array $_ids array of record identifiers
+     * @param   bool $_ignoreACL don't check acl grants
+     * @param Tinebase_Record_Expander $_expander
+     * @param   bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
+     */
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    {
+        $this->_checkRight(self::ACTION_GET);
+
+        $records = $this->_backend->getMultiple($_ids);
+        $this->_getGrants($records);
+        if (!$_ignoreACL) {
+            /** @var Tinebase_Record_Interface $records */
+            $records = $records->filter(function($record) {
+                if ($record->grants instanceof Tinebase_Record_RecordSet) {
+                    /** @var Tinebase_Model_Grants $grant */
+                    foreach ($record->grants as $grant) {
+                        if ($grant->userHasGrant(Tinebase_Model_Grants::GRANT_READ) ||
+                                $grant->userHasGrant(Tinebase_Model_Grants::GRANT_ADMIN)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            });
+        }
+
+        if ($_expander !== null) {
+            $_expander->expand($records);
+        } elseif ($this->resolveCustomfields()) {
+            Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
+        }
+
+        return $records;
     }
 }

@@ -28,6 +28,8 @@ class Calendar_Export_DocV2 extends Tinebase_Export_DocV2
     protected $_daysEventMatrix = array();
 
     protected $_cloneRow = null;
+    
+    protected $_calAttendeeCustomFResolveRAII;
 
     /**
      * the constructor
@@ -39,6 +41,10 @@ class Calendar_Export_DocV2 extends Tinebase_Export_DocV2
     public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->init($_filter, $_controller, $_additionalOptions);
+        $this->_calAttendeeCustomFResolveRAII = new Tinebase_RAII(function (){
+            Calendar_Model_Attender::setContactCustomfieldResolve(false);
+        });
+        Calendar_Model_Attender::setContactCustomfieldResolve(true);
     }
 
     public function _processRecord(Tinebase_Record_Interface $record)

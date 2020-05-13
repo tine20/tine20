@@ -115,6 +115,13 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
                 app: app,
                 keyfieldName: 'leadsources'
             },
+            {
+                label: app.i18n._('Leadtype'),
+                field: 'leadtype_id',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: app,
+                keyfieldName: 'leadtypes'
+            },
             {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: app},
             {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},

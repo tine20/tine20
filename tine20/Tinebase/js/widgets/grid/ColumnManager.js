@@ -100,6 +100,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.width = 90;
             }
 
+            if(fieldDefinition.type == 'money') {
+                config.align = 'right';
+            }
+
             // If no label exists, don't use in grid
             if (! fieldDefinition.label) {
                 return null;
@@ -107,7 +111,7 @@ Tine.widgets.grid.ColumnManager = function() {
 
             Ext.applyIf(column, {
                 id: fieldName,
-                dataIndex: (fieldDefinition.type == 'relation') ? 'relations' : fieldName,
+                dataIndex: fieldName,
                 header: i18n._(fieldDefinition.label),
                 hidden: fieldDefinition.hasOwnProperty('shy') ? fieldDefinition.shy : false,    // defaults to false
                 sortable: (fieldDefinition.hasOwnProperty('sortable') && fieldDefinition.sortable == false) ? false : true // defaults to true
@@ -117,7 +121,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 column.summaryType = fieldDefinition.summaryType;
             }
 
-            var renderer = Tine.widgets.grid.RendererManager.get(appName, modelName, fieldName, category);
+            var renderer = Tine.widgets.grid.RendererManager.get(appName, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
             if (renderer) {
                 column.renderer = renderer;
             }

@@ -41,7 +41,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
 
         if (Tine[this.appName].registry.get('importDefinitions')) {
             Ext.each(Tine.widgets.importAction.getImports(this.recordClass), function(defData) {
-                var options = defData.plugin_options,
+                var options = defData.plugin_options_json,
                     extension = options ? options.extension : null;
                 
                 defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
@@ -127,7 +127,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
         
         var def = this.selectedDefinition,
             description = def ? this.app.i18n._hidden(def.get('description')) : '',
-            options = def ? def.get('plugin_options') : null,
+            options = def ? def.get('plugin_options_json') : null,
             example = options && options.example ? options.example : '';
             
         return {

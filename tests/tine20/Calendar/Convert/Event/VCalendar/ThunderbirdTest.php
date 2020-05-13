@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -28,12 +28,15 @@ class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $event = $converter->toTine20Model($vcalendarStream);
-        $organizer = Addressbook_Controller_Contact::getInstance()->get($event->organizer);
+        $organizerId = $event->organizer instanceof Addressbook_Model_Contact ? $event->organizer->getId() :
+            $event->organizer;
+        $organizer = Addressbook_Controller_Contact::getInstance()->get($organizerId);
         
-        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
-        $this->assertEquals('Hamburg',                           $event->location);
-        $this->assertEquals('l.kneschke@metaways.de',            $organizer->email);
-        $this->assertGreaterThan(0, count($event->attendee->filter('user_id', $event->organizer)), 'Organizer must be attendee too');
+        static::assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
+        static::assertEquals('Hamburg',                           $event->location);
+        static::assertEquals('l.kneschke@metaways.de',            $organizer->email);
+        static::assertGreaterThan(0, count($event->attendee->filter('user_id', $organizerId)),
+            'Organizer must be attendee too');
     }
 
     /**

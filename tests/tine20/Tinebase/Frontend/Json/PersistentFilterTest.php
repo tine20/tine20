@@ -52,8 +52,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
      */
     public function testSaveFilter($filterData = NULL)
     {
-        $exampleFilterData = $filterData ? $filterData : self::getPersistentFilterData();
-        $savedFilterData = $this->_uit->savePersistentFilter(self::getPersistentFilterData());
+        $filterData = $filterData ? $filterData : self::getPersistentFilterData();
+        $exampleFilterData = $filterData;
+        $savedFilterData = $this->_uit->savePersistentFilter($filterData);
         
         $this->_assertSavedFilterData($exampleFilterData, $savedFilterData);
         $this->assertTrue(! empty($savedFilterData['grants']));
@@ -63,6 +64,112 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         }
         
         return $savedFilterData;
+    }
+
+    /**
+     * test to save a persistent filter
+     *
+     * @param array|null $filterData
+     * @return array
+     */
+    public function testSaveFilemanagerPathFilter()
+    {
+        Tinebase_FileSystem::getInstance()->mkdir('/Filemanager/folders/shared/path');
+        $filterData = self::getPersistentFilterData();
+        $filterData['application_id']   = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')
+            ->getId();
+        $filterData['model']            = Filemanager_Model_NodeFilter::class;
+        $filterData['filters']          = [
+            ['field' => 'path', 'operator' => 'equals', 'value' => '/shared/path']
+        ];
+        $savedFilterData = $this->_uit->savePersistentFilter($filterData);
+
+        $this->_assertSavedFilterData($filterData, $savedFilterData);
+        $this->assertTrue(! empty($savedFilterData['grants']));
+        $this->assertTrue(! empty($savedFilterData['account_grants']));
+        foreach (array('readGrant', 'editGrant', 'deleteGrant') as $grant) {
+            $this->assertTrue($savedFilterData['account_grants'][$grant]);
+        }
+
+        return $savedFilterData;
+    }
+
+    public function testFilemanagerPathFilterLoadAll()
+    {
+        $apps = Tinebase_Application::getInstance()->getApplications(null,'id');
+        $appsId = [];
+        foreach ($apps as $app) {
+            $appsId[] = $app->getId();
+        }
+        $filterData = array(
+            array('field' => 'account_id',   'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
+            array('field' => 'application_id',      'operator' => 'in', 'value' => $appsId
+            )
+        );
+        $persistent = $this->_uit->searchPersistentFilter($filterData, NULL);
+        self::assertGreaterThan(1,$persistent['totalcount']);
+        $createdFilter = $this->testSaveFilemanagerPathFilter();
+        Tinebase_FileSystem::getInstance()->rmdir('/Filemanager/folders/shared/path');
+
+        $persistent = $this->_uit->searchPersistentFilter($filterData, NULL);
+        self::assertGreaterThan(1,$persistent['totalcount']);
+
+        $found = false;
+        foreach ($persistent['results'] as $filter) {
+            if ($filter['id'] === $createdFilter['id']) {
+                self::assertSame('/', $filter['filters'][0]['value']['path']);
+                $found = true;
+                break;
+            }
+        }
+        self::assertTrue($found, 'did not find path filemanager path filter');
+    }
+
+    /*
+     * save customfield site!
+     */
+    function testSaveCustomField()
+    {
+        $user = Tinebase_Core::getUser();
+
+        $cfCfg = $this->_createCustomField('YomiName', Calendar_Model_Event::class, 'record');
+
+        $contact = Addressbook_Controller_Contact::getInstance()->getAll()->getFirstRecord();
+
+        $filter = [
+            'name' => 'PHPUnit testFilter',
+            'description' => 'a test filter created by PHPUnit',
+            'account_id' => $user->getId(),
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model' => Calendar_Model_EventFilter::class,
+            'filters' => [[
+                'field' => 'customfield',
+                'operator' => 'AND',
+                'value' => [
+                    'cfId' => $cfCfg->getId(),
+                    'value' => [[
+                        'field' => ':id',
+                        'operator' => 'in',
+                        'value' => [['id' => $contact->getId()]]
+                    ]]
+                ]
+            ]]
+        ];
+
+        $savedFilterData = $this->_uit->savePersistentFilter($filter);
+
+        $filterData = array(
+            array('field' => 'model',   'operator' => 'equals', 'value' => 'Calendar_Model_EventFilter'),
+            array('field' => 'id',      'operator' => 'equals', 'value' => $savedFilterData['id'])
+        );
+
+        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+        $this->assertEquals(1, $searchResult['totalcount']);
+        $this->assertTrue(isset($searchResult['results'][0]), 'filter not found in results: ' . print_r($searchResult['results'], true));
+
+        $filter['filters'][0]['value']['value'][0]['value'][0] = $contact->toArray();
+
+        $this->_assertSavedFilterData($filter, $searchResult['results'][0]);
     }
     
     /**
@@ -319,6 +426,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                 case 'due':
                     $this->assertEquals($requestFilter['value'], $responseFilter['value'], 'wrong due date');
                     break;
+                case 'customfield':
+                    $this->assertEquals($requestFilter['value']['value'][0]['value'][0]['n_fileas'], $responseFilter['value']['value'][0]['value'][0]['n_fileas'], 'wrong contact');
                 default:
                     // do nothting
                     break;
@@ -506,5 +615,29 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         $adbJson = new Addressbook_Frontend_Json();
         $result = $adbJson->searchContacts($result['id'], []);
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
+    }
+
+    public function testSaveFilemanagerFilter()
+    {
+        $filter = [
+            'name' => 'test',
+            'model' => 'Filemanager_Model_NodeFilter',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId(),
+            'desciption' => '',
+            'filters' => [
+                ['field' => 'query', 'operator' => 'contains', 'test'],
+                ['field' => 'path', 'operator' => 'equals', '/personal/tine20admin']
+            ]
+        ];
+
+        $result = $this->_uit->savePersistentFilter($filter);
+
+        // get backend record
+        $backend = new Tinebase_PersistentFilter_Backend_Sql();
+        $filterData = $backend->getRawDataByProperty($result['id'], 'id');
+
+        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+        $this->assertEquals(1, $searchResult['totalcount']);
+
     }
 }

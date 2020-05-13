@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
+
 class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**

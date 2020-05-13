@@ -697,19 +697,21 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $this->assertEquals($group->name, $newGroup->name);
         $this->assertEmpty($groupController->getGroupMembers($newGroup->getId()), 'group members not empty');
 
-        // add group members
-        $mod = $groupModifications->getFirstRecord();
-        $groupModifications->removeRecord($mod);
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
-        $this->assertTrue($result, 'applyReplicationModLogs failed');
-        $this->assertEquals(1, count($groupController->getGroupMembers($newGroup->getId())), 'group members not created');
+        $groupController->setGroupMembers($newGroup->getId(), [Zend_Registry::get('personas')['sclever']->getId()]);
 
-        // remove group members
+        // add group member
         $mod = $groupModifications->getFirstRecord();
         $groupModifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplicationModLogs failed');
-        $this->assertEmpty($groupController->getGroupMembers($newGroup->getId()), 'group members not deleted');
+        $this->assertEquals(2, count($groupController->getGroupMembers($newGroup->getId())), 'group member not added');
+
+        // remove group member
+        $mod = $groupModifications->getFirstRecord();
+        $groupModifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $this->assertCount(1, $groupController->getGroupMembers($newGroup->getId()), 'group member not removed');
 
         // update group description
         $mod = $groupModifications->getFirstRecord();
@@ -993,10 +995,11 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplicationModLogs failed');
         // update hash of FileObject
+        /*
         $mod = $modifications->getFirstRecord();
         $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
-        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $this->assertTrue($result, 'applyReplicationModLogs failed');*/
         // update acl_node of FileNode
         $mod = $modifications->getFirstRecord();
         $modifications->removeRecord($mod);
@@ -1088,6 +1091,10 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         static::assertEquals($oldGrants, $newGrants);
 
         // unset grants
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
         $mod = $modifications->getFirstRecord();
         $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));

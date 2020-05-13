@@ -28,6 +28,7 @@
  * @property    string                      accountLoginShell   account login shell
  * @property    string                      accountPrimaryGroup primary group id
  * @property    string                      container_id
+ * @property    string                      contact_id
  * @property    string                      configuration
  * @property    array                       groups              list of group memberships
  * @property    Tinebase_DateTime           lastLoginFailure    time of last login failure
@@ -37,11 +38,18 @@
  * @property    Tinebase_Model_EmailUser    imapUser
  * @property    Tinebase_Model_EmailUser    smtpUser
  * @property    Tinebase_DateTime           accountLastPasswordChange      date when password was last changed
+ * @property    bool                         password_must_change
  *
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
 {
     const XPROP_PERSONAL_FS_QUOTA = 'personalFSQuota';
+
+    /**
+     * external email user ids (for example in dovecot/postfix sql)
+     */
+    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -69,6 +77,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         'exposeHttpApi'     => false,
         'exposeJsonApi'     => false,
 
+        // container_id is used by admin module to create an account's contact directly in the proper adb container
         'containerProperty' => 'container_id',
         // ????
         'containerUsesFilter' => false,
@@ -202,6 +211,11 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                     self::VISIBILITY_HIDDEN,
                     self::VISIBILITY_DISPLAYED,
                 ], Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED],
+            ],
+            'password_must_change' => [
+                'type'                  => 'boolean',
+                'default'               => false,
+                'validators'            => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
         ],
     ];
@@ -365,17 +379,15 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      */
     protected function _sqlPasswordChangeNeeded()
     {
-        if (empty($this->accountLastPasswordChange)) {
-            return true;
-        }
+        if (empty($this->accountLastPasswordChange) || $this->password_must_change) return true;
+
         $passwordChangeDays = Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER);
 
         if ($passwordChangeDays > 0) {
             $now = Tinebase_DateTime::now();
             return $this->accountLastPasswordChange->isEarlier($now->subDay($passwordChangeDays));
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -454,5 +466,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         }
 
         parent::runConvertToData();
+    }
+
+    public function getEmailUserId($type = self::XPROP_EMAIL_USERID_IMAP)
+    {
+        return Tinebase_EmailUser_XpropsFacade::getEmailUserId($this, $type);
     }
 }

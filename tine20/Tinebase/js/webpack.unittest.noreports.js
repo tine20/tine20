@@ -1,8 +1,8 @@
 let path = require('path')
 const merge = require('webpack-merge');
-const common = require('./webpack.common.js');
+const prod = require('./webpack.prod.js');
 
-module.exports = merge(common, {
+module.exports = merge(prod, {
     entry: null,
     devtool: 'inline-source-map',
     module: {
@@ -12,15 +12,22 @@ module.exports = merge(common, {
                 loader: 'babel-loader',
                 exclude: [
                     /node_modules/,
-                    '/!(chai-as-promised)/'
+                    /!(chai-as-promised)/
                 ],
                 options: {
-                    plugins: ['@babel/plugin-transform-runtime'],
+                    plugins: [
+                        '@babel/plugin-transform-runtime',
+                        '@babel/plugin-transform-modules-commonjs'
+                    ],
                     presets: [
                         ["@babel/env"/*, { "modules": false }*/]
 
                     ]
                 }
+            },
+            {
+                test: /\.js$/,
+                use: ['webpack-conditional-loader']
             }
         ]
     },

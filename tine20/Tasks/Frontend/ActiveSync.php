@@ -193,12 +193,16 @@ class Tasks_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract
 
         foreach($this->_mapping as $syncrotonProperty => $tine20Property) {
             if (!isset($data->$syncrotonProperty)) {
-                $task->$tine20Property = null;
+                if ($tine20Property === 'priority') {
+                    $task->$tine20Property = Tasks_Model_Priority::NORMAL;
+                } else {
+                    $task->$tine20Property = null;
+                }
             
                 continue;
             }
             
-            switch($tine20Property) {
+            switch ($tine20Property) {
                 case 'completed':
                     if ($data->$syncrotonProperty === 1) {
                         $task->status = 'COMPLETED';
@@ -226,7 +230,11 @@ class Tasks_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract
                         ? $prioMapping[$data->$syncrotonProperty]
                         : Tasks_Model_Priority::NORMAL;
                     break;
-                    
+
+                case 'summary':
+                    $this->_truncateField($task, $tine20Property, $data->$syncrotonProperty);
+                    break;
+
                 default:
                     if ($data->$syncrotonProperty instanceof DateTime) {
                         $task->$tine20Property = new Tinebase_DateTime($data->$syncrotonProperty);

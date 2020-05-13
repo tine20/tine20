@@ -414,7 +414,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             // call default exception handler
             Tine.Tinebase.ExceptionHandler.handleRequestException(response);
         }
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     onClosedWarning: function() {

@@ -194,7 +194,7 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
                 'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
                 'accountLastName'       => 'Dummy',
                 'accountFirstName'      => 'No.'.$i,
-                'accountEmailAddress'   => 'phpunit@metaways.de'
+                'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain(),
             ));
             $this->_uit->addUser($dummyUser);
             $this->_objects[] = $dummyUser;

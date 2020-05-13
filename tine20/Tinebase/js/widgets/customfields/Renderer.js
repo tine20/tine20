@@ -19,6 +19,7 @@ Tine.widgets.customfields.Renderer = function(){
     var renderers = {};
     
     return {
+
         /**
          * returns key field record renderer
          * 
@@ -46,7 +47,8 @@ Tine.widgets.customfields.Renderer = function(){
                         return Tine.Tinebase.widgets.keyfield.Renderer.render(app, keyFieldName, customfields[cfName]);
                     };
                     
-                } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1) {
+                } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1 &&
+                    _.get(window, cfDefinition.recordConfig.value.records)) {
                     renderers[key] = function(customfields) {
                         var recordClass = eval(cfDefinition.recordConfig.value.records);
                         customfields = customfields || {}
@@ -68,6 +70,8 @@ Tine.widgets.customfields.Renderer = function(){
                                 return Tine.Tinebase.common.timeRenderer(customfields[cfName]);
                             case 'boolean':
                                 return Tine.Tinebase.common.booleanRenderer(customfields[cfName]);
+                            case 'recordList':
+                                return Tine.widgets.customfields.Renderer.recordListRenderer(cfDefinition, customfields[cfName]);
                             default:
                                 return Ext.util.Format.htmlEncode(customfields[cfName] || "");
                         }
@@ -77,6 +81,18 @@ Tine.widgets.customfields.Renderer = function(){
             
             return renderers[key];
         },
+
+        recordListRenderer: function(cfDefinition, value) {
+            var title = '';
+            Ext.each(value, function (value) {
+                var recordClass = eval(cfDefinition.recordListConfig.value.records);
+                title += Ext.isObject(value) && value.hasOwnProperty(recordClass.getMeta('titleProperty'))
+                    ? value[recordClass.getMeta('titleProperty')] + ' '
+                    : value + '';
+            })
+            return title;
+        },
+
         
         /**
          * render a given value

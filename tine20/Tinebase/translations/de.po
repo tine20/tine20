@@ -180,7 +180,7 @@ msgid ""
 "browsers popup blocker for {0}"
 msgstr ""
 "Das Fenster kann nun geschlossen werden. Um diese Nachricht zu vermeiden "
-"deaktivieren Sie bitte den Popup Blocker Ihres Browsers für {0}"
+"deaktivieren Sie bitte den Popup-Blocker Ihres Browsers für {0}"
 
 #: js/ux/PopupWindowManager.js:175
 msgid ""
@@ -430,7 +430,7 @@ msgstr "Bestätigen"
 
 #: js/MainMenu.js:293
 msgid "Are you sure you want to logout?"
-msgstr "Wollen Sie sich wirklich Abmelden?"
+msgstr "Wollen Sie sich wirklich abmelden?"
 
 #: js/MainMenu.js:308
 msgid "Logging you out..."
@@ -647,8 +647,8 @@ msgstr "Fehler"
 #: js/widgets/dialog/EditDialog.js:1127
 #: js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:658
-msgid "Please fix the errors noted."
-msgstr "Bitte beheben Sie die genannten Fehler."
+msgid "Please review the fields marked red. They contain invalid values."
+msgstr "Die rot markierten Felder enthalten ungültige Werte."
 
 #: js/LoginPanel.js:536
 msgid "Please enter your login data"
@@ -1543,8 +1543,8 @@ msgid "Last Conflict"
 msgstr "letzter Konflikt"
 
 #: js/widgets/dialog/ImportDialog.js:501
-msgid "Conflict is resolved"
-msgstr "Konflikt ist aufgelöst"
+msgid "Resolve this conflict"
+msgstr "Diesen Konflikt auflösen"
 
 #: js/widgets/dialog/ImportDialog.js:506
 msgid "Resolve all conflicts"
@@ -4194,7 +4194,7 @@ msgid "Token"
 msgstr "Token"
 
 msgid "Cleartext/Hidden"
-msgstr "Klartext/Verteckt"
+msgstr "Klartext/Versteckt"
 
 msgid "Copy to Clipboard"
 msgstr "In die Zwischenablage kopieren"
@@ -4380,8 +4380,8 @@ msgstr "- Der letzte ausgewählte Filter -"
 
 msgid "You are not allowed to remove all (admin) grants for this container."
 msgstr ""
-"Sie sind nicht berechtigt alle (Administrativen) Berechtigungen für "
-"diesen Ordner zu entfernen."
+"Sie sind nicht berechtigt alle (Administrativen) Berechtigungen für diesen "
+"Ordner zu entfernen."
 
 msgid "Personal containers can have only one owner!"
 msgstr "Persönliche Ordner können lediglich einen Eigentümer haben!"
@@ -4409,12 +4409,10 @@ msgstr "Hierarchie/Name"
 msgid "Grid Panel Key Bindings"
 msgstr "Tastenkürzel Listenansicht"
 
-msgid "User E-Mail-Address {0} not in allowed domains"
-msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
-
-msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
+msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr ""
-"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
+"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}] oder "
+"ungütig"
 
 msgid "Accesslog rotation in days"
 msgstr "Zugriffslog-Rotation in Tagen"
@@ -4446,8 +4444,8 @@ msgstr "Unterstütze NTML V2 Authentifikation"
 msgid ""
 "Support NTLM V2 authentication and store account password as ntlm v2 hash"
 msgstr ""
-"Unterstütze NTML V2 Authentifikation und speichern des Passworts als html "
-"v2 Hash"
+"Unterstütze NTML V2 Authentifikation und speichern des Passworts als html v2 "
+"Hash"
 
 msgid "Update NTLM V2 password has on login"
 msgstr "NTLM V2 Passwort Hash beim Login aktualisieren"
@@ -4459,8 +4457,8 @@ msgid ""
 "Encryption key used to encrypt and decrypt the NTLM V2 password hash when "
 "stored in the database."
 msgstr ""
-"Schlüssel der zum Verschlüsseln und Entschlüsseln des NTLM V2 Passwort "
-"Hash in der Datenbank verwendet wird."
+"Schlüssel der zum Verschlüsseln und Entschlüsseln des NTLM V2 Passwort Hash "
+"in der Datenbank verwendet wird."
 
 msgid "User password policy"
 msgstr "Nutzer Passwort Richtlinie"
@@ -4478,9 +4476,8 @@ msgid ""
 "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"normal\" (only "
 "users having the maintenance right can login) and \"all\""
 msgstr ""
-"Tine 2.0 in den Wartungsmodus setzten. Mögliche Werte: „off“, "
-"„normal“ (nur Nutzer mit dem Wartungsmodus Recht können sich einloggen) "
-"und „all“"
+"Tine 2.0 in den Wartungsmodus setzten. Mögliche Werte: „off“, „normal“ (nur "
+"Nutzer mit dem Wartungsmodus Recht können sich einloggen) und „all“"
 
 msgid "custom help url"
 msgstr "Angepasste Hilfe URL"
@@ -4531,12 +4528,11 @@ msgid "Custom url used for logo on login page."
 msgstr "Angepasste URL das für das Logo der Login-Seite verwendet wird."
 
 msgid ""
-"List of WebDav agent strings that will be denied. Expects a list of "
-"regular expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
+"List of WebDav agent strings that will be denied. Expects a list of regular "
+"expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
 msgstr ""
-"Liste der WebDAV Agent-Stings die abgelehnt werden. Eine Liste von "
-"regulären Ausdrücken wird erwartet - wie z.B.: [„/iPhone/„,“/iOS/„,“/"
-"Android/„]"
+"Liste der WebDAV Agent-Stings die abgelehnt werden. Eine Liste von regulären "
+"Ausdrücken wird erwartet - wie z.B.: [„/iPhone/„,“/iOS/„,“/Android/„]"
 
 msgid "Enable SyncToken plugin"
 msgstr "SyncToken Plugin aktivieren"
@@ -4557,8 +4553,7 @@ msgid "Max file size for preview service."
 msgstr "Maximale Dateigröße für den Preview-Service."
 
 msgid ""
-"Max per preview preview service error count, for trying to generate "
-"preview."
+"Max per preview preview service error count, for trying to generate preview."
 msgstr "Maximale Fehlerzahl beim versuch ein Preview zu erzeugen."
 
 msgid "Antivirus Scan Mode"
@@ -4599,11 +4594,11 @@ msgid "Tine20 URL"
 msgstr "Tine20 URL"
 
 msgid ""
-"The full URL including scheme, hostname, optional port and optional uri "
-"part under which tine20 is reachable."
+"The full URL including scheme, hostname, optional port and optional uri part "
+"under which tine20 is reachable."
 msgstr ""
-"Die vollständige URL mit Schema, Hostnamen, optionalen Port und "
-"optionalen URI Anteil unter der diese Installation erreichbar ist. "
+"Die vollständige URL mit Schema, Hostnamen, optionalen Port und optionalen "
+"URI Anteil unter der diese Installation erreichbar ist. "
 
 msgid "Hierarchy"
 msgstr "Hierarchie"
@@ -4635,3 +4630,78 @@ msgstr "Dauer der letzten Ausführung"
 
 msgid "Next run"
 msgstr "Nächste Ausführung"
+
+msgid "The new password must be different from the old one."
+msgstr "Das neue Passwort muss sich vom alten unterscheiden."
+
+msgid "Outdated Browser"
+msgstr "Veralteter Browser"
+
+msgid "You need a current Browser to use this program."
+msgstr "Sie benötigen einen aktuellen Browser um dieses Programm zu nutzen."
+
+msgid "A: select all visible rows"
+msgstr "A: Alle sichtbaren Zeilen selektieren"
+
+msgid "C: copy record"
+msgstr "C: Datensatz kopieren"
+
+msgid "E: edit record"
+msgstr "E: Datensatz editieren"
+
+msgid "N: new record"
+msgstr "N: neuen Datensatz hinzufügen"
+
+msgid "F: find"
+msgstr "F: Suche"
+
+msgid "ESC: focus grid"
+msgstr "ESC: Liste fokussieren"
+
+msgid "R: reload grid"
+msgstr "R: Liste neu laden"
+
+msgid "A Message has been filed to this record. Subject: {0}"
+msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
+
+msgid "Password failed to match the following policy requirements: "
+msgstr "Das eingegebene Kennwort entspricht nicht den Mindestanforderungen: "
+
+msgid "Cannot open new window"
+msgstr "Neues Fenster konnte nicht geöffnet werden"
+
+msgid ""
+"A new window cannot be opened. To avoid this message please deactivate your "
+"browsers popup blocker for {0}"
+msgstr ""
+"Ein neues Fenster konnte nicht geöffnet werden. Bitte deaktivieren Sie den "
+"Popup-Blocker Ihres Browsers für {0}"
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] "ImportExportDefinition"
+msgstr[1] "ImportExportDefinitionen"
+
+msgid "Label"
+msgstr "Label"
+
+msgid "Favorite"
+msgstr "Favorit"
+
+msgid "Icon Class"
+msgstr "Icon Klasse"
+
+msgid "Plugin"
+msgstr "Plugin"
+
+msgid "Scope"
+msgstr "Scope"
+
+msgid "Plugin Options"
+msgstr "Plugin Optionen"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Filename"
+msgstr "Dateiname"

@@ -157,6 +157,8 @@ class Tinebase_ControllerTest extends TestCase
         $counts = [];
         $newCounts = [];
 
+        $this->_instance->cleanAclTables();
+
         foreach ($aclTables as $table) {
             $row = $db->select()->from(SQL_TABLE_PREFIX . $table, new Zend_Db_Expr('count(*)'))->query()->
                 fetch(Zend_Db::FETCH_NUM);
@@ -172,7 +174,7 @@ class Tinebase_ControllerTest extends TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain()
+            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain(),
         ));
         $account = Admin_Controller_User::getInstance()->create($account, $pw, $pw);
         $filter = new Tinebase_Model_PersistentFilter(

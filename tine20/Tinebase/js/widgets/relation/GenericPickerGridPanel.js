@@ -214,8 +214,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         // update from relationsPanel if any
         if (this.isValid()) {
             if (record.data.hasOwnProperty('relations')) {
-                record.data.relations = null;
-                delete record.data.relations;
+                Tine.Tinebase.common.assertComparable(record.data.relations);
             }
             var relations = [];
             
@@ -223,7 +222,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 relations = relations.concat(this.getData(panel.store));
             }, this);
             
-            relations = relations.concat(this.getData());
+            relations = Tine.Tinebase.common.assertComparable(relations.concat(this.getData()));
             
             record.set('relations', relations);
         } else {
@@ -503,7 +502,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     {id: 'related_record', dataIndex: 'related_record', header: i18n._('Description'), renderer: this.relatedRecordRenderer.createDelegate(this), editor: false, scope: this},
                     {id: 'remark', dataIndex: 'remark', header: i18n._('Remark'), renderer: this.remarkRenderer.createDelegate(this), editor: Ext.form.Field, scope: this, width: 120},
                     {id: 'related_degree', hidden: this.hideRelatedDegree, dataIndex: 'related_degree', header: i18n._('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
-                    {id: 'type', dataIndex: 'type', renderer: this.typeRenderer, header: i18n._('Type'),  scope: this, width: 120, editor: true},
+                    {id: 'type', dataIndex: 'type', renderer: this.typeRenderer.createDelegate(this), header: i18n._('Type'),  scope: this, width: 120, editor: true},
                     {id: 'creation_time', dataIndex: 'creation_time', editor: false, renderer: Tine.Tinebase.common.dateTimeRenderer, header: i18n._('Creation Time'), width: 140}
                 ]
             });
@@ -692,7 +691,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             var relatedRecord = this.getRelatedRecord(record),
                 ownTitle = this.record.getTitle(),
                 relatedTitle = relatedRecord ? relatedRecord.getTitle() : '',
-                path = value == 'parent' ? (relatedTitle + '/' + ownTitle) : (relatedTitle + '/' + ownTitle);
+                path = relatedTitle + '/' + ownTitle;
 
             qtip = Tine.widgets.path.pathRenderer(path);
             // TODO make css work
@@ -708,16 +707,18 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {String} value
      * @return {String}
      */
-    relatedModelRenderer: function(value) {
-        if(!value) {
+    relatedModelRenderer: function (value, meta) {
+        if (!value) {
             return '';
         }
         var split = value.split('_Model_');
-        if (Tine[split[0]].Model) {
+        if (Tine[split[0]] && Tine[split[0]].Model) {
             var model = Tine[split[0]].Model[split[1]];
-            return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
+            return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName')
+                + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
         } else {
-            return String.format(i18n._("No access to {0}"), split[0]);
+            meta.css = 'x-form-empty-field';
+            return String.format(i18n._("No access to {0}"), split[0])
         }
     },
 

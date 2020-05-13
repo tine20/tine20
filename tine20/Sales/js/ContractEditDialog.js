@@ -60,8 +60,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     validateNumber: null,
 
-    displayNotes: true,
-    
     initComponent: function() {
         this.autoGenerateNumber = (Tine.Sales.registry.get('config').contractNumberGeneration.value == 'auto') ? true : false;
         this.validateNumber = Tine.Sales.registry.get('config').contractNumberValidation.value;
@@ -406,7 +404,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             activeTab: 0,
             border: false,

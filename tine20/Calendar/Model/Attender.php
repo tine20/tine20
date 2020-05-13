@@ -60,6 +60,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         self::USERTYPE_RESOURCE    => array(),
         Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF => array()
     );
+
+    protected static $_resolveAttendeeCustomfield;
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -103,7 +105,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         'quantity'             => array('allowEmpty' => true, 'Int'   ),
         'status'               => array('allowEmpty' => true          ),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
-        'displaycontainer_id'  => array('allowEmpty' => true, 'Alnum' ),
+        'displaycontainer_id'  => array('allowEmpty' => true ),
         'transp'               => array(
             'allowEmpty' => true,
             array('InArray', array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE))
@@ -233,6 +235,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     }
 
     /**
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getTitle()
+    {
+        try {
+            return $this->getName();
+        } catch (Exception $e) {
+            return parent::getTitle();
+        }
+    }
+
+    /**
      * get name of attender
      * 
      * @return string
@@ -256,7 +271,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $translation = Tinebase_Translation::getTranslation('Calendar');
                 $name = $resolvedUser->name ?: $resolvedUser->n_fileas;
                 if ($this->user_type == self::USERTYPE_GROUP) {
-                    $name . ' (' . $translation->_('Group') . ')';
+                    $name = $name . ' (' . $translation->_('Group') . ')';
                 }
                 return $name;
                 break;
@@ -344,7 +359,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function isSame($compareTo)
     {
-        $compareToSet = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($compareTo));
+        $compareToSet = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $compareTo instanceof Calendar_Model_Attender ? [$compareTo] : []);
         return !!self::getAttendee($compareToSet, $this);
     }
 
@@ -488,7 +503,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 // does a list with this name exist?
                 if ( ! $attendeeId &&
                     isset($smtpConfig['primarydomain']) && 
-                    preg_match('/(?P<localName>.*)@' . preg_quote($smtpConfig['primarydomain']) . '$/', $newAttendee['email'], $matches)
+                    preg_match('/(?P<localName>.*)@' . preg_quote($smtpConfig['primarydomain'], '/') . '$/', $newAttendee['email'], $matches)
                 ) {
                     $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
                         array('field' => 'name',       'operator' => 'equals', 'value' => $matches['localName']),
@@ -1058,7 +1073,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
 
         $contactIds = array_merge($typeMap[self::USERTYPE_USER], $typeMap[self::USERTYPE_GROUPMEMBER], $organizerIds);
-        $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(false);
+        $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(static::$_resolveAttendeeCustomfield);
         try {
             $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($contactIds), true);
             $contacts->resolveAttenderCleanUp();
@@ -1172,11 +1187,17 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 try {
                     return $a1->getName() > $a2->getName();
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
-                    Tinebase_Exception::log($teia);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' ' . $teia->getMessage());
                     return true;
                 }
             });
         }
+    }
+    
+    public static function setContactCustomfieldResolve($_resolve) {
+        static::$_resolveAttendeeCustomfield = $_resolve;
     }
     
     /**

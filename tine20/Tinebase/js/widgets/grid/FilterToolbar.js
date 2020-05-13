@@ -452,16 +452,20 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     this.actions.addFilterRow.show();
                     // move start search button
                     tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.searchButtonWrap);
+                    // have save button for single rows
+                    if (numFilters === 1) {
+                        tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
+                    }
+                    this.searchButtonWrap.applyStyles('float: left');
+                    this.actions.saveFilter.getEl().applyStyles('float: left');
                 }
                 if (this.showSearchButton) {
                     this.actions.startSearch.show();
                 }
                 // move delete all filters
-                // tr.child('td[class=tw-ftb-frow-deleteallfilters]').insertFirst(this.actions.removeAllFilters.getEl());
                 this.actions.removeAllFilters.setVisible(numFilters > 1);
                 // move save filter button
-                // tr.child('td[class=tw-ftb-frow-savefilterbutton]').insertFirst(this.actions.saveFilter.getEl());
-                this.actions.saveFilter.setVisible(this.allowSaving && numFilters > 1);
+                this.actions.saveFilter.setVisible(this.allowSaving);
             }
             
             if (filter.id == firstId) {
@@ -470,20 +474,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
                 
                 // hack for the save/delete all btns which are now in the first row
-                //if (Ext.isSafari) {
-                    this.actions.removeAllFilters.getEl().applyStyles('float: left');
-                //} else {
-                //    this.actions.saveFilter.getEl().applyStyles('display: inline');
-                //    this.actions.removeAllFilters.getEl().applyStyles('display: inline');
-                //}
-                
+                this.actions.removeAllFilters.getEl().applyStyles('float: left');
+
                 if (tr) {
-                    tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
+                    if (numFilters > 1) {
+                        tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
+                    }
                     tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.removeAllFilters.getEl());
                 }
-                
-                //tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.removeAllFilters.getEl());
-                //this.actions.removeAllFilters.setVisible(numFilters > 1);
             }
         }, this);
     },
@@ -741,7 +739,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (! fieldName && field.data && field.data.condition) {
             return this.ownRecordFilterModel;
         }
-        
+        if (! this.filterModelMap[fieldName]) {
+            Tine.log.err('"' + fieldName + '" filter not defined in filter map');
+        }
+
         return this.filterModelMap[fieldName];
     },
     

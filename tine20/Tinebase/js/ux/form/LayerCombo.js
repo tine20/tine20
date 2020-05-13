@@ -26,7 +26,14 @@ Ext.ux.form.LayerCombo = function(config) {
          * Return false from an event handler to stop the collapse.
          * @param {LayerCombo} this
          */
-        'beforecollapse'
+        'beforecollapse',
+        /**
+         * @event beforeexpand
+         * Fires before the layer is expanded by calling the {@link #expand} method.
+         * Return false from an event handler to stop the expand.
+         * @param {LayerCombo} this
+         */
+        'beforeexpand'
     );
 };
 
@@ -134,7 +141,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * Expands the dropdown layer if it is currently hidden. Fires the {@link #expand} event on completion.
      */
     expand: function() {
-        if(this.isExpanded() || !this.hasFocus){
+        if(this.isExpanded() || !this.hasFocus || this.fireEvent('beforeexpand', this) === false){
             return;
         }
         
@@ -158,7 +165,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @return {mixed}
      */
     getFormValue: function() {
-        var formValues = this.getInnerForm().getForm().getValues();
+        var formValues = this.getInnerForm().getForm().getFieldValues();
         return formValues;
     },
     
@@ -457,3 +464,5 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
         this.getInnerForm().getForm().setValues(value);
     }
 });
+
+Ext.reg('ux.layercombo', Ext.ux.form.LayerCombo)

@@ -85,6 +85,9 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         }
 
         $metadata->setPrimaryTable($table);
+        if (isset($table[Tinebase_ModelConfiguration_Const::ID_GENERATOR_TYPE])) {
+            $metadata->setIdGeneratorType($table[Tinebase_ModelConfiguration_Const::ID_GENERATOR_TYPE]);
+        }
 
         $this->_mapAssociations($modelConfig, $metadata);
         $this->_mapFields($modelConfig, $metadata);
@@ -135,6 +138,11 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
                 if (!isset($config['columnName'])) {
                     $config['columnName'] = $config['fieldName'];
                 }
+                if ($config['columnName'] === 'default') {
+                    // TODO what about quoting?
+                    throw new Tinebase_Exception_InvalidArgument('it is not allowed to name a column "default" as it is a keyword');
+                }
+
                 if (isset($mappedFields[$config['fieldName']])) {
                     throw new Tinebase_Exception_Record_DefinitionFailure('field ' . $config['fieldName'] .
                         ' already mapped');
@@ -211,7 +219,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         $result = [];
 
         /** @var Tinebase_Record_Interface $model */
-        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications() as $model) {
+        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications(true) as $model) {
             if ($this->isTransient($model)) {
                 $result[] = $model;
             }

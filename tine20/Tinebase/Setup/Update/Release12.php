@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
+
 class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
 {
     /**

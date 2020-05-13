@@ -5,8 +5,8 @@
  * @package     Admin
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,6 +37,8 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
     
     /**
      * set controller
+     *
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _setController()
     {
@@ -46,6 +48,13 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs correct model in config.');
+        }
+
+        if (empty($this->_options['accountEmailDomain'])) {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+            if (isset($config['primarydomain'])) {
+                $this->_options['accountEmailDomain'] = $config['primarydomain'];
+            }
         }
     }
     
@@ -104,7 +113,7 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
     {
         $result = parent::_doMapping($_data);
             $result['smtpUser'] = array(
-                'emailForwardOnly' => isset($_recordData['emailForwardOnly']) ? $_recordData['emailForwardOnly'] : true,
+                'emailForwardOnly' => isset($result['emailForwardOnly']) ? $result['emailForwardOnly'] : true,
                 'emailForwards'    => isset($result['emailForwards']) && !empty($result['emailForwards']) ? explode(' ', trim($result['emailForwards'])) : array(),
                 'emailAliases'     => isset($result['emailAliases']) ? explode(' ', trim($result['emailAliases'])) : array()
                             );

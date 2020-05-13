@@ -64,6 +64,24 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         return $persistentEvent;
     }
 
+    public function testCreatePollDuplicateContainer()
+    {
+        $containersBefore = Tinebase_Container::getInstance()->getPersonalContainer(
+            Tinebase_Core::getUser()->getId(),
+            'Calendar_Model_Event',
+            Tinebase_Core::getUser()->getId()
+        );
+
+        $this->testCreatePoll();
+
+        $containersAfter = Tinebase_Container::getInstance()->getPersonalContainer(
+            Tinebase_Core::getUser()->getId(),
+            'Calendar_Model_Event',
+            Tinebase_Core::getUser()->getId()
+        );
+        self::assertEquals(count($containersBefore), count($containersAfter));
+    }
+
     public function testCreatePollDuringUpdate()
     {
         $event = $this->_getEvent()->toArray();
@@ -417,11 +435,14 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $eventWithClosedPoll['summary'] = 'update after definite';
 
         $updatedEvent = $this->_uit->save($eventWithClosedPoll);
-        $updatedAlternativeEvents = $this->_uit->getPollEvents($updatedEvent['poll_id']['id']);
+        if ($updatedEvent) {
+            self::assertTrue(isset($updatedEvent['poll_id']['id']), print_r($updatedEvent, true));
+            $updatedAlternativeEvents = $this->_uit->getPollEvents($updatedEvent['poll_id']['id']);
 
-        foreach ($updatedAlternativeEvents['results'] as $updatedAlternativeEvent) {
-            $this->assertNotEquals($eventWithClosedPoll['summary'], $updatedAlternativeEvent['summary'],
-                'summary must not be updated');
+            foreach ($updatedAlternativeEvents['results'] as $updatedAlternativeEvent) {
+                $this->assertNotEquals($eventWithClosedPoll['summary'], $updatedAlternativeEvent['summary'],
+                    'summary must not be updated');
+            }
         }
     }
 

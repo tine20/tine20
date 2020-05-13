@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,6 +18,8 @@
 
 class HumanResources_Model_Employee extends Tinebase_Record_Abstract
 {
+    const MODEL_NAME_PART = 'Employee';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -45,7 +47,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
       
         'titleProperty'     => 'n_fn',
         'appName'           => 'HumanResources',
-        'modelName'         => 'Employee',
+        'modelName'         =>  self::MODEL_NAME_PART,
         
         'fieldGroups'       => array(
             'banking' => 'Banking Information',    // _('Banking Information')
@@ -89,7 +91,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
             ),
             'dfcom_id' => array(
-                'label' => 'Badge Id', //_('Badge Id')
+                'label' => 'Transponder Id', //_('Transponder Id')
                 'type'  => 'string',
                 'length'      => 255,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
@@ -353,4 +355,28 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             )
         )
     );
+
+    /**
+     * @param Tinebase_DateTime|null $_date
+     * @return null|HumanResources_Model_Contract
+     */
+    public function getValidContract(Tinebase_DateTime $_date = null)
+    {
+        if (!$this->contracts instanceof Tinebase_Record_RecordSet) {
+            return null;
+        }
+        if (null === $_date) {
+            $_date = Tinebase_DateTime::now();
+        }
+        $_date = $_date->getClone()->setTimezone(Tinebase_Core::getInstanceTimeZone());
+
+        /** @var HumanResources_Model_Contract $contract */
+        foreach ($this->contracts as $contract) {
+            if ($contract->isValidAt($_date)) {
+                return $contract;
+            }
+        }
+
+        return null;
+    }
 }

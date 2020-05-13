@@ -84,7 +84,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      */
     public function getExportDefinitionsForApplication(Tinebase_Model_Application $_application)
     {
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
             array('field' => 'application_id',  'operator' => 'equals',  'value' => $_application->getId()),
             array('field' => 'type',            'operator' => 'equals',  'value' => 'export'),
         ));
@@ -181,7 +181,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'order'                       => (int)$config->order,
                 'mapUndefinedFieldsEnable'    => $config->mapUndefinedFieldsEnable,
                 'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
-                'postMappingHook'             => $config->postMappingHook
+                'postMappingHook'             => $config->postMappingHook,
+                'filter'                      => $config->filter,
             ));
             
             return $definition;
@@ -211,17 +212,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $config = new Zend_Config_Xml($xmlConfig, /* section = */ null, /* runtime mods allowed = */ true);
             $cache->save($config, $cacheId);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Get Zend_Config_Xml from cache' . $cacheId);
             $config = $cache->load($cacheId);
         }
         
         if (! empty($_additionalOptions)) {
             $config->merge(new Zend_Config($_additionalOptions));
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Config: ' . print_r($config->toArray(), true));
         
         return $config;
     }

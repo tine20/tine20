@@ -114,9 +114,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             if ($currentUser instanceof Tinebase_Model_FullUser) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Creating user contact for ' . $currentUser->accountDisplayName . ' on the fly ...');
-                $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($currentUser);
-                $currentUser->contact_id = $contact->getId();
-                Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
+                Addressbook_Controller_Contact::getInstance()->inspectAddUser($currentUser, $currentUser);
+                $currentUser = Tinebase_User::getInstance()->getFullUserById($currentUser->getId());
             }
         }
 
@@ -345,9 +344,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function update(Tinebase_Record_Interface $_event, $_checkBusyConflicts = FALSE)
     {
-        if ($_event->recurid) {
-            throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
-        }
         if (! $_event->dtstart || ! $_event->dtend) {
             throw new Tinebase_Exception_Record_Validation('dtstart or dtend missing from event!');
         }
