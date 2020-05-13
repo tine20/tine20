@@ -4,6 +4,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('E-Mail');
+    page.waitForSelector('div.x-tree-selected a span',{text: "Posteingang"});
 });
 
 describe('message', () => {
@@ -21,14 +22,17 @@ describe('message', () => {
         await popupWindow.waitFor(500); //musst wait for input!
         await expect(popupWindow).toFill('input[name=subject]', 'message with attachment');
 
-        await expect(popupWindow).toClick('button',{text: 'Datei hinzufügen'});
-        let fileToUpload = 'src/test/Felamimail/attachment.txt';
-        await popupWindow.waitForSelector('input[type=file]');
-        const inputUploadHandle = await popupWindow.$('input[type=file]');
+        const fileToUpload = 'src/test/Felamimail/attachment.txt';
+        await expect(popupWindow).toClick('.x-btn-text', {text: 'Datei hinzufügen'});
+        const filePickerWindow = await lib.getNewWindow();
+        await expect(filePickerWindow).toClick('span',{text: 'From My Computer'});
+        await filePickerWindow.waitForSelector('input[type=file]');
+        const inputUploadHandle = await filePickerWindow.$('input[type=file]');
         await inputUploadHandle.uploadFile(fileToUpload);
 
         await expect(popupWindow).toMatchElement('.x-grid3-cell-inner.x-grid3-col-name', {text:'attachment.txt'});
-
+        await popupWindow.waitFor(500); //musst wait for upload complete!
+        
         // send message
         await expect(popupWindow).toClick('button', {text: 'Senden'});
     });

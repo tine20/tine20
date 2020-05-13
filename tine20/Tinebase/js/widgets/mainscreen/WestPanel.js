@@ -62,12 +62,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     favoritesPanelClassName: 'FilterPanel',
     
     /**
-     * @cfg {Bool} hasContentTypeTreePanel
-     * west panel has modulePanel (defaults to null -> autodetection)
-     */
-    hasContentTypeTreePanel: null,
-    
-    /**
      * @cfg {Bool} hasContainerTreePanel
      * west panel has containerTreePanel (defaults to null -> autodetection)
      */
@@ -110,7 +104,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         this.canonicalName = this.canonicalName ? this.canonicalName : this.getContentType();
         var fpcn = this.getContentType() + this.favoritesPanelClassName;
         this.hasFavoritesPanel = Ext.isBoolean(this.hasFavoritesPanel) ? this.hasFavoritesPanel : !! Tine[this.app.appName][fpcn];
-        this.hasContentTypeTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
         
         if (this.hasContainerTreePanel === null) {
             this.hasContainerTreePanel = true;

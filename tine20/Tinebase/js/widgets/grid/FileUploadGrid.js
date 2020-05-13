@@ -11,6 +11,8 @@
 
 Ext.ns('Tine.widgets.grid');
 
+import('../file/SelectionDialog');
+
 /**
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.FileUploadGrid
@@ -68,6 +70,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initComponent: function () {
+        this.addEvents(
+            /**
+             * @event filesSelected
+             * Fired once files where selected from filemanager or from a local source
+             */
+            'filesSelected'
+        );
+        
         this.i18nFileString = this.i18nFileString ? this.i18nFileString : i18n._('File');
 
         this.record = this.record || null;
@@ -93,7 +103,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.enableHdMenu = false;
 
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
-
+        
         this.on('rowcontextmenu', function (grid, row, e) {
             e.stopEvent();
             var selModel = grid.getSelectionModel();
@@ -448,11 +458,15 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     // Constructs a new dialog and opens it. Better to construct a new one everyt
     openDialog: function () {
-        this.fileSelectionDialog = new Tine.Tinebase.FileSelectionDialog({
-            handler: this.onFilesSelect.createDelegate(this)
+        const win = new Tine.Tinebase.widgets.file.SelectionDialog.openWindow({
+            windowId: this.id,
+            mode: 'source',
+            constraint: 'file',
+            listeners: {
+                scope: this,
+                apply: this.onFilesSelect
+            }
         });
-
-        this.fileSelectionDialog.openWindow()
     },
 
     /**
@@ -523,23 +537,16 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     /**
      * upload new file and add to store
-     *
-     * @param {} btn
-     * @param {} e
      */
-    onFilesSelect: function (fileSelector, e) {
-        if (window.lodash.isArray(fileSelector)) {
-            this.onFileSelectFromFilemanager(fileSelector);
+    onFilesSelect: function (fileList) {
+        if (_.get(fileList, '[0].plugin' === 'filemanager')) {
+            this.onFileSelectFromFilemanager(fileList);
             return;
         }
 
-
-        var files = fileSelector.getFileList();
-        Ext.each(files, function (file) {
-
+        Ext.each(fileList, function (file) {
             var upload = new Ext.ux.file.Upload({
-                file: file,
-                fileSelector: fileSelector
+                file: file
             });
 
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
@@ -552,9 +559,9 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             if (fileRecord.get('status') !== 'failure') {
                 this.store.addUnique(fileRecord, 'name');
             }
-
-
         }, this);
+
+        this.fireEvent('filesSelected');
 
     },
 

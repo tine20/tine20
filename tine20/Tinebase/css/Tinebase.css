@@ -775,6 +775,9 @@ span:hover.tinebase-download-link {
     background-image:url(../../images/icon-set/icon_download.svg) !important;
 }
 
+.action_upload {
+    background-image:url(../../images/icon-set/icon_filemanager_upload.svg) !important;
+}
 /******** email ***********/
 
 a:hover.tinebase-email-link {
