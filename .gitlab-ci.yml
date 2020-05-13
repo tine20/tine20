@@ -73,7 +73,7 @@ stages:
     - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
       when: on_success
     - when: never
-  timeout: 20m
+  timeout: 40m
 
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit_test
@@ -214,27 +214,11 @@ stages:
     - when: never
   timeout: 10m # time run: 3m
 
-"docker: push source and test-source image":
-  extends: .abstract_jobs.docker
-  stage: built_test_and_deploy
-  script:
-    - pull_tag_push source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
-    - pull_tag_push test-source commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
-  rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
-    - when: on_success
-  timeout: 10m # time run: 3m
-
-"docker: push build, built, test-built and dev image":
+"docker: push built and dev image":
   extends: .abstract_jobs.docker
   stage: deploy
   script:
-    - pull_tag_push build commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
-    - pull_tag_push test-built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
   rules:
     - if: $RUN_CI_PIPELINE == "false"
@@ -245,3 +229,20 @@ stages:
       when: on_success
     - when: never
   timeout: 10m # time run: 3m
+
+"docker push built and dev image to gitlab":
+  extends: .abstract_jobs.docker
+  stage: deploy
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - pull_tag_push_with_registry built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG $CI_REGISTRY/tine20/tine20
+    - pull_tag_push_with_registry dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG $CI_REGISTRY/tine20/tine20
+  rules:
+    - if: *feature_branch_pipeline
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: on_success
+    - if: $DOCKER_BUILD_BUILD == "true"
+      when: on_success
+    - when: never
+  timeout: 10m
