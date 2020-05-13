@@ -28,12 +28,17 @@ function build_and_push() {
 }
 
 function pull_tag_push() {
+  pull_tag_push_with_registry $1 $2 $3 $REGISTRY
+}
+
+function pull_tag_push_with_registry() {
   NAME=$1
   SOURCE_TAG=$(echo $2 | sed sI/I-Ig)
   DESTINATION_TAG=$(echo $3 | sed sI/I-Ig)
+  OTHER_REGISTRY=$4
 
   # use --quiet
   docker pull $REGISTRY/$NAME:$SOURCE_TAG
-  docker tag $REGISTRY/$NAME:$SOURCE_TAG $REGISTRY/$NAME:$DESTINATION_TAG
-  docker push $REGISTRY/$NAME:$DESTINATION_TAG
+  docker tag $REGISTRY/$NAME:$SOURCE_TAG $OTHER_REGISTRY/$NAME:$DESTINATION_TAG
+  docker push $OTHER_REGISTRY/$NAME:$DESTINATION_TAG
 }
