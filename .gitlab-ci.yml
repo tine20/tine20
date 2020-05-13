@@ -238,11 +238,30 @@ stages:
     - pull_tag_push_with_registry built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG $CI_REGISTRY/tine20/tine20
     - pull_tag_push_with_registry dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG $CI_REGISTRY/tine20/tine20
   rules:
-    - if: *feature_branch_pipeline
+    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: on_success
+      when: never
     - if: $DOCKER_BUILD_BUILD == "true"
+      when: on_success
+    - when: never
+  timeout: 10m
+
+"docker push built image to dockerhub":
+  extends: .abstract_jobs.docker
+  stage: deploy
+  script:
+    - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN docker.io
+    - pull_tag_push_with_registry_with_name built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG docker.io/tine20 tine20
+    - pull_tag_push_with_registry_with_name dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG docker.io/tine20 dev
+  rules:
+    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $DOCKER_BUILD_BUILD != "true"
+      when: never
+    - if: $PUSH_TO_DOCKERHUB == "true"
       when: on_success
     - when: never
   timeout: 10m
