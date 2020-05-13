@@ -10,7 +10,7 @@ function build_and_push() {
     --tag $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --file ci/dockerimage/Dockerfile \
     --build-arg BUILDKIT_INLINE_CACHE=1 \
-    --build-arg PHP_IMAGE=$REGISTRY/php \
+    --build-arg PHP_IMAGE=php \
     --build-arg PHP_IMAGE_TAG=$PHP_IMAGE_TAG \
     --build-arg BASE_IMAGE=$REGISTRY/base:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --build-arg DEPENDENCY_IMAGE=$REGISTRY/dependency:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
