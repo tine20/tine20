@@ -10,22 +10,6 @@ stages:
   - built_test_and_deploy
   - deploy
 
-"docker retag php image":
-  extends: .abstract_jobs.docker
-  stage: .pre
-  script:
-    - docker pull php:$PHP_IMAGE_TAG
-    - docker tag php:$PHP_IMAGE_TAG $REGISTRY/php:$PHP_IMAGE_TAG
-    - docker push $REGISTRY/php:$PHP_IMAGE_TAG
-  rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
-    - if: $DOCKER_RETAG_PHP_IMAGE == "true"
-      when: on_success
-    - when: never
-
 # this or the next job "docker: build base, dependency, source and test-source image" should be uses
 # "cache" using job
 "docker: build source and test-source image":
@@ -49,9 +33,6 @@ stages:
         - tine20/composer.lock
         - tine20/Tinebase/js/package.json
         - tine20/Tinebase/js/npm-shrinkwrap.json
-      when: never
-    # reverse of "docker: build base, dependency, source and test-source image"
-    - if: $DOCKER_RETAG_PHP_IMAGE == "true"
       when: never
     # reverse of "docker: build base, dependency, source and test-source image"
     - if: $DOCKER_BUILD_BASE_IMAGE == "true"
@@ -90,9 +71,6 @@ stages:
       when: on_success
     # reverse of "docker: build base, dependency, source and test-source image"
     - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
-      when: on_success
-    # reverse of "docker: build source and test-source image"
-    - if: $DOCKER_RETAG_PHP_IMAGE == "true"
       when: on_success
     - when: never
   timeout: 20m
@@ -232,9 +210,6 @@ stages:
       when: on_success
     # reverse of "docker: build base, dependency, source and test-source image"
     - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
-      when: on_success
-    # reverse of "docker: build source and test-source image"
-    - if: $DOCKER_RETAG_PHP_IMAGE == "true"
       when: on_success
     - when: never
   timeout: 10m # time run: 3m
