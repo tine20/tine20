@@ -14,9 +14,10 @@
  * 
  * @package     Timetracker
  *
+ * @property    integer             accounting_time
+ * @property    integer             duration
  * @property    Tinebase_DateTime   start_date
  * @property    string              start_time
- * @property    integer             duration
  * @property    string              timeaccount_id
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
@@ -302,7 +303,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
      */
     public function getQuantity()
     {
-        return $this->duration / 60;
+        return $this->accounting_time / 60;
     }
     
     /**

@@ -635,7 +635,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 
         sleep(1);
 
-        $this->sharedTimesheet->duration = 180;
+        $this->sharedTimesheet->accounting_time = 180;
         $this->sharedTimesheet = $this->_timesheetController->update($this->sharedTimesheet);
 
         $maybeRecreated = $this->_invoiceController->checkForContractOrInvoiceUpdates();

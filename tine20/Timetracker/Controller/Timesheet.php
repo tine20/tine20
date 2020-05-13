@@ -149,7 +149,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $timesheets = $this->search($filter);
         
         $matrix = array();
-        foreach($timesheets as $ts) {
+        foreach ($timesheets as $ts) {
             $matrix[] = array(
                 'userAccountId' => $ts->account_id,
                 'amount' => ($ts->duration / 60),
@@ -184,25 +184,23 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
 
             $duration = $end->diff($start);
             $_record->duration = $duration->h * 60 + $duration->i;
-            return;
-        }
-        
-        // If duration and start is set calculate the end
-        if (isset($duration) && isset($start)){
+        } else if (isset($duration) && isset($start)){
+            // If duration and start is set calculate the end
             $start = new dateTime($_record->start_date . ' ' . $start);
             
             $end = $start->modify('+' . $duration . ' minutes');
             $_record->end_time = $end->format('H:i');
-            return;
-        }
 
-        // If start is not set but duration and end calculate start instead
-        if (isset($duration) && isset($end)){
+        } else if (isset($duration) && isset($end)){
+            // If start is not set but duration and end calculate start instead
             $end = new dateTime($_record->start_date . ' ' . $end);
 
             $start = $end->modify('-' . $duration . ' minutes');
             $_record->start_time = $start->format('H:i');
-            return;
+        }
+
+        if (empty($_record->accounting_time)) {
+            $_record->accounting_time = $_record->duration;
         }
     }
     
