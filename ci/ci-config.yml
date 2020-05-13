@@ -10,3 +10,4 @@ variables:
   PHP_STAN_ANALYSES: "true"
   NO_CACHE: "true"
   RUN_CI_PIPELINE: "true"
+  PUSH_TO_DOCKERHUB: "false"

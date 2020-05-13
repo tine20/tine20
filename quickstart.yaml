@@ -16,7 +16,7 @@ services:
       - internal_network
 
   web:
-    image: tine20:2018.11-7.3-fpm-alpine
+    image: tine20/tine20:2018.11-7.3-fpm-alpine
     depends_on:
       - db
       - cache
