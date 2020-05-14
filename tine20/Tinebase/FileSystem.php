@@ -396,7 +396,7 @@ class Tinebase_FileSystem implements
      * set grants for node
      *
      * @param Tinebase_Model_Tree_Node $node
-     * @param                          $grants
+     * @param Tinebase_Record_RecordSet $grants
      * @return Tinebase_Model_Tree_Node
      * @throws Timetracker_Exception_UnexpectedValue
      * @throws Tinebase_Exception_Backend

@@ -963,7 +963,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 } else {
                     $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
                     $accountId = $user->getId();
-                    $accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+                    $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
                 }
             } else {
                 $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
@@ -979,6 +979,57 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             // prevent overwrite
             $removeOldGrants = false;
         }
+
+        return 0;
+    }
+
+    /**
+     * set node acl
+     *
+     * example:
+     * $ php tine20.php --method Tinebase.setNodeAcl -- id=NODEID \
+     *   grants='[{"account":"$USERNAME","account_type":"user","readGrant":1,"writeGrant":1},{"account":"$GROUPNAME","account_type":"group","readGrant":1}]'
+     *
+     * @param $_opts
+     * @return integer
+     *
+     * @todo generalize this - see \Tinebase_Frontend_Cli::setCustomfieldAcl
+     * @todo add a test
+     */
+    public function setNodeAcl(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+
+        $args = $this->_parseArgs($_opts, ['id', 'grants']);
+        $node = Tinebase_FileSystem::getInstance()->get($args['id']);
+
+        $grantsArray = Tinebase_Helper::jsonDecode($args['grants']);
+        // @todo generalize this - see \Tinebase_Frontend_Cli::setCustomfieldAcl
+        $grantsToSet = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
+        foreach ($grantsArray as $grant) {
+            $accountType = isset($grant['account_type']) ? $grant['account_type'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+            if (isset($grant['account'])) {
+                if ($accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                    $group = Tinebase_Group::getInstance()->getGroupByName($grant['account']);
+                    $accountId = $group->getId();
+                } else {
+                    $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
+                    $accountId = $user->getId();
+                }
+            } else {
+                $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
+            }
+            $grantRecord = new Tinebase_Model_Grants([
+                'account_id' => $accountId,
+                'account_type' => $accountType,
+            ]);
+            foreach (Tinebase_Model_Grants::getAllGrants() as $possibleGrant) {
+                if (isset($grant[$possibleGrant])) {
+                    $grantRecord->{$possibleGrant} = $grant[$possibleGrant];
+                }
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grantsToSet);
 
         return 0;
     }
