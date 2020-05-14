@@ -591,15 +591,13 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $definitionsArray = array();
         }
 
-        $definitionData = array(
+        return [
             'defaultImportDefinition'   => $defaultDefinitionArray,
             'importDefinitions'         => array(
                 'results'    => $definitionsArray,
                 'totalcount' => count($definitionsArray),
             ),
-        );
-
-        return $definitionData;
+        ];
     }
 
     /**
