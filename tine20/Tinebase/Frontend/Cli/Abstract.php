@@ -341,10 +341,13 @@ class Tinebase_Frontend_Cli_Abstract
      * @param Zend_Console_Getopt $_opts
      * @param array $_requiredKeys
      * @param string $_otherKey use this key for arguments without '='
+     * @param boolean $_splitSubArgs
      * @throws Tinebase_Exception_InvalidArgument
      * @return array
+     *
+     * @todo remove $_splitSubArgs and detect, if it is a json encoded value
      */
-    protected function _parseArgs(Zend_Console_Getopt $_opts, $_requiredKeys = array(), $_otherKey = 'other')
+    protected function _parseArgs(Zend_Console_Getopt $_opts, $_requiredKeys = array(), $_otherKey = 'other', $_splitSubArgs = true)
     {
         $args = $_opts->getRemainingArgs();
         
@@ -352,10 +355,12 @@ class Tinebase_Frontend_Cli_Abstract
         foreach ($args as $idx => $arg) {
             if (strpos($arg, '=') !== false) {
                 list($key, $value) = explode('=', $arg);
-                if (strpos($value, ',') !== false) {
-                    $value = explode(',', $value);
+                if ($_splitSubArgs) {
+                    if (strpos($value, ',') !== false) {
+                        $value = explode(',', $value);
+                    }
+                    $value = str_replace('"', '', $value);
                 }
-                $value = str_replace('"', '', $value);
                 $result[$key] = $value;
             } else {
                 $result[$_otherKey][] = $arg;

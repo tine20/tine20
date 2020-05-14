@@ -991,7 +991,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * set node acl
      *
      * example:
-     * $ php tine20.php --method Tinebase.setNodeAcl -- id=NODEID \
+     * $ php tine20.php --method Tinebase.setNodeAcl [-d] -- id=NODEID \
      *   grants='[{"account":"$USERNAME","account_type":"user","readGrant":1,"writeGrant":1},{"account":"$GROUPNAME","account_type":"group","readGrant":1}]'
      *
      * @param $_opts
@@ -1004,10 +1004,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_checkAdminRight();
 
-        $args = $this->_parseArgs($_opts, ['id', 'grants']);
+        $args = $this->_parseArgs($_opts, ['id', 'grants'], 'other', false);
         $node = Tinebase_FileSystem::getInstance()->get($args['id']);
 
         $grantsArray = Tinebase_Helper::jsonDecode($args['grants']);
+        #print_r($grantsArray);
         // @todo generalize this - see \Tinebase_Frontend_Cli::setCustomfieldAcl
         $grantsToSet = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
         foreach ($grantsArray as $grant) {
@@ -1029,11 +1030,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ]);
             foreach (Tinebase_Model_Grants::getAllGrants() as $possibleGrant) {
                 if (isset($grant[$possibleGrant])) {
-                    $grantRecord->{$possibleGrant} = $grant[$possibleGrant];
+                    $grantRecord->{$possibleGrant} = (boolean) $grant[$possibleGrant];
                 }
             }
+            $grantsToSet->addRecord($grantRecord);
         }
-        Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grantsToSet);
+        if ($_opts->d) {
+            echo "DRYRUN! grants to be set:\n";
+            print_r($grantsToSet->toArray());
+        } else {
+            Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grantsToSet);
+        }
 
         return 0;
     }
