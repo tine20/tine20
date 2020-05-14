@@ -395,11 +395,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     $value = base64_encode($content);
                     $attachmentData = [
                         'ENCODING' => 'BASE64',
-                        'X-FILENAME' => $filename,
                         'VALUE' => 'BINARY',
-                        // TODO needed?
-//                        'FMTTYPE'    => $attachment->contenttype,
-//                        'SIZE'       => $attachment->size,
+                        'FILENAME'   => $filename,
                     ];
                 } else {
                     $value = "{$baseUrl}{$filename}";

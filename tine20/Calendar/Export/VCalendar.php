@@ -150,7 +150,9 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
         }
         $currentSize = ftell($this->_exportFileHandle);
         $offset = 1024 * 512;
-        if ($currentSize + $offset > self::MAX_ICS_FILE_SIZE) {
+        $splitSize = isset($this->_config->maxfilesize) ? (int) $this->_config->maxfilesize : self::MAX_ICS_FILE_SIZE;
+
+        if ($splitSize > 0 && $currentSize + $offset > $splitSize) {
             // close current file - open new file in _createExportFilehandle
             fclose($this->_exportFileHandle);
             $this->_exportFileHandle = null;
