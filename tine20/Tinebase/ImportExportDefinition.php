@@ -93,7 +93,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         $fileSystem = Tinebase_FileSystem::getInstance();
         $toRemove = new Tinebase_Record_RecordSet('Tinebase_Model_ImportExportDefinition');
         /** @var Tinebase_Model_ImportExportDefinition $definition */
-        foreach($result as $definition) {
+        foreach ($result as $definition) {
             if ($definition->plugin_options) {
                 $config = Tinebase_ImportExportDefinition::getInstance()->
                     getOptionsAsZendConfigXml($definition, array());
@@ -105,14 +105,26 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                         $node = $fileSystem->stat(substr($config->template, 9));
                         if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $node->getId(),
                                 Tinebase_Model_Grants::GRANT_READ)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__
+                                . ' Removing export definition because'
+                                . ' user has no read grant on template file ' . $config->template);
                             $toRemove[] = $definition;
                         }
                     } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__
+                            . ' Removing export definition because'
+                            . ' exception was thrown: ' . $e->getMessage());
                         $toRemove[] = $definition;
                     }
                 } elseif (!empty($config->templateFileId)) {
                     if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $config->templateFileId,
                             Tinebase_Model_Grants::GRANT_READ)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__
+                            . ' Removing export definition because'
+                            . ' user has no read grant on template file id ' . $config->templateFileId);
                         $toRemove[] = $definition;
                     }
                 }
