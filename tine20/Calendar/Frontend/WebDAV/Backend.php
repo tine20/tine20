@@ -191,33 +191,15 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
     {
         $eventId = $event->getId();
         $lastModified = $event->last_modified_time ? $event->last_modified_time : $event->creation_time;
-        
-        // we always use a event set to return exdates at once
-        $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
-        
-        if ($event->rrule) {
-            foreach($event->exdate as $exEvent) {
-                if (! $exEvent->is_deleted) {
-                    $eventSet->addRecord($exEvent);
-                    $event->exdate->removeRecord($exEvent);
-                }
-            }
-            
-            // remaining exdates are fallouts
-            $event->exdate = $event->exdate->getOriginalDtStart();
-        }
-        
-        $exporter = new Calendar_Export_Ical();
-        $ics = $exporter->eventToIcal($eventSet);
-        
-        // work arround broken exdate handling in apple ical
-        // -> not neccesary at the moment this is done generally in ics export
-        
+
+        $converter = new Calendar_Convert_Event_VCalendar_Tine();
+        $vcalendar = $converter->fromTine20Model($event);
+
         return array(
             'id'            => $eventId,
             'uri'           => $eventId,
             'lastmodified'  => $lastModified->getTimeStamp(),
-            'calendardata'  => $ics,
+            'calendardata'  => $vcalendar->serialize(),
         );
     }
     

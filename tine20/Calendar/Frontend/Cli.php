@@ -50,26 +50,6 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
              )
         ),
-        'importCalDavCalendars' => array(
-            'description'    => 'import calendars without events from a CalDav source',
-            'params'         => array(
-                'url'        => 'CalDav source URL',
-                'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
-             )
-        ),
-        'importegw14' => array(
-            'description'    => 'imports calendars/events from egw 1.4',
-            'params'         => array(
-                'host'       => 'dbhost',
-                'username'   => 'username',
-                'password'   => 'password',
-                'dbname'     => 'dbname'
-            )
-        ),
-        'exportICS' => array(  
-            'description'    => "export calendar as ics", 
-            'params'         => array('container_id') 
-        ),
     );
     
     /**
@@ -96,34 +76,6 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
         parent::_import($_opts);
-    }
-    
-    /**
-     * exports calendars as ICS
-     *
-     * @param Zend_Console_Getopt $_opts
-     */
-    public function exportICS($_opts)
-    {
-        Tinebase_Core::set('HOSTNAME', 'localhost');
-        
-        $opts = $_opts->getRemainingArgs();
-        $container_id = $opts[0];
-        $filter = new Calendar_Model_EventFilter(array(
-            array(
-                'field'     => 'container_id',
-                'operator'  => 'equals',
-                'value'     => $container_id
-            )
-
-        ));
-        $result = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'get');
-        if ($result->count() == 0) {
-            throw new Tinebase_Exception('this calendar does not contain any records.');
-        }
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory("generic");
-        $result = $converter->fromTine20RecordSet($result);
-        print $result->serialize();
     }
 
     /**
