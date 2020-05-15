@@ -107,6 +107,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             fieldLabel: this.app.i18n._('Factor'),
             name: 'accounting_time_factor',
             allowNegative: false,
+            decimalSeparator: ',',
             value: 0
         }, {
             xtype: 'numberfield',

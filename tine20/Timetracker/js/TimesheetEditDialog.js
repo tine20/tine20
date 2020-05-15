@@ -211,6 +211,17 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }
         this.getForm().findField('accounting_time').setValue(accountingTime);
     },
+
+    calculateFactor: function() {
+        var duration = this.getForm().findField('duration').getValue(),
+            accountingTime = this.getForm().findField('accounting_time').getValue(),
+            factor = accountingTime / duration;
+        if (factor != this.factor) {
+            this.factor = factor;
+            this.factorChanged = true;
+        }
+        this.getForm().findField('accounting_time_factor').setValue(factor);
+    },
     
     onCheckBillable: function(field, checked) {
         if (!this.useMultiple) {
@@ -307,7 +318,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 enableKeyEvents: true,
                                 listeners: {
                                     scope: this,
-                                    keyup: this.calculateAccountingTime,
+                                    blur: this.calculateAccountingTime,
                                     spin: this.calculateAccountingTime,
                                 }
                             }),
@@ -350,11 +361,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             scope: this,
                                             check: this.onCheckBillable
                                         }}),
-                                    fieldManager('accounting_time_factor', {listeners: {
+                                    fieldManager('accounting_time_factor', {decimalSeparator: ',', listeners: {
                                         scope: this,
                                         change: this.calculateAccountingTime
                                     }}),
-                                    fieldManager('accounting_time'),
+                                    fieldManager('accounting_time', {listeners: {
+                                            scope: this,
+                                            blur: this.calculateFactor,
+                                            spin: this.calculateFactor
+                                        }}),
                                     fieldManager('need_for_clarification'),
                                 ], [
                                     fieldManager('is_cleared', {listeners: {
@@ -381,27 +396,26 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         items: [[
                             fieldManager('account_id')
                         ]]
-                    },
-                    {
-                        // activities and tags
-                        layout: 'ux.multiaccordion',
-                        animate: true,
-                        region: 'east',
-                        width: 210,
-                        split: true,
-                        collapsible: true,
-                        collapseMode: 'mini',
-                        header: false,
-                        margins: '0 5 0 5',
-                        border: true,
-                        items: [
-                            new Tine.widgets.tags.TagPanel({
-                                app: 'Timetracker',
-                                border: false,
-                                bodyStyle: 'border:1px solid #B5B8C8;'
-                            })
-                        ]
                     }]
+                }, {
+                    // activities and tags
+                    layout: 'ux.multiaccordion',
+                    animate: true,
+                    region: 'east',
+                    width: 210,
+                    split: true,
+                    collapsible: true,
+                    collapseMode: 'mini',
+                    header: false,
+                    margins: '0 5 0 5',
+                    border: true,
+                    items: [
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Timetracker',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        })
+                    ]
                 }]
             }, {
                     title: this.app.i18n._('Timeaccount'),
