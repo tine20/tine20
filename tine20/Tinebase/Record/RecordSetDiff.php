@@ -68,7 +68,7 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
      * 
      * @todo add translated model name?
      */
-    public function getTranslatedDiffText()
+    public function getTranslatedDiffText($_record, $_property)
     {
         $result = array();
         $translate = Tinebase_Translation::getTranslation('Tinebase');
@@ -79,8 +79,25 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
                 $first = true;
                 foreach ($this->{$action} as $data) {
                     /** @var Tinebase_Record_Interface $record */
-                    $record = new $model($data, true);
-                    $str .= ($first ? '' : ', ') . $record->getNotesTranslatedText();
+                    if (isset($data['id']) && $_record->{$_property} instanceof Tinebase_Record_RecordSet) {
+                        if (false === ($record = $_record->{$_property}->getById($data['id']))) {
+                            $_record->{$_property} = $_record->{$_property}->getClone(true);
+                            if (false === ($record = $_record->{$_property}->getById($data['id']))) {
+                                $record = new $model($data, true);
+                            }
+                        }
+                    } else {
+                        $record = new $model($data, true);
+                    }
+                    if ('modified' === $action) {
+                        $modLog = new Tinebase_Model_ModificationLog([
+                            'record_type' => $model,
+                            'new_value' => json_encode($data)
+                        ], true);
+                        $str .= ($first ? '' : ', ') . $record->getTitle() . ': "' . Tinebase_Notes::getInstance()->getRecordModificationChangeText($record, $modLog) . '"';
+                    } else {
+                        $str .= ($first ? '"' : ', "') . $record->getNotesTranslatedText() . '"';
+                    }
                     $first = false;
                 }
                 $result[] = $str;

@@ -207,7 +207,7 @@ class Calendar_Controller_PollTest extends TestCase
     /**
      * user
      */
-    public function testPublicApiUpdateAttenderStatusWidthAccount()
+    public function testPublicApiUpdateAttenderStatusWithAccount()
     {
         $pollData = $this->testPublicApiGetPollWithAccount();
         $contact_id = Tinebase_Core::getUser()->contact_id;
@@ -282,6 +282,17 @@ EOT;
         $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
         $this->assertEquals('TENTATIVE', $attendee->status);
         static::assertEquals(3, $attendee->seq);
+
+        $note = Tinebase_Notes::getInstance()->searchNotes(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Tinebase_Model_Note::class, [
+                ['field' => 'record_model',    'operator' => 'equals', 'value' => Calendar_Model_Event::class],
+                ['field' => 'note_type_id',    'operator' => 'equals', 'value' => Tinebase_Notes::getInstance()->getNoteTypeByName(Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED)->getId()],
+                ['field' => 'record_id',       'operator' => 'equals', 'value' => $statusData['status'][0]['cal_event_id']],
+            ]))->getFirstRecord();
+
+        $translate = Tinebase_Translation::getTranslation();
+        static::assertContains(' | ' . $translate->_('Changed fields:'). '  attendee (1 ' . $translate->_('modified') . ':', $note->note);
+        static::assertContains(': " seq (1 -> 2) status (NEEDS-ACTION -> TENTATIVE)")', $note->note);
     }
 
     /**
