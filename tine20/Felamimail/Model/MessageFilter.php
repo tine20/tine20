@@ -239,7 +239,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             } else {
                 $_select->having($db->quoteInto($havingColumn . ' NOT LIKE ? OR ' . $havingColumn . ' IS NULL', $value));
             }
-        } else {
+        } elseif (!empty($_filterData['value'])) {
             $_select->where(
                 $db->quoteInto($fieldName  . ' LIKE ?', $value) . ' OR ' .
                 $db->quoteInto($fieldEmail . ' LIKE ?', $value)
