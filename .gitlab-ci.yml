@@ -33,6 +33,7 @@ stages:
         - tine20/composer.lock
         - tine20/Tinebase/js/package.json
         - tine20/Tinebase/js/npm-shrinkwrap.json
+      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     # reverse of "docker: build base, dependency, source and test-source image"
     - if: $DOCKER_BUILD_BASE_IMAGE == "true"
@@ -65,6 +66,7 @@ stages:
         - tine20/composer.lock
         - tine20/Tinebase/js/package.json
         - tine20/Tinebase/js/npm-shrinkwrap.json
+      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
       when: on_success
     # reverse of "docker: build source and test-source image"
     - if: $DOCKER_BUILD_BASE_IMAGE == "true"
@@ -204,6 +206,7 @@ stages:
         - tine20/composer.lock
         - tine20/Tinebase/js/package.json
         - tine20/Tinebase/js/npm-shrinkwrap.json
+      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
       when: on_success
     # reverse of "docker: build source and test-source image"
     - if: $DOCKER_BUILD_BASE_IMAGE == "true"
