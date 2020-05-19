@@ -2,13 +2,19 @@ include:
   - local: '/ci/abstract_jobs.yml'
   - local: '/ci/ci-config.yml'
 
-.rule:is_feature_branch_pipeline: &feature_branch_pipeline $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
-
 stages:
   - build_docker_images
   - build_and_source_test
   - built_test_and_deploy
   - deploy
+
+workflow:
+  rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+      when: never
+    - when: always
 
 # this or the next job "docker: build base, dependency, source and test-source image" should be uses
 # "cache" using job
@@ -21,10 +27,6 @@ stages:
     - build_and_push source
     - build_and_push test-source
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     # reverse of "docker: build base, dependency, source and test-source image"
     - changes:
         - ci/dockerimage
@@ -54,10 +56,6 @@ stages:
     - build_and_push source
     - build_and_push test-source
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     # reverse of "docker: build source and test-source image"
     - changes:
         - ci/dockerimage
@@ -83,10 +81,6 @@ stages:
   image:
     name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
     - when: never
@@ -107,10 +101,6 @@ stages:
       - code-quality-report.json
     expire_in: 1 days
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     - if: $PHP_STAN_ANALYSES == "true"
       when: on_success
     - when: never
@@ -126,10 +116,6 @@ stages:
     - build_and_push test-built
     - build_and_push dev
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
@@ -141,10 +127,6 @@ stages:
   image:
     name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
     - when: never
@@ -156,10 +138,6 @@ stages:
   image:
     name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
       when: on_success
     - when: never
@@ -177,10 +155,6 @@ stages:
     - cd $TINE20ROOT/tests/tine20/
     - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap AllTests
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
       when: on_success
     - when: never
@@ -192,10 +166,6 @@ stages:
     - pull_tag_push base commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push dependency commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     - if: $CI_COMMIT_REF_NAME != $MAJOR_COMMIT_REF_NAME
       when: never
     # reverse of "docker: build source and test-source image"
@@ -224,10 +194,6 @@ stages:
     - pull_tag_push built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
     - pull_tag_push dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
   rules:
-    - if: $RUN_CI_PIPELINE == "false"
-      when: never
-    - if: *feature_branch_pipeline
-      when: never
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
