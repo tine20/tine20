@@ -2063,9 +2063,6 @@ class Admin_JsonTest extends TestCase
         $this->_convertAccount($internalAccount, $user);
     }
 
-    /**
-     * @group nogitlabci
-     */
     public function testSetSieveVacation()
     {
         $this->_checkMasterUserTable();
@@ -2077,9 +2074,6 @@ class Admin_JsonTest extends TestCase
         self::assertEquals($vacation['subject'], $result['subject']);
     }
 
-    /**
-     * @group nogitlabci
-     */
     public function testSetSieveRules()
     {
         $this->_checkMasterUserTable();
@@ -2108,9 +2102,6 @@ class Admin_JsonTest extends TestCase
         ));
     }
 
-    /**
-     * @group nogitlabci
-     */
     public function testGetSetSieveRuleForSclever()
     {
         $this->_checkMasterUserTable();

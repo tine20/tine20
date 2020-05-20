@@ -1900,9 +1900,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      * type = download_protected: uploaded from harddisk, supposed to be a protected download link
      *
      * @see 0012950: More attachment methods for mail
-     *
-     * @group nogitlabci
-     * gitlabci: inebase_Exception_NotFound: Filemanager_Model_DownloadLink record with id = 2a25b433b20128dd0d17c82da2ab01f7b035e3e< not found!
      */
     public function testAttachmentMethodProtectedDownloadLink()
     {
