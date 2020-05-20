@@ -417,7 +417,9 @@ class Tinebase_Relation_RelationTest extends TestCase
      *
      * - remove right to Tasks app of related record
      * - other relations should still be visible
+     *
      * @group nogitlabci
+     * gitlabci: Failed asserting that two arrays are equal.
      */
     public function testRemoveRelationsByAppACL()
     {
