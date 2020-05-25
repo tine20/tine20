@@ -2058,4 +2058,20 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         return Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account, ['user_id' => 'user_id']);
     }
+
+    /**
+     * @param $account
+     * @param $grant
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function checkGrantForSharedAccount($account, $grant)
+    {
+             // TODO generalize that? Tinebase_Core::getUser()->hasGrant() anyone?
+            $userGrants = Felamimail_Controller_Account::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(),
+                $account);
+            if (!$userGrants->{$grant}) {
+                throw new Tinebase_Exception_AccessDenied(
+                    'User is not allowed to send a message with this account');
+            }
+    }
 }
