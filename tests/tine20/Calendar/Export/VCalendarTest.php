@@ -25,7 +25,7 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
                 'file' => 'event.csv'
             ], $this->_getTestCalendar()
         );
-        $result = $this->_export();
+        $result = $this->_export('stdout=1');
 
         self::assertContains('Anforderungsanalyse', $result);
         self::assertContains('BEGIN:VCALENDAR', $result);
@@ -55,7 +55,7 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         $event = $this->_getRecurEvent();
         Calendar_Controller_Event::getInstance()->create($event);
 
-        $result = $this->_export();
+        $result = $this->_export('stdout=1');
 
         self::assertContains('hard working man needs some silence', $result);
         self::assertContains('RRULE:FREQ=DAILY', $result);
@@ -71,7 +71,7 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment(
             $event, $tempFile->name, $tempFile);
 
-        $result = $this->_export();
+        $result = $this->_export('stdout=1');
 
         self::assertContains('Early to bed and early to rise', $result);
         self::assertContains('ATTACH;ENCODING=BASE64;VALUE=BINARY;FILENAME=tempfile.tmp:dGVzdCBmaWxlIGNvb, nRlbnQ=', $result);

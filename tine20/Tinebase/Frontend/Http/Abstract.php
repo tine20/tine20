@@ -143,6 +143,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'docx':
             case 'error':
                 // redirect output to client browser
+                // TODO refactor function signature - write does not write content to file but to stdout/browser
                 if (null === $result) {
                     $export->write();
                 } else {

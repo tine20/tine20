@@ -628,4 +628,89 @@ class Tinebase_Frontend_Cli_Abstract
 
         return $cronuser;
     }
+
+    /**
+     * exports containers as ICS, VCF, ...
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @param string $_model
+     * @param string $_exportClass
+     * @return boolean
+     */
+    protected function _exportVObject(Zend_Console_Getopt $_opts, $_model, $_exportClass)
+    {
+        $args = $this->_parseArgs($_opts);
+
+        // @todo implement
+        //   - allow to export all shared containers
+
+        if (isset($args['type']) && $args['type'] === 'personal') {
+            // get all containers of given type
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(
+                Tinebase_Core::getUser(),
+                $_model,
+                Tinebase_Core::getUser()
+            )->getArrayOfIds();
+        } else if (isset($args['container_id'])) {
+            $containers = explode(',', $args['container_id']);
+        }
+
+        foreach ($containers as $containerId) {
+            $this->_exportContainerAsVObject($containerId, $args, $_model, $_exportClass);
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param $container
+     * @param $args
+     * @return string
+     *
+     * @todo add container name (need to strip spaces, special chars, ...)?
+     * @todo create subdir for each user?
+     */
+    protected function _getVObjectExportFilename($container, $args)
+    {
+        $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
+        return $path . DIRECTORY_SEPARATOR . Tinebase_Core::getUser()->accountLoginName
+            // . '_' . $container->name
+            . '_' . substr($container->getId(), 0, 8) . '.ics';
+    }
+
+    /**
+     * @param $containerId
+     * @param $options
+     * @param $model
+     * @param $exportClass
+     *
+     * TODO add more filters as param
+     */
+    protected function _exportContainerAsVObject($containerId, $options, $model, $exportClass)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Exporting calendar ' . $containerId);
+        }
+
+        if (! isset($options['stdout']) || $options['stdout'] != 1) {
+            if (! isset($options['filename'])) {
+                $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+                $options['filename'] = $this->_getVObjectExportFilename($container, $options);
+            }
+        } else {
+            unset($options['filename']);
+        }
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
+        ]);
+        $export = new $exportClass($filter, null, $options);
+        $filename = $export->generate();
+        if (! $filename) {
+            // TODO refactor function signature - write does not write content to file but to stdout/browser
+            $export->write();
+        } else {
+            echo 'Exported container ' . $containerId . ' into file ' . $filename . "\n";
+        }
+    }
 }

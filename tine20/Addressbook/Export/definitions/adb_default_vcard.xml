@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_default_vcard</name>
+    <type>export</type>
+    <favorite>true</favorite>
+    <scope>multi</scope>
+    <plugin>Addressbook_Export_VCard</plugin>
+    <!-- _('VCard all data') -->
+    <label>VCard all data</label>
+    <!-- _('Export contact data into vcf file') -->
+    <description>Export contact data into vcf file</description>
+</config>

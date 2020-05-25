@@ -89,71 +89,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function exportVCalendar($_opts)
     {
-        $args = $this->_parseArgs($_opts);
-
-        // @todo implement
-        //   - allow to export all shared calendars
-
-        if (isset($args['type']) && $args['type'] === 'personal') {
-            // get all containers of given type
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(
-                Tinebase_Core::getUser(),
-                Calendar_Model_Event::class,
-                Tinebase_Core::getUser()
-            );
-            $options = $args;
-            foreach ($containers as $container) {
-                $options['filename'] = $this->_getVCalendarExportFilename($container, $args);
-                $this->_exportVCalendar($container->getId(), $options);
-            }
-        }
-
-        if (isset($args['container_id'])) {
-            $containers = explode(',', $args['container_id']);
-            foreach ($containers as $containerId) {
-                $this->_exportVCalendar($containerId, $args);
-            }
-        }
-
-        return 0;
-    }
-
-    /**
-     * @param $container
-     * @param $args
-     * @return string
-     *
-     * @todo add container name (need to strip spaces, special chars, ...)?
-     * @todo create subdir for each user?
-     */
-    protected function _getVCalendarExportFilename($container, $args)
-    {
-        $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
-        return $path . DIRECTORY_SEPARATOR . Tinebase_Core::getUser()->accountLoginName
-            // . '_' . $container->name
-            . '_' . substr($container->getId(), 0, 8) . '.ics';
-    }
-
-    protected function _exportVCalendar($containerId, $options)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Exporting calendar ' . $containerId);
-        }
-
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class,
-            [
-                ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
-                // TODO add as param
-                // for keeping the data small
-                // ['field' => 'dtstart', 'operator' => 'inweek', 'value' => 20],
-            ]);
-        $export = new Calendar_Export_VCalendar($filter, null, $options);
-        $filename = $export->generate();
-        if (! $filename) {
-            $export->write();
-        } else {
-            echo 'Exported container ' . $containerId . ' into file ' . $filename . "\n";
-        }
+        return $this->_exportVObject($_opts, Calendar_Model_Event::class, Calendar_Export_VCalendar::class);
     }
 
     /**
@@ -366,7 +302,6 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
     }
-
 
     /**
      *
