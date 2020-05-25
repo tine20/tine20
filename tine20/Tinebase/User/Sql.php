@@ -562,16 +562,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * set password in plugins
      * 
-     * @param Tinebase_Model_FullUser $user
-     * @param Tinebase_Model_FullUser $password
-     * @param bool   $encrypt encrypt password
+     * @param Tinebase_Model_User $user
+     * @param string $password
+     * @param bool $encrypt encrypt password
      * @throws Tinebase_Exception_Backend
      */
-    protected function _setPluginsPassword($user, $password, $encrypt = TRUE)
+    protected function _setPluginsPassword(Tinebase_Model_User $user, $password, $encrypt = TRUE)
     {
         foreach ($this->_sqlPlugins as $plugin) {
             try {
-                $userId = $user instanceof Tinebase_Model_User ? $this->_getPluginUserId($plugin, $user) : $user;
+                $userId = $this->_getPluginUserId($plugin, $user);
                 $plugin->inspectSetPassword($userId, $password, $encrypt);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not change plugin password: ' . $e);
@@ -591,7 +591,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ? $user->getEmailUserId()
             : $user->getId();
     }
-    
+
     /**
      * ensure password policy
      * 
@@ -976,7 +976,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if ($method !== 'inspectGetUserByProperty') {
             $method = 'inspect' . ucfirst($method) . 'User';
         }
-        
+
         // add email user xprops here if configured
         if (Tinebase_EmailUser::isEmailUserPlugin($plugin) && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             $pluginUser = clone($user);
