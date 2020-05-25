@@ -190,13 +190,12 @@ class Tinebase_TransactionManager
                  try {
                      call_user_func_array($callable[0], $callable[1]);
                  } catch (Exception $e) {
-                     // we don't want to fail after we commited. Otherwise a rollback maybe triggered outside which
-                     // actually can't rollback anything anymore as we already commited.
+                     // we don't want to fail after we committed. Otherwise a rollback maybe triggered outside which
+                     // actually can't rollback anything anymore as we already committed.
                      // So afterCommitCallbacks will fail "silently", they only log and go to sentry
                      Tinebase_Exception::log($e, false);
                  }
              }
-
 
          } else {
              if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");

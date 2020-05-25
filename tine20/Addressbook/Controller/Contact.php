@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -20,7 +20,6 @@
  */
 class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract implements Tinebase_User_Plugin_SqlInterface
 {
-
     const CONTEXT_ALLOW_CREATE_USER = 'context_allow_create_user';
     const CONTEXT_NO_ACCOUNT_UPDATE = 'context_no_account_update';
     const CONTEXT_NO_SYNC_PHOTO = 'context_no_sync_photo';
@@ -341,30 +340,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        if (($updatedRecord->email !== $currentRecord->email || (empty($updatedRecord->email) &&
-                $updatedRecord->email_home !== $currentRecord->email_home)) &&
-                count($listIds = Addressbook_Controller_List::getInstance()->getMemberships($updatedRecord)) > 0) {
-
-            $oldListAclCheck = Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
-            $raii = new Tinebase_RAII(function() use($oldListAclCheck) {
-                Addressbook_Controller_List::getInstance()->doContainerACLChecks($oldListAclCheck);
-            });
-
-            $lists = Addressbook_Controller_List::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
-                    ['field' => 'id', 'operator' => 'in', 'value' => $listIds],
-                    ['field' => 'xprops', 'operator' => 'contains', 'value' => Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST],
-                ]));
-            foreach ($lists->filter(function($list) {
-                    return $list->xprops[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST];}) as $list) {
-                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
-                    Felamimail_Sieve_AdbList::setScriptForList($list);
-                }, [$list]);
-            }
-
-            //for unused variable check
-            unset($raii);
-        }
+        $this->_updateMailinglistsOnEmailChange($updatedRecord, $currentRecord);
 
         if (isset($record->account_id) && !isset($updatedRecord->account_id)) {
             $updatedRecord->account_id = $record->account_id;
@@ -394,8 +370,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $updateSyncBackendIds = false;
 
         //get sync backends
-        foreach($this->getSyncBackends() as $backendId => $backendArray)
-        {
+        foreach($this->getSyncBackends() as $backendId => $backendArray) {
             if (isset($backendArray['filter'])) {
                 $oldACL = $this->doContainerACLChecks(false);
 
@@ -472,6 +447,38 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         if (true === $updateSyncBackendIds) {
             $this->_backend->updateSyncBackendIds($updatedRecord->getId(), $updatedRecord->syncBackendIds);
+        }
+    }
+
+    protected function _updateMailinglistsOnEmailChange($updatedRecord, $currentRecord)
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            return;
+        }
+
+        if (($updatedRecord->email !== $currentRecord->email || (empty($updatedRecord->email) &&
+                    $updatedRecord->email_home !== $currentRecord->email_home)) &&
+            count($listIds = Addressbook_Controller_List::getInstance()->getMemberships($updatedRecord)) > 0) {
+
+            $oldListAclCheck = Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
+            $raii = new Tinebase_RAII(function() use($oldListAclCheck) {
+                Addressbook_Controller_List::getInstance()->doContainerACLChecks($oldListAclCheck);
+            });
+
+            $lists = Addressbook_Controller_List::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $listIds],
+                    ['field' => 'xprops', 'operator' => 'contains', 'value' => Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST],
+                ]));
+            foreach ($lists->filter(function($list) {
+                return $list->xprops[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST];}) as $list) {
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
+                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                }, [$list]);
+            }
+
+            //for unused variable check
+            unset($raii);
         }
     }
 
