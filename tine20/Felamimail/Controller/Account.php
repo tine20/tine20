@@ -1435,6 +1435,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 . $feisu->getMessage());
             // try again with INBOX as parent because some IMAP servers can not handle namespaces correctly
             $result = Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'], 'INBOX');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            // folder already there ...
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                . $tesg->getMessage());
         }
         
         return $result;
