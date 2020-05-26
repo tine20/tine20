@@ -223,8 +223,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         if (null !== $this->_subFilterController && null !== $this->_subFilter) {
             $value = $this->_value['value'];
 
-            $queryForEmpty = count($value) === 1 && isset($value[0]) &&
-                is_array($value[0]) && array_key_exists('value', $value[0]) && empty($value[0]['value']);
+            $queryForEmpty = count($value) === 0 || (count($value) === 1 && isset($value[0]) &&
+                is_array($value[0]) && array_key_exists('value', $value[0]) && empty($value[0]['value']));
             $notOperator = strpos($this->_operator, 'not') === 0;
 
             if ($queryForEmpty) {

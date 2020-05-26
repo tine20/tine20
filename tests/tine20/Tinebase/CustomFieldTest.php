@@ -239,6 +239,57 @@ class Tinebase_CustomFieldTest extends TestCase
     /**
      * testMultiRecordCustomField
      */
+    public function testRecordCustomField()
+    {
+        $this->_testCustomField = $this->_instance->addCustomField(self::getCustomField(array(
+            'name' => 'test',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+            'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
+        )));
+
+        //Customfield record 1
+        $contact1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'org_name'     => 'contact 1'
+        )));
+
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'     => 'contact'
+        )));
+
+        $cfValue = array($this->_testCustomField->name => $contact1->getId());
+        $contact->customfields = $cfValue;
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => $contact1->getId(), 'expectContactToBeFound' => true],
+            ['operator' => 'equals', 'value' => '',                 'expectContactToBeFound' => false],
+            ['operator' => 'equals', 'value' => null,               'expectContactToBeFound' => false],
+            ['operator' => 'AND',    'value' => [],                 'expectContactToBeFound' => false],
+        ];
+
+        foreach ($filtersToTest as $filterToTest) {
+            $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+                ['field' => 'customfield', 'operator' => $filterToTest['operator'], 'value' => [
+                    'cfId' => $this->_testCustomField->getId(),
+                    'value' => $filterToTest['value']
+                ]]
+            ]));
+            if ($filterToTest['expectContactToBeFound']) {
+                static::assertEquals(1, $result->count(), 'contact not found with filter '
+                    . print_r($filterToTest, true)
+                    . ' cf value: ' . $contact1->getId()
+                );
+                static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+            } else {
+                static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
+            }
+        }
+    }
+
+    /**
+     * testMultiRecordCustomField
+     */
     public function testMultiRecordCustomField()
     {
         $createdCustomField = $this->_instance->addCustomField(self::getCustomField(array(
@@ -347,6 +398,9 @@ class Tinebase_CustomFieldTest extends TestCase
             ['operator' => 'endswith', 'value' => '1234', 'expectContactToBeFound' => true],
             ['operator' => 'equals', 'value' => 'abc', 'expectContactToBeFound' => false],
             ['operator' => 'contains', 'value' => 'x', 'expectContactToBeFound' => false],
+            ['operator' => 'contains', 'value' => '', 'expectContactToBeFound' => false],
+            ['operator' => 'contains', 'value' => null, 'expectContactToBeFound' => false],
+            ['operator' => 'contains', 'value' => '0', 'expectContactToBeFound' => false],
         ];
         $this->_testContactCustomFieldOfType('string', $value, $filtersToTest);
     }
