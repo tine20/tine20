@@ -43,6 +43,9 @@ RUN apk --no-cache add nginx supervisor curl && \
     pecl install igbinary && echo -e "extension=igbinary.so\nigbinary.compact_strings=On" > /usr/local/etc/php/conf.d/php-ext-igbinary.ini && \
     echo "yes" | pecl install redis-4.3.0 && echo "extension=redis.so" > /usr/local/etc/php/conf.d/php-ext-redis.ini && \
     echo "" | pecl install yaml && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/php-ext-yaml.ini && \
+# install tika and ytnef
+    apk add --no-cache ytnef openjdk8-jre && \
+    curl -o /usr/local/bin/tika.jar http://packages.tine20.org/tika/tika-app-1.14.jar && \
 # remove php build dependencies
     apk del --purge .build-deps && \
     docker-php-source delete
