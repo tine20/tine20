@@ -2,7 +2,7 @@
 
 return array(
     'buildtype' => '{{getv "/buildtype" "RELEASE"}}',
-    'confdfolder'       => '/etc/tine20/conf.d',
+    'confdfolder' => '/etc/tine20/conf.d',
 
     'logger' => array (
         'active' => true,
@@ -14,25 +14,29 @@ return array(
     'tmpdir' => '{{getv "/tmpdir" "/var/lib/tine20/tmp"}}',
 
     'database' => array(
-        'host'          => '{{getv "/database/host"}}',
-        'dbname'        => '{{getv "/database/dbname"}}',
-        'username'      => '{{getv "/database/username"}}',
-        'password'      => '{{getv "/database/password"}}',
-        'tableprefix'   => '{{getv "/database/tableprefix" "tine20_"}}',
-        'adapter'       => '{{getv "/database/adapter" "pdo_mysql"}}',
+        'host' => '{{getv "/database/host"}}',
+        'dbname' => '{{getv "/database/dbname"}}',
+        'username' => '{{getv "/database/username"}}',
+        'password' => '{{getv "/database/password"}}',
+        'tableprefix'  => '{{getv "/database/tableprefix" "tine20_"}}',
+        'adapter' => '{{getv "/database/adapter" "pdo_mysql"}}',
     ),
 
     'setupuser' => array(
-        'username'      => '{{getv "/setupuser/username"}}',
-        'password'      => '{{getv "/setupuser/password"}}',
+        'username' => '{{getv "/setupuser/username"}}',
+        'password' => '{{getv "/setupuser/password"}}',
     ),
 
-   'login' => array(
-       'username'      => '{{getv "/login/username"}}',
-       'password'      => '{{getv "/login/password"}}',
+    'login' => array(
+        'username' => '{{getv "/login/username"}}',
+        'password' => '{{getv "/login/password"}}',
     ),
 
-    'caching' => array (
+    'fulltext' => array(
+        'tikaJar' => '/usr/local/bin/tika.jar'
+    ),
+
+    caching' => array (
        'active' => {{getv "/caching/active" "true"}},
        'lifetime' => {{getv "/caching/lifetime" "3600"}},
        'backend' => '{{getv "/caching/backend" "File"}}',
