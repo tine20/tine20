@@ -923,11 +923,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
-                $record = $this->getGroupById($modification->record_id);
-                if (!empty($record->list_id)) {
-                    Addressbook_Controller_List::getInstance()->delete($record->list_id);
-                }
-                $this->deleteGroups($modification->record_id);
+                try {
+                    $record = $this->getGroupById($modification->record_id);
+                    if (!empty($record->list_id)) {
+                        Addressbook_Controller_List::getInstance()->delete($record->list_id);
+                    }
+                    $this->deleteGroups($modification->record_id);
+                } catch (Tinebase_Exception_Record_NotDefined $e) {}
                 break;
 
             default:
