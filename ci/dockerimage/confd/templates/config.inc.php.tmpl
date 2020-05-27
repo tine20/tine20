@@ -48,6 +48,10 @@ return array(
        'path' => '{{getv "/caching/path" "/var/lib/tine20/caching"}}',
     ),
 
+    'filesystem' => array(
+        'index_content' => {{getv "/filesystem/index_content" "true"}},
+    ),
+
     'session' => array (
         'lifetime' => {{getv "/session/lifetime" "86400"}},
         'backend' => '{{getv "/session/backend" "File"}}',

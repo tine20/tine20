@@ -31,5 +31,6 @@ keys = [
     "/session/host",
     "/session/port",
     "/session/path",
-    "/credentialcachesharedkey"
+    "/credentialcachesharedkey",
+    "/filesystem/index_content"
 ]
