@@ -25,6 +25,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE012 = __CLASS__ . '::update012';
     const RELEASE012_UPDATE013 = __CLASS__ . '::update013';
     const RELEASE012_UPDATE014 = __CLASS__ . '::update014';
+    const RELEASE012_UPDATE015 = __CLASS__ . '::update015';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -58,6 +59,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE012          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update012',
+            ],
+            self::RELEASE012_UPDATE015          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update015',
             ],
         ],
 
@@ -289,5 +294,14 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         Tinebase_Scheduler::getInstance()->spreadTasks();
 
         $this->addApplicationUpdate('Tinebase', '12.32', self::RELEASE012_UPDATE014);
+    }
+
+    public function update015()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_WebDavLock::class,
+        ]);
+
+        $this->addApplicationUpdate('Tinebase', '12.33', self::RELEASE012_UPDATE015);
     }
 }
