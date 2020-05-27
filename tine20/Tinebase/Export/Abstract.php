@@ -925,6 +925,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_endRow();
     }
 
+    protected function _extendedCFResolving(Tinebase_Record_RecordSet $_records)
+    {
+        $_records->customfields = array();
+        Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+    }
+
     /**
      * resolve records and prepare for export (set user timezone, ...)
      *
@@ -995,8 +1001,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
 
             if (!$this->_FEDataRecordResolving) {
-                $_records->customfields = array();
-                Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+                $this->_extendedCFResolving($_records);
             }
 
             $availableCFNames = [];
