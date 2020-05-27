@@ -35,11 +35,17 @@ services:
       TINE20_SESSION_BACKEND: Redis
       TINE20_SESSION_HOST: cache
       TINE20_CREDENTIALCACHESHAREDKEY: change_me
+      TINE20_ACCEPTED_TERMS_VERSION: 0
+    volumes:
+      - "tine20_files:/var/lib/tine20/files"
     networks:
       - external_network
       - internal_network
     ports:
       - "127.0.0.1:4000:80"
+
+volumes:
+  tine20_files:
 
 networks:
   external_network:
