@@ -45,7 +45,7 @@ RUN apk --no-cache add nginx supervisor curl && \
     echo "" | pecl install yaml && echo "extension=yaml.so" > /usr/local/etc/php/conf.d/php-ext-yaml.ini && \
 # install tika and ytnef
     apk add --no-cache ytnef openjdk8-jre && \
-    curl -o /usr/local/bin/tika.jar http://packages.tine20.org/tika/tika-app-1.14.jar && \
+    wget -O /usr/local/bin/tika.jar http://packages.tine20.org/tika/tika-app-1.14.jar && \
 # remove php build dependencies
     apk del --purge .build-deps && \
     docker-php-source delete
