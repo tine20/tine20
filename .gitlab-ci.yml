@@ -29,8 +29,8 @@ workflow:
   rules:
     # reverse of "docker: build base, dependency, source and test-source image"
     - changes:
-        - ci/dockerimage
-        - tine20/library
+        - ci/dockerimage/**/**
+        - tine20/library/**/***
         - tine20/composer.json
         - tine20/composer.lock
         - tine20/Tinebase/js/package.json
@@ -58,8 +58,8 @@ workflow:
   rules:
     # reverse of "docker: build source and test-source image"
     - changes:
-        - ci/dockerimage
-        - tine20/library
+        - ci/dockerimage/**/**
+        - tine20/library/**/***
         - tine20/composer.json
         - tine20/composer.lock
         - tine20/Tinebase/js/package.json
@@ -170,8 +170,8 @@ workflow:
       when: never
     # reverse of "docker: build source and test-source image"
     - changes:
-        - ci/dockerimage
-        - tine20/library
+        - ci/dockerimage/**/**
+        - tine20/library/**/***
         - tine20/composer.json
         - tine20/composer.lock
         - tine20/Tinebase/js/package.json
