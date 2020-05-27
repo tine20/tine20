@@ -684,26 +684,26 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _addReplyHeaders(Felamimail_Model_Message $message)
     {
         $originalHeaders = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message->original_id);
-        if (! isset($originalHeaders['message-id'])) {
+        if (!isset($originalHeaders['message-id'])) {
             // no message-id -> skip this
             return;
         }
 
         $messageHeaders = is_array($message->headers) ? $message->headers : array();
         $messageHeaders['In-Reply-To'] = $originalHeaders['message-id'];
-        
+
         $references = '';
-        if (isset($originalHeaders['references'])) {
+        if (isset($originalHeaders['references']) && is_string($originalHeaders['references'])) {
             $references = $originalHeaders['references'] . ' ';
-        } else if (isset($originalHeaders['in-reply-to'])) {
+        } else if (isset($originalHeaders['in-reply-to']) && is_string($originalHeaders['in-reply-to'])) {
             $references = $originalHeaders['in-reply-to'] . ' ';
         }
         $references .= $originalHeaders['message-id'];
         $messageHeaders['References'] = $references;
-        
+
         $message->headers = $messageHeaders;
     }
-    
+
     /**
      * add attachments to mail
      *
