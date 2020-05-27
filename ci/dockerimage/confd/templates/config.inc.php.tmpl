@@ -33,10 +33,10 @@ return array(
     ),
 
     'fulltext' => array(
-        'tikaJar' => '/usr/local/bin/tika.jar'
+        'tikaJar' => '/usr/local/bin/tika.jar',
     ),
 
-    caching' => array (
+    'caching' => array (
        'active' => {{getv "/caching/active" "true"}},
        'lifetime' => {{getv "/caching/lifetime" "3600"}},
        'backend' => '{{getv "/caching/backend" "File"}}',
