@@ -663,19 +663,20 @@ class Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * @param $container
-     * @param $args
+     * @param Tinebase_Model_Container $container
+     * @param array $args
+     * @param string $extension
      * @return string
      *
      * @todo add container name (need to strip spaces, special chars, ...)?
      * @todo create subdir for each user?
      */
-    protected function _getVObjectExportFilename($container, $args)
+    protected function _getVObjectExportFilename($container, $args, $extension)
     {
         $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
         return $path . DIRECTORY_SEPARATOR . Tinebase_Core::getUser()->accountLoginName
             // . '_' . $container->name
-            . '_' . substr($container->getId(), 0, 8) . '.ics';
+            . '_' . substr($container->getId(), 0, 8) . '.' . $extension;
     }
 
     /**
@@ -695,7 +696,8 @@ class Tinebase_Frontend_Cli_Abstract
         if (! isset($options['stdout']) || $options['stdout'] != 1) {
             if (! isset($options['filename'])) {
                 $container = Tinebase_Container::getInstance()->getContainerById($containerId);
-                $options['filename'] = $this->_getVObjectExportFilename($container, $options);
+                $extension = $exportClass === Addressbook_Export_VCard::class ? 'vcf' : 'ics';
+                $options['filename'] = $this->_getVObjectExportFilename($container, $options, $extension);
             }
         } else {
             unset($options['filename']);
