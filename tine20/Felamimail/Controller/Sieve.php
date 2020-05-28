@@ -225,8 +225,11 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_vacation->getId());
-        if ($this->_doAclCheck && $account->user_id !== Tinebase_Core::getUser()->getId()) {
+        if (!($account->type === Felamimail_Model_Account::TYPE_SHARED) && $this->_doAclCheck && $account->user_id !== Tinebase_Core::getUser()->getId()) {
             throw new Tinebase_Exception_AccessDenied('It is not allowed to set the vacation message of another user.');
+        }
+        if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+            Felamimail_Controller_Account::getInstance()->checkGrantForSharedAccount($account, Felamimail_Model_AccountGrants::GRANT_EDIT);
         }
         
         $this->_setSieveBackendAndAuthenticate($account);
@@ -505,6 +508,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function setRules($_accountId, Tinebase_Record_RecordSet $_rules)
     {
+        $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+            Felamimail_Controller_Account::getInstance()->checkGrantForSharedAccount($account, Felamimail_Model_AccountGrants::GRANT_EDIT);
+        }
         $script = $this->getSieveScript($_accountId);
         
         if ($script === NULL) {

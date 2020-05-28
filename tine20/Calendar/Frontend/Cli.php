@@ -50,26 +50,6 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
              )
         ),
-        'importCalDavCalendars' => array(
-            'description'    => 'import calendars without events from a CalDav source',
-            'params'         => array(
-                'url'        => 'CalDav source URL',
-                'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
-             )
-        ),
-        'importegw14' => array(
-            'description'    => 'imports calendars/events from egw 1.4',
-            'params'         => array(
-                'host'       => 'dbhost',
-                'username'   => 'username',
-                'password'   => 'password',
-                'dbname'     => 'dbname'
-            )
-        ),
-        'exportICS' => array(  
-            'description'    => "export calendar as ics", 
-            'params'         => array('container_id') 
-        ),
     );
     
     /**
@@ -97,68 +77,19 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         parent::_import($_opts);
     }
-    
-    /**
-     * exports calendars as ICS
-     *
-     * @param Zend_Console_Getopt $_opts
-     */
-    public function exportICS($_opts)
-    {
-        Tinebase_Core::set('HOSTNAME', 'localhost');
-        
-        $opts = $_opts->getRemainingArgs();
-        $container_id = $opts[0];
-        $filter = new Calendar_Model_EventFilter(array(
-            array(
-                'field'     => 'container_id',
-                'operator'  => 'equals',
-                'value'     => $container_id
-            )
-
-        ));
-        $result = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'get');
-        if ($result->count() == 0) {
-            throw new Tinebase_Exception('this calendar does not contain any records.');
-        }
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory("generic");
-        $result = $converter->fromTine20RecordSet($result);
-        print $result->serialize();
-    }
 
     /**
-     * exports calendars as ICS
-     * --method Calendar.exportVCalendar --username=USER -- container_id=CALID filename=/my/export/file.ics
+     * exports calendars as ICS (VCALENDAR)
+     * examples:
+     *      --method Calendar.exportVCalendar --username=USER -- container_id=CALID filename=/my/export/file.ics
+     *      --method Calendar.exportVCalendar --username=USER -- type=personal path=/my/export/path/
      *
      * @param $_opts
      * @return boolean
      */
     public function exportVCalendar($_opts)
     {
-        $args = $this->_parseArgs($_opts);
-
-        // @todo implement
-        //   - allow to export all calendars of a user (create zip)
-        //   - allow to export all personal calendars (create zip)
-        //   - allow to export all shared calendars (create zip)
-
-        if (isset($args['container_id'])) {
-            $containers = explode(',', $args['container_id']);
-            foreach ($containers as $containerId) {
-                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class,
-                [
-                    ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
-                    // TODO add as param
-                    // for keeping the data small
-                    // ['field' => 'dtstart', 'operator' => 'inweek', 'value' => 20],
-                ]);
-                $export = new Calendar_Export_VCalendar($filter, null, $args);
-                $export->generate();
-                $export->write();
-            }
-        }
-
-        return 0;
+        return $this->_exportVObject($_opts, Calendar_Model_Event::class, Calendar_Export_VCalendar::class);
     }
 
     /**
@@ -229,21 +160,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $be = new Calendar_Backend_Sql();
         $be->repairDanglingDisplaycontainerEvents();
     }
-    
-    /**
-     * import calendars from a CalDav source
-     * 
-     * param Zend_Console_Getopt $_opts
-    public function importCalDavCalendars(Zend_Console_Getopt $_opts)
-    {
-        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
-        
-        $this->_addOutputLogWriter(4);
-        
-        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
-        $caldavCli->importAllCalendars();
-    }
-    
+
     /**
      * import calendar events from a CalDav source
      * 
@@ -385,7 +302,6 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
     }
-
 
     /**
      *

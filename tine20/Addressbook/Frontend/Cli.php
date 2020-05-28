@@ -181,7 +181,21 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         parent::_import($_opts);
     }
-    
+
+    /**
+     * exports contacts as VCARDs / VCF file
+     * examples:
+     *      --method Addressbook.exportVCard --username=USER -- container_id=CONTAINER_ID filename=/my/export/file.vcf
+     *      --method Addressbook.exportVCard --username=USER -- container_id=CONTAINER_ID stdout=1
+     *
+     * @param $_opts
+     * @return boolean
+     */
+    public function exportVCard($_opts)
+    {
+        return $this->_exportVObject($_opts, Addressbook_Model_Contact::class, Addressbook_Export_VCard::class);
+    }
+
     /**
      * export contacts csv to STDOUT
      * 

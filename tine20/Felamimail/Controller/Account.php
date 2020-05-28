@@ -1435,6 +1435,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 . $feisu->getMessage());
             // try again with INBOX as parent because some IMAP servers can not handle namespaces correctly
             $result = Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'], 'INBOX');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            // folder already there ...
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                . $tesg->getMessage());
         }
         
         return $result;
@@ -2057,5 +2061,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     public function getSharedAccountEmailUser(Felamimail_Model_Account $account)
     {
         return Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account, ['user_id' => 'user_id']);
+    }
+
+    /**
+     * @param $account
+     * @param $grant
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function checkGrantForSharedAccount($account, $grant)
+    {
+             // TODO generalize that? Tinebase_Core::getUser()->hasGrant() anyone?
+            $userGrants = Felamimail_Controller_Account::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(),
+                $account);
+            if (!$userGrants->{$grant}) {
+                throw new Tinebase_Exception_AccessDenied(
+                    'User is not allowed to send a message with this account');
+            }
     }
 }

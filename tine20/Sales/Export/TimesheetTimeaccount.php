@@ -91,9 +91,9 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
 
             foreach ($this->_records as $record) {
                 if ($record->tags && $record->tags->filter('name', static::TAG_SUM)->count() > 0) {
-                    $this->_contextSumTag += $record->duration;
+                    $this->_contextSumTag += $record->accounting_time;
                 } else {
-                    $this->_contextSum += $record->duration;
+                    $this->_contextSum += $record->accounting_time;
                 }
             }
         }

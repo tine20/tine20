@@ -45,6 +45,7 @@
     TINE20_EMAIL_SIEVE: "hostname:dovecot,port:4190,ssl:none"
     NODE_TOTAL: "$CI_NODE_TOTAL"
     NODE_INDEX: "$CI_NODE_INDEX"
+    TINE20_ACCEPTED_TERMS_VERSION: 1000
   services:
     - *abstract_jobs-mariadb_service
     - *abstract_jobs-redis_service

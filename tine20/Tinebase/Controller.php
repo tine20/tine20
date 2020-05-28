@@ -1055,6 +1055,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ]))->toArray());
         });
 
+        $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/health', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'healthCheck', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/_status[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatus', [
@@ -1080,6 +1087,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * @return \Zend\Diactoros\Response
      * @throws Tinebase_Exception_AccessDenied
+     *
+     * @todo replace with "healthCheck"?
      */
     public function getStatus($apiKey = null)
     {
@@ -1098,6 +1107,104 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         ];
         $response = new \Zend\Diactoros\Response\JsonResponse($data);
         return $response;
+    }
+
+    /**
+     * return tine20 health (json encoded)
+     * - status can be one of [pass, fail, warn]
+     * - returns http error code 500 on fail
+     * - checks: config, db, temp dir, files dir
+     * - client ip address needs to be in Tinebase_Config::ALLOWEDHEALTHCHECKIPS
+     *
+     * @return \Zend\Diactoros\Response
+     *
+     * @todo add cache check (see \Tinebase_Frontend_Cli::monitoringCheckCache + add $this->checkCache())
+     * @todo use api key instead of client whitelist?
+     */
+    public function healthCheck()
+    {
+        $clientIp = Tinebase_Core::getRequest()->getRemoteAddress();
+        if (! in_array($clientIp, Tinebase_Config::getInstance()->{Tinebase_Config::ALLOWEDHEALTHCHECKIPS})) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' client ip not allowed: '
+                    . $clientIp);
+            return new \Zend\Diactoros\Response('php://memory', 404);
+        }
+
+        $status = 'pass';
+        $problems = [];
+        if (! Tinebase_Controller::getInstance()->checkConfig()) {
+            $status = 'fail';
+            $problems[] = 'config';
+        }
+
+        try {
+            Tinebase_Core::getDb();
+        } catch (Zend_Db_Adapter_Exception $zdae) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' '
+                    . $zdae->getMessage());
+            $status = 'fail';
+            $problems[] = 'database';
+        }
+
+        $dirsToCheck = [
+            'temp dir' => Tinebase_Core::getTempDir(),
+            'files dir' => Tinebase_Core::getConfig()->filesdir
+        ];
+        foreach ($dirsToCheck as $key => $dir) {
+            if (empty($dir)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $key . ' not configured');
+                $status = 'fail';
+                $problems[] = $key;
+            } else {
+                $filename = $dir . DIRECTORY_SEPARATOR . __METHOD__ . Tinebase_Record_Abstract::generateUID(10);
+                try {
+                    file_put_contents($filename, 'abc');
+                    unlink($filename);
+                } catch (Throwable $t) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $t->getMessage());
+                    $status = 'fail';
+                    $problems[] = $key;
+                }
+            }
+        }
+
+        $code = $status === 'fail' ? 500 : 200;
+        $data = [
+            'status' => $status,
+            'problems' => $problems,
+        ];
+        return new \Zend\Diactoros\Response\JsonResponse($data, $code);
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkConfig()
+    {
+        $configfile = Setup_Core::getConfigFilePath();
+        if ($configfile) {
+            $configfile = escapeshellcmd($configfile);
+            if (preg_match('/^win/i', PHP_OS)) {
+                exec("php -l $configfile 2> NUL", $error, $code);
+            } else {
+                exec("php -l $configfile 2> /dev/null", $error, $code);
+            }
+            if ($code == 0) {
+                return true;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
+                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Config file syntax error');
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Config file missing');
+        }
+
+        return false;
     }
 
     /**

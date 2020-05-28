@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/TimeaccountResponsibleFilterModel.js:30 Model/Timeaccount.php:275
+#: js/TimeaccountResponsibleFilterModel.js:30 Model/Timeaccount.php:265
 msgid "Responsible"
 msgstr "Responsible"
 
@@ -54,9 +54,9 @@ msgstr "Total Time"
 msgid "Time of Billable Timesheets"
 msgstr "Time of Billable Timesheets"
 
-#: js/TimesheetGridPanel.js:180 js/TimesheetEditDialog.js:296
-#: js/TimesheetEditDialog.js:358 js/TimeaccountEditDialog.js:244
-#: Model/Timeaccount.php:154 Model/Timesheet.php:229
+#: js/TimesheetGridPanel.js:180 js/TimesheetEditDialog.js:369
+#: js/TimeaccountEditDialog.js:248 Model/Timeaccount.php:155
+#: Model/Timesheet.php:238
 msgid "Description"
 msgstr "Description"
 
@@ -85,111 +85,49 @@ msgstr "Export as CSV"
 msgid "Export as ..."
 msgstr "Export as ..."
 
-#: js/DurationSpinner.js:97
-msgid "Not a valid time"
-msgstr "Not a valid time"
-
-#: js/TimesheetEditDialog.js:193 Model/Timesheet.php:77
-msgid "Account"
-msgstr "Account"
-
-#: js/TimesheetEditDialog.js:198 Model/Timesheet.php:117
-#: Model/Timesheet.php:125
-msgid "Billable"
-msgstr "Billable"
-
-#: js/TimesheetEditDialog.js:204 Model/Timesheet.php:164
-msgid "Cleared"
-msgstr "Cleared"
-
-#: js/TimesheetEditDialog.js:214 js/TimeaccountEditDialog.js:139
-msgid "Cleared In"
-msgstr "Cleared In"
-
-#: js/TimesheetEditDialog.js:223 js/TimeaccountEditDialog.js:200
-#: Model/Timeaccount.php:209 Model/Timesheet.php:141
-msgid "Invoice"
-msgstr "Invoice"
-
-#: js/TimesheetEditDialog.js:242 Model/Timesheet.php:27
+#: js/TimesheetEditDialog.js:225 Model/Timesheet.php:35
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Timesheet"
 msgstr[1] "Timesheets"
 
-#: js/TimesheetEditDialog.js:259 js/TimeaccountEditDialog.js:216
-#: Model/Timeaccount.php:311
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Time Account"
-msgstr[1] "Time Accounts"
+#: js/TimesheetEditDialog.js:286
+msgid "Accounting"
+msgstr "Accounting"
 
-#: js/TimesheetEditDialog.js:260
-msgid "Select Time Account..."
-msgstr "Select Time Account..."
-
-#: js/TimesheetEditDialog.js:270 Model/Timesheet.php:222
-msgid "Duration"
-msgstr "Duration"
-
-#: js/TimesheetEditDialog.js:277 Model/Timesheet.php:181
-#: Model/Timesheet.php:188
-msgid "Date"
-msgstr "Date"
-
-#: js/TimesheetEditDialog.js:283
-msgid "Start"
-msgstr "Start"
-
-#: js/TimesheetEditDialog.js:285 js/TimesheetEditDialog.js:291
-msgid "not set"
-msgstr "not set"
-
-#: js/TimesheetEditDialog.js:289
-msgid "End"
-msgstr "End"
-
-#: js/TimesheetEditDialog.js:297
-msgid "Enter description..."
-msgstr "Enter description..."
-
-#: js/TimesheetEditDialog.js:315
-msgid "Need for Clarification"
-msgstr "Need for Clarification"
-
-#: js/TimesheetEditDialog.js:341 Model/Timeaccount.php:53
+#: js/TimesheetEditDialog.js:352 Model/Timeaccount.php:57
 msgid "Timeaccount"
 msgid_plural "Timeaccounts"
 msgstr[0] "Timeaccount"
 msgstr[1] "Timeaccounts"
 
-#: js/TimesheetEditDialog.js:394
+#: js/TimesheetEditDialog.js:405
 msgid "Failed"
 msgstr "Failed"
 
-#: js/TimesheetEditDialog.js:395
+#: js/TimesheetEditDialog.js:406
 #, python-brace-format
 msgid "Could not save {0}."
 msgstr "Could not save {0}."
 
-#: js/TimesheetEditDialog.js:396
+#: js/TimesheetEditDialog.js:407
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Booking deadline for this Timeaccount has been exceeded."
 
-#: js/TimesheetEditDialog.js:404 js/TimesheetEditDialog.js:416
+#: js/TimesheetEditDialog.js:415 js/TimesheetEditDialog.js:427
 msgid "Closed Timeaccount Warning!"
 msgstr "Closed Timeaccount Warning!"
 
-#: js/TimesheetEditDialog.js:405
+#: js/TimesheetEditDialog.js:416
 msgid "The selected Time Account is already closed."
 msgstr "The selected Time Account is already closed."
 
-#: js/TimesheetEditDialog.js:417
+#: js/TimesheetEditDialog.js:428
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr "The selected Time Account is already closed. Do you wish to continue anyway?"
 
-#: js/TimeAccountContractFilterModel.js:30 Model/Timeaccount.php:108
-#: Model/Timeaccount.php:287
+#: js/TimeAccountContractFilterModel.js:30 Model/Timeaccount.php:109
+#: Model/Timeaccount.php:277
 msgid "Contract"
 msgstr "Contract"
 
@@ -197,102 +135,102 @@ msgstr "Contract"
 msgid "without contract"
 msgstr "without contract"
 
-#: js/TimeaccountEditDialog.js:69
+#: js/TimeaccountEditDialog.js:70
 msgid "Add New Timeaccount"
 msgstr "Add New Timeaccount"
 
-#: js/TimeaccountEditDialog.js:96
+#: js/TimeaccountEditDialog.js:97
 msgid "Unit"
 msgstr "Unit"
 
-#: js/TimeaccountEditDialog.js:100
+#: js/TimeaccountEditDialog.js:101
 msgid "Unit Price"
 msgstr "Unit Price"
 
-#: js/TimeaccountEditDialog.js:105
+#: js/TimeaccountEditDialog.js:107
+msgid "Factor"
+msgstr "Factor"
+
+#: js/TimeaccountEditDialog.js:113
 msgid "Budget"
 msgstr "Budget"
 
-#: js/TimeaccountEditDialog.js:110 Model/Timeaccount.php:187
+#: js/TimeaccountEditDialog.js:118 Model/Timeaccount.php:189
 msgid "Status"
 msgstr "Status"
 
-#: js/TimeaccountEditDialog.js:116 js/Timetracker.js:19 js/Timetracker.js:24
-#: js/Timetracker.js:50 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountEditDialog.js:124 js/Timetracker.js:19 js/Timetracker.js:24
+#: js/Timetracker.js:50 js/TimeAccountStatusFilterModel.js:44
 msgid "closed"
 msgstr "closed"
 
-#: js/TimeaccountEditDialog.js:116 js/Timetracker.js:50
-#: js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountEditDialog.js:124 js/Timetracker.js:50
+#: js/TimeAccountStatusFilterModel.js:44
 msgid "open"
 msgstr "open"
 
-#: js/TimeaccountEditDialog.js:118 Model/Timeaccount.php:230
-msgid "Billed"
-msgstr "Billed"
+#: js/TimeaccountEditDialog.js:145
+msgid "Cleared In"
+msgstr "Cleared In"
 
-#: js/TimeaccountEditDialog.js:126 js/TimeAccountBilledFilterModel.js:46
-#: Model/Timeaccount.php:227
-msgid "not yet billed"
-msgstr "not yet billed"
-
-#: js/TimeaccountEditDialog.js:127 js/TimeAccountBilledFilterModel.js:47
-#: Model/Timeaccount.php:228
-msgid "to bill"
-msgstr "to bill"
-
-#: js/TimeaccountEditDialog.js:128 js/TimeAccountBilledFilterModel.js:48
-#: Model/Timeaccount.php:229
-msgid "billed"
-msgstr "billed"
-
-#: js/TimeaccountEditDialog.js:144 Model/Timeaccount.php:252
-msgid "Booking deadline"
-msgstr "Booking deadline"
-
-#: js/TimeaccountEditDialog.js:152
-msgid "none"
-msgstr "none"
-
-#: js/TimeaccountEditDialog.js:153
-msgid "last week"
-msgstr "last week"
-
-#: js/TimeaccountEditDialog.js:160 Model/Timeaccount.php:245
+#: js/TimeaccountEditDialog.js:164 Model/Timeaccount.php:237
 msgid "Cleared at"
 msgstr "Cleared at"
 
-#: js/TimeaccountEditDialog.js:166 Model/Timeaccount.php:303
+#: js/TimeaccountEditDialog.js:170 Model/Timeaccount.php:299
 msgid "Cost Center"
 msgstr "Cost Center"
 
-#: js/TimeaccountEditDialog.js:181 Model/Timeaccount.php:307
+#: js/TimeaccountEditDialog.js:185 Model/Timeaccount.php:303
 msgid "Responsible Person"
 msgstr "Responsible Person"
 
-#: js/TimeaccountEditDialog.js:190
+#: js/TimeaccountEditDialog.js:194
 msgid "Timesheets are billable"
 msgstr "Timesheets are billable"
 
-#: js/TimeaccountEditDialog.js:232 Model/Timeaccount.php:146
+#: js/TimeaccountEditDialog.js:204 Model/Timeaccount.php:212
+#: Model/Timesheet.php:151
+msgid "Invoice"
+msgstr "Invoice"
+
+#: js/TimeaccountEditDialog.js:220 Model/Timeaccount.php:307
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Time Account"
+msgstr[1] "Time Accounts"
+
+#: js/TimeaccountEditDialog.js:236 Model/Timeaccount.php:147
 msgid "Number"
 msgstr "Number"
 
-#: js/TimeaccountEditDialog.js:238 Model/Timeaccount.php:139
+#: js/TimeaccountEditDialog.js:242 Model/Timeaccount.php:140
 msgid "Title"
 msgstr "Title"
 
-#: js/TimeaccountEditDialog.js:269
+#: js/TimeaccountEditDialog.js:273
 msgid "Access"
 msgstr "Access"
 
-#: js/TimeaccountEditDialog.js:284
+#: js/TimeaccountEditDialog.js:288
 msgid "Permissions"
 msgstr "Permissions"
 
 #: js/TimeAccountBilledFilterModel.js:24
 msgid "Time Account - Billed"
 msgstr "Time Account - Billed"
+
+#: js/TimeAccountBilledFilterModel.js:44 Config.php:88
+msgid "not yet billed"
+msgstr "not yet billed"
+
+#: js/TimeAccountBilledFilterModel.js:45
+msgid "to bill"
+msgstr "to bill"
+
+#: js/TimeAccountBilledFilterModel.js:46 Config.php:90
+msgid "billed"
+msgstr "billed"
 
 #: js/TimeAccountStatusFilterModel.js:24
 msgid "Time Account - Status"
@@ -375,59 +313,107 @@ msgstr "Quick Tag allows to simply assign a predefined tag by the context menu."
 msgid "default"
 msgstr "default"
 
-#: Config.php:38
+#: Config.php:48
 msgid "Enabled Features"
 msgstr "Enabled Features"
 
-#: Config.php:40
+#: Config.php:50
 msgid "Enabled Features in Timetracker Application."
 msgstr "Enabled Features in Timetracker Application."
 
-#: Config.php:48
+#: Config.php:58
 msgid "Timeaccount Bookmarks"
 msgstr "Timeaccount Bookmarks"
 
-#: Config.php:59 Config.php:61 Model/Timesheet.php:243
-msgid "Type"
-msgstr "Type"
+#: Config.php:75
+msgid "none"
+msgstr "none"
 
-#: Config.php:69
-msgid "Working time"
-msgstr "Working time"
+#: Config.php:76
+msgid "last week"
+msgstr "last week"
 
-#: Config.php:70
-msgid "Project time"
-msgstr "Project time"
+#: Config.php:89
+msgid "status to bill"
+msgstr "status to bill"
 
-#: Config.php:51
+#: Config.php:61
 msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
 msgstr "Add timeaccounts as favorite to speedup timesheet creation.)"
 
-#: Model/Timeaccount.php:176
+#: Model/Timeaccount.php:178
 msgid "Price"
 msgstr "Price"
 
-#: Model/Timeaccount.php:203 Model/Timesheet.php:133
+#: Model/Timeaccount.php:206 Model/Timesheet.php:143
 msgid "Cleared in"
 msgstr "Cleared in"
 
-#: Model/Timeaccount.php:705 Model/Timesheet.php:293
+#: Model/Timeaccount.php:232
+msgid "Billed"
+msgstr "Billed"
+
+#: Model/Timeaccount.php:247
+msgid "Booking deadline"
+msgstr "Booking deadline"
+
+#: Model/Timeaccount.php:286 Model/Timesheet.php:250
+msgid "Accounting time factor"
+msgstr "Accounting time factor"
+
+#: Model/Timeaccount.php:701 Model/Timesheet.php:321
 msgid "hour"
 msgstr "hour"
 
-#: Model/Timesheet.php:84
+#: Model/Timesheet.php:87
+msgid "Account"
+msgstr "Account"
+
+#: Model/Timesheet.php:94
 msgid "Time Account (Number - Title)"
 msgstr "Time Account (Number - Title)"
 
-#: Model/Timesheet.php:196
+#: Model/Timesheet.php:120 Model/Timesheet.php:130 Model/Timesheet.php:135
+msgid "Billable"
+msgstr "Billable"
+
+#: Model/Timesheet.php:171 Model/Timesheet.php:176
+msgid "Cleared"
+msgstr "Cleared"
+
+#: Model/Timesheet.php:190 Model/Timesheet.php:197
+msgid "Date"
+msgstr "Date"
+
+#: Model/Timesheet.php:205
 msgid "Start time"
 msgstr "Start time"
 
-#: Model/Timesheet.php:214
+#: Model/Timesheet.php:223
 msgid "End time"
 msgstr "End time"
 
-#: Model/Timesheet.php:250
+#: Model/Timesheet.php:231
+msgid "Duration"
+msgstr "Duration"
+
+#: Model/Timesheet.php:244
+msgid "Need for Clarification"
+msgstr "Need for Clarification"
+
+#: Model/Timesheet.php:256
+msgid "Accounting time"
+msgstr "Accounting time"
+
+#: Model/Timesheet.php:263
+msgid "Workingtime is cleared"
+msgstr "Workingtime is cleared"
+
+#: Model/Timesheet.php:269
+msgid "Workingtime cleared in"
+msgstr "Workingtime cleared in"
+
+#: Model/Timesheet.php:278
 msgid "Time Account closed"
 msgstr "Time Account closed"
 

@@ -28,6 +28,7 @@ class Addressbook_AllTests
         $suite->addTest(Addressbook_Convert_AllTests::suite());
         $suite->addTest(Addressbook_Frontend_AllTests::suite());
         $suite->addTest(Addressbook_Import_AllTests::suite());
+        $suite->addTest(Addressbook_Export_AllTests::suite());
 
         $suite->addTestSuite(Addressbook_ControllerTest::class);
         $suite->addTestSuite(Addressbook_Controller_ListTest::class);
@@ -35,8 +36,6 @@ class Addressbook_AllTests
         $suite->addTestSuite(Addressbook_JsonTest::class);
         $suite->addTestSuite(Addressbook_CliTest::class);
         $suite->addTestSuite(Addressbook_Model_ContactIdFilterTest::class);
-        $suite->addTestSuite(Addressbook_Export_DocTest::class);
-        $suite->addTestSuite(Addressbook_Export_XlsTest::class);
 
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
             $suite->addTestSuite(Addressbook_LdapSyncTest::class);

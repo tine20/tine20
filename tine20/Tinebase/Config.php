@@ -268,7 +268,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ALLOWEDJSONORIGINS = 'allowedJsonOrigins';
-    
+
+    /**
+     * Config key for configuring allowed health check ips
+     *
+     * @var string
+     */
+    const ALLOWEDHEALTHCHECKIPS = 'allowedHealthCheckIPs';
+
     /**
      * Config key for acceptedTermsVersion
      * @var string
@@ -1443,8 +1450,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status',
             'type'                  => 'bool',
             'default'               => false,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
             'setBySetupModule'      => TRUE,
         ),
         self::ALLOWEDJSONORIGINS => array(
@@ -1453,9 +1460,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Allowed Origins for the JSON API.')
             'description'           => 'Allowed Origins for the JSON API.',
             'type'                  => 'array',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
+        ),
+        self::ALLOWEDHEALTHCHECKIPS => array(
+            //_('Allowed Health Check IPs')
+            'label'                 => 'Allowed Health Check IPs',
+            //_('Hosts that are allowed to access the TINEURL/health API')
+            'description'           => 'Hosts that are allowed to access the TINEURL/health API',
+            'type'                  => 'array',
+            'default'               => ['127.0.0.1'],
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
         ),
         self::ACCEPTEDTERMSVERSION => array(
                                    //_('Accepted Terms Version')

@@ -393,9 +393,6 @@ class ActiveSync_Command_SyncTests extends TestCase
      * @param string $filename
      * @param string $testHeaderValue
      * @return string output
-     *
-     * @group nogitlabci
-     * gitlabci: ... Failed asserting that null is not null (sync doc is null)
      */
     public function testSyncOfEmails($filename = 'multipart_mixed.eml', $testHeaderValue = 'multipart/mixed')
     {
@@ -524,10 +521,6 @@ class ActiveSync_Command_SyncTests extends TestCase
         return $output;
     }
 
-    /**
-     * @group nogitlabci
-     * gitlabci: ... Failed asserting that null is not null (sync doc is null)
-     */
     public function testSyncOfGarbledEmail()
     {
         $this->_testNeedsTransaction();

@@ -9,23 +9,14 @@
 
 /**
  * @package     Calendar
- *
- * @todo create generic "SabreDAV" export class in Tinebase?
  */
-class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
+class Calendar_Export_VCalendar extends Tinebase_Export_VObject
 {
     /**
      * @var Calendar_Convert_Event_VCalendar_Tine
      */
     protected $_converter = null;
-
-    /**
-     * @var \Sabre\VObject\Component\VCalendar
-     */
-    protected $_vcalendar = null;
-
     protected $_defaultExportname = 'cal_default_vcalendar';
-
     protected $_format = 'ics';
 
     /**
@@ -38,52 +29,58 @@ class Calendar_Export_VCalendar extends Tinebase_Export_Abstract
         return 'text/calendar';
     }
 
+    /**
+     * @return string|null
+     */
     public function generate()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Generating VCALENDAR export ...');
+        }
+
         $this->_converter = new Calendar_Convert_Event_VCalendar_Tine();
+
         $this->_converter->setOptions([
             Calendar_Convert_Event_VCalendar_Tine::OPTION_ADD_ATTACHMENTS_BINARY => true,
         ]);
         $this->_exportRecords();
-        return $this->_vcalendar !== null;
+
+        return $this->_returnExportFilename();
     }
 
-    /**
-     * @param Tinebase_Record_Interface $_record
-     */
-    public function _processRecord(Tinebase_Record_Interface $_record)
+    protected function _addRecordToFile(Tinebase_Record_Interface $_record)
     {
-        if ($this->_vcalendar === null) {
-            $this->_vcalendar = $this->_createVCalendar($_record);
-        }
+        $this->_checkMaxFileSize();
 
-        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($_record);
-        $this->_converter->addEventToVCalendar($this->_vcalendar, $_record);
+        $document = $this->_createDocument($_record, true);
+        $this->_converter->addEventToVCalendar($document, $_record);
+
+        if ($this->_exportFileHandle === null) {
+            $this->_createExportFilehandle();
+            fwrite($this->_exportFileHandle, $document->serialize());
+        } else if ($document instanceof \Sabre\VObject\Component\VCalendar) {
+            $objects = $document->select('VEVENT');
+            foreach ($objects as $object) {
+                $this->_addComponentToEndOfFile($object);
+            }
+        }
     }
 
-    protected function _createVCalendar(Calendar_Model_Event $_record)
+    protected function _createDocument(Tinebase_Record_Interface $_record)
     {
         return $this->_converter->createVCalendar($_record);
     }
 
-    /**
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function write()
+    protected function _addRecordToDocument(Tinebase_Record_Interface $_record)
     {
-        if ($this->_vcalendar === null) {
-            throw new Tinebase_Exception_NotFound('empty export');
-        }
+        $this->_converter->addEventToVCalendar($this->_document, $_record);
+    }
 
-        $vcalSerialized = $this->_vcalendar->serialize();
-        if ($this->_config->filename) {
-            if (file_exists($this->_config->filename)) {
-                throw new Tinebase_Exception_AccessDenied('Could not overwrite existing file');
-            }
-            file_put_contents($this->_config->filename, $vcalSerialized);
-        } else {
-            echo $vcalSerialized;
-        }
+    protected function _addComponentToEndOfFile(Sabre\VObject\Component $component)
+    {
+        // rewind to just before END:VCALENDAR
+        fseek($this->_exportFileHandle, ftell($this->_exportFileHandle) - strlen("END:VCALENDAR") - 2);
+        fwrite($this->_exportFileHandle, $component->serialize());
+        fwrite($this->_exportFileHandle, "END:VCALENDAR\r\n");
     }
 }

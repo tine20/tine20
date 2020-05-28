@@ -151,7 +151,8 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Quicksearch'),     field: 'query',    operators: ['contains']},
-                {label: this.app.i18n._('Device ID'),       field: 'deviceid', operators: ['contains']}
+                {label: this.app.i18n._('Device ID'),       field: 'deviceid', operators: ['contains']},
+                {label: this.app.i18n._('Owner'),           field: 'owner_id', valueType: 'user'}
             ],
             defaultFilter: 'query',
             /*filters: [

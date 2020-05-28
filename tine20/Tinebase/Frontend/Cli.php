@@ -988,6 +988,64 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * set node acl
+     *
+     * example:
+     * $ php tine20.php --method Tinebase.setNodeAcl [-d] -- id=NODEID \
+     *   grants='[{"account":"$USERNAME","account_type":"user","readGrant":1,"writeGrant":1},{"account":"$GROUPNAME","account_type":"group","readGrant":1}]'
+     *
+     * @param $_opts
+     * @return integer
+     *
+     * @todo generalize this - see \Tinebase_Frontend_Cli::setCustomfieldAcl
+     * @todo add a test
+     */
+    public function setNodeAcl(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+
+        $args = $this->_parseArgs($_opts, ['id', 'grants'], 'other', false);
+        $node = Tinebase_FileSystem::getInstance()->get($args['id']);
+
+        $grantsArray = Tinebase_Helper::jsonDecode($args['grants']);
+        #print_r($grantsArray);
+        // @todo generalize this - see \Tinebase_Frontend_Cli::setCustomfieldAcl
+        $grantsToSet = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
+        foreach ($grantsArray as $grant) {
+            $accountType = isset($grant['account_type']) ? $grant['account_type'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+            if (isset($grant['account'])) {
+                if ($accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                    $group = Tinebase_Group::getInstance()->getGroupByName($grant['account']);
+                    $accountId = $group->getId();
+                } else {
+                    $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
+                    $accountId = $user->getId();
+                }
+            } else {
+                $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
+            }
+            $grantRecord = new Tinebase_Model_Grants([
+                'account_id' => $accountId,
+                'account_type' => $accountType,
+            ]);
+            foreach (Tinebase_Model_Grants::getAllGrants() as $possibleGrant) {
+                if (isset($grant[$possibleGrant])) {
+                    $grantRecord->{$possibleGrant} = (boolean) $grant[$possibleGrant];
+                }
+            }
+            $grantsToSet->addRecord($grantRecord);
+        }
+        if ($_opts->d) {
+            echo "DRYRUN! grants to be set:\n";
+            print_r($grantsToSet->toArray());
+        } else {
+            Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grantsToSet);
+        }
+
+        return 0;
+    }
+
+    /**
      * nagios monitoring for tine 2.0 database connection
      * 
      * @return integer
@@ -1033,26 +1091,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function monitoringCheckConfig()
     {
         $message = 'CONFIG FAIL';
-        $configcheck = FALSE;
+        $configcheck = Tinebase_Controller::getInstance()->checkConfig();
         $result = 0;
-        
-        $configfile = Setup_Core::getConfigFilePath();
-        if ($configfile) {
-            $configfile = escapeshellcmd($configfile);
-            if (preg_match('/^win/i', PHP_OS)) {
-                exec("php -l $configfile 2> NUL", $error, $code);
-            } else {
-                exec("php -l $configfile 2> /dev/null", $error, $code);
-            }
-            if ($code == 0) {
-                $configcheck = TRUE;
-            } else {
-                $message .= ': CONFIG FILE SYNTAX ERROR';
-            }
-        } else {
-            $message .= ': CONFIG FILE MISSING';
-        }
-        
+
         if ($configcheck) {
             $message = "CONFIG FILE OK";
         } else {
@@ -1118,7 +1159,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * nagios monitoring for tine 2.0 logins during the last 5 mins
+     * nagios monitoring for successful tine 2.0 logins during the last 5 mins
      * 
      * @return number
      * 
@@ -1131,7 +1172,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         try {
             $filter = new Tinebase_Model_AccessLogFilter(array(
-                array('field' => 'li', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMinute(5))
+                array('field' => 'li', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMinute(5)),
+                array('field' => 'result', 'operator' => 'equals', 'value' => 1),
             ));
             $accesslogs = Tinebase_AccessLog::getInstance()->search($filter, NULL, FALSE, TRUE);
             $valueString = ' | count=' . count($accesslogs) . ';;;;';

@@ -22,7 +22,7 @@ describe('Edit Contact', () => {
         await popupWindow.click('.new-row .x-form-trigger.x-form-arrow-trigger');
         await popupWindow.waitFor(500);
         await popupWindow.screenshot({path: 'screenshots/5_aufgaben/3_aufgaben_alarm.png'});
-    })
+    });
 });
 
 afterAll(async () => {

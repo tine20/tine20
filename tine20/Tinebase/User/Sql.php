@@ -562,16 +562,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * set password in plugins
      * 
-     * @param Tinebase_Model_FullUser $user
-     * @param Tinebase_Model_FullUser $password
-     * @param bool   $encrypt encrypt password
+     * @param Tinebase_Model_User $user
+     * @param string $password
+     * @param bool $encrypt encrypt password
      * @throws Tinebase_Exception_Backend
      */
-    protected function _setPluginsPassword($user, $password, $encrypt = TRUE)
+    protected function _setPluginsPassword(Tinebase_Model_User $user, $password, $encrypt = TRUE)
     {
         foreach ($this->_sqlPlugins as $plugin) {
             try {
-                $userId = $user instanceof Tinebase_Model_User ? $this->_getPluginUserId($plugin, $user) : $user;
+                $userId = $this->_getPluginUserId($plugin, $user);
                 $plugin->inspectSetPassword($userId, $password, $encrypt);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not change plugin password: ' . $e);
@@ -591,7 +591,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ? $user->getEmailUserId()
             : $user->getId();
     }
-    
+
     /**
      * ensure password policy
      * 
@@ -976,7 +976,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if ($method !== 'inspectGetUserByProperty') {
             $method = 'inspect' . ucfirst($method) . 'User';
         }
-        
+
         // add email user xprops here if configured
         if (Tinebase_EmailUser::isEmailUserPlugin($plugin) && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             $pluginUser = clone($user);
@@ -1592,33 +1592,41 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             case Tinebase_Timemachine_ModificationLog::UPDATED:
                 $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
 
-                if (isset($diff->diff['password'])) {
-                    $diffArray = $diff->diff;
-                    $oldDataArray = $diff->oldData;
-                    $this->setPassword($modification->record_id, $diffArray['password'], false);
-                    unset($diffArray['password']);
-                    unset($diffArray['last_password_change']);
-                    unset($oldDataArray['password']);
-                    unset($oldDataArray['last_password_change']);
-                    $diff->diff = $diffArray;
-                    $diff->oldData = $oldDataArray;
-                }
-
-                if (!$diff->isEmpty()) {
-                    /** @var Tinebase_Model_FullUser $record */
-                    $record = $this->getUserById($modification->record_id, 'Tinebase_Model_FullUser');
-                    $currentRecord = clone $record;
-                    $record->applyDiff($diff);
-                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
-                    if (isset($diff->diff['accountEmailAddress'])) {
-                        $this->_addJustEmailDomainAfterReplication($record);
+                try {
+                    if (isset($diff->diff['password'])) {
+                        $diffArray = $diff->diff;
+                        $oldDataArray = $diff->oldData;
+                        $this->setPassword($modification->record_id, $diffArray['password'], false);
+                        unset($diffArray['password']);
+                        unset($diffArray['last_password_change']);
+                        unset($oldDataArray['password']);
+                        unset($oldDataArray['last_password_change']);
+                        $diff->diff = $diffArray;
+                        $diff->oldData = $oldDataArray;
                     }
-                    $this->updateUser($record);
+
+                    if (!$diff->isEmpty()) {
+                        /** @var Tinebase_Model_FullUser $record */
+                        $record = $this->getUserById($modification->record_id, 'Tinebase_Model_FullUser');
+                        $currentRecord = clone $record;
+                        $record->applyDiff($diff);
+                        Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
+                        if (isset($diff->diff['accountEmailAddress'])) {
+                            $this->_addJustEmailDomainAfterReplication($record);
+                        }
+                        $this->updateUser($record);
+                    }
+                } catch (Tinebase_Exception_NotFound $e) {
+                    if (strpos($e->getMessage(), 'User with accountId') !== 0) throw $e;
                 }
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
-                $this->deleteUser($modification->record_id);
+                try {
+                    $this->deleteUser($modification->record_id);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    if (strpos($e->getMessage(), 'User with accountId') !== 0) throw $e;
+                }
                 break;
 
             default:

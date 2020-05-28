@@ -928,6 +928,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_endRow();
     }
 
+    protected function _extendedCFResolving(Tinebase_Record_RecordSet $_records)
+    {
+        $_records->customfields = array();
+        Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+    }
+
     /**
      * resolve records and prepare for export (set user timezone, ...)
      *
@@ -998,8 +1004,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             }
 
             if (!$this->_FEDataRecordResolving) {
-                $_records->customfields = array();
-                Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($_records, true);
+                $this->_extendedCFResolving($_records);
             }
 
             $availableCFNames = [];
@@ -1359,6 +1364,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     /**
      * @param Tinebase_Record_Interface $_record
+     *
+     * @todo @refactor split this up in multiple FNs
      */
     protected function _processRecord(Tinebase_Record_Interface $_record)
     {
@@ -1366,9 +1373,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             __METHOD__ . '::' . __LINE__ . ' processing a export record...');
 
         if (true === $this->_dumpRecords) {
+            // TODO we should support "writing" whole records here and not only single fields - see \Calendar_Export_VCalendar
             foreach (empty($this->_fields) ? $_record->getFields() : $this->_fields as $field) {
                 if ($this->_rawData === false) {
-                    if ($this->_modelConfig && isset($this->_modelConfig->getFields()[$field]) && isset($this->_modelConfig->getFields()[$field]['system']) && $this->_modelConfig->getFields()[$field]['system'] === true) {
+                    if ($this->_modelConfig && isset($this->_modelConfig->getFields()[$field])
+                        && isset($this->_modelConfig->getFields()[$field]['system'])
+                        && $this->_modelConfig->getFields()[$field]['system'] === true
+                    ) {
                         continue;
                     } 
                 }
@@ -1407,7 +1418,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         } elseif (null !== $this->_twigTemplate) {
             $this->_renderTwigTemplate($_record);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' can not process record, misconfigured!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' can not process record, misconfigured!');
         }
     }
 

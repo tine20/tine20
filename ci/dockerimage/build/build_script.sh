@@ -1,3 +1,5 @@
+# TODO move this to a better place - /scripts/build for example (as this should not be usable in docker/ci context only)
+# TODO refactor cleanup/packaging -> copy stuff that is needed to a different dir and keep files that go into the packages
 function activateReleaseMode()
 {
     # utc datetime, like this: 2013-09-24 14:27:06
@@ -105,9 +107,6 @@ function cleanup()
                     # cleanup OpenLayers
                     (cd ${TINE20ROOT}/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
 
-                    # cleanup qCal
-                    (cd ${TINE20ROOT}/tine20/library/qCal;  rm -rf docs tests)
-
                     # save langStats
                     (mv ${TINE20ROOT}/tine20/langstatistics.json ${TINE20ROOT}/tine20/Tinebase/translations/langstatistics.json)
 
@@ -117,6 +116,13 @@ function cleanup()
                     rm -rf ${TINE20ROOT}/tine20/Tinebase/js/node_modules
                     rm -rf ${TINE20ROOT}/tine20/vendor/phpdocumentor
                     rm -rf ${TINE20ROOT}/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
+
+                    # remove tine20 custom apps - they are handled in a different way
+                    for CUSTOMAPP in `ls $TEMPDIR/tine20/vendor/metaways`; do
+                        if [ $CUSTOMAPP != "opendocument" ] && [ $CUSTOMAPP != "timezoneconvert" ]; then
+                            rm -rf $TEMPDIR/tine20vendor/metaways/$CUSTOMAPP
+                        fi
+                    done
 
                     find ${TINE20ROOT}/tine20/vendor -name .gitignore -type f -print0 | xargs -0 rm -rf
                     find ${TINE20ROOT}/tine20/vendor -name .git       -type d -print0 | xargs -0 rm -rf

@@ -587,9 +587,28 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         }
         $endCloseBlockPos += 6;
 
+
         $xmlBlock = substr($this->tempDocumentMainPart, $endOpenBlockPos, $closeBlockPos - $endOpenBlockPos);
 
         if (null !== $replacement) {
+            $openBlockContent = substr($this->tempDocumentMainPart, $openBlockPos, $endOpenBlockPos - $openBlockPos);
+            $clsBlockContent = substr($this->tempDocumentMainPart, $closeBlockPos, $endCloseBlockPos - $closeBlockPos);
+
+            if (strip_tags($openBlockContent) !== $openBlock) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' tag paragraph contains content: '
+                        . strip_tags($openBlockContent));
+                $openBlockContent = str_replace($openBlock, '', $openBlockContent);
+                $replacement = $openBlockContent . $replacement;
+            }
+            if (strip_tags($clsBlockContent) !== $closeBlock) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' tag paragraph contains content: '
+                        . strip_tags($clsBlockContent));
+                $clsBlockContent = str_replace($closeBlock, '', $clsBlockContent);
+                $replacement .= $clsBlockContent;
+            }
+
             $this->tempDocumentMainPart = substr($this->tempDocumentMainPart, 0, $openBlockPos) . $replacement .
                 substr($this->tempDocumentMainPart, $endCloseBlockPos);
         }

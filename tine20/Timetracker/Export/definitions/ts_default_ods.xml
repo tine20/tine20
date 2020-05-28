@@ -67,6 +67,11 @@
             <type>int(11)</type>
         </column>
         <column>
+            <identifier>accounting_time</identifier>
+            <header>Accounting time</header>
+            <type>int(11)</type>
+        </column>
+        <column>
             <identifier>description</identifier>
             <header>Description</header>
             <type>longtext</type>

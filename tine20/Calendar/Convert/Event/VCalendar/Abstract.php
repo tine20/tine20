@@ -272,7 +272,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
         $class = $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL';
         $vevent->add('X-CALENDARSERVER-ACCESS', $class);
-        if (! $_mainEvent) {
+        if (! $_mainEvent && $vcalendar->{'X-CALENDARSERVER-ACCESS'} === null) {
             // add one time only
             $vcalendar->add('X-CALENDARSERVER-ACCESS', $class);
         }
@@ -388,21 +388,26 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
             foreach ($event->attachments as $attachment) {
                 $filename = rawurlencode($attachment->name);
-                $attachmentData = [
-                    'MANAGED-ID' => $attachment->hash,
-                    'FMTTYPE'    => $attachment->contenttype,
-                    'SIZE'       => $attachment->size,
-                    'FILENAME'   => $filename,
-                ];
                 if (isset($this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY])
                     && $this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY]
                 ) {
                     $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
-                    $attachmentData['ENCODING'] = 'BASE64';
-                    $attachmentData['VALUE'] = 'BINARY:' . base64_encode($content);
+                    $value = base64_encode($content);
+                    $attachmentData = [
+                        'ENCODING' => 'BASE64',
+                        'VALUE' => 'BINARY',
+                        'FILENAME'   => $filename,
+                    ];
+                } else {
+                    $value = "{$baseUrl}{$filename}";
+                    $attachmentData = [
+                        'MANAGED-ID' => $attachment->hash,
+                        'FMTTYPE'    => $attachment->contenttype,
+                        'SIZE'       => $attachment->size,
+                        'FILENAME'   => $filename,
+                    ];
                 }
-                $attach = $vcalendar->createProperty('ATTACH', "{$baseUrl}{$filename}", $attachmentData, 'TEXT');
-
+                $attach = $vcalendar->createProperty('ATTACH', $value, $attachmentData, 'TEXT');
                 $vevent->add($attach);
             }
             if ($event->attachments->count()
