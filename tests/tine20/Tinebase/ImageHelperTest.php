@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Cornelius Weiss <c.weisse@metaways.de>
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**

@@ -24,6 +24,8 @@
  * @property string type
  * @property string plugin
  * @property string plugin_options
+ * @property array  plugin_options_json
+ * @property array  plugin_options_definition
  * @property string filename
  * @property bool   favorite
  * @property string icon_class
@@ -46,6 +48,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
     const FLDS_SCOPE = 'scope';
     const FLDS_PLUGIN_OPTIONS = 'plugin_options';
     const FLDS_PLUGIN_OPTIONS_JSON = 'plugin_options_json';
+    const FLDS_PLUGIN_OPTIONS_DEFINITION = 'plugin_options_definition';
     const FLDS_FORMAT = 'format';
     const FLDS_FILENAME = 'filename';
     const FLDS_FILTER = 'filter';
@@ -153,6 +156,8 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Type', // _('Type')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY  => false,
                     'presence'                      => 'required',
+                    // TODO add constants here
+                    // TODO what is a "letter"?
                     ['InArray', ['import', 'export', 'letter']]],
                 self::TYPE => self::TYPE_STRING,
             ],
@@ -189,6 +194,12 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
                 self::TYPE => 'xml',
             ],
             self::FLDS_PLUGIN_OPTIONS_JSON => [
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE => self::TYPE_VIRTUAL,
+                self::SHY => true,
+            ],
+            self::FLDS_PLUGIN_OPTIONS_DEFINITION => [
+                self::LABEL => 'Plugin Options Definition', // _('Plugin Options Definition')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::TYPE => self::TYPE_VIRTUAL,
                 self::SHY => true,
