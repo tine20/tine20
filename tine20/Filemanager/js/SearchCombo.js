@@ -32,7 +32,7 @@ Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
     
     allowBlank: false,
     singleSelect: true,
-    constraint: 'file',
+    constraint: null,
 
     itemSelector: 'div.search-item',
     minListWidth: 200,
