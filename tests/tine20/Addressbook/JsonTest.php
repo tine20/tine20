@@ -1948,6 +1948,8 @@ class Addressbook_JsonTest extends TestCase
         $this->assertTrue(is_array($options));
         $this->assertEquals('Addressbook_Model_Contact', $options['model']);
         $this->assertTrue(is_array($options['autotags']));
+        $this->assertTrue(isset($options['autotags'][0]['name']), 'autotag missing: '
+            . print_r($options['autotags'], true));
         $this->assertEquals('Import list (###CURRENTDATE###)', $options['autotags'][0]['name']);
     }
 
