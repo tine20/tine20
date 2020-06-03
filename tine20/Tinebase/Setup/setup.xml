@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>13.3</version>
+    <version>13.2</version>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
@@ -2480,7 +2480,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>13</version>
+            <version>12</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2531,10 +2531,6 @@
                 </field>
                 <field>
                     <name>plugin_options</name>
-                    <type>text</type>
-                </field>
-                <field>
-                    <name>plugin_options_definition</name>
                     <type>text</type>
                 </field>
                 <field>

@@ -43,10 +43,9 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_ZendFilterTest::class);
         $suite->addTestSuite(Tinebase_ContainerTest::class);
         $suite->addTestSuite(Tinebase_ContainerPersistentCacheTest::class);
+        $suite->addTestSuite(Tinebase_ImageHelperTest::class);
         $suite->addTestSuite(Tinebase_ConfigTest::class);
         $suite->addTestSuite(Tinebase_CustomFieldTest::class);
-        $suite->addTestSuite(Tinebase_ImageHelperTest::class);
-        $suite->addTestSuite(Tinebase_ImportExportDefinitionTest::class);
         $suite->addTestSuite(Tinebase_PreferenceTest::class);
         $suite->addTestSuite(Tinebase_ApplicationTest::class);
         $suite->addTestSuite(Tinebase_Relation_AllTests::class);

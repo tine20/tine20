@@ -42,25 +42,23 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
      */
     protected function _convertOptions(Tinebase_Model_ImportExportDefinition $_definition)
     {
-        foreach (['plugin_options', 'plugin_options_definition'] as $optionsField) {
-            $options = array();
-            if (is_array($_definition->$optionsField)) {
-                $options = $_definition->$optionsField;
-            } else if (!empty($_definition->$optionsField)) {
-                $options = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, [], $optionsField)->toArray();
-            }
+        $options = array();
 
-            if ($optionsField === 'plugin_options') {
-                if (isset($options['autotags'])) {
-                    $options['autotags'] = $this->_handleAutotags($options['autotags']);
-                }
-                if (isset($options['container_id'])) {
-                    $options['container_id'] = Tinebase_Container::getInstance()->getContainerById($options['container_id'])->toArray();
-                }
-            }
-
-            $_definition->{$optionsField . '_json'} = $options;
+        if (is_array($_definition->plugin_options)) {
+            $options = $_definition->plugin_options;
+        } else if (! empty($_definition->plugin_options)) {
+            $options = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition)->toArray();
         }
+
+        if (isset($options['autotags'])) {
+            $options['autotags'] = $this->_handleAutotags($options['autotags']);
+        }
+
+        if (isset($options['container_id'])) {
+            $options['container_id'] = Tinebase_Container::getInstance()->getContainerById($options['container_id'])->toArray();
+        }
+        
+        $_definition->plugin_options_json = $options;
     }
     
     /**

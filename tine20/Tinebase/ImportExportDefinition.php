@@ -208,22 +208,19 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      * 
      * @param Tinebase_Model_ImportExportDefinition $_definition
      * @param array $_additionalOptions additional options
-     * @param string $_field FLDS_PLUGIN_OPTIONS or FLDS_PLUGIN_OPTIONS_DEFINITION
      * @return Zend_Config_Xml
      */
-    public static function getOptionsAsZendConfigXml(Tinebase_Model_ImportExportDefinition $_definition,
-                                                     $_additionalOptions = array(),
-                                                     $_field = Tinebase_Model_ImportExportDefinition::FLDS_PLUGIN_OPTIONS)
+    public static function getOptionsAsZendConfigXml(Tinebase_Model_ImportExportDefinition $_definition, $_additionalOptions = array())
     {
-        $cacheId = Tinebase_Helper::convertCacheId('ZendConfigXml_' . $_field . md5($_definition));
+        $cacheId = 'ZendConfigXml_' . md5($_definition);
         $cache = Tinebase_Core::getCache();
         if (! $cache->test($cacheId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Generate new Zend_Config_Xml object' . $cacheId);
 
-            $xmlConfig = (empty($_definition->$_field))
+            $xmlConfig = (empty($_definition->plugin_options))
                 ? '<?xml version="1.0" encoding="UTF-8"?><config></config>'
-                : $_definition->$_field;
+                : $_definition->plugin_options;
             $config = new Zend_Config_Xml($xmlConfig, /* section = */ null, /* runtime mods allowed = */ true);
             $cache->save($config, $cacheId);
         } else {
