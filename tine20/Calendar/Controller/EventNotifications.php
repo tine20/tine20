@@ -205,6 +205,12 @@
 
         switch ($_action) {
             case 'alarm':
+                if ($_event->is_deleted || $_event->status === Calendar_Model_Event::STATUS_CANCELED) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Skip alarm for canceled event");
+                    return;
+                }
+
                 foreach($_event->attendee as $attender) {
                     if (Calendar_Model_Attender::isAlarmForAttendee($attender, $_alarm)) {
                         $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_NONE);
@@ -254,7 +260,7 @@
                     }
 
                     // compute change type
-                    if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
+                    if (count(array_intersect(array('dtstart', 'dtend', 'status'), array_keys($updates))) > 0) {
                         $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
                     } else if (count(array_diff(array_keys($updates), array('attendee'))) > 0) {
                         $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
@@ -545,6 +551,16 @@
     {
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
 
+        // rewrite status updates
+        if (isset($_updates['status'])) {
+            if ($_event->status === Calendar_Model_Event::STATUS_CANCELED) {
+                $_action = 'deleted';
+            }
+            else if ($_updates['status'] === Calendar_Model_Event::STATUS_CANCELED) {
+                $_action = 'created';
+            }
+        }
+        
         switch ($_action) {
             case 'alarm':
                 $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);

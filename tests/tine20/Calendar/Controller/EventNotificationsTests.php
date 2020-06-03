@@ -241,17 +241,27 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->summary = 'detail update notification has precedence over attendee update';
         $persistentEvent->url = 'http://somedetail.com';
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
-        $persistentEvent->status = Calendar_Model_Event::STATUS_TENTATIVE;
         
         self::flushMailer();
         $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf, sclever', NULL);
         $this->_assertMail('jmcblack, rwright', 'update');
 
+    }
+    
+    public function testStatusUpdatesReschedulesEvent()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('jmcblack');
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $persistentEvent->status = Calendar_Model_Event::STATUS_TENTATIVE;
+        self::flushMailer();
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $messages = self::getMessages();
         $this->assertContains('"' . Tinebase_Translation::getTranslation('Calendar')->translate('Tentative') . '"', $messages[0]->getBodyText()->getRawContent(), 'keyfield not resolved');
     }
-        
+    
     /**
      * testUpdateAttendeeStatus
      */
@@ -1625,5 +1635,22 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testSendNotificationForNoTentative()
     {
         $this->_tentativeNotification('1',true);
+    }
+    
+    public function testEventStatusUpdateNotification()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('sclever');
+        $persistentEvent = $this->_eventController->create($event);
+
+        self::flushMailer();
+        $persistentEvent->status = Calendar_Model_Event::STATUS_CANCELED;
+        $persistentEvent = $this->_eventController->update($persistentEvent);
+        $this->_assertMail('sclever', 'canceled');
+
+        // we can't detect this situation in the controller yet :(
+//        self::flushMailer();
+//        $this->_eventController->delete($persistentEvent);
+//        $this->_assertMail('sclever', null);
     }
 }

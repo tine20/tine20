@@ -674,7 +674,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             return;
         }
         
-        var addAction, responseAction, copyAction;
+        var addAction, responseAction, copyAction, eventStatusAction;
 
         if (datetime || event) {
             var dtStart = datetime || event.get('dtstart').clone();
@@ -692,6 +692,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             if (event) {
                 responseAction = this.getResponseAction(event);
                 copyAction = this.getCopyAction(event);
+                eventStatusAction = this.getEventStatusAction(event);
             }
         } else {
             addAction = this.action_addInNewWindow;
@@ -703,7 +704,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             view.getSelectionModel().clearSelections();
         }
 
-        var menuitems = this.recordActions.concat(addAction, responseAction || [], copyAction || []);
+        var menuitems = this.recordActions.concat(addAction, copyAction || [], eventStatusAction || [], '-', responseAction || []);
         if (event && event.get('poll_id') && event.get('editGrant')) {
             require('./PollSetDefiniteEventAction');
             menuitems = menuitems.concat(['-',{
@@ -810,6 +811,36 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         };
         
         return copyAction
+    },
+
+    /**
+     * get eventStatusAction action
+     *
+     * @param {Tine.Calendar.Model.Event} event
+     * @return {Object}
+     */
+    getEventStatusAction: function(event) {
+        let statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'eventStatus');
+        let statusRecord = statusStore.getById(event.get('status'));
+        let eventStatusAction = {
+            text: this.app.i18n._('Set event status'),
+            icon: statusRecord ? statusRecord.get('icon') : false,
+            menu: []
+        };
+
+        statusStore.each(function(status) {
+            let isCurrent = statusRecord && statusRecord.id === status.id;
+
+            // NOTE: we can't use checked items here as we use icons already
+            eventStatusAction.menu.push({
+                text: status.get('i18nValue'),
+                handler: this.setEventStatus.createDelegate(this, [event, status.id]),
+                icon: status.get('icon'),
+                disabled: isCurrent
+            });
+        }, this);
+        
+        return eventStatusAction;
     },
     
     checkPastEvent: function(event, checkBusyConflicts, actionType, oldEvent) {
@@ -1700,16 +1731,25 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var myAttenderRecord = event.getMyAttenderRecord();
         if (myAttenderRecord) {
             myAttenderRecord.set('status', status);
-            event.dirty = true;
-            event.modified = {};
-            
-            var panel = this.getCalendarPanel(this.activeView);
-            var store = this.getStore();
-            
-            store.replaceRecord(event, event);
-            
-            this.onUpdateEvent(event);
+            this.updateEvent(event);
         }
+    },
+
+    setEventStatus: function(event, status) {
+        event.set('status', status);
+        this.updateEvent(event);
+    },
+    
+    updateEvent: function(event) {
+        event.dirty = true;
+        event.modified = {};
+
+        var panel = this.getCalendarPanel(this.activeView);
+        var store = this.getStore();
+
+        store.replaceRecord(event, event);
+
+        this.onUpdateEvent(event);
     },
     
     updateEventActions: function () {
