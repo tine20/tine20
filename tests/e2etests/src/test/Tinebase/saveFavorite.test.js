@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Adressbuch', 'Kontakte');
 });
 
-describe('Mainpage', () => {
+describe.skip('Mainpage', () => {
 
     test('save favorite', async () => {
         try {
