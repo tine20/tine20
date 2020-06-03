@@ -44,7 +44,7 @@ workflow:
     - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
       when: never
     - when: on_success
-  timeout: 20m
+  timeout: 40m
 
 # "cache" updating job
 "docker: build base, dependency, source and test-source image":
@@ -73,7 +73,7 @@ workflow:
     - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
       when: on_success
     - when: never
-  timeout: 40m
+  timeout: 60m
 
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit_test
@@ -84,7 +84,7 @@ workflow:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
     - when: never
-  timeout: 25m # time run: 14m
+  timeout: 60m # time run: 14m
 
 "phpstan: code analyses":
   stage: build_and_source_test
@@ -105,7 +105,7 @@ workflow:
       when: on_success
     - when: never
   allow_failure: true
-  timeout: 10m # time run: 4m
+  timeout: 20m # time run: 4m
 
 "docker: build dev, build, built and test-built image":
   extends: .abstract_jobs.docker
@@ -119,7 +119,7 @@ workflow:
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
-  timeout: 40m # time run: 28m
+  timeout: 60m # time run: 28m
 
 "php unit: all tests built":
   extends: .abstract_jobs.php_unit_test
@@ -130,7 +130,7 @@ workflow:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
     - when: never
-  timeout: 25m # time run: 13m
+  timeout: 50m # time run: 13m
 
 "php unit: nogitlabci tests built":
   extends: .abstract_jobs.php_unit_test
@@ -185,7 +185,7 @@ workflow:
     - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
       when: on_success
     - when: never
-  timeout: 10m # time run: 3m
+  timeout: 20m # time run: 3m
 
 "docker: push built and dev image":
   extends: .abstract_jobs.docker
@@ -197,7 +197,7 @@ workflow:
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
-  timeout: 10m # time run: 3m
+  timeout: 20m # time run: 3m
 
 "docker push built and dev image to gitlab":
   extends: .abstract_jobs.docker
@@ -214,7 +214,7 @@ workflow:
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
-  timeout: 10m
+  timeout: 20m
 
 "docker push built image to dockerhub":
   extends: .abstract_jobs.docker
@@ -233,4 +233,4 @@ workflow:
     - if: $PUSH_TO_DOCKERHUB == "true"
       when: on_success
     - when: never
-  timeout: 10m
+  timeout: 20m
