@@ -1553,13 +1553,24 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                             $undoProductAggregates[$inPos->accountable_id] = $inPos->month;
                         }
                     }
+
+                    $isLastInvoice = false;
+                    if ('0' === $this->_backend->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        Sales_Model_Invoice::class, [
+                            ['field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId()],
+                            ['field' => 'id', 'operator' => 'notin', 'value' => $_ids],
+                        ]
+                    ))) {
+                        $isLastInvoice = true;
+                    }
                     
                     foreach($productAggregates as $productAggregate) {
                         
                         if (!$productAggregate->last_autobill)
                             continue;
-                        
-                        if ( !isset($undoProductAggregates[$productAggregate->id]) ) {
+                        if ($isLastInvoice) {
+                            $productAggregate->last_autobill = NULL;
+                        } elseif ( !isset($undoProductAggregates[$productAggregate->id]) ) {
                             $product = $this->_cachedProducts->getById($productAggregate->product_id);
                             if (! $product) {
                                 $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);

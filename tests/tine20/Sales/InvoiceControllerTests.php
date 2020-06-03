@@ -1098,6 +1098,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         // delete all created invoices again
         $allInvoices = $this->_invoiceController->getAll('start_date', 'DESC');
+        $lastInvoice = $allInvoices->getLastRecord();
+        $allInvoices->removeRecord($lastInvoice);
         
         foreach($allInvoices as $invoice) {
             $this->_invoiceController->delete($invoice);
@@ -1105,8 +1107,13 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $productAggregate = $paController->get($productAggregate->getId());
         $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
-        
-        $this->assertEquals($this->_referenceDate, $productAggregate->last_autobill);
+
+        $this->assertEquals($this->_referenceDate->getClone()->addMonth(1), $productAggregate->last_autobill);
+
+        $this->_invoiceController->delete($lastInvoice);
+        $productAggregate = $paController->get($productAggregate->getId());
+        $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
+        static::assertNull($productAggregate->last_autobill);
         
         // create 6 invoices again - each month one invoice - last autobill must be increased each month
         for ($i = 1; $i < 7; $i++) {
