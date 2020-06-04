@@ -11,7 +11,7 @@
  */
 
 /**
- * class to hold FileLocation data, it can either be a Filemanager path or it can be a record attachement
+ * class to hold FileLocation data, it can either be a Filemanager path or it can be a record attachment
  * it might be something else in the future, amend if required
  *
  * @package     Tinebase
@@ -21,6 +21,10 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
 {
     const TYPE_FM_NODE = 'fm_node';
     const TYPE_ATTACHMENT = 'attachement';
+    // user gets a download
+    const TYPE_DOWNLOAD = 'download';
+    // local filesystem, i.e. for CLI use
+    const TYPE_LOCAL = 'local';
 
     const FLD_TYPE = 'type';
     const FLD_MODEL = 'model';
@@ -48,14 +52,14 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_STRING,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
-                    ['InArray', [self::TYPE_ATTACHMENT, self::TYPE_FM_NODE]],
+                    ['InArray', [self::TYPE_ATTACHMENT, self::TYPE_FM_NODE, self::TYPE_DOWNLOAD, self::TYPE_LOCAL]],
                 ],
             ],
             // filemanager fields
             self::FLD_FM_PATH       => [
                 self::TYPE              => self::TYPE_STRING,
             ],
-            // attachement fields
+            // attachment fields
             self::FLD_MODEL         => [
                 self::TYPE              => self::TYPE_STRING,
             ],

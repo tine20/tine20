@@ -636,6 +636,8 @@ class Tinebase_Frontend_Cli_Abstract
      * @param string $_model
      * @param string $_exportClass
      * @return boolean
+     *
+     * TODO use Calendar_Export_VCalendarReport / Addressbook_Export_VCardReport here
      */
     protected function _exportVObject(Zend_Console_Getopt $_opts, $_model, $_exportClass)
     {
@@ -670,6 +672,8 @@ class Tinebase_Frontend_Cli_Abstract
      *
      * @todo add container name (need to strip spaces, special chars, ...)?
      * @todo create subdir for each user?
+     *
+     * TODO remove code replication with \Calendar_Export_VCalendarReport::_getExportFilename
      */
     protected function _getVObjectExportFilename($container, $args, $extension)
     {

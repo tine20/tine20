@@ -15,21 +15,23 @@ class Tinebase_ImportExportDefinitionTest extends TestCase
 {
     public function testPluginOptionsDefinitionConverter()
     {
-        // TODO implement
-//        $definition = getDefinition();
-//
-//        $converter = Tinebase_Convert_Factory::factory(Tinebase_Model_ImportExportDefinition::class);
-//        $jsonRecord = $converter->fromTine20Model($savedDefinition);
-//        self::assertTrue(isset($jsonRecord['plugin_options_definition_json']));
-//        self::assertEquals([
-//            'someOption' => [
-//                'label' => 'myOptionLabel',
-//                'length' => 40,
-//                'type' => 'string',
-//                'disable' => 1,
-//                'hide' => 1,
-//                'default' => '',
-//            ]
-//        ], $jsonRecord['plugin_options_definition']);
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('cal_default_vcalendar_report');
+
+        $converter = Tinebase_Convert_Factory::factory(Tinebase_Model_ImportExportDefinition::class);
+        $jsonRecord = $converter->fromTine20Model($definition);
+        self::assertTrue(isset($jsonRecord['plugin_options_definition']));
+        self::assertEquals([
+            'sources' => [
+                'label' => 'Containers to export',
+                'type' => 'containers',
+                'config' => [
+                    'recordClassName' => Calendar_Model_Event::class,
+                ]
+            ],
+            'target' => [
+                'label' => 'Export target',
+                'type' => 'filelocation',
+            ]
+        ], $jsonRecord['plugin_options_definition']);
     }
 }
