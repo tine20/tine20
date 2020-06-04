@@ -94,7 +94,7 @@ class Admin_Controller_UserTest extends TestCase
         // delete user + check if email user is deleted
         Admin_Controller_User::getInstance()->delete([$user->getId()]);
         $userInBackend = $emailUserBackend->getRawUserById($xpropsUser);
-        self::assertEmpty($userInBackend['email'], 'email user should be deleted: '
+        self::assertFalse($userInBackend, 'email user should be deleted: '
             . print_r($userInBackend, true));
     }
 
