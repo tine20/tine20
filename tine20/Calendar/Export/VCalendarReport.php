@@ -23,6 +23,8 @@ class Calendar_Export_VCalendarReport extends Tinebase_Export_Abstract
      */
     protected $_fileLocation = null;
 
+    protected $_downloadFilePaths = [];
+
     /**
      * get download content type
      *
@@ -85,6 +87,14 @@ class Calendar_Export_VCalendarReport extends Tinebase_Export_Abstract
         return $exportResult;
     }
 
+    /**
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     *
+     * @todo add default target?
+     */
     protected function _checkOptions()
     {
         if (! isset($this->_config->sources) || ! isset($this->_config->target)) {
@@ -113,7 +123,8 @@ class Calendar_Export_VCalendarReport extends Tinebase_Export_Abstract
      * @param array $exportResult
      * @throws Tinebase_Exception_NotImplemented
      *
-     *  TODO support all possible file locations
+     * @todo support all possible file locations (attachment + local still missing)
+     * @todo build zip file for multiple files
      */
     protected function _saveExportFilesToFileLocation($exportResult)
     {
@@ -124,6 +135,9 @@ class Calendar_Export_VCalendarReport extends Tinebase_Export_Abstract
                     $tempFile = Tinebase_TempFile::getInstance()->createTempFile($generatedExport['filename']);
                     Tinebase_FileSystem::getInstance()->copyTempfile($tempFile,
                          DIRECTORY_SEPARATOR .  'Filemanager'  . DIRECTORY_SEPARATOR . 'folders' . $this->_fileLocation->fm_path . DIRECTORY_SEPARATOR . $filename);
+                    break;
+                case Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD:
+                    $this->_downloadFilePaths[] = $generatedExport['filename'];
                     break;
                 default:
                     throw new Tinebase_Exception_NotImplemented(
@@ -139,5 +153,25 @@ class Calendar_Export_VCalendarReport extends Tinebase_Export_Abstract
     protected function _getExportFilename($container)
     {
         return str_replace([' ', DIRECTORY_SEPARATOR], '', $container->name . '.' . $this->_format);
+    }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function write()
+    {
+        if ($this->_fileLocation->type === Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD) {
+            foreach ($this->_downloadFilePaths as $path) {
+                $handle = fopen($path, 'r');
+                if (false === $handle) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' Could not open download file');
+                    continue;
+                }
+                fpassthru($handle);
+                fclose($handle);
+            }
+        }
     }
 }
