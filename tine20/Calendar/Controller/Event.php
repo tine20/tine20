@@ -1380,7 +1380,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $attendees = $_event->attendee;
                     unset($_event->attendee);
                 }
-                $note = $_event->notes;
                 unset($_event->notes);
                 $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts);
                 
@@ -1495,7 +1494,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
 
                 $attendees = $_event->attendee; unset($_event->attendee);
-                $note = $_event->notes; unset($_event->notes);
+                $note = $_event->notes;
+                unset($_event->notes);
                 $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts && $dtStartHasDiff);
                 
                 // we save attendee separately to preserve their attributes
