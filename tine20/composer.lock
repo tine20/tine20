@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b64fd2b5495d7391037df622dab0f75a",
+    "content-hash": "3900c07225b0d4941c6dea4341acc34b",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1343,7 +1343,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3020,7 +3020,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -3904,11 +3904,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl40",
+            "version": "1.12.20pl39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "ec27fd342e09b2b436c86516c07013bc751eeb8c"
+                "reference": "79c11374a4422d8f26fe794d82483e363afac71f"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3925,7 +3925,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2020-06-05T14:51:10+00:00"
+            "time": "2020-05-07T15:40:15+00:00"
         }
     ],
     "packages-dev": [
@@ -5420,7 +5420,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch40",
+            "version": "1.12.20.0-patch39",
             "package": "zendframework/zendframework1"
         }
     ],
