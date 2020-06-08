@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Adressbuch', 'Kontakte');
 });
 
-describe.skip('Mainpage', () => {
+describe('Mainpage', () => {
 
     test('save favorite', async () => {
         try {
@@ -40,6 +40,13 @@ describe.skip('Mainpage', () => {
     });
 
     test('edit favorite', async () => {
+        try {
+            let favoritePanelCollapsed = await page.$x('//div[contains(@class, "ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
+            await favoritePanelCollapsed[0].click();
+        } catch (e) {
+            console.log('favoritePanel also collapsed');
+        }
+        await page.waitFor(2000);
         await expect(page).toClick('span', {text: 'favorite', button:'right'});
         await expect(page).toClick('.x-menu-item-icon.action_edit', {visible: true});
         await page.waitForSelector('.x-window.x-resizable-pinned');
@@ -50,6 +57,13 @@ describe.skip('Mainpage', () => {
     });
 
     test('edit shared favorite', async () => {
+        try {
+            let favoritePanelCollapsed = await page.$x('//div[contains(@class, "ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
+            await favoritePanelCollapsed[0].click();
+        } catch (e) {
+            console.log('favoritePanel also collapsed');
+        }
+        await page.waitFor(2000);
         await expect(page).toClick('span', {text: 'shared favorite', button:'right'});
         await expect(page).toClick('.x-menu-item-icon.action_edit', {visible: true});
         await page.waitForSelector('.x-window.x-resizable-pinned');
