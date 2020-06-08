@@ -18,9 +18,11 @@
  */
 class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstract
 {
+    // FIXME why is this duplicated here? belongs to the model! i.e. \Tinebase_Model_ImportExportDefinition::SCOPE_SINGLE
     const SCOPE_SINGLE = 'single';
     const SCOPE_MULTI = 'multi';
     const SCOPE_HIDDEN = 'hidden';
+    const SCOPE_REPORT = 'report';
 
     /**
      * holds the instance of the singleton
@@ -185,7 +187,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'plugin'                      => $config->plugin,
                 'icon_class'                  => $config->icon_class,
                 'scope'                       => (empty($config->scope) ||
-                        !in_array($config->scope, array(self::SCOPE_SINGLE, self::SCOPE_MULTI, self::SCOPE_HIDDEN))) ? '' : $config->scope,
+                        !in_array($config->scope, [
+                            self::SCOPE_SINGLE,
+                            self::SCOPE_MULTI,
+                            self::SCOPE_HIDDEN,
+                            self::SCOPE_REPORT,
+                        ])) ? '' : $config->scope,
                 'plugin_options'              => $content,
                 'filename'                    => $basename,
                 'favorite'                    => false == $config->favorite ? 0 : 1,

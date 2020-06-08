@@ -84,6 +84,11 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
     const SCOPE_SINGLE = 'single';
 
     /**
+     * independent from current selection
+     */
+    const SCOPE_REPORT = 'report';
+
+    /**
      * holds the configuration object (must be declared in the concrete class)
      *
      * @var Tinebase_ModelConfiguration

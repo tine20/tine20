@@ -6,7 +6,7 @@
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -694,11 +694,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         self::assertEquals($copyOmitFields, $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
         self::assertTrue(is_array(($registryData['Timetracker']['relatableModels'][0])), 'relatableModels needs to be an numbered array');
 
-        self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']), 'no InventoryItem export config found: '
-            . print_r($registryData['Inventory']['models']['InventoryItem'], true));
-        self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']));
-        self::assertEquals(array('csv', 'ods'), $registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']);
-        self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['import']));
+        $this->_assertImportExportDefinitions($registryData);
 
         self::assertTrue(isset($registryData['Felamimail']['models']['Account']), 'account model missing from registry');
 
@@ -713,6 +709,29 @@ class Tinebase_Frontend_JsonTest extends TestCase
         }
 
         self::assertLessThan(2000000, strlen(json_encode($registryData)), 'registry size got too big');
+    }
+
+    protected function _assertImportExportDefinitions($registryData)
+    {
+        // Inventory
+        self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']), 'no InventoryItem export config found: '
+            . print_r($registryData['Inventory']['models']['InventoryItem'], true));
+        $export = $registryData['Inventory']['models']['InventoryItem']['export'];
+        self::assertTrue(isset($export['supportedFormats']));
+        self::assertEquals(array('csv', 'ods'), $export['supportedFormats']);
+        self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['import']));
+
+        // Calendar exportDefinitions
+        self::assertTrue(isset($registryData['Calendar']['exportDefinitions']), 'no exportDefinitions export config found: '
+            . print_r($registryData['Calendar'], true));
+        $exports = $registryData['Calendar']['exportDefinitions']['results'];
+        $filteredExports = array_filter($exports, function($export) {
+            return $export['name'] === 'cal_default_vcalendar_report';
+        });
+        self::assertEquals(1, count($filteredExports), 'cal_default_vcalendar_report not found');
+        $vcalendarReport = array_pop($filteredExports);
+        self::assertEquals('report', $vcalendarReport['scope'], 'scope mismatch');
+        self::assertTrue(is_array($vcalendarReport['plugin_options_json']));
     }
 
     /**

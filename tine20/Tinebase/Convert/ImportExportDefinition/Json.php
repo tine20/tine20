@@ -59,6 +59,8 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
         }
         
         $_definition->plugin_options_json = $options;
+        // save some space in registry
+        unset($_definition->plugin_options);
 
         if (isset($options['plugin_options_definition']) && $options['plugin_options_definition']) {
             if (method_exists($_definition->plugin, 'getPluginOptionsDefinition')) {
