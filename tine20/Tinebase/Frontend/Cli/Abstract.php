@@ -159,7 +159,7 @@ class Tinebase_Frontend_Cli_Abstract
      *
      * @param Zend_Console_Getopt $_opts
      * @param boolean $checkDependencies
-     * @return boolean
+     * @return int
      */
     public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
@@ -188,7 +188,7 @@ class Tinebase_Frontend_Cli_Abstract
                 $this->_createPhpDemoData($_opts, $checkDependencies);
                 $this->_createImportDemoData();
         }
-        return true;
+        return 0;
     }
 
     /**
@@ -278,8 +278,9 @@ class Tinebase_Frontend_Cli_Abstract
                 ] : [];
             $importer = new Tinebase_Setup_DemoData_Import($model, $options);
             try {
+                echo 'Importing Demo Data for ' . $model . "\n";
                 $importer->importDemodata();
-                echo 'Csv Demo Data was created successfully' . chr(10) . chr(10);
+                echo 'Csv Demo Data was created successfully' . "\n";
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // model has no import files
             }
