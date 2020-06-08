@@ -1362,7 +1362,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $imapBackend = $this->_getIMAPBackend($account);
         if ($imapBackend && $imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
             $systemFolder = $this->_createSystemFolder($account, $folderName);
-            if ($systemFolder->globalname !== $folderName) {
+            if ($systemFolder && $systemFolder->globalname !== $folderName) {
                 $account->{$systemFolderField} = $systemFolder->globalname;
                 $this->_backend->update($account);
             }
@@ -1419,7 +1419,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * 
      * @param Felamimail_Model_Account $_account
      * @param string $_systemFolder
-     * @return Felamimail_Model_Folder
+     * @return Felamimail_Model_Folder|null
      */
     protected function _createSystemFolder(Felamimail_Model_Account $_account, $_systemFolder)
     {
@@ -1439,6 +1439,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             // folder already there ...
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
                 . $tesg->getMessage());
+            $result = null;
         }
         
         return $result;
