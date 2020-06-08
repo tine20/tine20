@@ -857,17 +857,21 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     /**
      * test move
      */
-    public function testMoveMessage()
+    public function testMoveMessage($moveToFolderName = null)
     {
+        if (! $moveToFolderName) {
+            $moveToFolderName = $this->_testFolderName;
+        }
+
         $message = $this->_sendMessage();
-        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_testFolderName);
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $moveToFolderName);
 
         $inbox = $this->_getFolder('INBOX');
         $inboxBefore = $this->_json->updateMessageCache($inbox['id'], 30);
 
         // move
-        $testFolder = $this->_getFolder($this->_testFolderName);
-        $result = $this->_json->moveMessages(array(array(
+        $testFolder = $this->_getFolder($moveToFolderName);
+        $this->_json->moveMessages(array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         )), $testFolder->getId());
 
@@ -880,7 +884,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertEquals($inboxBefore['cache_unreadcount'] - 1, $inboxAfter['cache_unreadcount']);
         $this->assertEquals($inboxBefore['cache_totalcount'] - 1, $inboxAfter['cache_totalcount']);
 
-        $result = $this->_getMessages($this->_testFolderName);
+        $result = $this->_getMessages($moveToFolderName);
         $movedMessage = array();
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $message['subject']) {
@@ -888,6 +892,12 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             }
         }
         $this->assertTrue(!empty($movedMessage), 'moved message not found');
+    }
+
+    public function testMoveMessageToFolderWithUmlaut()
+    {
+        $result = $this->_json->addFolder('Info Gemeindebüro', $this->_testFolderName, $this->_account->getId());
+        $this->testMoveMessage($result['globalname']);
     }
 
     /**
