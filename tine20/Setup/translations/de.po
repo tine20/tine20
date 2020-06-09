@@ -137,8 +137,8 @@ msgid "Uninstall application"
 msgstr "Anwendung deinstallieren"
 
 #: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Anwendung aktualisieren"
+msgid "Update applications"
+msgstr "Anwendungen aktualisieren"
 
 #: js/ApplicationGridPanel.js:105
 #, python-brace-format
@@ -809,5 +809,7 @@ msgstr "PLAIN"
 msgid "Message"
 msgstr "Informationen"
 
-msgid "Updating {0} Applications."
-msgstr "Aktualisiere {0} Anwendungen."
+msgid "Updating application"
+msgid_plural "Updating applications"
+msgstr[0] "Aktualisiere Anwendung"
+msgstr[1] "Aktualisiere Anwendungen"
