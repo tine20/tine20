@@ -156,10 +156,10 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 };
                 sm.each(function(record){
                     
-                    data.sum = data.sum + parseInt(record.data.duration);
+                    data.sum = data.sum + parseInt(record.data.accounting_time);
                     if (record.data.is_billable_combined == '1') {
                         data.countbillable++;
-                        data.sumbillable = data.sumbillable + parseInt(record.data.duration);
+                        data.sumbillable = data.sumbillable + parseInt(record.data.accounting_time);
                     }
                 });
                 data.sum = Tine.Tinebase.common.minutesRenderer(data.sum);

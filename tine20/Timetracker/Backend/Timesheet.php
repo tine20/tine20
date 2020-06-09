@@ -65,7 +65,7 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
             'select'        => '', // set in contructor
             'singleValue'   => true,
         ),
-        'duration_billable'   => array(
+        'accounting_time_billable'   => array(
             'table'         => 'timetracker_timeaccount',
             'joinOn'        => 'id',
             'joinId'        => 'timeaccount_id',
@@ -93,8 +93,8 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
         
         $this->_additionalSearchCountCols =  array(
             'is_billable_combined' => null, // taken from _foreignTables
-            'duration'             => 'duration',
-            'duration_billable'    => null  // taken from _foreignTables
+            'accounting_time'      => 'accounting_time',
+            'accounting_time_billable'    => null  // taken from _foreignTables
         );
         
         $this->_foreignTables['is_billable_combined']['select'] = array(
@@ -103,8 +103,8 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
         $this->_foreignTables['is_cleared_combined']['select']  = array(
             'is_cleared_combined'   => new Zend_Db_Expr('(CASE WHEN ' . $this->_db->quoteIdentifier('timetracker_timesheet.is_cleared') . " = '1' OR " . $this->_db->quoteIdentifier('timetracker_timeaccount.status') . " = 'billed' THEN 1 ELSE 0 END)")
         );
-        $this->_foreignTables['duration_billable']['select'] = array(
-            'duration_billable' => new Zend_Db_Expr('(' . $this->_db->quoteIdentifier('duration') . '*' . $this->_db->quoteIdentifier('timetracker_timesheet.is_billable') . '*' . $this->_db->quoteIdentifier('timetracker_timeaccount.is_billable') . ')')
+        $this->_foreignTables['accounting_time_billable']['select'] = array(
+            'accounting_time_billable' => new Zend_Db_Expr('(' . $this->_db->quoteIdentifier('accounting_time') . '*' . $this->_db->quoteIdentifier('timetracker_timesheet.is_billable') . '*' . $this->_db->quoteIdentifier('timetracker_timeaccount.is_billable') . ')')
         );
     }
 }

@@ -152,7 +152,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         foreach ($timesheets as $ts) {
             $matrix[] = array(
                 'userAccountId' => $ts->account_id,
-                'amount' => ($ts->duration / 60),
+                'amount' => ($ts->accounting_time / 60),
                 'destination' => $destination,
                 'taCostCenter' => $taCostCenter
             );
