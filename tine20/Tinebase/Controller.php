@@ -1112,6 +1112,115 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * @return bool
      */
+    public function actionQueueConsistencyCheck()
+    {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} &&
+            Tinebase_ActionQueue::getInstance()->hasAsyncBackend()) {
+
+            if (null === ($queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                    Tinebase_Application::STATE_ACTION_QUEUE_STATE), true))) {
+                $queueState = [
+                    'lastFullCheck' => 0,
+                    'lastSizeOver10k' => false,
+                    'actionQueueMissingQueueKeys' => [],
+                    'actionQueueMissingDaemonKeys' => [],
+                    'lastLRSizeOver10k' => false,
+                    'actionQueueLRMissingQueueKeys' => [],
+                    'actionQueueLRMissingDaemonKeys' => [],
+                ];
+            }
+
+            $time = [
+                'actionQueue' => ['dataWarn' => 15, 'dataErr' => 60],
+                'actionQueueLR' => ['dataWarn' => 60, 'dataErr' => 5 * 60],
+            ];
+
+            foreach (['actionQueue' => Tinebase_ActionQueue::getInstance(), 'actionQueueLR' => Tinebase_ActionQueueLongRun::getInstance()] as $qName => $actionQueue) {
+
+                $missingQueueKeys = [];
+                $missingDaemonKeys = [];
+                $warn = null;
+                $err = null;
+                // go through queue and daemon struct and check timestamps in data
+                // remember stuff we did not find
+                foreach ($actionQueue->getQueueKeys() as $key) {
+                    if (empty($data = $actionQueue->getData($key))) {
+                        if (isset($queueState[$qName . 'MissingQueueKeys'][$key])) {
+                            if (null === $warn) {
+                                $warn = $qName . ' contains keys which are not present in data';
+                            }
+                        } else {
+                            $missingQueueKeys[$key] = true;
+                        }
+                    } else {
+                        if (($timediff = time() - $data['time']) > $time[$qName]['dataWarn'] * 60) {
+                            if (null === $warn) {
+                                $warn = $qName . ' data contains data older than ' . $time[$qName]['dataWarn'] . ' minutes';
+                            }
+                        }
+                        if ($timediff > $time[$qName]['dataErr'] * 60) {
+                            $err = $qName . ' data contains data older than ' . $time[$qName]['dataErr'] . ' minutes';
+                        }
+                    }
+                }
+                $queueState[$qName . 'MissingQueueKeys'] = $missingQueueKeys;
+
+                foreach ($actionQueue->getDaemonStructKeys() as $key) {
+                    if (empty($data = $actionQueue->getData($key))) {
+                        if (isset($queueState[$qName . 'MissingDaemonKeys'][$key])) {
+                            if (null === $warn) {
+                                $warn = $qName . ' daemon contains keys which are not present in data';
+                            }
+                        } else {
+                            $missingDaemonKeys[$key] = true;
+                        }
+                    } else {
+                        if (($timediff = time() - $data['time']) > $time[$qName]['dataWarn'] * 60) {
+                            if (null === $warn) {
+                                $warn = $qName . ' data contains data older than ' . $time[$qName]['dataWarn'] . ' minutes';
+                            }
+                        }
+                        if ($timediff > $time[$qName]['dataErr'] * 60) {
+                            $err = $qName . ' data contains data older than ' . $time[$qName]['dataErr'] . ' minutes';
+                        }
+                    }
+                }
+                $queueState[$qName . 'MissingDaemonKeys'] = $missingDaemonKeys;
+
+                // go through data keys and check timestmaps
+                while (false !== ($data = $actionQueue->iterateAllData())) {
+                    foreach ($data as $jobId) {
+                        if (!empty($job = $actionQueue->getData($jobId))) {
+                            if (($timediff = time() - $job['time']) > $time[$qName]['dataWarn'] * 60) {
+                                if (null === $warn) {
+                                    $warn = $qName . ' data contains data older than ' . $time[$qName]['dataWarn'] . ' minutes';
+                                }
+                            }
+                            if ($timediff > $time[$qName]['dataErr'] * 60) {
+                                $err = $qName . ' data contains data older than ' . $time[$qName]['dataErr'] . ' minutes';
+                            }
+                        }
+                    }
+                }
+
+                if (null !== $err) {
+                    $e = Tinebase_Exception($err);
+                    Tinebase_Exception::log($e);
+                } elseif (null !== $warn) {
+                    ($e = Tinebase_Exception($warn))->setLogLevelMethod('warn');
+                    Tinebase_Exception::log($e);
+                }
+            }
+
+            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode($queueState));
+        }
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
     public function actionQueueActiveMonitoring()
     {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} &&

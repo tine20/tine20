@@ -647,7 +647,29 @@ class Tinebase_Scheduler_Task
     }
 
     /**
-     * add acl tables cleanup task to scheduler
+     * add hourly action queue integrity check task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addActionQueueConsistencyCheckTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_ActionQueueConsistencyCheck')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_ActionQueueConsistencyCheck', self::TASK_TYPE_HOURLY, [[
+            self::CONTROLLER    => 'Tinebase_Controller',
+            self::METHOD_NAME   => 'actionQueueConsistencyCheck',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_Controller::actionQueueConsistencyCheck in scheduler.');
+    }
+
+    /**
+     * add action queue constant monitoring task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler
      */
