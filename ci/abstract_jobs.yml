@@ -61,7 +61,6 @@
   script:
     - cd $TINE20ROOT/tests/tine20/
     - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllTests
-  parallel: 5
 
 .abstract_jobs.php_unit_test_with_ldap:
   extends: .abstract_jobs.php_unit_test

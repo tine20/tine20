@@ -12,3 +12,4 @@ variables:
   RUN_CI_PIPELINE: "true"
   PUSH_TO_DOCKERHUB: "false"
   DOCKERHUB_TAG: "dev"
+  PHP_UNIT_SERVERTESTS: "true"

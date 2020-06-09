@@ -85,6 +85,21 @@ workflow:
       when: on_success
     - when: never
   timeout: 60m # time run: 14m
+  parallel: 5
+
+"php unit: servertests source":
+  extends: .abstract_jobs.php_unit_test
+  stage: build_and_source_test
+  image:
+    name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+  rules:
+    - if: $PHP_UNIT_SERVERTESTS == "true"
+      when: on_success
+    - when: never
+  script:
+    - cd $TINE20ROOT/tests/tine20/
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllServerTests
+  timeout: 30m
 
 "phpstan: code analyses":
   stage: build_and_source_test
@@ -131,6 +146,7 @@ workflow:
       when: on_success
     - when: never
   timeout: 50m # time run: 13m
+  parallel: 5
 
 "php unit: nogitlabci tests built":
   extends: .abstract_jobs.php_unit_test
@@ -145,6 +161,7 @@ workflow:
     - cd $TINE20ROOT/tests/tine20/
     - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --group nogitlabci AllTests
   allow_failure: true
+  parallel: 5
 
 "php unit: all tests built with ldap":
   extends: .abstract_jobs.php_unit_test_with_ldap
@@ -158,6 +175,7 @@ workflow:
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
       when: on_success
     - when: never
+  parallel: 5
 
 "docker: push base and dependency image":
   extends: .abstract_jobs.docker
