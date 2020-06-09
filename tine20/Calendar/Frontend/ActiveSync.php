@@ -816,7 +816,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                             $rrule->until = null;
                         } else if(isset($data->$syncrotonProperty->until)) {
                             $rrule->count = null;
-                            $rrule->until = new Tinebase_DateTime($data->$syncrotonProperty->until);
+                            $rrule->until = $this->_convertDateTime($data->$syncrotonProperty->until);
                         } else {
                             $rrule->count = null;
                             $rrule->until = null;
@@ -830,7 +830,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     
                 default:
                     if ($data->$syncrotonProperty instanceof DateTime) {
-                        $event->$tine20Property = new Tinebase_DateTime($data->$syncrotonProperty);
+                        $event->$tine20Property = $this->_convertDateTime($data->$syncrotonProperty);
                     } else {
                         $event->$tine20Property = $data->$syncrotonProperty;
                     }
@@ -877,6 +877,18 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             __METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
 
         return $event;
+    }
+
+    protected function _convertDateTime($syncrotonDateTime)
+    {
+        if ($syncrotonDateTime instanceof DateTime) {
+            // convert TZ from type 2 ('Z') to type 3 ('UTC')
+            // TODO do we need to do this for more TZs?
+            $tz = $syncrotonDateTime->getTimezone()->getName() === 'Z' ? new DateTimeZone('UTC') : null;
+        } else {
+            $tz = null;
+        }
+        return new Tinebase_DateTime($syncrotonDateTime, $tz);
     }
     
     /**

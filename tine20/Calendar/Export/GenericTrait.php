@@ -218,6 +218,10 @@ trait Calendar_Export_GenericTrait
      */
     protected function _extendedCFResolving(Tinebase_Record_RecordSet $_records)
     {
+        if ($_records->getRecordClassName() !== Calendar_Model_Event::class) {
+            return;
+        }
+
         $resolveRecords = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
         $recurInstances = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
         /** @var Calendar_Model_Event $event */

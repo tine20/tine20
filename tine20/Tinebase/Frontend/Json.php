@@ -1058,8 +1058,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         // @todo do this for all apps at once (see import definitions)
         $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
+        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
         $appRegistry['exportDefinitions'] = array(
-            'results'               => $exportDefinitions->toArray(),
+            'results'               => $definitionConverter->fromTine20RecordSet($exportDefinitions),
             'totalcount'            => count($exportDefinitions),
         );
 

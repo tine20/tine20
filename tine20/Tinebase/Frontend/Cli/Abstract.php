@@ -159,7 +159,7 @@ class Tinebase_Frontend_Cli_Abstract
      *
      * @param Zend_Console_Getopt $_opts
      * @param boolean $checkDependencies
-     * @return boolean
+     * @return int
      */
     public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
@@ -188,7 +188,7 @@ class Tinebase_Frontend_Cli_Abstract
                 $this->_createPhpDemoData($_opts, $checkDependencies);
                 $this->_createImportDemoData();
         }
-        return true;
+        return 0;
     }
 
     /**
@@ -278,8 +278,9 @@ class Tinebase_Frontend_Cli_Abstract
                 ] : [];
             $importer = new Tinebase_Setup_DemoData_Import($model, $options);
             try {
+                echo 'Importing Demo Data for ' . $model . "\n";
                 $importer->importDemodata();
-                echo 'Csv Demo Data was created successfully' . chr(10) . chr(10);
+                echo 'Csv Demo Data was created successfully' . "\n";
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // model has no import files
             }
@@ -636,6 +637,8 @@ class Tinebase_Frontend_Cli_Abstract
      * @param string $_model
      * @param string $_exportClass
      * @return boolean
+     *
+     * TODO use Calendar_Export_VCalendarReport / Addressbook_Export_VCardReport here
      */
     protected function _exportVObject(Zend_Console_Getopt $_opts, $_model, $_exportClass)
     {
@@ -663,19 +666,22 @@ class Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * @param $container
-     * @param $args
+     * @param Tinebase_Model_Container $container
+     * @param array $args
+     * @param string $extension
      * @return string
      *
      * @todo add container name (need to strip spaces, special chars, ...)?
      * @todo create subdir for each user?
+     *
+     * TODO remove code replication with \Calendar_Export_VCalendarReport::_getExportFilename
      */
-    protected function _getVObjectExportFilename($container, $args)
+    protected function _getVObjectExportFilename($container, $args, $extension)
     {
         $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
         return $path . DIRECTORY_SEPARATOR . Tinebase_Core::getUser()->accountLoginName
             // . '_' . $container->name
-            . '_' . substr($container->getId(), 0, 8) . '.ics';
+            . '_' . substr($container->getId(), 0, 8) . '.' . $extension;
     }
 
     /**
@@ -695,7 +701,8 @@ class Tinebase_Frontend_Cli_Abstract
         if (! isset($options['stdout']) || $options['stdout'] != 1) {
             if (! isset($options['filename'])) {
                 $container = Tinebase_Container::getInstance()->getContainerById($containerId);
-                $options['filename'] = $this->_getVObjectExportFilename($container, $options);
+                $extension = $exportClass === Addressbook_Export_VCard::class ? 'vcf' : 'ics';
+                $options['filename'] = $this->_getVObjectExportFilename($container, $options, $extension);
             }
         } else {
             unset($options['filename']);

@@ -1026,6 +1026,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $this->_currentMonthToBill = null;
         foreach ($productAggregates as $productAggregate) {
             if ( null != $productAggregate->last_autobill ) {
+                if ($productAggregate->last_autobill->isEarlier($contract->start_date)) {
+                    $productAggregate->last_autobill = null;
+                    continue;
+                }
                 $tmp = clone $productAggregate->last_autobill;
                 $tmp->setDate($tmp->format('Y'), $tmp->format('m'), 1);
                 $tmp->setTime(0,0,0);

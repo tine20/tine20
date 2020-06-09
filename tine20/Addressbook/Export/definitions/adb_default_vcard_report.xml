@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_default_vcard_report</name>
+    <type>export</type>
+    <scope>report</scope>
+    <plugin>Addressbook_Export_VCardReport</plugin>
+    <!-- _('VCard Report') -->
+    <label>VCard Report</label>
+    <!-- _('Export multiple addressbooks to vcf files') -->
+    <description>Export multiple addressbooks to vcf files</description>
+    <plugin_options_definition>true</plugin_options_definition>
+</config>

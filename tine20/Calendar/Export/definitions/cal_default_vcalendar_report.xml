@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Calendar_Model_Event</model>
+    <name>cal_default_vcalendar_report</name>
+    <type>export</type>
+    <scope>report</scope>
+    <plugin>Calendar_Export_VCalendarReport</plugin>
+    <!-- _('VCalendar Report') -->
+    <label>VCalendar Report</label>
+    <!-- _('Export multiple calendars to ics files') -->
+    <description>Export multiple calendars to ics files</description>
+    <plugin_options_definition>true</plugin_options_definition>
+</config>

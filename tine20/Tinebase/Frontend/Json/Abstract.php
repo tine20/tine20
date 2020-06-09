@@ -561,6 +561,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Record_RecordSet $definitions
      * @param Tinebase_Model_Application $application
      * @return array
+     *
+     * @todo move code to converter \Tinebase_Convert_ImportExportDefinition_Json
      */
     protected function _getImportDefinitionRegistryData(Tinebase_Record_RecordSet $definitions = null, Tinebase_Model_Application $application = null)
     {
@@ -591,12 +593,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $definitionsArray = array();
         }
         
-        //Save space in Registry
-        unset($defaultDefinitionArray['plugin_options']);
-        foreach ($definitionsArray as &$definition) {
-            unset($definition['plugin_options']);
-        }
-
         return [
             'defaultImportDefinition'   => $defaultDefinitionArray,
             'importDefinitions'         => array(

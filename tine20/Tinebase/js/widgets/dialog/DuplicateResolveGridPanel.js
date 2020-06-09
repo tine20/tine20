@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -254,6 +254,18 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
      * init the toolbar
      */
     initToolbar: function() {
+        let mergeStrategies = [
+            ['keep', i18n._('Keep both records')]
+        ];
+        if (!_.get(this,'store.clientRecord.id')) {
+            // only allow all strategies for new (client) records
+            mergeStrategies = [
+                ['mergeTheirs', i18n._('Merge, keeping existing details')],
+                ['mergeMine',   i18n._('Merge, keeping my details')],
+                ['discard',     i18n._('Keep existing record and discard mine')]
+            ].concat(mergeStrategies);
+        }
+
         this.tbar = [{
             xtype: 'label',
             text: i18n._('Action:') + ' '
@@ -271,12 +283,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             store: new Ext.data.ArrayStore({
                 id: 0,
                 fields: ['value', 'text'],
-                data: [
-                    ['mergeTheirs', i18n._('Merge, keeping existing details')],
-                    ['mergeMine',   i18n._('Merge, keeping my details')],
-                    ['discard',     i18n._('Keep existing record and discard mine')],
-                    ['keep',        i18n._('Keep both records')]
-                ]
+                data: mergeStrategies
             }),
             listeners: {
                 scope: this, 
@@ -373,8 +380,6 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
     fields: Tine.widgets.dialog.DuplicateResolveModel,
 
     groupField: 'group',
-//    groupOnSort: true,
-//    remoteGroup: false,
     sortInfo: {field: 'group', oder: 'ASC'},
 
     constructor: function(config) {
@@ -394,7 +399,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
             });
         }
 
-        // forece duplicate 0 atm.
+        // force duplicate 0 atm.
         this.duplicateIdx = 0;
 
         if (initialData) {
@@ -409,7 +414,11 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
         this.duplicates = data.duplicates;
         Ext.each([].concat(this.duplicates), function(duplicate, idx) {this.duplicates[idx] = this.createRecord(this.duplicates[idx]);}, this);
 
-        this.resolveStrategy = resolveStrategy || this.defaultResolveStrategy;
+        if (this.clientRecord.id) {
+            this.resolveStrategy = 'keep';
+        } else {
+            this.resolveStrategy = resolveStrategy || this.defaultResolveStrategy;
+        }
 
         if (finalRecord) {
             finalRecord = this.createRecord(finalRecord);
@@ -435,13 +444,13 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
                 };
 
             recordData.group = fieldGroup ? this.app.i18n._hidden(fieldGroup) : recordData.i18nFieldName;
-            Ext.each([].concat(this.duplicates), function(duplicate, idx) {recordData['value' + idx] =  Tine.Tinebase.common.assertComparable(this.duplicates[idx].get(fieldName));}, this);
+            Ext.each([].concat(this.duplicates), function(duplicate, idx) {recordData['value' + idx] =
+                Tine.Tinebase.common.assertComparable(this.duplicates[idx].get(fieldName));}, this);
 
             var record = new Tine.widgets.dialog.DuplicateResolveModel(recordData, fieldName);
 
             if (finalRecord) {
                 if (finalRecord.modified && finalRecord.modified.hasOwnProperty(fieldName)) {
-//                    Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::loadData ' + fieldName + 'changed from  ' + finalRecord.modified[fieldName] + ' to ' + finalRecord.get(fieldName));
                     record.set('finalValue', finalRecord.modified[fieldName]);
 
                 }

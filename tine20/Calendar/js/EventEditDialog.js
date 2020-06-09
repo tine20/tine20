@@ -196,6 +196,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             xtype: 'fieldset',
                             title: this.app.i18n._('Status'),
                             items: [{
+                                xtype: 'widget-keyfieldcombo',
+                                app:   'Calendar',
+                                keyFieldName: 'eventStatus',
+                                width: 120,
+                                hideLabel: true,
+                                value: 'CONFIRMED',
+                                name: 'status',
+                                requiredGrant: 'editGrant',
+                            }, {
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('non-blocking'),
@@ -212,20 +221,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }, Ext.apply(this.perspectiveCombo.getAttendeeTranspField(), {
                                 hideLabel: true
                             }), {
-                                xtype: 'checkbox',
-                                hideLabel: true,
-                                boxLabel: this.app.i18n._('Tentative'),
-                                name: 'status',
-                                requiredGrant: 'editGrant',
-                                getValue: function() {
-                                    var bool = Ext.form.Checkbox.prototype.getValue.call(this);
-                                    return bool ? 'TENTATIVE' : 'CONFIRMED';
-                                },
-                                setValue: function(value) {
-                                    var bool = (value == 'TENTATIVE' || value === true);
-                                    return Ext.form.Checkbox.prototype.setValue.call(this, bool);
-                                }
-                            }, {
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('Private'),

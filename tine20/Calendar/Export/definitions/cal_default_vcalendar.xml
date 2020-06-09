@@ -6,8 +6,8 @@
     <favorite>true</favorite>
     <scope>multi</scope>
     <plugin>Calendar_Export_VCalendar</plugin>
-    <!-- _('VCalendar all data') -->
-    <label>VCalendar all data</label>
-    <!-- _('Export event data into ics file') -->
-    <description>Export event data into ics file</description>
+    <!-- _('VCalendar/ICS') -->
+    <label>VCalendar/ICS</label>
+    <!-- _('Export visible events to ics file') -->
+    <description>Export visible events to ics file</description>
 </config>

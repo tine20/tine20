@@ -110,7 +110,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 25,
+        self::VERSION       => 26,
         'containerName'     => 'Addressbook',
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
         'recordName'        => 'Contact',
@@ -285,7 +285,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'adr_one_countryname'           => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Country', // _('Country')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -293,7 +293,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'adr_one_locality'              => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'City', // _('City')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -301,28 +301,28 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'adr_one_postalcode'            => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Postalcode', // _('Postalcode')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_region'                => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Region', // _('Region')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_street'                => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Street', // _('Street')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_street2'               => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Street 2', // _('Street 2')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -343,7 +343,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'adr_two_countryname'           => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Country (private)', // _('Country (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -351,35 +351,35 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'adr_two_locality'              => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'City (private)', // _('City (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_postalcode'            => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Postalcode (private)', // _('Postalcode (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_region'                => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Region (private)', // _('Region (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_street'                => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Street (private)', // _('Street (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_two_street2'               => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Street 2 (private)', // _('Street 2 (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -400,7 +400,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'assistent'                     => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Assistent', // _('Assistent')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -458,7 +458,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'industry'                      => [
                 self::TYPE                      => self::TYPE_STRING, // TODO make a record out of it?
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Industry', // _('Industry')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -510,7 +510,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'n_given'                       => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'First Name', // _('First Name')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -518,28 +518,28 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'n_middle'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Middle Name', // _('Middle Name')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'n_prefix'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Title', // _('Title')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'n_suffix'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Suffix', // _('Suffix')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'n_short'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Short Name', // _('Short Name')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -554,7 +554,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'org_unit'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Unit', // _('Unit')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -591,14 +591,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'role'                          => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Job Role', // _('Job Role')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'room'                          => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Room', // _('Room')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -621,161 +621,161 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'tel_assistent'                 => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::SYSTEM                    => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_car'                       => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Car phone', // _('Car phone')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_cell'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Mobile', // _('Mobile')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_cell_private'              => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Mobile (private)', // _('Mobile (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_fax'                       => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Fax', // _('Fax')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_fax_home'                  => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Fax (private)', // _('Fax (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_home'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Phone (private)', // _('Phone (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_pager'                     => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Pager', // _('Pager')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_work'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Phone', // _('Phone')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tel_other'                     => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_prefer'                    => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_assistent_normalized'      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_car_normalized'            => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_cell_normalized'           => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_cell_private_normalized'   => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_fax_normalized'            => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_fax_home_normalized'       => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_home_normalized'           => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_pager_normalized'          => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_work_normalized'           => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_other_normalized'          => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'tel_prefer_normalized'         => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 40,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'system'                        => true
             ],
             'title'                         => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 64,
+                self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Job Title', // _('Job Title')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -968,11 +968,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'n_family' => 255,
             'n_fileas' => 255,
             'org_name' => 255,
-            'n_given' => 64,
-            'n_middle' => 64,
-            'n_prefix' => 64,
-            'n_suffix' => 64,
-            'n_short' => 64,
+            'n_given' => 86,
+            'n_middle' => 86,
+            'n_prefix' => 86,
+            'n_suffix' => 86,
+            'n_short' => 86,
          ] as $field => $allowedLength) {
             if (isset($_data[$field]) && mb_strlen($_data[$field]) > $allowedLength) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
