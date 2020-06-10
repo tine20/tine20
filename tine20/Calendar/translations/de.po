@@ -2556,3 +2556,6 @@ msgstr "Bis"
 
 msgid "until"
 msgstr "bis"
+
+msgid "Set event status"
+msgstr "Terminstatus setzen"
