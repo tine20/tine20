@@ -1165,8 +1165,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         foreach ($this->_fields as $fieldKey => &$fieldDef) {
             $fieldDef['fieldName'] = $fieldKey;
 
-            if (isset($fieldDef['readOnly'])) {
+            if (isset($fieldDef['readOnly']) && $fieldDef['readOnly']) {
                 $this->_readOnlyFields[] = $fieldKey;
+            }
+
+            if (isset($fieldDef['autocomplete']) && $fieldDef['autocomplete'] && !isset($fieldDef['config'])) {
+                $fieldDef['config'] = [
+                    'appName' => $this->_appName,
+                    'modelName' => $this->_modelName,
+                ];
             }
 
             // set default type to string, if no type is given
