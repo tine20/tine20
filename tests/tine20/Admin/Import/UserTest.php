@@ -32,11 +32,6 @@ class Admin_Import_UserTest extends TestCase
      */
     public function testImportDemoData()
     {
-        // skip test if domain != 'example.org'
-        if (! Tinebase_EmailUser::checkDomain('test@example.org')) {
-            self::markTestSkipped('example.org domain is not allowed by config');
-        }
-
         $this->_importContainer = $this->_getTestContainer('Admin', 'Tinebase_Model_FullUser');
         $importer = new Tinebase_Setup_DemoData_Import('Admin', [
             'container_id' => $this->_importContainer->getId(),
@@ -48,10 +43,21 @@ class Admin_Import_UserTest extends TestCase
         $users = array('s.rattle', 's.fruehauf', 't.bar', 'j.baum', 'j.metzger', 'e.eichmann', 'm.schreiber');
         $count = 0;
         foreach ($users as $user) {
-            if (Admin_Controller_User::getInstance()->searchFullUsers($user)->count() > 0) {
+            $record = Admin_Controller_User::getInstance()->searchFullUsers($user)->getFirstRecord();
+            if ($record) {
+                $db = Tinebase_Core::getDb();
+                $select = $db->select()
+                    ->from(array($db->table_prefix . 'accounts'))
+                    ->where($db->quoteIdentifier('id') . ' = ?', $record->getId());
+                $stmt = $db->query($select);
+                $queryResult = $stmt->fetch();
+                $stmt->closeCursor();
+
+                $this->assertTrue(isset($queryResult['pin']), 'no password in result: ' . print_r($queryResult, TRUE));
                 $count++;
             }
         }
+
         self::assertEquals(count($users), $count);
     }
 }

@@ -62,6 +62,10 @@ EOS
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
     }
 
+    /**
+     * @group nogitlabci
+     * gitlabci: PHPUnit_Framework_Exception: Tine 2.0 can't setup the configured logger! The Server responded: Zend_Log_Exception: "php://stdout" cannot be opened with mode "a" in
+     */
     public function testDenyingWebDavClient()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST, array('/deniedClient/'));

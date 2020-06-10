@@ -1,0 +1,18 @@
+########################
+# Tine 2.0
+# @package     Addressbook
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Christian Feitl <c.feitl@metaways.de>
+# @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for Addressbook
+# imports notes
+########################
+---
+name: notes
+
+notes:
+  #$app,$model,$definition,$file
+  - n_family => Test Familie
+  - bday => 2017-11-01

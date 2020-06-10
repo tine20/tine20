@@ -32,6 +32,7 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
         'accountEmailDomain'            => '',
         'samba'                         => '',
         'accountLoginShell'             => '',
+        'pin'                           => '',
         'userNameSchema'                => 1
     );
     
@@ -87,7 +88,10 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
             if (isset($_recordData['accountHomeDirectoryPrefix'])) {
                 $this->_options['accountHomeDirectoryPrefix'] = $_recordData['accountHomeDirectoryPrefix'];
             }
-            
+            if (isset($_recordData['pin'])) {
+                $this->_options['pin'] = $_recordData['pin'];
+            }
+
             $password = $record->applyOptionsAndGeneratePassword($this->_options, (isset($_recordData['password'])) ? $_recordData['password'] : NULL);
             Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
             
@@ -128,5 +132,16 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
                 'pwdMustChange' => isset($result['pwdMustChange']) ? new Tinebase_DateTime($result['pwdMustChange']) : ''
                             );
         return $result;
+    }
+
+    /**
+     * add pin for user
+     * @param $importedRecord
+     */
+    protected function _inspectAfterImport($importedRecord)
+    {
+         if($this->_options['pin']){
+             $this->_controller->setAccountPin($importedRecord,$this->_options['pin']);
+         }
     }
 }

@@ -654,9 +654,10 @@ class Tinebase_Application
                 case 'rootnode':
                     $count = 0;
                     try {
-                        if (Tinebase_FileSystem::getInstance()->isDir($_application->name)) {
+                        $tries = 0;
+                        while (Tinebase_FileSystem::getInstance()->isDir($_application->name) && ++$tries < 10) {
                             // note: TFS expects name here, not ID
-                            $count = Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
+                            $count += (int)Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
                         }
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // nothing to do

@@ -24,5 +24,9 @@
             <source>groups</source>
             <destination>groups</destination>
         </field>
+        <field>
+            <source>rights</source>
+            <destination>rights</destination>
+        </field>
     </mapping>
 </config>
