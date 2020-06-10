@@ -37,10 +37,8 @@ class Calendar_Export_VCalendarReport extends Tinebase_Export_Report_Abstract
                 'label' => 'Containers to export', // _('Containers to export')
                 'type' => 'containers',
                 'config' => [
-                    'recordClassName' => Calendar_Model_Event::class,
-                    // TODO needed?
-//                    'controllerClassName'           => Tinebase_Record_Path::class,
-//                    'filterClassName'               => Tinebase_Model_PathFilter::class,
+                    'appName' => 'Calendar',
+                    'modelName' => 'Event',
                 ],
                 // TODO add validation?
             ],

@@ -565,9 +565,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::IS_VIRTUAL                => true,
                 'noResolve'                     => true,
                 'config'                        => [
-                    'recordClassName'               => Tinebase_Model_Path::class,
-                    'controllerClassName'           => Tinebase_Record_Path::class,
-                    'filterClassName'               => Tinebase_Model_PathFilter::class,
+                    'appName' => 'Tinebase',
+                    'modelName' => 'Path',
+                    'recordClassName' => Tinebase_Model_Path::class,
+                    'controllerClassName' => Tinebase_Record_Path::class,
+                    'filterClassName' => Tinebase_Model_PathFilter::class,
                 ],
                 'label'                         => 'Paths', // _('Paths')
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
