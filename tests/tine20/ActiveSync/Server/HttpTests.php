@@ -58,6 +58,10 @@ class ActiveSync_Server_HttpTests extends ServerTestCase
         $this->assertContains('AwFqAAAHVkwDMQABUgMxAAFOVwM', base64_encode($result),0,30);
     }
 
+    /**
+     * @group nogitlabci
+     * gitlabci: PHPUnit_Framework_Exception: Tine 2.0 can't setup the configured logger! The Server responded: Zend_Log_Exception: "php://stdout" cannot be opened with mode "a"
+     */
     public function testDeniedAgent()
     {
         ActiveSync_Config::getInstance()->{ActiveSync_Config::USER_AGENT_DENY_LIST} = [
