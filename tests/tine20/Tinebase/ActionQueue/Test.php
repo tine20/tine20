@@ -163,20 +163,5 @@ class Tinebase_ActionQueue_Test extends TestCase
                     ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT} . ' ') === 0;}, 1);
         Tinebase_ActionQueue_Backend_Test::$_daemonStructSizeCall = null;
         Tinebase_ActionQueue_Backend_Test::$_daemonStructSize = 0;
-
-
-        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
-            Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode(null));
-        Tinebase_ActionQueue_Backend_Test::$_queueKeys = ['a'];
-        $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val, 'QUEUE OK') === 0;}, 0);
-        $queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-            Tinebase_Application::STATE_ACTION_QUEUE_STATE), true);
-        static::assertArrayHasKey('lastMissingQueueKeys', $queueState);
-        static::assertSame(['a' => true], $queueState['lastMissingQueueKeys']);
-        $queueState['lastFullCheck'] = 0;
-        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
-            Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode($queueState));
-        $this->checkMonitoringCheckQueueOutput(function($val, $config) { return strpos($val,
-                'QUEUE WARN: queue contains keys which are not present in data') === 0;}, 1);
     }
 }

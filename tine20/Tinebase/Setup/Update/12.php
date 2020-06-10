@@ -26,6 +26,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE013 = __CLASS__ . '::update013';
     const RELEASE012_UPDATE014 = __CLASS__ . '::update014';
     const RELEASE012_UPDATE015 = __CLASS__ . '::update015';
+    const RELEASE012_UPDATE016 = __CLASS__ . '::update016';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -94,6 +95,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE014          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update014',
+            ],
+            self::RELEASE012_UPDATE016          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update016',
             ],
         ],
     ];
@@ -303,5 +308,23 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate('Tinebase', '12.33', self::RELEASE012_UPDATE015);
+    }
+
+    public function update016()
+    {
+        Tinebase_Scheduler_Task::addActionQueueConsistencyCheckTask(Tinebase_Core::getScheduler());
+
+        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode([
+                'lastFullCheck' => 0,
+                'lastSizeOver10k' => false,
+                'actionQueueMissingQueueKeys' => [],
+                'actionQueueMissingDaemonKeys' => [],
+                'lastLRSizeOver10k' => false,
+                'actionQueueLRMissingQueueKeys' => [],
+                'actionQueueLRMissingDaemonKeys' => [],
+            ]));
+
+        $this->addApplicationUpdate('Tinebase', '12.34', self::RELEASE012_UPDATE016);
     }
 }
