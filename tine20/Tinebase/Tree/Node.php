@@ -161,6 +161,33 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
     }
 
+    protected function _checkName($name)
+    {
+        if (strpos($name, '/') !== false) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('node name must not contain the character /'));
+        }
+    }
+
+    protected function _checkRecordName(Tinebase_Model_Tree_Node $node)
+    {
+        $this->_checkName($node->name);
+    }
+
+    /**
+     * Creates new entry
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return Tinebase_Record_Interface
+     * @throws Exception
+     * @todo    remove autoincremental ids later
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        $this->_checkRecordName($_record);
+        return parent::create($_record);
+    }
+
     /**
      * Updates existing entry
      *
@@ -171,6 +198,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function update(Tinebase_Record_Interface $_record, $_doModLog = true)
     {
+        $this->_checkRecordName($_record);
+
         $oldRecord = $this->get($_record->getId(), true);
         $newRecord = parent::update($_record);
 
@@ -223,6 +252,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $oldRecords = null;
         if ($this->_omitModLog !== true) {
             $oldRecords = $this->getMultiple($_ids);
+        }
+
+        if (isset($_data['name'])) {
+            $this->_checkName($_data['name']);
         }
 
         $result = parent::updateMultiple($_ids, $_data);
