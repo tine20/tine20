@@ -6,26 +6,23 @@
  * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-Ext.ns('Tine.Tinebase.widgets.file.SelectionDialog');
+Ext.ns('Tine.Tinebase.widgets.file.LocationTypePlugin');
 
-/**
- * NOTE: you need to register your plugin
- *       see {Tine.Tinebase.widgets.file.SelectionDialog.InitUploadPlugin} as example
- */
-Tine.Tinebase.widgets.file.SelectionDialog.AbstractPlugin = function(plugin) {
+
+Tine.Tinebase.widgets.file.LocationTypePlugin.Abstract = function(plugin) {
     Ext.apply(this, plugin);
 }
 
-Tine.Tinebase.widgets.file.SelectionDialog.AbstractPlugin.prototype = {
+Tine.Tinebase.widgets.file.LocationTypePlugin.Abstract.prototype = {
     /**
-     * @cfg {String} plugin
-     * internal plugin name
+     * @cfg {String} locationType
+     * locationType name
      */
-    plugin: '',
+    locationType: '',
     
     /**
      * @cfg {String} name
-     * _translated_ name of this plugin (required)
+     * _translated_ name of this locationType (required)
      */
     name: '',
     
@@ -34,29 +31,18 @@ Tine.Tinebase.widgets.file.SelectionDialog.AbstractPlugin.prototype = {
      * iconCls for place selection
      */
     iconCls: '',
-
+    
     /**
-     * @cfg {Ext.Panel} pluginPanel
+     * @param area one of pluginPanel|targetForm|optionsForm
+     * @return {Promise<void>}
      */
-    pluginPanel: null,
-
-    /**
-     * @cfg {Ext.Panel} targetForm
-     * optional northPanel
-     */
-    targetForm: null,
-
-    /**
-     * @cfg {Ext.Panel} optionsForm
-     * optional southPanel
-     */
-    optionsForm: null,
+    getSelectionDialogArea: async function(area, cmp) {},
     
     /**
      * @return {Array}
      */
     getFileList: function() {},
-
+    
     /**
      * manage state of apply button
      * use buttonApply.setDisabled({Boolean}) to manage state
@@ -68,5 +54,13 @@ Tine.Tinebase.widgets.file.SelectionDialog.AbstractPlugin.prototype = {
      * called before dialog closes, return false to suppress selection
      * @return {Promise<void>}
      */
-    validateSelection: async function () {}
+    validateSelection: async function () {},
+
+    /**
+     * get string representation of given location
+     *
+     * @param {Object} location
+     * @return {String} string representation of location
+     */
+    getLocationName: function(location) {}
 };

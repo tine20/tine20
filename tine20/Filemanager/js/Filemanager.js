@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import './FileSelectionDialog/InitFilemanagerPlugin';
+import './FileLocationType/FilemanagerPluginFactory';
 
 Ext.ns('Tine.Filemanager');
 

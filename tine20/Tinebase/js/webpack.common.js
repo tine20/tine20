@@ -11,12 +11,14 @@ var assetsPluginInstance = new AssetsPlugin({
     prettyPrint: true
 });
 var VueLoaderPlugin = require('vue-loader/lib/plugin');
+var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
 
 var baseDir  = path.resolve(__dirname , '../../'),
     entryPoints = {};
 
 // find all entry points
 fs.readdirSync(baseDir).forEach(function(baseName) {
+    // if (baseName !== 'Filemanager') return;
     try {
         // try npm package.json
         var pkgDef = JSON.parse(fs.readFileSync(baseDir + '/' + baseName + '/js/package.json').toString());
@@ -58,7 +60,8 @@ module.exports = {
     },
     plugins: [
         assetsPluginInstance,
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new ChunkNamePlugin()
     ],
     module: {
         rules: [

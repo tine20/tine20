@@ -11,6 +11,8 @@
 
 Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
+import '../../Model/ImportExportDefinition';
+
 /**
  * Generic 'Export' dialog
  *
@@ -21,6 +23,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  * @param       {Object} config The configuration options
  * 
  * TODO         add template for def combo (shows description, format?, ...)
+ *              -> add panel with it
  * 
  */
 Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -32,14 +35,15 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @cfg {Number} height
      */
-    height: 150,
+    height: 600,
     /**
      * @cfg {Number} width
      */
-    width: 400,
+    width: 800,
 
     // private
     windowNamePrefix: 'ExportWindow_',
+    checkUnsavedChanges: false,
     loadMask: false,
     tbarItems: [],
     evalGrants: false,
@@ -64,62 +68,37 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         var recordClass = Tine.Tinebase.data.RecordMgr.get(this.record.get('model')),
             scope = this.record.get('scope'),
-            exportDefinitions = Tine.widgets.exportAction.getExports(recordClass, false, scope);
+            exportDefinitions = Tine.widgets.exportAction.getExports(recordClass, null, scope);
 
-        // check if initial data available
-        if (Tine[this.appName].registry.get('exportDefinitions')) {
-            Ext.each(exportDefinitions, function(defData) {
-                var options = defData.plugin_options_json,
-                    extension = options ? options.extension : null;
-                
-                defData.label = this.app.i18n._hidden(defData.label ? defData.label : defData.name);
-                this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
-            }, this);
-            this.definitionsStore.sort('label');
-        }
+        Ext.each(exportDefinitions, function(defData) {
+            defData.label = this.app.i18n._hidden(defData.label ? defData.label : defData.name);
+            this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
+        }, this);
+        this.definitionsStore.sort('label');
+        
+        this.record.set('returnFileLocation', true);
         
         Tine.widgets.dialog.ExportDialog.superclass.initComponent.call(this);
     },
     
     /**
-     * executed after record got updated from proxy
-     */
-    onRecordLoad: function() {
-        // interrupt process flow until dialog is rendered
-        if (! this.rendered) {
-            this.onRecordLoad.defer(250, this);
-            return;
-        }
-        
-        this.window.setTitle(String.format(i18n._('Export {0} {1}'), this.record.get('count'), this.record.get('recordsName')));
-    },
-
-    /**
      * returns dialog
      */
     getFormItems: function() {
-        if (this.record) {
-            // remove all definitions that does not share the (grid) model / store.filter() did not do the job
-            this.definitionsStore.each(function(record) {
-                if (record.get('model') !== this.record.get('model') || record.get('favorite') == '1') {
-                    this.definitionsStore.remove(record);
-                }
-            }, this);
-        }
-            
         return {
             bodyStyle: 'padding:5px;',
             buttonAlign: 'right',
             labelAlign: 'top',
             border: false,
             layout: 'form',
+            ref: 'formPanel',
             defaults: {
                 anchor: '100%'
             },
             items: [{
                 xtype: 'combo',
-                fieldLabel: i18n._('Export definition'),
-                name:'export_definition_id',
+                fieldLabel: i18n._('Export'),
+                name:'definitionId',
                 store: this.definitionsStore,
                 displayField:'label',
                 mode: 'local',
@@ -129,9 +108,73 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 forceSelection: true,
                 emptyText: i18n._('Select Export Definition ...'),
                 valueField: 'id',
-                value: (this.definitionsStore.getCount() > 0) ? this.definitionsStore.getAt(0).id : null 
+                checkState: this.checkDefinitionState.createDelegate(this)
+            }, {
+                xtype: 'displayfield',
+                fieldLabel: i18n._('Description'),
+                ref: '../definitionDescription',
+                height: 70,
+                cls: 'x-ux-display-background-border',
+                style: 'padding-left: 5px;'
             }]
         };
+    },
+
+    checkDefinitionState: function() {
+        const definitionId = this.record.get('definitionId');
+        const definition = this.definitionsStore.getById(definitionId);
+        
+        if (definitionId && definitionId !== this.definitionId) {
+            this.definitionDescription.setValue(
+                this.app.i18n._hidden(definition.get('description')));
+            
+            this.formPanel.items.each((item) => {
+                if (item.definitionId && item.definitionId === this.definitionId) {
+                    item.ownerCt.remove(item);
+                }
+            });
+
+            const optionsDefinitions = _.get(definition, 'data.plugin_options_definition', {});
+            const options =  _.get(definition, 'data.plugin_options_json', {});
+
+            _.each(optionsDefinitions, (fieldDefinition, fieldName) => {
+                _.assign(fieldDefinition, {
+                    appName: this.appName,
+                    fieldName: fieldName,
+                });
+                
+                const config = {
+                    value: _.get(options, 'fieldName'),
+                    definitionId: definitionId
+                };
+                
+                const field = Ext.create(Tine.widgets.form.FieldManager.getByFieldDefinition(fieldDefinition,
+                    Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,{
+                        value: _.get(options, 'fieldName'),
+                        definitionId: definitionId
+                    }
+                ));
+                
+                this.formPanel.add(field);
+                this.relayEvents(field, ['change', 'select']);
+            });
+            
+            this.doLayout();
+            this.definitionId = definitionId;
+        }
+    },
+
+    onRecordUpdate: function() {
+        if (this.definitionId) {
+            this.formPanel.items.each((item) => {
+                if (item.definitionId && item.definitionId === this.definitionId) {
+                    // this.record is a exportJob not an definition! :-(
+                    _.set(this.record, 'data.options.' +item.name, item.getValue());
+                }
+            });
+        }
+        
+        return Tine.widgets.dialog.ExportDialog.superclass.onRecordUpdate.call(this);
     },
     
     /**
@@ -142,11 +185,49 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (form.isValid()) {
             this.onRecordUpdate();
 
-            Tine.widgets.exportAction.downloadExport(this.record);
-            this.window.close();
+            const exportMask = new Ext.LoadMask(this.getEl(), {msg: i18n._('Exporting...')});
+            exportMask.show();
+
+            Tine.widgets.exportAction.downloadExport(this.record).then((raw) => {
+                const response = JSON.parse(raw.responseText);
+
+                if (_.get(response, 'location.type') === 'download') {
+                    new Ext.ux.file.Download({
+                        params: {
+                            method: 'Tinebase.downloadTempfile',
+                            requestType: 'HTTP',
+                            tmpfileId: _.get(response, 'location.tempfile_id')
+                        }
+                    }).start();
+                }
+                
+                Ext.Msg.show({
+                    title: i18n._('Success'),
+                    msg: i18n._('Export created successfully.'),
+                    icon: Ext.MessageBox.INFO,
+                    buttons: Ext.Msg.OK,
+                    scope: this.window,
+                    fn: this.window.close
+                });
+                
+            }).catch((error) => {
+                Ext.Msg.show({
+                    title: i18n._('Failure'),
+                    msg: i18n._('Export could not be created. Please try again later'),
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK,
+                    scope: this.window,
+                    fn: this.window.close
+                });
+            });
             
         } else {
-            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
+            Ext.Msg.show({
+                title: i18n._('Errors'),
+                msg: this.getValidationErrorMessage(),
+                icon: Ext.MessageBox.ERROR,
+                buttons: Ext.Msg.OK
+            });
         }
     }
 });
@@ -157,7 +238,6 @@ Tine.widgets.dialog.ExportDialog.openWindow = function (config) {
         height: Tine.widgets.dialog.ExportDialog.prototype.height,
         name: Tine.widgets.dialog.ExportDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.ExportDialog',
-        contentPanelConstructorConfig: config,
-        modal: true
+        contentPanelConstructorConfig: config
     });
 };

@@ -10,12 +10,15 @@ Ext.ns('Tine', 'Tine.widgets', 'Tine.widgets.exportAction');
 Tine.widgets.exportAction.SCOPE_SINGLE = 'single';
 Tine.widgets.exportAction.SCOPE_MULTI = 'multi';
 Tine.widgets.exportAction.SCOPE_HIDDEN = 'hidden';
+Tine.widgets.exportAction.SCOPE_REPORT = 'report';
 
 /**
  * get all (favorite) export definitions for given model
  *
  * @param {Tine.Tinebase.data.Record} recordClass
- * @param {Object} exportConfig
+ * @param {Boolean} favorites
+ * @param {String} scope
+ * @return {Collection} exportDefinitionsData
  */
 Tine.widgets.exportAction.getExports = function (recordClass, favorites, scope) {
     var _ = window.lodash,
@@ -37,7 +40,14 @@ Tine.widgets.exportAction.getExports = function (recordClass, favorites, scope) 
 
     if (_.isString(scope)) {
         exportDefinitions = _.filter(exportDefinitions, function(d) {
-            return Tine.widgets.exportAction.SCOPE_HIDDEN !== d.scope && (d.scope === null || d.scope == "" || d.scope == scope);
+            let definedScope = d.scope === Tine.widgets.exportAction.SCOPE_REPORT ?
+                Tine.widgets.exportAction.SCOPE_MULTI : d.scope;
+            
+            if (definedScope === Tine.widgets.exportAction.SCOPE_HIDDEN) {
+                return false;
+            }
+            
+            return !definedScope || definedScope === scope;
         });
     }
 
@@ -52,6 +62,7 @@ Tine.widgets.exportAction.getExportMenuItems = function (recordClass, exportConf
 
     return _.reduce(exportDefinitions, function(items, definition) {
         items.push(new Tine.widgets.grid.ExportButton(_.assign({
+            exportScope: scope,
             recordClass: recordClass,
             definition: definition,
             text: app.i18n._hidden(definition.label ? definition.label : definition.name),
@@ -76,7 +87,7 @@ Tine.widgets.exportAction.getExportButton = function(recordClass, exportConfig, 
         allItems = Tine.widgets.exportAction.getExports(recordClass, null, scope),
         menuItems = Tine.widgets.exportAction.getExportMenuItems(recordClass, exportConfig, scope);
 
-    if (allItems.length > menuItems.length) {
+    if (allItems.length) {
         menuItems.push(new Tine.widgets.grid.ExportButton(_.assign({
             exportScope: scope,
             recordClass: recordClass,
@@ -116,20 +127,37 @@ Tine.widgets.exportAction.downloadExport = function(exportJob) {
         filter = exportJob.get('filter'),
         options = _.assign(exportJob.get('options'), {
             format: exportJob.get('format'),
-            definitionId: exportJob.get('export_definition_id')
+            definitionId: exportJob.get('definitionId'),
+            returnFileLocation: exportJob.get('returnFileLocation')
         });
 
-        if (options.filter) {
-            filter = options.filter;
-            delete options.filter;
-        }
-
-    new Ext.ux.file.Download({
-        params: {
-            method: exportJob.get('exportFunction'),
-            requestType: 'HTTP',
-            filter: Ext.util.JSON.encode(filter),
-            options: Ext.util.JSON.encode(options)
-        }
-    }).start();
+    if (options.filter) {
+        filter = options.filter;
+        delete options.filter;
+    }
+    
+    const params = {
+        method: exportJob.get('exportFunction'),
+        requestType: 'HTTP',
+        filter: Ext.util.JSON.encode(filter),
+        options: Ext.util.JSON.encode(options)
+    };
+    
+    if (! options.returnFileLocation) {
+        new Ext.ux.file.Download({
+            params: params
+        }).start();
+    } else {
+        return new Promise((resolve, reject) => {
+            const connection = new Ext.data.Connection();
+            connection.request({
+                params: params,
+                success: resolve,
+                failure: reject,
+                url: 'index.php',
+                method: 'POST',
+                timeout: 300000
+            });
+        });
+    }
 };

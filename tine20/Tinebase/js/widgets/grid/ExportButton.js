@@ -8,6 +8,8 @@
  */
 Ext.ns('Tine.widgets.grid');
 
+import '../../Model/ImportExportDefinition';
+
 /**
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.ExportButton
@@ -28,11 +30,6 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
      * @cfg {Tine.Tinebase.data.Record} recordClass
      */
     recordClass: null,
-
-    /**
-     * @cfg {Object} definition
-     */
-    definition: '',
 
     /**
      * @cfg {Function} getExportOptions
@@ -117,7 +114,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
     /**
      * do export
      */
-    doExport: function(options) {
+    doExport: async function(options) {
         var _ = window.lodash,
             appName, filter, model,
             count = 1;
@@ -151,18 +148,24 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
         this.exportFunction = this.exportFunction || (appName + '.export' + this.recordClass.getMeta('modelName') + 's');
 
         var exportJob = new Tine.Tinebase.Model.ExportJob({
-            scope: this.definition.scope,
+            scope: this.exportScope,
             filter: filter,
             format: this.format,
             exportFunction: this.exportFunction,
             count: count,
-            export_definition_id: this.definitionId,
+            definitionId: this.definitionId,
             recordsName: this.recordClass.getRecordsName(),
             model: model,
             options: options
         });
 
-        if (this.showExportDialog) {
+        let optionsMissing = false;
+        if (this.definitionId) {
+            const definition = Tine.Tinebase.Model.ImportExportDefinition.get(appName, this.definitionId);
+            optionsMissing = definition.optionsMissing(options);
+        }
+        
+        if (this.showExportDialog || Ext.EventObject.altKey === true || optionsMissing) {
             Tine.widgets.dialog.ExportDialog.openWindow({
                 appName: appName,
                 record: exportJob
