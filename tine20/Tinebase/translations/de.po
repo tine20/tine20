@@ -4709,3 +4709,13 @@ msgstr "Format"
 
 msgid "Filename"
 msgstr "Dateiname"
+
+msgid "Places"
+msgstr "Orte"
+
+msgid "My Device"
+msgstr "Mein Gerät"
+
+msgid "Download file and save on my local device."
+msgstr "Datei herunterladen und auf meinem Gerät speichern."
+

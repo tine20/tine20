@@ -13,7 +13,7 @@ Ext.ns('Tine.Tinebase.widgets.file.SelectionDialog');
 Tine.Tinebase.widgets.file.SelectionDialog.DownloadPlugin = function(plugin) {
     Ext.apply(this, plugin);
     
-    this.name = i18n._('To My Computer');
+    this.name = i18n._('My Device');
     
     this.targetForm = new Ext.Panel({
         height: 38,
@@ -22,7 +22,7 @@ Tine.Tinebase.widgets.file.SelectionDialog.DownloadPlugin = function(plugin) {
     });
     
     this.pluginPanel = new Ext.Button(Ext.apply({
-        text: i18n._('Download file and save on my local machine.'),
+        text: i18n._('Download file and save on my local device.'),
         doAutoWidth: Ext.emptyFn,
         iconCls: 'action_download',
         cls: 'tw-FileSelectionArea',

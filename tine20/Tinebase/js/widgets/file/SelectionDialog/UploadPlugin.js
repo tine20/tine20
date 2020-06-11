@@ -14,7 +14,7 @@ Ext.ns('Tine.Tinebase.widgets.file.SelectionDialog');
 Tine.Tinebase.widgets.file.SelectionDialog.UploadPlugin = function(plugin) {
     Ext.apply(this, plugin);
 
-    this.name = i18n._('From My Computer');
+    this.name = i18n._('My Device');
     
     if (this.uploadMode === 'select') {
         this.pluginPanel = new Tine.widgets.form.FileSelectionArea(Ext.apply({

@@ -11,7 +11,7 @@
 
 Ext.ns('Tine.widgets.grid');
 
-import('../file/SelectionDialog');
+import '../file/SelectionDialog';
 
 /**
  * @namespace   Tine.widgets.grid

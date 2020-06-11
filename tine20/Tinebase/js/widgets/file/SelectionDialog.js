@@ -6,8 +6,8 @@
  * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import('./SelectionDialog/InitUploadPlugin');
-import('./SelectionDialog/InitDownloadPlugin');
+import './SelectionDialog/InitUploadPlugin';
+import './SelectionDialog/InitDownloadPlugin';
 
 Ext.ns('Tine.Tinebase.widgets.file');
 
