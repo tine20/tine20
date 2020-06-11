@@ -2541,3 +2541,6 @@ msgstr "Es kann nicht mehr als einen Rechtefilter geben"
 
 msgid "You can not have more than one calendar filter"
 msgstr "Es kann nicht mehr als einen Kalenderfilter geben"
+
+msgid "The event got rescheduled. Set your response to:"
+msgstr "Der Termin wurde verschoben. Stellen Sie Ihre Antwort auf:"
