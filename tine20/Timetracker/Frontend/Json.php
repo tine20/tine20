@@ -309,7 +309,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
             // add totalcounts of leadstates/leadsources/leadtypes
             $totalresult['totalcountbillable'] = $result['sum_is_billable_combined'];
-            $totalresult['totalsum'] = $result['sum_accounting_time'];
+            $totalresult['totalsum'] = $result['sum_duration'];
             $totalresult['totalsumbillable'] = $result['sum_accounting_time_billable'];
             $totalresult['totalcount'] = $result['count'];
 

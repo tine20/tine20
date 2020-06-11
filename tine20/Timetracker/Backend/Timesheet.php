@@ -90,11 +90,11 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
     public function __construct($_dbAdapter = NULL, $_options = array())
     {
         parent::__construct($_dbAdapter, $_options);
-        
-        $this->_additionalSearchCountCols =  array(
+
+        $this->_additionalSearchCountCols = array(
             'is_billable_combined' => null, // taken from _foreignTables
-            'accounting_time'      => 'accounting_time',
-            'accounting_time_billable'    => null  // taken from _foreignTables
+            'duration' => 'duration',
+            'accounting_time_billable' => null  // taken from _foreignTables
         );
         
         $this->_foreignTables['is_billable_combined']['select'] = array(
