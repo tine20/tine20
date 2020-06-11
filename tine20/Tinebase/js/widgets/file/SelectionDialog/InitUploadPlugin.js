@@ -17,7 +17,7 @@ Tine.Tinebase.widgets.file.SelectionDialog.InitUploadPlugin.prototype = {
         this.cmp = cmp;
         // @TODO is user allowed/capable to upload local files?
         if (true) {
-            import(/* webpackChunkName: "Tinebase/js/widgets/file-SelectionDialog-UploadPlugin" */ './UploadPlugin').then(() => {
+            import(/* webpackChunkName: "Tinebase/js/widgets-file-SelectionDialog-UploadPlugin" */ './UploadPlugin').then(() => {
                 const plugin = new Tine.Tinebase.widgets.file.SelectionDialog.UploadPlugin(this);
             });
         }

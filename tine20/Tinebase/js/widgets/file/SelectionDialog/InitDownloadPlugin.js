@@ -16,7 +16,7 @@ Tine.Tinebase.widgets.file.SelectionDialog.InitDownloadPlugin.prototype = {
     init: function(cmp) {
         this.cmp = cmp;
         if (+Tine.Tinebase.configManager.get('downloadsAllowed')) {
-            import(/* webpackChunkName: "Tinebase/js/widgets/file-SelectionDialog-DownloadPlugin" */ './DownloadPlugin').then(() => {
+            import(/* webpackChunkName: "Tinebase/js/widgets-file-SelectionDialog-DownloadPlugin" */ './DownloadPlugin').then(() => {
                 const plugin = new Tine.Tinebase.widgets.file.SelectionDialog.DownloadPlugin(this);
             });
         }

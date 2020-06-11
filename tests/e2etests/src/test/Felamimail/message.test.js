@@ -25,7 +25,7 @@ describe('message', () => {
         const fileToUpload = 'src/test/Felamimail/attachment.txt';
         await expect(popupWindow).toClick('.x-btn-text', {text: 'Datei hinzufügen'});
         const filePickerWindow = await lib.getNewWindow();
-        await expect(filePickerWindow).toClick('span',{text: 'From My Computer'});
+        await expect(filePickerWindow).toClick('span',{text: 'Mein Gerät'});
         await filePickerWindow.waitForSelector('input[type=file]');
         const inputUploadHandle = await filePickerWindow.$('input[type=file]');
         await inputUploadHandle.uploadFile(fileToUpload);
