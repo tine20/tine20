@@ -168,6 +168,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if ($_password != $_passwordRepeat) {
             throw new Admin_Exception("Passwords don't match.");
         }
+
+        if ($_mustChange === null) {
+            $_mustChange = $_account->password_must_change ? true : false;
+        }
         
         $this->_userBackend->setPassword($_account, $_password, true, $_mustChange);
         
@@ -264,7 +268,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         Tinebase_Event::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($_user, $_password, $_passwordRepeat, FALSE);
+            $this->setAccountPassword($_user, $_password, $_passwordRepeat);
         }
 
         $this->_updateCurrentUser($user);
