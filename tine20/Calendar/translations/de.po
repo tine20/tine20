@@ -1678,8 +1678,12 @@ msgid "Sync Events"
 msgstr "Termine synchronisieren"
 
 #: js/Model/ResourceGrants.js:99
-msgid "The grant to synchronise events from this resource calendar. Needs the grant read events"
-msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu synchronisieren. Benötigt das Recht Termine lesen"
+msgid ""
+"The grant to synchronise events from this resource calendar. Needs the grant "
+"read events"
+msgstr ""
+"Das Recht Termine aus dem Ressourcen-Kalender zu synchronisieren. Benötigt "
+"das Recht Termine lesen"
 
 #: js/Model/ResourceGrants.js:100
 msgid "Events Free Busy"
@@ -2486,8 +2490,8 @@ msgid "{headerDate, date, full}"
 msgstr "{headerDate, date, full}"
 
 msgid ""
-"Container name / New or existing if it already exists you need "
-"permissions to add to."
+"Container name / New or existing if it already exists you need permissions "
+"to add to."
 msgstr ""
 "Ein neuer Container Name oder ein bereits Vorhandener für den man über "
 "Schreibrechte verfügt."
@@ -2541,6 +2545,9 @@ msgstr "Es kann nicht mehr als einen Rechtefilter geben"
 
 msgid "You can not have more than one calendar filter"
 msgstr "Es kann nicht mehr als einen Kalenderfilter geben"
+
+msgid "The event got rescheduled. Set your response to:"
+msgstr "Der Termin wurde verschoben. Stellen Sie Ihre Antwort auf:"
 
 msgid "Custom Selection"
 msgstr "Eigene Auswahl"
