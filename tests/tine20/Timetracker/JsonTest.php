@@ -16,17 +16,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     protected $_testUser = NULL;
 
     /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-    
-    /**
      * Tears down the fixture
      * This method is called after a test is executed.
      *
@@ -729,22 +718,23 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_deleteTimeSheets[] = $timesheetData['id'];
         $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
-        $timesheet = $this->_getTimesheet();
-        $timesheet['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
-        $timesheet->is_billable = false;
+        $timesheet = $this->_getTimesheet([
+            'timeaccount_id' => $timesheetData['timeaccount_id']['id'],
+            'is_billable' => false,
+        ]);
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_deleteTimeSheets[] = $timesheetData['id'];
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
+
         // search & check
         $search = $search = $this->_json->searchTimesheets(
             $this->_getTimesheetFilter(null, $timesheetData['timeaccount_id']['id']),
             $this->_getPaging()
         );
-        $this->assertEquals(60, $search['totalsum'], 'totalsum mismatch');
-        $this->assertEquals(15, $search['totalsumbillable'], 'totalsumbillable mismatch');
+        $this->assertEquals(60, $search['totalsum'], 'totalsum mismatch ' . print_r($search, true));
+        $this->assertEquals(15, $search['totalsumbillable'], 'totalsumbillable mismatch ' . print_r($search, true));
     }
     
     /**
