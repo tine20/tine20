@@ -840,7 +840,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function updateContactFromSyncBackend(Tinebase_Model_FullUser $_user, Addressbook_Model_Contact $_contact)
     {
-        $userData = $this->_getMetaData($_user);
+        try {
+            $userData = $this->_getMetaData($_user);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $tenf->getMessage());
+            return;
+        }
 
         $userData = $this->_ldap->getEntry($userData['dn']);
         
