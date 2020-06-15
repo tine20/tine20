@@ -1257,3 +1257,6 @@ msgstr "E-Mail-Konten verwalten"
 
 msgid "Only system accounts can be added to Addressbook group"
 msgstr "Nur Systembenutzer in der zugehörigen Addressbuch-Gruppe erlauben"
+
+msgid "Account only"
+msgstr "Nur Systembenutzer"

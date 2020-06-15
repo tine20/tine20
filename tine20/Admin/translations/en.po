@@ -1187,3 +1187,6 @@ msgstr "view serverinfo list"
 #: Acl/Rights.php:279 Acl/Rights.php:280
 msgid "view quota usage"
 msgstr "view quota usage"
+
+msgid "Account only"
+msgstr "Account only"
