@@ -426,5 +426,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     this.onApplyChanges(true);
                 }
             }, this);
+    },
+
+    /**
+     * disabled exportbutton in TimesheetEditDialog
+     */
+    initActions: function () {
+        Tine.Timetracker.TimesheetEditDialog.superclass.initActions.call(this);
+        this.action_export = null;
     }
 });
