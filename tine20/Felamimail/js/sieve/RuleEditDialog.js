@@ -438,6 +438,9 @@ Tine.Felamimail.sieve.RuleEditDialog.openWindow = function (config) {
  * @return {Array}
  */
 Tine.Felamimail.sieve.RuleEditDialog.getActionTypes = function(app) {
+    if (! app) {
+        app = Tine.Tinebase.appMgr.get('Felamimail');
+    }
     return [
         ['fileinto',    app.i18n._('Move mail to folder')],
         ['redirect',    app.i18n._('Redirect mail to address')],
