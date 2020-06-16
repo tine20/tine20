@@ -1116,7 +1116,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * get max attachment size for outgoing mails
      * 
-     * - currently it is set to memory_limit
+     * - currently it is set to memory_limit / 4
      * - returns size in Bytes
      * 
      * @return integer
@@ -1125,14 +1125,15 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         $configuredMemoryLimit = ini_get('memory_limit');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' memory_limit = ' . $configuredMemoryLimit);
-        
         if ($configuredMemoryLimit === FALSE or $configuredMemoryLimit == -1) {
             // set to a big default value
             $configuredMemoryLimit = '512M';
         }
-        
-        return Tinebase_Helper::convertToBytes($configuredMemoryLimit);
+
+        $result = round(Tinebase_Helper::convertToBytes($configuredMemoryLimit) / 4);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' memory_limit = ' . $configuredMemoryLimit . ' / max upload size: ' . $result);
+
+        return $result;
     }
 }
