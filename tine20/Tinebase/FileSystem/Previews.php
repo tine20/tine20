@@ -43,8 +43,15 @@ class Tinebase_FileSystem_Previews
     /**
      * @var array
      */
-    protected $_supportedFileExtensions = array(
-        'txt', 'rtf', 'odt', 'ods', 'odp', 'doc', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf', 'jpg', 'jpeg', 'gif', 'tiff', 'png'
+    protected $_supportedDocumentFileExtensions = array(
+        'txt', 'rtf', 'odt', 'ods', 'odp', 'doc', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf',
+    );
+
+    /**
+     * @var array
+     */
+    protected $_supportedImageFileExtensions = array(
+        'jpg', 'jpeg', 'gif', 'tiff', 'png'
     );
 
     /**
@@ -122,11 +129,33 @@ class Tinebase_FileSystem_Previews
      */
     public function isSupportedFileExtension($_fileExtension)
     {
-        return in_array(mb_strtolower($_fileExtension), $this->_supportedFileExtensions);
+        return in_array(mb_strtolower($_fileExtension), $this->_supportedDocumentFileExtensions)
+               || in_array(mb_strtolower($_fileExtension), $this->_supportedImageFileExtensions);
     }
 
-    protected function _getConfig()
+    /**
+     * @param string $_fileExtension
+     * @return bool true: is image file extension
+     */
+    public function isImageFileExtension($_fileExtension)
     {
+        return in_array(mb_strtolower($_fileExtension), $this->_supportedImageFileExtensions);
+    }
+
+    /**
+     * @param bool $_image true: config for image preview, false: config for document preview
+     * @return array[] config for DocumentPreviewService
+     */
+    protected function _getConfig($_image = false)
+    {
+        if ($_image === true) {
+            $previewMaxX = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_X};
+            $previewMaxY = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_Y};
+        } else {
+            $previewMaxX = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_X};
+            $previewMaxY = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_Y};
+        }
+
         return array(
             'thumbnail' => array(
                 'firstPage' => true,
@@ -138,8 +167,8 @@ class Tinebase_FileSystem_Previews
             'previews'  => array(
                 'firstPage' => false,
                 'filetype'  => 'jpg',
-                'x'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_PREVIEW_SIZE_X},
-                'y'         => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y},
+                'x'         => $previewMaxX,
+                'y'         => $previewMaxY,
                 'color'     => 'white'
             )
         );
@@ -217,8 +246,10 @@ class Tinebase_FileSystem_Previews
             return false;
         }
 
+        $ext = pathinfo($node->name, PATHINFO_EXTENSION);
+
         try {
-            $tempPath = Tinebase_TempFile::getTempPath() . '.' . pathinfo($node->name, PATHINFO_EXTENSION);
+            $tempPath = Tinebase_TempFile::getTempPath() . '.' . $ext;
             if (false === copy($path, $tempPath)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not copy file '
@@ -227,7 +258,7 @@ class Tinebase_FileSystem_Previews
                 return false;
             }
 
-            $config = $this->_getConfig();
+            $config = $this->_getConfig($this->isImageFileExtension($ext));
 
             if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
