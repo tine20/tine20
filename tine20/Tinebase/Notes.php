@@ -525,7 +525,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                         if ($oldData) {
                             try {
                                 $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
-                            } catch(Tinebase_Exception_NotFound $e) {
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                $oldDataString = $oldData;
+                            } catch (Tinebase_Exception_AccessDenied $tead) {
                                 $oldDataString = $oldData;
                             }
                         } else {

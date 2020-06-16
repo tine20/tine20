@@ -1,4 +1,4 @@
-name,description,members,groups
-Gartenpflege,Mitarbeiter für den Garten,,"Gaertner"
-Schloss Admin,Der Koenig,"e.eichmann",
-Vorstand, Der Vorstand der Elphi,,"Vorstand Elbphilharmonie"
+name,description,members,groups,rights
+Gartenpflege,Mitarbeiter für den Garten,,"Gaertner",ImportTest
+Schloss Admin,Der Koenig,"e.eichmann",,ImportTest
+Vorstand, Der Vorstand der Elphi,,"Vorstand Elbphilharmonie",

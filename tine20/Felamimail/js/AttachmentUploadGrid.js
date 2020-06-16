@@ -29,12 +29,6 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
 
     initComponent: function () {
         this.app = this.app || Tine.Tinebase.appMgr.get('Felamimail');
-        this.events = [
-            /**
-             * Fired once files where selected from filemanager or from a local source
-             */
-            'filesSelected'
-        ];
 
         this.attachmentTypeStore = new Ext.data.JsonStore({
             fields: ['id', 'name'],
@@ -186,38 +180,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
             header: i18n._('type')
         }]
     },
-
-    onFilesSelect: function (fileSelector, e) {
-        if (window.lodash.isArray(fileSelector)) {
-            this.onFileSelectFromFilemanager(fileSelector);
-            return;
-        }
-
-        var files = fileSelector.getFileList();
-        Ext.each(files, function (file) {
-
-            var upload = new Ext.ux.file.Upload({
-                file: file,
-                fileSelector: fileSelector
-            });
-
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
-
-            upload.on('uploadfailure', this.onUploadFail, this);
-            upload.on('uploadcomplete', this.onUploadComplete, fileRecord);
-            upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
-
-            if (fileRecord.get('status') !== 'failure') {
-                // overriden because of this
-                fileRecord.data.attachment_type = 'attachment';
-                this.store.add(fileRecord);
-            }
-        }, this);
-
-        this.fireEvent('filesSelected');
-    },
-
+    
     onFileSelectFromFilemanager: function (nodes) {
         var me = this;
 

@@ -25,7 +25,8 @@ class Tinebase_ImportExportDefinitionTest extends TestCase
                 'label' => 'Containers to export',
                 'type' => 'containers',
                 'config' => [
-                    'recordClassName' => Calendar_Model_Event::class,
+                    'appName' => 'Calendar',
+                    'modelName' => 'Event',
                 ]
             ],
             'target' => [

@@ -59,19 +59,23 @@ Tine.widgets.form.FieldManager = function() {
         getByModelConfig: function(appName, modelName, fieldName, category, config) {
             var recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
-                fieldDefinition = modelConfig && modelConfig.fields ? modelConfig.fields[fieldName] : {},
-                app = Tine.Tinebase.appMgr.get(appName);
+                fieldDefinition = modelConfig && modelConfig.fields ? modelConfig.fields[fieldName] : {};
 
-
-            return this.getByFieldDefinition(fieldDefinition, category, app, modelName, config, fieldName);
+            // have self contained fieldDefinition 
+            fieldDefinition.appName = appName;
+            fieldDefinition.fieldName = fieldName;
+            
+            return this.getByFieldDefinition(fieldDefinition, category, config);
         },
 
-        getByFieldDefinition: function(fieldDefinition, category, app, modelName, config, fieldName) {
-
+        getByFieldDefinition: function(fieldDefinition, category, config) {
+            category = category || Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG;
+            config = config || {};
+            
             var field = {},
                 fieldType = fieldDefinition.type || 'textfield',
+                app = Tine.Tinebase.appMgr.get(fieldDefinition.appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
-
 
             if (fieldType === 'virtual' && fieldDefinition.config) {
                 fieldType = fieldDefinition.config.type || 'textfield';
@@ -79,7 +83,7 @@ Tine.widgets.form.FieldManager = function() {
             }
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
-            field.name = (fieldName || fieldDefinition.name ||fieldDefinition.fieldName);
+            field.name = fieldDefinition.name || fieldDefinition.fieldName;
             field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
             // make field available via recordForm.formfield_NAME
@@ -194,11 +198,11 @@ Tine.widgets.form.FieldManager = function() {
                     }
                     break;
                 case 'records':
-                    if (category == 'editDialog') {
+                    if (category === 'editDialog') {
                         field.xtype = 'wdgt.pickergrid';
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
                         field.isFormField = true;
-                        field.fieldName = fieldName;
+                        field.fieldName = fieldDefinition.fieldName;
                         field.hideHeaders = true;
                         field.height = 170; // 5 records
                     } else {
@@ -221,9 +225,9 @@ Tine.widgets.form.FieldManager = function() {
                     field.height = 70; // 5 lines
                     break;
                 case 'stringAutocomplete':
-                    var recordClass = Tine.Tinebase.data.RecordMgr.get(app, modelName);
                     field.xtype = 'tine.widget.field.AutoCompleteField';
-                    field.recordClass = recordClass;
+                    field.appName = fieldDefinition.config.appName;
+                    field.modelName = fieldDefinition.config.modelName;
                     break;
                 case 'numberableStr':
                 case 'numberableInt':

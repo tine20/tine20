@@ -9,7 +9,7 @@ Ext.ns('Tine.Filemanager');
 
 /**
  * File picker dialog
- *
+ * 
  * @namespace   Tine.Filemanager
  * @class       Tine.Filemanager.FilePickerDialog
  * @extends     Tine.Tinebase.dialog.Dialog
@@ -17,56 +17,22 @@ Ext.ns('Tine.Filemanager');
  * @param       {Object} config The configuration options.
  */
 Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
-    layout: 'fit',
 
     /**
-     * Dialog window
+     * @cfg {String} mode one of source|target
      */
-    window: null,
+    mode: 'source',
 
     /**
-     * The validated and chosen node
+     * @cfg {Boolean} allowMultiple
+     * allow to select multiple fiels at once (source mode only)
      */
-    nodes: null,
+    allowMultiple: true,
 
     /**
-     * Allow to select one or more node
-     */
-    singleSelect: true,
-
-    /**
-     * allow creation of new files
-     * @cfg {Boolean} allowCreateNew
-     */
-    allowCreateNew: false,
-
-    /**
-     * check if file exists on file creation
-     * @cfg {Boolean} checkOverwrite
-     */
-    checkOverwrite: true,
-
-    /**
-     * initial fileName for new files
-     * @cfg {String} initialNewFileName
-     */
-    initialNewFileName: '',
-
-    /**
-     * initial path
-     * @cfg {String} initialPath
-     */
-    initialPath: null,
-
-    /**
+     * @cfg {String|RegExp}
      * A constraint allows to alter the selection behaviour of the picker, for example only allow to select files.
-     *
      * By default, file and folder are allowed to be selected, the concrete implementation needs to define it's purpose
-     *
-     * Valids constraints:
-     *  - file
-     *  - folder
-     *  - null (take all)
      */
     constraint: null,
 
@@ -74,14 +40,33 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      * @cfg {Array} requiredGrants
      * grants which are required to select nodes
      */
-    requiredGrants: ['readGrant'],
+    requiredGrants: null,
 
+    /**
+     * @cfg {String} fileName
+     * @property {String} fileName
+     * (initial) fileName
+     */
+    fileName: null,
+
+    /**
+     * initial path
+     * @cfg {String} initialPath
+     */
+    initialPath: 'null',
+    
+    // private
+    layout: 'fit',
+    window: null,
+    nodes: null,
     windowNamePrefix: 'FilePickerDialog_',
 
     /**
      * Constructor.
      */
     initComponent: function () {
+        this.allowMultiple = this.hasOwnProperty('singleSelect') ? ! this.singleSelect : this.allowMultiple;
+
         this.addEvents(
             /**
              * If the dialog will close and an valid node was selected
@@ -117,42 +102,9 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             }
         }
 
-        this.windowTitle = this.windowTitle || this.app.i18n._('')
         Tine.Filemanager.FilePickerDialog.superclass.initComponent.call(this);
     },
-
-    onButtonApply: async function() {
-        if (this.allowCreateNew && this.checkOverwrite && !await this.assertCheckOverwrite(this.nodes[0])) {
-            return;
-        }
-
-        Tine.Filemanager.FilePickerDialog.superclass.onButtonApply.call(this);
-    },
-
-    assertCheckOverwrite: async function(node) {
-        return new Promise((resolve) => {
-            const loadMask = new Ext.LoadMask(this.getEl(), {
-                msg: this.app.i18n._('Checking ...'),
-                removeMask: true
-            });
-            loadMask.show();
-
-            Tine.Filemanager.searchNodes([
-                {field: 'path', operator: 'equals', value: node.get('path')}
-            ]).then((results) => {
-                loadMask.hide();
-                const title = i18n._('Overwrite Existing File?');
-                const msg = i18n._('Do you really want to overwrite the selected file?');
-                Ext.MessageBox.confirm(title, msg, (btn) => {
-                    resolve(btn === 'yes');
-                });
-            }).catch(() => {
-                // NOTE: path filter throws an error in not existent
-                resolve(true);
-            })
-        });
-    },
-
+    
     getEventData: function () {
         return this.nodes;
     },
@@ -164,11 +116,11 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     getFilePicker: function () {
         if (! this.filePicker) {
             this.filePicker = new Tine.Filemanager.FilePicker({
+                mode: this.mode,
                 requiredGrants: this.requiredGrants,
                 constraint: this.constraint,
-                singleSelect: this.singleSelect,
-                allowCreateNew: this.allowCreateNew,
-                initialNewFileName: this.initialNewFileName,
+                allowMultiple: this.allowMultiple,
+                fileName: this.fileName,
                 initialPath: this.initialPath
             });
 
@@ -209,7 +161,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         this.window = Tine.WindowFactory.getWindow(_.assign({
             title: this.windowTitle,
             modal: true,
-            width: 550,
+            width: 800,
             height: 500,
             layout: 'fit',
             plain: true,

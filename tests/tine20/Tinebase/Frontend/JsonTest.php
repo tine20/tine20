@@ -721,17 +721,23 @@ class Tinebase_Frontend_JsonTest extends TestCase
         self::assertEquals(array('csv', 'ods'), $export['supportedFormats']);
         self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['import']));
 
-        // Calendar exportDefinitions
-        self::assertTrue(isset($registryData['Calendar']['exportDefinitions']), 'no exportDefinitions export config found: '
-            . print_r($registryData['Calendar'], true));
-        $exports = $registryData['Calendar']['exportDefinitions']['results'];
-        $filteredExports = array_filter($exports, function($export) {
-            return $export['name'] === 'cal_default_vcalendar_report';
-        });
-        self::assertEquals(1, count($filteredExports), 'cal_default_vcalendar_report not found');
-        $vcalendarReport = array_pop($filteredExports);
-        self::assertEquals('report', $vcalendarReport['scope'], 'scope mismatch');
-        self::assertTrue(is_array($vcalendarReport['plugin_options_json']));
+        // Calendar/Addressbook exportDefinitions
+        foreach ([
+            ['app' => 'Calendar', 'name' => 'cal_default_vcalendar_report'],
+            ['app' => 'Addressbook', 'name' => 'adb_default_vcard_report'],
+         ] as $definition) {
+            self::assertTrue(isset($registryData[$definition['app']]['exportDefinitions']), 'no exportDefinitions export config found: '
+                . print_r($registryData[$definition['app']], true));
+            $exports = $registryData[$definition['app']]['exportDefinitions']['results'];
+            $filteredExports = array_filter($exports, function ($export) use ($definition) {
+                return $export['name'] === $definition['name'];
+            });
+            self::assertEquals(1, count($filteredExports), 'report definition not found');
+            $reportDefinition = array_pop($filteredExports);
+            // var_export($reportDefinition);
+            self::assertEquals('report', $reportDefinition['scope'], 'scope mismatch');
+            self::assertTrue(is_array($reportDefinition['plugin_options_json']));
+        }
     }
 
     /**

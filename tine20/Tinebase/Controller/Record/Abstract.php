@@ -3042,4 +3042,38 @@ HumanResources_CliTests.testSetContractsEndDate */
     {
         return $this->_modelName;
     }
+
+    /**
+     * @param $property
+     * @param bool $_getRelatedData
+     * @return NULL|Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AreaLocked
+     */
+    public function getRecordByTitleProperty($property, $_getRelatedData = TRUE)
+    {
+        $modelName = $this->_modelName;
+
+        try {
+            $modelConfig = $modelName::getConfiguration();
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . $modelName . 'don´t have modelConfig');
+            return null;
+        }
+
+        $titleProperty = $modelConfig->titleProperty;
+
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName, [
+            ['field' => $titleProperty, 'operator' => 'equals', 'value' => $property]
+        ]);
+        $record = $this->search($filter)->getFirstRecord();
+
+        if ($_getRelatedData && $record != null) {
+            $this->_getRelatedData($record);
+        }
+
+        return $record;
+    }
 }

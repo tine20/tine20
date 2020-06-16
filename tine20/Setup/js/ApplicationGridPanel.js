@@ -93,11 +93,10 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         
         this.action_updateApplications = new Ext.Action({
-            text: this.app.i18n._('Update application'),
+            text: this.app.i18n._('Update applications'),
             handler: this.onAlterApplications,
             actionType: 'update',
             iconCls: 'setup_action_update',
-            disabled: true,
             scope: this
         });
         
@@ -171,7 +170,6 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.action_installApplications.setDisabled(nIn);
         this.action_uninstallApplications.setDisabled(nUn);
-        this.action_updateApplications.setDisabled(nUp);
     },
     
     /**
@@ -240,8 +238,11 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     sendAlterApplicationsRequest: function(type, appNames, options) {
-        var msg = this.app.i18n.n_('Updating Application "{0}".', 'Updating {0} Applications.', appNames.length);
-        msg = String.format(msg, appNames.length == 1 ? appNames[0] : appNames.length ) + ' ' + this.app.i18n._('This may take a while');
+        var msg = this.app.i18n.n_('Updating application', 'Updating applications', appNames.length);
+        if (appNames.length === 1) {
+            msg = msg + ' "' + appNames[0] + '"';
+        }
+        msg = msg + ' - ' + this.app.i18n._('This may take a while');
 
         var longLoadMask = new Ext.LoadMask(this.grid.getEl(), {
             msg: msg,

@@ -32,8 +32,10 @@ module.exports = {
         return new Promise((fulfill) => browser.once('targetcreated', (target) => fulfill(target.page())));
     },
 
-    getEditDialog: async function (btnText) {
-        await expect(page).toClick('.x-btn-text', {text: btnText});
+    getEditDialog: async function (btnText, win) {
+        await expect(win || page).toMatchElement('.x-btn-text', {text: btnText});
+        await page.waitFor(100); // wait for btn to get active
+        await expect(win || page).toClick('.x-btn-text', {text: btnText});
         let popupWindow = await this.getNewWindow();
         await popupWindow.waitForSelector('.ext-el-mask');
         await popupWindow.waitFor(() => !document.querySelector('.ext-el-mask'));
@@ -145,6 +147,7 @@ module.exports = {
         await page.waitForSelector('input[name=username]');
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toMatchElement('input[name=username]');
+        await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")')
         await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME);
         await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD);
         await expect(page).toClick('button', {text: 'Anmelden'});

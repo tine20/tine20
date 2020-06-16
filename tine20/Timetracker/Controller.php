@@ -72,6 +72,8 @@ class Timetracker_Controller extends Tinebase_Controller_Abstract
      * 
      * @param array $args
      * @return boolean
+     *
+     * @deprecated can be removed?
      */
     public function findTimesheetsForReport(array $args)
     {

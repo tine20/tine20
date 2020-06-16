@@ -228,8 +228,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             if (Tinebase_Core::isFilesystemAvailable()) {
                 self::$_server->addPlugin(
-                    new \Sabre\DAV\Locks\Plugin(
-                        new \Sabre\DAV\Locks\Backend\File('tine20://Tinebase/folders/shared/webdav.lock'))
+                    new \Sabre\DAV\Locks\Plugin(new Tinebase_WebDav_Plugin_LockBackend())
                 );
             }
 

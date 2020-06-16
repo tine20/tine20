@@ -137,6 +137,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @param string $taCostCenter
      * @param string $cacheId
      * @return array
+     *
+     * @deprecated can be removed?
      */
     public function findTimesheetsByTimeaccountAndPeriod($timeaccountId, $startDate, $endDate, $destination = NULL, $taCostCenter = NULL)
     {

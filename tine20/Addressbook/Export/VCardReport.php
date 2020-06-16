@@ -37,10 +37,8 @@ class Addressbook_Export_VCardReport extends Tinebase_Export_Report_Abstract
                 'label' => 'Containers to export', // _('Containers to export')
                 'type' => 'containers',
                 'config' => [
-                    'recordClassName' => Addressbook_Model_Contact::class,
-                    // TODO needed?
-//                    'controllerClassName'           => Tinebase_Record_Path::class,
-//                    'filterClassName'               => Tinebase_Model_PathFilter::class,
+                    'appName' => 'Addressbook',
+                    'modelName' => 'Contact',
                 ],
                 // TODO add validation?
             ],

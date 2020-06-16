@@ -88,7 +88,8 @@ Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.gen
 Tine.Admin.Model.User.getDefaultData = function () {
     var internalAddressbook = Tine.Admin.registry.get('defaultInternalAddressbook'),
         emailUserDefaults = (Tine.Admin.registry.get('config').defaultImapUserSettings && Tine.Admin.registry.get('config').defaultImapUserSettings.value)
-            ? Tine.Admin.registry.get('config').defaultImapUserSettings.value : '';
+            ? Tine.Admin.registry.get('config').defaultImapUserSettings.value : '',
+        passwordMustChangeDefault = Tine.Tinebase.configManager.get('defaultPasswordMustChange', 'Admin');
         
     return {
         sambaSAM: '',
@@ -96,6 +97,7 @@ Tine.Admin.Model.User.getDefaultData = function () {
         accountStatus: 'enabled',
         visibility: (internalAddressbook !== null) ? 'displayed' : 'hidden',
         container_id: internalAddressbook,
+        password_must_change: passwordMustChangeDefault,
         accountPrimaryGroup: Tine.Admin.registry.get('defaultPrimaryGroup')
     };
 };

@@ -472,6 +472,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_UpdateMultipleException::class,
                 Tinebase_Model_User::class,
                 Tinebase_Model_UserPassword::class,
+                Tinebase_Model_WebDavLock::class,
             ),
             'Voipmanager' => array(
                 Voipmanager_Model_Asterisk_Context::class,

@@ -386,6 +386,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
                 array('field' => 'model', 'operator' => 'equals', 'value' => $this->_modelName),
                 array('field' => 'name',  'operator' => 'equals', 'value' => $exportName),
+                array('field' => 'type',  'operator' => 'equals', 'value' => 'export'),
             ));
             $definitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
             if (count($definitions) == 0) {

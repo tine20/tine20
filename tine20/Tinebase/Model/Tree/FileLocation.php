@@ -16,6 +16,8 @@
  *
  * @package     Tinebase
  * @subpackage  Model
+ *
+ * TODO refactor: dynamic model with config depending on selected type, because download / local don't have node (etc.)
  */
 class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
 {

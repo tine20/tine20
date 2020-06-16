@@ -31,6 +31,8 @@ class Tinebase_ControllerServerTest extends ServerTestCase
 
     /**
      * @group ServerTests
+     * @group nogitlabci
+     * gitlabci: PHPUnit_Framework_Exception: Tine 2.0 can't setup the configured logger! The Server responded: Zend_Log_Exception: "php://stdout" cannot be opened with mode "a"
      */
     public function testRoleChangeLogin()
     {

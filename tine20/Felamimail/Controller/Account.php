@@ -1568,11 +1568,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $systemAccount->user = $emailUser->getEmailUserName($_user);
         $systemAccount->password = $pwd;
 
-        if ($this->_doAutocreateFolders($pwd)) {
+        if ($pwd && $this->_doAutocreateFolders($pwd)) {
             $this->_autoCreateSystemAccountFolders($systemAccount);
         }
 
-        if (Felamimail_Config::getInstance()
+        if ($pwd && Felamimail_Config::getInstance()
             ->featureEnabled(Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS)) {
             $this->_autoCreateMoveNotifications($systemAccount);
         }

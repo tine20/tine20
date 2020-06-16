@@ -4,14 +4,9 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Timetracker_Frontent_Json
@@ -20,17 +15,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 {
     protected $_testUser = NULL;
 
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-    
     /**
      * Tears down the fixture
      * This method is called after a test is executed.
@@ -567,12 +551,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
-     * try to search for Timesheets
-     *
+     * try to search for Timesheets + check sums
      */
-    public function testSearchTimesheets()
+    public function testSearchTimesheetsWithSums()
     {
-        // create
         $timesheet = $this->_getTimesheet();
 
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
@@ -582,8 +564,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        // search & check
-        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
+        $search = $this->_json->searchTimesheets(
+            $this->_getTimesheetFilter(null, $timesheetData['timeaccount_id']['id']),
+            $this->_getPaging()
+        );
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
 
         $this->assertEquals('array', gettype($search['results'][0]['timeaccount_id']), 'timeaccount_id is not resolved');
@@ -592,6 +576,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals(1, count($search['results']));
         $this->assertEquals(30, $search['totalsum'], 'totalsum mismatch');
+        $this->assertEquals(15, $search['totalsumbillable'], 'totalsumbillable mismatch');
     }
 
     /**
@@ -733,19 +718,23 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_deleteTimeSheets[] = $timesheetData['id'];
         $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
-        $timesheet = $this->_getTimesheet();
-        $timesheet->is_billable = false;
+        $timesheet = $this->_getTimesheet([
+            'timeaccount_id' => $timesheetData['timeaccount_id']['id'],
+            'is_billable' => false,
+        ]);
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_deleteTimeSheets[] = $timesheetData['id'];
-        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
+
         // search & check
-        $search = $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
-        $this->assertEquals(60, $search['totalsum']);
-        $this->assertEquals(30, $search['totalsumbillable']);
+        $search = $search = $this->_json->searchTimesheets(
+            $this->_getTimesheetFilter(null, $timesheetData['timeaccount_id']['id']),
+            $this->_getPaging()
+        );
+        $this->assertEquals(60, $search['totalsum'], 'totalsum mismatch ' . print_r($search, true));
+        $this->assertEquals(15, $search['totalsumbillable'], 'totalsumbillable mismatch ' . print_r($search, true));
     }
     
     /**

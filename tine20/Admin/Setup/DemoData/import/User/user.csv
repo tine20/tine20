@@ -1,8 +1,8 @@
-firstname,lastname,loginname,password,email
-Simon,Rattle,s.rattle,1234,
-Sven,Fruehauf,s.fruehauf,1234,
-Tanja,Bar,t.bar,1234,
-Jens,Baum,j.baum,1234,
-Julia,Metzger,j.metzger,1234,
-Eric,Eichmann,e.eichmann,1234,
-Martina,Schreiber,m.schreiber,1234,
+firstname,lastname,loginname,password,pin,email
+Simon,Rattle,s.rattle,1234,12345,
+Sven,Fruehauf,s.fruehauf,1234,12345,
+Tanja,Bar,t.bar,1234,12345,
+Jens,Baum,j.baum,1234,12345,
+Julia,Metzger,j.metzger,1234,12345,
+Eric,Eichmann,e.eichmann,1234,12345,
+Martina,Schreiber,m.schreiber,1234,12345,

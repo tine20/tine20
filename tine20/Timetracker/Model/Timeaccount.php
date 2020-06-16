@@ -240,7 +240,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'nullable'              => true,
                 'copyOmit'              => true,
             ),
-                'deadline' => array(
+            'deadline' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => self::DEADLINE_NONE),
                 'nullable' => true,
                 'default' => self::DEADLINE_NONE,
