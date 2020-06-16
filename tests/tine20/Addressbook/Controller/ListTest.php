@@ -316,6 +316,9 @@ class Addressbook_Controller_ListTest extends TestCase
      */
     public function testHiddenMembers()
     {
+        // sclever is deleted from sync backend, so we skip this with ldap backends
+        $this->_skipIfLDAPBackend();
+
         $group = new Tinebase_Model_Group(array(
             'name'          => 'testgroup',
             'description'   => 'test group',
