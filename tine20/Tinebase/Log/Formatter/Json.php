@@ -30,8 +30,8 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
             'timestamp' => isset($event['timestamp']) ? $event['timestamp'] : '',
             'priority' => isset($event['priority']) ? $event['priority'] : '',
             'user' => self::getUsername(),
-            'transaction_id' => self::$_transactionId,
-            'request_id' => self::$_requestId,
+            'transaction_id' => (string) self::$_transactionId,
+            'request_id' => (string) self::$_requestId,
             'logdifftime' => $logdifftime,
             'logruntime' => $logruntime,
             // TODO add method
