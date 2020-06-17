@@ -35,8 +35,8 @@ RUN apk --no-cache add nginx supervisor curl && \
     apk add --no-cache libjpeg-turbo-dev libpng-dev icu-dev libxslt-dev zlib-dev libzip-dev yaml-dev freetype-dev gettext libintl gettext-dev bash openldap-dev && \
 # install.tmpl php extentions
     if test "$PHP_IMAGE_TAG" == "7.3-fpm-alpine"; \
-    then docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && echo "with gd args"; \
-    else docker-php-ext-configure gd && echo "with out gd args"; \
+    then docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && echo "configure gd with 7.3 args"; \
+    else -with-freetype  --with-jpeg --enable-gd && echo "configure gd with args"; \
     fi && \
     docker-php-ext-install bcmath exif mysqli pcntl pdo_mysql soap sockets zip xsl intl gd opcache gettext iconv ldap && \
     docker-php-ext-enable ldap && \
