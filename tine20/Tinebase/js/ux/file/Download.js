@@ -70,8 +70,8 @@ Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {
             timeout: this.timeout
         });
 
-        // NOTE: success/fail cb's not working at all
-        // Ext.EventManager.on(frame, LOAD, cb, this); is never executed
+        // NOTE: success callback (iframe load) is not triggered with content-disposition: 'attachment' 
+        //       as the iframe technically is not loaded
         _.delay(_.bind(this.onSuccess, this), 2000);
 
         return this;
