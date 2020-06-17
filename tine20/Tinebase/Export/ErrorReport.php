@@ -26,7 +26,8 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
      * Tinebase_Export_ErrorReport constructor.
      * @param Exception $e
      */
-    public function __construct(Exception $e) {
+    public function __construct(Exception $e)
+    {
         $this->_exception = $e;
     }
 

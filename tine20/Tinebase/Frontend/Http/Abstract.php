@@ -29,7 +29,6 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @return void
      * 
      * @todo support single ids as filter?
-     * @todo use stream here instead of temp file?
      */
     protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_options, Tinebase_Controller_Record_Abstract $_controller = NULL)
     {
@@ -49,10 +48,36 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $format = strtolower(substr($format, 3));
         }
 
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $format);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_options, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $format .
+            ' / options: ' . print_r($_options, TRUE)
+        );
 
+        $result = $this->_generateExport($export, $_controller, $_filter, $format, $switchFormat, $pdfOutput);
+
+        if ($export->isDownload()) {
+            $this->_writeExportDownloadHeaders($export, $_filter, $format);
+            $this->_outputExportContent($switchFormat, $export, $result, $pdfOutput);
+        } else {
+            $this->_outputFileLocationJson($export, $result);
+        }
+        
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+    }
+
+    /**
+     * @param $export
+     * @param $_controller
+     * @param $_filter
+     * @param $format
+     * @param $switchFormat
+     * @param $pdfOutput
+     * @return string|null
+     * @throws Exception
+     */
+    protected function _generateExport(&$export, $_controller, $_filter, &$format, &$switchFormat, &$pdfOutput)
+    {
         try {
             switch ($switchFormat) {
                 case 'pdf':
@@ -93,7 +118,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 case 'doc':
                 case 'docx':
                     $result = $export->generate($_filter);
-                break;
+                    break;
                 default:
                     throw new Tinebase_Exception_UnexpectedValue('Format ' . $format . ' not supported.');
             }
@@ -115,19 +140,33 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $switchFormat = 'error';
         }
 
-        // write headers
-        $contentType = $export->getDownloadContentType();
-        $filename = $export->getDownloadFilename($_filter->getApplicationName(), $format);
+        return $result;
+    }
 
-        if (! headers_sent()) {
+    protected function _writeExportDownloadHeaders($export, $filter, $format)
+    {
+        $contentType = $export->getDownloadContentType();
+        $filename = $export->getDownloadFilename($filter->getApplicationName(), $format);
+
+        if (!headers_sent()) {
             header("Pragma: public");
             header("Cache-Control: max-age=0");
             header("Content-Disposition: " . (($format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);
             header("Content-Description: $format File");
             header("Content-type: $contentType");
         }
-        
-        // output export file
+    }
+
+    /**
+     * @param $switchFormat
+     * @param $export
+     * @param $filename
+     * @param $pdfOutput
+     *
+     * @todo use stream here instead of temp file?
+     */
+    protected function _outputExportContent($switchFormat, $export, $filename, $pdfOutput)
+    {
         switch ($switchFormat) {
             case 'pdf':
                 echo $pdfOutput;
@@ -144,19 +183,39 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'error':
                 // redirect output to client browser
                 // TODO refactor function signature - write does not write content to file but to stdout/browser
-                if (null === $result) {
+                if (null === $filename) {
                     $export->write();
                 } else {
-                    $export->write($result);
+                    $export->write($filename);
                 }
                 break;
             default:
-                readfile($result);
-                unlink($result);
+                readfile($filename);
+                unlink($filename);
         }
-        
-        // reset max execution time to old value
-        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+    }
+
+    /**
+     * @param $switchFormat
+     * @param $export
+     * @param $filename
+     * @param $pdfOutput
+     */
+    protected function _outputFileLocationJson($export, $filename)
+    {
+        if (! method_exists($export, 'getTargetFileLocation')) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' export does not support file location');
+            $fileLocation = null;
+            $filename = null;
+        } else {
+            $fileLocation = $export->getTargetFileLocation($filename);
+        }
+
+        echo json_encode([
+            'success' => $fileLocation && $filename !== null,
+            'file_location' => $fileLocation ? $fileLocation->toArray() : [],
+        ]);
     }
 
     /**

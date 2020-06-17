@@ -1595,4 +1595,34 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     {
         return $this->_controller;
     }
+
+    /**
+     * @return bool
+     *
+     * TODO remove code duplication with \Tinebase_Export_AbstractDeprecated::isDownload
+     */
+    public function isDownload()
+    {
+        return !$this->_config->returnFileLocation;
+    }
+
+    /**
+     * @param null|string $filename
+     * @return Tinebase_Model_Tree_FileLocation
+     * @throws Tinebase_Exception_NotImplemented
+     *
+     * TODO remove code duplication with \Tinebase_Export_AbstractDeprecated::getTargetFileLocation
+     */
+    public function getTargetFileLocation($filename = null)
+    {
+        if ($filename) {
+            $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename);
+            return new Tinebase_Model_Tree_FileLocation([
+                Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
+                Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
+            ]);
+        } else {
+            throw new Tinebase_Exception_NotImplemented();
+        }
+    }
 }
