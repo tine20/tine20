@@ -85,14 +85,16 @@ class Tinebase_Server_HttpTests extends TestCase
      * @param bool $returnFileLocation
      * @param string $definitionName
      * @param string $fm_path
+     * @param array $additionalSources
      * @return string
      */
     public function testExportEvents(
         $download = false,
         $returnFileLocation = false,
         $definitionName = 'cal_default_vcalendar_report',
-        $fm_path = '/shared/unittestexport')
-    {
+        $fm_path = '/shared/unittestexport',
+        $additionalSources = []
+    ) {
         $server = new Tinebase_Server_Http();
         $request = $this->_getRequest();
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($fm_path,
@@ -122,9 +124,9 @@ class Tinebase_Server_HttpTests extends TestCase
                     Tinebase_Model_Tree_FileLocation::FLD_FM_PATH => $fm_path,
                 ]);
                 $options = array_merge($options, [
-                    'sources' => [
+                    'sources' => array_merge($additionalSources, [
                         $calendar->toArray()
-                    ],
+                    ]),
                     'target' => $fileLocation->toArray(),
                     'format' => 'csv', // client sends this ...
                 ]);
@@ -167,11 +169,34 @@ class Tinebase_Server_HttpTests extends TestCase
 
     public function testExportEventsDownloadZip()
     {
-//        $out = $this->testExportEvents(true, false, true);
-//        // TODO unzip $out
-//        $unzipped = '';
-//        self::assertContains('BEGIN:VCALENDAR', $unzipped);
-//        self::assertContains('Get Up!', $unzipped);
+        $calendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class,
+            false, 'ics export container');
+        Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event([
+            'summary' => 'Get Down!',
+            'dtstart'     => '2020-03-25 22:00:00',
+            'dtend'       => '2020-03-25 22:15:00',
+            'container_id' => $calendar->getId(),
+        ]));
+
+        $out = $this->testExportEvents(true,
+            true,
+            'cal_default_vcalendar_report',
+            '/shared/unittestexport',
+            [$calendar->toArray()]
+        );
+
+        if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
+            $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
+            self::assertEquals('export_calendar_vcalendar_report.zip', $tempfile->name);
+        } else {
+            self::fail('could not extract tempfile_id');
+        }
+
+        $tmpfileContent = file_get_contents($tempfile->path);
+        $icsFilename =  str_replace([' ', DIRECTORY_SEPARATOR], '', $calendar->name . '.ics');
+        $content = $this->_unzipContent($tmpfileContent, $icsFilename);
+        self::assertContains('BEGIN:VCALENDAR', $content);
+        self::assertContains('Get Down!', $content);
     }
 
     public function testExportEventsDownloadReturnFileLocation()

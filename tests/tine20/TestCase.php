@@ -374,12 +374,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $applicationName
      * @param string $model
      * @param boolean $shared
+     * @param string $name
      * @return Tinebase_Model_Container
+     *
+     * TODO use array as param (with array_merge)
      */
-    protected function _getTestContainer($applicationName, $model, $shared = false)
+    protected function _getTestContainer($applicationName, $model, $shared = false, $name = null)
     {
         return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'PHPUnit ' . $model . ($shared ? ' shared' : '') . ' container',
+            'name'           => $name ? $name : 'PHPUnit ' . $model . ($shared ? ' shared' : '') . ' container',
             'type'           => $shared ? Tinebase_Model_Container::TYPE_SHARED :
                 Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'       => $shared ? null : Tinebase_Core::getUser(),
@@ -1174,5 +1177,24 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         ));
         $sendMessage = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
         self::assertEquals($message->subject, $sendMessage->subject);
+    }
+
+    protected function _unzipContent($zippedContent, $filenameInZip = 'test1.txt')
+    {
+        $zipfilename = Tinebase_TempFile::getTempPath();
+        file_put_contents($zipfilename, $zippedContent);
+
+        // create zip file, unzip, check content
+        $zip = new ZipArchive();
+        $opened = $zip->open($zipfilename);
+        self::assertTrue($opened, 'could not open zip file');
+        $zip->extractTo(Tinebase_Core::getTempDir());
+        $extractedFile = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $filenameInZip;
+        self::assertTrue(file_exists($extractedFile), 'did not find extracted '
+            . $extractedFile . ' file in dir');
+        $content = file_get_contents($extractedFile);
+        $zip->close();
+
+        return $content;
     }
 }

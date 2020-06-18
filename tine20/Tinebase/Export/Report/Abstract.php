@@ -168,7 +168,8 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
     {
         if ($this->_config->returnFileLocation && $this->_fileLocation->type === Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD) {
             if (count($filename) > 1) {
-                throw new Tinebase_Exception_NotImplemented('TODO zip result files if multiple');
+                $filename = $this->_zipFiles($filename);
+                $this->_format = 'zip';
             } else {
                 $firstFile = array_pop($filename);
                 $filename = $firstFile['filename'];
@@ -178,5 +179,29 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
         } else {
             return $this->_fileLocation;
         }
+    }
+
+    /**
+     * @param $exportFiles
+     * @return string
+     * @throws Exception
+     *
+     * TODO add a zip helper
+     */
+    protected function _zipFiles($exportFiles)
+    {
+        $zip = new ZipArchive();
+        $zipfilename = Tinebase_TempFile::getTempPath();
+        $opened = $zip->open($zipfilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+
+        if( $opened !== true ) {
+            throw new Exception('could not open zip file');
+        }
+        foreach ($exportFiles as $file) {
+            $zip->addFile($file['filename'], $this->_getExportFilename($file['container']));
+        }
+        $zip->close();
+
+        return $zipfilename;
     }
 }
