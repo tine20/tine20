@@ -191,12 +191,12 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Tine.widgets.exportAction.downloadExport(this.record).then((raw) => {
                 const response = JSON.parse(raw.responseText);
 
-                if (_.get(response, 'location.type') === 'download') {
+                if (_.get(response, 'file_location.type') === 'download') {
                     new Ext.ux.file.Download({
                         params: {
                             method: 'Tinebase.downloadTempfile',
                             requestType: 'HTTP',
-                            tmpfileId: _.get(response, 'location.tempfile_id')
+                            tmpfileId: _.get(response, 'file_location.tempfile_id')
                         }
                     }).start();
                 }

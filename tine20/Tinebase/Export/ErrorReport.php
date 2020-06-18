@@ -25,10 +25,17 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
     /**
      * Tinebase_Export_ErrorReport constructor.
      * @param Exception $e
+     * @param array $options
      */
-    public function __construct(Exception $e)
+    public function __construct(Exception $e, $options)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Generating ERROR REPORT for exception: ' . $e->getMessage());
+        }
+
         $this->_exception = $e;
+        $this->_config = new Zend_Config($options);
     }
 
     /**
@@ -48,7 +55,7 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
      * @param string $_format
      * @return string
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         return 'export_error_report.txt';
     }
@@ -58,7 +65,12 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
      */
     public function write()
     {
-        echo get_class($this->_exception) . ': ' . $this->_exception->getMessage();
+        echo $this->getContent();
+    }
+
+    public function getContent()
+    {
+        return get_class($this->_exception) . ': ' . $this->_exception->getMessage();
     }
 
     /**
@@ -87,5 +99,18 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
     protected function _writeValue($_value)
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' not implementd');
+    }
+
+    /**
+     * @param null|string $filename
+     * @return Tinebase_Model_Tree_FileLocation
+     */
+    public function getTargetFileLocation($filename = null)
+    {
+        if (! $filename) {
+            $filename = Tinebase_TempFile::getTempPath();
+            file_put_contents($filename, $this->getContent());
+        }
+        return parent::getTargetFileLocation($filename);
     }
 }

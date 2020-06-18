@@ -589,8 +589,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * @param string $_format
      * @return string
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
+        if (! $_appName) {
+            $_appName = $this->_applicationName;
+        }
+        if (! $_format) {
+            $_format = $this->_format;
+        }
+
         if (isset($this->_config->exportFilename) && $this->_hasTwig()) {
             $this->_twig->addLoader(new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]));
             $twigTmpl = $this->_twig->load('fileNameTmpl');
@@ -623,9 +630,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $name .= $this->_translate->_($this->_config->label, $this->_locale);
         }
         $tineTranslate = Tinebase_Translation::getTranslation('Tinebase');
-        $result =  mb_strtolower($tineTranslate->_('Export', $this->_locale) . '_' .
-            $this->_translate->_($_appName, $this->_locale) . $model . $name . '.' . $_format);
-        return str_replace(' ', '', $result);
+        $result = mb_strtolower($tineTranslate->_('Export', $this->_locale) . '_' .
+            $this->_translate->_($_appName, $this->_locale)
+            . ($model !== '' ? $model : '_')
+            . $name . '.' . $_format);
+        return str_replace([' ', '/'], '_', $result);
     }
 
 
@@ -1616,13 +1625,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     public function getTargetFileLocation($filename = null)
     {
         if ($filename) {
-            $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename);
+            $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename, $this->getDownloadFilename());
             return new Tinebase_Model_Tree_FileLocation([
                 Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
                 Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
             ]);
         } else {
-            throw new Tinebase_Exception_NotImplemented();
+            throw new Tinebase_Exception_NotImplemented('not implemented for this export');
         }
     }
 }

@@ -83,12 +83,20 @@ class Tinebase_Server_HttpTests extends TestCase
      *
      * @param bool $download
      * @param bool $returnFileLocation
+     * @param string $definitionName
+     * @param string $fm_path
      * @return string
      */
-    public function testExportEvents($download = false, $returnFileLocation = false)
+    public function testExportEvents(
+        $download = false,
+        $returnFileLocation = false,
+        $definitionName = 'cal_default_vcalendar_report',
+        $fm_path = '/shared/unittestexport')
     {
         $server = new Tinebase_Server_Http();
         $request = $this->_getRequest();
+        $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($fm_path,
+            Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
 
         $calendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
         Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event([
@@ -97,36 +105,53 @@ class Tinebase_Server_HttpTests extends TestCase
             'dtend'       => '2020-03-25 06:15:00',
             'container_id' => $calendar->getId(),
         ]));
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('cal_default_vcalendar_report');
-        Tinebase_FileSystem::getInstance()->mkdir('/Filemanager/folders/shared/unittestexport');
-        $fileLocation = new Tinebase_Model_Tree_FileLocation([
-            Tinebase_Model_Tree_FileLocation::FLD_TYPE      => $download
-                ? Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD
-                : Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
-            Tinebase_Model_Tree_FileLocation::FLD_FM_PATH   => '/shared/unittestexport/',
-        ]);
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
+
         $options = [
             'definitionId' => $definition->getId(),
-            'sources' => [
-                $calendar->toArray()
-            ],
-            'target' => $fileLocation->toArray(),
             'returnFileLocation' => $returnFileLocation,
         ];
+        $filter = [];
+        switch ($definitionName) {
+            case 'cal_default_vcalendar_report':
+                Tinebase_FileSystem::getInstance()->mkdir($nodePath->statpath);
+                $fileLocation = new Tinebase_Model_Tree_FileLocation([
+                    Tinebase_Model_Tree_FileLocation::FLD_TYPE => $download
+                        ? Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD
+                        : Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
+                    Tinebase_Model_Tree_FileLocation::FLD_FM_PATH => $fm_path,
+                ]);
+                $options = array_merge($options, [
+                    'sources' => [
+                        $calendar->toArray()
+                    ],
+                    'target' => $fileLocation->toArray(),
+                    'format' => 'csv', // client sends this ...
+                ]);
+                break;
+            case 'cal_default_vcalendar':
+            case 'cal_default_ods':
+                $filter = [
+                    ['field' => 'container_id', 'operator' => 'equals', 'value' => $calendar->getId()]
+                ];
+                break;
+            default:
+                throw new Tinebase_Exception_NotImplemented($definitionName . ' test not implemented');
+        }
 
         // set method & params
         $_REQUEST['method'] = 'Calendar.exportEvents';
-        $_REQUEST['filter'] = Zend_Json::encode([]);
+        $_REQUEST['filter'] = Zend_Json::encode($filter);
         $_REQUEST['options'] = Zend_Json::encode($options);
         ob_start();
         $server->handle($request);
         $out = ob_get_clean();
 
         // check if file exists in path and has the right contents
-        if (! $download) {
-            $exportFilenamePath = 'Filemanager/folders/shared/unittestexport/'
+        if (! $download && $definitionName === 'cal_default_vcalendar_report') {
+            $exportFilenamePath = $nodePath->streamwrapperpath . '/'
                 . str_replace([' ', DIRECTORY_SEPARATOR], '', $calendar->name . '.ics');
-            $ics = file_get_contents('tine20:///' . $exportFilenamePath);
+            $ics = file_get_contents($exportFilenamePath);
             self::assertContains('Get Up!', $ics);
         }
 
@@ -157,12 +182,52 @@ class Tinebase_Server_HttpTests extends TestCase
         $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
     }
 
-    public function testExportEventsToFilemanagerReturnFileLocation()
+    public function testExportEventsToFilemanagerSharedReturnFileLocation()
     {
         $out = $this->testExportEvents(false, true);
 
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport\/"}}', $out);
+        $this->assertContains('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}}', $out);
+    }
+
+    public function testExportEventsToFilemanagerPersonalReturnFileLocation()
+    {
+        $path = '/personal/' . Tinebase_Core::getUser()->accountLoginName . '/mypersonal';
+        $out = $this->testExportEvents(false, true, 'cal_default_vcalendar_report', $path);
+
+        $this->assertTrue(!empty($out), 'request should not be empty');
+        $this->assertContains('{"success":true,"file_location":{"type":"fm_node","fm_path":"'
+            . str_replace('/', '\/', $path) . '"}}', $out);
+    }
+
+    public function testExportEventsDownloadReturnFileLocationVCalendar()
+    {
+        $out = $this->testExportEvents(true, true, 'cal_default_vcalendar');
+
+        $this->assertTrue(!empty($out), 'request should not be empty');
+        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+        // check download filename in Tempfile
+        if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
+            $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
+            self::assertEquals('export_calendar_vcalendar_ics.ics', $tempfile->name);
+        } else {
+            self::fail('could not extract tempfile_id');
+        }
+    }
+
+    public function testExportEventsDownloadReturnFileLocationOds()
+    {
+        $out = $this->testExportEvents(true, true, 'cal_default_ods');
+
+        $this->assertTrue(!empty($out), 'request should not be empty');
+        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+        // check download filename in Tempfile
+        if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
+            $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
+            self::assertEquals('export_calendar.ods', $tempfile->name);
+        } else {
+            self::fail('could not extract tempfile_id');
+        }
     }
 
     /**

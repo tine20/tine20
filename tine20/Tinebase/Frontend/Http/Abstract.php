@@ -53,7 +53,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             ' / options: ' . print_r($_options, TRUE)
         );
 
-        $result = $this->_generateExport($export, $_controller, $_filter, $format, $switchFormat, $pdfOutput);
+        $result = $this->_generateExport($export, $_controller, $_filter, $format, $switchFormat, $pdfOutput, $_options);
 
         if ($export->isDownload()) {
             $this->_writeExportDownloadHeaders($export, $_filter, $format);
@@ -73,10 +73,11 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param $format
      * @param $switchFormat
      * @param $pdfOutput
+     * @param array $_options
      * @return string|null
      * @throws Exception
      */
-    protected function _generateExport(&$export, $_controller, $_filter, &$format, &$switchFormat, &$pdfOutput)
+    protected function _generateExport(&$export, $_controller, $_filter, &$format, &$switchFormat, &$pdfOutput, $_options)
     {
         try {
             switch ($switchFormat) {
@@ -127,7 +128,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 throw $e;
             }
             $result = null;
-            $export = new Tinebase_Export_ErrorReport($e);
+            $export = new Tinebase_Export_ErrorReport($e, $_options);
             $format = 'txt';
             $switchFormat = 'error';
         } catch (Exception $e) {
@@ -135,7 +136,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 throw $e;
             }
             $result = null;
-            $export = new Tinebase_Export_ErrorReport($e);
+            $export = new Tinebase_Export_ErrorReport($e, $_options);
             $format = 'txt';
             $switchFormat = 'error';
         }
