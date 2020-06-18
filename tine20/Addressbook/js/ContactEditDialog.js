@@ -88,7 +88,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             }
         });
 
-        if (Tine.Tinebase.common.hasRight('run', 'Calendar', null) && Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureContactEventList')) {
+        if (Tine.Tinebase.common.hasRight('run', 'Calendar', null) && Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureContactEventList') && this.record.id !== 0) {
             this.contactEventPanel = new Tine.Calendar.ContactEventsGridPanel({
                 editDialog: this,
                 hasFavoritesPanel: false
