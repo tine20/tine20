@@ -27,6 +27,11 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
     {
         $this->_checkOptions();
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Generating REPORT export (' . $this->_config->name . ')');
+        }
+
         // TODO define export result - is it an object? recordset of filelocations?
         $exportResult = [];
         foreach ($this->_config->sources->toArray() as $containerData) {
@@ -94,10 +99,7 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
         foreach ($exportResult as $generatedExport) {
             switch ($this->_fileLocation->type) {
                 case Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE:
-                    $filename = $this->_getExportFilename($generatedExport['container']);
-                    $tempFile = Tinebase_TempFile::getInstance()->createTempFile($generatedExport['filename']);
-                    Tinebase_FileSystem::getInstance()->copyTempfile($tempFile,
-                         DIRECTORY_SEPARATOR .  'Filemanager'  . DIRECTORY_SEPARATOR . 'folders' . $this->_fileLocation->fm_path . DIRECTORY_SEPARATOR . $filename);
+                    $this->_saveToFilemanager($generatedExport);
                     break;
                 case Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD:
                     $this->_downloadFilePaths[] = $generatedExport['filename'];
@@ -107,6 +109,16 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
                         'FileLocation type ' . $this->_fileLocation->type . ' not implemented yet');
             }
         }
+    }
+
+    protected function _saveToFilemanager($generatedExport)
+    {
+        $filename = $this->_getExportFilename($generatedExport['container']);
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($generatedExport['filename']);
+
+        $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($this->_fileLocation->fm_path,
+            Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+        Tinebase_FileSystem::getInstance()->copyTempfile($tempFile,$nodePath->statpath . '/' . $filename);
     }
 
     /**
@@ -136,5 +148,60 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
                 fclose($handle);
             }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDownload()
+    {
+        return parent::isDownload() && $this->_fileLocation->type === Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD;
+    }
+
+    /**
+     * add information to file location / create filelocation if isDownload
+     *
+     * @param null|array|string $filename
+     * @return Tinebase_Model_Tree_FileLocation|null
+     */
+    public function getTargetFileLocation($filename = null)
+    {
+        if ($this->_config->returnFileLocation && $this->_fileLocation->type === Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD) {
+            if (count($filename) > 1) {
+                $filename = $this->_zipFiles($filename);
+                $this->_format = 'zip';
+            } else {
+                $firstFile = array_pop($filename);
+                $filename = $firstFile['filename'];
+            }
+
+            return parent::getTargetFileLocation($filename);
+        } else {
+            return $this->_fileLocation;
+        }
+    }
+
+    /**
+     * @param $exportFiles
+     * @return string
+     * @throws Exception
+     *
+     * TODO add a zip helper
+     */
+    protected function _zipFiles($exportFiles)
+    {
+        $zip = new ZipArchive();
+        $zipfilename = Tinebase_TempFile::getTempPath();
+        $opened = $zip->open($zipfilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+
+        if( $opened !== true ) {
+            throw new Exception('could not open zip file');
+        }
+        foreach ($exportFiles as $file) {
+            $zip->addFile($file['filename'], $this->_getExportFilename($file['container']));
+        }
+        $zip->close();
+
+        return $zipfilename;
     }
 }

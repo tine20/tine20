@@ -96,7 +96,9 @@ module.exports = {
         const frame = await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
         await expect(frame).toClick('.x-menu-item-icon.action_adminMode');
         const preferencePopup = await this.getNewWindow();
-        await preferencePopup.waitFor(2000);
+        await preferencePopup.waitFor(() => document.querySelector('.ext-el-mask'));
+        await preferencePopup.waitFor(() => !document.querySelector('.ext-el-mask'));
+        await preferencePopup.waitForSelector('.x-tree-node');
         await expect(preferencePopup).toClick('span', {text: appName});
         await preferencePopup.waitFor(1000);
 
@@ -110,6 +112,7 @@ module.exports = {
         await page.waitFor(1000);
 
         await this.reloadRegistry(page);
+        await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
     },
 
     getBrowser: async function (app, module) {

@@ -128,59 +128,56 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             }, {
                 region: 'north',
                 border: false,
-                hidden: this.mode !== 'target',
-                layout: 'vbox',
-                // height: 58,
-                height: 32,
+                hidden: this.mode !== 'target' || this.constraint === 'folder',
+                layout: 'hbox',
+                height: 38,
+                frame: true,
+                defaults: {
+                    height: 38,
+                    border: false,
+                    frame: true
+                },
                 items: [{
-                    layout: 'hbox',
-                    defaults: {
-                        height: 32,
-                        border: false,
-                        frame: true
-                    },
-                    items: [{
-                        flex: 1,
-                    }, {
-                        layout: 'form',
-                        labelAlign: 'left',
-                        width: 450,
-                        frame: true,
-                        items: {
-                            xtype: 'textfield',
-                            ref: '../../../../fileNameField',
-                            fieldLabel: 'Save as',
-                            value: this.fileName,
-                            width: 300,
-                            enableKeyEvents: true,
-                            validate: Ext.emptyFn,
-                            listeners: {
-                                keyup: this.onFileNameFieldChange.createDelegate(this),
-                                specialkey: (field, e) => {
-                                    if (e.getKey() === e.ENTER && this.validSelection) {
-                                        this.fireEvent('forceNodeSelected', this.selection);
-                                    }
-                                },
-                                focus: (field) => {
-                                    const value = String(field.getValue());
-                                    let end = null;
-                                    if (_.isRegExp(this.constraint)) {
-                                        const match = value.match(this.constraint);
-                                        if (match) {
-                                            end = match.index
-                                        }
-                                    }
-
-                                    field.focus();
-                                    field.selectText(0, end);
+                    flex: 1,
+                }, {
+                    layout: 'form',
+                    labelAlign: 'left',
+                    width: 450,
+                    frame: true,
+                    items: {
+                        xtype: 'textfield',
+                        ref: '../../../fileNameField',
+                        fieldLabel: 'Save as',
+                        value: this.fileName,
+                        width: 300,
+                        enableKeyEvents: true,
+                        validate: Ext.emptyFn,
+                        listeners: {
+                            keyup: this.onFileNameFieldChange.createDelegate(this),
+                            specialkey: (field, e) => {
+                                if (e.getKey() === e.ENTER && this.validSelection) {
+                                    this.fireEvent('forceNodeSelected', this.selection);
                                 }
+                            },
+                            focus: (field) => {
+                                const value = String(field.getValue());
+                                let end = null;
+                                if (_.isRegExp(this.constraint)) {
+                                    const match = value.match(this.constraint);
+                                    if (match) {
+                                        end = match.index
+                                    }
+                                }
+
+                                field.focus();
+                                field.selectText(0, end);
                             }
                         }
-                    }, {
-                        flex: 1,
-                        cls: 'x-form'
-                    }]
-                }],
+                    }
+                }, {
+                    flex: 1,
+                    cls: 'x-form'
+                }]
             }]
         }];
         
@@ -431,7 +428,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      * @return {Promise<unknown>}
      */
     validateSelection: async function() {
-        if (this.mode !== 'target') {
+        if (this.mode !== 'target' || this.constraint === 'folder') {
             return true;
         }
 

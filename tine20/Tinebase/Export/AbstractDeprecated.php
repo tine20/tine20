@@ -238,8 +238,15 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
      * @param string $_format
      * @return string
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
+        if (! $_appName) {
+            $_appName = $this->_applicationName;
+        }
+        if (! $_format) {
+            $_format = $this->_format;
+        }
+
         return 'export_' . strtolower($_appName) . '.' . $_format;
     }
 
@@ -705,5 +712,35 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
             }
         }
         return null;
+    }
+
+    /**
+     * @return bool
+     *
+     * TODO remove code duplication with \Tinebase_Export_Abstract::isDownload
+     */
+    public function isDownload()
+    {
+        return !$this->_config->returnFileLocation;
+    }
+
+    /**
+     * @param null|string $filename
+     * @return Tinebase_Model_Tree_FileLocation
+     * @throws Tinebase_Exception_NotImplemented
+     *
+     * TODO remove code duplication with \Tinebase_Export_Abstract::getTargetFileLocation
+     */
+    public function getTargetFileLocation($filename = null)
+    {
+        if ($filename) {
+            $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename, $this->getDownloadFilename());
+            return new Tinebase_Model_Tree_FileLocation([
+                Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
+                Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
+            ]);
+        } else {
+            throw new Tinebase_Exception_NotImplemented('not implemented for this export');
+        }
     }
 }

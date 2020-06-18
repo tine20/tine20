@@ -954,6 +954,14 @@
           "path": "js/widgets/form/"
         },
         {
+          "text": "LocationTypePluginFactory.js",
+          "path": "js/widgets/file/"
+        },
+        {
+          "text": "SelectionField.js",
+          "path": "js/widgets/file/"
+        },
+        {
           "text": "PasswordDialog.js",
           "path": "js/widgets/dialog/"
         },

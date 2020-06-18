@@ -1062,6 +1062,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ]))->toArray());
         });
 
+
+        $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/status.php', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getOCStatus', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/_status[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatus', [
@@ -1084,6 +1092,28 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         });
     }
 
+    public function getOCStatus()
+    {
+        $data = new Tinebase_Frontend_Json();
+        $registryData = $data->getRegistryData();
+        $version = $registryData['version'];
+
+        $values = array(
+            'installed'     => true,
+            'version'       => $version['codeName'],
+            'versionstring' => $version['packageString'],
+            'maintenance'   => Tinebase_Core::inMaintenanceMode(),
+            'edition'       => $version['buildType'],
+            'productname'   => 'Tine 2.0' // lets try it ;-)
+        );
+
+        $response = (new \Zend\Diactoros\Response())
+            ->withAddedHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($values));
+
+        return $response;
+    }
+    
     /**
      * @return \Zend\Diactoros\Response
      * @throws Tinebase_Exception_AccessDenied

@@ -123,6 +123,22 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }
 
     /**
+     * create new path record from given realpath string like this:
+     *  /personal/tine20admin/somedir
+     *
+     * @param string|Tinebase_Model_Tree_Node_Path $_path
+     * @return Tinebase_Model_Tree_Node_Path
+     */
+    public static function createFromRealPath($_path, $_application, $part = self::FOLDERS_PART)
+    {
+        $flatpath = '/' . $_application->name . '/' . $part . $_path;
+        return new Tinebase_Model_Tree_Node_Path(array(
+            'application' => $_application,
+            'flatpath'  => $flatpath
+        ));
+    }
+
+    /**
      * create new path record from given stat path (= path with ids) string
      *
      * @param string $statPath

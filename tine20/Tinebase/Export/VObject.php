@@ -137,6 +137,13 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
      */
     protected function _returnExportFilename()
     {
-        return $this->_writeToFile() && ! empty($this->_exportFilenames) ? $this->_exportFilenames[0] : null;
+        $result = $this->_writeToFile() && ! empty($this->_exportFilenames) ? $this->_exportFilenames[0] : null;
+        if (! $result && $this->_config->returnFileLocation) {
+            // create a tempfile and return that
+            $result = Tinebase_TempFile::getTempPath();
+            file_put_contents($result, $this->_document->serialize());
+        }
+
+        return $result;
     }
 }

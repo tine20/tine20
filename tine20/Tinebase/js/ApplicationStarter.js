@@ -355,7 +355,7 @@ Tine.Tinebase.ApplicationStarter = {
         if (fieldconfig && (fieldconfig.type == 'record' || fieldconfig.type == 'records')) {
             var opt = fieldconfig.config;
             
-            if (opt && (! opt.doNotCheckModuleRight) && (! Tine.Tinebase.common.hasRight('view', opt.appName, opt.modelName.toLowerCase()))) {
+            if (opt && (! opt.doNotCheckModuleRight) && (! Tine.Tinebase.common.hasRight('view', opt.appName, _.lowerCase(opt.modelName)))) {
                 return null;
             }
         }
@@ -534,6 +534,12 @@ Tine.Tinebase.ApplicationStarter = {
                                 'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle')
                         );
 
+                        // NOTE: no constructor, super magic here
+                        if (Tine[appName].Model.hasOwnProperty(modelName + 'Mixin')) {
+                            Ext.override(Tine[appName].Model[modelName], Tine[appName].Model[modelName + 'Mixin']);
+                            Ext.apply(Tine[appName].Model[modelName], _.get(Tine[appName].Model[modelName + 'Mixin'], 'statics', {}));
+                        }
+                        
                         // called from legacy code - but all filters should come from registy (see below)
                         Tine[appName].Model[modelName].getFilterModel = function() { return [];};
                     }

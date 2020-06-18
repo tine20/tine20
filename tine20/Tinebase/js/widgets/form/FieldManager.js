@@ -242,6 +242,23 @@ Tine.widgets.form.FieldManager = function() {
                     field.xtype = 'tw-xmlfield';
                     field.height = 150; // 12 lines
                     break;
+                case 'container':
+                    field.xtype = 'tinewidgetscontainerselectcombo';
+                    break;
+                case 'containers':
+                    field.xtype = 'containerspicker';
+                    field.appName = fieldDefinition.config.appName;
+                    field.modelName = fieldDefinition.config.modelName;
+                    break;
+                case 'filelocation':
+                    field.xtype = 'fileselectionfield';
+                    field.mode = fieldDefinition.config.mode;
+                    field.locationTypesEnabled = fieldDefinition.config.locationTypesEnabled;
+                    field.allowMultiple = fieldDefinition.config.allowMultiple;
+                    field.constraint = fieldDefinition.config.constraint;
+                    field.initialPath = fieldDefinition.config.initialPath;
+                    field.fileName = fieldDefinition.config.fileName;
+                    break;
                 default:
                     field.xtype = 'textfield';
                     if (fieldDefinition.length) {

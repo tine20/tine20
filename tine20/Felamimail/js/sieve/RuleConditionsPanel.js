@@ -66,6 +66,9 @@ Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterT
  * @return {Array}
  */
 Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel = function(app) {
+    if (! app) {
+        app = Tine.Tinebase.appMgr.get('Felamimail');
+    }
     return [
         {sort: 10, label: app.i18n._('From (Email)'),     field: 'from',     operators: ['contains', 'regex'], emptyText: 'test@example.org'},
         {sort: 20, label: app.i18n._('From (Email and Name)'), field: 'fromheader',     operators: ['contains', 'regex'], emptyText: 'name or email'},

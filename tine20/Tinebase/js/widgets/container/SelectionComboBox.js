@@ -384,6 +384,7 @@ Tine.widgets.container.SelectionComboBox = Ext.extend(Ext.form.ComboBox, {
             if (this.blurOnSelect) {
                 this.fireEvent('blur', this);
             }
+            this.validate();
         }, this);
     },
     

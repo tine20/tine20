@@ -6,9 +6,6 @@
  * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import './SelectionDialog/InitUploadPlugin';
-import './SelectionDialog/InitDownloadPlugin';
-
 Ext.ns('Tine.Tinebase.widgets.file');
 
 /**
@@ -24,9 +21,9 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
     mode: 'source',
 
     /**
-     * @cfg {String} pluginsEnabled list of enabled plugins
+     * @cfg {String} locationTypesEnabled list of enabled plugins
      */
-    pluginsEnabled: 'filemanager,local',
+    locationTypesEnabled: 'fm_node,local',
 
     /**
      * @cfg {Boolean} allowMultiple
@@ -75,26 +72,30 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
     border: false,
     
     initComponent: function () {
-        this.places = [];
-        this.pluginsEnabled = _.map(_.split(this.pluginsEnabled, ','), _.trim);
+        this.locationPlugins = [];
+        this.locationTypesEnabled = _.map(_.split(this.locationTypesEnabled, ','), _.trim);
         
-        const localIdx = _.indexOf(this.pluginsEnabled, 'local');
+        this.allowMultiple = this.mode === 'source' ? this.allowMultiple : false;
+        
+        const localIdx = _.indexOf(this.locationTypesEnabled, 'local');
         if (localIdx >= 0) {
-            this.pluginsEnabled[localIdx] = _.indexOf(['source', 'src'], this.mode) >= 0 ?
+            this.locationTypesEnabled[localIdx] = _.indexOf(['source', 'src'], this.mode) >= 0 ?
                 'upload' : 'download';
         }
         
-        // init plugins
-        this.plugins = this.plugins || [];
-        this.pluginsEnabled = _.filter(this.pluginsEnabled, (plugin) => {
-            const pType = 'widgets.file.selectiondialog.' + plugin;
+        // init locationType plugins
+        this.locationTypesEnabled = _.filter(this.locationTypesEnabled, (type) => {
             
-            if (! Ext.ComponentMgr.isPluginRegistered(pType)) {
-                Tine.log.warn(`fileSelectionDialog: "${pType}" is not registered`);
+            if (! Tine.Tinebase.widgets.file.LocationTypePluginFactory.isRegistered(type)) {
+                Tine.log.warn(`no LocationTypePlugin for "${type}" registered`);
                 return false;
             }
 
-            this.plugins.push(pType);
+            Tine.Tinebase.widgets.file.LocationTypePluginFactory.create(type, _.get(this.pluginConfig, type, {}))
+                .then((plugin) => {
+                    this.addLocationPlugin(plugin);
+                });
+            
             return true;
         });
 
@@ -117,12 +118,12 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
         _.each(fileList, (file) => {
             _.defaults(file, {
                 mode: this.mode,
-                plugin: this.activePlace.plugin,
-                fileName: this.fileName
-            })
+                type: this.activePlace.locationType,
+                file_name: this.fileName
+            });
         });
         
-        return fileList;
+        return this.allowMultiple ? fileList : _.get(fileList, '[0]');
     },
 
     onButtonApply: async function() {
@@ -133,46 +134,47 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
         return Tine.Tinebase.widgets.file.SelectionDialog.superclass.onButtonApply.apply(this, arguments);
     },
     
-    // note, places are added async!
-    addPlace: function(place) {
-        this.places.push(place);
+    // note, locationPlugins are added async!
+    addLocationPlugin: function(locationPlugin) {
+        this.locationPlugins.push(locationPlugin);
 
-        place.treeNode = new Ext.tree.TreeNode({
-            text: place.name,
-            iconCls: place.iconCls
+        locationPlugin.treeNode = new Ext.tree.TreeNode({
+            text: locationPlugin.name,
+            iconCls: locationPlugin.iconCls
         });
 
-        place.index = this.pluginsEnabled.indexOf(place.plugin);
+        locationPlugin.index = this.locationTypesEnabled.indexOf(locationPlugin.plugin);
         
         let nodeInserted = false;
-        _.each(this.places, (p) => {
-            if (p.index > place.index) {
-                this.getPluginSelectionTree().getRootNode().insertBefore(place.treeNode, p.treeNode);
+        _.each(this.locationPlugins, (p) => {
+            if (p.index > locationPlugin.index) {
+                this.getPluginSelectionTree().getRootNode().insertBefore(locationPlugin.treeNode, p.treeNode);
                 nodeInserted = true;
             }
         });
         
         if (! nodeInserted) {
-            this.getPluginSelectionTree().getRootNode().appendChild(place.treeNode);
+            this.getPluginSelectionTree().getRootNode().appendChild(locationPlugin.treeNode);
         }
         
-        if (place.plugin === this.pluginsEnabled[0]) {
-            place.treeNode.select();
+        if (locationPlugin.locationType === this.locationTypesEnabled[0]) {
+            locationPlugin.treeNode.select();
         }
     },
 
-    onTreeSelectionChange: function(sm, node) {
+    onTreeSelectionChange: async function(sm, node) {
         // this.ensureSelected(node);
         
-        const place = _.find(this.places, {treeNode: node});
+        const locationPlugin = _.find(this.locationPlugins, {treeNode: node});
 
-        place.manageButtonApply(this.buttonApply);
+        locationPlugin.manageButtonApply(this.buttonApply);
         
-        _.each(['pluginPanel', 'targetForm', 'optionsForm'], (area) => {
+        const async = await import('async');
+        await async.map(['pluginPanel', 'targetForm', 'optionsForm'], async (area) => {
             const cardPanel = _.get(this, area);
-            const pluginArea = _.get(place, area);
+            const pluginArea = await locationPlugin.getSelectionDialogArea(area, this);
             
-            if (pluginArea) {
+            if (pluginArea && !pluginArea.disabled) {
                 if (cardPanel.items.indexOf(pluginArea) < 0) {
                     _.get(this, area).add(pluginArea);
                 }
@@ -180,7 +182,9 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
                 cardPanel.layout.setActiveItem(pluginArea.id);
                 cardPanel.show();
                 if (_.indexOf(['north', 'south'], cardPanel.region) >= 0) {
-                    cardPanel.setHeight(pluginArea.getHeight());
+                    const height = pluginArea.getHeight();
+                    this[area].setHeight(height);
+                    cardPanel.setHeight(height);
                 }
                 cardPanel.doLayout();
             } else {
@@ -189,15 +193,15 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
         });
         
         // manage pluginSelection
-        if (place.plugin === 'filemanager') {
-            place.pluginPanel.westPanel.getPortalColumn().insert(0, this.getPluginSelectionTree());
+        if (locationPlugin.locationType === 'fm_node') {
+            locationPlugin.pluginPanel.westPanel.getPortalColumn().insert(0, this.getPluginSelectionTree());
             this.westPanel.hide();
         } else {
             this.westPanel.show();
             this.westPanel.insert(0, this.getPluginSelectionTree());
         }
         
-        this.activePlace = place;
+        this.activePlace = locationPlugin;
         this.doLayout();
     },
     

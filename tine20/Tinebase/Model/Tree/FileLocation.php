@@ -35,6 +35,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
     const FLD_FM_PATH = 'fm_path';
     const FLD_NODE_ID = 'node_id';
     const FLD_REVISION = 'revision';
+    const FLD_TEMPFILE_ID = 'tempfile_id';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -77,6 +78,10 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
             ],
             self::FLD_REVISION      => [
                 self::TYPE              => self::TYPE_INTEGER,
+            ],
+            // download fields
+            self::FLD_TEMPFILE_ID      => [
+                self::TYPE              => self::TYPE_STRING,
             ],
         ],
     ];

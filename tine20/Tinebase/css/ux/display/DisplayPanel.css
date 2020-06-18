@@ -64,6 +64,10 @@
     /*-khtml-border-radius: 8px;*/
 }
 
+.x-ux-display-background-border {
+    background-color: #F3F6F7;
+}
+
 .x-ux-display .x-ux-display-declaration {
     color:#A0A0A0;
     font-size:12px;

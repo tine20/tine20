@@ -41,7 +41,14 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         parent::_authenticate();
         
         if (!Tinebase_Session::isStarted()) {
-            Tinebase_Core::startCoreSession();
+            try {
+                Tinebase_Core::startCoreSession();
+            } catch (Zend_Session_Exception $zse) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage());
+                header('WWW-Authenticate: Basic realm="Tine 2.0"');
+                header('HTTP/1.0 401 Unauthorized');
+                exit;
+            }
         }
         
         $snomSession = Phone_Session::getSessionNamespace();

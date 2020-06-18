@@ -59,20 +59,8 @@ class Felamimail_Frontend_HttpTest extends Felamimail_TestCase
         }
         $out = $this->_fetchDownload($message['id'], $partIds);
 
-        $zipfilename = Tinebase_TempFile::getTempPath();
-        file_put_contents($zipfilename, $out);
-
-        // create zip file, unzip, check content
-        $zip = new ZipArchive();
-        $opened = $zip->open($zipfilename);
-        self::assertTrue($opened);
-        $zip->extractTo(Tinebase_Core::getTempDir());
-        $extractedFile = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . 'test1.txt';
-        self::assertTrue(file_exists($extractedFile), 'did not find extracted '
-            . $extractedFile . ' file in dir ');
-        $content = file_get_contents($extractedFile);
+        $content = $this->_unzipContent($out);
         self::assertEquals('some content', $content);
-        $zip->close();
     }
 
     public function testDownloadNodeAttachment()

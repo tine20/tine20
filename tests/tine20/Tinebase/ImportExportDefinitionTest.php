@@ -32,6 +32,12 @@ class Tinebase_ImportExportDefinitionTest extends TestCase
             'target' => [
                 'label' => 'Export target',
                 'type' => 'filelocation',
+                'config' => [
+                    'mode' => 'target',
+                    'locationTypesEnabled' => 'fm_node,download',
+                    'allowMultiple' => false,
+                    'constraint' => 'folder'
+                ]
             ]
         ], $jsonRecord['plugin_options_definition']);
     }

@@ -709,8 +709,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
     const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X = 'previewThumbnailSizeX';
     const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y = 'previewThumbnailSizeY';
-    const FILESYSTEM_PREVIEW_PREVIEW_SIZE_X = 'previewPreviewSizeX';
-    const FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y = 'previewPreviewSizeY';
+    const FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_X = 'previewDocumentPreviewSizeX';
+    const FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_Y = 'previewDocumentPreviewSizeY';
+    const FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_X = 'previewImagePreviewSizeX';
+    const FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_Y = 'previewImagePreviewSizeY';
     const FILESYSTEM_PREVIEW_IGNORE_PROXY = 'previewPreviewIgnoreProxy';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
     const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
@@ -2346,27 +2348,49 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => FALSE,
                     'default'               => 200,
                 ),
-                self::FILESYSTEM_PREVIEW_PREVIEW_SIZE_X => array(
+                self::FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_X => array(
                     //_('X size of preview images.')
-                    'label'                 => 'X size of preview images.',
+                    'label'                 => 'X size of preview images for documents.',
                     //_('X size of preview images.')
-                    'description'           => 'X size of preview images.',
+                    'description'           => 'X size of preview images for documents.',
                     'type'                  => self::TYPE_INT,
                     'clientRegistryInclude' => FALSE,
                     'setByAdminModule'      => FALSE,
                     'setBySetupModule'      => FALSE,
                     'default'               => 1416,
                 ),
-                self::FILESYSTEM_PREVIEW_PREVIEW_SIZE_Y => array(
+                self::FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_Y => array(
                     //_('Y size of preview images.')
-                    'label'                 => 'Y size of preview images.',
+                    'label'                 => 'Y size of preview images for documents.',
                     //_('Y size of preview images.')
-                    'description'           => 'Y size of preview images.',
+                    'description'           => 'Y size of preview images for documents.',
                     'type'                  => self::TYPE_INT,
                     'clientRegistryInclude' => FALSE,
                     'setByAdminModule'      => FALSE,
                     'setBySetupModule'      => FALSE,
                     'default'               => 2000,
+                ),
+                self::FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_X => array(
+                    //_('X size of preview images.')
+                    'label'                 => 'X size of preview images for images.',
+                    //_('X size of preview images.')
+                    'description'           => 'X size of preview images for images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 708,
+                ),
+                self::FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_Y => array(
+                    //_('Y size of preview images.')
+                    'label'                 => 'Y size of preview images for images..',
+                    //_('Y size of preview images.')
+                    'description'           => 'Y size of preview images for images..',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 1000,
                 ),
                 self::FILESYSTEM_PREVIEW_IGNORE_PROXY => array(
                     //_('Ignore Proxy config for preview service')
