@@ -114,7 +114,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
      * @param string $_format
      * @return string
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         $result = parent::getDownloadFilename($_appName, $_format);
 

@@ -56,7 +56,7 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_AbstractDeprecated im
      * @param string $_appName
      * @param string $_format
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         return 'letter_' . strtolower($_appName) . '.docx';
     }
