@@ -22,6 +22,7 @@ cp.on('select', function(palette, selColor){
  * @param {Object} config The config object
  * @xtype colorpalette
  */
+
 Ext.ColorPalette = Ext.extend(Ext.Component, {
 	/**
 	 * @cfg {String} tpl An existing XTemplate instance to be used in place of the default template for rendering the component.
@@ -74,7 +75,8 @@ cp.colors = ['000000', '993300', '333300'];
         '800000', 'FF6600', '808000', '008000', '008080', '0000FF', '666699', '808080',
         'FF0000', 'FF9900', '99CC00', '339966', '33CCCC', '3366FF', '800080', '969696',
         'FF00FF', 'FFCC00', 'FFFF00', '00FF00', '00FFFF', '00CCFF', '993366', 'C0C0C0',
-        'FF99CC', 'FFCC99', 'FFFF99', 'CCFFCC', 'CCFFFF', '99CCFF', 'CC99FF', 'FFFFFF'
+        'FF99CC', 'FFCC99', 'FFFF99', 'CCFFCC', 'CCFFFF', '99CCFF', 'CC99FF', 'FFFFFF',
+        'FFECF6', 'FFF3E7', 'FFFFE7', 'E2FFE2', 'DCFCFF', 'EDF6FF', 'F4E9FF', 'picker'
     ],
 
     /**
@@ -90,7 +92,9 @@ cp.colors = ['000000', '993300', '333300'];
      * The scope (<tt><b>this</b></tt> reference) in which the <code>{@link #handler}</code>
      * function will be called.  Defaults to this ColorPalette instance.
      */
-    
+
+    colorPicker: null,
+
     // private
     initComponent : function(){
         Ext.ColorPalette.superclass.initComponent.call(this);
@@ -117,7 +121,21 @@ cp.colors = ['000000', '993300', '333300'];
         };
         Ext.ColorPalette.superclass.onRender.call(this, container, position);
         var t = this.tpl || new Ext.XTemplate(
-            '<tpl for="."><a href="#" class="color-{.}" hidefocus="on"><em><span style="background:#{.}" unselectable="on">&#160;</span></em></a></tpl>'
+            '<tpl for="."><a href="#" class="color-{.}" hidefocus="on"><em><span style="background:#{[this.getColor(values)]}; text-align: center" unselectable="on">{[this.getSymbol(values)]}</span></em></a></tpl>',
+            {
+                getColor(value) {
+                    if (value === 'picker') {
+                        return 'FFFFFF';
+                    }
+                    return value;
+                },
+                getSymbol: function (value) {
+                    if (value === 'picker') {
+                        return '+';
+                    }
+                    return '&#160';
+                }
+            }
         );
         t.overwrite(this.el, this.colors);
         this.mon(this.el, this.clickEvent, this.handleClick, this, {delegate: 'a'});
@@ -139,6 +157,9 @@ cp.colors = ['000000', '993300', '333300'];
     // private
     handleClick : function(e, t){
         e.preventDefault();
+        if (this.colorPicker) {
+            return;
+        }
         if(!this.disabled){
             var c = t.className.match(/(?:^|\s)color-(.{6})(?:\s|$)/)[1];
             this.select(c.toUpperCase());
@@ -151,15 +172,95 @@ cp.colors = ['000000', '993300', '333300'];
      */
     select : function(color){
         color = color.replace('#', '');
-        if(color != this.value || this.allowReselect){
-            var el = this.el;
-            if(this.value){
-                el.child('a.color-'+this.value).removeClass('x-color-palette-sel');
-            }
-            el.child('a.color-'+color).addClass('x-color-palette-sel');
+        if (color === 'PICKER') {
+            this.renderColorPicker();
+            return;
+        }
+
+        if(color !== this.value || this.allowReselect){
+            this.highlightElement(this.el, color);
             this.value = color;
             this.fireEvent('select', this, color);
+
+            let values = Tine.Calendar.ColorManager.str2dec(color)
+            // weights of color values see: https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
+            let Y = 0.299 * values[0] + 0.587 * values[1] + 0.114 * values[2];
+            let textColor = Y > 128 ? '000000' : 'FFFFFF';
+
+            this.el.child('a.color-picker > em > span').dom.style.backgroundColor = '#' + color;
+            this.el.child('a.color-picker > em > span').dom.style.color = '#' + textColor;
         }
+    },
+
+    highlightElement (el, color) {
+        if (this.value && el.child('a.color-'+this.value)) {
+            el.child('a.color-'+this.value).removeClass('x-color-palette-sel');
+        }
+
+        if (el.child('a.color-picker')) {
+            el.child('a.color-picker').removeClass('x-color-palette-sel');
+        }
+
+        if (el.child('a.color-'+color)) {
+            el.child('a.color-'+color).addClass('x-color-palette-sel');
+        } else {
+            el.child('a.color-picker').addClass('x-color-palette-sel');
+        }
+    },
+
+    renderColorPicker: async function () {
+        const me = this;
+
+        const {default: Vue} = await import(/* webpackChunkName: "Tinebase/js/Vue" */ 'vue/dist/vue.js');
+        const {default: ColorPickerApp} = await import(/* webpackChunkName: "Tinebase/js/ColorPickerApp" */ 'ux/form/ColorPickerApp.vue');
+
+        const colorPickerApp = new Ext.Component({
+            border: false,
+            id: 'ColorPickerApp-' + this.id,
+        });
+
+        const picker = Tine.WindowFactory.getWindow({
+            modal: true,
+            name: 'ColorPickerWindow_' + this.id,
+            closeAction: 'destroy',
+            width: 215,
+            height: 330,
+            items: new Tine.Tinebase.dialog.Dialog({
+                listeners: {
+                    scope: this,
+                    apply: function(color) {
+                        this.select(color)
+                        picker.destroy()
+                        me.colorPicker = null;
+                    },
+                    cancel: function () {
+                        picker.destroy()
+                        me.colorPicker = null;
+                    }
+                },
+                getEventData: function(eventName) {
+                    if (eventName === 'apply') {
+                        return vm.$refs.colorPickerApp.getColor()
+                    }
+                },
+                items: [{
+                    items: colorPickerApp,
+                    layout: 'absolute'
+                }]
+            })
+        }).show();
+        picker.setZIndex(16000);
+
+        await colorPickerApp.afterIsRendered();
+        this.colorPicker = picker;
+        this.fireEvent('pickerShow', picker);
+
+        const vm = new Vue({
+            el: '#ColorPickerApp-' + this.id,
+            render: (createElement) => {
+                return createElement (ColorPickerApp, {props:{initialColor: me.value}, ref: 'colorPickerApp'});
+            }
+        });
     }
 
     /**

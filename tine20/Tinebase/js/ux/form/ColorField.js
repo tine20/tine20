@@ -69,7 +69,12 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
         }
         if(this.menu == null){
             this.menu = new Ext.menu.ColorMenu({
-                hideOnClick: false
+                hideOnClick: false,
+                listeners: {
+                    scope: this,
+                    select: this.onSelect,
+                    pickerShow: this.onPickerShow
+                }
             });
 
         }
@@ -90,7 +95,6 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
     
     //private
     menuEvents: function(method){
-        this.menu[method]('select', this.onSelect, this);
         this.menu[method]('hide', this.onMenuHide, this);
         this.menu[method]('show', this.onMenuShow, this);
     },
@@ -117,7 +121,19 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
 
         this.onFocus();
     },
-
+    
+    //private
+    onPickerShow: function(win) {
+        // win is shown in a menu! ok btn is outside the menu and thus
+        // menu is hidden -> editing is canceled!
+        win.on('close', () => {
+            this.colorPickerWindow = null;
+        });
+        
+        this.colorPickerWindow = win;
+        
+    },
+    
     //private
     onMenuHide: function(){
         this.focus(false, 60);
@@ -125,7 +141,7 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
 
         Ext.WindowMgr.unregister(this.menu);
 
-        if (this.inEditor && this.editor) {
+        if (this.inEditor && this.editor && !this.colorPickerWindow) {
             this.editor.cancelEdit();
         }
     }

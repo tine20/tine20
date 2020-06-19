@@ -87,6 +87,12 @@ Tine.widgets.tree.ContextMenu = {
             menu: new Ext.menu.ColorMenu({
                 scope: this,
                 listeners: {
+                    show: function (cmp) {
+                        const colorPalette = cmp.items.get(0)
+                        colorPalette.suspendEvents()
+                        colorPalette.select(this.scope.ctxNode.attributes.color)
+                        colorPalette.resumeEvents()
+                    },
                     select: this.changeNodeColor,
                     scope: this.config
                 }

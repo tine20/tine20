@@ -168,7 +168,7 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
 
     getTextColor: function (colorString) {
         let values = Tine.Calendar.ColorManager.str2dec(colorString)
-        // constants see: https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
+        // weights of color values see: https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
         let Y = 0.299 * values[0] + 0.587 * values[1] + 0.114 * values[2];
 
         return Y > 128 ? '#000000' : '#FFFFFF';
