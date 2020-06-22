@@ -1,3 +1,5 @@
+const path = require('path');
+const baseDir = path.resolve(__dirname , '../../');
 /**
  * moves unnamed chunks into "<app>/js/" dir
  * with this a chunkFilename in import() / require.ensure() calls is not longer needed
@@ -16,7 +18,8 @@ class ChunkNamePlugin {
                         if (! chunk.name) {
                             let app = 'Tinebase'
                             chunk.getModules().forEach((module) => {
-                                const moduleApp = (module.resource.split('/')[3]);
+                                const relPath = module.resource.replace(baseDir, '');
+                                const moduleApp = (relPath.split('/')[1]);
                                 // @TODO - common chunks should be factored out
                                 // @TODO - what about mixed app chunks -> should not happen with common chunks
                                 if (moduleApp !== 'Tinebase') {
