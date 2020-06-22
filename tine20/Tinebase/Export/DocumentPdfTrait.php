@@ -107,7 +107,7 @@ trait Tinebase_Export_DocumentPdfTrait
      * @param string $_format
      * @return string
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         return parent::getDownloadFilename($_appName, $_format);
     }

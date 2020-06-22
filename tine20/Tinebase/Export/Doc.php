@@ -368,10 +368,11 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         $this->_twig->addLoader(new Tinebase_Twig_CallBackLoader($twigName, $this->_getLastModifiedTimeStamp(),
             array($this->_currentProcessor, 'getTwigSource')));
 
-        $result = $this->_twig->load($twigName)->render($this->_getTwigContext([
-            'records' => $this->_currentIterationRecords,
-            'record'  => null,
-        ]));
+        $result = str_replace("\n", Tinebase_Export_Richtext_TemplateProcessor::NEW_LINE_PLACEHOLDER,
+            $this->_twig->load($twigName)->render($this->_getTwigContext([
+                'records' => $this->_currentIterationRecords,
+                'record'  => null,
+            ])));
         $this->_currentProcessor->setValue('${TWIG_TEMPLATE}', $result);
         $this->_currentProcessor->unsetTwigSource();
     }

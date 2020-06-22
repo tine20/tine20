@@ -318,7 +318,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * 
      * @todo remove this when we extend Tinebase_Export_Abstract
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         return 'export_' . strtolower($_appName) . '.' . $_format;
     }

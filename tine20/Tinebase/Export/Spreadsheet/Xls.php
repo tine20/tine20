@@ -148,7 +148,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
      * @param string $_appName
      * @param string $_format
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         $result = parent::getDownloadFilename($_appName, $_format);
         
