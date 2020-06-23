@@ -638,6 +638,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                     'user_type' => $attendee['user_type'],
                     'name'      => $attendee->getName(),
                     'status'    => $status,
+                    'seq'       => $attendee['seq'],
                 ];
             }
 
@@ -777,11 +778,31 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
 
+            $transId = null;
             foreach($request['status'] as $date) {
-                $event = Calendar_Controller_Event::getInstance()->get($date['cal_event_id']);
                 $attendee = new Calendar_Model_Attender($date);
+                if (empty($attendee->status_authkey)) continue;
 
+                $raii = (new Tinebase_RAII(function() use($transId) {
+                    if (null !== $transId) {
+                        Tinebase_TransactionManager::getInstance()->rollBack();
+                    }
+                }))->setReleaseFunc(function() use(&$transId) {
+                    Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+                    $transId = null;
+                });
+                $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+                $event = Calendar_Controller_Event::getInstance()->get($date['cal_event_id']);
+                if (($currentAttender = Calendar_Model_Attender::getAttendee($event->attendee, $attendee)) !== null &&
+                        (int)$currentAttender->seq > (int)$attendee->seq) {
+                    $raii->release();
+                    continue;
+                }
+                
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $attendee, $attendee->status_authkey);
+
+                $raii->release();
             }
 
             // @TODO: queue some sort of notification
