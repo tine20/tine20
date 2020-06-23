@@ -10,7 +10,7 @@ https://github.com/tine20/tine20/wiki/EN:Development-Setup
 * Non-trivial changes should be discussed on an issue first
 * Let us know you’re working on the issue (by using the
  [Kanban board](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/projects/1))
-* Develop in a topic branch, not master
+* Develop in a topic branch, not main
 * Provide useful pull request description
 * Write a good description of your PR
 * Link to the Github issue in the description
@@ -25,8 +25,8 @@ This can be done directly in the Pull Request, thanks to https://cla-assistant.i
 
 ### Writing Tests
 
-For PHP code, write [phpunit](https://phpunit.de/) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/master/tests/tine20)
-For JavaScript code, write [karma](http://karma-runner.github.io) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/master/tests/js)
+For PHP code, write [phpunit](https://phpunit.de/) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/main/tests/tine20)
+For JavaScript code, write [karma](http://karma-runner.github.io) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/main/tests/js)
 
 ### Commit Message Guidelines
 
