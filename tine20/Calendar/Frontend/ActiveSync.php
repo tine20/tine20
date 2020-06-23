@@ -221,7 +221,11 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
      */
     public function setAttendeeStatus(Syncroton_Model_MeetingResponse $response)
     {
-        $event = $instance = $this->_contentController->get($response->requestId);
+        try {
+            $event = $instance = $this->_contentController->get($response->requestId);
+        } catch (Tinebase_Exception_NotFound $eventNotFound) {
+            throw new Syncroton_Exception_Status_MeetingResponse("event not found", Syncroton_Exception_Status_MeetingResponse::MEETING_ERROR);
+        }
         $method = 'attenderStatusUpdate';
         
         if ($response->instanceId instanceof DateTime) {
