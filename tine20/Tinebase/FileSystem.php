@@ -4224,9 +4224,21 @@ class Tinebase_FileSystem implements
             Tinebase_Lock::keepLocksAlive();
         }
 
+        $this->_notifyImapQuota($quotaConfig);
+
+        return true;
+    }
+
+    protected function _notifyImapQuota($quotaConfig)
+    {
         if ($quotaConfig->{Tinebase_Config::QUOTA_SKIP_IMAP_QUOTA}) {
             return true;
         }
+
+        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            return true;
+        }
+
         /** @var Tinebase_EmailUser_Imap_Dovecot $imapBackend */
         $imapBackend = null;
         try {
@@ -4239,6 +4251,8 @@ class Tinebase_FileSystem implements
             return true;
         }
 
+        $softQuota = $quotaConfig->{Tinebase_Config::QUOTA_SOFT_QUOTA};
+
         /** @var Tinebase_Model_EmailUser $emailUser */
         foreach ($imapBackend->getAllEmailUsers() as $emailUser) {
             if ($emailUser->emailMailQuota < 1) {
@@ -4248,7 +4262,7 @@ class Tinebase_FileSystem implements
             $softAlert = false;
             if ($emailUser->emailMailSize >= ($emailUser->emailMailQuota * 0.99)) {
                 $alert = true;
-            } elseif($softQuota > 0 && $emailUser->emailMailSize > ($emailUser->emailMailQuota * $softQuota / 100)) {
+            } elseif ($softQuota > 0 && $emailUser->emailMailSize > ($emailUser->emailMailQuota * $softQuota / 100)) {
                 $alert = true;
                 $softAlert = true;
             }
@@ -4256,7 +4270,7 @@ class Tinebase_FileSystem implements
             if (true === $alert) {
                 /** @var Tinebase_Model_FullUser $user */
                 foreach (Tinebase_User::getInstance()->getMultiple(array_unique(array_merge(
-                        $this->_quotaNotificationRoleMembers, array($emailUser->emailUserId)))) as $user) {
+                    $this->_quotaNotificationRoleMembers, array($emailUser->emailUserId)))) as $user) {
                     $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
                         $user->accountId));
                     $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
@@ -4272,8 +4286,6 @@ class Tinebase_FileSystem implements
 
             Tinebase_Lock::keepLocksAlive();
         }
-
-        return true;
     }
 
     protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
