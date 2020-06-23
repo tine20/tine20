@@ -46,6 +46,12 @@ class Addressbook_Export_VCardReport extends Tinebase_Export_Report_Abstract
             'target' => [
                 'label' => 'Export target', // _('Export target')
                 'type' => 'filelocation',
+                'config' => [
+                    'mode' => 'target',
+                    'locationTypesEnabled' => 'fm_node,download',
+                    'allowMultiple' => false,
+                    'constraint' => 'folder'
+                ]
             ]
         ];
     }
