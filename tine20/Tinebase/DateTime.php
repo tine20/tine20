@@ -271,15 +271,30 @@ class Tinebase_DateTime extends DateTime
         if (! $_date instanceof DateTime) {
             throw new Tinebase_Exception_Date(var_export($_date, TRUE) . ' is not an instance of DateTime');
         }
+
+        $that = $this;
+        if ($this->_hasTime && (!$_date instanceof Tinebase_DateTime || $_date->hasTime())) {
+            $cmpTZ = $this->getTimezone();
+
+            if ($cmpTZ->getName() !== $_date->getTimezone()->getName()) {
+                $_date = clone $_date;
+                $_date->setTimezone($cmpTZ);
+            };
+        } else {
+            if ($this->_hasTime) {
+                $that = clone $this;
+                $that->hasTime(false);
+            } else {
+                $_date = clone $_date;
+                if ($_date instanceof Tinebase_DateTime) {
+                    $_date->hasTime(false);
+                } else {
+                    $_date->setTime(0, 0, 0, 0);
+                }
+            }
+        }
         
-        $cmpTZ = $this->getTimezone();
-        
-        if ($cmpTZ != $_date->getTimezone()) {
-            $_date = clone $_date;
-            $_date->setTimezone($cmpTZ);
-        };
-        
-        $thisValue = $this->format($_part);
+        $thisValue = $that->format($_part);
         $dateValue = $_date->format($_part);
         
         if ($thisValue == $dateValue) {
@@ -357,7 +372,7 @@ class Tinebase_DateTime extends DateTime
             $this->_hasTime = $paramValue;
             
             if ($this->_hasTime === FALSE) {
-                $this->setTime(0,0,0);
+                $this->setTime(0, 0, 0, 0);
             }
         }
         

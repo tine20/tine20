@@ -1465,6 +1465,19 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
                 $_data[$field] = $value;
             }
         }
+        foreach (static::$_configurationObject->dateFields as $field) {
+            if (isset($_data[$field])) {
+                if (is_array($_data[$field])) {
+                    foreach ($_data[$field] as $val) {
+                        if ($val instanceof Tinebase_DateTime) {
+                            $val->hasTime(false);
+                        }
+                    }
+                } elseif ($_data[$field] instanceof Tinebase_DateTime) {
+                    $_data[$field]->hasTime(false);
+                }
+            }
+        }
     }
 
     /**

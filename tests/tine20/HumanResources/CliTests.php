@@ -198,6 +198,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $newEnd = Tinebase_DateTime::now()->subDay(1);
         
         $employee->employment_end = $newEnd;
+        $newEnd->hasTime(false);
         
         $employee->contracts = array($contract->toArray());
         

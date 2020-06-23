@@ -819,7 +819,19 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 $_data[$field] = $value;
             }
         }
-        
+        foreach ($this->_dateFields as $field) {
+            if (isset($_data[$field])) {
+                if (is_array($_data[$field])) {
+                    foreach ($_data[$field] as $val) {
+                        if ($val instanceof Tinebase_DateTime) {
+                            $val->hasTime(false);
+                        }
+                    }
+                } elseif ($_data[$field] instanceof Tinebase_DateTime) {
+                    $_data[$field]->hasTime(false);
+                }
+            }
+        }
     }
     
     /**
