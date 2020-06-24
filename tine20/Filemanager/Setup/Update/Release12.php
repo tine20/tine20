@@ -26,7 +26,7 @@ class Filemanager_Setup_Update_Release12 extends Setup_Update_Abstract
             $users = Tinebase_User::getInstance()->getFullUsers(null, 'accountId', 'ASC', $start, $limit);
             foreach ($users as $user) {
 
-                if (Tinebase_Core::isReplicationSlave()) {
+                if (Tinebase_Core::isReplica()) {
                     // do not create folders for user that came from the master as those folders will be created
                     // on the master and then replicated.
 

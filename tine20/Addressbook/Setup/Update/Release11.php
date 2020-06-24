@@ -34,7 +34,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.2');
     }
@@ -50,7 +50,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.3');
     }
@@ -66,7 +66,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_3()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.4');
     }
@@ -82,7 +82,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_4()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.5');
     }
@@ -98,7 +98,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_5()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.6');
     }
@@ -114,7 +114,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_6()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.7');
     }
@@ -130,7 +130,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_7()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.8');
     }
@@ -146,7 +146,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_8()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.9');
     }
@@ -162,7 +162,7 @@ class Addressbook_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_9()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplicationSlave());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), Tinebase_Core::isReplica());
 
         $this->setApplicationVersion('Addressbook', '11.10');
     }

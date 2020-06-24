@@ -2179,7 +2179,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectEvent($_record, $skipEvent = false)
     {
-        if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $_record->isReplicable()) {
+        if ($this->_doContainerACLChecks && Tinebase_Core::isReplica() && $_record->isReplicable()) {
             throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
         }
 
@@ -2281,15 +2281,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * inspects delete action
      *
      * @param array $_ids
-     * @return array of ids to actually delete
+     * @return Tinebase_Record_RecordSet of Calendar_Model_Event
+     * @throws Tinebase_Exception_AccessDenied
      */
-    protected function _inspectDelete(array $_ids) {
+    protected function _inspectDelete(array $_ids)
+    {
         $events = $this->_backend->getMultiple($_ids);
         
         foreach ($events as $event) {
 
-            if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $event->isReplicable()) {
-                throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+            if ($this->_doContainerACLChecks && Tinebase_Core::isReplica() && $event->isReplicable()) {
+                throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the replicas!');
             }
 
             // implicitly delete persistent recur instances of series

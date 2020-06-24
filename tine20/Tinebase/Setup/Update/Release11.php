@@ -921,7 +921,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         /** @var Tinebase_Model_Application $application */
         foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
-            $setupController->createImportExportDefinitions($application, Tinebase_Core::isReplicationSlave());
+            $setupController->createImportExportDefinitions($application, Tinebase_Core::isReplica());
         }
 
         $this->setApplicationVersion('Tinebase', '11.45');
