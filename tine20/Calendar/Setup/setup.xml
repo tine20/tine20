@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>11.16</version>
+    <version>11.17</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
@@ -325,7 +325,7 @@
         <!-- attendee -->
         <table>
             <name>cal_attendee</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -486,6 +486,7 @@
                     <reference>
                         <table>container</table>
                         <field>id</field>
+                        <ondelete>SET NULL</ondelete>
                     </reference>
                 </index>
             </declaration>

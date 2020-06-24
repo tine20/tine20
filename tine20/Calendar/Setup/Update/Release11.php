@@ -5,7 +5,7 @@
  * @package     Calendar
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
@@ -377,5 +377,26 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
         $update10->update_11();
 
         $this->setApplicationVersion('Calendar', '11.16');
+    }
+
+    public function update_16()
+    {
+        $this->_backend->dropForeignKey('cal_attendee', 'cal_attendee::displaycontainer_id--container::id');
+        $this->_backend->addForeignKey('cal_attendee', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>cal_attendee::displaycontainer_id--container::id</name>
+                    <field>
+                        <name>displaycontainer_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                        <ondelete>SET NULL</ondelete>
+                    </reference>
+                </index>'));
+        if ($this->getTableVersion('cal_events') < 8) {
+            $this->setTableVersion('cal_events', 8);
+        }
+        $this->setApplicationVersion('Calendar', '11.17');
     }
 }
