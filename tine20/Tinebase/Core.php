@@ -224,18 +224,18 @@ class Tinebase_Core
     protected static $_delegatorCache = array();
 
     /**
-     * whether this instance is a replication primary or not. if no replication configured, its a primary node
+     * whether this instance is a replication master or not. if no replication configured, its a master
      *
      * @var bool
      */
-    protected static $_isReplicationPrimary = null;
+    protected static $_isReplicationMaster = null;
 
     /**
-     * whether this instance is a replica or not. if no replication configured, its a primary node
+     * whether this instance is a replication slave or not. if no replication configured, its a master
      *
      * @var bool
      */
-    protected static $_isReplica = null;
+    protected static $_isReplicationSlave = null;
 
     /******************************* DISPATCH *********************************/
     
@@ -2233,10 +2233,10 @@ class Tinebase_Core
     /**
      * @return bool
      */
-    public static function isReplica()
+    public static function isReplicationSlave()
     {
-        if (null !== static::$_isReplica) {
-            return static::$_isReplica;
+        if (null !== static::$_isReplicationSlave) {
+            return static::$_isReplicationSlave;
         }
         $slaveConfiguration = Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_SLAVE};
         $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
@@ -2245,12 +2245,12 @@ class Tinebase_Core
 
         // check if we are a replication slave
         if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
-            static::$_isReplicationPrimary = true;
-            return (static::$_isReplica = false);
+            static::$_isReplicationMaster = true;
+            return (static::$_isReplicationSlave = false);
         }
 
-        static::$_isReplicationPrimary = false;
-        return (static::$_isReplica = true);
+        static::$_isReplicationMaster = false;
+        return (static::$_isReplicationSlave = true);
     }
 
     /**
@@ -2258,11 +2258,11 @@ class Tinebase_Core
      */
     public static function isReplicationMaster()
     {
-        if (null !== static::$_isReplicationPrimary) {
-            return static::$_isReplicationPrimary;
+        if (null !== static::$_isReplicationMaster) {
+            return static::$_isReplicationMaster;
         }
 
-        return ! static::isReplica();
+        return ! static::isReplicationSlave();
     }
 
     /**

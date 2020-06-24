@@ -46,7 +46,7 @@ class Sales_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'), Tinebase_Core::isReplica());
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'), Tinebase_Core::isReplicationSlave());
 
         $this->setApplicationVersion('Sales', '11.2');
     }
