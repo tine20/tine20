@@ -1,8 +1,8 @@
-.mariadb_service: &abstract_jobs-mariadb_service
-  name: mariadb:10.4.1
+.db_service: &abstract_jobs-db_service
+  name: "$DATABASE_IMAGE"
   alias: db
 .redis_service: &abstract_jobs-redis_service
-  name: redis:5.0.5
+  name: "$REDIS_IMAGE"
   alias: cache
 .postfix_service: &abstract_jobs-postfix_service
   name: dockerregistry.metaways.net/tine20/docker/postfix:1.0.0
@@ -47,7 +47,7 @@
     NODE_INDEX: "$CI_NODE_INDEX"
     TINE20_ACCEPTED_TERMS_VERSION: 1000
   services:
-    - *abstract_jobs-mariadb_service
+    - *abstract_jobs-db_service
     - *abstract_jobs-redis_service
     - *abstract_jobs-postfix_service
     - *abstract_jobs-dovecot_service
@@ -72,7 +72,7 @@
     TINE20_AUTHENTICATION: "bindRequiresDn:1,backend:ldap,host:ldap\\://ldap,port:389,username:cn=admin\\,dc=tine\\,dc=test,password:admin,baseDn:ou=users\\,dc=tine\\,dc=test,accountFilterFormat:(&(objectClass=posixAccount)(uid=%s)),accountCanonicalForm:2"
     TINE20_ACCOUNTS: "backend:ldap,host:ldap\\://ldap,port:389,username:cn=admin\\,dc=tine\\,dc=test,password:admin,userDn:ou=users\\,dc=tine\\,dc=test,groupsDn:ou=groups\\,dc=tine\\,dc=test,defaultUserGroupName:Users,defaultAdminGroupName:Administrators"
   services:
-    - *abstract_jobs-mariadb_service
+    - *abstract_jobs-db_service
     - *abstract_jobs-redis_service
     - *abstract_jobs-postfix_service
     - *abstract_jobs-dovecot_service
