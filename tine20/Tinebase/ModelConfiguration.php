@@ -1169,13 +1169,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $this->_readOnlyFields[] = $fieldKey;
             }
 
-            if (isset($fieldDef['autocomplete']) && $fieldDef['autocomplete'] && !isset($fieldDef['config'])) {
-                $fieldDef['config'] = [
-                    'appName' => $this->_appName,
-                    'modelName' => $this->_modelName,
-                ];
-            }
-
             // set default type to string, if no type is given
             if (! isset($fieldDef[self::TYPE])) {
                 $fieldDef[self::TYPE] = 'string';
@@ -1225,6 +1218,10 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $this->_autoincrementFields[] = $fieldDef;
             }  elseif ($fieldDef[self::TYPE] === 'image') {
                 $fieldDef['label'] = 'Image'; // _('Image')
+            } elseif ($fieldDef[self::TYPE] === self::TYPE_STRING_AUTOCOMPLETE) {
+                $fieldDef[self::CONFIG] = isset($fieldDef[self::CONFIG]) && is_array($fieldDef[self::CONFIG]) ? $fieldDef[self::CONFIG] : [];
+                $fieldDef[self::CONFIG][self::APP_NAME] = $this->_appName;
+                $fieldDef[self::CONFIG][self::MODEL_NAME] = $this->_modelName;
             }
 
             if (isset($fieldDef[self::IS_VIRTUAL])) {
