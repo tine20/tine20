@@ -2083,6 +2083,8 @@ class Tinebase_FileSystem implements
             if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $_name, true, false)) &&
                     $deletedNode->is_deleted) {
                 $deletedNode->is_deleted = 0;
+                $deletedNode->deleted_by = null;
+                $deletedNode->deleted_time = null;
                 /** @var Tinebase_Model_Tree_FileObject $object */
                 $object = $this->_fileObjectBackend->get($deletedNode->object_id, true);
                 if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
@@ -2096,6 +2098,8 @@ class Tinebase_FileSystem implements
                 $object->hash = Tinebase_Record_Abstract::generateUID();
                 $object->size = 0;
                 $object->is_deleted = 0;
+                $object->deleted_by = null;
+                $object->deleted_time = null;
                 $object->type = $_fileType;
                 $object->preview_count = 0;
                 $object->contenttype = $_mimeType;

@@ -51,14 +51,19 @@ function removeComposerDevDependencies() {
     cd ${TINE20ROOT}/tine20 && composer install --no-dev --no-ansi --no-progress --no-suggest
 }
 
-function cleanup()
+function cleanup() {
+    cleanupTinebase
+    cleanupCss
+    cleanupJs
+    cleanupFiles
+}
+
+function cleanupCss()
 {
-    echo "cleanup tine20 files"
+    echo "cleanup css files in:"
     CLIENTBUILDFILTER="FAT"
 
     for FILE in `ls ${TINE20ROOT}/tine20`; do
-        UCFILE=`echo ${FILE} | tr '[A-Z]' '[a-z]'`
-
         # tine20 app needs translations OR Setup dir
         if [ -d "$TEMPDIR/tine20/$FILE/translations" ] || [ -d "$TEMPDIR/tine20/$FILE/Setup" ]; then
             case $FILE in
@@ -146,16 +151,92 @@ function cleanup()
                     fi
                     ;;
             esac
-        else
-            echo " $FILE"
-            # delete all files which the original build script dose not copy, because docker can not loop and copy
+        fi
+    done
+}
 
+function cleanupJs()
+{
+    echo "cleanup js files in:"
+
+    echo "\"Tinebase/js/webpack-assets-FAT.json\"" >> ${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json
+
+    for FILE in `ls "${TINE20ROOT}/tine20"`; do
+        # tine20 app needs translations OR Setup dir
+        if [ -d "${TINE20ROOT}/tine20/${FILE}/translations" ] || [ -d "${TINE20ROOT}/tine20/${FILE}/Setup" ]; then
+            echo "+ ${FILE}"
+            if [ -d "${TINE20ROOT}/tine20/${FILE}/js" ]; then
+                for JSFILE in `ls "${TINE20ROOT}/tine20/${FILE}/js/"`; do
+                    if ! grep -q "\"${FILE}/js/${JSFILE}\"" "${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json"; then
+                        rm -rf "${TINE20ROOT}/tine20/${FILE}/js/${JSFILE}"
+                    fi
+                done
+            fi
+        fi
+    done
+
+    rm -rf ${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json
+}
+
+function cleanupFiles() {
+    echo "cleanup files:"
+
+    for FILE in `ls ${TINE20ROOT}/tine20`; do
+        # tine20 app needs translations OR Setup dir
+        if [ ! -d "${TINE20ROOT}/tine20/$FILE/translations" ] && [ ! -d "${TINE20ROOT}/tine20/$FILE/Setup" ]; then
             local FILES="images|library|vendor|docs|fonts|CREDITS|LICENSE|PRIVACY|README|RELEASENOTES|init_plugins.php|favicon.ico"
             local FILES="$FILES|config.inc.php.dist|index.php|langHelper.php|setup.php|tine20.php|bootstrap.php|worker.php|status.php"
 
             if ! [[ "$FILE" =~ $(echo ^\($FILES\)$) ]]; then
-                rm -rf $FILE
+                echo "- $FILE"
+                rm -rf "${TINE20ROOT}/tine20/$FILE"
+            else
+                echo "+ $FILE"
             fi
         fi
     done
+}
+
+function cleanupTinebase() {
+  echo "cleanup Tinebase:"
+
+  CLIENTBUILDFILTER="FAT"
+
+  (cd ${TINE20ROOT}/tine20/Addressbook/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+  (cd ${TINE20ROOT}/tine20/Admin/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+  (cd ${TINE20ROOT}/tine20/Setup/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+
+  (cd ${TINE20ROOT}/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css | grep -v widgets))
+  (cd ${TINE20ROOT}/tine20/Tinebase/css/widgets;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+
+  # cleanup ExtJS
+  (cd ${TINE20ROOT}/tine20/library/ExtJS/adapter; rm -rf $(ls | grep -v ext))
+  (cd ${TINE20ROOT}/tine20/library/ExtJS/src;     rm -rf $(ls | grep -v debug.js))
+  (cd ${TINE20ROOT}/tine20/library/ExtJS;         rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
+
+  # cleanup OpenLayers
+  (cd ${TINE20ROOT}/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
+
+  # cleanup qCal
+  (cd ${TINE20ROOT}/tine20/library/qCal;  rm -rf docs tests)
+
+  # save langStats
+  (mv ${TINE20ROOT}/tine20/langstatistics.json ${TINE20ROOT}/tine20/Tinebase/translations/langstatistics.json)
+
+  # remove composer dev requires (--no-scripts to prevent post-install-cmds like "git submodule --init")
+  composer install --ignore-platform-reqs --no-dev --no-scripts -d ${TINE20ROOT}/tine20
+
+  rm -rf ${TINE20ROOT}/tine20/Tinebase/js/node_modules
+  rm -rf ${TINE20ROOT}/tine20/vendor/phpdocumentor
+  rm -rf ${TINE20ROOT}/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
+
+  find ${TINE20ROOT}/tine20/vendor -name .gitignore -type f -print0 | xargs -0 rm -rf
+  find ${TINE20ROOT}/tine20/vendor -name .git       -type d -print0 | xargs -0 rm -rf
+  find ${TINE20ROOT}/tine20/vendor -name docs       -type d -print0 | xargs -0 rm -rf
+  find ${TINE20ROOT}/tine20/vendor -name examples   -type d -print0 | xargs -0 rm -rf
+  find ${TINE20ROOT}/tine20/vendor -name tests      -type d -print0 | xargs -0 rm -rf
+
+  composer dumpautoload -d ${TINE20ROOT}/tine20
+
+  rm -rf ${TINE20ROOT}/tine20/composer.*
 }
