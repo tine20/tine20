@@ -11,12 +11,12 @@ Ext.ns('Tine.Tinebase.widgets.file');
 Tine.Tinebase.widgets.file.LocationTypePluginFactory = (function() {
     const pluginFactories = {
         'download': async function(config) {
-            return import('./LocationTypePlugin/Download').then(() => {
+            return import(/* webpackChunkName: "Tinebase/js/DownloadFileLocationTypePlugin" */ './LocationTypePlugin/Download').then(() => {
                 return new Tine.Tinebase.widgets.file.LocationTypePlugin.Download(config);
             });
         },
         'upload': async function(config) {
-            return import('./LocationTypePlugin/Upload').then(() => {
+            return import(/* webpackChunkName: "Tinebase/js/UploadFileLocationTypePlugin" */ './LocationTypePlugin/Upload').then(() => {
                 return new Tine.Tinebase.widgets.file.LocationTypePlugin.Upload(config);
             });
         }

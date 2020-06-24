@@ -169,7 +169,7 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
 
         locationPlugin.manageButtonApply(this.buttonApply);
         
-        const async = await import('async');
+        const async = await import(/* webpackChunkName: "Tinebase/js/async" */ 'async');
         await async.map(['pluginPanel', 'targetForm', 'optionsForm'], async (area) => {
             const cardPanel = _.get(this, area);
             const pluginArea = await locationPlugin.getSelectionDialogArea(area, this);
