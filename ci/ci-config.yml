@@ -13,3 +13,5 @@ variables:
   PUSH_TO_DOCKERHUB: "false"
   DOCKERHUB_TAG: "dev"
   PHP_UNIT_SERVERTESTS: "true"
+  DATABASE_IMAGE: "mariadb:10.5.3"
+  REDIS_IMAGE: "redis:5.0.5"
