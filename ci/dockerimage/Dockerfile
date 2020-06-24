@@ -183,8 +183,16 @@ RUN apk add --no-cache composer git npm mysql-client
 
 COPY docs/config/ /config
 
-COPY --from=copy-build ${TINE20ROOT}/tests ${TINE20ROOT}/tests
 COPY --from=copy-build ${TINE20ROOT}/.git ${TINE20ROOT}/.git
+COPY --from=copy-build ${TINE20ROOT}/tests ${TINE20ROOT}/tests
+COPY --from=source ${TINE20ROOT}/tine20/vendor ${TINE20ROOT}/tine20/vendor
+COPY --from=source ${TINE20ROOT}/tine20/library/ExtJS/src/locale ${TINE20ROOT}/tine20/library/ExtJS/src/locale
+COPY --from=source ${TINE20ROOT}/tine20/composer.json ${TINE20ROOT}/tine20/composer.json
+COPY --from=source ${TINE20ROOT}/tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
+COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
+COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
+COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/node_modules ${TINE20ROOT}/tine20/Tinebase/js/node_modules
+COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/Locale/static ${TINE20ROOT}/tine20/Tinebase/js/Locale/static
 
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
 
