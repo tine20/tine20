@@ -42,6 +42,7 @@ class Calendar_Export_VCalendar extends Tinebase_Export_VObject
 
         $this->_converter->setOptions([
             Calendar_Convert_Event_VCalendar_Tine::OPTION_ADD_ATTACHMENTS_BINARY => true,
+            Calendar_Convert_Event_VCalendar_Tine::OPTION_ADD_ATTACHMENTS_MAX_SIZE => 1024 * 1024, // 1 MB
         ]);
         $this->_exportRecords();
 

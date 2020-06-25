@@ -72,7 +72,11 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
         $splitSize = isset($this->_config->maxfilesize) ? (int) $this->_config->maxfilesize : self::MAX_FILE_SIZE;
 
         if ($splitSize > 0 && $currentSize + $offset > $splitSize) {
-            // close current file - open new file in _createExportFilehandle
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Close current export file - opening new file (splitsize ' . $splitSize . ' reached)');
+            }
+
             fclose($this->_exportFileHandle);
             $this->_exportFileHandle = null;
             $number = count($this->_exportFilenames) + 1;
