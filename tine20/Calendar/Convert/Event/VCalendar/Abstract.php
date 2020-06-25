@@ -385,42 +385,63 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         }
         
         if ($event->attachments instanceof Tinebase_Record_RecordSet) {
-            $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
-            foreach ($event->attachments as $attachment) {
-                $filename = rawurlencode($attachment->name);
-                if (isset($this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY])
-                    && $this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY]
-                ) {
-                    $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
-                    $value = base64_encode($content);
-                    $attachmentData = [
-                        'ENCODING' => 'BASE64',
-                        'VALUE' => 'BINARY',
-                        'FILENAME'   => $filename,
-                    ];
-                } else {
-                    $value = "{$baseUrl}{$filename}";
-                    $attachmentData = [
-                        'MANAGED-ID' => $attachment->hash,
-                        'FMTTYPE'    => $attachment->contenttype,
-                        'SIZE'       => $attachment->size,
-                        'FILENAME'   => $filename,
-                    ];
-                }
-                $attach = $vcalendar->createProperty('ATTACH', $value, $attachmentData, 'TEXT');
-                $vevent->add($attach);
-            }
-            if ($event->attachments->count()
-                && isset($this->_options[self::OPTION_ADD_ATTACHMENTS_URL])
-                && $this->_options[self::OPTION_ADD_ATTACHMENTS_URL]
-            ) {
-                $vevent->add($vcalendar->createProperty('URL', $baseUrl));
-            }
+            $this->_addAttachments($vevent, $vcalendar, $event);
         }
         
         $vcalendar->add($vevent);
     }
-    
+
+    protected function _addAttachments($vevent, $vcalendar, $event)
+    {
+        $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
+        foreach ($event->attachments as $attachment) {
+            $filename = rawurlencode($this->_getAttachmentFilename($attachment->name));
+            if (isset($this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY])
+                && $this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY]
+            ) {
+                $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
+                $value = base64_encode($content);
+                $attachmentData = [
+                    'ENCODING' => 'BASE64',
+                    'VALUE' => 'BINARY',
+                    'FILENAME'   => $filename,
+                ];
+            } else {
+                $value = "{$baseUrl}{$filename}";
+                $attachmentData = [
+                    'MANAGED-ID' => $attachment->hash,
+                    'FMTTYPE'    => $attachment->contenttype,
+                    'SIZE'       => $attachment->size,
+                    'FILENAME'   => $filename,
+                ];
+            }
+            $attach = $vcalendar->createProperty('ATTACH', $value, $attachmentData, 'TEXT');
+            $vevent->add($attach);
+        }
+        if ($event->attachments->count()
+            && isset($this->_options[self::OPTION_ADD_ATTACHMENTS_URL])
+            && $this->_options[self::OPTION_ADD_ATTACHMENTS_URL]
+        ) {
+            $vevent->add($vcalendar->createProperty('URL', $baseUrl));
+        }
+    }
+
+    /**
+     * convert to ascii string
+     *
+     * @param string $string
+     * @return string
+     *
+     * TODO move this to Tinebase_Helper
+     */
+    protected function _getAttachmentFilename($string)
+    {
+        $filename = str_replace([' ', '/'], '_', $string);
+        $filename = iconv("UTF-8", "ascii//TRANSLIT", $filename);
+
+        return $filename;
+    }
+
     /**
      * add event attendee to VEVENT object 
      * 
