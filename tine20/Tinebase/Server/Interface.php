@@ -23,7 +23,6 @@ interface Tinebase_Server_Interface
      * 
      * @param  \Zend\Http\Request  $request
      * @param  stream|string       $body
-     * @return boolean
      */
     public function handle(\Zend\Http\Request $request = null, $body = null);
     
