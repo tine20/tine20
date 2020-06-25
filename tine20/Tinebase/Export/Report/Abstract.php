@@ -163,11 +163,13 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
      *
      * @param null|array|string $filename
      * @return Tinebase_Model_Tree_FileLocation|null
+     *
+     * TODO allow to set alwaysZip option via definition
      */
     public function getTargetFileLocation($filename = null)
     {
         if ($this->_config->returnFileLocation && $this->_fileLocation->type === Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD) {
-            if (count($filename) > 1) {
+            if (count($filename) > 1 || $this->_config->alwaysZip) {
                 $filename = $this->_zipFiles($filename);
                 $this->_format = 'zip';
             } else {
@@ -191,7 +193,7 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
     protected function _zipFiles($exportFiles)
     {
         $zip = new ZipArchive();
-        $zipfilename = Tinebase_TempFile::getTempPath();
+        $zipfilename = tempnam(Tinebase_Core::getTempDir(), 'tine_export_') . '.zip';
         $opened = $zip->open($zipfilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
 
         if( $opened !== true ) {
