@@ -68,6 +68,13 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     protected $_requestContext = null;
 
+    /**
+     * enable Maintenance Mode state
+     *
+     * @var boolean
+     */
+    protected $_maintenanceMode = false;
+
 
     public function setRequestContext(array $context)
     {
@@ -435,4 +442,31 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     {
 
     }
+
+    /**
+     * enable Maintenance Mode
+     */
+    public  function goIntoMaintenanceMode()
+    {
+        $this->_maintenanceMode = true;
+    }
+
+    /**
+     * returns Maintenance Mode
+     *
+     * @return boolean
+     */
+    public  function isInMaintenanceMode()
+    {
+        return $this->_maintenanceMode;
+    }
+
+    /**
+     * disable Maintenance Mode
+     */
+    public  function leaveMaintenanceMode()
+    {
+        $this->_maintenanceMode = false;
+    }
+
 }
