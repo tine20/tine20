@@ -151,7 +151,7 @@ class Tinebase_Server_HttpTests extends TestCase
 
         // check if file exists in path and has the right contents
         if (! $download && $definitionName === 'cal_default_vcalendar_report') {
-            $exportFilenamePath = $nodePath->streamwrapperpath . '/'
+            $exportFilenamePath = $nodePath->streamwrapperpath . '/0_'
                 . str_replace([' ', DIRECTORY_SEPARATOR], '', $calendar->name . '.ics');
             $ics = file_get_contents($exportFilenamePath);
             self::assertContains('Get Up!', $ics);
@@ -197,6 +197,16 @@ class Tinebase_Server_HttpTests extends TestCase
         $content = $this->_unzipContent($tmpfileContent, $icsFilename);
         self::assertContains('BEGIN:VCALENDAR', $content);
         self::assertContains('Get Down!', $content);
+    }
+
+    public function testExportEventsDownloadZipSplit()
+    {
+        // TODO implement
+    }
+
+    public function testExportEventsFilemanagerSplit()
+    {
+        // TODO implement
     }
 
     public function testExportEventsDownloadReturnFileLocation()
