@@ -81,9 +81,11 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_config->model, [
             ['field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId()],
         ]);
-        $export = new $this->_exportClass($filter, null, [
-            'filename' => Tinebase_TempFile::getTempPath(),
+        $optionsToPassToChildExport = array_intersect_key($this->_config->toArray(), [
+            'maxfilesize' => ''
         ]);
+        $optionsToPassToChildExport['filename'] = Tinebase_TempFile::getTempPath();
+        $export = new $this->_exportClass($filter, null, $optionsToPassToChildExport);
         return $export->generate();
     }
 
@@ -102,7 +104,7 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
                     $this->_saveToFilemanager($generatedExport);
                     break;
                 case Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD:
-                    $this->_downloadFilePaths[] = $generatedExport['filename'];
+                    $this->_downloadFilePaths = array_merge($this->_downloadFilePaths, (array)$generatedExport['filename']);
                     break;
                 default:
                     throw new Tinebase_Exception_NotImplemented(
@@ -114,11 +116,12 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
     protected function _saveToFilemanager($generatedExport)
     {
         $filename = $this->_getExportFilename($generatedExport['container']);
-        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($generatedExport['filename']);
-
-        $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($this->_fileLocation->fm_path,
-            Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
-        Tinebase_FileSystem::getInstance()->copyTempfile($tempFile,$nodePath->statpath . '/' . $filename);
+        foreach ((array) $generatedExport['filename'] as $index => $exportFilename) {
+            $tempFile = Tinebase_TempFile::getInstance()->createTempFile($exportFilename);
+            $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($this->_fileLocation->fm_path,
+                Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+            Tinebase_FileSystem::getInstance()->copyTempfile($tempFile, $nodePath->statpath . '/' . $index . '_' . $filename);
+        }
     }
 
     /**
@@ -164,18 +167,14 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
      * @param null|array|string $filename
      * @return Tinebase_Model_Tree_FileLocation|null
      *
-     * TODO allow to set alwaysZip option via definition
+     * TODO allow to configure alwaysZip option via definition
      */
     public function getTargetFileLocation($filename = null)
     {
         if ($this->_config->returnFileLocation && $this->_fileLocation->type === Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD) {
-            if (count($filename) > 1 || $this->_config->alwaysZip) {
-                $filename = $this->_zipFiles($filename);
-                $this->_format = 'zip';
-            } else {
-                $firstFile = array_pop($filename);
-                $filename = $firstFile['filename'];
-            }
+            // if (count($filename) > 1 || $this->_config->alwaysZip) {
+            $filename = $this->_zipFiles($filename);
+            $this->_format = 'zip';
 
             return parent::getTargetFileLocation($filename);
         } else {
@@ -200,7 +199,14 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
             throw new Exception('could not open zip file');
         }
         foreach ($exportFiles as $file) {
-            $zip->addFile($file['filename'], $this->_getExportFilename($file['container']));
+            if (is_array($file['filename'])) {
+                // file has been splitted (see for example \Tinebase_Export_VObject::MAX_FILE_SIZE)
+                foreach ($file['filename'] as $index => $filename) {
+                    $zip->addFile($filename, $index . '_' . $this->_getExportFilename($file['container']));
+                }
+            } else {
+                $zip->addFile($file['filename'], $this->_getExportFilename($file['container']));
+            }
         }
         $zip->close();
 
