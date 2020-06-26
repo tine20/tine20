@@ -30,11 +30,11 @@
 Ext.grid.EditorGridPanel = Ext.extend(Ext.grid.GridPanel, {
     /**
      * @cfg {Number} clicksToEdit
-     * <p>The number of clicks on a cell required to display the cell's editor (defaults to 2).</p>
+     * <p>The number of clicks on a cell required to display the cell's editor (defaults to 'auto').</p>
      * <p>Setting this option to 'auto' means that mousedown <i>on the selected cell</i> starts
      * editing that cell.</p>
      */
-    clicksToEdit: 2,
+    clicksToEdit: 'auto',
 
     /**
     * @cfg {Boolean} forceValidation
@@ -151,15 +151,31 @@ grid.on('validateedit', function(e) {
     initEvents : function(){
         Ext.grid.EditorGridPanel.superclass.initEvents.call(this);
 
+        this.on('beforeedit', this.onBeforeEdit, this);
+        
         this.getGridEl().on('mousewheel', this.stopEditing.createDelegate(this, [true]), this);
         this.on('columnresize', this.stopEditing, this, [true]);
 
-        if(this.clicksToEdit == 1){
+        if(this.clicksToEdit === 1){
             this.on("cellclick", this.onCellDblClick, this);
         }else {
             var view = this.getView();
-            if(this.clicksToEdit == 'auto' && view.mainBody){
+            if(this.clicksToEdit === 'auto' && view.mainBody){
                 view.mainBody.on('mousedown', this.onAutoEditClick, this);
+                this.selModel.on('selectionchange', this.denyEdit, this);
+                this.on('dblclick', this.denyEdit, this);
+                if (this.view.dragZone) {
+                    (() => {
+                        // this.view.dragZone.onBeforeDrag = this.view.dragZone.onBeforeDrag.createInterceptor(() => {
+                        //     this.stopEditing(true);
+                        // });
+                        this.view.dragZone.onInitDrag = this.view.dragZone.onInitDrag.createSequence(() => {
+                            this.denyEdit();
+                            this.stopEditing(true);
+                        });
+                    }).defer(500);
+                    
+                };
             }
             this.on('celldblclick', this.onCellDblClick, this);
         }
@@ -175,7 +191,11 @@ grid.on('validateedit', function(e) {
 
     // private
     onCellDblClick : function(g, row, col){
-        this.startEditing(row, col);
+        if(this.clicksToEdit === 'auto') {
+            this.denyEdit();
+        } else {
+            this.startEditing(row, col);
+        }
     },
 
     // private
@@ -190,11 +210,11 @@ grid.on('validateedit', function(e) {
             if(this.selModel.getSelectedCell){ // cell sm
                 var sc = this.selModel.getSelectedCell();
                 if(sc && sc[0] === row && sc[1] === col){
-                    this.startEditing(row, col);
+                    this.startEditingIf(row, col);
                 }
             }else{
                 if(this.selModel.isSelected(row)){
-                    this.startEditing(row, col);
+                    this.startEditingIf(row, col);
                 }
             }
         }
@@ -228,6 +248,35 @@ grid.on('validateedit', function(e) {
         this.view.focusCell(ed.row, ed.col);
     },
 
+    onBeforeEdit: function(o) {
+        if (this.readOnly) {
+            o.cancel = true;
+        }
+    },
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
+    },
+    
+    startEditingIf : async function(row, col){
+        let now = new Date().getTime();
+        
+        // wait and see if we get a dblclick / dragstart
+        if (now - this.editDenyTime > 300) {
+            this.editDenyTime = now;
+            await new Promise((fulfill) => {window.setTimeout(fulfill, 300); });
+            now = new Date().getTime();
+        }
+        
+        if (now - this.editDenyTime >= 300) {
+            return this.startEditing(row, col);
+        }
+    },
+    
+    denyEdit: function() {
+        this.editDenyTime = new Date().getTime();
+    },
+    
     /**
      * Starts editing the specified for the specified row/column
      * @param {Number} rowIndex
