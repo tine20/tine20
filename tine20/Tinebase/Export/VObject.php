@@ -13,8 +13,6 @@
 abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
 {
     /**
-     * TODO allow to configure this
-     *
      * 10 MB
      *
      * @const MAX_FILE_SIZE
@@ -64,16 +62,13 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
 
     abstract protected function _addRecordToFile(Tinebase_Record_Interface $_record);
 
-    /**
-     * TODO improve split check: should do it AFTER record is converted and its size is known
-     */
     protected function _checkMaxFileSize()
     {
         if (! $this->_exportFileHandle) {
             return;
         }
         $currentSize = ftell($this->_exportFileHandle);
-        $offset = 1024 * 600;
+        $offset = 1024 * 512;
         $splitSize = isset($this->_config->maxfilesize) ? (int) $this->_config->maxfilesize : self::MAX_FILE_SIZE;
 
         if ($splitSize > 0 && $currentSize + $offset > $splitSize) {
@@ -139,19 +134,18 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
     }
 
     /**
-     * @return array|string|null
+     * TODO return all generated files - should be refactored, currently \Tinebase_Frontend_Http_Abstract::_export
+     *      only expects one file name
      *
-     * TODO should be refactored to always return multiple files
+     * @return mixed|null
      */
     protected function _returnExportFilename()
     {
-        $result = $this->_writeToFile() && ! empty($this->_exportFilenames) ? $this->_exportFilenames : null;
+        $result = $this->_writeToFile() && ! empty($this->_exportFilenames) ? $this->_exportFilenames[0] : null;
         if (! $result && $this->_config->returnFileLocation) {
             // create a tempfile and return that
             $result = Tinebase_TempFile::getTempPath();
             file_put_contents($result, $this->_document->serialize());
-        } else if (count($result) === 1) {
-            $result = $this->_exportFilenames[0];
         }
 
         return $result;
