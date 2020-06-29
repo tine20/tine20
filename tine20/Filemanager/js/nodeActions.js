@@ -92,17 +92,31 @@ Tine.Filemanager.nodeActions.CreateFolder = {
 
         if (! currentPath) return;
 
-        Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), function(btn, text) {
-            if(currentFolderNode && btn === 'ok') {
-                if (! text) {
-                    Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), String.format(app.i18n._('You have to supply a {0} name!'), nodeName));
-                    return;
-                }
+        const grid = _.get(this, 'initialConfig.selectionModel.grid');
+        if (grid) {
+            const gridWdgt = grid.ownerCt.ownerCt;
+            const newRecord = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
+                name: app.i18n._('New Folder'),
+                type: 'folder'
+            }));
+            
+            gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
+                const nodeData = await Tine.Filemanager.createNode(currentPath + '/' + localRecord.get('name'), 'folder', [], false);
+                return Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
+            });
+        } else {
+            Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), function (btn, text) {
+                if (currentFolderNode && btn === 'ok') {
+                    if (!text) {
+                        Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), String.format(app.i18n._('You have to supply a {0} name!'), nodeName));
+                        return;
+                    }
 
-                var filename = currentPath + '/' + text;
-                Tine.Filemanager.fileRecordBackend.createFolder(filename);
-            }
-        }, this);
+                    var filename = currentPath + '/' + text;
+                    Tine.Filemanager.fileRecordBackend.createFolder(filename);
+                }
+            }, this);
+        }
     },
     actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
         var enabled = !isFilterSelect

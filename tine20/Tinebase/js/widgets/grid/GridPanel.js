@@ -1124,6 +1124,46 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     /**
+     * adds given record and starts editing
+     * 
+     * @param localRecord
+     * @param editProperty
+     * @param proxyFn
+     * @return {Promise<void>}
+     */
+    newInlineRecord: async function(localRecord, editProperty, proxyFn) {
+        localRecord.noProxy = true;
+        this.store.addUnique(localRecord, editProperty);
+        this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
+        this.grid.startEditingRecord(localRecord, editProperty);
+        const ed = this.grid.activeEditor;
+        ed.field.selectText(0, String(ed.field.getValue()).lastIndexOf('.'));
+        ed.startValue = Math.random();
+
+        const onCancelEdit = (e) => {
+            this.grid.un('afteredit', onAfterEdit);
+            this.store.remove(localRecord);
+        };
+        ed.on('canceledit', onCancelEdit, this, {single: true});
+
+        const onAfterEdit = async (o) => {
+            ed.un('canceledit', onCancelEdit);
+
+            this.pagingToolbar.refresh.disable();
+            this.store.remove(localRecord);
+            this.store.addSorted(localRecord);
+            this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
+            
+            const remoteRecord = await proxyFn(localRecord);
+            this.store.remove(localRecord);
+            this.store.addSorted(remoteRecord);
+            this.grid.getSelectionModel().selectRow(this.store.indexOf(remoteRecord));
+            this.pagingToolbar.refresh.enable();
+        }
+        this.grid.on('afteredit', onAfterEdit, this, {single: true, buffer: 100});
+    },
+    
+    /**
      * header is clicked
      * 
      * @param {Object} grid
@@ -1169,6 +1209,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {String} operation
      */
     onStoreUpdate: function(store, record, operation) {
+        if (record.noProxy) return;
         switch (operation) {
             case Ext.data.Record.EDIT:
                 this.addToEditBuffer(record);

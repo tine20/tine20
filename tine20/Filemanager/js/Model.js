@@ -91,13 +91,23 @@ Ext.override(Tine.widgets.container.GrantsGrid, {
  * @param {File} file
  */
 Tine.Filemanager.Model.Node.createFromFile = function(file) {
-    return new Tine.Filemanager.Model.Node({
+    return new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
         name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
         size: file.size || 0,
-        type: 'file',
         contenttype: file.type ? file.type : file.fileType, // missing if safari and chrome 
-        revision: 0
-    });
+    }));
+};
+
+Tine.Filemanager.Model.Node.getDefaultData = function (defaults) {
+    return _.assign({
+        type: 'file',
+        size: 0,
+        creation_time: new Date(),
+        created_by: Tine.Tinebase.registry.get('currentAccount'),
+        revision: 0,
+        revision_size: 0,
+        isIndexed: false
+    }, defaults);
 };
 
 // NOTE: atm the activity records are stored as Tinebase_Model_Tree_Node records

@@ -345,6 +345,14 @@ grid.on('validateedit', function(e) {
         }
     },
 
+    startEditingRecord: function(record, property) {
+        const row = this.store.indexOf(record);
+        const cols = this.colModel.columns;
+        const col = _.indexOf(cols, _.find(cols, {dataIndex: property}));
+        
+        this.startEditing(row, col);
+    },
+    
     // private
     preEditValue : function(r, field){
         var value = r.data[field];
