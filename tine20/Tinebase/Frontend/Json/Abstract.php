@@ -592,7 +592,15 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             Tinebase_Exception::log($e);
             $definitionsArray = array();
         }
-        
+
+        // Save space in Registry -
+        // should not be done in \Tinebase_Convert_ImportExportDefinition_Json::_convertOptions
+        // because we want to see / edit the plugin options in the admin area
+        unset($defaultDefinitionArray['plugin_options']);
+        foreach ($definitionsArray as &$definition) {
+            unset($definition['plugin_options']);
+        }
+
         return [
             'defaultImportDefinition'   => $defaultDefinitionArray,
             'importDefinitions'         => array(
