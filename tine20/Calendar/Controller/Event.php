@@ -2180,7 +2180,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _inspectEvent($_record, $skipEvent = false)
     {
         if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $_record->isReplicable()) {
-            throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+            throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the replicas!');
         }
 
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
