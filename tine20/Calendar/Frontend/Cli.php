@@ -894,4 +894,91 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    public function reportBigEventAttachments()
+    {
+        // TODO find out calendar attachments parent node id
+        // TODO allow to define BIG (size param)
+
+        Calendar_Controller_Event::getInstance()->doContainerACLChecks(false);
+
+        $eventAttachmentsParentId = '5c77378e3091bb4047df608ab4b7f5a326b09ca4';
+
+        $db = Tinebase_Core::getDb();
+
+        $stmt = $db->query(
+            'select * from tine20_tree_nodes where parent_id in (select id from tine20_tree_nodes where parent_id = "'
+            . $eventAttachmentsParentId . '")');
+
+        $result = $stmt->fetchAll();
+
+        $tempFileName = Tinebase_TempFile::getTempPath();
+        $tempFileName .= '.csv';
+        $csvhandle = fopen($tempFileName, 'w');
+
+        $data = [
+            'filename',
+            'size',
+            'calendar',
+            'container_id',
+            'account',
+            'event_summary',
+            'event_dtstart',
+        ];
+
+        // headline
+        fputcsv($csvhandle, $data);
+
+        foreach ($result as $file) {
+            // check size
+            $stmt = $db->query('select * from tine20_tree_filerevisions where id in (select id from tine20_tree_fileobjects where id = "' .
+                $file['object_id'] . '") and size > 1024*1024');
+            $fileRes = $stmt->fetchAll();
+            if (! empty($fileRes)) {
+                // print_r($fileRes);
+
+                $stmt = $db->query(
+                    'select * from tine20_tree_nodes where id = "' . $file['parent_id'] . '"');
+                $eventNode = $stmt->fetchAll();
+                try {
+                    $event = Calendar_Controller_Event::getInstance()->get($eventNode[0]['name']);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // no matching event
+                    continue;
+                }
+
+                // print_r($event);
+
+                $container = Tinebase_Container::getInstance()->get($event->container_id);
+                try {
+                    $owner = Tinebase_User::getInstance()->getFullUserById($event->created_by);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // try container owner
+                    try {
+                        $owner = Tinebase_User::getInstance()->getFullUserById($container->owner_id);
+                    } catch (Exception $e) {
+                        $owner = null;
+                    }
+                }
+
+                $event->dtstart->setTimezone('Europe/Berlin');
+                $data = [
+                    'filename' => $file['name'],
+                    'size' => Tinebase_Helper::formatBytes((integer) $fileRes[0]['size']),
+                    'calendar' => $container->name,
+                    'container_id' => $container->getId(),
+                    'account' => $owner ? $owner->accountLoginName : 'unknown',
+                    'event_summary' => $event->summary,
+                    'event_dtstart' => $event->dtstart->toString(),
+                ];
+
+                fputcsv($csvhandle, $data);
+
+                // print_r($data);
+            }
+        }
+
+        fclose($csvhandle);
+        echo "exported csv data to file " . $tempFileName . "\n";
+    }
 }
