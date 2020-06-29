@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * class to hold data representing one node in the tree
  *
@@ -96,6 +98,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'createModule'      => false,
         'exposeHttpApi'     => false,
         'exposeJsonApi'     => false,
+        TMCC::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',

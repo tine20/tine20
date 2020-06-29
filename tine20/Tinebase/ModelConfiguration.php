@@ -1001,6 +1001,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // during install app may not be there yet
                 $modelsSystemCFs = [];
+            } catch (Zend_Db_Exception $e) {
+                // during install app may not be there yet
+                $modelsSystemCFs = [];
             }
             /** @var Tinebase_Model_CustomField_Config $cfc */
             foreach ($modelsSystemCFs as $cfc) {

@@ -652,7 +652,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     }
                 }
             // resolve virtual field by function
-                // TODO multiple is not passed along and not part of the if condition! this is bad I guess this is dead code?
+                // shouldn't really be used, but got used for example in OOI ooi_editors systemCF
             } else if ((isset($field['function']) || array_key_exists('function', $field))) {
                 if (is_array($field['function'])) {
                     if (count($field['function']) > 1) { // static method call
