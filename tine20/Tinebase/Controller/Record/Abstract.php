@@ -1507,9 +1507,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 . ' Writing modlog for ' . count($ids) . ' records ...');
             
             $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLogMultiple($ids, $_oldData, $_newData, $this->_modelName, $this->_getBackendType(), $updateMetaData);
-            $records = $this->getMultiple($ids);
             /** @noinspection PhpUndefinedVariableInspection */
-            Tinebase_Notes::getInstance()->addMultipleModificationSystemNotes($records, $currentMods, $currentAccountId);
+            Tinebase_Notes::getInstance()->addMultipleModificationSystemNotes($currentMods, $currentAccountId, $this->_modelName);
         }
     }
     

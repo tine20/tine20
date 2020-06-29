@@ -11,8 +11,6 @@
  * @todo        delete notes completely or just set the is_deleted flag?
  */
 
-use Tinebase_ModelConfiguration_Const as MCC;
-
 /**
  * Class for handling notes
  * 
@@ -426,16 +424,17 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * add new system note
      *
-     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface|string $_record
      * @param string|Tinebase_Mode_User $_userId
      * @param string $_type (created|changed)
      * @param Tinebase_Record_RecordSet|string $_mods (Tinebase_Model_ModificationLog)
+     * @param string $_backend   backend of record
      * @return Tinebase_Model_Note|boolean
      * 
      * @todo get field translations from application?
      * @todo attach modlog record (id) to note instead of saving an ugly string
      */
-    public function addSystemNote($_record, $_userId = NULL, $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_mods = NULL)
+    public function addSystemNote($_record, $_userId = NULL, $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
     {
         if ((empty($_mods) || $_mods instanceof Tinebase_Record_RecordSet && count($_mods) === 0)
             && $_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED
@@ -444,9 +443,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             return false;
         }
         
-        $id = $_record->getId();
-        $seq = $_record->has('seq') ? $_record->seq : 0;
-        $modelName = get_class($_record);
+        $id = $_record instanceof Tinebase_Record_Interface ? $_record->getId() : $_record;
+        $seq = $_record instanceof Tinebase_Record_Interface && $_record->has('seq') ? $_record->seq : 0;
+        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : 'unknown');
         if (($_userId === NULL)) {
             $_userId = Tinebase_Core::getUser();
         }
@@ -461,7 +460,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 foreach ($_mods as $mod) {
                     $modifiedAttribute = $mod->modified_attribute;
                     if (empty($modifiedAttribute)) {
-                        $noteText.= ' ' . $this->getRecordModificationChangeText($_record, $mod);
+                        $noteText.= ' ' . $this->_getSystemNoteChangeText($mod, $translate);
                     } else {
                         $noteText .= ' ' . $translate->_($mod->modified_attribute) . ' (' . $this->_getSystemNoteChangeText($mod) . ')';
                     }
@@ -479,97 +478,14 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             'note_type_id'      => $noteType->getId(),
             'note'              => mb_substr($noteText, 0, self::MAX_NOTE_LENGTH),
             'record_model'      => $modelName,
-            'record_backend'    => 'Sql',
+            'record_backend'    => ucfirst(strtolower($_backend)),
             'record_id'         => $id,
             'seq'               => $seq,
         ));
         
         return $this->addNote($note);
     }
-
-    public function getRecordModificationChangeText(Tinebase_Record_Interface $_record, Tinebase_Model_ModificationLog $modification)
-    {
-        $fields = [];
-        $recordProperties = [];
-        if ($mc = $_record::getConfiguration()) {
-            $recordProperties = $mc->recordFields;
-            $fields = $mc->fields;
-        }
-        $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-        $return = '';
-
-        foreach ($diff->diff as $attribute => $value) {
-
-            if (is_array($value) && isset($value['model']) && isset($value['added'])) {
-                $tmpDiff = new Tinebase_Record_RecordSetDiff($value);
-
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' fetching translated text for diff: ' . print_r($tmpDiff->toArray(), true));
-
-                $return .= ' ' . $attribute . ' (' . $tmpDiff->getTranslatedDiffText($_record, $attribute) . ')';
-            } else {
-                $oldData = $diff->oldData ? $diff->oldData[$attribute] : null;
-
-                if (isset($recordProperties[$attribute]) && ($oldData || $value) &&
-                    isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
-                        $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
-                    method_exists($controller, 'get')) {
-                    if ($oldData) {
-                        try {
-                            $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
-                        } catch (Tinebase_Exception_NotFound $tenf) {
-                            $oldDataString = $oldData;
-                        } catch (Tinebase_Exception_AccessDenied $tead) {
-                            $oldDataString = $oldData;
-                        }
-                    } else {
-                        $oldDataString = '';
-                    }
-                    if ($value) {
-                        try {
-                            $valueString = $controller->get($value, null, false, true)->getTitle();
-                        } catch(Tinebase_Exception_NotFound $e) {
-                            $valueString = $value;
-                        }
-                    } else {
-                        $valueString = '';
-                    }
-                } else {
-                    if (is_array($oldData)) {
-                        $oldDataString = '';
-                        foreach ($oldData as $key => $val) {
-                            if (is_object($val)) {
-                                $val = $val->toArray();
-                            }
-                            $oldDataString .= ' ' . $key . ': ' . (is_array($val) ? (isset($val['id']) ? $val['id'] : print_r($val,
-                                    true)) : $val);
-                        }
-                    } else {
-                        $oldDataString = $oldData;
-                    }
-                    if (is_array($value)) {
-                        $valueString = '';
-                        foreach ($value as $key => $val) {
-                            if (is_object($val)) {
-                                $val = $val->toArray();
-                            }
-                            $valueString .= ' ' . $key . ': ' . (is_array($val) ? (isset($val['id']) ? $val['id'] : print_r($val,
-                                    true)) : $val);
-                        }
-                    } else {
-                        $valueString = $value;
-                    }
-                }
-
-                if (null !== $oldDataString || (null !== $valueString && '' !== $valueString)) {
-                    $return .= ' ' . $attribute . ' (' . $oldDataString . ' -> ' . $valueString . ')';
-                }
-            }
-        }
-
-        return $return;
-    }
-
+    
     /**
      * get system note change text
      * 
@@ -577,7 +493,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param Zend_Translate $translate
      * @return string
      */
-    public function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, Zend_Translate $translate = null)
+    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, Zend_Translate $translate = null)
     {
         $recordProperties = [];
         /** @var Tinebase_Record_Interface $model */
@@ -683,17 +599,17 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     
     /**
      * add multiple modification system nodes
-     *
-     * @param Tinebase_Record_RecordSet $_records
+     * 
      * @param Tinebase_Record_RecordSet $_mods
      * @param string $_userId
      * @param string $modelName
      */
-    public function addMultipleModificationSystemNotes($_records, $_mods, $_userId)
+    public function addMultipleModificationSystemNotes($_mods, $_userId, $modelName = null)
     {
-        foreach ($_records as $record) {
-            $modsOfRecord = $_mods->filter('record_id', $record->getId());
-            $this->addSystemNote($record, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modsOfRecord);
+        $_mods->addIndices(array('record_id'));
+        foreach ($_mods->record_id as $recordId) {
+            $modsOfRecord = $_mods->filter('record_id', $recordId);
+            $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modsOfRecord, 'Sql', $modelName);
         }
     }
 

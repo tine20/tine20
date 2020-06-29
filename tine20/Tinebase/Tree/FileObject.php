@@ -401,7 +401,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($newRecord->getId()) as
                     $node) {
                 Tinebase_Notes::getInstance()->addSystemNote($node, Tinebase_Core::getUser(),
-                    Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+                    Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods, 'Sql', 'Tinebase_Model_Tree_Node');
             }
         }
 

@@ -266,15 +266,11 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      */
     public function getTitle()
     {
-        /** @var Tinebase_Record_Interface $model */
+        /** @var Tinebase_Record_Abstract $model */
         $model = $this->related_model;
-        $relatedRecord = $this->related_record;
-        if (is_array(($relatedRecord))) {
-            $relatedRecord = new $model($relatedRecord, true);
-        }
         return (class_exists($model) ? $model::getRecordName() : $model)
             . (empty($this->type) ? '' :  ' ' . $this->type)
-            . ($relatedRecord instanceof Tinebase_Record_Interface ? ' ' . $relatedRecord->getTitle()
+            . ($this->related_record instanceof Tinebase_Record_Interface ? ' ' . $this->related_record->getTitle()
                 : '');
     }
 
