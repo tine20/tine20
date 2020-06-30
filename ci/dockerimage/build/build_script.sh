@@ -65,92 +65,13 @@ function cleanupCss()
 
     for FILE in `ls ${TINE20ROOT}/tine20`; do
         # tine20 app needs translations OR Setup dir
-        if [ -d "$TEMPDIR/tine20/$FILE/translations" ] || [ -d "$TEMPDIR/tine20/$FILE/Setup" ]; then
-            case $FILE in
-                Addressbook)
-                    # handled in Tinebase
-                    ;;
-                Admin)
-                    # handled in Tinebase
-                    ;;
-                Setup)
-                    # handled in Tinebase
-                    ;;
-
-                Calendar)
-                    echo " $FILE"
-                    echo -n "  cleanup "
-                    # TODO remove unminified js/vue files from pollClient dir?
-                    (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v pollClient | grep -v "\.map"))
+        if [ -d "${TINE20ROOT}/tine20/$FILE/translations" ] || [ -d "${TINE20ROOT}/tine20/$FILE/Setup" ]; then
+            if [ "$FILE" != "Tinebase"  ]; then
+                echo "+ $FILE"
+                if [ -d "${TINE20ROOT}/tine20/$FILE/css" ]; then
                     (cd ${TINE20ROOT}/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-                    ;;
-
-                Tinebase)
-                    echo " $FILE"
-                    echo -n "  cleanup "
-                    (cd ${TINE20ROOT}/tine20/Addressbook/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "\.map"))
-                    (cd ${TINE20ROOT}/tine20/Addressbook/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-                    (cd ${TINE20ROOT}/tine20/Admin/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "\.map"))
-                    (cd ${TINE20ROOT}/tine20/Admin/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-                    (cd ${TINE20ROOT}/tine20/Setup/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "\.map"))
-                    (cd ${TINE20ROOT}/tine20/Setup/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-
-                    # Tinebase/js/ux/Printer/print.css
-                    (cd ${TINE20ROOT}/tine20/Tinebase/js/ux/Printer; rm -rf $(ls | grep -v print.css))
-                    # Tinebase/js/ux/data/windowNameConnection*
-                    (cd ${TINE20ROOT}/tine20/Tinebase/js/ux/data; rm -rf $(ls | grep -v windowNameConnection))
-                    (cd ${TINE20ROOT}/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer | grep -v data))
-                    (cd ${TINE20ROOT}/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux | grep -v "\-lang\-" | grep -v node_modules | grep -v "\.map"))
-                    (cd ${TINE20ROOT}/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css | grep -v widgets))
-                    (cd ${TINE20ROOT}/tine20/Tinebase/css/widgets;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-
-                    # cleanup ExtJS
-                    (cd ${TINE20ROOT}/tine20/library/ExtJS/adapter; rm -rf $(ls | grep -v ext))
-                    (cd ${TINE20ROOT}/tine20/library/ExtJS/src;     rm -rf $(ls | grep -v debug.js))
-                    (cd ${TINE20ROOT}/tine20/library/ExtJS;         rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
-
-                    # cleanup OpenLayers
-                    (cd ${TINE20ROOT}/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
-
-                    # save langStats
-                    (mv ${TINE20ROOT}/tine20/langstatistics.json ${TINE20ROOT}/tine20/Tinebase/translations/langstatistics.json)
-
-                    # remove composer dev requires (--no-scripts to prevent post-install-cmds like "git submodule --init")
-                    composer install --ignore-platform-reqs --no-dev --no-scripts -d ${TINE20ROOT}/tine20
-
-                    rm -rf ${TINE20ROOT}/tine20/Tinebase/js/node_modules
-                    rm -rf ${TINE20ROOT}/tine20/vendor/phpdocumentor
-                    rm -rf ${TINE20ROOT}/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
-
-                    # remove tine20 custom apps - they are handled in a different way
-                    for CUSTOMAPP in `ls $TEMPDIR/tine20/vendor/metaways`; do
-                        if [ $CUSTOMAPP != "opendocument" ] && [ $CUSTOMAPP != "timezoneconvert" ]; then
-                            rm -rf $TEMPDIR/tine20vendor/metaways/$CUSTOMAPP
-                        fi
-                    done
-
-                    find ${TINE20ROOT}/tine20/vendor -name .gitignore -type f -print0 | xargs -0 rm -rf
-                    find ${TINE20ROOT}/tine20/vendor -name .git       -type d -print0 | xargs -0 rm -rf
-                    find ${TINE20ROOT}/tine20/vendor -name docs       -type d -print0 | xargs -0 rm -rf
-                    find ${TINE20ROOT}/tine20/vendor -name examples   -type d -print0 | xargs -0 rm -rf
-                    find ${TINE20ROOT}/tine20/vendor -name tests      -type d -print0 | xargs -0 rm -rf
-
-                    composer dumpautoload -d ${TINE20ROOT}/tine20
-
-                    rm -rf ${TINE20ROOT}/tine20/composer.*
-                    ;;
-                *)
-                    echo " $FILE"
-
-                    echo -n "  cleanup "
-                    if [ -d "${TINE20ROOT}/tine20/$FILE/js" ]; then
-                        (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "empty\.js"  | grep -v "\.map"))
-                    fi
-                    if [ -d "${TINE20ROOT}/tine20/$FILE/css" ]; then
-                        (cd ${TINE20ROOT}/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-                    fi
-                    ;;
-            esac
+                fi
+            fi
         fi
     done
 }
