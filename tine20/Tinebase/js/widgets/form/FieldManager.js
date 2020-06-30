@@ -79,7 +79,7 @@ Tine.widgets.form.FieldManager = function() {
 
             if (fieldType === 'virtual' && fieldDefinition.config) {
                 fieldType = fieldDefinition.config.type || 'textfield';
-                fieldDefinition = fieldDefinition.config;
+                fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);
             }
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
