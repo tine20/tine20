@@ -1490,7 +1490,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 // TODO add cache access time?
 
                 // write, read and delete to test cache
-                $cacheId = Tinebase_Helper::convertCacheId(__METHOD__);
+                $cacheId = Tinebase_Helper::convertCacheId(uniqid(__METHOD__, true));
                 if (false !== $cache->save(true, $cacheId)) {
                     $value = $cache->load($cacheId);
                     $cache->remove($cacheId);
