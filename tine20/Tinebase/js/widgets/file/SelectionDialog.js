@@ -109,7 +109,12 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
 
         this.window.setTitle(this.windowTitle);
         
+        this.stateId = 'widgets.file.SelectionDialog.defaultLocation';
+        
         Tine.Tinebase.widgets.file.SelectionDialog.superclass.initComponent.call(this);
+
+        this.defaultLocationType = _.indexOf(this.locationTypesEnabled, this.defaultLocationType) >= 0 ?
+            this.defaultLocationType : this.locationTypesEnabled[0];
     },
 
     getEventData: function() {
@@ -131,6 +136,7 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
             return;
         }
         
+        this.saveState();
         return Tine.Tinebase.widgets.file.SelectionDialog.superclass.onButtonApply.apply(this, arguments);
     },
     
@@ -157,7 +163,7 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
             this.getPluginSelectionTree().getRootNode().appendChild(locationPlugin.treeNode);
         }
         
-        if (locationPlugin.locationType === this.locationTypesEnabled[0]) {
+        if (locationPlugin.locationType === this.defaultLocationType) {
             locationPlugin.treeNode.select();
         }
     },
@@ -263,7 +269,13 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
             layout: 'card',
             hidden: true
         }]; 
-    }
+    },
+
+    getState: function () {
+        return {
+            defaultLocationType: this.activePlace.locationType
+        };
+    },
 });
 
 Tine.Tinebase.widgets.file.SelectionDialog.openWindow = function (config) {
