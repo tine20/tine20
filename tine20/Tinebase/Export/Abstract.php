@@ -276,8 +276,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_applicationName = $this->_filter->getApplicationName();
         }
 
-        $this->_controller = ($_controller !== null) ? $_controller :
-            Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName, isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
+        $this->_controller = ($_controller !== null)
+            ? $_controller
+            : $this->_getController(isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
+
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
         $this->_locale = Tinebase_Core::getLocale();
@@ -445,6 +447,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $cfConfig->definition->label;
             }
         }
+    }
+
+    protected function _getController($ignoreAcl = false)
+    {
+        return Tinebase_Core::getApplicationInstance(
+            $this->_applicationName,
+            $this->_modelName,
+            $ignoreAcl
+        );
     }
 
     protected function _parseTemplatePath($_path)
