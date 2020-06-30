@@ -364,7 +364,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     layout: 'form',
                                     defaults: {
                                         valueField:'id',
-                                        typeAhead: true,
+                                        typeAhead: false,
                                         mode: 'local',
                                         triggerAction: 'all',
                                         editable: false,
