@@ -223,12 +223,14 @@ class Tinebase_Server_HttpTests extends TestCase
         $icsFilename =  str_replace([' ', DIRECTORY_SEPARATOR], '', '0_' . $calendar->name . '.ics');
         $content = $this->_unzipContent($tmpfileContent, $icsFilename);
         self::assertContains('BEGIN:VCALENDAR', $content);
-        self::assertContains('Get Down!', $content);
+        self::assertContains('Get ', $content);
+        self::assertContains('Down', $content);
 
         $icsFilename =  str_replace([' ', DIRECTORY_SEPARATOR], '', '1_' . $calendar->name . '.ics');
         $content = $this->_unzipContent($tmpfileContent, $icsFilename);
         self::assertContains('BEGIN:VCALENDAR', $content);
-        self::assertContains('Get A Downer!', $content);
+        self::assertContains('Get ', $content);
+        self::assertContains('Down', $content);
     }
 
     protected function _testCalendarWithTwoEvents()
