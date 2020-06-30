@@ -148,7 +148,7 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
             // create a tempfile and return that
             $result = Tinebase_TempFile::getTempPath();
             file_put_contents($result, $this->_document->serialize());
-        } else if (count($result) === 1) {
+        } else if (is_array($result) && count($result) === 1) {
             $result = $this->_exportFilenames[0];
         }
 
