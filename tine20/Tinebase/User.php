@@ -467,7 +467,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * @return Tinebase_Model_FullUser|null
      * @throws Tinebase_Exception
      * 
-     * @todo make use of dbmail plugin configurable (should be false by default)
      * @todo switch to new primary group if it could not be found
      */
     public static function syncUser($username, $options = array())
@@ -491,21 +490,23 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 $userBackend->registerLdapPlugin($plugin);
             }
         }
-        
-        $user = $userBackend->getUserByPropertyFromSyncBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
+
+        try {
+            $user = $userBackend->getUserByPropertyFromSyncBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                . $tenf->getMessage());
+            return null;
+        }
+
         $user->accountPrimaryGroup = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($user->accountPrimaryGroup);
         
         $userProperties = method_exists($userBackend, 'getLastUserProperties') ? $userBackend->getLastUserProperties() : array();
-
 
         $hookResult = self::_syncUserHook($user, $userProperties);
         if (! $hookResult) {
             return null;
         }
-
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
-            . print_r($user->toArray(), TRUE));
 
         $oldContainerAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
         $oldRequestContext = Addressbook_Controller_Contact::getInstance()->getRequestContext();
