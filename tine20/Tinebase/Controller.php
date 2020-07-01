@@ -608,13 +608,19 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             && in_array($loginName, $allowedRoleChangesArray[$currentAccountName])
         ) {
             $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
-            Tinebase_Session::getSessionNamespace()->userAccountChanged = true;
-            Tinebase_Session::getSessionNamespace()->originalAccountName = $currentAccountName;
-            
+            // CalDAV / ActiveSync have no session
+            Tinebase_Core::set('userAccountChanged', true);
+            Tinebase_Core::set('originalAccountName', $currentAccountName);
+            if (Tinebase_Session::isStarted()) {
+                Tinebase_Session::getSessionNamespace()->userAccountChanged = true;
+                Tinebase_Session::getSessionNamespace()->originalAccountName = $currentAccountName;
+            }
         } else if (Tinebase_Session::getSessionNamespace()->userAccountChanged 
             && isset($allowedRoleChangesArray[Tinebase_Session::getSessionNamespace()->originalAccountName])
         ) {
             $user = Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_Session::getSessionNamespace()->originalAccountName);
+            Tinebase_Core::set('userAccountChanged', false);
+            Tinebase_Core::set('originalAccountName', null);
             Tinebase_Session::getSessionNamespace()->userAccountChanged = false;
             Tinebase_Session::getSessionNamespace()->originalAccountName = null;
         }
@@ -926,13 +932,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         try {
             $session = Tinebase_Session::getSessionNamespace();
-        } catch (Zend_Session_Exception $zse) {
-            $session = null;
-        }
-        
-        return ($session instanceof Zend_Session_Namespace && isset($session->userAccountChanged)) 
+            return ($session instanceof Zend_Session_Namespace && isset($session->userAccountChanged))
                 ? $session->userAccountChanged
                 : false;
+        } catch (Zend_Session_Exception $zse) {
+            return !! Tinebase_Core::get('userAccountChanged');
+        }
     }
 
     /**
