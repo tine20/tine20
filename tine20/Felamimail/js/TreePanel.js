@@ -105,7 +105,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * TreePanel config
      * @private
      */
-    rootVisible: false,
+    rootVisible: true,
     
     /**
      * drag n drop
@@ -143,6 +143,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
 
         // set the root node
         this.root = new Ext.tree.TreeNode({
+            cls: 'felamimail-node-root',
             text: 'default',
             draggable: false,
             allowDrop: false,

@@ -322,6 +322,9 @@ ul.x-tab-strip-top {
   padding: 0;
 }
 
+.x-toolbar-more-icon {
+  background-image: url('../../images/icon-set/icon_dblarrow_right.svg') !important;
+}
 /* MAIN NORTH TOOLBAR */
 .tine-mainscreen-centerpanel-north {
   #button(@northTbColor);
@@ -986,6 +989,36 @@ td.x-date-mp-sel a,
 
 .x-tree-node .x-tree-selected {
   background-color: @selectionColor;
+}
+
+.x-tree-arrows {
+  .x-tree-elbow-minus,
+  .x-tree-elbow-plus,
+  .x-tree-elbow-end-minus,
+  .x-tree-elbow-end-plus {
+    background-position: 3px 3px;
+    background-size: 12px;
+  }
+
+  .x-tree-ec-over {
+    .x-tree-elbow-minus,
+    .x-tree-elbow-plus,
+    .x-tree-elbow-end-minus,
+    .x-tree-elbow-end-plus {
+      background-position: 2px 2px;
+      background-size: 14px;
+    }
+  }
+
+  .x-tree-elbow-minus,
+  .x-tree-elbow-end-minus {
+    background-image: url('../../images/icon-set/icon_arrow_full_45.svg');
+  }
+
+  .x-tree-elbow-plus,
+  .x-tree-elbow-end-plus{
+    background-image: url('../../images/icon-set/icon_arrow_right.svg');
+  }
 }
 
 /* ARROW COLLAPSE */

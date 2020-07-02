@@ -166,6 +166,10 @@
 
 /***** node classes ******/
 
+.felamimail-node-root {
+    display: none;
+}
+
 .felamimail-node-unread span {
     font-weight: bold;
 }
