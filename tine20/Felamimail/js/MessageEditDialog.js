@@ -354,18 +354,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.MessageEditDialog.superclass.onRender.call(this, ct, position);
         this.showLoadMask();
     },
-
-    isRendered: function () {
-        var me = this;
-        return new Promise(function (fulfill, reject) {
-            if (me.rendered) {
-                fulfill(true);
-            } else {
-                me.on('render', fulfill);
-            }
-        });
-    },
-
+    
     /**
      * handle attachments: attaches message when forwarding mails or
      *  keeps attachments as they are (if preference is set or draft/template)
