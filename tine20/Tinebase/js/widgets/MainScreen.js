@@ -39,9 +39,18 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      * use modulePanel (defaults to null -> autodetection)
      */
     useModuleTreePanel: null,
-
+    /**
+     * @cfg {Number} northHeight
+     */
+    northHeight: 44,
+    /**
+     * @cfg {Number} westWidth
+     */
+    westWidth: 200,
+    
     layout: 'border',
     border: false,
+    stateful: true, 
 
     initComponent: function() {
         var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + this.app.appName, []);
@@ -57,7 +66,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             this.cls = 't-app-' + this.app.appName.toLowerCase();
         }
         
-
+        this.stateId = this.app.appName + '-mainScreen';
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
     },
 
@@ -100,6 +109,18 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         }
     },
 
+    getState: function() {
+        return {
+            westWidth: this.westRegionPanel.getWidth(),
+            northHeight: this.northCardPanel.getHeight()
+        };
+    },
+    
+    applyState: function(state) {
+        this.westRegionPanel.setWidth(state.westWidth);
+        this.northCardPanel.setHeight(state.northHeight);
+    },
+    
     /**
      * @private
      */
@@ -110,7 +131,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             region: 'north',
             layout: 'card',
             activeItem: 0,
-            height: 44,
+            height: this.northHeight,
             border: false,
             items: []
         }, {
@@ -132,7 +153,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             //id: 'west',
             stateful: false,
             split: true,
-            width: 200 + Ext.getScrollBarWidth(),
+            width: this.westWidth,
             minSize: 100,
             border: false,
             collapsible:true,
@@ -140,6 +161,8 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             header: false,
             layout: 'fit',
             listeners: {
+                scope: this,
+                resize: this.saveState,
                 afterrender: function() {
                     // add to scrollmanager
                     if (arguments[0] && arguments[0].hasOwnProperty('body')) {
