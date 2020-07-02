@@ -308,12 +308,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (Ext.isString(this.additionalConfig)) {
             Ext.apply(this, Ext.decode(this.additionalConfig));
         }
-        
-        if (Ext.isString(this.fixedFields)) {
-            var decoded = Ext.decode(this.fixedFields);
-            this.fixedFields = new Ext.util.MixedCollection();
-            this.fixedFields.addAll(decoded);
-        }
+
+        var fixedFieldsData = Ext.isString(this.fixedFields) ? Ext.decode(this.fixedFields) : [];
+        this.fixedFields = new Ext.util.MixedCollection();
+        this.fixedFields.addAll(fixedFieldsData);
         
         if (! this.recordClass && this.modelName) {
             this.recordClass = Tine[this.appName].Model[this.modelName];
@@ -944,6 +942,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
         }
+
+        this.fixedFields.eachKey(function(field, value) {
+            this.record.set(field, value);
+        }, this);
         
         if (this.copyRecord) {
             this.doCopyRecord();
