@@ -32,5 +32,6 @@ keys = [
     "/session/port",
     "/session/path",
     "/credentialcachesharedkey",
-    "/filesystem/index_content"
+    "/filesystem/index_content",
+    "/logger/filename"
 ]
