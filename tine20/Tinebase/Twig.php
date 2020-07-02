@@ -99,6 +99,7 @@ class Tinebase_Twig
                 'locale'            => Tinebase_Core::getLocale(),
                 'timezone'          => Tinebase_Core::getUserTimezone(),
             ],
+            'currencySymbol'    => $tbConfig->{Tinebase_Config::CURRENCY_SYMBOL},
         ];
         $this->_twigEnvironment->addGlobal('app', $globals);
     }
