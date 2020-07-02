@@ -22,8 +22,8 @@ workflow:
   extends: .abstract_jobs.docker
   stage: build_docker_images
   script:
-    - pull_tag_push base $MAJOR_COMMIT_REF_NAME-$PHP_IMAGE_TAG commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG
-    - pull_tag_push dependency $MAJOR_COMMIT_REF_NAME-$PHP_IMAGE_TAG commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG
+    - tag_major_as_commit_image base
+    - tag_major_as_commit_image dependency
     - build_and_push source
     - build_and_push test-source
   rules:
@@ -79,7 +79,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
@@ -91,7 +91,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_SERVERTESTS == "true"
       when: on_success
@@ -104,7 +104,7 @@ workflow:
 "phpstan: code analyses":
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   script:
     - cd $TINE20ROOT
     - composer require phpstan/phpstan
@@ -140,7 +140,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
@@ -152,7 +152,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
       when: on_success
@@ -167,7 +167,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test_with_ldap
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   script:
     - cd $TINE20ROOT/tests/tine20/
     - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap AllTests
@@ -181,8 +181,8 @@ workflow:
   extends: .abstract_jobs.docker
   stage: built_test_and_deploy
   script:
-    - pull_tag_push base commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
-    - pull_tag_push dependency commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+    - tag_commit_as_branch_image base
+    - tag_commit_as_branch_image dependency
   rules:
     - if: $CI_COMMIT_REF_NAME != $MAJOR_COMMIT_REF_NAME
       when: never
@@ -209,8 +209,8 @@ workflow:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
-    - pull_tag_push built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
-    - pull_tag_push dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG
+    - tag_commit_as_branch_image built
+    - tag_commit_as_branch_image dev
   rules:
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
@@ -221,9 +221,8 @@ workflow:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - pull_tag_push_with_registry built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG $CI_REGISTRY/tine20/tine20
-    - pull_tag_push_with_registry dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $CI_COMMIT_REF_NAME-$PHP_IMAGE_TAG $CI_REGISTRY/tine20/tine20
+    - tag_commit_as_gitlab_image built
+    - tag_commit_as_gitlab_image dev
   rules:
     - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
       when: never
@@ -238,9 +237,8 @@ workflow:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
-    - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN docker.io
-    - pull_tag_push_with_registry_with_name built commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $DOCKERHUB_TAG docker.io/tine20 tine20
-    - pull_tag_push_with_registry_with_name dev commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG $DOCKERHUB_TAG docker.io/tine20 dev
+    - tag_commit_as_dockerhub_image built
+    - tag_commit_as_dockerhub_image dev
   rules:
     - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
       when: never
