@@ -74,11 +74,23 @@ function cleanupCss()
     done
 }
 
-function cleanupJs()
-{
+function cleanupJs() {
     echo "cleanup js files in:"
 
-    echo "\"Tinebase/js/webpack-assets-FAT.json\"" >> ${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json
+    for FILE in `ls "${TINE20ROOT}/tine20"`; do
+        # tine20 app needs translations OR Setup dir
+        if [ -d "${TINE20ROOT}/tine20/${FILE}/translations" ] || [ -d "${TINE20ROOT}/tine20/${FILE}/Setup" ]; then
+            echo "+ ${FILE}"
+            if [ -d "${TINE20ROOT}/tine20/${FILE}/js" ]; then
+                (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v "FAT" | grep -v "\-lang\-" | grep -v "empty\.js"  | grep -v "\.map" | grep -v "pollClient" | grep -v "Locale" | grep -v "ux" | grep -v "node_modules"))
+            fi
+        fi
+    done
+}
+
+function cleanupJsWithAssetsJson()
+{
+    echo "cleanup js files in:"
 
     for FILE in `ls "${TINE20ROOT}/tine20"`; do
         # tine20 app needs translations OR Setup dir
@@ -86,15 +98,15 @@ function cleanupJs()
             echo "+ ${FILE}"
             if [ -d "${TINE20ROOT}/tine20/${FILE}/js" ]; then
                 for JSFILE in `ls "${TINE20ROOT}/tine20/${FILE}/js/"`; do
-                    if ! grep -q "\"${FILE}/js/${JSFILE}\"" "${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json"; then
-                        rm -rf "${TINE20ROOT}/tine20/${FILE}/js/${JSFILE}"
+                    if [ "${FILE}/js/${JSFILE}" != "Tinebase/js/webpack-assets-FAT.json" ]; then
+                        if ! grep -q "\"${FILE}/js/${JSFILE}\"" "${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json"; then
+                            rm -rf "${TINE20ROOT}/tine20/${FILE}/js/${JSFILE}"
+                        fi
                     fi
                 done
             fi
         fi
     done
-
-    rm -rf ${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json
 }
 
 function cleanupFiles() {
