@@ -890,15 +890,19 @@ td.x-date-mp-sel a,
 
 ///* TOOLS */
 // problems with trees yet
-//.x-tool {
-//  background-size: 13px 13px;
-//  background-position: 1px 1px !important;
-//
-//  &:hover {
-//    background-size: 15px 15px;
-//    background-position: 0 0 !important;
-//  }
-//}
+.x-tool {
+  background-size: 13px 13px;
+  background-position: 1px 1px !important;
+  background-image: url(../../images/icon-set/icon_arrow_up.svg);
+
+  &:hover {
+    background-size: 15px 15px;
+    background-position: 0 0 !important;
+  }
+  .x-panel-collapsed & {
+    background-image:url(../../images/icon-set/icon_arrow_down.svg);
+  }
+}
 //
 //.x-tool-close {
 //  background-image: url('../../images/icon-set/icon_clear.svg') !important;

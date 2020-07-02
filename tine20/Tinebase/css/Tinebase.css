@@ -20,15 +20,6 @@ html, body {
 
 /* ----- ext fixes -------------------------------------------------------------*/
 
-/* x-tool arrow (exception dialog) */
-.x-panel-collapsed .x-tool {
-    background-image:url(../../images/icon-set/icon_arrow_down.svg);
-}
-
-.x-tool {
-    background-image: url(../../images/icon-set/icon_arrow_up.svg);
-}
-
 /* auto column sizing */
 .x-grid3-hd-row td {
     box-sizing: border-box;
