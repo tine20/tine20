@@ -237,8 +237,8 @@ workflow:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
-    - tag_commit_as_dockerhub_image built
-    - tag_commit_as_dockerhub_image dev
+    - tag_commit_as_dockerhub_image built tine20
+    - tag_commit_as_dockerhub_image dev dev
   rules:
     - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
       when: never
