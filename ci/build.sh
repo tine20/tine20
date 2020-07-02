@@ -48,9 +48,10 @@ function tag_commit_as_gitlab_image() {
 
 function tag_commit_as_dockerhub_image() {
     NAME=$1
+    DOCKERHUB_NAME=$2
 
     docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_TOKEN}" "docker.io"
-    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_COMMIT_SHA}-${PHP_IMAGE_TAG}" "docker.io/tine20" "${NAME}" "${DOCKERHUB_TAG}"
+    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_COMMIT_SHA}-${PHP_IMAGE_TAG}" "docker.io/tine20" "${DOCKERHUB_NAME}" "${DOCKERHUB_TAG}"
 }
 
 function tag_image() {
