@@ -214,7 +214,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         }
 
         echo json_encode([
-            'success' => $fileLocation && $filename !== null,
+            'success' => ($fileLocation !== null),
             'file_location' => $fileLocation ? $fileLocation->toArray() : [],
         ]);
     }

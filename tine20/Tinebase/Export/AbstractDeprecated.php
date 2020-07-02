@@ -733,14 +733,22 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
      */
     public function getTargetFileLocation($filename = null)
     {
-        if ($filename) {
-            $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename, $this->getDownloadFilename());
-            return new Tinebase_Model_Tree_FileLocation([
-                Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
-                Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
-            ]);
-        } else {
-            throw new Tinebase_Exception_NotImplemented('not implemented for this export');
+        if ($filename === null) {
+            if (method_exists($this, 'write')) {
+                ob_start();
+                $this->write();
+                $output = ob_get_clean();
+                $filename = Tinebase_TempFile::getTempPath();
+                file_put_contents($filename, $output);
+            } else {
+                throw new Tinebase_Exception_NotImplemented('Not implemented for this export');
+            }
         }
+
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename, $this->getDownloadFilename());
+        return new Tinebase_Model_Tree_FileLocation([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
+            Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
+        ]);
     }
 }

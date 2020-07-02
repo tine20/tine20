@@ -322,6 +322,40 @@ class Tinebase_Server_HttpTests extends TestCase
         }
     }
 
+    public function testExportContactDownloadReturnFileLocationXls()
+    {
+        $server = new Tinebase_Server_Http();
+        $request = $this->_getRequest();
+
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_xls');
+
+        $options = [
+            'definitionId' => $definition->getId(),
+            'returnFileLocation' => true,
+        ];
+        $filter = [
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller::getDefaultInternalAddressbook()]
+        ];
+
+        // set method & params
+        $_REQUEST['method'] = 'Addressbook.exportContacts';
+        $_REQUEST['filter'] = Zend_Json::encode($filter);
+        $_REQUEST['options'] = Zend_Json::encode($options);
+        ob_start();
+        $server->handle($request);
+        $out = ob_get_clean();
+
+        $this->assertTrue(!empty($out), 'request should not be empty');
+        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+        // check download filename in Tempfile
+        if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
+            $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
+            self::assertEquals('export_addressbook_contact_excel_all_data.xlsx', $tempfile->name);
+        } else {
+            self::fail('could not extract tempfile_id');
+        }
+    }
+
     /**
      * @group ServerTests
      *
