@@ -379,6 +379,26 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.priceTaxField.setValue(tax);
         this.priceGrossField.setValue(gross);
     },
+
+    /**
+     * calculates price gross by price net and tax
+     */
+    calcTaxPercent: function() {
+        var netPrice = parseFloat(this.priceNetField.getValue());
+        var tax      = parseFloat(this.priceTaxField.getValue());
+
+        var taxPercent = tax / netPrice * 100;
+
+        var roundedPercent = Math.round(Math.abs(taxPercent) * 100) / 100;
+
+        this.salesTaxField.setValue(roundedPercent);
+    },
+
+    onUpdatePriceTax: function() {
+        this.calcTaxPercent();
+        this.calcGross();
+        this.calcTotal();
+    },
     
     /**
      * returns dialog
@@ -421,9 +441,13 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.priceTaxField = new Ext.ux.form.MoneyField({
             xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Tax'),
-            disabled: true,
+            disabled: false,
             name: 'price_tax',
             columnWidth: 1/4,
+            listeners: {
+                scope: this,
+                blur: this.onUpdatePriceTax.createDelegate(this)
+            }
         });
 
         this.priceGrossField = new Ext.ux.form.MoneyField({
