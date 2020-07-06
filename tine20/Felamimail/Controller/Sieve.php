@@ -552,14 +552,22 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _checkRule($_rule, $_accountId)
     {
-        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $account = ($_accountId instanceof Felamimail_Model_Account)
+            ? $_accountId
+            : Felamimail_Controller_Account::getInstance()->get($_accountId);
+
         if ($_rule->action_type === Felamimail_Sieve_Rule_Action::REDIRECT && $_rule->enabled) {
-            if ($account->email === $_rule->action_argument) {
-                throw new Felamimail_Exception_Sieve('It is not allowed to redirect emails to self (' . $account->email . ')! Please change the recipient.');
+            $redirectEmails = is_array($_rule->action_argument) ? (array) $_rule->action_argument['emails'] : [$_rule->action_argument];
+
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            if (in_array($account->email, $redirectEmails)) {
+                throw new Felamimail_Exception_Sieve($translate->_('It is not allowed to redirect emails to self! Please change the recipient.'));
             }
             if (Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_REDIRECT_ONLY_INTERNAL}) {
                 $success = false;
-                $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+                $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP)
+                    ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP)
+                    : $smtpConfig = array();
                 $allowedDomains = array();
                 if (isset($smtpConfig['primarydomain'])) {
                     $allowedDomains[] = $smtpConfig['primarydomain'];
@@ -567,14 +575,17 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 if (isset($smtpConfig['secondarydomains'])) {
                     $allowedDomains[] = array_merge($allowedDomains, explode(',', $smtpConfig['secondarydomains']));
                 }
+
                 foreach ($allowedDomains as $allowedDomain) {
-                    if (strpos($_rule->action_argument, $allowedDomain) !== false) {
-                        $success = true;
-                        break;
+                    foreach ($redirectEmails as $email) {
+                        if (strpos($email, $allowedDomain) !== false) {
+                            $success = true;
+                            break;
+                        }
                     }
                 }
                 if (false === $success) {
-                    throw new Felamimail_Exception_Sieve('redirects only to the following domains allowed: ' . join(',', $allowedDomain));
+                    throw new Felamimail_Exception_Sieve($translate->_('Redirects to external email domains are not allowed.'));
                 }
             }
         }

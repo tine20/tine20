@@ -1535,18 +1535,9 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testSetForwardRuleToSelf()
     {
-        $ruleData = array(array(
-            'id' => 1,
-            'action_type' => Felamimail_Sieve_Rule_Action::REDIRECT,
-            'action_argument' => $this->_account->email,
-            'conjunction' => 'allof',
-            'conditions' => array(array(
-                'test' => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
-                'comperator' => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
-                'header' => 'From',
-                'key' => 'info@example.org',
-            )),
-            'enabled' => 1,
+        $ruleData = $this->_getRedirectRuleData(array(
+            'emails' => $this->_account->email,
+            'copy' => 0,
         ));
 
         try {
@@ -1566,23 +1557,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testSetForwardRuleWithCopy()
     {
-        $ruleData = array(array(
-            'id' => 1,
-            'action_type' => Felamimail_Sieve_Rule_Action::REDIRECT,
-            'action_argument' => array(
-                'emails' => 'someaccount@example.org',
-                'copy' => 1,
-            ),
-            'conjunction' => 'allof',
-            'conditions' => array(array(
-                'test' => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
-                'comperator' => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
-                'header' => 'From',
-                'key' => 'info@example.org',
-            )),
-            'enabled' => 1,
+        $ruleData = $this->_getRedirectRuleData(array(
+            'emails' => 'someaccount@' . $this->_mailDomain,
+            'copy' => 1,
         ));
-
         $this->_sieveTestHelper($ruleData);
     }
 
@@ -1591,13 +1569,41 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     public function testSetForwardRuleWithoutCopy()
     {
-        $ruleData = array(array(
-            'id' => 1,
+        $ruleData = $this->_getRedirectRuleData(array(
+            'emails' => 'someaccount@' . $this->_mailDomain,
+            'copy' => 0,
+        ));
+        $this->_sieveTestHelper($ruleData);
+    }
+
+    /**
+     * should throw an exception with FEATURE_SIEVE_RULE_PREVENT_EXTERNAL_FORWARD
+     */
+    public function testSetForwardRuleToExternal()
+    {
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SIEVE_REDIRECT_ONLY_INTERNAL, true);
+
+        $ruleData = $this->_getRedirectRuleData(array(
+            'emails' => 'someaddress@external.com',
+            'copy' => 0,
+        ));
+        try {
+            $this->_sieveTestHelper($ruleData);
+            $this->assertTrue(FALSE,
+                'It is not allowed to set external email address for redirect (with FEATURE_SIEVE_RULE_PREVENT_EXTERNAL_FORWARD)!');
+        } catch (Felamimail_Exception_Sieve $e) {
+            $this->assertTrue(TRUE);
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            self::assertEquals($translate->_('Redirects to external email domains are not allowed.'), $e->getMessage());
+        }
+    }
+
+    protected function _getRedirectRuleData($actionArgument)
+    {
+        return array(array(
+            'id' => '1',
             'action_type' => Felamimail_Sieve_Rule_Action::REDIRECT,
-            'action_argument' => array(
-                'emails' => 'someaccount@example.org',
-                'copy' => 0,
-            ),
+            'action_argument' => $actionArgument,
             'conjunction' => 'allof',
             'conditions' => array(array(
                 'test' => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
@@ -1607,8 +1613,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             )),
             'enabled' => 1,
         ));
-
-        $this->_sieveTestHelper($ruleData);
     }
 
     /**

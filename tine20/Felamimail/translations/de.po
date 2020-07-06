@@ -1850,3 +1850,9 @@ msgstr "Automatisches Verschieben von Benachrichtigungen"
 
 msgid "Auto-move notifications folder"
 msgstr "Ordner für Benachrichtigungen"
+
+msgid "It is not allowed to redirect emails to self! Please change the recipient."
+msgstr "Es ist nicht erlaubt, E-Mails an sich selbst weiterzuleiten. Bitte ändern Sie den Empfänger."
+
+msgid "Redirects to external email domains are not allowed."
+msgstr "Weiterleitungen zu externen E-Mail-Konten sind nicht erlaubt."
