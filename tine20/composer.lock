@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3900c07225b0d4941c6dea4341acc34b",
+    "content-hash": "afb680d76a76a6181bf11e65335e1b34",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -778,12 +778,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "ced089434df320de6df9b610854b8fba8bfe1d1e"
+                "reference": "15258fd24ee4c3da2e4681f41ce9404c74f8b24d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/ced089434df320de6df9b610854b8fba8bfe1d1e",
-                "reference": "ced089434df320de6df9b610854b8fba8bfe1d1e",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/15258fd24ee4c3da2e4681f41ce9404c74f8b24d",
+                "reference": "15258fd24ee4c3da2e4681f41ce9404c74f8b24d",
                 "shasum": ""
             },
             "require": {
@@ -820,7 +820,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-02-22T17:12:02+00:00"
+            "time": "2020-07-06T18:36:33+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "103cd522d9fb6ba5a31052b404a7cbfc578c84b5"
+                "reference": "4d8a7dde31b3e39b6b76189b94aa3badbbf67da5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/103cd522d9fb6ba5a31052b404a7cbfc578c84b5",
-                "reference": "103cd522d9fb6ba5a31052b404a7cbfc578c84b5",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4d8a7dde31b3e39b6b76189b94aa3badbbf67da5",
+                "reference": "4d8a7dde31b3e39b6b76189b94aa3badbbf67da5",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-03-25T12:41:16+00:00"
+            "time": "2020-06-19T13:27:02+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -2984,11 +2984,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.5",
+            "version": "1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "fa85b3ff3e1620dab502a1caa14afd782e91c6d7"
+                "reference": "b4b1984b3b0d318954af10e29783fd9f57b52cac"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -3012,7 +3012,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2020-01-22T10:19:26+00:00"
+            "time": "2020-07-06T14:21:35+00:00"
         },
         {
             "name": "tine20/composerapploader",
