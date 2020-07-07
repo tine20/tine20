@@ -179,28 +179,5 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
             width: 70,
             header: i18n._('type')
         }]
-    },
-    
-    onFileSelectFromFilemanager: function (nodes) {
-        var me = this;
-
-        Ext.each(nodes, function (node) {
-            var record = new Tine.Filemanager.Model.Node(node);
-
-            if (me.store.find('name', record.get('name')) === -1) {
-                // Overriden because of this
-                record.data.attachment_type = 'systemlink_fm';
-                me.store.add(record);
-            } else {
-                Ext.MessageBox.show({
-                    title: i18n._('Failure'),
-                    msg: i18n._('This file is already attached to this record.'),
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            }
-        });
-
-        this.fireEvent('filesSelected');
     }
 });
