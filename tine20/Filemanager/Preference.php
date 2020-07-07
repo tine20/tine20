@@ -18,11 +18,6 @@
 class Filemanager_Preference extends Tinebase_Preference_Abstract
 {
     /**
-     * Preference for row double click default action
-     */
-    const DB_CLICK_ACTION = 'dbClickAction';
-
-    /**
      * Filemanager_Preference constructor.
      * @param null $_dbAdapter
      * @param array $_options
@@ -42,7 +37,6 @@ class Filemanager_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $preferences = [];
-        $preferences[] = self::DB_CLICK_ACTION;
 
         return $preferences;
     }
@@ -56,12 +50,9 @@ class Filemanager_Preference extends Tinebase_Preference_Abstract
     {
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
-        $prefDescriptions = array(
-            self::DB_CLICK_ACTION => array(
-                'label' => $translate->_('Default behavior when double-clicking on a Row'),
-                'description' => $translate->_('Defines which action should be executed by default when double-clicked.'),
-            )
-        );
+        $prefDescriptions = [
+            
+        ];
 
         return $prefDescriptions;
     }
@@ -82,26 +73,6 @@ class Filemanager_Preference extends Tinebase_Preference_Abstract
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
         switch ($_preferenceName) {
-            case self::DB_CLICK_ACTION:
-                $preference->value = 'download';
-
-                $downloadOption = '<option>
-                    <value>download</value>
-                    <label>' . $translate->_('Download') . '</label>
-                </option>';
-
-                $previewOption = '<option>
-                    <value>preview</value>
-                    <label>' . $translate->_('Preview') . '</label>
-                </option>';
-
-                $preference->options = \sprintf('<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                    %s
-                    %s
-                    </options>', $downloadOption,  $previewOption);
-                break;
-
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }

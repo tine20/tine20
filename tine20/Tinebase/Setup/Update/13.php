@@ -14,6 +14,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE013_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -34,6 +35,10 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE013_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ]
     ];
@@ -79,5 +84,26 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         ]);
         Tinebase_Scheduler_Task::addLogEntryCleanUpTask(Tinebase_Core::getScheduler());
         $this->addApplicationUpdate('Tinebase', '13.3', self::RELEASE013_UPDATE004);
+    }
+
+    /**
+     * move dblclick action config to tinebase
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function update005()
+    {
+        $db = $this->getDb();
+        $db->update(
+            SQL_TABLE_PREFIX . 'preferences', [
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+                'name' => Tinebase_Preference::FILE_DBLCLICK_ACTION
+            ],
+            $db->quoteInto('name = ?', 'dbClickAction')
+        );
+        
+        $this->addApplicationUpdate('Tinebase', '13.4', self::RELEASE013_UPDATE004);
     }
 }

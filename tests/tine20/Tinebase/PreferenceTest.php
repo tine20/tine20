@@ -288,18 +288,18 @@ class Tinebase_PreferenceTest extends TestCase
      */
     public function testSetForcedDefaultPrefDefaultValue()
     {
-        $defaultPref = (new Filemanager_Preference())->getApplicationPreferenceDefaults(
-            Filemanager_Preference::DB_CLICK_ACTION);
-        (new Tinebase_Frontend_Json())->savePreferences(['Filemanager' => [
+        $defaultPref = (new Tinebase_Preference())->getApplicationPreferenceDefaults(
+            Tinebase_Preference::FILE_DBLCLICK_ACTION);
+        (new Tinebase_Frontend_Json())->savePreferences(['Tinebase' => [
             $defaultPref->getId() => array(
                 'type'  => Tinebase_Model_Preference::TYPE_FORCED,
                 'value' => Tinebase_Model_Preference::DEFAULT_VALUE,
-                'name'  => Filemanager_Preference::DB_CLICK_ACTION
+                'name'  => Tinebase_Preference::FILE_DBLCLICK_ACTION
             )
         ]], 1);
 
-        $appPrefs = Tinebase_Core::getPreference('Filemanager');
-        static::assertSame('download', $appPrefs->{Filemanager_Preference::DB_CLICK_ACTION});
+        $appPrefs = Tinebase_Core::getPreference('Tinebase');
+        static::assertSame('download', $appPrefs->{Tinebase_Preference::FILE_DBLCLICK_ACTION});
     }
 
     /**
