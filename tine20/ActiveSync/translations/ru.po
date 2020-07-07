@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Aleksey <aleksdem@aleksdem.com>, 2013
 # Aleksey <aleksdem@aleksdem.com>, 2013
@@ -12,129 +12,99 @@ msgstr ""
 "PO-Revision-Date: 2017-09-28 09:48+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] "Устройство"
-msgstr[1] "Устройства"
-msgstr[2] "Устройств"
-msgstr[3] "Устройств"
+#: Preference.php:75
+msgid "Default Address book"
+msgstr ""
+
+#: Preference.php:76
+msgid "The default address book to create new contacts in."
+msgstr ""
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Календарь по умолчанию"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Календарь для создания новых событий по умолчанию"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Список задач по умолчанию"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Список задач для создания новых задач по умолчанию"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
 msgstr "Устройства"
 
-#: js/SyncDevicesGridPanel.js:69
-msgid "ID"
-msgstr "ID"
-
-#: js/SyncDevicesGridPanel.js:70 js/SyncDevicesGridPanel.js:153
-#: js/EditDialog.js:72
+#: js/EditDialog.js:72 js/SyncDevicesGridPanel.js:70
+#: js/SyncDevicesGridPanel.js:154
 msgid "Device ID"
 msgstr "ID устройства"
 
-#: js/SyncDevicesGridPanel.js:71 js/EditDialog.js:79
+#: js/EditDialog.js:79
 msgid "Devicetype"
 msgstr "Тип устройства"
 
-#: js/SyncDevicesGridPanel.js:72 js/EditDialog.js:86
+#: js/EditDialog.js:86 js/SyncDevicesGridPanel.js:72
 msgid "Owner"
 msgstr "Владелец"
 
-#: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
+#: js/EditDialog.js:98 js/SyncDevicesGridPanel.js:73
 msgid "Policy"
 msgstr "Политика"
 
-#: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:104
-msgid "AS Version"
-msgstr "Версия AS"
+#: js/EditDialog.js:104 js/SyncDevicesGridPanel.js:74
+msgid "ActiveSync Version"
+msgstr ""
 
-#: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:110
-msgid "Useragent"
-msgstr "Приложение"
+#: js/EditDialog.js:110 js/SyncDevicesGridPanel.js:75
+msgid "User agent"
+msgstr ""
 
-#: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:116
+#: js/EditDialog.js:116 js/SyncDevicesGridPanel.js:76
 msgid "Model"
 msgstr "Модель"
 
-#: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:122
+#: js/EditDialog.js:122 js/SyncDevicesGridPanel.js:77
 msgid "IMEI"
 msgstr "IMEI"
 
-#: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:128
+#: js/EditDialog.js:128 js/SyncDevicesGridPanel.js:78
 msgid "Friendly Name"
 msgstr "Простое имя"
 
-#: js/SyncDevicesGridPanel.js:79 js/EditDialog.js:134
+#: js/EditDialog.js:134
 msgid "OS"
 msgstr "ОС"
 
-#: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:140
+#: js/EditDialog.js:140 js/SyncDevicesGridPanel.js:80
 msgid "OS Language"
 msgstr "Язык ОС"
 
-#: js/SyncDevicesGridPanel.js:81 js/EditDialog.js:146
+#: js/EditDialog.js:146
 msgid "Phonenumber"
 msgstr "Номер телефона"
 
-#: js/SyncDevicesGridPanel.js:82
-msgid "Ping Lifetime"
-msgstr "Пинг"
-
-#: js/SyncDevicesGridPanel.js:83
-msgid "Ping Folder"
-msgstr "Папка для пинга"
-
-#: js/SyncDevicesGridPanel.js:84
-msgid "Remote Wipe"
-msgstr "Удаленный сброс"
-
-#: js/SyncDevicesGridPanel.js:85
-msgid "Calendarfilter"
-msgstr "Фильтр календаря"
-
-#: js/SyncDevicesGridPanel.js:86
-msgid "Contactsfilter"
-msgstr "Фильтр контактов"
-
-#: js/SyncDevicesGridPanel.js:87
-msgid "Emailfilter"
-msgstr "Фильтр email"
-
-#: js/SyncDevicesGridPanel.js:88
-msgid "Tasksfilter"
-msgstr "Фильтр задач"
-
-#: js/SyncDevicesGridPanel.js:89
-msgid "Last Ping"
-msgstr "Последний пинг"
-
-#: js/SyncDevicesGridPanel.js:100
-msgid "Remote Reset Device"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:115
-msgid "Please Confirm"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:116
-msgid ""
-"Do you really want to wipe the selected devices? All personal data will be "
-"removed and the device is reset to factory settings!"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:152
-msgid "Quicksearch"
-msgstr "Быстрый поиск"
+#: js/SyncDevices.js:71
+msgid "Sync Device"
+msgid_plural "Sync Devices"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: js/Model.js:42
 msgid "Device"
@@ -182,59 +152,119 @@ msgstr "сброшен"
 msgid "Set Sync Filter"
 msgstr "Установить фильтр синхронизации"
 
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Адресная книга по умолчанию"
+#: js/SyncDevicesGridPanel.js:69
+msgid "ID"
+msgstr "ID"
 
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Адресная книга для создания контактов по умолчанию"
+#: js/SyncDevicesGridPanel.js:71
+msgid "Device Type"
+msgstr ""
 
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Календарь по умолчанию"
+#: js/SyncDevicesGridPanel.js:79
+msgid "Operating System"
+msgstr ""
 
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Календарь для создания новых событий по умолчанию"
+#: js/SyncDevicesGridPanel.js:81
+msgid "Phone Number"
+msgstr ""
 
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Список задач по умолчанию"
+#: js/SyncDevicesGridPanel.js:82
+msgid "Ping Lifetime"
+msgstr "Пинг"
 
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Список задач для создания новых задач по умолчанию"
+#: js/SyncDevicesGridPanel.js:83
+msgid "Ping Folder"
+msgstr "Папка для пинга"
 
-#: Config.php:52
+#: js/SyncDevicesGridPanel.js:84
+msgid "Remote Wipe"
+msgstr "Удаленный сброс"
+
+#: js/SyncDevicesGridPanel.js:85
+msgid "Calendar Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:86
+msgid "Contacts Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:87
+msgid "E-mail Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:88
+msgid "Tasks Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:89
+msgid "Last Ping"
+msgstr "Последний пинг"
+
+#: js/SyncDevicesGridPanel.js:90
+msgid "Monitor Last Ping"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:101
+msgid "Remote Device Reset"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:116
+msgid "Please Confirm"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:117
+msgid "Do you really want to wipe the selected devices? All personal data will be removed and the device will be reset to factory settings!"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:153
+msgid "Quicksearch"
+msgstr "Быстрый поиск"
+
+#: Setup/Update/Release6.php:290 Setup/setup.xml:549
+msgid "Default Policy"
+msgstr "Политика по умолчанию"
+
+#: Setup/Update/Release6.php:295 Setup/setup.xml:554
+msgid "Default Policy installed during setup"
+msgstr "Политика по умолчанию заданная при установке"
+
+#: Config.php:57
 msgid "Default policy for new devices"
 msgstr "Политика по умолчанию для новых устройств"
 
-#: Config.php:54
+#: Config.php:59
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Введите ID политики для применения к вновь созданным устройствам."
 
-#: Config.php:63
+#: Config.php:68
+msgid "User Agent Deny List"
+msgstr ""
+
+#: Config.php:70
+msgid "Array of regular expressions of User-Agent strings"
+msgstr ""
+
+#: Config.php:81
 msgid "Disable Access Log"
 msgstr "Отключить лог"
 
-#: Config.php:65
+#: Config.php:83
 msgid "Disable ActiveSync Access Log creation."
 msgstr "Отключить создание лога подключений ActiveSync"
 
-#: Config.php:74
-msgid "Filter timeslot for emails"
-msgstr "Фильтрация писем по времени"
+#: Config.php:92
+msgid "Filter timeslot for e-mails"
+msgstr ""
 
-#: Config.php:76
-msgid "For how long in the past the emails should be synchronized."
-msgstr "Насколько давние письма должны быть синхронизированы."
+#: Config.php:94
+msgid "For how long in the past the e-mails should be synchronized."
+msgstr ""
 
-#: Config.php:97
+#: Config.php:115
 msgid "Filter timeslot for events"
 msgstr "Фильтрация событий по времени"
 
-#: Config.php:99
+#: Config.php:117
 msgid "For how long in the past the events should be synchronized."
 msgstr "Насколько давние события должны быть синхронизированы."
 
@@ -254,10 +284,39 @@ msgstr ""
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Политика по умолчанию"
+#~ msgid "Default Addressbook"
+#~ msgstr "Адресная книга по умолчанию"
 
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Политика по умолчанию заданная при установке"
+#~ msgid "The default addressbook to create new contacts in."
+#~ msgstr "Адресная книга для создания контактов по умолчанию"
+
+#~ msgid "AS Version"
+#~ msgstr "Версия AS"
+
+#~ msgid "Useragent"
+#~ msgstr "Приложение"
+
+#~ msgid "SyncDevice"
+#~ msgid_plural "SyncDevices"
+#~ msgstr[0] "Устройство"
+#~ msgstr[1] "Устройства"
+#~ msgstr[2] "Устройств"
+#~ msgstr[3] "Устройств"
+
+#~ msgid "Calendarfilter"
+#~ msgstr "Фильтр календаря"
+
+#~ msgid "Contactsfilter"
+#~ msgstr "Фильтр контактов"
+
+#~ msgid "Emailfilter"
+#~ msgstr "Фильтр email"
+
+#~ msgid "Tasksfilter"
+#~ msgstr "Фильтр задач"
+
+#~ msgid "Filter timeslot for emails"
+#~ msgstr "Фильтрация писем по времени"
+
+#~ msgid "For how long in the past the emails should be synchronized."
+#~ msgstr "Насколько давние письма должны быть синхронизированы."

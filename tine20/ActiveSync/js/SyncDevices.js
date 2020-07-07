@@ -66,11 +66,10 @@ Tine.ActiveSync.Model.SyncDevice = Tine.Tinebase.data.Record.create(Tine.ActiveS
     appName: 'ActiveSync',
     modelName: 'SyncDevice',
     idProperty: 'id',
-    //titleProperty: 'name',
     titleProperty: 'deviceid',
-    // ngettext('SyncDevice', 'SyncDevices', n);
-    recordName: 'SyncDevice',
-    recordsName: 'SyncDevices'
+    // ngettext('Sync Device', 'Sync Devices', n);
+    recordName: 'Sync Device',
+    recordsName: 'Sync Devices'
 });
 
 /**
