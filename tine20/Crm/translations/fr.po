@@ -18,253 +18,135 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller/Lead.php:205 js/LeadGridDetailsPanel.js:45 js/Contact.js:161
-#: js/Contact.js:356 js/Contact.js:396 js/LeadGridPanel.js:119
-#: Model/Lead.php:123 Config.php:125
-msgid "Customer"
-msgstr "Client"
-
-#: Controller/Lead.php:206
-msgid "State"
-msgstr "État"
-
-#: Controller/Lead.php:207 js/Contact.js:252 js/AddToLeadPanel.js:78
-msgid "Role"
-msgstr "Rôle"
-
-#: Controller/Lead.php:208
-msgid "Source"
-msgstr "Source"
-
-#: Controller/Lead.php:209 Export/Pdf.php:91 js/LeadGridDetailsPanel.js:212
-#: js/LeadEditDialog.js:447
-msgid "Start"
-msgstr "Début"
-
-#: Controller/Lead.php:210
-msgid "Scheduled end"
-msgstr "Fin planifiée"
-
-#: Controller/Lead.php:211 Export/Pdf.php:94 js/LeadEditDialog.js:234
-msgid "End"
-msgstr "Fin"
-
-#: Controller/Lead.php:212 Export/Pdf.php:85 js/Model.js:125
-#: js/LeadGridPanel.js:124
-msgid "Turnover"
-msgstr "Rotation"
-
-#: Controller/Lead.php:213 Export/Pdf.php:88 js/Model.js:110 js/Model.js:155
-#: js/LeadGridPanel.js:123 js/LeadEditDialog.js:227
-msgid "Probability"
-msgstr "Probabilité"
-
-#: Controller/Lead.php:214
-msgid "Folder"
-msgstr "Dossier"
-
-#: Controller/Lead.php:215
-msgid "Updated by"
-msgstr "Mis à jour par"
-
-#: Controller/Lead.php:216
-msgid "Updated Fields:"
-msgstr "Champs mis à jour :"
-
-#: Controller/Lead.php:217
-#, python-format
-msgid "'%s' changed from '%s' to '%s'."
-msgstr ""
-
-#: Controller/Lead.php:218 js/LeadGridPanel.js:115
-msgid "Tags"
-msgstr "Marqueurs"
-
-#: Controller/Lead.php:224
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Le prospect %s a changé"
-
-#: Controller/Lead.php:226
-#, python-format
-msgid "Lead %s has been deleted"
-msgstr ""
-
-#: Controller/Lead.php:228
-#, python-format
-msgid "Lead %s has been created"
-msgstr "Le prospect %s a été créé"
-
-#: Export/Pdf.php:73
-msgid "Lead Data"
-msgstr "Données du prospect"
-
-#: Export/Pdf.php:76 js/Model.js:104 js/LeadGridPanel.js:120
-#: js/LeadEditDialog.js:379
-msgid "Leadstate"
-msgstr "État du prospect"
-
-#: Export/Pdf.php:79 js/Model.js:119 js/LeadGridDetailsPanel.js:222
-#: js/LeadGridPanel.js:121 js/LeadEditDialog.js:396
-msgid "Leadtype"
-msgstr "Type du prospect"
-
-#: Export/Pdf.php:82 js/Model.js:112 js/LeadGridDetailsPanel.js:227
-#: js/LeadGridPanel.js:122 js/LeadEditDialog.js:402
-msgid "Leadsource"
-msgstr "Origine du prospect"
-
-#: Export/Pdf.php:97
-msgid "End Scheduled"
-msgstr "Fin planifiée"
-
-#: Export/Pdf.php:179
-msgid "Contacts"
-msgstr "Contacts"
-
-#: Export/Pdf.php:206 js/Contact.js:231
-msgid "Address"
-msgstr "Adresse"
-
-#: Export/Pdf.php:213
-msgid "Telephone"
-msgstr "Téléphone"
-
-#: Export/Pdf.php:214
-msgid "Email"
-msgstr "Email"
-
-#: Export/Pdf.php:227 js/Task.js:82 js/LeadEditDialog.js:250
-msgid "Tasks"
-msgstr "Tâches"
-
-#: Export/Pdf.php:248 js/Task.js:224
-msgid "Due Date"
-msgstr "Date prévue"
-
-#: Export/Pdf.php:255 js/Task.js:237
-msgid "Priority"
-msgstr "Priorité"
-
-#: Export/Pdf.php:273 js/LeadEditDialog.js:261 js/Product.js:85
-msgid "Products"
-msgstr "Produits"
-
-#: Export/Pdf.php:314
-msgid "low"
-msgstr "basse"
-
-#: Export/Pdf.php:315
-msgid "normal"
-msgstr "normale"
-
-#: Export/Pdf.php:316
-msgid "high"
-msgstr "haute"
-
-#: Export/Pdf.php:317
-msgid "urgent"
-msgstr "urgent"
-
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:36
-msgid "All leads I have read grants for"
-msgstr "Tous les prospects auxquels j'ai accès"
-
-#: Setup/Initialize.php:43
-msgid "Last modified by me"
-msgstr "Mes dernières modifications"
-
-#: Setup/Initialize.php:44
-msgid "All leads that I have last modified"
-msgstr "Prospects que j'ai modifié dernièrement"
-
-#: Setup/Initialize.php:53
-msgid "My leads"
-msgstr "Mes prospects"
-
-#: Setup/Initialize.php:54
-msgid "All leads that I am responsible for"
-msgstr "Tous les prospects dont je suis responsable"
-
-#: Setup/Initialize.php:67
-msgid "Leads with overdue tasks"
-msgstr "Tâches en retard"
-
 #: Preference.php:37
 msgid "All leads"
 msgstr "Tous les prospects"
 
-#: Preference.php:94
+#: Preference.php:92
 msgid "Default Lead List"
 msgstr "Liste de prospects par défaut"
 
-#: Preference.php:95
+#: Preference.php:93
 msgid "The default list for new leads"
 msgstr "La liste par défaut pour les nouveaux prospects"
 
-#: Preference.php:99
-msgid "Get Notification Emails"
-msgstr "Notifier par courriel"
+#: Preference.php:97
+msgid "Get Notification E-mails"
+msgstr ""
 
-#: Preference.php:100
+#: Preference.php:98
 msgid "The level of actions you want to be notified about."
 msgstr "Le niveau des actions qui vous seront notifiées."
 
-#: Preference.php:104
-msgid "Send Notifications Emails for own actions"
-msgstr "Être notifié par courriel de vos propres actions"
-
-#: Preference.php:105
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Être notifié par courriel des actions faites par vous-même."
-
-#: Preference.php:108
-msgid "Send Notifications Emails to responsible"
+#: Preference.php:102
+msgid "Send Notifications e-mails for own actions"
 msgstr ""
 
-#: Preference.php:109
-msgid "Get notifications emails for action to responsible"
+#: Preference.php:103
+msgid "Get notifications e-mails for actions you did yourself"
 msgstr ""
 
-#: Preference.php:112
-msgid "Send Notifications Emails to customer"
+#: Preference.php:106
+msgid "Send Notifications e-mails to responsible"
 msgstr ""
 
-#: Preference.php:113
-msgid "Get notifications emails for action to customer"
+#: Preference.php:107
+msgid "Get notifications e-mails for action to responsible"
 msgstr ""
 
-#: Preference.php:116
-msgid "Send Notifications Emails to partner"
+#: Preference.php:110
+msgid "Send Notifications e-mails to customer"
 msgstr ""
 
-#: Preference.php:117
-msgid "Get notifications emails for action to partner"
+#: Preference.php:111
+msgid "Get notifications e-mails for action to customer"
 msgstr ""
 
-#: Preference.php:120
+#: Preference.php:114
+msgid "Send Notifications e-mails to partner"
+msgstr ""
+
+#: Preference.php:115
+msgid "Get notifications e-mails for action to partner"
+msgstr ""
+
+#: Preference.php:118
 msgid "Default Favorite"
 msgstr "Favoris par défaut"
 
-#: Preference.php:121
+#: Preference.php:119
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Le favoris par défaut qui est charge au lancement du GRC"
 
-#: Acl/Rights.php:105
-msgid "manage shared lead folders"
-msgstr "gérer les dossiers de prospects partagés"
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr "Nouveau prospect"
 
-#: Acl/Rights.php:106
-msgid "Create new shared lead folders"
-msgstr "Créer de nouveaux dossiers de prospects partagés"
+#: js/LeadGridPanel.js:115 Controller/Lead.php:224
+msgid "Tags"
+msgstr "Marqueurs"
 
-#: Acl/Rights.php:109
-msgid "manage shared leads favorites"
-msgstr "gérer les favoris de prospects partagés"
+#: js/LeadGridPanel.js:116 js/Model.js:102
+msgid "Lead name"
+msgstr "Nom du prospect"
 
-#: Acl/Rights.php:110
-msgid "Create or update shared leads favorites"
-msgstr "Créer ou mettre à jour les favoris de prospects partagés"
+#: js/LeadGridPanel.js:117 js/Contact.js:171 js/Contact.js:355
+#: js/Contact.js:392 Model/Lead.php:122
+msgid "Responsible"
+msgstr "Responsable"
+
+#: js/LeadGridPanel.js:118 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
+#: js/Contact.js:357 js/Contact.js:400 Config.php:126
+msgid "Partner"
+msgstr "Partenaire"
+
+#: js/LeadGridPanel.js:119 js/LeadGridDetailsPanel.js:45 js/Contact.js:161
+#: js/Contact.js:356 js/Contact.js:396 Config.php:125 Controller/Lead.php:211
+#: Model/Lead.php:123
+msgid "Customer"
+msgstr "Client"
+
+#: js/LeadGridPanel.js:120 js/LeadEditDialog.js:379 js/Model.js:104
+#: Export/Pdf.php:76
+msgid "Leadstate"
+msgstr "État du prospect"
+
+#: js/LeadGridPanel.js:121 js/LeadGridDetailsPanel.js:222
+#: js/LeadEditDialog.js:396 js/Model.js:119 Export/Pdf.php:79
+msgid "Leadtype"
+msgstr "Type du prospect"
+
+#: js/LeadGridPanel.js:122 js/LeadGridDetailsPanel.js:227
+#: js/LeadEditDialog.js:402 js/Model.js:112 Export/Pdf.php:82
+msgid "Leadsource"
+msgstr "Origine du prospect"
+
+#: js/LeadGridPanel.js:123 js/LeadEditDialog.js:227 js/Model.js:110
+#: js/Model.js:155 Controller/Lead.php:219 Export/Pdf.php:88
+msgid "Probability"
+msgstr "Probabilité"
+
+#: js/LeadGridPanel.js:124 js/Model.js:125 Controller/Lead.php:218
+#: Export/Pdf.php:85
+msgid "Turnover"
+msgstr "Rotation"
+
+#: js/LeadGridPanel.js:126 js/LeadGridDetailsPanel.js:217
+#: js/LeadEditDialog.js:453 js/Model.js:132
+msgid "Estimated end"
+msgstr "Fin estimée"
+
+#: js/LeadGridPanel.js:127
+msgid "Probable Turnover"
+msgstr "Rotation probable"
+
+#: js/LeadGridPanel.js:128 js/LeadEditDialog.js:434 js/Model.js:133
+msgid "Resubmission Date"
+msgstr ""
+
+#: js/LeadGridPanel.js:172
+msgid "Import leads"
+msgstr ""
 
 #: js/LeadGridContactFilter.js:47
 msgid "Contact"
@@ -274,67 +156,97 @@ msgstr "Contacte"
 msgid "CRM Role"
 msgstr "Rôle CRM"
 
-#: js/Model.js:52 js/AddToLeadPanel.js:73 js/LeadEditDialog.js:308
+#: js/Task.js:82 js/LeadEditDialog.js:250 Export/Pdf.php:227
+msgid "Tasks"
+msgstr "Tâches"
+
+#: js/Task.js:105
+msgid "No Tasks to display"
+msgstr "Pas de tĉhe à afficher"
+
+#: js/Task.js:216
+msgid "Summary"
+msgstr "Résumé"
+
+#: js/Task.js:220
+msgid "Add a task..."
+msgstr "Ajouter un tâche"
+
+#: js/Task.js:224 Export/Pdf.php:248
+msgid "Due Date"
+msgstr "Date prévue"
+
+#: js/Task.js:237 Export/Pdf.php:255
+msgid "Priority"
+msgstr "Priorité"
+
+#: js/Task.js:252
+msgid "Percent"
+msgstr "Pourcent"
+
+#: js/Task.js:265 js/LeadGridDetailsPanel.js:207
+msgid "Status"
+msgstr "Statut"
+
+#: js/Task.js:281
+msgid "Organizer"
+msgstr ""
+
+#: js/LinkGridPanel.js:34
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "Ajouter un nouveau {0}"
+
+#: js/LinkGridPanel.js:56 js/Product.js:185
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr "Délier {0}"
+
+#: js/LinkGridPanel.js:57 js/Product.js:186
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr "Délier les {0} sélectionnés"
+
+#: js/LinkGridPanel.js:72
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Éditer le {0}"
+
+#: js/LinkGridPanel.js:73
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Éditer le {0} sélectionné"
+
+#: js/AddToLeadPanel.js:31
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Choisissez le prospect lié aux contacts"
+
+#: js/AddToLeadPanel.js:36
+msgid "Please select the attenders' role"
+msgstr "Choisissez le rôle du participant"
+
+#: js/AddToLeadPanel.js:73 js/LeadEditDialog.js:308 js/Model.js:52
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Prospect"
 msgstr[1] "Prospects"
 
-#: js/Model.js:56
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "liste de prospects"
-msgstr[1] "listes de prospects"
+#: js/AddToLeadPanel.js:74
+msgid "Select Lead"
+msgstr "Choisissez un prospect"
 
-#: js/Model.js:56
-msgid "lead lists"
-msgstr "listes de prospects"
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:213
+msgid "Role"
+msgstr "Rôle"
 
-#: js/Model.js:100
-msgid "Quick Search"
-msgstr "Recherche rapide"
+#: js/AddToLeadPanel.js:79
+msgid "Select Role"
+msgstr "Choisissez un rôle"
 
-#: js/Model.js:102 js/LeadGridPanel.js:116
-msgid "Lead name"
-msgstr "Nom du prospect"
-
-#: js/Model.js:127
-msgid "Last Modified Time"
-msgstr "Dernière modification"
-
-#: js/Model.js:128
-msgid "Last Modified By"
-msgstr "Modifié par"
-
-#: js/Model.js:129
-msgid "Creation Time"
-msgstr "Date de création"
-
-#: js/Model.js:130
-msgid "Created By"
-msgstr "Créé par"
-
-#: js/Model.js:132 js/LeadGridDetailsPanel.js:217 js/LeadGridPanel.js:126
-#: js/LeadEditDialog.js:453
-msgid "Estimated end"
-msgstr "Fin estimée"
-
-#: js/Model.js:133 js/LeadGridPanel.js:128 js/LeadEditDialog.js:434
-msgid "Resubmission Date"
-msgstr ""
-
-#: js/Model.js:156
-msgid "X Lead"
-msgstr ""
-
-#: js/Model.js:169
-msgid "Archived"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:45 js/Contact.js:181 js/Contact.js:357
-#: js/Contact.js:400 js/LeadGridPanel.js:118 Config.php:126
-msgid "Partner"
-msgstr "Partenaire"
+#: js/AddToLeadPanel.js:93
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr "Ajout de {0} contacts au prospect"
 
 #: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
 msgid "Phone"
@@ -368,18 +280,14 @@ msgstr ""
 msgid "City"
 msgstr ""
 
-#: js/LeadGridDetailsPanel.js:207 js/Task.js:265
-msgid "Status"
-msgstr "Statut"
+#: js/LeadGridDetailsPanel.js:212 js/LeadEditDialog.js:447
+#: Controller/Lead.php:215 Export/Pdf.php:91
+msgid "Start"
+msgstr "Début"
 
 #: js/Contact.js:162
 msgid "Change type to Customer"
 msgstr "Modifier en client"
-
-#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
-#: js/LeadGridPanel.js:117 Model/Lead.php:122
-msgid "Responsible"
-msgstr "Responsable"
 
 #: js/Contact.js:172
 msgid "Change type to Responsible"
@@ -401,6 +309,10 @@ msgstr "Recherche de contacte à ajouter..."
 msgid "Name"
 msgstr "Nom"
 
+#: js/Contact.js:231 Export/Pdf.php:206
+msgid "Address"
+msgstr "Adresse"
+
 #: js/Contact.js:242
 msgid "Data"
 msgstr "Données"
@@ -409,83 +321,17 @@ msgstr "Données"
 msgid "Cellphone"
 msgstr "Téléphone (portable)"
 
-#: js/LinkGridPanel.js:34
-#, python-brace-format
-msgid "Add new {0}"
-msgstr "Ajouter un nouveau {0}"
-
-#: js/LinkGridPanel.js:56 js/Product.js:185
-#, python-brace-format
-msgid "Unlink {0}"
-msgstr "Délier {0}"
-
-#: js/LinkGridPanel.js:57 js/Product.js:186
-#, python-brace-format
-msgid "Unlink selected {0}"
-msgstr "Délier les {0} sélectionnés"
-
-#: js/LinkGridPanel.js:72
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "Éditer le {0}"
-
-#: js/LinkGridPanel.js:73
-#, python-brace-format
-msgid "Edit selected {0}"
-msgstr "Éditer le {0} sélectionné"
-
-#: js/Task.js:105
-msgid "No Tasks to display"
-msgstr "Pas de tĉhe à afficher"
-
-#: js/Task.js:216
-msgid "Summary"
-msgstr "Résumé"
-
-#: js/Task.js:220
-msgid "Add a task..."
-msgstr "Ajouter un tâche"
-
-#: js/Task.js:252
-msgid "Percent"
-msgstr "Pourcent"
-
-#: js/Task.js:281
-msgid "Organizer"
-msgstr ""
-
-#: js/AddToLeadPanel.js:31
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Choisissez le prospect lié aux contacts"
-
-#: js/AddToLeadPanel.js:36
-msgid "Please select the attenders' role"
-msgstr "Choisissez le rôle du participant"
-
-#: js/AddToLeadPanel.js:74
-msgid "Select Lead"
-msgstr "Choisissez un prospect"
-
-#: js/AddToLeadPanel.js:79
-msgid "Select Role"
-msgstr "Choisissez un rôle"
-
-#: js/AddToLeadPanel.js:93
-#, python-brace-format
-msgid "Adding {0} contacts to lead"
-msgstr "Ajout de {0} contacts au prospect"
-
-#: js/LeadGridPanel.js:127
-msgid "Probable Turnover"
-msgstr "Rotation probable"
-
-#: js/LeadGridPanel.js:172
-msgid "Import leads"
-msgstr ""
+#: js/LeadEditDialog.js:234 Controller/Lead.php:217 Export/Pdf.php:94
+msgid "End"
+msgstr "Fin"
 
 #: js/LeadEditDialog.js:251
 msgid "You do not have the run right for the Tasks application or it is not activated."
 msgstr "Vous n'avez pas les droits pour lancer l'application Tâches, ou  celle-ci n'est pas activée."
+
+#: js/LeadEditDialog.js:261 js/Product.js:85 Export/Pdf.php:273
+msgid "Products"
+msgstr "Produits"
 
 #: js/LeadEditDialog.js:262
 msgid "You do not have the run right for the Sales application or it is not activated."
@@ -507,9 +353,43 @@ msgstr "Description"
 msgid "Enter description"
 msgstr "Veuillez saisir une description"
 
-#: js/Crm.js:24
-msgid "New Lead"
-msgstr "Nouveau prospect"
+#: js/Model.js:56
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "liste de prospects"
+msgstr[1] "listes de prospects"
+
+#: js/Model.js:56
+msgid "lead lists"
+msgstr "listes de prospects"
+
+#: js/Model.js:100
+msgid "Quick Search"
+msgstr "Recherche rapide"
+
+#: js/Model.js:127
+msgid "Last Modified Time"
+msgstr "Dernière modification"
+
+#: js/Model.js:128
+msgid "Last Modified By"
+msgstr "Modifié par"
+
+#: js/Model.js:129
+msgid "Creation Time"
+msgstr "Date de création"
+
+#: js/Model.js:130
+msgid "Created By"
+msgstr "Créé par"
+
+#: js/Model.js:156
+msgid "X Lead"
+msgstr ""
+
+#: js/Model.js:169
+msgid "Archived"
+msgstr ""
 
 #: js/Product.js:134
 msgid "Product"
@@ -527,38 +407,29 @@ msgstr "Quantité"
 msgid "Search for Products to add ..."
 msgstr "Recherche de produits à ajouter"
 
-#: Import/Csv.php:131
-msgid "Edit new lead"
-msgstr ""
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:36
+msgid "All leads I have read grants for"
+msgstr "Tous les prospects auxquels j'ai accès"
 
-#: Import/Csv.php:235
-#, python-format
-msgid "The following leads have just been imported into lead list %s"
-msgstr ""
+#: Setup/Initialize.php:43
+msgid "Last modified by me"
+msgstr "Mes dernières modifications"
 
-#: Import/Csv.php:240
-#, python-format
-msgid "%s new leads have been imported"
-msgstr ""
+#: Setup/Initialize.php:44
+msgid "All leads that I have last modified"
+msgstr "Prospects que j'ai modifié dernièrement"
 
-#: Import/definitions/crm_tine_import_csv.xml:11
-#: Import/definitions/crm_demo_import_csv.xml:11
-msgid "Lead CSV import"
-msgstr ""
+#: Setup/Initialize.php:53
+msgid "My leads"
+msgstr "Mes prospects"
 
-#: Import/definitions/crm_tine_import_csv.xml:17
-#: Import/definitions/crm_demo_import_csv.xml:17
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+#: Setup/Initialize.php:54
+msgid "All leads that I am responsible for"
+msgstr "Tous les prospects dont je suis responsable"
 
-#: Import/definitions/crm_tine_import_csv.xml:19
-#: Import/definitions/crm_demo_import_csv.xml:19
-msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
-#: Model/Lead.php:129
-msgid "Task"
-msgstr "Recherche rapide"
+#: Setup/Initialize.php:67
+msgid "Leads with overdue tasks"
+msgstr "Tâches en retard"
 
 #: Config.php:73
 msgid "Lead States Available"
@@ -617,7 +488,7 @@ msgid "Enabled Features"
 msgstr ""
 
 #: Config.php:139
-msgid "Enabled Features in Crm Application."
+msgid "Enabled Features in CRM Application."
 msgstr ""
 
 #: Config.php:146
@@ -633,11 +504,11 @@ msgid "Automatically creates a task for the responsible person if a new lead is 
 msgstr ""
 
 #: Config.php:164
-msgid "Send notification email on lead import"
+msgid "Send notification e-mail on lead import"
 msgstr ""
 
 #: Config.php:166
-msgid "Sends an email to all responsible persons for the imported leads."
+msgid "Sends an e-mail to all responsible persons for the imported leads."
 msgstr ""
 
 #: Config.php:173
@@ -647,3 +518,141 @@ msgstr ""
 #: Config.php:175
 msgid "These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
+
+#: Controller/Lead.php:212
+msgid "State"
+msgstr "État"
+
+#: Controller/Lead.php:214
+msgid "Source"
+msgstr "Source"
+
+#: Controller/Lead.php:216
+msgid "Scheduled end"
+msgstr "Fin planifiée"
+
+#: Controller/Lead.php:220
+msgid "Folder"
+msgstr "Dossier"
+
+#: Controller/Lead.php:221
+msgid "Updated by"
+msgstr "Mis à jour par"
+
+#: Controller/Lead.php:222
+msgid "Updated Fields:"
+msgstr "Champs mis à jour :"
+
+#: Controller/Lead.php:223
+#, python-format
+msgid "'%s' changed from '%s' to '%s'."
+msgstr ""
+
+#: Controller/Lead.php:230
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Le prospect %s a changé"
+
+#: Controller/Lead.php:232
+#, python-format
+msgid "Lead %s has been deleted"
+msgstr ""
+
+#: Controller/Lead.php:234
+#, python-format
+msgid "Lead %s has been created"
+msgstr "Le prospect %s a été créé"
+
+#: Model/Lead.php:129
+msgid "Task"
+msgstr "Recherche rapide"
+
+#: Export/Pdf.php:73
+msgid "Lead Data"
+msgstr "Données du prospect"
+
+#: Export/Pdf.php:97
+msgid "End Scheduled"
+msgstr "Fin planifiée"
+
+#: Export/Pdf.php:179
+msgid "Contacts"
+msgstr "Contacts"
+
+#: Export/Pdf.php:213
+msgid "Telephone"
+msgstr "Téléphone"
+
+#: Export/Pdf.php:214
+msgid "Email"
+msgstr "Email"
+
+#: Export/Pdf.php:314
+msgid "low"
+msgstr "basse"
+
+#: Export/Pdf.php:315
+msgid "normal"
+msgstr "normale"
+
+#: Export/Pdf.php:316
+msgid "high"
+msgstr "haute"
+
+#: Export/Pdf.php:317
+msgid "urgent"
+msgstr "urgent"
+
+#: Import/definitions/crm_demo_import_csv.xml:11
+#: Import/definitions/crm_tine_import_csv.xml:11
+msgid "Lead CSV import"
+msgstr ""
+
+#: Import/definitions/crm_demo_import_csv.xml:17
+#: Import/definitions/crm_tine_import_csv.xml:17
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/crm_demo_import_csv.xml:19
+#: Import/definitions/crm_tine_import_csv.xml:19
+msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
+#: Import/Csv.php:131
+msgid "Edit new lead"
+msgstr ""
+
+#: Import/Csv.php:235
+#, python-format
+msgid "The following leads have just been imported into lead list %s"
+msgstr ""
+
+#: Import/Csv.php:240
+#, python-format
+msgid "%s new leads have been imported"
+msgstr ""
+
+#: Acl/Rights.php:105
+msgid "manage shared lead folders"
+msgstr "gérer les dossiers de prospects partagés"
+
+#: Acl/Rights.php:106
+msgid "Create new shared lead folders"
+msgstr "Créer de nouveaux dossiers de prospects partagés"
+
+#: Acl/Rights.php:109
+msgid "manage shared leads favorites"
+msgstr "gérer les favoris de prospects partagés"
+
+#: Acl/Rights.php:110
+msgid "Create or update shared leads favorites"
+msgstr "Créer ou mettre à jour les favoris de prospects partagés"
+
+#~ msgid "Get Notification Emails"
+#~ msgstr "Notifier par courriel"
+
+#~ msgid "Send Notifications Emails for own actions"
+#~ msgstr "Être notifié par courriel de vos propres actions"
+
+#~ msgid "Get notifications emails for actions you did yourself"
+#~ msgstr "Être notifié par courriel des actions faites par vous-même."

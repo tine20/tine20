@@ -18,253 +18,135 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller/Lead.php:205 js/LeadGridDetailsPanel.js:45 js/Contact.js:161
-#: js/Contact.js:356 js/Contact.js:396 js/LeadGridPanel.js:119
-#: Model/Lead.php:123 Config.php:125
-msgid "Customer"
-msgstr "Asiakas"
-
-#: Controller/Lead.php:206
-msgid "State"
-msgstr ""
-
-#: Controller/Lead.php:207 js/Contact.js:252 js/AddToLeadPanel.js:78
-msgid "Role"
-msgstr ""
-
-#: Controller/Lead.php:208
-msgid "Source"
-msgstr "Lähde"
-
-#: Controller/Lead.php:209 Export/Pdf.php:91 js/LeadGridDetailsPanel.js:212
-#: js/LeadEditDialog.js:447
-msgid "Start"
-msgstr "Alku"
-
-#: Controller/Lead.php:210
-msgid "Scheduled end"
-msgstr "Arvioitu päättyminen"
-
-#: Controller/Lead.php:211 Export/Pdf.php:94 js/LeadEditDialog.js:234
-msgid "End"
-msgstr "Loppu"
-
-#: Controller/Lead.php:212 Export/Pdf.php:85 js/Model.js:125
-#: js/LeadGridPanel.js:124
-msgid "Turnover"
-msgstr ""
-
-#: Controller/Lead.php:213 Export/Pdf.php:88 js/Model.js:110 js/Model.js:155
-#: js/LeadGridPanel.js:123 js/LeadEditDialog.js:227
-msgid "Probability"
-msgstr ""
-
-#: Controller/Lead.php:214
-msgid "Folder"
-msgstr "Kansio"
-
-#: Controller/Lead.php:215
-msgid "Updated by"
-msgstr "Päivitetty"
-
-#: Controller/Lead.php:216
-msgid "Updated Fields:"
-msgstr "Päivitetyt kentät:"
-
-#: Controller/Lead.php:217
-#, python-format
-msgid "'%s' changed from '%s' to '%s'."
-msgstr ""
-
-#: Controller/Lead.php:218 js/LeadGridPanel.js:115
-msgid "Tags"
-msgstr ""
-
-#: Controller/Lead.php:224
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Johtaja %s on vaihdettu"
-
-#: Controller/Lead.php:226
-#, python-format
-msgid "Lead %s has been deleted"
-msgstr ""
-
-#: Controller/Lead.php:228
-#, python-format
-msgid "Lead %s has been created"
-msgstr "Johtaja %s on luotu"
-
-#: Export/Pdf.php:73
-msgid "Lead Data"
-msgstr ""
-
-#: Export/Pdf.php:76 js/Model.js:104 js/LeadGridPanel.js:120
-#: js/LeadEditDialog.js:379
-msgid "Leadstate"
-msgstr ""
-
-#: Export/Pdf.php:79 js/Model.js:119 js/LeadGridDetailsPanel.js:222
-#: js/LeadGridPanel.js:121 js/LeadEditDialog.js:396
-msgid "Leadtype"
-msgstr ""
-
-#: Export/Pdf.php:82 js/Model.js:112 js/LeadGridDetailsPanel.js:227
-#: js/LeadGridPanel.js:122 js/LeadEditDialog.js:402
-msgid "Leadsource"
-msgstr ""
-
-#: Export/Pdf.php:97
-msgid "End Scheduled"
-msgstr ""
-
-#: Export/Pdf.php:179
-msgid "Contacts"
-msgstr "Yhteystiedot"
-
-#: Export/Pdf.php:206 js/Contact.js:231
-msgid "Address"
-msgstr "Osoite"
-
-#: Export/Pdf.php:213
-msgid "Telephone"
-msgstr "Puhelin"
-
-#: Export/Pdf.php:214
-msgid "Email"
-msgstr "Sähköposti"
-
-#: Export/Pdf.php:227 js/Task.js:82 js/LeadEditDialog.js:250
-msgid "Tasks"
-msgstr ""
-
-#: Export/Pdf.php:248 js/Task.js:224
-msgid "Due Date"
-msgstr ""
-
-#: Export/Pdf.php:255 js/Task.js:237
-msgid "Priority"
-msgstr ""
-
-#: Export/Pdf.php:273 js/LeadEditDialog.js:261 js/Product.js:85
-msgid "Products"
-msgstr "Tuotteet"
-
-#: Export/Pdf.php:314
-msgid "low"
-msgstr "alhainen"
-
-#: Export/Pdf.php:315
-msgid "normal"
-msgstr "normaali"
-
-#: Export/Pdf.php:316
-msgid "high"
-msgstr "korkea"
-
-#: Export/Pdf.php:317
-msgid "urgent"
-msgstr "tärkeä"
-
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:36
-msgid "All leads I have read grants for"
-msgstr ""
-
-#: Setup/Initialize.php:43
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:44
-msgid "All leads that I have last modified"
-msgstr ""
-
-#: Setup/Initialize.php:53
-msgid "My leads"
-msgstr ""
-
-#: Setup/Initialize.php:54
-msgid "All leads that I am responsible for"
-msgstr ""
-
-#: Setup/Initialize.php:67
-msgid "Leads with overdue tasks"
-msgstr ""
-
 #: Preference.php:37
 msgid "All leads"
 msgstr ""
 
-#: Preference.php:94
+#: Preference.php:92
 msgid "Default Lead List"
 msgstr ""
 
-#: Preference.php:95
+#: Preference.php:93
 msgid "The default list for new leads"
 msgstr ""
 
-#: Preference.php:99
-msgid "Get Notification Emails"
+#: Preference.php:97
+msgid "Get Notification E-mails"
 msgstr ""
 
-#: Preference.php:100
+#: Preference.php:98
 msgid "The level of actions you want to be notified about."
 msgstr ""
 
-#: Preference.php:104
-msgid "Send Notifications Emails for own actions"
+#: Preference.php:102
+msgid "Send Notifications e-mails for own actions"
 msgstr ""
 
-#: Preference.php:105
-msgid "Get notifications emails for actions you did yourself"
+#: Preference.php:103
+msgid "Get notifications e-mails for actions you did yourself"
 msgstr ""
 
-#: Preference.php:108
-msgid "Send Notifications Emails to responsible"
+#: Preference.php:106
+msgid "Send Notifications e-mails to responsible"
 msgstr ""
 
-#: Preference.php:109
-msgid "Get notifications emails for action to responsible"
+#: Preference.php:107
+msgid "Get notifications e-mails for action to responsible"
 msgstr ""
 
-#: Preference.php:112
-msgid "Send Notifications Emails to customer"
+#: Preference.php:110
+msgid "Send Notifications e-mails to customer"
 msgstr ""
 
-#: Preference.php:113
-msgid "Get notifications emails for action to customer"
+#: Preference.php:111
+msgid "Get notifications e-mails for action to customer"
 msgstr ""
 
-#: Preference.php:116
-msgid "Send Notifications Emails to partner"
+#: Preference.php:114
+msgid "Send Notifications e-mails to partner"
 msgstr ""
 
-#: Preference.php:117
-msgid "Get notifications emails for action to partner"
+#: Preference.php:115
+msgid "Get notifications e-mails for action to partner"
 msgstr ""
 
-#: Preference.php:120
+#: Preference.php:118
 msgid "Default Favorite"
 msgstr "Oletus suosikki"
 
-#: Preference.php:121
+#: Preference.php:119
 msgid "The default favorite which is loaded on crm startup"
 msgstr ""
 
-#: Acl/Rights.php:105
-msgid "manage shared lead folders"
-msgstr "hallitse jaettujen johtajien kansioita"
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr ""
 
-#: Acl/Rights.php:106
-msgid "Create new shared lead folders"
-msgstr "Luo uusi jaettu johtajan kansio"
+#: js/LeadGridPanel.js:115 Controller/Lead.php:224
+msgid "Tags"
+msgstr ""
 
-#: Acl/Rights.php:109
-msgid "manage shared leads favorites"
-msgstr "hallitse jaettujen kansioiden suosikeita"
+#: js/LeadGridPanel.js:116 js/Model.js:102
+msgid "Lead name"
+msgstr ""
 
-#: Acl/Rights.php:110
-msgid "Create or update shared leads favorites"
-msgstr "Luo tai päivitä jaettujen johtajien suosikkeja"
+#: js/LeadGridPanel.js:117 js/Contact.js:171 js/Contact.js:355
+#: js/Contact.js:392 Model/Lead.php:122
+msgid "Responsible"
+msgstr ""
+
+#: js/LeadGridPanel.js:118 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
+#: js/Contact.js:357 js/Contact.js:400 Config.php:126
+msgid "Partner"
+msgstr "Partneri"
+
+#: js/LeadGridPanel.js:119 js/LeadGridDetailsPanel.js:45 js/Contact.js:161
+#: js/Contact.js:356 js/Contact.js:396 Config.php:125 Controller/Lead.php:211
+#: Model/Lead.php:123
+msgid "Customer"
+msgstr "Asiakas"
+
+#: js/LeadGridPanel.js:120 js/LeadEditDialog.js:379 js/Model.js:104
+#: Export/Pdf.php:76
+msgid "Leadstate"
+msgstr ""
+
+#: js/LeadGridPanel.js:121 js/LeadGridDetailsPanel.js:222
+#: js/LeadEditDialog.js:396 js/Model.js:119 Export/Pdf.php:79
+msgid "Leadtype"
+msgstr ""
+
+#: js/LeadGridPanel.js:122 js/LeadGridDetailsPanel.js:227
+#: js/LeadEditDialog.js:402 js/Model.js:112 Export/Pdf.php:82
+msgid "Leadsource"
+msgstr ""
+
+#: js/LeadGridPanel.js:123 js/LeadEditDialog.js:227 js/Model.js:110
+#: js/Model.js:155 Controller/Lead.php:219 Export/Pdf.php:88
+msgid "Probability"
+msgstr ""
+
+#: js/LeadGridPanel.js:124 js/Model.js:125 Controller/Lead.php:218
+#: Export/Pdf.php:85
+msgid "Turnover"
+msgstr ""
+
+#: js/LeadGridPanel.js:126 js/LeadGridDetailsPanel.js:217
+#: js/LeadEditDialog.js:453 js/Model.js:132
+msgid "Estimated end"
+msgstr ""
+
+#: js/LeadGridPanel.js:127
+msgid "Probable Turnover"
+msgstr ""
+
+#: js/LeadGridPanel.js:128 js/LeadEditDialog.js:434 js/Model.js:133
+msgid "Resubmission Date"
+msgstr ""
+
+#: js/LeadGridPanel.js:172
+msgid "Import leads"
+msgstr ""
 
 #: js/LeadGridContactFilter.js:47
 msgid "Contact"
@@ -274,67 +156,97 @@ msgstr ""
 msgid "CRM Role"
 msgstr ""
 
-#: js/Model.js:52 js/AddToLeadPanel.js:73 js/LeadEditDialog.js:308
+#: js/Task.js:82 js/LeadEditDialog.js:250 Export/Pdf.php:227
+msgid "Tasks"
+msgstr ""
+
+#: js/Task.js:105
+msgid "No Tasks to display"
+msgstr ""
+
+#: js/Task.js:216
+msgid "Summary"
+msgstr "Yhteenveto"
+
+#: js/Task.js:220
+msgid "Add a task..."
+msgstr ""
+
+#: js/Task.js:224 Export/Pdf.php:248
+msgid "Due Date"
+msgstr ""
+
+#: js/Task.js:237 Export/Pdf.php:255
+msgid "Priority"
+msgstr ""
+
+#: js/Task.js:252
+msgid "Percent"
+msgstr "Prosenttia"
+
+#: js/Task.js:265 js/LeadGridDetailsPanel.js:207
+msgid "Status"
+msgstr "Tila"
+
+#: js/Task.js:281
+msgid "Organizer"
+msgstr ""
+
+#: js/LinkGridPanel.js:34
+#, python-brace-format
+msgid "Add new {0}"
+msgstr ""
+
+#: js/LinkGridPanel.js:56 js/Product.js:185
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr ""
+
+#: js/LinkGridPanel.js:57 js/Product.js:186
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr ""
+
+#: js/LinkGridPanel.js:72
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Muokkaa {0}"
+
+#: js/LinkGridPanel.js:73
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Muokkaa valittuja {0}"
+
+#: js/AddToLeadPanel.js:31
+msgid "Please choose the Lead to add the contacts to"
+msgstr ""
+
+#: js/AddToLeadPanel.js:36
+msgid "Please select the attenders' role"
+msgstr ""
+
+#: js/AddToLeadPanel.js:73 js/LeadEditDialog.js:308 js/Model.js:52
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:56
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:56
-msgid "lead lists"
+#: js/AddToLeadPanel.js:74
+msgid "Select Lead"
 msgstr ""
 
-#: js/Model.js:100
-msgid "Quick Search"
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:213
+msgid "Role"
 msgstr ""
 
-#: js/Model.js:102 js/LeadGridPanel.js:116
-msgid "Lead name"
+#: js/AddToLeadPanel.js:79
+msgid "Select Role"
 msgstr ""
 
-#: js/Model.js:127
-msgid "Last Modified Time"
-msgstr "Muokattu viimeksi"
-
-#: js/Model.js:128
-msgid "Last Modified By"
-msgstr "Muokkasi viimeksi"
-
-#: js/Model.js:129
-msgid "Creation Time"
-msgstr "Luontiaika"
-
-#: js/Model.js:130
-msgid "Created By"
-msgstr "Luonut"
-
-#: js/Model.js:132 js/LeadGridDetailsPanel.js:217 js/LeadGridPanel.js:126
-#: js/LeadEditDialog.js:453
-msgid "Estimated end"
+#: js/AddToLeadPanel.js:93
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
 msgstr ""
-
-#: js/Model.js:133 js/LeadGridPanel.js:128 js/LeadEditDialog.js:434
-msgid "Resubmission Date"
-msgstr ""
-
-#: js/Model.js:156
-msgid "X Lead"
-msgstr ""
-
-#: js/Model.js:169
-msgid "Archived"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:45 js/Contact.js:181 js/Contact.js:357
-#: js/Contact.js:400 js/LeadGridPanel.js:118 Config.php:126
-msgid "Partner"
-msgstr "Partneri"
 
 #: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
 msgid "Phone"
@@ -368,17 +280,13 @@ msgstr ""
 msgid "City"
 msgstr ""
 
-#: js/LeadGridDetailsPanel.js:207 js/Task.js:265
-msgid "Status"
-msgstr "Tila"
+#: js/LeadGridDetailsPanel.js:212 js/LeadEditDialog.js:447
+#: Controller/Lead.php:215 Export/Pdf.php:91
+msgid "Start"
+msgstr "Alku"
 
 #: js/Contact.js:162
 msgid "Change type to Customer"
-msgstr ""
-
-#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
-#: js/LeadGridPanel.js:117 Model/Lead.php:122
-msgid "Responsible"
 msgstr ""
 
 #: js/Contact.js:172
@@ -401,6 +309,10 @@ msgstr ""
 msgid "Name"
 msgstr "Nimi"
 
+#: js/Contact.js:231 Export/Pdf.php:206
+msgid "Address"
+msgstr "Osoite"
+
 #: js/Contact.js:242
 msgid "Data"
 msgstr "Tiedot"
@@ -409,83 +321,17 @@ msgstr "Tiedot"
 msgid "Cellphone"
 msgstr "Matkapuhelin"
 
-#: js/LinkGridPanel.js:34
-#, python-brace-format
-msgid "Add new {0}"
-msgstr ""
-
-#: js/LinkGridPanel.js:56 js/Product.js:185
-#, python-brace-format
-msgid "Unlink {0}"
-msgstr ""
-
-#: js/LinkGridPanel.js:57 js/Product.js:186
-#, python-brace-format
-msgid "Unlink selected {0}"
-msgstr ""
-
-#: js/LinkGridPanel.js:72
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "Muokkaa {0}"
-
-#: js/LinkGridPanel.js:73
-#, python-brace-format
-msgid "Edit selected {0}"
-msgstr "Muokkaa valittuja {0}"
-
-#: js/Task.js:105
-msgid "No Tasks to display"
-msgstr ""
-
-#: js/Task.js:216
-msgid "Summary"
-msgstr "Yhteenveto"
-
-#: js/Task.js:220
-msgid "Add a task..."
-msgstr ""
-
-#: js/Task.js:252
-msgid "Percent"
-msgstr "Prosenttia"
-
-#: js/Task.js:281
-msgid "Organizer"
-msgstr ""
-
-#: js/AddToLeadPanel.js:31
-msgid "Please choose the Lead to add the contacts to"
-msgstr ""
-
-#: js/AddToLeadPanel.js:36
-msgid "Please select the attenders' role"
-msgstr ""
-
-#: js/AddToLeadPanel.js:74
-msgid "Select Lead"
-msgstr ""
-
-#: js/AddToLeadPanel.js:79
-msgid "Select Role"
-msgstr ""
-
-#: js/AddToLeadPanel.js:93
-#, python-brace-format
-msgid "Adding {0} contacts to lead"
-msgstr ""
-
-#: js/LeadGridPanel.js:127
-msgid "Probable Turnover"
-msgstr ""
-
-#: js/LeadGridPanel.js:172
-msgid "Import leads"
-msgstr ""
+#: js/LeadEditDialog.js:234 Controller/Lead.php:217 Export/Pdf.php:94
+msgid "End"
+msgstr "Loppu"
 
 #: js/LeadEditDialog.js:251
 msgid "You do not have the run right for the Tasks application or it is not activated."
 msgstr ""
+
+#: js/LeadEditDialog.js:261 js/Product.js:85 Export/Pdf.php:273
+msgid "Products"
+msgstr "Tuotteet"
 
 #: js/LeadEditDialog.js:262
 msgid "You do not have the run right for the Sales application or it is not activated."
@@ -507,8 +353,42 @@ msgstr "Kuvaus"
 msgid "Enter description"
 msgstr ""
 
-#: js/Crm.js:24
-msgid "New Lead"
+#: js/Model.js:56
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:56
+msgid "lead lists"
+msgstr ""
+
+#: js/Model.js:100
+msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:127
+msgid "Last Modified Time"
+msgstr "Muokattu viimeksi"
+
+#: js/Model.js:128
+msgid "Last Modified By"
+msgstr "Muokkasi viimeksi"
+
+#: js/Model.js:129
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/Model.js:130
+msgid "Created By"
+msgstr "Luonut"
+
+#: js/Model.js:156
+msgid "X Lead"
+msgstr ""
+
+#: js/Model.js:169
+msgid "Archived"
 msgstr ""
 
 #: js/Product.js:134
@@ -527,37 +407,28 @@ msgstr "Määrä"
 msgid "Search for Products to add ..."
 msgstr ""
 
-#: Import/Csv.php:131
-msgid "Edit new lead"
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:36
+msgid "All leads I have read grants for"
 msgstr ""
 
-#: Import/Csv.php:235
-#, python-format
-msgid "The following leads have just been imported into lead list %s"
+#: Setup/Initialize.php:43
+msgid "Last modified by me"
 msgstr ""
 
-#: Import/Csv.php:240
-#, python-format
-msgid "%s new leads have been imported"
+#: Setup/Initialize.php:44
+msgid "All leads that I have last modified"
 msgstr ""
 
-#: Import/definitions/crm_tine_import_csv.xml:11
-#: Import/definitions/crm_demo_import_csv.xml:11
-msgid "Lead CSV import"
+#: Setup/Initialize.php:53
+msgid "My leads"
 msgstr ""
 
-#: Import/definitions/crm_tine_import_csv.xml:17
-#: Import/definitions/crm_demo_import_csv.xml:17
-msgid "Import list (###CURRENTDATE###)"
+#: Setup/Initialize.php:54
+msgid "All leads that I am responsible for"
 msgstr ""
 
-#: Import/definitions/crm_tine_import_csv.xml:19
-#: Import/definitions/crm_demo_import_csv.xml:19
-msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
-#: Model/Lead.php:129
-msgid "Task"
+#: Setup/Initialize.php:67
+msgid "Leads with overdue tasks"
 msgstr ""
 
 #: Config.php:73
@@ -617,7 +488,7 @@ msgid "Enabled Features"
 msgstr ""
 
 #: Config.php:139
-msgid "Enabled Features in Crm Application."
+msgid "Enabled Features in CRM Application."
 msgstr ""
 
 #: Config.php:146
@@ -633,11 +504,11 @@ msgid "Automatically creates a task for the responsible person if a new lead is 
 msgstr ""
 
 #: Config.php:164
-msgid "Send notification email on lead import"
+msgid "Send notification e-mail on lead import"
 msgstr ""
 
 #: Config.php:166
-msgid "Sends an email to all responsible persons for the imported leads."
+msgid "Sends an e-mail to all responsible persons for the imported leads."
 msgstr ""
 
 #: Config.php:173
@@ -647,3 +518,132 @@ msgstr ""
 #: Config.php:175
 msgid "These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
+
+#: Controller/Lead.php:212
+msgid "State"
+msgstr ""
+
+#: Controller/Lead.php:214
+msgid "Source"
+msgstr "Lähde"
+
+#: Controller/Lead.php:216
+msgid "Scheduled end"
+msgstr "Arvioitu päättyminen"
+
+#: Controller/Lead.php:220
+msgid "Folder"
+msgstr "Kansio"
+
+#: Controller/Lead.php:221
+msgid "Updated by"
+msgstr "Päivitetty"
+
+#: Controller/Lead.php:222
+msgid "Updated Fields:"
+msgstr "Päivitetyt kentät:"
+
+#: Controller/Lead.php:223
+#, python-format
+msgid "'%s' changed from '%s' to '%s'."
+msgstr ""
+
+#: Controller/Lead.php:230
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Johtaja %s on vaihdettu"
+
+#: Controller/Lead.php:232
+#, python-format
+msgid "Lead %s has been deleted"
+msgstr ""
+
+#: Controller/Lead.php:234
+#, python-format
+msgid "Lead %s has been created"
+msgstr "Johtaja %s on luotu"
+
+#: Model/Lead.php:129
+msgid "Task"
+msgstr ""
+
+#: Export/Pdf.php:73
+msgid "Lead Data"
+msgstr ""
+
+#: Export/Pdf.php:97
+msgid "End Scheduled"
+msgstr ""
+
+#: Export/Pdf.php:179
+msgid "Contacts"
+msgstr "Yhteystiedot"
+
+#: Export/Pdf.php:213
+msgid "Telephone"
+msgstr "Puhelin"
+
+#: Export/Pdf.php:214
+msgid "Email"
+msgstr "Sähköposti"
+
+#: Export/Pdf.php:314
+msgid "low"
+msgstr "alhainen"
+
+#: Export/Pdf.php:315
+msgid "normal"
+msgstr "normaali"
+
+#: Export/Pdf.php:316
+msgid "high"
+msgstr "korkea"
+
+#: Export/Pdf.php:317
+msgid "urgent"
+msgstr "tärkeä"
+
+#: Import/definitions/crm_demo_import_csv.xml:11
+#: Import/definitions/crm_tine_import_csv.xml:11
+msgid "Lead CSV import"
+msgstr ""
+
+#: Import/definitions/crm_demo_import_csv.xml:17
+#: Import/definitions/crm_tine_import_csv.xml:17
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/crm_demo_import_csv.xml:19
+#: Import/definitions/crm_tine_import_csv.xml:19
+msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
+#: Import/Csv.php:131
+msgid "Edit new lead"
+msgstr ""
+
+#: Import/Csv.php:235
+#, python-format
+msgid "The following leads have just been imported into lead list %s"
+msgstr ""
+
+#: Import/Csv.php:240
+#, python-format
+msgid "%s new leads have been imported"
+msgstr ""
+
+#: Acl/Rights.php:105
+msgid "manage shared lead folders"
+msgstr "hallitse jaettujen johtajien kansioita"
+
+#: Acl/Rights.php:106
+msgid "Create new shared lead folders"
+msgstr "Luo uusi jaettu johtajan kansio"
+
+#: Acl/Rights.php:109
+msgid "manage shared leads favorites"
+msgstr "hallitse jaettujen kansioiden suosikeita"
+
+#: Acl/Rights.php:110
+msgid "Create or update shared leads favorites"
+msgstr "Luo tai päivitä jaettujen johtajien suosikkeja"
