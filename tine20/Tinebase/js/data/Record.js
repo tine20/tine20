@@ -257,6 +257,35 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             this.set(field.name, newValue);
         }, this);
         this.endEdit();
+    },
+    
+    resolveForeignRecords: async function(fields) {
+        const fieldDefs = this.constructor.getModelConfiguration().fields;
+        const pms = [];
+        
+        _.each(this.constructor.getModelConfiguration().fields, (def, fieldName) => {
+            if (fields && _.indexOf(fields, fieldName) < 0) return;
+            
+            let value = this.get(fieldName);
+            if (_.get(def, 'type') === 'record' && value && ! _.isFunction(_.get(value, 'beginEdit'))) {
+                const recordClass = Tine.Tinebase.data.RecordMgr.get(def.config.appName, def.config.modelName);
+                if (! recordClass) return;
+                
+                if (String(value)[0] === '{' || _.isObject(value)) {
+                    this.set(fieldName, Tine.Tinebase.data.Record.setFromJson(value, recordClass));
+                } else {
+                    const proxy = new Tine.Tinebase.data.RecordProxy({
+                        recordClass: recordClass
+                    });
+                    pms.push(proxy.promiseLoadRecord(value)
+                        .then((record) => {
+                            this.set(fieldName, record);
+                        }));
+                }
+            }
+        });
+        
+        await Promise.all(pms);
     }
 });
 

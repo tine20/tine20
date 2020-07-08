@@ -186,9 +186,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 if (isset($_value['from']) && isset($_value['until'])) {
                     return [
                         $_value['from'] instanceof Tinebase_DateTime
-                            ? $_value['from']->toString('Y-m-t') : substr($_value['from'], 0, 10),
+                            ? $_value['from']->toString('Y-m-d') : substr($_value['from'], 0, 10),
                         $_value['until'] instanceof Tinebase_DateTime
-                            ? $_value['until']->toString('Y-m-t') : substr($_value['until'], 0, 10),
+                            ? $_value['until']->toString('Y-m-d') : substr($_value['until'], 0, 10),
                     ];
                 } else {
                     throw new Tinebase_Exception_UnexpectedValue('did expect from and until in value');
@@ -202,7 +202,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
 
                 /******** anytime ******/
                 case 'anytime':
-                    $last = $date->toString('Y-m-t');
+                    $last = $date->toString('Y-m-d');
                     $first = '1970-01-01';
                     
                     $value = array(

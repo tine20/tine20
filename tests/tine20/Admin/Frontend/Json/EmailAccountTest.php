@@ -534,6 +534,14 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->_sendMessageWithAccount(null, $userInternalAccount['email']);
     }
 
+    /**
+     * system -> shared
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     public function testConvertEmailAccount()
     {
         $this->_testNeedsTransaction();

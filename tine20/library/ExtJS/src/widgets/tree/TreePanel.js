@@ -119,10 +119,11 @@ new Ext.Viewport({
 Ext.tree.TreePanel = Ext.extend(Ext.Panel, {
     rootVisible : true,
     animate : Ext.enableFx,
-    lines : true,
+    lines : false,
     enableDD : false,
     hlDrop : Ext.enableFx,
     pathSeparator : '/',
+    useArrows: true,
 
     /**
      * @cfg {Array} bubbleEvents

@@ -61,6 +61,45 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertContains('RRULE:FREQ=DAILY', $result);
     }
 
+    public function testExportRecurEventWithException()
+    {
+        $this->_testNeedsTransaction();
+
+        $event = $this->_getRecurEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+
+        $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, Tinebase_DateTime::now());
+        $nextOccurance->summary = 'hard working woman needs some silence';
+        Calendar_Controller_Event::getInstance()->createRecurException($nextOccurance);
+
+        $result = $this->_export('stdout=1');
+
+        self::assertContains('hard working man needs some silence', $result);
+        self::assertContains('hard working woman needs some silence', $result);
+        self::assertContains('RRULE:FREQ=DAILY', $result);
+        self::assertContains('RECURRENCE-ID', $result);
+    }
+
+    public function testExportEventWithAlarm()
+    {
+        $this->_testNeedsTransaction();
+
+        $event = $this->_getEvent();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        Calendar_Controller_Event::getInstance()->create($event);
+
+        $result = $this->_export('stdout=1');
+
+        self::assertContains('Early to bed and early to rise', $result);
+        self::assertContains('VALARM', $result);
+    }
+
     public function testExportEventWithAttachment()
     {
         $this->_testNeedsTransaction();
@@ -74,7 +113,8 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         $result = $this->_export('stdout=1');
 
         self::assertContains('Early to bed and early to rise', $result);
-        self::assertContains('ATTACH;ENCODING=BASE64;VALUE=BINARY;FILENAME=tempfile.tmp:dGVzdCBmaWxlIGNvb, nRlbnQ=', $result);
+        self::assertContains('ATTACH;ENCODING=BASE64;VALUE=BINARY;FILENAME=tempfile.tmp', $result);
+        self::assertContains('X-APPLE-FILENAME=tempfile.tmp;FMTTYPE=text/plain:dGVzdCBmaWxlIGNvbn', $result);
     }
 
     public function testExportIntoFile()

@@ -196,13 +196,11 @@ class Felamimail_Sieve_Rule
      */
     public function __toString() 
     {
-        $rule = sprintf("%s (%s) {\r\n%s\r\n}\r\n",
+        return sprintf("%s (%s) {\r\n%s\r\n}\r\n",
             $this->getSieveConjunction(),
             $this->_getSieveConditions(),
             $this->_getSieveAction()
         );
-        
-        return $rule;
     }
     
     /**

@@ -220,13 +220,15 @@ class Calendar_Controller_PollTest extends TestCase
         "status":"TENTATIVE",
         "user_type":"user",
         "user_id":"{$contact_id}",
-        "status_authkey":"{$statusData['status'][0]['status_authkey']}"
+        "status_authkey":"{$statusData['status'][0]['status_authkey']}",
+        "seq":1
     } , {
         "cal_event_id":"{$statusData['status'][1]['cal_event_id']}",
         "status":"DECLINED",
         "user_type":"user",
         "user_id":"{$contact_id}",
-        "status_authkey":"{$statusData['status'][1]['status_authkey']}"
+        "status_authkey":"{$statusData['status'][1]['status_authkey']}",
+        "seq":1
     }]
 }
 EOT;
@@ -241,12 +243,45 @@ EOT;
         $event = Calendar_Controller_Event::getInstance()->get($statusData['status'][0]['cal_event_id']);
         $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
         $this->assertEquals('TENTATIVE', $attendee->status);
+        static::assertEquals(2, $attendee->seq);
 
         $event = Calendar_Controller_Event::getInstance()->get($statusData['status'][1]['cal_event_id']);
         $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
         $this->assertEquals('DECLINED', $attendee->status);
+        static::assertEquals(2, $attendee->seq);
 
+        $requestBody = <<<EOT
+{
+    "status":[{
+        "cal_event_id":"{$statusData['status'][0]['cal_event_id']}",
+        "status":"DECLINED",
+        "user_type":"user",
+        "user_id":"{$contact_id}",
+        "status_authkey":"{$statusData['status'][0]['status_authkey']}",
+        "seq":1
+    } , {
+        "cal_event_id":"{$statusData['status'][1]['cal_event_id']}",
+        "status":"TENTATIVE",
+        "user_type":"user",
+        "user_id":"{$contact_id}",
+        "status_authkey":"{$statusData['status'][1]['status_authkey']}",
+        "seq":2
+    }]
+}
+EOT;
+        $request->setContent($requestBody);
+        $response = $this->_uit->publicApiUpdateAttendeeStatus($pollData['id']);
+        $this->assertEquals(200, $response->getStatusCode());
 
+        $event = Calendar_Controller_Event::getInstance()->get($statusData['status'][0]['cal_event_id']);
+        $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
+        $this->assertEquals('TENTATIVE', $attendee->status);
+        static::assertEquals(2, $attendee->seq);
+
+        $event = Calendar_Controller_Event::getInstance()->get($statusData['status'][1]['cal_event_id']);
+        $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
+        $this->assertEquals('TENTATIVE', $attendee->status);
+        static::assertEquals(3, $attendee->seq);
     }
 
     /**

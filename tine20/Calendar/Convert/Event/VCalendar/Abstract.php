@@ -23,6 +23,13 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * @const
      */
     const OPTION_ADD_ATTACHMENTS_BINARY = 'addAttachmentsBinary';
+
+    /**
+     * add attachment content max size (bytes)
+     * @const
+     */
+    const OPTION_ADD_ATTACHMENTS_MAX_SIZE = 'addAttachmentsMaxSize';
+
     /**
      * add attachment url
      * @const
@@ -53,11 +60,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * options array
      * @var array
      * 
-     * TODO allow more options
-     * 
      * current options:
      *  - onlyBasicData (only use basic event data when converting from VCALENDAR to Tine 2.0)
      *  - addAttachmentsURL
+     *  - addAttachmentsMaxSize
+     *  - addAttachmentsBinary
      */
     protected $_options = array();
     
@@ -385,42 +392,80 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         }
         
         if ($event->attachments instanceof Tinebase_Record_RecordSet) {
-            $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
-            foreach ($event->attachments as $attachment) {
-                $filename = rawurlencode($attachment->name);
-                if (isset($this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY])
-                    && $this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY]
-                ) {
-                    $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
-                    $value = base64_encode($content);
-                    $attachmentData = [
-                        'ENCODING' => 'BASE64',
-                        'VALUE' => 'BINARY',
-                        'FILENAME'   => $filename,
-                    ];
-                } else {
-                    $value = "{$baseUrl}{$filename}";
-                    $attachmentData = [
-                        'MANAGED-ID' => $attachment->hash,
-                        'FMTTYPE'    => $attachment->contenttype,
-                        'SIZE'       => $attachment->size,
-                        'FILENAME'   => $filename,
-                    ];
-                }
-                $attach = $vcalendar->createProperty('ATTACH', $value, $attachmentData, 'TEXT');
-                $vevent->add($attach);
-            }
-            if ($event->attachments->count()
-                && isset($this->_options[self::OPTION_ADD_ATTACHMENTS_URL])
-                && $this->_options[self::OPTION_ADD_ATTACHMENTS_URL]
-            ) {
-                $vevent->add($vcalendar->createProperty('URL', $baseUrl));
-            }
+            $this->_addAttachments($vevent, $vcalendar, $event);
         }
         
         $vcalendar->add($vevent);
     }
-    
+
+    protected function _addAttachments($vevent, $vcalendar, $event)
+    {
+        $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
+        $maxSize = isset($this->_options[self::OPTION_ADD_ATTACHMENTS_MAX_SIZE])
+            ? $this->_options[self::OPTION_ADD_ATTACHMENTS_MAX_SIZE]
+            : 10 * 1024 * 1024; // 10 MB
+        foreach ($event->attachments as $attachment) {
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Adding attachment: ' . print_r($attachment->toArray(), true));
+
+            if ($attachment->size > $maxSize) {
+                // NOTE: sabredav component->serialize fails with bigger files (> 10 MB)
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    ' Not adding attachment because it is bigger than configured max size: ' . Tinebase_Helper::formatBytes($attachment->size));
+                continue;
+            }
+
+            $filename = rawurlencode($this->_getAttachmentFilename($attachment->name));
+            if (isset($this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY])
+                && $this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY]
+            ) {
+                $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
+                $value = base64_encode($content);
+                $attachmentData = [
+                    'ENCODING' => 'BASE64',
+                    'VALUE' => 'BINARY',
+                    'FILENAME' => $filename,
+                    'X-FILENAME' => $filename,
+                    'X-APPLE-FILENAME' => $filename,
+                    'FMTTYPE' => $attachment->contenttype,
+                ];
+            } else {
+                $value = "{$baseUrl}{$filename}";
+                $attachmentData = [
+                    'MANAGED-ID' => $attachment->hash,
+                    'FMTTYPE'    => $attachment->contenttype,
+                    'SIZE'       => $attachment->size,
+                    'FILENAME'   => $filename,
+                ];
+            }
+            $attach = $vcalendar->createProperty('ATTACH', $value, $attachmentData, 'TEXT');
+            $vevent->add($attach);
+        }
+        if ($event->attachments->count()
+            && isset($this->_options[self::OPTION_ADD_ATTACHMENTS_URL])
+            && $this->_options[self::OPTION_ADD_ATTACHMENTS_URL]
+        ) {
+            $vevent->add($vcalendar->createProperty('URL', $baseUrl));
+        }
+    }
+
+    /**
+     * convert to ascii string
+     *
+     * @param string $string
+     * @return string
+     *
+     * TODO move this to Tinebase_Helper
+     */
+    protected function _getAttachmentFilename($string)
+    {
+        $filename = str_replace([' ', '/'], '_', $string);
+        $filename = iconv("UTF-8", "ascii//TRANSLIT", $filename);
+
+        return $filename;
+    }
+
     /**
      * add event attendee to VEVENT object 
      * 

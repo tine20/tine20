@@ -156,7 +156,7 @@ Tine.widgets.exportAction.downloadExport = function(exportJob) {
                 failure: reject,
                 url: 'index.php',
                 method: 'POST',
-                timeout: 300000
+                timeout: 1800000 // 30 minutes - this might take a while
             });
         });
     }

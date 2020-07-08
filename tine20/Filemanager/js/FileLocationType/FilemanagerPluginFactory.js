@@ -9,7 +9,7 @@
 Ext.ns('Tine.Filemanager.FileLocationType');
 
 Tine.Filemanager.FileLocationType.FilemanagerPluginFactory = async function(config) {
-    return import('./FilemanagerPlugin').then(() => {
+    return import(/* webpackChunkName: "Filemanager/js/FilemanagerFileLocationPlugin" */ './FilemanagerPlugin').then(() => {
         return new Tine.Filemanager.FileLocationType.FilemanagerPlugin(config);
     });
 }

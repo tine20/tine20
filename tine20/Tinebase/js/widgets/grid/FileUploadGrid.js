@@ -478,9 +478,16 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (record && record.get(this.filesProperty)) {
             var files = record.get(this.filesProperty);
             for (var i = 0; i < files.length; i += 1) {
-                var file = new Ext.ux.file.Upload.file(files[i]);
-                file.data.status = 'complete';
-                this.store.addUnique(file, 'name');
+                const existing = this.store.getById(files[i].id);
+                if (existing) {
+                    _.each(files[i], (value, key) => {
+                        existing.set(value, key);
+                    });
+                } else {
+                    var file = new Ext.ux.file.Upload.file(files[i]);
+                    file.data.status = 'complete';
+                    this.store.addUnique(file, 'name');
+                }
             }
         }
     },
@@ -539,30 +546,28 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * upload new file and add to store
      */
     onFilesSelect: function (fileList) {
-        if (_.get(fileList, '[0].plugin' === 'filemanager')) {
+        if (_.get(fileList, '[0].type') === 'fm_node') {
             this.onFileSelectFromFilemanager(fileList);
-            return;
+        } else {
+            Ext.each(fileList, function (file) {
+                var upload = new Ext.ux.file.Upload({
+                    file: file
+                });
+
+                var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
+                var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
+
+                upload.on('uploadfailure', this.onUploadFail, this);
+                upload.on('uploadcomplete', this.onUploadComplete, fileRecord);
+                upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
+
+                if (fileRecord.get('status') !== 'failure') {
+                    this.store.addUnique(fileRecord, 'name');
+                }
+            }, this);
         }
 
-        Ext.each(fileList, function (file) {
-            var upload = new Ext.ux.file.Upload({
-                file: file
-            });
-
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
-
-            upload.on('uploadfailure', this.onUploadFail, this);
-            upload.on('uploadcomplete', this.onUploadComplete, fileRecord);
-            upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
-
-            if (fileRecord.get('status') !== 'failure') {
-                this.store.addUnique(fileRecord, 'name');
-            }
-        }, this);
-
         this.fireEvent('filesSelected');
-
     },
 
     /**
@@ -574,8 +579,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var me = this;
 
         Ext.each(nodes, function (node) {
-            var record = new Tine.Filemanager.Model.Node(node);
-
+            const nodeData = _.get(node, 'node_id');
+            const record = Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
+            _.set(record, 'data.type', record.get('contenttype'));
+            
             if (me.store.find('name', record.get('name')) === -1) {
                 me.store.add(record);
             } else {

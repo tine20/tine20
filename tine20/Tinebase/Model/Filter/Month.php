@@ -86,7 +86,8 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
             } else {
                 $split = explode('-', $this->_value);
                 if (!((strlen($this->_value) == 7) && ((int) $split[0] > 1900) && ((int) $split[1] > 0) && ((int) $split[1] < 13))) {
-                    throw new Tinebase_Exception_MonthFormat();
+                    // set default value
+                    $this->_value = '0000-00';
                 }
                 
                 $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " = (?)", $this->_value));

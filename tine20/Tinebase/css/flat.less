@@ -267,6 +267,9 @@ ul.x-tab-strip-top {
   & .x-toolbar {
     background-image: none;
     background-color: @focusColor;
+    & .renderer_accountUserChangedIcon{
+      background-color: white !important;
+    }
   }
   & .x-btn {
     color: black;
@@ -319,6 +322,9 @@ ul.x-tab-strip-top {
   padding: 0;
 }
 
+.x-toolbar-more-icon {
+  background-image: url('../../images/icon-set/icon_dblarrow_right.svg') !important;
+}
 /* MAIN NORTH TOOLBAR */
 .tine-mainscreen-centerpanel-north {
   #button(@northTbColor);
@@ -884,15 +890,19 @@ td.x-date-mp-sel a,
 
 ///* TOOLS */
 // problems with trees yet
-//.x-tool {
-//  background-size: 13px 13px;
-//  background-position: 1px 1px !important;
-//
-//  &:hover {
-//    background-size: 15px 15px;
-//    background-position: 0 0 !important;
-//  }
-//}
+.x-tool {
+  background-size: 13px 13px;
+  background-position: 1px 1px !important;
+  background-image: url(../../images/icon-set/icon_arrow_up.svg);
+
+  &:hover {
+    background-size: 15px 15px;
+    background-position: 0 0 !important;
+  }
+  .x-panel-collapsed & {
+    background-image:url(../../images/icon-set/icon_arrow_down.svg);
+  }
+}
 //
 //.x-tool-close {
 //  background-image: url('../../images/icon-set/icon_clear.svg') !important;
@@ -983,6 +993,36 @@ td.x-date-mp-sel a,
 
 .x-tree-node .x-tree-selected {
   background-color: @selectionColor;
+}
+
+.x-tree-arrows {
+  .x-tree-elbow-minus,
+  .x-tree-elbow-plus,
+  .x-tree-elbow-end-minus,
+  .x-tree-elbow-end-plus {
+    background-position: 3px 3px;
+    background-size: 12px;
+  }
+
+  .x-tree-ec-over {
+    .x-tree-elbow-minus,
+    .x-tree-elbow-plus,
+    .x-tree-elbow-end-minus,
+    .x-tree-elbow-end-plus {
+      background-position: 2px 2px;
+      background-size: 14px;
+    }
+  }
+
+  .x-tree-elbow-minus,
+  .x-tree-elbow-end-minus {
+    background-image: url('../../images/icon-set/icon_arrow_full_45.svg');
+  }
+
+  .x-tree-elbow-plus,
+  .x-tree-elbow-end-plus{
+    background-image: url('../../images/icon-set/icon_arrow_right.svg');
+  }
 }
 
 /* ARROW COLLAPSE */

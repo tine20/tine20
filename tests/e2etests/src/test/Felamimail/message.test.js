@@ -9,7 +9,7 @@ beforeAll(async () => {
 
 describe('message', () => {
     let popupWindow;
-    test('compose message with attachment', async () => {
+    test('compose message with uploaded attachment', async () => {
         popupWindow = await lib.getEditDialog('Verfassen');
         let currentUser = await lib.getCurrentUser(popupWindow);
         // add recipient
@@ -37,6 +37,13 @@ describe('message', () => {
         await expect(popupWindow).toClick('button', {text: 'Senden'});
     });
 
+    // test('compose message with filemanager attachment', async () => {
+    //     await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+    //     await expect(page).toClick('.x-menu-item-text', {text: 'Dateimanager'});
+    //    
+    //     // @TODO
+    // });
+    
     let newMail;
     test('fetch messages', async () => {
         await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');

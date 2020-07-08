@@ -17,7 +17,7 @@
 class HumanResources_Setup_Uninitialize extends Setup_Uninitialize
 {
     /**
-     * uninit scheduler tasks
+     * uninit COR system customfields
      */
     protected function _uninitializeCORSystemCustomField()
     {
@@ -28,6 +28,10 @@ class HumanResources_Setup_Uninitialize extends Setup_Uninitialize
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {}
+        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Throwable $t) {
+            // problem!
+            Tinebase_Exception::log($t);
+        }
     }
 }

@@ -1193,6 +1193,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         self::assertTrue(file_exists($extractedFile), 'did not find extracted '
             . $extractedFile . ' file in dir');
         $content = file_get_contents($extractedFile);
+        unlink($extractedFile);
         $zip->close();
 
         return $content;

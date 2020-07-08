@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  RAII
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -39,5 +39,19 @@ class Tinebase_RAII
     public function release()
     {
         ($this->releaseFunc)();
+    }
+
+    public static function getTransactionManagerRAII()
+    {
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        // if $transactionId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
+        return (new static(function() use (&$transactionId) {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }))->setReleaseFunc(function () use (&$transactionId) {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transId = null;
+        });
     }
 }

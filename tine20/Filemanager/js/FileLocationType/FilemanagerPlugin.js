@@ -66,7 +66,8 @@ Ext.extend(Tine.Filemanager.FileLocationType.FilemanagerPlugin, Tine.Tinebase.wi
     getFileList: function() {
         return _.map(this.pluginPanel.selection, (node) => {
             return {
-                fm_path: node.path
+                fm_path: node.path,
+                node_id: node
             };
         });
     },

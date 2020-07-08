@@ -116,36 +116,4 @@ class Tinebase_Server_RoutingTests extends TestCase
         self::assertNotEmpty($content);
         self::assertEquals('{"status":"pass","problems":[]}', $content);
     }
-
-    public function testOCStatus()
-    {
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
-            'GET /status.php HTTP/1.1' . "\r\n"
-            . 'Host: localhost' . "\r\n"
-            . 'User-Agent: Tine 2.0 UNITTEST of Tine20Drive' . "\r\n"
-            . 'Accept: */*' . "\r\n"
-            . "\r\n"
-        ));
-
-        $data = new Tinebase_Frontend_Json();
-        $registryData = $data->getRegistryData();
-        $version = $registryData['version'];
-
-        $values = array(
-            'installed'     => true,
-            'version'       => $version['codeName'],
-            'versionstring' => $version['packageString'],
-            'maintenance'   => Tinebase_Core::inMaintenanceMode(),
-            'edition'       => $version['buildType'],
-            'productname'   => 'Tine 2.0' // lets try it ;-)
-        );
-
-        $content = $this->_emitRequest($request);
-
-        self::assertNotEmpty($content);
-        self::assertContains($values['productname'], $content);
-        self::assertContains($values['edition'], $content);
-        self::assertContains($values['version'], $content);
-        self::assertContains($values['versionstring'], $content);
-    }
 }

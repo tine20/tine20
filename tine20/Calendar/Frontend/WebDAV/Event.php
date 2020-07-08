@@ -163,7 +163,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 
             } catch (Zend_Db_Statement_Exception $zdse) {
                 $retry = true;
-                Tinebase_Exception::log($zdse, true);
+                if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                    Tinebase_Exception::log($zdse, true);
+                }
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 $retry = true;
                 Tinebase_Exception::log($tead, true);

@@ -677,7 +677,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $result = ($_record->type === $_to && in_array($_oldRecord->type, $_from));
 
         if ($_throw && $_record->type !== $_oldRecord->type && ! $result) {
-            throw new Tinebase_Exception_UnexpectedValue('Account type cannot be changed');
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric(str_replace(
+                ['{0}', '{1}'],
+                [$_oldRecord->type, $_record->type],
+                $translate->_('Account type cannot be changed from {0} to {1}')
+            ));
         }
 
         if ($result) {
@@ -2071,12 +2076,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function checkGrantForSharedAccount($account, $grant)
     {
-             // TODO generalize that? Tinebase_Core::getUser()->hasGrant() anyone?
-            $userGrants = Felamimail_Controller_Account::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(),
-                $account);
-            if (!$userGrants->{$grant}) {
-                throw new Tinebase_Exception_AccessDenied(
-                    'User is not allowed to send a message with this account');
-            }
+         // TODO generalize that? Tinebase_Core::getUser()->hasGrant() anyone?
+        $userGrants = Felamimail_Controller_Account::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(),
+            $account);
+        if (! $userGrants->{$grant} && ! $userGrants->{Felamimail_Model_AccountGrants::GRANT_ADMIN}) {
+            throw new Tinebase_Exception_AccessDenied(
+                'User is not allowed to send a message with this account');
+        }
     }
 }

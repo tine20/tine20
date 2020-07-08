@@ -17,6 +17,7 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -43,6 +44,10 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE012_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
     ];
@@ -105,5 +110,12 @@ class Calendar_Setup_Update_12 extends Setup_Update_Abstract
         Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES} = $attendeeKeyField;
 
         $this->addApplicationUpdate('Calendar', '12.12', self::RELEASE012_UPDATE006);
+    }
+
+    public function update007()
+    {
+        $release11 = new Calendar_Setup_Update_Release11($this->_backend);
+        $release11->update_16();
+        $this->addApplicationUpdate('Calendar', '12.13', self::RELEASE012_UPDATE007);
     }
 }

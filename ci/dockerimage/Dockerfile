@@ -35,8 +35,8 @@ RUN apk --no-cache add nginx supervisor curl && \
     apk add --no-cache libjpeg-turbo-dev libpng-dev icu-dev libxslt-dev zlib-dev libzip-dev yaml-dev freetype-dev gettext libintl gettext-dev bash openldap-dev && \
 # install.tmpl php extentions
     if test "$PHP_IMAGE_TAG" == "7.3-fpm-alpine"; \
-    then docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && echo "with gd args"; \
-    else docker-php-ext-configure gd && echo "with out gd args"; \
+    then docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && echo "configure gd with 7.3 args"; \
+    else docker-php-ext-configure --with-freetype  --with-jpeg --enable-gd && echo "configure gd with args"; \
     fi && \
     docker-php-ext-install bcmath exif mysqli pcntl pdo_mysql soap sockets zip xsl intl gd opcache gettext iconv ldap && \
     docker-php-ext-enable ldap && \
@@ -183,8 +183,16 @@ RUN apk add --no-cache composer git npm mysql-client
 
 COPY docs/config/ /config
 
-COPY --from=copy-build ${TINE20ROOT}/tests ${TINE20ROOT}/tests
 COPY --from=copy-build ${TINE20ROOT}/.git ${TINE20ROOT}/.git
+COPY --from=copy-build ${TINE20ROOT}/tests ${TINE20ROOT}/tests
+COPY --from=source ${TINE20ROOT}/tine20/vendor ${TINE20ROOT}/tine20/vendor
+COPY --from=source ${TINE20ROOT}/tine20/library/ExtJS/src/locale ${TINE20ROOT}/tine20/library/ExtJS/src/locale
+COPY --from=source ${TINE20ROOT}/tine20/composer.json ${TINE20ROOT}/tine20/composer.json
+COPY --from=source ${TINE20ROOT}/tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
+COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
+COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
+COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/node_modules ${TINE20ROOT}/tine20/Tinebase/js/node_modules
+COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/Locale/static ${TINE20ROOT}/tine20/Tinebase/js/Locale/static
 
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
 

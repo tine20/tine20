@@ -133,7 +133,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             rewind($inputStream);
         }
         
-         if ($this->_debugEmail == true) {
+         if ($this->_debugEmail) {
              $debugStream = fopen("php://temp", 'r+');
              stream_copy_to_stream($inputStream, $debugStream);
              rewind($debugStream);
@@ -293,7 +293,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             rewind($inputStream);
         }
         
-        if ($this->_debugEmail == true) {
+        if ($this->_debugEmail) {
              $debugStream = fopen("php://temp", 'r+');
              stream_copy_to_stream($inputStream, $debugStream);
              rewind($debugStream);
@@ -358,14 +358,14 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             rewind($inputStream);
         }
         
-        if ($this->_debugEmail == true) {
+        if ($this->_debugEmail) {
              $debugStream = fopen("php://temp", 'r+');
              stream_copy_to_stream($inputStream, $debugStream);
              rewind($debugStream);
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                  __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
         
-             //replace original stream wirh debug stream, as php://input can't be rewinded
+             // replace original stream with debug stream, as php://input can't be rewinded
              $inputStream = $debugStream;
              rewind($inputStream);
         }

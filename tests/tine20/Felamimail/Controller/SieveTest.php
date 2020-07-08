@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -113,5 +113,13 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
         // for unused variable check
         unset($raii);
+    }
+
+    public function testSetSieveOfSharedAccount()
+    {
+        $account = $this->_createSharedAccount();
+        $vacationData = Felamimail_Frontend_JsonTest::getVacationData($account);
+        $vacation = Felamimail_Controller_Sieve::getInstance()->setVacation(new Felamimail_Model_Sieve_Vacation($vacationData));
+        self::assertEquals(true, $vacation->enabled);
     }
 }

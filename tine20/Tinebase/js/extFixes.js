@@ -36,63 +36,6 @@
     });
 })();
 
-Ext.override(Ext.data.Store, {
-    /**
-     * String cast the id, as otherwise the entries are not found
-     */
-    indexOfId : function(id){
-        return this.data.indexOfKey(String(id));
-    },
-
-    /**
-     * promisified store load
-     */
-    promiseLoad: function(options) {
-        var me = this;
-        return new Promise(function (fulfill, reject) {
-            try {
-                me.load(Ext.apply(options || {}, {
-                    callback: function (r, options, success) {
-                        if (success) {
-                            fulfill(r, options);
-                        } else if (Ext.isFunction(reject)) {
-                            reject(new Error(options));
-                        }
-                    }
-                }));
-            } catch (error) {
-                if (Ext.isFunction(reject)) {
-                    reject(new Error(options));
-                }
-            }
-        });
-    },
-
-    nextLoad: function() {
-        var me = this;
-        return new Promise(function (resolve) {
-            me.on('load', resolve, me, { single: true });
-        });
-    },
-
-    /**
-     * appends (number) to property to ensure uniqness
-     *
-     * @param {Ext.data.Record} record
-     * @param {String} prop property name or property path
-     */
-    addUnique: function(record, prop) {
-        prop = prop.match(/^data\./) ? prop : `data.${prop}`;
-        let [,name, idx, ext] = String(_.get(record, prop)).match(/(.*?)(?:\s\((\d+)\))?(\..*)/) || [null, _.get(record, prop)];
-        while(_.find(this.data.items, (item) => {return _.get(item, prop) === _.get(record, prop)})) {
-            idx = idx || 0;
-            _.set(record, prop, `${name} (${++idx})${ext}`);
-        }
-
-        this.add([record]);
-    }
-});
-
 /**
  * for some reasons the original fix insertes two <br>'s on enter for webkit. But this is one to much
  */
@@ -1114,37 +1057,6 @@ Ext.layout.VBoxLayout.prototype.onLayout = Ext.layout.VBoxLayout.prototype.onLay
             })
         }, this);
         this.vboxfix = true;
-    }
-});
-
-Ext.override(Ext.grid.EditorGridPanel, {
-    initEvents : function(){
-        Ext.grid.EditorGridPanel.superclass.initEvents.call(this);
-
-        this.on('beforeedit', this.onBeforeEdit, this);
-
-        this.getGridEl().on('mousewheel', this.stopEditing.createDelegate(this, [true]), this);
-        this.on('columnresize', this.stopEditing, this, [true]);
-
-        if(this.clicksToEdit == 1){
-            this.on("cellclick", this.onCellDblClick, this);
-        }else {
-            var view = this.getView();
-            if(this.clicksToEdit == 'auto' && view.mainBody){
-                view.mainBody.on('mousedown', this.onAutoEditClick, this);
-            }
-            this.on('celldblclick', this.onCellDblClick, this);
-        }
-    },
-
-    onBeforeEdit: function(o) {
-        if (this.readOnly) {
-            o.cancel = true;
-        }
-    },
-
-    setReadOnly: function(readOnly) {
-        this.readOnly = readOnly;
     }
 });
 

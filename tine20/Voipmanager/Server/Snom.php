@@ -33,8 +33,8 @@ class Voipmanager_Server_Snom implements Tinebase_Server_Interface
     protected $_body;
     
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_Server_Interface::handle()
+     * @param  \Zend\Http\Request  $request
+     * @param  stream|string       $body
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {

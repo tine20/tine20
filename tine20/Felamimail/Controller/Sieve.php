@@ -225,13 +225,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_vacation->getId());
-        if (!($account->type === Felamimail_Model_Account::TYPE_SHARED) && $this->_doAclCheck && $account->user_id !== Tinebase_Core::getUser()->getId()) {
-            throw new Tinebase_Exception_AccessDenied('It is not allowed to set the vacation message of another user.');
-        }
-        if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
-            Felamimail_Controller_Account::getInstance()->checkGrantForSharedAccount($account, Felamimail_Model_AccountGrants::GRANT_EDIT);
-        }
-        
+        $this->_checkAccountEditGrant($account);
+
         $this->_setSieveBackendAndAuthenticate($account);
         $this->_addVacationUserData($_vacation, $account);
         $this->_checkCapabilities($_vacation);
@@ -245,14 +240,31 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         }
         $script->setVacation($fsv);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
         
         $this->_putScript($account, $script);
         Felamimail_Controller_Account::getInstance()->setVacationActive($account, $_vacation->enabled);
         
         return $this->getVacation($account);
     }
-    
+
+    /**
+     * @param $account
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkAccountEditGrant($account)
+    {
+        if ($this->_doAclCheck) {
+            if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+                Felamimail_Controller_Account::getInstance()->checkGrantForSharedAccount($account,
+                    Felamimail_Model_AccountGrants::GRANT_EDIT);
+            } else if ($account->user_id !== Tinebase_Core::getUser()->getId()) {
+                throw new Tinebase_Exception_AccessDenied('It is not allowed to edit the account of another user.');
+            }
+        }
+    }
+
     /**
      * add addresses and from to vacation
      * 
@@ -509,9 +521,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     public function setRules($_accountId, Tinebase_Record_RecordSet $_rules)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
-        if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
-            Felamimail_Controller_Account::getInstance()->checkGrantForSharedAccount($account, Felamimail_Model_AccountGrants::GRANT_EDIT);
-        }
+        $this->_checkAccountEditGrant($account);
         $script = $this->getSieveScript($_accountId);
         
         if ($script === NULL) {
@@ -542,14 +552,22 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _checkRule($_rule, $_accountId)
     {
-        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $account = ($_accountId instanceof Felamimail_Model_Account)
+            ? $_accountId
+            : Felamimail_Controller_Account::getInstance()->get($_accountId);
+
         if ($_rule->action_type === Felamimail_Sieve_Rule_Action::REDIRECT && $_rule->enabled) {
-            if ($account->email === $_rule->action_argument) {
-                throw new Felamimail_Exception_Sieve('It is not allowed to redirect emails to self (' . $account->email . ')! Please change the recipient.');
+            $redirectEmails = is_array($_rule->action_argument) ? (array) $_rule->action_argument['emails'] : [$_rule->action_argument];
+
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            if (in_array($account->email, $redirectEmails)) {
+                throw new Felamimail_Exception_Sieve($translate->_('It is not allowed to redirect emails to self! Please change the recipient.'));
             }
             if (Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_REDIRECT_ONLY_INTERNAL}) {
                 $success = false;
-                $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+                $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP)
+                    ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP)
+                    : $smtpConfig = array();
                 $allowedDomains = array();
                 if (isset($smtpConfig['primarydomain'])) {
                     $allowedDomains[] = $smtpConfig['primarydomain'];
@@ -557,14 +575,17 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 if (isset($smtpConfig['secondarydomains'])) {
                     $allowedDomains[] = array_merge($allowedDomains, explode(',', $smtpConfig['secondarydomains']));
                 }
+
                 foreach ($allowedDomains as $allowedDomain) {
-                    if (strpos($_rule->action_argument, $allowedDomain) !== false) {
-                        $success = true;
-                        break;
+                    foreach ($redirectEmails as $email) {
+                        if (strpos($email, $allowedDomain) !== false) {
+                            $success = true;
+                            break;
+                        }
                     }
                 }
                 if (false === $success) {
-                    throw new Felamimail_Exception_Sieve('redirects only to the following domains allowed: ' . join(',', $allowedDomain));
+                    throw new Felamimail_Exception_Sieve($translate->_('Redirects to external email domains are not allowed.'));
                 }
             }
         }

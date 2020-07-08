@@ -74,6 +74,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             enableFileDialog: false,
             enableDragDrop: true,
             ddGroup: 'fileDDGroup',
+            gridType: Ext.grid.EditorGridPanel,
+            clicksToEdit: 'auto',
             listeners: {
                 scope: this,
                 afterrender: this.initDragDrop
@@ -236,7 +238,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 70,
                 sortable: true,
                 dataIndex: 'name',
-                renderer: Ext.ux.PercentRendererWithName
+                renderer: Ext.ux.PercentRendererWithName,
+                editor: Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'name', Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID)
             },{
                 id: 'hash',
                 header: this.app.i18n._("MD5 Hash"),
@@ -260,7 +263,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: function(value, metadata, record) {
 
                     var app = Tine.Tinebase.appMgr.get('Filemanager');
-                    if(record.data.type == 'folder') {
+                    if(record.data.type === 'folder') {
                         return app.i18n._("Folder");
                     }
                     else {

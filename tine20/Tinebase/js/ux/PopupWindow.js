@@ -77,6 +77,11 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     modal: false,
     /**
+     * @cfg {Boolean} cut relation to opener
+     * needed e.g. when opening a new mainWindow
+     */
+    noParent: false,
+    /**
      * @cfg {String}
      */
     layout: 'fit',
@@ -139,6 +144,9 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         if (! this.popup) {
             try {
                 this.popup = this.openWindow(this.name, this.url, this.width, this.height);
+                if (this.noParent) {
+                    this.popup.opener = null;
+                }
             } catch (e) {
                 return Ext.MessageBox.alert(
                     i18n._('Cannot open new window'),

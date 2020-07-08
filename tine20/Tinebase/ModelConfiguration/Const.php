@@ -43,6 +43,7 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER_GROUP = 'filtergroup';
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
+    const FUNCTION = 'function';
 
     const HAS_CUSTOM_FIELDS = 'hasCustomFields';
     const HAS_DELETED_TIME_UNIQUE = 'hasDeletedTimeUnique';

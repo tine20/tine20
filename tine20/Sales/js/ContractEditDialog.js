@@ -164,7 +164,8 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     });
 
                 dialog.openWindow();
-                dialog.on('apply', (product, contractDialog, relation) => {
+                dialog.on('apply', (eventData) => {
+                    let [product, contractDialog, relation] = eventData;
                     // link into product agg json attributes like this:
                     // 'accountables' -> [{"model":"WebAccounting_Model_ProxmoxVM","id":"12345abcde"}]
                     Tine.log.debug(product);

@@ -30,6 +30,23 @@ class Calendar_Export_VCalendar extends Tinebase_Export_VObject
     }
 
     /**
+     * need to use ms-event-facade to make sure we have the correct "view" on alarms and recur exceptions
+     *
+     * @param bool $ignoreAcl
+     * @return Calendar_Controller_MSEventFacade
+     *
+     * TODO support $ignoreAcl param?
+     */
+    protected function _getController($ignoreAcl = false)
+    {
+        if ($ignoreAcl && Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Ignore ACL is not supported in this export.');
+        }
+
+        return Calendar_Controller_MSEventFacade::getInstance();
+    }
+
+    /**
      * @return string|null
      */
     public function generate()
@@ -42,6 +59,7 @@ class Calendar_Export_VCalendar extends Tinebase_Export_VObject
 
         $this->_converter->setOptions([
             Calendar_Convert_Event_VCalendar_Tine::OPTION_ADD_ATTACHMENTS_BINARY => true,
+            Calendar_Convert_Event_VCalendar_Tine::OPTION_ADD_ATTACHMENTS_MAX_SIZE => 1024 * 1024, // 1 MB
         ]);
         $this->_exportRecords();
 

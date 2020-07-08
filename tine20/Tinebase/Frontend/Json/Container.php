@@ -108,7 +108,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * deletes a container
      * 
      * @param   int     $containerId
-     * @return  string  success
+     * @return  array
      */
     public function deleteContainer($containerId)
     {

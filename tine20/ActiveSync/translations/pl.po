@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012,2016
 msgid ""
@@ -8,129 +8,99 @@ msgstr ""
 "PO-Revision-Date: 2017-09-28 09:48+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/tine20/tine20/language/pl/)\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] "Połączone urządzenia"
-msgstr[1] "Połączone urządzenia"
-msgstr[2] "Połączone urządzenia"
-msgstr[3] "Połączone urządzenia"
+#: Preference.php:75
+msgid "Default Address book"
+msgstr ""
+
+#: Preference.php:76
+msgid "The default address book to create new contacts in."
+msgstr ""
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Domyślny kalendarz"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Domyślny kalendarz z nowymi terminami"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Domyślna lista zadań"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Domyślna lista dla nowo tworzonych zadań"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
 msgstr "Połącz urządzenia"
 
-#: js/SyncDevicesGridPanel.js:69
-msgid "ID"
-msgstr "Id"
-
-#: js/SyncDevicesGridPanel.js:70 js/SyncDevicesGridPanel.js:153
-#: js/EditDialog.js:72
+#: js/EditDialog.js:72 js/SyncDevicesGridPanel.js:70
+#: js/SyncDevicesGridPanel.js:154
 msgid "Device ID"
 msgstr "Id urządzenia"
 
-#: js/SyncDevicesGridPanel.js:71 js/EditDialog.js:79
+#: js/EditDialog.js:79
 msgid "Devicetype"
 msgstr "Typ urządzenia"
 
-#: js/SyncDevicesGridPanel.js:72 js/EditDialog.js:86
+#: js/EditDialog.js:86 js/SyncDevicesGridPanel.js:72
 msgid "Owner"
 msgstr "Właściciel"
 
-#: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
+#: js/EditDialog.js:98 js/SyncDevicesGridPanel.js:73
 msgid "Policy"
 msgstr "Polityka"
 
-#: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:104
-msgid "AS Version"
-msgstr "Wersja AS"
+#: js/EditDialog.js:104 js/SyncDevicesGridPanel.js:74
+msgid "ActiveSync Version"
+msgstr ""
 
-#: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:110
-msgid "Useragent"
-msgstr "Useragent"
+#: js/EditDialog.js:110 js/SyncDevicesGridPanel.js:75
+msgid "User agent"
+msgstr ""
 
-#: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:116
+#: js/EditDialog.js:116 js/SyncDevicesGridPanel.js:76
 msgid "Model"
 msgstr "Model"
 
-#: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:122
+#: js/EditDialog.js:122 js/SyncDevicesGridPanel.js:77
 msgid "IMEI"
 msgstr "IMEI"
 
-#: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:128
+#: js/EditDialog.js:128 js/SyncDevicesGridPanel.js:78
 msgid "Friendly Name"
 msgstr "Przyjazna nazwa"
 
-#: js/SyncDevicesGridPanel.js:79 js/EditDialog.js:134
+#: js/EditDialog.js:134
 msgid "OS"
 msgstr "System operacyjny"
 
-#: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:140
+#: js/EditDialog.js:140 js/SyncDevicesGridPanel.js:80
 msgid "OS Language"
 msgstr "Język systemu operacyjnego"
 
-#: js/SyncDevicesGridPanel.js:81 js/EditDialog.js:146
+#: js/EditDialog.js:146
 msgid "Phonenumber"
 msgstr "Numer telefonu"
 
-#: js/SyncDevicesGridPanel.js:82
-msgid "Ping Lifetime"
-msgstr "Czas odpowiedzi ping."
-
-#: js/SyncDevicesGridPanel.js:83
-msgid "Ping Folder"
-msgstr "Katalog ping"
-
-#: js/SyncDevicesGridPanel.js:84
-msgid "Remote Wipe"
-msgstr "Zdalne usuwanie"
-
-#: js/SyncDevicesGridPanel.js:85
-msgid "Calendarfilter"
-msgstr "Filtr kalendarza"
-
-#: js/SyncDevicesGridPanel.js:86
-msgid "Contactsfilter"
-msgstr "Filtr kontaktów"
-
-#: js/SyncDevicesGridPanel.js:87
-msgid "Emailfilter"
-msgstr "Filtr poczty"
-
-#: js/SyncDevicesGridPanel.js:88
-msgid "Tasksfilter"
-msgstr "Filtr zadań"
-
-#: js/SyncDevicesGridPanel.js:89
-msgid "Last Ping"
-msgstr "Ostatni ping"
-
-#: js/SyncDevicesGridPanel.js:100
-msgid "Remote Reset Device"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:115
-msgid "Please Confirm"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:116
-msgid ""
-"Do you really want to wipe the selected devices? All personal data will be "
-"removed and the device is reset to factory settings!"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:152
-msgid "Quicksearch"
-msgstr "Szybkie wyszukiwanie"
+#: js/SyncDevices.js:71
+msgid "Sync Device"
+msgid_plural "Sync Devices"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: js/Model.js:42
 msgid "Device"
@@ -178,59 +148,119 @@ msgstr "zresetowane"
 msgid "Set Sync Filter"
 msgstr "Ustaw filtr synchronizacji"
 
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Domyślna książka adresowa"
+#: js/SyncDevicesGridPanel.js:69
+msgid "ID"
+msgstr "Id"
 
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Domyślna książka adresowa z nowymi kontaktami"
+#: js/SyncDevicesGridPanel.js:71
+msgid "Device Type"
+msgstr ""
 
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Domyślny kalendarz"
+#: js/SyncDevicesGridPanel.js:79
+msgid "Operating System"
+msgstr ""
 
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Domyślny kalendarz z nowymi terminami"
+#: js/SyncDevicesGridPanel.js:81
+msgid "Phone Number"
+msgstr ""
 
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Domyślna lista zadań"
+#: js/SyncDevicesGridPanel.js:82
+msgid "Ping Lifetime"
+msgstr "Czas odpowiedzi ping."
 
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Domyślna lista dla nowo tworzonych zadań"
+#: js/SyncDevicesGridPanel.js:83
+msgid "Ping Folder"
+msgstr "Katalog ping"
 
-#: Config.php:52
+#: js/SyncDevicesGridPanel.js:84
+msgid "Remote Wipe"
+msgstr "Zdalne usuwanie"
+
+#: js/SyncDevicesGridPanel.js:85
+msgid "Calendar Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:86
+msgid "Contacts Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:87
+msgid "E-mail Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:88
+msgid "Tasks Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:89
+msgid "Last Ping"
+msgstr "Ostatni ping"
+
+#: js/SyncDevicesGridPanel.js:90
+msgid "Monitor Last Ping"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:101
+msgid "Remote Device Reset"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:116
+msgid "Please Confirm"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:117
+msgid "Do you really want to wipe the selected devices? All personal data will be removed and the device will be reset to factory settings!"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:153
+msgid "Quicksearch"
+msgstr "Szybkie wyszukiwanie"
+
+#: Setup/Update/Release6.php:290 Setup/setup.xml:549
+msgid "Default Policy"
+msgstr "Domyślna polityka"
+
+#: Setup/Update/Release6.php:295 Setup/setup.xml:554
+msgid "Default Policy installed during setup"
+msgstr "Domyślna polityka określona podczas definiowania ustawień"
+
+#: Config.php:57
 msgid "Default policy for new devices"
 msgstr "Domyślna polityka dla nowych urządzeń"
 
-#: Config.php:54
+#: Config.php:59
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Wpisz id polityki, aby przypisać ją do nowo dodanych urządzeń."
 
-#: Config.php:63
+#: Config.php:68
+msgid "User Agent Deny List"
+msgstr ""
+
+#: Config.php:70
+msgid "Array of regular expressions of User-Agent strings"
+msgstr ""
+
+#: Config.php:81
 msgid "Disable Access Log"
 msgstr "Wyłącz dziennik logowania"
 
-#: Config.php:65
+#: Config.php:83
 msgid "Disable ActiveSync Access Log creation."
 msgstr "Wyłącz dziennik logowania dla ActiveSync"
 
-#: Config.php:74
-msgid "Filter timeslot for emails"
-msgstr "Filtruj przedział czasu dla poczty"
+#: Config.php:92
+msgid "Filter timeslot for e-mails"
+msgstr ""
 
-#: Config.php:76
-msgid "For how long in the past the emails should be synchronized."
-msgstr "Jak daleko wstecz należy zsynchronizować pocztę."
+#: Config.php:94
+msgid "For how long in the past the e-mails should be synchronized."
+msgstr ""
 
-#: Config.php:97
+#: Config.php:115
 msgid "Filter timeslot for events"
 msgstr "Filtruj przydział czasu dla wydarzeń"
 
-#: Config.php:99
+#: Config.php:117
 msgid "For how long in the past the events should be synchronized."
 msgstr "Jak daleko wprzód należy zsynchronizować wydarzenia."
 
@@ -250,10 +280,39 @@ msgstr ""
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Domyślna polityka"
+#~ msgid "Default Addressbook"
+#~ msgstr "Domyślna książka adresowa"
 
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Domyślna polityka określona podczas definiowania ustawień"
+#~ msgid "The default addressbook to create new contacts in."
+#~ msgstr "Domyślna książka adresowa z nowymi kontaktami"
+
+#~ msgid "AS Version"
+#~ msgstr "Wersja AS"
+
+#~ msgid "Useragent"
+#~ msgstr "Useragent"
+
+#~ msgid "SyncDevice"
+#~ msgid_plural "SyncDevices"
+#~ msgstr[0] "Połączone urządzenia"
+#~ msgstr[1] "Połączone urządzenia"
+#~ msgstr[2] "Połączone urządzenia"
+#~ msgstr[3] "Połączone urządzenia"
+
+#~ msgid "Calendarfilter"
+#~ msgstr "Filtr kalendarza"
+
+#~ msgid "Contactsfilter"
+#~ msgstr "Filtr kontaktów"
+
+#~ msgid "Emailfilter"
+#~ msgstr "Filtr poczty"
+
+#~ msgid "Tasksfilter"
+#~ msgstr "Filtr zadań"
+
+#~ msgid "Filter timeslot for emails"
+#~ msgstr "Filtruj przedział czasu dla poczty"
+
+#~ msgid "For how long in the past the emails should be synchronized."
+#~ msgstr "Jak daleko wstecz należy zsynchronizować pocztę."

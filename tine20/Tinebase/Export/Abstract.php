@@ -276,8 +276,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_applicationName = $this->_filter->getApplicationName();
         }
 
-        $this->_controller = ($_controller !== null) ? $_controller :
-            Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName, isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
+        $this->_controller = ($_controller !== null)
+            ? $_controller
+            : $this->_getController(isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
+
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
         $this->_locale = Tinebase_Core::getLocale();
@@ -445,6 +447,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $cfConfig->definition->label;
             }
         }
+    }
+
+    protected function _getController($ignoreAcl = false)
+    {
+        return Tinebase_Core::getApplicationInstance(
+            $this->_applicationName,
+            $this->_modelName,
+            $ignoreAcl
+        );
     }
 
     protected function _parseTemplatePath($_path)
@@ -630,7 +641,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $name .= $this->_translate->_($this->_config->label, $this->_locale);
         }
         $tineTranslate = Tinebase_Translation::getTranslation('Tinebase');
-        $result = mb_strtolower($tineTranslate->_('Export', $this->_locale) . '_' .
+        $result = mb_strtolower($tineTranslate->plural('Export', 'Exports', 1, $this->_locale) . '_' .
             $this->_translate->_($_appName, $this->_locale)
             . ($model !== '' ? $model : '_')
             . $name . '.' . $_format);
@@ -1624,14 +1635,22 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     public function getTargetFileLocation($filename = null)
     {
-        if ($filename) {
-            $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename, $this->getDownloadFilename());
-            return new Tinebase_Model_Tree_FileLocation([
-                Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
-                Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
-            ]);
-        } else {
-            throw new Tinebase_Exception_NotImplemented('not implemented for this export');
+        if ($filename === null) {
+            if (method_exists($this, 'write')) {
+                ob_start();
+                $this->write();
+                $output = ob_get_clean();
+                $filename = Tinebase_TempFile::getTempPath();
+                file_put_contents($filename, $output);
+            } else {
+                throw new Tinebase_Exception_NotImplemented('Not implemented for this export');
+            }
         }
+
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename, $this->getDownloadFilename());
+        return new Tinebase_Model_Tree_FileLocation([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
+            Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
+        ]);
     }
 }

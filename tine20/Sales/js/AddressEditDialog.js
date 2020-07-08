@@ -49,11 +49,6 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         Tine.Sales.AddressEditDialog.superclass.initComponent.call(this);
-
-        // code expect fixedFields to be present
-        if (! this.fixedFields) {
-            this.fixedFields = new Ext.util.MixedCollection();
-        }
     },
 
     /**

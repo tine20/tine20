@@ -977,10 +977,12 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_data[$key])) {
-                /** @var Tinebase_Model_Converter_Interface $converter */
-                foreach ($converters as $converter) {
+            foreach ($converters as $converter) {
+                if (isset($this->_data[$key])) {
+                    /** @var Tinebase_Model_Converter_Interface $converter */
                     $this->_data[$key] = $converter->convertToRecord($this, $key, $this->_data[$key]);
+                } elseif ($converter instanceof Tinebase_Model_Converter_RunOnNullInterface) {
+                    $this->_data[$key] = $converter->convertToRecord($this, $key, null);
                 }
             }
         }
@@ -993,10 +995,12 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_data[$key])) {
-                /** @var Tinebase_Model_Converter_Interface $converter */
-                foreach ($converters as $converter) {
+            foreach ($converters as $converter) {
+                if (isset($this->_data[$key])) {
+                    /** @var Tinebase_Model_Converter_Interface $converter */
                     $this->_data[$key] = $converter->convertToData($this, $key, $this->_data[$key]);
+                } elseif ($converter instanceof Tinebase_Model_Converter_RunOnNullInterface) {
+                    $this->_data[$key] = $converter->convertToData($this, $key, null);
                 }
             }
         }

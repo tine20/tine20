@@ -79,11 +79,11 @@ Tine.widgets.form.FieldManager = function() {
 
             if (fieldType === 'virtual' && fieldDefinition.config) {
                 fieldType = fieldDefinition.config.type || 'textfield';
-                fieldDefinition = fieldDefinition.config;
+                fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);
             }
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
-            field.name = fieldDefinition.name || fieldDefinition.fieldName;
+            field.name = fieldDefinition.fieldName || fieldDefinition.name;
             field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
             // make field available via recordForm.formfield_NAME

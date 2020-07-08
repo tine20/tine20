@@ -665,7 +665,7 @@ class Tinebase_Application
                     } catch (Tinebase_Exception_Backend $teb) {
                         // nothing to do
                         Tinebase_Exception::log($teb);
-                    } catch (Exception $e) {
+                    } catch (Throwable $e) {
                         // problem!
                         Tinebase_Exception::log($e);
                     }

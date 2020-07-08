@@ -82,7 +82,7 @@ Tine.Tinebase.widgets.file.SelectionField = Ext.extend(Ext.form.TriggerField, {
         this.value = _.isArray(locations) ? locations : [locations];
         Tine.Tinebase.common.assertComparable(this.value);
         
-        const async = await import('async');
+        const async = await import(/* webpackChunkName: "Tinebase/js/async" */ 'async');
         const locationNames = await async.map(this.value, Tine.Tinebase.widgets.file.locationRenderer.getLocationName);
         this.setRawValue(_.join(locationNames, ', '));
     },

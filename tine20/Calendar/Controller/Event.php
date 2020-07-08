@@ -987,10 +987,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         $this->attenderStatusUpdate($_record, $attender, $attender->status_authkey);
                     }
                 }
-
-                $updatedEvent = $this->get($_record->getId());
-                $currentMods = $this->_writeModLog($updatedEvent, $event);
-                $this->_setSystemNotes($updatedEvent, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -2184,7 +2180,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _inspectEvent($_record, $skipEvent = false)
     {
         if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $_record->isReplicable()) {
-            throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+            throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the replicas!');
         }
 
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
@@ -2639,6 +2635,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $updatedAttender->displaycontainer_id = isset($_attender->displaycontainer_id) ? $_attender->displaycontainer_id : $updatedAttender->displaycontainer_id;
             $updatedAttender->transp              = isset($_attender->transp) ? $_attender->transp : Calendar_Model_Event::TRANSP_OPAQUE;
             $updatedAttender->xprops              = $_attender->xprops;
+            $updatedAttender->seq                 = (int)$updatedAttender->seq + 1;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -2669,6 +2666,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
             // touch event to persist data changed by observers
             $this->_touch($event, true);
+
+            $currentMods = $this->_writeModLog($event, $oldEvent);
+            $this->_setSystemNotes($event, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {

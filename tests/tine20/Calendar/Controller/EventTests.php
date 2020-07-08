@@ -2297,7 +2297,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->seq = 0;
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationById('Calendar')->getId(), $event, 10000);
-        static::assertEquals(8, $modifications->count());
+        static::assertEquals(10, $modifications->count());
 
         // undelete it
         $mod = $modifications->getLastRecord();
@@ -2384,9 +2384,13 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         // remove the added related data
         $mod = $modifications->getLastRecord();
         $modifications->removeRecord($mod);
-        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
-            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
-        )));
+        $mod1 = $modifications->getLastRecord();
+        $modifications->removeRecord($mod1);
+        $mod2 = $modifications->getLastRecord();
+        $modifications->removeRecord($mod2);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter([
+            ['field' => 'id', 'operator' => 'in', 'value' => [$mod->getId(), $mod1->getId(), $mod2->getId()]]
+        ]));
         $undeletedEvent = $this->_controller->get($event->getId());
         static::assertEquals(1, $undeletedEvent->notes->count());
         static::assertEquals(1, $undeletedEvent->relations->count());

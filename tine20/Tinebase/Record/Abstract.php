@@ -1375,10 +1375,12 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_properties[$key])) {
-                /** @var Tinebase_Model_Converter_Interface $converter */
-                foreach ($converters as $converter) {
+            foreach ($converters as $converter) {
+                if (isset($this->_properties[$key])) {
+                    /** @var Tinebase_Model_Converter_Interface $converter */
                     $this->_properties[$key] = $converter->convertToRecord($this, $key, $this->_properties[$key]);
+                } elseif ($converter instanceof Tinebase_Model_Converter_RunOnNullInterface) {
+                    $this->_properties[$key] = $converter->convertToRecord($this, $key, null);
                 }
             }
         }

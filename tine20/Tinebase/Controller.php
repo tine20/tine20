@@ -608,13 +608,19 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             && in_array($loginName, $allowedRoleChangesArray[$currentAccountName])
         ) {
             $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
-            Tinebase_Session::getSessionNamespace()->userAccountChanged = true;
-            Tinebase_Session::getSessionNamespace()->originalAccountName = $currentAccountName;
-            
+            // CalDAV / ActiveSync have no session
+            Tinebase_Core::set('userAccountChanged', true);
+            Tinebase_Core::set('originalAccountName', $currentAccountName);
+            if (Tinebase_Session::isStarted()) {
+                Tinebase_Session::getSessionNamespace()->userAccountChanged = true;
+                Tinebase_Session::getSessionNamespace()->originalAccountName = $currentAccountName;
+            }
         } else if (Tinebase_Session::getSessionNamespace()->userAccountChanged 
             && isset($allowedRoleChangesArray[Tinebase_Session::getSessionNamespace()->originalAccountName])
         ) {
             $user = Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_Session::getSessionNamespace()->originalAccountName);
+            Tinebase_Core::set('userAccountChanged', false);
+            Tinebase_Core::set('originalAccountName', null);
             Tinebase_Session::getSessionNamespace()->userAccountChanged = false;
             Tinebase_Session::getSessionNamespace()->originalAccountName = null;
         }
@@ -926,13 +932,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         try {
             $session = Tinebase_Session::getSessionNamespace();
-        } catch (Zend_Session_Exception $zse) {
-            $session = null;
-        }
-        
-        return ($session instanceof Zend_Session_Namespace && isset($session->userAccountChanged)) 
+            return ($session instanceof Zend_Session_Namespace && isset($session->userAccountChanged))
                 ? $session->userAccountChanged
                 : false;
+        } catch (Zend_Session_Exception $zse) {
+            return !! Tinebase_Core::get('userAccountChanged');
+        }
     }
 
     /**
@@ -1062,14 +1067,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ]))->toArray());
         });
 
-
-        $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
-            $routeCollector->get('/status.php', (new Tinebase_Expressive_RouteHandler(
-                Tinebase_Controller::class, 'getOCStatus', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
-        });
-
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/_status[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatus', [
@@ -1092,28 +1089,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         });
     }
 
-    public function getOCStatus()
-    {
-        $data = new Tinebase_Frontend_Json();
-        $registryData = $data->getRegistryData();
-        $version = $registryData['version'];
-
-        $values = array(
-            'installed'     => true,
-            'version'       => $version['codeName'],
-            'versionstring' => $version['packageString'],
-            'maintenance'   => Tinebase_Core::inMaintenanceMode(),
-            'edition'       => $version['buildType'],
-            'productname'   => 'Tine 2.0' // lets try it ;-)
-        );
-
-        $response = (new \Zend\Diactoros\Response())
-            ->withAddedHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode($values));
-
-        return $response;
-    }
-    
     /**
      * @return \Zend\Diactoros\Response
      * @throws Tinebase_Exception_AccessDenied
