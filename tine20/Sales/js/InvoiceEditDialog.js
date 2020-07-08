@@ -427,7 +427,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             xtype: 'numberfield',
             suffix: ' €',
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            fieldLabel: this.app.i18n._('Price Tax'),
+            fieldLabel: this.app.i18n._('Taxes (VAT)'),
             columnWidth: 1/4
         });
         

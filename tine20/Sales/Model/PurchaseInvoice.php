@@ -119,7 +119,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'label' => 'Payed at',          // _('Payed at')
             ),
             'payment_method' => array(
-                'label'   => 'Payment_method', //_('Payment_method')
+                'label'   => 'Payment Method', //_('Payment Method')
                 'default' => 'BANK TRANSFER',
                 'type'    => 'keyfield',
                 'name'    => Sales_Config::PAYMENT_METHODS,
@@ -160,7 +160,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'shy' => TRUE,
             ),
             'price_tax' => array(
-                'label' => 'Price Tax', // _('Price Tax')
+                'label' => 'Taxes (VAT)', // _('Taxes (VAT)')
                 'type'  => 'money',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),

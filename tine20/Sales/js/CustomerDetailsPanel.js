@@ -142,7 +142,7 @@ Tine.Sales.CustomerDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     '<div>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('IBAN') + '</span>{[this.encode(values.iban)]}<br/>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('BIC') + '</span>{[this.encode(values.bic)]}<br/>',
-                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('VAT No.') + '</span>{[this.encode(values.vatid)]}<br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('VAT ID') + '</span>{[this.encode(values.vatid)]}<br/>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Currency') + '</span>{[this.encode(values.currency)]}<br/>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Currency Translation Rate') + '</span>{[this.encode(values.currency_trans_rate)]}<br/>',
                     '</div>',
