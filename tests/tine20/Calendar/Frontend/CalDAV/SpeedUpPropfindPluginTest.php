@@ -17,7 +17,7 @@ require_once __DIR__ . '/../../../../../tine20/vendor/sabre/dav/tests/Sabre/HTTP
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
  */
-class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends TestCase
+class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCase
 {
     /**
      *
@@ -26,12 +26,22 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends TestCase
     protected $server;
 
     /**
+     * @var Calendar_Frontend_WebDAV_EventTest
+     */
+    protected $calDAVTests;
+
+    /**
+     * @var Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin
+     */
+    protected $plugin;
+
+    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
      * @access protected
      */
-    protected function setUp()
+    public function setUp()
     {
         $this->calDAVTests = new Calendar_Frontend_WebDAV_EventTest();
         $this->calDAVTests->setup();
@@ -85,11 +95,11 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends TestCase
         //var_dump($this->response->body);
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
 
-        $responseDoc = new DOMDocument();
+        /*$responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
         //echo $this->response->body;
         //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
-        /*$xpath = new DomXPath($responseDoc);
+        $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
 
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:default-alarm-vevent-datetime');
@@ -107,5 +117,54 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends TestCase
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:default-alarm-vtodo-date');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());*/
+    }
+
+    public function testInvitationToExceptionOnly()
+    {
+        $cctrl = Calendar_Controller_Event::getInstance();
+        $event = $this->_getEvent(true);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;COUNT=5';
+        /*$createdEvent = */$cctrl->create($event);
+
+        $allEvents = $cctrl->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()],
+        ]));
+        Calendar_Model_Rrule::mergeRecurrenceSet($allEvents, Tinebase_DateTime::now()->setTime(0,0,0),
+            Tinebase_DateTime::now()->addWeek(1));
+        $allEvents[2]->dtstart->subMinute(1);
+        $allEvents[2]->dtend->subMinute(1);
+        $allEvents[2]->attendee->addRecord($this->_createAttender($this->_personas['jmcblack']->contact_id));
+        $recurException = $cctrl->createRecurException($allEvents[2]);
+
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+        $allEvents = $cctrl->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_personasDefaultCals['jmcblack']->getId()],
+        ]));
+
+        static::assertSame(1, $allEvents->count());
+        static::assertSame($recurException->getId(), $allEvents->getFirstRecord()->getId());
+
+
+        $body = '<?xml version="1.0" encoding="utf-8"?>
+                 <propfind xmlns="DAV:">
+                    <prop>
+                        <getcontenttype/>
+                        <getetag/>
+                    </prop>
+                 </propfind>';
+
+        $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->_personasDefaultCals['jmcblack']->getId();
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI'    => $uri,
+            'HTTP_DEPTH'     => '1',
+        ));
+        $request->setBody($body);
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        static::assertSame('HTTP/1.1 207 Multi-Status', $this->response->status);
+        static::assertContains($uri . '/' . $recurException->getId(), $this->response->body);
     }
 }
