@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Etienne <inscription@arrakeen.net>, 2012-2013
 # Etienne <inscription@arrakeen.net>, 2012
@@ -10,14 +10,154 @@ msgstr ""
 "PO-Revision-Date: 2017-09-28 09:49+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/tine20/tine20/language/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: js/Phone.js:102
+msgid "Incoming call"
+msgstr "Appel entrant"
+
+#: js/Phone.js:106
+msgid "Outgoing call"
+msgstr "Appel sortant"
+
+#: js/Phone.js:114
+msgid "unknown number"
+msgstr "numéro inconnu"
+
+#: js/DialerPanel.js:54 Model/MyPhone.php:32
+msgid "Phone"
+msgstr "Téléphone"
+
+#: js/DialerPanel.js:77 Model/Call.php:60
+msgid "Line"
+msgstr "Ligne"
+
+#: js/DialerPanel.js:86
+msgid "Number"
+msgstr "Numéro"
+
+#: js/DialerPanel.js:95
+msgid "Cancel"
+msgstr "Annuler"
+
+#: js/DialerPanel.js:105
+msgid "Dial"
+msgstr "Composer"
+
+#: js/DialerPanel.js:125
+msgid "Error"
+msgstr "Erreur"
+
+#: js/DialerPanel.js:126
+msgid "Not possible to dial."
+msgstr "Numérotation impossible."
+
+#: js/AddressbookGridPanelHook.js:40
+msgid "Call contact"
+msgstr "Appeler le contact"
+
+#: js/AddressbookGridPanelHook.js:196
+msgid "Work"
+msgstr "Travail"
+
+#: js/AddressbookGridPanelHook.js:205
+msgid "Home"
+msgstr "Domicile"
+
+#: js/AddressbookGridPanelHook.js:214
+msgid "Cell"
+msgstr "Mobile"
+
+#: js/AddressbookGridPanelHook.js:223
+msgid "Cell private"
+msgstr "Mobile personnel"
+
+#: js/CallGridPanel.js:56
+msgid "Edit phone settings"
+msgstr "Éditer les paramètres du téléphone"
+
+#: js/CallGridPanel.js:70
+msgid "Dial number"
+msgstr "Composer numéro"
+
+#: js/CallGridPanel.js:71
+msgid "Initiate a new outgoing call"
+msgstr "Faire un nouvel appel"
+
+#: js/CallGridPanel.js:176 Model/MyPhone.php:33
+msgid "Phones"
+msgstr "Téléphones"
+
+#: js/CallGridPanel.js:225
+msgid "No phone selected"
+msgstr "Aucun téléphone sélectionné"
+
+#: js/CallGridPanel.js:226
+msgid "Please select the desired phone in the tree!"
+msgstr "Sélectionnez un téléphone dans les choix"
+
+#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr "Appels de cette semaine"
+
+#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Appels de la semaine dernière"
+
+#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Appels de ce mois"
+
+#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Appels du mois précédent"
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Appels entrants et sortants de cette semaine"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Appels entrants et sortants de la semaine dernière"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Appels entrants et sortants de ce mois"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Appels entrants et sortants du mois dernier"
+
+#: Config.php:44 Config.php:46
+msgid "Local prefix for outgoing calls"
+msgstr ""
+
+#: Config.php:53 Config.php:55
+msgid "telephone area code"
+msgstr ""
+
+#: Config.php:61
+msgid "regex for local calls"
+msgstr ""
+
+#: Config.php:63
+msgid "Identifies if a calling number is a local call without leading area code."
+msgstr ""
+
+#: Config.php:70
+msgid "own telephone number"
+msgstr ""
+
+#: Config.php:72
+msgid "Own telephone number to prefix to internal calls."
+msgstr ""
 
 #: Model/Call.php:43
 msgid "Call"
@@ -26,10 +166,6 @@ msgstr "Appel"
 #: Model/Call.php:44
 msgid "Calls"
 msgstr "Appels"
-
-#: Model/Call.php:60 js/DialerPanel.js:77
-msgid "Line"
-msgstr "Ligne"
 
 #: Model/Call.php:80
 msgid "Caller Id"
@@ -67,13 +203,9 @@ msgstr "Source"
 msgid "Destination"
 msgstr "Destination"
 
-#: Model/MyPhone.php:32 js/DialerPanel.js:54
-msgid "Phone"
-msgstr "Téléphone"
-
-#: Model/MyPhone.php:33 js/CallGridPanel.js:167
-msgid "Phones"
-msgstr "Téléphones"
+#: Model/Call.php:125
+msgid "resolved destination"
+msgstr ""
 
 #: Model/MyPhone.php:61
 msgid "Settings"
@@ -86,132 +218,3 @@ msgstr "Lignes"
 #: Model/MyPhone.php:69
 msgid "Description"
 msgstr "Description"
-
-#: js/DialerPanel.js:86
-msgid "Number"
-msgstr "Numéro"
-
-#: js/DialerPanel.js:95
-msgid "Cancel"
-msgstr "Annuler"
-
-#: js/DialerPanel.js:105
-msgid "Dial"
-msgstr "Composer"
-
-#: js/DialerPanel.js:125
-msgid "Error"
-msgstr "Erreur"
-
-#: js/DialerPanel.js:126
-msgid "Not possible to dial."
-msgstr "Numérotation impossible."
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "Éditer les paramètres du téléphone"
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "Composer numéro"
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "Faire un nouvel appel"
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "Aucun téléphone sélectionné"
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "Sélectionnez un téléphone dans les choix"
-
-#: js/AddressbookGridPanelHook.js:40
-msgid "Call contact"
-msgstr "Appeler le contact"
-
-#: js/AddressbookGridPanelHook.js:196
-msgid "Work"
-msgstr "Travail"
-
-#: js/AddressbookGridPanelHook.js:205
-msgid "Home"
-msgstr "Domicile"
-
-#: js/AddressbookGridPanelHook.js:214
-msgid "Cell"
-msgstr "Mobile"
-
-#: js/AddressbookGridPanelHook.js:223
-msgid "Cell private"
-msgstr "Mobile personnel"
-
-#: js/Phone.js:100
-msgid "Incoming call"
-msgstr "Appel entrant"
-
-#: js/Phone.js:104
-msgid "Outgoing call"
-msgstr "Appel sortant"
-
-#: js/Phone.js:112
-msgid "unknown number"
-msgstr "numéro inconnu"
-
-#: Config.php:44 Config.php:46
-msgid "local prefix for outgoing calls"
-msgstr ""
-
-#: Config.php:53 Config.php:55
-msgid "telephone area code"
-msgstr ""
-
-#: Config.php:61
-msgid "regex for local calls"
-msgstr ""
-
-#: Config.php:63
-msgid ""
-"identifies if a calling number is a local call without leading area code"
-msgstr ""
-
-#: Config.php:70
-msgid "own telephone number"
-msgstr ""
-
-#: Config.php:72
-msgid "own telephone number to prefix to internal calls"
-msgstr ""
-
-#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
-msgid "Calls this week"
-msgstr "Appels de cette semaine"
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Appels entrants et sortants de cette semaine"
-
-#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
-msgid "Calls last week"
-msgstr "Appels de la semaine dernière"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Appels entrants et sortants de la semaine dernière"
-
-#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
-msgid "Calls this month"
-msgstr "Appels de ce mois"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Appels entrants et sortants de ce mois"
-
-#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
-msgid "Calls last month"
-msgstr "Appels du mois précédent"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Appels entrants et sortants du mois dernier"
