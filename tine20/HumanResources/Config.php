@@ -141,8 +141,8 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         self::DEFAULT_FEAST_CALENDAR => array(
             // _('Default Feast Calendar')
             'label'                 => 'Default Feast Calendar',
-            // _('Here you can define the default feast calendar used to set feast days and other free days in datepicker')
-            'description'           => 'Here you can define the default feast calendar used to set feast days and other free days in datepicker',
+            // _('Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker')
+            'description'           => 'Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
