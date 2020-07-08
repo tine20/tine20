@@ -16,7 +16,7 @@
 class ActiveSync_Preference extends Tinebase_Preference_Abstract
 {
     /**
-     * default addressbook to create new synced contacts in
+     * default address book to create new synced contacts in
      *
      */
     const DEFAULTADDRESSBOOK = 'defaultAddressbook';
@@ -72,8 +72,8 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
 
         $prefDescriptions = array(
             self::DEFAULTADDRESSBOOK  => array(
-                'label'         => $translate->_('Default Addressbook'),
-                'description'   => $translate->_('The default addressbook to create new contacts in.'),
+                'label'         => $translate->_('Default Address book'),
+                'description'   => $translate->_('The default address book to create new contacts in.'),
             ),
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),

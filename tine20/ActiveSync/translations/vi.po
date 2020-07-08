@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # sao sang <saosangmo@yahoo.com>, 2013
 msgid ""
@@ -8,131 +8,103 @@ msgstr ""
 "PO-Revision-Date: 2017-09-28 09:48+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/SyncDevices.js:70
-msgid "SyncDevice"
-msgid_plural "SyncDevices"
-msgstr[0] ""
+#: Preference.php:75
+msgid "Default Address book"
+msgstr ""
+
+#: Preference.php:76
+msgid "The default address book to create new contacts in."
+msgstr ""
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Lịch mặc định"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Lịch mặc định để tạo sự kiện mới trong đó"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Danh sách công việc mặc định"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Danh sách công việc mặc định để tạo việc mới trong đó"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:69
-msgid "ID"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:70 js/SyncDevicesGridPanel.js:153
-#: js/EditDialog.js:72
+#: js/EditDialog.js:72 js/SyncDevicesGridPanel.js:70
+#: js/SyncDevicesGridPanel.js:154
 msgid "Device ID"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:71 js/EditDialog.js:79
+#: js/EditDialog.js:79
 msgid "Devicetype"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:72 js/EditDialog.js:86
+#: js/EditDialog.js:86 js/SyncDevicesGridPanel.js:72
 msgid "Owner"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
+#: js/EditDialog.js:98 js/SyncDevicesGridPanel.js:73
 msgid "Policy"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:104
-msgid "AS Version"
+#: js/EditDialog.js:104 js/SyncDevicesGridPanel.js:74
+msgid "ActiveSync Version"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:110
-msgid "Useragent"
+#: js/EditDialog.js:110 js/SyncDevicesGridPanel.js:75
+msgid "User agent"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:116
+#: js/EditDialog.js:116 js/SyncDevicesGridPanel.js:76
 msgid "Model"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:122
+#: js/EditDialog.js:122 js/SyncDevicesGridPanel.js:77
 msgid "IMEI"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:128
+#: js/EditDialog.js:128 js/SyncDevicesGridPanel.js:78
 msgid "Friendly Name"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:79 js/EditDialog.js:134
+#: js/EditDialog.js:134
 msgid "OS"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:140
+#: js/EditDialog.js:140 js/SyncDevicesGridPanel.js:80
 msgid "OS Language"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:81 js/EditDialog.js:146
+#: js/EditDialog.js:146
 msgid "Phonenumber"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:82
-msgid "Ping Lifetime"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:83
-msgid "Ping Folder"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:84
-msgid "Remote Wipe"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:85
-msgid "Calendarfilter"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:86
-msgid "Contactsfilter"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:87
-msgid "Emailfilter"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:88
-msgid "Tasksfilter"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:89
-msgid "Last Ping"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:100
-msgid "Remote Reset Device"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:115
-msgid "Please Confirm"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:116
-msgid ""
-"Do you really want to wipe the selected devices? All personal data will be "
-"removed and the device is reset to factory settings!"
-msgstr ""
-
-#: js/SyncDevicesGridPanel.js:152
-msgid "Quicksearch"
-msgstr ""
+#: js/SyncDevices.js:71
+msgid "Sync Device"
+msgid_plural "Sync Devices"
+msgstr[0] ""
 
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
-msgstr[0] "one:Thiết bị\nother:Thiết bị"
+msgstr[0] ""
+"one:Thiết bị\n"
+"other:Thiết bị"
 
 #: js/Model.js:42
 msgid "Devices"
@@ -172,59 +144,119 @@ msgstr "đã khởi tạo"
 msgid "Set Sync Filter"
 msgstr "Đặt bộ lọc đồng bộ"
 
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Sổ địa chỉ mặc định"
+#: js/SyncDevicesGridPanel.js:69
+msgid "ID"
+msgstr ""
 
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Sổ địa chỉ mặc định khi tạo liên lạc mới"
+#: js/SyncDevicesGridPanel.js:71
+msgid "Device Type"
+msgstr ""
 
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Lịch mặc định"
+#: js/SyncDevicesGridPanel.js:79
+msgid "Operating System"
+msgstr ""
 
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Lịch mặc định để tạo sự kiện mới trong đó"
+#: js/SyncDevicesGridPanel.js:81
+msgid "Phone Number"
+msgstr ""
 
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Danh sách công việc mặc định"
+#: js/SyncDevicesGridPanel.js:82
+msgid "Ping Lifetime"
+msgstr ""
 
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Danh sách công việc mặc định để tạo việc mới trong đó"
+#: js/SyncDevicesGridPanel.js:83
+msgid "Ping Folder"
+msgstr ""
 
-#: Config.php:52
+#: js/SyncDevicesGridPanel.js:84
+msgid "Remote Wipe"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:85
+msgid "Calendar Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:86
+msgid "Contacts Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:87
+msgid "E-mail Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:88
+msgid "Tasks Filter"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:89
+msgid "Last Ping"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:90
+msgid "Monitor Last Ping"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:101
+msgid "Remote Device Reset"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:116
+msgid "Please Confirm"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:117
+msgid "Do you really want to wipe the selected devices? All personal data will be removed and the device will be reset to factory settings!"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:153
+msgid "Quicksearch"
+msgstr ""
+
+#: Setup/Update/Release6.php:290 Setup/setup.xml:549
+msgid "Default Policy"
+msgstr "Chính sách mặc định"
+
+#: Setup/Update/Release6.php:295 Setup/setup.xml:554
+msgid "Default Policy installed during setup"
+msgstr "Chính sách mặc định đã được thiết lập quá trình cài đặt"
+
+#: Config.php:57
 msgid "Default policy for new devices"
 msgstr "Chính sách mặc định cho thiết bị mới"
 
-#: Config.php:54
+#: Config.php:59
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Nhập vào mã chính sách muốn áp dụng mỗi khi thiết bị mới được tạo"
 
-#: Config.php:63
+#: Config.php:68
+msgid "User Agent Deny List"
+msgstr ""
+
+#: Config.php:70
+msgid "Array of regular expressions of User-Agent strings"
+msgstr ""
+
+#: Config.php:81
 msgid "Disable Access Log"
 msgstr "Tắt nhật ký truy cập"
 
-#: Config.php:65
+#: Config.php:83
 msgid "Disable ActiveSync Access Log creation."
 msgstr "Ngừng tạo nhật ký truy cập ActiveSync"
 
-#: Config.php:74
-msgid "Filter timeslot for emails"
+#: Config.php:92
+msgid "Filter timeslot for e-mails"
 msgstr ""
 
-#: Config.php:76
-msgid "For how long in the past the emails should be synchronized."
+#: Config.php:94
+msgid "For how long in the past the e-mails should be synchronized."
 msgstr ""
 
-#: Config.php:97
+#: Config.php:115
 msgid "Filter timeslot for events"
 msgstr ""
 
-#: Config.php:99
+#: Config.php:117
 msgid "For how long in the past the events should be synchronized."
 msgstr ""
 
@@ -244,10 +276,8 @@ msgstr ""
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
 
-#: Setup/setup.xml:544 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Chính sách mặc định"
+#~ msgid "Default Addressbook"
+#~ msgstr "Sổ địa chỉ mặc định"
 
-#: Setup/setup.xml:549 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Chính sách mặc định đã được thiết lập quá trình cài đặt"
+#~ msgid "The default addressbook to create new contacts in."
+#~ msgstr "Sổ địa chỉ mặc định khi tạo liên lạc mới"

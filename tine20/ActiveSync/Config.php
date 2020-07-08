@@ -104,9 +104,9 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'default'               => FALSE,
         ),
         self::MAX_FILTER_TYPE_EMAIL => array(
-        //_('Filter timeslot for emails')
+        //_('Filter timeslot for e-mails')
             'label'                 => 'Filter timeslot for emails',
-        //_('For how long in the past the emails should be synchronized.')
+        //_('For how long in the past the e-mails should be synchronized.')
             'description'           => 'For how long in the past the emails should be synchronized.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
             // @todo options is not used yet (only for TYPE_KEYFIELD_CONFIG configs),
