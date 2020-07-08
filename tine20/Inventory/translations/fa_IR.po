@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # mrp59 <mrp59@yahoo.com>, 2013
 # mrp59 <mrp59@yahoo.com>, 2013
@@ -9,77 +9,21 @@ msgstr ""
 "PO-Revision-Date: 2017-12-13 11:05+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/tine20/tine20/language/fa_IR/)\n"
+"Language: fa_IR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Model/InventoryItem.php:38
-msgid "Inventory item"
-msgid_plural "Inventory items"
-msgstr[0] "one: اقلام موجود\nother: اقلام موجود"
-msgstr[1] "one: اقلام موجود\nother: اقلام موجود"
-
-#: Model/InventoryItem.php:42
-msgid "Inventory item list"
-msgid_plural "Inventory item lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/InventoryItem.php:82 js/InventoryItemEditDialog.js:101
-msgid "Name"
-msgstr "نام"
-
-#: Model/InventoryItem.php:88 js/InventoryItemEditDialog.js:197
-msgid "Status"
-msgstr "وضعیت"
-
-#: Model/InventoryItem.php:97
-msgid "Inventory ID"
-msgstr "شناسه موجودی"
-
-#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:121
-msgid "Description"
-msgstr "توضیحات"
-
-#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:155
-msgid "Location"
-msgstr "موقعیت"
-
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:277
-msgid "Invoice date"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
 msgstr ""
 
-#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:271
-msgid "Invoice"
-msgstr "فاکتور"
-
-#: Model/InventoryItem.php:150 js/InventoryItemEditDialog.js:251
-msgid "Price"
-msgstr "قیمت"
-
-#: Model/InventoryItem.php:155
-msgid "Cost Center"
-msgstr ""
-
-#: Model/InventoryItem.php:168 js/InventoryItemEditDialog.js:168
-msgid "Warranty"
-msgstr "گارانتی"
-
-#: Model/InventoryItem.php:176
-msgid "Item added"
-msgstr "اقلام افزوده شده"
-
-#: Model/InventoryItem.php:184
-msgid "Item removed"
-msgstr "اقلام حذف شده"
-
-#: Model/InventoryItem.php:193
-msgid "Deprecate"
+#: Preference.php:61
+msgid "The default container for new items"
 msgstr ""
 
 #: js/InventoryItemEditDialog.js:42
@@ -94,13 +38,29 @@ msgstr "عمومی"
 msgid "ID"
 msgstr "شناسه"
 
+#: js/InventoryItemEditDialog.js:101 Model/InventoryItem.php:82
+msgid "Name"
+msgstr "نام"
+
+#: js/InventoryItemEditDialog.js:121 Model/InventoryItem.php:104
+msgid "Description"
+msgstr "توضیحات"
+
 #: js/InventoryItemEditDialog.js:125
 msgid "Enter description"
 msgstr "وارد کردن توضیحات"
 
+#: js/InventoryItemEditDialog.js:155 Model/InventoryItem.php:111
+msgid "Location"
+msgstr "موقعیت"
+
 #: js/InventoryItemEditDialog.js:162
 msgid "Added"
 msgstr "اضافه شده"
+
+#: js/InventoryItemEditDialog.js:168 Model/InventoryItem.php:168
+msgid "Warranty"
+msgstr "گارانتی"
 
 #: js/InventoryItemEditDialog.js:174
 msgid "Removed"
@@ -114,25 +74,45 @@ msgstr "تعداد کل"
 msgid "Available number"
 msgstr ""
 
+#: js/InventoryItemEditDialog.js:197 Model/InventoryItem.php:88
+msgid "Status"
+msgstr "وضعیت"
+
 #: js/InventoryItemEditDialog.js:230
 msgid "Accounting"
 msgstr "حسابداری"
+
+#: js/InventoryItemEditDialog.js:251 Model/InventoryItem.php:150
+msgid "Price"
+msgstr "قیمت"
 
 #: js/InventoryItemEditDialog.js:258
 msgid "Cost center"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:283
+#: js/InventoryItemEditDialog.js:271 Model/InventoryItem.php:143
+msgid "Invoice"
+msgstr "فاکتور"
+
+#: js/InventoryItemEditDialog.js:277 Model/InventoryItem.php:116
+msgid "Invoice date"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
 msgid "Depreciate"
 msgstr ""
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
+msgid "All Inventory Items"
 msgstr ""
 
-#: Preference.php:61
-msgid "The default container for new items"
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
+msgid "All existing Inventory Items"
 msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "موجودی"
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -142,29 +122,61 @@ msgstr "وضعیت موجودی در دسترس"
 msgid "Possible status."
 msgstr "وضعیت ممکن"
 
-#: Config.php:40
+#: Config.php:41
 msgid "ordered"
 msgstr "سفارش داده شده"
 
-#: Config.php:41
+#: Config.php:42
 msgid "available"
 msgstr "در دسترس"
 
-#: Config.php:42
+#: Config.php:43
 msgid "defect"
 msgstr "کمبود"
 
-#: Config.php:43
+#: Config.php:44
 msgid "missing"
 msgstr "از دست رفته"
 
-#: Config.php:44
+#: Config.php:45
 msgid "removed"
 msgstr "حذف شده"
 
-#: Config.php:45
+#: Config.php:46
 msgid "unknown"
 msgstr ""
+
+#: Model/InventoryItem.php:38
+msgid "Inventory item"
+msgid_plural "Inventory items"
+msgstr[0] ""
+"one: اقلام موجود\n"
+"other: اقلام موجود"
+msgstr[1] ""
+"one: اقلام موجود\n"
+"other: اقلام موجود"
+
+#: Model/InventoryItem.php:42
+msgid "Inventory item list"
+msgid_plural "Inventory item lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/InventoryItem.php:97
+msgid "Inventory ID"
+msgstr "شناسه موجودی"
+
+#: Model/InventoryItem.php:155
+msgid "Cost Center"
+msgstr ""
+
+#: Model/InventoryItem.php:176
+msgid "Item added"
+msgstr "اقلام افزوده شده"
+
+#: Model/InventoryItem.php:184
+msgid "Item removed"
+msgstr "اقلام حذف شده"
 
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
@@ -175,19 +187,5 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
-
-#: Setup/Initialize.php:34 Setup/Update/Release7.php:127
-msgid "All Inventory Items"
-msgstr ""
-
-#: Setup/Initialize.php:35 Setup/Update/Release7.php:128
-msgid "All existing Inventory Items"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "موجودی"
