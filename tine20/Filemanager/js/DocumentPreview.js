@@ -145,11 +145,11 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             var text = '';
 
             if (!Tine.Tinebase.configManager.get('filesystem').createPreviews) {
-                text = '<b>' + me.app.i18n._('Sorry, Tine 2.0 would like to show you the contents of the file displayed.') + '</b><br/><br/>' +
+                text = '<b>' + me.app.i18n._('Sorry, Tine 2.0 would have liked to show you the contents of the file.') + '</b><br/><br/>' +
                     me.app.i18n._('This is possible for .doc, .jpg, .pdf and even more file formats.') + '<br/>' +
                     '<a href="https://www.tine20.com/kontakt/" target="_blank">' +
                     me.app.i18n._('Interested? Then let us know!') + '</a><br/>' +
-                    me.app.i18n._('We are happy make you a non-binding offer.');
+                    me.app.i18n._('We would be happy to make you a non-binding offer.');
             } else {
                 text = '<b>' + me.app.i18n._('No preview available yet - Please try again in a few minutes.') + '</b>';
             }

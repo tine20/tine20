@@ -403,7 +403,7 @@ Tine.Filemanager.nodeActions.Publish = {
         var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
             allowEmptyPassword: true,
             locked: false,
-            questionText: i18n._('Public download links can be password protected. If left blank anyone who knows the link can download the selected files.')
+            questionText: i18n._('Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files.')
         });
         passwordDialog.openWindow();
 

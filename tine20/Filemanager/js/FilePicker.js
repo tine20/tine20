@@ -434,7 +434,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, true], 3)
         }, {
             id: 'contenttype',
-            header: this.app.i18n._("Contenttype"),
+            header: this.app.i18n._("Content type"),
             width: 50,
             sortable: true,
             dataIndex: 'contenttype',

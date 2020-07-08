@@ -631,7 +631,7 @@ Tine.Filemanager.Model.Node.getFilterModel = function() {
     return [
         {label : i18n._('Quick Search'), field : 'query', operators : [ 'contains' ]},
 //        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
-        {label: app.i18n._('Contenttype'), field: 'contenttype'},
+        {label: app.i18n._('Content Type'), field: 'contenttype'},
         {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
         {label: app.i18n._('Description'), field: 'description', valueType: 'fulltext'},
         {filtertype : 'tine.filemanager.pathfiltermodel', app : app},

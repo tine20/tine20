@@ -52,7 +52,7 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                     allowCancel: false,
                     height: 180,
                     width: 300,
-                    title: app.i18n._('Files already exists') + '. ' + app.i18n._('Do you want to replace the following file(s)?'),
+                    title: app.i18n._('File(s) already exists') + '. ' + app.i18n._('Do you want to replace the following file(s)?'),
                     text: existingFilenames.join('<br />'),
                     scope: this,
                     handler: function(button) {
@@ -96,7 +96,7 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
 
             } else {
                 Ext.Msg.show({
-                  title:   app.i18n._('Failure on create folder'),
+                  title:   app.i18n._('An error occurred creating this folder'),
                   msg:     app.i18n._('Item with this name already exists!'),
                   icon:    Ext.MessageBox.ERROR,
                   buttons: Ext.Msg.OK

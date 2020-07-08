@@ -236,7 +236,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getColumnModel: function(){
         var columns = [{ 
                 id: 'url',
-                header: this.app.i18n._('Url'),
+                header: this.app.i18n._('URL'),
                 dataIndex: 'url',
                 width: 250,
                 //sortable: false,

@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # corneliusweiss <mail@corneliusweiss.de>, 2012
 # Ettore Atalan <atalanttore@googlemail.com>, 2014,2016-2017
@@ -11,116 +11,83 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-11-28 12:18+0000\n"
-"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
+"PO-Revision-Date: 2020-04-06 12:24+0200\n"
+"Last-Translator: Paul Hartog <p.hartog@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 2.3\n"
 
-#: js/NodeTreePanel.js:564 js/NodeGridPanel.js:873
-msgid "Upload Failed"
-msgstr "Hochladen fehlgeschlagen"
+#: Frontend/Download.php:109
+msgid "Password for download required"
+msgstr "Zum Herunterladen Passwort eingeben"
 
-#: js/NodeTreePanel.js:565 js/NodeGridPanel.js:874
-msgid "Putting files in this folder is not allowed!"
-msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
+#: Frontend/Download.php:111
+msgid "Submit"
+msgstr "Abschicken"
 
-#: js/Filemanager.js:24
-msgid "Filemanager"
-msgstr "Dateimanager"
+#: Frontend/Download.php:125
+msgid "File not found!"
+msgstr "Datei nicht gefunden!"
 
-#: js/Filemanager.js:74 js/nodeActions.js:285
-msgid "Save locally"
-msgstr "Lokal speichern"
-
-#: js/NodeGridPanel.js:226
-msgid "Tags"
-msgstr "Tags"
-
-#: js/NodeGridPanel.js:234 js/FilePicker.js:295
-#: js/NotificationGridPanel.js:127 js/NodeEditDialog.js:139
-#: Frontend/Download.php:196 Frontend/Download.php:223
+#: Frontend/Download.php:196 Frontend/Download.php:223 js/FilePicker.js:414
+#: js/NodeGridPanel.js:234 js/NodeEditDialog.js:139
+#: js/NotificationGridPanel.js:127
 msgid "Name"
 msgstr "Name"
 
-#: js/NodeGridPanel.js:241 js/FilePicker.js:302 js/UsagePanel.js:39
-#: Frontend/Download.php:197 Frontend/Download.php:224
+#: Frontend/Download.php:197 Frontend/Download.php:224 js/FilePicker.js:421
+#: js/NodeGridPanel.js:241 js/UsagePanel.js:39
 msgid "Size"
 msgstr "Größe"
 
-#: js/NodeGridPanel.js:248 js/FilePicker.js:309 js/Model.js:612
-msgid "Contenttype"
-msgstr "Typ"
+#: Frontend/Download.php:198 Frontend/Download.php:225 js/NodeEditDialog.js:193
+msgid "Last Modified"
+msgstr "Letzter Änderungszeitpunkt"
 
-#: js/NodeGridPanel.js:256 js/FilePicker.js:317 js/Model.js:26
-#: js/NodeEditDialog.js:61 Frontend/Download.php:200
+#: Frontend/Download.php:199 js/NodeEditDialog.js:214 js/Model.js:636
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Frontend/Download.php:200 js/FilePicker.js:436 js/NodeGridPanel.js:256
+#: js/NodeEditDialog.js:61 js/Model.js:28
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Ordner"
 msgstr[1] "Ordner"
 
-#: js/NodeGridPanel.js:264 js/Model.js:613 js/NodeEditDialog.js:181
-#: js/DownloadLinkGridPanel.js:263
-msgid "Creation Time"
-msgstr "Erstellt am"
+#: Frontend/Download.php:226 js/NodeEditDialog.js:61 js/Model.js:25
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "Datei"
+msgstr[1] "Dateien"
 
-#: js/NodeGridPanel.js:271 js/NodeEditDialog.js:178
-#: js/DownloadLinkGridPanel.js:255
-msgid "Created By"
-msgstr "Erstellt von"
+#: Preference.php:61
+msgid "Default behavior when double-clicking on a Row"
+msgstr "Standardverhalten beim Doppelklicken auf eine Zeile"
 
-#: js/NodeGridPanel.js:278 js/DownloadLinkGridPanel.js:287
-msgid "Last Modified Time"
-msgstr "Zuletzt geändert"
+#: Preference.php:62
+msgid "Defines which action should be executed by default when double-clicked."
+msgstr "Legt fest, welche Aktion bei einem Doppelklick standardmäßig ausgeführt werden soll."
 
-#: js/NodeGridPanel.js:285 js/DownloadLinkGridPanel.js:295
-msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
+#: js/FilePicker.js:217
+msgid "Invalid Filename"
+msgstr "Ungültiger Dateiname"
 
-#: js/NodeGridPanel.js:296 js/UsagePanel.js:84
-msgid "Revision Size"
-msgstr "Revisions Größe"
+#: js/FilePicker.js:428 js/NodeGridPanel.js:248
+msgid "Content type"
+msgstr "Inhaltstyp"
 
-#: js/NodeGridPanel.js:297
-msgid "Total size of all available revisions"
-msgstr "Gesamtgröße der verfügbaren Revisionen"
-
-#: js/NodeGridPanel.js:309 js/Model.js:619 js/NodeEditDialog.js:159
-msgid "Indexed"
-msgstr "Indiziert"
-
-#: js/NodeGridPanel.js:310
-msgid "File contents is part of the search index"
-msgstr "Dateiinhalte sind im Suchindex"
-
-#: js/NodeGridPanel.js:417
-msgid "Upload"
-msgstr "Hochladen"
-
-#: js/NodeGridPanel.js:475 js/NodeGridPanel.js:610
-msgid "Open Data Safe"
-msgstr "Datentresor öffnen"
-
-#: js/NodeGridPanel.js:497
-msgid "Folder Up"
-msgstr "Aufwärts"
-
-#: js/NodeGridPanel.js:610
-msgid "Close Data Safe"
-msgstr "Datentresor schließen"
-
-#: js/DownloadLinkDialog.js:52
-msgid "Node Download Links"
-msgstr "Knoten Download Links"
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "Pfad"
 
 #: js/FilePublishedDialog.js:58 js/DownloadLinkGridPanel.js:239
-msgid "Url"
+msgid "URL"
 msgstr "URL"
 
 #: js/FilePublishedDialog.js:66 js/FilePublishedDialog.js:109
@@ -135,38 +102,57 @@ msgstr "Gültig bis"
 msgid "Send as e-mail"
 msgstr "Sende als E-Mail"
 
-#: js/FilePublishedDialog.js:106 js/Model.js:78
+#: js/FilePublishedDialog.js:106 js/Model.js:82
 msgid "Download"
 msgstr "Herunterladen"
 
-#: js/ExceptionHandler.js:32
-msgid "Service Unavailable"
-msgstr "Dienst nicht verfügbar"
+#: js/DownloadLinkGridPanel.js:68
+msgid "Create Public Link"
+msgstr "Öffentlichen Link erstellen"
 
-#: js/ExceptionHandler.js:33
-#, python-brace-format
-msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Der Dateimanager ist nicht korrekt konfiguriert. Bitte kontaktieren sie ihren Administrator oder ziehen sie die {0}Tine 2.0 Dokumentation{1} zu Rate."
+#: js/DownloadLinkGridPanel.js:76 js/NotificationGridPanel.js:231
+msgid "Remove record"
+msgstr "Eintrag entfernen"
 
-#: js/ExceptionHandler.js:55
-msgid "Files already exists"
-msgstr "Datei(en) schon vorhanden"
+#: js/DownloadLinkGridPanel.js:144
+msgid "Creating new Download Link..."
+msgstr "Erstelle neuen Download Link..."
 
-#: js/ExceptionHandler.js:55
-msgid "Do you want to replace the following file(s)?"
-msgstr "Möchten Sie die folgenden Datei(en) ersetzen?"
+#: js/DownloadLinkGridPanel.js:182
+msgid "Deleting Download Links..."
+msgstr "Lösche Download Links..."
 
-#: js/ExceptionHandler.js:99
-msgid "Failure on create folder"
-msgstr "Fehler beim anlegen des Ordners"
+#: js/DownloadLinkGridPanel.js:182
+msgid "Deleting Download Link..."
+msgstr "Lösche Download Link..."
 
-#: js/ExceptionHandler.js:100
-msgid "Item with this name already exists!"
-msgstr "Item(s) mit diesem Namen schon vorhanden!"
+#: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:271
+#: js/NodeEditDialog.js:178
+msgid "Created By"
+msgstr "Erstellt von"
 
-#: js/RevisionPanel.js:34 js/Model.js:102
+#: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:264
+#: js/NodeEditDialog.js:181 js/Model.js:635
+msgid "Creation Time"
+msgstr "Erstellt am"
+
+#: js/DownloadLinkGridPanel.js:271
+msgid "Expiration Time"
+msgstr "Fristablauf"
+
+#: js/DownloadLinkGridPanel.js:280
+msgid "Access Count"
+msgstr "Anzahl der Zugriffe"
+
+#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:278
+msgid "Last Modified Time"
+msgstr "Zuletzt geändert"
+
+#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:285
+msgid "Last Modified By"
+msgstr "Zuletzt geändert von"
+
+#: js/RevisionPanel.js:34 js/Model.js:106
 msgid "Revision"
 msgstr "Version"
 
@@ -186,190 +172,222 @@ msgstr "Revisionen limitieren auf"
 msgid "Hold-back in months"
 msgstr "Vorhalten in Monaten"
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "Pfad"
+#: js/NodeTreePanel.js:565 js/NodeGridPanel.js:877 js/Model.js:588
+msgid "Upload Failed"
+msgstr "Hochladen fehlgeschlagen"
 
-#: js/NotificationPanel.js:25
-msgid "Notifications"
-msgstr "Benachrichtigungen"
+#: js/NodeTreePanel.js:566 js/NodeGridPanel.js:878
+msgid "It is not permitted to store files in this folder!"
+msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
 
-#: js/NotificationPanel.js:45
-msgid "This folder has own notification settings"
-msgstr "Dieser Ordner hat eigene Benachrichtigungs Einstellungen"
+#: js/FilePickerDialog.js:103
+msgid "Select a file"
+msgstr "Wähle eine Datei"
 
-#: js/nodeActions.js:24
-msgid "Reload"
-msgstr "Aktualisieren"
+#: js/FilePickerDialog.js:103
+msgid "Select files"
+msgstr "Wähle Dateien aus"
 
-#: js/nodeActions.js:41
-msgid "Create Folder"
-msgstr "Ordner anlegen"
+#: js/FilePickerDialog.js:106
+msgid "Select a folder"
+msgstr "Wähle einen Ordner aus"
 
-#: js/nodeActions.js:50
-msgid "New Folder"
-msgstr "Neuer Ordner"
+#: js/FilePickerDialog.js:106
+msgid "Select folders"
+msgstr "Ordner Auswählen"
 
-#: js/nodeActions.js:50
-msgid "Please enter the name of the new folder:"
-msgstr "Bitte geben Sie den Namen für den neuen Ordner ein:"
+#: js/FilePickerDialog.js:109
+msgid "Select an item"
+msgstr "Wähle einen Artikel aus"
 
-#: js/nodeActions.js:53
+#: js/FilePickerDialog.js:109
+msgid "Select items"
+msgstr "Artikel Auswählen"
+
+#: js/FilePickerDialog.js:129
+msgid "Checking ..."
+msgstr "Prüfe…"
+
+#: js/FilePickerDialog.js:139
+msgid "Overwrite Existing File?"
+msgstr "Bestehende Datei Überschreiben?"
+
+#: js/FilePickerDialog.js:140
+msgid "Do you really want to overwrite the selected file?"
+msgstr "Wollen Sie wirklich die ausgewählten Dateien überschreiben?"
+
+#: js/NodeGridPanel.js:226
+msgid "Tags"
+msgstr "Tags"
+
+#: js/NodeGridPanel.js:296 js/UsagePanel.js:84
+msgid "Revision Size"
+msgstr "Revisions Größe"
+
+#: js/NodeGridPanel.js:297
+msgid "Total size of all available revisions"
+msgstr "Gesamtgröße der verfügbaren Revisionen"
+
+#: js/NodeGridPanel.js:309 js/NodeEditDialog.js:159 js/Model.js:641
+msgid "Indexed"
+msgstr "Indiziert"
+
+#: js/NodeGridPanel.js:310
+msgid "File contents is part of the search index"
+msgstr "Dateiinhalte sind im Suchindex"
+
+#: js/NodeGridPanel.js:417
+msgid "Upload"
+msgstr "Hochladen"
+
+#: js/NodeGridPanel.js:474 js/NodeGridPanel.js:614
+msgid "Open Data Safe"
+msgstr "Datentresor öffnen"
+
+#: js/NodeGridPanel.js:496
+msgid "Folder Up"
+msgstr "Aufwärts"
+
+#: js/NodeGridPanel.js:614
+msgid "Close Data Safe"
+msgstr "Datentresor schließen"
+
+#: js/Filemanager.js:24
+msgid "Filemanager"
+msgstr "Dateimanager"
+
+#: js/Filemanager.js:74 js/nodeActions.js:283
+msgid "Save locally"
+msgstr "Lokal speichern"
+
+#: js/QuickLookPanel.js:62
+msgid "Close"
+msgstr "Schließen"
+
+#: js/QuickLookPanel.js:71
+msgid "Loading preview ..."
+msgstr "Lade Vorschau …"
+
+#: js/NodeEditDialog.js:59
+msgid "Edit folder"
+msgstr "Ordner bearbeiten"
+
+#: js/NodeEditDialog.js:59
+msgid "edit file"
+msgstr "Datei bearbeiten"
+
+#: js/NodeEditDialog.js:96
+msgid "Public Links"
+msgstr "Öffentliche Links"
+
+#: js/NodeEditDialog.js:147 js/Model.js:633
+msgid "Type"
+msgstr "Typ"
+
+#: js/NodeEditDialog.js:159
+msgid "Not yet indexed"
+msgstr "Noch nicht indiziert"
+
+#: js/NodeEditDialog.js:190
+msgid "Modified By"
+msgstr "Zuletzt geändert von"
+
+#: js/NodeEditDialog.js:228
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
+
+#: js/ExceptionHandler.js:32
+msgid "Service Unavailable"
+msgstr "Dienst nicht verfügbar"
+
+#: js/ExceptionHandler.js:33
 #, python-brace-format
-msgid "No {0} added"
-msgstr "Kein {0} hinzugefügt"
+msgid "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "Der Dateimanager ist nicht korrekt konfiguriert. Bitte kontaktieren sie ihren Administrator oder ziehen sie die {0}Tine 2.0 Dokumentation{1} zu Rate."
 
-#: js/nodeActions.js:53 js/nodeActions.js:140
-#, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr "Sie müssen einen {0}-namen angeben!"
+#: js/ExceptionHandler.js:55
+msgid "File(s) already exists"
+msgstr "Datei(en) schon vorhanden"
 
-#: js/nodeActions.js:86
-msgid "Edit Properties"
-msgstr "Eigenschaften bearbeiten"
+#: js/ExceptionHandler.js:55
+msgid "Do you want to replace the following file(s)?"
+msgstr "Möchten Sie die folgenden Datei(en) ersetzen?"
 
-#: js/nodeActions.js:119
-msgid "Rename"
-msgstr "Umbenennen"
+#: js/ExceptionHandler.js:99
+msgid "An error occurred creating this folder"
+msgstr "Beim Erstellen dieses Ordners ist ein Fehler aufgetreten"
 
-#: js/nodeActions.js:133
-#, python-brace-format
-msgid "Rename {0}"
-msgstr "{0} umbenennen"
+#: js/ExceptionHandler.js:100
+msgid "Item with this name already exists!"
+msgstr "Item(s) mit diesem Namen schon vorhanden!"
 
-#: js/nodeActions.js:134
-#, python-brace-format
-msgid "Please enter the new name of the {0}:"
-msgstr "Bitte den neuen Namen von {0} eingeben:"
+#: js/RecursiveFilter.js:38
+msgid "Whole Filemanager"
+msgstr "Gesamter Dateimanager"
 
-#: js/nodeActions.js:140
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr "Unbenannter {0}"
+#: js/RecursiveFilter.js:48
+msgid "This Folder"
+msgstr "Dieser Ordner"
 
-#: js/nodeActions.js:164 js/nodeActions.js:175
-msgid "System Link"
-msgstr "System Link"
+#: js/RecursiveFilter.js:59
+msgid "Search"
+msgstr "Suche"
 
-#: js/nodeActions.js:178
-msgid "Use this link to share the entry with other system users"
-msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu teilen"
+#: js/Model.js:83
+msgid "The grant to download files"
+msgstr "Das Recht, Dateien zu herunterzuladen"
 
-#: js/nodeActions.js:195
-msgid "Delete"
-msgstr "Löschen"
-
-#: js/nodeActions.js:218
-msgid "Do you really want to delete the following files?"
-msgstr "Möchten Sie folgende Datei(en) löschen?"
-
-#: js/nodeActions.js:253
-msgid "Move"
-msgstr "Verschieben"
-
-#: js/nodeActions.js:264
-msgid "Move Items"
-msgstr "Einträge verschieben"
-
-#: js/nodeActions.js:312
-msgid "Preview"
-msgstr "Vorschau"
-
-#: js/nodeActions.js:339 js/Model.js:80
+#: js/Model.js:84 js/nodeActions.js:340
 msgid "Publish"
 msgstr "Veröffentlichen"
 
-#: js/nodeActions.js:355
-msgid ""
-"Public download links can be password protected. If left blank anyone who "
-"knows the link can download the selected files."
-msgstr "Anonyme Download Links können mit einem Passwort geschützt werden. Wenn kein Passwort angegeben ist kann jeder der den Link kennt auf die selektierten Dateien zugreifen."
-
-#: js/nodeActions.js:372
-msgid "Folder has been published successfully"
-msgstr "Ordner wurde erfolgreich veröffentlicht"
-
-#: js/nodeActions.js:372
-msgid "File has been published successfully"
-msgstr "Datei wurde erfolgreich veröffentlicht"
-
-#: js/Model.js:23 js/NodeEditDialog.js:61 Frontend/Download.php:226
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "Datei"
-msgstr[1] "Dateien"
-
-#: js/Model.js:79
-msgid "The grant to download files"
-msgstr "Das Recht Datein zu downloaden"
-
-#: js/Model.js:81
+#: js/Model.js:85
 msgid "The grant to create anonymous download links for files"
-msgstr "Das Recht anonyme Download Links für Datein zu erstellen"
+msgstr "Das Recht, anonyme Download Links für Dateien zu erstellen"
 
-#: js/Model.js:258 js/Model.js:273
+#: js/Model.js:268 js/Model.js:283
 #, python-brace-format
 msgid "Copying data .. {0}"
 msgstr "Kopiere Daten .. {0}"
 
-#: js/Model.js:261 js/Model.js:275
+#: js/Model.js:271 js/Model.js:285
 #, python-brace-format
 msgid "Moving data .. {0}"
 msgstr "Verschiebe Daten .. {0}"
 
-#: js/Model.js:279
+#: js/Model.js:289
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/Model.js:610
+#: js/Model.js:585
+#, python-brace-format
+msgid "Error while uploading \"{fileName}\". Please try again later."
+msgstr "Fehler beim Hochladen von „{fileName}“ . Bitte versuchen Sie es später noch einmal."
+
+#: js/Model.js:632
 msgid "Quick Search"
 msgstr "Schnellsuche"
 
-#: js/Model.js:611 js/NodeEditDialog.js:147
-msgid "Type"
-msgstr "Typ"
+#: js/Model.js:634
+msgid "Content Type"
+msgstr "Inhaltstyp"
 
-#: js/Model.js:614 js/NodeEditDialog.js:214 Frontend/Download.php:199
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/Model.js:618
+#: js/Model.js:640
 msgid "File Contents"
 msgstr "Dateiinhalt"
 
-#: js/Model.js:641
+#: js/Model.js:663
 msgid "Download Link"
 msgid_plural "Download Links"
 msgstr[0] "Download Link"
 msgstr[1] "Download Links"
 
-#: js/GrantsPanel.js:33
-msgid "Grants"
-msgstr "Berechtigungen"
-
-#: js/GrantsPanel.js:40
-msgid "This folder has own grants"
-msgstr "Diese Ordner hat eigene Berechtigungen"
-
-#: js/GrantsPanel.js:44
-msgid ""
-"Grants of a folder also apply recursively for all of its sub folders as long"
-" they don't have own grants itself."
-msgstr "Berechtigungen gelten ebenfalls rekursiv für alle Unterordner sofern diese nicht über eigene Berechtigungen verfügen."
-
-#: js/GrantsPanel.js:49
-msgid "This folder is part of the data safe"
-msgstr "Dieser Ordner ist Teil des Datentresors"
-
-#: js/GrantsPanel.js:52
-msgid ""
-"If data safe protection is enabled, this folder and all it's contents is "
-"only shown if the data safe is opened."
-msgstr "Wenn der Datentresor Schutz aktiviert ist, kann auf diesen Ordner und seine Inhalte nur zugegriffen werden wenn der Datentresor geöffnet ist."
+#: js/DownloadLinkDialog.js:52
+msgid "Node Download Links"
+msgstr "Knoten Download Links"
 
 #: js/DocumentPreview.js:132
-msgid ""
-"Sorry, Tine 2.0 would like to show you the contents of the file displayed."
+msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
 msgstr "Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
 
 #: js/DocumentPreview.js:133
@@ -381,12 +399,20 @@ msgid "Interested? Then let us know!"
 msgstr "Interessiert? Dann melden Sie sich bei uns!"
 
 #: js/DocumentPreview.js:136
-msgid "We are happy make you a non-binding offer."
+msgid "We would be happy to make you a non-binding offer."
 msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
 
 #: js/DocumentPreview.js:140
 msgid "No preview available yet - Please try again in a few minutes."
 msgstr "Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einigen Minuten erneut."
+
+#: js/NotificationPanel.js:25
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#: js/NotificationPanel.js:45
+msgid "This folder has own notification settings"
+msgstr "Dieser Ordner hat eigene Benachrichtigungs Einstellungen"
 
 #: js/NotificationGridPanel.js:58
 msgid "Notification"
@@ -447,98 +473,29 @@ msgstr "Keine Berechtigung"
 msgid "all"
 msgstr "alle"
 
-#: js/NotificationGridPanel.js:231 js/DownloadLinkGridPanel.js:76
-msgid "Remove record"
-msgstr "Eintrag entfernen"
-
 #: js/NotificationGridPanel.js:299
 msgid "Search for groups ..."
 msgstr "Suche nach Gruppen ..."
 
-#: js/QuickLookPanel.js:56
-msgid "Close"
-msgstr "Schliessen"
+#: js/GrantsPanel.js:33
+msgid "Grants"
+msgstr "Berechtigungen"
 
-#: js/QuickLookPanel.js:65
-msgid "Loading preview ..."
-msgstr ""
+#: js/GrantsPanel.js:40
+msgid "This folder has its own grants"
+msgstr "Diese Ordner hat eigene Berechtigungen"
 
-#: js/NodeEditDialog.js:59
-msgid "Edit folder"
-msgstr "Ordner bearbeiten"
+#: js/GrantsPanel.js:44
+msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
+msgstr "Rechte eines Ordners gelten auch rekursiv für alle Unterordner, es sei denn, sie verfügen über eigene Rechte."
 
-#: js/NodeEditDialog.js:59
-msgid "edit file"
-msgstr "Datei bearbeiten"
+#: js/GrantsPanel.js:49
+msgid "This folder is part of the data safe"
+msgstr "Dieser Ordner ist Teil des Datentresors"
 
-#: js/NodeEditDialog.js:96
-msgid "Public Links"
-msgstr "Öffentliche Links"
-
-#: js/NodeEditDialog.js:159
-msgid "Not yet indexed"
-msgstr "Noch nicht indiziert"
-
-#: js/NodeEditDialog.js:190
-msgid "Modified By"
-msgstr "Zuletzt geändert von"
-
-#: js/NodeEditDialog.js:193 Frontend/Download.php:198
-#: Frontend/Download.php:225
-msgid "Last Modified"
-msgstr "Letzter Änderungszeitpunkt"
-
-#: js/NodeEditDialog.js:228
-msgid "Enter description"
-msgstr "Beschreibung eingeben"
-
-#: js/FilePickerDialog.js:85
-msgid "Select a file"
-msgstr "Wähle eine Datei"
-
-#: js/FilePickerDialog.js:85
-msgid "Select files"
-msgstr ""
-
-#: js/FilePickerDialog.js:88
-msgid "Select a folder"
-msgstr ""
-
-#: js/FilePickerDialog.js:88
-msgid "Select folders"
-msgstr ""
-
-#: js/FilePickerDialog.js:91
-msgid "Select an item"
-msgstr ""
-
-#: js/FilePickerDialog.js:91
-msgid "Select items"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:68
-msgid "Create Public Link"
-msgstr "Öffentlichen Link erstellen"
-
-#: js/DownloadLinkGridPanel.js:144
-msgid "Creating new Download Link..."
-msgstr "Erstelle neuen Download Link..."
-
-#: js/DownloadLinkGridPanel.js:182
-msgid "Deleting Download Links..."
-msgstr "Lösche Download Links..."
-
-#: js/DownloadLinkGridPanel.js:182
-msgid "Deleting Download Link..."
-msgstr "Lösche Download Link..."
-
-#: js/DownloadLinkGridPanel.js:271
-msgid "Expiration Time"
-msgstr "Fristablauf"
-
-#: js/DownloadLinkGridPanel.js:280
-msgid "Access Count"
-msgstr "Anzahl der Zugriffe"
+#: js/GrantsPanel.js:52
+msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
+msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
 
 #: js/UsagePanel.js:29
 msgid "Usage"
@@ -561,10 +518,8 @@ msgid "Current Usage"
 msgstr "Aktuelle Nutzung"
 
 #: js/UsagePanel.js:64
-msgid ""
-"The Quota applies recursively for files and subfolders. Please note, the "
-"Effective Quota differs wehn a parent folder has set a lower quota."
-msgstr "Das Kontingent gilt rekursiv für Dateien und Unter-Ordner. Achtung: Das effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine geringeres Kontingent gesetzt hat."
+msgid "The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota."
+msgstr "Das Kontingent gilt rekursiv für Dateien und Unterordner. Achtung: Das effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine geringeres Kontingent gesetzt hat."
 
 #: js/UsagePanel.js:91
 msgid "File Type"
@@ -586,47 +541,166 @@ msgstr "Verbrauch nach Benutzer"
 msgid "unknown"
 msgstr "unbekannt"
 
-#: js/RecursiveFilter.js:38
-msgid "Whole Filemanager"
-msgstr "Gesamter Dateimanager"
+#: js/nodeActions.js:24
+msgid "Reload"
+msgstr "Aktualisieren"
 
-#: js/RecursiveFilter.js:48
-msgid "This Folder"
-msgstr "Dieser Ordner"
+#: js/nodeActions.js:41
+msgid "Create Folder"
+msgstr "Ordner anlegen"
 
-#: js/RecursiveFilter.js:59
-msgid "Search"
-msgstr "Suche"
+#: js/nodeActions.js:50
+msgid "New Folder"
+msgstr "Neuer Ordner"
 
-#: Preference.php:61
-msgid "Row double click default"
-msgstr "Standardverhalten bei Doppelklick auf Zeile"
+#: js/nodeActions.js:50
+msgid "Please enter the name of the new folder:"
+msgstr "Bitte geben Sie den Namen für den neuen Ordner ein:"
 
-#: Preference.php:62
-msgid "Defines which action should be executed on double click by default?"
-msgstr "Legt fest, welche Aktion bei einem Doppelklick standardmäßig ausgeführt werden soll."
+#: js/nodeActions.js:53
+#, python-brace-format
+msgid "No {0} added"
+msgstr "Kein {0} hinzugefügt"
 
-#: Frontend/Download.php:109
-msgid "Password for download required"
-msgstr "Zum Herunterladen Passwort eingeben"
+#: js/nodeActions.js:53 js/nodeActions.js:133
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr "Sie müssen einen {0}-namen angeben!"
 
-#: Frontend/Download.php:111
-msgid "Submit"
-msgstr "Abschicken"
+#: js/nodeActions.js:90
+msgid "Edit Properties"
+msgstr "Eigenschaften bearbeiten"
 
-#: Frontend/Download.php:125
-msgid "File not found!"
-msgstr "Datei nicht gefunden!"
+#: js/nodeActions.js:112
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: js/nodeActions.js:126
+#, python-brace-format
+msgid "Rename {0}"
+msgstr "{0} umbenennen"
+
+#: js/nodeActions.js:127
+#, python-brace-format
+msgid "Please enter the new name of the {0}:"
+msgstr "Bitte den neuen Namen von {0} eingeben:"
+
+#: js/nodeActions.js:133
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr "Unbenannter {0}"
+
+#: js/nodeActions.js:157 js/nodeActions.js:168
+msgid "System Link"
+msgstr "System Link"
+
+#: js/nodeActions.js:171
+msgid "Use this link to share the entry with other system users"
+msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu teilen"
+
+#: js/nodeActions.js:191
+msgid "Delete"
+msgstr "Löschen"
+
+#: js/nodeActions.js:214
+msgid "Do you really want to delete the following files?"
+msgstr "Möchten Sie folgende Datei(en) löschen?"
+
+#: js/nodeActions.js:251
+msgid "Move"
+msgstr "Verschieben"
+
+#: js/nodeActions.js:262
+msgid "Move Items"
+msgstr "Einträge verschieben"
+
+#: js/nodeActions.js:311
+msgid "Preview"
+msgstr "Vorschau"
+
+#: js/nodeActions.js:356
+msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
+msgstr "Download Links können mit einem Passwort geschützt werden. Wenn kein Passwort angegeben ist, kann jeder der den Link kennt auf die selektierten Dateien zugreifen."
+
+#: js/nodeActions.js:373
+msgid "Folder has been published successfully"
+msgstr "Ordner wurde erfolgreich veröffentlicht"
+
+#: js/nodeActions.js:373
+msgid "File has been published successfully"
+msgstr "Datei wurde erfolgreich veröffentlicht"
 
 #: Config.php:26
 msgid "Public Download URL"
 msgstr "Öffentliche Download URL"
 
 #: Config.php:28
-msgid ""
-"Serve anonymous downloads from a different URL. Make sure to setup proper "
-"rewrite rules."
-msgstr "Anonyme Downloads von einer anderen URL ausliefern. Stellen sie sicher dass die rewrite Regeln entsprechend angepasst sind."
+msgid "Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly."
+msgstr "Liefern Sie anonyme Downloads von einer anderen URL. Stellen Sie sicher, dass die Umschreiberegeln entsprechend angepasst sind."
+
+#: Controller/Node.php:277
+msgid "you can't remove your own admin grant"
+msgstr "Sie können Ihr eigenes Administrator-Recht nicht entfernen"
+
+#: Controller/Node.php:569
+msgid "My folders"
+msgstr "Meine Ordner"
+
+#: Controller/Node.php:576
+msgid "Shared folders"
+msgstr "Gemeinsame Ordner"
+
+#: Controller/Node.php:583
+msgid "Other users folders"
+msgstr "Ordner anderer Benutzer"
+
+#: Controller/Node.php:1559
+msgid "Received"
+msgstr "Erhalten"
+
+#: Controller/Node.php:1560
+msgid "To"
+msgstr "An"
+
+#: Controller/Node.php:1561
+msgid "Cc"
+msgstr "Cc"
+
+#: Controller/Node.php:1562
+msgid "Bcc"
+msgstr "Bcc"
+
+#: Controller/Node.php:1563
+msgid "From (E-Mail)"
+msgstr "Von (E-Mail)"
+
+#: Controller/Node.php:1564
+msgid "From (Name)"
+msgstr "Von (Name)"
+
+#: Controller/Node.php:1565
+msgid "Body"
+msgstr "Inhalt"
+
+#: Controller/Node.php:1566
+msgid "Attachments"
+msgstr "Anhänge"
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr "Ziel ist ein Unterordner"
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid "The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders."
+msgstr "Das Ziel ist ein Unterordner. Es ist nicht erlaubt einen Ordner in einen seiner Unterordner zu kopieren oder zu verschieben."
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr "Ziel hat den gleichen Pfad"
+
+#: Exception/DestinationIsSameNode.php:31
+msgid "The destination has the same path as the source. No action has been performed."
+msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
 
 #: Acl/Rights.php:104
 msgid "manage shared folders"
@@ -641,69 +715,68 @@ msgid "Manage anonymous download links"
 msgstr "Anonyme Download Links verwalten"
 
 #: Acl/Rights.php:109
-msgid "Allow to see, add and delete download links of files and folders"
+msgid "Allow viewing, adding and deleting download links"
 msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
 
-#: Exception/DestinationIsOwnChild.php:26
-msgid "Destination is a Subfolder"
-msgstr "Ziel ist ein Unterordner"
+#~ msgid "Contenttype"
+#~ msgstr "Inhalts Typ"
 
-#: Exception/DestinationIsOwnChild.php:31
-msgid ""
-"The destination is a subfolder. It is not allowed to copy or move a folder "
-"into one of its subfolders."
-msgstr "Das Ziel ist ein Unterordner. Es ist nicht erlaubt einen Ordner in einen seiner Unterordner zu kopieren oder zu verschieben."
+#~ msgid "If the data safe is activated, this folder and its contents can only be accessed if the data safe is open."
+#~ msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
 
-#: Exception/DestinationIsSameNode.php:26
-msgid "Destination has the same Path"
-msgstr "Ziel hat den gleichen Pfad"
+#~ msgid "Send as E-Mail"
+#~ msgstr "Sende als E-Mail"
 
-#: Exception/DestinationIsSameNode.php:31
-msgid ""
-"The destination has the same path the source has. No action has been "
-"performed."
-msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
+#~ msgid "Files already exists"
+#~ msgstr "Datei(en) schon vorhanden"
 
-#: Controller/Node.php:526
-msgid "My folders"
-msgstr "Meine Ordner"
+#~ msgid "Failure on create folder"
+#~ msgstr "Fehler beim anlegen des Ordners"
 
-#: Controller/Node.php:533
-msgid "Shared folders"
-msgstr "Gemeinsame Ordner"
+#~ msgid "If data safe protection is activated, this folder and its contents can only be accessed if the data safe is open."
+#~ msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
 
-#: Controller/Node.php:540
-msgid "Other users folders"
-msgstr "Ordner anderer Benutzer"
+#~ msgid "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
+#~ msgstr "Download Links können mit einem Passwort geschützt werden. Wenn kein Passwort angegeben ist, kann jeder der den Link kennt auf die selektierten Dateien zugreifen."
 
-#: Controller/Node.php:1497
-msgid "Received"
-msgstr "Erhalten"
+#~ msgid "Allow to see, add and delete download links of files and folders"
+#~ msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
 
-#: Controller/Node.php:1498
-msgid "To"
-msgstr "An"
+#~ msgid "The destination has the same path the source. No action has been performed."
+#~ msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
 
-#: Controller/Node.php:1499
-msgid "Cc"
-msgstr "Cc"
+#~ msgid "Putting files in this folder is not allowed!"
+#~ msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
 
-#: Controller/Node.php:1500
-msgid "Bcc"
-msgstr "Bcc"
+#~ msgid "Url"
+#~ msgstr "URL"
 
-#: Controller/Node.php:1501
-msgid "From (E-Mail)"
-msgstr "Von (E-Mail)"
+#~ msgid "This folder has own grants"
+#~ msgstr "Diese Ordner hat eigene Berechtigungen"
 
-#: Controller/Node.php:1502
-msgid "From (Name)"
-msgstr "Von (Name)"
+#~ msgid "Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself."
+#~ msgstr "Berechtigungen gelten ebenfalls rekursiv für alle Unterordner sofern diese nicht über eigene Berechtigungen verfügen."
 
-#: Controller/Node.php:1503
-msgid "Body"
-msgstr "Inhalt"
+#~ msgid "If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened."
+#~ msgstr "Wenn der Datentresor Schutz aktiviert ist, kann auf diesen Ordner und seine Inhalte nur zugegriffen werden wenn der Datentresor geöffnet ist."
 
-#: Controller/Node.php:1504
-msgid "Attachments"
-msgstr "Anhänge"
+#~ msgid "Sorry, Tine 2.0 would like to show you the contents of the file displayed."
+#~ msgstr "Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
+
+#~ msgid "We are happy make you a non-binding offer."
+#~ msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
+
+#~ msgid "The Quota applies recursively for files and subfolders. Please note, the Effective Quota differs wehn a parent folder has set a lower quota."
+#~ msgstr "Das Kontingent gilt rekursiv für Dateien und Unterordner. Achtung: Das effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine geringeres Kontingent gesetzt hat."
+
+#~ msgid "Row double click default"
+#~ msgstr "Standardverhalten bei Doppelklick auf Zeile"
+
+#~ msgid "Defines which action should be executed on double click by default?"
+#~ msgstr "Legt fest, welche Aktion bei einem Doppelklick standardmäßig ausgeführt werden soll."
+
+#~ msgid "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
+#~ msgstr "Anonyme Downloads von einer anderen URL ausliefern. Stellen sie sicher dass die rewrite Regeln entsprechend angepasst sind."
+
+#~ msgid "The destination has the same path the source has. No action has been performed."
+#~ msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
