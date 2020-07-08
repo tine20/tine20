@@ -59,6 +59,11 @@ a new major release of our business edition.
 Each [Tine 2.0 Business Edition](http://www.tine20.com) is maintained with security patches and bug fixes for at least two 
 years. Our [partners](https://www.tine20.com/partner/) offer a wide range of commercial support for different business needs.
 
+## Quickstart with Docker Compose
+
+Head over to dockerhub to give Tine 2.0 a try on your favorite Docker host:
+https://hub.docker.com/r/tine20/tine20
+
 ## Reporting security issues
 If you found any security relevant issue you can mail us [security@tine20.com](mailto:security@tine20.com).
 
