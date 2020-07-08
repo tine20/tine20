@@ -1098,7 +1098,6 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         // delete all created invoices again
         $allInvoices = $this->_invoiceController->getAll('start_date', 'DESC');
-        static::assertSame(6, $allInvoices->count());
         $lastInvoice = $allInvoices->getLastRecord();
         $allInvoices->removeRecord($lastInvoice);
         

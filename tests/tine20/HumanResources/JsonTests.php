@@ -791,7 +791,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employee->contracts = array($contract->toArray());
         $json = new HumanResources_Frontend_Json();
         $savedEmployee = $json->saveEmployee($json->saveEmployee($employee->toArray()));
-        $this->assertStringEndsWith('00:00:00', $savedEmployee['employment_begin']);
+        $this->assertStringEndsWith('12:00:00', $savedEmployee['employment_begin']);
         $this->assertStringEndsWith('12:00:00', $savedEmployee['contracts'][0]['start_date']);
     }
 
