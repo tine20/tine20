@@ -173,7 +173,7 @@ Tine.Admin.init = function () {
             && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')
         ) {
             tree.push({
-                text: translation.gettext('E-Mail Accounts'),
+                text: translation.gettext('E-mail Accounts'),
                 //pos: 850,
                 cls: "treemain",
                 iconCls: 'FelamimailIconCls',

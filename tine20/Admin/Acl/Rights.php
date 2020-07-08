@@ -45,7 +45,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_APPS = 'manage_apps';
 
     /**
-     * the right to manage email accounts
+     * the right to manage e-mail accounts
      * @staticvar string
      */
     const MANAGE_EMAILACCOUNTS = 'manage_emailaccounts';
@@ -99,7 +99,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const VIEW_SHARED_TAGS = 'viewshared_tags';
 
     /**
-     * the right to view email accounts
+     * the right to view e-mail accounts
      * @staticvar string
      */
     const VIEW_EMAILACCOUNTS = 'view_emailaccounts';
@@ -233,84 +233,84 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $rightDescriptions = array(
             self::MANAGE_ACCESS_LOG   => array(
-                'text'          => $translate->_('manage access log'),
-                'description'   => $translate->_('delete access log entries'),
+                'text'          => $translate->_('Manage access log'),
+                'description'   => $translate->_('Delete access log entries.'),
             ),
             self::MANAGE_ACCOUNTS   => array(
-                'text'          => $translate->_('manage accounts'),
-                'description'   => $translate->_('add and edit users and groups, add group members, change user passwords'),
+                'text'          => $translate->_('Manage accounts'),
+                'description'   => $translate->_('Add and edit users and groups, add group members, change user passwords.'),
             ),
             self::MANAGE_EMAILACCOUNTS   => array(
-                'text'          => $translate->_('manage email accounts'),
-                'description'   => $translate->_('add and edit shared and personal email accounts'),
+                'text'          => $translate->_('Manage e-mail accounts'),
+                'description'   => $translate->_('Add and edit shared and personal e-mail accounts.'),
             ),
             self::MANAGE_APPS   => array(
-                'text'          => $translate->_('manage applications'),
-                'description'   => $translate->_('enable and disable applications, edit application settings'),
+                'text'          => $translate->_('Manage applications'),
+                'description'   => $translate->_('Enable and disable applications, edit application settings.'),
             ),
             self::MANAGE_ROLES  => array(
-                'text'          => $translate->_('manage roles'),
-                'description'   => $translate->_('add and edit roles, add new members to roles, add application rights to roles'),
+                'text'          => $translate->_('Manage roles'),
+                'description'   => $translate->_('Add and edit roles, add new members to roles, add application rights to roles.'),
             ),
             self::MANAGE_SHARED_TAGS    => array(
-                'text'          => $translate->_('manage shared tags'),
-                'description'   => $translate->_('add, delete and edit shared tags'),
+                'text'          => $translate->_('Manage shared tags'),
+                'description'   => $translate->_('Add, delete and edit shared tags.'),
             ),
             self::MANAGE_COMPUTERS => array(
-                'text'          => $translate->_('manage computers'),
-                'description'   => $translate->_('add, delete and edit (samba) computers'),
+                'text'          => $translate->_('Manage computers'),
+                'description'   => $translate->_('Add, delete and edit (samba) computers.'),
             ),
             self::MANAGE_CONTAINERS => array(
-                'text'          => $translate->_('manage containers'),
-                'description'   => $translate->_('add, delete and edit containers and manage container grants'),
+                'text'          => $translate->_('Manage containers'),
+                'description'   => $translate->_('Add, delete and edit containers and manage container grants.'),
             ),
             self::MANAGE_CUSTOMFIELDS   => array(
-                'text'          => $translate->_('manage customfields'),
-                'description'   => $translate->_('add and edit customfields'),
+                'text'          => $translate->_('Manage customfields'),
+                'description'   => $translate->_('Add and edit customfields.'),
             ),            
             self::VIEW_ACCESS_LOG   => array(
-                'text'          => $translate->_('view access log'),
-                'description'   => $translate->_('view access log list'),
+                'text'          => $translate->_('View access log'),
+                'description'   => $translate->_('View access log list.'),
             ),
             self::VIEW_ACCOUNTS   => array(
-                'text'          => $translate->_('view accounts'),
-                'description'   => $translate->_('view accounts list and details'),
+                'text'          => $translate->_('View accounts'),
+                'description'   => $translate->_('View accounts list and details.'),
             ),
             self::VIEW_EMAILACCOUNTS   => array(
-                'text'          => $translate->_('view email accounts'),
-                'description'   => $translate->_('view shared and personal email accounts'),
+                'text'          => $translate->_('View e-mail accounts'),
+                'description'   => $translate->_('View shared and personal e-mail accounts.'),
             ),
             self::VIEW_APPS   => array(
-                'text'          => $translate->_('view applications'),
-                'description'   => $translate->_('view applications list and details'),
+                'text'          => $translate->_('View applications'),
+                'description'   => $translate->_('View applications list and details.'),
             ),
             self::VIEW_ROLES  => array(
-                'text'          => $translate->_('view roles'),
-                'description'   => $translate->_('view roles list and details'),
+                'text'          => $translate->_('View roles'),
+                'description'   => $translate->_('View roles list and details.'),
             ),
             self::VIEW_SHARED_TAGS    => array(
-                'text'          => $translate->_('view shared tags'),
-                'description'   => $translate->_('view shared tags list and details'),
+                'text'          => $translate->_('View shared tags'),
+                'description'   => $translate->_('View shared tags list and details.'),
             ),
             self::VIEW_COMPUTERS  => array(
-                'text'          => $translate->_('view computers'),
-                'description'   => $translate->_('view computers list and details'),
+                'text'          => $translate->_('View computers'),
+                'description'   => $translate->_('View computers list and details.'),
             ),
             self::VIEW_CONTAINERS  => array(
-                'text'          => $translate->_('view containers'),
-                'description'   => $translate->_('view personal and shared containers'),
+                'text'          => $translate->_('View containers'),
+                'description'   => $translate->_('View personal and shared containers.'),
             ),
             self::VIEW_CUSTOMFIELDS   => array(
-                'text'          => $translate->_('view customfields'),
-                'description'   => $translate->_('view customfields list'),
+                'text'          => $translate->_('View customfields'),
+                'description'   => $translate->_('View customfields list.'),
             ),
             self::VIEW_SERVERINFO   => array(
-                'text'          => $translate->_('view serverinfo'),
-                'description'   => $translate->_('view serverinfo list'),
+                'text'          => $translate->_('View serverinfo'),
+                'description'   => $translate->_('View serverinfo list.'),
             ),
             self::VIEW_QUOTA_USAGE => array(
-                'text'          => $translate->_('view quota usage'),
-                'description'   => $translate->_('view quota usage'),
+                'text'          => $translate->_('View quota usage'),
+                'description'   => $translate->_('View quota usage.'),
             ),
         );
         
