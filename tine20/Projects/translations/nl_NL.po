@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Bastiën Zittema <b_zittema@hotmail.com>, 2014
 msgid ""
@@ -8,14 +8,69 @@ msgstr ""
 "PO-Revision-Date: 2017-09-19 14:19+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/tine20/tine20/language/nl_NL/)\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's persoonlijke project"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Al mijn projecten"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Standaard favoriet"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "De standaard favoriet die bij het opstarten van projecten wordt geladen"
+
+#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "Genodigde"
+
+#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
+msgid "Role"
+msgstr "Functie"
+
+#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Project"
+msgstr[1] "Projecten"
+
+#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "Titel"
+
+#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "Nummer"
+
+#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "Status"
+
+#: js/ProjectEditDialog.js:188 js/Model.js:76
+msgid "Description"
+msgstr "Omschrijving"
+
+#: js/ProjectEditDialog.js:202
+msgid "Enter description"
+msgstr "Voer omschrijving in"
+
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projecten"
 
 #: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
@@ -29,10 +84,6 @@ msgstr ""
 msgid "Select Project"
 msgstr "Selecteer project"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:85
-msgid "Role"
-msgstr "Functie"
-
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Selecteer functie"
@@ -41,16 +92,6 @@ msgstr "Selecteer functie"
 #, python-brace-format
 msgid "Adding {0} Participants to project"
 msgstr "Voeg {0} deelnemer aan project"
-
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projecten"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:111 js/ProjectEditDialog.js:124
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Project"
-msgstr[1] "Projecten"
 
 #: js/Model.js:39
 msgid "Project list"
@@ -65,22 +106,6 @@ msgstr "Projectenlijsten"
 #: js/Model.js:73
 msgid "Quick Search"
 msgstr "Snel zoeken"
-
-#: js/Model.js:74 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Titel"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Nummer"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:182
-msgid "Description"
-msgstr "Omschrijving"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:147 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Status"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -98,17 +123,9 @@ msgstr "Tijdstip aanmaak"
 msgid "Created By"
 msgstr "Gemaakt door"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:84
-msgid "Attendee"
-msgstr "Genodigde"
-
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr "Taak genodigde"
-
-#: js/ProjectEditDialog.js:196
-msgid "Enter description"
-msgstr "Voer omschrijving in"
 
 #: js/ProjectGridPanel.js:75
 msgid "Search FAQ"
@@ -117,76 +134,6 @@ msgstr "Zoek FAQ"
 #: js/ProjectGridPanel.js:118
 msgid "Tags"
 msgstr "Tags"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Al mijn projecten"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Standaard favoriet"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "De standaard favoriet die bij het opstarten van projecten wordt geladen"
-
-#: Config.php:38
-msgid "Project Status Available"
-msgstr "Project status beschikbaar"
-
-#: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
-msgstr "Mogelijke projecten status. Houd er rekening mee dat de extra status van het project andere projecten kan beïnvloeden op de uitvoer en synchronisatie."
-
-#: Config.php:47
-msgid "On hold"
-msgstr "In de wacht"
-
-#: Config.php:48
-msgid "Completed"
-msgstr "Afgerond"
-
-#: Config.php:49
-msgid "Cancelled"
-msgstr "Geannuleerd"
-
-#: Config.php:50
-msgid "In process"
-msgstr "In behandeling"
-
-#: Config.php:56
-msgid "Project Attendee Role Available"
-msgstr ""
-
-#: Config.php:58
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
-msgstr ""
-
-#: Config.php:65
-msgid "Coworker"
-msgstr "Mede werknemer"
-
-#: Config.php:66
-msgid "Responsible"
-msgstr "Verantwoordelijk"
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Beheer gedeelde project favorieten"
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Maak een nieuwe gedeelde project favorieten"
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's persoonlijke project"
 
 #: Setup/Initialize.php:36
 msgid "All my open projects"
@@ -207,3 +154,54 @@ msgstr "Mijn wachtende projecten"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Mijn projecten in de wacht"
+
+#: Config.php:38
+msgid "Available Project Status"
+msgstr ""
+
+#: Config.php:40
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
+msgstr "Mogelijke projecten status. Houd er rekening mee dat de extra status van het project andere projecten kan beïnvloeden op de uitvoer en synchronisatie."
+
+#: Config.php:47
+msgid "On hold"
+msgstr "In de wacht"
+
+#: Config.php:48
+msgid "Completed"
+msgstr "Afgerond"
+
+#: Config.php:49
+msgid "Cancelled"
+msgstr "Geannuleerd"
+
+#: Config.php:50
+msgid "In process"
+msgstr "In behandeling"
+
+#: Config.php:56
+msgid "Available Project Attendee Role"
+msgstr ""
+
+#: Config.php:58
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:65
+msgid "Coworker"
+msgstr "Mede werknemer"
+
+#: Config.php:66
+msgid "Responsible"
+msgstr "Verantwoordelijk"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Beheer gedeelde project favorieten"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Maak een nieuwe gedeelde project favorieten"
+
+#~ msgid "Project Status Available"
+#~ msgstr "Project status beschikbaar"

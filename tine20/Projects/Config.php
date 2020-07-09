@@ -35,8 +35,8 @@ class Projects_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::PROJECT_STATUS => array(
-                                   //_('Project Status Available')
-            'label'                 => 'Project Status Available',
+                                   //_('Available Project Status')
+            'label'                 => 'Available Project Status',
                                    //_('Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation.')
             'description'           => 'Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation.',
             'type'                  => 'keyFieldConfig',
@@ -53,8 +53,8 @@ class Projects_Config extends Tinebase_Config_Abstract
             )
         ),
         self::PROJECT_ATTENDEE_ROLE => array(
-                                   //_('Project Attendee Role Available')
-            'label'                 => 'Project Attendee Role Available',
+                                   //_('Available Project Attendee Role')
+            'label'                 => 'Available Project Attendee Role',
                                    //_('Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation.')
             'description'           => 'Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation.',
             'type'                  => 'keyFieldConfig',

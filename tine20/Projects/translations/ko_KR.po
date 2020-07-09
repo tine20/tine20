@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 msgid ""
 msgstr ""
@@ -7,14 +7,68 @@ msgstr ""
 "PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/tine20/tine20/language/ko_KR/)\n"
+"Language: ko_KR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko_KR\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr ""
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr ""
+
+#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr ""
+
+#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
+msgid "Role"
+msgstr ""
+
+#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+
+#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr ""
+
+#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr ""
+
+#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr ""
+
+#: js/ProjectEditDialog.js:188 js/Model.js:76
+msgid "Description"
+msgstr ""
+
+#: js/ProjectEditDialog.js:202
+msgid "Enter description"
+msgstr ""
+
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr ""
 
 #: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
@@ -28,10 +82,6 @@ msgstr ""
 msgid "Select Project"
 msgstr ""
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:85
-msgid "Role"
-msgstr ""
-
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr ""
@@ -40,15 +90,6 @@ msgstr ""
 #, python-brace-format
 msgid "Adding {0} Participants to project"
 msgstr ""
-
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr ""
-
-#: js/Model.js:35 js/ProjectEditDialog.js:111 js/ProjectEditDialog.js:124
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
 
 #: js/Model.js:39
 msgid "Project list"
@@ -61,22 +102,6 @@ msgstr ""
 
 #: js/Model.js:73
 msgid "Quick Search"
-msgstr ""
-
-#: js/Model.js:74 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr ""
-
-#: js/Model.js:75 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr ""
-
-#: js/Model.js:76 js/ProjectEditDialog.js:182
-msgid "Description"
-msgstr ""
-
-#: js/Model.js:78 js/ProjectEditDialog.js:147 js/ProjectGridPanel.js:134
-msgid "Status"
 msgstr ""
 
 #: js/Model.js:87
@@ -95,16 +120,8 @@ msgstr ""
 msgid "Created By"
 msgstr ""
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:84
-msgid "Attendee"
-msgstr ""
-
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
-msgstr ""
-
-#: js/ProjectEditDialog.js:196
-msgid "Enter description"
 msgstr ""
 
 #: js/ProjectGridPanel.js:75
@@ -113,76 +130,6 @@ msgstr ""
 
 #: js/ProjectGridPanel.js:118
 msgid "Tags"
-msgstr ""
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr ""
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr ""
-
-#: Config.php:38
-msgid "Project Status Available"
-msgstr ""
-
-#: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
-msgstr ""
-
-#: Config.php:47
-msgid "On hold"
-msgstr ""
-
-#: Config.php:48
-msgid "Completed"
-msgstr ""
-
-#: Config.php:49
-msgid "Cancelled"
-msgstr ""
-
-#: Config.php:50
-msgid "In process"
-msgstr ""
-
-#: Config.php:56
-msgid "Project Attendee Role Available"
-msgstr ""
-
-#: Config.php:58
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
-msgstr ""
-
-#: Config.php:65
-msgid "Coworker"
-msgstr ""
-
-#: Config.php:66
-msgid "Responsible"
-msgstr ""
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr ""
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr ""
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
 msgstr ""
 
 #: Setup/Initialize.php:36
@@ -203,4 +150,52 @@ msgstr ""
 
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
+msgstr ""
+
+#: Config.php:38
+msgid "Available Project Status"
+msgstr ""
+
+#: Config.php:40
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:47
+msgid "On hold"
+msgstr ""
+
+#: Config.php:48
+msgid "Completed"
+msgstr ""
+
+#: Config.php:49
+msgid "Cancelled"
+msgstr ""
+
+#: Config.php:50
+msgid "In process"
+msgstr ""
+
+#: Config.php:56
+msgid "Available Project Attendee Role"
+msgstr ""
+
+#: Config.php:58
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:65
+msgid "Coworker"
+msgstr ""
+
+#: Config.php:66
+msgid "Responsible"
+msgstr ""
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr ""
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
 msgstr ""
