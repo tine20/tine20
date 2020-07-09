@@ -84,13 +84,13 @@ class Crm_Preference extends Tinebase_Preference_Abstract
             ),
             /*
             self::NOTIFICATION_LEVEL => array(
-                'label'         => $translate->_('Get Notification Emails'),
+                'label'         => $translate->_('Get Notification E-mails'),
                 'description'   => $translate->_('The level of actions you want to be notified about.'),
             ),
             */
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
-                'label'         => $translate->_('Send Notifications Emails for own actions'),
-                'description'   => $translate->_('Get notifications emails for actions you did yourself'),
+                'label'         => $translate->_('Send Notifications e-mails for own actions'),
+                'description'   => $translate->_('Get notifications e-mails for actions you did yourself'),
             ),
             self::DEFAULTPERSISTENTFILTER  => array(
                 'label'         => $translate->_('Default Favorite'),

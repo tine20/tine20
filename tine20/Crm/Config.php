@@ -178,8 +178,8 @@ class Crm_Config extends Tinebase_Config_Abstract
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',
-            //_('Enabled Features in Crm Application.')
-            self::DESCRIPTION           => 'Enabled Features in Crm Application.',
+            //_('Enabled Features in CRM Application.')
+            self::DESCRIPTION           => 'Enabled Features in CRM Application.',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => true,
@@ -203,10 +203,10 @@ class Crm_Config extends Tinebase_Config_Abstract
             'default'               => false,
         ),
         self::LEAD_IMPORT_NOTIFICATION => array(
-            //_('Send notification email on lead import')
-            'label'                 => 'Send notification email on lead import',
-            //_('Sends an email to all responsible persons for the imported leads.')
-            'description'           => 'Sends an email to all responsible persons for the imported leads.',
+            //_('Send notification e-mail on lead import')
+            'label'                 => 'Send notification e-mail on lead import',
+            //_('Sends an e-mail to all responsible persons for the imported leads.')
+            'description'           => 'Sends an e-mail to all responsible persons for the imported leads.',
             'type'                  => 'boolean',
             'clientRegistryInclude' => false,
             'default'               => false,
