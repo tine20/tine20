@@ -55,7 +55,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.Panel, {
                 items: [
                     [{
                         columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Url'),
+                        fieldLabel: this.app.i18n._('URL'),
                         name: 'url',
                         value: this.record.get('url'),
                         maxLength: 100,

@@ -25,8 +25,8 @@ class Filemanager_Config extends Tinebase_Config_Abstract
         self::PUBLIC_DOWNLOAD_URL => array(
                                    //_('Public Download URL')
             'label'                 => 'Public Download URL',
-                                   //_('Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules.')
-            'description'           => 'Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules.',
+                                   //_('Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly.')
+            'description'           => 'Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly.',
             'type'                  => 'string',
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,

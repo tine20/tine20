@@ -28,7 +28,7 @@ class Filemanager_Exception_DestinationIsSameNode extends Filemanager_Exception
     /**
      * @see SPL Exception
      */
-    protected $message = 'The destination has the same path the source has. No action has been performed.'; // _('The destination has the same path the source has. No action has been performed.')
+    protected $message = 'The destination has the same path as the source. No action has been performed.'; // _('The destination has the same path as the source. No action has been performed.')
     
     /**
      * @see SPL Exception

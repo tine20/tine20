@@ -256,7 +256,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
             },{
                 id: 'contenttype',
-                header: this.app.i18n._("Contenttype"),
+                header: this.app.i18n._("Content type"),
                 width: 50,
                 sortable: true,
                 dataIndex: 'contenttype',
@@ -870,7 +870,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if(!nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
-                    app.i18n._('Putting files in this folder is not allowed!')
+                    app.i18n._('It is not permitted to store files in this folder!')
             ).setIcon(Ext.MessageBox.ERROR);
 
             return;
