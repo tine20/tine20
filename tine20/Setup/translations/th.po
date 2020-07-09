@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # jaruwan <luca.ingianni@gmail.com>, 2014
 # jaruwan <luca.ingianni@gmail.com>, 2014
@@ -9,19 +9,39 @@ msgstr ""
 "PO-Revision-Date: 2018-11-28 11:10+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/EmailPanel.js:146 js/EmailPanel.js:486 js/ConfigManagerPanel.js:147
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr ""
+
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr ""
+
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr ""
+
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "ข้อตกลงเรื่องความเป็นส่วนตัว"
+
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr ""
+
+#: js/EmailPanel.js:146 js/EmailPanel.js:486 js/AuthenticationPanel.js:203
+#: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
 #: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183 js/AuthenticationPanel.js:204
-#: js/AuthenticationPanel.js:217
+#: js/ConfigManagerPanel.js:183
 msgid "Backend"
 msgstr "ส่วนหลัง"
 
@@ -38,9 +58,9 @@ msgid "Imap"
 msgstr ""
 
 #: js/EmailPanel.js:192 js/EmailPanel.js:322 js/EmailPanel.js:451
-#: js/ConfigManagerPanel.js:227 js/ConfigManagerPanel.js:324
-#: js/ConfigManagerPanel.js:344 js/ConfigManagerPanel.js:385
-#: js/ConfigManagerPanel.js:444 js/AuthenticationPanel.js:385
+#: js/AuthenticationPanel.js:380 js/ConfigManagerPanel.js:227
+#: js/ConfigManagerPanel.js:324 js/ConfigManagerPanel.js:344
+#: js/ConfigManagerPanel.js:385 js/ConfigManagerPanel.js:444
 msgid "Hostname"
 msgstr "ชื่อแม่ข่าย"
 
@@ -48,39 +68,38 @@ msgstr "ชื่อแม่ข่าย"
 msgid "Username"
 msgstr "ชื่อผู้ใช้"
 
-#: js/EmailPanel.js:200 js/ConfigManagerPanel.js:212
-#: js/ConfigManagerPanel.js:243 js/AuthenticationPanel.js:323
-#: js/AuthenticationPanel.js:614
+#: js/EmailPanel.js:200 js/AuthenticationPanel.js:318
+#: js/AuthenticationPanel.js:609 js/ConfigManagerPanel.js:212
+#: js/ConfigManagerPanel.js:243
 msgid "Password"
 msgstr "รหัสผ่าน"
 
 #: js/EmailPanel.js:205 js/EmailPanel.js:326 js/EmailPanel.js:455
-#: js/ConfigManagerPanel.js:232 js/ConfigManagerPanel.js:328
-#: js/ConfigManagerPanel.js:348 js/ConfigManagerPanel.js:389
-#: js/ConfigManagerPanel.js:448 js/AuthenticationPanel.js:317
-#: js/AuthenticationPanel.js:346 js/AuthenticationPanel.js:388
-#: js/AuthenticationPanel.js:637
+#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:383
+#: js/AuthenticationPanel.js:632 js/ConfigManagerPanel.js:232
+#: js/ConfigManagerPanel.js:328 js/ConfigManagerPanel.js:348
+#: js/ConfigManagerPanel.js:389 js/ConfigManagerPanel.js:448
 msgid "Port"
 msgstr "พอร์ท"
 
 #: js/EmailPanel.js:209 js/EmailPanel.js:330 js/EmailPanel.js:459
-#: js/AuthenticationPanel.js:392
+#: js/AuthenticationPanel.js:387
 msgid "Secure Connection"
 msgstr "การเชื่อมต่อที่ปลอดภัย"
 
 #: js/EmailPanel.js:212 js/EmailPanel.js:333 js/EmailPanel.js:344
-#: js/EmailPanel.js:462 js/AuthenticationPanel.js:394
+#: js/EmailPanel.js:462 js/AuthenticationPanel.js:389
 msgid "None"
 msgstr "ไม่มีเลย"
 
 #: js/EmailPanel.js:212 js/EmailPanel.js:333 js/EmailPanel.js:462
-#: js/AuthenticationPanel.js:394
+#: js/AuthenticationPanel.js:389
 msgid "TLS"
 msgstr "TLS"
 
 #: js/EmailPanel.js:212 js/EmailPanel.js:333 js/EmailPanel.js:462
-#: js/AuthenticationPanel.js:340 js/AuthenticationPanel.js:394
-#: js/AuthenticationPanel.js:631
+#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:389
+#: js/AuthenticationPanel.js:626
 msgid "SSL"
 msgstr "SSL"
 
@@ -92,33 +111,33 @@ msgstr ""
 msgid "Use system account"
 msgstr "ใช้บัญชีของระบบ"
 
-#: js/EmailPanel.js:222 js/EmailPanel.js:287 js/AuthenticationPanel.js:285
-#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:335
-#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:358
-#: js/AuthenticationPanel.js:420 js/AuthenticationPanel.js:491
-#: js/AuthenticationPanel.js:515 js/AuthenticationPanel.js:521
-#: js/AuthenticationPanel.js:527 js/AuthenticationPanel.js:556
-#: js/AuthenticationPanel.js:577 js/AuthenticationPanel.js:583
-#: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
-#: js/AuthenticationPanel.js:632 js/AuthenticationPanel.js:687
-#: js/AuthenticationPanel.js:723
+#: js/EmailPanel.js:222 js/EmailPanel.js:287 js/AuthenticationPanel.js:284
+#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
+#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
+#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
+#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
+#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
+#: js/AuthenticationPanel.js:615 js/AuthenticationPanel.js:621
+#: js/AuthenticationPanel.js:627 js/AuthenticationPanel.js:682
+#: js/AuthenticationPanel.js:718
 msgid "No"
 msgstr "ไม่"
 
-#: js/EmailPanel.js:222 js/EmailPanel.js:287 js/AuthenticationPanel.js:285
-#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:335
-#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:358
-#: js/AuthenticationPanel.js:420 js/AuthenticationPanel.js:491
-#: js/AuthenticationPanel.js:515 js/AuthenticationPanel.js:521
-#: js/AuthenticationPanel.js:527 js/AuthenticationPanel.js:556
-#: js/AuthenticationPanel.js:577 js/AuthenticationPanel.js:583
-#: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
-#: js/AuthenticationPanel.js:632 js/AuthenticationPanel.js:687
-#: js/AuthenticationPanel.js:723
+#: js/EmailPanel.js:222 js/EmailPanel.js:287 js/AuthenticationPanel.js:284
+#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
+#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
+#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
+#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
+#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
+#: js/AuthenticationPanel.js:615 js/AuthenticationPanel.js:621
+#: js/AuthenticationPanel.js:627 js/AuthenticationPanel.js:682
+#: js/AuthenticationPanel.js:718
 msgid "Yes"
 msgstr "ใช่"
 
-#: js/EmailPanel.js:227 js/AuthenticationPanel.js:399
+#: js/EmailPanel.js:227 js/AuthenticationPanel.js:394
 msgid "Append domain to login name"
 msgstr ""
 
@@ -250,25 +269,389 @@ msgstr ""
 msgid "PLAIN"
 msgstr ""
 
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
+#: js/TreePanel.js:52
+msgid "Terms and Conditions"
 msgstr ""
 
-#: js/TermsPanel.js:37
-msgid "License Agreement"
+#: js/TreePanel.js:57
+msgid "Setup Checks"
 msgstr ""
 
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
+#: js/TreePanel.js:63
+msgid "Config Manager"
 msgstr ""
 
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "ข้อตกลงเรื่องความเป็นส่วนตัว"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
+#: js/TreePanel.js:69
+msgid "Authentication/Accounts"
 msgstr ""
+
+#: js/TreePanel.js:75
+msgid "Email"
+msgstr "อีเมล"
+
+#: js/TreePanel.js:81
+msgid "Application Manager"
+msgstr "ตัวจัดการแอพพลิเคชั่น"
+
+#: js/init.js:75
+msgid "Setup"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "ชื่อ"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "เปิดใช้งานแล้ว"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "คำสั่ง"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "เวอร์ชั่นที่ได้ติดตั้ง"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "เวอร์ชั่นที่มี"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "ขึ้นอยู่กับ"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "ติดตั้งแอพพลิเคชั่น"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "ถอนการติดตั้งแอพพลิเคชั่น"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "อัพเดทแอพพลิเคชั่น"
+
+#: js/ApplicationGridPanel.js:105
+#, python-brace-format
+msgid "Go to {0} login"
+msgstr "ไปยังการเข้าใช้ {0} "
+
+#: js/ApplicationGridPanel.js:184
+msgid "uninstall"
+msgstr "ถอนการติดตั้ง"
+
+#: js/ApplicationGridPanel.js:184
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "คุณแน่ใจว่าต้องการถอนการติดตั้งแอพพลิเคชั่น(s)?"
+
+#: js/ApplicationGridPanel.js:244
+msgid "This may take a while"
+msgstr "นี่อาจจะใช้เวลาสักครู่"
+
+#: js/ApplicationGridPanel.js:278
+msgid "Dependency Violation"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:287
+msgid "CLI Required"
+msgstr ""
+
+#: js/AuthenticationPanel.js:126
+msgid "Delete all existing users and groups"
+msgstr "ลบผ๔้ใช้และกลุ่มที่มีอยู่ทั้งหมด"
+
+#: js/AuthenticationPanel.js:126
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "การสลับจาก SQL ไปยัง LDAP จะลบบัญชี กลุ่ม และหน้าที่ของผู้ใช้ที่มีอยู่ทั้งหมด คุณแน่ใจว่าต้องการสลับการจัดเก็บบัญชีส่วนหลังไปใช้ LDAP?"
+
+#: js/AuthenticationPanel.js:204
+msgid "TLS client certificate"
+msgstr ""
+
+#: js/AuthenticationPanel.js:232
+msgid "Initial Admin User"
+msgstr ""
+
+#: js/AuthenticationPanel.js:245
+msgid "Initial admin login name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:250
+msgid "Initial admin Password"
+msgstr ""
+
+#: js/AuthenticationPanel.js:254
+msgid "Password confirmation"
+msgstr "การยืนยันรหัสผ่าน"
+
+#: js/AuthenticationPanel.js:262
+msgid "Authentication provider"
+msgstr "ผู้ให้การอนุญาต"
+
+#: js/AuthenticationPanel.js:283 js/AuthenticationPanel.js:352
+#: js/AuthenticationPanel.js:414
+msgid "Try to split username"
+msgstr "พยายามที่จะแตกชื่อผู้ใช้"
+
+#: js/AuthenticationPanel.js:289 js/AuthenticationPanel.js:358
+msgid "Account canonical form"
+msgstr ""
+
+#: js/AuthenticationPanel.js:295 js/AuthenticationPanel.js:364
+msgid "Account domain name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:298 js/AuthenticationPanel.js:367
+msgid "Account domain short name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:312 js/AuthenticationPanel.js:603
+msgid "Host"
+msgstr "แม่ข่าย"
+
+#: js/AuthenticationPanel.js:315 js/AuthenticationPanel.js:606
+msgid "Login name"
+msgstr "ชื่อที่เข้าใช้"
+
+#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:614
+msgid "Bind requires DN"
+msgstr "การเชื่อมต่อต้องการ DN"
+
+#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:620
+msgid "Start TLS"
+msgstr "เริ่ม TLS"
+
+#: js/AuthenticationPanel.js:345
+msgid "Base DN"
+msgstr "ฐาน DN"
+
+#: js/AuthenticationPanel.js:348
+msgid "Search filter"
+msgstr "หาตัวกรอง"
+
+#: js/AuthenticationPanel.js:407
+msgid "Certificate validation"
+msgstr ""
+
+#: js/AuthenticationPanel.js:420
+msgid "CA file"
+msgstr "ไฟล์ CA"
+
+#: js/AuthenticationPanel.js:423
+msgid "CRL directory"
+msgstr "ไดเรคทอรี่ CRL "
+
+#: js/AuthenticationPanel.js:433
+msgid "Accounts storage"
+msgstr "การจัดเก็บบัญชี"
+
+#: js/AuthenticationPanel.js:455 js/AuthenticationPanel.js:710
+msgid "Default user group name"
+msgstr "ชื่อกลุ่มผู้ใช้หลัก"
+
+#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:713
+msgid "Default admin group name"
+msgstr "ชื่อกลุ่มผู้ดูแลหลัก"
+
+#: js/AuthenticationPanel.js:470
+msgid "Login panel"
+msgstr "ช่องลงชื่อเข้าใช้"
+
+#: js/AuthenticationPanel.js:485
+msgid "Reuse last username logged"
+msgstr ""
+
+#: js/AuthenticationPanel.js:494
+msgid "Password Settings"
+msgstr "การรติดตั้งรหัสผ่าน"
+
+#: js/AuthenticationPanel.js:509
+msgid "User can change password"
+msgstr "ผู้ใช้สามารถเปลี่ยนรหัสผ่านได้"
+
+#: js/AuthenticationPanel.js:515
+msgid "Enable password policy"
+msgstr ""
+
+#: js/AuthenticationPanel.js:521
+msgid "Only ASCII"
+msgstr "เฉพาะ ASCII"
+
+#: js/AuthenticationPanel.js:526
+msgid "Minimum length"
+msgstr "ความยาวอย่างน้อยที่สุด"
+
+#: js/AuthenticationPanel.js:529
+msgid "Minimum word chars"
+msgstr ""
+
+#: js/AuthenticationPanel.js:532
+msgid "Minimum uppercase chars"
+msgstr ""
+
+#: js/AuthenticationPanel.js:535
+msgid "Minimum special chars"
+msgstr ""
+
+#: js/AuthenticationPanel.js:538
+msgid "Minimum numbers"
+msgstr "จำนวนหมายเลขที่น้อยที่สุด"
+
+#: js/AuthenticationPanel.js:541
+msgid "Change password after ... days"
+msgstr ""
+
+#: js/AuthenticationPanel.js:550
+msgid "Forbid part of username in password"
+msgstr ""
+
+#: js/AuthenticationPanel.js:559
+msgid "Redirect Settings"
+msgstr ""
+
+#: js/AuthenticationPanel.js:567
+msgid "Redirect Url (redirect to login screen if empty)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:571
+msgid "Redirect Always (if No, only redirect after logout)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:577
+msgid "Redirect to referring site, if exists"
+msgstr ""
+
+#: js/AuthenticationPanel.js:637
+msgid "Password encoding"
+msgstr ""
+
+#: js/AuthenticationPanel.js:639
+msgid "des"
+msgstr ""
+
+#: js/AuthenticationPanel.js:640
+msgid "crypt"
+msgstr ""
+
+#: js/AuthenticationPanel.js:641
+msgid "blowfish_crypt"
+msgstr ""
+
+#: js/AuthenticationPanel.js:642
+msgid "md5_crypt"
+msgstr "md5_crypt"
+
+#: js/AuthenticationPanel.js:643
+msgid "ext_crypt"
+msgstr ""
+
+#: js/AuthenticationPanel.js:644
+msgid "md5"
+msgstr ""
+
+#: js/AuthenticationPanel.js:645
+msgid "smd5"
+msgstr ""
+
+#: js/AuthenticationPanel.js:646
+msgid "sha"
+msgstr ""
+
+#: js/AuthenticationPanel.js:647
+msgid "ssha"
+msgstr ""
+
+#: js/AuthenticationPanel.js:648
+msgid "ntpassword"
+msgstr ""
+
+#: js/AuthenticationPanel.js:649
+msgid "plain"
+msgstr "ว่าง"
+
+#: js/AuthenticationPanel.js:655
+msgid "User DN"
+msgstr " ผู้ใช้ DN"
+
+#: js/AuthenticationPanel.js:658
+msgid "User Filter"
+msgstr "ตัวกรองผู้ใช้"
+
+#: js/AuthenticationPanel.js:662
+msgid "User Search Scope"
+msgstr "ขอบเขตการค้นหาของผู้ใช้"
+
+#: js/AuthenticationPanel.js:668
+msgid "Groups DN"
+msgstr "กลุ่ม DN"
+
+#: js/AuthenticationPanel.js:671
+msgid "Group Filter"
+msgstr "ตัวกรองกลุ่ม"
+
+#: js/AuthenticationPanel.js:675
+msgid "Group Search Scope"
+msgstr "ขอบเขตการค้นหาของกลุ่ม"
+
+#: js/AuthenticationPanel.js:681
+msgid "Use Rfc 2307 bis"
+msgstr ""
+
+#: js/AuthenticationPanel.js:681
+msgid "Maintain RFC 2307 attributes"
+msgstr ""
+
+#: js/AuthenticationPanel.js:687
+msgid "Min User Id"
+msgstr "รหัสของผู้ใช้ที่สั้นที่สุด"
+
+#: js/AuthenticationPanel.js:690
+msgid "Max User Id"
+msgstr "รหัสของผู้ใช้ที่ยาวที่สุด"
+
+#: js/AuthenticationPanel.js:693
+msgid "Min Group Id"
+msgstr "รหัสของกลุ่มที่สั้นที่สุด"
+
+#: js/AuthenticationPanel.js:696
+msgid "Max Group Id"
+msgstr "รหัสของกลุ่มที่ยาวที่สุด"
+
+#: js/AuthenticationPanel.js:700
+msgid "Group UUID Attribute name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:705
+msgid "User UUID Attribute name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:717
+msgid "Readonly access"
+msgstr ""
+
+#: js/AuthenticationPanel.js:731
+msgid "Save config and install"
+msgstr ""
+
+#: js/AuthenticationPanel.js:733 js/ConfigManagerPanel.js:506
+msgid "Save config"
+msgstr ""
+
+#: js/AuthenticationPanel.js:758
+msgid "Passwords don't match"
+msgstr "รหัสผ่านไม่ตรง"
+
+#: js/AuthenticationPanel.js:771 js/AuthenticationPanel.js:778
+#: js/AuthenticationPanel.js:782 js/AuthenticationPanel.js:794
+#: js/AuthenticationPanel.js:805
+msgid "Should not be empty"
+msgstr "ไม่ควรว่างไว้"
 
 #: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
@@ -276,9 +659,7 @@ msgstr ""
 
 #: js/EnvCheckGridPanel.js:130
 #, python-brace-format
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria,"
-" view-options or the {1} you search in."
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr ""
 
 #: js/EnvCheckGridPanel.js:160
@@ -301,9 +682,10 @@ msgstr ""
 msgid "Ignore setup tests"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:204 js/ApplicationGridPanel.js:78
-msgid "Install application"
-msgstr "ติดตั้งแอพพลิเคชั่น"
+#: js/Model.js:33
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "แอพพลิเคชั่น"
 
 #: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
 msgid "File"
@@ -393,400 +775,11 @@ msgstr ""
 msgid "Config file is not writable"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:506 js/AuthenticationPanel.js:738
-msgid "Save config"
-msgstr ""
-
 #: js/ConfigManagerPanel.js:523
 msgid "Download config file"
 msgstr ""
 
 #: js/ConfigManagerPanel.js:564
 #, python-brace-format
-msgid ""
-"This prefix is too long. Please choose a prefix no longer than {0} chars."
-msgstr ""
-
-#: js/TreePanel.js:52
-msgid "Terms and Conditions"
-msgstr ""
-
-#: js/TreePanel.js:57
-msgid "Setup Checks"
-msgstr ""
-
-#: js/TreePanel.js:63
-msgid "Config Manager"
-msgstr ""
-
-#: js/TreePanel.js:69
-msgid "Authentication/Accounts"
-msgstr ""
-
-#: js/TreePanel.js:75
-msgid "Email"
-msgstr "อีเมล"
-
-#: js/TreePanel.js:81
-msgid "Application Manager"
-msgstr "ตัวจัดการแอพพลิเคชั่น"
-
-#: js/AuthenticationPanel.js:127
-msgid "Delete all existing users and groups"
-msgstr "ลบผ๔้ใช้และกลุ่มที่มีอยู่ทั้งหมด"
-
-#: js/AuthenticationPanel.js:127
-msgid ""
-"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to LDAP"
-" ?"
-msgstr "การสลับจาก SQL ไปยัง LDAP จะลบบัญชี กลุ่ม และหน้าที่ของผู้ใช้ที่มีอยู่ทั้งหมด คุณแน่ใจว่าต้องการสลับการจัดเก็บบัญชีส่วนหลังไปใช้ LDAP?"
-
-#: js/AuthenticationPanel.js:205
-msgid "TLS client certificate"
-msgstr ""
-
-#: js/AuthenticationPanel.js:233
-msgid "Initial Admin User"
-msgstr ""
-
-#: js/AuthenticationPanel.js:246
-msgid "Initial admin login name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:251
-msgid "Initial admin Password"
-msgstr ""
-
-#: js/AuthenticationPanel.js:255
-msgid "Password confirmation"
-msgstr "การยืนยันรหัสผ่าน"
-
-#: js/AuthenticationPanel.js:263
-msgid "Authentication provider"
-msgstr "ผู้ให้การอนุญาต"
-
-#: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:357
-#: js/AuthenticationPanel.js:419
-msgid "Try to split username"
-msgstr "พยายามที่จะแตกชื่อผู้ใช้"
-
-#: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:363
-msgid "Account canonical form"
-msgstr ""
-
-#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:369
-msgid "Account domain name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:372
-msgid "Account domain short name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:608
-msgid "Host"
-msgstr "แม่ข่าย"
-
-#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:611
-msgid "Login name"
-msgstr "ชื่อที่เข้าใช้"
-
-#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:619
-msgid "Bind requires DN"
-msgstr "การเชื่อมต่อต้องการ DN"
-
-#: js/AuthenticationPanel.js:334 js/AuthenticationPanel.js:625
-msgid "Start TLS"
-msgstr "เริ่ม TLS"
-
-#: js/AuthenticationPanel.js:350
-msgid "Base DN"
-msgstr "ฐาน DN"
-
-#: js/AuthenticationPanel.js:353
-msgid "Search filter"
-msgstr "หาตัวกรอง"
-
-#: js/AuthenticationPanel.js:412
-msgid "Certificate validation"
-msgstr ""
-
-#: js/AuthenticationPanel.js:425
-msgid "CA file"
-msgstr "ไฟล์ CA"
-
-#: js/AuthenticationPanel.js:428
-msgid "CRL directory"
-msgstr "ไดเรคทอรี่ CRL "
-
-#: js/AuthenticationPanel.js:438
-msgid "Accounts storage"
-msgstr "การจัดเก็บบัญชี"
-
-#: js/AuthenticationPanel.js:460 js/AuthenticationPanel.js:715
-msgid "Default user group name"
-msgstr "ชื่อกลุ่มผู้ใช้หลัก"
-
-#: js/AuthenticationPanel.js:463 js/AuthenticationPanel.js:718
-msgid "Default admin group name"
-msgstr "ชื่อกลุ่มผู้ดูแลหลัก"
-
-#: js/AuthenticationPanel.js:475
-msgid "Login panel"
-msgstr "ช่องลงชื่อเข้าใช้"
-
-#: js/AuthenticationPanel.js:490
-msgid "Reuse last username logged"
-msgstr ""
-
-#: js/AuthenticationPanel.js:499
-msgid "Password Settings"
-msgstr "การรติดตั้งรหัสผ่าน"
-
-#: js/AuthenticationPanel.js:514
-msgid "User can change password"
-msgstr "ผู้ใช้สามารถเปลี่ยนรหัสผ่านได้"
-
-#: js/AuthenticationPanel.js:520
-msgid "Enable password policy"
-msgstr ""
-
-#: js/AuthenticationPanel.js:526
-msgid "Only ASCII"
-msgstr "เฉพาะ ASCII"
-
-#: js/AuthenticationPanel.js:531
-msgid "Minimum length"
-msgstr "ความยาวอย่างน้อยที่สุด"
-
-#: js/AuthenticationPanel.js:534
-msgid "Minimum word chars"
-msgstr ""
-
-#: js/AuthenticationPanel.js:537
-msgid "Minimum uppercase chars"
-msgstr ""
-
-#: js/AuthenticationPanel.js:540
-msgid "Minimum special chars"
-msgstr ""
-
-#: js/AuthenticationPanel.js:543
-msgid "Minimum numbers"
-msgstr "จำนวนหมายเลขที่น้อยที่สุด"
-
-#: js/AuthenticationPanel.js:546
-msgid "Change password after ... days"
-msgstr ""
-
-#: js/AuthenticationPanel.js:555
-msgid "Forbid part of username in password"
-msgstr ""
-
-#: js/AuthenticationPanel.js:564
-msgid "Redirect Settings"
-msgstr ""
-
-#: js/AuthenticationPanel.js:572
-msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
-
-#: js/AuthenticationPanel.js:576
-msgid "Redirect Always (if No, only redirect after logout)"
-msgstr ""
-
-#: js/AuthenticationPanel.js:582
-msgid "Redirect to referring site, if exists"
-msgstr ""
-
-#: js/AuthenticationPanel.js:642
-msgid "Password encoding"
-msgstr ""
-
-#: js/AuthenticationPanel.js:644
-msgid "des"
-msgstr ""
-
-#: js/AuthenticationPanel.js:645
-msgid "crypt"
-msgstr ""
-
-#: js/AuthenticationPanel.js:646
-msgid "blowfish_crypt"
-msgstr ""
-
-#: js/AuthenticationPanel.js:647
-msgid "md5_crypt"
-msgstr "md5_crypt"
-
-#: js/AuthenticationPanel.js:648
-msgid "ext_crypt"
-msgstr ""
-
-#: js/AuthenticationPanel.js:649
-msgid "md5"
-msgstr ""
-
-#: js/AuthenticationPanel.js:650
-msgid "smd5"
-msgstr ""
-
-#: js/AuthenticationPanel.js:651
-msgid "sha"
-msgstr ""
-
-#: js/AuthenticationPanel.js:652
-msgid "ssha"
-msgstr ""
-
-#: js/AuthenticationPanel.js:653
-msgid "ntpassword"
-msgstr ""
-
-#: js/AuthenticationPanel.js:654
-msgid "plain"
-msgstr "ว่าง"
-
-#: js/AuthenticationPanel.js:660
-msgid "User DN"
-msgstr " ผู้ใช้ DN"
-
-#: js/AuthenticationPanel.js:663
-msgid "User Filter"
-msgstr "ตัวกรองผู้ใช้"
-
-#: js/AuthenticationPanel.js:667
-msgid "User Search Scope"
-msgstr "ขอบเขตการค้นหาของผู้ใช้"
-
-#: js/AuthenticationPanel.js:673
-msgid "Groups DN"
-msgstr "กลุ่ม DN"
-
-#: js/AuthenticationPanel.js:676
-msgid "Group Filter"
-msgstr "ตัวกรองกลุ่ม"
-
-#: js/AuthenticationPanel.js:680
-msgid "Group Search Scope"
-msgstr "ขอบเขตการค้นหาของกลุ่ม"
-
-#: js/AuthenticationPanel.js:686
-msgid "Use Rfc 2307 bis"
-msgstr ""
-
-#: js/AuthenticationPanel.js:686
-msgid "Maintain RFC 2307 attributes"
-msgstr ""
-
-#: js/AuthenticationPanel.js:692
-msgid "Min User Id"
-msgstr "รหัสของผู้ใช้ที่สั้นที่สุด"
-
-#: js/AuthenticationPanel.js:695
-msgid "Max User Id"
-msgstr "รหัสของผู้ใช้ที่ยาวที่สุด"
-
-#: js/AuthenticationPanel.js:698
-msgid "Min Group Id"
-msgstr "รหัสของกลุ่มที่สั้นที่สุด"
-
-#: js/AuthenticationPanel.js:701
-msgid "Max Group Id"
-msgstr "รหัสของกลุ่มที่ยาวที่สุด"
-
-#: js/AuthenticationPanel.js:705
-msgid "Group UUID Attribute name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:710
-msgid "User UUID Attribute name"
-msgstr ""
-
-#: js/AuthenticationPanel.js:722
-msgid "Readonly access"
-msgstr ""
-
-#: js/AuthenticationPanel.js:736
-msgid "Save config and install"
-msgstr ""
-
-#: js/AuthenticationPanel.js:763
-msgid "Passwords don't match"
-msgstr "รหัสผ่านไม่ตรง"
-
-#: js/AuthenticationPanel.js:776 js/AuthenticationPanel.js:783
-#: js/AuthenticationPanel.js:787 js/AuthenticationPanel.js:799
-#: js/AuthenticationPanel.js:810
-msgid "Should not be empty"
-msgstr "ไม่ควรว่างไว้"
-
-#: js/init.js:75
-msgid "Setup"
-msgstr ""
-
-#: js/Model.js:33
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "แอพพลิเคชั่น"
-
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "ชื่อ"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "เปิดใช้งานแล้ว"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "คำสั่ง"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "เวอร์ชั่นที่ได้ติดตั้ง"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "เวอร์ชั่นที่มี"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "สถานะ"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "ขึ้นอยู่กับ"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "ถอนการติดตั้งแอพพลิเคชั่น"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "อัพเดทแอพพลิเคชั่น"
-
-#: js/ApplicationGridPanel.js:105
-#, python-brace-format
-msgid "Go to {0} login"
-msgstr "ไปยังการเข้าใช้ {0} "
-
-#: js/ApplicationGridPanel.js:184
-msgid "uninstall"
-msgstr "ถอนการติดตั้ง"
-
-#: js/ApplicationGridPanel.js:184
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "คุณแน่ใจว่าต้องการถอนการติดตั้งแอพพลิเคชั่น(s)?"
-
-#: js/ApplicationGridPanel.js:244
-msgid "This may take a while"
-msgstr "นี่อาจจะใช้เวลาสักครู่"
-
-#: js/ApplicationGridPanel.js:278
-msgid "Dependency Violation"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:287
-msgid "CLI Required"
+msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
 msgstr ""
