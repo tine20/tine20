@@ -8,7 +8,6 @@
  */
 
 Ext.ns('Tine.Felamimail');
-
 /**
  * @param config
  * @constructor
@@ -573,7 +572,69 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             Ext.fly(target).removeClass('tinebase-download-link-anim');
         }
 
-    }
+    },
+    
+    /**
+     * process spam strategy and refresh grid panel
+     *
+     * @param option
+     */
+    processSpamStrategy: async function (option) {
+        try {
+            await Tine.Felamimail.processSpam(this.record.data,option);
+            this.spamToolbar.hide();
+            this.messageRecordPanel.doLayout();
+        } finally {
+            this.app.getMainScreen().getCenterPanel().doRefresh();
+        }
+    },
+
+    /**
+     * show spam toolbar
+     *
+     * @param record
+     */
+    showSpamToolbar: function (record) {
+        
+        if (!this.spamToolbar) {
+            this.spamToolbar = new Ext.Toolbar({
+                items: [{
+                        xtype: 'tbtext',
+                        text: this.app.i18n._('This message is probably SPAM. Please help to train your anti-SPAM system with a decision: "Yes, it is SPAM" or "No, it is not"')
+                    },
+                    '->',
+                    {
+                        iconCls: 'action_about',
+                        handler: () => {
+                            Ext.Msg.alert(
+                                i18n._('About SPAM'),
+                                Tine.Tinebase.configManager.get('spamInfoDialogContent', 'Felamimail')
+                            );
+                        }
+                    }, {
+                        xtype: 'tbspacer', width: 20
+                    }, {
+                        iconCls: 'felamimail-action-spam',
+                        text: this.app.i18n._('Yes, it is SPAM'),
+                        handler: this.processSpamStrategy.bind(this, 'spam'),
+                    }, {
+                        iconCls: 'felamimail-action-ham',
+                        text: this.app.i18n._('No, it is not'),
+                        handler: this.processSpamStrategy.bind(this, 'ham'),
+                    }]
+            })
+
+            this.messageRecordPanel.add(this.spamToolbar);
+        }
+
+        if(record.get('is_spam_suspicions')) {
+            this.spamToolbar.show();
+        } else {
+            this.spamToolbar.hide();
+        }
+        
+        this.messageRecordPanel.doLayout();
+    },
 });
 
 Ext.reg('felamimaildetailspanel', Tine.Felamimail.MailDetailsPanel);

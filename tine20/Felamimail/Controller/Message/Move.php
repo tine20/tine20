@@ -90,7 +90,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $messages = $this->_convertToRecordSet($_messages, TRUE);
             $result = $this->processMoveIteration($messages, $targetFolder, $keepOriginalMessages);
         }
-        
+
         return $result;
     }
     

@@ -335,6 +335,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Felamimail_Model_Message::class,
                 Felamimail_Model_MessageFileLocation::class,
                 Felamimail_Model_MessageFileSuggestion::class,
+                Felamimail_Model_MessagePipeConfig::class,
                 Felamimail_Model_PreparedMessagePart::class,
                 Felamimail_Model_Sieve_Rule::class,
                 Felamimail_Model_Sieve_ScriptPart::class,

@@ -13,6 +13,7 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
 {
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -23,6 +24,10 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE013_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -72,5 +77,24 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Felamimail', '13.1', self::RELEASE013_UPDATE002);
+    }
+
+    public function update003()
+    {
+        if ($this->getTableVersion('felamimail_cache_message') < 12) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>is_spam_suspicions</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+            ');
+            $this->_backend->addCol('felamimail_cache_message', $declaration);
+            $this->setTableVersion('felamimail_cache_message', 12);
+        }
+
+        // TODO also add new fields to accounts here
+
+        $this->addApplicationUpdate('Felamimail', '13.2', self::RELEASE013_UPDATE003);
     }
 }

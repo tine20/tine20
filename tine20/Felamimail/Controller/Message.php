@@ -136,6 +136,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $mimeType
      * @param boolean $_setSeen
      * @return Felamimail_Model_Message
+     * @throws Exception
      */
     public function getCompleteMessage($_id, $_partId = NULL, $mimeType = 'configured', $_setSeen = FALSE)
     {
@@ -158,6 +159,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($message)) {
             Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($message);
+        }
+
+        if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY)) {
+            $strategy = Felamimail_Spam_SuspicionStrategy_Factory::factory();
+            $message->is_spam_suspicions = $strategy->apply($message);
         }
 
         if ($_setSeen) {
@@ -1521,6 +1527,61 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $imap->addFlags([$message->messageuid], [Zend_Mail_Storage::FLAG_DELETED]);
         }
 
+        return $updatedMessage;
+    }
+
+    /**
+     * copy message with
+     * @param Felamimail_Model_Message $message
+     * @param $wrapTo
+     * @param $targetFolder
+     * @return Felamimail_Model_Message
+     * @throws Felamimail_Exception
+     * @throws Felamimail_Exception_IMAP
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Mail_Transport_Exception
+     */
+    public function copyMessageWithAttachment(Felamimail_Model_Message $message, $wrapTo, $targetFolder)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($message->account_id);
+
+        $updatedMessage = clone($message);
+        $updatedMessage->subject = $wrapTo['subject'];
+        $updatedMessage->to = $wrapTo['to'];
+        $updatedMessage->original_id = $message->getId(); // doesnt work
+        $updatedMessage->attachments =  [new Tinebase_Model_TempFile([
+            'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
+            'name'  => $message->subject,
+        ], TRUE)];
+
+        $imap = Felamimail_Backend_ImapFactory::factory($account);
+        $mailToAppend = Felamimail_Controller_Message_Send::getInstance()->createMailForSending(
+            $updatedMessage,
+            $account,
+            $_nonPrivateRecipients,
+            true
+        );
+        $transport = new Felamimail_Transport();
+        $mailAsString = $transport->getRawMessage($mailToAppend);
+        $uid = $imap->appendMessage(
+            $mailAsString,
+            Felamimail_Model_Folder::encodeFolderName($targetFolder->globalname),
+            []
+        );
+
+        if ($uid) {
+            $updatedMessage->messageuid = $uid;
+        } else {
+            throw new Felamimail_Exception_IMAP('appendMessage failed');
+        }
+
+        // remove old message
+        if ($message->messageuid) {
+            $imap->addFlags([$message->messageuid], [Zend_Mail_Storage::FLAG_DELETED]);
+        }
+        
         return $updatedMessage;
     }
 }

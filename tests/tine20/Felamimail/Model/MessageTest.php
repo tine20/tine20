@@ -125,4 +125,34 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('eMail=abc@efh.com', $result);
         $this->assertContains('a href="http://my.serveer.com/job/job1/137/display/redirect?page=changes"', $result);
     }
+
+    /**
+     * test spam suspicion subject strategy
+     */
+    public function testSpamSuspicionSubjectStrategy()
+    {
+        Felamimail_Config::getInstance()->set(Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY, TRUE);
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'subject');
+
+        $config = [
+            'pattern' => '/^SPAM\? \([^)]+\) \*\*\* /',
+        ];
+
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY_CONFIG, $config);
+
+        $message = new Felamimail_Model_Message([
+            'subject' => 'SPAM? (Score = 14.53 / 15) *** Super preise',
+        ]);
+
+        $strategy = Felamimail_Spam_SuspicionStrategy_Factory::factory();
+        $message->is_spam_suspicions = $strategy->apply($message);
+
+        static::assertTrue($message->is_spam_suspicions, 'set the spam suspicion strategy failed');
+
+        $message['subject'] = 'test non spam suspicion subject';
+        $message->is_spam_suspicions = $strategy->apply($message);
+
+        static::assertFalse($message->is_spam_suspicions, 'set the spam non-suspicion strategy failed');
+    }
+
 }
