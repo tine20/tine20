@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2014
 # Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2014
@@ -9,14 +9,142 @@ msgstr ""
 "PO-Revision-Date: 2017-12-13 11:05+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Romanian (Romania) (http://www.transifex.com/tine20/tine20/language/ro_RO/)\n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ro_RO\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:42
+msgid "The active number must be less than or equal total number."
+msgstr "Numărul activ trebuie sa fie mai mic sau egal cu numărul total."
+
+#: js/InventoryItemEditDialog.js:68
+msgid "General"
+msgstr "General"
+
+#: js/InventoryItemEditDialog.js:92
+msgid "ID"
+msgstr "ID"
+
+#: js/InventoryItemEditDialog.js:101 Model/InventoryItem.php:82
+msgid "Name"
+msgstr "Nume"
+
+#: js/InventoryItemEditDialog.js:121 Model/InventoryItem.php:104
+msgid "Description"
+msgstr "Descriere"
+
+#: js/InventoryItemEditDialog.js:125
+msgid "Enter description"
+msgstr "Introducere Descriere"
+
+#: js/InventoryItemEditDialog.js:155 Model/InventoryItem.php:111
+msgid "Location"
+msgstr "Locaţie"
+
+#: js/InventoryItemEditDialog.js:162
+msgid "Added"
+msgstr "Adăugat"
+
+#: js/InventoryItemEditDialog.js:168 Model/InventoryItem.php:168
+msgid "Warranty"
+msgstr "Garanţie"
+
+#: js/InventoryItemEditDialog.js:174
+msgid "Removed"
+msgstr "Înlăturat"
+
+#: js/InventoryItemEditDialog.js:181
+msgid "Total number"
+msgstr "Număr total"
+
+#: js/InventoryItemEditDialog.js:189
+msgid "Available number"
+msgstr "Număr disponibil"
+
+#: js/InventoryItemEditDialog.js:197 Model/InventoryItem.php:88
+msgid "Status"
+msgstr "Status"
+
+#: js/InventoryItemEditDialog.js:230
+msgid "Accounting"
+msgstr "Contabilitate"
+
+#: js/InventoryItemEditDialog.js:251 Model/InventoryItem.php:150
+msgid "Price"
+msgstr "Preţ"
+
+#: js/InventoryItemEditDialog.js:258
+msgid "Cost center"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:271 Model/InventoryItem.php:143
+msgid "Invoice"
+msgstr "Factură"
+
+#: js/InventoryItemEditDialog.js:277 Model/InventoryItem.php:116
+msgid "Invoice date"
+msgstr "Dată factură"
+
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
+msgid "Depreciate"
+msgstr "Depreciat"
+
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Toate elementele Inventarului"
+
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Toate elementele existente"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventar"
+
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr ""
+
+#: Config.php:33
+msgid "Possible status."
+msgstr "Status posibil."
+
+#: Config.php:41
+msgid "ordered"
+msgstr "comandat"
+
+#: Config.php:42
+msgid "available"
+msgstr "disponibil"
+
+#: Config.php:43
+msgid "defect"
+msgstr "defect"
+
+#: Config.php:44
+msgid "missing"
+msgstr "lipsă"
+
+#: Config.php:45
+msgid "removed"
+msgstr "înlăturat"
+
+#: Config.php:46
+msgid "unknown"
+msgstr "necunoscut"
 
 #: Model/InventoryItem.php:38
 msgid "Inventory item"
@@ -32,45 +160,13 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: Model/InventoryItem.php:82 js/InventoryItemEditDialog.js:101
-msgid "Name"
-msgstr "Nume"
-
-#: Model/InventoryItem.php:88 js/InventoryItemEditDialog.js:197
-msgid "Status"
-msgstr "Status"
-
 #: Model/InventoryItem.php:97
 msgid "Inventory ID"
 msgstr "ID Inventor"
 
-#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:121
-msgid "Description"
-msgstr "Descriere"
-
-#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:155
-msgid "Location"
-msgstr "Locaţie"
-
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:277
-msgid "Invoice date"
-msgstr "Dată factură"
-
-#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:271
-msgid "Invoice"
-msgstr "Factură"
-
-#: Model/InventoryItem.php:150 js/InventoryItemEditDialog.js:251
-msgid "Price"
-msgstr "Preţ"
-
 #: Model/InventoryItem.php:155
 msgid "Cost Center"
 msgstr ""
-
-#: Model/InventoryItem.php:168 js/InventoryItemEditDialog.js:168
-msgid "Warranty"
-msgstr "Garanţie"
 
 #: Model/InventoryItem.php:176
 msgid "Item added"
@@ -79,94 +175,6 @@ msgstr "Element adăugat"
 #: Model/InventoryItem.php:184
 msgid "Item removed"
 msgstr "Element înlăturat"
-
-#: Model/InventoryItem.php:193
-msgid "Deprecate"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:42
-msgid "The active number must be less than or equal total number."
-msgstr "Numărul activ trebuie sa fie mai mic sau egal cu numărul total."
-
-#: js/InventoryItemEditDialog.js:68
-msgid "General"
-msgstr "General"
-
-#: js/InventoryItemEditDialog.js:92
-msgid "ID"
-msgstr "ID"
-
-#: js/InventoryItemEditDialog.js:125
-msgid "Enter description"
-msgstr "Introducere Descriere"
-
-#: js/InventoryItemEditDialog.js:162
-msgid "Added"
-msgstr "Adăugat"
-
-#: js/InventoryItemEditDialog.js:174
-msgid "Removed"
-msgstr "Înlăturat"
-
-#: js/InventoryItemEditDialog.js:181
-msgid "Total number"
-msgstr "Număr total"
-
-#: js/InventoryItemEditDialog.js:189
-msgid "Available number"
-msgstr "Număr disponibil"
-
-#: js/InventoryItemEditDialog.js:230
-msgid "Accounting"
-msgstr "Contabilitate"
-
-#: js/InventoryItemEditDialog.js:258
-msgid "Cost center"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:283
-msgid "Depreciate"
-msgstr "Depreciat"
-
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr ""
-
-#: Config.php:31
-msgid "Inventory Status Available"
-msgstr ""
-
-#: Config.php:33
-msgid "Possible status."
-msgstr "Status posibil."
-
-#: Config.php:40
-msgid "ordered"
-msgstr "comandat"
-
-#: Config.php:41
-msgid "available"
-msgstr "disponibil"
-
-#: Config.php:42
-msgid "defect"
-msgstr "defect"
-
-#: Config.php:43
-msgid "missing"
-msgstr "lipsă"
-
-#: Config.php:44
-msgid "removed"
-msgstr "înlăturat"
-
-#: Config.php:45
-msgid "unknown"
-msgstr "necunoscut"
 
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
@@ -177,19 +185,5 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
-
-#: Setup/Initialize.php:34 Setup/Update/Release7.php:127
-msgid "All Inventory Items"
-msgstr "Toate elementele Inventarului"
-
-#: Setup/Initialize.php:35 Setup/Update/Release7.php:128
-msgid "All existing Inventory Items"
-msgstr "Toate elementele existente"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventar"

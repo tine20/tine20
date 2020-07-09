@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 # fgsl <flavio.lisboa@serpro.gov.br>, 2017
@@ -9,78 +9,22 @@ msgstr ""
 "PO-Revision-Date: 2017-12-13 11:05+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Model/InventoryItem.php:38
-msgid "Inventory item"
-msgid_plural "Inventory items"
-msgstr[0] "Item de inventário"
-msgstr[1] "itens de inventário"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Repositório Padrão de Item de Inventário"
 
-#: Model/InventoryItem.php:42
-msgid "Inventory item list"
-msgid_plural "Inventory item lists"
-msgstr[0] "Listas de itens de inventário"
-msgstr[1] "Listas de itens de inventário"
-
-#: Model/InventoryItem.php:82 js/InventoryItemEditDialog.js:101
-msgid "Name"
-msgstr "Nome"
-
-#: Model/InventoryItem.php:88 js/InventoryItemEditDialog.js:197
-msgid "Status"
-msgstr "Situação"
-
-#: Model/InventoryItem.php:97
-msgid "Inventory ID"
-msgstr "ID do Inventário"
-
-#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:121
-msgid "Description"
-msgstr "Descrição"
-
-#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:155
-msgid "Location"
-msgstr "Posição"
-
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:277
-msgid "Invoice date"
-msgstr "Data da fatura"
-
-#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:271
-msgid "Invoice"
-msgstr "Fatura"
-
-#: Model/InventoryItem.php:150 js/InventoryItemEditDialog.js:251
-msgid "Price"
-msgstr "Preço"
-
-#: Model/InventoryItem.php:155
-msgid "Cost Center"
-msgstr "Centro de Custo"
-
-#: Model/InventoryItem.php:168 js/InventoryItemEditDialog.js:168
-msgid "Warranty"
-msgstr "Garantia"
-
-#: Model/InventoryItem.php:176
-msgid "Item added"
-msgstr "Item adicionado"
-
-#: Model/InventoryItem.php:184
-msgid "Item removed"
-msgstr "Item removido"
-
-#: Model/InventoryItem.php:193
-msgid "Deprecate"
-msgstr "Depreciar"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "O repositório padrão para novos ítens"
 
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
@@ -94,13 +38,29 @@ msgstr "Geral"
 msgid "ID"
 msgstr "ID"
 
+#: js/InventoryItemEditDialog.js:101 Model/InventoryItem.php:82
+msgid "Name"
+msgstr "Nome"
+
+#: js/InventoryItemEditDialog.js:121 Model/InventoryItem.php:104
+msgid "Description"
+msgstr "Descrição"
+
 #: js/InventoryItemEditDialog.js:125
 msgid "Enter description"
 msgstr "Informe a descrição"
 
+#: js/InventoryItemEditDialog.js:155 Model/InventoryItem.php:111
+msgid "Location"
+msgstr "Posição"
+
 #: js/InventoryItemEditDialog.js:162
 msgid "Added"
 msgstr "Adicionado"
+
+#: js/InventoryItemEditDialog.js:168 Model/InventoryItem.php:168
+msgid "Warranty"
+msgstr "Garantia"
 
 #: js/InventoryItemEditDialog.js:174
 msgid "Removed"
@@ -114,25 +74,45 @@ msgstr "Número total"
 msgid "Available number"
 msgstr "Número disponível"
 
+#: js/InventoryItemEditDialog.js:197 Model/InventoryItem.php:88
+msgid "Status"
+msgstr "Situação"
+
 #: js/InventoryItemEditDialog.js:230
 msgid "Accounting"
 msgstr "Contabilidade"
+
+#: js/InventoryItemEditDialog.js:251 Model/InventoryItem.php:150
+msgid "Price"
+msgstr "Preço"
 
 #: js/InventoryItemEditDialog.js:258
 msgid "Cost center"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:283
+#: js/InventoryItemEditDialog.js:271 Model/InventoryItem.php:143
+msgid "Invoice"
+msgstr "Fatura"
+
+#: js/InventoryItemEditDialog.js:277 Model/InventoryItem.php:116
+msgid "Invoice date"
+msgstr "Data da fatura"
+
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
 msgid "Depreciate"
 msgstr "Depreciar"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Repositório Padrão de Item de Inventário"
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Todos os ítens do inventário"
 
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "O repositório padrão para novos ítens"
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Todos os ítens de inventário existentes"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventário"
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -142,29 +122,57 @@ msgstr "Situação do Inventário Disponível"
 msgid "Possible status."
 msgstr "Situação possível."
 
-#: Config.php:40
+#: Config.php:41
 msgid "ordered"
 msgstr "ordenado"
 
-#: Config.php:41
+#: Config.php:42
 msgid "available"
 msgstr "disponível"
 
-#: Config.php:42
+#: Config.php:43
 msgid "defect"
 msgstr "defeito"
 
-#: Config.php:43
+#: Config.php:44
 msgid "missing"
 msgstr "faltando"
 
-#: Config.php:44
+#: Config.php:45
 msgid "removed"
 msgstr "removido"
 
-#: Config.php:45
+#: Config.php:46
 msgid "unknown"
 msgstr "desconhecido"
+
+#: Model/InventoryItem.php:38
+msgid "Inventory item"
+msgid_plural "Inventory items"
+msgstr[0] "Item de inventário"
+msgstr[1] "itens de inventário"
+
+#: Model/InventoryItem.php:42
+msgid "Inventory item list"
+msgid_plural "Inventory item lists"
+msgstr[0] "Listas de itens de inventário"
+msgstr[1] "Listas de itens de inventário"
+
+#: Model/InventoryItem.php:97
+msgid "Inventory ID"
+msgstr "ID do Inventário"
+
+#: Model/InventoryItem.php:155
+msgid "Cost Center"
+msgstr "Centro de Custo"
+
+#: Model/InventoryItem.php:176
+msgid "Item added"
+msgstr "Item adicionado"
+
+#: Model/InventoryItem.php:184
+msgid "Item removed"
+msgstr "Item removido"
 
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
@@ -175,19 +183,8 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr "Lista de Importação (###CURRENTDATE###)"
 
 #: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Ítens importados  em ###CURRENTDATE### às ###CURRENTTIME### por ###USERFULLNAME###"
 
-#: Setup/Initialize.php:34 Setup/Update/Release7.php:127
-msgid "All Inventory Items"
-msgstr "Todos os ítens do inventário"
-
-#: Setup/Initialize.php:35 Setup/Update/Release7.php:128
-msgid "All existing Inventory Items"
-msgstr "Todos os ítens de inventário existentes"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventário"
+#~ msgid "Deprecate"
+#~ msgstr "Depreciar"
