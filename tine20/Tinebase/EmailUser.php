@@ -214,7 +214,12 @@ class Tinebase_EmailUser
         
         return self::$_backends[$type];
     }
-    
+
+    public static function destroyInstance()
+    {
+        self::clearCaches();
+    }
+
     /**
      * return an instance of the defined backend
      *

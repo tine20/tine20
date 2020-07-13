@@ -76,7 +76,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     protected function tearDown()
     {
         foreach ($this->objects['users'] as $user) {
-            $this->_backend->deleteUser($user);
+            Tinebase_User::getInstance()->deleteUser($user);
         }
 
         parent::tearDown();
@@ -142,15 +142,15 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     {
         // add smtp user
         $user = $this->testAddUser();
-        
+
         // update user
         $user->smtpUser->emailForwardOnly = 1;
         $user->smtpUser->emailAliases = array('bla@' . $this->_mailDomain);
         $user->smtpUser->emailForwards = array();
         $user->accountEmailAddress = 'j.smith@' . $this->_mailDomain;
-        
+
         $testUser = $this->_backend->updateUser($user);
-        
+
         $this->assertEquals(array(),                            $testUser->smtpUser->emailForwards, 'forwards mismatch');
         $this->assertEquals([
             ['email' => 'bla@' . $this->_mailDomain, 'dispatch_address' => 1]
@@ -216,14 +216,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $user = $this->testAddUser();
         
         // check destinations
-        $db = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->getDb();
-        $select = $db->select()
-            ->from(array('smtp_destinations'))
-            ->where($db->quoteIdentifier('userid') . ' = ?', $user->getId());
-        $stmt = $db->query($select);
-        $queryResult = $stmt->fetchAll();
-        $stmt->closeCursor();
-
+        $queryResult = $this->_getDestinations($user);
         $this->assertEquals(6, count($queryResult), print_r($queryResult, TRUE));
         $expectedDestinations = array(
             'bla@' . $this->_mailDomain => array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain),
@@ -242,7 +235,64 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
             $this->assertTrue($foundDestinations == $destinations, print_r($destinations, TRUE));
         }
     }
-    
+
+    protected function _getDestinations($user)
+    {
+        $db = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->getDb();
+        $select = $db->select()
+            ->from(array('smtp_destinations'))
+            ->where($db->quoteIdentifier('userid') . ' = ?', $user->getId());
+            // 2020.11!
+            // ->where($db->quoteIdentifier('userid') . ' = ?', $user->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP]);
+        $stmt = $db->query($select);
+        $queryResult = $stmt->fetchAll();
+        $stmt->closeCursor();
+
+        return $queryResult;
+    }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @todo make this test work
+     */
+    public function testAddUserCheckDefaultDestinations()
+    {
+        self::markTestSkipped('FIXME this breaks Felamimail_Frontend_ActiveSyncTest::testSendEmail');
+
+        $this->_testNeedsTransaction();
+
+        Tinebase_User::destroyInstance();
+        $oldSmtpConf = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $smtpConf = clone $oldSmtpConf;
+        $smtpConf->onlyemaildestination = true;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConf);
+
+        $emailAddress = 'phpunitpostfix2@' . $this->_mailDomain;
+        $user = TestCase::getTestUser([
+            'accountLoginName'      => 'phpunitpostfix2login',
+            'accountEmailAddress'   => $emailAddress,
+        ]);
+        $user->smtpUser = new Tinebase_Model_EmailUser(array(
+            'emailAddress'     => $user->accountEmailAddress,
+            'emailForwardOnly' => true,
+            'emailForwards'    => [],
+            'emailAliases'     => [],
+        ));
+
+        $testUser = Tinebase_User::getInstance()->addUser($user);
+        $this->objects['users'][] = $testUser;
+        $queryResult = $this->_getDestinations($testUser);
+        self::assertEquals(1, count($queryResult), 'user should only have 1 destination! '
+            . print_r($queryResult, true));
+        $destination = $queryResult[0];
+        self::assertEquals($user->accountEmailAddress, $destination['source'], print_r($queryResult, true));
+        self::assertEquals($user->accountEmailAddress, $destination['source'], print_r($queryResult, true));
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $oldSmtpConf);
+        Tinebase_User::destroyInstance();
+    }
+
     /**
      * testLotsOfAliasesAndForwards
      * 

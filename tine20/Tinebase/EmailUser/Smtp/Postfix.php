@@ -327,7 +327,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         ));
         
         // create username -> username alias if email and username are different
-        if ($_smtpSettings[$this->_propertyMapping['emailUsername']] != $_smtpSettings[$this->_propertyMapping['emailAddress']]) {
+        if ((! isset($this->_config['onlyemaildestination']) || ! $this->_config['onlyemaildestination'])
+            && $_smtpSettings[$this->_propertyMapping['emailUsername']] != $_smtpSettings[$this->_propertyMapping['emailAddress']]
+        ) {
             $this->_addDestination(array(
                 'userid'      => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
                 'source'      => $_smtpSettings[$this->_propertyMapping['emailUsername']], // username
