@@ -22,7 +22,7 @@ Tine.Admin.Applications.Main = {
         this._action_enable = new Ext.Action({
             text: this.translation.gettext('Enable Application'),
             disabled: true,
-            handler: this._enableDisableButtonHandler.createDelegate(this, ['enabled']),
+            handler: this._enableDisableButtonHandler.createDelegate(this, ['Enabled']),
             scope: this,
             iconCls: 'action_enable'
         });
@@ -30,7 +30,7 @@ Tine.Admin.Applications.Main = {
         this._action_disable = new Ext.Action({
             text: this.translation.gettext('Disable Application'),
             disabled: true,
-            handler: this._enableDisableButtonHandler.createDelegate(this, ['disabled']),
+            handler: this._enableDisableButtonHandler.createDelegate(this, ['Disabled']),
             scope: this,
             iconCls: 'action_disable'
         });
@@ -138,9 +138,9 @@ Tine.Admin.Applications.Main = {
             return;
         }
         
-        this._action_enable.setText(this.translation.gettext('enable application'));
-        this._action_disable.setText(this.translation.gettext('disable application'));
-        this._action_settings.setText(this.translation.gettext('settings'));
+        this._action_enable.setText(this.translation.gettext('Enable Application'));
+        this._action_disable.setText(this.translation.gettext('Disable Application'));
+        this._action_settings.setText(this.translation.gettext('Settings'));
     
         var ApplicationsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'ApplicationsAdminQuickSearchField',
@@ -217,14 +217,14 @@ Tine.Admin.Applications.Main = {
         
         switch(_value) {
             case 'disabled':
-                gridValue = this.translation.gettext('disabled');
+                gridValue = this.translation.gettext('Disabled');
                 break;
             case 'enabled':
-              gridValue = this.translation.gettext('enabled');
+              gridValue = this.translation.gettext('Enabled');
               break;
               
             default:
-              gridValue = String.format(this.translation.gettext('unknown status ({0})'), value);
+              gridValue = String.format(this.translation.gettext('Unknown status ({0})'), value);
               break;
         }
         

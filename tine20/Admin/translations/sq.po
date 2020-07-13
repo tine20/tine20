@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Enri Mullai <enri_mullai@albnet.net>, 2013
 # Enri Mullai <enri_mullai@albnet.net>, 2013
@@ -9,210 +9,24 @@ msgstr ""
 "PO-Revision-Date: 2018-11-28 11:09+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/tine20/tine20/language/sq/)\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Admin.js:26 js/AccessLog.js:106 js/user/Users.js:75
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Përdorues"
-msgstr[1] "Përdoruesa"
-
-#: js/Admin.js:39 js/Models.js:87
-msgid "Groups"
-msgstr "Grupe"
-
-#: js/Admin.js:52
-msgid "Roles"
-msgstr "Role"
-
-#: js/Admin.js:64 js/Models.js:128
-msgid "Applications"
-msgstr "Aplikacione"
-
-#: js/Admin.js:77
-msgid "Containers"
-msgstr "Konteinerë"
-
-#: js/Admin.js:89
-msgid "Shared Tags"
-msgstr "Etiketa të ndara"
-
-#: js/Admin.js:102
-msgid "Customfields"
-msgstr "Fusha‎ të personifikuara"
-
-#: js/Admin.js:114
-msgid "Computers"
-msgstr "Kompjutera"
-
-#: js/Admin.js:128 js/Models.js:51 js/AccessLog.js:104
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "Ditari i hyrjeve"
-msgstr[1] "Ditarët e hyrjeve"
-
-#: js/Admin.js:141
-msgid "Server Information"
-msgstr "Informacion i serverit"
-
-#: js/Admin.js:157
-msgid "ActiveSync Devices"
-msgstr ""
-
-#: js/Admin.js:228
-msgid "Admin"
-msgstr "Admin"
-
-#: js/Admin.js:318
-msgid "Refresh"
-msgstr "Rifresko"
-
-#: js/QuotaUsage.js:51 js/Applications.js:276 js/Groups.js:240
-#: js/AccessLog.js:132 js/container/EditDialog.js:157 js/Roles.js:238
-#: js/Tags.js:230 js/config/GridPanel.js:74 js/SambaMachineGrid.js:83
-#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:459
-#: js/user/EditDialog.js:315 js/user/EditDialog.js:351
-msgid "Name"
-msgstr "Emri"
-
-#: js/QuotaUsage.js:57
-msgid "Size"
-msgstr ""
-
-#: js/QuotaUsage.js:69
-msgid "Revision Size"
-msgstr ""
-
-#: js/QuotaUsage.js:70
-msgid "Total size of all available revisions"
-msgstr ""
-
-#: js/QuotaUsage.js:107
-msgid "Quota Usage"
-msgstr ""
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Kompjuter"
-msgstr[1] "Kompjutera"
-
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Blloku i paracaktuar i adresave për kontakte dhe grupe te rinj"
-
-#: js/Models.js:87 js/GroupEditDialog.js:222 js/customfield/EditDialog.js:493
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Grup"
-msgstr[1] "Grupe"
-
-#: js/Models.js:128 js/ApplicationFilter.js:33 js/container/GridPanel.js:67
-#: js/container/EditDialog.js:169 js/customfield/GridPanel.js:70
-#: js/customfield/EditDialog.js:229 js/customfield/EditDialog.js:389
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplikacion"
-msgstr[1] "Apliakcione"
-
-#: js/Models.js:160 js/config/GridPanel.js:49
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:160
-msgid "Configs"
-msgstr ""
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
-msgid "Please wait"
-msgstr "Ju lutem prisni"
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Duke përditësuar Anëtarësimet"
-
-#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:108
-#: js/RoleEditDialog.js:136 js/Roles.js:69 js/TagEditDialog.js:84
-msgid "Failed"
-msgstr "Dështoi"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Nuk mund të ruhej grupi"
-
-#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115
-#: js/customfield/EditDialog.js:138 js/customfield/EditDialog.js:274
-#: js/TagEditDialog.js:91
-msgid "Errors"
-msgstr "Gabime"
-
-#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:91
-msgid "Please fix the errors noted."
-msgstr "Ju lutem riparoni gabimet e shënuara"
-
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "Emër Grupi"
-
-#: js/GroupEditDialog.js:129 js/Groups.js:241 js/RoleEditDialog.js:294
-#: js/Roles.js:239 js/Tags.js:231 js/config/GridPanel.js:63
-#: js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89
-#: js/user/GridPanel.js:105 js/TagEditDialog.js:234
-msgid "Description"
-msgstr "Përshkrimi"
-
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:997
-msgid "Visibility"
-msgstr "Dukshmëria"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:1004
-msgid "Display in addressbook"
-msgstr "Shfaqni në bllokun e adresave"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:1004
-msgid "Hide from addressbook"
-msgstr "Fshihni nga blloku i adresave"
-
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:1018
-msgid "Saved in Addressbook"
-msgstr "U ruajt në bllokun e adresave"
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "Pjesëtarë  Grupi"
-
-#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:361 js/TagEditDialog.js:294
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Duke transferuar {0}... "
-
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "Shto një grup të ri"
-
-#: js/GroupEditDialog.js:240
-#, python-brace-format
-msgid "Edit Group \"{0}\""
-msgstr "Modifiko Grupin \"{0}\""
-
-#: js/Applications.js:23
+#: js/Applications.js:23 js/Applications.js:141
 msgid "Enable Application"
 msgstr "Aktivizo Aplikacionin"
 
-#: js/Applications.js:31
+#: js/Applications.js:31 js/Applications.js:142
 msgid "Disable Application"
 msgstr "Ç'aktivizo Aplikacionin"
 
-#: js/Applications.js:39
+#: js/Applications.js:39 js/Applications.js:143
 msgid "Settings"
 msgstr "Konfigurime"
 
@@ -221,34 +35,22 @@ msgstr "Konfigurime"
 msgid "{0} Settings"
 msgstr "{0} Konfigurime"
 
-#: js/Applications.js:141
-msgid "enable application"
-msgstr "aktivizo aplikacionin"
-
-#: js/Applications.js:142
-msgid "disable application"
-msgstr "ç'aktivizo aplikacionin"
-
-#: js/Applications.js:143
-msgid "settings"
-msgstr "konfigurime"
-
-#: js/Applications.js:180 js/Groups.js:180 js/Roles.js:180 js/Tags.js:174
+#: js/Applications.js:180 js/Groups.js:180 js/Tags.js:174 js/Roles.js:180
 msgid "Search:"
 msgstr "Kërko:"
 
-#: js/Applications.js:220 js/user/EditDialog.js:959
-msgid "disabled"
-msgstr "ç'aktivizuar"
+#: js/Applications.js:220 js/Admin.js:363
+msgid "Disabled"
+msgstr ""
 
-#: js/Applications.js:223 js/user/EditDialog.js:958
-msgid "enabled"
-msgstr "aktivizuar"
+#: js/Applications.js:223
+msgid "Enabled"
+msgstr ""
 
 #: js/Applications.js:227
 #, python-brace-format
-msgid "unknown status ({0})"
-msgstr "status i panjohur ({0})"
+msgid "Unknown status ({0})"
+msgstr ""
 
 #: js/Applications.js:265
 #, python-brace-format
@@ -259,12 +61,20 @@ msgstr "Duke shfaqur aplikacionin  {0} - {1} nga {2}"
 msgid "No applications to display"
 msgstr "Nuk ka aplikacione për tu shfaqur"
 
-#: js/Applications.js:275 js/container/EditDialog.js:215
-#: js/customfield/EditDialog.js:498
+#: js/Applications.js:275 js/customfield/EditDialog.js:498
+#: js/container/EditDialog.js:199
 msgid "Order"
 msgstr "Renditje"
 
-#: js/Applications.js:277 js/user/GridPanel.js:205 js/user/EditDialog.js:950
+#: js/Applications.js:276 js/Groups.js:240 js/customfield/EditDialog.js:459
+#: js/customfield/GridPanel.js:68 js/config/GridPanel.js:75
+#: js/SambaMachineGrid.js:83 js/Tags.js:231 js/Roles.js:238
+#: js/user/EditDialog.js:292 js/user/EditDialog.js:328
+#: js/container/EditDialog.js:146 js/QuotaUsage.js:51 js/AccessLog.js:132
+msgid "Name"
+msgstr "Emri"
+
+#: js/Applications.js:277 js/user/EditDialog.js:935 js/user/GridPanel.js:205
 msgid "Status"
 msgstr "Status"
 
@@ -272,7 +82,7 @@ msgstr "Status"
 msgid "Version"
 msgstr "Versioni"
 
-#: js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
+#: js/Groups.js:52 js/Tags.js:64 js/Roles.js:47
 msgid "Confirm"
 msgstr "Konfirmo"
 
@@ -283,6 +93,11 @@ msgstr "Doni vërtet të fshini grupet e zgjedhur?"
 #: js/Groups.js:69
 msgid "Deleting group(s)..."
 msgstr "Duke fshirë grup(et)..."
+
+#: js/Groups.js:74 js/TagEditDialog.js:84 js/RoleEditDialog.js:109
+#: js/RoleEditDialog.js:137 js/Roles.js:69
+msgid "Failed"
+msgstr "Dështoi"
 
 #: js/Groups.js:74
 msgid "Some error occurred while trying to delete the group."
@@ -305,279 +120,61 @@ msgstr "Fshij Grupin"
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Duke shfaqur grupet {0} - {1} nga {2}"
 
-#: js/Groups.js:229 js/Groups.js:287
+#: js/Groups.js:229 js/Groups.js:288
 msgid "No groups to display"
 msgstr "Nuk ka grupe për tu shfaqur"
 
-#: js/Groups.js:239 js/container/GridPanel.js:65 js/Roles.js:237
-#: js/SambaMachineGrid.js:76 js/customfield/GridPanel.js:66
-#: js/user/GridPanel.js:204
+#: js/Groups.js:239 js/customfield/GridPanel.js:66 js/SambaMachineGrid.js:76
+#: js/Tags.js:227 js/Roles.js:237 js/user/GridPanel.js:204
+#: js/container/GridPanel.js:65
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:242
+#: js/Groups.js:241 js/user/EditDialog.js:903 js/user/GridPanel.js:210
+#: js/GroupEditDialog.js:111
+msgid "E-mail"
+msgstr ""
+
+#: js/Groups.js:242 js/config/GridPanel.js:64 js/SambaMachineGrid.js:57
+#: js/SambaMachineGrid.js:89 js/TagEditDialog.js:234 js/Tags.js:232
+#: js/RoleEditDialog.js:295 js/Roles.js:239 js/user/GridPanel.js:105
+#: js/GroupEditDialog.js:70
+msgid "Description"
+msgstr "Përshkrimi"
+
+#: js/Groups.js:243
 msgid "Creation Time"
 msgstr ""
 
-#: js/Groups.js:243
+#: js/Groups.js:244
 msgid "Created By"
 msgstr ""
 
-#: js/Groups.js:244
+#: js/Groups.js:245
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Groups.js:245
+#: js/Groups.js:246
 msgid "Last Modified By"
 msgstr ""
 
-#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:56
-msgid "Computer Name"
-msgstr "Emri i Kompjuterit"
-
-#: js/AccessLog.js:105 js/AccessLog.js:133
-msgid "IP Address"
-msgstr "Adresa IP"
-
-#: js/AccessLog.js:107 js/AccessLog.js:134
-msgid "Login Time"
-msgstr "Koha e hyrjes"
-
-#: js/AccessLog.js:108 js/AccessLog.js:135
-msgid "Logout Time"
-msgstr "Koha e daljes"
-
-#: js/AccessLog.js:109 js/AccessLog.js:137
-msgid "Client Type"
-msgstr "Tipi i Klientit"
-
-#: js/AccessLog.js:130
-msgid "Session ID"
-msgstr "ID e seances"
-
-#: js/AccessLog.js:131
-msgid "Login Name"
-msgstr "Emri i Hyrjes"
-
-#: js/AccessLog.js:136
-msgid "Result"
-msgstr "Reziltati"
-
-#: js/AccessLog.js:157
-msgid "user blocked"
-msgstr "përdoruesi i bllokuar"
-
-#: js/AccessLog.js:161
-msgid "password expired"
-msgstr "fjalëkalimi ka skaduar"
-
-#: js/AccessLog.js:165
-msgid "user disabled"
-msgstr "përdoruesi i ç'aktivizuar"
-
-#: js/AccessLog.js:169
-msgid "invalid password"
-msgstr "fjalëkalim jo i saktë"
-
-#: js/AccessLog.js:173
-msgid "ambiguous username"
-msgstr "Emër përdoruesi jo i qartë"
-
-#: js/AccessLog.js:177
-msgid "user not found"
-msgstr "përdouresi nuk u gjend"
-
-#: js/AccessLog.js:181
-msgid "failure"
-msgstr "dështim"
-
-#: js/AccessLog.js:185
-msgid "success"
-msgstr "sukses"
-
-#: js/RoleEditDialog.js:108
-msgid "Could not save role."
-msgstr "Roli nuk u ruajt dot"
-
-#: js/RoleEditDialog.js:128
-msgid "Deleting role..."
-msgstr "Duke fshir rolin..."
-
-#: js/RoleEditDialog.js:136 js/Roles.js:69
-msgid "Some error occurred while trying to delete the role."
-msgstr "Ndodhën disa gabime ndërkohe që po fshihej roli"
-
-#: js/RoleEditDialog.js:160
-msgid "Rights"
-msgstr "Të drejta"
-
-#: js/RoleEditDialog.js:262
-msgid "Members"
-msgstr "Pjesëtarë"
-
-#: js/RoleEditDialog.js:286
-msgid "Role Name"
-msgstr "Emri i Rolit"
-
-#: js/RoleEditDialog.js:361
-msgid "Role"
-msgstr "Roli"
-
-#: js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "Shto një rol të ri"
-
-#: js/RoleEditDialog.js:373
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "Modifiko Rolin \"{0}\""
-
-#: js/container/GridPanel.js:66
-msgid "Container Name"
-msgstr "Emri i Konteinerit"
-
-#: js/container/GridPanel.js:68 js/container/GridPanel.js:100
-#: js/container/EditDialog.js:201 js/customfield/GridPanel.js:69
-#: js/customfield/EditDialog.js:447
-msgid "Type"
-msgstr "Tipi"
-
-#: js/container/GridPanel.js:69
-msgid "Container Order"
-msgstr ""
-
-#: js/container/GridPanel.js:99 js/container/Container.js:46
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Konteiner"
-msgstr[1] "Konteinerë"
-
-#: js/container/EditDialog.js:190 js/customfield/GridPanel.js:71
-#: js/customfield/EditDialog.js:411
-msgid "Model"
-msgstr "Modeli"
-
-#: js/container/EditDialog.js:202
-msgid "personal"
-msgstr "personal"
-
-#: js/container/EditDialog.js:202
-msgid "shared"
-msgstr "ndarë"
-
-#: js/container/EditDialog.js:221 js/Tags.js:227 js/TagEditDialog.js:229
-msgid "Color"
-msgstr "Ngjyrë"
-
-#: js/container/EditDialog.js:225
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-#: js/container/EditDialog.js:233
-msgid "Note for Owner"
-msgstr "Shënim për zoteruesin"
-
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Doni vërtetë të fshini rolet e zgjedhur?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Duke fshirë rolin(et)"
-
-#: js/Roles.js:107
-msgid "Add Role"
-msgstr "Shto Rol"
-
-#: js/Roles.js:115
-msgid "Edit Role"
-msgstr "Modifiko Rolin"
-
-#: js/Roles.js:123
-msgid "Delete Role"
-msgstr "Fshij Rolin"
-
-#: js/Roles.js:226
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Duke shfaqur rolin {0} - {1} nga {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "Nuk ka role për tu shfaqur"
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Doni vërtet të fshini etiketat e zgjedhura"
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Duke fshirë etiketën(at)"
-
-#: js/Tags.js:102
-msgid "Add Tag"
-msgstr "Shto Etiketë"
-
-#: js/Tags.js:110
-msgid "Edit Tag"
-msgstr "Modifiko Etiketën"
-
-#: js/Tags.js:118
-msgid "Delete Tag"
-msgstr "Fshij Etiketën"
-
-#: js/Tags.js:216
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Duke shfaqur etiketat {0} - {1} nga {2}"
-
-#: js/Tags.js:217 js/Tags.js:273
-msgid "No tags to display"
-msgstr "Nuk ka etiketa për tu shfaqur"
-
-#: js/Tags.js:228
-msgid "Usage:&#160;"
-msgstr "Përdorimi:&#160;"
-
-#: js/config/GridPanel.js:80 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:465
-msgid "Label"
-msgstr "EtiketV"
-
-#: js/config/GridPanel.js:87
-msgid "Value"
-msgstr "Vlera"
-
-#: js/config/GridPanel.js:243
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-#: js/config/FieldManager.js:49
-msgid "Yes"
-msgstr ""
-
-#: js/config/FieldManager.js:49
-msgid "No"
-msgstr ""
-
-#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:111
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] "Fushë e personalizuar"
-msgstr[1] "Fusha të personalizuara"
-
-#: js/customfield/GridPanel.js:184
-msgid "This custom field is still in use!"
-msgstr ""
-
-#: js/customfield/GridPanel.js:185
-msgid "Are you sure you want to delete them?"
-msgstr ""
+#: js/customfield/EditDialog.js:138 js/customfield/EditDialog.js:274
+#: js/TagEditDialog.js:91 js/RoleEditDialog.js:116
+msgid "Errors"
+msgstr "Gabime"
 
 #: js/customfield/EditDialog.js:138
 msgid "Please configure store for this field type"
 msgstr "Ju lutem konfiguroni vend-ruajtien për këtë tip fushe"
+
+#: js/customfield/EditDialog.js:229 js/customfield/EditDialog.js:389
+#: js/customfield/GridPanel.js:70 js/Models.js:138
+#: js/container/EditDialog.js:155 js/container/GridPanel.js:67
+#: js/ApplicationFilter.js:33
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplikacion"
+msgstr[1] "Apliakcione"
 
 #: js/customfield/EditDialog.js:249
 msgid "Record Class"
@@ -587,7 +184,7 @@ msgstr "Klasa regjistrimit"
 msgid "Given record class not found"
 msgstr "Klasa e dhëne e regjistrimit nuk u gjet"
 
-#: js/customfield/EditDialog.js:311 js/user/EditDialog.js:787
+#: js/customfield/EditDialog.js:311 js/user/EditDialog.js:772
 msgid "Cancel"
 msgstr "Anullo"
 
@@ -598,6 +195,11 @@ msgstr "OK"
 #: js/customfield/EditDialog.js:363
 msgid "Configure store"
 msgstr "Konfiguro vend-ruajtien"
+
+#: js/customfield/EditDialog.js:411 js/customfield/GridPanel.js:71
+#: js/container/EditDialog.js:174
+msgid "Model"
+msgstr "Modeli"
 
 #: js/customfield/EditDialog.js:423
 msgid "Custom field definition"
@@ -647,6 +249,17 @@ msgstr "E dhënë"
 msgid "Record List"
 msgstr ""
 
+#: js/customfield/EditDialog.js:447 js/customfield/GridPanel.js:69
+#: js/container/EditDialog.js:185 js/container/GridPanel.js:68
+#: js/container/GridPanel.js:100
+msgid "Type"
+msgstr "Tipi"
+
+#: js/customfield/EditDialog.js:465 js/customfield/GridPanel.js:67
+#: js/config/GridPanel.js:81
+msgid "Label"
+msgstr "EtiketV"
+
 #: js/customfield/EditDialog.js:471
 msgid "Length"
 msgstr "Gjatësi"
@@ -663,357 +276,64 @@ msgstr "Të dhëna shtesë për fushat e personalizuara"
 msgid "Tab Panel"
 msgstr ""
 
+#: js/customfield/EditDialog.js:493 js/Models.js:90
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Grup"
+msgstr[1] "Grupe"
+
 #: js/customfield/EditDialog.js:522
 msgid "Customfield already exists. Please choose another name."
 msgstr "Fusha e personalizuar ekziston. Ju lutem zgjidhni një emër tjetër"
 
-#: js/user/GridPanel.js:51
-msgid "Enable Account"
-msgstr "Aktivizoni Llogarinë"
+#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:111
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] "Fushë e personalizuar"
+msgstr[1] "Fusha të personalizuara"
 
-#: js/user/GridPanel.js:61
-msgid "Disable Account"
-msgstr "Ç'aktivizoni Llogarinë"
-
-#: js/user/GridPanel.js:71
-msgid "Reset Password"
-msgstr "Rivendosni Fjalëkalimin"
-
-#: js/user/GridPanel.js:80
-msgid "Reset Pin"
+#: js/customfield/GridPanel.js:184
+msgid "This custom field is still in use!"
 msgstr ""
 
-#: js/user/GridPanel.js:206
-msgid "Display name"
-msgstr "Emri i Shfaqur"
-
-#: js/user/GridPanel.js:207 js/user/EditDialog.js:876
-#: js/user/EditDialog.js:926
-msgid "Login name"
-msgstr "Emrii Hyrjes"
-
-#: js/user/GridPanel.js:208 js/user/EditDialog.js:870
-msgid "Last name"
-msgstr "Mbiemri"
-
-#: js/user/GridPanel.js:209 js/user/EditDialog.js:859
-msgid "First name"
-msgstr "Emri"
-
-#: js/user/GridPanel.js:210 js/user/EditDialog.js:918
-msgid "Email"
-msgstr "E-Posta"
-
-#: js/user/GridPanel.js:211
-msgid "Email usage"
+#: js/customfield/GridPanel.js:185
+msgid "Are you sure you want to delete them?"
 msgstr ""
 
-#: js/user/GridPanel.js:212
-msgid "Filesystem usage"
+#: js/config/FieldManager.js:49
+msgid "Yes"
 msgstr ""
 
-#: js/user/GridPanel.js:213 js/user/EditDialog.js:925
-msgid "OpenID"
-msgstr "OpenID"
-
-#: js/user/GridPanel.js:214 js/user/EditDialog.js:1058
-msgid "Last login at"
-msgstr "Hyrja e fundit më"
-
-#: js/user/GridPanel.js:215 js/user/EditDialog.js:1062
-msgid "Last login from"
-msgstr "Hyrja e fundit nga"
-
-#: js/user/GridPanel.js:216
-msgid "Password changed"
-msgstr "Fjalëkalimi ndryshoi"
-
-#: js/user/GridPanel.js:217 js/user/EditDialog.js:991
-msgid "Expires"
-msgstr "Skadon"
-
-#: js/user/GridPanel.js:276
-msgid "Set new password"
-msgstr "Vendosni Fjalëkalimin e ri"
-
-#: js/user/GridPanel.js:276
-msgid "Please enter the new password:"
-msgstr "Ju lutem fusni fjalëkalimin e ri"
-
-#: js/user/GridPanel.js:304
-msgid "Set new pin"
+#: js/config/FieldManager.js:49
+msgid "No"
 msgstr ""
 
-#: js/user/GridPanel.js:304
-msgid "Please enter the new pin:"
-msgstr ""
+#: js/config/GridPanel.js:49 js/Models.js:170
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/user/Users.js:75
-msgid "Users"
-msgstr "Përdorues"
+#: js/config/GridPanel.js:88
+msgid "Value"
+msgstr "Vlera"
 
-#: js/user/Users.js:123
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Perdorues Samba"
-msgstr[1] "Perdorues Samba"
-
-#: js/user/Users.js:149
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Përdorues E-Poste"
-msgstr[1] "Perdorues E-Poste"
-
-#: js/user/EditDialog.js:207
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domain nuk lejohet, Kontrolloni konfigurimet e domain-it SMTP"
-
-#: js/user/EditDialog.js:217
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-#: js/user/EditDialog.js:264 js/user/EditDialog.js:267
-#: js/user/EditDialog.js:784
-msgid "Passwords do not match!"
-msgstr "Fjalëkalimet nuk përkojne"
-
-#: js/user/EditDialog.js:270
-msgid "Passwords match!"
-msgstr "Fjalëkalimet përkojne"
-
-#: js/user/EditDialog.js:316 js/user/EditDialog.js:932
-msgid "Primary group"
-msgstr "Grupi primar"
-
-#: js/user/EditDialog.js:393
-msgid "Unix"
-msgstr "Unix"
-
-#: js/user/EditDialog.js:407
-msgid "Home Directory"
-msgstr "Skedari Kryesor"
-
-#: js/user/EditDialog.js:411
-msgid "Login Shell"
-msgstr "Hapësira Hyrjes"
-
-#: js/user/EditDialog.js:417
-msgid "Windows"
-msgstr "Windows"
-
-#: js/user/EditDialog.js:431
-msgid "Home Drive"
-msgstr "Arkiva Kryesore"
-
-#: js/user/EditDialog.js:436
-msgid "Logon Time"
-msgstr "Koha e Hyrjes"
-
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:1060
-#: js/user/EditDialog.js:1064
-msgid "never logged in"
-msgstr "Nuk ka hyrë asnjëhere"
-
-#: js/user/EditDialog.js:441
-msgid "Home Path"
-msgstr "Rruga kryesore"
-
-#: js/user/EditDialog.js:446
-msgid "Logoff Time"
-msgstr "Koha e daljes"
-
-#: js/user/EditDialog.js:448
-msgid "never logged off"
-msgstr "Nuk ka dalë asnjëhere"
-
-#: js/user/EditDialog.js:451
-msgid "Profile Path"
-msgstr "Rruga e profilit"
-
-#: js/user/EditDialog.js:456
-msgid "Password Last Set"
-msgstr "Fjalëkalimi i funidit i vendosur më"
-
-#: js/user/EditDialog.js:458 js/user/EditDialog.js:994
-#: js/user/EditDialog.js:1068
-msgid "never"
-msgstr "asnjëhere"
-
-#: js/user/EditDialog.js:461
-msgid "Logon Script"
-msgstr "Shkrimi i hyrjes"
-
-#: js/user/EditDialog.js:466
-msgid "Password Can Change"
-msgstr "Fjalëkalimi mund të ndryshojë"
-
-#: js/user/EditDialog.js:468 js/user/EditDialog.js:473
-#: js/user/EditDialog.js:478
-msgid "not set"
-msgstr "nuk është vendosur"
-
-#: js/user/EditDialog.js:471
-msgid "Password Must Change"
-msgstr "Fjalëkalimi Duhet ndryshuar"
-
-#: js/user/EditDialog.js:476
-msgid "Kick Off Time"
-msgstr "Koha e përjashtimit"
-
-#: js/user/EditDialog.js:495
-msgid "Filesystem Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:514 js/user/EditDialog.js:556
-#: js/user/EditDialog.js:588
-msgid "Quota"
-msgstr "Kuota"
-
-#: js/user/EditDialog.js:515 js/user/EditDialog.js:557
-#: js/user/EditDialog.js:589
-msgid "no quota set"
-msgstr "nuk është vendosur kuotë"
-
-#: js/user/EditDialog.js:519
-msgid "Current Filesystem usage"
-msgstr ""
-
-#: js/user/EditDialog.js:537
-msgid "IMAP Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:561
-msgid "Current Mailbox size"
-msgstr "Madhësia aktuale e Kutisë së Postës"
-
-#: js/user/EditDialog.js:569
-msgid "Sieve Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:593
-msgid "Current Sieve size"
-msgstr "Madhësia aktuale e Sieve"
-
-#: js/user/EditDialog.js:602 js/user/EditDialog.js:1043
-msgid "Information"
-msgstr "Informacion"
-
-#: js/user/EditDialog.js:616
-msgid "Last Login"
-msgstr "Hyrja e Fundit"
-
-#: js/user/EditDialog.js:677
-msgid "Domain not allowed"
-msgstr "Domain nuk lejohet"
-
-#: js/user/EditDialog.js:678
+#: js/config/GridPanel.js:268
 #, python-brace-format
-msgid ""
-"The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup. Please add this "
-"domain to the secondary domains in SMTP setup or use another domain which is"
-" configured already."
+msgid "Default ({0})"
 msgstr ""
 
-#: js/user/EditDialog.js:687
-msgid "Email Alias"
-msgstr "Pseudonime të E-Postës"
+#: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
+msgid "Computer Name"
+msgstr "Emri i Kompjuterit"
 
-#: js/user/EditDialog.js:693
-msgid "Add an alias address..."
-msgstr "Shtoni një pseudonim adrese..."
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Blloku i paracaktuar i adresave për kontakte dhe grupe te rinj"
 
-#: js/user/EditDialog.js:711
-msgid "Forwarding to self"
-msgstr "Ridrejtuar tek vetja"
-
-#: js/user/EditDialog.js:712
-msgid ""
-"You are not allowed to set a forward email address that is identical to the "
-"users primary email or one of his aliases."
-msgstr "Ju nuk jeni të lejuar të vendosni një adresë poste ridrejtuese të njëjtë meadresVn parësore të përdoruesit ose pseudonimin"
-
-#: js/user/EditDialog.js:721
-msgid "Email Forward"
-msgstr "Ridrejtim E-Poste"
-
-#: js/user/EditDialog.js:727
-msgid "Add a forward address..."
-msgstr "Shto një adresë ridrejtimi"
-
-#: js/user/EditDialog.js:740
-msgid "Forward Only"
-msgstr "Vetëm Ridrejtim"
-
-#: js/user/EditDialog.js:750
-msgid "Password confirmation"
-msgstr "Konfirmim Fjalëkalimi"
-
-#: js/user/EditDialog.js:768
-msgid "Repeat password"
-msgstr "Përsërisni Fjalëkalimin"
-
-#: js/user/EditDialog.js:794
-msgid "Ok"
-msgstr "OK"
-
-#: js/user/EditDialog.js:844
-msgid "Account"
-msgstr "Llogari"
-
-#: js/user/EditDialog.js:882
-msgid "Password"
-msgstr "Fjalëkalimi"
-
-#: js/user/EditDialog.js:960
-msgid "expired"
-msgstr "skaduar"
-
-#: js/user/EditDialog.js:961
-msgid "blocked"
-msgstr "bllokuar"
-
-#: js/user/EditDialog.js:968
-msgid "Invalid Status"
-msgstr "Status i Gabuar"
-
-#: js/user/EditDialog.js:969
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
-msgstr "Statusi i bllokuar është i vlefshëm vetëm nëse përdoruesi provoi të hynte shumë shpeshme fjalëkalim të gabuar. Nuk është e mundur të vendoset ky status këtu"
-
-#: js/user/EditDialog.js:1060 js/user/EditDialog.js:1064
-msgid "don't know"
-msgstr "nuk e di"
-
-#: js/user/EditDialog.js:1066
-msgid "Password set"
-msgstr "Fjalëkalimi u vendos"
-
-#: js/user/EditDialog.js:1073
-msgid "User groups"
-msgstr "Grupet e përdoruesëve"
-
-#: js/user/EditDialog.js:1079
-msgid "User roles"
-msgstr "Rolet e përdoruesëve"
-
-#: js/user/EditDialog.js:1085
-msgid "Fileserver"
-msgstr "Serveri Skedarëve"
-
-#: js/user/EditDialog.js:1091
-msgid "Filesystem"
-msgstr ""
-
-#: js/user/EditDialog.js:1096
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:1105
-msgid "SMTP"
-msgstr "SMTP"
+#: js/TagEditDialog.js:38 js/RoleEditDialog.js:71
+msgid "Please wait"
+msgstr "Ju lutem prisni"
 
 #: js/TagEditDialog.js:38
 msgid "Updating Tag"
@@ -1023,6 +343,10 @@ msgstr "Duke përditesuar etiketën"
 #, python-brace-format
 msgid "Could not save tag ({0})"
 msgstr ""
+
+#: js/TagEditDialog.js:91 js/RoleEditDialog.js:116
+msgid "Please fix the errors noted."
+msgstr "Ju lutem riparoni gabimet e shënuara"
 
 #: js/TagEditDialog.js:172
 msgid "Allowed Contexts"
@@ -1048,6 +372,15 @@ msgstr "Përdor"
 msgid "Tag Name"
 msgstr "Emri i Etiketës"
 
+#: js/TagEditDialog.js:229 js/Tags.js:228 js/container/EditDialog.js:205
+msgid "Color"
+msgstr "Ngjyrë"
+
+#: js/TagEditDialog.js:294 js/RoleEditDialog.js:362
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Duke transferuar {0}... "
+
 #: js/TagEditDialog.js:294
 msgid "Tag"
 msgstr "Etiketë"
@@ -1061,159 +394,682 @@ msgstr "Shto një etiketë të re"
 msgid "Edit Tag \"{0}\""
 msgstr "Modifiko Etiketen \"{0}\""
 
-#: Config.php:47 Config.php:49
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Doni vërtet të fshini etiketat e zgjedhura"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Duke fshirë etiketën(at)"
+
+#: js/Tags.js:102
+msgid "Add Tag"
+msgstr "Shto Etiketë"
+
+#: js/Tags.js:110
+msgid "Edit Tag"
+msgstr "Modifiko Etiketën"
+
+#: js/Tags.js:118
+msgid "Delete Tag"
+msgstr "Fshij Etiketën"
+
+#: js/Tags.js:216
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Duke shfaqur etiketat {0} - {1} nga {2}"
+
+#: js/Tags.js:217 js/Tags.js:273
+msgid "No tags to display"
+msgstr "Nuk ka etiketa për tu shfaqur"
+
+#: js/Tags.js:229
+msgid "Usage:&#160;"
+msgstr "Përdorimi:&#160;"
+
+#: js/RoleEditDialog.js:71
+msgid "Updating Memberships"
+msgstr "Duke përditësuar Anëtarësimet"
+
+#: js/RoleEditDialog.js:109
+msgid "Could not save role."
+msgstr "Roli nuk u ruajt dot"
+
+#: js/RoleEditDialog.js:129
+msgid "Deleting role..."
+msgstr "Duke fshir rolin..."
+
+#: js/RoleEditDialog.js:137 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "Ndodhën disa gabime ndërkohe që po fshihej roli"
+
+#: js/RoleEditDialog.js:161
+msgid "Rights"
+msgstr "Të drejta"
+
+#: js/RoleEditDialog.js:263
+msgid "Members"
+msgstr "Pjesëtarë"
+
+#: js/RoleEditDialog.js:287
+msgid "Role Name"
+msgstr "Emri i Rolit"
+
+#: js/RoleEditDialog.js:362
+msgid "Role"
+msgstr "Roli"
+
+#: js/RoleEditDialog.js:372
+msgid "Add New Role"
+msgstr "Shto një rol të ri"
+
+#: js/RoleEditDialog.js:374
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr "Modifiko Rolin \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Doni vërtetë të fshini rolet e zgjedhur?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Duke fshirë rolin(et)"
+
+#: js/Roles.js:107
+msgid "Add Role"
+msgstr "Shto Rol"
+
+#: js/Roles.js:115
+msgid "Edit Role"
+msgstr "Modifiko Rolin"
+
+#: js/Roles.js:123
+msgid "Delete Role"
+msgstr "Fshij Rolin"
+
+#: js/Roles.js:226
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Duke shfaqur rolin {0} - {1} nga {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Nuk ka role për tu shfaqur"
+
+#: js/Models.js:51 js/Admin.js:128 js/AccessLog.js:104
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Ditari i hyrjeve"
+msgstr[1] "Ditarët e hyrjeve"
+
+#: js/Models.js:90 js/Admin.js:39
+msgid "Groups"
+msgstr "Grupe"
+
+#: js/Models.js:138 js/Admin.js:64
+msgid "Applications"
+msgstr "Aplikacione"
+
+#: js/Models.js:170
+msgid "Configs"
+msgstr ""
+
+#: js/user/EditDialog.js:207 js/GroupEditDialog.js:178
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domain nuk lejohet, Kontrolloni konfigurimet e domain-it SMTP"
+
+#: js/user/EditDialog.js:217
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+#: js/user/EditDialog.js:241 js/user/EditDialog.js:244
+#: js/user/EditDialog.js:769
+msgid "Passwords do not match!"
+msgstr "Fjalëkalimet nuk përkojne"
+
+#: js/user/EditDialog.js:247
+msgid "Passwords match!"
+msgstr "Fjalëkalimet përkojne"
+
+#: js/user/EditDialog.js:293 js/user/EditDialog.js:917
+msgid "Primary group"
+msgstr "Grupi primar"
+
+#: js/user/EditDialog.js:370
+msgid "Unix"
+msgstr "Unix"
+
+#: js/user/EditDialog.js:384
+msgid "Home Directory"
+msgstr "Skedari Kryesor"
+
+#: js/user/EditDialog.js:388
+msgid "Login Shell"
+msgstr "Hapësira Hyrjes"
+
+#: js/user/EditDialog.js:394
+msgid "Windows"
+msgstr "Windows"
+
+#: js/user/EditDialog.js:408
+msgid "Home Drive"
+msgstr "Arkiva Kryesore"
+
+#: js/user/EditDialog.js:413 js/AccessLog.js:107 js/AccessLog.js:134
+msgid "Login Time"
+msgstr "Koha e hyrjes"
+
+#: js/user/EditDialog.js:415 js/user/EditDialog.js:1054
+#: js/user/EditDialog.js:1058
+msgid "never logged in"
+msgstr "Nuk ka hyrë asnjëhere"
+
+#: js/user/EditDialog.js:418
+msgid "Home Path"
+msgstr "Rruga kryesore"
+
+#: js/user/EditDialog.js:423 js/AccessLog.js:108 js/AccessLog.js:135
+msgid "Logout Time"
+msgstr "Koha e daljes"
+
+#: js/user/EditDialog.js:425
+msgid "never logged off"
+msgstr "Nuk ka dalë asnjëhere"
+
+#: js/user/EditDialog.js:428
+msgid "Profile Path"
+msgstr "Rruga e profilit"
+
+#: js/user/EditDialog.js:433
+msgid "Password Last Set"
+msgstr "Fjalëkalimi i funidit i vendosur më"
+
+#: js/user/EditDialog.js:435 js/user/EditDialog.js:979
+#: js/user/EditDialog.js:1062
+msgid "never"
+msgstr "asnjëhere"
+
+#: js/user/EditDialog.js:438
+msgid "Logon Script"
+msgstr "Shkrimi i hyrjes"
+
+#: js/user/EditDialog.js:443
+msgid "Password Can Change"
+msgstr "Fjalëkalimi mund të ndryshojë"
+
+#: js/user/EditDialog.js:445 js/user/EditDialog.js:450
+#: js/user/EditDialog.js:455
+msgid "not set"
+msgstr "nuk është vendosur"
+
+#: js/user/EditDialog.js:448 js/user/EditDialog.js:1029
+msgid "Password Must Change"
+msgstr "Fjalëkalimi Duhet ndryshuar"
+
+#: js/user/EditDialog.js:453
+msgid "Kick Off Time"
+msgstr "Koha e përjashtimit"
+
+#: js/user/EditDialog.js:472
+msgid "Filesystem Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:491 js/user/EditDialog.js:533
+#: js/user/EditDialog.js:565
+msgid "Quota"
+msgstr "Kuota"
+
+#: js/user/EditDialog.js:492 js/user/EditDialog.js:534
+#: js/user/EditDialog.js:566
+msgid "no quota set"
+msgstr "nuk është vendosur kuotë"
+
+#: js/user/EditDialog.js:496
+msgid "Current Filesystem usage"
+msgstr ""
+
+#: js/user/EditDialog.js:514
+msgid "IMAP Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:538
+msgid "Current Mailbox size"
+msgstr "Madhësia aktuale e Kutisë së Postës"
+
+#: js/user/EditDialog.js:546
+msgid "Sieve Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:570
+msgid "Current Sieve size"
+msgstr "Madhësia aktuale e Sieve"
+
+#: js/user/EditDialog.js:579 js/user/EditDialog.js:1037
+msgid "Information"
+msgstr "Informacion"
+
+#: js/user/EditDialog.js:593
+msgid "Last Login"
+msgstr "Hyrja e Fundit"
+
+#: js/user/EditDialog.js:653
+msgid "Domain not allowed"
+msgstr "Domain nuk lejohet"
+
+#: js/user/EditDialog.js:654
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+#: js/user/EditDialog.js:663
+msgid "E-mail Alias"
+msgstr ""
+
+#: js/user/EditDialog.js:669
+msgid "Add an alias address..."
+msgstr "Shtoni një pseudonim adrese..."
+
+#: js/user/EditDialog.js:676
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+#: js/user/EditDialog.js:696
+msgid "Forwarding to self"
+msgstr "Ridrejtuar tek vetja"
+
+#: js/user/EditDialog.js:697
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+#: js/user/EditDialog.js:706
+msgid "E-mail Forward"
+msgstr ""
+
+#: js/user/EditDialog.js:712
+msgid "Add a forwarding address..."
+msgstr ""
+
+#: js/user/EditDialog.js:725
+msgid "Forward Only"
+msgstr "Vetëm Ridrejtim"
+
+#: js/user/EditDialog.js:735
+msgid "Password confirmation"
+msgstr "Konfirmim Fjalëkalimi"
+
+#: js/user/EditDialog.js:753
+msgid "Repeat password"
+msgstr "Përsërisni Fjalëkalimin"
+
+#: js/user/EditDialog.js:779
+msgid "Ok"
+msgstr "OK"
+
+#: js/user/EditDialog.js:829
+msgid "Account"
+msgstr "Llogari"
+
+#: js/user/EditDialog.js:844 js/user/GridPanel.js:209
+msgid "First name"
+msgstr "Emri"
+
+#: js/user/EditDialog.js:855 js/user/GridPanel.js:208
+msgid "Last name"
+msgstr "Mbiemri"
+
+#: js/user/EditDialog.js:861 js/user/EditDialog.js:911 js/user/GridPanel.js:207
+msgid "Login name"
+msgstr "Emrii Hyrjes"
+
+#: js/user/EditDialog.js:867
+msgid "Password"
+msgstr "Fjalëkalimi"
+
+#: js/user/EditDialog.js:910 js/user/GridPanel.js:213
+msgid "OpenID"
+msgstr "OpenID"
+
+#: js/user/EditDialog.js:943
+msgid "enabled"
+msgstr "aktivizuar"
+
+#: js/user/EditDialog.js:944
+msgid "disabled"
+msgstr "ç'aktivizuar"
+
+#: js/user/EditDialog.js:945
+msgid "expired"
+msgstr "skaduar"
+
+#: js/user/EditDialog.js:946
+msgid "blocked"
+msgstr "bllokuar"
+
+#: js/user/EditDialog.js:953
+msgid "Invalid Status"
+msgstr "Status i Gabuar"
+
+#: js/user/EditDialog.js:954
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr "Statusi i bllokuar është i vlefshëm vetëm nëse përdoruesi provoi të hynte shumë shpeshme fjalëkalim të gabuar. Nuk është e mundur të vendoset ky status këtu"
+
+#: js/user/EditDialog.js:976 js/user/GridPanel.js:217
+msgid "Expires"
+msgstr "Skadon"
+
+#: js/user/EditDialog.js:982 js/GroupEditDialog.js:78
+msgid "Visibility"
+msgstr "Dukshmëria"
+
+#: js/user/EditDialog.js:989 js/GroupEditDialog.js:84
+msgid "Display in addressbook"
+msgstr "Shfaqni në bllokun e adresave"
+
+#: js/user/EditDialog.js:989 js/GroupEditDialog.js:84
+msgid "Hide from addressbook"
+msgstr "Fshihni nga blloku i adresave"
+
+#: js/user/EditDialog.js:1003 js/GroupEditDialog.js:100
+msgid "Saved in Addressbook"
+msgstr "U ruajt në bllokun e adresave"
+
+#: js/user/EditDialog.js:1052 js/user/GridPanel.js:214
+msgid "Last login at"
+msgstr "Hyrja e fundit më"
+
+#: js/user/EditDialog.js:1054 js/user/EditDialog.js:1058
+msgid "don't know"
+msgstr "nuk e di"
+
+#: js/user/EditDialog.js:1056 js/user/GridPanel.js:215
+msgid "Last login from"
+msgstr "Hyrja e fundit nga"
+
+#: js/user/EditDialog.js:1060
+msgid "Password set"
+msgstr "Fjalëkalimi u vendos"
+
+#: js/user/EditDialog.js:1067
+msgid "User groups"
+msgstr "Grupet e përdoruesëve"
+
+#: js/user/EditDialog.js:1073
+msgid "User roles"
+msgstr "Rolet e përdoruesëve"
+
+#: js/user/EditDialog.js:1079
+msgid "Fileserver"
+msgstr "Serveri Skedarëve"
+
+#: js/user/EditDialog.js:1085
+msgid "Filesystem"
+msgstr ""
+
+#: js/user/EditDialog.js:1090
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:1099
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/Users.js:76 js/Admin.js:26 js/AccessLog.js:106
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Përdorues"
+msgstr[1] "Përdoruesa"
+
+#: js/user/Users.js:76
+msgid "Users"
+msgstr "Përdorues"
+
+#: js/user/Users.js:124
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Perdorues Samba"
+msgstr[1] "Perdorues Samba"
+
+#: js/user/Users.js:150
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Përdorues E-Poste"
+msgstr[1] "Perdorues E-Poste"
+
+#: js/user/GridPanel.js:51
+msgid "Enable Account"
+msgstr "Aktivizoni Llogarinë"
+
+#: js/user/GridPanel.js:61
+msgid "Disable Account"
+msgstr "Ç'aktivizoni Llogarinë"
+
+#: js/user/GridPanel.js:71
+msgid "Reset Password"
+msgstr "Rivendosni Fjalëkalimin"
+
+#: js/user/GridPanel.js:80
+msgid "Reset Pin"
+msgstr ""
+
+#: js/user/GridPanel.js:206
+msgid "Display name"
+msgstr "Emri i Shfaqur"
+
+#: js/user/GridPanel.js:211
+msgid "E-mail usage"
+msgstr ""
+
+#: js/user/GridPanel.js:212
+msgid "Filesystem usage"
+msgstr ""
+
+#: js/user/GridPanel.js:216
+msgid "Password changed"
+msgstr "Fjalëkalimi ndryshoi"
+
+#: js/user/GridPanel.js:276
+msgid "Set new password"
+msgstr "Vendosni Fjalëkalimin e ri"
+
+#: js/user/GridPanel.js:276
+msgid "Please enter the new password:"
+msgstr "Ju lutem fusni fjalëkalimin e ri"
+
+#: js/user/GridPanel.js:304
+msgid "Set new pin"
+msgstr ""
+
+#: js/user/GridPanel.js:304
+msgid "Please enter the new pin:"
+msgstr ""
+
+#: js/GroupEditDialog.js:62
+msgid "Group Name"
+msgstr "Emër Grupi"
+
+#: js/GroupEditDialog.js:120
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+#: js/GroupEditDialog.js:127
+msgid "Group Members"
+msgstr "Pjesëtarë  Grupi"
+
+#: js/container/EditDialog.js:186
+msgid "personal"
+msgstr "personal"
+
+#: js/container/EditDialog.js:186
+msgid "shared"
+msgstr "ndarë"
+
+#: js/container/EditDialog.js:209
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+#: js/container/EditDialog.js:217
+msgid "Note for Owner"
+msgstr "Shënim për zoteruesin"
+
+#: js/container/EditDialog.js:230
+msgid "Info"
+msgstr ""
+
+#: js/container/EditDialog.js:230
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+#: js/container/Container.js:46 js/container/GridPanel.js:99
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Konteiner"
+msgstr[1] "Konteinerë"
+
+#: js/container/GridPanel.js:66
+msgid "Container Name"
+msgstr "Emri i Konteinerit"
+
+#: js/container/GridPanel.js:69
+msgid "Container Order"
+msgstr ""
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Kompjuter"
+msgstr[1] "Kompjutera"
+
+#: js/QuotaUsage.js:57
+msgid "Size"
+msgstr ""
+
+#: js/QuotaUsage.js:69
+msgid "Revision Size"
+msgstr ""
+
+#: js/QuotaUsage.js:70
+msgid "Total size of all available revisions"
+msgstr ""
+
+#: js/QuotaUsage.js:107
+msgid "Quota Usage"
+msgstr ""
+
+#: js/Admin.js:52
+msgid "Roles"
+msgstr "Role"
+
+#: js/Admin.js:77
+msgid "Containers"
+msgstr "Konteinerë"
+
+#: js/Admin.js:89
+msgid "Shared Tags"
+msgstr "Etiketa të ndara"
+
+#: js/Admin.js:102
+msgid "Customfields"
+msgstr "Fusha‎ të personifikuara"
+
+#: js/Admin.js:114
+msgid "Computers"
+msgstr "Kompjutera"
+
+#: js/Admin.js:141
+msgid "Server Information"
+msgstr "Informacion i serverit"
+
+#: js/Admin.js:157
+msgid "ActiveSync Devices"
+msgstr ""
+
+#: js/Admin.js:176
+msgid "E-mail Accounts"
+msgstr ""
+
+#: js/Admin.js:248
+msgid "Admin"
+msgstr "Admin"
+
+#: js/Admin.js:340
+msgid "Refresh"
+msgstr "Rifresko"
+
+#: js/Admin.js:363
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+#: js/AccessLog.js:105 js/AccessLog.js:133
+msgid "IP Address"
+msgstr "Adresa IP"
+
+#: js/AccessLog.js:109 js/AccessLog.js:137
+msgid "Client Type"
+msgstr "Tipi i Klientit"
+
+#: js/AccessLog.js:130
+msgid "Session ID"
+msgstr "ID e seances"
+
+#: js/AccessLog.js:131
+msgid "Login Name"
+msgstr "Emri i Hyrjes"
+
+#: js/AccessLog.js:136
+msgid "Result"
+msgstr "Reziltati"
+
+#: js/AccessLog.js:157
+msgid "user blocked"
+msgstr "përdoruesi i bllokuar"
+
+#: js/AccessLog.js:161
+msgid "password expired"
+msgstr "fjalëkalimi ka skaduar"
+
+#: js/AccessLog.js:165
+msgid "user disabled"
+msgstr "përdoruesi i ç'aktivizuar"
+
+#: js/AccessLog.js:169
+msgid "invalid password"
+msgstr "fjalëkalim jo i saktë"
+
+#: js/AccessLog.js:173
+msgid "ambiguous username"
+msgstr "Emër përdoruesi jo i qartë"
+
+#: js/AccessLog.js:177
+msgid "user not found"
+msgstr "përdouresi nuk u gjend"
+
+#: js/AccessLog.js:181
+msgid "failure"
+msgstr "dështim"
+
+#: js/AccessLog.js:185
+msgid "success"
+msgstr "sukses"
+
+#: Config.php:54 Config.php:56
 msgid "Default IMAP user settings"
 msgstr "Konfigurimet e Paracaktuara IMAP të përdoruesit"
 
-#: Config.php:58
+#: Config.php:65
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:60
+#: Config.php:67
 msgid "Enabled Features in Admin Application."
 msgstr ""
 
-#: Config.php:68
+#: Config.php:75
 msgid "Prevent special chars in login name"
 msgstr ""
 
-#: Config.php:74
+#: Config.php:80 Config.php:86
 msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-#: Acl/Rights.php:215
-msgid "manage access log"
-msgstr "menaxho ditarin e hyrjeve"
-
-#: Acl/Rights.php:216
-msgid "delete access log entries"
-msgstr "fshij shenimet e ditarit te hyrjeve "
-
-#: Acl/Rights.php:219
-msgid "manage accounts"
-msgstr "menaxho llogaritë"
-
-#: Acl/Rights.php:220
-msgid ""
-"add and edit users and groups, add group members, change user passwords"
-msgstr "shto dhe modifiko përdorues dhe grupe, shto pjestarë grupi , ndrysho fjalëkalime  përdoruesish "
-
-#: Acl/Rights.php:223
-msgid "manage applications"
-msgstr "menaxho aplikacione"
-
-#: Acl/Rights.php:224
-msgid "enable and disable applications, edit application settings"
-msgstr "aktivizo dhe ç'aktivizo aplikacione, modifiko konfigurimet e aplikacioneve"
-
-#: Acl/Rights.php:227
-msgid "manage roles"
-msgstr "menaxho rolet"
-
-#: Acl/Rights.php:228
-msgid ""
-"add and edit roles, add new members to roles, add application rights to "
-"roles"
-msgstr "shto dhe modifiko rolet, shto pjestarë te rinj në rolet, shto të drejta aplikacionesh në role"
-
-#: Acl/Rights.php:231
-msgid "manage shared tags"
-msgstr "menaxho etiketat e ndara"
-
-#: Acl/Rights.php:232
-msgid "add, delete and edit shared tags"
-msgstr "shto , fshij dhe modifiko etiketat e ndara"
-
-#: Acl/Rights.php:235
-msgid "manage computers"
-msgstr "menaxho kompjutera"
-
-#: Acl/Rights.php:236
-msgid "add, delete and edit (samba) computers"
-msgstr "shto, fshij dhe modifiko kompjutera (samba)"
-
-#: Acl/Rights.php:239
-msgid "manage containers"
-msgstr "menaxho konteinerët"
-
-#: Acl/Rights.php:240
-msgid "add, delete and edit containers and manage container grants"
-msgstr "shto, fshij dhe modifiko kontenierët dhe menaxho te drejtat e kontenierëve"
-
-#: Acl/Rights.php:243
-msgid "manage customfields"
-msgstr "menaxho fushat e personalizuara"
-
-#: Acl/Rights.php:244
-msgid "add and edit customfields"
-msgstr "shto dhe modifiko fushat e personalizuara"
-
-#: Acl/Rights.php:247
-msgid "view access log"
-msgstr "shiko ditarin e hyrjeve"
-
-#: Acl/Rights.php:248
-msgid "view access log list"
-msgstr "shiko listën e ditarit të hyrjeve"
-
-#: Acl/Rights.php:251
-msgid "view accounts"
-msgstr "shiko llogarite"
-
-#: Acl/Rights.php:252
-msgid "view accounts list and details"
-msgstr "shiko listën e llogarive dhe detajet"
-
-#: Acl/Rights.php:255
-msgid "view applications"
-msgstr "shiko aplikacionet"
-
-#: Acl/Rights.php:256
-msgid "view applications list and details"
-msgstr "shiko listën e aplikacioneve dhe detajet"
-
-#: Acl/Rights.php:259
-msgid "view roles"
-msgstr "shiko rolet"
-
-#: Acl/Rights.php:260
-msgid "view roles list and details"
-msgstr "shiko rolet dhe detajet"
-
-#: Acl/Rights.php:263
-msgid "view computers"
-msgstr "shiko kompjutera"
-
-#: Acl/Rights.php:264
-msgid "view computers list and details"
-msgstr "shiko listën e komjuterave dhe detajet"
-
-#: Acl/Rights.php:267
-msgid "view containers"
-msgstr "shiko konteinerët"
-
-#: Acl/Rights.php:268
-msgid "view personal and shared containers"
-msgstr "shiko konteinerët e ndarë personal"
-
-#: Acl/Rights.php:271
-msgid "view customfields"
-msgstr "shiko fushat e personalizuara"
-
-#: Acl/Rights.php:272
-msgid "view customfields list"
-msgstr "shiko listën e fushave të personalizuara"
-
-#: Acl/Rights.php:275
-msgid "view serverinfo"
-msgstr "shiko informacionin e serverit"
-
-#: Acl/Rights.php:276
-msgid "view serverinfo list"
-msgstr "shiko listën e informaciont të serverit"
-
-#: Acl/Rights.php:279 Acl/Rights.php:280
-msgid "view quota usage"
 msgstr ""
 
 #: Controller/Container.php:204
@@ -1224,6 +1080,302 @@ msgstr "Konteineri Juaj është ndryshuar"
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Konteineri juaj është ndryshuar nga %1$s %2$sShenim: %3$s"
 
-#: Controller/Tags.php:166
-msgid "Could not save tag without (view-)rights"
+#: Acl/Rights.php:236
+msgid "Manage access log"
 msgstr ""
+
+#: Acl/Rights.php:237
+msgid "Delete access log entries."
+msgstr ""
+
+#: Acl/Rights.php:240
+msgid "Manage accounts"
+msgstr ""
+
+#: Acl/Rights.php:241
+msgid "Add and edit users and groups, add group members, change user passwords."
+msgstr ""
+
+#: Acl/Rights.php:244
+msgid "Manage e-mail accounts"
+msgstr ""
+
+#: Acl/Rights.php:245
+msgid "Add and edit shared and personal e-mail accounts."
+msgstr ""
+
+#: Acl/Rights.php:248
+msgid "Manage applications"
+msgstr ""
+
+#: Acl/Rights.php:249
+msgid "Enable and disable applications, edit application settings."
+msgstr ""
+
+#: Acl/Rights.php:252
+msgid "Manage roles"
+msgstr ""
+
+#: Acl/Rights.php:253
+msgid "Add and edit roles, add new members to roles, add application rights to roles."
+msgstr ""
+
+#: Acl/Rights.php:256
+msgid "Manage shared tags"
+msgstr ""
+
+#: Acl/Rights.php:257
+msgid "Add, delete and edit shared tags."
+msgstr ""
+
+#: Acl/Rights.php:260
+msgid "Manage computers"
+msgstr ""
+
+#: Acl/Rights.php:261
+msgid "Add, delete and edit (samba) computers."
+msgstr ""
+
+#: Acl/Rights.php:264
+msgid "Manage containers"
+msgstr ""
+
+#: Acl/Rights.php:265
+msgid "Add, delete and edit containers and manage container grants."
+msgstr ""
+
+#: Acl/Rights.php:268
+msgid "Manage customfields"
+msgstr ""
+
+#: Acl/Rights.php:269
+msgid "Add and edit customfields."
+msgstr ""
+
+#: Acl/Rights.php:272
+msgid "View access log"
+msgstr ""
+
+#: Acl/Rights.php:273
+msgid "View access log list."
+msgstr ""
+
+#: Acl/Rights.php:276
+msgid "View accounts"
+msgstr ""
+
+#: Acl/Rights.php:277
+msgid "View accounts list and details."
+msgstr ""
+
+#: Acl/Rights.php:280
+msgid "View e-mail accounts"
+msgstr ""
+
+#: Acl/Rights.php:281
+msgid "View shared and personal e-mail accounts."
+msgstr ""
+
+#: Acl/Rights.php:284
+msgid "View applications"
+msgstr ""
+
+#: Acl/Rights.php:285
+msgid "View applications list and details."
+msgstr ""
+
+#: Acl/Rights.php:288
+msgid "View roles"
+msgstr ""
+
+#: Acl/Rights.php:289
+msgid "View roles list and details."
+msgstr ""
+
+#: Acl/Rights.php:292
+msgid "View shared tags"
+msgstr ""
+
+#: Acl/Rights.php:293
+msgid "View shared tags list and details."
+msgstr ""
+
+#: Acl/Rights.php:296
+msgid "View computers"
+msgstr ""
+
+#: Acl/Rights.php:297
+msgid "View computers list and details."
+msgstr ""
+
+#: Acl/Rights.php:300
+msgid "View containers"
+msgstr ""
+
+#: Acl/Rights.php:301
+msgid "View personal and shared containers."
+msgstr ""
+
+#: Acl/Rights.php:304
+msgid "View customfields"
+msgstr ""
+
+#: Acl/Rights.php:305
+msgid "View customfields list."
+msgstr ""
+
+#: Acl/Rights.php:308
+msgid "View serverinfo"
+msgstr ""
+
+#: Acl/Rights.php:309
+msgid "View serverinfo list."
+msgstr ""
+
+#: Acl/Rights.php:312
+msgid "View quota usage"
+msgstr ""
+
+#: Acl/Rights.php:313
+msgid "View quota usage."
+msgstr ""
+
+#~ msgid "Logon Time"
+#~ msgstr "Koha e Hyrjes"
+
+#~ msgid "Logoff Time"
+#~ msgstr "Koha e daljes"
+
+#~ msgid "Add a forward address..."
+#~ msgstr "Shto një adresë ridrejtimi"
+
+#~ msgid "You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases."
+#~ msgstr "Ju nuk jeni të lejuar të vendosni një adresë poste ridrejtuese të njëjtë meadresVn parësore të përdoruesit ose pseudonimin"
+
+#~ msgid "Could not save group."
+#~ msgstr "Nuk mund të ruhej grupi"
+
+#~ msgid "Add new group"
+#~ msgstr "Shto një grup të ri"
+
+#, python-brace-format
+#~ msgid "Edit Group \"{0}\""
+#~ msgstr "Modifiko Grupin \"{0}\""
+
+#~ msgid "enable application"
+#~ msgstr "aktivizo aplikacionin"
+
+#~ msgid "disable application"
+#~ msgstr "ç'aktivizo aplikacionin"
+
+#~ msgid "settings"
+#~ msgstr "konfigurime"
+
+#, python-brace-format
+#~ msgid "unknown status ({0})"
+#~ msgstr "status i panjohur ({0})"
+
+#~ msgid "Email"
+#~ msgstr "E-Posta"
+
+#~ msgid "Email Alias"
+#~ msgstr "Pseudonime të E-Postës"
+
+#~ msgid "Email Forward"
+#~ msgstr "Ridrejtim E-Poste"
+
+#~ msgid "manage access log"
+#~ msgstr "menaxho ditarin e hyrjeve"
+
+#~ msgid "delete access log entries"
+#~ msgstr "fshij shenimet e ditarit te hyrjeve "
+
+#~ msgid "manage accounts"
+#~ msgstr "menaxho llogaritë"
+
+#~ msgid "add and edit users and groups, add group members, change user passwords"
+#~ msgstr "shto dhe modifiko përdorues dhe grupe, shto pjestarë grupi , ndrysho fjalëkalime  përdoruesish "
+
+#~ msgid "manage applications"
+#~ msgstr "menaxho aplikacione"
+
+#~ msgid "enable and disable applications, edit application settings"
+#~ msgstr "aktivizo dhe ç'aktivizo aplikacione, modifiko konfigurimet e aplikacioneve"
+
+#~ msgid "manage roles"
+#~ msgstr "menaxho rolet"
+
+#~ msgid "add and edit roles, add new members to roles, add application rights to roles"
+#~ msgstr "shto dhe modifiko rolet, shto pjestarë te rinj në rolet, shto të drejta aplikacionesh në role"
+
+#~ msgid "manage shared tags"
+#~ msgstr "menaxho etiketat e ndara"
+
+#~ msgid "add, delete and edit shared tags"
+#~ msgstr "shto , fshij dhe modifiko etiketat e ndara"
+
+#~ msgid "manage computers"
+#~ msgstr "menaxho kompjutera"
+
+#~ msgid "add, delete and edit (samba) computers"
+#~ msgstr "shto, fshij dhe modifiko kompjutera (samba)"
+
+#~ msgid "manage containers"
+#~ msgstr "menaxho konteinerët"
+
+#~ msgid "add, delete and edit containers and manage container grants"
+#~ msgstr "shto, fshij dhe modifiko kontenierët dhe menaxho te drejtat e kontenierëve"
+
+#~ msgid "manage customfields"
+#~ msgstr "menaxho fushat e personalizuara"
+
+#~ msgid "add and edit customfields"
+#~ msgstr "shto dhe modifiko fushat e personalizuara"
+
+#~ msgid "view access log"
+#~ msgstr "shiko ditarin e hyrjeve"
+
+#~ msgid "view access log list"
+#~ msgstr "shiko listën e ditarit të hyrjeve"
+
+#~ msgid "view accounts"
+#~ msgstr "shiko llogarite"
+
+#~ msgid "view accounts list and details"
+#~ msgstr "shiko listën e llogarive dhe detajet"
+
+#~ msgid "view applications"
+#~ msgstr "shiko aplikacionet"
+
+#~ msgid "view applications list and details"
+#~ msgstr "shiko listën e aplikacioneve dhe detajet"
+
+#~ msgid "view roles"
+#~ msgstr "shiko rolet"
+
+#~ msgid "view roles list and details"
+#~ msgstr "shiko rolet dhe detajet"
+
+#~ msgid "view computers"
+#~ msgstr "shiko kompjutera"
+
+#~ msgid "view computers list and details"
+#~ msgstr "shiko listën e komjuterave dhe detajet"
+
+#~ msgid "view containers"
+#~ msgstr "shiko konteinerët"
+
+#~ msgid "view personal and shared containers"
+#~ msgstr "shiko konteinerët e ndarë personal"
+
+#~ msgid "view customfields"
+#~ msgstr "shiko fushat e personalizuara"
+
+#~ msgid "view customfields list"
+#~ msgstr "shiko listën e fushave të personalizuara"
+
+#~ msgid "view serverinfo"
+#~ msgstr "shiko informacionin e serverit"
+
+#~ msgid "view serverinfo list"
+#~ msgstr "shiko listën e informaciont të serverit"

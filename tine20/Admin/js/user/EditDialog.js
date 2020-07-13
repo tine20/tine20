@@ -142,7 +142,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.forwardsGrid.doBlur();
             this.emailRecord.set('emailAliases', this.aliasesGrid.getFromStoreAsArray());
             this.emailRecord.set('emailForwards', this.forwardsGrid.getFromStoreAsArray());
-            Tine.log.debug('Tine.Admin.UserEditDialog::onRecordUpdate() -> setting aliases and forwards in email record');
+            Tine.log.debug('Tine.Admin.UserEditDialog::onRecordUpdate() -> setting aliases and forwards in e-mail record');
             Tine.log.debug(this.emailRecord);
         }
         this.unsetLocalizedDateTimeFields(this.emailRecord, ['emailLastLogin']);
@@ -411,7 +411,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.666
                     }, {
                         xtype: 'displayfield',
-                        fieldLabel: this.app.i18n.gettext('Logon Time'),
+                        fieldLabel: this.app.i18n.gettext('Login Time'),
                         name: 'logonTime',
                         emptyText: this.app.i18n.gettext('never logged in'),
                         style: this.displayFieldStyle
@@ -421,7 +421,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.666
                     }, {
                         xtype: 'displayfield',
-                        fieldLabel: this.app.i18n.gettext('Logoff Time'),
+                        fieldLabel: this.app.i18n.gettext('Logout Time'),
                         name: 'logoffTime',
                         emptyText: this.app.i18n.gettext('never logged off'),
                         style: this.displayFieldStyle
@@ -655,7 +655,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         let cm = [{
             id: 'email',
-            header: this.app.i18n.gettext('Email Alias'),
+            header: this.app.i18n.gettext('E-mail Alias'),
             dataIndex: 'email',
             width: 260,
             hideable: false,
@@ -720,7 +720,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         let aliasesStore = this.aliasesGrid.getStore();
         let app = this.app;
         let record = this.record;
-        
+
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
@@ -729,7 +729,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             buttons: Ext.Msg.OK,
                             icon: Ext.MessageBox.WARNING,
                             title: app.i18n._('Forwarding to self'),
-                            msg: app.i18n._('You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases.')
+                            msg: app.i18n._('You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases.')
                         });
                         return false;
                     } else {
@@ -738,13 +738,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email',
-                    header: this.app.i18n.gettext('Email Forward'),
+                    header: this.app.i18n.gettext('E-mail Forward'),
                     dataIndex: 'email',
                     width: 300,
                     hideable: false,
                     sortable: true,
                     quickaddField: new Ext.form.TextField({
-                        emptyText: this.app.i18n.gettext('Add a forward address...'),
+                        emptyText: this.app.i18n.gettext('Add a forwarding address...'),
                         vtype: 'email'
                     }),
                     editor: new Ext.form.TextField({allowBlank: false})
@@ -924,7 +924,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }
                     }], [{
                         vtype: 'email',
-                        fieldLabel: this.app.i18n.gettext('Email'),
+                        fieldLabel: this.app.i18n.gettext('E-mail'),
                         tabIndex: 5,
                         name: 'accountEmailAddress',
                         id: 'accountEmailAddress',
