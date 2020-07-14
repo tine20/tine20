@@ -28,6 +28,20 @@ class Setup_Frontend_Cli
     protected $_appname = 'Setup';
 
     /**
+     * @var Tinebase_Application
+     */
+    protected $_tinebaseApplication;
+
+    public function __construct($tinebaseApplication = null)
+    {
+        if ($tinebaseApplication === null) {
+            $this->_tinebaseApplication = Tinebase_Application::getInstance();
+        } else {
+            $this->_tinebaseApplication = $tinebaseApplication;
+        }
+    }
+
+    /**
      * authentication
      *
      * @param string $_username
@@ -45,7 +59,7 @@ class Setup_Frontend_Cli
      *
      * @param Zend_Console_Getopt $_opts
      * @param boolean $exitAfterHandle
-     * @return void
+     * @return int
      */
     public function handle(Zend_Console_Getopt $_opts, $exitAfterHandle = true)
     {
@@ -126,6 +140,8 @@ class Setup_Frontend_Cli
             $this->_migrateUtf8mb4();
         } elseif(isset($_opts->config_from_env)) {
             $this->_configFromEnv();
+        } elseif(isset($_opts->is_installed)) {
+            $result = $this->_isInstalled();
         }
 
         Tinebase_Log::logUsageAndMethod('setup.php', $time_start, 'Setup.' . implode(',', $_opts->getOptions()));
@@ -133,6 +149,8 @@ class Setup_Frontend_Cli
         if ($exitAfterHandle) {
             exit($result);
         }
+
+        return $result;
     }
     
     /**
@@ -1346,5 +1364,17 @@ class Setup_Frontend_Cli
         } else {
             echo "Nothing to load\n";
         }
+    }
+
+    private function _isInstalled() {
+        try {
+            if ($this->_tinebaseApplication->isInstalled('Tinebase', true)) {
+                return 0;
+            }
+        } catch (Exception $e) {
+            return 1;
+        }
+
+        return 1;
     }
 }
