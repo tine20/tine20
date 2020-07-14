@@ -73,13 +73,19 @@ RUN addgroup -S -g 150 tine20 && \
 RUN mkdir -p /etc/confd/
 COPY ci/dockerimage/confd/conf.d /etc/confd/conf.d
 COPY ci/dockerimage/confd/templates/ /etc/confd/templates
+COPY ci/dockerimage/confd/cli.config.inc.php /etc/tine20/
 
 RUN mkdir -p /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d
 COPY ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d
 COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d
+COPY ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d
 
 COPY ci/dockerimage/scripts/* /usr/local/bin
+
+# set up logging
+RUN touch /var/log/tine20/tine20.log && \
+    chown tine20:tine20 /var/log/tine20/tine20.log
 
 # set workdir
 WORKDIR ${TINE20ROOT}
