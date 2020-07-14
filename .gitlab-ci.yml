@@ -52,6 +52,7 @@ workflow:
   stage: build_docker_images
   script:
     - build_and_push base
+    - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
     - build_and_push dependency
     - build_and_push source
     - build_and_push test-source
@@ -184,6 +185,8 @@ workflow:
     - tag_commit_as_branch_image base
     - tag_commit_as_branch_image dependency
   rules:
+    - if: $NO_PUSH == "true"
+      when: never
     - if: $CI_COMMIT_REF_NAME != $MAJOR_COMMIT_REF_NAME
       when: never
     # reverse of "docker: build source and test-source image"
@@ -212,6 +215,8 @@ workflow:
     - tag_commit_as_branch_image built
     - tag_commit_as_branch_image dev
   rules:
+    - if: $NO_PUSH == "true"
+      when: never
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
@@ -224,6 +229,8 @@ workflow:
     - tag_commit_as_gitlab_image built
     - tag_commit_as_gitlab_image dev
   rules:
+    - if: $NO_PUSH == "true"
+      when: never
     - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -240,6 +247,8 @@ workflow:
     - tag_commit_as_dockerhub_image built tine20
     - tag_commit_as_dockerhub_image dev dev
   rules:
+    - if: $NO_PUSH == "true"
+      when: never
     - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"

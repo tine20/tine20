@@ -19,6 +19,10 @@ function build_and_push() {
     --build-arg "BUILT_IMAGE=${REGISTRY}/built-commit:${CI_COMMIT_SHA}-${PHP_IMAGE_TAG}" \
     --build-arg NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND}" \
     --build-arg "NODE_TLS_REJECT_UNAUTHORIZED=0" \
+    --build-arg "CUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}" \
+    --build-arg "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}" \
+    --build-arg "CUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}" \
+    --build-arg "CUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" \
     .
 
   echo "docker: built ${NAME} image"

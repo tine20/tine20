@@ -15,3 +15,7 @@ variables:
   PHP_UNIT_SERVERTESTS: "true"
   DATABASE_IMAGE: "mariadb:10.4.1"
   REDIS_IMAGE: "redis:5.0.5"
+  DOCKER_GIT_CONFIG: ""
+  NO_PUSH: "false"
+  CUSTOM_APP_VENDOR: "metaways"
+  CUSTOM_APP_VERSION: "dev-master"
