@@ -6,7 +6,7 @@ return array(
 
     'logger' => array (
         'active' => true,
-        'filename' => 'php://stdout',
+        'filename' => '{{getv "/logger/filename" "/var/log/tine20/tine20.log"}}',
         'priority' => {{getv "/logger/priority" "5"}},
     ),
 
