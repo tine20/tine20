@@ -26,7 +26,7 @@ fi
 su tine20 -c "/usr/local/bin/tine20_await_db"
 
 # install tine20 if it is not installed
-su tine20 -c "/usr/local/bin/tine20_install"
+su tine20 -c "php /usr/share/tine20/setup.php --config /etc/tine20/config.inc.php --is_installed || /usr/local/bin/tine20_install"
 
 # update tine20 install if it is not up to date
 su tine20 -c "php /usr/share/tine20/setup.php --config /etc/tine20/config.inc.php --update"

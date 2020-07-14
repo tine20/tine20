@@ -89,6 +89,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                         Examples:
                            setup.php --maintenance_mode -- state=[on|all|off]',
                 'config_from_env'           => 'generates config from environment variables like TINE20__<application>_<propertiy>',
+                'is_installed'           => 'Checks if tine20 is installed, otherwise returns 1.',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -121,7 +122,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->migrateUtf8mb4) &&
             empty($opts->pgsqlMigration) &&
             empty($opts->maintenance_mode) &&
-            empty($opts->config_from_env)))
+            empty($opts->config_from_env) &&
+            empty($opts->is_installed)))
         {
             echo $opts->getUsageMessage();
             exit;
