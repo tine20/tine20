@@ -39,7 +39,7 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
         ];
 
         return @json_encode($event,
-            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION)
+            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)
             . PHP_EOL;
     }
 }
