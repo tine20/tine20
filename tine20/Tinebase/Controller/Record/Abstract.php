@@ -831,6 +831,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
 
+            $createNewValue = $this->_inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue);
+
             if (true === $createNewValue) {
                 $_record->{$fieldDef['fieldName']} = $numberable->getNext();
                 if (null !== $_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']})) {
@@ -842,6 +844,20 @@ abstract class Tinebase_Controller_Record_Abstract
                 $numberable->free($_oldRecord->{$fieldDef['fieldName']});
             }
         }
+    }
+
+    /**
+     * allows to override default autoincrement handling
+     *
+     * @param $_record
+     * @param $numberable
+     * @param $fieldDef
+     * @param $createNewValue
+     * @return mixed
+     */
+    protected function _inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue)
+    {
+        return $createNewValue;
     }
 
     /**
