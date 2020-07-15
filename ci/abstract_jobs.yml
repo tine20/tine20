@@ -41,7 +41,7 @@
     TINE20_SESSION_BACKEND: Redis
     TINE20_SESSION_HOST: cache
     TINE20_APPLICATION_TO_INSTALL: "all"
-    TINE20_LOGGER_FILENAME: "php://stdout"
+    TINE20_LOGGER_PRIORITY: "7"
     TINE20_EMAIL_IMAP: "active:true,host:dovecot,port:143,useSystemAccount:1,ssl:none,verifyPeer:0,backend:dovecot_imap,domain:mail.test,instanceName:tine.test,dovecot_host:db,dovecot_dbname:dovecot,dovecot_username:tine20,dovecot_password:tine20pw,dovecot_uid:vmail,dovecot_gid:vmail,dovecot_home:/var/vmail/%d/%u,dovecot_scheme:SSHA256"
     TINE20_EMAIL_SMTP: "active:true,backend:postfix,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfix_host:db,postfix_dbname:postfix,postfix_username:tine20,postfix_password:tine20pw"
     TINE20_EMAIL_SIEVE: "hostname:dovecot,port:4190,ssl:none"
@@ -63,6 +63,11 @@
   script:
     - cd $TINE20ROOT/tests/tine20/
     - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci --filter "${PHPUNIT_FILTER}" AllTests
+    - cp /var/log/tine20/tine20.log ${CI_PROJECT_DIR}/tine20.log
+  artifacts:
+    paths:
+      - tine20.log
+    expire_in: 1 day
 
 .abstract_jobs.php_unit_test_with_ldap:
   extends: .abstract_jobs.php_unit_test
