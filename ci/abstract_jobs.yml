@@ -62,7 +62,7 @@
     - supervisord
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllTests
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci --filter "${PHPUNIT_FILTER}" AllTests
 
 .abstract_jobs.php_unit_test_with_ldap:
   extends: .abstract_jobs.php_unit_test
