@@ -20,7 +20,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
      * @var Tinebase_User
      */
     protected $_backend = NULL;
-    
+
     /**
      * @var array test objects
      */
@@ -28,11 +28,11 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
 
     /**
      * mailserver domain
-     * 
+     *
      * @var string
      */
     protected $_mailDomain = 'tine20.org';
-    
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -44,7 +44,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         parent::setUp();
 
         $this->_backend = Tinebase_User::getInstance();
-        
+
         if (   ! array_key_exists('Tinebase_EmailUser_Smtp_Postfix', $this->_backend->getPlugins())
             && ! array_key_exists('Tinebase_EmailUser_Smtp_PostfixMultiInstance', $this->_backend->getPlugins())
         ) {
@@ -58,7 +58,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         }
 
         $this->objects['users'] = array();
-        
+
         $this->_mailDomain = TestServer::getPrimaryMailDomain();
     }
 
@@ -71,15 +71,18 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     protected function tearDown()
     {
         foreach ($this->objects['users'] as $user) {
-            $this->_backend->deleteUser($user);
+            try {
+                $this->_backend->deleteUser($user);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
         }
 
         parent::tearDown();
     }
-    
+
     /**
      * try to add an user
-     * 
+     *
      * @return Tinebase_Model_FullUser
      */
     public function testAddUser()
@@ -94,10 +97,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
             'emailForwards'    => array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain),
             'emailAliases'     => array('bla@' . $this->_mailDomain, 'blubb@' . $this->_mailDomain)
         ));
-        
+
         $testUser = $this->_backend->addUser($user);
         $this->objects['users']['testUser'] = $testUser;
-        
+
         $this->assertTrue($testUser instanceof Tinebase_Model_FullUser);
         $this->assertTrue(isset($testUser->smtpUser), 'no smtpUser data found in ' . print_r($testUser->toArray(),
                 TRUE));
@@ -116,7 +119,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
 
         $this->assertEquals(true, $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals($user->accountEmailAddress, $testUser->smtpUser->emailAddress);
-        
+
         return $testUser;
     }
 
@@ -129,7 +132,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $user = Tinebase_User::getInstance()->getFullUserByLoginName($testUser->accountLoginName);
         self::assertEquals(2, count($user->emailUser->emailAliases));
     }
-    
+
     /**
      * try to update an email account
      */
@@ -155,7 +158,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $this->assertEquals($testUser->smtpUser->emailAliases, $testUser->emailUser->emailAliases,
             'smtp user data needs to be merged in email user: ' . print_r($testUser->emailUser->toArray(), TRUE));
     }
-    
+
     /**
      * try to enable an account
      */
@@ -170,7 +173,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
         $this->assertEquals(Tinebase_User::STATUS_ENABLED, $testUser->accountStatus);
     }
-    
+
     /**
      * try to update an email account
      */
@@ -178,10 +181,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     {
         // add smtp user
         $user = $this->testAddUser();
-        
+
         $newPassword = Tinebase_Record_Abstract::generateUID();
         $this->_backend->setPassword($user->getId(), $newPassword);
-        
+
         // fetch email pw from db
         $db = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->getDb();
         $select = $db->select()
@@ -190,15 +193,15 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $stmt = $db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
-        
+
         $this->assertTrue(isset($queryResult['passwd']), 'no password in result: ' . print_r($queryResult, TRUE));
         $hashPw = new Hash_Password();
         $this->assertTrue($hashPw->validate($queryResult['passwd'], $newPassword), 'password mismatch: ' . print_r($queryResult, TRUE));
     }
-    
+
     /**
      * testForwardedAlias
-     * 
+     *
      * @see 0007066: postfix email user: allow wildcard alias forwarding
      */
     public function testForwardedAlias()
@@ -209,7 +212,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         }
 
         $user = $this->testAddUser();
-        
+
         // check destinations
         $db = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->getDb();
         $select = $db->select()
@@ -237,10 +240,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
             $this->assertTrue($foundDestinations == $destinations, print_r($destinations, TRUE));
         }
     }
-    
+
     /**
      * testLotsOfAliasesAndForwards
-     * 
+     *
      * @see 0007194: alias table in user admin dialog truncated
      *
      * @todo make it work for multiinstance backend (102 aliases are found...)
@@ -263,7 +266,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         }
         $user->smtpUser->emailForwards = $forwards;
         $testUser = $this->_backend->updateUser($user);
-        
+
         $testUser = Tinebase_User::getInstance()->getUserById($testUser->getId(), 'Tinebase_Model_FullUser');
         $this->assertEquals(100, count($testUser->smtpUser->emailAliases));
         $this->assertEquals(100, count($testUser->smtpUser->emailForwards));
@@ -309,5 +312,49 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
                 self::assertEquals(0, $alias['dispatch_address']);
             }
         }
+    }
+
+    public function testAddUserToSecondaryDomain()
+    {
+        $smtpConf = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        if (empty($smtpConf->secondarydomains)) {
+            self::markTestSkipped('only with configured secondary domain');
+        }
+
+        // create two users: one with email in primary and one with email in secondary domain
+        $user1 = $this->testAddUser();
+        $this->objects['users'][] = $user1;
+        $user2 = TestCase::getTestUser([
+            'accountLoginName'      => 'phpunitssecond',
+            'accountEmailAddress'   => 'phpunitpostfix@' . $smtpConf->secondarydomains,
+        ]);
+        $user2->smtpUser = new Tinebase_Model_EmailUser(array(
+            'emailAddress'     => $user2->accountEmailAddress,
+            'emailForwardOnly' => false,
+            'emailForwards'    => array(),
+            'emailAliases'     => array(),
+        ));
+        $user2 = $this->_backend->addUser($user2);
+        $this->objects['users'][] = $user2;
+
+        $this->assertTrue($user2 instanceof Tinebase_Model_FullUser);
+        $this->assertTrue(isset($user2->smtpUser), 'no smtpUser data found in ' . print_r($user2->toArray(),
+                TRUE));
+
+        // check dovecot users
+        $imapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP,
+            new Tinebase_Config_Struct())->toArray();
+        if (!isset($imapConf['backend']) || !('Imap_' . ucfirst($imapConf['backend']) == Tinebase_EmailUser::IMAP_DOVECOT) || $imapConf['active'] != true) {
+            return;
+        }
+        $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
+
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user1);
+        $rawDovecotUser1 = $dovecot->getRawUserById($emailUser);
+        self::assertEquals($user1->accountEmailAddress, $rawDovecotUser1['loginname']);
+
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user2);
+        $rawDovecotUser2 = $dovecot->getRawUserById($emailUser);
+        self::assertEquals($user2->accountEmailAddress, $rawDovecotUser2['loginname']);
     }
 }

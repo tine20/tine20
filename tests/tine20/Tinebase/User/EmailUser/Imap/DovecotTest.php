@@ -10,11 +10,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_DovecotTest
  */
 class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
