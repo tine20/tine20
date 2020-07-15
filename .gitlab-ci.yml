@@ -99,7 +99,7 @@ workflow:
     - when: never
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllServerTests
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci --filter "${PHPUNIT_FILTER}" AllServerTests
   timeout: 30m
 
 "phpstan: code analyses":
@@ -160,7 +160,7 @@ workflow:
     - when: never
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --group nogitlabci AllTests
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --group nogitlabci --filter "${PHPUNIT_FILTER}" AllTests
   allow_failure: true
   parallel: 5
 
@@ -171,7 +171,7 @@ workflow:
     name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap AllTests
+    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap --filter "${PHPUNIT_FILTER}" AllTests
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
       when: on_success
