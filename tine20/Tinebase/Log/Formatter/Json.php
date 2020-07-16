@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Log
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -23,23 +23,10 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
      */
     public function format($event)
     {
-        $logruntime = $this->_getLogRunTime(false);
-        $logdifftime = $this->_getLogDiffTime(false);
-        $event = [
-            'message' => isset($event['message']) ? str_replace($this->_search, $this->_replace, $event['message']) : '',
-            'timestamp' => isset($event['timestamp']) ? $event['timestamp'] : '',
-            'priority' => isset($event['priority']) ? $event['priority'] : '',
-            'user' => self::getUsername(),
-            'transaction_id' => (string) self::$_transactionId,
-            'request_id' => (string) self::$_requestId,
-            'logdifftime' => $logdifftime,
-            'logruntime' => $logruntime,
-            // TODO add method
-            // 'method' => self::$_method
-        ];
+        $data = $this->getLogData($event);
 
-        return @json_encode($event,
-            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION)
+        return @json_encode($data,
+            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)
             . PHP_EOL;
     }
 }

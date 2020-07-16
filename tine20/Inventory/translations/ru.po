@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Aleksey <aleksdem@aleksdem.com>, 2013-2015
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013,2016
@@ -9,14 +9,142 @@ msgstr ""
 "PO-Revision-Date: 2017-12-13 11:05+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Контейнер по-умолчанию для инвентаризации"
+
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Контейнер по-умолчанию для новых предметов"
+
+#: js/InventoryItemEditDialog.js:42
+msgid "The active number must be less than or equal total number."
+msgstr "Этот номер должен быть меньше или равным общему."
+
+#: js/InventoryItemEditDialog.js:68
+msgid "General"
+msgstr "Общее"
+
+#: js/InventoryItemEditDialog.js:92
+msgid "ID"
+msgstr "№"
+
+#: js/InventoryItemEditDialog.js:101 Model/InventoryItem.php:82
+msgid "Name"
+msgstr "Название"
+
+#: js/InventoryItemEditDialog.js:121 Model/InventoryItem.php:104
+msgid "Description"
+msgstr "Описание"
+
+#: js/InventoryItemEditDialog.js:125
+msgid "Enter description"
+msgstr "Введите описание"
+
+#: js/InventoryItemEditDialog.js:155 Model/InventoryItem.php:111
+msgid "Location"
+msgstr "Расположение"
+
+#: js/InventoryItemEditDialog.js:162
+msgid "Added"
+msgstr "Добавлен"
+
+#: js/InventoryItemEditDialog.js:168 Model/InventoryItem.php:168
+msgid "Warranty"
+msgstr "Гарантия"
+
+#: js/InventoryItemEditDialog.js:174
+msgid "Removed"
+msgstr "Удалено"
+
+#: js/InventoryItemEditDialog.js:181
+msgid "Total number"
+msgstr "Общее число"
+
+#: js/InventoryItemEditDialog.js:189
+msgid "Available number"
+msgstr "Доступный номер"
+
+#: js/InventoryItemEditDialog.js:197 Model/InventoryItem.php:88
+msgid "Status"
+msgstr "Состояние"
+
+#: js/InventoryItemEditDialog.js:230
+msgid "Accounting"
+msgstr "Учёт"
+
+#: js/InventoryItemEditDialog.js:251 Model/InventoryItem.php:150
+msgid "Price"
+msgstr "Цена"
+
+#: js/InventoryItemEditDialog.js:258
+msgid "Cost center"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:271 Model/InventoryItem.php:143
+msgid "Invoice"
+msgstr "Счёт"
+
+#: js/InventoryItemEditDialog.js:277 Model/InventoryItem.php:116
+msgid "Invoice date"
+msgstr "Дата счёта"
+
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
+msgid "Depreciate"
+msgstr "Не используется"
+
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Все предметы из инвентаризации"
+
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Все существующие предметы из инвентаризации"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "инвентарь"
+
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr "Доступен статус инвенторизации"
+
+#: Config.php:33
+msgid "Possible status."
+msgstr "Возможное состояние."
+
+#: Config.php:41
+msgid "ordered"
+msgstr "заказан"
+
+#: Config.php:42
+msgid "available"
+msgstr "доступен"
+
+#: Config.php:43
+msgid "defect"
+msgstr "повреждён"
+
+#: Config.php:44
+msgid "missing"
+msgstr "утерян"
+
+#: Config.php:45
+msgid "removed"
+msgstr "списан"
+
+#: Config.php:46
+msgid "unknown"
+msgstr "неизвестно"
 
 #: Model/InventoryItem.php:38
 msgid "Inventory item"
@@ -34,45 +162,13 @@ msgstr[1] "листы инвентаризации"
 msgstr[2] ""
 msgstr[3] "листы инвентаризации"
 
-#: Model/InventoryItem.php:82 js/InventoryItemEditDialog.js:101
-msgid "Name"
-msgstr "Название"
-
-#: Model/InventoryItem.php:88 js/InventoryItemEditDialog.js:197
-msgid "Status"
-msgstr "Состояние"
-
 #: Model/InventoryItem.php:97
 msgid "Inventory ID"
 msgstr "Инвентарный №"
 
-#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:121
-msgid "Description"
-msgstr "Описание"
-
-#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:155
-msgid "Location"
-msgstr "Расположение"
-
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:277
-msgid "Invoice date"
-msgstr "Дата счёта"
-
-#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:271
-msgid "Invoice"
-msgstr "Счёт"
-
-#: Model/InventoryItem.php:150 js/InventoryItemEditDialog.js:251
-msgid "Price"
-msgstr "Цена"
-
 #: Model/InventoryItem.php:155
 msgid "Cost Center"
 msgstr "Затраты"
-
-#: Model/InventoryItem.php:168 js/InventoryItemEditDialog.js:168
-msgid "Warranty"
-msgstr "Гарантия"
 
 #: Model/InventoryItem.php:176
 msgid "Item added"
@@ -81,94 +177,6 @@ msgstr "Пункт добавлен"
 #: Model/InventoryItem.php:184
 msgid "Item removed"
 msgstr "пункт удалён"
-
-#: Model/InventoryItem.php:193
-msgid "Deprecate"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:42
-msgid "The active number must be less than or equal total number."
-msgstr "Этот номер должен быть меньше или равным общему."
-
-#: js/InventoryItemEditDialog.js:68
-msgid "General"
-msgstr "Общее"
-
-#: js/InventoryItemEditDialog.js:92
-msgid "ID"
-msgstr "№"
-
-#: js/InventoryItemEditDialog.js:125
-msgid "Enter description"
-msgstr "Введите описание"
-
-#: js/InventoryItemEditDialog.js:162
-msgid "Added"
-msgstr "Добавлен"
-
-#: js/InventoryItemEditDialog.js:174
-msgid "Removed"
-msgstr "Удалено"
-
-#: js/InventoryItemEditDialog.js:181
-msgid "Total number"
-msgstr "Общее число"
-
-#: js/InventoryItemEditDialog.js:189
-msgid "Available number"
-msgstr "Доступный номер"
-
-#: js/InventoryItemEditDialog.js:230
-msgid "Accounting"
-msgstr "Учёт"
-
-#: js/InventoryItemEditDialog.js:258
-msgid "Cost center"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:283
-msgid "Depreciate"
-msgstr "Не используется"
-
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Контейнер по-умолчанию для инвентаризации"
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Контейнер по-умолчанию для новых предметов"
-
-#: Config.php:31
-msgid "Inventory Status Available"
-msgstr "Доступен статус инвенторизации"
-
-#: Config.php:33
-msgid "Possible status."
-msgstr "Возможное состояние."
-
-#: Config.php:40
-msgid "ordered"
-msgstr "заказан"
-
-#: Config.php:41
-msgid "available"
-msgstr "доступен"
-
-#: Config.php:42
-msgid "defect"
-msgstr "повреждён"
-
-#: Config.php:43
-msgid "missing"
-msgstr "утерян"
-
-#: Config.php:44
-msgid "removed"
-msgstr "списан"
-
-#: Config.php:45
-msgid "unknown"
-msgstr "неизвестно"
 
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
@@ -179,19 +187,5 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr "Импорт списка (###CURRENTDATE###)"
 
 #: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Предметы импортированы ###CURRENTDATE### в ###CURRENTTIME### пользователем ###USERFULLNAME###"
-
-#: Setup/Initialize.php:34 Setup/Update/Release7.php:127
-msgid "All Inventory Items"
-msgstr "Все предметы из инвентаризации"
-
-#: Setup/Initialize.php:35 Setup/Update/Release7.php:128
-msgid "All existing Inventory Items"
-msgstr "Все существующие предметы из инвентаризации"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "инвентарь"

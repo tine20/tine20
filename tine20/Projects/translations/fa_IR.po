@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # hyalavi <hyalavi@yahoo.com>, 2013
 # hyalavi <hyalavi@yahoo.com>, 2013
@@ -11,14 +11,75 @@ msgstr ""
 "PO-Revision-Date: 2017-09-19 13:36+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/tine20/tine20/language/fa_IR/)\n"
+"Language: fa_IR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s پروژه های شخصی"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "همه پروژه های من"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "علاقه مندی مورد علاقه"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "علاقه مندی پیش فرض که هنگام راه اندازی پروژه بارگذاری شده است"
+
+#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "شرکت کنندگان"
+
+#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
+msgid "Role"
+msgstr "سِمَت"
+
+#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+"Pluralized Translations\n"
+"one: پروژه\n"
+"other: پروژه"
+msgstr[1] ""
+"Pluralized Translations\n"
+"one: پروژه\n"
+"other: پروژه"
+
+#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "عنوان"
+
+#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "شماره"
+
+#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "وضعیت"
+
+#: js/ProjectEditDialog.js:188 js/Model.js:76
+msgid "Description"
+msgstr "توضیحات"
+
+#: js/ProjectEditDialog.js:202
+msgid "Enter description"
+msgstr "توضیحات"
+
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "پروژه ها"
 
 #: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
@@ -32,10 +93,6 @@ msgstr "لطفا نقش حاضرین در پروژه را انتخاب نمای�
 msgid "Select Project"
 msgstr "انتخاب پروژه"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:85
-msgid "Role"
-msgstr "سِمَت"
-
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "انتخاب سِمَت"
@@ -45,21 +102,19 @@ msgstr "انتخاب سِمَت"
 msgid "Adding {0} Participants to project"
 msgstr "افزودن {0} شرکت کننده به پروژه"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "پروژه ها"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:111 js/ProjectEditDialog.js:124
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Pluralized Translations\none: پروژه\nother: پروژه"
-msgstr[1] "Pluralized Translations\none: پروژه\nother: پروژه"
-
 #: js/Model.js:39
 msgid "Project list"
 msgid_plural "Project lists"
-msgstr[0] "Pluralized Translations\n\none: لیست پروژه\nother: لیست پروژه"
-msgstr[1] "Pluralized Translations\n\none: لیست پروژه\nother: لیست پروژه"
+msgstr[0] ""
+"Pluralized Translations\n"
+"\n"
+"one: لیست پروژه\n"
+"other: لیست پروژه"
+msgstr[1] ""
+"Pluralized Translations\n"
+"\n"
+"one: لیست پروژه\n"
+"other: لیست پروژه"
 
 #: js/Model.js:42
 msgid "Project lists"
@@ -68,22 +123,6 @@ msgstr "فهرست پروژه ها"
 #: js/Model.js:73
 msgid "Quick Search"
 msgstr ""
-
-#: js/Model.js:74 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "عنوان"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "شماره"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:182
-msgid "Description"
-msgstr "توضیحات"
-
-#: js/Model.js:78 js/ProjectEditDialog.js:147 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "وضعیت"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -101,17 +140,9 @@ msgstr "زمان ساخت"
 msgid "Created By"
 msgstr "ساخته شده توسط"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:84
-msgid "Attendee"
-msgstr "شرکت کنندگان"
-
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr "نقش شرکت کنندگان"
-
-#: js/ProjectEditDialog.js:196
-msgid "Enter description"
-msgstr "توضیحات"
 
 #: js/ProjectGridPanel.js:75
 msgid "Search FAQ"
@@ -120,76 +151,6 @@ msgstr ""
 #: js/ProjectGridPanel.js:118
 msgid "Tags"
 msgstr "برچسب"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "همه پروژه های من"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "علاقه مندی مورد علاقه"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "علاقه مندی پیش فرض که هنگام راه اندازی پروژه بارگذاری شده است"
-
-#: Config.php:38
-msgid "Project Status Available"
-msgstr "وضعیت پروژه در دسترس"
-
-#: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
-msgstr "وضعیت پروژه های بالقوه. لطفا توجه داشته باشید که وضعیت پروژه های اضافی و بالقوه ممکن است بر روی خروجی یا هماهنگ سازی سیستم های پروژه های دیگر تأثیر بگذارد."
-
-#: Config.php:47
-msgid "On hold"
-msgstr "در انتظار"
-
-#: Config.php:48
-msgid "Completed"
-msgstr "تکمیل شده"
-
-#: Config.php:49
-msgid "Cancelled"
-msgstr "لغو شده"
-
-#: Config.php:50
-msgid "In process"
-msgstr "در جریان"
-
-#: Config.php:56
-msgid "Project Attendee Role Available"
-msgstr "نقش شرکت کنندگان پروژه های موجود"
-
-#: Config.php:58
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
-msgstr "نقش شرکت کنندگان پروژه های بالقوه. لطفا توجه داشته باشید که نقش شرکت کنندگان در پروژه های اضافی و بالقوه ممکن است بر روی خروجی یا هماهنگ سازی سیستم های پروژه های دیگر تأثیر بگذارد."
-
-#: Config.php:65
-msgid "Coworker"
-msgstr "همکار"
-
-#: Config.php:66
-msgid "Responsible"
-msgstr "مسئوليت"
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "مدیریت پروژه‌های مشترک موردعلاقه"
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "ایجاد پروژه مشترک مورد علاقه جدید"
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s پروژه های شخصی"
 
 #: Setup/Initialize.php:36
 msgid "All my open projects"
@@ -210,3 +171,57 @@ msgstr "پروژه های در انتظار من"
 #: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "پروژه های در انتظار من"
+
+#: Config.php:38
+msgid "Available Project Status"
+msgstr ""
+
+#: Config.php:40
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
+msgstr "وضعیت پروژه های بالقوه. لطفا توجه داشته باشید که وضعیت پروژه های اضافی و بالقوه ممکن است بر روی خروجی یا هماهنگ سازی سیستم های پروژه های دیگر تأثیر بگذارد."
+
+#: Config.php:47
+msgid "On hold"
+msgstr "در انتظار"
+
+#: Config.php:48
+msgid "Completed"
+msgstr "تکمیل شده"
+
+#: Config.php:49
+msgid "Cancelled"
+msgstr "لغو شده"
+
+#: Config.php:50
+msgid "In process"
+msgstr "در جریان"
+
+#: Config.php:56
+msgid "Available Project Attendee Role"
+msgstr ""
+
+#: Config.php:58
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+msgstr "نقش شرکت کنندگان پروژه های بالقوه. لطفا توجه داشته باشید که نقش شرکت کنندگان در پروژه های اضافی و بالقوه ممکن است بر روی خروجی یا هماهنگ سازی سیستم های پروژه های دیگر تأثیر بگذارد."
+
+#: Config.php:65
+msgid "Coworker"
+msgstr "همکار"
+
+#: Config.php:66
+msgid "Responsible"
+msgstr "مسئوليت"
+
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "مدیریت پروژه‌های مشترک موردعلاقه"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "ایجاد پروژه مشترک مورد علاقه جدید"
+
+#~ msgid "Project Status Available"
+#~ msgstr "وضعیت پروژه در دسترس"
+
+#~ msgid "Project Attendee Role Available"
+#~ msgstr "نقش شرکت کنندگان پروژه های موجود"

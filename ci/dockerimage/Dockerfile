@@ -73,13 +73,19 @@ RUN addgroup -S -g 150 tine20 && \
 RUN mkdir -p /etc/confd/
 COPY ci/dockerimage/confd/conf.d /etc/confd/conf.d
 COPY ci/dockerimage/confd/templates/ /etc/confd/templates
+COPY ci/dockerimage/confd/cli.config.inc.php /etc/tine20/
 
 RUN mkdir -p /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d
 COPY ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d
 COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d
+COPY ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d
 
 COPY ci/dockerimage/scripts/* /usr/local/bin
+
+# set up logging
+RUN touch /var/log/tine20/tine20.log && \
+    chown tine20:tine20 /var/log/tine20/tine20.log
 
 # set workdir
 WORKDIR ${TINE20ROOT}
@@ -106,6 +112,8 @@ COPY tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
 COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
 COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
 
+COPY ci/dockerimage/.gitconfig /root/.gitconfig
+
 # install tine dependencies
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
 
@@ -117,6 +125,10 @@ ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG NODE_TLS_REJECT_UNAUTHORIZED=1
 ARG TINE20ROOT=/usr/share
+ARG CUSTOM_APP_VENDOR=metaways
+ARG CUSTOM_APP_NAME=""
+ARG CUSTOM_APP_GIT_URL=""
+ARG CUSTOM_APP_VERSION=dev-master
 
 # copy tine source
 COPY .git ${TINE20ROOT}/.git
@@ -124,8 +136,15 @@ COPY tine20 ${TINE20ROOT}/tine20/
 COPY tests ${TINE20ROOT}/tests/
 COPY scripts ${TINE20ROOT}/scripts/
 
-# run composer post install command, cant be run before becouse git is needed
-RUN cd ${TINE20ROOT}/tine20 && composer run-script post-install-cmd
+RUN if test -n "${CUSTOM_APP_NAME}"; \
+    then cd ${TINE20ROOT}/tine20; \
+    echo composer config "repositories.${CUSTOM_APP_VENDOR}-${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
+    composer config "repositories.${CUSTOM_APP_VENDOR}-${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
+    echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}"; \
+    composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}"; \
+    fi
+
+RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
 
 # ======================================================================================================================
 

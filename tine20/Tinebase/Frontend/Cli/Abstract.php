@@ -116,11 +116,12 @@ class Tinebase_Frontend_Cli_Abstract
      * set container grants
      * 
      * example usages: 
-     * (1) $ php tine20.php --method=Calendar.setContainerGrants containerId=3339 accountId=15 accountType=group grants=readGrant
-     * (2) $ php tine20.php --method=Timetracker.setContainerGrants namefilter="timeaccount name" accountId=15,30 accountType=group grants=book_own,manage_billable overwrite=1
-     * 
+     * (1) $ php tine20.php --method=Calendar.setContainerGrants id=3339 accountId=15 accountType=group grants=readGrant
+     * (2) $ php tine20.php --method=Timetracker.setContainerGrants name="timeaccount name" accountId=15,30 accountType=group grants=book_own,manage_billable overwrite=1
+     * (3) $ php tine20.php --method=Addressbok.setContainerGrants type=personal accountId=15 accountType=group grants=readGrant [-d]
+     *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean
+     * @return integer
      */
     public function setContainerGrants(Zend_Console_Getopt $_opts)
     {
@@ -132,18 +133,22 @@ class Tinebase_Frontend_Cli_Abstract
         if (count($containers) == 0) {
             echo "No matching containers found.\n";
         } else {
-            Admin_Controller_Container::getInstance()->setGrantsForContainers(
-                $containers, 
-                $data['grants'],
-                $data['accountId'], 
-                ((isset($data['accountType']) || array_key_exists('accountType', $data))) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                ((isset($data['overwrite']) || array_key_exists('overwrite', $data)) && $data['overwrite'] == '1')
-            );
-            
-            echo "Updated " . count($containers) . " container(s).\n";
+            if ($_opts->d) {
+                echo "Setting " . print_r($data['grants'], true) . ' for ' . count($containers) . " containers(s).\n";
+            } else {
+                Admin_Controller_Container::getInstance()->setGrantsForContainers(
+                    $containers,
+                    $data['grants'],
+                    $data['accountId'],
+                    ((isset($data['accountType']) || array_key_exists('accountType', $data))) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    ((isset($data['overwrite']) || array_key_exists('overwrite', $data)) && $data['overwrite'] == '1')
+                );
+
+                echo "Updated " . count($containers) . " container(s).\n";
+            }
         }
         
-        return TRUE;
+        return 0;
     }
 
     /**
@@ -322,18 +327,18 @@ class Tinebase_Frontend_Cli_Abstract
         $containerFilterData = array(
             array('field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()),
         );
-        
-        if ((isset($_params['containerId']) || array_key_exists('containerId', $_params))) {
-            $containerFilterData[] = array('field' => 'id', 'operator' => 'equals', 'value' => $_params['containerId']);
-        } else if ((isset($_params['namefilter']) || array_key_exists('namefilter', $_params))) {
-            $containerFilterData[] = array('field' => 'name', 'operator' => 'contains', 'value' => $_params['namefilter']);
-        } else {
-            throw new Timetracker_Exception_UnexpectedValue('Parameter containerId or namefilter missing!');
+
+        foreach (['id', 'name', 'type'] as $field) {
+            if (isset($_params[$field])) {
+                $containerFilterData[] = [
+                    'field' => $field,
+                    'operator' => $field === 'name' ? 'contains' : 'equals',
+                    'value' => $_params[$field]
+                ];
+            }
         }
-        
-        $containers = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter($containerFilterData));
-        
-        return $containers;
+
+        return Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter($containerFilterData));
     }
     
     /**

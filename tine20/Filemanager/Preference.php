@@ -58,8 +58,8 @@ class Filemanager_Preference extends Tinebase_Preference_Abstract
 
         $prefDescriptions = array(
             self::DB_CLICK_ACTION => array(
-                'label' => $translate->_('Row double click default'),
-                'description' => $translate->_('Defines which action should be executed on double click by default?'),
+                'label' => $translate->_('Default behavior when double-clicking on a Row'),
+                'description' => $translate->_('Defines which action should be executed by default when double-clicked.'),
             )
         );
 

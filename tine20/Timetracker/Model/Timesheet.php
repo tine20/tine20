@@ -22,6 +22,8 @@
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
+    const MODEL_NAME_PART = 'Timesheet';
+
     const TYPE_WORKINGTIME = 'AZ';
     const TYPE_PROJECTTIME = 'PZ';
 
@@ -46,8 +48,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'titleProperty'     => 'description',
-        'appName'           => 'Timetracker',
-        'modelName'         => 'Timesheet',
+        'appName'           => Timetracker_Config::APP_NAME,
+        'modelName'         => self::MODEL_NAME_PART,
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [

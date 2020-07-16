@@ -106,7 +106,7 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             ),
             self::MANAGE_DOWNLOADLINKS  => array(
                 'text'          => $translate->_('Manage anonymous download links'),
-                'description'   => $translate->_('Allow to see, add and delete download links of files and folders'),
+                'description'   => $translate->_('Allow viewing, adding and deleting download links'),
             )
         );
         

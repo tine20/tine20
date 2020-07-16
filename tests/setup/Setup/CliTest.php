@@ -110,4 +110,41 @@ class Setup_CliTest extends TestCase
         $auth = Tinebase_Auth::getInstance()->authenticate(Tinebase_User::SYSTEM_USER_REPLICATION, 'xxxx1234');
         self::assertTrue($auth->isValid(), print_r($auth, true));
     }
+
+    /**
+     * Test isInstalled
+     *
+     * Test expects Tinebase_Application->isInstalled('Tinebase', ture) to work correctly.
+     * Testing with out mocking requires to uninstall and install all applications.
+     * After uninstalling 'Tinebase' is still cached in Tinebase_PerRequestCache. So that isInstalled dose not work correctly.
+     * Resetting the cache solves that. But than reinstalling the applications fails.
+     */
+    public function testIsInstalled() {
+        $opts = new Zend_Console_Getopt(array('is_installed' => 'is_installed'));
+        $opts->setArguments(array('--is_installed'));
+
+        $stub = $this->getMockBuilder(Tinebase_Application::class)->disableOriginalConstructor()->getMock();
+        $stub->method('isInstalled')->with(
+            $this->equalTo('Tinebase'),
+            $this->equalTo(true)
+        )->willReturn(true);
+        $result = (new Setup_Frontend_Cli($stub))->handle($opts, false);
+        self::assertEquals(0, $result);
+
+        $stub = $this->getMockBuilder(Tinebase_Application::class)->disableOriginalConstructor()->getMock();
+        $stub->method('isInstalled')->with(
+            $this->equalTo('Tinebase'),
+            $this->equalTo(true)
+        )->willReturn(false);
+        $result = (new Setup_Frontend_Cli($stub))->handle($opts, false);
+        self::assertEquals(1, $result);
+
+        $stub = $this->getMockBuilder(Tinebase_Application::class)->disableOriginalConstructor()->getMock();
+        $stub->method('isInstalled')->with(
+            $this->equalTo('Tinebase'),
+            $this->equalTo(true)
+        )->willThrowException(new Exception("A test Exception"));
+        $result = (new Setup_Frontend_Cli($stub))->handle($opts, false);
+        self::assertEquals(1, $result);
+    }
 }

@@ -59,6 +59,11 @@ class Tinebase_Record_Expander_Factory
                     return new Tinebase_Record_Expander_JsonStorageProperty($propModel, $_property, $_definition,
                         $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
                 } else {
+                    if (isset($fieldDef[MCC::CONFIG][MCC::REF_ID_FIELD])) {
+                        $_definition['fieldDefConfig'] = $fieldDef[MCC::CONFIG];
+                        return new Tinebase_Record_Expander_RefIdProperty($propModel, $_property, $_definition,
+                            $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
+                    }
                     return new Tinebase_Record_Expander_RecordsProperty($propModel, $_property, $_definition,
                         $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
                 }
@@ -71,6 +76,13 @@ class Tinebase_Record_Expander_Factory
                 return new Tinebase_Record_Expander_Note($propModel, $_property, $_definition, $_rootExpander);
             case MCC::TYPE_ATTACHMENTS:
                 return new Tinebase_Record_Expander_Attachments($propModel, $_property, $_definition, $_rootExpander);
+            case MCC::TYPE_VIRTUAL:
+                switch ($fieldDef[MCC::CONFIG][MCC::TYPE]) {
+                    case MCC::TYPE_RELATIONS:
+                    case MCC::TYPE_RELATION:
+                        return new Tinebase_Record_Expander_VirtualRelation($fieldDef[MCC::CONFIG][MCC::CONFIG],
+                            $propModel, $_property, $_definition, $_rootExpander);
+                }
         }
 
         throw new Tinebase_Exception_InvalidArgument($_model . '::' . $_property . ' of type ' . $fieldDef['type'] .

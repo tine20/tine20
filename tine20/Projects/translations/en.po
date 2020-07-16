@@ -14,47 +14,81 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's personal Projects"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "All my projects"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Default Favorite"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "The default favorite which is loaded on Projects startup"
+
+#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Attendee"
 
-#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
+#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
 msgid "Role"
 msgstr "Role"
 
-#: js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119 js/Model.js:35
+#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Project"
 msgstr[1] "Projects"
 
-#: js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128 js/Model.js:74
+#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "Title"
 
-#: js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121 js/Model.js:75
+#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "Number"
 
-#: js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134 js/Model.js:78
+#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "Status"
 
-#: js/ProjectEditDialog.js:177 js/Model.js:76
+#: js/ProjectEditDialog.js:188 js/Model.js:76
 msgid "Description"
 msgstr "Description"
 
-#: js/ProjectEditDialog.js:191
+#: js/ProjectEditDialog.js:202
 msgid "Enter description"
 msgstr "Enter description"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Search FAQ"
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projects"
 
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Tags"
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Please choose the Project to add the contacts to"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Please select the attenders' role"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Select Project"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Select Role"
+
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Adding {0} Participants to project"
 
 #: js/Model.js:39
 msgid "Project list"
@@ -86,38 +120,41 @@ msgstr "Creation Time"
 msgid "Created By"
 msgstr "Created By"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projects"
-
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr "Attendee Role"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Please choose the Project to add the contacts to"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Search FAQ"
 
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Please select the attenders' role"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Tags"
 
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Select Project"
+#: Setup/Initialize.php:36
+msgid "All my open projects"
+msgstr "All my open projects"
 
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Select Role"
+#: Setup/Initialize.php:56
+msgid "My projects that I'm responsible for"
+msgstr "My projects that I'm responsible for"
 
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Adding {0} Participants to project"
+#: Setup/Initialize.php:57
+msgid "All my open projects that I am responsible for"
+msgstr "All my open projects that I am responsible for"
+
+#: Setup/Initialize.php:77
+msgid "My waiting projects"
+msgstr "My waiting projects"
+
+#: Setup/Initialize.php:78
+msgid "My projects that are on hold"
+msgstr "My projects that are on hold"
 
 #: Config.php:38
-msgid "Project Status Available"
-msgstr "Project Status Available"
+msgid "Available Project Status"
+msgstr "Available Project Status"
 
 #: Config.php:40
 msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
@@ -140,8 +177,8 @@ msgid "In process"
 msgstr "In process"
 
 #: Config.php:56
-msgid "Project Attendee Role Available"
-msgstr "Project Attendee Role Available"
+msgid "Available Project Attendee Role"
+msgstr "Available Project Attendee Role"
 
 #: Config.php:58
 msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
@@ -155,31 +192,6 @@ msgstr "Coworker"
 msgid "Responsible"
 msgstr "Responsible"
 
-#: Setup/Initialize.php:36
-msgid "All my open projects"
-msgstr "All my open projects"
-
-#: Setup/Initialize.php:56
-msgid "My projects that I'm responsible for"
-msgstr "My projects that I'm responsible for"
-
-#: Setup/Initialize.php:57
-msgid "All my open projects that I am responsible for"
-msgstr "All my open projects that I am responsible for"
-
-#: Setup/Initialize.php:77
-msgid "My waiting projects"
-msgstr "My waiting projects"
-
-#: Setup/Initialize.php:78
-msgid "My projects that are on hold"
-msgstr "My projects that are on hold"
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's personal Projects"
-
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"
 msgstr "Manage shared project favorites"
@@ -187,15 +199,3 @@ msgstr "Manage shared project favorites"
 #: Acl/Rights.php:91
 msgid "Create new shared project favorites"
 msgstr "Create new shared project favorites"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "All my projects"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Default Favorite"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "The default favorite which is loaded on Projects startup"

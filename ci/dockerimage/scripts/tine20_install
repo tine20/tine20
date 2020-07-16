@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-php /usr/share/tine20/setup.php --install --config /etc/tine20/config.inc.php ${TINE20_APPLICATION_TO_INSTALL:-"ActiveSync,Calendar,Felamimail,CoreData,Filemanager,Sales,Timetracker,Tasks,Crm,HumanResources,Inventory"} -- \
+php /usr/share/tine20/setup.php --install --config /etc/tine20/cli.config.inc.php ${TINE20_APPLICATION_TO_INSTALL:-"ActiveSync,Calendar,Felamimail,CoreData,Filemanager,Sales,Timetracker,Tasks,Crm,HumanResources,Inventory"} -- \
   adminLoginName="${TINE20_LOGIN_USERNAME:-tine20admin}" \
   adminPassword="${TINE20_LOGIN_PASSWORD:-tine20admin}" \
   adminEmailAddress="${TINE20_ADMIN_EMAIL:-tine20admin@example.org}" \

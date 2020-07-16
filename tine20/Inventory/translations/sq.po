@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Enri Mullai <enri_mullai@albnet.net>, 2013
 # Enri Mullai <enri_mullai@albnet.net>, 2013
@@ -9,78 +9,22 @@ msgstr ""
 "PO-Revision-Date: 2017-12-13 11:05+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/tine20/tine20/language/sq/)\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Model/InventoryItem.php:38
-msgid "Inventory item"
-msgid_plural "Inventory items"
-msgstr[0] "Artikull Inventari"
-msgstr[1] "Artikuj Inventari"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Kontenieri i paracaktuar i artikujve te inventarit"
 
-#: Model/InventoryItem.php:42
-msgid "Inventory item list"
-msgid_plural "Inventory item lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/InventoryItem.php:82 js/InventoryItemEditDialog.js:101
-msgid "Name"
-msgstr "Emri"
-
-#: Model/InventoryItem.php:88 js/InventoryItemEditDialog.js:197
-msgid "Status"
-msgstr "Statusi"
-
-#: Model/InventoryItem.php:97
-msgid "Inventory ID"
-msgstr "ID Inventari"
-
-#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:121
-msgid "Description"
-msgstr "Përshkrimi"
-
-#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:155
-msgid "Location"
-msgstr "Vendndodhja"
-
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:277
-msgid "Invoice date"
-msgstr "Data e Faturës"
-
-#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:271
-msgid "Invoice"
-msgstr "Faturë"
-
-#: Model/InventoryItem.php:150 js/InventoryItemEditDialog.js:251
-msgid "Price"
-msgstr "Çmimi"
-
-#: Model/InventoryItem.php:155
-msgid "Cost Center"
-msgstr ""
-
-#: Model/InventoryItem.php:168 js/InventoryItemEditDialog.js:168
-msgid "Warranty"
-msgstr "Garancia"
-
-#: Model/InventoryItem.php:176
-msgid "Item added"
-msgstr "Artikull i  shtuar"
-
-#: Model/InventoryItem.php:184
-msgid "Item removed"
-msgstr "Artikull i hequr"
-
-#: Model/InventoryItem.php:193
-msgid "Deprecate"
-msgstr ""
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Kontenieri i paracaktuar për artikujt e rinj"
 
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
@@ -94,13 +38,29 @@ msgstr "I Përgjithshëm"
 msgid "ID"
 msgstr "ID"
 
+#: js/InventoryItemEditDialog.js:101 Model/InventoryItem.php:82
+msgid "Name"
+msgstr "Emri"
+
+#: js/InventoryItemEditDialog.js:121 Model/InventoryItem.php:104
+msgid "Description"
+msgstr "Përshkrimi"
+
 #: js/InventoryItemEditDialog.js:125
 msgid "Enter description"
 msgstr "Vendosni përshkrimin"
 
+#: js/InventoryItemEditDialog.js:155 Model/InventoryItem.php:111
+msgid "Location"
+msgstr "Vendndodhja"
+
 #: js/InventoryItemEditDialog.js:162
 msgid "Added"
 msgstr "Shtuar"
+
+#: js/InventoryItemEditDialog.js:168 Model/InventoryItem.php:168
+msgid "Warranty"
+msgstr "Garancia"
 
 #: js/InventoryItemEditDialog.js:174
 msgid "Removed"
@@ -114,25 +74,45 @@ msgstr "Numri total"
 msgid "Available number"
 msgstr "Numri i disponueshëm"
 
+#: js/InventoryItemEditDialog.js:197 Model/InventoryItem.php:88
+msgid "Status"
+msgstr "Statusi"
+
 #: js/InventoryItemEditDialog.js:230
 msgid "Accounting"
 msgstr "Llogaritje"
+
+#: js/InventoryItemEditDialog.js:251 Model/InventoryItem.php:150
+msgid "Price"
+msgstr "Çmimi"
 
 #: js/InventoryItemEditDialog.js:258
 msgid "Cost center"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:283
+#: js/InventoryItemEditDialog.js:271 Model/InventoryItem.php:143
+msgid "Invoice"
+msgstr "Faturë"
+
+#: js/InventoryItemEditDialog.js:277 Model/InventoryItem.php:116
+msgid "Invoice date"
+msgstr "Data e Faturës"
+
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
 msgid "Depreciate"
 msgstr "Zhvlerëso"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Kontenieri i paracaktuar i artikujve te inventarit"
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Të gjithë Artikujt e inventarit"
 
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Kontenieri i paracaktuar për artikujt e rinj"
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Të gjithë Artikujt egzistues të inventarit"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventari"
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -142,29 +122,57 @@ msgstr "Statusi i mundshëm i inventarit"
 msgid "Possible status."
 msgstr "Statusi i mundshëm"
 
-#: Config.php:40
+#: Config.php:41
 msgid "ordered"
 msgstr "porositur"
 
-#: Config.php:41
+#: Config.php:42
 msgid "available"
 msgstr "i mundshëm"
 
-#: Config.php:42
+#: Config.php:43
 msgid "defect"
 msgstr "difektoz"
 
-#: Config.php:43
+#: Config.php:44
 msgid "missing"
 msgstr "mungon"
 
-#: Config.php:44
+#: Config.php:45
 msgid "removed"
 msgstr "hequr"
 
-#: Config.php:45
+#: Config.php:46
 msgid "unknown"
 msgstr "i/e panjohur"
+
+#: Model/InventoryItem.php:38
+msgid "Inventory item"
+msgid_plural "Inventory items"
+msgstr[0] "Artikull Inventari"
+msgstr[1] "Artikuj Inventari"
+
+#: Model/InventoryItem.php:42
+msgid "Inventory item list"
+msgid_plural "Inventory item lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/InventoryItem.php:97
+msgid "Inventory ID"
+msgstr "ID Inventari"
+
+#: Model/InventoryItem.php:155
+msgid "Cost Center"
+msgstr ""
+
+#: Model/InventoryItem.php:176
+msgid "Item added"
+msgstr "Artikull i  shtuar"
+
+#: Model/InventoryItem.php:184
+msgid "Item removed"
+msgstr "Artikull i hequr"
 
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
@@ -175,19 +183,5 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr "importo listen (###CURRENTDATE###)"
 
 #: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Artikuj të importuar në ###CURRENTDATE### më ###CURRENTTIME### nga ###USERFULLNAME###"
-
-#: Setup/Initialize.php:34 Setup/Update/Release7.php:127
-msgid "All Inventory Items"
-msgstr "Të gjithë Artikujt e inventarit"
-
-#: Setup/Initialize.php:35 Setup/Update/Release7.php:128
-msgid "All existing Inventory Items"
-msgstr "Të gjithë Artikujt egzistues të inventarit"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventari"

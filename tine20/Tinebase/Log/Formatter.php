@@ -340,4 +340,23 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
             self::$_colorize = $options['colorize'];
         }
     }
+    
+    public function getLogData($event)
+    {
+        $logruntime = $this->_getLogRunTime(false);
+        $logdifftime = $this->_getLogDiffTime(false);
+        return [
+            'message' => isset($event['message']) ? str_replace($this->_search, $this->_replace, $event['message']) : '',
+            'timestamp' => isset($event['timestamp']) ? $event['timestamp'] : '',
+            'priority' => isset($event['priority']) ? $event['priority'] : '',
+            'priorityName' => isset($event['priorityName']) ? $event['priorityName'] : '',
+            'user' => self::getUsername(),
+            'transaction_id' => (string) self::$_transactionId,
+            'request_id' => (string) self::$_requestId,
+            'logdifftime' => $logdifftime,
+            'logruntime' => $logruntime,
+            // TODO add method
+            // 'method' => self::$_method
+        ];
+    }
 }

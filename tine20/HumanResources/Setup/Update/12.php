@@ -16,6 +16,7 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -26,6 +27,10 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE012_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -226,5 +231,16 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.10', self::RELEASE012_UPDATE005);
+    }
+
+    public function update006()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Stream::class,
+            HumanResources_Model_StreamModality::class,
+            HumanResources_Model_StreamModalReport::class,
+        ]);
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.11', self::RELEASE012_UPDATE006);
     }
 }

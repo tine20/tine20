@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -288,6 +288,18 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'type'                  => 'float',
                 'default'               => 1
             ),
+            'stream'     => [
+                self::TYPE                  => self::TYPE_VIRTUAL,
+                self::CONFIG                => [
+                    self::TYPE                  => self::TYPE_RELATION,
+                    self::LABEL                 => 'Stream', // _('Stream')
+                    self::CONFIG                => [
+                        self::APP_NAME              => HumanResources_Config::APP_NAME,
+                        self::MODEL_NAME            => HumanResources_Model_Stream::MODEL_NAME_PART,
+                        self::TYPE                  => Timetracker_Model_Timeaccount::MODEL_NAME_PART
+                    ]
+                ]
+            ]
         )
     );
 
@@ -307,6 +319,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '1:0'), // _('Time Account')
         )
         ),
+        [
+            'relatedApp' => HumanResources_Config::APP_NAME,
+            'relatedModel' => HumanResources_Model_Stream::MODEL_NAME_PART,
+            'config' => [
+                ['type' => self::MODEL_NAME_PART, 'degree' => Tinebase_Model_Relation::DEGREE_SIBLING, 'max' => '1:0'],
+            ],
+        ],
     );
     
     /**

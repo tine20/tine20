@@ -204,6 +204,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_recordPathFeatureEnabled = null;
 
     /**
+     * add / remove relations during _setReleatedData for virtual relation proproperties
+     *
+     * @var bool
+     */
+    protected $_handleVirtualRelationProperties = false;
+
+    /**
      * constants for actions
      *
      * @var string
@@ -824,6 +831,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
 
+            $createNewValue = $this->_inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue);
+
             if (true === $createNewValue) {
                 $_record->{$fieldDef['fieldName']} = $numberable->getNext();
                 if (null !== $_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']})) {
@@ -835,6 +844,20 @@ abstract class Tinebase_Controller_Record_Abstract
                 $numberable->free($_oldRecord->{$fieldDef['fieldName']});
             }
         }
+    }
+
+    /**
+     * allows to override default autoincrement handling
+     *
+     * @param $_record
+     * @param $numberable
+     * @param $fieldDef
+     * @param $createNewValue
+     * @return mixed
+     */
+    protected function _inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue)
+    {
+        return $createNewValue;
     }
 
     /**
@@ -1288,6 +1311,11 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Update record: ' . print_r($record->toArray(), true));
 
+        // needs to be done before relation updates happen!
+        if ($this->_handleVirtualRelationProperties) {
+            $this->_setRelationsByVirtualProps($record, $currentRecord);
+        }
+
         // relations won't be touched if the property is set to NULL
         // an empty array on the relations property will remove all relations
         if ($record->has('relations') && isset($record->relations)
@@ -1353,6 +1381,99 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         return $updatedRecord;
+    }
+
+    /**
+     * set relations from virtual relation properties
+     *
+     * @param   Tinebase_Record_Interface $record the update record
+     * @param   Tinebase_Record_Interface $currentRecord the original record if one exists
+     */
+    protected function _setRelationsByVirtualProps(Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null)
+    {
+        $mc = $record::getConfiguration();
+        $properties = $mc->getFields();
+        $relationsModified = false;
+        $addRelations = [];
+        $removeRelations = [];
+
+        if (null !== $record->relations) {
+            if (is_array($record->relations)) {
+                $record->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $record->relations);
+            }
+            $relationsNull = false;
+        } else {
+            $relationsNull = true;
+        }
+
+        foreach (array_keys($mc->getVirtualFields()) as $virtualField) {
+            if (!isset($properties[$virtualField][TMCC::CONFIG][TMCC::TYPE]) || (TMCC::TYPE_RELATION !==
+                    $properties[$virtualField][TMCC::CONFIG][TMCC::TYPE] && TMCC::TYPE_RELATIONS !==
+                    $properties[$virtualField][TMCC::CONFIG][TMCC::TYPE])) {
+                continue;
+            }
+            $model = $properties[$virtualField][TMCC::CONFIG][TMCC::CONFIG][TMCC::RECORD_CLASS_NAME];
+            $type = $properties[$virtualField][TMCC::CONFIG][TMCC::CONFIG][TMCC::TYPE];
+            $degree = $properties[$virtualField][TMCC::CONFIG][TMCC::CONFIG][TMCC::DEGREE];
+            if (null !== $currentRecord && $currentRecord->relations->count() > 0) {
+                $existingRelations = $currentRecord->relations->filter('related_model', $model)->filter('type', $type)
+                    ->filter('degree', $degree);
+            } else {
+                $existingRelations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
+            }
+
+            if (null === $record->{$virtualField}) {
+                if (!$relationsNull && $existingRelations->count() > 0) {
+                    $addRelations[] = $existingRelations;
+                }
+                continue;
+            }
+
+            foreach ($record->{$virtualField} as $item) {
+                if (is_array($item)) {
+                    $item = $item['id'];
+                }
+                if (null === ($existingRel = $existingRelations->find('related_id', $item))) {
+                    $relationsModified = true;
+                    $addRelations[] = new Tinebase_Model_Relation([
+                        'related_model'     => $model,
+                        'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                        'related_id'        => $item,
+                        'related_degree'    => $degree,
+                        'type'              => $type,
+                    ], true);
+                } else {
+                    $existingRelations->removeById($existingRel->getId());
+                }
+            }
+
+            if ($existingRelations->count() > 0) {
+                $relationsModified = true;
+                $removeRelations[] = $existingRelations;
+            }
+        }
+
+        if ($relationsModified) {
+            if ($relationsNull) {
+                if (null !== $currentRecord) {
+                    $record->relations = $currentRecord->relations;
+                } else {
+                    $record->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
+                }
+            }
+
+            foreach ($addRelations as $add) {
+                if ($add instanceof Tinebase_Record_RecordSet) {
+                    $record->relations->mergeById($add);
+                } else {
+                    $record->relations->addRecord($add);
+                }
+            }
+
+            foreach ($removeRelations as $remove) {
+                $record->relations->removeRecordsById($remove);
+            }
+        }
     }
 
     /**

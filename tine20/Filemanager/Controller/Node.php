@@ -850,8 +850,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     }
                 }
             } else if (! $_forceOverwrite) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' ' . $fene);
                 throw $fene;
             }
         }
@@ -934,7 +932,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $existsException = new Filemanager_Exception_NodeExists();
                 $existsException->addExistingNodeInfo($_node);
                 throw $existsException;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Could not find node ...');
             }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Path does not exist yet');
         }
     }
     

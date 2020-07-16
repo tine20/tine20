@@ -80,6 +80,16 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * id of timeaccount for workingtime timesheets
      */
     const WORKING_TIME_TIMEACCOUNT = 'workingTimeTimeAccount';
+
+    /**
+     * key field for streams interval (week, month, quarter, year)
+     */
+    const STREAM_INTERVAL = 'streamInterval';
+
+    /**
+     * key field for stream types (velocity stream, working stream, etc.)
+     */
+    const STREAM_TYPE = 'streamType';
     
     /**
      * (non-PHPdoc)
@@ -141,8 +151,8 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         self::DEFAULT_FEAST_CALENDAR => array(
             // _('Default Feast Calendar')
             'label'                 => 'Default Feast Calendar',
-            // _('Here you can define the default feast calendar used to set feast days and other free days in datepicker')
-            'description'           => 'Here you can define the default feast calendar used to set feast days and other free days in datepicker',
+            // _('Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker')
+            'description'           => 'Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
@@ -220,6 +230,37 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'setBySetupModule'      => false,
         ),
+        self::STREAM_INTERVAL => [
+            //_('Stream Intervals available')
+            self::LABEL                     => 'Stream Intervals available',
+            self::DESCRIPTION               => 'Stream Intervals available',
+            self::TYPE                      => 'keyFieldConfig',
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => false,
+            self::DEFAULT_STR               => [
+                self::RECORDS                   => [
+                    ['system' => 1, 'id' => HumanResources_Model_StreamModality::INT_WEEKLY,      'value' => 'Weekly'], //_('Weekly')
+                    ['system' => 1, 'id' => HumanResources_Model_StreamModality::INT_MONTHLY,     'value' => 'Monthly'], //_('Monthly')
+                    ['system' => 1, 'id' => HumanResources_Model_StreamModality::INT_QUARTERLY,   'value' => 'Quarterly'], //_('Quarterly')
+                    ['system' => 1, 'id' => HumanResources_Model_StreamModality::INT_YEARLY,      'value' => 'Yearly'], //_('Yearly')
+                ],
+            ],
+        ],
+        self::STREAM_TYPE => [
+            //_('Stream Types available')
+            self::LABEL                     => 'Stream Types available',
+            self::DESCRIPTION               => 'Stream Types available',
+            self::TYPE                      => 'keyFieldConfig',
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => [
+                self::RECORDS                   => [
+                    ['id' => 'velocity stream',     'value' => 'Velocity Stream'], //_('Velocity Stream')
+                    ['id' => 'working stream',      'value' => 'Working Stream'], //_('Working Stream')
+                    ['id' => 'daily business',      'value' => 'Daily Business'], //_('Daily Business')
+                ],
+            ],
+        ],
     );
 
     /**

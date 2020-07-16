@@ -244,8 +244,6 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      * @param array|string              $_accountId single or multiple account ids
      * @param string                    $_accountType
      * @param boolean                   $_overwrite replace grants?
-     * 
-     * @todo need to invent a way to let applications (like the timetracker) hook into this fn + remove timetracker stuff afterwards
      */
     public function setGrantsForContainers($_containers, $_grants, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $_overwrite = FALSE)
     {
@@ -255,15 +253,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         $accountIds = (array) $_accountId;
         $grantsArray = ($_overwrite) ? array() : (array) $_grants;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Changing grants of containers: ' . print_r($_containers->name, TRUE));
-        
-        $timetrackerApp = (Tinebase_Application::getInstance()->isInstalled('Timetracker')) 
-            ? Tinebase_Application::getInstance()->getApplicationByName('Timetracker')
-            : NULL;
-
         /** @var Tinebase_Model_Container $container */
-        foreach($_containers as $container) {
+        foreach ($_containers as $container) {
             foreach ($accountIds as $accountId) {
                 if ($_overwrite) {
                     foreach((array) $_grants as $grant) {
@@ -287,7 +278,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
                 
                 Tinebase_Container::getInstance()->setGrants($container, $grants, TRUE, FALSE);
             }
-        }        
+        }
     }
     
     /**

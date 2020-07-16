@@ -26,12 +26,12 @@ fi
 su tine20 -c "/usr/local/bin/tine20_await_db"
 
 # install tine20 if it is not installed
-su tine20 -c "/usr/local/bin/tine20_install"
+su tine20 -c "php /usr/share/tine20/setup.php --config /etc/tine20/config.inc.php --is_installed || /usr/local/bin/tine20_install"
 
 # update tine20 install if it is not up to date
-su tine20 -c "php /usr/share/tine20/setup.php --config /etc/tine20/config.inc.php --update"
+su tine20 -c "php /usr/share/tine20/setup.php --config /etc/tine20/cli.config.inc.php --update"
 
 # load config from env vars TINE20__<app>_<property>
-su tine20 -c "php /usr/share/tine20/setup.php --config /etc/tine20/config.inc.php --config_from_env"
+su tine20 -c "php /usr/share/tine20/setup.php --config /etc/tine20/cli.config.inc.php --config_from_env"
 
 /usr/bin/supervisord -c /etc/supervisord.conf --nodaemon

@@ -51,8 +51,13 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      */
     public function toTine20Model($_blob, Tinebase_Record_Interface $_record = NULL)
     {
+        /** @var Tinebase_Record_Interface $record */
         $record = new $this->_recordClass([], true);
         $record->setFromJsonInUsersTimezone($_blob);
+        if (null !== ($mc = ($this->_recordClass)::getConfiguration()) && $mc
+                ->{Tinebase_ModelConfiguration_Const::RUN_CONVERT_TO_RECORD_FROM_JSON}) {
+            $record->runConvertToRecord();
+        }
         return $record;
     }
     
@@ -631,7 +636,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         foreach ($virtualFields as $field) {
             // resolve virtual relation record from relations property
-            if (isset($field['type']) && $field['type'] == 'relation') {
+            if (isset($field['type']) && ($field['type'] === 'relation' || $field['type'] === 'relations')) {
 
                 // tODO probably move this array nesting to the top of the function, check 'function' todo below though
                 if ($multiple) {

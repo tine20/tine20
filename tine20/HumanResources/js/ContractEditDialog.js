@@ -268,7 +268,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     allowBlank: false,
                                     blurOnSelect: true,
                                     columnWidth: 1/2,
-                                    fieldLabel: this.app.i18n._('Feast Calendar')
+                                    fieldLabel: this.app.i18n._('Public Holiday Calendar')
                                 },
                                 {name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation days of one calendar year'), allowBlank: false, columnWidth: 1/2}
                         ]]

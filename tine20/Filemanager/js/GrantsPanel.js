@@ -37,11 +37,11 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
         this.hasOwnGrantsCheckbox = new Ext.form.Checkbox({
             disabled: true,
-            boxLabel: this.app.i18n._('This folder has own grants'),
+            boxLabel: this.app.i18n._('This folder has its own grants'),
             listeners: {scope: this, check: this.onOwnGrantsCheck}
         });
         this.hasOwnRightsDescription = new Ext.form.Label({
-            text: this.app.i18n._("Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself.")
+            text: this.app.i18n._("Grants of a folder also apply recursively to all sub folders unless they have their own grants.")
         });
         this.pinProtectionCheckbox = new Ext.form.Checkbox({
             disabled: true,
@@ -49,7 +49,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             boxLabel: this.app.i18n._('This folder is part of the data safe')
         });
         this.pinProtectionDescription = new Ext.form.Label({
-            text: this.app.i18n._("If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened.")
+            text: this.app.i18n._("If the data safe is activated, this folder and its contents can only be accessed when the data safe is open.")
         });
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             app: this.app,
