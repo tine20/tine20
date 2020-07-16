@@ -564,28 +564,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 throw new Felamimail_Exception_Sieve($translate->_('It is not allowed to redirect emails to self! Please change the recipient.'));
             }
             if (Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_REDIRECT_ONLY_INTERNAL}) {
-                $success = false;
-                $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP)
-                    ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP)
-                    : $smtpConfig = array();
-                $allowedDomains = array();
-                if (isset($smtpConfig['primarydomain'])) {
-                    $allowedDomains[] = $smtpConfig['primarydomain'];
-                }
-                if (isset($smtpConfig['secondarydomains'])) {
-                    $allowedDomains[] = array_merge($allowedDomains, explode(',', $smtpConfig['secondarydomains']));
-                }
-
-                foreach ($allowedDomains as $allowedDomain) {
-                    foreach ($redirectEmails as $email) {
-                        if (strpos($email, $allowedDomain) !== false) {
-                            $success = true;
-                            break;
-                        }
+                foreach ($redirectEmails as $email) {
+                    if (false === Tinebase_EmailUser::checkDomain($email)) {
+                        throw new Felamimail_Exception_Sieve($translate->_('Redirects to external email domains are not allowed.'));
                     }
-                }
-                if (false === $success) {
-                    throw new Felamimail_Exception_Sieve($translate->_('Redirects to external email domains are not allowed.'));
                 }
             }
         }
