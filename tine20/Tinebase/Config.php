@@ -909,6 +909,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "secondarydomains":"second.test,third.test" (string - comma separated)
          * "additionaldomains":"another.test,onemore.test" (string - comma separated)
          * "instanceName":"tine.test" (string)
+         * "onlyemaildestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          */
         self::SMTP => array(
                                    //_('System SMTP')

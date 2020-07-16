@@ -205,6 +205,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         self::$_instance = null;
         self::$_backendConfiguration = null;
         self::$_backendType = null;
+        Tinebase_EmailUser::destroyInstance();
     }
 
     /**
