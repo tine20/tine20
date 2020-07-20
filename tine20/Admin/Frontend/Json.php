@@ -343,8 +343,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         // dehydrate primary group id
-        if (is_array($recordData['accountPrimaryGroup']) && isset($recordData['accountPrimaryGroup']['id'])) {
-            $recordData['accountPrimaryGroup']= $recordData['accountPrimaryGroup']['id'];
+        if (isset($recordData['accountPrimaryGroup'])
+            && is_array($recordData['accountPrimaryGroup'])
+            && isset($recordData['accountPrimaryGroup']['id'])
+        ) {
+            $recordData['accountPrimaryGroup'] = $recordData['accountPrimaryGroup']['id'];
         }
         
         $account = new Tinebase_Model_FullUser();

@@ -92,7 +92,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      */
     public static function getSharedAccountData($sendgrant = true, $data = [])
     {
-        $accountdata = array_merge([
+        return array_merge([
             'name' => 'unittest shared account',
             'email' => 'shared' . Tinebase_Record_Abstract::generateUID(6) . '@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_SHARED,
@@ -107,7 +107,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
                 ]
             ]
         ], $data);
-        return $accountdata;
     }
 
     /**

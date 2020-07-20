@@ -4,8 +4,8 @@
  *
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -25,6 +25,7 @@ class Admin_Frontend_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Frontend All Tests');
         $suite->addTestSuite(Admin_Frontend_JsonTest::class);
         $suite->addTestSuite(Admin_Frontend_Json_EmailAccountTest::class);
+        $suite->addTestSuite(Admin_Frontend_Json_UserTest::class);
         return $suite;
     }
 }
