@@ -294,8 +294,8 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                     self::TYPE                  => self::TYPE_RELATION,
                     self::LABEL                 => 'Stream', // _('Stream')
                     self::CONFIG                => [
-                        self::APP_NAME              => HumanResources_Config::APP_NAME,
-                        self::MODEL_NAME            => HumanResources_Model_Stream::MODEL_NAME_PART,
+                        self::APP_NAME              => 'HumanResources',
+                        self::MODEL_NAME            => 'Stream',
                         self::TYPE                  => Timetracker_Model_Timeaccount::MODEL_NAME_PART
                     ]
                 ]
@@ -318,10 +318,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         array('relatedApp' => 'Sales', 'relatedModel' => 'Contract', 'config' => array(
             array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '1:0'), // _('Time Account')
         )
-        ),
-        [
-            'relatedApp' => HumanResources_Config::APP_NAME,
-            'relatedModel' => HumanResources_Model_Stream::MODEL_NAME_PART,
+        ), [
+            'relatedApp' => 'HumanResources',
+            'relatedModel' => 'Stream',
             'config' => [
                 ['type' => self::MODEL_NAME_PART, 'degree' => Tinebase_Model_Relation::DEGREE_SIBLING, 'max' => '1:0'],
             ],
