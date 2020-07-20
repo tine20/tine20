@@ -156,7 +156,14 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
                 case 'emailAddress';
                     $_ldapData[$ldapAttribute] = $_user->accountEmailAddress;
                     break;
-                    
+
+                case 'emailAliases':
+                case 'emailForwards':
+                    $_ldapData[$ldapAttribute] = $_user->{$objectProperty} instanceof Tinebase_Record_RecordSet
+                        ? $_user->{$objectProperty}->email
+                        : $_user->{$objectProperty};
+                    break;
+
                 default:
                     $_ldapData[$ldapAttribute] = $mailSettings->{$objectProperty};
                     break;

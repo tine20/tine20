@@ -104,14 +104,14 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $this->assertTrue($testUser instanceof Tinebase_Model_FullUser);
         $this->assertTrue(isset($testUser->smtpUser), 'no smtpUser data found in ' . print_r($testUser->toArray(),
                 TRUE));
-        $this->assertTrue(in_array('unittest@' . $this->_mailDomain, $testUser->smtpUser->emailForwards),
+        $this->assertTrue(in_array('unittest@' . $this->_mailDomain, $testUser->smtpUser->emailForwards->email),
             'forwards not found');
-        $this->assertTrue(in_array('test@' . $this->_mailDomain, $testUser->smtpUser->emailForwards),
+        $this->assertTrue(in_array('test@' . $this->_mailDomain, $testUser->smtpUser->emailForwards->email),
             'forwards not found');
 
         $expectedAliases = ['bla@' . $this->_mailDomain, 'blubb@' . $this->_mailDomain];
-        $foundAliases = array_filter($testUser->smtpUser->emailAliases, function($alias) use ($expectedAliases) {
-            return (in_array($alias['email'], $expectedAliases));
+        $foundAliases = array_filter($testUser->smtpUser->emailAliases->email, function($email) use ($expectedAliases) {
+            return (in_array($email, $expectedAliases));
         });
         $this->assertEquals(2, count($foundAliases),
             'aliases not found: ' . print_r($expectedAliases, true) . ' in '
@@ -143,19 +143,24 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
 
         // update user
         $user->smtpUser->emailForwardOnly = 1;
-        $user->smtpUser->emailAliases = array('bla@' . $this->_mailDomain);
-        $user->smtpUser->emailForwards = array();
+        $user->smtpUser->emailAliases = new Tinebase_Record_RecordSet(Tinebase_Model_EmailUser_Alias::class, [[
+            Tinebase_Model_EmailUser_Alias::FLDS_EMAIL => 'bla@' . $this->_mailDomain,
+            Tinebase_Model_EmailUser_Alias::FLDS_DISPATCH_ADDRESS => true,
+        ]]);
+        $user->smtpUser->emailForwards = new Tinebase_Record_RecordSet(Tinebase_Model_EmailUser_Forward::class);
         $user->accountEmailAddress = 'j.smith@' . $this->_mailDomain;
 
         $testUser = $this->_backend->updateUser($user);
 
-        $this->assertEquals(array(), $testUser->smtpUser->emailForwards, 'forwards should be empty');
+        $this->assertEquals(0, count($testUser->smtpUser->emailForwards), 'forwards should be empty');
+        $this->assertEquals(1, count($testUser->smtpUser->emailAliases), 'should have 1 alias: '
+            . print_r($testUser->smtpUser->toArray(), true));
         $this->assertEquals([
             ['email' => 'bla@' . $this->_mailDomain, 'dispatch_address' => 1]
-        ], $testUser->smtpUser->emailAliases, 'aliases mismatch');
+        ], $testUser->smtpUser->emailAliases->toArray(), 'aliases mismatch');
         $this->assertEquals(false, $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals('j.smith@' . $this->_mailDomain, $testUser->smtpUser->emailAddress);
-        $this->assertEquals($testUser->smtpUser->emailAliases, $testUser->emailUser->emailAliases,
+        $this->assertEquals($testUser->smtpUser->emailAliases->email, $testUser->emailUser->emailAliases->email,
             'smtp user data needs to be merged in email user: ' . print_r($testUser->emailUser->toArray(), TRUE));
     }
 
@@ -306,9 +311,12 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $user = $this->testAddUser();
         $aliases = $forwards = array();
         for ($i = 0; $i < 100; $i++) {
-            $aliases[] = 'alias_blablablablablablablablalbalbbl' . $i . '@' . $this->_mailDomain;
+            $aliases[] = [
+                Tinebase_Model_EmailUser_Alias::FLDS_EMAIL => 'alias_blablablablablablablablalbalbbl' . $i . '@' . $this->_mailDomain,
+                Tinebase_Model_EmailUser_Alias::FLDS_DISPATCH_ADDRESS => true,
+            ];
         }
-        $user->smtpUser->emailAliases = $aliases;
+        $user->smtpUser->emailAliases = new Tinebase_Record_RecordSet(Tinebase_Model_EmailUser_Alias::class, $aliases);
         for ($i = 0; $i < 100; $i++) {
             $forwards[] = 'forward_blablablablablablablablalbalbbl' . $i . '@' . $this->_mailDomain;
         }
@@ -326,22 +334,20 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     public function testAliasEqualsDefaultMail()
     {
         $user = $this->testAddUser();
-        $aliases = $user->emailUser->emailAliases;
-        $aliases[] = [
+        $user->smtpUser->emailAliases->addRecord(new Tinebase_Model_EmailUser_Alias([
             'email' => $user->accountEmailAddress,
             'dispatch_address' => 1,
-        ];
-        $user->smtpUser->emailAliases = $aliases;
+        ]));
         try {
             $updatedUser = $this->_backend->updateUser($user);
-            self::fail('alias should not be allowed to equal email address' . print_r($updatedUser->toArray(), true));
+            self::fail('alias should not be allowed to equal email address: ' . print_r($updatedUser->toArray(), true));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
         }
 
-        $user->accountEmailAddress = $user->emailUser->emailAliases[0]['email'];
+        $user->accountEmailAddress = $user->emailUser->emailAliases->getFirstRecord()->email;
         try {
             $updatedUser = $this->_backend->updateUser($user);
-            self::fail('alias should not be allowed to equal email address' . print_r($updatedUser->toArray(), true));
+            self::fail('alias should not be allowed to equal email address: ' . print_r($updatedUser->toArray(), true));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
         }
     }
@@ -349,15 +355,13 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     public function testAliasesDispatchAddressFlag()
     {
         $user = $this->testAddUser();
-        $aliases = $user->emailUser->emailAliases;
         foreach ([0, '0', false] as $inputvalue) {
-            foreach ($aliases as &$alias) {
-                $alias['dispatch_address'] = $inputvalue;
+            foreach ($user->smtpUser->emailAliases as $alias) {
+                $alias->dispatch_address = $inputvalue;
             }
-            $user->smtpUser->emailAliases = $aliases;
             $updatedUser = $this->_backend->updateUser($user);
-            foreach ($updatedUser->emailUser->emailAliases as $alias) {
-                self::assertEquals(0, $alias['dispatch_address']);
+            foreach ($updatedUser->smtpUser->emailAliases as $alias) {
+                self::assertEquals(0, $alias->dispatch_address, print_r($alias->toArray(), true));
             }
         }
     }

@@ -381,26 +381,27 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         }
             
         foreach ($_smtpSettings[$this->_propertyMapping['emailAliases']] as $aliasAddress) {
-            // backward compatibility
-            if (! is_array($aliasAddress)) {
-                $aliasAddress = [
+            if (is_string($aliasAddress)) {
+                $aliasAddress = new Tinebase_Model_EmailUser_Alias([
                     'email' => $aliasAddress,
-                    'dispatch_address' => 1,
-                ];
+                    'dispatch_address' => true,
+                ]);
+            } else if (is_array($aliasAddress)) {
+                $aliasAddress = new Tinebase_Model_EmailUser_Alias($aliasAddress);
             }
-            if ($aliasAddress['email'] === $_smtpSettings['email']) {
+            if ($aliasAddress->email === $_smtpSettings['email']) {
                 throw new Tinebase_Exception_SystemGeneric('It is not allowed to set an alias equal to the main email address');
             }
 
             // check if in primary or secondary domains
-            if (! empty($aliasAddress['email']) && $this->_checkDomain($aliasAddress['email'])) {
+            if (! empty($aliasAddress->email) && $this->_checkDomain($aliasAddress->email)) {
                 if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
                     // create alias -> email
                     $this->_addDestination(array(
                         $userIdField  => $userId,
-                        'source'      => $aliasAddress['email'],
+                        'source'      => $aliasAddress->email,
                         'destination' => $_smtpSettings[$this->_propertyMapping['emailAddress']],
-                        'dispatch_address' => $aliasAddress['dispatch_address'],
+                        'dispatch_address' => $aliasAddress->dispatch_address,
                     ));
                 } else if ($this->_hasForwards($_smtpSettings)) {
                     $this->_addForwards($userId, $aliasAddress, $_smtpSettings[$this->_propertyMapping['emailForwards']]);
@@ -432,11 +433,19 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     {
         foreach ($forwards as $forwardAddress) {
             if (! empty($forwardAddress)) {
+                if (is_string($forwardAddress)) {
+                    $forwardAddress = new Tinebase_Model_EmailUser_Forward([
+                        'email' => $forwardAddress,
+                    ]);
+                } else if (is_array($forwardAddress)) {
+                    $forwardAddress = new Tinebase_Model_EmailUser_Forward($forwardAddress);
+                }
+
                 // create email -> forward
                 $this->_addDestination(array(
                     $userIdField  => $userId,
                     'source'      => isset($source['email']) ? $source['email'] : $source,
-                    'destination' => $forwardAddress,
+                    'destination' => $forwardAddress->email,
                     'dispatch_address' => isset($source['dispatch_address']) ? $source['dispatch_address'] : 1
                 ));
             }
@@ -556,14 +565,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         $stmt->closeCursor();
-        
-        $aliases = ($emailUser->emailAliases && is_array($emailUser->emailAliases)) ? $emailUser->emailAliases : array();
-        $sources = array_map(function($alias) {
-            return $alias['email'];
-        }, $aliases);
+
+        $sources = $emailUser->emailAliases ? $emailUser->emailAliases->email : [];
         foreach ($queryResult as $destination) {
             if ($destination['source'] !== $emailUser->emailAddress
-                && in_array($destination['destination'], $emailUser->emailForwards)
+                && in_array($destination['destination'], $emailUser->emailForwards->email)
                 && ! in_array($destination['source'], $sources)
             ) {
                 $aliases[] = [
@@ -573,7 +579,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                 $sources[] = $destination['source'];
             }
         }
-        $emailUser->emailAliases = $aliases;
+        $emailUser->emailAliases = new Tinebase_Record_RecordSet(
+            Tinebase_Model_EmailUser_Alias::class,
+            $aliases
+        );
     }
 
     /**
@@ -635,17 +644,16 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                             
                         case 'emailAliases':
                             $rawData[$property] = array();
-                            
-                            foreach((array)$value as $address) {
-                                $email = isset($address['email']) ? $address['email'] : $address;
-                                if ($this->_checkDomain($email) === true) {
-                                    $rawData[$property][] = $address;
+
+                            foreach ($value as $address) {
+                                if ($this->_checkDomain($address->email) === true) {
+                                    $rawData[$property][] = $address->toArray();
                                 }
                             }
                             break;
                             
                         case 'emailForwards':
-                            $rawData[$property] = is_array($value) ? $value : array();
+                            $rawData[$property] = $value instanceof Tinebase_Record_RecordSet ? $value->email : $value;
                             break;
 
                         case 'emailForwardOnly':
