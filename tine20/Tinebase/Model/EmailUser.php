@@ -115,15 +115,37 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
                 $_data[$arrayField] = explode(',', preg_replace('/ /', '', $_data[$arrayField]));
             }
         }
+
+        if (isset($_data['emailAddress'])) {
+            $_data['emailAddress'] = Tinebase_Helper::convertDomainToPunycode($_data['emailAddress']);
+        }
         
         parent::setFromArray($_data);
     }
 
+    /**
+     * @return array
+     */
     public function getAliasesAsEmails()
     {
         $result = [];
         foreach ($this->emailAliases as $alias) {
             $result[] = is_array($alias) ? $alias['email'] : $alias;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param bool $_recursive
+     * @return array
+     */
+    public function toArray($_recursive = TRUE)
+    {
+        $result = parent::toArray($_recursive);
+
+        if ($this->emailAddress) {
+            $result['emailAddress'] = Tinebase_Helper::convertDomainToUnicode($this->emailAddress);
         }
 
         return $result;

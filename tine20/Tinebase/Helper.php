@@ -520,11 +520,17 @@ class Tinebase_Helper
      */
     public static function convertDomainToPunycode($domain)
     {
+        return self::convertDomain($domain, 'idn_to_ascii');
+    }
+
+    public static function convertDomain($domain, $converterFunction)
+    {
         if (strpos($domain, '@') !== false) {
             list($emailpart, $domainpart) = explode('@', $domain);
-            return $emailpart . '@' . idn_to_ascii($domainpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+            return call_user_func_array($converterFunction, [$emailpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46])
+                . '@' . call_user_func_array($converterFunction, [$domainpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46]);
         } else {
-            return idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+            return call_user_func_array($converterFunction, [$domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46]);
         }
     }
 
@@ -536,11 +542,6 @@ class Tinebase_Helper
      */
     public static function convertDomainToUnicode($domain)
     {
-        if (strpos($domain, '@') !== false) {
-            list($emailpart, $domainpart) = explode('@', $domain);
-            return $emailpart . '@' . idn_to_utf8($domainpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
-        } else {
-            return idn_to_utf8($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
-        }
+        return self::convertDomain($domain, 'idn_to_utf8');
     }
 }

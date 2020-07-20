@@ -424,21 +424,32 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
             ? $smtpConfig['primarydomain'] : '';
     }
 
-    public function testAdditionalDomainInUserAccount()
+    public function testAdditionalDomainInUserAccount($domain = 'anotherdomain.com', $localPart = 'somemail')
     {
         $this->_skipWithoutEmailSystemAccountConfig();
 
-        $addDomain = 'anotherdomain.com';
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
-        $smtpConfig->additionaldomains = $addDomain;
+
+        $smtpConfig->additionaldomains = Tinebase_Helper::convertDomainToPunycode($domain);
         Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
 
-        $user = $this->_createTestUser()->toArray();
-        $user['accountEmailAddress'] = 'somemail@' . $addDomain;
-        $updatedUser = $this->_json->saveUser($user);
-        self::assertEquals($user['accountEmailAddress'], $updatedUser['accountEmailAddress']);
+        $user = $this->_createTestUser();
+        $userArray = $user->toArray();
+        $userArray['accountEmailAddress'] = $localPart . '@' . $domain;
+        $updatedUser = $this->_json->saveUser($userArray);
+        self::assertEquals($userArray['accountEmailAddress'], $updatedUser['accountEmailAddress']);
 
-        // TODO email user should be removed afterwards
+        // check if smtp address is empty - it should be because email address is not in primary/secondary domains!
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        $xpropsUser = clone($user);
+        Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $xpropsUser);
+        $userInSmtpBackend = $emailUserBackend->getRawUserById($xpropsUser);
+        self::assertFalse($userInSmtpBackend);
+    }
+
+    public function testUmlautsInDomainAndEmailAddress()
+    {
+        $this->testAdditionalDomainInUserAccount('myümläutdomain.de', 'müller');
     }
 
     /**
