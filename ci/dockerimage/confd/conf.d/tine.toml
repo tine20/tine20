@@ -33,5 +33,7 @@ keys = [
     "/session/path",
     "/credentialcachesharedkey",
     "/filesystem/index_content",
-    "/logger/filename"
+    "/logger/filename",
+    "/logger/additionalwriters/filename",
+    "/logger/additionalwriters/priority"
 ]

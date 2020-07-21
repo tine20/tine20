@@ -73,7 +73,6 @@ RUN addgroup -S -g 150 tine20 && \
 RUN mkdir -p /etc/confd/
 COPY ci/dockerimage/confd/conf.d /etc/confd/conf.d
 COPY ci/dockerimage/confd/templates/ /etc/confd/templates
-COPY ci/dockerimage/confd/cli.config.inc.php /etc/tine20/
 
 RUN mkdir -p /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d
