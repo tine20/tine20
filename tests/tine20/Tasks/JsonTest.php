@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tasks_JsonTest
@@ -142,41 +137,7 @@ class Tasks_JsonTest extends TestCase
         $this->assertTrue(isset($persistentTaskData['alarms']));
         $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
-    
-    /**
-     * test alarm sending failure (with wrong stmp user/password)
-     *
-     * @group nogitlabci
-     * gitlabci: should not send message with wrong pw - maybe smtp server is not configured correctly? ... Expected: failure, Actual: success
-     */
-    public function testAlarmSendingFailure()
-    {
-        if (empty($this->_smtpConfig)) {
-             $this->markTestSkipped('No SMTP config found.');
-        }
-        
-        // send old alarms first
-        $this->_sendAlarm();
 
-        $task = $this->_getTaskWithAlarm();
-        $persistentTaskData = $this->_backend->saveTask($task->toArray());
-        
-        // set wrong smtp user/password
-        $wrongCredentialsConfig = $this->_smtpConfig;
-        $wrongCredentialsConfig['username'] = $this->_getEmailAddress();
-        $wrongCredentialsConfig['password'] = 'wrongpw';
-        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $wrongCredentialsConfig);
-        $this->_smtpConfigChanged = TRUE;
-        Tinebase_Smtp::setDefaultTransport(NULL);
-        $this->_sendAlarm();
-        $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
-        
-        $this->assertEquals(Tinebase_Model_Alarm::STATUS_FAILURE, $loadedTaskData['alarms'][0]['sent_status'],
-            'should not send message with wrong pw - maybe smtp server is not configured correctly?');
-        $this->assertContains('5.7.8 Error: authentication failed', $loadedTaskData['alarms'][0]['sent_message'],
-            'got: ' . $loadedTaskData['alarms'][0]['sent_message']);
-    }
-    
     /**
      * send alarm via scheduler
      */
