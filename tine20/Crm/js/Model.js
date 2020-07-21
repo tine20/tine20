@@ -31,7 +31,7 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.gener
         {name: 'probableTurnover',   type: 'int', omitDuplicateResolving: true},
         {name: 'end_scheduled', type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true},
         {name: 'resubmission_date', type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true},
-
+        {name: 'mute'},
         {name: 'lastread', omitDuplicateResolving: true},
         {name: 'lastreader', omitDuplicateResolving: true},
         {name: 'responsible', omitDuplicateResolving: true},
@@ -78,6 +78,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
         container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
         probability: 0,
         turnover: 0,
+        mute: true, // @todo use the user/config ?
         relations: [{
             type: 'RESPONSIBLE',
             related_record: Tine.Tinebase.registry.get('userContact')

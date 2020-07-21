@@ -726,7 +726,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $mods = $this->_writeModLog($createdRecordWithRelated, null);
             $this->_setSystemNotes($createdRecordWithRelated, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $mods);
 
-            if ($this->sendNotifications()) {
+            if ($this->sendNotifications() && !$_record->mute) {
                 $this->doSendNotifications($createdRecord, Tinebase_Core::getUser(), 'created');
             }
             

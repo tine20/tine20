@@ -235,6 +235,26 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $this->assertContains("testNotificationTag\n", $bodyText);
         $this->assertContains(sprintf($changeMessage, 'description', 'Description', 'updated description'), $bodyText);
     }
+
+    public function testMuteNotification()
+    {
+        self::flushMailer();
+        $lead = $this->_getLead(true);
+        $lead->relations = array(new Tinebase_Model_Relation(array(
+            'type' => 'CUSTOMER',
+            'related_record' => $this->_getContact(),
+            'own_model' => 'Crm_Model_Lead',
+            'own_backend' => 'Sql',
+            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model' => 'Addressbook_Model_Contact',
+            'related_backend' => Tasks_Backend_Factory::SQL,
+        ), TRUE));
+
+        $savedLead = $this->_leadController->create($lead);
+
+        $messages = self::getMessages();
+        $this->assertEquals(0, count($messages));
+    }
     
     /**
      * get contact
