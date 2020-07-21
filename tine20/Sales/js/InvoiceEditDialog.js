@@ -381,6 +381,25 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
+     * Calculate Tax and Tax percent from Gross and Net
+     */
+    calcTaxFromGross: function() {
+        var grossPrice = parseFloat(this.priceGrossField.getValue());
+        var netPrice   = parseFloat(this.priceNetField.getValue());
+        if (!netPrice) {
+            var salesTax = parseFloat(this.salesTaxField.getValue());
+            var tax = grossPrice / salesTax;
+            this.priceTaxField.setValue(tax);
+        } else {
+            var tax = grossPrice - netPrice;
+            var taxPercent = tax * 100 / netPrice;
+
+            this.priceTaxField.setValue(tax);
+            this.salesTaxField.setValue(taxPercent.toFixed(2));
+        }
+    },
+
+    /**
      * calculates price gross by price net and tax
      */
     calcTaxPercent: function() {
@@ -397,9 +416,25 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onUpdatePriceTax: function() {
         this.calcTaxPercent();
         this.calcGross();
-        this.calcTotal();
+        this.calcNet();
     },
-    
+
+    onUpdatePriceGross: function() {
+        this.calcTaxFromGross();
+        this.calcNet();
+    },
+
+    /**
+     * calculates total prices by price gross, additional price gross, discount
+     */
+    calcNet: function() {
+        const priceGross = parseFloat(this.priceGrossField.getValue());
+        const tax = parseFloat(this.priceTaxField.getValue());
+        let netPrice = priceGross - tax;
+
+        this.priceNetField.setValue(netPrice);
+    },
+
     /**
      * returns dialog
      * 
@@ -455,6 +490,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: this.app.i18n._('Price Gross'),
             name: 'price_gross',
             columnWidth: 1/4,
+            listeners: {
+                scope: this,
+                blur: this.onUpdatePriceGross.createDelegate(this)
+            }
         });
         
         this.salesTaxField = Ext.create({

@@ -106,6 +106,11 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.calcTotal();
     },
     
+    onUpdatePriceGross: function() {
+        this.calcTaxFromGross();
+        this.calcTotal();
+    },
+    
     onUpdateDateOfInvoice: function() {
         var dateOfInvoice = this.dateOfInvoiceField.getValue();
         var dueInDays     = parseInt(this.dueInDaysField.getValue());
@@ -183,6 +188,22 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }
         
         this.priceTaxField.setValue(roundedTax);
+    },
+
+    /**
+     * Calculate Tax and Tax percent from Gross and Net
+     */
+    calcTaxFromGross: function() {
+        var grossPrice = parseFloat(this.priceGrossField.getValue());
+        var netPrice   = parseFloat(this.priceNetField.getValue());
+        if (!netPrice) {
+            return;
+        }
+        var tax = grossPrice - netPrice;
+        var taxPercent =  tax * 100 / netPrice;
+        
+        this.priceTaxField.setValue(tax);
+        this.salesTaxField.setValue(taxPercent.toFixed(2));
     },
     
     /**
@@ -276,7 +297,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             columnWidth: 1/4,
             listeners: {
                 scope: this,
-                blur: this.calcGross.createDelegate(this)
+                blur: this.onUpdatePriceGross.createDelegate(this)
             }
         });
 
@@ -350,7 +371,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             fieldLabel: this.app.i18n._('Discount (%)'),
             columnWidth: 1/4,
             value: 0,
-            regex: /^[0-9]+\.?[0-9]*$/,
+            suffix: ' %',
             listeners: {
                 scope: this,
                 spin: this.calcTotal.createDelegate(this),
