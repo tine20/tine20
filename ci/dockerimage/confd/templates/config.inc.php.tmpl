@@ -8,6 +8,14 @@ return array(
         'active' => true,
         'filename' => '{{getv "/logger/filename" "/var/log/tine20/tine20.log"}}',
         'priority' => {{getv "/logger/priority" "5"}},
+        'logruntime' => true,
+        'logdifftime' => true,
+        'traceQueryOrigins' => true,
+        'additionalWriters' => array(array(
+            'active' => true,
+            'filename' => '{{getv "/logger/additionalwriters/filename" "php://stdout"}}',
+            'priority' => {{getv "/logger/additionalwriters/priority" "5"}},
+        )),
     ),
 
     'filesdir'  => '{{getv "/filesdir" "/var/lib/tine20/files"}}',
