@@ -80,7 +80,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
@@ -92,7 +92,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_SERVERTESTS == "true"
       when: on_success
@@ -110,7 +110,7 @@ workflow:
 "phpstan: code analyses":
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   script:
     - cd $TINE20ROOT
     - composer require phpstan/phpstan
@@ -146,7 +146,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
@@ -158,7 +158,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
       when: on_success
@@ -178,7 +178,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test_with_ldap
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   script:
     - cd $TINE20ROOT/tests/tine20/
     - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap --filter "${PHPUNIT_FILTER}" AllTests
