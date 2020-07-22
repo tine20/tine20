@@ -196,7 +196,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     {
         $account = $this->_createTestUser();
         $internalContainer = $this->_removeGrantsOfInternalContainer($account);
-        $account = $this->_json->getUser($account['accountId']);
+        $account = $this->_json->getUser($account->getId());
 
         self::assertTrue(isset($account['groups']['results']), 'account got no groups: ' . print_r($account, true));
         $account['groups'] = array(Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(), $account['groups']['results'][0]['id']);
@@ -210,10 +210,12 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     /**
      * @param Tinebase_Model_FullUser $account
-     * @group nogitlabci_ldap
+     * @return Tinebase_Model_Container
      */
     protected function _removeGrantsOfInternalContainer($account)
     {
+        self::assertNotEmpty($account->container_id, print_r($account->toArray(), true));
+
         /** @var Tinebase_Model_Container $internalContainer */
         $internalContainer = Tinebase_Container::getInstance()->get($account->container_id);
         $this->_originalGrants[$internalContainer->getId()] = Tinebase_Container::getInstance()->getGrantsOfContainer(
