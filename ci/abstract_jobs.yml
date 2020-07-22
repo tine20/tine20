@@ -63,7 +63,7 @@
     - supervisord
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci --filter "${PHPUNIT_FILTER}" AllTests
+    - if test -z "${PHPUNIT_FILTER}"; then php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllTests; else php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --filter "${PHPUNIT_FILTER}" --exclude-group longrunning,needsbuild,nogitlabci AllTests; fi
   artifacts:
     paths:
       - tine20.log
