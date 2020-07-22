@@ -60,11 +60,11 @@ class AllTests
             }
         }
 
-        $split_suites = array_chunk($suites, intval(count($suites)/$node_total));
-
-        foreach ($split_suites[$node_index - 1] as $name) {
-            $className = $name . '_AllTests';
-            $suite->addTest($className::suite());
+        foreach ($suites as $i => $name) {
+            if ($i % $node_total === $node_index - 1) {
+                $className = $name . '_AllTests';
+                $suite->addTest($className::suite());
+            }
         }
 
         return $suite;
