@@ -151,7 +151,7 @@ class Crm_Import_CsvTest extends ImportTestCase
 
         // assert emails for responsibles
         $messages = self::getMessages();
-        $this->assertGreaterThan(1, count($messages));
+        $this->assertGreaterThanOrEqual(1, count($messages));
 
         $translate = Tinebase_Translation::getTranslation('Crm');
         $importNotifications = array();
