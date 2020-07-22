@@ -18,7 +18,12 @@
   alias: ldap
   entrypoint: ["/container/tool/run", "--copy-service"]
 
-.abstract_jobs.php_unit_test:
+# $ARG_IMAGE e.g. test-built-commit
+# $ARG_EXCLUDE_GROUP optional e.g. longrunning,needsbuild,nogitlabci
+# $ARG_TEST e.g. AllTests
+# $ARG_FILTER optional e.g. CashBook
+# $ARG_GROUP optional e.g nogitlab
+.abstract_jobs.php_unit:
   variables:
     MYSQL_HOST: db
     MYSQL_ROOT_PASSWORD: rootpw
@@ -40,39 +45,48 @@
     TINE20_CACHING_REDIS_HOST: cache
     TINE20_SESSION_BACKEND: Redis
     TINE20_SESSION_HOST: cache
-    TINE20_APPLICATION_TO_INSTALL: "all"
-    TINE20_LOGGER_FILENAME: "$CI_PROJECT_DIR/tine20.log"
-    TINE20_LOGGER_PRIORITY: "7"
+    TINE20_APPLICATION_TO_INSTALL: all
+    TINE20_LOGGER_FILENAME: $CI_PROJECT_DIR/tine20.log
+    TINE20_LOGGER_PRIORITY: 7
     TINE20_EMAIL_IMAP: "active:true,host:dovecot,port:143,useSystemAccount:1,ssl:none,verifyPeer:0,backend:dovecot_imap,domain:mail.test,instanceName:tine.test,dovecot_host:db,dovecot_dbname:dovecot,dovecot_username:tine20,dovecot_password:tine20pw,dovecot_uid:vmail,dovecot_gid:vmail,dovecot_home:/var/vmail/%d/%u,dovecot_scheme:SSHA256"
     TINE20_EMAIL_SMTP: "active:true,backend:postfix,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfix_host:db,postfix_dbname:postfix,postfix_username:tine20,postfix_password:tine20pw"
     TINE20_EMAIL_SIEVE: "hostname:dovecot,port:4190,ssl:none"
-    NODE_TOTAL: "$CI_NODE_TOTAL"
-    NODE_INDEX: "$CI_NODE_INDEX"
+    NODE_TOTAL: $CI_NODE_TOTAL
+    NODE_INDEX: $CI_NODE_INDEX
     TINE20_ACCEPTED_TERMS_VERSION: 1000
+    ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci
+    ARG_TEST: AllTests
+    ARG_FILTER: $PHPUNIT_FILTER
   services:
     - *abstract_jobs-db_service
     - *abstract_jobs-redis_service
     - *abstract_jobs-postfix_service
     - *abstract_jobs-dovecot_service
   before_script:
-    - cp /etc/hosts "${CI_PROJECT_DIR}/hosts_$CI_JOB_ID"
+    - cp /etc/hosts "${CI_PROJECT_DIR}/hosts_${CI_JOB_ID}"
     - /usr/sbin/confd -onetime -backend env
     - tine20_await_db
     - tine20_setup_mail
     - tine20_install
     - supervisord
+  image:
+    name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}
   script:
-    - cd $TINE20ROOT/tests/tine20/
-    - if test -z "${PHPUNIT_FILTER}"; then php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllTests; else php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --filter "${PHPUNIT_FILTER}" --exclude-group longrunning,needsbuild,nogitlabci AllTests; fi
+    - cd ${TINE20ROOT}/tests/tine20/
+    - cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --debug";
+      if test -n "${ARG_FILTER}"; then cmd="${cmd} --filter ${ARG_FILTER}"; fi;
+      if test -n "${ARG_EXCLUDE_GROUP}"; then cmd="${cmd} --exclude-group ${ARG_EXCLUDE_GROUP}"; fi;
+      if test -n "${ARG_GROUP}"; then cmd="${cmd} --group ${ARG_GROUP}"; fi;
+      cmd="${cmd} ${ARG_TEST}";
+      ${cmd}
   artifacts:
     paths:
       - tine20.log
     expire_in: 1 day
     when: always
 
-.abstract_jobs.php_unit_test_with_ldap:
-  extends: .abstract_jobs.php_unit_test
-  stage: test_built
+.abstract_jobs.php_unit_ldap:
+  extends: .abstract_jobs.php_unit
   variables:
     LDAP_ORGANISATION: "Tine20 dev"
     LDAP_DOMAIN: "tine.test"
