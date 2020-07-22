@@ -434,9 +434,11 @@ class Addressbook_JsonTest extends TestCase
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    public function testGetPrivateContactDataOfOwnContact() {
+    public function testGetPrivateContactDataOfOwnContact()
+    {
         $originalUser = Tinebase_Core::getUser();
-        $internalContainer = Tinebase_Container::getInstance()->getContainerByName(Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        $internalContainer = Tinebase_Container::getInstance()->getContainerByName(
+            Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         
         Tinebase_Core::setUser($this->_personas['sclever']);
         $this->assertFalse(Tinebase_Core::getUser()->hasGrant($internalContainer->getId(), Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));

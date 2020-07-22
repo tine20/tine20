@@ -214,10 +214,9 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      */
     protected function _removeGrantsOfInternalContainer($account)
     {
-        self::assertNotEmpty($account->container_id, print_r($account->toArray(), true));
-
         /** @var Tinebase_Model_Container $internalContainer */
-        $internalContainer = Tinebase_Container::getInstance()->get($account->container_id);
+        $internalContainer = Tinebase_Container::getInstance()->getContainerByName(
+            Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         $this->_originalGrants[$internalContainer->getId()] = Tinebase_Container::getInstance()->getGrantsOfContainer(
             $internalContainer, true);
         Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet(
