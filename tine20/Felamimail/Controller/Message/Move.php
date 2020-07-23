@@ -88,7 +88,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $result = (! empty($iterateResult['results'])) ? array_pop($iterateResult['results']) : new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         } else {
             $messages = $this->_convertToRecordSet($_messages, TRUE);
-            $result = $this->processMoveIteration($messages, $targetFolder);
+            $result = $this->processMoveIteration($messages, $targetFolder, $keepOriginalMessages);
         }
         
         return $result;
