@@ -498,14 +498,28 @@ class Tinebase_Core
         Tinebase_Core::setupDbLogger();
     }
 
+    /**
+     * setup the database logger
+     *
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Log_Exception
+     */
     protected static function setupDbLogger()
     {
         $config = self::getConfig();
         
-        if ($config->dblogger) {
+        if ($config->dblogger && $config->dblogger->active) {
             $logger = Tinebase_Core::getLogger();
-            $writer = $logger->getWriter($config->dblogger);
-            $writer->setFormatter($logger->getFormatter($config->dblogger));
+            $loggerConfig = new Zend_Config(
+                [
+                    'database' => true,
+                    'priority' => $config->dblogger->priority,
+                    'active' => true,
+                    'formatter' => 'db',
+                ]
+            );
+            $writer = $logger->getWriter($loggerConfig);
+            $writer->setFormatter($logger->getFormatter($loggerConfig));
             $logger->addWriter($writer);
         }
     }
