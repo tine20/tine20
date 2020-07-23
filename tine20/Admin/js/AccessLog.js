@@ -125,7 +125,7 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * returns cm
      * @private
      */
-    getColumns: function(){
+    getColumns: function() {
         return [
             { header: this.app.i18n._('Session ID'), id: 'sessionid', dataIndex: 'sessionid', width: 200, hidden: true},
             { header: this.app.i18n._('Login Name'), id: 'login_name', dataIndex: 'login_name'},
@@ -134,6 +134,7 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Login Time'), id: 'li', dataIndex: 'li', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Logout Time'), id: 'lo', dataIndex: 'lo', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Result'), id: 'result', dataIndex: 'result', width: 110, renderer: this.resultRenderer, scope: this},
+            { header: this.app.i18n._('User Agent'), id: 'user_agent', dataIndex: 'user_agent', width: 90},
             { header: this.app.i18n._('Client Type'), id: 'clienttype', dataIndex: 'clienttype', width: 50}
         ];
     },
