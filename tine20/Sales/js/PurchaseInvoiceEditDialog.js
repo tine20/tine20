@@ -325,7 +325,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         this.priceTaxField = new Ext.ux.form.MoneyField({
             xtype: 'extuxmoneyfield',
-            fieldLabel: this.app.i18n._('Price Tax'),
+            fieldLabel: this.app.i18n._('Taxes (VAT)'),
             name: 'price_tax',
             disabled: false,
             columnWidth: 1 / 4,

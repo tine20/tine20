@@ -1306,7 +1306,7 @@ msgstr "Deaktiviert"
 
 #: js/Applications.js:223
 msgid "Enabled"
-msgstr "Aktivirt"
+msgstr "Aktiviert"
 
 #: js/Applications.js:227
 #, python-brace-format

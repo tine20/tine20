@@ -193,52 +193,52 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $rightDescriptions = array(
             self::MANAGE_PRODUCTS => array(
-                'text'          => $translate->_('manage products'),
-                'description'   => $translate->_('add, edit and delete products'),
+                'text'          => $translate->_('Manage Products'),
+                'description'   => $translate->_('Add, edit and delete products.'),
             ),
             self::MANAGE_CONTRACTS => array(
-                'text'          => $translate->_('manage contracts'),
-                'description'   => $translate->_('add, edit and delete contracts'),
+                'text'          => $translate->_('Manage Contracts'),
+                'description'   => $translate->_('Add, edit and delete contracts.'),
             ),
             self::MANAGE_COSTCENTERS => array(
-                'text'          => $translate->_('manage cost centers'),
-                'description'   => $translate->_('add, edit and delete cost centers'),
+                'text'          => $translate->_('Manage Cost Centers'),
+                'description'   => $translate->_('Add, edit and delete cost centers.'),
             ),
             self::MANAGE_CUSTOMERS => array(
-                'text'          => $translate->_('manage customers'),
-                'description'   => $translate->_('add, edit and delete customers'),
+                'text'          => $translate->_('Manage Customers'),
+                'description'   => $translate->_('Add, edit and delete customers.'),
             ),
             self::MANAGE_SUPPLIERS => array(
-                'text'          => $translate->_('manage suppliers'),
-                'description'   => $translate->_('add, edit and delete suppliers'),
+                'text'          => $translate->_('Manage Suppliers'),
+                'description'   => $translate->_('Add, edit and delete suppliers.'),
             ),
             self::MANAGE_INVOICES => array(
                 'text'          => $translate->_('manage invoices'),
-                'description'   => $translate->_('add, edit and delete invoices'),
+                'description'   => $translate->_('Add, edit and delete invoices.'),
             ),
             self::MANAGE_DIVISIONS => array(
-                'text'          => $translate->_('manage divisions'),
-                'description'   => $translate->_('add, edit and delete divisions'),
+                'text'          => $translate->_('Manage Divisions'),
+                'description'   => $translate->_('Add, edit and delete divisions.'),
             ),
             self::MANAGE_ORDERCONFIRMATIONS => array(
-                'text'          => $translate->_('manage order confirmations'),
-                'description'   => $translate->_('add, edit and delete order confirmations'),
+                'text'          => $translate->_('Manage Order Confirmations'),
+                'description'   => $translate->_('Add, edit and delete order confirmations.'),
             ),
             self::MANAGE_OFFERS => array(
-                'text'          => $translate->_('manage offers'),
-                'description'   => $translate->_('add, edit and delete offers'),
+                'text'          => $translate->_('Manage Offers'),
+                'description'   => $translate->_('Add, edit and delete offers.'),
             ),
             self::MANAGE_PURCHASE_INVOICES => array(
-                'text'          => $translate->_('manage purchase invoices'),
-                'description'   => $translate->_('add, edit and delete purchase invoices'),
+                'text'          => $translate->_('Manage Purchase Invoices'),
+                'description'   => $translate->_('Add, edit and delete purchase invoices.'),
             ),
             self::CHANGE_OC_NUMBER => array(
-                'text'          => $translate->_('change number of an order confirmations'),
-                'description'   => $translate->_('allow to change the number of an order confirmation on update'),
+                'text'          => $translate->_('Change number of an order confirmations'),
+                'description'   => $translate->_('Allow changing the number of an order confirmation during the update.'),
             ),
             self::SET_INVOICE_NUMBER => array(
-                'text'          => $translate->_('set number of invoices'),
-                'description'   => $translate->_('allow to set the number of an invoice'),
+                'text'          => $translate->_('Set number of invoices'),
+                'description'   => $translate->_('Allow to set the number of an invoice.'),
             ),
         );
         
