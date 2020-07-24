@@ -333,6 +333,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onMuteNotificationOnce: function (button, e) {
         this.record.set('mute', button.pressed);
+        button.setText(Tine.Tinebase.appMgr.get('Calendar').i18n._(button.pressed ?
+            'Notifications are disabled' : 'Notifications are enabled'
+        ));
     },
 
     onPrint: function(printMode) {
@@ -364,7 +367,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.tbarItems = [new Ext.Button(this.action_freeTimeSearch), new Ext.Button(new Ext.Action({
-            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are enabled'),
             handler: this.onMuteNotificationOnce,
             iconCls: 'action_mute_noteification',
             disabled: false,
@@ -595,7 +598,28 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onAllDayChange(null, true);
         }
     },
-    
+
+    /**
+     * generic apply changes handler
+     * @param {Boolean} closeWindow
+     */
+    onApplyChanges: function(closeWindow) {
+        if (this.app.featureEnabled('featureEventNotificationConfirmation') && !this.record.get('mute')) {
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Send Notification?'),
+                this.app.i18n._('Changes to this event might send notifications. Press the button "Notifcation are enabled" to switch to "Notification are disabled"'),
+                function (button) {
+                    if (button === 'yes') {
+                        Tine.Crm.LeadEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+                    }
+                },
+                this
+            );
+            return;
+        }
+        Tine.Calendar.EventEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+    },
+
     onRecordUpdate: function() {
         Tine.Calendar.EventEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.attendeeGridPanel.onRecordUpdate(this.record);
