@@ -80,7 +80,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
@@ -92,20 +92,25 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_SERVERTESTS == "true"
       when: on_success
     - when: never
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci --filter "${PHPUNIT_FILTER}" AllServerTests
+    - if test -z "${PHPUNIT_FILTER}"; then php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci AllServerTests; else php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --filter "${PHPUNIT_FILTER}" --exclude-group longrunning,needsbuild,nogitlabci AllServerTests; fi
+  artifacts:
+    paths:
+      - tine20.log
+    expire_in: 1 day
+    when: always
   timeout: 30m
 
 "phpstan: code analyses":
   stage: build_and_source_test
   image:
-    name: "$REGISTRY/test-source-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   script:
     - cd $TINE20ROOT
     - composer require phpstan/phpstan
@@ -141,7 +146,7 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
@@ -153,14 +158,19 @@ workflow:
   extends: .abstract_jobs.php_unit_test
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   rules:
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
       when: on_success
     - when: never
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --group nogitlabci --filter "${PHPUNIT_FILTER}" AllTests
+    - if test -z "${PHPUNIT_FILTER}"; then php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --group nogitlabci AllTests; else php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --group nogitlabci --filter "${PHPUNIT_FILTER}" AllTests; fi
+  artifacts:
+    paths:
+      - tine20.log
+    expire_in: 1 day
+    when: always
   allow_failure: true
   parallel: 5
 
@@ -168,10 +178,15 @@ workflow:
   extends: .abstract_jobs.php_unit_test_with_ldap
   stage: built_test_and_deploy
   image:
-    name: "$REGISTRY/test-built-commit:$CI_COMMIT_SHA-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-built-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   script:
     - cd $TINE20ROOT/tests/tine20/
-    - php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap --filter "${PHPUNIT_FILTER}" AllTests
+    - if test -z "${PHPUNIT_FILTER}"; then php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --exclude-group longrunning,needsbuild,nogitlabci_ldap AllTests; else php $TINE20ROOT/tine20/vendor/bin/phpunit --color --debug --filter "${PHPUNIT_FILTER}" --exclude-group longrunning,needsbuild,nogitlabci_ldap AllTests; fi
+  artifacts:
+    paths:
+      - tine20.log
+    expire_in: 1 day
+    when: always
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
       when: on_success

@@ -726,7 +726,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $mods = $this->_writeModLog($createdRecordWithRelated, null);
             $this->_setSystemNotes($createdRecordWithRelated, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $mods);
 
-            if ($this->sendNotifications()) {
+            if ($this->sendNotifications() && !$_record->mute) {
                 $this->doSendNotifications($createdRecord, Tinebase_Core::getUser(), 'created');
             }
             
@@ -1903,7 +1903,8 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (count((array)$ids) != count($records)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
+                . ' of ' . count((array)$ids) . ' records exist.');
         }
         
         if (empty($records)) {

@@ -302,16 +302,32 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     /**
      * calls the editdialog for the model
      */
-    onEditInNewWindow: function() {
+    onEditInNewWindow: async function() {
         var _ = window.lodash,
             record = this.getRelatedRecord(this.getSelectionModel().getSelected()),
             openMethod = record ? _.get(Tine, record.appName + '.' + record.modelName + 'EditDialog.openWindow') : null;
 
         if (! record) {
             return;
-        }
+        }else if (record.get('type') === 'folder') {
+            const loadMask = new Ext.LoadMask(this.el, {msg: 'Loading ...'});
+            loadMask.show();
+            const nodeData = await Tine.Filemanager.getNode(record.id);
 
-        if (openMethod) {
+            const nodeRecord = Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
+
+            var win = Tine.WindowFactory.getWindow({
+                width: 1024,
+                height: 768,
+                name: 'Filemanager',
+                noParent: true,
+                url: nodeRecord.getSystemLink(),
+                modal: false,
+            });
+
+            loadMask.hide();
+            loadMask.destroy();
+        }else if (openMethod) {
             openMethod({
                 record: record,
                 mode: 'remote'
@@ -714,8 +730,14 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var split = value.split('_Model_');
         if (Tine[split[0]] && Tine[split[0]].Model) {
             var model = Tine[split[0]].Model[split[1]];
+            if (model.getPhpClassName() === 'Filemanager_Model_Node') {
+                return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName')
+                + model.getMeta('modelName') + '">&nbsp;</span>'
+                + model.getAppName();
+            }
             return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName')
-                + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
+                + model.getMeta('modelName') + '">&nbsp;</span>'
+                + model.getRecordName() + ' (' + model.getAppName() + ')';
         } else {
             meta.css = 'x-form-empty-field';
             return String.format(i18n._("No access to {0}"), split[0])
@@ -783,13 +805,17 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     /**
      * is called when selecting a record in the searchCombo (relationpickercombo)
      */
-    onAddRecordFromCombo: function(node) {
+    onAddRecordFromCombo: async function(node) {
         var record = null;
 
         if (this.getActiveSearchCombo().hasOwnProperty('store')) {
             record = this.getActiveSearchCombo().store.getById(this.getActiveSearchCombo().getValue())
         } else {
-            record = node;
+            if(node.leaf === false) {
+                record =  await Tine.Filemanager.getNode(node.id);
+            }else {
+                record = node;
+            }
         }
 
         if (! record) {

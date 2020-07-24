@@ -764,3 +764,12 @@ msgstr "Versendet Benachrichtigungen"
 
 msgid "controls sending notification of Leads"
 msgstr "Steuert das versenden von Benachrichtigungen für Leads"
+
+msgid "Send Notification?"
+msgstr "Benachrichtigung senden?"
+
+msgid "Changes to this lead might send notifications."
+msgstr "Änderungen an diesem Lead könnten Benachrichtigungen verschicken."
+
+msgid "Mute Notification"
+msgstr "Benachrichtigungen unterdrücken"

@@ -1056,6 +1056,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         return $data;
     }
 
+    /**
+     * @param null $data
+     * @return Tinebase_Model_FullUser
+     * @throws Admin_Exception
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     protected function _createTestUser($data = null)
     {
         if ($data === null) {

@@ -243,7 +243,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [
                             [{
                                 name: 'vatid',
-                                fieldLabel: this.app.i18n._('VAT No.')
+                                fieldLabel: this.app.i18n._('VAT ID')
                             }, {
                                 name: 'credit_term',
                                 fieldLabel: this.app.i18n._('Credit Term (days)'),

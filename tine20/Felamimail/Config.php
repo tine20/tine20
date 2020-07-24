@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -81,6 +81,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FILTER_EMAIL_URIS = 'filterEmailUris';
 
     /**
+     * Prevent copying mails in the same account
+     *
+     * @var string
+     */
+    const PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT = 'preventCopyOfMailsInSameAccount';
+
+    /**
      * system account special folders
      *
      * @var string
@@ -136,7 +143,6 @@ class Felamimail_Config extends Tinebase_Config_Abstract
 
     const SIEVE_MAILINGLIST_REJECT_REASON = 'sieveMailingListRejectReason';
 
-
     /**
      * keyFieldConfig vor mail account types
      */
@@ -179,53 +185,63 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         ],
         self::VACATION_TEMPLATES_CONTAINER_ID => array(
         //_('Vacation Templates Node ID')
-            'label'                 => 'Vacation Templates Node ID',
-            'description'           => 'Vacation Templates Node ID',
-            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::LABEL                 => 'Vacation Templates Node ID',
+            self::DESCRIPTION           => 'Vacation Templates Node ID',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => FALSE,
+            self::SETBYSETUPMODULE      => FALSE,
         ),
         self::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID => array(
             //_('Email Notification Templates Node ID')
-            'label'                 => 'Email Notification Templates Node ID',
-            'description'           => 'Email Notification Templates Node ID',
-            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::LABEL                 => 'Email Notification Templates Node ID',
+            self::DESCRIPTION           => 'Email Notification Templates Node ID',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => FALSE,
+            self::SETBYSETUPMODULE      => FALSE,
         ),
         self::VACATION_CUSTOM_MESSAGE_ALLOWED => array(
         //_('Custom Vacation Message')
-            'label'                 => 'Custom Vacation Message',
+            self::LABEL                 => 'Custom Vacation Message',
         // _('User is allowed to set custom vacation message for system account')
-            'description'           => 'User is allowed to set custom vacation message for system account',
-            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'default'               => 1,
+            self::DESCRIPTION           => 'User is allowed to set custom vacation message for system account',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE      => FALSE,
+            self::SETBYSETUPMODULE      => FALSE,
+            self::DEFAULT_STR           => 1,
         ),
         self::CACHE_EMAIL_BODY => array(
         //_('Cache email body')
-            'label'                 => 'Cache email body',
+            self::LABEL                 => 'Cache email body',
         // _('Should the email body be cached (recommended for slow IMAP server connections)')
-            'description'           => 'Should the email body be cached (recommended for slow IMAP server connections)',
-            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'default'               => 1,
+            self::DESCRIPTION           => 'Should the email body be cached (recommended for slow IMAP server connections)',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => FALSE,
+            self::SETBYSETUPMODULE      => TRUE,
+            self::DEFAULT_STR           => 1,
         ),
         self::DELETE_ARCHIVED_MAIL => array(
             //_('Delete Archived Mail')
-            'label'                 => 'Delete Archived Mail',
-            'description'           => 'Delete Archived Mail',
-            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'default'               => false,
+            self::LABEL                 => 'Delete Archived Mail',
+            self::DESCRIPTION           => 'Delete Archived Mail',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => FALSE,
+            self::SETBYSETUPMODULE      => TRUE,
+            self::DEFAULT_STR           => false,
+        ),
+        self::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT => array(
+            //_('Prevent copying mails in the same account')
+            self::LABEL                 => 'Prevent copying mails in the same account',
+            self::DESCRIPTION           => 'Prevent copying mails in the same account',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => false,
         ),
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
@@ -289,14 +305,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         ],
         self::FILTER_EMAIL_URIS => array(
             //_('Filter E-Mail URIs')
-            'label'                 => 'Filter E-Mail URIs',
+            self::LABEL                 => 'Filter E-Mail URIs',
             // _('Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on')
-            'description'           => 'Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on',
-            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'default'               => true,
+            self::DESCRIPTION           => 'Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => FALSE,
+            self::SETBYSETUPMODULE      => TRUE,
+            self::DEFAULT_STR           => true,
         ),
         /**
          * possible keys/values::
@@ -308,78 +324,78 @@ class Felamimail_Config extends Tinebase_Config_Abstract
          */
         self::SYSTEM_ACCOUNT_FOLDER_DEFAULTS => array(
             //_('System Account Folder Defaults')
-            'label'                 => 'System Account Folder Defaults',
+            self::LABEL                 => 'System Account Folder Defaults',
             // _('Paths of the special folders (like Sent, Trash, ...)')
-            'description'           => 'Paths of the special folders (like Sent, Trash, ...)',
-            'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => TRUE,
-            'setBySetupModule'      => TRUE,
-            'default'               => null,
+            self::DESCRIPTION           => 'Paths of the special folders (like Sent, Trash, ...)',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => TRUE,
+            self::SETBYSETUPMODULE      => TRUE,
+            self::DEFAULT_STR           => null,
         ),
         self::IMAP_ALLOW_SELF_SIGNED_TLS_CERT => array(
             //_('Allow self signed TLS cert for IMAP connection')
-            'label'                 => 'Allow self signed TLS cert for IMAP connection',
-            'description'           => '',
-            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'default'               => false,
+            self::LABEL                 => 'Allow self signed TLS cert for IMAP connection',
+            self::DESCRIPTION           => '',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => FALSE,
+            self::SETBYSETUPMODULE      => TRUE,
+            self::DEFAULT_STR           => false,
         ),
         self::SIEVE_REDIRECT_ONLY_INTERNAL => array(
             //_('Sieve Redirect Only Internal')
-            'label'                 => 'Sieve Redirect Only Internal',
+            self::LABEL                 => 'Sieve Redirect Only Internal',
             // _('Allow only sieve redirect rules to internal (primary/secondary) email addresses')
-            'description'           => 'Allow only sieve redirect rules to internal (primary/secondary) email addresses',
-            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => false,
-            'default'               => false,
+            self::DESCRIPTION           => 'Allow only sieve redirect rules to internal (primary/secondary) email addresses',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => false,
         ),
         self::SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL => array(
             //_('Sieve Notification Bounces Reporting Email')
-            'label'                 => 'Sieve Notification Bounces Reporting Email',
+            self::LABEL                 => 'Sieve Notification Bounces Reporting Email',
             // _('Sieve Notification Bounces Reporting Email')
-            'description'           => 'Sieve Notification Bounces Reporting Email',
-            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => false,
-            'default'               => null,
+            self::DESCRIPTION           => 'Sieve Notification Bounces Reporting Email',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => null,
         ),
         self::FLAG_ICON_OWN_DOMAIN => array(
             //_('URL icon path for own domain')
-            'label'                 => 'URL icon path for own domain',
+            self::LABEL                 => 'URL icon path for own domain',
             //_('Used to mark messages from configured primary and secondary domains')
-            'description'           => 'Used to mark messages from configured primary and secondary domains',
-            'type'                  => 'string',
-            'default'               => 'favicon/svg',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => false,
+            self::DESCRIPTION           => 'Used to mark messages from configured primary and secondary domains',
+            self::TYPE                  => 'string',
+            self::DEFAULT_STR           => 'favicon/svg',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
         ),
         self::FLAG_ICON_OTHER_DOMAIN => array(
             //_('URL icon path for other domains')
-            'label'                 => 'URL icon path for other domains',
+            self::LABEL                 => 'URL icon path for other domains',
             //_('Used to mark messages from all other domains')
-            'description'           => 'Used to mark messages from all other domains',
-            'type'                  => 'string',
-            'default'               => 'favicon/svg',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => false,
+            self::DESCRIPTION           => 'Used to mark messages from all other domains',
+            self::TYPE                  => 'string',
+            self::DEFAULT_STR           => 'favicon/svg',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
         ),
         self::FLAG_ICON_OTHER_DOMAIN_REGEX => array(
             //_('Other domain regex for FLAG_ICON_OTHER_DOMAIN')
-            'label'                 => 'Other domain regex for FLAG_ICON_OTHER_DOMAIN',
+            self::LABEL                 => 'Other domain regex for FLAG_ICON_OTHER_DOMAIN',
             //_('Other domain regex for FLAG_ICON_OTHER_DOMAIN')
-            'description'           => 'Other domain regex for FLAG_ICON_OTHER_DOMAIN',
-            'type'                  => 'string',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => false,
+            self::DESCRIPTION           => 'Other domain regex for FLAG_ICON_OTHER_DOMAIN',
+            self::TYPE                  => 'string',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
         ),
     );
 

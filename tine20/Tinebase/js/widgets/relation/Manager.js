@@ -86,7 +86,7 @@ Tine.widgets.relation.Manager = function() {
                         ownModel: recordClass.getMeta('recordName'),
                         relatedApp: rec.getMeta('appName'),
                         relatedModel: rec.getMeta('modelName'),
-                        text: rec.getRecordName() + ' (' + rec.getAppName() + ')'
+                        text: rec.getMeta('modelName') === 'Node' ? rec.getAppName()  : rec.getRecordName() +  '  (' + rec.getAppName() + ')'
                     });
                 }
             });

@@ -44,6 +44,13 @@ class Crm_Config extends Tinebase_Config_Abstract
     const FEATURE_LEAD_IMPORT = 'featureLeadImport';
 
     /**
+     * lead notification confirmation
+     *
+     * @var string
+     */
+    const FEATURE_LEAD_NOTIFICATION_CONFIRMATION = 'featureLeadNotificationConfirmation';
+
+    /**
      * lead import auto task
      *
      * @var string
@@ -189,6 +196,12 @@ class Crm_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION   => 'Lead Import',
                     self::TYPE          => self::TYPE_BOOL,
                     self::DEFAULT_STR   => true,
+                ],
+                self::FEATURE_LEAD_NOTIFICATION_CONFIRMATION   => [
+                    self::LABEL         => 'Lead Notification Confirmation', //_('Lead Notification Confirmation')
+                    self::DESCRIPTION   => 'Lead Notification Confirmation',
+                    self::TYPE          => self::TYPE_BOOL,
+                    self::DEFAULT_STR   => false,
                 ],
             ],
             self::DEFAULT_STR => [],

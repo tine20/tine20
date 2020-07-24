@@ -19,4 +19,4 @@ variables:
   NO_PUSH: "false"
   CUSTOM_APP_VENDOR: "metaways"
   CUSTOM_APP_VERSION: "dev-master"
-  PHPUNIT_FILTER: ".*"
+  PHPUNIT_FILTER: ""

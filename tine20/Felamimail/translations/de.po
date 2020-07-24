@@ -1856,3 +1856,9 @@ msgstr "Es ist nicht erlaubt, E-Mails an sich selbst weiterzuleiten. Bitte ände
 
 msgid "Redirects to external email domains are not allowed."
 msgstr "Weiterleitungen zu externen E-Mail-Konten sind nicht erlaubt."
+
+msgid "It is not allowed to copy e-mails in the same account."
+msgstr "E-Mails innerhalb eines Kontos zu kopieren ist nicht erlaubt."
+
+msgid "Copy"
+msgstr "Kopieren"

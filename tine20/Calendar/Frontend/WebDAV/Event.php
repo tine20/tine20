@@ -268,7 +268,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     }
 
     /**
-     * @param $converter
+     * @param Calendar_Convert_Event_VCalendar_Abstract $converter
      * @throws \Sabre\DAV\Exception\Forbidden
      */
     public static function checkWriteAccess($converter)
@@ -278,9 +278,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             'Calendar_Convert_Event_VCalendar_Generic',
             'Calendar_Convert_Event_VCalendar_KDE',
         ])) {
+            $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' update by '
-                 . $converterClass . ' client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.');
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Update by '
+                 . $converterClass . ' client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.'
+                 . ' User-Agent: ' . $useragent);
             throw new Sabre\DAV\Exception\Forbidden('write access denied for unknown client');
         }
     }

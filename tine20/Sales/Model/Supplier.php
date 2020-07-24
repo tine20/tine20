@@ -107,7 +107,7 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
                 )
             ),
             'vatid' => array (
-                'label'   => 'VAT No.', // _('VAT No.')
+                'label'   => 'VAT ID', // _('VAT ID')
                 'type'    => 'text',
                 'group'   => 'accounting',
                 'shy'     => TRUE

@@ -91,8 +91,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CACHE = 'caching';
-
     const CREDENTIAL_CACHE_SHARED_KEY = 'credentialCacheSharedKey';
+    const DBLOGGER = 'dblogger';
 
     /**
      * DEFAULT_LOCALE
@@ -840,6 +840,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule' => false,
             'default' => 'DEVELOPMENT',
         ),
+        self::DBLOGGER => [
+            //_('DB logger configuration')
+            'label'                 => 'DB logger configuration',
+            'description'           => 'DB logger configuration',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'content'               => [
+                'active' => [
+                    'type' => Tinebase_Config::TYPE_BOOL,
+                ],
+                // values from '0' to '7' are supported - see Tinebase_Log
+                'priority' => [
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => '5',
+                ],
+            ]
+        ],
         /**
          * for example: 'de'
          */

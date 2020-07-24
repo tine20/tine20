@@ -66,6 +66,15 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     ignoreRelatedModels: ['Sales_Model_Product', 'Addressbook_Model_Contact', 'Tasks_Model_Task'],
 
     initComponent: function() {
+        this.tbarItems = [new Ext.Button(new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Crm').i18n._('Mute Notification'),
+            handler: this.onMuteNotificationOnce,
+            iconCls: 'action_mute_noteification',
+            disabled: false,
+            scope: this,
+            enableToggle: true,
+            pressed: this.record.get('mute')
+        }))];
         Tine.Crm.LeadEditDialog.superclass.initComponent.call(this);
         this.on('recordUpdate', this.onAfterRecordUpdate, this);
     },
@@ -94,6 +103,16 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.productsGrid.store.loadData(relations.products, true);
             }
         }
+    },
+
+    /**
+     * mute first alert
+     *
+     * @param {} button
+     * @param {} e
+     */
+    onMuteNotificationOnce: function (button, e) {
+        this.record.set('mute', button.pressed);
     },
     
     onAfterRecordUpdate: function(closeWindow) {
@@ -212,6 +231,29 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             products: products
         };
     },
+
+    /**
+     * generic apply changes handler
+     * @param {Boolean} closeWindow
+     */
+    onApplyChanges: function(closeWindow) {
+        if (this.app.featureEnabled('featureLeadNotificationConfirmation') && !this.record.get('mute')) {
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Send Notification?'),
+                this.app.i18n._('Changes to this lead might send notifications.'),
+                function (button) {
+                    if (button === 'yes') {
+                        Tine.Crm.LeadEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+                    }
+                },
+                this
+            );
+            return;
+        }
+        Tine.Crm.LeadEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+    },
+
+
 
     /**
      * returns dialog

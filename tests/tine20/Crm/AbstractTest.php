@@ -86,7 +86,7 @@ class Crm_AbstractTest extends TestCase
      * 
      * @return Crm_Model_Lead
      */
-    protected function _getLead()
+    protected function _getLead($mute = false)
     {
         return new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit',
@@ -100,6 +100,7 @@ class Crm_AbstractTest extends TestCase
             'turnover'      => '200000',
             'probability'   => 70,
             'end_scheduled' => NULL,
+            'mute'          => $mute,
         ));
     }
     

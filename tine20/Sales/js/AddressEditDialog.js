@@ -97,9 +97,9 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, c.name + l));
         } else if (! this.record.id) {
             if (String(this.fixedFields.get('type')).toLowerCase() == 'billing') {
-                this.window.setTitle(this.app.i18n._('Add new Billing Address'));
+                this.window.setTitle(this.app.i18n._('Add New Billing Address'));
             } else {
-                this.window.setTitle(this.app.i18n._('Add new Delivery Address'));
+                this.window.setTitle(this.app.i18n._('Add New Delivery Address'));
             }
         }
     },

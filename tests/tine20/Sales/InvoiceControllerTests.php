@@ -549,10 +549,6 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(1, $positions->count());
     }
 
-    /**
-     * @group nogitlabci
-     * gitlabci: this fails at random with: "no invoice position found"
-     */
     public function testInvoiceUpdateExistingTimeaccount()
     {
         $result = $this->_createInvoiceUpdateRecreationFixtures();

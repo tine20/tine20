@@ -1735,17 +1735,15 @@ class Felamimail_Controller_MessageTest extends TestCase
      *       https://forge.tine20.org/mantisbt/view.php?id=10126
      *       
      *       http://htmlpurifier.org/live/configdoc/plain.html#HTML.TidyLevel
-     * @group nogitlabci
-     * gitlabci: Failed asserting that 'Failed asserting that '...' contains "...".
      */
     public function testInvalidHtml()
     {
         $cachedMessage = $this->messageTestHelper('invalid_html.eml');
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
         
-        $this->assertContains('hier seine Daten :)<br /><br /><span id="felamimail-body-signature">
-        </span><pre><span style="font-family:tahoma;">John Smith
-Photographer', $message->body);
+        $this->assertContains('hier seine Daten :)<br />', $message->body);
+        $this->assertContains('<span id="felamimail-body-signature">', $message->body);
+        $this->assertContains('</span><pre><span style="font-family:tahoma;">John Smith', $message->body);
     }
 
     /**

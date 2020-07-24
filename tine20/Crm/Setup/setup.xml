@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>12.1</version>
+    <version>12.2</version>
     <order>20</order>
     <depends>
         <application>Tasks</application>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>metacrm_lead</name>
-            <version>10</version>
+            <version>11</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -79,6 +79,10 @@
                 <field>
                     <name>lastread</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>mute</name>
+                    <type>boolean</type>
                 </field>
                <field>
                     <name>created_by</name>
