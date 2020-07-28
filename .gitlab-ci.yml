@@ -16,66 +16,29 @@ workflow:
       when: never
     - when: always
 
-# this or the next job "docker: build base, dependency, source and test-source image" should be uses
-# "cache" using job
-"docker: build source and test-source image":
-  extends: .abstract_jobs.docker
-  stage: build_docker_images
-  script:
-    - tag_major_as_commit_image base
-    - tag_major_as_commit_image dependency
-    - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
-    - build_and_push source
-    - build_and_push test-source
-  rules:
-    # reverse of "docker: build base, dependency, source and test-source image"
-    - changes:
-        - ci/dockerimage/**/**
-        - tine20/library/**/***
-        - tine20/composer.json
-        - tine20/composer.lock
-        - tine20/Tinebase/js/package.json
-        - tine20/Tinebase/js/npm-shrinkwrap.json
-      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    # reverse of "docker: build base, dependency, source and test-source image"
-    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
-      when: never
-    # reverse of "docker: build base, dependency, source and test-source image"
-    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
-      when: never
-    - when: on_success
-  timeout: 40m
+# ============ stage: build_docker_images ===========================
+# This stage should produce everything needed to run source test (jenkins like test, on the source code with webpack).
 
-# "cache" updating job
 "docker: build base, dependency, source and test-source image":
   extends: .abstract_jobs.docker
   stage: build_docker_images
   script:
-    - build_and_push base
     - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
-    - build_and_push dependency
-    - build_and_push source
-    - build_and_push test-source
-  rules:
-    # reverse of "docker: build source and test-source image"
-    - changes:
-        - ci/dockerimage/**/**
-        - tine20/library/**/***
-        - tine20/composer.json
-        - tine20/composer.lock
-        - tine20/Tinebase/js/package.json
-        - tine20/Tinebase/js/npm-shrinkwrap.json
-      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: on_success
-    # reverse of "docker: build source and test-source image"
-    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
-      when: on_success
-    # reverse of "docker: build base, dependency, source and test-source image"
-    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
-      when: on_success
-    - when: never
+    - build_image base
+    - use_cached_image_when_nothing_changed base
+    - push_image base
+    - build_image source
+    - use_cached_image_when_nothing_changed source
+    - push_image source
+    - build_image test-source
+    - push_image test-source
   timeout: 60m
+
+# ============ stage: build_and_source_test ===========================
+# This stage runs source tests. This are all test which do not require a js build.
+# This stage builds all the docker image the were not build in the first stage.
+# The base-commit, source-commit, source-test-commit images are available here.
+# They are named according to $REGISTRY/$NAME-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG
 
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit
@@ -139,19 +102,30 @@ workflow:
   allow_failure: true
   timeout: 20m # time run: 4m
 
-"docker: build dev, build, built and test-built image":
+"docker: build dev, built and test-built image":
   extends: .abstract_jobs.docker
   stage: build_and_source_test
   script:
-    - build_and_push build
-    - build_and_push built
-    - build_and_push test-built
-    - build_and_push dev
+    - build_image build
+    - use_cached_image_when_nothing_changed build
+    - build_image built
+    - use_cached_image_when_nothing_changed built
+    - push_image build
+    - push_image built
+    - build_image test-built
+    - push_image test-built
+    - build_image dev
+    - use_cached_image_when_nothing_changed dev
+    - push_image dev
   rules:
     - if: $DOCKER_BUILD_BUILD == "true"
       when: on_success
     - when: never
   timeout: 60m # time run: 28m
+
+# ============ stage: built_test_and_deploy ===========================
+# Run all test which require a js build.
+# And push all images already tested.
 
 "php unit: all tests built":
   extends: .abstract_jobs.php_unit
@@ -192,42 +166,37 @@ workflow:
       when: on_success
     - when: never
 
-"docker: push base and dependency image":
+# Pushes base-commit as base, source-commit as source and test-source-commit as test-source to aws ecr.
+# They are used for caching.
+# Only images which passed the source test are pushed.
+# The ecr registry is vital for the ci. So this is more an internal push.
+"docker: push base, source, test-source and dependency image":
   extends: .abstract_jobs.docker
   stage: built_test_and_deploy
   script:
     - tag_commit_as_branch_image base
-    - tag_commit_as_branch_image dependency
+    - tag_commit_as_branch_image source
+    - tag_commit_as_branch_image test-source
   rules:
     - if: $NO_PUSH == "true"
       when: never
-    - if: $CI_COMMIT_REF_NAME != $MAJOR_COMMIT_REF_NAME
-      when: never
-    # reverse of "docker: build source and test-source image"
-    - changes:
-        - ci/dockerimage/**/**
-        - tine20/library/**/***
-        - tine20/composer.json
-        - tine20/composer.lock
-        - tine20/Tinebase/js/package.json
-        - tine20/Tinebase/js/npm-shrinkwrap.json
-      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: on_success
-    # reverse of "docker: build source and test-source image"
-    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
-      when: on_success
-    # reverse of "docker: build base, dependency, source and test-source image"
-    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
-      when: on_success
-    - when: never
+    - when: on_success
   timeout: 20m # time run: 3m
 
-"docker: push built and dev image":
+# ============ stage: deploy ===========================
+
+# Pushes build-commit as build, built-commit as built and test-built-commit as test-built and dev-commit as dev to aws ecr.
+# They are used for caching.
+# Only images which passed the built test are pushed.
+# The ecr registry is vital for the ci. So this is more an internal push.
+"docker: push built, build, test-build and dev image":
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - tag_commit_as_branch_image built
     - tag_commit_as_branch_image dev
+    - tag_commit_as_branch_image build
+    - tag_commit_as_branch_image test-built
   rules:
     - if: $NO_PUSH == "true"
       when: never
@@ -236,6 +205,9 @@ workflow:
     - when: never
   timeout: 20m # time run: 3m
 
+# pushes built-commit as built and dev-commit as dev to our gitlab registry.
+# They can be accessed essayer.
+# They are pushed on every change of a major branch.
 "docker push built and dev image to gitlab":
   extends: .abstract_jobs.docker
   stage: deploy
@@ -254,6 +226,9 @@ workflow:
     - when: never
   timeout: 20m
 
+# pushing built-commit as tine20/tine20 and dev as tine20/dev to dockerhub.
+# The tag is also overwritten and set to $DOCKERHUB_TAG
+# This job should only be triggered by a schedule or a manual pipeline trigger
 "docker push built image to dockerhub":
   extends: .abstract_jobs.docker
   stage: deploy

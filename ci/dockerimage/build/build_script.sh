@@ -47,7 +47,7 @@ function buildClient()
 }
 
 function removeComposerDevDependencies() {
-    cd ${TINE20ROOT}/tine20 && composer install --no-dev --no-ansi --no-progress --no-suggest
+    cd ${TINE20ROOT}/tine20 && composer install --no-dev --no-ansi --no-progress --no-suggest --no-scripts
 }
 
 function cleanup() {

@@ -1,3 +1,8 @@
+# This file defines common ci jobs.
+# They are not run on their own (because they start with ".").
+# They are used like function. And parameterised by variables starting with ARG_.
+
+# gitlab services used by test jobs:
 .db_service: &abstract_jobs-db_service
   name: "$DATABASE_IMAGE"
   alias: db
@@ -18,6 +23,7 @@
   alias: ldap
   entrypoint: ["/container/tool/run", "--copy-service"]
 
+# Has a db, redis and installs tine. Then runs a php unit test.
 # $ARG_IMAGE e.g. test-built-commit
 # $ARG_EXCLUDE_GROUP optional e.g. longrunning,needsbuild,nogitlabci
 # $ARG_TEST e.g. AllTests
@@ -87,6 +93,7 @@
     expire_in: 1 day
     when: always
 
+# extends .abstract_jobs.php_unit with ldap.
 .abstract_jobs.php_unit_ldap:
   extends: .abstract_jobs.php_unit
   variables:
@@ -102,8 +109,10 @@
     - *abstract_jobs-dovecot_service
     - *abstract_jobs-ldap_service
 
+# basic docker setup.
 .abstract_jobs.docker:
   image: $REGISTRY/docker:19.03.1
   before_script:
     - source ci/build.sh
-    - export DOCKER_BUILDKIT=1
+    - export DOCKER_BUILDKIT=0
+    - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
