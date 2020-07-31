@@ -639,4 +639,20 @@ class Tinebase_CustomFieldTest extends TestCase
         $record = new Addressbook_Model_Contact([], true);
         static::assertFalse($record->has($systemCF->name), 'record still has the system cf property');
     }
+
+    public function testCustomKeyFieldFilter()
+    {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            static::markTestSkipped('pgsql doesnt support int customfield filters');
+        }
+
+        $value = 'go';
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => $value, 'expectContactToBeFound' => true],
+            ['operator' => 'not', 'value' => $value, 'expectContactToBeFound' => false],
+            ['operator' => 'equals', 'value' => '1234', 'expectContactToBeFound' => false],
+        ];
+        $this->_testContactCustomFieldOfType('keyField', $value, $filtersToTest);
+    }
+
 }
