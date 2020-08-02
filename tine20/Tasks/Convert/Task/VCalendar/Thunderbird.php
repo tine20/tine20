@@ -21,7 +21,7 @@ class Tasks_Convert_Task_VCalendar_Thunderbird extends Tasks_Convert_Task_VCalen
     // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
     // Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.24) Gecko/20111103 Lightning/1.0b2 Thunderbird/3.1.16
     // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.16) Gecko/20111110 Iceowl/1.0b1 Icedove/3.0.11
-    const HEADER_MATCH = '/ (Lightning|Iceowl)\/(?P<version>\S+)/';
+    const HEADER_MATCH = '/ (Thunderbird|Lightning|Iceowl)\/(?P<version>\S+)/';
     
     protected $_supportedFields = array(
         'seq',
