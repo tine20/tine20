@@ -755,7 +755,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         $fixedDocumentPart = preg_replace_callback(
             '|\{[^}{%]*\{[^}]*\}[^}]*\}|U',
             function ($match) {
-                return strip_tags($match[0]);
+                return htmlspecialchars_decode(strip_tags($match[0]), ENT_QUOTES | ENT_XML1);
             },
             $documentPart
         );
@@ -763,7 +763,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         $fixedDocumentPart = preg_replace_callback(
             '|\{[^}{%]*%[^}]*\}|U',
             function ($match) {
-                return strip_tags($match[0]);
+                return htmlspecialchars_decode(strip_tags($match[0]), ENT_QUOTES | ENT_XML1);
             },
             $fixedDocumentPart
         );
