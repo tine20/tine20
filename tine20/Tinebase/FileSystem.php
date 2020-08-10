@@ -454,6 +454,7 @@ class Tinebase_FileSystem implements
      *
      * @param string|Tinebase_Model_Tree_Node $nodeId
      * @return string
+     * @throws Tinebase_Exception
      */
     public function getNodeContents($nodeId)
     {
@@ -461,6 +462,9 @@ class Tinebase_FileSystem implements
         // we do not start a transaction here
         $path = $this->getPathOfNode($nodeId, /* $getPathAsString */ true);
         $handle = $this->fopen($path, 'r');
+        if (! $handle) {
+            throw new Tinebase_Exception('Could not get contents of path ' . $path);
+        }
         $contents = stream_get_contents($handle);
         $this->fclose($handle);
 
