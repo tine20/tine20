@@ -1793,7 +1793,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         $script = new Felamimail_Sieve_Backend_Sql($this->_account->getId());
         $scriptParts = $script->getScriptParts();
-        static::assertEquals(1, $scriptParts->count());
+        static::assertEquals(1, $scriptParts->count(), '1 script part expected. script: ' . $script->getSieve());
         /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
         $scriptPart = $scriptParts->getFirstRecord();
         static::assertTrue(count(array_intersect(array('"enotify"', '"variables"', '"copy"', '"body"'),
