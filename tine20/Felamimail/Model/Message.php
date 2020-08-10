@@ -380,8 +380,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $message = new Felamimail_Model_Message();
             $message->account_id = $this->account_id;
             
-            $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
-            $to = Felamimail_Message::convertAddresses($this->headers['disposition-notification-to'], $punycodeConverter);
+            $to = Felamimail_Message::convertAddresses($this->headers['disposition-notification-to']);
             if (empty($to)) {
                 throw new Felamimail_Exception('disposition-notification-to header does not contain a valid email address');
             }
@@ -431,17 +430,16 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->message_id = $_headers['message-id'];
         }
 
-        $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
         foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
             if (isset($_headers[$field])) {
                 if (is_array($_headers[$field])) {
                     $value = array();
                     foreach ($_headers[$field] as $headerValue) {
-                        $value = array_merge($value, Felamimail_Message::convertAddresses($headerValue, $punycodeConverter));
+                        $value = array_merge($value, Felamimail_Message::convertAddresses($headerValue));
                     }
                     $this->$field = $value;
                 } else {
-                    $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
+                    $value = Felamimail_Message::convertAddresses($_headers[$field]);
                     switch ($field) {
                         case 'from':
                             $this->from_email = (isset($value[0]) && (isset($value[0]['email']) || array_key_exists('email', $value[0]))) ? $value[0]['email'] : '';

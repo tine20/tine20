@@ -82,6 +82,7 @@
     "ext-openssl": "*",
     "ext-xml": "*",
     "ext-zip": "*",
+    "algo26-matthias/idna-convert": "^2.1",
     "composer/semver": "^1.4",
     "doctrine/dbal": "v2.5.13pl6 as v2.5.13",
     "doctrine/orm": "2.5.14pl1 as v2.5.14",
@@ -131,10 +132,7 @@
         "vendor/zendframework/zendframework1/library"
       ],
       "qCal": "library/qCal/lib"
-    },
-    "classmap": [
-      "library/idnaconvert"
-    ]
+    }
   },
   "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
   "include-path": [

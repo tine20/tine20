@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -510,5 +510,33 @@ class Tinebase_Helper
         }
 
         return null;
+    }
+
+    /**
+     * convert domain or email string to punycode / ACE representation
+     *
+     * @param string $domain
+     * @return string punycode domain/email
+     *
+     * @todo put converter into static member var?
+     */
+    public static function convertDomainToPunycode($domain)
+    {
+        $idna = new Algo26\IdnaConvert\IdnaConvert();
+        return $idna->encode($domain);
+    }
+
+    /**
+     * convert domain or email string from punycode / ACE representation to IDN form (unicode)
+     *
+     * @param string $domain punycode domain/email
+     * @return string
+     *
+     * @todo put converter into static member var?
+     */
+    public static function convertDomainToUnicode($domain)
+    {
+        $idna = new Algo26\IdnaConvert\IdnaConvert();
+        return $idna->decode($domain);
     }
 }

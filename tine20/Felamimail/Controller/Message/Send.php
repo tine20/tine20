@@ -536,7 +536,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * set mail recipients
      * 
-     * @param Tinebase_Mail $_mail
+     * @param Zend_Mail $_mail
      * @param Felamimail_Model_Message $_message
      * @return array
      * @throws Tinebase_Exception_SystemGeneric
@@ -544,14 +544,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _setMailRecipients(Zend_Mail $_mail, Felamimail_Model_Message $_message)
     {
         $nonPrivateRecipients = array();
-        $punycodeConverter = $this->getPunycodeConverter();
         $invalidEmailAddresses = array();
         
         foreach (array('to', 'cc', 'bcc') as $type) {
             if (isset($_message->{$type})) {
                 foreach((array) $_message->{$type} as $address) {
 
-                    $punyCodedAddress = $punycodeConverter->encode($address);
+                    $punyCodedAddress = Tinebase_Helper::convertDomainToPunycode($address);
 
                     if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $punyCodedAddress)) {
                         $invalidEmailAddresses[] = $address;
