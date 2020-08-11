@@ -150,7 +150,9 @@ cp.colors = ['000000', '993300', '333300'];
         if(this.value){
             var s = this.value;
             this.value = null;
+            this.suspendEvents();
             this.select(s);
+            this.resumeEvents();
         }
     },
 
@@ -222,6 +224,7 @@ cp.colors = ['000000', '993300', '333300'];
         const picker = Tine.WindowFactory.getWindow({
             modal: true,
             name: 'ColorPickerWindow_' + this.id,
+            title: i18n._('Select Color'),
             closeAction: 'destroy',
             width: 215,
             height: 330,
