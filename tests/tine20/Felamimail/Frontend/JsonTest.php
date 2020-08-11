@@ -1789,11 +1789,15 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_setTestScriptname();
 
         $this->_account->sieve_notification_email = 'test@test.de';
+        $this->_account->sieve_notification_move = false;
         Felamimail_Controller_Account::getInstance()->update($this->_account);
 
         $script = new Felamimail_Sieve_Backend_Sql($this->_account->getId());
         $scriptParts = $script->getScriptParts();
-        static::assertEquals(1, $scriptParts->count(), '1 script part expected. script: ' . $script->getSieve());
+        static::assertEquals(1, $scriptParts->count(), '1 script part expected. script: '
+            . $script->getSieve() . ' parts: '
+            . print_r($scriptParts->toArray(), true)
+        );
         /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
         $scriptPart = $scriptParts->getFirstRecord();
         static::assertTrue(count(array_intersect(array('"enotify"', '"variables"', '"copy"', '"body"'),
