@@ -515,28 +515,32 @@ class Tinebase_Helper
     /**
      * convert domain or email string to punycode / ACE representation
      *
-     * @param string $domain
+     * @param string $domain domain or email
      * @return string punycode domain/email
-     *
-     * @todo put converter into static member var?
      */
     public static function convertDomainToPunycode($domain)
     {
-        $idna = new Algo26\IdnaConvert\IdnaConvert();
-        return $idna->encode($domain);
+        if (strpos($domain, '@') !== false) {
+            list($emailpart, $domainpart) = explode('@', $domain);
+            return $emailpart . '@' . idn_to_ascii($domainpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+        } else {
+            return idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+        }
     }
 
     /**
      * convert domain or email string from punycode / ACE representation to IDN form (unicode)
      *
-     * @param string $domain punycode domain/email
+     * @param string $domain domain or email
      * @return string
-     *
-     * @todo put converter into static member var?
      */
     public static function convertDomainToUnicode($domain)
     {
-        $idna = new Algo26\IdnaConvert\IdnaConvert();
-        return $idna->decode($domain);
+        if (strpos($domain, '@') !== false) {
+            list($emailpart, $domainpart) = explode('@', $domain);
+            return $emailpart . '@' . idn_to_utf8($domainpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+        } else {
+            return idn_to_utf8($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+        }
     }
 }
