@@ -2515,4 +2515,15 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_json->changeCredentials($account['id'], Tinebase_Core::getUser()->accountEmailAddress, $pass);
         $this->_assertPassword($account['id'], $pass);
     }
+
+    public function testDoMailsBelongToAccount()
+    {
+        $userMail = Tinebase_Core::getUser()->accountEmailAddress;
+        $mails = [
+            $userMail,
+            'someexternal@mail.test',
+        ];
+        $result = $this->_json->doMailsBelongToAccount($mails);
+        self::assertCount(1, $result);
+    }
 }

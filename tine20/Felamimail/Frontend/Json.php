@@ -750,7 +750,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         ]);
         
         $contacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
-        
         $usermails = array_filter(array_merge($contacts->email, $contacts->email_home));
         
         return array_diff($mails, $usermails);
