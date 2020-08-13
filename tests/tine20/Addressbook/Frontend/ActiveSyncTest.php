@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -52,6 +52,7 @@ class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_Controll
                         <Contacts:Birthday>2000-12-25T23:00:00.000Z</Contacts:Birthday>
                         <Contacts:WebPage>fb://some.dumb.fb.url</Contacts:WebPage>
                         <Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber>
+                        <Contacts:homePhoneNumber>+43123412341241212234432223452352352345234554</Contacts:homePhoneNumber>
                         <Contacts:BusinessAddressStreet>Pickhuben 2</Contacts:BusinessAddressStreet>
                         <Body xmlns="uri:AirSyncBase"><Type>1</Type><Data>Hello</Data></Body>
                         <Contacts:Email1Address>l.kneschke@example.com</Contacts:Email1Address>
@@ -161,7 +162,8 @@ class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_Controll
     /**
      * testCreateEntryWithNoFamilyName
      * 
-     * @param unknown_type $syncrotonFolder
+     * @param Syncroton_Model_Folder $syncrotonFolder
+     * @return array
      */
     public function testCreateEntryWithNoFamilyName($syncrotonFolder = null)
     {
@@ -180,7 +182,6 @@ class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_Controll
         $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
         $this->assertEquals('asdf',                   $syncrotonContact->firstName);
-        $this->assertEquals('imported',               $syncrotonContact->lastName);
         $this->assertEquals('l.kneschke@example.com', $syncrotonContact->email1Address);
         $this->assertEquals('c.weiss@example.de',     $syncrotonContact->email2Address);
         $this->assertEquals('20001224T230000Z',       $syncrotonContact->birthday->format('Ymd\THis\Z'));
