@@ -330,12 +330,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
         );
         // force update of n_fileas and n_fn
         $contact->setFromArray($data);
-        
-        // either "org_name" or "n_family" must be given!
-        if (empty($contact->org_name) && empty($contact->n_family)) {
-            $contact->n_family = 'imported';
-        }
-        
+
         // contact should be valid now
         $contact->isValid();
         

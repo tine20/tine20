@@ -180,7 +180,6 @@ class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_Controll
         $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
         $this->assertEquals('asdf',                   $syncrotonContact->firstName);
-        $this->assertEquals('imported',               $syncrotonContact->lastName);
         $this->assertEquals('l.kneschke@example.com', $syncrotonContact->email1Address);
         $this->assertEquals('c.weiss@example.de',     $syncrotonContact->email2Address);
         $this->assertEquals('20001224T230000Z',       $syncrotonContact->birthday->format('Ymd\THis\Z'));
