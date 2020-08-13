@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -1643,6 +1643,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'results'   => Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($sequence, $limit)->toArray(),
         );
         $result['totalcount'] = count($result['results']);
+        $result['primaryTinebaseId'] = Tinebase_Core::getTinebaseId();
 
         return $result;
     }

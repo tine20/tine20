@@ -210,8 +210,12 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
         switch ($_modification->change_type) {
             case Tinebase_Timemachine_ModificationLog::CREATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                /** @var Tinebase_Model_CustomField_Config $record */
                 $model = $_modification->record_type;
                 $record = new $model($diff->diff);
+                if (Tinebase_Core::getPrimaryTinebaseId() === $record->application_id) {
+                    $record->application_id = Tinebase_Core::getTinebaseId();
+                }
                 Tinebase_CustomField::getInstance()->addCustomField($record);
                 break;
 
@@ -219,6 +223,9 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $record = $this->get($_modification->record_id, true);
                 $record->applyDiff($diff);
+                if (Tinebase_Core::getPrimaryTinebaseId() === $record->application_id) {
+                    $record->application_id = Tinebase_Core::getTinebaseId();
+                }
                 Admin_Controller_Customfield::getInstance()->update($record);
                 break;
 
