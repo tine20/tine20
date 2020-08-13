@@ -382,7 +382,11 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 
     public function update_16()
     {
-        $this->_backend->dropForeignKey('cal_attendee', 'cal_attendee::displaycontainer_id--container::id');
+        try {
+            $this->_backend->dropForeignKey('cal_attendee', 'cal_attendee::displaycontainer_id--container::id');
+        } catch (Exception $e) {
+            // fk might not exist yet
+        }
         $this->_backend->addForeignKey('cal_attendee', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>cal_attendee::displaycontainer_id--container::id</name>
                     <field>
