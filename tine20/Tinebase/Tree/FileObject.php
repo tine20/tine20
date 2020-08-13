@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -326,7 +326,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             $data['id'] = $_record->getId();
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
 
-            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type) {
+            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type &&
+                Tinebase_Model_Tree_FileObject::TYPE_LINK !== $_record->type) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
                     array('revision_size' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision_size') . ' + ' . (int)$_record->size)),
@@ -344,6 +345,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
             if (1 === count($currentRecord->available_revisions) &&
                     Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type &&
+                    Tinebase_Model_Tree_FileObject::TYPE_LINK !== $_record->type &&
                     (int)$currentRecord->revision_size !== (int)$_record->size) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,

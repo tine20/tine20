@@ -1201,11 +1201,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
             if ($fieldDef[self::TYPE] === 'keyfield') {
                 $fieldDef['length'] = 40;
-                if (Tinebase_Application::getInstance()->isInstalled($this->_applicationName)) {
-                    if (!isset($fieldDef['name']) || !Tinebase_Config::getAppConfig(
-                                isset($fieldDef['config']['application'])
-                                    ? $fieldDef['config']['application']
-                                    : $this->_applicationName)->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
+                $keyFieldAppName = isset($fieldDef['config']['application']) ? $fieldDef['config']['application']
+                    : $this->_applicationName;
+                if (Tinebase_Application::getInstance()->isInstalled($keyFieldAppName)) {
+                    if (!isset($fieldDef['name']) || !Tinebase_Config::getAppConfig($keyFieldAppName)
+                                ->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
                         throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
                             $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
                     }

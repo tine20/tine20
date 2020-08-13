@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add transactions to move/create/delete/copy 
  */
@@ -63,6 +63,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @var bool
      */
     protected $_throwOnGetQuarantined = true;
+
+    protected $_createNodeInBackendIntercepter = [];
     
     /**
      * holds the instance of the singleton
@@ -448,7 +450,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected function _searchNodesRecursive($_filter, $_pagination)
     {
         $_filter->removeFilter('type');
-        $_filter->addFilter($_filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
+        $_filter->addFilter($_filter->createFilter('type', 'in', [Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_LINK]));
         $filter = clone $_filter;
         // prepend base path to original $_filter object! it is required for toArray() in the response array
         $this->_ensurePathFilterPresent($_filter);
@@ -701,7 +703,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $filter->removeFilter('path');
             $filter->removeFilter('recursive');
             $filter->removeFilter('type');
-            $filter->addFilter($filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
+            $filter->addFilter($filter->createFilter('type', 'in', [Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_LINK]));
             $filter = new Tinebase_Model_Tree_Node_Filter($filter->toArray(), '', array('nameCaseInSensitive' => true));
             $result = $this->_backend->searchNodesCount($filter);
         } else {
@@ -861,7 +863,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $this->resolveGrants($newNode);
         return $newNode;
     }
-    
+
+    public function registerCreateNodeInBackendIntercepter($callable)
+    {
+        $this->_createNodeInBackendIntercepter[] = $callable;
+    }
+
     /**
      * create node in backend
      * 
@@ -876,7 +883,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
 
-        $node = NULL;
+        $node = null;
+        foreach ($this->_createNodeInBackendIntercepter as $callable) {
+            if (null !== ($node = call_user_func($callable, $_statpath, $_type, $_tempFileId))) {
+                return $node;
+            }
+        }
         switch ($_type) {
             case Tinebase_Model_Tree_FileObject::TYPE_FOLDER:
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($_statpath);

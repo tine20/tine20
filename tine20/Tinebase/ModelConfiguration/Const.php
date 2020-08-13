@@ -18,6 +18,7 @@
 
 class Tinebase_ModelConfiguration_Const {
     const ADD_FILTERS = 'addFilters';
+    const APPLICATION = 'application';
     const APP_NAME = 'appName';
     const ASSOCIATIONS = 'associations';
     const AVAILABLE_MODELS = 'availableModels';

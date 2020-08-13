@@ -92,8 +92,9 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function createNode($filename, $type, $tempFileId = array(), $forceOverwrite = false)
     {
+        $this->_setRequestContext($fmCtrlNode = Filemanager_Controller_Node::getInstance());
         // do not convert $type to array!
-        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filename, $type, (array)$tempFileId, $forceOverwrite);
+        $nodes = $fmCtrlNode->createNodes((array)$filename, $type, (array)$tempFileId, $forceOverwrite);
         $result = (count($nodes) === 0) ? array() : $this->_recordToJson($nodes->getFirstRecord());
         
         return $result;
@@ -110,8 +111,9 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function createNodes($filenames, $types, $tempFileIds = array(), $forceOverwrite = false)
     {
+        $this->_setRequestContext($fmCtrlNode = Filemanager_Controller_Node::getInstance());
         // do not convert $type to array!
-        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $types, (array)$tempFileIds, $forceOverwrite);
+        $nodes = $fmCtrlNode->createNodes((array)$filenames, $types, (array)$tempFileIds, $forceOverwrite);
 
         return $this->_multipleRecordsToJson($nodes);
     }

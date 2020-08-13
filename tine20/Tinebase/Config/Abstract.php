@@ -28,6 +28,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     const LABEL                 = 'label';
     const OPTIONS               = 'options';
     const RECORDS               = 'records';
+    const RECORD_MODEL          = 'recordModel';
     const SETBYADMINMODULE      = 'setByAdminModule';
     const SETBYSETUPMODULE      = 'setBySetupModule';
     const TYPE                  = 'type';
