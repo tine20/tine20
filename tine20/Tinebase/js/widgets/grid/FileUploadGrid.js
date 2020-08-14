@@ -450,7 +450,9 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 multiple: true,
                 enableFileDialog: false,
                 dropElSelector: 'div[id=' + this.id + ']',
-                handler: this.onFilesSelect.createDelegate(me)
+                handler: (fileSelection) => {
+                    me.onFilesSelect(fileSelection.getFileList());
+                }
             }],
             handler: me.openDialog
         };
