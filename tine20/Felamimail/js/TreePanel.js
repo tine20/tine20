@@ -120,6 +120,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     filterMode: 'filterToolbar',
     
     /**
+     * define state events
+     */
+    stateful: true,
+    stateId: 'Felamimail-TreePanel',
+    stateEvents: ['expandnode', 'collapsenode'],
+    
+    /**
      * is needed by Tine.widgets.mainscreen.WestPanel to fake container tree panel
      */
     selectContainerPath: Ext.emptyFn,
@@ -185,6 +192,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         initCtxMenu();
         
         // add listeners
+        this.on('beforestatesave',this.saveStateIf, this);
         this.on('beforeclick', this.onBeforeClick, this);
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
@@ -199,6 +207,65 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         // call parent::initComponent
         Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
     },
+
+    /**
+     * get state
+     */
+    getState: function() {
+        return {
+            paths: this.getExpandedPaths(this.getRootNode()),
+            selected: _.get(this.getSelectionModel().getSelectedNode(), 'id')
+        }
+    },
+
+
+    /**
+     * get the deepest nodes expanded paths
+     *
+     * @param node
+     */
+    getExpandedPaths: function(node) {
+        let paths = [];
+
+        if (node.expanded) {
+            paths.push(node.getPath());
+
+            if (node.hasChildNodes()) {
+                Ext.each(node.childNodes, function(childNode) {
+                    paths = paths.concat(this.getExpandedPaths(childNode));
+                }, this);
+            }
+        }
+
+        paths.reverse();
+        paths =  _.reduce(paths, (reduced, path) => {
+            return reduced.concat(String(reduced[reduced.length-1]).startsWith(path) ? [] : [path]);
+        }, []);
+
+        return paths;
+    },
+
+    /**
+     * set expanded paths
+     */
+    setExpandedPaths: async function(state) {
+        let promises = [];
+
+        _.each(state.paths, (path) => {
+            const promise = new Promise((resolve, reject) => {
+                this.expandPath(path, null, function (success, oLastNode) {
+                    if (success) {
+                        resolve();
+                    } else {
+                        reject('expand paths failed.');
+                    }
+                });
+            });
+            promises.push(promise);
+        });
+
+        return Promise.all(promises);
+    },
     
     /**
      * add accounts from registry as nodes to root node
@@ -211,7 +278,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.accountStore.on('load', function(store, records) {
             this.root.removeAll();
             _.map(records, _.bind(this.addAccount, this));
-            this.selectInbox();
+            this.selectLastSelectedNode();
         }, this);
         this.accountStore.on('add', function(store, records) {_.map(records, _.bind(this.addAccount, this)); }, this);
         this.accountStore.on('update', this.onAccountUpdate, this);
@@ -284,9 +351,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             }, this);
             sm.resumeEvents();
         }
+        this.saveState();
     },
 
-   /**
+    /**
      * returns a filter plugin to be used in a grid
      * @private
      */
@@ -321,24 +389,55 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     afterRender: function() {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
         this.initToolTips();
-        this.selectInbox();
+        this.selectLastSelectedNode();
     },
     
     /**
-     * select inbox of account
-     * 
-     * @param {Record} account
+     * select the last selected node
+     * - expand the recorded expanded node from db
      */
-    selectInbox: function(account) {
-        var accountId = (account) ? account.id : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+    selectLastSelectedNode: async function () {
+        let state = Ext.state.Manager.get(this.stateId);
+        this.applyingState = true;
 
-        // expand portal column "Email Accounts" first
+        this.expandPortalColumn();
+
+        try {
+            await this.setExpandedPaths(state);
+        } catch(error) {
+            this.selectInbox();
+            this.applyingState = false;
+        }
+
+        let node = this.getNodeById(state.selected);
+
+        if(node) {
+            node.select();
+        }else {
+            this.selectInbox();
+        }
+
+        this.applyingState = false;
+    },
+
+    /**
+     * expand portal column "Email Accounts"
+     */
+    expandPortalColumn: function () {
         Ext.each(this.app.getMainScreen().getWestPanel().getPortalColumn().items.items, function (item) {
             if (Ext.isFunction(item.expand) && item.recordClass) {
                 item.expand();
             }
         });
-        
+    },
+
+    /**
+     * select inbox of account
+     * @param {Record} account
+     */
+    selectInbox: function(account) {
+        var accountId = (account) ? account.id : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+
         this.expandPath('/root/' + accountId + '/', null, function(success, parentNode) {
             Ext.each(parentNode.childNodes, function(node) {
                 if (Ext.util.Format.lowercase(node.attributes.localname) == 'inbox') {
@@ -347,6 +446,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 }
             }, this);
         });
+    },
+
+    /**
+     * return flag for applying state
+     */
+    saveStateIf() {
+        return !this.applyingState;
     },
     
     /**
