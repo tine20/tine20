@@ -135,6 +135,7 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                         break;
                     case 'textarea':
                         fieldDef.xtype = 'textarea';
+                        fieldDef.height = 150;
                         break;
                     case 'string':
                     default:

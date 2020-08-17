@@ -189,7 +189,9 @@ class Tinebase_Twig
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('keyField', function ($appName, $keyFieldName, $key, $locale = null) {
             $config = Tinebase_Config::getAppConfig($appName)->$keyFieldName;
-            $keyFieldRecord = $config && $config->records instanceof Tinebase_Record_RecordSet ? $config->records->getById($key) : false;
+            $keyFieldRecord = ($config && $config->records instanceof Tinebase_Record_RecordSet && is_string($key))
+                ? $config->records->getById($key)
+                : false;
 
             if ($locale !== null) {
                 $locale = Tinebase_Translation::getLocale($locale);

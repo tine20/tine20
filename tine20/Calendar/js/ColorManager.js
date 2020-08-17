@@ -22,6 +22,7 @@ Ext.ns('Tine.Calendar');
  */
 Tine.Calendar.ColorManager = function(config) {
     Ext.apply(this, config);
+    this.customColorSchemataCache = {};
 };
 
 Ext.apply(Tine.Calendar.ColorManager.prototype, {
@@ -113,12 +114,18 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
     },
     
     getCustomSchema: function(color) {
-        let schema = {color: "#" + color}
-        schema.light = this.shadeColor(0.4, schema.color);
-        schema.text = this.getTextColor(schema.color);
-        schema.lighttext = this.getTextColor(schema.light);
+        if (!this.customColorSchemataCache[color]) {
+            const solid = "#" + color;
+            const light = this.shadeColor(0.4, solid);
+            this.customColorSchemataCache[color] = {
+                color: solid,
+                text: this.getTextColor(solid),
+                light: light,
+                lighttext: this.getTextColor(light)
+            };
+        }
 
-        return schema;
+        return this.customColorSchemataCache[color];
     },
 
     shadeColor: function(shade, color) {

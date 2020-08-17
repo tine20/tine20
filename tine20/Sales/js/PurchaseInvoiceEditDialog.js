@@ -349,7 +349,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/4,
-            regex: /^[0-9]+\.?[0-9]*$/,
+            suffix: ' %',
             listeners: {
                 scope: this,
                 spin: this.onUpdateSalesTax.createDelegate(this),

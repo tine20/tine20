@@ -2168,6 +2168,22 @@ class Tinebase_Core
         return Tinebase_FileSystem_Preview_ServiceFactory::getPreviewService();
     }
 
+    public static function getPrimaryTinebaseId()
+    {
+        if (! isset(self::$appInstanceCache['PrimaryTinebaseId'])) {
+            self::$appInstanceCache['PrimaryTinebaseId'] = Tinebase_Application::getInstance()->getApplicationState(
+                'Tinebase', Tinebase_Application::STATE_REPLICATION_PRIMARY_TB_ID);
+        }
+        return self::$appInstanceCache['PrimaryTinebaseId'];
+    }
+
+    public static function setPrimaryTinebaseId($id)
+    {
+        self::$appInstanceCache['PrimaryTinebaseId'] = $id;
+        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+            Tinebase_Application::STATE_REPLICATION_PRIMARY_TB_ID, $id);
+    }
+
     /**
      * returns the tinebase id
      *
@@ -2260,6 +2276,14 @@ class Tinebase_Core
     /**
      * @return bool
      */
+    public static function isReplica()
+    {
+        return static::isReplicationSlave();
+    }
+
+    /**
+     * @return bool
+     */
     public static function isReplicationSlave()
     {
         if (null !== static::$_isReplicationSlave) {
@@ -2278,6 +2302,14 @@ class Tinebase_Core
 
         static::$_isReplicationMaster = false;
         return (static::$_isReplicationSlave = true);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isReplicationPrimary()
+    {
+        return static::isReplicationMaster();
     }
 
     /**

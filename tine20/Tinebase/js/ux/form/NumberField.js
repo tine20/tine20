@@ -121,7 +121,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
             }
         }
         
-        var showValue = (this.prefix ? this.prefix : '') + tenStringValue + this.decimalSeparator + decimalString + (this.suffix ? this.suffix : '');
+        var showValue = (this.prefix ? this.prefix : '') + tenStringValue + (this.decimalSeparator ? this.decimalSeparator : '') + decimalString + (this.suffix ? this.suffix : '');
         this.setRawValue(prefix + showValue);
         
         return this;

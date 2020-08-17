@@ -236,6 +236,8 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                 
                 continue;
             }
+
+            $maxLength = isset($fields[$value]['length']) ? $fields[$value]['length'] : null;
             
             switch ($value) {
                 case 'jpegphoto':
@@ -275,7 +277,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                 case 'adr_one_street':
                 case 'adr_two_street':
                 case 'title':
-                    $this->_truncateField($contact, $value, $data->$fieldName, 64);
+                    $this->_truncateField($contact, $value, $data->$fieldName, $maxLength);
                     break;
                     
                 case 'email':
@@ -309,7 +311,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     break;
                     
                 default:
-                    $contact->$value = $data->$fieldName;
+                    $this->_truncateField($contact, $value, $data->$fieldName, $maxLength);
                     break;
             }
 
@@ -330,12 +332,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
         );
         // force update of n_fileas and n_fn
         $contact->setFromArray($data);
-        
-        // either "org_name" or "n_family" must be given!
-        if (empty($contact->org_name) && empty($contact->n_family)) {
-            $contact->n_family = 'imported';
-        }
-        
+
         // contact should be valid now
         $contact->isValid();
         

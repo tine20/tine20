@@ -136,6 +136,8 @@ Ext.extend(Ext.ux.form.Spinner, Ext.form.TriggerField, {
         if(this.strategy == undefined){
             this.strategy = new Ext.ux.form.Spinner.NumberStrategy();
         }
+        
+        this.strategy.init(this);
     },
 
     //private

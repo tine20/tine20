@@ -13,7 +13,7 @@ Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Bus
 * [Github Documentation Project](https://github.com/tine20/tine20/projects/2)
 * [Package Downloads](https://github.com/tine20/tine20/releases)
 * [Twitter](https://twitter.com/tine20org)
-* [Matrix chat room #tine20org:matrix.org](https://riot.im/app/#/room/#tine20org:matrix.org)
+* [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
 * [Gitter chat room](https://gitter.im/tine20/Lobby)
 
 ## Other Community resources

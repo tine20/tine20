@@ -115,10 +115,9 @@ trait Felamimail_Transport_Trait
             $this->body = $message->generateMessage($this->EOL);
         }
 
+        // TODO can't we use a stream/filter here to reduce memory footprint?
         $mailAsString = $this->getHeaders($_additionalHeaders) . $this->EOL. $this->getBody();
         // convert \n to \r\n
-        $mailAsString = preg_replace("/(?<!\\r)\\n(?!\\r)/", "\r\n", $mailAsString);
-
-        return $mailAsString;
+        return preg_replace("/(?<!\\r)\\n(?!\\r)/", "\r\n", $mailAsString);
     }
 }

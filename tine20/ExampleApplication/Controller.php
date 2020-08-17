@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -21,6 +21,8 @@
  */
 class ExampleApplication_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
+    use Tinebase_Controller_SingletonTrait;
+
     const publicTestRouteOutput = 'publicTestRouteOutput';
     const authTestRouteOutput = 'authTestRouteOutput';
 
@@ -29,42 +31,8 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
      * @var string
      */
     protected static $_defaultModel = 'ExampleApplication_Model_ExampleRecord';
-    
-    /**
-     * the constructor
-     *
-     * don't use the constructor. use the singleton 
-     */
-    private function __construct() {
-        $this->_applicationName = 'ExampleApplication';
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {
-    }
-    
-    /**
-     * holds self
-     * @var ExampleApplication_Controller
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * singleton
-     *
-     * @return ExampleApplication_Controller
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new ExampleApplication_Controller();
-        }
-        return self::$_instance;
-    }
+
+    protected $_applicationName = 'ExampleApplication';
 
     /**
      * creates the initial folder for new accounts

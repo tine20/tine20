@@ -1389,6 +1389,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             unset($tinebaseProxy);
             unset($tine20Service);
 
+            Tinebase_Core::setPrimaryTinebaseId($result['primaryTinebaseId']);
             $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $result['results']);
             unset($result);
 

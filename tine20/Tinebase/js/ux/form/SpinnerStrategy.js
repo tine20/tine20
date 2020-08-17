@@ -30,6 +30,8 @@ Ext.extend(Ext.ux.form.Spinner.Strategy, Ext.util.Observable, {
     alternateIncrementValue : 5,
     validationTask : new Ext.util.DelayedTask(),
     
+    init: function(cmp) {},
+    
     onSpinUp : function(field){
         this.spin(field, false, false);
     },
@@ -74,6 +76,16 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
     allowDecimals : true,
     decimalPrecision : 2,
     
+    init : function(field) {
+        field.setValue = Ext.ux.form.NumberField.prototype.setValue;
+        field.parseValue = Ext.ux.form.NumberField.prototype.parseValue;
+        field.validateValue = Ext.ux.form.NumberField.prototype.validateValue;
+        field.getValue = Ext.ux.form.NumberField.prototype.getValue;
+        field.fixPrecision = Ext.ux.form.NumberField.prototype.fixPrecision;
+        field.beforeBlur = Ext.ux.form.NumberField.prototype.beforeBlur;
+        
+        field.el.applyStyles('text-align: right');
+    },
     spin : function(field, down, alternate){
         Ext.ux.form.Spinner.NumberStrategy.superclass.spin.call(this, field, down, alternate);
 
@@ -83,7 +95,7 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
         (down == true) ? v -= incr : v += incr ;
         v = (isNaN(v)) ? this.defaultValue : v;
         v = this.fixBoundries(v);
-        field.setRawValue(v);
+        field.setValue(v);
     },
 
     fixBoundries : function(value){

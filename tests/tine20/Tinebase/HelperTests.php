@@ -18,38 +18,6 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  */
 class Tinebase_HelperTests extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_HelperTests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    }
-
     public function testArray_value()
     {
         $array = array(
@@ -107,5 +75,14 @@ class Tinebase_HelperTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($remoteUserValues));
         $firstServerValue = array_shift($remoteUserValues);
         $this->assertEquals('1', $firstServerValue);
+    }
+
+    public function testIdnaConvert()
+    {
+        $input = 'andre@xn--brse-5qa.xn--knrz-1ra.info';
+        self::assertEquals('andre@börse.knürz.info', Tinebase_Helper::convertDomainToUnicode($input));
+
+        $input = 'nörgler.com';
+        self::assertEquals('xn--nrgler-wxa.com', Tinebase_Helper::convertDomainToPunycode($input));
     }
 }

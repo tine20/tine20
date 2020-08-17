@@ -790,11 +790,9 @@ abstract class Tinebase_Controller_Record_Abstract
             $numberable = null;
 
             // if new record field is not set and if there is no old record, we assign a new value
-            if (!isset($_record->{$fieldDef['fieldName']})) {
-                if (null === $_oldRecord) {
+            if (!isset($_record->{$fieldDef['fieldName']}) &&
+                null === $_oldRecord) {
                     $createNewValue = true;
-                }
-
             } else {
 
                 // if new record field is set to empty string, we assign a new value
