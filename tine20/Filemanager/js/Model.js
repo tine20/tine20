@@ -58,7 +58,7 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
 
     getSystemLink: function() {
         var _ = window.lodash,
-            encodedPath = _.map(String(this.get('path')).replace(/(^\/|\/$)/, '').split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/');
+            encodedPath = _.map(String(this.get('path')).replace(/(^\/|\/$)/, '').split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/') + '/';
 
         return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#/Filemanager/showNode', encodedPath].join('/');
     }
