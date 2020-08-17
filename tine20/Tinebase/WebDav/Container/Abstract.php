@@ -616,7 +616,10 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     public function getSyncToken()
     {
         // this only returns null if the container is not found or if container.content_seq = NULL, this does not look up the content history!
-        return Tinebase_Container::getInstance()->getContentSequence($this->_container);
+        if (null === ($token = Tinebase_Container::getInstance()->getContentSequence($this->_container))) {
+            return '-1';
+        }
+        return $token;
     }
 
     /**

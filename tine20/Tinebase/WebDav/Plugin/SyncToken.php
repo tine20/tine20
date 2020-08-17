@@ -110,10 +110,6 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
         if (!($node instanceof Tinebase_WebDav_Container_Abstract) || !$node->supportsSyncToken()) {
             throw new Sabre\DAV\Exception\ReportNotSupported('The {DAV:}sync-collection REPORT is not supported on this url.');
         }
-        $token = $node->getSyncToken();
-        if (!$token) {
-            throw new Sabre\DAV\Exception\ReportNotSupported('No sync information is available at this node');
-        }
 
         // getting the sync token send with the request
         $syncToken = '';

@@ -128,6 +128,34 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
         $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/5</d:sync-token></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response></d:multistatus>', $this->response->body);
     }
 
+    public function testSyncCollectionEmptyContainer()
+    {
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['jmcblack']);
+
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+            <sync-collection xmlns="DAV:">
+                <sync-token/>
+                <sync-level>1</sync-level>
+                <prop>
+                    <getcontenttype/>
+                    <getetag/>
+                </prop>
+            </sync-collection>';
+
+        $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['jmcblack']->getId());
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'REPORT',
+            'REQUEST_URI' => $uri,
+        ));
+        $request->setBody($body);
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        static::assertSame('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/-1</d:sync-token></d:multistatus>', $this->response->body);
+    }
+
     /**
      * test sync-collection request
      */
