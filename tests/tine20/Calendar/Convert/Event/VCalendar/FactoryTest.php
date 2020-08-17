@@ -76,6 +76,7 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends TestCase
             array('version' => '10.7.1', 'identifier' => 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)'),
             array('version' => '10.8',   'identifier' => 'Mac OS X/10.8 (12A269) CalendarAgent/47'),
             array('version' => '10.9',   'identifier' => 'Mac_OS_X/10.9 (13A603) CalendarAgent/174'),
+            array('version' => '11.0',   'identifier' => 'macOS/11.0 (20A5343i) CalendarAgent/950'),
         );
         
         foreach($agents as $agent) {
