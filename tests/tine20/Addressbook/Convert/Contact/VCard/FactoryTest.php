@@ -63,6 +63,7 @@ class Addressbook_Convert_Contact_VCard_FactoryTest extends PHPUnit_Framework_Te
         $agents = array(
                 array('version' => '10.7.1', 'identifier' => 'AddressBook/6.0 (1043) CardDAVPlugin/182 CFNetwork/520.0.13 Mac_OS_X/10.7.1 (11B26)'),
                 array('version' => '10.9',   'identifier' => 'Mac OS X/10.9 (13A603) AddressBook/1365'),
+                array('version' => '11.0',   'identifier' => 'macOS/11.0 (20A5343i) AddressBookCore/1'),
         );
     
         foreach($agents as $agent) {

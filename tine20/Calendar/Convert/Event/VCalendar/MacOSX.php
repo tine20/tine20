@@ -22,7 +22,11 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     // Mac OS X/10.8 (12A269) CalendarAgent/47 
     // Mac_OS_X/10.9 (13A603) CalendarAgent/174
     // Mac+OS+X/10.10 (14A389) CalendarAgent/315"
-    const HEADER_MATCH = '/(?J)((CalendarStore.*Mac OS X\/(?P<version>\S+) )|(^Mac[ _+]OS[ _+]X\/(?P<version>\S+).*CalendarAgent))/';
+    // macOS/11.0 (20A5343i) CalendarAgent/950
+    const HEADER_MATCH = '/'.
+        '(?J)((CalendarStore.*Mac OS X\/(?P<version>\S+) )|'.
+        '(^(M|m)ac[ _+]{0,1}OS([ _+]X){0,1}\/(?P<version>\S+).*CalendarAgent))'.
+    '/';
 
     const INTELLIGROUP = 'INTELLIGROUP';
     
