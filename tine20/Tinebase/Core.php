@@ -2276,7 +2276,7 @@ class Tinebase_Core
     /**
      * @return bool
      */
-    public static function isReplicationSecondary()
+    public static function isReplica()
     {
         return static::isReplicationSlave();
     }
