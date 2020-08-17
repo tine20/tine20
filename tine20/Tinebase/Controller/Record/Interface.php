@@ -70,15 +70,16 @@ interface Tinebase_Controller_Record_Interface
      * @throws  Tinebase_Exception_Record_Validation
      */
     public function update(Tinebase_Record_Interface $_record);
-    
+
     /**
      * update multiple records
-     * 
-     * @param   Tinebase_Model_Filter_FilterGroup $_filter
-     * @param   array $_data
-     * @return  array $this->_updateMultipleResult
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param array $_data
+     * @param Tinebase_Model_Pagination $_pagination
+     * @return array
      */
-    public function updateMultiple($_filter, $_data);
+    public function updateMultiple($_filter, $_data, $_pagination = null);
     
     /**
      * Deletes a set of records.

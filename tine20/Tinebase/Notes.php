@@ -901,14 +901,14 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     }
 
     /**
-     * Updates multiple entries
+     * update multiple records
      *
-     * @param array $_ids to update
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param array $_data
-     * @return integer number of affected rows
+     * @param Tinebase_Model_Pagination $_pagination
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function updateMultiple($_ids, $_data)
+    public function updateMultiple($_filter, $_data, $_pagination = null)
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }

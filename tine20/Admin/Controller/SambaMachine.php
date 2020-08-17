@@ -253,15 +253,14 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
 
     /**
      * update multiple records
-     * 
-     * @param   Tinebase_Model_Filter_FilterGroup $_filter
-     * @param   array $_data
-     * @return  integer number of updated records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param array $_data
+     * @param Tinebase_Model_Pagination $_pagination
+     * @return array
      */
-    public function updateMultiple($_filter, $_data)
+    public function updateMultiple($_filter, $_data, $_pagination = null)
     {
-        //$this->checkRight('MANAGE_SAMBAMACHINES');
-        
         return $this->_backend->updateMultiple($_filter, $_data);
     }
 

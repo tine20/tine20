@@ -279,12 +279,12 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
     /**
      * update multiple records
      *
-     * @param   Tinebase_Model_Filter_FilterGroup $_filter
-     * @param   array $_data
-     * @return  integer number of updated records
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param array $_data
+     * @param Tinebase_Model_Pagination $_pagination
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function updateMultiple($_what, $_data)
+    public function updateMultiple($_filter, $_data, $_pagination = null)
     {
         throw new Tinebase_Exception_NotImplemented('Not Implemented');
     }
