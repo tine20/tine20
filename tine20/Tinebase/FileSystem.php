@@ -2205,7 +2205,8 @@ class Tinebase_FileSystem implements
         
         $hashDirectory = $this->_basePath . '/' . substr($hash, 0, 3);
         if (!file_exists($hashDirectory)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
             if (@mkdir($hashDirectory, 0700) === false) {
                 if (!is_dir($hashDirectory)) {
                     throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
@@ -2213,12 +2214,13 @@ class Tinebase_FileSystem implements
             }
         }
         
-        $hashFile      = $hashDirectory . '/' . substr($hash, 3);
+        $hashFile = $hashDirectory . '/' . substr($hash, 3);
         $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
         $fileCreated = false;
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
         while (!file_exists($hashFile)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
             $hashHandle = fopen($hashFile, 'x');
             if (! $hashHandle) {
                 if (file_exists($hashFile)) {
