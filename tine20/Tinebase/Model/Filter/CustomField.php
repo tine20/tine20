@@ -167,6 +167,10 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 // TODO support recordset
                 throw new Tinebase_Exception_NotImplemented('filter for records type not implemented yet');
                 break;
+            case 'keyField':
+                $filterClass = Tinebase_Model_Filter_Id::class;
+                $this->_operators = ['equals', 'not'];
+                break;
             default:
                 $this->_operators = ['contains', 'AND', 'OR'];
                 // nothing here - parent is used
