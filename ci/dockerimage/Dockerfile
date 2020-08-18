@@ -134,6 +134,7 @@ COPY .git ${TINE20ROOT}/.git
 COPY tine20 ${TINE20ROOT}/tine20/
 COPY tests ${TINE20ROOT}/tests/
 COPY scripts ${TINE20ROOT}/scripts/
+COPY ci/dockerimage/.gitconfig /root/.gitconfig
 
 RUN if test -n "${CUSTOM_APP_NAME}"; \
     then cd ${TINE20ROOT}/tine20; \
