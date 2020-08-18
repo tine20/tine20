@@ -4564,7 +4564,7 @@ msgid "You are not allowed to delete this Container. Please define another conta
 msgstr "Es ist nicht erlaubt diesen Ordner zu löschen. Bitte definieren sie zuvor einen anderen Ordner für interne Kontakte!"
 
 msgid "File double-clicking action"
-msgstr "Datei Doppel-klick verhalten"
+msgstr "Datei Doppelklick-Verhalten"
 
 msgid "Which action should be executed by default when a file is double-clicked."
-msgstr "Welche Aktion soll ausgeführt werden wenn eine datei doppelt angeklickt wird."
+msgstr "Welche Aktion soll ausgeführt werden, wenn eine Datei doppelt angeklickt wird."
