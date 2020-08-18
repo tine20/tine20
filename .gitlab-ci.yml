@@ -24,6 +24,7 @@ workflow:
   script:
     - tag_major_as_commit_image base
     - tag_major_as_commit_image dependency
+    - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
     - build_and_push source
     - build_and_push test-source
   rules:
