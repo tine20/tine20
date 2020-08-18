@@ -629,7 +629,7 @@ function(el){
          * @return {Boolean}
          */
         isFunction : function(v){
-            return toString.apply(v) === '[object Function]';
+            return _.isFunction(v); // cope with async functions
         },
 
         /**
