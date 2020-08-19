@@ -121,7 +121,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
             }
         }
         
-        var showValue = (this.prefix ? this.prefix : '') + tenStringValue + (this.decimalSeparator ? this.decimalSeparator : '') + decimalString + (this.suffix ? this.suffix : '');
+        var showValue = (this.prefix ? this.prefix : '') + tenStringValue + ((this.decimalSeparator && decimalString) ? this.decimalSeparator : '') + decimalString + (this.suffix ? this.suffix : '');
         this.setRawValue(prefix + showValue);
         
         return this;
@@ -168,7 +168,21 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
             var regex = new RegExp(((this.thousandSeparator == ".") ? '\\.' : this.thousandSeparator), 'g');
             value = value.replace(regex, '');
         }
-        
+
+        const decimalRe = new RegExp(this.decimalSeparator === "." ? '\\.' : this.decimalSeparator, 'g');
+        if (value && !this.allowDecimals && String(value).match(decimalRe)) {
+            this.markInvalid(Tine.Tinebase.i18n._('no decimals allowed'));
+            return false;
+        }
+
+        if (value && this.allowDecimals && String(value).match(decimalRe)) {
+            const parts = value.split(decimalRe);
+            if (parts[1].length > this.decimalPrecision) {
+                this.markInvalid(String.format(Tine.Tinebase.i18n._('max decimals allowed: {0}'), this.decimalPrecision));
+                return false;
+            }
+        }
+
         return Ext.ux.form.NumberField.superclass.validateValue.call(this, value);
     }
 });

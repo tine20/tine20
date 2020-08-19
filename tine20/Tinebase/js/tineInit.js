@@ -779,6 +779,11 @@ Tine.Tinebase.tineInit = {
 
         Tine.Tinebase.tineInit.initExtDirect();
 
+
+        Ext.form.NumberField.prototype.decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
+        Ext.ux.form.NumberField.prototype.thousandSeparator = Tine.Tinebase.registry.get('thousandSeparator');
+
+
         formatMessage.setup({
             locale: Tine.Tinebase.registry.get('locale').locale || 'en'
         });
