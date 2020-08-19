@@ -301,7 +301,11 @@ class Tinebase_PreferenceTest extends TestCase
         ]], 1);
 
         $appPrefs = Tinebase_Core::getPreference('Tinebase');
-        static::assertSame('download', $appPrefs->{Tinebase_Preference::FILE_DBLCLICK_ACTION});
+        $expectedPrefValue = (class_exists('OnlyOfficeIntegrator_Config') && Tinebase_Application::getInstance()
+                ->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME, true))
+                ? 'openwithonlyoffice'
+                : 'download';
+        static::assertSame($expectedPrefValue, $appPrefs->{Tinebase_Preference::FILE_DBLCLICK_ACTION});
     }
 
     /**
