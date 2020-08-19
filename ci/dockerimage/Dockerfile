@@ -138,8 +138,11 @@ COPY ci/dockerimage/.gitconfig /root/.gitconfig
 
 RUN if test -n "${CUSTOM_APP_NAME}"; \
     then cd ${TINE20ROOT}/tine20; \
-    echo composer config "repositories.${CUSTOM_APP_VENDOR}-${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
-    composer config "repositories.${CUSTOM_APP_VENDOR}-${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
+    apk add jq; \
+    echo jq 'del(.repositories[]|select(.url=="https://gerrit.tine20.com/customers/p/'${CUSTOM_APP_NAME}'.git"))' $TINE20ROOT/tine20/composer.json '>' /tmp/replace-composer.json '&&' mv /tmp/replace-composer.json $TINE20ROOT/tine20/composer.json; \
+    jq 'del(.repositories[]|select(.url=="https://gerrit.tine20.com/customers/p/'${CUSTOM_APP_NAME}'.git"))' $TINE20ROOT/tine20/composer.json > /tmp/replace-composer.json && mv /tmp/replace-composer.json $TINE20ROOT/tine20/composer.json; \
+    echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
+    composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
     echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}"; \
     composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}"; \
     fi
