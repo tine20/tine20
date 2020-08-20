@@ -386,8 +386,10 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
             $this->_backend->dropForeignKey('cal_attendee', 'cal_attendee::displaycontainer_id--container::id');
         } catch (Exception $e) {
             // fk might not exist yet
+            Tinebase_Exception::log($e);
         }
-        $this->_backend->addForeignKey('cal_attendee', new Setup_Backend_Schema_Index_Xml('<index>
+        try {
+            $this->_backend->addForeignKey('cal_attendee', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>cal_attendee::displaycontainer_id--container::id</name>
                     <field>
                         <name>displaycontainer_id</name>
@@ -399,6 +401,11 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
                         <ondelete>SET NULL</ondelete>
                     </reference>
                 </index>'));
+        } catch (Exception $e) {
+            // this is strange - maybe the table structure has an issue that needs to be solved manually
+            Tinebase_Exception::log($e);
+        }
+
         if ($this->getTableVersion('cal_events') < 8) {
             $this->setTableVersion('cal_events', 8);
         }
