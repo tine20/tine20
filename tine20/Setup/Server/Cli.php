@@ -87,7 +87,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                             setup.php --migrateUtf8mb4',
                 'maintenance_mode'          => 'set systems maintenance mode state
                         Examples:
-                           setup.php --maintenance_mode -- state=[on|all|off]',
+                           setup.php --maintenance_mode -- state=[normal|all|off]',
                 'config_from_env'           => 'generates config from environment variables like TINE20__<application>_<propertiy>',
                 'is_installed'           => 'Checks if tine20 is installed, otherwise returns 1.',
             ));
