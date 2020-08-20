@@ -134,11 +134,15 @@ COPY .git ${TINE20ROOT}/.git
 COPY tine20 ${TINE20ROOT}/tine20/
 COPY tests ${TINE20ROOT}/tests/
 COPY scripts ${TINE20ROOT}/scripts/
+COPY ci/dockerimage/.gitconfig /root/.gitconfig
 
 RUN if test -n "${CUSTOM_APP_NAME}"; \
     then cd ${TINE20ROOT}/tine20; \
-    echo composer config "repositories.${CUSTOM_APP_VENDOR}-${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
-    composer config "repositories.${CUSTOM_APP_VENDOR}-${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
+    apk add jq; \
+    echo jq 'del(.repositories[]|select(.url=="https://gerrit.tine20.com/customers/p/'${CUSTOM_APP_NAME}'.git"))' $TINE20ROOT/tine20/composer.json '>' /tmp/replace-composer.json '&&' mv /tmp/replace-composer.json $TINE20ROOT/tine20/composer.json; \
+    jq 'del(.repositories[]|select(.url=="https://gerrit.tine20.com/customers/p/'${CUSTOM_APP_NAME}'.git"))' $TINE20ROOT/tine20/composer.json > /tmp/replace-composer.json && mv /tmp/replace-composer.json $TINE20ROOT/tine20/composer.json; \
+    echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
+    composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
     echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}"; \
     composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}"; \
     fi
@@ -182,6 +186,7 @@ RUN bash -c "source /build_script.sh && cleanup"
 # fixes some bug: Forgot to document it in time, so i do not no witch one
 FROM ${BUILD_IMAGE} as copy-build
 
+FROM ${SOURCE_IMAGE} as copy-source
 # ======================================================================================================================
 
 FROM ${BASE_IMAGE} as built
@@ -203,14 +208,14 @@ COPY docs/config/ /config
 
 COPY --from=copy-build ${TINE20ROOT}/.git ${TINE20ROOT}/.git
 COPY --from=copy-build ${TINE20ROOT}/tests ${TINE20ROOT}/tests
-COPY --from=source ${TINE20ROOT}/tine20/vendor ${TINE20ROOT}/tine20/vendor
-COPY --from=source ${TINE20ROOT}/tine20/library/ExtJS/src/locale ${TINE20ROOT}/tine20/library/ExtJS/src/locale
-COPY --from=source ${TINE20ROOT}/tine20/composer.json ${TINE20ROOT}/tine20/composer.json
-COPY --from=source ${TINE20ROOT}/tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
-COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
-COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
-COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/node_modules ${TINE20ROOT}/tine20/Tinebase/js/node_modules
-COPY --from=source ${TINE20ROOT}/tine20/Tinebase/js/Locale/static ${TINE20ROOT}/tine20/Tinebase/js/Locale/static
+COPY --from=copy-source ${TINE20ROOT}/tine20/vendor ${TINE20ROOT}/tine20/vendor
+COPY --from=copy-source ${TINE20ROOT}/tine20/library/ExtJS/src/locale ${TINE20ROOT}/tine20/library/ExtJS/src/locale
+COPY --from=copy-source ${TINE20ROOT}/tine20/composer.json ${TINE20ROOT}/tine20/composer.json
+COPY --from=copy-source ${TINE20ROOT}/tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
+COPY --from=copy-source ${TINE20ROOT}/tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
+COPY --from=copy-source ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
+COPY --from=copy-source ${TINE20ROOT}/tine20/Tinebase/js/node_modules ${TINE20ROOT}/tine20/Tinebase/js/node_modules
+COPY --from=copy-source ${TINE20ROOT}/tine20/Tinebase/js/Locale/static ${TINE20ROOT}/tine20/Tinebase/js/Locale/static
 
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
 

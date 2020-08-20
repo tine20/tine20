@@ -6,7 +6,7 @@
  * @subpackage  File
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -354,12 +354,16 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         return $handle;
     }
 
-    public function createTempFileFromNode($node)
+    public function createTempFileFromNode(Tinebase_Model_Tree_Node $node)
     {
-        $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
         $path = self::getTempPath();
-        file_put_contents($path, $content);
-        return $this->createTempFile($path);
+        if (!copy($node->getFilesystemPath(), $path)) {
+            Tinebase_Core::getLogger()->err('could not copy node ' . $node->getId() . ' ' . $node->getFilesystemPath()
+                . ' to temppath ' . $path);
+            throw new Tinebase_Exception_Backend('could not copy node to tempPath');
+        }
+
+        return $this->createTempFile($path, $node->name, $node->contenttype, $node->size);
     }
 
     public function createTempFileFromStream($stream)

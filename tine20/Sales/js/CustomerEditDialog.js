@@ -46,12 +46,6 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             form.markInvalid( {'adr_street': msg, 'adr_pobox': msg});
         }
 
-        var number = form.findField('number').getValue();
-        if (number.match(/[^0-9^]+/)) {
-            isValid = false;
-            form.markInvalid( {'number': this.app.i18n._('Only numbers are allowed!')});
-        }
-
         return isValid;
     },
     
@@ -272,7 +266,6 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }),
                                 decimalPrecision: 2,
                                 decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-                                regex: /^[0-9]+\.?[0-9]*$/
                             }], [{
                                 name: 'iban',
                                 fieldLabel: this.app.i18n._('IBAN')

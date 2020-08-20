@@ -1705,13 +1705,14 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * update multiple records
      *
-     * @param   Tinebase_Model_Filter_FilterGroup $_filter
-     * @param   array $_data
-     * @return  array $this->_updateMultipleResult
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param array $_data
+     * @param Tinebase_Model_Pagination $_pagination
+     * @return array $this->_updateMultipleResult
      * 
      * @todo add param $_returnFullResults (if false, do not return updated records in 'results')
      */
-    public function updateMultiple($_filter, $_data)
+    public function updateMultiple($_filter, $_data, $_pagination = null)
     {
         $this->_checkRight(self::ACTION_UPDATE);
         $this->checkFilterACL($_filter, self::ACTION_UPDATE);
@@ -1743,7 +1744,10 @@ abstract class Tinebase_Controller_Record_Abstract
             'iteratable' => $this,
             'controller' => $this,
             'filter'     => $_filter,
-            'options'    => array('getRelations' => $getRelations),
+            'options'    => [
+                'getRelations' => $getRelations,
+                'sortInfo' => $_pagination,
+            ],
             'function'   => 'processUpdateMultipleIteration',
         ));
         /*$result = */$iterator->iterate($_data);

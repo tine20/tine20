@@ -140,6 +140,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
      * @param $message
      * @param $location
      * @param $record
+     * @param $node
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function createMessageLocationForRecord($message, $location, $record, $node)
@@ -162,7 +163,16 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
                 ? Felamimail_Model_MessageFileLocation::TYPE_NODE
                 : Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT;
         }
-        $this->create($locationToCreate);
+
+        try {
+            $this->create($locationToCreate);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Exception::isDbDuplicate($zdse) && Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+            } else {
+                throw $zdse;
+            }
+        }
 
         // invalidate location cache
         $cache = Tinebase_Core::getCache();

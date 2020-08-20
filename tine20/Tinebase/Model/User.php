@@ -193,12 +193,29 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
                 }
             }
         }
-        
+
+        if (isset($_data['accountEmailAddress'])) {
+            $_data['accountEmailAddress'] = Tinebase_Helper::convertDomainToPunycode($_data['accountEmailAddress']);
+        }
+
         parent::setFromArray($_data);
     }
-    
 
-    
+    /**
+     * @param bool $_recursive
+     * @return array
+     */
+    public function toArray($_recursive = TRUE)
+    {
+        $result = parent::toArray($_recursive);
+
+        if ($this->accountEmailAddress) {
+            $result['accountEmailAddress'] = Tinebase_Helper::convertDomainToUnicode($this->accountEmailAddress);
+        }
+
+        return $result;
+    }
+
     /**
      * check if current user has a given right for a given application
      *
@@ -214,9 +231,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
 
         $roles = Tinebase_Acl_Roles::getInstance();
         
-        $result = $roles->hasRight($_application, $this->accountId, $_right);
-        
-        return $result;
+        return $roles->hasRight($_application, $this->accountId, $_right);
     }
     
     /**
@@ -229,9 +244,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         $roles = Tinebase_Acl_Roles::getInstance();
         
-        $result = $roles->getApplicationRights($_application, $this->accountId);
-        
-        return $result;
+        return $roles->getApplicationRights($_application, $this->accountId);
     }
     
     /**
@@ -243,9 +256,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         $backend = Tinebase_Group::getInstance();
         
-        $result = $backend->getGroupMemberships($this->accountId);
-        
-        return $result;
+        return $backend->getGroupMemberships($this->accountId);
     }
     
     /**
@@ -259,9 +270,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         $backend = Tinebase_User::getInstance();
         
-        $result = $backend->setLoginTime($this->accountId, $_ipAddress);
-        
-        return $result;
+        return $backend->setLoginTime($this->accountId, $_ipAddress);
     }
     
     /**

@@ -1028,21 +1028,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // need to save new attendee set in $updatedRecord for modlog
         $updatedRecord->attendee = clone($record->attendee);
     }
-    
+
     /**
      * update multiple records
-     * 
-     * @param   Tinebase_Model_Filter_FilterGroup $_filter
-     * @param   array $_data
-     * @return  integer number of updated records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param array $_data
+     * @param Tinebase_Model_Pagination $_pagination
+     * @return array
      */
-    public function updateMultiple($_filter, $_data)
+    public function updateMultiple($_filter, $_data, $_pagination = null)
     {
         $this->_checkRight('update');
         $this->checkFilterACL($_filter, 'update');
         
         // get only ids
-        $ids = $this->_backend->search($_filter, NULL, TRUE);
+        $ids = $this->_backend->search($_filter, $_pagination, TRUE);
         
         foreach ($ids as $eventId) {
             $event = $this->get($eventId);
@@ -1052,8 +1053,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $this->update($event);
         }
-        
-        return count($ids);
+
+        return ['totalcount' => count($ids)];
     }
     
     /**

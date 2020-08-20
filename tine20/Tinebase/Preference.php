@@ -79,6 +79,11 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      * advanced search through relations and so on
      */
     const ADVANCED_SEARCH = 'advancedSearch';
+
+    /**
+     * Preference for file row double click default action
+     */
+    const FILE_DBLCLICK_ACTION = 'fileDblClickAction';
     
     /**************************** public functions *********************************/
     
@@ -89,8 +94,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      */
     public function getAllApplicationPreferences()
     {
-        $allPrefs = ($this->_application == 'Tinebase') 
-            ? array(
+        $allPrefs = $this->_application === 'Tinebase' ? [
                 self::TIMEZONE,
                 self::LOCALE,
                 self::DEFAULT_APP,
@@ -100,9 +104,9 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::GRID_STRIPE_ROWS,
                 self::GRID_LOAD_MASK,
                 self::FILTER_CHANGE_AUTO_SEARCH,
-                self::ADVANCED_SEARCH
-            )
-            : array();
+                self::ADVANCED_SEARCH,
+                self::FILE_DBLCLICK_ACTION
+            ] : [];
             
         return $allPrefs;
     }
@@ -156,6 +160,10 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             self::ADVANCED_SEARCH => array(
                 'label'         => $translate->_('Enable advanced search'),
                 'description'   => $translate->_('If enabled quickfilter searches through relations as well.')
+            ),
+            self::FILE_DBLCLICK_ACTION => array(
+                'label' => $translate->_('File double-clicking action'),
+                'description' => $translate->_('Which action should be executed by default when a file is double-clicked.'),
             )
         );
         
@@ -171,6 +179,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
+        $translate = Tinebase_Translation::getTranslation($this->_application);
         
         switch($_preferenceName) {
             case self::PAGE_SIZE:
@@ -260,6 +269,28 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::FILE_DBLCLICK_ACTION:
+                $OOIAvailable = class_exists('OnlyOfficeIntegrator_Config') && Tinebase_Application::getInstance()
+                        ->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME, true);
+                
+                $preference->value = $OOIAvailable ? 'openwithonlyoffice' : 'download';
+
+                $preference->options = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <value>download</value>
+                            <label>' . $translate->_('Download') . '</label>
+                        </option>
+                        <option>
+                            <value>preview</value>
+                            <label>' . $translate->_('Preview') . '</label>
+                        </option>
+                        ' . ($OOIAvailable ? '<option>
+                            <value>openwithonlyoffice</value>
+                            <label>' . $translate->_('Edit') . '</label>
+                        </option>' : '') . '
                     </options>';
                 break;
             default:

@@ -809,18 +809,44 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string', $definition = null)
     {
+        if ($type === 'keyField') {
+            $definition = [
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type' => $type,
+                'required' => false,
+                'keyFieldConfig' => [
+                    'value' => [
+                        'records' => [
+                            ['id' => 'test', 'value' => 'test'],
+                            ['id' => 'go', 'value' => 'go'],
+                        ],
+                        'default' => 'go'
+                    ]
+                ]
+            ];
+        }
         if ($definition === null) {
             $definition = array(
                 'label' => Tinebase_Record_Abstract::generateUID(),
-                'type'  => $type,
+                'type' => $type,
                 'recordConfig' => $type === 'record'
                     ? array('value' => array('records' => 'Tine.Addressbook.Model.Contact'))
                     : null,
+                'keyFieldConfig' => $type === 'keyField'
+                    ? ['value' => [
+                        'records' => [
+                            ['id' => 'test', 'value' => 'test'],
+                            ['id' => 'go', 'value' => 'go'],
+                        ],
+                        'default' => 'go'
+                    ]
+                    ]
+                    : null,
                 'uiconfig' => array(
-                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'xtype' => Tinebase_Record_Abstract::generateUID(),
                     'length' => 10,
-                    'group'  => 'unittest',
-                    'order'  => 100,
+                    'group' => 'unittest',
+                    'order' => 100,
                 )
             );
         }

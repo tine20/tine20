@@ -130,7 +130,8 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
                 throw new Tinebase_Exception_UnexpectedValue('invalid type: ' . $this->{self::FLD_TYPE});
         }
 
-        if (!empty($this->{self::FLD_NODE_ID}) && $this->{self::FLD_NODE_ID} !== $node->getId()) {
+        $nodeId = is_array($this->{self::FLD_NODE_ID}) ? $this->{self::FLD_NODE_ID}['id'] : $this->{self::FLD_NODE_ID};
+        if (!empty($nodeId) && $nodeId !== $node->getId()) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_FM_PATH . ' and ' . self::FLD_NODE_ID . ' mismatch');
         }
         return $node;

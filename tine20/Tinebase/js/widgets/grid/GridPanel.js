@@ -1965,9 +1965,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                             });
                         }
                         break;
-                    case 'keyfield':
-                        // @TODO implement me
-                        break;
                     default:
                         result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
                         break;
