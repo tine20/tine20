@@ -43,6 +43,7 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
     lazyInit: false,
     forceSelection: true,
     itemSelector: 'div.search-item',
+    editable: false,
 
     //private
     initComponent: function(){
