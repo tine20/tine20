@@ -165,9 +165,14 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns the node record
      * @param string $id
      * @return array
+     * @throws Tinebase_Exception_NotFound
      */
     public function getNode($id)
     {
+        if ($id === null) {
+            throw new Tinebase_Exception_NotFound('Node not found');
+        }
+
         $controller = Filemanager_Controller_Node::getInstance();
         try {
             $oldDoThrow = $controller->doThrowOnGetQuarantined(false);
