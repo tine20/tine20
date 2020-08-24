@@ -181,15 +181,15 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         // always update accountDisplayName and accountFullName
         if (isset($_data['accountLastName'])) {
-            $_data['accountDisplayName'] = $_data['accountLastName'];
+            $_data['accountDisplayName'] = trim($_data['accountLastName']);
             if (!empty($_data['accountFirstName'])) {
-                $_data['accountDisplayName'] .= ', ' . $_data['accountFirstName'];
+                $_data['accountDisplayName'] .= ', ' . trim($_data['accountFirstName']);
             }
             
             if (! (isset($_data['accountFullName']) || array_key_exists('accountFullName', $_data))) {
-                $_data['accountFullName'] = $_data['accountLastName'];
+                $_data['accountFullName'] = trim($_data['accountLastName']);
                 if (!empty($_data['accountFirstName'])) {
-                    $_data['accountFullName'] = $_data['accountFirstName'] . ' ' . $_data['accountLastName'];
+                    $_data['accountFullName'] = trim($_data['accountFirstName']) . ' ' . $_data['accountFullName'];
                 }
             }
         }
