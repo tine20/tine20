@@ -221,10 +221,10 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $tmpFile = fopen($tmpPath, 'w');
                 try {
                     stream_copy_to_stream($stream, $tmpFile);
-                } catch (Exception $e) {
+                } catch (Throwable $t) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                         __METHOD__ . '::' . __LINE__
-                        . ' Could not copy stream: ' . $e->getMessage());
+                        . ' Could not copy stream: ' . $t->getMessage());
                 } finally {
                     fclose($tmpFile);
                 }
