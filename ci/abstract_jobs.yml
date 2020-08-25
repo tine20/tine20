@@ -78,6 +78,8 @@
       if test -n "${ARG_EXCLUDE_GROUP}"; then cmd="${cmd} --exclude-group ${ARG_EXCLUDE_GROUP}"; fi;
       if test -n "${ARG_GROUP}"; then cmd="${cmd} --group ${ARG_GROUP}"; fi;
       cmd="${cmd} ${ARG_TEST}";
+      echo ${cmd};
+      echo ${NODE_TOTAL} ${NODE_INDEX};
       ${cmd}
   artifacts:
     paths:
