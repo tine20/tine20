@@ -78,7 +78,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
         container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
         probability: 0,
         turnover: 0,
-        mute: true, // @todo use the user/config ?
+        mute: '1', // @todo use the user/config ?
         relations: [{
             type: 'RESPONSIBLE',
             related_record: Tine.Tinebase.registry.get('userContact')

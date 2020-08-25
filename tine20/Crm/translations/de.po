@@ -768,8 +768,11 @@ msgstr "Steuert das versenden von Benachrichtigungen für Leads"
 msgid "Send Notification?"
 msgstr "Benachrichtigung senden?"
 
-msgid "Changes to this lead might send notifications."
-msgstr "Änderungen an diesem Lead könnten Benachrichtigungen verschicken."
+msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr "Änderungen an diesem Lead können Benachrichtigungen senden. Drücken Sie die Taste \"Benachrichtigung werden nicht unterdrückt\", um zu \"Benachrichtigung werden unterdrückt\" zu wechseln."
 
-msgid "Mute Notification"
-msgstr "Benachrichtigungen unterdrücken"
+msgid "Notifications are enabled"
+msgstr "Benachrichtigungen werden nicht unterdrückt"
+
+msgid "Notifications are disabled"
+msgstr "Benachrichtigungen werden unterdrückt"

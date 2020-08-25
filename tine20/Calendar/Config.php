@@ -206,6 +206,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
     /**
      * @var string
      */
+    const FEATURE_EVENT_NOTIFICATION_CONFIRMATION = 'featureEventNotificationConfirmation';
+
+    /**
+     * @var string
+     */
     const TENTATIVE_NOTIFICATIONS = 'tentativeNotifications';
 
     /**
@@ -591,6 +596,12 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => true,
                 ),
+                self::FEATURE_EVENT_NOTIFICATION_CONFIRMATION   => [
+                    self::LABEL         => 'Event Notification Confirmation', //_('Lead Notification Confirmation')
+                    self::DESCRIPTION   => 'Event Notification Confirmation',
+                    self::TYPE          => self::TYPE_BOOL,
+                    self::DEFAULT_STR   => false,
+                ],
             ],
             self::DEFAULT_STR => [],
         ],
