@@ -29,7 +29,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 $file .= (strpos($file, '?') ? '&' : '?') . 'version=' . Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
             }
 
-            $baseUrl = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NO_PROTO);
+            $baseUrl = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NO_PROTO, false);
 
             if (TINE20_BUILDTYPE == 'DEBUG') {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
