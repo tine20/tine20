@@ -81,10 +81,27 @@ workflow:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
   stage: build_and_source_test
-  parallel: 5
   timeout: 45m
   rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
+      when: on_success
+    - when: never
+
+"php unit: all tests source, parallel":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-source-commit
+  stage: build_and_source_test
+  timeout: 45m
+  parallel: 5
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "false"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
     - when: never
