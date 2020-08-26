@@ -527,8 +527,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param   int|Tinebase_Model_Container $_containerId the id of the container
      * @param   bool                         $_getDeleted get deleted records
      * @return  Tinebase_Model_Container
-     * @throws  Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function getContainerById($_containerId, $_getDeleted = FALSE)
     {
@@ -539,10 +537,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         try {
             $container = $this->loadFromClassCache(__FUNCTION__, $cacheId,
                 Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
-            if (! $container instanceof Tinebase_Model_Container) {
-                throw new Tinebase_Exception_UnexpectedValue('did not get a container from cache!');
+            if ($container instanceof Tinebase_Model_Container) {
+                return $container;
             }
-            return $container;
         } catch (Tinebase_Exception_NotFound $tenf) {
             // continue...
         }
