@@ -246,7 +246,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         region: 'north',
                         xtype: 'columnform',
                         formDefaults: commonFormDefaults,
-                        height: 200,
+                        height: 350,
                         items: [[{
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
@@ -709,7 +709,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  Tine.Felamimail.AccountEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 580,
-        height: 550,
+        height: 600,
         name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.AccountEditDialog',
         contentPanelConstructorConfig: config
