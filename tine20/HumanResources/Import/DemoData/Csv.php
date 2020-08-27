@@ -64,7 +64,7 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
                 'employee_id' => $importedRecord['id'],
                 'feast_calendar_id' => $event_id,
                 'vacation_days' => '27',
-                'workingtime_json' => '{"days":[8,8,8,8,5.5,0,0]}'
+                'workingtime_json' => '{"days":[8,8,8,8,8,0,0]}'
             ));
             HumanResources_Controller_Contract::getInstance()->create($contract_Model);
         }catch(Exception $e)
@@ -127,6 +127,7 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
                 'bday' => $contact['bday'],
                 'profession' => $contact['title'],
                 'position' => $contact['org_unit'],
+                'dfcom_id' => ($result['dfcom_id']) ? $result['dfcom_id'] : Tinebase_Record_Abstract::generateUID(20),
             );
             $result = array_merge($conctact_data, $result);
         }
