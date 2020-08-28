@@ -384,8 +384,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             allowBlank: false,
                             selectOnFocus: true,
                             maxLength: 255,
-                            // TODO make this work
-                            listeners: {render: function(field){field.focus(false, 2000);}}
                         }]
                     }, {
                         region: 'center',
