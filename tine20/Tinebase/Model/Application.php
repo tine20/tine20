@@ -88,6 +88,10 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
                     Tinebase_Application::ENABLED,
                     Tinebase_Application::DISABLED
                 ]]],
+                'inputFilters'                  => [
+                    Zend_Filter_StringTrim::class => null,
+                    Zend_Filter_StringToLower::class => null,
+                ],
             ),
             'order'             => array(
                 'label'             => 'Order', //_('Order')

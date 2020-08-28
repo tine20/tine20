@@ -320,6 +320,7 @@ class Tinebase_Application
      */
     public function setApplicationStatus($_applicationIds, $state)
     {
+        $state = strtolower($state);
         if (!in_array($state, array(Tinebase_Application::ENABLED, Tinebase_Application::DISABLED))) {
             throw new Tinebase_Exception_InvalidArgument('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
