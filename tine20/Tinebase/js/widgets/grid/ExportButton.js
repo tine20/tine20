@@ -95,7 +95,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                 relatedFiles = _.map(_.filter(relations, {related_model: 'Filemanager_Model_Node'}), 'related_record'),
                 allFiles = _.concat(attachments, relatedFiles),
                 menuItems = _.reduce(allFiles, function(result, file) {
-                    if (_.endsWith(file.name, format)) {
+                    if (file && _.endsWith(file.name, format)) {
                         result.push({
                             text: file.name,
                             handler: handler.createDelegate(action, [{template: file.id}])
