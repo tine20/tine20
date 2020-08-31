@@ -527,4 +527,14 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 . __LINE__ . ' icon file not found or unsupported format: ' . $iconFilename);
         }
     }
+
+    /**
+     * @return bool
+     *
+     * pdf export only supports download
+     */
+    public function isDownload()
+    {
+        return true;
+    }
 }
