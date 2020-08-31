@@ -155,13 +155,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setApplicationState($applicationIds, $state)
     {
-        Admin_Controller_Application::getInstance()->setApplicationState($applicationIds, $state);
+        $result = Admin_Controller_Application::getInstance()->setApplicationState($applicationIds, $state);
 
-        $result = array(
-            'success' => TRUE
+        return array(
+            'success' => $result
         );
-        
-        return $result;
     }
             
     /********************************** Users *********************************/

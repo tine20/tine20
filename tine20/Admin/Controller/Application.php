@@ -110,13 +110,14 @@ class Admin_Controller_Application extends Tinebase_Controller_Abstract
      *
      * @param   array $_applicationIds  array of application ids
      * @param   string $_state           state to set
+     * @return boolean
      */
     public function setApplicationState($_applicationIds, $_state)
     {
         $this->checkRight('MANAGE_APPS');
         
-        $tineApplications = Tinebase_Application::getInstance();
-        
-        return $tineApplications->setApplicationStatus($_applicationIds, $_state);
+        Tinebase_Application::getInstance()->setApplicationStatus($_applicationIds, $_state);
+
+        return true;
     }           
 }

@@ -22,7 +22,7 @@ Tine.Admin.Applications.Main = {
         this._action_enable = new Ext.Action({
             text: this.translation.gettext('Enable Application'),
             disabled: true,
-            handler: this._enableDisableButtonHandler.createDelegate(this, ['Enabled']),
+            handler: this._enableDisableButtonHandler.createDelegate(this, ['enabled']),
             scope: this,
             iconCls: 'action_enable'
         });
@@ -30,7 +30,7 @@ Tine.Admin.Applications.Main = {
         this._action_disable = new Ext.Action({
             text: this.translation.gettext('Disable Application'),
             disabled: true,
-            handler: this._enableDisableButtonHandler.createDelegate(this, ['Disabled']),
+            handler: this._enableDisableButtonHandler.createDelegate(this, ['disabled']),
             scope: this,
             iconCls: 'action_disable'
         });
