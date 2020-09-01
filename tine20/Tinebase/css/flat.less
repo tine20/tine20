@@ -285,6 +285,15 @@ ul.x-tab-strip-top {
   border: none !important;
 
   #button(@tbColor);
+
+  .xtb-sep {
+    background-image: none;
+  }
+
+  div.xtb-text, label {
+    padding: 0px 2px 0;
+    line-height: 15px;
+  }
 }
 
 .x-btn-group-tc,
@@ -296,10 +305,6 @@ ul.x-tab-strip-top {
 .x-btn-group-ml,
 .x-btn-group-mr,
 .x-btn-group-notitle .x-btn-group-tc {
-  background-image: none;
-}
-
-.x-toolbar .xtb-sep {
   background-image: none;
 }
 
@@ -315,7 +320,6 @@ ul.x-tab-strip-top {
 .x-btn-group-bl,
 .x-btn-group-br {
   height: 0;
-
 }
 
 .x-btn-group-mc {
@@ -338,12 +342,16 @@ ul.x-tab-strip-top {
     .x-item-disabled {
       opacity: 0.5;
     }
-  }
-  .x-toolbar-left-row{
-  & .x-toolbar-left {
-      border-right: 1px @filterTbColor solid !important;
+    
+    .x-btn-group .x-toolbar {
+      border-bottom: 0px !important;
     }
-}
+  }
+//  .x-toolbar-left-row{
+//  & .x-toolbar-left {
+//      border-right: 1px @filterTbColor solid !important;
+//    }
+//}
   .x-panel-bwrap {
     background-color: @tabPanelColor;
     color: black;
