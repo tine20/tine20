@@ -426,6 +426,7 @@
                 acceptedTermsVersion=1000 \
                 imap=${imap} \
                 smtp=${smtp} \
+                lang=${lang} \
                 authentication=${authentication} \
                 accounts=${accounts} \
                 sieve=${sieve}

@@ -84,7 +84,7 @@ class Setup_Frontend_Cli
         }
 
         $lang = $_opts->lang ? $_opts->lang : getenv('LANGUAGE');
-
+        
         if ($lang) {
             Tinebase_Core::setLocale($lang);
         }
@@ -164,7 +164,10 @@ class Setup_Frontend_Cli
         $controller = Setup_Controller::getInstance();
 
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-
+        if (isset($options['lang'])) {
+            Tinebase_Core::setLocale($options['lang']);
+        }
+        
         if ($_opts->install === true) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
                 // nothing to do
