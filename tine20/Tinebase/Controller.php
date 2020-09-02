@@ -1380,10 +1380,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 }
 
                 if (null !== $err) {
-                    $e = Tinebase_Exception($err);
+                    $e = new Tinebase_Exception($err);
                     Tinebase_Exception::log($e);
                 } elseif (null !== $warn) {
-                    ($e = Tinebase_Exception($warn))->setLogLevelMethod('warn');
+                    ($e = new Tinebase_Exception($warn))->setLogLevelMethod('warn');
                     Tinebase_Exception::log($e);
                 }
             }
