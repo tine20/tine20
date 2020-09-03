@@ -16,13 +16,15 @@ class Calendar_Import_EventTest extends TestCase
 
     public function testImportDemoData()
     {
-        $this->_importContainer = $this->_importDemoData('Calendar', 'Calendar_Model_Event', [
+        $container = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
+
+        $this->_importDemoData('Calendar', 'Calendar_Model_Event', [
             'definition' => 'cal_import_event_csv',
-            'file' => 'event.csv'
-        ]);
+            'file' => 'event.csv',
+        ], $container);
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Calendar_Model_Event', [
-            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_importContainer->getId()]
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId()]
         ]);
         $result = Calendar_Controller_Event::getInstance()->search($filter);
         self::assertEquals(4, count($result));
