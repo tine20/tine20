@@ -1496,7 +1496,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $updatedMessage = clone($message);
         $updatedMessage->subject = $newSubject;
         $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $mailToAppend = Felamimail_Controller_Message_Send::getInstance()->createMailForSending($updatedMessage, $account);
+        $mailToAppend = Felamimail_Controller_Message_Send::getInstance()->createMailForSending(
+            $updatedMessage,
+            $account,
+            $_nonPrivateRecipients,
+            true
+        );
         $transport = new Felamimail_Transport();
         $mailAsString = $transport->getRawMessage($mailToAppend);
         $uid = $imap->appendMessage(
