@@ -1481,4 +1481,39 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         ]));
         return $result->getFirstRecord();
     }
+
+    /**
+     * @param Felamimail_Model_Message $message
+     * @param $newSubject
+     * @return Felamimail_Model_Message
+     * @throws Felamimail_Exception_IMAP
+     */
+    public function rewriteMessageSubject(Felamimail_Model_Message $message, $newSubject)
+    {
+        $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
+        $account = Felamimail_Controller_Account::getInstance()->get($message->account_id);
+
+        $updatedMessage = clone($message);
+        $updatedMessage->subject = $newSubject;
+        $imap = Felamimail_Backend_ImapFactory::factory($account);
+        $mailToAppend = Felamimail_Controller_Message_Send::getInstance()->createMailForSending($updatedMessage, $account);
+        $transport = new Felamimail_Transport();
+        $mailAsString = $transport->getRawMessage($mailToAppend);
+        $uid = $imap->appendMessage(
+            $mailAsString,
+            Felamimail_Model_Folder::encodeFolderName($folder->globalname),
+            []
+        );
+
+        if ($uid) {
+            $updatedMessage->messageuid = $uid;
+        } else {
+            throw new Felamimail_Exception_IMAP('appendMessage failed');
+        }
+
+        // remove old message
+        $imap->addFlags([$message->messageuid], [Zend_Mail_Storage::FLAG_DELETED]);
+
+        return $updatedMessage;
+    }
 }

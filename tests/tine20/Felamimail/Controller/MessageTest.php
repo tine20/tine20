@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -1777,5 +1777,14 @@ class Felamimail_Controller_MessageTest extends TestCase
         $message = $this->_getController()->getCompleteMessage($cachedMessage, null, Zend_Mime::TYPE_TEXT);
 
         $this->assertContains('welche Private Krankenversicherung ist für mich die beste', $message->body);
+    }
+
+    public function testRewriteMessageSubject()
+    {
+        $cachedMessage = $this->messageTestHelper('24706.eml');
+        $newSubject = 'i like my new subject';
+        $rewrittenMessage = $this->_getController()->rewriteMessageSubject($cachedMessage, $newSubject);
+        self::assertEquals($newSubject, $rewrittenMessage->subject);
+        self::assertNotEquals($cachedMessage->messageuid, $rewrittenMessage->messageuid);
     }
 }
