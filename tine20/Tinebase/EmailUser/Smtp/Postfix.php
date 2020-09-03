@@ -567,6 +567,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         $stmt->closeCursor();
 
         $sources = $emailUser->emailAliases ? $emailUser->emailAliases->email : [];
+        $aliases = [];
         foreach ($queryResult as $destination) {
             if ($destination['source'] !== $emailUser->emailAddress
                 && in_array($destination['destination'], $emailUser->emailForwards->email)
