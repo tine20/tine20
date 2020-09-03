@@ -1512,7 +1512,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // remove old message
-        $imap->addFlags([$message->messageuid], [Zend_Mail_Storage::FLAG_DELETED]);
+        if ($message->messageuid) {
+            $imap->addFlags([$message->messageuid], [Zend_Mail_Storage::FLAG_DELETED]);
+        }
 
         return $updatedMessage;
     }

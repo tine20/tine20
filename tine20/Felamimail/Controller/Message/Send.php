@@ -285,9 +285,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Account $_account
      * @param array $_nonPrivateRecipients
+     * @param boolean $preserveHeaders
      * @return Tinebase_Mail
      */
-    public function createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array())
+    public function createMailForSending(Felamimail_Model_Message $_message,
+                                         Felamimail_Model_Account $_account,
+                                         &$_nonPrivateRecipients = array(),
+                                         $preserveHeaders = false)
     {
         // create new mail to send
         $mail = new Tinebase_Mail('UTF-8');
@@ -296,7 +300,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $this->_setMailFrom($mail, $_account, $_message);
         $_nonPrivateRecipients = $this->_setMailRecipients($mail, $_message);
 
-        $this->_setMailHeaders($mail, $_account, $_message);
+        $this->_setMailHeaders($mail, $_account, $_message, $preserveHeaders);
         $this->_addAttachments($mail, $_message);
         $this->_setMailBody($mail, $_message);
 
@@ -599,55 +603,77 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * set headers in mail to be sent
      * 
-     * @param Tinebase_Mail $_mail
+     * @param Zend_Mail $_mail
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
+     * @param boolean $preserveHeaders
      */
-    protected function _setMailHeaders(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
+    protected function _setMailHeaders(Zend_Mail $_mail,
+                                       Felamimail_Model_Account $_account,
+                                       Felamimail_Model_Message $_message = NULL,
+                                       $preserveHeaders = false)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting mail headers');
-        
-        // add user agent
-        $_mail->addHeader('User-Agent', Tinebase_Core::getTineUserAgent('Email Client'));
-        
-        // set organization
-        if (isset($_account->organization) && ! empty($_account->organization)) {
-            $_mail->addHeader('Organization', $_account->organization);
-        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Setting mail headers');
 
-        // add reply-to
-        $replyTo = $_message && ! empty($_message->reply_to)
-            ? $_message->reply_to
-            : (! empty($_account->reply_to) ? $_account->reply_to : null);
-        if ($replyTo && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $replyTo)) {
-            $_mail->setReplyTo($replyTo, $this->_getSenderName($_message, $_account));
-        }
-        
-        // set message-id (we could use Zend_Mail::createMessageId() here)
-        if ($_mail->getMessageId() === NULL) {
-            $domainPart = substr($_account->email, strpos($_account->email, '@'));
-            $uid = Tinebase_Record_Abstract::generateUID();
-            $_mail->setMessageId($uid . $domainPart);
+        if (! $preserveHeaders) {
+            // add user agent
+            $_mail->addHeader('User-Agent', Tinebase_Core::getTineUserAgent('Email Client'));
+
+            // set organization
+            if (isset($_account->organization) && !empty($_account->organization)) {
+                $_mail->addHeader('Organization', $_account->organization);
+            }
+
+            // add reply-to
+            $replyTo = $_message && !empty($_message->reply_to)
+                ? $_message->reply_to
+                : (!empty($_account->reply_to) ? $_account->reply_to : null);
+            if ($replyTo && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $replyTo)) {
+                $_mail->setReplyTo($replyTo, $this->_getSenderName($_message, $_account));
+            }
+
+            // set message-id (we could use Zend_Mail::createMessageId() here)
+            if ($_mail->getMessageId() === NULL) {
+                $domainPart = substr($_account->email, strpos($_account->email, '@'));
+                $uid = Tinebase_Record_Abstract::generateUID();
+                $_mail->setMessageId($uid . $domainPart);
+            }
         }
         
         if ($_message !== NULL) {
-            if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_message->original_id instanceof Felamimail_Model_Message) {
-                $this->_addReplyHeaders($_message);
-            }
-            
-            // set the header request response
-            if ($_message->reading_conf) {
-                $_mail->addHeader('Disposition-Notification-To', $_message->from_email);
-            }
-            
-            // add other headers
-            if (! empty($_message->headers) && is_array($_message->headers)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
-                foreach ($_message->headers as $key => $value) {
-                    $value = $this->_trimHeader($key, $value);
-                    $_mail->addHeader($key, $value);
+            if (! $preserveHeaders) {
+                if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_message->original_id instanceof Felamimail_Model_Message) {
+                    $this->_addReplyHeaders($_message);
                 }
+                // set the header request response
+                if ($_message->reading_conf) {
+                    $_mail->addHeader('Disposition-Notification-To', $_message->from_email);
+                }
+            }
+
+            $this->_addCustomHeaders($_mail, $_message);
+        }
+    }
+
+    protected function _addCustomHeaders(Zend_Mail $_mail,
+                                         Felamimail_Model_Message $_message)
+    {
+        if (empty($_message->headers) || ! is_array($_message->headers)) {
+            return;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
+
+        foreach ($_message->headers as $key => $value) {
+            $value = $this->_trimHeader($key, $value);
+            try {
+                $_mail->addHeader($key, $value);
+            } catch (Zend_Mail_Exception $zme) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__
+                    . ' Skipping header ' . $key . '(' . $zme->getMessage() . ')');
             }
         }
     }
@@ -655,11 +681,15 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * trim message headers (Zend_Mail only supports < 998 chars)
      * 
-     * @param string $value
+     * @param string|array $value
      * @return string
      */
     protected function _trimHeader($key, $value)
     {
+        if (is_array($value)) {
+            $value = implode(',', $value);
+        }
+
         if (is_scalar($value) && strlen($value) + strlen($key) > 998) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Trimming header ' . $key);
