@@ -75,7 +75,8 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
             border: true,
             autoScroll: true,
             layout: 'border',
-            title: this.app.i18n._('Extra free time')
+            title: this.app.i18n._('Extra free time'),
+            hideColumns: ['account_id']
         });
         // columnForm defaults
         var cfDefaults = {xtype: 'textfield', readOnly: true, columnWidth: .5, anchor: '100%'};

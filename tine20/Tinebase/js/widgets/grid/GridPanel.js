@@ -2283,7 +2283,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             // sort new/edited record
             store.remoteSort = false;
-            store.sort(store.sortInfo.field, store.sortInfo.direction)
+            store.sort(
+                _.get(store, 'sortInfo.field', this.recordClass.getMeta('titleField')),
+                _.get(store, 'sortInfo.direction', 'ASC')
+            );
             store.remoteSort = this.storeRemoteSort;
 
             if (isSelected) {
