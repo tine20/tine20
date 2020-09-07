@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -352,14 +352,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function triggerAsyncEvents($_opts)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Triggering async events from CLI.');
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::CRON_DISABLED)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' Cronjob is disabled.');
+            return false;
+        }
 
         if (Tinebase_Core::inMaintenanceModeAll()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                __LINE__ . ' maintenance mode prevents trigger async events.');
+                __LINE__ . ' Maintenance mode prevents trigger async events.');
             return false;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Triggering async events from CLI.');
 
         $userController = Tinebase_User::getInstance();
 
@@ -1116,30 +1122,34 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     */
     public function monitoringCheckCron()
     {
-        $message = 'CRON FAIL';
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::CRON_DISABLED)) {
+            $message = 'CRON INACTIVE';
+            $result = 0;
+        } else {
+            $message = 'CRON FAIL';
+            try {
+                $lastJob = Tinebase_Scheduler::getInstance()->getLastRun();
 
-        try {
-            $lastJob = Tinebase_Scheduler::getInstance()->getLastRun();
-            
-            if ($lastJob === NULL || ! $lastJob->last_run instanceof Tinebase_DateTime) {
-                $message .= ': NO LAST JOB FOUND';
-                $result = 1;
-            } else {
-                $valueString = ' | duration=' . $lastJob->last_duration . 's;;;;';
-                $valueString .= ' end=' . $lastJob->last_run->getClone()->addSecond($lastJob->last_duration)->getIso() . ';;;;';
-                
-                if ($lastJob->server_time->isLater($lastJob->last_run->getClone()->addHour(1))) {
-                    $message .= ': NO JOB IN THE LAST HOUR';
+                if ($lastJob === NULL || !$lastJob->last_run instanceof Tinebase_DateTime) {
+                    $message .= ': NO LAST JOB FOUND';
                     $result = 1;
                 } else {
-                    $message = 'CRON OK';
-                    $result = 0;
+                    $valueString = ' | duration=' . $lastJob->last_duration . 's;;;;';
+                    $valueString .= ' end=' . $lastJob->last_run->getClone()->addSecond($lastJob->last_duration)->getIso() . ';;;;';
+
+                    if ($lastJob->server_time->isLater($lastJob->last_run->getClone()->addHour(1))) {
+                        $message .= ': NO JOB IN THE LAST HOUR';
+                        $result = 1;
+                    } else {
+                        $message = 'CRON OK';
+                        $result = 0;
+                    }
+                    $message .= $valueString;
                 }
-                $message .= $valueString;
+            } catch (Exception $e) {
+                $message .= ': ' . $e->getMessage();
+                $result = 2;
             }
-        } catch (Exception $e) {
-            $message .= ': ' . $e->getMessage();
-            $result = 2;
         }
 
         $this->_logMonitoringResult($result, $message);
