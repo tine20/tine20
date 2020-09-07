@@ -80,9 +80,11 @@ describe('employee', () => {
                 
                 test('vacation is saved', async () => {
                     await expect(freetimeEditDialog).toClick('button', {text: 'Ok'});
-                    await employeeEditDialog.waitFor(500); // need wait to close editDialog
-                    
-                    await expect(employeeEditDialog).toClick('.x-ux-pagingtb-refresh-disabled tbody > tr > td > em > button');
+
+                    // wait for loading starts and ends
+                    await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+
                     await expect(employeeEditDialog).toClick('.x-grid3-col-description', {text: testString});
                 });
             });
@@ -103,7 +105,9 @@ describe('employee', () => {
                     
                     await expect(freetimeEditDialog).toClick('button', {text: 'Ok'});
 
-                    await expect(employeeEditDialog).toClick('.x-ux-pagingtb-refresh-disabled tbody > tr > td > em > button');
+                    // wait for loading starts and ends
+                    await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
                     
                     await expect(employeeEditDialog).toClick('.x-grid3-col-description', {text: testString + ' update'});
                     
@@ -124,7 +128,10 @@ describe('employee', () => {
                 });
                 
                 test('vacation is deleted', async () => {
-                    await expect(employeeEditDialog).toClick('.x-ux-pagingtb-refresh-disabled tbody > tr > td > em > button');
+                    // wait for loading starts and ends
+                    await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+
                     await expect(employeeEditDialog).not.toMatchElement('.x-grid3-col-description', {text: testString});
                 });
             });
@@ -164,10 +171,12 @@ describe('employee', () => {
                 
                 test('sickness is saved', async () => {
                     await expect(freetimeEditDialog).toClick('button', {text: 'Ok'});
-                    await employeeEditDialog.waitFor(500); // need wait to close editDialog
-
-                    await expect(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled tbody > tr > td > em > button');
-                    await expect(employeeEditDialog).toClick('.x-grid3-col-description', {text: testString});
+                    
+                    // wait for loading starts and ends
+                    await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+                    
+                    await expect(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-SICKNESS .x-grid3-col-description', {text: testString});
                 });
             });
 
@@ -189,8 +198,10 @@ describe('employee', () => {
                 });
 
                 test('vacation is deleted', async () => {
-                    await expect(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled tbody > tr > td > em > button');
-                    await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled tbody > tr > td > em > button');
+                    // wait for loading starts and ends
+                    await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+
                     await expect(employeeEditDialog).not.toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-grid3-col-description', {text: testString});
                 });
             });

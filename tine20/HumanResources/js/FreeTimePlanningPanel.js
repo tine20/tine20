@@ -53,6 +53,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         };
 
         me.i18nRecordName = 'Free Time';
+        me.initFreeTimeTypes(); // async!
         Tine.HumanResources.FreeTimePlanningPanel.superclass.initComponent.call(me);
 
         me.grid.on('cellmousedown', _.bind(me.onCellMouseDown, me));
@@ -124,6 +125,11 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         return columns;
     },
 
+    initFreeTimeTypes: async function() {
+        this.freeTimeTypes = [];
+        this.freeTimeTypes = _.get(await Tine.HumanResources.searchFreeTimeTypes({}), 'results', []);
+    },
+    
     renderFreeDay: function(value, metaData, record, rowIndex, colIndex, store, day) {
         let me = this;
         let bgColor = '#FFFFFF';
@@ -164,10 +170,9 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         }
         me.gridConfig.cm.setConfig(me.getColumns());
     },
-
-    onRowClick: function() {
-        // prevent default
-    },
+    
+    // prevent default
+    onRowClick: Ext.emptyFn,
 
     /**
      * NOTE: onCellClick is executed after selection model has already selected the cell
@@ -201,12 +206,10 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
             }
         }
     },
-
-    onCellDblClick: function() {
-        // if (! this.action_editInNewWindow.isDisabled())
-        this.action_editInNewWindow.execute();
-    },
-
+    
+    // prevent default
+    onRowDblClick: Ext.emptyFn,
+    
     onBeforeCellSelect: function(sm, cellInfo, keepExisting) {
         let me = this;
         let col = me.getColumns()[cellInfo[1]];
@@ -277,7 +280,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         me.resolveRecords(me.periodPicker.getValue().from.format('Y'));
     },
 
-    resolveRecords: function(year) {
+    resolveRecords: function(year, employeeIds) {
         let me = this;
         let promises = [];
 
@@ -286,7 +289,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
                 me.pagingToolbar.refresh.disable();
             })
             .then(() => {
-                let employeeIds = _.map(me.store.data.items, 'data.id');
+                employeeIds = _.isArray(employeeIds) ? employeeIds : _.map(me.store.data.items, 'data.id');
                 const reflect = p => p.then(
                     v => ({v, status: "resolved" }),
                     e => ({e, status: "rejected" })
@@ -366,34 +369,58 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         let record = null;
         let fixedFields = null;
 
-        if (actionType === 'edit') {
-
-            if (selectedFreeTime) {
-                record = selectedFreeTime;
-                fixedFields = {
-                    'employee_id': selectedEmployee.data,
-                    'type': selectedFreeTime.type
-                };
-            }
-        } else if (actionType === 'add') {
+        if (actionType === 'edit' && selectedFreeTime) {
+            record = selectedFreeTime;
+            fixedFields = {
+                'employee_id': selectedEmployee.data,
+                'type': selectedFreeTime.type
+            };
+        } else {
+            const freedays = selectedFreeTime ? [] : _.map(me.getSelectedDays(), (day) => {
+                return {date: day.format('Y-m-d 00:00:00')}
+            });
+            
             record = {
                 'employee_id': _.get(selectedEmployee, 'data'),
-                'freedays': selectedFreeTime ? [] : _.map(me.getSelectedDays(), (day) => {
-                    return {date: day.format('Y-m-d 00:00:00')}
-                })
+                'type': this.freeTimeType,
+                'freedays': freedays,
+                'days_count': freedays.length,
+                'firstday_date': freedays[0],
+                'lastday_date': freedays[freedays.length-1]
             }
         }
 
         if (record) {
             Tine.HumanResources.FreeTimeEditDialog.openWindow({
-                record: JSON.stringify(record),
-                fixedFields: JSON.stringify(fixedFields)
+                record: record,
+                fixedFields: JSON.stringify(fixedFields),
+                listeners: {
+                    scope: this,
+                    update: this.onUpdateRecord
+                }
             });
         }
 
 
     },
 
+    /**
+     * on update after edit
+     *
+     * @param {String|Tine.Tinebase.data.Record} record
+     * @param {String} mode
+     */
+    onUpdateRecord: function(record, mode) {
+        const freeTime = Tine.Tinebase.data.Record.setFromJson(record, Tine.HumanResources.Model.FreeTime);
+        const employee = Tine.Tinebase.data.Record.setFromJson(freeTime.get('employee_id'), Tine.HumanResources.Model.Employee);
+        
+        this.resolveRecords(this.periodPicker.getValue().from.format('Y'), [employee.getId()])
+        
+        .then(() => {
+            this.grid.refresh();
+        });
+    },
+    
     /**
      *
      * @param {custom} employee
@@ -415,6 +442,20 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         
         return Tine.HumanResources.Model.FreeTime.getFreeTimes(feastAndFreeDaysCache, day);
     },
+
+    onKeyDown: function(e) {
+        const freeTimeType = _.find(this.freeTimeTypes, {'abbreviation': String.fromCharCode(e.getKey())});
+        
+        if (freeTimeType) {
+            this.freeTimeType = freeTimeType;
+            window.setTimeout(() => {
+                this.freeTimeType = null
+            }, 1000);
+            this.action_editInNewWindow.execute();
+        } else {
+            Tine.HumanResources.FreeTimePlanningPanel.superclass.onKeyDown.call(this, e);
+        }
+    }
 });
 
 Ext.reg('humanresources.freetimeplanning', Tine.HumanResources.FreeTimePlanningPanel);

@@ -58,7 +58,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         ]);
 
         const statusPicker = this.getStatusPicker();
-        if (statusPicker) {
+        if (statusPicker && this.record.get('created_by')) {
             statusPicker.setValue(this.record.get('status'));
         }
         
@@ -74,7 +74,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.HumanResources.FreeTimeEditDialog.superclass.checkStates.apply(this, arguments);
 
         // record vs. recordData!
-        var type = this.typePicker.selectedRecord || this.record.get('type');
+        var type = this.typePicker.selectedRecord || this.record.get('type') || {};
         var employee = this.employeePicker.selectedRecord || this.record.get('employee_id');
         var employeeName = _.get(employee, 'data.n_fn', _.get(employee, 'n_fn', this.app.i18n._('Employee')));
         var typeString = _.get(type, 'data.name', _.get(type, 'name', type)) || 'Free Time';
@@ -360,7 +360,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 const feastAndFreeDays = _.get(this.feastAndFreeDaysCache, year);
                 let remaining = _.get(feastAndFreeDays, 'remainingVacation', 0);
                 
-                const originalDays = +_.get(this.record, 'modified.days_count', 0);
+                const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', 0) : 0;
                 const currentDays = this.record.get('days_count');
                 remaining = remaining + originalDays - currentDays;
 
