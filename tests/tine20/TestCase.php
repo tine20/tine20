@@ -177,7 +177,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         foreach ($this->_listsToDelete as $list) {
-            Addressbook_Controller_List::getInstance()->delete($list->getId());
+            $listId = $list instanceof Addressbook_Model_List ? $list->getId() : $list;
+            Addressbook_Controller_List::getInstance()->delete($listId);
         }
 
         Tinebase_Lock_UnitTestFix::clearLocks();
@@ -1041,6 +1042,24 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $mailinglist = Addressbook_Controller_List::getInstance()->create($list);
         $this->_listsToDelete[] = $mailinglist;
         return $mailinglist;
+    }
+
+    /**
+     * @return Tinebase_Model_Group|unknown
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     *
+     * TODO add more data?
+     */
+    protected function _createGroup()
+    {
+        $group = Tinebase_Group::getInstance()->addGroup(new Tinebase_Model_Group([
+            'name'      => 'unittestgroup' . Tinebase_Record_Abstract::generateUID(5)
+        ]));
+        $this->_listsToDelete[] = $group->list_id;
+
+        return $group;
     }
 
     /**
