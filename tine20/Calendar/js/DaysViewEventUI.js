@@ -201,7 +201,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 extraCls: extraCls,
                 color: this.colorSet.color,
                 bgColor: this.colorSet.light,
-                textColor: '#000000',//this.colorSet.text,
+                textColor: this.colorSet.text,
+                infoColors: this.createBorderColors(this.infoBarColors),
                 zIndex: 100,
                 height: height + '%',
                 left: Math.round(pos * 90 * 1/parallels) + '%',
@@ -233,6 +234,26 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 });
             }
         }
+    },
+
+    createBorderColors: function (colors) {
+        if(colors.length === 0) {
+            return 'linear-gradient(to bottom, rgb(210, 210, 210) 0%, rgb(210, 210, 210) 100%) 0 0 0 3';
+        }
+        let out = 'linear-gradient(to bottom';
+        let pct = 100 / colors.length;
+        let c = 0;
+        _.forEach(colors, function (color) {
+            color = color.replace('#', '');
+            let r = parseInt(color.substr(0,2), 16),
+                g = parseInt(color.substr(2,2), 16),
+                b = parseInt(color.substr(4,2), 16),
+                rgb = 'rgb('+r+', '+g+', '+b+')';
+            out += ', '+rgb+' '+(c*pct)+'%';
+            c++;
+            out += ', '+rgb+' '+(c*pct)+'%';
+        });
+        return out + ') 0 0 0 3 stretch';
     },
 
     onSelectedChange: function(state){
