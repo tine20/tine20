@@ -64,7 +64,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected $_throwOnGetQuarantined = true;
 
-    protected $_createNodeInBackendIntercepter = [];
+    protected $_createNodeInBackendInterceptor = [];
     
     /**
      * holds the instance of the singleton
@@ -864,9 +864,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $newNode;
     }
 
-    public function registerCreateNodeInBackendIntercepter($callable)
+    public function registerCreateNodeInBackendInterceptor($callable)
     {
-        $this->_createNodeInBackendIntercepter[] = $callable;
+        $this->_createNodeInBackendInterceptor[] = $callable;
     }
 
     /**
@@ -884,7 +884,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
 
         $node = null;
-        foreach ($this->_createNodeInBackendIntercepter as $callable) {
+        foreach ($this->_createNodeInBackendInterceptor as $callable) {
             if (null !== ($node = call_user_func($callable, $_statpath, $_type, $_tempFileId))) {
                 return $node;
             }
