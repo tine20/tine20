@@ -939,7 +939,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Tine.log.debug(this.record);
 
 
-        if (!this.record.id || !_.get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
+        if (!this.record.id || this.recordClass.getMeta('containerProperty') && !_.get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
