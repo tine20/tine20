@@ -72,11 +72,17 @@ class Tinebase_Fulltext_Indexer
 
         $db = Tinebase_Core::getDb();
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $logFileSize = (int)$db->query('SHOW VARIABLES LIKE "innodb_log_file_size"')->fetchColumn(0);
-            if ($logFileSize > 0) $this->_maxBlobSize = $logFileSize / 10;
-            $maxPacketSize = (int)$db->query('SHOW VARIABLES LIKE "max_allowed_packet"')->fetchColumn(0);
-            if ($maxPacketSize > 0 && $this->_maxBlobSize < $maxPacketSize) $this->_maxBlobSize = $maxPacketSize;
-            if ($this->_maxBlobSize > 0) $this->_maxBlobSize -= 16*1024;
+            $logFileSize = (int) Tinebase_Core::getDbVariable('innodb_log_file_size', $db);
+            if ($logFileSize > 0) {
+                $this->_maxBlobSize = round($logFileSize / 10);
+            }
+            $maxPacketSize = (int) Tinebase_Core::getDbVariable('max_allowed_packet', $db);
+            if ($maxPacketSize > 0 && ($this->_maxBlobSize === 0 || $maxPacketSize < $this->_maxBlobSize)) {
+                $this->_maxBlobSize = $maxPacketSize;
+            }
+            if ($this->_maxBlobSize > 0) {
+                $this->_maxBlobSize -= 64*1024;
+            }
         }
     }
 
@@ -93,9 +99,15 @@ class Tinebase_Fulltext_Indexer
         }
         $blob = Tinebase_Core::filterInputForDatabase($blob);
 
-        if ($this->_maxBlobSize > 0 && strlen($blob) > $this->_maxBlobSize) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' truncating full text blob for id ' . $_id);
-            $blob = substr($blob, 0, $this->_maxBlobSize);
+        $blobsize = strlen($blob);
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Blob size (max): '
+            . $blobsize . ' (' . $this->_maxBlobSize . ')');
+        if ($this->_maxBlobSize > 0 && $blobsize > $this->_maxBlobSize) {
+            if (Tinebase_Core::isLogLevel(Tinebase_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Truncating full text blob for id '
+                . $_id . ' to max blob size');
+            $blob = mb_substr($blob, 0, $this->_maxBlobSize);
         }
         
         $db = Tinebase_Core::getDb();

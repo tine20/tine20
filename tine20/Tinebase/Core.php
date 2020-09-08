@@ -1787,6 +1787,19 @@ class Tinebase_Core
     }
 
     /**
+     * @param string $variable
+     * @param Zend_Db_Adapter_Abstract $db
+     * @return false|mixed|string
+     */
+    public static function getDbVariable($variable, Zend_Db_Adapter_Abstract $db = null)
+    {
+        if ($db === null) {
+            $db = self::getDb();
+        }
+        return $db->query('SHOW VARIABLES LIKE "' . $variable . '"')->fetchColumn(1);
+    }
+
+    /**
      * get db name
      *
      * @return string
